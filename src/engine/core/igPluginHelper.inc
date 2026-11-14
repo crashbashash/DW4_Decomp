@@ -86,17 +86,17 @@ void igPluginHelper_EnsureRegistered(void)
 void igPluginHelper_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPluginHelper_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igPluginHelper_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igPluginHelper_GetMetaObjectFunction,
         igPluginHelper_className,
-        0x18, /* instance size */
+        0x18,
         igPluginHelper_GetVTable,
-        &igPluginHelper_InitFields,
-        0, /* extra callback item */
-        g_igPluginHelper_callbackList /* callback list */
+        igPluginHelper_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igPluginHelper_callbackList
     );
 }
 

@@ -56,17 +56,17 @@ void igCallStackTable_EnsureRegistered(void)
 void igCallStackTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igCallStackTable_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igCallStackTable_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igCallStackTable_GetMetaObjectFunction,
         igCallStackTable_className,
-        0x18, /* instance size */
+        0x18,
         igCallStackTable_GetVTable,
-        &igCallStackTable_InitFields,
-        0, /* extra callback item */
-        g_igCallStackTable_callbackList /* callback list */
+        igCallStackTable_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igCallStackTable_callbackList
     );
 }
 

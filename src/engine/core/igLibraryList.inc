@@ -30,17 +30,17 @@ void igLibraryList_EnsureRegistered(void)
 void igLibraryList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igLibraryList_metaObject),
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        0,
+        g_igLibraryList_metaObject,
+        (igMetaObjectRegisterFunction)igObjectList_Register,
+        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igLibraryList_GetMetaObjectFunction,
         igLibraryList_className,
-        0x14, /* instance size */
+        0x14,
         igLibraryList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igLibraryList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igLibraryList_callbackList
     );
 }
 

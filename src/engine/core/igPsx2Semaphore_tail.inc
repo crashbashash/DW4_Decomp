@@ -43,17 +43,17 @@ void igPsx2Semaphore_EnsureRegistered(void)
 void igPsx2Semaphore_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2Semaphore_metaObject),
-        igSemaphore_Register,
+        0,
+        g_igPsx2Semaphore_metaObject,
+        (igMetaObjectRegisterFunction)igSemaphore_Register,
         igSemaphore_GetPublishedMetaObject,
         igPsx2Semaphore_GetMetaObjectFunction,
         igPsx2Semaphore_className,
-        0x18, /* instance size */
+        0x18,
         igPsx2Semaphore_GetVTable,
-        &igPsx2Semaphore_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igPsx2Semaphore_InitFields,
+        0,
+        0
     );
 }
 

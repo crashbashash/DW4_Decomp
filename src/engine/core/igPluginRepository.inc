@@ -69,17 +69,17 @@ void igPluginRepository_EnsureRegistered(void)
 void igPluginRepository_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPluginRepository_metaObject),
-        igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        0,
+        g_igPluginRepository_metaObject,
+        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igPluginRepository_GetMetaObjectFunction,
         igPluginRepository_className,
-        0x14, /* instance size */
+        0x14,
         igPluginRepository_GetVTable,
-        &igPluginRepository_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igPluginRepository_InitFields,
+        0,
+        0
     );
 }
 

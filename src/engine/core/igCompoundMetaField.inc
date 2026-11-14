@@ -14,17 +14,17 @@ void igCompoundMetaField_EnsureRegistered(void)
 void igCompoundMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igCompoundMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        1,
+        g_igCompoundMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igCompoundMetaField_GetMetaObjectFunction,
         igCompoundMetaField_className,
-        0x38, /* instance size */
+        0x38,
         0,
-        &igCompoundMetaField_InitFields,
-        0, /* extra callback item */
-        g_igCompoundMetaField_callbackList /* callback list */
+        igCompoundMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igCompoundMetaField_callbackList
     );
 }
 

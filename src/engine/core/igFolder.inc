@@ -47,17 +47,17 @@ void igFolder_EnsureRegistered(void)
 void igFolder_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igFolder_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igFolder_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igFolder_GetMetaObjectFunction,
         igFolder_className,
-        0xC, /* instance size */
+        0xC,
         igFolder_GetVTable,
-        &igFolder_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igFolder_InitFields,
+        0,
+        0
     );
 }
 

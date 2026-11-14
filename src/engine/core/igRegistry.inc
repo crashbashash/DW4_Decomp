@@ -73,17 +73,17 @@ void igRegistry_EnsureRegistered(void)
 void igRegistry_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igRegistry_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igRegistry_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igRegistry_GetMetaObjectFunction,
         igRegistry_className,
-        0x18, /* instance size */
+        0x18,
         igRegistry_GetVTable,
-        &igRegistry_InitFields,
-        0, /* extra callback item */
-        g_igRegistry_callbackList /* callback list */
+        igRegistry_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igRegistry_callbackList
     );
 }
 

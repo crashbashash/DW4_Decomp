@@ -42,17 +42,17 @@ void igStackMemoryPool_EnsureRegistered(void)
 void igStackMemoryPool_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igStackMemoryPool_metaObject),
-        igMemoryPool_Register,
+        0,
+        g_igStackMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igStackMemoryPool_GetMetaObjectFunction,
         igStackMemoryPool_className,
-        0x98, /* instance size */
+        0x98,
         igStackMemoryPool_GetVTable,
-        &igStackMemoryPool_InitFields,
-        0, /* extra callback item */
-        g_igStackMemoryPool_callbackList /* callback list */
+        igStackMemoryPool_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igStackMemoryPool_callbackList
     );
 }
 

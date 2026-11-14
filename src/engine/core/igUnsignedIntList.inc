@@ -34,17 +34,17 @@ void igUnsignedIntList_EnsureRegistered(void)
 void igUnsignedIntList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igUnsignedIntList_metaObject),
-        igDataList_Register,                       /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igUnsignedIntList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igUnsignedIntList_GetMetaObjectFunction,
         igUnsignedIntList_className,
-        0x14, /* instance size */
+        0x14,
         igUnsignedIntList_GetVTable,
-        &igUnsignedIntList_InitFields_002ca5c0[0], /* field adder (class InitFields) */
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igUnsignedIntList_InitFields_002ca5c0,
+        0,
+        0
     );
 }
 

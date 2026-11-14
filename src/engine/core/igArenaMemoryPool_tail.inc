@@ -79,17 +79,17 @@ void igArenaMemoryPool_EnsureRegistered(void)
 
 void igArenaMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igArenaMemoryPool_metaObject),
-        igMemoryPool_Register,
+        0,
+        g_igArenaMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igArenaMemoryPool_GetMetaObjectFunction,
         igArenaMemoryPool_className,
-        0xD0, /* instance size */
+        0xD0,
         igArenaMemoryPool_GetVTable,
-        &igArenaMemoryPool_InitFields,
-        0, /* extra callback item */
-        g_igArenaMemoryPool_callbackList /* callback list */
+        igArenaMemoryPool_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igArenaMemoryPool_callbackList
     );
 }
 

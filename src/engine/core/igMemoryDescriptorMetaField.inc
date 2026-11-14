@@ -55,17 +55,17 @@ void igMemoryDescriptorMetaField_EnsureRegistered(void)
 void igMemoryDescriptorMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryDescriptorMetaField_metaObject),
-        igCompoundMetaField_Register,
-        igCompoundMetaField_GetPublishedMetaObject,
+        0,
+        g_igMemoryDescriptorMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igCompoundMetaField_Register,
+        (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igMemoryDescriptorMetaField_GetMetaObjectFunction,
         igMemoryDescriptorMetaField_className,
-        0x38, /* instance size */
+        0x38,
         igMemoryDescriptorMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igMemoryDescriptorMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igMemoryDescriptorMetaField_callbackList
     );
 }
 

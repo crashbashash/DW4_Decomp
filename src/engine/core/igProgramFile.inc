@@ -49,17 +49,17 @@ void igProgramFile_EnsureRegistered(void)
 void igProgramFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igProgramFile_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igProgramFile_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igProgramFile_GetMetaObjectFunction,
         igProgramFile_className,
-        0x10, /* instance size */
+        0x10,
         igProgramFile_GetVTable,
-        &igProgramFile_InitFields,
-        0, /* extra callback item */
-        g_igProgramFile_callbackList /* callback list */
+        igProgramFile_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igProgramFile_callbackList
     );
 }
 

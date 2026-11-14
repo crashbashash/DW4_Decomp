@@ -58,17 +58,17 @@ void __internalNonRefCountedObjectList_EnsureRegistered(void)
 
 void __internalNonRefCountedObjectList_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g___internalNonRefCountedObjectList_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g___internalNonRefCountedObjectList_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         __internalNonRefCountedObjectList_GetMetaObjectFunction,
         __internalNonRefCountedObjectList_className,
-        0x10, /* instance size */
+        0x10,
         __internalNonRefCountedObjectList_GetVTable,
-        &__internalNonRefCountedObjectList_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        __internalNonRefCountedObjectList_InitFields,
+        0,
+        0
     );
 }
 

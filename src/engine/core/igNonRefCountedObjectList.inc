@@ -22,17 +22,17 @@ void igNonRefCountedObjectList_EnsureRegistered(void)
 void igNonRefCountedObjectList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igNonRefCountedObjectList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igNonRefCountedObjectList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igNonRefCountedObjectList_GetMetaObjectFunction,
         igNonRefCountedObjectList_className,
-        0x14, /* instance size */
+        0x14,
         igNonRefCountedObjectList_GetVTable,
-        &igNonRefCountedObjectList_InitFields_002bddc0[0],
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igNonRefCountedObjectList_InitFields_002bddc0,
+        0,
+        0
     );
 }
 

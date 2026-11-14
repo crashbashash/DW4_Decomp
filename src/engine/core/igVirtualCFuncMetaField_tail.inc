@@ -65,7 +65,7 @@ void FUN_0030f220(igArenaMemoryPoolView *self) {
     char *base;
     SystemAllocator_EnsureCreated();
     for (i = 1; i < 96; i++) {
-        TaggedBlockHeader *bin = (TaggedBlockHeader *)state->bins[i];
+        TaggedBlockHeader *bin = &state->bins[i].header;
         chunkLinks(bin)->forward = bin;
         chunkLinks(bin)->back = bin;
     }
@@ -100,11 +100,11 @@ void FUN_0030f220(igArenaMemoryPoolView *self) {
                 }
             }
         }
-        state->top = base;
-        initChunkHeader((TaggedBlockHeader *)state->top, (unsigned int)-1, (int)size, (unsigned int)self->_poolIndex >> 1, 0);
-        ((TaggedBlockHeader *)state->top)->used = 1;
+        state->top = (TaggedBlockHeader *)base;
+        initChunkHeader(self, state->top, (unsigned int)-1, (int)size, 0);
+        state->top->used = 1;
     } else {
-        state->top = state->bins[1];
+        state->top = &state->bins[1].header;
     }
     state->pageSize = g_activeSystemAllocator[0]->vfunc_21();
 }
@@ -126,7 +126,7 @@ void igArenaMemoryPool_CheckChunk(igArenaMemoryPoolView *self, TaggedBlockHeader
     high = self->getHighestAddress();
     low = self->getLowestAddress();
     if (isFreeChunk(h) == 0) {
-        if ((char *)h != state->top) {
+        if (h != state->top) {
             if (state->flags & 1) {
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (char *)h < low && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
@@ -254,7 +254,7 @@ void igArenaMemoryPool_CheckFreeChunk(igArenaMemoryPoolView *self, TaggedBlockHe
                 }
             }
         }
-        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (char *)next != state->top && !((TaggedBlockHeader *)((char *)next + chunkBytes(next)))->used && self->_messageLevel > 0) {
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && next != state->top && !((TaggedBlockHeader *)((char *)next + chunkBytes(next)))->used && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554c6c == 0) {
                 r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, h, DAT_004fb7d0);
@@ -329,7 +329,7 @@ void igArenaMemoryPool_CheckInUseChunk(igArenaMemoryPoolView *self, TaggedBlockH
         }
         igArenaMemoryPool_CheckFreeChunk(self, prev);
     }
-    if ((char *)next == state->top) {
+    if (next == state->top) {
         if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !next->used && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE23Notice == 0) {
@@ -372,7 +372,7 @@ void igArenaMemoryPool_CheckBlock(igArenaMemoryPoolView *self, TaggedBlockHeader
     high = self->getHighestAddress();
     low = self->getLowestAddress();
     if (isFreeChunk(h) == 0) {
-        if ((char *)h != state->top) {
+        if (h != state->top) {
             if (state->flags & 1) {
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (char *)h < low && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
@@ -503,7 +503,7 @@ void FUN_00310c00(igArenaMemoryPoolView *self) {
     if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !((8 & (8 - 1)) == 0) && self->_messageLevel > 0) {
         Memory_PrintPoolStatistics(0, self);
     }
-    if (state->top == 0 || state->top == state->bins[1]) {
+    if (state->top == 0 || state->top == &state->bins[1].header) {
         return;
     }
     if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (state->pageSize & (state->pageSize - 1)) != 0 && self->_messageLevel > 0) {
@@ -599,7 +599,7 @@ void FUN_00310c00(igArenaMemoryPoolView *self) {
         }
     }
     for (i = 1; i < 96; ++i) {
-        b = (TaggedBlockHeader *)state->bins[i];
+        b = &state->bins[i].header;
         if (i >= 2) {
             binbit = state->binMap[i >> 5] & (1 << (i & 0x1f));
             empty = chunkLinks(b)->back == b;
@@ -652,12 +652,12 @@ void FUN_00310c00(igArenaMemoryPoolView *self) {
                     }
                 }
             }
-            for (q = (TaggedBlockHeader *)((char *)p + chunkBytes(p)); (char *)q != state->top && ((TaggedBlockHeader *)((char *)q + chunkBytes(q)))->used && chunkBytes(q) >= ((self->_smallestChunkSize + 7) & ~7); q = (TaggedBlockHeader *)((char *)q + chunkBytes(q))) {
+            for (q = (TaggedBlockHeader *)((char *)p + chunkBytes(p)); q != state->top && ((TaggedBlockHeader *)((char *)q + chunkBytes(q)))->used && chunkBytes(q) >= ((self->_smallestChunkSize + 7) & ~7); q = (TaggedBlockHeader *)((char *)q + chunkBytes(q))) {
                 igArenaMemoryPool_CheckInUseChunk(self, q);
             }
         }
     }
     if (self->_heapIntegrityCheckLevel > 0) {
-        igArenaMemoryPool_CheckChunk(self, (TaggedBlockHeader *)state->top);
+        igArenaMemoryPool_CheckChunk(self, state->top);
     }
 }

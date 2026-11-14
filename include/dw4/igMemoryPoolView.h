@@ -26,7 +26,7 @@ public:
     virtual void d23();
     virtual int vfunc_26(...);                                                   /* slot 24, byte 104: the raw memory block; callers pass a stray argument or none */
     virtual int Trim(int);                                                       /* slot 25, byte 108 */
-    virtual void d26();
+    virtual int vfunc_28(int level);                                             /* slot 26, byte 112: asked for memory back when the system has none; nonzero when it freed some */
     virtual int vfunc_29();                                                      /* slot 27, byte 116 */
     virtual void activate();                                                     /* slot 28, byte 120 */
     virtual void vfunc_31();                                                     /* slot 29, byte 124 */

@@ -77,17 +77,17 @@ void igIntMetaField_EnsureRegistered(void)
 
 void igIntMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igIntMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igIntMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igIntMetaField_GetMetaObjectFunction,
         igIntMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igIntMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igIntMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igIntMetaField_callbackList
     );
 }
 

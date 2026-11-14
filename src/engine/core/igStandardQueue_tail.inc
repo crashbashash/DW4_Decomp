@@ -59,17 +59,17 @@ void igStandardQueue_EnsureRegistered(void)
 void igStandardQueue_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igStandardQueue_metaObject),
-        igQueue_Register,
+        0,
+        g_igStandardQueue_metaObject,
+        (igMetaObjectRegisterFunction)igQueue_Register,
         igQueue_GetPublishedMetaObject,
         igStandardQueue_GetMetaObjectFunction,
         igStandardQueue_className,
-        0x2C, /* instance size */
+        0x2C,
         igStandardQueue_GetVTable,
-        &igStandardQueue_InitFields,
-        0, /* extra callback item */
-        g_igStandardQueue_callbackList /* callback list */
+        igStandardQueue_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igStandardQueue_callbackList
     );
 }
 

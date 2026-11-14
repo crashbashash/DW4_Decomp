@@ -38,17 +38,17 @@ void igUnsignedLongArrayMetaField_EnsureRegistered(void)
 void igUnsignedLongArrayMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igUnsignedLongArrayMetaField_metaObject),
-        igUnsignedLongMetaField_Register,
+        0,
+        g_igUnsignedLongArrayMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igUnsignedLongMetaField_Register,
         igUnsignedLongMetaField_GetPublishedMetaObject,
         igUnsignedLongArrayMetaField_GetMetaObjectFunction,
         igUnsignedLongArrayMetaField_className,
-        0x38, /* instance size */
+        0x38,
         igUnsignedLongArrayMetaField_GetVTable,
-        &igUnsignedLongArrayMetaField_InitFields,
-        0, /* extra callback item */
-        g_igUnsignedLongArrayMetaField_callbackList /* callback list */
+        igUnsignedLongArrayMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igUnsignedLongArrayMetaField_callbackList
     );
 }
 

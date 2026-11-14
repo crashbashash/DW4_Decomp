@@ -29,17 +29,17 @@ void igPluginRepositoryList_EnsureRegistered(void)
 void igPluginRepositoryList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPluginRepositoryList_metaObject),
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        0,
+        g_igPluginRepositoryList_metaObject,
+        (igMetaObjectRegisterFunction)igObjectList_Register,
+        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igPluginRepositoryList_GetMetaObjectFunction,
         igPluginRepositoryList_className,
-        0x14, /* instance size */
+        0x14,
         igPluginRepositoryList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igPluginRepositoryList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igPluginRepositoryList_callbackList
     );
 }
 

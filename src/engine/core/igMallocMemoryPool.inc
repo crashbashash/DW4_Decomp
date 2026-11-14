@@ -74,17 +74,17 @@ void igMallocMemoryPool_EnsureRegistered(void)
 
 void igMallocMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMallocMemoryPool_metaObject),
-        igMemoryPool_Register,
+        0,
+        g_igMallocMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igMallocMemoryPool_GetMetaObjectFunction,
         igMallocMemoryPool_className,
-        0xA0, /* instance size */
+        0xA0,
         igMallocMemoryPool_GetVTable,
-        &igMallocMemoryPool_InitFields,
-        0, /* extra callback item */
-        g_igMallocMemoryPool_callbackList /* callback list */
+        igMallocMemoryPool_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMallocMemoryPool_callbackList
     );
 }
 

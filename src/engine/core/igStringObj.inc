@@ -34,17 +34,17 @@ void igStringObj_EnsureRegistered(void)
 void igStringObj_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igStringObj_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igStringObj_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igStringObj_GetMetaObjectFunction,
         igStringObj_className,
-        0x10, /* instance size */
+        0x10,
         igStringObj_GetVTable,
-        &igStringObj_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igStringObj_InitFields,
+        0,
+        0
     );
 }
 

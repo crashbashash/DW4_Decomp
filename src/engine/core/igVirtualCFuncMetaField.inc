@@ -37,17 +37,17 @@ void igVirtualCFuncMetaField_EnsureRegistered(void)
 void igVirtualCFuncMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igVirtualCFuncMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igVirtualCFuncMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igVirtualCFuncMetaField_GetMetaObjectFunction,
         igVirtualCFuncMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igVirtualCFuncMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igVirtualCFuncMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igVirtualCFuncMetaField_callbackList
     );
 }
 

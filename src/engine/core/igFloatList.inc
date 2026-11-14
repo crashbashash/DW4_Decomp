@@ -34,17 +34,17 @@ void igFloatList_EnsureRegistered(void)
 void igFloatList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igFloatList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igFloatList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igFloatList_GetMetaObjectFunction,
         igFloatList_className,
-        0x14, /* instance size */
+        0x14,
         igFloatList_GetVTable,
-        &igFloatList_InitFields_002c98f0[0],
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igFloatList_InitFields_002c98f0,
+        0,
+        0
     );
 }
 

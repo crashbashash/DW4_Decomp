@@ -28,17 +28,17 @@ void igDependencyList_EnsureRegistered(void)
 void igDependencyList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igDependencyList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igDependencyList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igDependencyList_GetMetaObjectFunction,
         igDependencyList_className,
-        0x14, /* instance size */
+        0x14,
         igDependencyList_GetVTable,
         igDependencyList_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

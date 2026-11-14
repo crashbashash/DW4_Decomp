@@ -51,17 +51,17 @@ void igDriverDatabase_EnsureRegistered(void)
 void igDriverDatabase_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igDriverDatabase_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igDriverDatabase_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igDriverDatabase_GetMetaObjectFunction,
         igDriverDatabase_className,
-        0x38, /* instance size */
+        0x38,
         igDriverDatabase_GetVTable,
-        &igDriverDatabase_InitFields,
-        0, /* extra callback item */
-        g_igDriverDatabase_callbackList /* callback list */
+        igDriverDatabase_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igDriverDatabase_callbackList
     );
 }
 

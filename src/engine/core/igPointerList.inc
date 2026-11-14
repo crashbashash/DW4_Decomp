@@ -34,17 +34,17 @@ void igPointerList_EnsureRegistered(void)
 void igPointerList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPointerList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igPointerList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igPointerList_GetMetaObjectFunction,
         igPointerList_className,
-        0x14, /* instance size */
+        0x14,
         igPointerList_GetVTable,
-        &igPointerList_InitFields_002c92e0[0], /* Field adder. */
-        0,                                     /* extra callback-vector item (none) */
-        0                                      /* zero-terminated callback-vector item list (none) */
+        (igMetaObjectCallback)igPointerList_InitFields_002c92e0,
+        0,
+        0
     );
 }
 

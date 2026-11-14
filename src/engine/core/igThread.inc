@@ -54,17 +54,17 @@ void igThread_EnsureRegistered(void)
 void igThread_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igThread_metaObject),
-        igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        1,
+        g_igThread_metaObject,
+        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igThread_GetMetaObjectFunction,
         igThread_className,
-        0x30, /* instance size */
+        0x30,
         0,
-        &igThread_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igThread_InitFields,
+        0,
+        0
     );
 }
 

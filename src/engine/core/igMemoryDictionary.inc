@@ -43,17 +43,17 @@ void igMemoryDictionary_EnsureRegistered(void)
 void igMemoryDictionary_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryDictionary_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igMemoryDictionary_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMemoryDictionary_GetMetaObjectFunction,
         igMemoryDictionary_className,
-        0x18, /* instance size */
+        0x18,
         igMemoryDictionary_GetVTable,
-        &igMemoryDictionary_InitFields,
-        0, /* extra callback item */
-        g_igMemoryDictionary_callbackList /* callback list */
+        igMemoryDictionary_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMemoryDictionary_callbackList
     );
 }
 

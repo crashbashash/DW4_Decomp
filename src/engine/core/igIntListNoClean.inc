@@ -34,17 +34,17 @@ void igIntListNoClean_EnsureRegistered(void)
 void igIntListNoClean_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igIntListNoClean_metaObject),
-        igIntList_Register,
+        0,
+        g_igIntListNoClean_metaObject,
+        (igMetaObjectRegisterFunction)igIntList_Register,
         igIntList_GetPublishedMetaObject,
         igIntListNoClean_GetMetaObjectFunction,
         igIntListNoClean_className,
-        0x14, /* instance size */
+        0x14,
         igIntListNoClean_GetVTable,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

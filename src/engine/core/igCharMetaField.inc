@@ -67,17 +67,17 @@ void igCharMetaField_EnsureRegistered(void)
 
 void igCharMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igCharMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igCharMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igCharMetaField_GetMetaObjectFunction,
         igCharMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igCharMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igCharMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igCharMetaField_callbackList
     );
 }
 

@@ -33,17 +33,17 @@ void igPsx2IopRpcConnection_EnsureRegistered(void)
 void igPsx2IopRpcConnection_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2IopRpcConnection_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igPsx2IopRpcConnection_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igPsx2IopRpcConnection_GetMetaObjectFunction,
         igPsx2IopRpcConnection_className,
-        0x14, /* instance size */
+        0x14,
         igPsx2IopRpcConnection_GetVTable,
-        &igPsx2IopRpcConnection_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igPsx2IopRpcConnection_InitFields,
+        0,
+        0
     );
 }
 

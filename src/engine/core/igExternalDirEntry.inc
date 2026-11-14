@@ -36,17 +36,17 @@ void igExternalDirEntry_EnsureRegistered(void)
 void igExternalDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igExternalDirEntry_metaObject),
-        igDirEntry_Register,
+        0,
+        g_igExternalDirEntry_metaObject,
+        (igMetaObjectRegisterFunction)igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalDirEntry_GetMetaObjectFunction,
         igExternalDirEntry_className,
-        0x2C, /* instance size */
+        0x2C,
         igExternalDirEntry_GetVTable,
         igExternalDirEntry_InitFields,
-        0,                                          /* static-initializer callback item (appended on fresh configuration) */
-        g_igExternalDirEntry_callbackList  /* 0-terminated dependency-callback list */
+        0,
+        (igMetaObjectCallback *)g_igExternalDirEntry_callbackList
     );
 }
 

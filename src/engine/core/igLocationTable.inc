@@ -45,17 +45,17 @@ void igLocationTable_EnsureRegistered(void)
 void igLocationTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igLocationTable_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igLocationTable_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igLocationTable_GetMetaObjectFunction,
         igLocationTable_className,
-        0x20, /* instance size */
+        0x20,
         igLocationTable_GetVTable,
-        &igLocationTable_InitFields,
-        0, /* extra callback item */
-        g_igLocationTable_callbackList /* callback list */
+        igLocationTable_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igLocationTable_callbackList
     );
 }
 

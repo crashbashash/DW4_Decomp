@@ -29,17 +29,17 @@ void igMemoryPoolInfoList_EnsureRegistered(void)
 void igMemoryPoolInfoList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryPoolInfoList_metaObject),
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        0,
+        g_igMemoryPoolInfoList_metaObject,
+        (igMetaObjectRegisterFunction)igObjectList_Register,
+        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igMemoryPoolInfoList_GetMetaObjectFunction,
         igMemoryPoolInfoList_className,
-        0x14, /* instance size */
+        0x14,
         igMemoryPoolInfoList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igMemoryPoolInfoList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igMemoryPoolInfoList_callbackList
     );
 }
 

@@ -89,17 +89,17 @@ void igMetaObject_EnsureRegistered(void)
 
 void igMetaObject_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMetaObject_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igMetaObject_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMetaObject_GetMetaObjectFunction,
         igMetaObject_className,
-        0x64, /* instance size */
+        0x64,
         igMetaObject_GetVTable,
-        &igMetaObject_InitFields,
-        0, /* extra callback item */
-        g_igMetaObject_callbackList /* callback list */
+        igMetaObject_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMetaObject_callbackList
     );
 }
 

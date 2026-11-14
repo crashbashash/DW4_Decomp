@@ -56,17 +56,17 @@ void igMemoryPoolContextInfo_EnsureRegistered(void)
 void igMemoryPoolContextInfo_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryPoolContextInfo_metaObject_00585e88),
-        igInfo_Register,
-        igInfo_GetPublishedMetaObject,
+        0,
+        g_igMemoryPoolContextInfo_metaObject_00585e88,
+        (igMetaObjectRegisterFunction)igInfo_Register,
+        (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMemoryPoolContextInfo_GetMetaObjectFunction,
         igMemoryPoolContextInfo_className,
-        0x18, /* instance size */
+        0x18,
         igMemoryPoolContextInfo_GetVTable,
-        &igMemoryPoolContextInfo_InitFields,
-        0, /* extra callback item */
-        g_igMemoryPoolContextInfo_callbackList /* callback list */
+        igMemoryPoolContextInfo_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMemoryPoolContextInfo_callbackList
     );
 }
 

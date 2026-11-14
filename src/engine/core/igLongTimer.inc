@@ -18,17 +18,17 @@ void igLongTimer_EnsureRegistered(void)
 void igLongTimer_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
+        1,
         g_igLongTimer_metaObject,
-        igTimer_Register,
+        (igMetaObjectRegisterFunction)igTimer_Register,
         igTimer_GetPublishedMetaObject,
-        thunk_igLongTimer_GetMetaObject_002b7b60,
+        (igMetaObjectCallback)thunk_igLongTimer_GetMetaObject_002b7b60,
         igLongTimer_className,
-        0x28, /* instance size */
+        0x28,
         0,
-        &igLongTimer_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igLongTimer_InitFields,
+        0,
+        0
     );
 }
 

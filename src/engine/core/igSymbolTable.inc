@@ -82,17 +82,17 @@ void igSymbolTable_EnsureRegistered(void)
 void igSymbolTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igSymbolTable_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igSymbolTable_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igSymbolTable_GetMetaObjectFunction,
         igSymbolTable_className,
-        0x2C, /* instance size */
+        0x2C,
         igSymbolTable_GetVTable,
-        &igSymbolTable_InitFields,
-        0, /* extra callback item */
-        g_igSymbolTable_callbackList /* callback list */
+        igSymbolTable_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igSymbolTable_callbackList
     );
 }
 

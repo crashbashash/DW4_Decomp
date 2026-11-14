@@ -14,10 +14,10 @@ char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3) {
     for (; i < cnt; i++) {
         if (arg2 & igMetaEnum_GetValueAt((void *)arg3, i)) {
             if (n != 0) {
-                strncat(arg0, DAT_004f9950, len);
+                strncat(arg0, (const char *)DAT_004f9950, len);
             }
             igMetaEnum_GetNameAt((int *)&sp9C, (void *)arg3, i);
-            strncat(arg0, sp9C, len);
+            strncat(arg0, (const char *)sp9C, len);
             if (sp9C != 0) {
                 hdr = sp9C - 2;
                 v = sp9C[-1] - 1;

@@ -47,17 +47,17 @@ void igMemoryFileEntry_EnsureRegistered(void)
 void igMemoryFileEntry_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryFileEntry_metaObject),
-        igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        0,
+        g_igMemoryFileEntry_metaObject,
+        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igMemoryFileEntry_GetMetaObjectFunction,
         igMemoryFileEntry_className,
-        0x14, /* instance size */
+        0x14,
         igMemoryFileEntry_GetVTable,
-        &igMemoryFileEntry_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igMemoryFileEntry_InitFields,
+        0,
+        0
     );
 }
 

@@ -26,17 +26,17 @@ void igSemaphore_EnsureRegistered(void)
 void igSemaphore_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igSemaphore_metaObject),
-        igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        1,
+        g_igSemaphore_metaObject,
+        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igSemaphore_GetMetaObjectFunction,
         igSemaphore_className,
-        0xC, /* instance size */
+        0xC,
         0,
-        &igSemaphore_InitFields_002ba7c0[0],
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igSemaphore_InitFields_002ba7c0,
+        0,
+        0
     );
 }
 

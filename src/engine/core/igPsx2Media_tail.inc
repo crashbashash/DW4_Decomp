@@ -71,17 +71,17 @@ void igPsx2Media_EnsureRegistered(void)
 void igPsx2Media_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2Media_metaObject),
-        igMedia_Register,
+        0,
+        g_igPsx2Media_metaObject,
+        (igMetaObjectRegisterFunction)igMedia_Register,
         igMedia_GetPublishedMetaObject,
         igPsx2Media_GetMetaObjectFunction,
         igPsx2Media_className,
-        0x28, /* instance size */
+        0x28,
         igPsx2Media_GetVTable,
-        &igPsx2Media_InitFields,
-        0, /* extra callback item */
-        g_igPsx2Media_callbackList /* callback list */
+        igPsx2Media_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igPsx2Media_callbackList
     );
 }
 

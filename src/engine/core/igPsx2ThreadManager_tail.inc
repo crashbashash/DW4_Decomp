@@ -22,17 +22,17 @@ void igPsx2ThreadManager_EnsureRegistered(void)
 void igPsx2ThreadManager_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2ThreadManager_metaObject),
-        igThreadManager_Register,
-        igThreadManager_GetPublishedMetaObject,
+        0,
+        g_igPsx2ThreadManager_metaObject,
+        (igMetaObjectRegisterFunction)igThreadManager_Register,
+        (igMetaObjectGetFunction)igThreadManager_GetPublishedMetaObject,
         igPsx2ThreadManager_GetMetaObjectFunction,
         igPsx2ThreadManager_className,
-        0x10, /* instance size */
+        0x10,
         igPsx2ThreadManager_GetVTable,
-        &igPsx2ThreadManager_InitFields_002cf3f0[0],     /* Field adder. */
-        0,                                               /* extra callback-vector item (none) */
-        0                                                /* zero-terminated callback-vector item list (none) */
+        (igMetaObjectCallback)igPsx2ThreadManager_InitFields_002cf3f0,
+        0,
+        0
     );
 }
 

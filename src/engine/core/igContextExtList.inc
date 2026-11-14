@@ -29,17 +29,17 @@ void igContextExtList_EnsureRegistered(void)
 void igContextExtList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igContextExtList_metaObject),
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        0,
+        g_igContextExtList_metaObject,
+        (igMetaObjectRegisterFunction)igObjectList_Register,
+        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igContextExtList_GetMetaObjectFunction,
         igContextExtList_className,
-        0x14, /* instance size */
+        0x14,
         igContextExtList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igContextExtList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igContextExtList_callbackList
     );
 }
 

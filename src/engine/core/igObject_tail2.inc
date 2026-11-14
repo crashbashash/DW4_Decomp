@@ -223,19 +223,19 @@ int igObject_GetVTable(void) {
 void igObject_EnsureRegistered(void){igMetaObject_RunStaticInit((StaticInitCallbacks *(*)())igObject_Register);}
 
 void *igObject_Register(void) {
-    return ((void *)igMetaObject_RegisterClass(
-        0, /* abstract */
+    return igMetaObject_RegisterClass(
+        0,
         g_igObject_metaObject,
-        igObject_CreateEmptyInitCallbacks,
-        igObject_GetNoParentMetaObject,
-        igObject_GetMetaObject,
+        (igMetaObjectRegisterFunction)igObject_CreateEmptyInitCallbacks,
+        (igMetaObjectGetFunction)igObject_GetNoParentMetaObject,
+        (igMetaObjectCallback)igObject_GetMetaObject,
         igObject_className,
-        8, /* instance size */
+        8,
         igObject_GetVTable,
-        &igObject_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
-    ));
+        igObject_InitFields,
+        0,
+        0
+    );
 }
 
 void *igObject_GetMetaObject(void){return (void *)g_igObject_metaObject[0];}

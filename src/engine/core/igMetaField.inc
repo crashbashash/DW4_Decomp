@@ -20,17 +20,17 @@ void igMetaField_EnsureRegistered(void)
 
 void igMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igMetaField_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMetaField_GetMetaObjectFunction,
         igMetaField_className,
-        0x34, /* instance size */
+        0x34,
         0,
-        &igMetaField_InitFields,
-        0, /* extra callback item */
-        g_igMetaField_callbackList /* callback list */
+        igMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMetaField_callbackList
     );
 }
 

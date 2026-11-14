@@ -68,17 +68,17 @@ void igUnsignedIntMetaField_EnsureRegistered(void)
 
 void igUnsignedIntMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igUnsignedIntMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igUnsignedIntMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igUnsignedIntMetaField_GetMetaObjectFunction,
         igUnsignedIntMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igUnsignedIntMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igUnsignedIntMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igUnsignedIntMetaField_callbackList
     );
 }
 

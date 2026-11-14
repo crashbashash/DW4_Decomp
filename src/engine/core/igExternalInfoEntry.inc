@@ -40,17 +40,17 @@ void igExternalInfoEntry_EnsureRegistered(void)
 void igExternalInfoEntry_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igExternalInfoEntry_metaObject),
-        igDirEntry_Register,
+        0,
+        g_igExternalInfoEntry_metaObject,
+        (igMetaObjectRegisterFunction)igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalInfoEntry_GetMetaObjectFunction,
         igExternalInfoEntry_className,
-        0x28, /* instance size */
+        0x28,
         igExternalInfoEntry_GetVTable,
-        &igExternalInfoEntry_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igExternalInfoEntry_InitFields,
+        0,
+        0
     );
 }
 

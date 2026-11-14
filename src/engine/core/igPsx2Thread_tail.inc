@@ -53,17 +53,17 @@ void igPsx2Thread_EnsureRegistered(void)
 void igPsx2Thread_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2Thread_metaObject),
-        igThread_Register,
+        0,
+        g_igPsx2Thread_metaObject,
+        (igMetaObjectRegisterFunction)igThread_Register,
         igThread_GetPublishedMetaObject,
         igPsx2Thread_GetMetaObjectFunction,
         igPsx2Thread_className,
-        0x40, /* instance size */
+        0x40,
         igPsx2Thread_GetVTable,
-        &igPsx2Thread_InitFields,
-        0, /* extra callback item */
-        g_igPsx2Thread_callbackList /* callback list */
+        igPsx2Thread_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igPsx2Thread_callbackList
     );
 }
 

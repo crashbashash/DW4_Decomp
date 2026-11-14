@@ -40,17 +40,17 @@ void igFile_EnsureRegistered(void)
 void igFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igFile_metaObject),
-        igNamedObject_Register,
-        igNamedObject_GetPublishedMetaObject,
+        1,
+        g_igFile_metaObject,
+        (igMetaObjectRegisterFunction)igNamedObject_Register,
+        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igFile_GetMetaObjectFunction,
         igFile_className,
-        0x2C, /* instance size */
+        0x2C,
         0,
-        &igFile_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igFile_InitFields,
+        0,
+        0
     );
 }
 

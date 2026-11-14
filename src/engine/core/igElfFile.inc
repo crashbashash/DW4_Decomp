@@ -62,17 +62,17 @@ void igElfFile_EnsureRegistered(void)
 void igElfFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igElfFile_metaObject),
-        igProgramFile_Register,
-        igProgramFile_GetPublishedMetaObject,
+        0,
+        g_igElfFile_metaObject,
+        (igMetaObjectRegisterFunction)igProgramFile_Register,
+        (igMetaObjectGetFunction)igProgramFile_GetPublishedMetaObject,
         igElfFile_GetMetaObjectFunction,
         igElfFile_className,
-        0x64, /* instance size */
+        0x64,
         igElfFile_GetVTable,
-        &igElfFile_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igElfFile_InitFields,
+        0,
+        0
     );
 }
 

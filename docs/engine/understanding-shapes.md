@@ -14,7 +14,9 @@ method and the reasons.
 1. **State the difference exactly.** Compile the candidate under the unit's profile and read the instruction diff:
    `python3 tools/check.py --no-cache --function 0xVA --cand <file>`, and for a whole listing
    `python3 tools/project.py cc --version SLUS-20836 <symbol> <file> <out>.o` then
-   `mipsel-linux-gnu-objdump -dr <out>.o`. Write it down in machine terms: "the body reloads `52(s0)` where ours
+   `mipsel-linux-gnu-objdump -dr -z <out>.o` (`-z` keeps runs of zero words: the three `nop`s MWCC pads a short
+   loop with are otherwise printed as `...` and the listing looks 12 bytes short per loop). Write it down in
+   machine terms: "the body reloads `52(s0)` where ours
    reuses the guard's load", "the count gets `a0`, retail's `a0` is the list", "four bytes short, the delay slot is
    filled". A size difference, an order difference and a register difference have different causes.
 2. **Read the function and its unit.** Real types from `include/dw4/reflected.h`, what each value is for, how the
@@ -144,6 +146,40 @@ after"), so the first run decides which temporaries overlap and with that their 
 position: one more instruction at the head of a block exchanges a pair further down. Two spellings with the same
 unscheduled listing and different scheduled ones differ in something the listing does not show, such as a register
 copy that coalescing removes.
+
+### The b52 scheduler trace
+
+**When:** the scheduler-off listing is the same as retail's and the scheduled one is not, or two temporaries
+share a register in retail and not in the candidate. `tools/mwcc_irdump/gdb_schedtrace.py` runs the compiler
+under gdb and writes, for every basic block of both scheduling passes, the dependence nodes the scheduler built
+and each pick it makes:
+
+```sh
+IRDUMP_OUT=/tmp/irdump/sched.txt MWCIncludes=src gdb -q -batch -x tools/mwcc_irdump/gdb_schedtrace.py \
+    --args local/wibo local/mwcps2/3.0b52-030722/mwccps2.exe -c -O4,s -sdatathreshold 2 \
+    -inline level=8,bottomup -Iinclude /tmp/irdump/t.cpp -o /tmp/irdump/t.o
+```
+
+What it shows about the scheduler (`Scheduler.c` in the compiler; the routine at 0x4c42f0 schedules one block):
+
+- It is a forward list scheduler for a two-wide machine: each cycle it issues up to two instructions, then
+  advances the clock. A node may be issued once all its predecessors are, and not before its `ready` cycle,
+  which is the issue cycle of each predecessor plus the latency on the edge: 1 for arithmetic, 6 for a load, 0
+  into the block's branch. So the user of a load waits six cycles and everything that depends on nothing is
+  issued in the meantime, which is the "constants and loads first" look of scheduled code.
+- The first pass (before register allocation) takes the first eligible node in list order, the order the code
+  generator wrote, unless another eligible node scores better in its register-pressure function (0x4c3630; in
+  the block traced, an `and` that ended two live values went ahead of an `andi` that ended none). Because the machine is two-wide and a result is not
+  available in the cycle that makes it, one more instruction at the head of a block changes which pairs share
+  a cycle further down: position matters, and so does the order in which an inline's arguments and body are
+  written.
+- The second pass (after allocation) prefers a node that has reached its `latest` cycle (it is on the block's
+  longest path), then the node that frees more successors, then the longer path, then list order: the order
+  the first pass left. Registers add edges (a redefinition waits for the earlier uses), and so does memory: a
+  store ahead of a load in the list is a predecessor of the load, whatever the two addresses are, so a spill
+  store ahead of an unrelated load puts that load on a longer path.
+- Virtual register numbers in the first pass are the allocator's ids, so the trace also answers which of two
+  temporaries was created first.
 
 ### EE GCC's scheduler trace
 
@@ -427,6 +463,19 @@ Units are named by their source file.
   pointer arithmetic (`(char *)(&entry.stat + 1)`, the byte after the stat) and the other as the member keeps them
   apart; casts or `&entry.name[0]` on the same member are folded together. *Unit:*
   `src/engine/core/CoreLibrary.cpp` (`igPsx2Folder_ListFiles`).
+- **A cast between a base and a field leaves an address to move, and reads that do not merge.**
+  - *Symptom:* a function with loops has one more 16-byte stack slot than retail and loads a byte through a
+    spilled pointer (`lw v0,176(sp); lbu v0,0(v0)`) where retail reads it off the base (`lbu v1,75(s2)`); and a
+    validity check loads one header byte three times where retail loads it once and masks it (`andi v0,v0,0xff`).
+  - *Cause:* the state record declared its bins as raw bytes and its top chunk as `char *`, so each use went
+    through a cast to the chunk type. The cast is a node between the base and the field offset: inside a loop
+    the cast address is an invariant expression, moved to a temporary in front of the loop, and the temporary
+    is spilled. A cast pointer passed to three inline accessors gives three reads that are not shared; the
+    member read in its own type is one expression, shared in a byte temporary.
+  - *Spelling:* type the members: the top as a pointer to the chunk header, a bin as a struct whose first
+    member is the header, and `&state->bins[i].header` for a bin. The other functions of the allocator matched
+    with either typing; only the ones with loops tell them apart.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator, 0x315170).
 
 ### Propagation (b52)
 
@@ -531,6 +580,26 @@ Units are named by their source file.
   written plainly. `*a != 0` there folds to `beqz`, and a `(bool)` cast is not needed. The remaining count of a
   bounded scan does the same in `while (remaining && *p)`, with the cursor declared before the count. *Unit:*
   `src/engine/core/CoreLibrary.cpp` (0x2d3d30, 0x30ab20).
+
+- **A `goto` into the tail keeps a loop's constants inside it.**
+  - *Symptom:* a chunk walk loads `li v1,1` and `li v1,-4` on every pass in retail, and the `if (cur != top) {
+    while … }` spelling hoists both in front of the loop (same length, other registers).
+  - *Cause:* with the loop inside an `if` the optimizer has a place for a pre-header. Written flat, with the
+    skip as a jump over the loop to a label in the function's last block, it hoists nothing.
+  - *Spelling:* `if (cur == top) goto reset; while (walk < end) { … } … if (inUse == 0) { remove(); reset: …;
+    return success; } return failure;`. The label sits inside the final `if`, which also puts the failure
+    return last, as in retail.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x314b50).
+- **A value computed on every pass is hoisted with a guard; one under `||` is not.**
+  - *Symptom:* retail tests `0 < count` once (`sltu at,zero,n; beqz at`), loads `pool->_poolIndex >> 1 < 32` in
+    that guarded block (placed at the end of the function) and still jumps to the loop test. With
+    `if (size >= 0x80000 || (unsigned)pool->_poolIndex >> 1 >= 32)` in the body the load stays in the loop
+    and there is no guard.
+  - *Cause:* the second operand of `||` does not run on every pass, so it is not invariant code to move. As an
+    inline's argument (or a body local) the shift runs unconditionally; the optimizer moves it, and because
+    it is a load it guards the moved block with the loop test. The widened `unsigned short` count is moved
+    the same way, which is why no count local may be declared: `i < count` on the parameter.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x322a70, 0x31d640).
 
 ### Types and values
 
@@ -640,6 +709,79 @@ Units are named by their source file.
   The same sequence without the null test, followed by the release of the old token, is the assignment
   `name = chars;`. Holders with an adopting constructor fed by hand-written intern code were the same class.
   *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2da1c0, 0x2d1c40, 0x305d30, 0x2fca80, 0x32c240).
+- **String literals are read-only, and a `strcpy` from one is a fixed-size copy.**
+  - *Symptom:* a two-byte string (`"\n"`) is copied with `lui; addiu; lh 0(v0); sh 0(v1)` from `.rodata`, and a
+    `strcat` in the same function points at the same object. Under the unit's flags a two-byte literal is small
+    data (`-sdatathreshold 2` counts size 2), reached through `gp`, and `strcpy` stays a call; a `static const`
+    array is copied byte by byte.
+  - *Cause:* the original build made string constants read-only (`-str readonly`). A read-only literal goes to
+    `.rodata` whatever its size, and because its bytes cannot change the compiler expands `strcpy(buffer, "\n")`
+    into a copy of the literal's known size; the variadic `int strcpy(...)` declaration is expanded the same way.
+    Every two-byte string of the library sits in `.rodata` in retail, which is why the unit could only name them
+    through extern arrays.
+  - *Spelling:* the literals written in the function, between `#pragma push`, `#pragma readonly_strings on` and
+    `#pragma pop`: the pragma is the source form of the flag and leaves the unit's row alone. Each literal the
+    function then emits is an `anon` row at its retail address.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d45d0).
+- **A size parameter's conversion leaves the loop's entry jump at the end of the function.**
+  - *Symptom:* the code before a `while` loop jumps to a two-instruction block placed after the function's last
+    statement, which jumps on to the loop's test (`b L; ... L: b test+4; <copy of the test's first instruction>`),
+    and the final `return` branches over that block: 12 bytes more than the same loop entered directly.
+  - *Cause:* the loop body passes an `int` to a callee whose parameter is unsigned (`strncat`'s `size_t`). The
+    conversion is a loop-invariant expression, so the optimizer creates a preheader for the loop, and it appends
+    new blocks at the end of the function. The moved value is a copy of the variable's register and vanishes in
+    the code generator; the block stays. An empty preheader (nothing moved) is removed by jump chaining, so a
+    callee declared with an `int` size has no such block.
+  - *Spelling:* the callee's real prototype, `char *strncat(char *, const char *, unsigned int)`, the argument
+    passed plain.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d45d0).
+- **A predicate that returns a byte is normalised before the branch.** `and v0,v0,v1; sltu v0,zero,v0; beqz v0`
+  on a flag test: the test is an inline returning `unsigned char` whose body compares (`return (flags & mask)
+  != 0;`). A `bool` return, or the mask test written in the `if`, folds to the plain branch. The object goes in by
+  `const` reference: a pointer to `const` makes the field's address a value of its own (`addiu v0,s4,20`).
+  *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2dd1c0, not yet matched).
+- **A range test spelled as an unsigned difference keeps it.** `addiu t4,c,-99; sltiu at,t4,5; bnez at` inside a
+  chain of `beq` tests is `(unsigned)(c - 'c') > 4` (with `<=` for the other sense). `c >= 'c' && c <= 'g'` gives two
+  `slti` tests, a run of `c != 'c' && c != 'd' && ...` gives one `beq` each and is not merged, and a `switch` sorts its
+  cases, so a chain in retail's own unsorted order (`u x i s S c-g C ] n-p`) is a flat `&&` chain. The spelling was
+  found by a variant test. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
+- **A local initialised from a string literal copies exactly its own size.** `char name[] = "igMetaObject: ";` copies
+  its 15 bytes as `ld`, `lwc1`/`swc1`, `lh`, `lbu`; a larger array with the same initialiser copies a template of the
+  array's full size (`lq` loop), `memcpy` stays a call, and `strcpy` declared `(...)` stays a call. An array declared
+  and never used takes no frame space. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0, not matched: retail's
+  frame is 256 bytes larger than one 15-byte name explains).
+
+### Scheduling (b52)
+
+- **A value an inline reads for itself is evaluated after its arguments.**
+  - *Symptom:* two expansions of one header-writing inline in one function; the one in a block that starts with
+    an extra `addu` has `li a3,-1` and `move a2,s0` exchanged, two masks issued in the other order and one
+    temporary in another register (5 instructions), and no declaration order or spelling of the surrounding
+    statements moves it.
+  - *Cause:* the candidate passed the pool index as an argument, so its load was written ahead of the copies
+    of the other arguments (arguments are evaluated from the last to the first). The first scheduling pass
+    issues in list order, two a cycle; with the load first and the extra `addu` at the head, the header byte's
+    load fell one cycle later than the index's, its user became ready one cycle after the index's user instead
+    of with it, and the two ended in the other order. The live ranges then overlapped and the allocator needed
+    another register. With the index read inside the inline the copies come first and both blocks schedule as
+    retail.
+  - *Spelling:* the inline takes the object and reads the member itself, as a member function would.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator, 0x318110; traced with the scheduler
+    trace).
+- **A shared sum is computed where it is first used.**
+  - *Symptom:* a block starts with a load in retail (`lw a0,200(s4)`) and with an `addu` in the candidate, and
+    the branches into the block carry a copy of that `addu` in their delay slots where retail has `nop`.
+  - *Cause:* the candidate assigned `newTop = oldTop + nb` and then used `newTop` in the next expression, so
+    the `addu` and the store of the spilled `newTop` were written first. The store ahead of the load makes the
+    load wait for it in the second pass, the sum's chain is then the longest, and the `addu` leads the block.
+    Retail has the load first, so the sum was written inside the expression that uses it.
+  - *Spelling:* `newEnd = (oldTop + nb + minimum + pageMask) & ~pageMask; newTop = oldTop + nb;`: the
+    optimizer shares the sum, and its temporary is assigned where the first statement evaluates it. An
+    assignment inside the expression gives the same bytes and is not needed.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x312ba0).
+- **Statement order shows in a delay slot.** `beqz at,L; nop; lw a0,56(s4); li v1,1; subu v0,v0,a0;
+  sw v1,196(s4)`: the size is computed first and the state flag stored after it. With the store first its
+  `li` fills the branch's slot and the load follows. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x312ba0).
 
 ### Scheduling (EE GCC)
 
@@ -729,8 +871,16 @@ Units are named by their source file.
     the branch it sits in (`!p` turns `beqz p,T; b F` into `bnez p,F`) is the wrong one. An `int` or pointer return
     has no `return;` form; there the trigger has to be one of the other two.
   - *Unit:* `src/engine/core/CoreLibrary.cpp`: the arena pool's block walks (0x311d10, a trailing `return;` after the
-    bad-chunk report) and the arena block check (0x312790, `igResult`). The page pool's memory operation (0x326410)
-    shows the effect but has not been matched.
+    bad-chunk report) and the arena block check (0x312790, `igResult`).
+  - *Open case:* the three pool memory operations (page 0x326410, malloc 0x3236a0, arena 0x31f480) are in this
+    mode and none of the three constructs is theirs. Their operation-name argument is
+    `bne size,-1,B; beq block,zero,A; nop; b B; nop`, which is what the plain `(size == -1 && block == 0) ? a : b`
+    compiles to; `&& !block` gives the mode but turns the pair into `bnez block,B` (2 instructions short). With
+    the plain spelling the page function has retail's instructions and only the 15 unfilled slots differ, so
+    the trigger is somewhere else in the function. Tried without effect in a small probe file: `for (;;)`,
+    `while (1)`, `do … while`, `goto retry`/`goto done`, a `return` inside the loop, nested conditional
+    expressions, a redundant `result = 0`, an empty `else`, a `switch` with the cases first. A `switch` with
+    `default:` first gives the mode but puts the default body first, and retail has the free path first.
 - **A commutative add takes the plain variable as its first operand.** The front end orders the operands of `+` so
   that a leaf comes first. An inline call counts as complex until it is expanded, and a conditional expression is
   always complex. To get retail's `addu v1,a0,v1` with the payload in `a0`, the payload has to be a variable. When
@@ -738,6 +888,16 @@ Units are named by their source file.
   assigning the variable between them: `if (level > 0 && ml > 0) { size = …; if (((Chunk *)((char *)h + (size +
   header)))->used && ml > 0) … }` compiles to the same branches as the flat chain. *Unit:*
   `src/engine/core/CoreLibrary.cpp` (0x30fa90).
+- **A statement after an `if` that both arms reach is hoisted into the test's slot.**
+  - *Symptom:* after a scan loop, `bnez t7,L; li s0,2` with the append in the fall-through, and the loop's first
+    exit to that test keeps a `nop`. With the assignment written ahead of the `if` the `li` stays in front of the
+    branch, the slot takes the fall-through's first instruction, and the loop exit copies the `li` from its target.
+  - *Cause (not traced):* written after the `if`, the assignment is the first instruction of the join both paths
+    reach, and it ends up in the test's slot; the test is then the first instruction at the loop exits' target, which
+    leaves them nothing to copy. Written ahead, it stays in the test's own block and the slot takes the
+    fall-through's first instruction. The two placements also number the temporaries differently.
+  - *Spelling:* `if (!space) { piece[used++] = c; i++; } state = 2;`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
 
 ### Declaration order and evaluation order
 
@@ -855,6 +1015,38 @@ Units are named by their source file.
     `static inline const char *igMemoryPoolInfo_messages(const igMemoryPoolInfo *info)`, every local declared
     where it is first set, the result an `igResult` assigned from the base call.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x3223d0, 0x325940, the arena pool's).
+- **A decoder's helpers take the cursor and the result by reference, and the results are typed scratch locals.**
+  - *Symptom:* a record decoder runs a variable-length-integer loop per field. Retail keeps the read pointer in
+    one saved register throughout, the flags word in the next and the slot counter between them; the value and
+    the shift of a field's loop sit in `a1` and `a0`. Helpers that return the advanced pointer, or that build
+    the value in a local of their own and store it at the end, give the same instructions with the saved
+    registers rotated and the value and shift exchanged; no declaration order of the caller's locals changes
+    anything, because each is replaced by a helper's temporary.
+  - *Cause:* a helper that works on `T &out` directly (`out = 0; out |= ...`) leaves the caller's declared
+    variable as the accumulator, with the id of its declaration; the helper's own locals (shift, a copy of the
+    cursor) are numbered after it. Only the first web of a declared variable has that id: a scratch variable
+    used for a second field is a later web and is numbered after the helper's locals, which exchanges the two
+    registers. Retail's pattern (declared-variable order at the type, at the first signed field and at the
+    first unsigned field after it, later-web order everywhere else) is three variables: the type, one signed
+    scratch and one unsigned scratch, each field assigned from the scratch of its own signedness.
+  - *The cursor copy:* each helper reads through a local copy (`const char *q = p; ... p = q;`). The copy's
+    last assignment back is then an expression the optimizer puts into the next use in the same block, so
+    where two fields are decoded with a call between them and no branch, the cursor's increment comes after
+    the call's result is stored (`jal; lw a0,68(s4); sw v0,68(s3); addiu s0,s0,1`), not in the call's delay
+    slot.
+  - *Spelling:* `static inline void decodeUnsigned(const char *&p, unsigned int &out)` and
+    `decodeSigned(const char *&p, int &out)`, called as `decodeSigned(p, value); record->size = value;`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2de480).
+- **A character compared in place needs no local.** A scan `while (*s && *s != '\'' && n < 255)` whose body
+  tests and stores `*s` again shares one load and one sign extension; copying the character to an `int` local
+  in the condition (`(c = *s) != '\''`) gives the same instructions with eight temporaries permuted. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d45d0).
+- **Spilled locals take their stack slots from the last declared to the first.** A function with more
+  long-lived locals than saved registers keeps some in 16-byte frame slots; the slots rise in the reverse of
+  declaration order, so their offsets give the declaration block. Where a value returned after a scoped
+  block has a slot below the block's own locals, the locals are all declared at the top of the function,
+  C style, and only the scoped object is in the block. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2dd1c0, not
+  yet matched: one pair of temporaries around a list-capacity test is still exchanged).
 - **Fields read where they are used leave no locals to order.**
   - A reader's `gets` compares, clamps and subtracts its position and length: `if (f->pos >= f->len) return 0;`
     and `if (n + f->pos >= f->len) n = f->len - f->pos;`. The shared reads are the optimizer's temporaries,
@@ -872,6 +1064,12 @@ Units are named by their source file.
     directly (its widened copy is the compiler's and takes the lowest register, where a declared count local
     took a higher one).
     *Unit:* `src/engine/core/CoreLibrary.cpp` (0x327d40, 0x327ed0).
+  - A scanf over a format string reads `format[i]` at each use in the outer dispatch (`if (format[i] != '%')`,
+    `piece[used++] = format[i]`), and only the inner conversion scan keeps the character in a local, `c`, with the
+    space test through a one-line inline (`static inline int isSpace(int c) { return _ctype_[c + 1] & 8; }`). A
+    character local for the outer dispatch, declared anywhere, exchanged it with the hoisted copy of the format
+    pointer (`t1`/`t2`); without the inline, ten temporaries took other registers. *Unit:*
+    `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
 - **Where a pair of locals is all that is left of an order.**
   - `for (int i = 0, count = list->count; i < count; i++)` numbers the index before the count, which a count
     declared in front of the loop does not; an `int` getter for the count changes nothing. *Unit:*
@@ -914,6 +1112,94 @@ Units are named by their source file.
   *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
 - **Inline virtuals are emitted in reverse declaration order.** Declare them in the reverse of retail's address
   order. *Unit:* `src/engine/lua/LuaRegistration.cpp`.
+- **A later web of a reused variable colours first; a block local is its own first web.**
+  - *Symptom:* instructions identical, the temporaries of one path rotated (`v1`/`a0`, then every temporary
+    after them), and no order of the declarations changes it.
+  - *Cause:* `IRO_SplitLifetimes` gives each separate lifetime of a variable after the first a new temporary,
+    numbered late, so it colours before the optimizer's shared values and takes the low register. The value
+    retail colours late is a variable's first lifetime. In the dlmalloc code one `bck` holds the chunk before
+    the victim in the small-bin path, in the unsorted loop, in binning and in the bin scan; retail's colours
+    need the first two to be lifetimes of their own.
+  - *Spelling:* the value declared in the block that uses it (`TaggedBlockHeader *previous = ...;` in the
+    small-bin path and again in the unsorted loop), the function-level variable left to the paths that share
+    it. The reverse case in the same allocator: the end and the new top of a separately placed system block
+    are the function's `newEnd` and `newTop` assigned a second time, which is what gives them the first
+    temporary registers; a local for the end exchanges three temporaries, and the sum written out at both uses
+    is computed after the alignment test instead of before it.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x315170, 0x312ba0).
+- **A named local keeps an argument out of the inline's arithmetic.** `addiu a2,s5,-8; addiu a0,a2,-4;
+  ... addiu v0,a2,-12`: the argument is computed once and the inline subtracts from it. Passed as an
+  expression (`resize(chunk, size - 8)`) the constants fold (`-12`, `-20` from the variable); a `const`
+  parameter changes nothing, a cast on the argument stops the folding but numbers the value differently.
+  *Spelling:* `unsigned int shortened = size - 8; resize(chunk, shortened);`. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x312ba0).
+- **Locals declared in the order they are first assigned.** A search over the declaration order of fourteen
+  locals found one that matched; testing every single move showed only five constraints, and the order of
+  first assignment satisfies them all. Try that order before searching. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x312ba0).
+- **A 64-bit member passed as `%u` is read through a getter.**
+  - *Symptom:* a notice passes twelve 64-bit counters truncated to 32 bits. Retail loads the first five whole
+    (`ld`) before the branch of a conditional argument and truncates them after it (`dsll32`/`dsra32`), loads
+    the seven that go to the stack with `lw`, all of them ahead of the stores; the candidate loads and stores
+    one by one and reads the first five with `lw` after the conditional.
+  - *Cause:* a cast on the member is narrowed to a 32-bit load in the optimizer and is then a plain operand,
+    loaded where its argument register is set. An inline getter returning `long long` leaves a 64-bit
+    temporary assigned where the call stands, so every argument is evaluated before any is placed, and the
+    truncation happens at placement; within one block the load and the truncation merge into `lw`.
+  - *Spelling:* `(unsigned int)pool->getLocalAllocated()` with `long long getLocalAllocated()`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x312ba0, 0x3194c0).
+- **An `int` accessor materialises a flag test.** `andi v0,v0,0x40; sltu v0,zero,v0; beqz v0`: the option
+  test goes through an inline returning `int` (`return (flags & option) != 0;`). Written in place, or through
+  an inline returning `bool`, the `sltu` is folded into the branch. *Unit:* `src/engine/core/CoreLibrary.cpp`
+  (0x312ba0, 0x315170).
+- **A copy that coalescing removes leaves its block behind.** `beqz at,L730` to a block that is only
+  `b L1138`: the source assigns `newp = oldp` at the end of the first arm, both variables take one register,
+  and the jump is not threaded because the block was not empty when jumps were chained. The statements after
+  the arms use `newp`. An assertion written ahead of `remainder_size = newsize - nb` likewise leaves the
+  subtraction on both sides of the notice. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x3194c0).
+
+- **A local declared ahead of a spilled one colours after the scan that follows the spill.**
+  - *Symptom:* a write position and the byte total it follows share `s5` where retail has `s0`, with the block
+    pointer and the guard size one register low; no order of the function-level locals moves them.
+  - *Cause:* the allocator pushes low-degree nodes in ascending id, scan after scan, and colours in reverse.
+    The last scan pushed the header pointers and the position first and the long-lived locals after them
+    (`45 46 81 | 33 36 37 38`), so the position coloured after them. A position declared before the spilled
+    `first` record pointer has a lower id than the header pointers, is pushed in the same scan as the
+    long-lived locals and after them, colours first and takes `s0`; the byte total, which does not overlap it,
+    then takes `s0` too.
+  - *Spelling:* in the block, `char *cursor; GangRecord *first; TaggedBlockHeader *h;`; at the top the guard
+    before the block pointer.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x322a70, 0x31d640).
+- **A node one neighbour over the limit waits a scan and takes `v0`.**
+  - *Symptom:* a size loop's index is in `v0` and every temporary one register up (`v1`, `a0`, …) where retail
+    has the index in `a3`. The sibling function with one fewer spilled value matches with the same source.
+  - *Cause:* the index has 29 neighbours (traced with the proxy compiler); 25 or more keeps a node out of the
+    scan until enough lower-numbered neighbours are pushed, and only four were (the loop's size, chunk and
+    the inline's two values). Pushed in the second scan, it coloured before all the loop's temporaries. A fifth
+    lower-numbered neighbour puts it in the first scan.
+  - *Spelling:* the member's size with its record is a variable set twice, `entry = chunk + 12;
+    entry = roundUp8(entry); total += entry;`. A variable set once is propagated away and gives no node.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x31d640; 0x322a70 takes the same source).
+- **Mixed signedness keeps two additions, and two masks, apart.** `roundUp8(chunk + 12)` with an `int`
+  parameter adds 12 and then 7 where two `unsigned` values fold to 19; a chunk size computed in `int` loads its
+  own `-4` where an `unsigned` one reuses the mask already in a register. Each is a conversion node between
+  the two operations. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x322a70, 0x31d640).
+- **A header written by the shared inline keeps the arithmetic its other callers need.**
+  - *Symptom:* a function that always writes the 12-byte header computes the header word count at run time
+    (`addiu a2,a1,12; subu a1,a2,a1; srl; addiu -1`), and with the statements written out the constant folds;
+    with the fold prevented by a signed local the instructions are retail's but 79 sit elsewhere in the block,
+    the `0 & 1` of the cleared flags in `t9` instead of `v0`.
+  - *Cause:* the pool's blocks are stamped by one inline that takes the block's byte count or 0
+    (`if (total == 0) total = ((size + 3) & ~3) + 12;` in the long branch, `+ 4` in the short one, then
+    `words = ((total - ((size + 3) & ~3)) >> 2) - 1`) and a flag that forces the long form. The forced branch
+    is removed after the subtraction has been built from two copies of the rounded size, so nothing folds,
+    and the statements reach the scheduler in the inline's order.
+  - *Spelling:* `initBlockHeader(self, h, size, 0, marked, external)`; the two gang allocators and the
+    system-block allocator share it.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x31e0b0, 0x322a70, 0x31d640).
+- **A compare written toward the larger side branches through `at`.** `total + used <= max` gives retail's
+  `sltu at,max,sum; bnez at` and puts the refused path out of line; `max >= sum` makes a register of the
+  compare. `alignment > 8` likewise for `slti at,v0,9`. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x322a70).
 
 ### `asm` and `volatile`
 

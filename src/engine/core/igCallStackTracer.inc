@@ -30,17 +30,17 @@ void igCallStackTracer_EnsureRegistered(void)
 void igCallStackTracer_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igCallStackTracer_metaObject),
-        igUnsignedIntListNoClean_Register,
+        0,
+        g_igCallStackTracer_metaObject,
+        (igMetaObjectRegisterFunction)igUnsignedIntListNoClean_Register,
         igUnsignedIntListNoClean_GetPublishedMetaObject,
         igCallStackTracer_GetMetaObjectFunction,
         igCallStackTracer_className,
-        0x14, /* instance size */
+        0x14,
         igCallStackTracer_GetVTable,
         igCallStackTracer_SetAbstractProxy,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

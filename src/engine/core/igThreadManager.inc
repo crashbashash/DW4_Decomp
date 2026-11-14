@@ -19,17 +19,17 @@ void igThreadManager_EnsureRegistered(void)
 void igThreadManager_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igThreadManager_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igThreadManager_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igThreadManager_GetMetaObjectFunction,
         igThreadManager_className,
-        0x10, /* instance size */
+        0x10,
         0,
-        &igThreadManager_InitFields,
-        igThreadManager_StaticInitCallback, /* extra callback item */
-        g_igThreadManager_callbackList /* callback list */
+        igThreadManager_InitFields,
+        igThreadManager_StaticInitCallback,
+        (igMetaObjectCallback *)g_igThreadManager_callbackList
     );
 }
 

@@ -36,17 +36,17 @@ void igObjectDirEntry_EnsureRegistered(void)
 void igObjectDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igObjectDirEntry_metaObject),
-        igDirEntry_Register,
+        0,
+        g_igObjectDirEntry_metaObject,
+        (igMetaObjectRegisterFunction)igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igObjectDirEntry_GetMetaObjectFunction,
         igObjectDirEntry_className,
-        0x34, /* instance size */
+        0x34,
         igObjectDirEntry_GetVTable,
-        &igObjectDirEntry_InitFields,
-        0, /* extra callback item */
-        g_igObjectDirEntry_callbackList /* callback list */
+        igObjectDirEntry_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igObjectDirEntry_callbackList
     );
 }
 

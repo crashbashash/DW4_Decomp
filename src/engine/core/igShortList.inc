@@ -34,17 +34,17 @@ void igShortList_EnsureRegistered(void)
 void igShortList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igShortList_metaObject),
-        igDataList_Register,                 /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igShortList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igShortList_GetMetaObjectFunction,
         igShortList_className,
-        0x14, /* instance size */
+        0x14,
         igShortList_GetVTable,
-        &igShortList_InitFields_002c9f30[0], /* field adder (class InitFields) */
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igShortList_InitFields_002c9f30,
+        0,
+        0
     );
 }
 

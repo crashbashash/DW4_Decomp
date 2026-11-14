@@ -63,17 +63,17 @@ void igStringTable_EnsureRegistered(void)
 void igStringTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igStringTable_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igStringTable_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igStringTable_GetMetaObjectFunction,
         igStringTable_className,
-        0x18, /* instance size */
+        0x18,
         igStringTable_GetVTable,
-        &igStringTable_InitFields,
-        0, /* extra callback item */
-        g_igStringTable_callbackList /* callback list */
+        igStringTable_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igStringTable_callbackList
     );
 }
 

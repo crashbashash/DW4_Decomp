@@ -209,7 +209,6 @@ extern "C" StringPool *StringPool_Construct(StringPool *arg0);
 extern "C" void CoreLibrary_MarkRegistered(void);
 extern "C" int igVirtualCFuncMetaField_GetVTable(void);
 extern "C" void igVirtualCFuncMetaField_EnsureRegistered(void);
-extern "C" int igMetaObject_RegisterClass(...);
 extern "C" void igVirtualCFuncMetaField_Register(void);
 extern "C" void igVirtualCFuncMetaField_GetMetaObjectFunction(void);
 extern "C" void igVirtualCFuncMetaField_CreateDefaultDescriptor(void);
@@ -1984,7 +1983,7 @@ extern "C" char DAT_004fc090[];
 extern "C" char DAT_004fc150[];
 extern "C" void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end);
 extern "C" void igArenaMemoryPool_DisplayOutstandingAllocations(void *self0);
-extern "C" int strncat(char *, int *, int);
+extern "C" char *strncat(char *, const char *, unsigned int);
 extern "C" char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3);
 extern "C" char *igMetaEnum_GetValueName(char *arg0, int arg1, int arg2, int arg3);
 extern "C" char *FUN_00312140(char *, int, int, int);
@@ -3944,6 +3943,15 @@ typedef struct {int *data;int count;int capacity;} CallbackArray;
 extern "C" CallbackArray *igArray_Construct(CallbackArray *array);
 extern "C" CallbackArray *igArray_Destruct(CallbackArray *array,short deleteFlag);
 extern "C" int igArray_Append(CallbackArray *array,int item);
+typedef CallbackArray *(*igMetaObjectRegisterFunction)();
+typedef igMetaObject *(*igMetaObjectGetFunction)();
+typedef int (*igMetaObjectGetVTableFunction)();
+typedef void (*igMetaObjectCallback)();
+extern "C" CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObject,
+    igMetaObjectRegisterFunction registerParent, igMetaObjectGetFunction getParentMetaObject,
+    igMetaObjectCallback getMetaObjectFunction, const char *className, int instanceSize,
+    igMetaObjectGetVTableFunction getVTable, igMetaObjectCallback initFields,
+    igMetaObjectCallback staticInitCallback, igMetaObjectCallback *callbacks);
 extern "C" void igBoolArrayMetaField_SwapBytes(igBoolArrayMetaField *self, int buffer, int count);
 extern "C" void igBoolArrayMetaField_SetDefaultAll(igBoolArrayMetaField *arg0, int arg1);
 extern "C" int DAT_004f9588[4];
@@ -4351,7 +4359,7 @@ enum igEventType {
     kEventTypeAny, kMemoryAllocation, kMemoryDetach, kMemoryDeallocation, kMemoryRead, kMemoryWrite, kObjectAllocation,
     kObjectDetach, kObjectDeallocation, kObjectRead, kObjectWrite, kMemberRead, kMemberWrite, kMarker, kNotification, kCustom
 };
-struct EventRecord { int type; int index; int pad8; int val; int pad16; int markerType; int pad24[6]; char *str; int pad52[4]; int f68; int f72; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } };
+struct EventRecord { int type; int index; int address; int val; int f16; int markerType; int markerValue; char *markerName; int notificationType; int notificationCode; char *notificationText; char *group; char *str; char *memberName; char *annotation; char *f60; char *f64; int f68; int f72; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } };
 /* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
 class igEventTrackerView : public igVirtualObject {
 public:
@@ -4763,6 +4771,7 @@ class igMediaFileView : public igFileView { public:
     igMediaView *_media;
 };
 extern "C" void igMediaFile_Close(igMediaFileView *arg0);
+extern "C" int Gap__Core__igMediaFile__vfunc_30(igMediaFileView *self, const char *format, ...);
 extern "C" char DAT_004f9c48[];
 extern "C" char DAT_004f9c58[];
 extern "C" char DAT_004f9c68[];
@@ -5890,7 +5899,6 @@ extern "C" unsigned char GPR_00554d04;
 extern "C" igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *end);
 extern "C" unsigned char GPR_00554d1c;
 extern "C" char text_igArenaMemoryPool_trim_E76_Arena[];
-extern "C" igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *, int, int, int);
 extern "C" bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad);
 /* A free chunk's link pair sits past its header, at +4 or +12 as the header is short or `big`;
  * `big == 0 ? 4 : 12` gives the movn form. */
@@ -5909,6 +5917,28 @@ extern "C" char text_LightChecking[];
 extern "C" char text_ModerateChecking[];
 extern "C" char text_HeavyChecking[];
 extern "C" igResult igArenaMemoryPool_Configure(igArenaMemoryPool *pool, igMemoryPoolInfo *info);
+struct TaggedBlockHeader {
+    unsigned char used : 1;
+    unsigned char words : 4;
+    unsigned size : 19;
+    unsigned char poolLow : 5;
+    unsigned char marked : 1;
+    unsigned char relocated : 1;
+    unsigned char big : 1;
+    int previous;
+    unsigned short sizeHigh : 12;
+    unsigned poolHigh : 12;
+    unsigned char extraUsed : 1;
+    unsigned char extraMarked : 1;
+    unsigned char extraTag : 5;
+    unsigned char extraBig : 1;
+};
+/* A bin of the arena: a chunk header that only anchors a free list, with room after it for the two
+ * links in either header form. */
+struct ArenaBin {
+    TaggedBlockHeader header;
+    int linkRoom[2];
+};
 /* The arena's 0x814-byte state record, dlmalloc's malloc_state: the fast-bin size limit with two
  * flag bits, the fast bins, the top chunk and the last remainder, 96 bins that are each a chunk
  * header with its two links, the bin map and the tuning values (bit 0 of the flags at 2016 marks
@@ -5918,9 +5948,9 @@ extern "C" igResult igArenaMemoryPool_Configure(igArenaMemoryPool *pool, igMemor
 struct ArenaState {
     unsigned int maxFast;
     TaggedBlockHeader *fastBins[10];
-    char *top;
+    TaggedBlockHeader *top;
     TaggedBlockHeader *lastRemainder;
-    char bins[96][20];
+    ArenaBin bins[96];
     unsigned int binMap[4];
     unsigned int trimThreshold;
     int f1992;
@@ -5987,6 +6017,18 @@ public:
     int _poolOptionFlags;
     int _poolPreSized;
     unsigned int _smallestChunkSize;
+    long long getLocalAllocated() { return _localAllocated; }
+    long long getLocalFreed() { return _localFreed; }
+    long long getLocalNetAllocated() { return _localNetAllocated; }
+    long long getLocalNetAllocatedHigh() { return _localNetAllocatedHigh; }
+    long long getLocalAllocatedWithOverhead() { return _localAllocatedWithOverhead; }
+    long long getLocalFreedWithOverhead() { return _localFreedWithOverhead; }
+    long long getLocalNetAllocatedWithOverhead() { return _localNetAllocatedWithOverhead; }
+    long long getLocalNetAllocatedWithOverheadHigh() { return _localNetAllocatedWithOverheadHigh; }
+    long long getLocalAllocationCount() { return _localAllocationCount; }
+    long long getLocalFreeCount() { return _localFreeCount; }
+    long long getLocalNetAllocationCount() { return _localNetAllocationCount; }
+    long long getLocalNetAllocationCountHigh() { return _localNetAllocationCountHigh; }
 };
 extern "C" void igArenaMemoryPool_Activate(igArenaMemoryPoolView *arg0);
 extern "C" void igArenaMemoryPool_Reset(igArenaMemoryPool *self);
@@ -6242,22 +6284,6 @@ extern "C" int DAT_004ff1b0[4];
 extern "C" char DAT_004ff1f0[];
 extern "C" void igMallocMemoryPool_TransferAllocation(int *arg0, igMallocMemoryPool *arg1, char *arg2, igMemoryPoolView *arg3);
 extern "C" unsigned char igMallocMemoryPool_IsActive(igMallocMemoryPool *self);
-struct TaggedBlockHeader {
-    unsigned char used : 1;
-    unsigned char words : 4;
-    unsigned size : 19;
-    unsigned char poolLow : 5;
-    unsigned char marked : 1;
-    unsigned char relocated : 1;
-    unsigned char big : 1;
-    int previous;
-    unsigned short sizeHigh : 12;
-    unsigned poolHigh : 12;
-    unsigned char extraUsed : 1;
-    unsigned char extraMarked : 1;
-    unsigned char extraTag : 5;
-    unsigned char extraBig : 1;
-};
 /* An arena chunk's payload size rounded up to a word; its header words follow in the chunk's bytes. */
 static inline unsigned int alignedPayloadSize(TaggedBlockHeader *h) {
     unsigned int size = h->size;
@@ -6411,11 +6437,13 @@ static inline void setChunkBytes(TaggedBlockHeader *h, unsigned int total) {
         }
     }
 }
-/* Writes a fresh header for a chunk owned by pool `pool`: the 12-byte form when the payload size
- * needs more than 19 bits, the pool index more than 5, or the chunk is system-mapped, else the
- * short form. A caller that knows the chunk's `total` bytes but not its payload passes a size of
- * -1; one that knows the payload may pass a total of 0 to take the header's own size. */
-static inline void initChunkHeader(TaggedBlockHeader *h, unsigned int size, unsigned int total, unsigned int pool, int mapped) {
+/* Writes a fresh header for a chunk of the arena `self`, tagged with the pool's index: the 12-byte
+ * form when the payload size needs more than 19 bits, the pool index more than 5, or the chunk is
+ * system-mapped, else the short form. A caller that knows the chunk's `total` bytes but not its
+ * payload passes a size of -1; one that knows the payload may pass a total of 0 to take the
+ * header's own size. */
+static inline void initChunkHeader(igArenaMemoryPoolView *self, TaggedBlockHeader *h, unsigned int size, unsigned int total, int mapped) {
+    unsigned int pool = (unsigned int)self->_poolIndex >> 1;
     h->poolLow = pool;
     h->relocated = 0;
     h->marked = 0;
@@ -6466,6 +6494,26 @@ extern "C" unsigned char GPR_00554cb4, GPR_00554cb8, GPR_00554cbc, GPR_00554cc0,
 extern "C" char DAT_004fbb00[], DAT_004fbb20[], DAT_004fbb60[], DAT_004fbba0[], DAT_004fbc00[], DAT_004fbc40[], DAT_004fbc60[], DAT_004fbcb0[], DAT_004fbce0[], DAT_004fbd20[], DAT_004fbd70[], DAT_004fbdb0[], DAT_004fbe00[], DAT_004fbe50[];
 extern "C" unsigned char GPR_00554d4c;
 extern "C" char DAT_004fd2c0[], DAT_004fd2e0[];
+/* An empty in-use header: the two fenceposts that close off a top chunk the arena can no longer
+ * extend are written this way. */
+static inline void initFencepost(TaggedBlockHeader *h) {
+    h->poolLow = 0;
+    h->relocated = 0;
+    h->marked = 0;
+    h->used = 0;
+    h->big = 0;
+    h->words = 0;
+    h->size = 0;
+}
+extern "C" char text_igArenaMemoryPool_E102_PreSizeReached[], text_igArenaSystemMalloc_E66[], text_igArenaMemoryPool_E105_PreSizeReached[], text_igArenaMemoryPool_E106_PreSizeReached[], text_igArenaMemoryPool_E103_MemoryExhausted[], text_System[];
+/* Set when the answer to a notice asks not to see it again. */
+extern "C" unsigned char g_arenaNoticeE102Silenced, g_arenaNoticeE66Silenced, g_arenaNoticeE105Silenced, g_arenaNoticeE106Silenced, g_arenaNoticeE103Silenced;
+extern "C" void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int bytes);
+extern "C" char text_E59_CorruptedControlStructure[], text_E60_CorruptedBlockHeader[], text_igArena_malloc_E67[];
+extern "C" unsigned char g_arenaNoticeE59Silenced, g_arenaNoticeE60Silenced, g_arenaNoticeE67Silenced;
+extern "C" char text_ncopies_3[], text_igUnsignedInt_newsize_igUnsignedInt_nb[], text_igArenaMemoryPool_E104_MemoryExhausted[];
+extern "C" unsigned char g_arenaAssertNcopiesSilenced, g_arenaAssertNewsizeSilenced, g_arenaNoticeE104Silenced;
+extern "C" void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes);
 extern "C" void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes);
 extern "C" void FUN_00318110(igArenaMemoryPoolView *self, char *mem);
 extern "C" void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned int bytes);
@@ -6482,6 +6530,88 @@ extern "C" void igMallocMemoryPool_FreeBlock(igMallocMemoryPoolView *self, unsig
 struct TaggedTailByte { unsigned char low : 7; unsigned char extended : 1; };
 extern "C" void *igMallocMemoryPool_ReallocateBlock(igMallocMemoryPoolView *self, char *p, unsigned size);
 extern "C" void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsigned alignment, unsigned size);
+/* Each member of a gang allocation is preceded by this record: its byte distance from the first
+ * member's record, and (first member only) the number of members still allocated. */
+struct GangRecord {
+    unsigned short offset;
+    unsigned short count;
+    int reserved;
+};
+extern "C" igResult Gap__Core__igMallocMemoryPool__vfunc_62(igMallocMemoryPoolView *self, int count, unsigned int *sizes, void **blocks);
+extern "C" int DAT_004fe940[4];
+extern "C" int DAT_004fd480[4];
+/* chunkBytes in signed arithmetic, used where the gang allocators find a member's guard word. Retail
+ * loads a second -4 there instead of reusing the unsigned mask of the header code, which a signed
+ * mask gives. */
+static inline int signedChunkBytes(TaggedBlockHeader *h) {
+    int size = h->size;
+    if (h->big == 1) {
+        size += h->sizeHigh << 19;
+    }
+    size = (size + 3) & ~3;
+    return size + (h->words + 1) * 4;
+}
+
+/* Rounds a byte count up to 8. The signed parameter keeps the caller's own addition apart from the
+ * rounding one (retail adds 12 and then 7). */
+static inline int roundUp8(int bytes) { return (bytes + 7) & ~7; }
+
+/* Writes the tagged header of a block a pool hands out whole: owner pool, payload size, and the
+ * 12-byte form when the size or the pool index does not fit the short one or the block is `external`
+ * (taken straight from the system allocator; the header then carries `extraMarked`). `total` is the
+ * block's byte count when the caller knows it, else 0 and the header's own bytes are added to the
+ * rounded payload. Gang members are `marked`. */
+static inline void initBlockHeader(igMemoryPoolView *self, TaggedBlockHeader *h, unsigned size, unsigned total, bool marked, bool external) {
+    int id = self->GetPoolIndex() >> 1;
+    h->poolLow = id;
+    h->relocated = 0;
+    h->marked = marked;
+    h->used = 0;
+    if (size >= 0x80000 || id >= 32 || external) {
+        h->sizeHigh = size >> 19;
+        h->poolHigh = id >> 5;
+        h->big = 1;
+        h->extraBig = 1;
+        h->extraUsed = 0;
+        h->extraMarked = external;
+        h->extraTag = 0;
+        if (total == 0) {
+            total = ((size + 3) & ~3) + 12;
+        }
+    } else {
+        h->big = 0;
+        if (total == 0) {
+            total = ((size + 3) & ~3) + 4;
+        }
+    }
+    h->words = ((total - ((size + 3) & ~3)) >> 2) - 1;
+    h->size = size;
+}
+
+extern "C" igResult Gap__Core__igArenaMemoryPool__vfunc_62(igArenaMemoryPoolView *self, int count, unsigned int *sizes, void **blocks);
+extern "C" int DAT_004fd410[4];
+extern "C" unsigned char GPR_00554d50;
+extern "C" unsigned char GPR_00554d54;
+/* Whether a pool-option bit is set, as 0 or 1. */
+static inline int hasPoolOption(int flags, int mask) { return (flags & mask) != 0; }
+extern "C" igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end);
+extern "C" int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size);
+extern "C" int DAT_004fd500[4];
+extern "C" int DAT_004fd550[4];
+extern "C" int DAT_004fd5c0[4];
+extern "C" unsigned char GPR_00554d58;
+extern "C" unsigned char GPR_00554d5c;
+extern "C" unsigned char GPR_00554d60;
+extern "C" char DAT_004fcc00[];
+extern "C" char DAT_004fcc70[];
+extern "C" char DAT_004fcce0[];
+extern "C" char DAT_004fcd50[];
+extern "C" char DAT_004fcdd0[];
+extern "C" unsigned char GPR_00554d20;
+extern "C" unsigned char GPR_00554d24;
+extern "C" unsigned char GPR_00554d28;
+extern "C" unsigned char GPR_00554d2c;
+extern "C" unsigned char GPR_00554d30;
 extern "C" void *igPageMemoryPool_Initialize(igPageMemoryPool *arg0);
 extern "C" void *igPageMemoryPool_CopyConstruct(igPageMemoryPool *arg0, int extra1);
 extern "C" int DAT_004fc120[4];
@@ -6825,6 +6955,7 @@ public:
     char *_prefix;
 };
 extern "C" void igPsx2File_Close(igPsx2FileView *self);
+extern "C" int Gap__Core__igPsx2File__vfunc_30(igPsx2FileView *self, const char *format, ...);
 extern "C" void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mode);
 extern "C" void igPsx2File_GrowBuffer(igPsx2FileView *arg0, int arg1);
 extern "C" int igPsx2File_Read(igPsx2FileView *arg0, int arg1, int arg2, int arg3);

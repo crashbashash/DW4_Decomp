@@ -55,17 +55,17 @@ void igDependencyMetaField_EnsureRegistered(void)
 void igDependencyMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igDependencyMetaField_metaObject),
-        igCompoundMetaField_Register,
-        igCompoundMetaField_GetPublishedMetaObject,
+        0,
+        g_igDependencyMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igCompoundMetaField_Register,
+        (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igDependencyMetaField_GetMetaObjectFunction,
         igDependencyMetaField_className,
-        0x38, /* instance size */
+        0x38,
         igDependencyMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igDependencyMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igDependencyMetaField_callbackList
     );
 }
 

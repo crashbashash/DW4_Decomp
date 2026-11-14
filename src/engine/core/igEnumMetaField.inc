@@ -68,17 +68,17 @@ void igEnumMetaField_EnsureRegistered(void)
 
 void igEnumMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igEnumMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igEnumMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igEnumMetaField_GetMetaObjectFunction,
         igEnumMetaField_className,
-        0x38, /* instance size */
+        0x38,
         igEnumMetaField_GetVTable,
-        &igEnumMetaField_InitFields,
-        0, /* extra callback item */
-        g_igEnumMetaField_callbackList /* callback list */
+        igEnumMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igEnumMetaField_callbackList
     );
 }
 

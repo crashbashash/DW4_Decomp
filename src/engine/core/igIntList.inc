@@ -38,19 +38,19 @@ void igIntList_EnsureRegistered(void)
 
 void *igIntList_Register(void) {
     CoreLibrary_MarkRegistered();
-    return ((void *)igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igIntList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+    return igMetaObject_RegisterClass(
+        0,
+        g_igIntList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igIntList_GetMetaObjectFunction,
         igIntList_className,
-        0x14, /* instance size */
+        0x14,
         igIntList_GetVTable,
         igIntList_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
-    ));
+        0,
+        0
+    );
 }
 
 void igIntList_GetMetaObjectFunction(void) {

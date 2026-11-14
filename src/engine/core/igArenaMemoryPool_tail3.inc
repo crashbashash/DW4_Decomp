@@ -213,6 +213,194 @@ bad:
     return g_resultSuccess;
 }
 
+/* dlmalloc's sYSMALLOc: the top chunk cannot hold `nb` bytes, so the arena asks the system for
+ * more. It first tries to extend the top in place, to the page after the new top plus one smallest
+ * chunk; failing that it takes a separate block, closes the old top off with two fenceposts and
+ * frees what is left of it. A pre-sized pool asks for all of its pre-size at once. When the system
+ * has nothing, the pool is asked to give memory back and the request is retried. */
+void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int bytes) {
+    ArenaState *state;
+    unsigned int pageMask;
+    int tries;
+    TaggedBlockHeader *oldTop;
+    unsigned int oldSize;
+    char *oldEnd;
+    char *newEnd;
+    char *newTop;
+    int size;
+    unsigned int preSize;
+    unsigned int room;
+    unsigned int brk;
+    TaggedBlockHeader *p;
+    int r;
+    state = self->_arenaState;
+    pageMask = state->pageSize - 1;
+    tries = 0;
+    if (self->_poolPreSized == 1 && hasPoolOption(self->_poolOptionFlags, 0x40)) {
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (g_arenaNoticeE102Silenced == 0) {
+                r = igReportNotice(text_igArenaMemoryPool_E102_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                if (r != 1 && r == 2) {
+                    g_arenaNoticeE102Silenced = 1;
+                }
+            }
+        }
+        self->_poolPreSized = 2;
+    }
+    for (;;) {
+        oldTop = state->top;
+        oldSize = chunkBytes(oldTop);
+        if (oldTop == &state->bins[1].header) {
+            oldSize = 0;
+        } else if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, oldTop) && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (g_arenaNoticeE66Silenced == 0) {
+                r = igReportNotice(DAT_004fbc00, text_igArenaSystemMalloc_E66, oldTop);
+                if (r != 1 && r == 2) {
+                    g_arenaNoticeE66Silenced = 1;
+                }
+            }
+        }
+        oldEnd = (char *)oldTop + oldSize;
+        newEnd = (char *)(((unsigned int)oldTop + nb + ((self->_smallestChunkSize + 7) & ~7) + pageMask) & ~pageMask);
+        newTop = (char *)oldTop + nb;
+        size = newEnd - oldEnd;
+        preSize = self->_preSize;
+        if (preSize != 0) {
+            if (size + self->_systemAllocated < preSize) {
+                room = preSize - (int)self->_localNetAllocatedWithOverhead;
+                size = (room + pageMask) & ~pageMask;
+                self->_poolPreSized = 1;
+                newEnd = oldEnd + size;
+            } else {
+                if (self->_poolPreSized == 0 && hasPoolOption(self->_poolOptionFlags, 0x40)) {
+                    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_arenaNoticeE105Silenced == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_E105_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                            if (r != 1 && r == 2) {
+                                g_arenaNoticeE105Silenced = 1;
+                            }
+                        }
+                    }
+                }
+                self->_poolPreSized = 2;
+            }
+        }
+        brk = self->vfunc_105((int)oldEnd, size);
+        if (brk != (unsigned int)-1) {
+            state->top = (TaggedBlockHeader *)newTop;
+            initChunkHeader(self, state->top, (unsigned int)-1, newEnd - newTop, 0);
+            state->top->used = 1;
+            self->vfunc_111(oldEnd, size);
+            initChunkHeader(self, oldTop, bytes, nb, 0);
+            oldTop->used = 1;
+            if (self->_heapIntegrityCheckLevel > 0) {
+                igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)oldTop, nb);
+            }
+            return chunkMemory(oldTop);
+        }
+        size = (nb + ((self->_smallestChunkSize + 7) & ~7) + 4 + pageMask) & ~pageMask;
+        preSize = self->_preSize;
+        if (preSize != 0) {
+            if (size + self->_systemAllocated < preSize) {
+                room = preSize - (int)self->_localNetAllocatedWithOverhead;
+                size = (room + pageMask) & ~pageMask;
+                self->_poolPreSized = 1;
+            } else {
+                if (self->_poolPreSized == 0 && hasPoolOption(self->_poolOptionFlags, 0x40)) {
+                    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_arenaNoticeE106Silenced == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_E106_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                            if (r != 1 && r == 2) {
+                                g_arenaNoticeE106Silenced = 1;
+                            }
+                        }
+                    }
+                }
+                self->_poolPreSized = 2;
+            }
+        }
+        brk = self->vfunc_105(0, size);
+        if (brk != (unsigned int)-1) {
+            newEnd = (char *)brk + size;
+            p = (TaggedBlockHeader *)brk;
+            if ((brk & 7) != 4) {
+                p = (TaggedBlockHeader *)(((brk + 4) | 4) & ~3);
+            }
+            newTop = (char *)p + nb;
+            state->top = (TaggedBlockHeader *)newTop;
+            initChunkHeader(self, state->top, (unsigned int)-1, newEnd - newTop, 0);
+            state->top->used = 1;
+            self->vfunc_111((char *)p, newEnd - (char *)p);
+            initChunkHeader(self, p, bytes, nb, 0);
+            p->used = 1;
+            if (self->_heapIntegrityCheckLevel > 0) {
+                igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)p, nb);
+            }
+            if ((oldSize & 7) != 0) {
+                oldSize &= ~7;
+            }
+            if (oldSize >= ((self->_smallestChunkSize + 7) & ~7) + 8) {
+                unsigned int trimThreshold;
+                unsigned int shortened = oldSize - 8;
+                setChunkBytes(oldTop, shortened);
+                initFencepost((TaggedBlockHeader *)((char *)oldTop + (oldSize - 8)));
+                ((TaggedBlockHeader *)((char *)oldTop + (oldSize - 8)))->used = 1;
+                initFencepost((TaggedBlockHeader *)((char *)oldTop + (oldSize - 4)));
+                ((TaggedBlockHeader *)((char *)oldTop + (oldSize - 4)))->used = 1;
+                trimThreshold = state->trimThreshold;
+                state->trimThreshold = (unsigned int)-1;
+                FUN_00318110(self, chunkMemory(oldTop));
+                state->trimThreshold = trimThreshold;
+            } else if (oldSize != 0) {
+                initFencepost(oldTop);
+                oldTop->used = 1;
+                initFencepost((TaggedBlockHeader *)((char *)oldTop + 4));
+                ((TaggedBlockHeader *)((char *)oldTop + 4))->used = 1;
+            }
+            return chunkMemory(p);
+        }
+        if (tries < 2) {
+            tries++;
+            if (self->vfunc_28(0) != 0) {
+                continue;
+            }
+            if (self->vfunc_28(1) != 0) {
+                continue;
+            }
+        }
+        if (self->vfunc_23(bytes, 3) != 0) {
+            continue;
+        }
+        if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
+            SystemMemoryStatistics stats;
+            g_activeSystemAllocator[0]->GetStatistics(&stats);
+            Memory_PrintPoolStatistics(0, self);
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (g_arenaNoticeE103Silenced == 0) {
+                    r = igReportNotice(text_igArenaMemoryPool_E103_MemoryExhausted, self->_size != 0 ? text_Raw : text_System, self->_poolIndex,
+                                       (unsigned int)self->getLocalAllocated(), (unsigned int)self->getLocalFreed(), (unsigned int)self->getLocalNetAllocated(),
+                                       (unsigned int)self->getLocalNetAllocatedHigh(), (unsigned int)self->getLocalAllocatedWithOverhead(),
+                                       (unsigned int)self->getLocalFreedWithOverhead(), (unsigned int)self->getLocalNetAllocatedWithOverhead(),
+                                       (unsigned int)self->getLocalNetAllocatedWithOverheadHigh(), (unsigned int)self->getLocalAllocationCount(),
+                                       (unsigned int)self->getLocalFreeCount(), (unsigned int)self->getLocalNetAllocationCount(),
+                                       (unsigned int)self->getLocalNetAllocationCountHigh(), stats.totalSystemMemorySize,
+                                       stats.allocationSpan, stats.maximumSpan, stats.allocatedAndInUse,
+                                       stats.allocatedAndAvailable, stats.freeFromTop);
+                    if (r != 1 && r == 2) {
+                        g_arenaNoticeE103Silenced = 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
+
 /* dlmalloc's sYSTRIm: gives the pages at the end of the top chunk back to the system, keeping `pad`
  * bytes and, unless forced, the pool's pre-size. */
 int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
@@ -221,8 +409,8 @@ int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
     int extra;
     char *released;
     unsigned int pageSize = state->pageSize;
-    if (state->top != state->bins[1] && self->_size == 0) {
-        TaggedBlockHeader *top = (TaggedBlockHeader *)state->top;
+    if (state->top != &state->bins[1].header && self->_size == 0) {
+        TaggedBlockHeader *top = state->top;
         unsigned int payload = alignedPayloadSize(top);
         topSize = payload + (top->words + 1) * 4;
         extra = ((topSize - pad - ((self->_smallestChunkSize + 7) & ~7) + (pageSize - 1)) / pageSize - 1) * pageSize;
@@ -236,11 +424,11 @@ int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
             self->_poolPreSized = 0;
         }
         if (extra > 0) {
-            released = state->top + topSize - extra;
+            released = (char *)state->top + topSize - extra;
             self->vfunc_106(released, extra);
             state->f2044 -= extra;
-            initChunkHeader((TaggedBlockHeader *)state->top, (unsigned int)-1, topSize - extra, (unsigned int)self->_poolIndex >> 1, 0);
-            ((TaggedBlockHeader *)state->top)->used = 1;
+            initChunkHeader(self, state->top, (unsigned int)-1, topSize - extra, 0);
+            state->top->used = 1;
             self->vfunc_111(released, -extra);
             if (self->_heapIntegrityCheckLevel >= 2) {
                 FUN_00310c00(self);
@@ -276,7 +464,7 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
         return false;
     }
     for (i = a->blockCount - 2; i >= 0; i -= 2) {
-        if (igArenaMemoryPool_TrimArenaBlock(self, i, a->blocks[i], a->blocks[i + 1]) == g_resultSuccess) {
+        if (igArenaMemoryPool_TrimArenaBlock(self, i, (char *)a->blocks[i], (char *)a->blocks[i + 1]) == g_resultSuccess) {
             if (i < a->blockCount - 2) {
                 memcpy(a->blocks + i, a->blocks + (i + 2), (a->blockCount - (i + 2)) * 4);
             }
@@ -288,6 +476,142 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     }
     FUN_00314510(self, a->f1992, pad);
     return trimmed;
+}
+
+/* Walks one system block of the arena. When every chunk in it is free it unlinks them, moves the top
+ * pointer off the block if it was there, and gives the block's pages back to the system. */
+igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
+    char *top = (char *)self->_arenaState->top;
+    char *walk = cur;
+    char *hi = self->getHighestAddress();
+    char *lo = self->getLowestAddress();
+    TaggedBlockHeader *n;
+    unsigned int size = 0;
+    int count = 0;
+    int inUse = 0;
+    bool ok = false;
+    if (cur < lo || hi < cur) {
+        if (self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554d20 == 0) {
+                int r = igReportNotice(DAT_004fcc00, index, cur, lo, hi);
+                if (r != 1 && r == 2) {
+                    GPR_00554d20 = 1;
+                }
+            }
+        }
+        return g_resultFailure;
+    }
+    if (end < lo || hi < end) {
+        if (self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554d24 == 0) {
+                int r = igReportNotice(DAT_004fcc70, index, end, lo, hi);
+                if (r != 1 && r == 2) {
+                    GPR_00554d24 = 1;
+                }
+            }
+        }
+        return g_resultFailure;
+    }
+    if (end < cur) {
+        if (self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554d28 == 0) {
+                int r = igReportNotice(DAT_004fcce0, index, end, cur);
+                if (r != 1 && r == 2) {
+                    GPR_00554d28 = 1;
+                }
+            }
+        }
+        return g_resultFailure;
+    }
+    if (!((TaggedBlockHeader *)cur)->used) {
+        if (self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554d2c == 0) {
+                int r = igReportNotice(DAT_004fcd50);
+                if (r != 1 && r == 2) {
+                    GPR_00554d2c = 1;
+                }
+            }
+        }
+        return g_resultFailure;
+    }
+    /* A block that starts at the top chunk has nothing to walk: straight to the release. */
+    if (cur == top) {
+        goto reset;
+    }
+    while (walk < end) {
+        TaggedBlockHeader *h = (TaggedBlockHeader *)walk;
+        unsigned int sz = h->size;
+        if (h->big == 1) {
+            sz += h->sizeHigh << 19;
+        }
+        sz = (sz + 3) & ~3;
+        size = sz + (h->words + 1) * 4;
+        n = (TaggedBlockHeader *)(walk + size);
+        if (walk == top) {
+            walk = (char *)n;
+            break;
+        }
+        int min = self->_smallestChunkSize;
+        if (size < min) {
+            if (end - walk <= min) {
+                ok = true;
+                break;
+            }
+            unsigned int nsz;
+            if (n->big == 0) {
+                nsz = n->size;
+            } else {
+                nsz = n->size + (n->sizeHigh << 19);
+            }
+            if (nsz < min) {
+                if (end - (char *)n <= min * 2) {
+                    ok = true;
+                    break;
+                }
+            }
+            goto bad;
+        }
+        if (n->used) {
+            inUse++;
+        }
+        if ((char *)n > end || (char *)n < walk) {
+            goto bad;
+        }
+        walk = (char *)n;
+        count++;
+    }
+    if (walk != end && !ok) {
+bad:
+        if (self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554d30 == 0) {
+                int r = igReportNotice(DAT_004fcdd0, walk, index, count, size, cur, end);
+                if (r != 1 && r == 2) {
+                    GPR_00554d30 = 1;
+                }
+            }
+        }
+        return g_resultFailure;
+    }
+    if (inUse == 0) {
+        igResult removed;
+        igArenaMemoryPool_RemoveFreeChunksInRange((int *)&removed, (igArenaMemoryPool *)self, (unsigned int)cur, (unsigned int)end);
+reset:
+        if (top >= cur && top < end) {
+            ArenaState *state = self->_arenaState;
+            state->top = &state->bins[1].header;
+        }
+        unsigned int pageMask = g_activeSystemAllocator[0]->vfunc_21() - 1;
+        cur = (char *)((unsigned int)cur & ~pageMask);
+        end = (char *)(~pageMask & (unsigned int)(end + pageMask));
+        self->vfunc_106(cur, end - cur);
+        return g_resultSuccess;
+    }
+    return g_resultFailure;
 }
 
 void igArenaMemoryPool_RemoveFreeChunksInRange(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigned int arg3) {
@@ -318,6 +642,384 @@ void igArenaMemoryPool_RemoveFreeChunksInRange(int *arg0, igArenaMemoryPool *arg
     *arg0 = g_resultSuccess.v;
 }
 
+/* dlmalloc's mALLOc: a fast bin or small bin of the exact size, then the unsorted list (binning what
+ * does not fit), the request's large bin, the next non-empty bin by the bin map, and last the top
+ * chunk. A pool with the top-only option goes straight to the top. When the top is too small, a pool
+ * on raw memory, or one not pre-sized, consolidates the fast bins and tries once more before the
+ * system is asked. */
+void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
+    ArenaState *state;
+    unsigned int nb;
+    unsigned int idx;
+    TaggedBlockHeader *bin;
+    TaggedBlockHeader **fb;
+    TaggedBlockHeader *victim;
+    unsigned int size;
+    int victimIndex;
+    TaggedBlockHeader *remainder;
+    unsigned int remainderSize;
+    unsigned int block;
+    unsigned int bit;
+    unsigned int map;
+    TaggedBlockHeader *fwd;
+    TaggedBlockHeader *bck;
+    int attempt;
+    int r;
+    if (self->_heapIntegrityCheckLevel >= 3) {
+        ArenaHeapCheck check(self);
+    }
+    state = self->_arenaState;
+    attempt = 1;
+    nb = 0;
+    if (bytes >= (unsigned int)-32) {
+        if (self->vfunc_23(bytes, attempt) == 0) {
+            return 0;
+        }
+    } else {
+        unsigned int smallest = self->_smallestChunkSize;
+        nb = (bytes + headerBytesFor(bytes, (unsigned int)self->_poolIndex >> 1) + 7) & ~7;
+        if (nb < smallest) {
+            nb = smallest;
+        }
+    }
+    for (;;) {
+        if (hasPoolOption(self->_poolOptionFlags, 0x10)) {
+            goto use_top;
+        }
+        if (!(state->maxFast & 1)) {
+            if (state->maxFast == 0) {
+                FUN_00318b40(self);
+            }
+            goto use_top;
+        }
+        if (nb <= state->maxFast) {
+            fb = &state->fastBins[(nb >> 3) - 2];
+            if ((victim = *fb) != 0) {
+                *fb = chunkLinks(victim)->forward;
+                setChunkPayload(victim, bytes, nb);
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckBlock(self, victim, nb);
+                }
+                return chunkMemory(victim);
+            }
+        }
+        if (nb < 256) {
+            idx = nb >> 3;
+            bin = &state->bins[idx].header;
+            if ((victim = chunkLinks(bin)->back) != bin) {
+                setChunkPayload(victim, bytes, nb);
+                TaggedBlockHeader *previous = chunkLinks(victim)->back;
+                ((TaggedBlockHeader *)((char *)victim + nb))->used = 1;
+                chunkLinks(bin)->back = previous;
+                chunkLinks(previous)->forward = bin;
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+                }
+                return chunkMemory(victim);
+            }
+        } else {
+            idx = largeBinIndex(nb);
+            if (state->maxFast & 2) {
+                FUN_00318b40(self);
+            }
+        }
+        while ((victim = chunkLinks(&state->bins[1].header)->back) != &state->bins[1].header) {
+            TaggedBlockHeader *previous = chunkLinks(victim)->back;
+            size = chunkBytes(victim);
+            if (nb < 256 && previous == &state->bins[1].header && victim == state->lastRemainder && size > nb + ((self->_smallestChunkSize + 7) & ~7)) {
+                remainderSize = size - nb;
+                remainder = (TaggedBlockHeader *)((char *)victim + nb);
+                initChunkHeader(self, victim, bytes, nb, 0);
+                victim->used = 1;
+                initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
+                remainder->used = 1;
+                *(unsigned int *)((char *)remainder + chunkBytes(remainder) - 4) = remainderSize;
+                chunkLinks(&state->bins[1].header)->back = remainder;
+                chunkLinks(&state->bins[1].header)->forward = remainder;
+                state->lastRemainder = remainder;
+                chunkLinks(remainder)->back = &state->bins[1].header;
+                chunkLinks(remainder)->forward = &state->bins[1].header;
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+                }
+                return chunkMemory(victim);
+            }
+            chunkLinks(&state->bins[1].header)->back = previous;
+            chunkLinks(previous)->forward = &state->bins[1].header;
+            if (size == nb) {
+                ((TaggedBlockHeader *)((char *)victim + size))->used = 1;
+                setChunkPayload(victim, bytes, size);
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+                }
+                return chunkMemory(victim);
+            }
+            if (size < 256) {
+                victimIndex = size >> 3;
+                bck = &state->bins[victimIndex].header;
+                fwd = chunkLinks(bck)->forward;
+            } else {
+                victimIndex = largeBinIndex(size);
+                bck = &state->bins[victimIndex].header;
+                fwd = chunkLinks(bck)->forward;
+                if (fwd != bck) {
+                    if (size < chunkBytes(chunkLinks(bck)->back)) {
+                        fwd = bck;
+                        bck = chunkLinks(bck)->back;
+                    } else if (size >= 256) {
+                        size |= 1;
+                        while (size < chunkBytes(fwd)) {
+                            fwd = chunkLinks(fwd)->forward;
+                        }
+                        bck = chunkLinks(fwd)->back;
+                    }
+                }
+            }
+            state->binMap[victimIndex >> 5] |= 1 << (victimIndex & 31);
+            chunkLinks(victim)->back = bck;
+            chunkLinks(victim)->forward = fwd;
+            chunkLinks(fwd)->back = victim;
+            chunkLinks(bck)->forward = victim;
+        }
+        if (nb >= 256) {
+            bin = &state->bins[idx].header;
+            for (victim = chunkLinks(bin)->back; victim != bin; victim = chunkLinks(victim)->back) {
+                size = chunkBytes(victim);
+                if (size >= nb) {
+                    remainderSize = size - nb;
+                    unlinkChunk(victim);
+                    if (remainderSize < ((self->_smallestChunkSize + 7) & ~7)) {
+                        ((TaggedBlockHeader *)((char *)victim + size))->used = 1;
+                        setChunkPayload(victim, bytes, size);
+                        if (self->_heapIntegrityCheckLevel > 0) {
+                            igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, size);
+                        }
+                        return chunkMemory(victim);
+                    } else {
+                        remainder = (TaggedBlockHeader *)((char *)victim + nb);
+                        initChunkHeader(self, victim, bytes, nb, 0);
+                        victim->used = 1;
+                        initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
+                        remainder->used = 1;
+                        *(unsigned int *)((char *)remainder + chunkBytes(remainder) - 4) = remainderSize;
+                        chunkLinks(&state->bins[1].header)->back = remainder;
+                        chunkLinks(&state->bins[1].header)->forward = remainder;
+                        chunkLinks(remainder)->back = &state->bins[1].header;
+                        chunkLinks(remainder)->forward = &state->bins[1].header;
+                        if (self->_heapIntegrityCheckLevel > 0) {
+                            igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+                        }
+                        return chunkMemory(victim);
+                    }
+                }
+            }
+        }
+        ++idx;
+        bin = &state->bins[idx].header;
+        block = idx >> 5;
+        map = state->binMap[block];
+        bit = 1 << (idx & 31);
+        for (;;) {
+            if (bit > map || bit == 0) {
+                do {
+                    if (++block >= 3) {
+                        goto use_top;
+                    }
+                } while ((map = state->binMap[block]) == 0);
+                bin = &state->bins[block << 5].header;
+                bit = 1;
+            }
+            while ((bit & map) == 0) {
+                bin = (TaggedBlockHeader *)((char *)bin + 20);
+                bit <<= 1;
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(bit != 0) && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (g_arenaNoticeE59Silenced == 0) {
+                        r = igReportNotice(DAT_004fbb00, text_E59_CorruptedControlStructure);
+                        if (r != 1 && r == 2) {
+                            g_arenaNoticeE59Silenced = 1;
+                        }
+                    }
+                }
+            }
+            victim = chunkLinks(bin)->back;
+            if (victim == bin) {
+                state->binMap[block] = map &= ~bit;
+                bin = (TaggedBlockHeader *)((char *)bin + 20);
+                bit <<= 1;
+            } else {
+                size = chunkBytes(victim);
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(size >= nb) && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (g_arenaNoticeE60Silenced == 0) {
+                        r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, victim, text_E60_CorruptedBlockHeader);
+                        if (r != 1 && r == 2) {
+                            g_arenaNoticeE60Silenced = 1;
+                        }
+                    }
+                }
+                remainderSize = size - nb;
+                bck = chunkLinks(victim)->back;
+                chunkLinks(bin)->back = bck;
+                chunkLinks(bck)->forward = bin;
+                if (remainderSize < ((self->_smallestChunkSize + 7) & ~7)) {
+                    ((TaggedBlockHeader *)((char *)victim + size))->used = 1;
+                    setChunkPayload(victim, bytes, size);
+                    if (self->_heapIntegrityCheckLevel > 0) {
+                        igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, size);
+                    }
+                    return chunkMemory(victim);
+                } else {
+                    remainder = (TaggedBlockHeader *)((char *)victim + nb);
+                    initChunkHeader(self, victim, bytes, nb, 0);
+                    victim->used = 1;
+                    initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
+                    remainder->used = 1;
+                    *(unsigned int *)((char *)remainder + chunkBytes(remainder) - 4) = remainderSize;
+                    chunkLinks(&state->bins[1].header)->back = remainder;
+                    chunkLinks(&state->bins[1].header)->forward = remainder;
+                    chunkLinks(remainder)->back = &state->bins[1].header;
+                    chunkLinks(remainder)->forward = &state->bins[1].header;
+                    if (nb < 256) {
+                        state->lastRemainder = remainder;
+                    }
+                    if (self->_heapIntegrityCheckLevel > 0) {
+                        igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+                    }
+                    return chunkMemory(victim);
+                }
+            }
+        }
+    use_top:
+        victim = state->top;
+        size = chunkBytes(victim);
+        if (size >= nb + ((self->_smallestChunkSize + 7) & ~7)) {
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, state->top) && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (g_arenaNoticeE67Silenced == 0) {
+                    r = igReportNotice(DAT_004fbc00, text_igArena_malloc_E67, state->top);
+                    if (r != 1 && r == 2) {
+                        g_arenaNoticeE67Silenced = 1;
+                    }
+                }
+            }
+            remainderSize = size - nb;
+            remainder = (TaggedBlockHeader *)((char *)victim + nb);
+            state->top = remainder;
+            initChunkHeader(self, victim, bytes, nb, 0);
+            victim->used = 1;
+            initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
+            remainder->used = 1;
+            if (self->_heapIntegrityCheckLevel > 0) {
+                igArenaMemoryPool_CheckInUseBlock(self, (unsigned char *)victim, nb);
+            }
+            return chunkMemory(victim);
+        }
+        if (self->_size != 0 || self->_poolPreSized == 0) {
+            if (attempt-- != 0) {
+                FUN_00318b40(self);
+                continue;
+            }
+        }
+        return FUN_00312ba0(self, nb, bytes);
+    }
+}
+
+/* dlmalloc's fREe: a small chunk goes on its fast bin; any other is merged with its free neighbours
+ * and put on the unsorted list or into the top chunk, and a large enough result consolidates the
+ * fast bins and trims the top. */
+void FUN_00318110(igArenaMemoryPoolView *self, char *mem) {
+    ArenaState *state;
+    TaggedBlockHeader *p;
+    unsigned int size;
+    TaggedBlockHeader **fb;
+    TaggedBlockHeader *nextchunk;
+    unsigned int nextsize;
+    int nextinuse;
+    unsigned int prevsize;
+    TaggedBlockHeader *bck;
+    TaggedBlockHeader *fwd;
+    if (self->_heapIntegrityCheckLevel >= 3) {
+        ArenaHeapCheck check(self);
+    }
+    state = self->_arenaState;
+    if (mem != 0) {
+        p = (TaggedBlockHeader *)(mem - 4);
+        if (((TaggedTailByte *)(mem - 1))->extended == 1) {
+            p = (TaggedBlockHeader *)(mem - 12);
+        }
+        {
+            unsigned int payload = alignedPayloadSize(p);
+            size = payload + (p->words + 1) * 4;
+        }
+        if (self->_heapIntegrityCheckLevel > 0) {
+            igArenaMemoryPool_CheckInUseChunk(self, p);
+        }
+        if (size <= state->maxFast) {
+            state->maxFast |= 3;
+            fb = &state->fastBins[(size >> 3) - 2];
+            setForwardLink(p, *fb);
+            *fb = p;
+        } else if (!chunkIsMapped(p)) {
+            state->maxFast |= 1;
+            nextchunk = (TaggedBlockHeader *)((char *)p + size);
+            {
+                unsigned int payload = alignedPayloadSize(nextchunk);
+                nextsize = payload + (nextchunk->words + 1) * 4;
+            }
+            if (!p->used) {
+                prevsize = ((unsigned int *)p)[-1];
+                size += prevsize;
+                p = (TaggedBlockHeader *)((char *)p - prevsize);
+                unlinkChunk(p);
+            }
+            if (nextchunk != state->top) {
+                nextinuse = ((TaggedBlockHeader *)((char *)nextchunk + nextsize))->used;
+                nextchunk->used = 0;
+                if (!nextinuse) {
+                    unlinkChunk(nextchunk);
+                    size += nextsize;
+                }
+                initChunkHeader(self, p, (unsigned int)-1, size, 0);
+                p->used = 1;
+                {
+                    unsigned int payload = alignedPayloadSize(p);
+                    *(unsigned int *)((char *)p + (payload + (p->words + 1) * 4) - 4) = size;
+                }
+                bck = &state->bins[1].header;
+                fwd = chunkLinks(bck)->forward;
+                chunkLinks(p)->back = bck;
+                chunkLinks(p)->forward = fwd;
+                chunkLinks(bck)->forward = p;
+                chunkLinks(fwd)->back = p;
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckFreeChunk(self, p);
+                }
+            } else {
+                size += nextsize;
+                initChunkHeader(self, p, (unsigned int)-1, size, 0);
+                p->used = 1;
+                state->top = p;
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckChunk(self, p);
+                }
+            }
+            if (size >= 0x20000) {
+                if (state->maxFast & 2) {
+                    FUN_00318b40(self);
+                }
+                {
+                    TaggedBlockHeader *top = state->top;
+                    unsigned int payload = alignedPayloadSize(top);
+                    if (payload + (top->words + 1) * 4 >= state->trimThreshold) {
+                        FUN_00314510(self, state->f1992, 0);
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* dlmalloc's malloc_consolidate: empties the fast bins, merging each chunk with its free neighbours
  * and putting the result on the unsorted list or into the top chunk. A state not yet set up is
  * initialised instead. */
@@ -340,7 +1042,7 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
     state = self->_arenaState;
     if (state->maxFast != 0) {
         state->maxFast &= ~2;
-        unsortedBin = (TaggedBlockHeader *)state->bins[1];
+        unsortedBin = &state->bins[1].header;
         maxfb = &state->fastBins[(state->maxFast >> 3) - 2];
         fb = &state->fastBins[0];
         do {
@@ -366,7 +1068,7 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
                         p = (TaggedBlockHeader *)((char *)p - prevsize);
                         unlinkChunk(p);
                     }
-                    if ((char *)nextchunk != state->top) {
+                    if (nextchunk != state->top) {
                         nextinuse = ((TaggedBlockHeader *)((char *)nextchunk + nextsize))->used;
                         nextchunk->used = 0;
                         if (!nextinuse) {
@@ -388,7 +1090,7 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
                         size += nextsize;
                         setChunkBytes(p, size);
                         p->used = 1;
-                        state->top = (char *)p;
+                        state->top = p;
                     }
                 } while ((p = nextp) != 0);
             }
@@ -397,6 +1099,234 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
         FUN_0030f220(self);
         if (self->_heapIntegrityCheckLevel >= 2) {
             FUN_00310c00(self);
+        }
+    }
+}
+
+/* dlmalloc's rEALLOc, with the header's size taken into account: a request that moves the chunk
+ * between the 4-byte and the 12-byte header keeps the larger header when the chunk already has it,
+ * and otherwise moves the payload to its new offset. The chunk is resized in place when it is big
+ * enough or can grow into the top or a free neighbour; otherwise a new chunk is allocated, the
+ * payload copied and the old chunk freed. A system-mapped chunk cannot be resized. */
+void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes) {
+    ArenaState *state;
+    unsigned int nb;
+    TaggedBlockHeader *oldp;
+    unsigned int oldsize;
+    TaggedBlockHeader *newp;
+    unsigned int newsize;
+    char *newmem;
+    TaggedBlockHeader *next;
+    TaggedBlockHeader *remainder;
+    unsigned int remainderSize;
+    unsigned int copysize;
+    unsigned int ncopies;
+    unsigned int *s;
+    unsigned int *d;
+    unsigned int oldHeader;
+    unsigned int newHeader;
+    bool keepHeader;
+    int prevInUse;
+    int r;
+    if (self->_heapIntegrityCheckLevel >= 3) {
+        ArenaHeapCheck check(self);
+    }
+    state = self->_arenaState;
+    nb = 0;
+    keepHeader = false;
+    if (oldmem == 0) {
+        return FUN_00315170(self, bytes);
+    }
+    if (bytes >= (unsigned int)-32) {
+        if (self->vfunc_23(bytes, 1) == 0) {
+            return 0;
+        }
+    } else {
+        unsigned int smallest = self->_smallestChunkSize;
+        nb = (bytes + headerBytesFor(bytes, (unsigned int)self->_poolIndex >> 1) + 7) & ~7;
+        if (nb < smallest) {
+            nb = smallest;
+        }
+    }
+    for (;;) {
+        oldp = (TaggedBlockHeader *)(oldmem - 4);
+        if (((TaggedTailByte *)(oldmem - 1))->extended == 1) {
+            oldp = (TaggedBlockHeader *)(oldmem - 12);
+        }
+        oldsize = chunkBytes(oldp);
+        oldHeader = oldp->big == 0 ? 4 : 12;
+        prevInUse = chunkUsedBit(oldp);
+        newHeader = headerBytesFor(bytes, (unsigned int)self->_poolIndex >> 1);
+        if (newHeader < oldHeader) {
+            keepHeader = true;
+            nb += oldHeader - newHeader;
+            newHeader = oldHeader;
+        }
+        if (self->_heapIntegrityCheckLevel > 0) {
+            igArenaMemoryPool_CheckInUseChunk(self, oldp);
+        }
+        if (!chunkIsMapped(oldp)) {
+            if (oldsize >= nb) {
+                if (oldsize - nb < ((self->_smallestChunkSize + 7) & ~7)) {
+                    if (newHeader != oldHeader) {
+                        memmove((char *)oldp + newHeader, (char *)oldp + oldHeader, bytes);
+                        initChunkHeader(self, oldp, bytes, oldsize, 0);
+                        oldp->used = prevInUse;
+                        return chunkMemory(oldp);
+                    }
+                    setChunkPayload(oldp, bytes, oldsize);
+                    return chunkMemory(oldp);
+                }
+                newp = oldp;
+                newsize = oldsize;
+            } else {
+                next = (TaggedBlockHeader *)((char *)oldp + oldsize);
+                if (next == state->top && (newsize = oldsize + chunkBytes(next)) >= nb + ((self->_smallestChunkSize + 7) & ~7)) {
+                    if (newHeader != oldHeader) {
+                        memmove((char *)oldp + newHeader, (char *)oldp + oldHeader, payloadSize(oldp));
+                    }
+                    initChunkHeader(self, oldp, bytes, nb, 0);
+                    oldp->used = prevInUse;
+                    state->top = (TaggedBlockHeader *)((char *)oldp + nb);
+                    initChunkHeader(self, state->top, (unsigned int)-1, newsize - nb, 0);
+                    state->top->used = 1;
+                    return chunkMemory(oldp);
+                } else if (next != state->top && !((TaggedBlockHeader *)((char *)next + chunkBytes(next)))->used && (newsize = oldsize + chunkBytes(next)) >= nb) {
+                    newp = oldp;
+                    unlinkChunk(next);
+                } else {
+                    newmem = (char *)FUN_00315170(self, bytes);
+                    if (newmem == 0) {
+                        return 0;
+                    }
+                    newp = (TaggedBlockHeader *)(newmem - 4);
+                    if (((TaggedTailByte *)(newmem - 1))->extended == 1) {
+                        newp = (TaggedBlockHeader *)(newmem - 12);
+                    }
+                    newsize = chunkBytes(newp);
+                    prevInUse = chunkUsedBit(oldp);
+                    if (newp == next) {
+                        if (self->_heapIntegrityCheckLevel >= 3) {
+                            FUN_00310c00(self);
+                        }
+                        newsize += oldsize;
+                        newp = oldp;
+                    } else {
+                        copysize = oldsize - 4;
+                        s = (unsigned int *)oldmem;
+                        d = (unsigned int *)newmem;
+                        ncopies = copysize / 4;
+                        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(ncopies >= 3) && self->_messageLevel > 0) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (g_arenaAssertNcopiesSilenced == 0) {
+                                r = igReportNotice(text_ncopies_3);
+                                if (r != 1 && r == 2) {
+                                    g_arenaAssertNcopiesSilenced = 1;
+                                }
+                            }
+                        }
+                        if (ncopies > 9) {
+                            memcpy(d, s, copysize);
+                        } else {
+                            d[0] = s[0];
+                            d[1] = s[1];
+                            d[2] = s[2];
+                            if (ncopies > 4) {
+                                d[3] = s[3];
+                                d[4] = s[4];
+                                if (ncopies > 6) {
+                                    d[5] = s[5];
+                                    d[6] = s[6];
+                                    if (ncopies > 8) {
+                                        d[7] = s[7];
+                                        d[8] = s[8];
+                                    }
+                                }
+                            }
+                        }
+                        FUN_00318110(self, oldmem);
+                        if (self->_heapIntegrityCheckLevel > 0) {
+                            igArenaMemoryPool_CheckInUseChunk(self, newp);
+                        }
+                        return chunkMemory(newp);
+                    }
+                }
+            }
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(newsize >= nb) && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (g_arenaAssertNewsizeSilenced == 0) {
+                    r = igReportNotice(text_igUnsignedInt_newsize_igUnsignedInt_nb);
+                    if (r != 1 && r == 2) {
+                        g_arenaAssertNewsizeSilenced = 1;
+                    }
+                }
+            }
+            remainderSize = newsize - nb;
+            if (remainderSize == 0) {
+                if (newHeader != oldHeader) {
+                    memmove((char *)newp + newHeader, (char *)newp + oldHeader, bytes);
+                }
+                setChunkPayload(newp, bytes, nb);
+                ((TaggedBlockHeader *)((char *)newp + chunkBytes(newp)))->used = 1;
+                ((TaggedBlockHeader *)((char *)newp + nb))->used = 1;
+            } else if (remainderSize < ((self->_smallestChunkSize + 7) & ~7)) {
+                if (newHeader != oldHeader) {
+                    memmove((char *)newp + newHeader, (char *)newp + oldHeader, bytes);
+                }
+                initChunkHeader(self, newp, bytes, newsize, 0);
+                newp->used = prevInUse;
+                ((TaggedBlockHeader *)((char *)newp + chunkBytes(newp)))->used = 1;
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    igArenaMemoryPool_CheckInUseChunk(self, newp);
+                }
+                return chunkMemory(newp);
+            } else {
+                if (keepHeader) {
+                    setChunkPayload(newp, bytes, nb);
+                } else {
+                    if (newHeader != oldHeader) {
+                        memmove((char *)newp + newHeader, (char *)newp + oldHeader, bytes);
+                    }
+                    initChunkHeader(self, newp, bytes, nb, 0);
+                    newp->used = prevInUse;
+                }
+                remainder = (TaggedBlockHeader *)((char *)newp + nb);
+                initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
+                remainder->used = 1;
+                ((TaggedBlockHeader *)((char *)remainder + remainderSize))->used = 1;
+                FUN_00318110(self, chunkMemory(remainder));
+            }
+            if (self->_heapIntegrityCheckLevel > 0) {
+                igArenaMemoryPool_CheckInUseChunk(self, newp);
+            }
+            return chunkMemory(newp);
+        }
+        if (self->_heapIntegrityCheckLevel >= 2) {
+            FUN_00310c00(self);
+        }
+        if (self->vfunc_23(bytes, 3) == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
+                SystemMemoryStatistics stats;
+                g_activeSystemAllocator[0]->GetStatistics(&stats);
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (g_arenaNoticeE104Silenced == 0) {
+                        r = igReportNotice(text_igArenaMemoryPool_E104_MemoryExhausted, self->_size != 0 ? text_Raw : text_System, self->_poolIndex,
+                                           (unsigned int)self->getLocalAllocated(), (unsigned int)self->getLocalFreed(),
+                                           (unsigned int)self->getLocalNetAllocated(), (unsigned int)self->getLocalNetAllocatedHigh(),
+                                           (unsigned int)self->getLocalAllocatedWithOverhead(), (unsigned int)self->getLocalFreedWithOverhead(),
+                                           (unsigned int)self->getLocalNetAllocatedWithOverhead(), (unsigned int)self->getLocalNetAllocatedWithOverheadHigh(),
+                                           (unsigned int)self->getLocalAllocationCount(), (unsigned int)self->getLocalFreeCount(),
+                                           (unsigned int)self->getLocalNetAllocationCount(), (unsigned int)self->getLocalNetAllocationCountHigh(),
+                                           stats.totalSystemMemorySize, stats.allocationSpan, stats.maximumSpan,
+                                           stats.allocatedAndInUse, stats.allocatedAndAvailable, stats.freeFromTop);
+                        if (r != 1 && r == 2) {
+                            g_arenaNoticeE104Silenced = 1;
+                        }
+                    }
+                }
+            }
+            return 0;
         }
     }
 }
@@ -468,21 +1398,21 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
         remainder = (TaggedBlockHeader *)(brk + newsize);
         if (chunkIsMapped(p)) {
             ((unsigned int *)newp)[-1] = leadsize + ((unsigned int *)p)[-1];
-            initChunkHeader(newp, (unsigned int)-1, newsize, (unsigned int)self->_poolIndex >> 1, 1);
+            initChunkHeader(self, newp, (unsigned int)-1, newsize, 1);
             newp->used = 0;
             return chunkMemory(newp);
         }
-        initChunkHeader(newp, bytes, newsize, (unsigned int)self->_poolIndex >> 1, 0);
+        initChunkHeader(self, newp, bytes, newsize, 0);
         newp->used = 1;
         remainder->used = 1;
         if (remainderSize != 0) {
-            initChunkHeader(remainder, (unsigned int)-1, remainderSize, (unsigned int)self->_poolIndex >> 1, 0);
+            initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
             remainder->used = 1;
             ((TaggedBlockHeader *)((char *)remainder + remainderSize))->used = 1;
         }
         {
             int used = chunkUsedBit(p);
-            initChunkHeader(p, (unsigned int)-1, leadsize, (unsigned int)self->_poolIndex >> 1, 0);
+            initChunkHeader(self, p, (unsigned int)-1, leadsize, 0);
             p->used = used;
         }
         FUN_00318110(self, chunkMemory(p));
@@ -506,7 +1436,7 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
         if (size >= nb + self->_smallestChunkSize) {
             remainder = (TaggedBlockHeader *)((char *)p + nb);
             remainderSize = size - nb;
-            initChunkHeader(remainder, (unsigned int)-1, remainderSize, (unsigned int)self->_poolIndex >> 1, 0);
+            initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
             remainder->used = 1;
             newsize = size - remainderSize;
             setChunkPayload(p, bytes, newsize);
@@ -904,6 +1834,130 @@ void *igArenaMemoryPool_ReallocateAligned(igArenaMemoryPoolView *self, void *blo
     return self->MemoryOperation(block, size, alignment);
 }
 
+/* Gang allocation: one system block carries every requested block. The block starts with its own
+ * byte count; each member is a GangRecord followed by a tagged header and the payload. */
+igResult Gap__Core__igArenaMemoryPool__vfunc_62(igArenaMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
+    int guard = 0;
+    char *block;
+    unsigned total;
+    unsigned i;
+    if (hasPoolOption(self->_poolOptionFlags, 1)) {
+        guard = 12;
+    }
+    total = guard + 4;
+    if (self->_alignment > 8) {
+        unsigned short *alignments = (unsigned short *)self->Allocate((unsigned short)count * 2);
+        for (i = 0; i < (unsigned short)count; i++) {
+            alignments[i] = self->_alignment;
+        }
+        igResult result = self->gangAllocAligned(count, sizes, blocks, alignments);
+        self->Free(alignments);
+        return result;
+    }
+    {
+        for (i = 0; i < (unsigned short)count; i++) {
+            unsigned size = guard + sizes[i];
+            unsigned overhead;
+            unsigned chunk;
+            overhead = headerBytesFor(size, (unsigned)self->_poolIndex >> 1);
+            chunk = (size + overhead + 3) & ~3;
+            if (chunk < 4) {
+                chunk = 4;
+            }
+            /* A member's size with its record, set in two steps: the variable then has a register
+             * of its own, as in retail. */
+            unsigned entry;
+            entry = chunk + 12;
+            entry = roundUp8(entry);
+            total += entry;
+        }
+    }
+    block = 0;
+    for (;;) {
+        if ((unsigned)(total + (int)self->_localNetAllocated) <= self->_maxSize) {
+            block = (char *)self->Allocate(total);
+            if (block != 0) {
+                /* The write position is declared ahead of `first`, which lives on the stack. */
+                char *cursor;
+                GangRecord *first;
+                TaggedBlockHeader *h;
+                self->_localAllocationCount += (unsigned short)count;
+                self->_localNetAllocationCount += (unsigned short)count;
+                block += 4;
+            if (self->_localNetAllocationCountHigh < self->_localNetAllocationCount) {
+                    self->_localNetAllocationCountHigh = self->_localNetAllocationCount;
+                }
+                    *(unsigned *)block = total;
+                first = (GangRecord *)(block + 4);
+                cursor = block + 12;
+                first->offset = 0;
+                first->count = (unsigned short)count;
+                h = (TaggedBlockHeader *)cursor;
+                initBlockHeader(self, h, sizes[0] + guard, 0, true, false);
+                blocks[0] = (char *)h + (h->big == 0 ? 4 : 12);
+                cursor += chunkBytes(h);
+                if (guard != 0) {
+                    ((unsigned *)blocks[0])[1] = 0xAAAAAAAF;
+                    ((unsigned *)blocks[0])[0] = 8;
+                    blocks[0] = (char *)blocks[0] + 8;
+                    *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
+                    cursor += guard;
+                }
+                for (i = 1; i < (unsigned short)count; i++) {
+                    if ((unsigned)cursor & 7) {
+                        cursor += 4;
+                    }
+                    ((GangRecord *)cursor)->offset = cursor - (char *)first;
+                    ((GangRecord *)cursor)->count = 0;
+                    cursor += 8;
+                    h = (TaggedBlockHeader *)cursor;
+                    initBlockHeader(self, h, guard + sizes[i], 0, true, false);
+                    blocks[i] = (char *)h + (h->big == 0 ? 4 : 12);
+                    cursor += chunkBytes(h);
+                    if (guard != 0) {
+                        ((unsigned *)blocks[i])[1] = 0xAAAAAAAF;
+                        ((unsigned *)blocks[i])[0] = 8;
+                        blocks[i] = (char *)blocks[i] + 8;
+                        *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
+                        cursor += guard;
+                    }
+                }
+            }
+            break;
+        }
+        if (self->vfunc_23(total, 1) == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 0x20)) {
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    if (self->_messageLevel > 0) {
+                        if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (GPR_00554d50 == 0) {
+                                int r = igReportNotice((const char *)DAT_004fd410, (unsigned)self->_maxSize, (int)self->_localNetAllocated);
+                                if (r != 1 && r == 2) {
+                                    GPR_00554d50 = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (self->_messageLevel >= 3 && GPR_00554d54 == 0) {
+                int r = igReportNotice((const char *)DAT_004fd480, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+                if (r != 1 && r == 2) {
+                    GPR_00554d54 = 1;
+                }
+            }
+            break;
+        }
+    }
+    if (block == 0) {
+        for (i = 0; i < (unsigned short)count; i++) {
+            blocks[i] = 0;
+        }
+        return g_resultFailure;
+    }
+    return g_resultSuccess;
+}
+
 void igArenaMemoryPool_GangAllocAligned(int *arg0) {
     *arg0 = g_resultFailure.v;
 }
@@ -924,6 +1978,74 @@ void Gap__Core__igArenaMemoryPool__freeSized(igArenaMemoryPoolView *self, unsign
     self->_localFreeCount += *(unsigned short *)(q + 2);
     self->_localNetAllocationCount -= size;
     self->Free((char *)((int)q - 4) - 4);
+}
+
+/* Allocates a block straight from the system allocator on the pool's behalf. The block always takes
+ * the 12-byte header, with `extraMarked` set to tell it from an arena chunk. */
+int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size) {
+    char *result;
+    int guard;
+    igArenaMemoryPool_Lock(self);
+    guard = 0;
+    result = 0;
+    if (hasPoolOption(self->_poolOptionFlags, 1)) {
+        guard = 12;
+    }
+    for (;;) {
+        if ((unsigned)(size + (int)self->_localNetAllocated) <= self->_maxSize) {
+            TaggedBlockHeader *h;
+            unsigned total = size + guard;
+            h = (TaggedBlockHeader *)g_activeSystemAllocator[0]->Allocate(guard + (size + 12));
+            if (h != 0) {
+                initBlockHeader(self, h, total, 0, false, true);
+                if (self->_size == 0 && self->_updateStatistics != 0) {
+                    self->vfunc_50(size, chunkBytes(h), 1);
+                }
+                result = (char *)h + (h->big == 0 ? 4 : 12);
+                if (flag2(self)) {
+                    memset(result, 0xCD, chunkBytes(h) - (h->big == 0 ? 4 : 12) - guard);
+                } else if (flag4(self)) {
+                    memset(result, 0, chunkBytes(h) - (h->big == 0 ? 4 : 12) - guard);
+                }
+                if (guard != 0) {
+                    ((unsigned *)result)[1] = 0xAAAAAAAF;
+                    ((unsigned *)result)[0] = 8;
+                    result += 8;
+                    *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
+                }
+            } else if (self->_messageLevel >= 3 && GPR_00554d58 == 0) {
+                int r = igReportNotice((const char *)DAT_004fd500, self->_poolIndex, size);
+                if (r != 1 && r == 2) {
+                    GPR_00554d58 = 1;
+                }
+            }
+            break;
+        }
+        if (self->vfunc_23(size, 1) == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 0x20)) {
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    if (self->_messageLevel > 0) {
+                        if ((unsigned)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (GPR_00554d5c == 0) {
+                                int r = igReportNotice((const char *)DAT_004fd550, (int)self->_maxSize, (int)self->_localNetAllocated);
+                                if (r != 1 && r == 2) {
+                                    GPR_00554d5c = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (self->_messageLevel >= 3 && GPR_00554d60 == 0) {
+                int r = igReportNotice((const char *)DAT_004fd5c0, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+                if (r != 1 && r == 2) {
+                    GPR_00554d60 = 1;
+                }
+            }
+            break;
+        }
+    }
+    return igArenaMemoryPool_UnlockAndReturn(self, (int)result);
 }
 
 void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {

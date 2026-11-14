@@ -42,17 +42,17 @@ void igPsx2Folder_EnsureRegistered(void)
 void igPsx2Folder_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2Folder_metaObject),
-        igFolder_Register,
+        0,
+        g_igPsx2Folder_metaObject,
+        (igMetaObjectRegisterFunction)igFolder_Register,
         igFolder_GetPublishedMetaObject,
         igPsx2Folder_GetMetaObjectFunction,
         igPsx2Folder_className,
-        0xC, /* instance size */
+        0xC,
         igPsx2Folder_GetVTable,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

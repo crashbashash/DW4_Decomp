@@ -26,17 +26,17 @@ void igTimer_EnsureRegistered(void)
 void igTimer_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igTimer_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igTimer_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igTimer_GetMetaObjectFunction,
         igTimer_className,
-        8, /* instance size */
+        8,
         0,
         igTimer_SetAbstractProxy,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

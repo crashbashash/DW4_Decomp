@@ -28,17 +28,17 @@ void igMediaList_EnsureRegistered(void)
 void igMediaList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMediaList_metaObject),
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        0,
+        g_igMediaList_metaObject,
+        (igMetaObjectRegisterFunction)igObjectList_Register,
+        (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igMediaList_GetMetaObjectFunction,
         igMediaList_className,
-        0x14, /* instance size */
+        0x14,
         igMediaList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igMediaList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igMediaList_callbackList
     );
 }
 

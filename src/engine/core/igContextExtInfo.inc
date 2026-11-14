@@ -59,17 +59,17 @@ void igContextExtInfo_EnsureRegistered(void)
 void igContextExtInfo_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igContextExtInfo_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igContextExtInfo_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igContextExtInfo_GetMetaObjectFunction,
         igContextExtInfo_className,
-        0x14, /* instance size */
+        0x14,
         igContextExtInfo_GetVTable,
-        &igContextExtInfo_InitFields,
-        0, /* extra callback item */
-        g_igContextExtInfo_callbackList /* callback list */
+        igContextExtInfo_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igContextExtInfo_callbackList
     );
 }
 

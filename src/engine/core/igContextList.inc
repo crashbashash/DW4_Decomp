@@ -27,17 +27,17 @@ void igContextList_EnsureRegistered(void)
 void igContextList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igContextList_metaObject),
-        igNonRefCountedObjectList_Register,
-        igNonRefCountedObjectList_GetPublishedMetaObject,
+        0,
+        g_igContextList_metaObject,
+        (igMetaObjectRegisterFunction)igNonRefCountedObjectList_Register,
+        (igMetaObjectGetFunction)igNonRefCountedObjectList_GetPublishedMetaObject,
         igContextList_GetMetaObjectFunction,
         igContextList_className,
-        0x14, /* instance size */
+        0x14,
         igContextList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igContextList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igContextList_callbackList
     );
 }
 

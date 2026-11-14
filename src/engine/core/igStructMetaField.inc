@@ -41,17 +41,17 @@ void igStructMetaField_EnsureRegistered(void)
 void igStructMetaField_Register(void) {
     CoreLibrary_MarkRegistered();  /* one-shot static-init guard (byte flag), chaining to sibling init stubs */
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igStructMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igStructMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igStructMetaField_GetMetaObjectFunction,
         igStructMetaField_className,
-        0x40, /* instance size */
+        0x40,
         igStructMetaField_GetVTable,
-        &igStructMetaField_InitFields_002b8b50[0],                            /* field adder: InitFields, registers the reflected fields */
-        0, /* extra callback item */
-        g_igStructMetaField_callbackList /* callback list */
+        (igMetaObjectCallback)igStructMetaField_InitFields_002b8b50,
+        0,
+        (igMetaObjectCallback *)g_igStructMetaField_callbackList
     );
 }
 

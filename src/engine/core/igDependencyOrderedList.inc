@@ -32,17 +32,17 @@ void igDependencyOrderedList_EnsureRegistered(void)
 void igDependencyOrderedList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igDependencyOrderedList_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igDependencyOrderedList_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igDependencyOrderedList_GetMetaObjectFunction,
         igDependencyOrderedList_className,
-        0x1C, /* instance size */
+        0x1C,
         igDependencyOrderedList_GetVTable,
-        &igDependencyOrderedList_InitFields,
-        0, /* extra callback item */
-        g_igDependencyOrderedList_callbackList /* callback list */
+        igDependencyOrderedList_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igDependencyOrderedList_callbackList
     );
 }
 

@@ -27,17 +27,17 @@ void igUnsignedCharList_EnsureRegistered(void)
 void igUnsignedCharList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igUnsignedCharList_metaObject),
-        igDataList_Register,                        /* base class registrar (igDataList) */
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igUnsignedCharList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igUnsignedCharList_GetMetaObjectFunction,
         igUnsignedCharList_className,
-        0x14, /* instance size */
+        0x14,
         igUnsignedCharList_GetVTable,
-        &igUnsignedCharList_InitFields_002c9b10[0], /* field adder (class InitFields) */
-        0, /* extra callback item */
-        0 /* callback list */
+        (igMetaObjectCallback)igUnsignedCharList_InitFields_002c9b10,
+        0,
+        0
     );
 }
 

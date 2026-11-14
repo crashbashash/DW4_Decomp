@@ -27,17 +27,17 @@ void igErrorHandler_EnsureRegistered(void)
 void igErrorHandler_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igErrorHandler_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igErrorHandler_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igErrorHandler_GetMetaObjectFunction,
         igErrorHandler_className,
-        8, /* instance size */
+        8,
         igErrorHandler_GetVTable,
         igErrorHandler_RegisterExitCallback,
-        igErrorHandler_StaticInitCallback,              /* static-initializer callback item (appended on fresh configuration) */
-        0                                      /* 0-terminated dependency-callback list */
+        igErrorHandler_StaticInitCallback,
+        0
     );
 }
 

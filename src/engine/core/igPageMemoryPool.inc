@@ -63,17 +63,17 @@ void igPageMemoryPool_EnsureRegistered(void)
 
 void igPageMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPageMemoryPool_metaObject),
-        igMemoryPool_Register,
+        0,
+        g_igPageMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igPageMemoryPool_GetMetaObjectFunction,
         igPageMemoryPool_className,
-        0x110, /* instance size */
+        0x110,
         igPageMemoryPool_GetVTable,
-        &igPageMemoryPool_InitFields,
-        0, /* extra callback item */
-        g_igPageMemoryPool_callbackList /* callback list */
+        igPageMemoryPool_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igPageMemoryPool_callbackList
     );
 }
 

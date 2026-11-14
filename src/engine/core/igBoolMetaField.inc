@@ -68,17 +68,17 @@ void igBoolMetaField_EnsureRegistered(void)
 
 void igBoolMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igBoolMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igBoolMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igBoolMetaField_GetMetaObjectFunction,
         igBoolMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igBoolMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igBoolMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igBoolMetaField_callbackList
     );
 }
 

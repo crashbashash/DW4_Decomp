@@ -71,17 +71,17 @@ void igMetaEnum_EnsureRegistered(void)
 void igMetaEnum_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMetaEnum_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igMetaEnum_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMetaEnum_GetMetaObjectFunction,
         igMetaEnum_className,
-        0x14, /* instance size */
+        0x14,
         igMetaEnum_GetVTable,
-        &igMetaEnum_InitFields,
-        0, /* extra callback item */
-        g_igMetaEnum_callbackList /* callback list */
+        igMetaEnum_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMetaEnum_callbackList
     );
 }
 

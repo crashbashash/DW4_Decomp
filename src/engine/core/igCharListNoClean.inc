@@ -29,17 +29,17 @@ void igCharListNoClean_EnsureRegistered(void)
 void igCharListNoClean_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igCharListNoClean_metaObject),
-        igCharList_Register,
+        0,
+        g_igCharListNoClean_metaObject,
+        (igMetaObjectRegisterFunction)igCharList_Register,
         igCharList_GetPublishedMetaObject,
         igCharListNoClean_GetMetaObjectFunction,
         igCharListNoClean_className,
-        0x14, /* instance size */
+        0x14,
         igCharListNoClean_GetVTable,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

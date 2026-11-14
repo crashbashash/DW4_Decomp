@@ -174,6 +174,85 @@ int igMediaFile_Flush(igMediaFileView *arg0) {
     return 0;
 }
 
+static inline int isSpace(int c) { return _ctype_[c + 1] & 8; }
+
+int Gap__Core__igMediaFile__vfunc_30(igMediaFileView *self, const char *format, ...) {
+    char *args;
+    int n;
+    int off;
+    int length;
+    int i;
+    int count;
+    if (self->_isBinary != 0) {
+        return -1;
+    }
+    n = __builtin_args_info(2);
+    if (n >= 8) off = 0; else off = (8 - n) * 8;
+    args = (char *)__builtin_next_arg(format) - off;
+    if (format == 0) {
+        return 0;
+    }
+    length = strlen(format);
+    i = 0;
+    count = 0;
+    while (i < length) {
+        char piece[512];
+        int state = 0;
+        int used = 0;
+        while (!state) {
+            if (i == length) {
+                state = 1;
+                continue;
+            }
+            if (format[i] != '%') {
+                piece[used++] = format[i];
+                i++;
+            } else if (format[i] == '%' && format[i + 1] == '%') {
+                piece[used] = format[i];
+                piece[used + 1] = format[i + 1];
+                i += 2;
+                used += 2;
+            } else if (format[i] == '%') {
+                int space;
+                int c;
+                piece[used++] = format[i];
+                i++;
+                /* matching construct: variant test — the c-g and n-p ranges as unsigned differences */
+                while (!(space = isSpace(c = format[i])) && c != 'u' && c != 'x' && c != 'i' && c != 's' &&
+                       c != 'S' && (unsigned)(c - 'c') > 4 && c != 'C' && c != ']' && (unsigned)(c - 'n') > 2 &&
+                       i != length) {
+                    piece[used++] = c;
+                    i++;
+                }
+                if (!space) {
+                    piece[used++] = c;
+                    i++;
+                }
+                state = 2;
+            }
+        }
+        piece[used] = 0;
+        strcat(piece, "%n");
+        if (state == 1) {
+            int consumed = 0;
+            sscanf(self->_fBuf + self->_bufPos, piece, &consumed);
+            self->_bufPos += consumed;
+        } else {
+            void *target;
+            args += 8;
+            target = *(void **)(args - 8);
+            int consumed = 0;
+            int matched = sscanf(self->_fBuf + self->_bufPos, piece, target, &consumed);
+            if (matched == -1) {
+                break;
+            }
+            count += matched;
+            self->_bufPos += consumed;
+        }
+    }
+    return count;
+}
+
 int igMediaFile_Printf(igMediaFileView *self, int fmt, ...) {
     char buf[16384];
     int n;

@@ -163,6 +163,124 @@ void igEventTracker_Reset(igEventTrackerView *arg0) {
     arg0->vfunc_50(arg0->_hashIndex->_capacity);
 }
 
+/* An unaligned little-endian word of an event record. */
+static inline void readWord(const char *p, void *out) {
+    *(int *)out = ((unsigned char)p[0]) | ((((unsigned char)p[1]) << 8) | ((((unsigned char)p[3]) << 24) | (((unsigned char)p[2]) << 16)));
+}
+
+static inline void decodeUnsigned(const char *&p, unsigned int &out) {
+    const char *q = p;
+    int shift = 0;
+    out = 0;
+    for (;;) {
+        out |= (*q & 0x7F) << shift;
+        if ((*q++ & 0x80) == 0) break;
+        shift += 7;
+    }
+    p = q;
+}
+
+/* A signed value ends on a byte with bit 6 set: the bits above its top set bit are filled in. */
+static inline void decodeSigned(const char *&p, int &out) {
+    const char *q = p;
+    int shift = 0;
+    out = 0;
+    for (;;) {
+        char byte = *q;
+        out |= (byte & 0x7F) << shift;
+        if ((byte & 0x80) == 0) {
+            if (byte & 0x40) {
+                int mask = 0x80000000;
+                while ((out & mask) == 0) mask >>= 1;
+                out |= mask;
+            }
+            break;
+        }
+        q++;
+        shift += 7;
+    }
+    p = q + 1;
+}
+
+/* Decodes the event stored at `offset`: its type, version and flags, then each field its flag says
+ * is present, then the extra slots. */
+extern "C" igResult Gap__Core__igEventTracker__vfunc_27(igEventTrackerView *self, int offset, EventRecord *record);
+igResult Gap__Core__igEventTracker__vfunc_27(igEventTrackerView *self, int offset, EventRecord *record) {
+    ScopedLock guard(self->_lock);
+    unsigned int flags;
+    int slot;
+    int state;
+    unsigned int type;
+    int value;
+    unsigned int unsignedValue;
+    const char *p;
+    if (offset < 0 || offset >= self->_eventRecords->_count) {
+        return g_resultFailure;
+    }
+    p = (const char *)self->_eventRecords->_data + offset;
+    slot = 0;
+    igEventTracker_ClearEvent((int)record);
+    decodeUnsigned(p, type);
+    record->type = type;
+    if (record->type >= 32) {
+        return g_resultFailure;
+    }
+    if (*p > DAT_004c1ea8[0]) {
+        return g_resultFailure;
+    }
+    p++;
+    decodeUnsigned(p, flags);
+    if (flags & 0x1) {
+        readWord(p, &record->address);
+        p += 4;
+        decodeSigned(p, value); record->val = value;
+        decodeSigned(p, value); record->f16 = value;
+    }
+    if (flags & 0x200) { decodeUnsigned(p, unsignedValue); record->markerType = unsignedValue; }
+    if (flags & 0x400) { decodeSigned(p, value); record->markerValue = value; }
+    if (flags & 0x800) { decodeSigned(p, value); record->markerName = igStringTable_GetString((int *)self->_annotations, value); }
+    if (flags & 0x1000) { decodeUnsigned(p, unsignedValue); record->notificationType = unsignedValue; }
+    if (flags & 0x2000) { decodeSigned(p, value); record->notificationCode = value; }
+    if (flags & 0x4000) { decodeSigned(p, value); record->notificationText = igStringTable_GetString((int *)self->_annotations, value); }
+    decodeSigned(p, value); record->index = value;
+    if (flags & 0x2) { decodeSigned(p, value); record->group = igStringTable_GetString((int *)self->_groups, value); }
+    if (flags & 0x40) { decodeSigned(p, value); record->str = igStringTable_GetString((int *)self->_classNames, value); }
+    if (flags & 0x80) { decodeSigned(p, value); record->memberName = igStringTable_GetString((int *)self->_memberNames, value); }
+    if (flags & 0x4) { decodeSigned(p, value); record->annotation = igStringTable_GetString((int *)self->_annotations, value); }
+    if (flags & 0x100) { decodeSigned(p, value); record->f60 = igStringTable_GetString((int *)self->_groups, value); }
+    if (flags & 0x8) {
+        decodeSigned(p, value);
+        record->f68 = (int)igStringTable_GetString((int *)self->_sourceFileNames, value);
+        decodeUnsigned(p, unsignedValue); record->f72 = unsignedValue;
+    }
+    if (flags & 0x10) { decodeSigned(p, value); record->f64 = igStringTable_GetString((int *)self->_groups, value); }
+    if (flags & 0x20) { decodeSigned(p, value); record->callStack = (int *)((igCallStackTableView *)self->_callStacks)->vfunc_25(value); }
+    if (flags & 0x8000) {
+        decodeUnsigned(p, unsignedValue); record->slotStates = unsignedValue;
+        do {
+            state = igEventTracker_GetEventDataType(record, slot);
+            switch (state) {
+            case 0:
+                break;
+            case 1:
+                decodeSigned(p, value);
+                igEventTracker_SetEventDataInt(record, slot, value);
+                break;
+            case 2:
+                decodeUnsigned(p, unsignedValue);
+                igEventTracker_SetEventDataUnsigned(record, slot, unsignedValue);
+                break;
+            case 3:
+                decodeSigned(p, value);
+                igEventTracker_SetEventDataString(record, slot, (int)igStringTable_GetString((int *)self->_annotations, value));
+                break;
+            }
+            slot++;
+        } while (state != 0);
+    }
+    return g_resultSuccess;
+}
+
 void igEventTracker_ReadEventType(int *arg0, char *arg1, char *arg2, int *arg3) {
     int acc;
     int c;
@@ -242,11 +360,6 @@ void igEventTracker_ReadEventKey(int *arg0, char *arg1, char *arg2, int *arg3) {
     }
     *arg0 = g_resultSuccess.v;
     }
-}
-
-/* An unaligned little-endian word of an event record. */
-static inline void readWord(const char *p, void *out) {
-    *(int *)out = ((unsigned char)p[0]) | ((((unsigned char)p[1]) << 8) | ((((unsigned char)p[3]) << 24) | (((unsigned char)p[2]) << 16)));
 }
 
 static inline void readVarint(const char *p, int *out) {

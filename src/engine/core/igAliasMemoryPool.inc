@@ -87,17 +87,17 @@ void igAliasMemoryPool_EnsureRegistered(void)
 
 void igAliasMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igAliasMemoryPool_metaObject),
-        igMemoryPool_Register,
+        0,
+        g_igAliasMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igAliasMemoryPool_GetMetaObjectFunction,
         igAliasMemoryPool_className,
-        0xB8, /* instance size */
+        0xB8,
         igAliasMemoryPool_GetVTable,
-        &igAliasMemoryPool_InitFields,
-        0, /* extra callback item */
-        g_igAliasMemoryPool_callbackList /* callback list */
+        igAliasMemoryPool_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igAliasMemoryPool_callbackList
     );
 }
 

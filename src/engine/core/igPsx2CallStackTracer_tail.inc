@@ -21,17 +21,17 @@ void igPsx2CallStackTracer_EnsureRegistered(void)
 void igPsx2CallStackTracer_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2CallStackTracer_metaObject),
-        igCallStackTracer_Register,
+        0,
+        g_igPsx2CallStackTracer_metaObject,
+        (igMetaObjectRegisterFunction)igCallStackTracer_Register,
         igCallStackTracer_GetPublishedMetaObject,
         igPsx2CallStackTracer_GetMetaObjectFunction,
         igPsx2CallStackTracer_className,
-        0x14, /* instance size */
+        0x14,
         igPsx2CallStackTracer_GetVTable,
-        &igPsx2CallStackTracer_InitFields_002d0530[0],     /* Field adder. */
-        0,                                                 /* extra callback-vector item (none) */
-        0                                                  /* zero-terminated callback-vector item list (none) */
+        (igMetaObjectCallback)igPsx2CallStackTracer_InitFields_002d0530,
+        0,
+        0
     );
 }
 

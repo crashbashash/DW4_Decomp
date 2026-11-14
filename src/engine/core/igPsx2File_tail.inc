@@ -36,17 +36,17 @@ void igPsx2File_EnsureRegistered(void)
 void igPsx2File_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2File_metaObject),
-        igFile_Register,
+        0,
+        g_igPsx2File_metaObject,
+        (igMetaObjectRegisterFunction)igFile_Register,
         igFile_GetPublishedMetaObject,
         igPsx2File_GetMetaObjectFunction,
         igPsx2File_className,
-        0x4C, /* instance size */
+        0x4C,
         igPsx2File_GetVTable,
-        &igPsx2File_InitFields,
-        igPsx2File_StaticInitCallback, /* extra callback item */
-        0 /* callback list */
+        igPsx2File_InitFields,
+        igPsx2File_StaticInitCallback,
+        0
     );
 }
 

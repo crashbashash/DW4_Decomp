@@ -70,17 +70,17 @@ void igUnsignedLongMetaField_EnsureRegistered(void)
 
 void igUnsignedLongMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igUnsignedLongMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igUnsignedLongMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igUnsignedLongMetaField_GetMetaObjectFunction,
         igUnsignedLongMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igUnsignedLongMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igUnsignedLongMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igUnsignedLongMetaField_callbackList
     );
 }
 

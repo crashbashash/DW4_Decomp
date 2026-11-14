@@ -14,17 +14,17 @@ void igContextExt_EnsureRegistered(void)
 void igContextExt_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igContextExt_metaObject),
-        igContext_Register,
-        igContext_GetPublishedMetaObject,
+        1,
+        g_igContextExt_metaObject,
+        (igMetaObjectRegisterFunction)igContext_Register,
+        (igMetaObjectGetFunction)igContext_GetPublishedMetaObject,
         igContextExt_GetMetaObjectFunction,
         igContextExt_className,
-        0x14, /* instance size */
+        0x14,
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

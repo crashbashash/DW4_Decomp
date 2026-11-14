@@ -135,17 +135,17 @@ void igMemoryRefMetaField_EnsureRegistered(void)
 
 void igMemoryRefMetaField_Register(void) {
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryRefMetaField_metaObject),
-        igRefMetaField_Register,
+        0,
+        g_igMemoryRefMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igRefMetaField_Register,
         igRefMetaField_GetPublishedMetaObject,
         igMemoryRefMetaField_GetMetaObjectFunction,
         igMemoryRefMetaField_className,
-        0x50, /* instance size */
+        0x50,
         igMemoryRefMetaField_GetVTable,
-        igMemoryRefMetaField_InitFields,   /* field adder (igMetaObject_CreateFields) */
-        0, /* extra callback item */
-        g_igMemoryRefMetaField_callbackList /* callback list */
+        igMemoryRefMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMemoryRefMetaField_callbackList
     );
 }
 

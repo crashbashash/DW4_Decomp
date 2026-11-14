@@ -43,17 +43,17 @@ void igIntArrayMetaField_EnsureRegistered(void)
 void igIntArrayMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igIntArrayMetaField_metaObject),
-        igIntMetaField_Register,
+        0,
+        g_igIntArrayMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igIntMetaField_Register,
         igIntMetaField_GetPublishedMetaObject,
         igIntArrayMetaField_GetMetaObjectFunction,
         igIntArrayMetaField_className,
-        0x38, /* instance size */
+        0x38,
         igIntArrayMetaField_GetVTable,
-        &igIntArrayMetaField_InitFields,
-        0, /* extra callback item */
-        g_igIntArrayMetaField_callbackList /* callback list */
+        igIntArrayMetaField_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igIntArrayMetaField_callbackList
     );
 }
 

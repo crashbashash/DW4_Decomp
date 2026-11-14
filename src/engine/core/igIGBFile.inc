@@ -137,17 +137,17 @@ void igIGBFile_EnsureRegistered(void)
 void igIGBFile_Register(void) {
     CoreLibrary_MarkRegistered();  /* First-use initializer: sets a gp byte flag, then runs five one-time init calls. */
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igIGBFile_metaObject),
-        igDirectory_Register,
+        0,
+        g_igIGBFile_metaObject,
+        (igMetaObjectRegisterFunction)igDirectory_Register,
         igDirectory_GetPublishedMetaObject,
         igIGBFile_GetMetaObjectFunction,
         igIGBFile_className,
-        sizeof(igIGBFile),                           /* Instance size. */
+        sizeof(igIGBFile),
         igIGBFile_GetVTable,
-        &igIGBFile_InitFields,
-        igIGBFile_StaticInitCallback, /* extra callback item */
-        g_igIGBFile_callbackList /* callback list */
+        igIGBFile_InitFields,
+        igIGBFile_StaticInitCallback,
+        (igMetaObjectCallback *)g_igIGBFile_callbackList
     );
 }
 

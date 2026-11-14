@@ -22,17 +22,17 @@ void igPsx2LongTimer_EnsureRegistered(void)
 void igPsx2LongTimer_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igPsx2LongTimer_metaObject),
-        igLongTimer_Register,
-        igLongTimer_GetPublishedMetaObject,
+        0,
+        g_igPsx2LongTimer_metaObject,
+        (igMetaObjectRegisterFunction)igLongTimer_Register,
+        (igMetaObjectGetFunction)igLongTimer_GetPublishedMetaObject,
         igPsx2LongTimer_GetMetaObjectFunction,
         igPsx2LongTimer_className,
-        0x28, /* instance size */
+        0x28,
         igPsx2LongTimer_GetVTable,
         0,
-        igPsx2LongTimer_StaticInitCallback,                                /* static-initializer callback item (appended on fresh configuration) */
-        0                                            /* 0-terminated dependency-callback list */
+        igPsx2LongTimer_StaticInitCallback,
+        0
     );
 }
 

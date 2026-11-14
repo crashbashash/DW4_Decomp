@@ -28,17 +28,17 @@ void igNonRefCountedThreadList_EnsureRegistered(void)
 void igNonRefCountedThreadList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igNonRefCountedThreadList_metaObject),
-        igNonRefCountedObjectList_Register,
-        igNonRefCountedObjectList_GetPublishedMetaObject,
+        0,
+        g_igNonRefCountedThreadList_metaObject,
+        (igMetaObjectRegisterFunction)igNonRefCountedObjectList_Register,
+        (igMetaObjectGetFunction)igNonRefCountedObjectList_GetPublishedMetaObject,
         igNonRefCountedThreadList_GetMetaObjectFunction,
         igNonRefCountedThreadList_className,
-        0x14, /* instance size */
+        0x14,
         igNonRefCountedThreadList_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igNonRefCountedThreadList_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igNonRefCountedThreadList_callbackList
     );
 }
 

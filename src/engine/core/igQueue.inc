@@ -26,17 +26,17 @@ void igQueue_EnsureRegistered(void)
 void igQueue_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igQueue_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igQueue_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igQueue_GetMetaObjectFunction,
         igQueue_className,
-        0xC, /* instance size */
+        0xC,
         0,
-        &igQueue_InitFields,
-        0, /* extra callback item */
-        g_igQueue_callbackList /* callback list */
+        igQueue_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igQueue_callbackList
     );
 }
 

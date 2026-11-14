@@ -64,17 +64,17 @@ void igEventTracker_EnsureRegistered(void)
 void igEventTracker_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igEventTracker_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igEventTracker_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igEventTracker_GetMetaObjectFunction,
         igEventTracker_className,
-        0x2530, /* instance size */
+        0x2530,
         igEventTracker_GetVTable,
-        &igEventTracker_InitFields,
-        0, /* extra callback item */
-        g_igEventTracker_callbackList /* callback list */
+        igEventTracker_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igEventTracker_callbackList
     );
 }
 

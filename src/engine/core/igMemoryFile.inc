@@ -84,17 +84,17 @@ void igMemoryFile_EnsureRegistered(void)
 void igMemoryFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryFile_metaObject),
-        igFile_Register,
+        0,
+        g_igMemoryFile_metaObject,
+        (igMetaObjectRegisterFunction)igFile_Register,
         igFile_GetPublishedMetaObject,
         igMemoryFile_GetMetaObjectFunction,
         igMemoryFile_className,
-        0x3C, /* instance size */
+        0x3C,
         igMemoryFile_GetVTable,
-        &igMemoryFile_InitFields,
-        igMemoryFile_StaticInitCallback, /* extra callback item */
-        0 /* callback list */
+        igMemoryFile_InitFields,
+        igMemoryFile_StaticInitCallback,
+        0
     );
 }
 

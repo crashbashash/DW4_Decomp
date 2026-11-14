@@ -49,17 +49,17 @@ void igMediaFile_EnsureRegistered(void)
 void igMediaFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMediaFile_metaObject),
-        igFile_Register,
+        0,
+        g_igMediaFile_metaObject,
+        (igMetaObjectRegisterFunction)igFile_Register,
         igFile_GetPublishedMetaObject,
         igMediaFile_GetMetaObjectFunction,
         igMediaFile_className,
-        0x44, /* instance size */
+        0x44,
         igMediaFile_GetVTable,
-        &igMediaFile_InitFields,
-        0, /* extra callback item */
-        g_igMediaFile_callbackList /* callback list */
+        igMediaFile_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igMediaFile_callbackList
     );
 }
 

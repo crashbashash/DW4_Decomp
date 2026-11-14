@@ -20,17 +20,17 @@ void igMemoryPool_EnsureRegistered(void)
 
 void igMemoryPool_Register(void) {
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igMemoryPool_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igMemoryPool_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMemoryPool_GetMetaObjectFunction,
         igMemoryPool_className,
-        0x70, /* instance size */
+        0x70,
         0,
-        &igMemoryPool_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igMemoryPool_InitFields,
+        0,
+        0
     );
 }
 

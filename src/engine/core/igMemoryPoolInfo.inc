@@ -55,17 +55,17 @@ void igMemoryPoolInfo_EnsureRegistered(void)
 void igMemoryPoolInfo_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igMemoryPoolInfo_metaObject),
-        igInfo_Register,
-        igInfo_GetPublishedMetaObject,
+        0,
+        g_igMemoryPoolInfo_metaObject,
+        (igMetaObjectRegisterFunction)igInfo_Register,
+        (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMemoryPoolInfo_GetMetaObjectFunction,
         igMemoryPoolInfo_className,
-        0x54, /* instance size */
+        0x54,
         igMemoryPoolInfo_GetVTable,
-        &igMemoryPoolInfo_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        igMemoryPoolInfo_InitFields,
+        0,
+        0
     );
 }
 

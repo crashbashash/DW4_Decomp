@@ -21,17 +21,17 @@ void igLibraryLoader_EnsureRegistered(void)
 void igLibraryLoader_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        1, /* abstract */
-        ((char *)g_igLibraryLoader_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        1,
+        g_igLibraryLoader_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igLibraryLoader_GetMetaObjectFunction,
         igLibraryLoader_className,
-        8, /* instance size */
+        8,
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

@@ -31,17 +31,17 @@ void igExternalIndexedEntry_EnsureRegistered(void)
 void igExternalIndexedEntry_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igExternalIndexedEntry_metaObject),
-        igDirEntry_Register,
+        0,
+        g_igExternalIndexedEntry_metaObject,
+        (igMetaObjectRegisterFunction)igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalIndexedEntry_GetMetaObjectFunction,
         igExternalIndexedEntry_className,
-        0x34, /* instance size */
+        0x34,
         igExternalIndexedEntry_GetVTable,
-        &igExternalIndexedEntry_InitFields,
-        0, /* extra callback item */
-        g_igExternalIndexedEntry_callbackList /* callback list */
+        igExternalIndexedEntry_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igExternalIndexedEntry_callbackList
     );
 }
 

@@ -29,17 +29,17 @@ void igDoubleList_EnsureRegistered(void)
 void igDoubleList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igDoubleList_metaObject),
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        0,
+        g_igDoubleList_metaObject,
+        (igMetaObjectRegisterFunction)igDataList_Register,
+        (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igDoubleList_GetMetaObjectFunction,
         igDoubleList_className,
-        0x14, /* instance size */
+        0x14,
         igDoubleList_GetVTable,
         igDoubleList_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
 

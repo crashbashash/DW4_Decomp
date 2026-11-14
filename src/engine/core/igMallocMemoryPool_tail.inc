@@ -159,8 +159,6 @@ void *igMallocMemoryPool_AllocateAligned(igMallocMemoryPoolView *self, unsigned 
     return self->vfunc_101(0, size, alignment);
 }
 
-static inline int hasPoolOption(int flags, int mask) { return (flags & mask) != 0; }
-
 void *igMallocMemoryPool_Callocate(igMallocMemoryPool *self, int count, int size) {
     int total = count * size;
     void *p = ((igMallocMemoryPoolView *)self)->vfunc_101(0, total, self->_alignment);
@@ -200,6 +198,119 @@ void *igMallocMemoryPool_Reallocate(igMallocMemoryPoolView *self, void *block, u
 void *igMallocMemoryPool_ReallocateAligned(igMallocMemoryPoolView *self, void *block, int size, unsigned int alignment)
 {
     return self->vfunc_101(block, size, alignment);
+}
+
+/* Gang allocation: one system block carries every requested block. The block starts with its own
+ * byte count; each member is a GangRecord followed by a tagged header and the payload. */
+igResult Gap__Core__igMallocMemoryPool__vfunc_62(igMallocMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
+    int guard = 0;
+    char *block;
+    unsigned total;
+    unsigned i;
+    if (hasPoolOption(self->_poolOptionFlags, 1)) {
+        guard = 12;
+    }
+    total = guard + 4;
+    if (self->_alignment > 8) {
+        unsigned short *alignments = (unsigned short *)self->Allocate((unsigned short)count * 2);
+        for (i = 0; i < (unsigned short)count; i++) {
+            alignments[i] = self->_alignment;
+        }
+        igResult result = self->gangAllocAligned(count, sizes, blocks, alignments);
+        self->Free(alignments);
+        return result;
+    }
+    {
+        for (i = 0; i < (unsigned short)count; i++) {
+            unsigned size = guard + sizes[i];
+            unsigned overhead;
+            unsigned chunk;
+            overhead = headerBytesFor(size, (unsigned)self->_poolIndex >> 1);
+            chunk = (size + overhead + 3) & ~3;
+            if (chunk < 4) {
+                chunk = 4;
+            }
+            /* A member's size with its record, set in two steps: the variable then has a register
+             * of its own, as in retail. */
+            unsigned entry;
+            entry = chunk + 12;
+            entry = roundUp8(entry);
+            total += entry;
+        }
+    }
+    block = 0;
+    for (;;) {
+        if ((unsigned)(total + (int)self->_localNetAllocated) <= self->_maxSize) {
+            block = (char *)self->Allocate(total);
+            if (block != 0) {
+                /* The write position is declared ahead of `first`, which lives on the stack. */
+                char *cursor;
+                GangRecord *first;
+                TaggedBlockHeader *h;
+                self->_localAllocationCount += (unsigned short)count;
+                self->_localNetAllocationCount += (unsigned short)count;
+                block += 4;
+            if (self->_localNetAllocationCountHigh < self->_localNetAllocationCount) {
+                    self->_localNetAllocationCountHigh = self->_localNetAllocationCount;
+                }
+                    *(unsigned *)block = total;
+                first = (GangRecord *)(block + 4);
+                cursor = block + 12;
+                first->offset = 0;
+                first->count = (unsigned short)count;
+                h = (TaggedBlockHeader *)cursor;
+                initBlockHeader(self, h, sizes[0] + guard, 0, true, false);
+                blocks[0] = (char *)h + (h->big == 0 ? 4 : 12);
+                cursor += chunkBytes(h);
+                if (guard != 0) {
+                    ((unsigned *)blocks[0])[1] = 0xAAAAAAAF;
+                    ((unsigned *)blocks[0])[0] = 8;
+                    blocks[0] = (char *)blocks[0] + 8;
+                    *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
+                    cursor += guard;
+                }
+                for (i = 1; i < (unsigned short)count; i++) {
+                    if ((unsigned)cursor & 7) {
+                        cursor += 4;
+                    }
+                    ((GangRecord *)cursor)->offset = cursor - (char *)first;
+                    ((GangRecord *)cursor)->count = 0;
+                    cursor += 8;
+                    h = (TaggedBlockHeader *)cursor;
+                    initBlockHeader(self, h, guard + sizes[i], 0, true, false);
+                    blocks[i] = (char *)h + (h->big == 0 ? 4 : 12);
+                    cursor += chunkBytes(h);
+                    if (guard != 0) {
+                        ((unsigned *)blocks[i])[1] = 0xAAAAAAAF;
+                        ((unsigned *)blocks[i])[0] = 8;
+                        blocks[i] = (char *)blocks[i] + 8;
+                        *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
+                        cursor += guard;
+                    }
+                }
+            }
+            break;
+        }
+        if (self->vfunc_23(total, 1) == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
+                if (self->_messageLevel > 0) {
+                    if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
+                        igReportError((const char *)DAT_004fe940, (int)self->_maxSize, (int)self->_localNetAllocated);
+                    }
+                }
+            } else if (self->_messageLevel >= 3) {
+                igReportNotice((const char *)DAT_004fd480, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+            }
+            break;
+        }
+    }
+    if (block == 0) {
+        for (i = 0; i < (unsigned short)count; i++) {
+            blocks[i] = 0;
+        }
+        return g_resultFailure;
+    }
+    return g_resultSuccess;
 }
 
 void igMallocMemoryPool_GangAllocAligned(int *arg0) {

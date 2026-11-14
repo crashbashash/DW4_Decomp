@@ -59,17 +59,17 @@ void igObjectStringMap_EnsureRegistered(void)
 void igObjectStringMap_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igObjectStringMap_metaObject),
-        igObject_Register,
-        igObject_GetMetaObject_ParentAccessor,
+        0,
+        g_igObjectStringMap_metaObject,
+        (igMetaObjectRegisterFunction)igObject_Register,
+        (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igObjectStringMap_GetMetaObjectFunction,
         igObjectStringMap_className,
-        0x10, /* instance size */
+        0x10,
         igObjectStringMap_GetVTable,
-        &igObjectStringMap_InitFields,
-        0, /* extra callback item */
-        g_igObjectStringMap_callbackList /* callback list */
+        igObjectStringMap_InitFields,
+        0,
+        (igMetaObjectCallback *)g_igObjectStringMap_callbackList
     );
 }
 

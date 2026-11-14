@@ -44,17 +44,17 @@ void igFloatMetaField_EnsureRegistered(void)
 void igFloatMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
-        0, /* abstract */
-        ((char *)g_igFloatMetaField_metaObject),
-        igMetaField_Register,
-        igMetaField_GetPublishedMetaObject,
+        0,
+        g_igFloatMetaField_metaObject,
+        (igMetaObjectRegisterFunction)igMetaField_Register,
+        (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igFloatMetaField_GetMetaObjectFunction,
         igFloatMetaField_className,
-        0x34, /* instance size */
+        0x34,
         igFloatMetaField_GetVTable,
         0,
-        0, /* extra callback item */
-        g_igFloatMetaField_callbackList /* callback list */
+        0,
+        (igMetaObjectCallback *)g_igFloatMetaField_callbackList
     );
 }
 
