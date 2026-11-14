@@ -41,10 +41,16 @@ metadata the repo has recovered:
 | --- | --- | --- |
 | `code` | `config/SLUS-20836/layout.txt` | the function extents from `config/SLUS-20836/symbols.txt` |
 | `jtbl` | `config/SLUS-20836/layout.txt` | `config/SLUS-20836/jumptables.txt` |
-| `vtable` | `data/vtables.json` | `8 + 4 × len(vfuncs)`; the words are `[rtti, offset, vfuncs…]` |
+| `vtable` | `data/vtables.json` (RTTI) and `data/vtables-getvtable.json` (each class's `GetVTable`) | `8 + 4 × len(vfuncs)`; the words are `[rtti, offset, vfuncs…]`; a GetVTable dump is cut at the next labelled address |
 | `str` | `data/strings.json` | `length + 1`, for strings actually in the image |
 | `handle` | `data/reflection.json` | 4 bytes per class handle (they live in the `.bss` tail) |
+| `named` | the data rows of `config/SLUS-20836/data-names.tsv` | a reflection table (`field-table`, `ctor-table`, `callback-list`) or a `_vtable` runs to the next labelled address, at most 1 KB; any other named datum counts one word |
 | `?` | the remainder | alignment, tables whose extent is not pinned yet, the rest of `.bss` |
+
+A name records where a datum starts, not where it ends, so `named` counts only what the evidence
+bounds: tables laid out back to back end where the next labelled datum begins, and a scalar global is
+one word until its declared type gives more. Rows that name a function, a string or a class handle are
+counted by their own kinds, not again.
 
 The number reported is **identified data bytes / total data bytes**. `?` is the honest
 remainder, not a failure: it is what has *not* been classified yet, and shrinking it is how

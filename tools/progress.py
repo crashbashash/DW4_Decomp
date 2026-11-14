@@ -1121,7 +1121,7 @@ def render_md(d):
     A("")
     A("| kind | bytes | % of data |")
     A("| --- | ---: | ---: |")
-    for k in ("jtbl", "vtable", "str", "handle", "?"):
+    for k in ("jtbl", "vtable", "str", "handle", "named", "?"):
         A("| `%s` | %s | %.1f |" % (k, format(dd["kinds"][k], ","),
                                      100.0 * dd["kinds"][k] / dd["total"]))
     A("")

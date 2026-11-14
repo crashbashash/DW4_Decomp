@@ -150,16 +150,17 @@
   "total": 3472716
  },
  "data_bytes": {
-  "identified": 303514,
+  "identified": 465894,
   "kinds": {
-   "?": 996250,
+   "?": 833870,
    "code": 3472716,
    "handle": 4300,
    "jtbl": 16824,
+   "named": 94180,
    "str": 231710,
-   "vtable": 50680
+   "vtable": 118880
   },
-  "pct": 23.35,
+  "pct": 35.84,
   "total": 1299764
  },
  "debt": {

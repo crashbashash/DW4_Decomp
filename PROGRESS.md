@@ -10,7 +10,7 @@ code bytes identical (verification debt included; see below)
   functions  ███████████████████████░  97.3 %   20,019 / 20,575
   code bytes █████████████████████░░░  87.7 %   3,044,232 / 3,472,716
 fully linked ████████████████░░░░░░░░  67.2 %   3,054,020 / 4,541,184 bytes of the section linked from C/C++
-data bytes ██████░░░░░░░░░░░░░░░░░░  23.4 %   303,514 / 1,299,764 identified
+data bytes █████████░░░░░░░░░░░░░░░  35.8 %   465,894 / 1,299,764 identified
 not counted: 0 asm bodies, 0 code bytes (0.0 %): retail instructions kept as source, in no figure above
 assembly   : 87 assembly sources, 6,004 code bytes (0.2 %), in the matched figures above: owner-approved `.S` routines (config/assembly-sources.tsv) and MWCC `asm` functions (`asm-function` rows, config/source-approvals.tsv) whose original was assembly
 ```
@@ -111,10 +111,11 @@ yet, and the rest of `.bss`.
 | kind | bytes | % of data |
 | --- | ---: | ---: |
 | `jtbl` | 16,824 | 1.3 |
-| `vtable` | 50,680 | 3.9 |
+| `vtable` | 118,880 | 9.1 |
 | `str` | 231,710 | 17.8 |
 | `handle` | 4,300 | 0.3 |
-| `?` | 996,250 | 76.6 |
+| `named` | 94,180 | 7.2 |
+| `?` | 833,870 | 64.2 |
 
 ## By size
 

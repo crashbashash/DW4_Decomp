@@ -17,10 +17,16 @@ classifies each data byte from the metadata the repo has actually recovered:
 | --- | --- | --- |
 | `code` | `config/SLUS-20836/layout.txt` (`code` units — the functions) | the `symbols.txt` extents |
 | `jtbl` | `config/SLUS-20836/layout.txt` (`jtbl` units) | from `config/SLUS-20836/jumptables.txt` |
-| `vtable` | `data/vtables.json` | `8 + 4 × len(vfuncs)`; the words are `[rtti, offset, vfuncs…]` |
+| `vtable` | `data/vtables.json` (RTTI) and `data/vtables-getvtable.json` (each class's `GetVTable`) | `8 + 4 × len(vfuncs)`, the GetVTable dumps cut at the next labelled address |
 | `str` | `data/strings.json` | `length + 1`, for the strings that are actually in the image |
 | `handle` | `data/reflection.json` | 4 bytes per class handle (they live in the `.bss` tail) |
+| `named` | `config/SLUS-20836/data-names.tsv` (the data rows) | see below |
 | `?` | everything else | alignment padding, unrecovered tables, other `.bss` |
+
+A name gives a datum's start, not its size, so `named` claims only what the evidence bounds: a
+reflection table (`field-table`, `ctor-table`, `callback-list`) or a `_vtable` runs to the next
+labelled address (at most 1 KB); any other named datum counts one word. Function symbols and the
+rows `str`/`handle` already cover are not counted again.
 
 `?` is the honest remainder, not a failure: it holds alignment, the tables whose
 extent is not yet pinned, and the rest of `.bss`.
@@ -44,7 +50,12 @@ REFLECTION = os.path.join(ROOT, "data", "reflection.json")
 # The image: the one file-backed section, plus the zero-initialised tail the loader
 # still maps (`tools/m2c_batch.py:load_bounds` reads both from the program headers).
 IMG_LO, IMG_HI = 0x100000, 0x58D280
-KINDS = ["code", "jtbl", "vtable", "str", "handle", "?"]
+KINDS = ["code", "jtbl", "vtable", "str", "handle", "named", "?"]
+DATA_NAMES = os.path.join(ROOT, "config", "SLUS-20836", "data-names.tsv")
+GETVTABLES = os.path.join(ROOT, "data", "vtables-getvtable.json")
+NOT_DATA = ("function-symbol", "published-accessor", "string-literal", "class-name", "class-handle")
+TABLE_RULES = ("field-table", "ctor-table", "callback-list")
+TABLE_CAP = 1024
 
 
 def known_intervals():
@@ -69,6 +80,33 @@ def known_intervals():
         a = int(c["handle"], 16)
         if IMG_LO <= a < IMG_HI:
             out.append((a, a + 4, "handle"))
+    out += bounded_intervals(out)
+    return out
+
+
+def bounded_intervals(known):
+    """GetVTable vtables and named data, each cut at the next labelled address."""
+    import bisect
+    named = []
+    for ln in open(DATA_NAMES):
+        p = ln.rstrip("\n").split("\t")
+        if ln.startswith("#") or len(p) < 3 or p[2] in NOT_DATA:
+            continue
+        a = int(p[0], 16)
+        if IMG_LO <= a < IMG_HI:
+            named.append((a, p[1], p[2]))
+    getv = [(int(k, 16), d) for k, d in json.load(open(GETVTABLES)).items()]
+    starts = sorted({lo for lo, _hi, _k in known} | {a for a, _n, _r in named} | {a for a, _d in getv}
+                    | {IMG_HI})
+
+    def next_start(a):
+        return starts[bisect.bisect_right(starts, a)]
+    out = [(a, min(next_start(a), a + 8 + 4 * len(d["vfuncs"])), "vtable") for a, d in getv]
+    for a, name, rule in named:
+        if rule in TABLE_RULES or name.endswith("_vtable"):
+            out.append((a, min(next_start(a), a + TABLE_CAP), "named"))
+        else:
+            out.append((a, min(next_start(a), a + 4), "named"))
     return out
 
 
@@ -128,7 +166,7 @@ def main(argv=None):
     print("data   %10d bytes  %5.1f %% of the image  (%5.1f %% of it identified)"
           % (s["data_bytes"], 100.0 * s["data_bytes"] / s["image_bytes"],
              s["identified_data_pct"]))
-    for k in ("jtbl", "vtable", "str", "handle", "?"):
+    for k in ("jtbl", "vtable", "str", "handle", "named", "?"):
         v = s["kinds"][k]
         print("   %-7s %9d bytes  %5.1f %% of the data"
               % (k, v, 100.0 * v / s["data_bytes"]))
