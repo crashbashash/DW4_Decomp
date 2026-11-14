@@ -10,7 +10,7 @@ void FUN_002d38f0(igCallStackTableView *table) {
     capacity = table->_capacity;
     callStacks = table->_callStacks;
     if (capacity >= callStacks->_count) {
-        List_Reserve((L_2d6680 *)callStacks, capacity, 4);
+        List_Reserve((igDataList *)callStacks, capacity, 4);
     }
     table->vfunc_31(table->_hashCapacity);
 }
@@ -29,7 +29,7 @@ void FUN_002d3950(igCallStackTableView *table) {
     }
     callStacks2 = table->_callStacks;
     if (!(0 < callStacks2->_count)) {
-        List_Reserve((L_2d6680 *)callStacks2, 0, 4);
+        List_Reserve((igDataList *)callStacks2, 0, 4);
     }
     hashIndex = table->_hashIndex;
     if (!(0 > hashIndex->_capacity)) {
@@ -46,7 +46,7 @@ void FUN_002d3950(igCallStackTableView *table) {
     }
     hashIndex3 = table->_hashIndex;
     if (!(0 < hashIndex3->_count)) {
-        List_Reserve((L_2d6680 *)hashIndex3, 0, 4);
+        List_Reserve((igDataList *)hashIndex3, 0, 4);
     }
     }
 }
@@ -121,7 +121,7 @@ struct CallStackWordList {
         int grown = capacity * 2;
         if (capacity < n) {
             if (!(grown < count)) {
-                List_Reserve((L_2d6680 *)this, grown, 4);
+                List_Reserve((igDataList *)this, grown, 4);
             }
         }
     }
@@ -319,7 +319,7 @@ void Gap__Core__igCallStackTable__vfunc_31(igCallStackTableView *self, int arg1)
             self->_hashIndex = (igTDataList<int> *)FUN_002ca8b0(temp_s1);
         }
         l = self->_hashIndex;
-        if (arg1 >= l->_count) List_Reserve((L_2d6680 *)l, arg1, 4);
+        if (arg1 >= l->_count) List_Reserve((igDataList *)l, arg1, 4);
         l = self->_hashIndex;
         if (arg1 >= 0) {
             if (arg1 <= l->_capacity) l->_count = arg1;

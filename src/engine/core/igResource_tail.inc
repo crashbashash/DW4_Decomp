@@ -18,7 +18,7 @@ void igResource_StopAsyncLoading(ResourceAsyncRawView *self) {
         q = self->_loadThread;
         z = ((PairQueryHost * *)g_threadManager)[0]->m92();
         sp38 = z->m96(q);
-        FUN_00305000((H_305000 *)self->_loadQueue);
+        FUN_00305000((igStandardQueueView *)self->_loadQueue);
         x = self->_loadQueue;
         if (x != 0) {
             ((PairCountedRef *)x)->f4 = ((PairCountedRef *)x)->f4 - 1;
@@ -96,7 +96,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     o = (igIGBFile *)file.p;
     if (g_stringPool[0] == 0) {
         v = ((int)StringPool_Allocate(16));
-        if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
+        if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
         g_stringPool[0] = v;
     }
     v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);

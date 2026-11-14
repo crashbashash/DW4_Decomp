@@ -13,15 +13,15 @@ void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, i
     FUN_002ea0d0((void **)self, file, (int)object);
 }
 
-int FUN_002feeb0(struct L_2feeb0 *arg0, struct K *arg1, int arg2) {
+int FUN_002feeb0(igTDataList<int> *list, igMetaField *field, int value) {
     int i;
     int v;
-    if (arg1 == 0) {
+    if (field == 0) {
         return 0;
     }
-    for (i = 0; i < arg0->n; i++) {
-        v = arg0->items[i];
-        if (v != 0 && arg2 == *(int *)(v + arg1->off)) {
+    for (i = 0; i < list->_count; i++) {
+        v = list->_data[i];
+        if (v != 0 && value == *(int *)(v + field->_offset)) {
             return v;
         }
     }

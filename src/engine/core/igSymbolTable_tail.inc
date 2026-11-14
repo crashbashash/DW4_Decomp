@@ -25,7 +25,7 @@ void FUN_0030daa0(igSymbolTableView *arg0) {
     temp_a1 = arg0->_capacity * 4;
     temp_a0 = arg0->_symbols;
     if (temp_a1 >= temp_a0->count) {
-        List_Reserve((L_2d6680 *)temp_a0, temp_a1, 4);
+        List_Reserve((igDataList *)temp_a0, temp_a1, 4);
     }
     arg0->vfunc_32(arg0->_hashCapacity);
     FUN_0030cf20(arg0->_symbolNames, arg0->_capacity * 4);
@@ -56,20 +56,20 @@ void Gap__Core__igSymbolTable__vfunc_24(int *arg0, igSymbolTableView *arg1, int 
     *arg0 = g_resultSuccess.v;
 }
 
-igResult Gap__Core__igSymbolTable__vfunc_25(Table *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
+igResult Gap__Core__igSymbolTable__vfunc_25(igSymbolTable *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
     igResult result = g_resultFailure;
     SymbolRecord *e;
     char *s;
 
-    if (idx >= 0 && idx * 4 < self->entries->count) {
-        e = &self->entries->data[idx];
+    if (idx >= 0 && idx * 4 < ((igTDataList<SymbolRecord> *)self->_symbols)->_count) {
+        e = &((igTDataList<SymbolRecord> *)self->_symbols)->_data[idx];
         *a = e->address;
         if (name != 0) {
-if ((s = FUN_0030d1d0((int *)self->names, e->name)) != 0) { strncpy(name, s, nameSize); } else { *name = 0; }
+if ((s = FUN_0030d1d0((int *)self->_symbolNames, e->name)) != 0) { strncpy(name, s, nameSize); } else { *name = 0; }
         }
         *b = e->size;
         if (path != 0) {
-if ((s = FUN_0030d1d0((int *)self->paths, e->path)) != 0) { strncpy(path, s, pathSize); } else { *path = 0; }
+if ((s = FUN_0030d1d0((int *)self->_sourceFileNames, e->path)) != 0) { strncpy(path, s, pathSize); } else { *path = 0; }
         }
         result = g_resultSuccess;
     } else {
@@ -181,7 +181,7 @@ done:
     return 1;
 }
 
-static inline void reserve(igIntListView *l, int n) { if (n >= l->count) { List_Reserve((L_2d6680 *)l, n, 4); } }
+static inline void reserve(igIntListView *l, int n) { if (n >= l->count) { List_Reserve((igDataList *)l, n, 4); } }
 
 static inline void setCount_30e2a0(igIntListView *l, int n) { if (n >= 0) { if (n <= l->capacity) { l->count = n; } else { List_Resize(l, n, 4); } } }
 

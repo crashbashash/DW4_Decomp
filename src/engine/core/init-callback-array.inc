@@ -1,33 +1,32 @@
-void FUN_002d1a00(S_2d1a00 *self) {
+void FUN_002d1a00(ObjectSystemView *self) {
     void *m;
-    P_2d1a00 *p;
-    L_2d1a00 *l;
+    __internalObjectList *l;
     unsigned int n;
     int b;
-    self->f20 = 1;
+    self->started = 1;
     FUN_0032ae70();
-    self->f916 = 0;
-    if (((P_2d1a00 * *)DAT_00586fd0)[0] == 0) {
+    self->vtableProbeOffset = 0;
+    if (((MemoryContext * *)DAT_00586fd0)[0] == 0) {
         m = FUN_002f87f0(0x19F4);
-        if (m != 0) m = ((P_2d1a00 *)igMemoryPoolContextInfo_Construct((ContextView *)m));
-        ((P_2d1a00 * *)DAT_00586fd0)[0] = (P_2d1a00 *)m;
+        if (m != 0) m = ((MemoryContext *)igMemoryPoolContextInfo_Construct((ContextView *)m));
+        ((MemoryContext * *)DAT_00586fd0)[0] = (MemoryContext *)m;
     }
-    ((P_2d1a00 * *)DAT_00586fd0)[0]->v40();
-    self->f24 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
-    l = self->f24;
-    if (l->f8 == 0) n = 0; else n = Memory_GetBufferSize((void *)l->f8) >> 2;
-    if ((int)n < 0x401) ObjectPointerList_EnsureIndex((List_2ea4f0 *)l, 0x400);
-    self->f36 = ((L_2d1a00 *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
+    ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_42();
+    self->metaRegistry = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
+    l = (__internalObjectList *)self->metaRegistry;
+    if (l->_data == 0) n = 0; else n = Memory_GetBufferSize((void *)l->_data) >> 2;
+    if ((int)n < 0x401) ObjectPointerList_EnsureIndex((PointerList *)l, 0x400);
+    self->auxObjectList = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
-    self->f40 = b;
+    self->startupCallbacks = (void *)b;
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
-    self->f44 = b;
+    self->registrationCallbacks = (void *)b;
     igMetaObject_EnsureRegistered();
-    self->f0 = 1;
-    self->f4 = self->f24->f12;
-    self->f8 = ((L_2d1a00 * *)DAT_00587188)[0]->f12;
+    self->active = 1;
+    self->bootMetaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
+    self->bootMetaFieldCount = DAT_00587188[0]->_count;
     FUN_002bf190();
     FUN_002ce3c0();
     FUN_002cdcf0();
@@ -51,7 +50,7 @@ void FUN_002d1a00(S_2d1a00 *self) {
     FUN_002c1b10();
     igUnsignedCharMetaField_EnsureRegistered();
     ((int *)g_igRefMetaField_descriptor)[0] = igRawRefMetaField_GetDefaultDescriptor();
-    ((P_2d1a00 * *)DAT_00586fd0)[0]->v41();
+    ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_43();
 }
 
 int FUN_002d1c20(int *p)
@@ -64,83 +63,83 @@ int FUN_002d1c30(int *p)
     return *(int *)((char *)p + 924);
 }
 
-void FUN_002d1c40(Obj_2d1c40 *arg0) {
+void FUN_002d1c40(ObjectSystemView *arg0) {
     igString env;
     char *text = (char *)getenv(IG_ROOT);
     text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)text));
     env.adopt(text);
-    arg0->m920.assign(env);
+    arg0->rootPath.assign(env);
     text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)DAT_004f9468));
-    arg0->m924.adopt(text);
+    arg0->basePath.adopt(text);
     text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)DAT_004f9470));
-    arg0->m924.adopt(text);
+    arg0->basePath.adopt(text);
 }
 
 igMetaObject *FUN_002d2790(void) {
     return g_igMediaFile_metaObject[0];
 }
 
-void FUN_002d27a0(S_2d27a0 *arg0) {
-    void **temp_a0;
+void FUN_002d27a0(ObjectSystemView *arg0) {
+    igEventTrackerView *temp_a0;
 
-    arg0->b = 1;
-    temp_a0 = arg0->p;
+    arg0->preExitDone = 1;
+    temp_a0 = arg0->exitMarkerSink;
     if (temp_a0 != 0) {
-        ((DW4VC_184_0 *)(temp_a0))->vX();
-        FUN_002dcc60((FileRequest *)arg0->p, (int)&text_exitPre[0]);
+        temp_a0->vfunc_46();
+        FUN_002dcc60((igEventTrackerView *)arg0->exitMarkerSink, (int)&text_exitPre[0]);
     }
 }
 
-void FUN_002d2de0(S_2d2de0 *arg0) {
-    if (arg0->f84 != 0) {
-        arg0->f84->vX();
-        FUN_002dcc60((FileRequest *)arg0->f84, (int)(&text_exitIn[0]));
+void FUN_002d2de0(ObjectSystemView *arg0) {
+    if (arg0->exitMarkerSink != 0) {
+        arg0->exitMarkerSink->vfunc_47();
+        FUN_002dcc60((igEventTrackerView *)arg0->exitMarkerSink, (int)(&text_exitIn[0]));
     }
-    if (arg0->f117 != 0 && ((V224 * *)DAT_00586fd0)[0] != 0) {
-        ((V224 * *)DAT_00586fd0)[0]->vX();
+    if (arg0->dumpEventTrackersAtExit != 0 && ((MemoryContext * *)DAT_00586fd0)[0] != 0) {
+        ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_56();
     }
 }
 
-void FUN_002d2e60(S_2d2e60 *arg0) {
+void FUN_002d2e60(ObjectSystemView *arg0) {
     int i;
     int v;
-    Obj_2d2e60 *o;
-    o = arg0->f36;
-    o->refs = o->refs - 1;
-    if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
-    arg0->f36 = 0;
+    igObject *o;
+    o = (igObject *)arg0->auxObjectList;
+    o->_refCount = o->_refCount - 1;
+    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    arg0->auxObjectList = 0;
     FUN_002e3280(0);
-    igArray_Destruct((CallbackArray *)arg0->f44, 1);
+    igArray_Destruct((CallbackArray *)arg0->registrationCallbacks, 1);
     if (DAT_00586fd0[0] != 0) {
-        DAT_00586fd0[0]->v45();
+        DAT_00586fd0[0]->vfunc_47();
     }
-    InternalObjectList_SetCount((PointerList *)DAT_00587188[0], arg0->f8);
-    for (i = arg0->f12 - 1; i >= arg0->f4; i--) {
-        InternalObjectList_SetAtRetained((PointerList *)arg0->f24, i, (RefHeader *)0);
+    InternalObjectList_SetCount((PointerList *)DAT_00587188[0], arg0->bootMetaFieldCount);
+    for (i = arg0->metaObjectCount - 1; i >= arg0->bootMetaObjectCount; i--) {
+        InternalObjectList_SetAtRetained((PointerList *)arg0->metaRegistry, i, (RefHeader *)0);
     }
-    arg0->f0 = 0;
-    o = DAT_00587188[0];
-    o->refs = o->refs - 1;
-    if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
-    o = arg0->f24;
-    o->refs = o->refs - 1;
-    if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
-    o = arg0->f112;
+    arg0->active = 0;
+    o = (igObject *)DAT_00587188[0];
+    o->_refCount = o->_refCount - 1;
+    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    o = (igObject *)arg0->metaRegistry;
+    o->_refCount = o->_refCount - 1;
+    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    o = arg0->retainedObject;
     if (o != 0) {
-        o->refs = o->refs - 1;
-        if ((o->refs & 0x7fffff) == 0) igObject_Destroy(o);
+        o->_refCount = o->_refCount - 1;
+        if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
     }
     if (g_stringPool[0] == 0) {
         v = ((int)StringPool_Allocate(16));
-        if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
+        if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
         g_stringPool[0] = v;
     }
-    StringPool_Destroy((int *)g_stringPool[0], 1);
-    arg0->f20 = 0;
+    StringPool_Destroy((StringPool *)g_stringPool[0], 1);
+    arg0->started = 0;
     if (DAT_00586fd0[0] != 0) {
-        DAT_00586fd0[0]->v42();
+        DAT_00586fd0[0]->vfunc_44();
         if (DAT_00586fd0[0] != 0) {
-            DAT_00586fd0[0]->v65(1);
+            DAT_00586fd0[0]->Destruct(1);
         }
         DAT_00586fd0[0] = 0;
     }
@@ -264,7 +263,7 @@ int igArray_Append(CallbackArray *array,int item){
     if(array->count==capacity){
         if(capacity==0)array->capacity=4;
         else array->capacity*=((capacity*3)/2);
-        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPool_2ed1c0 *)(((ObjectSystemRecord_2d3400 * *)g_objectSystem)[0]->allocator)));
+        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPoolView *)(((ObjectSystemView * *)g_objectSystem)[0]->systemPool)));
         else array->data=(int *)(Memory_ReallocateBuffer(array->data, (unsigned int)(array->capacity*4)));
     }
     array->data[array->count++]=item;

@@ -17,7 +17,7 @@ static inline void *pool() {
     if (((void * *)g_stringPool)[0] == 0) {
         void *o = StringPool_Allocate(0x10);
         if (o != 0) {
-            o = ((void *)StringPool_Construct((struct S_2eadf0 *)o));
+            o = ((void *)StringPool_Construct((StringPool *)o));
         }
         ((void * *)g_stringPool)[0] = o;
     }
@@ -26,7 +26,7 @@ static inline void *pool() {
 
 void FUN_002e3850(Named *self, int key) {
     Holder h = self->Find(key);
-    char *text = h.p->text;
+    char *text = (char *)h.p->_buffer;
     char *v;
     char *old;
     text = (text == 0) ? g_stringObjEmptyText[0] : text;

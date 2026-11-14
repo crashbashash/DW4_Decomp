@@ -5,7 +5,7 @@ void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void 
     if (g_stringPool[0] == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) {
-            v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+            v = ((int)StringPool_Construct((StringPool *)v));
         }
         g_stringPool[0] = v;
     }
@@ -39,7 +39,7 @@ void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
@@ -71,31 +71,31 @@ void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObject *arg1) {
     arg0->_ref = (int)(arg1);
 }
 
-int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
+int Gap__Core__igExternalDirEntry__vfunc_44(igExternalDirEntryView *arg0, int arg1) {
     igSmartPointer<igIGBFileView> stream(((igIGBFileView *)FUN_002c37e0(((int)igObject_GetAllocator((int)arg0)))));
     char *s1;
     int len;
     int c;
     char *buf;
     stream.get()->_userLoadFunction = arg1;
-    stream.get()->ReadFile(arg0->f28);
+    stream.get()->ReadFile((char *)arg0->_directoryName);
     if (stream.get()->_count == 0) {
-        s1 = arg0->f28;
-        len = strlen(arg0->f40);
+        s1 = (char *)arg0->_directoryName;
+        len = strlen(arg0->_externalFilePath);
         len = len + strlen(s1);
         c = strlen(&DAT_004f9a48[0]);
         buf = (char *)igObject_AllocateStorage((int)arg0, c + len + 1);
-        strcpy(buf, arg0->f40);
+        strcpy(buf, arg0->_externalFilePath);
         strcat(buf, &DAT_004f9a48[0]);
-        strcat(buf, arg0->f28);
+        strcat(buf, arg0->_directoryName);
         stream.get()->ReadFile(buf);
         FUN_00300f50((int)arg0, (int)buf);
     }
-    arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)arg0->f32)));
-    if (arg0->f24 == 0) {
-        arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)&text_root[0])));
+    arg0->vfunc_23(FUN_002d8e70((int)(stream.get()), arg0->_entryName));
+    if (arg0->_ref == 0) {
+        arg0->vfunc_23(FUN_002d8e70((int)(stream.get()), (int)&text_root[0]));
     }
-    return arg0->f24 != 0;
+    return arg0->_ref != 0;
 }
 
 void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0) {

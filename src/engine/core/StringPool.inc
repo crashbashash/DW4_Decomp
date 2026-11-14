@@ -1,35 +1,35 @@
-struct S_2eadf0 *StringPool_Construct(struct S_2eadf0 *arg0) {
-    int var_v0;
-    int var_v0_2;
-    int var_v0_3;
+StringPool *StringPool_Construct(StringPool *pool) {
+    int allocator;
+    int table;
+    int chunk;
 
-    arg0->f0 = 0;
-    arg0->f4 = 0;
-    arg0->f8 = 0x4000;
-    arg0->f12 = 0;
-    var_v0 = arg0->f12;
-    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : (int)((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
-    arg0->f12 = var_v0;
-    if (arg0->f12 == 0) {
-        arg0->f12 = ((int)Memory_GetDefaultAllocator());
+    pool->table = 0;
+    pool->chunks = 0;
+    pool->chunkSize = 0x4000;
+    pool->pool = 0;
+    allocator = pool->pool;
+    allocator = g_useOwnerAllocator != 0 ? allocator : (int)((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
+    pool->pool = allocator;
+    if (pool->pool == 0) {
+        pool->pool = ((int)Memory_GetDefaultAllocator());
     }
-    var_v0_2 = ((int)StringTable_AllocateObject(0x18, (igMemoryPoolView *)arg0->f12));
-    if (var_v0_2 != 0) {
-        var_v0_2 = ((int)StringTable_Construct((void *)var_v0_2, (void *)arg0, 0x400));
+    table = ((int)StringTable_AllocateObject(0x18, (igMemoryPoolView *)pool->pool));
+    if (table != 0) {
+        table = ((int)StringTable_Construct((void *)table, (void *)pool, 0x400));
     }
-    arg0->f0 = var_v0_2;
-    var_v0_3 = ((int)StringChunk_AllocateObject(0x24, (igMemoryPoolView *)arg0->f12));
-    if (var_v0_3 != 0) {
-        var_v0_3 = ((int)StringChunk_Construct((StringChunk *)var_v0_3, 0, arg0->f0, arg0->f8));
+    pool->table = table;
+    chunk = ((int)StringChunk_AllocateObject(0x24, (igMemoryPoolView *)pool->pool));
+    if (chunk != 0) {
+        chunk = ((int)StringChunk_Construct((StringChunk *)chunk, 0, pool->table, pool->chunkSize));
     }
-    arg0->f4 = var_v0_3;
-    return arg0;
+    pool->chunks = chunk;
+    return pool;
 }
 
-int *StringPool_Destroy(int *self, long long delete_flag) {
+StringPool *StringPool_Destroy(StringPool *self, long long delete_flag) {
     if (self != 0) {
-        StringPool_DestroyChunks((struct P_2eadf0 *)self);
-        StringTable_Destroy((StringTableLayout *)((void *)*self), 1);
+        StringPool_DestroyChunks(self);
+        StringTable_Destroy((StringTableLayout *)((void *)self->table), 1);
         if ((short)delete_flag > 0) {
             FUN_002eb050((int)self);
         }
@@ -37,12 +37,12 @@ int *StringPool_Destroy(int *self, long long delete_flag) {
     return self;
 }
 
-void StringPool_DestroyChunks(struct P_2eadf0 *arg0) {
-    struct C_2eadf0 *c = arg0->head;
+void StringPool_DestroyChunks(StringPool *pool) {
+    StringChunk *c = (StringChunk *)pool->chunks;
     while (c != 0) {
-        struct C_2eadf0 *t = c;
-        c = c->next;
-        StringChunk_Destroy((StringChunk *)t, 1);
+        StringChunk *t = c;
+        c = (StringChunk *)c->next;
+        StringChunk_Destroy(t, 1);
     }
 }
 
@@ -70,14 +70,14 @@ void * StringPool_Allocate(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
-    return (void *)(((DW4VC_216_1 *)(temp_v0))->vX((int)(arg0)));
+    return ((igMemoryPoolView *)temp_v0)->Allocate(arg0);
 }
 
 void FUN_002eb050(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
-    ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
+    ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
 }
 
 void FUN_002eb090(int a0, int a1)

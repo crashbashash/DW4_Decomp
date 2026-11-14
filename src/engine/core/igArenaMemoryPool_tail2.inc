@@ -1,10 +1,10 @@
-void Gap__Core__igArenaMemoryPool__vfunc_111(Obj_311990 *o, unsigned int lo, int len) {
+void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int lo, int len) {
     Ranges *r;
     int i;
     bool found;
     unsigned int hi;
     found = 0;
-    r = o->r;
+    r = (Ranges *)o->_arenaState;
     r->total += len;
     if (len < 0) hi = lo; else hi = lo + len;
     i = r->count - 2;
@@ -14,7 +14,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_111(Obj_311990 *o, unsigned int lo, int
         unsigned int *h;
         if (lo >= a && (h = e + 1, lo <= e[1])) {
             if (found) {
-                if (o->lvlB >= 2 && GPR_00554ce4 == 0) {
+                if (o->_messageLevel >= 2 && GPR_00554ce4 == 0) {
                     int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->data, h, a);
                     if (rc != 1 && rc == 2) GPR_00554ce4 = 1;
                 }
@@ -31,7 +31,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_111(Obj_311990 *o, unsigned int lo, int
                     *h = hi;
                 }
                 found = 1;
-                if (o->lvlA < 2) break;
+                if (o->_heapIntegrityCheckLevel < 2) break;
             }
         }
         if (len > 0) break;
@@ -43,12 +43,12 @@ if (r->count >= cap) {
             void *np;
             ncap = cap + 2;
             if (ncap == 0) ncap = 512;
-            np = ((Alloc_311990 * *)g_activeSystemAllocator)[0]->Realloc(r->data, ncap * 4);
+            np = g_activeSystemAllocator[0]->Reallocate(r->data, ncap * 4);
             if (np != 0) {
                 r->data = (unsigned int *)np;
                 r->cap = ncap;
             } else {
-                if (o->lvlB > 0) {
+                if (o->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, o);
                     if (GPR_00554ce8 == 0) {
                         int rc = igReportNotice(text_igArenaMemoryPool_E68_Unable_to);

@@ -1,12 +1,11 @@
 void FUN_002efa20(int arg0, int arg1, int arg2) {
     FUN_002c0890();
     if (arg1 != 0) {
-        Ref_2efa20 sp4C;
-        sp4C.p = (Rc_2efa20 *)FUN_002c0b60(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0])));
-        igNamedObject_SetName((igNamedObject *)sp4C.p, arg0);
-        sp4C.p->f16 = arg2;
-        sp4C.p->f12 = arg1;
-        ObjectList_AppendRetained((igObjectList *)(((int *)DAT_00586f48)[0]), (igObject *)sp4C.p);
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)FUN_002c0b60(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0]))));
+        igNamedObject_SetName((igNamedObject *)entry.p, arg0);
+        entry->_size = arg2;
+        entry->_buffer = arg1;
+        ObjectList_AppendRetained((igObjectList *)(((int *)DAT_00586f48)[0]), (igObject *)entry.p);
     }
 }
 
@@ -69,13 +68,13 @@ void Gap__Core__igMemoryFile__vfunc_24(void *arg0) {
     *(char *)((char *)(arg0) + 44) = 0;
 }
 
-MF_2efc50 *Gap__Core__igMemoryFile__vfunc_25(MF_2efc50 *arg0, const char *fileName, int arg2) {
+igFileView *Gap__Core__igMemoryFile__vfunc_25(igFileView *arg0, const char *fileName, int arg2) {
     int ok;
     FUN_002e30b0((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
-        ok = arg0->vX(0).Ok();
+        ok = arg0->vfunc_23(0) == g_resultSuccess;
     } else if (strcmp(arg2, &((int *)DAT_004f9c48)[0]) == 0) {
-        ok = arg0->vX(4).Ok();
+        ok = arg0->vfunc_23(4) == g_resultSuccess;
     } else {
         return 0;
     }
@@ -130,19 +129,19 @@ int Gap__Core__igMemoryFile__vfunc_32(void) {
     return 0;
 }
 
-char Gap__Core__igMemoryFile__vfunc_33(S_2efe60 *arg0) {
+char Gap__Core__igMemoryFile__vfunc_33(igMemoryFile *arg0) {
     int temp_a1;
     char r;
 
-    if (arg0->f2C == 0) {
+    if (arg0->_bIsOpen == 0) {
         return -1;
     }
-    temp_a1 = arg0->f38;
-    if ((arg0->f34 - temp_a1) <= 0) {
+    temp_a1 = arg0->_iSeekPosition;
+    if ((arg0->_iBufferSize - temp_a1) <= 0) {
         return -1;
     }
-    r = *(char *)(temp_a1 + arg0->f30);
-    arg0->f38 = temp_a1 + 1;
+    r = *(char *)(temp_a1 + arg0->_buffer);
+    arg0->_iSeekPosition = temp_a1 + 1;
     return r;
 }
 

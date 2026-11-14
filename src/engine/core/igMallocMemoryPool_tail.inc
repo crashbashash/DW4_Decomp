@@ -151,24 +151,22 @@ int FUN_00322890(void *arg0, int arg1) {
 
 void *Gap__Core__igMallocMemoryPool__vfunc_54(igMallocMemoryPoolView *self, unsigned int size)
 {
-    return self->vfunc_99(0, size, self->_alignment);
+    return self->vfunc_101(0, size, self->_alignment);
 }
 
 void *Gap__Core__igMallocMemoryPool__vfunc_55(igMallocMemoryPoolView *self, unsigned int size, unsigned int alignment)
 {
-    return self->vfunc_99(0, size, alignment);
+    return self->vfunc_101(0, size, alignment);
 }
 
-static inline int flag2_3223d0(MallocPoolFlags *p) { return (p->flags & 2) != 0; }
+static inline int hasPoolOption(int flags, int mask) { return (flags & mask) != 0; }
 
-static inline int flag4_3223d0(MallocPoolFlags *p) { return (p->flags & 4) != 0; }
-
-void *Gap__Core__igMallocMemoryPool__vfunc_56(Pool56_3223d0 *self, int count, int size) {
+void *Gap__Core__igMallocMemoryPool__vfunc_56(igMallocMemoryPool *self, int count, int size) {
     int total = count * size;
-    void *p = self->Alloc(0, total, ((MallocPoolFlags *)self)->align);
+    void *p = ((igMallocMemoryPoolView *)self)->vfunc_101(0, total, self->_alignment);
     if (p != 0) {
         if (total != 0) {
-            if (flag2_3223d0((MallocPoolFlags *)self) || !flag4_3223d0((MallocPoolFlags *)self)) {
+            if (hasPoolOption(self->_poolOptionFlags, 2) || !hasPoolOption(self->_poolOptionFlags, 4)) {
                 memset(p, 0, total);
             }
         }
@@ -178,30 +176,30 @@ void *Gap__Core__igMallocMemoryPool__vfunc_56(Pool56_3223d0 *self, int count, in
 
 int Gap__Core__igMallocMemoryPool__vfunc_57(igMallocMemoryPool *arg0, int arg1, int arg2) {
     int temp_s1;
-    int temp_v0;
+    void *temp_v0;
     int temp_v1;
 
     temp_s1 = arg1 * arg2;
-    temp_v0 = ((DW4VC_404_2 *)(((char *)(arg0) + 0)))->vX((int)(0), (int)(temp_s1));
+    temp_v0 = ((igMallocMemoryPoolView *)arg0)->vfunc_101(0, temp_s1);
     if (temp_v0 != 0) {
         if (temp_s1 != 0) {
             temp_v1 = arg0->_poolOptionFlags;
-            if (H57::has(temp_v1, 2) || !H57::has(temp_v1, 4)) {
+            if (hasPoolOption(temp_v1, 2) || !hasPoolOption(temp_v1, 4)) {
                 memset(temp_v0, 0, temp_s1);
             }
         }
     }
-    return temp_v0;
+    return (int)temp_v0;
 }
 
 void *Gap__Core__igMallocMemoryPool__vfunc_58(igMallocMemoryPoolView *self, void *block, unsigned int size)
 {
-    return self->vfunc_99(block, size, self->_alignment);
+    return self->vfunc_101(block, size, self->_alignment);
 }
 
 void *Gap__Core__igMallocMemoryPool__vfunc_59(igMallocMemoryPoolView *self, void *block, int size, unsigned int alignment)
 {
-    return self->vfunc_99(block, size, alignment);
+    return self->vfunc_101(block, size, alignment);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_63(int *arg0) {
@@ -220,33 +218,33 @@ void Gap__Core__igMallocMemoryPool__vfunc_13(igMallocMemoryPool *self, int extra
     self->_poolOptionFlags = (int) g_poolOptionFlagsDefault_004c25f8[0];
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_97(O_3223d0 *o) {
-    Ref_3223d0 *r;
-    o->f4.w = 0;
-    o->f4.b.cnt = 1;
-    *((char *)o + 7) = 0;
-    o->f120 = 0;
-    o->v49();
-    o->f124 = 0;
-    o->f128 = (long long)(unsigned __int128)(unsigned long long)-1LL;
-    o->f136 = 0;
-    o->f144 = 1;
-    r = o->f148;
+void Gap__Core__igMallocMemoryPool__vfunc_97(igMallocMemoryPool *self) {
+    igObject *r;
+    self->_refCount = 0;
+    ((RefCount *)&self->_refCount)->u.b.cnt = 1;
+    *((char *)self + 7) = 0;
+    self->_poolIndex = 0;
+    ((igMemoryPoolView *)self)->vfunc_51();
+    self->_elementSize = 0;
+    self->_maxSize = (long long)(unsigned __int128)(unsigned long long)-1LL;
+    self->_size = 0;
+    self->_alignment = 1;
+    r = (igObject *)self->_eventTracker;
     if (r != 0) {
-        r->rc = r->rc - 1;
-        if (((unsigned long long)((long long)r->rc << 0x29) >> 0x29) == 0) igObject_Destroy(r);
+        r->_refCount = r->_refCount - 1;
+        if ((r->_refCount & 0x7fffff) == 0) igObject_Destroy(r);
     }
-    o->f148 = 0;
-    o->f112 = 0;
+    self->_eventTracker = 0;
+    self->_isActive = 0;
     GPR_00554dbc += 1;
-    r = (Ref_3223d0 *)o->f116;
+    r = (igObject *)self->_allocationLock;
     if (r != 0) {
-        r->rc = r->rc - 1;
-        if (((unsigned long long)((long long)r->rc << 0x29) >> 0x29) == 0) igObject_Destroy(r);
+        r->_refCount = r->_refCount - 1;
+        if ((r->_refCount & 0x7fffff) == 0) igObject_Destroy(r);
     }
-    o->f116 = 0;
-    o->f152 = 1;
-    o->f156 = 12;
+    self->_allocationLock = 0;
+    self->_messageLevel = 1;
+    self->_poolOptionFlags = 12;
 }
 
 void *FUN_003235c0(igMallocMemoryPool *arg0) {
@@ -272,27 +270,27 @@ void Gap__Core__igMallocMemoryPool__vfunc_02(igMallocMemoryPool *self) {
 
 void Gap__Core__igMallocMemoryPool__vfunc_66(igMallocMemoryPoolView *self, void *block)
 {
-    self->vfunc_99(block, -1, self->_alignment);
+    self->vfunc_101(block, -1, self->_alignment);
 }
 
 int Gap__Core__igMallocMemoryPool__vfunc_85(int arg0, char *arg1) {
-    H85 *h;
+    TaggedBlockHeader *h;
     int v;
     int r;
     int a;
 
     a = arg0;
-    h = (H85 *)(arg1 - 4);
-    if (((T85 *)(arg1 - 1))->flag == 1) {
-        h = (H85 *)(arg1 - 12);
+    h = (TaggedBlockHeader *)(arg1 - 4);
+    if (((TaggedTailByte *)(arg1 - 1))->extended == 1) {
+        h = (TaggedBlockHeader *)(arg1 - 12);
     }
     if (h == 0) {
         return 0;
     }
-    if (h->flag == 0) {
-        v = h->lo * 2;
+    if (h->big == 0) {
+        v = h->poolLow * 2;
     } else {
-        v = (h->lo + (h->ext << 5)) * 2;
+        v = (h->poolLow + (h->poolHigh << 5)) * 2;
     }
     r = igAllocator_ResolveEncodedIndex(v);
     return r == a;
@@ -303,19 +301,19 @@ int Gap__Core__igMallocMemoryPool__vfunc_83(void) {
 }
 
 unsigned int Gap__Core__igMallocMemoryPool__vfunc_84(int arg0, char *arg1) {
-    H84 *hdr;
+    TaggedBlockHeader *hdr;
 
-    hdr = (H84 *)(arg1 - 4);
-    if (hdr->flag == 1) {
-        hdr = (H84 *)(arg1 - 0xC);
+    hdr = (TaggedBlockHeader *)(arg1 - 4);
+    if (hdr->big == 1) {
+        hdr = (TaggedBlockHeader *)(arg1 - 0xC);
     }
     if (hdr == 0) {
         return 0;
     }
-    if (hdr->flag == 0) {
+    if (hdr->big == 0) {
         return hdr->size;
     }
-    return hdr->size + (hdr->s2 << 0x13);
+    return hdr->size + (hdr->sizeHigh << 0x13);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_87(Pool87 *self, char *title) {
@@ -352,20 +350,20 @@ int Gap__Core__igMallocMemoryPool__vfunc_89(void *arg0) {
     return *(int *)((char *)(arg0) + 148);
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_90(S0_3223d0 *arg0, S1_3223d0 *arg1) {
-    S1_3223d0 *temp_a0;
-    if ((arg1 == 0) || (((void *)igObject_GetAllocator((int)arg1)) != arg0)) {
-        if (arg1 != 0) {
-            arg1->f4 = (int)((int) (arg1->f4 + 1));
+void Gap__Core__igMallocMemoryPool__vfunc_90(igMallocMemoryPool *self, igObject *tracker) {
+    igObject *old;
+    if ((tracker == 0) || (((void *)igObject_GetAllocator((int)tracker)) != self)) {
+        if (tracker != 0) {
+            tracker->_refCount = tracker->_refCount + 1;
         }
-        temp_a0 = arg0->f94;
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
+        old = (igObject *)self->_eventTracker;
+        if (old != 0) {
+            old->_refCount = old->_refCount - 1;
+            if ((old->_refCount & 0x7fffff) == 0) {
+                igObject_Destroy(old);
             }
         }
-        arg0->f94 = arg1;
+        self->_eventTracker = (int)tracker;
     }
 }
 
@@ -376,7 +374,7 @@ void igMallocMemoryPool_Dump(void *self, int a1, int a2, int a3, int t0) {
     if (t0 != 0) {
         igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
         if (r.p->Open((const char *)t0, (const char *)&DAT_004f92f0[0]) == 0) {
-            if (((M_3223d0 *)self)->f152 >= 2) {
+            if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
                 FUN_00308390(DAT_004ff1f0, t0);
             }
             FUN_00322860(self);
@@ -398,25 +396,23 @@ void Gap__Core__igMallocMemoryPool__vfunc_92(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 120) = arg1;
 }
 
-static inline int Chk(int x, int y) { if (x < 64) { if (y >= 64) { return 0; } return 1; } return 1; }
+static inline int poolIndexAccepts(igMallocMemoryPool *p, int y) { if (p->_poolIndex < 64 && y >= 64) return 0; return 1; }
 
-static inline int Chk2(int x, int y) { int r = 1; if (x < 64) { r = 0; if (y >= 64) { } else { r = 1; } } return r; }
-
-void Gap__Core__igMallocMemoryPool__vfunc_93(int *arg0, S_3223d0 *arg1, char *arg2, DW4VC_364_0 *arg3) {
-    int v = arg3->vX();
+void Gap__Core__igMallocMemoryPool__vfunc_93(int *arg0, igMallocMemoryPool *arg1, char *arg2, igMemoryPoolView *arg3) {
+    int v = arg3->GetPoolIndex();
     int ok;
-    H93 *h;
+    TaggedBlockHeader *h;
     int a;
-    ok = arg1->Chk(v);
+    ok = poolIndexAccepts(arg1, v);
     if (ok != 0) {
-        h = (H93 *)(arg2 - 4);
-        if (((T93 *)(arg2 - 1))->flag == 1) {
-            h = (H93 *)(arg2 - 12);
+        h = (TaggedBlockHeader *)(arg2 - 4);
+        if (((TaggedTailByte *)(arg2 - 1))->extended == 1) {
+            h = (TaggedBlockHeader *)(arg2 - 12);
         }
-        a = arg3->vX() >> 1;
-        h->lo = a;
-        if (h->flag == 1) {
-            h->ext = a >> 5;
+        a = arg3->GetPoolIndex() >> 1;
+        h->poolLow = a;
+        if (h->big == 1) {
+            h->poolHigh = a >> 5;
         }
         *arg0 = g_resultSuccess.v;
     } else {
@@ -428,7 +424,7 @@ int Gap__Core__igMallocMemoryPool__vfunc_94(void *arg0, void **arg1) {
     int temp_v0;
     int var_v0;
 
-    temp_v0 = ((DW4VC_364_0 *)(arg1))->vX();
+    temp_v0 = ((igMemoryPoolView *)(arg1))->GetPoolIndex();
     if ((*(int *)((char *)(arg0) + 120) < 0x40) && (temp_v0 >= 0x40)) {
         var_v0 = 0;
     } else {
@@ -441,22 +437,22 @@ int Gap__Core__igMallocMemoryPool__vfunc_94(void *arg0, void **arg1) {
 }
 
 int Gap__Core__igMallocMemoryPool__vfunc_95(int arg0, char *arg1) {
-    struct Hdr *h;
+    TaggedBlockHeader *h;
 
     if (arg1 == 0) {
         return -1;
     }
-    h = (struct Hdr *)(arg1 - 4);
-    if (((struct B8_3223d0 *)(arg1 - 1))->flag == 1) {
-        h = (struct Hdr *)(arg1 - 12);
+    h = (TaggedBlockHeader *)(arg1 - 4);
+    if (((TaggedTailByte *)(arg1 - 1))->extended == 1) {
+        h = (TaggedBlockHeader *)(arg1 - 12);
     }
     if (h == 0) {
         return -1;
     }
-    if (h->flag == 0) {
-        return h->lo * 2;
+    if (h->big == 0) {
+        return h->poolLow * 2;
     }
-    return (h->lo + (h->hi << 5)) * 2;
+    return (h->poolLow + (h->poolHigh << 5)) * 2;
 }
 
 /* Reports whether the pool is active: returns _isActive (+112), same slot as
@@ -485,11 +481,11 @@ void *FUN_00324be0(TaggedPool *self, unsigned size) {
     }
     total = overhead + size;
     if (usesAligned(self)) {
-        block = (*(TaggedHeap * *)g_activeSystemAllocator)->AllocateAligned(total + 4);
+        block = (*(SystemAllocator * *)g_activeSystemAllocator)->AllocateAligned(total + 4);
     } else if (usesSized(self)) {
-        block = (*(TaggedHeap * *)g_activeSystemAllocator)->AllocateSized(total + 4);
+        block = (*(SystemAllocator * *)g_activeSystemAllocator)->AllocateSized(total + 4);
     } else {
-        block = (*(TaggedHeap * *)g_activeSystemAllocator)->Allocate(total + 4);
+        block = (*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total + 4);
     }
     if (block != 0) {
     h = (TaggedBlockHeader *)((char *)block + 4);
@@ -520,41 +516,37 @@ void *FUN_00324be0(TaggedPool *self, unsigned size) {
     return 0;
 }
 
-static inline int f20(Pool_324ec0 *p) { return (p->flags & 0x20) != 0; }
-
-static inline int f10(Pool_324ec0 *p) { return (p->flags & 0x10) != 0; }
-
-void FUN_00324ec0(Pool_324ec0 *self, unsigned char *p) {
-    H_324ec0 *h = (H_324ec0 *)(p - 4);
+void FUN_00324ec0(TaggedPool *self, unsigned char *p) {
+    TaggedBlockHeader *h = (TaggedBlockHeader *)(p - 4);
     unsigned size;
-    if (((T_324ec0 *)(p - 1))->flag == 1) {
-        h = (H_324ec0 *)(p - 12);
+    if (((TaggedTailByte *)(p - 1))->extended == 1) {
+        h = (TaggedBlockHeader *)(p - 12);
     }
-    size = h->w.sz;
-    if (h->b.big == 1) {
-        size = size + (h->w.ext << 19);
+    size = h->size;
+    if (h->big == 1) {
+        size = size + (h->sizeHigh << 19);
     }
     size = (size + 3) & ~3;
-    size = size + (h->b.words + 1) * 4;
-    if (h->b.offset != 0) {
+    size = size + (h->words + 1) * 4;
+    if (h->relocated != 0) {
         int off = *(unsigned short *)((char *)h - 2);
         char *base = (char *)h - off;
         size = size + ((char *)h - base);
-        if (f20(self)) {
-            ((Heap * *)g_activeSystemAllocator)[0]->FreeAligned(base, size);
-        } else if (f10(self)) {
-            ((Heap * *)g_activeSystemAllocator)[0]->FreeSized(base, size);
+        if (usesAligned(self)) {
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeAligned(base, size);
+        } else if (usesSized(self)) {
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeSized(base, size);
         } else {
-            ((Heap * *)g_activeSystemAllocator)[0]->Free(base);
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->Free(base);
         }
     } else {
         char *base = (char *)h - 4;
-        if (f20(self)) {
-            ((Heap * *)g_activeSystemAllocator)[0]->FreeAligned(base, size + 4);
-        } else if (f10(self)) {
-            ((Heap * *)g_activeSystemAllocator)[0]->FreeSized(base, size + 4);
+        if (usesAligned(self)) {
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeAligned(base, size + 4);
+        } else if (usesSized(self)) {
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeSized(base, size + 4);
         } else {
-            ((Heap * *)g_activeSystemAllocator)[0]->Free(base);
+            ((SystemAllocator * *)g_activeSystemAllocator)[0]->Free(base);
         }
     }
 }
@@ -608,7 +600,7 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
         char *moved = (char *)FUN_00324be0(self, size);
         if (moved != 0) {
             memcpy(moved, p, kept < size ? kept : size);
-            FUN_00324ec0((Pool_324ec0 *)self, (unsigned char *)p);
+            FUN_00324ec0(self, (unsigned char *)p);
         }
         return moved;
     }
@@ -679,11 +671,11 @@ void *FUN_003254a0(TaggedAlignedPool *self, unsigned alignment, unsigned size) {
     }
     total += overhead;
     if (usesAligned_3254a0(self)) {
-        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->AllocateAligned(total);
+        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateAligned(total);
     } else if (usesSized_3254a0(self)) {
-        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->AllocateSized(total);
+        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateSized(total);
     } else {
-        block = (char *)(*(TaggedHeap * *)g_activeSystemAllocator)->Allocate(total);
+        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total);
     }
     if (block == 0) {
         return 0;

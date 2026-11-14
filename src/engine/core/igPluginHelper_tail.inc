@@ -36,7 +36,7 @@ void FUN_00304b10(void *self) {
             } else {
                 *(IniValueList **)&values = ((IniValueList *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
                 held = values;
-                if (FUN_00306aa0(ini, section, keyText(key), (SL *)held, 0) == 0) {
+                if (FUN_00306aa0(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
                     dropValues_304b10(values);
                     dropKey(key);
                 } else {
@@ -54,22 +54,22 @@ void FUN_00304b10(void *self) {
     }
 }
 
-void Gap__Core__igPluginHelper__vfunc_10(S_304d90 *arg0) {
-    int temp_s1;
-    int var_s0;
-    R_304d90 *sp4C;
+void Gap__Core__igPluginHelper__vfunc_10(igPluginHelper *self) {
+    int count;
+    int i;
+    igLibrary *library;
 
-    temp_s1 = arg0->f14->cnt;
-    for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-        sp4C = arg0->f14->arr[var_s0];
-        if (sp4C != 0) {
-            sp4C->refs = sp4C->refs + 1;
+    count = ((igLibraryList *)self->_loadedPlugins)->_count;
+    for (i = 0; i < count; i++) {
+        library = ((igLibrary **)((igLibraryList *)self->_loadedPlugins)->_data)[i];
+        if (library != 0) {
+            library->_refCount = library->_refCount + 1;
         }
-        arg0->f10->vX(&sp4C);
-        if (sp4C != 0) {
-            sp4C->refs = sp4C->refs - 1;
-            if ((sp4C->refs & 0x7fffff) == 0) {
-                igObject_Destroy(sp4C);
+        ((igLibraryLoaderView *)self->_libraryLoader)->vfunc_24(&library);
+        if (library != 0) {
+            library->_refCount = library->_refCount - 1;
+            if ((library->_refCount & 0x7fffff) == 0) {
+                igObject_Destroy(library);
             }
         }
     }
@@ -91,67 +91,67 @@ int FUN_00304e60(Args *args) {
 void **FUN_00304f00(void *arg0, int arg1, unsigned stackSize) {
     void **a; void *b;
     a = (void **)(((void **)igObject_GetAllocator((int)arg0)));
-    b = (void *)(((DW4VC_216_1 *)(a))->vX((int)(8)));
+    b = ((igMemoryPoolView *)a)->Allocate(8);
     *(int *)((char *)(b) + 0) = arg1;
     *(int *)((char *)(b) + 4) = (int)(arg0);
     a = (void **)(((void **)FUN_002b7f40((int)a)));
-    ((DW4VCSR_132_1 *)(a))->vX((int (*)(...))FUN_00304e60);
-    ((DW4VCSR_140_1 *)(a))->vX((int)(b));
-    ((DW4VCSR_156_1 *)(a))->vX((int)(stackSize));
-    if (((DW4VCSR_120_0 *)(a))->vX() == g_resultSuccess) {
+    ((igPsx2ThreadView *)a)->setFunction((int (*)(...))FUN_00304e60);
+    ((igPsx2ThreadView *)a)->setArg((int)b);
+    ((igPsx2ThreadView *)a)->setStackSize(stackSize);
+    if (((igPsx2ThreadView *)a)->start() == g_resultSuccess) {
         ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)a);
     }
     return a;
 }
 
-int FUN_00305000(H_305000 *h) {
-    R_305000 sp58, sp5C;
+int FUN_00305000(igStandardQueueView *queue) {
+    igResult terminated, joined;
     int n;
-    O_305000 *p;
+    igPsx2ThreadView *p;
     int c;
     int k;
-    Lst_305000 *l;
+    igTDataList<igPsx2ThreadView *> *l;
     int i;
     int m;
-    O_305000 *o;
+    igPsx2ThreadView *thread;
     int j;
 
-    n = h->l->n;
+    n = ((igTDataList<igPsx2ThreadView *> *)queue->_serviceThreads)->_count;
     for (i = 0; i < n; i++) {
-        o = h->l->d[i];
-        if (o->v30()) {
-            sp5C = o->v42();
+        thread = ((igTDataList<igPsx2ThreadView *> *)queue->_serviceThreads)->_data[i];
+        if (thread->isRunning()) {
+            terminated = thread->terminate();
         }
-        if (o->v30()) {
-            sp58 = ((Y_305000 * *)g_threadManager)[0]->v21()->v22(o);
+        if (thread->isRunning()) {
+            joined = ((igPsx2ThreadManagerView **)g_threadManager)[0]->getCurrentThread()->join(thread);
         }
-        o->rc = o->rc - 1;
-        if (((unsigned long long)((long long)o->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
+        thread->_refCount = thread->_refCount - 1;
+        if (((unsigned long long)((long long)(int)thread->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(thread);
         }
     }
     if (n > 0) {
-        l = h->l;
-        m = l->n;
+        l = (igTDataList<igPsx2ThreadView *> *)queue->_serviceThreads;
+        m = l->_count;
         for (j = 0; j < m; j++) {
-            p = l->d[j];
+            p = l->_data[j];
             if (p != 0) {
-                p->rc = p->rc - 1;
-                if (((unsigned long long)((long long)p->rc << 0x29) >> 0x29) == 0) {
+                p->_refCount = p->_refCount - 1;
+                if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(p);
                 }
             }
         }
-        c = l->n;
+        c = l->_count;
         for (k = 0; k < c; k++) {
-            l->d[k] = 0;
+            l->_data[k] = 0;
         }
-        l->n = 0;
+        l->_count = 0;
     }
 }
 
 int thunk_FUN_00305000(int extra0)
 {
-    return FUN_00305000((H_305000 *)extra0);
+    return FUN_00305000((igStandardQueueView *)extra0);
 }
 

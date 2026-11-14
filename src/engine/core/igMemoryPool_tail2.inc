@@ -105,9 +105,9 @@ void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3) {
     void **temp_v0;
 
     if ((arg2 == 0) || (arg2 & DAT_004c2160[0])) {
-        temp_v0 = (void **)(((DW4VC_356_0 *)(arg0))->vX());
+        temp_v0 = (void **)(((igMemoryPoolView *)(arg0))->getEventTracker());
         if (temp_v0 != 0) {
-            ((EventTrackerQueryView *)(temp_v0))->Update((EventRecordInfo *)arg1, arg3 + 1);
+            ((igEventTrackerView *)temp_v0)->vfunc_26((EventRecordInfo *)arg1, arg3 + 1);
         }
     }
 }

@@ -15,7 +15,7 @@ void FUN_0030cf40(void *arg0) {
     temp_a1 = *(int *)((char *)(arg0) + 8);
     temp_a0 = (void *)(*(int *)((char *)(arg0) + 16));
     if (temp_a1 >= *(int *)((char *)(temp_a0) + 8)) {
-        List_Reserve((L_2d6680 *)temp_a0, temp_a1, 1);
+        List_Reserve((igDataList *)temp_a0, temp_a1, 1);
     }
     ((igStringTableView *)(((char *)(arg0) + 0)))->setHashing((int)(*(int *)((char *)(arg0) + 12)));
 }
@@ -33,7 +33,7 @@ void FUN_0030cfa0(struct ClearOwner *arg0) {
     }
     temp_a0_2 = arg0->a;
     if (!(0 < temp_a0_2->n)) {
-        List_Reserve((L_2d6680 *)temp_a0_2, 0, 1);
+        List_Reserve((igDataList *)temp_a0_2, 0, 1);
     }
     temp_a0_3 = arg0->b;
     if (temp_a0_3 != 0) {
@@ -44,7 +44,7 @@ void FUN_0030cfa0(struct ClearOwner *arg0) {
         }
         temp_a0_4 = arg0->b;
         if (!(0 < temp_a0_4->n)) {
-            List_Reserve((L_2d6680 *)temp_a0_4, 0, 4);
+            List_Reserve((igDataList *)temp_a0_4, 0, 4);
         }
     }
 }
@@ -125,7 +125,7 @@ int FUN_0030d230(igStringTableView *self, char *s) {
     int offset;
     length = strlen(s) + 1;
     self->strings->reserveFor(length + (offset = self->strings->count));
-    List_AppendBytes((L_2d6900 *)self->strings, length, (int)s, 1);
+    List_AppendBytes((igDataList *)self->strings, length, (int)s, 1);
     if (self->hashTable != 0 && self->hashTable->count != 0) {
         self->insert(self->strings->data + offset, offset);
     }
@@ -272,7 +272,7 @@ void Gap__Core__igStringTable__vfunc_25(igStringTableView *arg0, int arg1) {
         }
         l = arg0->hashTable;
         if (arg1 >= l->count) {
-            List_Reserve((L_2d6680 *)l, arg1, 4);
+            List_Reserve((igDataList *)l, arg1, 4);
         }
         l = arg0->hashTable;
         n = l->count;

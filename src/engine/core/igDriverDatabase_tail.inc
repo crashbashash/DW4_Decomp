@@ -41,25 +41,25 @@ int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2) {
     sp58.p = 0;
     x = ((igObject **)((igObjectList *)arg0->_subPropertyNames)->_data)[arg1];
     if (x == 0) return 0;
-    Util_2d9cf0::assign(sp5C, x);
-    Util_2d9cf0::assign(sp58, ((igObject **)((igObjectList *)arg0->_subPropertyValues)->_data)[arg1]);
+    sp5C = x;
+    sp58 = ((igObject **)((igObjectList *)arg0->_subPropertyValues)->_data)[arg1];
     if (arg2 == 0) {
         v = 0;
     } else {
         if (g_stringPool[0] == 0) {
             int al = ((int)StringPool_Allocate(16));
-            if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
+            if (al != 0) al = ((int)StringPool_Construct((StringPool *)al));
             g_stringPool[0] = al;
         }
         v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg2);
     }
     sp54 = v;
     idx = FUN_001cafc0(sp5C.p, &sp54, 0);
-    Util_2d9cf0::relstr(sp54);
+    releaseString((const char *)sp54);
     if (idx >= 0) {
         StringList_CopyRetained(&sp50, sp58.p, idx);
         r = sp50;
-        Util_2d9cf0::relstr(r);
+        releaseString((const char *)r);
         return r;
     }
     return 0;
@@ -138,7 +138,7 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
         return 0;
     }
     igStringObj_Set(arg0->_databaseFileName, *(int *)((char *)s0 + 12));
-    FUN_002daac0((S_2daac0 *)arg0, arg0->_databaseFile);
+    FUN_002daac0(arg0, arg0->_databaseFile);
     ((igFileView *)arg0->_databaseFile)->Close();
     release_2da1c0((igObject *)arg0->_databaseFile);
     arg0->_databaseFile = 0;
@@ -156,34 +156,34 @@ int FUN_002da710(void *arg0, int arg1, int arg2) {
 
 int FUN_002da770(int *p)
 {
-    return igStringObj_Clear((S0_30b420 *)(*(int *)((char *)p + 40)));
+    return igStringObj_Clear((IniStringView *)(*(int *)((char *)p + 40)));
 }
 
-static inline int n_of(const struct L_2da780 *list) { return list->n; }
+static inline int n_of(const TrackedEntryList *list) { return list->count; }
 
-struct L_2da780 *FUN_002da780(struct S_2da780 *s) {
+TrackedEntryList *FUN_002da780(igDriverDatabase *s) {
     int cnt;
     int r;
-    struct L_2da780 *l;
+    TrackedEntryList *l;
     int v;
 
-    l = ((struct L_2da780 *)FUN_002c8450(((int)igObject_GetAllocator((int)s))));
-    s->f44 = 1;
-    v = s->src->c;
+    l = ((TrackedEntryList *)FUN_002c8450(((int)igObject_GetAllocator((int)s))));
+    s->_currentLine = 1;
+    v = ((igStringObj *)s->_rawDatabase)->_buffer;
     if (v == 0) {
         v = ((int *)g_stringObjEmptyText)[0];
     }
-    s->f52 = v;
+    s->_dbIndex = v;
     do {
         r = FUN_002dae40(s);
         if (r != 0) {
-            cnt = l->n;
+            cnt = l->count;
             if (cnt < l->cap) {
-                l->n = n_of(l) + 1;
+                l->count = n_of(l) + 1;
             } else {
                 List_Resize(l, cnt + 1, 4);
             }
-            l->arr[cnt] = r;
+            l->data[cnt] = (TrackedEntry *)r;
         }
     } while (r != 0);
     return l;
@@ -231,18 +231,18 @@ void *FUN_002da940(void *arg0, long long arg1) {
     return arg0;
 }
 
-int FUN_002da990(Owner_2da990 *arg0, int arg1, int arg2, int arg3) {
+int FUN_002da990(igDriverDatabase *arg0, int arg1, int arg2, int arg3) {
     int r;
-    Arr_2da990 *a;
+    TrackedEntryList *a;
     int i;
-    igSmartPointer<Obj_2da990> sp7C(((Obj_2da990 *)FUN_002baff0(((int)igObject_GetAllocator((int)arg0)))));
-    a = ((Arr_2da990 *)FUN_002da780((struct S_2da780 *)arg0));
+    igSmartPointer<igRegistry> sp7C(((igRegistry *)FUN_002baff0(((int)igObject_GetAllocator((int)arg0)))));
+    a = FUN_002da780(arg0);
     for (i = 0; i < a->count; i++) {
-        FUN_002db040((void *)arg0, a->items[i], (void *)sp7C.p, (void *)arg2);
+        FUN_002db040((void *)arg0, (int)a->data[i], (void *)sp7C.p, (void *)arg2);
     }
     FUN_003061c0((void *)arg1, (IniIncludeView *)sp7C.p, arg3);
-    r = *arg0->p52 == 0;
-    FUN_002da850((void *)arg0, (TrackedEntryList *)a);
+    r = *(char *)arg0->_dbIndex == 0;
+    FUN_002da850((void *)arg0, a);
     FUN_002da770((int *)arg0);
     return r;
 }
@@ -290,12 +290,12 @@ int FUN_002dac90(void *arg0) {
     return 1;
 }
 
-bool FUN_002dacc0(void *a0, S_2dacc0 *s, char *buf, int n) {
-    int c = s->vX();
+bool FUN_002dacc0(void *a0, igFileView *s, char *buf, int n) {
+    int c = s->vfunc_33();
     int i = 0;
     while (c != -1 && c != 10 && c != 13 && c != 0) {
         if (i < n - 2) buf[i] = c;
-        c = s->vX();
+        c = s->vfunc_33();
         i++;
     }
     if (n - 2 < i) i = n - 2;
@@ -347,14 +347,14 @@ void FUN_002db4e0(int arg0, char *arg1) {
     }
 }
 
-bool FUN_002db540(S_2db540 *arg0, int *arg1) {
+bool FUN_002db540(igDriverDatabase *arg0, int *arg1) {
     char sp40[4096];
     bool var_s0;
 
     var_s0 = 0;
     FUN_002db480((int *)arg0);
-    if (sscanf(arg0->f52, &text_abcdefghijklmnopqrstuvwxyzABCDEF[0], sp40) == 1) {
-        arg0->f52 = arg0->f52 + strlen(sp40);
+    if (sscanf(arg0->_dbIndex, &text_abcdefghijklmnopqrstuvwxyzABCDEF[0], sp40) == 1) {
+        arg0->_dbIndex = arg0->_dbIndex + strlen(sp40);
         *arg1 = ((int)igStringObj_Create(((int)igObject_GetAllocator((int)arg0))));
         igStringObj_Set(*arg1, (int)sp40);
         var_s0 = 1;
@@ -403,7 +403,7 @@ static inline void storeToken(int table, ConfigToken *n) {
     int kind = n->kind;
     int t = table;
     text = (text == 0) ? g_stringObjEmptyText[0] : text;
-    FUN_0030b320((struct S_30b320 *)t, (int)text, kind);
+    FUN_0030b320((IniStringView *)t, (int)text, kind);
 }
 
 static inline void releaseToken(ConfigToken *n) {

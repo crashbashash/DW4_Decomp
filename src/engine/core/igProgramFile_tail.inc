@@ -3,13 +3,13 @@ void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0) {
     int temp_v1;
     int var_v0;
     char *temp_a0;
-    ProgramFileStream *temp_a0_2;
+    igFileView *temp_a0_2;
     char *temp_s1;
 
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
@@ -24,10 +24,10 @@ void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0) {
         }
     }
     arg0->_fileName = (int)temp_s1;
-    temp_a0_2 = (ProgramFileStream *)arg0->_file;
+    temp_a0_2 = (igFileView *)arg0->_file;
     if (temp_a0_2 != 0) {
-        --temp_a0_2->refCount;
-        if (((unsigned long long)(long long)temp_a0_2->refCount & 0x7fffffULL) == 0) {
+        --temp_a0_2->_refCount;
+        if (((unsigned long long)(long long)(int)temp_a0_2->_refCount & 0x7fffffULL) == 0) {
             igObject_Destroy(temp_a0_2);
         }
     }
@@ -41,13 +41,13 @@ igResult Gap__Core__igProgramFile__vfunc_24(igProgramFile *self, const char *pat
     int *old;
     int *header;
     int name;
-    ProgramFileStream *stream;
+    igFileView *stream;
     int refs;
     file->Reset();
     if (g_stringPool[0] == 0) {
         pool = (int)StringPool_Allocate(0x10);
         if (pool != 0) {
-            pool = (int)StringPool_Construct((struct S_2eadf0 *)pool);
+            pool = (int)StringPool_Construct((StringPool *)pool);
         }
         g_stringPool[0] = pool;
     }
@@ -65,14 +65,14 @@ igResult Gap__Core__igProgramFile__vfunc_24(igProgramFile *self, const char *pat
     allocator = (int)igObject_GetAllocator((int)self);
     stream = file->stream;
     if (stream != 0) {
-        stream->refCount = stream->refCount - 1;
-        if (((unsigned long long)(long long)stream->refCount & 0x7fffffULL) == 0) {
+        stream->_refCount = stream->_refCount - 1;
+        if (((unsigned long long)(long long)(int)stream->_refCount & 0x7fffffULL) == 0) {
             igObject_Destroy(stream);
         }
     }
-    file->stream = (ProgramFileStream *)igFile_Create(allocator);
+    file->stream = (igFileView *)igFile_Create(allocator);
     FUN_002e30b0((int *)file->stream, file->path);
-    if (file->stream->Open(4) == g_resultFailure) {
+    if (file->stream->vfunc_23(4) == g_resultFailure) {
         FUN_00304430((const char *)&DAT_004ff4f0[0], (int)file->path);
         FUN_00304680();
         return g_resultFailure;
@@ -81,13 +81,13 @@ igResult Gap__Core__igProgramFile__vfunc_24(igProgramFile *self, const char *pat
 }
 
 void Gap__Core__igProgramFile__vfunc_25(int *result, ProgramFileView *self) {
-    self->stream->Close();
+    self->stream->vfunc_24();
     self->Reset();
     *result = g_resultSuccess.v;
 }
 
 void Gap__Core__igProgramFile__vfunc_26(int *result, ProgramFileView *self, int offset, int size, void **dest) {
-    ProgramFileStream *stream;
+    igFileView *stream;
     stream = self->stream;
     if (stream->Seek(offset, 0) == -1) {
         FUN_00304430(DAT_004ff510, offset, self->path);

@@ -22,7 +22,7 @@ void Gap__Core__igCharMetaField__vfunc_57(int *arg0, int arg1, char *arg2) {
         if (g_stringPool[0] == 0) {
             var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
             }
             g_stringPool[0] = var_v0;
         }
@@ -371,7 +371,7 @@ int FUN_002d5df0(RecoveryString *out, igMetaFieldView *ctx, int a2, int a3) {
     else {
         if (g_stringPool[0] == 0) {
             int v = ((int)StringPool_Allocate(0x10));
-            if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
+            if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
             g_stringPool[0] = v;
         }
         r = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf);
@@ -408,8 +408,8 @@ void FUN_002d60b0(igContext *arg0) {
         ((igObjectDispatchView *)arg0)->getMeta();
         meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
         arg0->_iNumExts = igMetaObject_CountTree((MetaTreeNode *)meta) - 1;
-        if (arg0->_iNumExts >= ((igContextExtInfoList *)arg0->_pExtList)->_count) List_Reserve((L_2d6680 *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts, 4);
-        ObjectList_ResizeRetained((L_301ee0 *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts);
+        if (arg0->_iNumExts >= ((igContextExtInfoList *)arg0->_pExtList)->_count) List_Reserve((igDataList *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts, 4);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts);
         for (i = 0; i < arg0->_iNumExts; i++) {
             int nm;
             igMetaObject *nd;
@@ -423,7 +423,7 @@ void FUN_002d60b0(igContext *arg0) {
             nm = nd->_name;
             if (g_stringPool[0] == 0) {
                 int al = ((int)StringPool_Allocate(16));
-                if (al != 0) al = ((int)StringPool_Construct((struct S_2eadf0 *)al));
+                if (al != 0) al = ((int)StringPool_Construct((StringPool *)al));
                 g_stringPool[0] = al;
             }
             {

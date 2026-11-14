@@ -30,7 +30,7 @@ igMetaField *igMetaField_Init(igMetaField *field){
     field->_externalEnumStorage=0;
     if(g_stringPool[0]==0){
         pool=((int)StringPool_Allocate(16));
-        if(pool)pool=((int)StringPool_Construct((S_2eadf0 *)pool));
+        if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
         g_stringPool[0]=pool;
     }
     emptyToken=((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
@@ -147,7 +147,7 @@ void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField
         if (g_stringPool[0] == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
-                pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
             g_stringPool[0] = pool;
         }
@@ -431,7 +431,7 @@ void FUN_002fce20(int *arg0, void *arg1) {
         if (g_stringPool[0] == 0) {
             var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
             }
             g_stringPool[0] = var_v0;
         }

@@ -11,7 +11,7 @@ int Gap__Core__igPsx2File__vfunc_22(void) {
     return ((int *)g_igPsx2File_metaObject)[0];
 }
 
-void Gap__Core__igPsx2File__vfunc_11(struct O_330e90 *arg0) {
+void Gap__Core__igPsx2File__vfunc_11(igPsx2File *arg0) {
     int *temp_a1;
     int temp_s0;
     int temp_v1;
@@ -22,12 +22,12 @@ void Gap__Core__igPsx2File__vfunc_11(struct O_330e90 *arg0) {
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
     temp_s0_2 = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)temp_s0)));
-    temp_a0 = arg0->s;
+    temp_a0 = (int *)arg0->_prefix;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;
         temp_v1 = temp_a0[-1] - 1;
@@ -36,7 +36,7 @@ void Gap__Core__igPsx2File__vfunc_11(struct O_330e90 *arg0) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
         }
     }
-    arg0->s = temp_s0_2;
+    arg0->_prefix = (int)temp_s0_2;
 }
 
 int Gap__Core__igPsx2CallStackTracer__vfunc_22(void)
@@ -156,10 +156,10 @@ void Gap__Core__igStringRefList__vfunc_14(igStringRefListView *self)
     self->vfunc_16();
 }
 
-void Gap__Core__igStringRefList__vfunc_18(List_3310f0 *l) {
-    int n = l->count;
-    if (n < l->capacity) {
-        List_Reserve((L_2d6680 *)l, n, 4);
+void Gap__Core__igStringRefList__vfunc_18(igStringRefList *l) {
+    int n = l->_count;
+    if (n < l->_capacity) {
+        List_Reserve((igDataList *)l, n, 4);
     }
 }
 
@@ -764,7 +764,7 @@ int Gap__Core__igPointerList__vfunc_23(void) {
     return 4;
 }
 
-int FUN_00331a70(L_331a70 *arg0, unsigned int *arg1) {
+int FUN_00331a70(igTDataList<unsigned int> *arg0, unsigned int *arg1) {
     unsigned int v;
     int lo;
     int hi;
@@ -772,12 +772,12 @@ int FUN_00331a70(L_331a70 *arg0, unsigned int *arg1) {
     unsigned int k;
     int n;
     lo = 0;
-    n = arg0->count;
+    n = arg0->_count;
     hi = n - 1;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
         k = *arg1;
-        v = arg0->data[mid];
+        v = arg0->_data[mid];
         if (v < k) {
             lo = 1 + mid;
         } else if (k < v) {
@@ -787,7 +787,7 @@ int FUN_00331a70(L_331a70 *arg0, unsigned int *arg1) {
         }
     }
     if (!n) return 0;
-    lo = (arg0->data[lo] < *arg1) ? lo + 1 : lo;
+    lo = (arg0->_data[lo] < *arg1) ? lo + 1 : lo;
     return lo;
 }
 
@@ -921,7 +921,7 @@ void Gap__Core__igBoolList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 1);
+        List_Reserve((igDataList *)arg0, temp_a1, 1);
     }
 }
 
@@ -930,7 +930,7 @@ void Gap__Core__igCharList__vfunc_18(igCharList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 1);
+        List_Reserve((igDataList *)arg0, temp_a1, 1);
     }
 }
 
@@ -939,7 +939,7 @@ void igIntList_TrimCapacity(igIntList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((L_2d6680 *)self, count, 4);
+        List_Reserve((igDataList *)self, count, 4);
     }
 }
 
@@ -948,7 +948,7 @@ void Gap__Core__igUnsignedShortList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 2);
+        List_Reserve((igDataList *)arg0, temp_a1, 2);
     }
 }
 
@@ -957,7 +957,7 @@ void Gap__Core__igShortList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 2);
+        List_Reserve((igDataList *)arg0, temp_a1, 2);
     }
 }
 
@@ -966,7 +966,7 @@ void Gap__Core__igUnsignedCharList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 1);
+        List_Reserve((igDataList *)arg0, temp_a1, 1);
     }
 }
 
@@ -975,7 +975,7 @@ void Gap__Core__igFloatList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 4);
+        List_Reserve((igDataList *)arg0, temp_a1, 4);
     }
 }
 
@@ -984,7 +984,7 @@ void Gap__Core__igPointerList__vfunc_18(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve((L_2d6680 *)arg0, temp_a1, 4);
+        List_Reserve((igDataList *)arg0, temp_a1, 4);
     }
 }
 
@@ -993,7 +993,7 @@ void Gap__Core__igDependencyList__vfunc_18(igDependencyList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((L_2d6680 *)self, count, 8);
+        List_Reserve((igDataList *)self, count, 8);
     }
 }
 

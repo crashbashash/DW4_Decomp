@@ -460,52 +460,52 @@ char *FUN_00321c50(int arg0, int arg1, char *arg2) {
     return arg2;
 }
 
-void Gap__Core__igElfFile__vfunc_30(O_321d30 *o) {
+void Gap__Core__igElfFile__vfunc_30(ElfFileView *o) {
     FUN_00304430(DAT_004fe090);
     FUN_00304680();
     FUN_00304430(DAT_004fe0b0);
     FUN_00304680();
-    FUN_00304430(DAT_004fe0d0, o->b16);
+    FUN_00304430(DAT_004fe0d0, o->magic[0]);
     FUN_00304680();
-    FUN_00304430(DAT_004fe0f0, o->b17);
+    FUN_00304430(DAT_004fe0f0, o->magic[1]);
     FUN_00304680();
-    FUN_00304430(DAT_004fe110, o->b18);
+    FUN_00304430(DAT_004fe110, o->magic[2]);
     FUN_00304680();
-    FUN_00304430(DAT_004fe130, o->b19);
+    FUN_00304430(DAT_004fe130, o->magic[3]);
     FUN_00304680();
-    FUN_00304430(DAT_004fe150, ((int)FUN_00321c10(o->b20, &DAT_004c23f0[0])));
+    FUN_00304430(DAT_004fe150, ((int)FUN_00321c10(o->elfClass, &DAT_004c23f0[0])));
     FUN_00304680();
-    FUN_00304430(DAT_004fe170, ((int)FUN_00321c10(o->b21, &DAT_004c2410[0])));
+    FUN_00304430(DAT_004fe170, ((int)FUN_00321c10(o->endian, &DAT_004c2410[0])));
     FUN_00304680();
-    FUN_00304430(DAT_004fe190, o->b22);
+    FUN_00304430(DAT_004fe190, o->identVersion);
     FUN_00304680();
     FUN_00304430(DAT_004fe1b0);
     FUN_00304680();
-    FUN_00304430(DAT_004fe1d0, ((int)FUN_00321c10(o->h32, &DAT_004c2430[0])));
+    FUN_00304430(DAT_004fe1d0, ((int)FUN_00321c10(o->type, &DAT_004c2430[0])));
     FUN_00304680();
-    FUN_00304430(DAT_004fe1f0, ((int)FUN_00321c10(o->h34, &DAT_004c2470[0])));
+    FUN_00304430(DAT_004fe1f0, ((int)FUN_00321c10(o->machine, &DAT_004c2470[0])));
     FUN_00304680();
-    FUN_00304430(DAT_004fe210, o->w36);
+    FUN_00304430(DAT_004fe210, o->version);
     FUN_00304680();
-    FUN_00304430(DAT_004fe230, o->w40);
+    FUN_00304430(DAT_004fe230, o->entry);
     FUN_00304680();
-    FUN_00304430(DAT_004fe250, o->w44);
+    FUN_00304430(DAT_004fe250, o->programHeaderOffset);
     FUN_00304680();
-    FUN_00304430(DAT_004fe270, o->w48);
+    FUN_00304430(DAT_004fe270, o->sectionHeaderOffset);
     FUN_00304680();
-    FUN_00304430(DAT_004fe290, o->w52);
+    FUN_00304430(DAT_004fe290, o->flags);
     FUN_00304680();
-    FUN_00304430(DAT_004fe2b0, o->h56);
+    FUN_00304430(DAT_004fe2b0, o->headerSize);
     FUN_00304680();
-    FUN_00304430(DAT_004fe2d0, o->h58);
+    FUN_00304430(DAT_004fe2d0, o->programHeaderEntrySize);
     FUN_00304680();
-    FUN_00304430(DAT_004fe2f0, o->h60);
+    FUN_00304430(DAT_004fe2f0, o->programHeaderCount);
     FUN_00304680();
-    FUN_00304430(DAT_004fe310, o->h62);
+    FUN_00304430(DAT_004fe310, o->sectionHeaderEntrySize);
     FUN_00304680();
-    FUN_00304430(DAT_004fe330, o->h64);
+    FUN_00304430(DAT_004fe330, o->sectionHeaderCount);
     FUN_00304680();
-    FUN_00304430(DAT_004fe350, o->h66);
+    FUN_00304430(DAT_004fe350, o->sectionNameIndex);
     FUN_00304680();
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
@@ -518,47 +518,47 @@ void Gap__Core__igElfFile__vfunc_31(int *arg0) {
     FUN_00304430(DAT_004fe370, temp_a1, temp_a1);
     FUN_00304680();
     for (var_s0 = 0; var_s0 < arg0[19]; var_s0++) {
-        FUN_00322040((A_322040 *)arg0, var_s0, (B_322040 *)(FUN_00320ea0((ElfFileView *)arg0, var_s0)));
+        FUN_00322040((ElfFileView *)arg0, var_s0, FUN_00320ea0((ElfFileView *)arg0, var_s0));
     }
 }
 
-void FUN_00322040(struct A_322040 *arg0, int arg1, struct B_322040 *arg2) {
+void FUN_00322040(ElfFileView *arg0, int arg1, ElfSection *arg2) {
     char sp30[128];
 
     FUN_00304430(DAT_004fe4d0);
     FUN_00304680();
-    FUN_00304430(DAT_004fe4f0, arg2->f0, arg0->f72 + arg2->f0);
+    FUN_00304430(DAT_004fe4f0, arg2->name, (int)arg0->sectionNames + arg2->name);
     FUN_00304680();
-    FUN_00304430(DAT_004fe520, ((int)FUN_00321c10(arg2->f4, &DAT_004c24c0[0])));
+    FUN_00304430(DAT_004fe520, ((int)FUN_00321c10(arg2->type, &DAT_004c24c0[0])));
     FUN_00304680();
-    FUN_00304430(DAT_004fe540, arg2->f8, ((int)FUN_00321c50(arg2->f8, (int)&DAT_004c2550[0], (char *)sp30)));
+    FUN_00304430(DAT_004fe540, arg2->flags, ((int)FUN_00321c50(arg2->flags, (int)&DAT_004c2550[0], (char *)sp30)));
     FUN_00304680();
-    FUN_00304430(DAT_004fe570, arg2->f12);
+    FUN_00304430(DAT_004fe570, arg2->addr);
     FUN_00304680();
-    FUN_00304430(DAT_004fe5a0, arg2->f16);
+    FUN_00304430(DAT_004fe5a0, arg2->offset);
     FUN_00304680();
-    FUN_00304430(DAT_004fe5d0, arg2->f20);
+    FUN_00304430(DAT_004fe5d0, arg2->size);
     FUN_00304680();
-    FUN_00304430(DAT_004fe600, arg2->f24);
+    FUN_00304430(DAT_004fe600, arg2->link);
     FUN_00304680();
-    FUN_00304430(DAT_004fe630, arg2->f28);
+    FUN_00304430(DAT_004fe630, arg2->info);
     FUN_00304680();
-    FUN_00304430(DAT_004fe660, arg2->f32);
+    FUN_00304430(DAT_004fe660, arg2->addressAlign);
     FUN_00304680();
-    FUN_00304430(DAT_004fe690, arg2->f36);
+    FUN_00304430(DAT_004fe690, arg2->entrySize);
     FUN_00304680();
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
 }
 
-void Gap__Core__igElfFile__vfunc_32(struct E_3221c0 *arg0) {
+void Gap__Core__igElfFile__vfunc_32(ElfFileView *arg0) {
     int temp_a1;
     int i;
 
-    temp_a1 = arg0->n;
+    temp_a1 = arg0->symbolCount;
     FUN_00304430(DAT_004fe6c0, temp_a1, temp_a1);
     FUN_00304680();
-    for (i = 0; i < arg0->n; i++) {
+    for (i = 0; i < arg0->symbolCount; i++) {
         FUN_00322240((igElfFile *)arg0, i, (unsigned char *)(FUN_00320f70(arg0, i)));
     }
 }

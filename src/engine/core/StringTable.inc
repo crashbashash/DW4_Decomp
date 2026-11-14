@@ -285,7 +285,8 @@ void StringChunk_ReleaseHeader(StringChunkOwnerView *self, int header) {
 }
 
 void StringChunk_InitializeStorage(StringChunkStorageView *chunk) {
-    chunk->storage=((AllocatorSlot216 *)*(int *)((char *)*(int *)chunk->table+12))->allocate_bytes(chunk->size);
+    igMemoryPoolView *pool = (igMemoryPoolView *)*(int *)((char *)*(int *)chunk->table+12);
+    chunk->storage=(int)pool->Allocate(chunk->size);
     chunk->head=chunk->storage+chunk->size;
     chunk->end=chunk->storage+chunk->size;
     {

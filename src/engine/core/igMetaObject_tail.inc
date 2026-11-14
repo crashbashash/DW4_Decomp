@@ -72,7 +72,7 @@ igMetaObject *igMetaObject_Init(igMetaObject *meta){
     meta->_requiredAlignment=4;
     meta->_vTablePointer=0;
     if(g_stringPool[0]==0){
-        pool=((int)StringPool_Allocate(16));if(pool)pool=((int)StringPool_Construct((struct S_2eadf0 *)pool));
+        pool=((int)StringPool_Allocate(16));if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
         g_stringPool[0]=pool;
     }
     emptyToken=(void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
@@ -233,7 +233,7 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
     if (g_stringPool[0] == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool) {
-            pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
         g_stringPool[0] = pool;
     }

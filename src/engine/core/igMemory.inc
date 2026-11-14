@@ -1,49 +1,49 @@
-void *Memory_AllocateBufferViaSharedTail(unsigned int size, igMemoryPool_2ed1c0 *pool)
+void *Memory_AllocateBufferViaSharedTail(unsigned int size, igMemoryPoolView *pool)
 {
     return FUN_002ed1e0(1, size, pool);
 }
 
-void *FUN_002ed1e0(int, unsigned int size, igMemoryPool_2ed1c0 *pool)
+void *FUN_002ed1e0(int, unsigned int size, igMemoryPoolView *pool)
 {
     return pool->Allocate(size);
 }
 
 void *Memory_AllocateDefaultBuffer(unsigned int size)
 {
-    igMemoryPool_2ed1c0 *allocator = ((igMemoryPool_2ed1c0 *)Memory_GetDefaultAllocator());
+    igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     return allocator->Allocate(size);
 }
 
-void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPool_2ed1c0 *pool)
+void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPoolView *pool)
 {
     return pool->Allocate(size);
 }
 
 void *FUN_002ed260(unsigned int size, unsigned int alignment)
 {
-    igMemoryPool_2ed1c0 *allocator = ((igMemoryPool_2ed1c0 *)Memory_GetDefaultAllocator());
+    igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     return allocator->AllocateAligned(size, alignment);
 }
 
-void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPool_2ed1c0 *pool)
+void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool)
 {
     return pool->AllocateAligned(size, alignment);
 }
 
 void *FUN_002ed2e0(unsigned int size, unsigned int alignment)
 {
-    igMemoryPool_2ed1c0 *allocator = ((igMemoryPool_2ed1c0 *)Memory_GetDefaultAllocator());
-    return allocator->vfunc_54(size, alignment);
+    igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
+    return allocator->vfunc_56(size, alignment);
 }
 
 void *Memory_ReallocateBuffer(void *buffer, unsigned int size)
 {
-    igMemoryPool_2ed1c0 *owner;
+    igMemoryPoolView *owner;
 
     if (buffer == 0) {
         return Memory_AllocateDefaultBuffer(size);
     }
-    owner = ((igMemoryPool_2ed1c0 *)Memory_FindOwningAllocator((int)buffer));
+    owner = ((igMemoryPoolView *)Memory_FindOwningAllocator((int)buffer));
     if (owner != 0) {
         return owner->Reallocate(buffer, size);
     }
@@ -52,12 +52,12 @@ void *Memory_ReallocateBuffer(void *buffer, unsigned int size)
 
 void *FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment)
 {
-    igMemoryPool_2ed1c0 *owner;
+    igMemoryPoolView *owner;
 
     if (buffer == 0) {
         return FUN_002ed260(size, alignment);
     }
-    owner = ((igMemoryPool_2ed1c0 *)Memory_FindOwningAllocator((int)buffer));
+    owner = ((igMemoryPoolView *)Memory_FindOwningAllocator((int)buffer));
     if (owner != 0) {
         return owner->ReallocateAligned(buffer, size, alignment);
     }
@@ -76,10 +76,10 @@ void *thunk_FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment
 
 int Memory_FreeBuffer(void *buffer)
 {
-    igMemoryPool_2ed1c0 *allocator;
+    igMemoryPoolView *allocator;
 
     if (buffer != 0) {
-        allocator = ((igMemoryPool_2ed1c0 *)Memory_FindOwningAllocator((int)buffer));
+        allocator = ((igMemoryPoolView *)Memory_FindOwningAllocator((int)buffer));
         if (allocator != 0) {
             allocator->Free(buffer);
         }
@@ -91,20 +91,20 @@ int Memory_FreeBufferAliasA(void *buffer)
     return Memory_FreeBuffer(buffer);
 }
 
-void Memory_FreeBufferWithAllocator(void *block, igMemoryPool_2ed1c0 *pool)
+void Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool)
 {
     pool->Free(block);
 }
 
 unsigned int Memory_GetBufferSize(void *buffer)
 {
-    igMemoryPool_2ed1c0 *owner = ((igMemoryPool_2ed1c0 *)Memory_FindOwningAllocator((int)buffer));
-    return owner->GetSize(buffer);
+    igMemoryPoolView *owner = ((igMemoryPoolView *)Memory_FindOwningAllocator((int)buffer));
+    return owner->GetAllocationSize(buffer);
 }
 
-igMemoryPool_2ed1c0 *Memory_FindBufferOwner(void *buffer)
+igMemoryPoolView *Memory_FindBufferOwner(void *buffer)
 {
-    return ((igMemoryPool_2ed1c0 *)Memory_FindOwningAllocator((int)buffer));
+    return ((igMemoryPoolView *)Memory_FindOwningAllocator((int)buffer));
 }
 
 void *Memory_DuplicateBuffer(void *source)
@@ -118,7 +118,7 @@ void *Memory_DuplicateBuffer(void *source)
     return copy;
 }
 
-int FUN_002ed5a0(void *block, igMemoryPool_2ed1c0 *pool)
+int FUN_002ed5a0(void *block, igMemoryPoolView *pool)
 {
     return pool->vfunc_58(block);
 }
@@ -130,7 +130,7 @@ void Memory_FreeBufferAliasB(void *buffer)
 
 void Memory_FreeOwnedBufferUnchecked(void *buffer)
 {
-    igMemoryPool_2ed1c0 *owner = Memory_FindBufferOwner(buffer);
+    igMemoryPoolView *owner = Memory_FindBufferOwner(buffer);
     owner->Free(buffer);
 }
 

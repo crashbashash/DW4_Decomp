@@ -4,14 +4,14 @@ void List_RemoveWordAt(igDataList *l, int i) {
     if (i != n - 1) { d = l->_data + i * 4; memmove(d, d + 4, 4 * (n - (i + 1))); }
     l->_count = l->_count - 1; }
 
-int List_BinarySearchWords(struct LL *arg0, int arg1, int (*arg2)(int, int)) {
+int List_BinarySearchWords(igDataList *arg0, int arg1, int (*arg2)(int, int)) {
     int lo = 0;
-    int hi = arg0->count - 1;
+    int hi = arg0->_count - 1;
     int mid;
     int r;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        r = arg2(arg0->data + mid * 4, arg1);
+        r = arg2(arg0->_data + mid * 4, arg1);
         if (r < 0) {
             lo = mid + 1;
         } else if (r > 0) {
@@ -20,10 +20,10 @@ int List_BinarySearchWords(struct LL *arg0, int arg1, int (*arg2)(int, int)) {
             return mid;
         }
     }
-    if (arg0->count == 0) {
+    if (arg0->_count == 0) {
         return -1;
     }
-    if (arg2(arg0->data + lo * 4, arg1) == 0) {
+    if (arg2(arg0->_data + lo * 4, arg1) == 0) {
         return lo;
     }
     return -1;
@@ -44,7 +44,7 @@ int FUN_002d6e60(igDataList *l, void *key, Cmp cmp) {
 static inline int count_of(const igDependencyListView *list) { return list->_count; }
 
 void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
-    int n; igDependencyListView *q; struct It *it;
+    int n; igDependencyListView *q; DependencyPair *it;
     q = arg0->_dependencies;
     n = q->_count;
     if (n < q->_capacity) {
@@ -52,7 +52,7 @@ void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
     } else {
         List_Resize(q, n + 1, 8);
     }
-    it = (struct It *)((char *)q->_data + n * 8);
+    it = (DependencyPair *)((char *)q->_data + n * 8);
     it->a = arg1;
     it->b = arg2;
     FUN_002d7280(arg0);
@@ -61,7 +61,7 @@ void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
 
 void FUN_002d7130(igDependencyOrderedListView *owner) {
     igSmartPointer<ObjectList> copy(((ObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
-    ObjectList_AppendRetainedList((int)copy.p, (L_301e90 *)owner->_objectList);
+    ObjectList_AppendRetainedList((int)copy.p, (igTDataList<igObject *> *)owner->_objectList);
     ObjectList *children = owner->_objectList;
     int count = children->count;
     int i;
@@ -113,7 +113,7 @@ void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int ar
     int idx = temp_a0->Find(arg2, arg3);
     int var_s2;
     if (idx >= 0) {
-        List_RemoveAt((L_2d69a0 *)temp_a0, idx, 8);
+        List_RemoveAt((igDataList *)temp_a0, idx, 8);
         var_s2 = g_resultSuccess.v;
     } else {
         var_s2 = g_resultFailure.v;
@@ -137,7 +137,7 @@ void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1) {
         b = temp_v1[1];
         a = temp_v1[0];
         if ((a == arg1) || (b == arg1)) {
-            List_RemoveAt((L_2d69a0 *)temp_a0, var_s0, 8);
+            List_RemoveAt((igDataList *)temp_a0, var_s0, 8);
         }
     }
     if (arg0->_hasCircularDependencies != 0) {
@@ -159,7 +159,7 @@ void FUN_002d78e0(void *arg0, int arg1) {
         if (g_stringPool[0] == 0) {
             var_v0_2 = ((int)StringPool_Allocate(0x10));
             if (var_v0_2 != 0) {
-                var_v0_2 = ((int)StringPool_Construct((struct S_2eadf0 *)var_v0_2));
+                var_v0_2 = ((int)StringPool_Construct((StringPool *)var_v0_2));
             }
             g_stringPool[0] = var_v0_2;
         }

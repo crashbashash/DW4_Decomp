@@ -4,7 +4,6 @@ int List_AppendWord(igDataList *list, int value) {
     (*(int **)&list->_data)[index] = value;
 }
 
-static inline int countOf(const igDataList *list) { return list->_count; }
 extern "C" void List_InsertWords(igDataList *list, int index, int count, const void *src) {
     int oldCount;
     int newCount;

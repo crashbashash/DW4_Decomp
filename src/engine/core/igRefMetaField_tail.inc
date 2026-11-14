@@ -95,7 +95,7 @@ block12:
     } else {
         if (g_stringPool[0] == 0) {
             v = ((int)StringPool_Allocate(16));
-            if (v != 0) v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+            if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
             g_stringPool[0] = v;
         }
         pi = ((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf));

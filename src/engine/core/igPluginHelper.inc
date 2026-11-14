@@ -48,14 +48,14 @@ void **FUN_002bc440(void **arg0, long long arg1) {
 }
 
 void **FUN_002bc4c0(void **arg0, short arg1) {
-    S_temp_a0_2bc4c0 *temp_a0;
+    igLibraryLoaderView *loader;
 
     if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_2bc4c0 *)((void *)(*arg0));
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+        loader = (igLibraryLoaderView *)*arg0;
+        if (loader != 0) {
+            loader->_refCount = loader->_refCount - 1;
+            if ((loader->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(loader);
             }
         }
         if (arg1 > 0) {

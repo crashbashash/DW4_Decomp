@@ -128,8 +128,8 @@ void FUN_0032f300(void) {
 }
 
 void FUN_0032f330(void) {
-    if (((void ** *)g_activeSystemAllocator)[0] != 0) {
-        ((DW4VC_12_0 *)(((void ** *)g_activeSystemAllocator)[0]))->vX();
+    if (g_activeSystemAllocator[0] != 0) {
+        g_activeSystemAllocator[0]->vfunc_3();
     }
 }
 
@@ -154,7 +154,7 @@ void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map) {
     if (size == -1) {
         size = g_rangeEnd[0];
     }
-    FUN_003295d0((Tr *)self, (int *)map);
+    FUN_003295d0(self, (int *)map);
     map->stackTop = top;
     map->stackBottom = bottom - size;
     map->stackSize = size;

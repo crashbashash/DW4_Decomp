@@ -1,12 +1,12 @@
 void Gap__Core__igRegistry__vfunc_11(void *arg0) {
     Gap__Core__igObject__vfunc_09((int)arg0);
-    ObjectList_ResizeRetained((L_301ee0 *)(*(int *)((char *)arg0 + 8)), 0x100);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)(*(int *)((char *)arg0 + 8)), 0x100);
 }
 
 static inline int pool_305d30() {
     if ((*(int *)g_stringPool) == 0) {
         int p = ((int)StringPool_Allocate(0x10));
-        if (p != 0) { p = ((int)StringPool_Construct((struct S_2eadf0 *)p)); }
+        if (p != 0) { p = ((int)StringPool_Construct((StringPool *)p)); }
         (*(int *)g_stringPool) = p;
     }
     return (*(int *)g_stringPool);
@@ -185,35 +185,35 @@ bool FUN_003066b0(int arg0, int arg1, const char *arg2, float *arg3, int arg4, f
     return var_s0;
 }
 
-int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, const char *arg4, int arg5) {
+int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const char *arg4, int arg5) {
     Node *node;
-    T_306770 *t;
-    T_306770 *old;
+    igStringObj *t;
+    igStringObj *old;
     StringObjHolder h;
     node = ((Node *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0));
     if (node != 0) {
         t = node->f12;
         if (t) {
-            ++t->references;
+            ++t->_refCount;
         }
         old = *arg3;
         if (old) {
-            --old->references;
-            if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0)
+            --old->_refCount;
+            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)old);
         }
         *arg3 = t;
     } else {
-    h.ref = ((T_306770 *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
+    h.ref = ((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
     igStringObj_Set((int)h.ref, (int)arg4);
     t = h.ref;
     if (t) {
-        ++t->references;
+        ++t->_refCount;
     }
     old = *arg3;
     if (old) {
-        --old->references;
-        if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0)
+        --old->_refCount;
+        if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
             igObject_Destroy((void *)old);
     }
     *arg3 = t;
@@ -230,7 +230,7 @@ static inline int pool_306910(void) {
     if (g_stringPool[0] == 0) {
         p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
-            p = ((int)StringPool_Construct((S_2eadf0 *)p));
+            p = ((int)StringPool_Construct((StringPool *)p));
         }
         g_stringPool[0] = p;
     }
@@ -275,7 +275,7 @@ static inline int pool_306aa0(void) {
     if (g_stringPool[0] == 0) {
         p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
-            p = ((int)StringPool_Construct((S_2eadf0 *)p));
+            p = ((int)StringPool_Construct((StringPool *)p));
         }
         g_stringPool[0] = p;
     }
@@ -304,10 +304,10 @@ static inline void releaseRef(int *old) {
     }
 }
 
-static inline void setAt_306aa0(SL *l, int i, int **v) {
-    int n = l->count;
+static inline void setAt_306aa0(igStringRefList *l, int i, int **v) {
+    int n = l->_count;
     if (n != 0 && i >= 0 && i < n) {
-        int **slot = &l->data[i];
+        int **slot = &((int **)l->_data)[i];
         int *w = *v;
         if (w != 0) {
             w[-1] = w[-1] + 1;
@@ -319,7 +319,7 @@ static inline void setAt_306aa0(SL *l, int i, int **v) {
 
 static inline void append_306aa0(Str *c, char *s) { int at = c->length; igStringObj_Insert((IniStringView *)c, s, at, strlen(s)); }
 
-int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create) {
+int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list, int create) {
     Str *a;
     Str *b;
     int *r1;
@@ -334,7 +334,7 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
     if (p != 0) {
         FUN_0030bce0((SrcStr *)p->_value, 0x2C, (igTDataList<char *> *)list);
         *(Str **)&a = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
-        for (i = 0; i < list->count; i++) {
+        for (i = 0; i < list->_count; i++) {
             StringList_CopyRetained(&r1, list, i);
             igStringObj_Set((int)a, (int)r1);
             releaseRef(r1);
@@ -352,7 +352,7 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
         }
     } else if (create != 0) {
         *(Str **)&b = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
-        n = list->count;
+        n = list->_count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
             igStringObj_Set((int)b, (int)r2);
@@ -481,11 +481,11 @@ void FUN_003077a0(igRegistry *self) {
         l->_data[j] = 0;
     }
     l->_count = 0;
-    ObjectList_ClearRetainedPreserveCount((L_301d80 *)self->_valueTable, n2);
+    ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_valueTable, n2);
 }
 
-bool FUN_00307a50(void *unused, Stream *s, char *buf, int *lines) {
-    int c = s->get();
+bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines) {
+    int c = s->vfunc_33();
     int prev = 0;
     bool comment = false;
     int n = 0;
@@ -493,10 +493,10 @@ bool FUN_00307a50(void *unused, Stream *s, char *buf, int *lines) {
     bool lead = true;
     while (c != -1 && c != 0) {
         while (lead) {
-            if (c == 0x20 || c == 9) { prev = c; c = s->get(); }
+            if (c == 0x20 || c == 9) { prev = c; c = s->vfunc_33(); }
             else lead = false;
         }
-        if (c == 13) { c = s->get(); continue; }
+        if (c == 13) { c = s->vfunc_33(); continue; }
         if (c != 10) {
             if (!comment) {
                 if (c == 0x3B) comment = true;
@@ -514,7 +514,7 @@ bool FUN_00307a50(void *unused, Stream *s, char *buf, int *lines) {
         if (!comment) n -= 1;
     next:
         prev = c;
-        c = s->get();
+        c = s->vfunc_33();
     }
     if (n > 0 || c != -1) {
         ret = true;
@@ -566,7 +566,7 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int 
         igRegistryValue *t;
         if (s1 < 0) {
             s1 = ((igRegistryValueList *)arg0->_valueTable)->_count;
-            ObjectList_ResizeRetained((L_301ee0 *)(((igRegistryValueList *)arg0->_valueTable)), s1 * 2);
+            ObjectList_ResizeRetained((igTDataList<igObject *> *)(((igRegistryValueList *)arg0->_valueTable)), s1 * 2);
         }
         s0 = ((int)igObject_GetAllocator((int)arg0));
         old = r.p;
@@ -714,7 +714,7 @@ void FUN_003085c0(void) {
     if (config != 0) {
         FUN_00306e50((int)config, 2, text_assertOnErrors, (char *)&GPR_005549b0, 1, 0);
         igStringObj *name = (igStringObj *)igStringObj_Create(allocator());
-        if (FUN_00306770((int)config, 2, text_defaultReportLevel, (T_306770 **)&name, (char *)DAT_004f7910, 0) != 0) {
+        if (FUN_00306770((int)config, 2, text_defaultReportLevel, &name, (char *)DAT_004f7910, 0) != 0) {
             char *t = levelText(name);
             if (strcmp(t, text_kDetail) == 0) {
                 DAT_004c22d8 = 6;
@@ -816,7 +816,7 @@ igDirectory *FUN_00308a90(igResource *self) {
         if (0 == g_stringPool[0]) {
             v = ((int)StringPool_Allocate(16));
             if (v != 0) {
-                v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+                v = ((int)StringPool_Construct((StringPool *)v));
             }
             g_stringPool[0] = v;
         }
@@ -834,7 +834,7 @@ igDirectory *FUN_00308a90(igResource *self) {
         ((igDirectory *)self->_imageDirectory)->_managingResource = (int)self;
         FUN_00308850((int *)self, self->_imageDirectory);
     }
-    fflush(_impure_ptr[0]->f8);
+    fflush(_impure_ptr->_stdout);
     return (igDirectory *)self->_imageDirectory;
 }
 

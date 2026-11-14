@@ -11,12 +11,12 @@ igObject *FUN_00328e00(igObject *self, long long deleteFlags) {
     return self;
 }
 
-void FUN_00328e50(void **arg0) {
+void FUN_00328e50(SystemAllocator *self) {
     for (unsigned int i = 0; i < 64; i++) {
         int *slot = &DAT_00587220[i];
         int table = *slot;
         if (table != 0) {
-            ((DW4VC_180_1 *)(arg0))->vX(table);
+            self->vfunc_45((void *)table);
             *slot = 0;
         }
     }
@@ -52,7 +52,7 @@ void FUN_00328f80(int arg0, int arg1, int arg2) {
     realloc(arg1, arg2);
 }
 
-int FUN_00328f90(void **arg0, int *arg1) {
+int FUN_00328f90(SystemAllocator *self, int *arg1) {
     int *var_s1;
     int temp_v0;
 
@@ -60,7 +60,7 @@ int FUN_00328f90(void **arg0, int *arg1) {
     if (var_s1 == 0) {
         var_s1 = (int *)(&DAT_004f7910[0]);
     }
-    temp_v0 = ((DW4VC_16_1 *)(arg0))->vX((int)(strlen(var_s1) + 1));
+    temp_v0 = (int)self->Allocate(strlen(var_s1) + 1);
     if (temp_v0 != 0) {
         strcpy(temp_v0, var_s1);
     }
@@ -71,124 +71,124 @@ void FUN_00329000(int a0, int a1) {
     free(a1, a1);
 }
 
-void FUN_00329010(CrtHeapView *self, void *block)
+void FUN_00329010(SystemAllocator *self, unsigned int size)
 {
-    self->vfunc_15(0, block);
+    self->vfunc_17(0, size);
 }
 
-void FUN_00329030(void **arg0, int arg1, int arg2) {
-    DW4SR4 sp1C;
+void FUN_00329030(SystemAllocator *self, int arg1, int arg2) {
+    igResult sp1C;
 
-    sp1C = ((DW4VCSR_72_2 *)(arg0))->vX((int)(arg1), (int)(arg2));
+    sp1C = self->vfunc_18(arg1, arg2);
 }
 
-int FUN_00329070(void **arg0, int arg1, unsigned int arg2, unsigned int arg3) {
-    DW4SR4 sp5C;
-    DW4SR4 sp58;
+int FUN_00329070(SystemAllocator *self, int arg1, unsigned int arg2, unsigned int arg3) {
+    igResult sp5C;
+    igResult sp58;
     int temp_v0;
 
     if (arg2 < arg3) {
-        sp5C = ((DW4VCSR_72_2 *)(arg0))->vX((int)(arg1 + arg2), (int)(arg3 - arg2));
+        sp5C = self->vfunc_18(arg1 + arg2, arg3 - arg2);
         return arg1;
     }
-    if (((DW4VC_68_2 *)(arg0))->vX((int)(arg1 + arg3), (int)(arg2 - arg3)) != -1) {
+    if (self->vfunc_17(arg1 + arg3, arg2 - arg3) != -1) {
         return arg1;
     }
-    temp_v0 = ((DW4VC_68_2 *)(arg0))->vX((int)(0), (int)(arg2));
+    temp_v0 = self->vfunc_17(0, arg2);
     if (temp_v0 == -1) {
         return 0;
     }
     memcpy(temp_v0, arg1, arg3);
-    sp58 = ((DW4VCSR_72_2 *)(arg0))->vX((int)(arg1), (int)(arg3));
+    sp58 = self->vfunc_18(arg1, arg3);
     return temp_v0;
 }
 
-void FUN_00329170(CrtHeapView *self, void *block)
+void FUN_00329170(SystemAllocator *self, unsigned int size)
 {
-    self->vfunc_8(block);
+    self->AllocateSized(size);
 }
 
-void *FUN_00329180(CrtHeapView *self, void *block, unsigned int size)
+void FUN_00329180(SystemAllocator *self, void *block, int size)
 {
-    return self->vfunc_9(block, size);
+    self->FreeSized(block, size);
 }
 
-void FUN_00329190(CrtHeapView *self)
+void FUN_00329190(SystemAllocator *self, void *block, unsigned int size, unsigned int old)
 {
-    self->vfunc_10();
+    self->ReallocateSized(block, size, old);
 }
 
-void FUN_003291a0(Stream_328e00 *self, int n) {
+void FUN_003291a0(SystemAllocator *self, int n) {
     if (n > 0) {
-        if (self->Seek(self->Tell(), n) == -1) {
-            self->Seek(0, n);
+        if (self->vfunc_17(self->GetStackSize(), n) == -1) {
+            self->vfunc_17(0, n);
         }
     } else if (n < 0) {
-        int pos = self->Tell();
-        self->Move(pos + n, -n);
-        self->Tell();
+        int pos = self->GetStackSize();
+        self->vfunc_18(pos + n, -n);
+        self->GetStackSize();
     } else {
-        self->Tell();
+        self->GetStackSize();
     }
 }
 
-unsigned FUN_00329280(O_328e00 *self, unsigned a, int n) {
+unsigned FUN_00329280(SystemAllocator *self, unsigned a, int n) {
     unsigned r = -1;
     if (a == 0) {
-        unsigned t = self->v27(n);
+        unsigned t = self->vfunc_29(n);
         r = t;
-        if (t == (unsigned)-1) r = self->v40(n);
-    } else if (self->v26() != 0) {
+        if (t == (unsigned)-1) r = self->vfunc_42(n);
+    } else if (self->vfunc_28(a, n) != 0) {
         r = a;
     } else {
-        unsigned c = self->v17();
+        unsigned c = self->GetStackSize();
         if (c == a) {
-            r = self->v40(n);
+            r = self->vfunc_42(n);
             if (r != a) {
                 if (r != (unsigned)-1) {
-                    self->v40(-n);
+                    self->vfunc_42(-n);
                     r = -1;
                 }
             }
         } else {
             unsigned e = a + n;
-            if (a <= c && c < e && self->v26(a, c - a) != 0) {
+            if (a <= c && c < e && self->vfunc_28(a, c - a) != 0) {
                 int m = e - c;
-                r = self->v40(m);
+                r = self->vfunc_42(m);
                 if (r != a && r != (unsigned)-1) {
-                    self->v40(-m);
+                    self->vfunc_42(-m);
                     r = -1;
                 }
             }
         }
     }
     if (r != (unsigned)-1) {
-        R_328e00 x = self->v44(r, n, 1);
-        R_328e00 y = self->v25(3, r, n);
+        igResult x = self->vfunc_46(r, n, 1);
+        igResult y = self->vfunc_27(3, r, n);
     }
     return r;
 }
 
-R460 FUN_00329460(C_328e00 *arg1, int arg2, int arg3) {
-    int r17 = arg1->v17();
+igResult FUN_00329460(SystemAllocator *self, int arg2, int arg3) {
+    int r17 = self->GetStackSize();
     if (r17 == arg2 + arg3) {
-        int t = arg1->v40(-arg3);
+        int t = self->vfunc_42(-arg3);
         if (t != -1) {
-            arg1->v25(0, t, arg3);
-            return R460(g_resultSuccess.v);
+            self->vfunc_27(0, t, arg3);
+            return igResult(g_resultSuccess.v);
         }
     } else {
-        return arg1->v41(arg2, arg3);
+        return self->vfunc_43(arg2, arg3);
     }
-    return R460(g_resultFailure.v);
+    return igResult(g_resultFailure.v);
 }
 
 /* Result of the virtual call at vtable byte offset 168 (queried with 0), with a zero result mapped
  * to -1 (an index-style lookup that reports "not found" as -1). */
-int FUN_00329540(igPsx2CallStackTracer *self) {
+int FUN_00329540(SystemAllocator *self) {
     int result;
 
-    result = ((DW4VC_168_1 *)(self))->vX((int)(0));
+    result = self->vfunc_42(0);
     if (result == 0) {
         result = -1;
     }
@@ -223,10 +223,10 @@ int FUN_003295c0(void) {
     return g_rangeEnd[0];
 }
 
-void FUN_003295d0(Tr *self, int *out) {
-    S_328e00 s;
+void FUN_003295d0(SystemAllocator *self, int *out) {
+    PageStateCounts s;
     unsigned int i;
-    int v = self->v19();
+    int v = self->GetStackSize();
     if (v == -1) {
         v = g_rangeEnd[0];
     }
@@ -243,8 +243,8 @@ void FUN_003295d0(Tr *self, int *out) {
     out[0] = -1;
     out[1] = v - g_rangeStart[0];
     out[2] = g_rangeEnd[0] - g_rangeStart[0];
-    out[3] = s.d << 12;
-    out[4] = s.b << 12;
+    out[3] = s.allocated << 12;
+    out[4] = s.available << 12;
     out[5] = -1;
 }
 
@@ -252,7 +252,7 @@ int FUN_003296d0(igPsx2CallStackTracer *self) {
     return 0;
 }
 
-R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
+igResult FUN_003296e0(SystemAllocator *self, int state, unsigned int addr, int len) {
     unsigned int end = addr + len;
     unsigned int startPage = addr >> 26;
     unsigned int endPage = end >> 26;
@@ -263,7 +263,7 @@ R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
         int table = *slot;
         unsigned int lo, hi;
         if (table == 0) {
-            table = self->vX(0x1000);
+            table = (int)self->vfunc_44(0x1000);
             memset(table, 0, 0x1000);
             *slot = table;
         }
@@ -273,7 +273,7 @@ R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
     }
     if (addr < g_rangeStart[0]) g_rangeStart[0] = addr;
     if (g_rangeEnd[0] < end) g_rangeEnd[0] = end;
-    return R460(g_resultSuccess.v);
+    return igResult(g_resultSuccess.v);
 }
 
 int FUN_00329860(void *self, unsigned int addr, unsigned int len) {
@@ -381,7 +381,7 @@ int FUN_00329b40(void *arg0, void *arg1, int *arg2, int *arg3) {
     return 1;
 }
 
-void FUN_00329b60(V_328e00 *arg0) {
+void FUN_00329b60(SystemAllocator *self) {
     char line[256];
     unsigned int page;
     unsigned int index;
@@ -417,7 +417,7 @@ void FUN_00329b60(V_328e00 *arg0) {
         }
         page += 1;
     } while (page < 0x40U);
-    arg0->vX();
+    self->vfunc_36();
 }
 
 void FUN_00329ca0(int unused, unsigned int addr, int len) {
@@ -467,52 +467,52 @@ void FUN_00329ca0(int unused, unsigned int addr, int len) {
     }
 }
 
-void FUN_00329e70(Obj_328e00 *arg0) {
-    int buf[21];
-    arg0->vf(buf);
+void FUN_00329e70(SystemAllocator *self) {
+    SystemMemoryStatistics stats;
+    self->GetStatistics(&stats);
     FUN_00304430(DAT_004ff5e0);
     FUN_00304680();
-    FUN_00304430(DAT_004ff600, buf[0], buf[0]);
+    FUN_00304430(DAT_004ff600, stats.totalSystemMemorySize, stats.totalSystemMemorySize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff630, buf[1], buf[1]);
+    FUN_00304430(DAT_004ff630, stats.allocationSpan, stats.allocationSpan);
     FUN_00304680();
-    FUN_00304430(DAT_004ff660, buf[2], buf[2]);
+    FUN_00304430(DAT_004ff660, stats.maximumSpan, stats.maximumSpan);
     FUN_00304680();
-    FUN_00304430(DAT_004ff690, buf[3], buf[3]);
+    FUN_00304430(DAT_004ff690, stats.allocatedAndInUse, stats.allocatedAndInUse);
     FUN_00304680();
-    FUN_00304430(DAT_004ff6c0, buf[4], buf[4]);
+    FUN_00304430(DAT_004ff6c0, stats.allocatedAndAvailable, stats.allocatedAndAvailable);
     FUN_00304680();
-    FUN_00304430(DAT_004ff6f0, buf[5], buf[5]);
+    FUN_00304430(DAT_004ff6f0, stats.freeFromTop, stats.freeFromTop);
     FUN_00304680();
-    FUN_00304430(DAT_004ff720, buf[6], buf[6]);
+    FUN_00304430(DAT_004ff720, stats.codeStart, stats.codeStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff750, buf[7], buf[7]);
+    FUN_00304430(DAT_004ff750, stats.codeSize, stats.codeSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff780, buf[8], buf[8]);
+    FUN_00304430(DAT_004ff780, stats.dataStart, stats.dataStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff7b0, buf[9], buf[9]);
+    FUN_00304430(DAT_004ff7b0, stats.dataSize, stats.dataSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff7e0, buf[10], buf[10]);
+    FUN_00304430(DAT_004ff7e0, stats.initializedStart, stats.initializedStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff810, buf[11], buf[11]);
+    FUN_00304430(DAT_004ff810, stats.initializedSize, stats.initializedSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff840, buf[12], buf[12]);
+    FUN_00304430(DAT_004ff840, stats.uninitializedStart, stats.uninitializedStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff870, buf[13], buf[13]);
+    FUN_00304430(DAT_004ff870, stats.uninitializedSize, stats.uninitializedSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff8a0, buf[14], buf[14]);
+    FUN_00304430(DAT_004ff8a0, stats.stackStart, stats.stackStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff8d0, buf[15], buf[15]);
+    FUN_00304430(DAT_004ff8d0, stats.stackSize, stats.stackSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff900, buf[16], buf[16]);
+    FUN_00304430(DAT_004ff900, stats.fastStart, stats.fastStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff930, buf[17], buf[17]);
+    FUN_00304430(DAT_004ff930, stats.fastSize, stats.fastSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff960, buf[18], buf[18]);
+    FUN_00304430(DAT_004ff960, stats.virtualStart, stats.virtualStart);
     FUN_00304680();
-    FUN_00304430(DAT_004ff990, buf[19], buf[19]);
+    FUN_00304430(DAT_004ff990, stats.virtualSize, stats.virtualSize);
     FUN_00304680();
-    FUN_00304430(DAT_004ff9c0, buf[20], buf[20]);
+    FUN_00304430(DAT_004ff9c0, stats.heapTop, stats.heapTop);
     FUN_00304680();
 }
 
@@ -541,11 +541,11 @@ void FUN_0032a1b0(DumpRegion *row, const char *poolName) {
 }
 
 DumpRegion *FUN_0032a1e0(int size) {
-    return (DumpRegion *)((DW4VC_216_1 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->vX(size);
+    return (DumpRegion *)((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->Allocate(size);
 }
 
 void FUN_0032a220(void *block) {
-    ((DW4VC_264_1 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->vX((int)block);
+    ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->Free(block);
 }
 
 int FUN_0032a260(DumpRegion **a, DumpRegion **b) {
@@ -608,75 +608,75 @@ void FUN_0032a5f0(int extra0)
 {
 }
 
-void FUN_0032a600(A600 *arg0, int arg1) {
+void FUN_0032a600(SystemAllocator *self, int arg1) {
     DumpRegion *row;
-    Out600 out;
+    SystemMemoryStatistics out;
     int *s1;
-    arg0->v23(&out);
-    s1 = &out.a0;
+    self->GetStatistics(&out);
+    s1 = &out.codeStart;
     if (*s1 != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
         e->start = *s1;
-        row->size = out.b0;
+        row->size = out.codeSize;
         FUN_0032a180(row, text_Section_Code);
         FUN_0032a1b0(row, text_Program);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
-    s1 = &out.a1;
+    s1 = &out.dataStart;
     if (*s1 != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
         e->start = *s1;
-        row->size = out.b1;
+        row->size = out.dataSize;
         FUN_0032a180(row, text_Section_Data);
         FUN_0032a1b0(row, text_Program);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
-    s1 = &out.a2;
+    s1 = &out.initializedStart;
     if (*s1 != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
         e->start = *s1;
-        row->size = out.b2;
+        row->size = out.initializedSize;
         FUN_0032a180(row, text_Section_Initialized_Data);
         FUN_0032a1b0(row, text_Program);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
-    s1 = &out.a3;
+    s1 = &out.uninitializedStart;
     if (*s1 != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
         e->start = *s1;
-        row->size = out.b3;
+        row->size = out.uninitializedSize;
         FUN_0032a180(row, text_Section_Uninitialized_Data);
         FUN_0032a1b0(row, text_Program);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
-    s1 = &out.a4;
+    s1 = &out.stackStart;
     if (*s1 != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
         e->start = *s1;
-        row->size = out.b4;
+        row->size = out.stackSize;
         FUN_0032a180(row, text_Section_Stack_Data);
         FUN_0032a1b0(row, text_Program);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
 }
 
-void FUN_0032a900(A900 *arg0, int arg1) {
+void FUN_0032a900(SystemAllocator *self, int arg1) {
     DumpRegion *row;
-    Out900 out;
+    SystemMemoryStatistics out;
     unsigned i;
     unsigned j;
     int s2; int s1; int s0;
-    arg0->v23(&out);
+    self->GetStatistics(&out);
     for (i = 0; i < 0x40U; i++) {
         s0 = DAT_00587220[i];
         if (s0 != 0) for (j = 0; j < 0x4000U; j += s1) {
@@ -696,12 +696,12 @@ void FUN_0032a900(A900 *arg0, int arg1) {
             List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
         }
     }
-    if (out.b != -1 && out.a != -1) {
+    if (out.heapTop != -1 && out.freeFromTop != -1) {
         DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
         row = e;
-        e->start = out.b;
-        row->size = out.a;
+        e->start = out.heapTop;
+        row->size = out.freeFromTop;
         FUN_0032a180(row, text_Heap_Free_from_top);
         FUN_0032a1b0(row, text_SystemHeap);
         List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
@@ -716,16 +716,16 @@ int FUN_0032aba0(void) {
     return -1;
 }
 
-void FUN_0032abb0(int *arg0, void **arg1, int arg2, int arg3) {DW4SR4 a = ((DW4VCSR_108_3 *)(arg1))->vX(1, arg2, arg3); DW4SR4 b = ((DW4VCSR_184_3 *)(arg1))->vX(arg2, arg3, 0);*arg0 = g_resultSuccess.v;}
+void FUN_0032abb0(int *arg0, SystemAllocator *self, int arg2, int arg3) {igResult a = self->vfunc_27(1, arg2, arg3); igResult b = self->vfunc_46(arg2, arg3, 0);*arg0 = g_resultSuccess.v;}
 
-void *FUN_0032ac40(CrtHeapView *self, unsigned int size)
+void *FUN_0032ac40(SystemAllocator *self, unsigned int size)
 {
-    return self->vfunc_2(size);
+    return self->Allocate(size);
 }
 
-void FUN_0032ac50(CrtHeapView *self, void *block)
+void FUN_0032ac50(SystemAllocator *self, void *block)
 {
-    self->vfunc_7(block);
+    self->Free(block);
 }
 
 void FUN_0032ac60(int *arg0) {

@@ -10,28 +10,28 @@ static inline const char *nameOf_3010f0(const igObjectDirEntry *entry) {
     return entry->_name != 0 ? (const char *)entry->_name : ((char *)emptyString);
 }
 
-static inline EntryList_3010f0 *asEntryList_3010f0(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (EntryList_3010f0 *)object;
+static inline ObjectDirEntryList *asEntryList_3010f0(igObject *object) {
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (ObjectDirEntryList *)object;
     return 0;
 }
 
-igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, DirFile_3010f0 *file) {
-    igSmartPointer<EntryList_3010f0> lists(file->sharedEntries, kRetainReference);
+igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, igIGBFile *file) {
+    igSmartPointer<ObjectDirEntryList> lists((ObjectDirEntryList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
     int index = ((DirEntryView *)self)->getMeta()->index;
     if (lists->_count <= index) {
-        ObjectList_ResizeRetained((L_301ee0 *)lists.p, index + 1);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
         lists->set(index, 0);
     }
-    igSmartPointer<EntryList_3010f0> entries(asEntryList_3010f0(((igObject **)lists->_data)[index]), kRetainReference);
+    igSmartPointer<ObjectDirEntryList> entries(asEntryList_3010f0(((igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
-        int pool = file->pool;
+        int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((EntryList_3010f0 *)FUN_002bd680(pool));
+        entries.p = ((ObjectDirEntryList *)FUN_002bd680(pool));
         lists->set(index, entries.p);
     }
     int i;
-    EntryList_3010f0 *list;
+    ObjectDirEntryList *list;
     igObjectDirEntry *entry;
     int count;
     count = entries->_count;
@@ -105,33 +105,33 @@ void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *obj
     self->_ref = (int)object;
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_38(void *arg0) {
-    DW4VC_88_0_3010f0 *a = *(DW4VC_88_0_3010f0 **)((char *)arg0 + 24);
+void Gap__Core__igObjectDirEntry__vfunc_38(igObjectDirEntryView *arg0) {
+    igObjectDispatchView *a = arg0->_ref;
     if (a != 0) {
-        int (*f)() = a->vX()->fn;
+        int (*f)() = (int (*)())a->getMeta()->_writeProxy;
         if (f != 0) {
             FUN_00301590((igObjectDirEntry *)arg0, (igMetaObject *)f());
         }
     }
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_39(S_3010f0 *arg0, A_3010f0 *arg1) {
+void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile *arg1) {
     int temp_s0_2;
     void *(*temp_v1)();
-    V_3010f0 *temp_s0;
+    igObjectDispatchView *temp_s0;
     void *var_v0;
 
-    temp_s0 = arg0->f24;
-    R_3010f0 *r = temp_s0->vX();
+    temp_s0 = arg0->_ref;
+    igMetaObject *r = temp_s0->getMeta();
     var_v0 = r;
-    temp_v1 = r->f64;
+    temp_v1 = (void *(*)())r->_writeProxy;
     if (temp_v1 != 0) {
         var_v0 = temp_v1();
     }
-    arg0->f48 = FUN_002fe600((igTDataList<ChainMeta *> *)arg1->f192, (ChainMeta *)var_v0);
-    temp_s0_2 = arg1->f148;
-    arg1->f148 = temp_s0_2 + igObject_GetSerializedSize((SizeObject *)temp_s0);
-    arg1->f144 = arg1->f144 + 1;
+    arg0->_typeMetaIndex = FUN_002fe600((igTDataList<ChainMeta *> *)arg1->_metaObjectListInFile, (ChainMeta *)var_v0);
+    temp_s0_2 = arg1->_objectBufferSize;
+    arg1->_objectBufferSize = temp_s0_2 + igObject_GetSerializedSize((SizeObject *)temp_s0);
+    arg1->_objectCount = arg1->_objectCount + 1;
 }
 
 void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1) {
@@ -232,53 +232,53 @@ int Gap__Core__igObjectDirEntry__vfunc_30(igObjectDirEntry *self) {
     return self->_memoryPoolHandle;
 }
 
-void ObjectList_FillRetained(L_301c90 *arg0, R_301c90 *arg1) {
+void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1) {
     int n;
     int i;
     int j;
     int cnt;
-    R_301c90 **data;
+    igObject **data;
     int k;
-    R_301c90 *t;
-    n = arg0->cnt;
+    igObject *t;
+    n = arg0->_count;
     if (arg1 != 0) {
         for (i = 0; i < n; i++) {
-            arg1->f4 = arg1->f4 + 1;
+            arg1->_refCount = arg1->_refCount + 1;
         }
     }
     for (j = 0; j < n; j++) {
-        t = arg0->data[j];
+        t = arg0->_data[j];
         if (t != 0) {
-            t->f4 = t->f4 - 1;
-            if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
+            t->_refCount = t->_refCount - 1;
+            if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(t);
             }
         }
     }
-    cnt = arg0->cnt;
-    data = arg0->data;
+    cnt = arg0->_count;
+    data = arg0->_data;
     for (k = 0; k < cnt; k++) {
         data[k] = arg1;
     }
 }
 
-void ObjectList_ClearRetainedPreserveCount(struct L_301d80 *arg0, int extra1) {
+void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *arg0, int extra1) {
     int n;
     int i;
-    struct R_301d80 *o;
+    igObject *o;
 
-    n = arg0->count;
+    n = arg0->_count;
     for (i = 0; i < n; i++) {
-        o = arg0->data[i];
+        o = arg0->_data[i];
         if (o != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) {
+            o->_refCount = o->_refCount - 1;
+            if ((o->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(o);
             }
         }
     }
-    if (arg0->count != 0) {
-        memset(arg0->data, 0, arg0->count * 4);
+    if (arg0->_count != 0) {
+        memset(arg0->_data, 0, arg0->_count * 4);
     }
 }
 

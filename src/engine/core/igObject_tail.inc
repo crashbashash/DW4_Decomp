@@ -49,7 +49,7 @@ void FUN_002f00f0(void *arg0) {
     if (temp_s0 != arg0) {
         if (temp_s0 != 0) {
             ((void * *)DAT_00586f68)[0] = (void *)(0);
-            ((DW4VC_104_0 *)(((char *)(temp_s0) + 0)))->vX();
+            ((igMemoryDictionaryView *)temp_s0)->vfunc_26();
             *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
             if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(temp_s0);
@@ -59,19 +59,19 @@ void FUN_002f00f0(void *arg0) {
     }
 }
 
-R_2f0180 FUN_002f0180(int arg1, int *arg2) {
+igResult FUN_002f0180(int arg1, int *arg2) {
     int sp3C;
-    O_2f0180 *o = ((O_2f0180 * *)DAT_00586f68)[0];
+    igMemoryDictionaryView *o = DAT_00586f68[0];
     if (o != 0) {
-        int x = o->vX(arg1, &sp3C).get(); if (x == g_resultSuccess.v) {
+        int x = o->vfunc_30(arg1, &sp3C).get(); if (x == g_resultSuccess.v) {
             *arg2 = igAllocator_ResolveEncodedIndex(sp3C);
             if (*arg2 != 0) {
-                return R_2f0180(g_resultSuccess.v);
+                return igResult(g_resultSuccess.v);
             }
         }
     }
     *arg2 = 0;
-    return R_2f0180(g_resultFailure.v);
+    return igResult(g_resultFailure.v);
 }
 
 igResult FUN_002f0220(int arg1, igMemoryPoolView *arg2) {
@@ -96,38 +96,38 @@ igResult FUN_002f0320(int arg1, igMemoryPoolView *pool) {
 }
 
 void FUN_002f0370(void **arg0) {
-    PL *list;
+    AllocatorRegistry *list;
     int idx;
     int flag;
 
-    if (((DW4VC_116_0 *)(arg0))->vX() == 0) {
-        list = ((PL * *)g_primaryAllocatorList)[0];
-        idx = list->n;
+    if (((igMemoryPoolView *)arg0)->vfunc_29() == 0) {
+        list = g_primaryAllocatorList[0];
+        idx = list->count;
         flag = 0;
     } else {
         flag = 1;
-        list = ((PL * *)g_secondaryAllocatorList)[0];
-        idx = list->n;
+        list = g_secondaryAllocatorList[0];
+        idx = list->count;
     }
     if (idx < 0x1F) {
         igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
     } else {
         idx = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)list, (AllocatorLookupView *)0);
         if (idx == -1) {
-            idx = list->n;
+            idx = list->count;
             igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
         } else {
-            list->d[idx] = arg0;
+            list->data[idx] = (AllocatorLookupView *)arg0;
         }
     }
     flag = flag + (idx * 2);
-    ((DW4VC_368_1 *)(arg0))->vX((int)flag);
+    ((igMemoryPoolView *)arg0)->SetPoolIndex(flag);
 }
 
 void FUN_002f0460(void **arg0) {
     int temp_v0;
 
-    if (((DW4VC_116_0 *)(arg0))->vX() == 0) {
+    if (((igMemoryPoolView *)arg0)->vfunc_29() == 0) {
         temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (AllocatorLookupView *)arg0);
         if (temp_v0 >= 0) {
             *(int *)(*((int * *)g_primaryAllocatorList)[0] + (temp_v0 * 4)) = 0;
@@ -142,22 +142,22 @@ void FUN_002f0460(void **arg0) {
 
 void *Memory_FindOwningAllocator(int arg0) {
     int var_s2;
-    VC_2f04f0 *temp_s1;
-    VC_2f04f0 *temp_s2;
+    igMemoryPoolView *temp_s1;
+    igMemoryPoolView *temp_s2;
     int var_s1;
 
     var_s2 = g_secondaryAllocatorList[0]->count - 1;
     while (var_s2 >= 0) {
-        temp_s1 = (VC_2f04f0 *)g_secondaryAllocatorList[0]->data[var_s2];
-        if ((temp_s1 != 0) && (temp_s1->a() != 0) && (temp_s1->b(arg0) != 0)) {
+        temp_s1 = (igMemoryPoolView *)g_secondaryAllocatorList[0]->data[var_s2];
+        if ((temp_s1 != 0) && (temp_s1->isActive() != 0) && (temp_s1->OwnsAllocation((void *)arg0) != 0)) {
             return temp_s1;
         }
         var_s2 -= 1;
     }
     var_s1 = g_primaryAllocatorList[0]->count - 1;
     while (var_s1 >= 0) {
-        temp_s2 = (VC_2f04f0 *)g_primaryAllocatorList[0]->data[var_s1];
-        if ((temp_s2 != 0) && (temp_s2->a() != 0) && (temp_s2->b(arg0) != 0)) {
+        temp_s2 = (igMemoryPoolView *)g_primaryAllocatorList[0]->data[var_s1];
+        if ((temp_s2 != 0) && (temp_s2->isActive() != 0) && (temp_s2->OwnsAllocation((void *)arg0) != 0)) {
             return temp_s2;
         }
         var_s1 -= 1;

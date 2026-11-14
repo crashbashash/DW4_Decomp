@@ -447,7 +447,7 @@ void FUN_003044a0(const char *arg0, int arg1) {
             sp10[4095] = 0;
             var_v0 = 0x1000;
         }
-        DAT_005871b0[0]->vfunc_29(&sp10[0], var_v0, 1);
+        DAT_005871b0[0]->Write(&sp10[0], var_v0, 1);
         if (GPR_0055499c != 0) {
             printf(&DAT_004f95a0[0], &sp10[0]);
         }
@@ -472,12 +472,12 @@ int FUN_003045c0(int arg0, int arg1) {
             buf[4095] = 0;
             var_v0 = 0x1000;
         }
-        DAT_005871b8[0]->vfunc_29(buf, var_v0, 1);
+        DAT_005871b8[0]->Write(buf, var_v0, 1);
         if (GPR_005549a8 != 0) {
-            fprintf(*(int *)((char *)(((int *)_impure_ptr)[0]) + 12), &DAT_004f95a0[0], buf);
+            fprintf(_impure_ptr->_stderr, &DAT_004f95a0[0], buf);
         }
     } else if (GPR_005549a8 != 0) {
-        vfprintf(*(int *)((char *)(((int *)_impure_ptr)[0]) + 12), arg0, arg1);
+        vfprintf(_impure_ptr->_stderr, arg0, arg1);
     }
 }
 
@@ -485,14 +485,14 @@ void FUN_00304680(void) {
     if (DAT_005871b0[0] != 0) {
         DAT_005871b0[0]->vfunc_32();
     }
-    fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 8));
+    fflush(_impure_ptr->_stdout);
 }
 
 void FUN_003046d0(void) {
     if (DAT_005871b8[0] != 0) {
         DAT_005871b8[0]->vfunc_32();
     }
-    fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 12));
+    fflush(_impure_ptr->_stderr);
 }
 
 void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType) {
@@ -506,7 +506,7 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
     if (g_stringPool[0] == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
-            pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
         g_stringPool[0] = pool;
     }
@@ -533,7 +533,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
     if (g_stringPool[0] == 0) {
         int pool = ((int)StringPool_Allocate(16));
         if (pool != 0) {
-            pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
         g_stringPool[0] = pool;
     }
@@ -558,7 +558,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
     if (g_stringPool[0] == 0) {
         int pool = ((int)StringPool_Allocate(16));
         if (pool != 0) {
-            pool = ((int)StringPool_Construct((struct S_2eadf0 *)pool));
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
         g_stringPool[0] = pool;
     }

@@ -3,7 +3,7 @@ static inline int pool_30cd10(void) {
     if (g_stringPool[0] == 0) {
         p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
-            p = ((int)StringPool_Construct((S_2eadf0 *)p));
+            p = ((int)StringPool_Construct((StringPool *)p));
         }
         g_stringPool[0] = p;
     }
@@ -60,7 +60,7 @@ void StringList_Resize(StringRefListView *arg0, int arg1) {
             if (g_stringPool[0] == 0) {
                 pool_30cd10 = ((int)StringPool_Allocate(0x10));
                 if (pool_30cd10 != 0) {
-                    pool_30cd10 = ((int)StringPool_Construct((S_2eadf0 *)pool_30cd10));
+                    pool_30cd10 = ((int)StringPool_Construct((StringPool *)pool_30cd10));
                 }
                 g_stringPool[0] = pool_30cd10;
             }

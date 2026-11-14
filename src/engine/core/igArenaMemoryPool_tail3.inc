@@ -1,6 +1,6 @@
-void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, VC_312520 *arg1) {
+void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, igArenaMemoryPoolView *arg1) {
     FUN_0031d3f0(arg1);
-    R_312520 r = arg1->vX();
+    igResult r = arg1->vfunc_103();
     FUN_0031d430(arg1);
     *arg0 = r.v;
 }
@@ -272,7 +272,7 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_45(igArenaMemoryPool *pool, igMemor
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_30(Pool30 *arg0) {
-    DW4SR4 sp2C;
+    igResult sp2C;
     if (arg0->f116 == 0) {
         arg0->v204();
         arg0->f136 = 0;
@@ -291,14 +291,14 @@ void Gap__Core__igArenaMemoryPool__vfunc_31(igArenaMemoryPool *self) {
     int arenaState;
 
     if (self->_size != 0) {
-        ((DW4VC_204_0 *)self)->vX();
+        ((igMemoryPoolView *)self)->vfunc_51();
         self->_systemAllocated = 0;
         arenaState = self->_arenaState;
         if (arenaState != 0) {
             memset(arenaState, 0, 0x814);
         }
     } else {
-        ((DW4VC_108_1_3125d0 *)self)->vX(1);
+        ((igMemoryPoolView *)self)->Trim(1);
     }
 }
 
@@ -354,33 +354,38 @@ int Gap__Core__igArenaMemoryPool__vfunc_29(void) {
     return 0;
 }
 
-void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, Pool34 *p, int flag) {
+static inline void releaseAllocationLock(igArenaMemoryPool *p) {
+    igSemaphoreView *x = (igSemaphoreView *)p->_allocationLock;
+    if (x) {
+        x->_refCount = x->_refCount - 1;
+        if (((unsigned long long)((long long)(int)x->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(x);
+    }
+}
+
+void Gap__Core__igArenaMemoryPool__vfunc_34(int *ret, igArenaMemoryPool *p, int flag) {
     int fl;
     if (flag != 0) {
-        fl = p->f192 | 8;
+        fl = p->_poolOptionFlags | 8;
     } else {
-        fl = p->f192 & ~8;
+        fl = p->_poolOptionFlags & ~8;
     }
     igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)p, fl);
     if ((unsigned char)flag == 0) {
-        Ref_3125d0 a;
-        a.o = p->f120;
-        if (a.o) a.o->rc = a.o->rc + 1;
-        p->relp();
-        p->f120 = 0;
-        if (a.o != 0) {
-            a.o->v31(1);
-            a.o->v22();
+        igSmartPointer<igSemaphoreView> lock((igSemaphoreView *)p->_allocationLock, kRetainReference);
+        releaseAllocationLock(p);
+        p->_allocationLock = 0;
+        if (lock.p != 0) {
+            lock->wait(1);
+            lock->destroy();
         }
     } else if ((unsigned char)flag == 1) {
-        if (p->f120 != 0) { *ret = g_resultSuccess.v; return; }
-        Ref_3125d0 b;
-        b.o = (Tracker34 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)p))));
-        b.o->v21();
-        Tracker34 *t = b.o;
-        if (t) t->rc = t->rc + 1;
-        p->relp();
-        p->f120 = t;
+        if (p->_allocationLock != 0) { *ret = g_resultSuccess.v; return; }
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)p)))));
+        created->create();
+        igSemaphoreView *t = created.p;
+        if (t) t->_refCount = t->_refCount + 1;
+        releaseAllocationLock(p);
+        p->_allocationLock = (int)t;
     }
     *ret = g_resultSuccess.v;
 }
@@ -423,7 +428,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2) {
     *(int *)((char *)(arg1) + 168) = arg2;
     *(int *)((char *)(arg1) + 196) = 0;
     if (((MemoryPool *)arg1)->IsActive() != 0) {
-        ((DW4VC_264_1 *)(((char *)(arg1) + 0)))->vX((int)(((DW4VC_216_1 *)(((char *)(arg1) + 0)))->vX((int)(0x10))));
+        ((igMemoryPoolView *)arg1)->Free(((igMemoryPoolView *)arg1)->Allocate(0x10));
     }
     *arg0 = g_resultSuccess.v;
 }
@@ -628,7 +633,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     self->w4 = 0;
     ((Bits *)&self->w4)->refs = 1;
     ((char *)self)[7] = 0;
-    self->arena = (Arena97 *)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Alloc(0x814);
+    self->arena = (Arena97 *)g_activeSystemAllocator[0]->Allocate(0x814);
     if (self->arena == 0 && GPR_00554d64 == 0) {
         v = igReportError(text_Unable_to_allocate_memory_for_ar);
         if (v != 1) {
@@ -645,11 +650,11 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     self->size = 0;
     self->preSize = 0;
     self->alignment = 1;
-    Rel_3125d0::go(self->tracker);
+    releaseRefObject(self->tracker);
     self->tracker = 0;
     self->isActive = 0;
     DAT_00587200[0] = DAT_00587200[0] + 1;
-    Rel_3125d0::go(self->lock);
+    releaseRefObject(self->lock);
     self->lock = 0;
     self->poolIndex = 0;
     self->heapLevel = 0;
@@ -658,7 +663,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(Pool97 *self) {
     self->preSized = 0;
     self->smallest = 16;
     if (self->arena->f2020 == 0) {
-        self->arena->f2020 = (int)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->AllocAligned(0x200, 4);
+        self->arena->f2020 = (int)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
         if (self->arena->f2020 == 0 && GPR_00554d68 == 0) {
             v = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (v != 1) {
@@ -727,12 +732,12 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(Pool98 *arg0) {
     if (temp_v1 != 0) {
         temp_a1 = temp_v1->f2020;
         if (temp_a1 != 0) {
-            ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Free(temp_a1);
+            g_activeSystemAllocator[0]->Free((void *)temp_a1);
             arg0->f112->f2024 = 0;
             arg0->f112->f2028 = 0;
             arg0->f112->f2032 = 0;
         }
-        ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Free((int)arg0->f112);
+        g_activeSystemAllocator[0]->Free((void *)arg0->f112);
         arg0->f112 = 0;
     }
     arg0->f112 = 0;
@@ -767,7 +772,7 @@ void *FUN_0031ec20(igArenaMemoryPool *arg0, int extra1) {
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_02(void **self) {
-    ((DW4VC_392_0 *)(self))->vX();
+    ((igMemoryPoolView *)(self))->vfunc_98();
     Gap__Core__igObject__vfunc_00((int)self);
 }
 
@@ -865,16 +870,16 @@ int Gap__Core__igArenaMemoryPool__vfunc_89(void *arg0) {
     return *(int *)((char *)(arg0) + 176);
 }
 
-void Gap__Core__igArenaMemoryPool__vfunc_90(int *arg0, Obj_3125d0 *arg1) {
-    Obj_3125d0 *o;
+void Gap__Core__igArenaMemoryPool__vfunc_90(int *arg0, igObject *arg1) {
+    igObject *o;
     if (arg1 == 0 || (int *)((void *)igObject_GetAllocator((int)arg1)) != arg0) {
         if (arg1 != 0) {
-            arg1->refs++;
+            arg1->_refCount++;
         }
-        o = (Obj_3125d0 *)arg0[44];
+        o = (igObject *)arg0[44];
         if (o != 0) {
-            --o->refs;
-            if ((o->refs & 0x7fffff) == 0) {
+            --o->_refCount;
+            if ((o->_refCount & 0x7fffff) == 0) {
                 igObject_Destroy(o);
             }
         }
@@ -899,8 +904,8 @@ void Gap__Core__igArenaMemoryPool__vfunc_92(void *arg0, int arg1) {
     }
 }
 
-void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2, DW4VC_364_0 *arg3) {
-    int v = arg3->vX();
+void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2, igMemoryPoolView *arg3) {
+    int v = arg3->GetPoolIndex();
     int ok;
     Header93 *h;
     int a;
@@ -919,7 +924,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_93(int *arg0, Pool93 *arg1, char *arg2,
         if (((TagByte93 *)(arg2 - 1))->flag == 1) {
             h = (Header93 *)(arg2 - 12);
         }
-        a = arg3->vX() >> 1;
+        a = arg3->GetPoolIndex() >> 1;
         h->lo = a;
         if (h->flag == 1) {
             h->ext = a >> 5;
@@ -934,7 +939,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_94(void *arg0, void **arg1) {
     int temp_v0;
     int var_v0;
 
-    temp_v0 = ((DW4VC_364_0 *)(arg1))->vX();
+    temp_v0 = ((igMemoryPoolView *)(arg1))->GetPoolIndex();
     if ((*(int *)((char *)(arg0) + 180) < 0x40) && (temp_v0 >= 0x40)) {
         var_v0 = 0;
     } else {
@@ -962,10 +967,10 @@ int Gap__Core__igArenaMemoryPool__vfunc_95(int arg0, unsigned char *p) {
 
 void Gap__Core__igArenaMemoryPool__vfunc_03(Pool03 *arg0, int arg1) {
     int t;
-    arg0->f70 = (Arena03 *)((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->Alloc(0x814);
+    arg0->f70 = (Arena03 *)g_activeSystemAllocator[0]->Allocate(0x814);
     memset(arg0->f70, 0, 0x814);
     if (arg0->f70->f7e4 == 0) {
-        arg0->f70->f7e4 = ((SystemAllocator_3125d0 * *)g_activeSystemAllocator)[0]->AllocAligned(0x200, 4);
+        arg0->f70->f7e4 = g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
         if (arg0->f70->f7e4 == 0 && GPR_00554d7c == 0) {
             t = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (t != 1 && t == 2) {
@@ -1001,7 +1006,7 @@ unsigned int Gap__Core__igArenaMemoryPool__vfunc_105(igArenaMemoryPool *arg0, in
     if (arg0->_size != 0) {
         return -1U;
     }
-    temp_v0 = ((DW4VC_68_0 *)(((void ** *)g_activeSystemAllocator)[0]))->vX();
+    temp_v0 = g_activeSystemAllocator[0]->vfunc_17(arg1, arg2);
     if (temp_v0 != -1U) {
         arg0->_systemAllocated = arg0->_systemAllocated + arg2;
         temp_v1 = (void *)(arg0->_arenaState);
@@ -1017,20 +1022,20 @@ unsigned int Gap__Core__igArenaMemoryPool__vfunc_105(igArenaMemoryPool *arg0, in
     return temp_v0;
 }
 
-S_320830 Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long arg3) {
-    F_320830 *f = (F_320830 *)arg1;
-    if (f->z != 0) {
-        S_320830 r;
+igResult Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long arg3) {
+    igArenaMemoryPool *f = (igArenaMemoryPool *)arg1;
+    if (f->_size != 0) {
+        igResult r;
         r.v = g_resultFailure.v;
         return r;
     }
     long long d = (long long)(int)arg3;
-    if ((unsigned long long)d < f->t) {
-        f->t = f->t - d;
+    if ((unsigned long long)d < f->_systemAllocated) {
+        f->_systemAllocated = f->_systemAllocated - d;
     } else {
-        f->t = 0;
+        f->_systemAllocated = 0;
     }
-    return (*((VC_320830 * *)g_activeSystemAllocator)[0]).vX();
+    return g_activeSystemAllocator[0]->vfunc_18(arg2, arg3);
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_107(igArenaMemoryPoolView *self)

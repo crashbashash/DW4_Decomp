@@ -70,13 +70,13 @@ ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage) {
 igDirectory *FUN_002c3b00(igDirectory *p, short n) {
     if (p) {
         p->_vtable = (int)&DAT_00530890[0];
-        ((R_2c3b00 *)&p->_loadingSemaphore)->release();
-        ((R_2c3b00 *)&p->_metaFieldPerObjectIndices)->release();
-        ((R_2c3b00 *)&p->_refList)->release();
-        ((R_2c3b00 *)&p->_uniqueEntryList)->release();
-        ((R_2c3b00 *)&p->_infoList)->release();
-        ((R_2c3b00 *)&p->_externalDirectoryList)->release();
-        ((S_2c3b00 *)&p->_name)->release();
+        ((ObjectRefWord *)&p->_loadingSemaphore)->release();
+        ((ObjectRefWord *)&p->_metaFieldPerObjectIndices)->release();
+        ((ObjectRefWord *)&p->_refList)->release();
+        ((ObjectRefWord *)&p->_uniqueEntryList)->release();
+        ((ObjectRefWord *)&p->_infoList)->release();
+        ((ObjectRefWord *)&p->_externalDirectoryList)->release();
+        ((PooledStringWord *)&p->_name)->release();
         if (n > 0) thunk_FUN_002ed460__002ff810((int)p);
     }
     return p;

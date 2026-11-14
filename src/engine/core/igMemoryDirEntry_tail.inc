@@ -2,32 +2,32 @@ void Gap__Core__igMemoryDirEntry__vfunc_42(int arg0) {
     igObject_IsKindOf((void *)(*(int *)((char *)(arg0) + 36)), (igMetaObject *)((*(int *)g_igRefMetaField_metaObject)));
 }
 
-void Gap__Core__igMemoryDirEntry__vfunc_31(Ent_2eedd0 *arg0, Own *arg1) {
-    Lst2 *fields = arg1->f188;
+void Gap__Core__igMemoryDirEntry__vfunc_31(igMemoryDirEntry *self, igIGBFile *file) {
+    igObjectList *fields = (igObjectList *)file->_metaFieldListInFile;
     int align = 16;
-    Ref_2eedd0 sizes(arg1->f244);
-    Alloc_2eedd0 *a;
+    igSmartPointer<igIntList> alignments((igIntList *)file->_alignmentListInFile, kRetainReference);
+    igMemoryPoolView *pool;
 
-    if (0 <= arg0->f44) {
-        align = sizes.p->data[arg0->f44];
+    if (0 <= self->_alignmentTypeIndex) {
+        align = ((int *)alignments->_data)[self->_alignmentTypeIndex];
     } else if (fields != 0) {
-        if (0 <= arg0->f40) {
-            arg0->f36 = fields->data[arg0->f40];
-            align = arg0->f36->v108();
+        if (0 <= self->_memTypeIndex) {
+            self->_memType = ((int *)fields->_data)[self->_memTypeIndex];
+            align = ((igMetaFieldView *)self->_memType)->vfunc_27();
         }
     }
-    if ((arg0->f48 == -1) || (arg0->f48 == 1) || (arg0->f48 == 2)) {
-        a = arg1->f284;
+    if ((self->_memoryPoolHandle == -1) || (self->_memoryPoolHandle == 1) || (self->_memoryPoolHandle == 2)) {
+        pool = (igMemoryPoolView *)file->_dataMemoryPool;
     } else {
-        a = (Alloc_2eedd0 *)Memory_GetAllocatorBySelector(arg0->f48);
-        if (a == 0) {
-            a = arg1->f284;
+        pool = (igMemoryPoolView *)Memory_GetAllocatorBySelector(self->_memoryPoolHandle);
+        if (pool == 0) {
+            pool = (igMemoryPoolView *)file->_dataMemoryPool;
         }
     }
     if (align < 5) {
-        FUN_002d7da0((A7da0 *)arg1, arg0->f12, a->v216(arg0->f28));
+        FUN_002d7da0((A7da0 *)file, self->_index, (int)pool->Allocate(self->_memSize));
     } else {
-        FUN_002d7da0((A7da0 *)arg1, arg0->f12, a->v220(arg0->f28, align & 0xFFFF));
+        FUN_002d7da0((A7da0 *)file, self->_index, (int)pool->AllocateAligned(self->_memSize, align & 0xFFFF));
     }
 }
 
@@ -67,7 +67,7 @@ void Gap__Core__igMemoryDirEntry__vfunc_41(igMemoryDirEntry *arg0, igIGBFile *ar
         s2 -= s0;
         i += s0;
         if (s2 == 0) {
-            s6 += s4 * ((Dev_2eef60 *)arg1->_file)->v27(s8, s4, 1);
+            s6 += s4 * ((igFileView *)arg1->_file)->Write((void *)s8, s4, 1);
             t2 = arg1->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -77,7 +77,7 @@ void Gap__Core__igMemoryDirEntry__vfunc_41(igMemoryDirEntry *arg0, igIGBFile *ar
         s0 = ((s3 + 3) & ~3) % s4;
         s2 = s2 - (s0 - s3);
         if (s0 < s3) {
-            s6 += s4 * ((Dev_2eef60 *)arg1->_file)->v27(s8, s4, 1);
+            s6 += s4 * ((igFileView *)arg1->_file)->Write((void *)s8, s4, 1);
             t2 = arg1->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -112,7 +112,7 @@ igMemoryDirEntry *Gap__Core__igMemoryDirEntry__vfunc_26(igMemoryDirEntry *self, 
     if (lists.p == 0) return self;
     int index = ((DirEntryView *)self)->getMeta()->index;
     if (lists->_count <= index) {
-        ObjectList_ResizeRetained((L_301ee0 *)lists.p, index + 1);
+        ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
         lists->set(index, 0);
     }
     igSmartPointer<EntryList> entries(asEntryList(((igObject **)lists->_data)[index]), kRetainReference);
@@ -142,7 +142,7 @@ int Gap__Core__igMemoryDirEntry__vfunc_22(void) {
     return ((int *)g_igMemoryDirEntry_metaObject)[0];
 }
 
-void Gap__Core__igMemoryDirEntry__vfunc_35(Dst *arg0, Rd_2ef680 *arg1) {
+void Gap__Core__igMemoryDirEntry__vfunc_35(igMemoryDirEntry *arg0, igIGBFile *arg1) {
     int s6;
     int s8;
     char *s7;
@@ -154,20 +154,20 @@ void Gap__Core__igMemoryDirEntry__vfunc_35(Dst *arg0, Rd_2ef680 *arg1) {
     int s0;
     int t;
     s6 = 0;
-    s8 = arg0->f28;
-    s7 = arg0->f24;
-    s4 = arg1->f260;
-    s3 = arg1->f256;
-    s2 = arg1->f268;
-    s1 = arg1->f272;
-    base = arg1->f264;
+    s8 = arg0->_memSize;
+    s7 = (char *)arg0->_ref;
+    s4 = arg1->_chunkSize;
+    s3 = arg1->_memoryBufferPlace;
+    s2 = arg1->_memoryBytesCopied;
+    s1 = arg1->_bytesRemainingInChunk;
+    base = arg1->_chunk;
     while (s6 < s8) {
         if (s1 == 0) {
-            t = arg1->f156;
+            t = arg1->_memoryRefBufferSize;
             if (t < s4 + s2) {
                 s4 = t - s2;
             }
-            s2 += s4 * arg1->f104->rd(base, s4, 1);
+            s2 += s4 * ((igFileView *)arg1->_file)->Read((void *)base, s4, 1);
             s1 = s4;
         }
         s0 = s8 - s6;
@@ -184,10 +184,10 @@ void Gap__Core__igMemoryDirEntry__vfunc_35(Dst *arg0, Rd_2ef680 *arg1) {
     }
     s1 = s1 - (s3 - t);
     if (s3 < t) s1 = 0;
-    arg1->f260 = s4;
-    arg1->f256 = s3;
-    arg1->f268 = s2;
-    arg1->f272 = s1;
+    arg1->_chunkSize = s4;
+    arg1->_memoryBufferPlace = s3;
+    arg1->_memoryBytesCopied = s2;
+    arg1->_bytesRemainingInChunk = s1;
 }
 
 void Gap__Core__igMemoryDirEntry__vfunc_36(void) {

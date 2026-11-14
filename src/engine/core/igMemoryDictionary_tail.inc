@@ -18,7 +18,7 @@ void Gap__Core__igMemoryDictionary__vfunc_25(igMemoryDictionaryView *self) {
     a = self->_capacity * 2;
     l = self->_memoryEntries;
     if (a >= l->_count) {
-        List_Reserve((L_2d6680 *)l, a, 4);
+        List_Reserve((igDataList *)l, a, 4);
     }
     b = self->_capacity * 2;
     l = self->_memoryEntries;
@@ -44,7 +44,7 @@ void Gap__Core__igMemoryDictionary__vfunc_26(igMemoryDictionaryView *self) {
     }
     entries2 = self->_memoryEntries;
     if (!(0 < entries2->_count)) {
-        List_Reserve((L_2d6680 *)entries2, 0, 4);
+        List_Reserve((igDataList *)entries2, 0, 4);
     }
     self->_count = 0;
     self->_cachedIndex = 0;
@@ -236,7 +236,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionary
     self->_memoryEntries = (MemoryDictionaryEntryList *)FUN_002ca260(allocator);
     words = self->_capacity * 2;
     if (words >= self->_memoryEntries->_count) {
-        List_Reserve((L_2d6680 *)self->_memoryEntries, words, 4);
+        List_Reserve((igDataList *)self->_memoryEntries, words, 4);
     }
     table = self->_memoryEntries;
     if (table->_data == 0) {

@@ -5,7 +5,7 @@ int Gap__Core__igPsx2ThreadManager__vfunc_23(igPsx2ThreadManager *arg0) {
 
     temp_v0 = GetThreadId();
     temp_s2 = ChangeThreadPriority(temp_v0, 1);
-    temp_s1 = FUN_002feeb0((L_2feeb0 *)arg0->_threadList, (K *)DAT_00586ca8[0], GetThreadId());
+    temp_s1 = FUN_002feeb0((igTDataList<int> *)arg0->_threadList, (igMetaField *)DAT_00586ca8[0], GetThreadId());
     ChangeThreadPriority(temp_v0, temp_s2);
     return temp_s1;
 }
@@ -67,21 +67,21 @@ void FUN_00330730(int arg0, int arg1) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)FUN_003306f0(arg1)));
-    ((DW4VC_220_2 *)(temp_v0))->vX((int)(arg0), (int)(0x10));
+    ((igMemoryPoolView *)(temp_v0))->AllocateAligned(arg0, 0x10);
 }
 
 void FUN_00330770(int arg0, int arg1) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)FUN_003306f0(arg1)));
-    ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
+    ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
 }
 
 void FUN_003307b0(int arg0, int arg1, int arg2) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)FUN_003306f0(arg2)));
-    ((DW4VC_236_3 *)(temp_v0))->vX((int)(arg0), (int)(arg1), (int)(0x10));
+    ((igMemoryPoolView *)(temp_v0))->ReallocateAligned((void *)arg0, arg1, 0x10);
 }
 
 int Gap__Core__igPsx2ThreadManager__vfunc_22(void) {

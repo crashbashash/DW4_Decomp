@@ -16,7 +16,7 @@ igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
             if ((*(int *)g_stringPool) == 0) {
                 int v = ((int)StringPool_Allocate(16));
                 if (v != 0) {
-                    v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+                    v = ((int)StringPool_Construct((StringPool *)v));
                 }
                 (*(int *)g_stringPool) = v;
             }
@@ -29,12 +29,12 @@ igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
     return list;
 }
 
-void FUN_0032cac0(struct S_32cac0 *arg0) {
+void FUN_0032cac0(igStringObj *arg0) {
     int i;
     char *s;
     int c;
 
-    s = arg0->f8;
+    s = (char *)arg0->_buffer;
     if (s == 0) {
         s = g_stringObjEmptyText[0];
     }
@@ -61,7 +61,7 @@ char *FUN_0032cb50(char *name, int kind) {
     char *joined = 0;
     char *resolved = 0;
     if (kind == 0) {
-        joined = (char *)FUN_002ed5a0(name, (igMemoryPool_2ed1c0 *)currentAllocator());
+        joined = (char *)FUN_002ed5a0(name, (igMemoryPoolView *)currentAllocator());
     } else {
         char *dirs[3];
         const char *key;
@@ -71,8 +71,8 @@ char *FUN_0032cb50(char *name, int kind) {
         } else {
             key = text_intrinsicModulePath;
         }
-        if (FUN_00306770(*(int *)(g_objectSystem[0] + 56), 2, key, (T_306770 **)&path, (const char *)DAT_004f7910, 0) != 0) {
-            FUN_0032cac0((S_32cac0 *)path.p);
+        if (FUN_00306770(*(int *)(g_objectSystem[0] + 56), 2, key, (igStringObj **)&path, (const char *)DAT_004f7910, 0) != 0) {
+            FUN_0032cac0((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText[0] : dir;
             FolderAllocator *allocator = currentAllocator();
@@ -213,7 +213,7 @@ static inline int internPool(void) {
     if (g_stringPool[0] == 0) {
         int a = ((int)StringPool_Allocate(0x10));
         if (a != 0) {
-            a = ((int)StringPool_Construct((S_2eadf0 *)a));
+            a = ((int)StringPool_Construct((StringPool *)a));
         }
         g_stringPool[0] = a;
     }
@@ -250,10 +250,10 @@ void FUN_0032d220(void) {
             setName(first.p, DAT_00587358[0]);
             setName(second.p, DAT_00587358[0]);
         }
-        if (first->open(text_stdout_txt, (const char *)DAT_004f9c50) != 0) {
+        if (first->Open(text_stdout_txt, (const char *)DAT_004f9c50) != 0) {
             FUN_00304350(first.p);
         }
-        if (second->open(text_stderr_txt, (const char *)DAT_004f9c50) != 0) {
+        if (second->Open(text_stderr_txt, (const char *)DAT_004f9c50) != 0) {
             FUN_003043c0(second.p);
         }
     }

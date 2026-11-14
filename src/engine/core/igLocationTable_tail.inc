@@ -9,7 +9,7 @@ void FUN_002eb0b0(igLocationTableView *arg0) {
     temp_a1 = arg0->_capacity * 5;
     temp_a0 = arg0->_locations;
     if (temp_a1 >= temp_a0->_count) {
-        List_Reserve((L_2d6680 *)temp_a0, temp_a1, 4);
+        List_Reserve((igDataList *)temp_a0, temp_a1, 4);
     }
     arg0->vfunc_32(arg0->_hashCapacity);
     FUN_0030cf20(arg0->_symbolNames, arg0->_capacity * 4);
@@ -31,7 +31,7 @@ void FUN_002eb150(igLocationTableView *table) {
     }
     locations = table->_locations;
     if (!(0 < locations->_count)) {
-        List_Reserve((L_2d6680 *)locations, 0, 4);
+        List_Reserve((igDataList *)locations, 0, 4);
     }
     if (table->_hashIndex != 0) {
         hashIndex = table->_hashIndex;
@@ -42,7 +42,7 @@ void FUN_002eb150(igLocationTableView *table) {
         }
         hashIndex = table->_hashIndex;
         if (!(0 < hashIndex->_count)) {
-            List_Reserve((L_2d6680 *)hashIndex, 0, 4);
+            List_Reserve((igDataList *)hashIndex, 0, 4);
         }
     }
     FUN_0030cfa0((ClearOwner *)table->_symbolNames);
@@ -223,7 +223,7 @@ void Gap__Core__igLocationTable__vfunc_32(igLocationTableView *arg0, int arg1) {
     igTDataList<int> *l; int n; int *a; int i; LocationRecord *s1; LocationRecord *s0; LocationRecord *s3;
     FUN_002eb0a0((int)arg0, arg1);
     l = arg0->_hashIndex;
-    if (!(arg1 < l->_count)) List_Reserve((L_2d6680 *)l, arg1, 4);
+    if (!(arg1 < l->_count)) List_Reserve((igDataList *)l, arg1, 4);
     l = arg0->_hashIndex;
     if (arg1 >= 0) {
         if (!(arg1 > l->_capacity)) { l->_count = arg1; } else { List_Resize((void *)l, arg1, 4); }

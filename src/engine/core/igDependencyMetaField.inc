@@ -130,7 +130,7 @@ void FUN_002c8250(int arg0) {
         if (g_stringPool[0] == 0) {
             var_v0_2 = ((int)StringPool_Allocate(0x10));
             if (var_v0_2 != 0) {
-                var_v0_2 = ((int)StringPool_Construct((S_2eadf0 *)var_v0_2));
+                var_v0_2 = ((int)StringPool_Construct((StringPool *)var_v0_2));
             }
             g_stringPool[0] = var_v0_2;
         }
@@ -160,7 +160,7 @@ void FUN_002c8250(int arg0) {
         if (g_stringPool[0] == 0) {
             var_v0_4 = ((int)StringPool_Allocate(0x10));
             if (var_v0_4 != 0) {
-                var_v0_4 = ((int)StringPool_Construct((S_2eadf0 *)var_v0_4));
+                var_v0_4 = ((int)StringPool_Construct((StringPool *)var_v0_4));
             }
             g_stringPool[0] = var_v0_4;
         }

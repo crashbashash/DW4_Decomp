@@ -21,7 +21,7 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
@@ -57,7 +57,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
         if (g_stringPool[0] == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
-                pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
             g_stringPool[0] = pool;
         }
@@ -105,7 +105,7 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
@@ -185,7 +185,7 @@ void igStringMetaField_ResetValue(int *arg0, int arg1) {
         if (g_stringPool[0] == 0) {
             p = ((int)StringPool_Allocate(16));
             if (p != 0) {
-                p = ((int)StringPool_Construct((S_2eadf0 *)p));
+                p = ((int)StringPool_Construct((StringPool *)p));
             }
             g_stringPool[0] = p;
         }
@@ -341,18 +341,18 @@ void Gap__Core__igStringMetaField__vfunc_02(void) {
     igRefMetaField_Destruct();
 }
 
-void FUN_0030b320(struct S_30b320 *arg0, int arg1, int arg2) {
+void FUN_0030b320(IniStringView *arg0, int arg1, int arg2) {
     char *temp_s0;
 
-    temp_s0 = arg0->f8;
+    temp_s0 = arg0->text;
     if ((arg1 == 0) || (arg2 == 0)) {
-        arg0->f8 = 0;
-        arg0->f12 = 0;
+        arg0->text = 0;
+        arg0->length = 0;
     } else {
-        arg0->f8 = (char *)igObject_AllocateStorage((int)arg0, arg2 + 1);
-        memcpy(arg0->f8, arg1, arg2);
-        arg0->f8[arg2] = 0;
-        arg0->f12 = arg2;
+        arg0->text = (char *)igObject_AllocateStorage((int)arg0, arg2 + 1);
+        memcpy(arg0->text, arg1, arg2);
+        arg0->text[arg2] = 0;
+        arg0->length = arg2;
     }
     if (temp_s0 != 0) {
         FUN_00300f50((int)arg0, (int)temp_s0);
@@ -361,21 +361,21 @@ void FUN_0030b320(struct S_30b320 *arg0, int arg1, int arg2) {
 
 void igStringObj_Set(int arg0, int arg1) {
     if (arg1 != 0) {
-        FUN_0030b320((struct S_30b320 *)arg0, arg1, strlen(arg1));
+        FUN_0030b320((IniStringView *)arg0, arg1, strlen(arg1));
         return;
     }
-    igStringObj_Clear((S0_30b420 *)arg0);
+    igStringObj_Clear((IniStringView *)arg0);
 }
 
-int igStringObj_Clear(S0_30b420 *arg0) {
+int igStringObj_Clear(IniStringView *arg0) {
     int temp_a1;
 
-    temp_a1 = arg0->f8;
+    temp_a1 = (int)arg0->text;
     if (temp_a1 != 0) {
         FUN_00300f50((int)arg0, temp_a1);
     }
-    arg0->f8 = 0;
-    arg0->fC = 0;
+    arg0->text = 0;
+    arg0->length = 0;
 }
 
 void igStringObj_Insert(IniStringView *self, char *insert, unsigned int at, unsigned int n) {
@@ -383,7 +383,7 @@ void igStringObj_Insert(IniStringView *self, char *insert, unsigned int at, unsi
     char *buf;
     if (n == 0 || insert == 0) { return; }
     if (self->length == 0) {
-        FUN_0030b320((struct S_30b320 *)self, (int)insert, (int)n);
+        FUN_0030b320(self, (int)insert, (int)n);
     } else {
     total = n + self->length;
     buf = FUN_00300d70(self, total + 1);
@@ -488,25 +488,27 @@ int FUN_0030b840(int arg0, int extra1, int extra2) {
     if (var_s0 > 0x7FF) {
         var_s0 = -1;
     } else {
-        FUN_0030b320((S_30b320 *)arg0, (int)buf, var_s0);
+        FUN_0030b320((IniStringView *)arg0, (int)buf, var_s0);
     }
     return var_s0;
 }
 
 static inline char *pick(char *a, char *d) { if (a == 0) { return d; } return a; }
 
-void igStringObj_KeepExtension(O_30b8a0 *o) {
+void igStringObj_KeepExtension(igStringObj *o) {
     int i;
     char *e;
     char *t;
     char *base;
-    base = o->s;
+    base = (char *)o->_buffer;
     if (base != 0) {
-        i = o->len - 1;
+        i = o->_length - 1;
         e = g_stringObjEmptyText[0];
         for (; i != 0; i--) {
             if (pick(base, e)[i] == '.') {
-                t = ((O_30b8a0 *)o)->s; igStringObj_Set((int)o, (int)((t == 0 ? e : t) + i));
+                /* read _buffer as a char * word: an int-typed read would be merged with base's load,
+                 * and retail loads it again here */
+                t = *(char **)&o->_buffer; igStringObj_Set((int)o, (int)((t == 0 ? e : t) + i));
                 return;
             }
             if (pick(base, e)[i] == '/' || pick(base, e)[i] == '\\') break;
@@ -627,7 +629,7 @@ void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list) {
         void **slot = (void **)((char *)list->_data + i * 4);
         if (g_stringPool[0] == 0) {
             int v = ((int)StringPool_Allocate(0x10));
-            if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
+            if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
             g_stringPool[0] = v;
         }
         void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
@@ -647,7 +649,7 @@ void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list) {
             else {
                 if (g_stringPool[0] == 0) {
                     int v = ((int)StringPool_Allocate(0x10));
-                    if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
+                    if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
                     g_stringPool[0] = v;
                 }
                 s = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)p));

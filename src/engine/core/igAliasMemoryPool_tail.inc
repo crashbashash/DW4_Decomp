@@ -564,7 +564,7 @@ void FUN_002d16a0(int arg0) {
             var_v0 = ((int)FUN_002d1930((void *)var_v0));
         }
         ((int *)g_objectSystem)[0] = var_v0;
-        FUN_002d1a00((S_2d1a00 *)var_v0);
+        FUN_002d1a00((ObjectSystemView *)var_v0);
         FUN_002b9620();
         FUN_002b9470();
         FUN_002c4d80();
@@ -584,11 +584,11 @@ void FUN_002d1770(void) {
     int rc;
 
     if (((struct Core *)((void * *)g_objectSystem)[0])->f21 == 0) {
-        FUN_002d27a0((S_2d27a0 *)(((void * *)g_objectSystem)[0]));
+        FUN_002d27a0((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
     }
     if (--DAT_00586dd8[0] == 0) {
         FUN_002d2800(((void * *)g_objectSystem)[0]);
-        FUN_002d2e60((S_2d2e60 *)(((void * *)g_objectSystem)[0]));
+        FUN_002d2e60((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
         core = (struct Core *)((void * *)g_objectSystem)[0];
         if (core != 0) {
             if (&core->f924) {

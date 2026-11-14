@@ -1,24 +1,19 @@
-void Gap__Core__igMediaFile__vfunc_24(S_2ec250 *arg0) {
-    R_2ec250 *t;
+void Gap__Core__igMediaFile__vfunc_24(igMediaFileView *arg0) {
+    igMediaView *t;
 
-    if (arg0->f45 != 0) {
-        ((VC_128_0 *)arg0)->vX();
-        ((VC_104_1 *)arg0->f64)->vX(arg0->f24);
-        ((VC_96_1 *)arg0->f64)->vX(arg0->f24);
-        t = arg0->f64;
-        if (t != 0) {
-            t->f4 = t->f4 - 1;
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-        arg0->f64 = 0;
-        arg0->f24 = -1;
-        FUN_00300f50((int)arg0, arg0->f60);
-        arg0->f60 = 0;
-        arg0->f48 = 0;
-        arg0->f56 = 0;
-        arg0->f45 = 0;
+    if (arg0->_isOpen != 0) {
+        arg0->vfunc_32();
+        arg0->_media->vfunc_26(arg0->_fileHandle);
+        arg0->_media->vfunc_24(arg0->_fileHandle);
+        t = arg0->_media;
+        REL(t)
+        arg0->_media = 0;
+        arg0->_fileHandle = -1;
+        FUN_00300f50((int)arg0, (int)arg0->_fBuf);
+        arg0->_fBuf = 0;
+        arg0->_bufSize = 0;
+        arg0->_bufPos = 0;
+        arg0->_isOpen = 0;
     }
 }
 
@@ -81,114 +76,111 @@ block_21:
 
 void Gap__Core__igMediaFile__vfunc_26(igMediaFileView *self)
 {
-    self->vfunc_22();
+    self->vfunc_24();
 }
 
-void FUN_002ec570(struct O_2ec570 *arg0, int arg1) {
+void FUN_002ec570(igMediaFileView *arg0, int arg1) {
     int temp_a1;
     int var_s0;
     int var_v0;
-    if (arg0->f48 < arg1) {
+    if (arg0->_bufSize < arg1) {
         var_s0 = arg1 * 2;
         if (arg1 > 0x100000) {
             var_s0 = arg1 + 0x100000;
         }
-        temp_a1 = arg0->f60;
+        temp_a1 = (int)arg0->_fBuf;
         if (temp_a1 != 0) {
             var_v0 = FUN_00300e50((int)arg0, temp_a1, var_s0);
         } else {
             var_v0 = igObject_AllocateStorage((int)arg0, var_s0);
         }
-        arg0->f60 = var_v0;
-        arg0->f48 = var_s0;
+        arg0->_fBuf = (unsigned char *)var_v0;
+        arg0->_bufSize = var_s0;
     }
-    arg0->f52 = arg1;
+    arg0->_fileSize = arg1;
 }
 
-int Gap__Core__igMediaFile__vfunc_27(A_2ec600 *arg0, int arg1, int arg2, int arg3) {
+int Gap__Core__igMediaFile__vfunc_27(igMediaFileView *arg0, int arg1, int arg2, int arg3) {
     int bytes;
     int got;
     int n;
     int cnt;
     int back;
-    if (arg0->f2d == 0) {
+    if (arg0->_isOpen == 0) {
         return -1;
     }
     bytes = arg2 * arg3;
-    if (arg0->f2c == 1) {
-        got = ((VC_112a *)arg0->f40)->vX(arg0->f18, arg1, (unsigned)arg3 * arg2);
+    if (arg0->_isBinary == 1) {
+        got = arg0->_media->vfunc_28(arg0->_fileHandle, (void *)arg1, (unsigned)arg3 * arg2);
         n = got / arg2;
         back = n * arg2;
         if (got != back) {
-            ((VC_120b *)arg0->f40)->vX(arg0->f18, back - got, 1);
+            arg0->_media->vfunc_30(arg0->_fileHandle, back - got, 1);
         }
         return n;
     }
     cnt = arg3;
-    if (arg0->f34 < arg0->f38 + bytes) {
-        cnt = (arg0->f34 - arg0->f38) / arg2;
+    if (arg0->_fileSize < arg0->_bufPos + bytes) {
+        cnt = (arg0->_fileSize - arg0->_bufPos) / arg2;
         bytes = cnt * arg2;
     }
-    memcpy(arg1, arg0->f3c + arg0->f38, bytes, arg0->f38);
-    arg0->f38 = arg0->f38 + bytes;
+    memcpy(arg1, arg0->_fBuf + arg0->_bufPos, bytes, arg0->_bufPos);
+    arg0->_bufPos = arg0->_bufPos + bytes;
     return cnt;
 }
 
-void Gap__Core__igMediaFile__vfunc_28(void *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
-    void **temp_a0;
-
-    if (*(unsigned char *)((char *)(arg0) + 45) == 0) {
+void Gap__Core__igMediaFile__vfunc_28(igMediaFileView *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
+    if (arg0->_isOpen == 0) {
         arg3(arg4, -1);
     }
-    if (*(unsigned char *)((char *)(arg0) + 44) == 1) {
-        temp_a0 = (void **)(*(int *)((char *)(arg0) + 64));
-        ((DW4VC_116_5 *)(temp_a0))->vX((int)(*(int *)((char *)(arg0) + 24)), (int)(arg1), (int)(arg2), (int)(arg3), (int)(arg4));
+    if (arg0->_isBinary == 1) {
+        arg0->_media->vfunc_29(arg0->_fileHandle, (void *)arg1, arg2, arg3, arg4);
     }
-    arg3(arg4, ((DW4VC_108_3 *)(((char *)(arg0) + 0)))->vX((int)(arg1), (int)(1), (int)(arg2)));
+    arg3(arg4, arg0->Read((void *)arg1, 1, arg2));
 }
 
-int Gap__Core__igMediaFile__vfunc_29(S_2ec7d0 *arg0, int arg1, int arg2, int arg3) {
+int Gap__Core__igMediaFile__vfunc_29(igMediaFileView *arg0, int arg1, int arg2, int arg3) {
     int s0;
-    if (arg0->f45 == 0) {
+    if (arg0->_isOpen == 0) {
         return -1;
     }
     if (arg2 == 0) {
         return 0;
     }
-    if (arg0->f44 == 1) {
-        if (arg0->f20 == 6) {
-            arg0->f64->v120(arg0->f24, 0, 2);
+    if (arg0->_isBinary == 1) {
+        if (arg0->_openMode == 6) {
+            arg0->_media->vfunc_30(arg0->_fileHandle, 0, 2);
         }
-        return arg0->f64->v108(arg0->f24, arg1, arg3 * arg2) / arg2;
+        return arg0->_media->vfunc_27(arg0->_fileHandle, (const void *)arg1, arg3 * arg2) / arg2;
     }
     s0 = arg2 * arg3;
-    if (arg0->f20 == 2) {
-        arg0->f56 = arg0->f52;
+    if (arg0->_openMode == 2) {
+        arg0->_bufPos = arg0->_fileSize;
     }
-    FUN_002ec570((struct O_2ec570 *)arg0, arg0->f56 + s0);
-    memcpy(arg0->f60 + arg0->f56, arg1, s0);
-    arg0->f56 = arg0->f56 + s0;
+    FUN_002ec570(arg0, arg0->_bufPos + s0);
+    memcpy(arg0->_fBuf + arg0->_bufPos, arg1, s0);
+    arg0->_bufPos = arg0->_bufPos + s0;
     return s0 / arg2;
 }
 
-int Gap__Core__igMediaFile__vfunc_32(S_2ec900 *arg0) {
-    if (arg0->f44 != 0) {
+int Gap__Core__igMediaFile__vfunc_32(igMediaFileView *arg0) {
+    if (arg0->_isBinary != 0) {
         return 0;
     }
-    if (arg0->f46 != 0) {
-        arg0->f64->vB(arg0->f24, 0, 0);
-        arg0->f64->vA(arg0->f24, arg0->f60, arg0->f52);
+    if (arg0->_write != 0) {
+        arg0->_media->vfunc_30(arg0->_fileHandle, 0, 0);
+        arg0->_media->vfunc_27(arg0->_fileHandle, arg0->_fBuf, arg0->_fileSize);
     }
     return 0;
 }
 
-int Gap__Core__igMediaFile__vfunc_31(struct F_2ecc50 *self, int fmt, ...) {
+int Gap__Core__igMediaFile__vfunc_31(igMediaFileView *self, int fmt, ...) {
     char buf[16384];
     int n;
     int off;
     int len;
     int pos;
-    if (self->f44 != 0) {
+    if (self->_isBinary != 0) {
         return -1;
     }
     n = __builtin_args_info(2);
@@ -198,106 +190,106 @@ int Gap__Core__igMediaFile__vfunc_31(struct F_2ecc50 *self, int fmt, ...) {
         off = (8 - n) * 8;
     }
     len = vsprintf(buf, fmt, (char *)__builtin_next_arg(fmt) - off);
-    pos = self->f56 + len;
-    if (pos >= self->f52) {
-        FUN_002ec570((O_2ec570 *)self, pos);
+    pos = self->_bufPos + len;
+    if (pos >= self->_fileSize) {
+        FUN_002ec570(self, pos);
     }
-    memcpy(self->f60 + self->f56, buf, len);
-    self->f56 = self->f56 + len;
+    memcpy(self->_fBuf + self->_bufPos, buf, len);
+    self->_bufPos = self->_bufPos + len;
     return len;
 }
 
-int Gap__Core__igMediaFile__vfunc_33(S_2ecd30 *arg0) {
+int Gap__Core__igMediaFile__vfunc_33(igMediaFileView *arg0) {
     int sp1C;
     int t;
-    if (arg0->f44 != 0) {
-        int a = arg0->f24;
-        V_2ecd30 *v = arg0->f64;
-        if (v->v112(a, &sp1C, 1) != 0) {
+    if (arg0->_isBinary != 0) {
+        unsigned int a = arg0->_fileHandle;
+        igMediaView *v = arg0->_media;
+        if (v->vfunc_28(a, &sp1C, 1) != 0) {
             return sp1C;
         }
         return -1;
     }
-    t = arg0->f56;
-    if (t >= arg0->f52) {
+    t = arg0->_bufPos;
+    if (t >= arg0->_fileSize) {
         return -1;
     }
-    arg0->f56 = t + 1;
-    return arg0->f60[arg0->f56 - 1];
+    arg0->_bufPos = t + 1;
+    return arg0->_fBuf[arg0->_bufPos - 1];
 }
 
-int Gap__Core__igMediaFile__vfunc_34(char *a, int c) {
+int Gap__Core__igMediaFile__vfunc_34(igMediaFileView *a, int c) {
     int n;
-    if (*(unsigned char *)(a + 44) != 0) return -1;
-    n = *(int *)(a + 56);
+    if (a->_isBinary != 0) return -1;
+    n = a->_bufPos;
     if (n == 0) return -1;
-    *(int *)(a + 56) = n - 1;
-    if ((c & 0xff) != *(unsigned char *)(*(int *)(a + 60) + *(int *)(a + 56))) c = -1;
+    a->_bufPos = n - 1;
+    if ((c & 0xff) != a->_fBuf[a->_bufPos]) c = -1;
     return c;
 }
 
-int Gap__Core__igMediaFile__vfunc_35(S_2ece20 *arg0, unsigned char arg1) {
+int Gap__Core__igMediaFile__vfunc_35(igMediaFileView *arg0, unsigned char arg1) {
     int temp_a1;
 
-    if (arg0->f2c != 0) {
+    if (arg0->_isBinary != 0) {
         return -1;
     }
-    temp_a1 = arg0->f38 + 1;
-    if (temp_a1 >= arg0->f34) {
-        FUN_002ec570((O_2ec570 *)arg0, temp_a1);
+    temp_a1 = arg0->_bufPos + 1;
+    if (temp_a1 >= arg0->_fileSize) {
+        FUN_002ec570(arg0, temp_a1);
     }
-    arg0->f3c[arg0->f38] = arg1;
-    arg0->f38 = arg0->f38 + 1;
+    arg0->_fBuf[arg0->_bufPos] = arg1;
+    arg0->_bufPos = arg0->_bufPos + 1;
     return arg1;
 }
 
-char *Gap__Core__igMediaFile__vfunc_36(struct F_2ecea0 *arg0, char *arg1, int arg2) {
+char *Gap__Core__igMediaFile__vfunc_36(igMediaFileView *arg0, char *arg1, int arg2) {
     if (arg1 == 0) return 0;
-    if (arg0->f44 != 0) return 0;
-    if (arg0->pos >= arg0->len) return 0;
+    if (arg0->_isBinary != 0) return 0;
+    if (arg0->_bufPos >= arg0->_fileSize) return 0;
     int i = 0;
     arg2 = arg2 - 1;
-    if (arg2 + arg0->pos >= arg0->len) arg2 = arg0->len - arg0->pos;
+    if (arg2 + arg0->_bufPos >= arg0->_fileSize) arg2 = arg0->_fileSize - arg0->_bufPos;
     while (i < arg2) {
-        unsigned char c = arg0->data[arg0->pos];
+        unsigned char c = arg0->_fBuf[arg0->_bufPos];
         arg1[i] = c;
         i++;
-        arg0->pos = arg0->pos + 1;
+        arg0->_bufPos = arg0->_bufPos + 1;
         if (c == 10) break;
     }
     arg1[i] = 0;
     return arg1;
 }
 
-int Gap__Core__igMediaFile__vfunc_37(struct S_2ecf50 *arg0, int arg1) {
+int Gap__Core__igMediaFile__vfunc_37(igMediaFileView *arg0, int arg1) {
     int temp_a1;
     int temp_v0;
 
     if (arg1 == 0) {
         return -1;
     }
-    if (arg0->f44 != 0) {
+    if (arg0->_isBinary != 0) {
         return -1;
     }
     temp_v0 = strlen(arg1);
-    temp_a1 = arg0->f56 + temp_v0;
-    if (temp_a1 >= arg0->f52) {
-        FUN_002ec570((O_2ec570 *)arg0, temp_a1);
+    temp_a1 = arg0->_bufPos + temp_v0;
+    if (temp_a1 >= arg0->_fileSize) {
+        FUN_002ec570(arg0, temp_a1);
     }
-    memcpy(arg0->f60 + arg0->f56, arg1, temp_v0);
-    arg0->f56 = arg0->f56 + temp_v0;
+    memcpy(arg0->_fBuf + arg0->_bufPos, arg1, temp_v0);
+    arg0->_bufPos = arg0->_bufPos + temp_v0;
     return temp_v0;
 }
 
-int Gap__Core__igMediaFile__vfunc_38(A_2ed000 *arg0, int arg1, int arg2) {
+int Gap__Core__igMediaFile__vfunc_38(igMediaFileView *arg0, int arg1, int arg2) {
     int base;
     int cur;
-    if (arg0->f44 != 0) {
-        base = ((VC_156 *)arg0)->vX();
-        if (((VC_120 *)arg0->f64)->vX(arg0->f24, arg1, arg2) != 0) {
+    if (arg0->_isBinary != 0) {
+        base = arg0->vfunc_39();
+        if (arg0->_media->vfunc_30(arg0->_fileHandle, arg1, arg2) != 0) {
             return 0;
         }
-        cur = ((VC_156 *)arg0)->vX();
+        cur = arg0->vfunc_39();
         switch (arg2) {
         case 0:
             return -(cur != arg1);
@@ -311,25 +303,24 @@ int Gap__Core__igMediaFile__vfunc_38(A_2ed000 *arg0, int arg1, int arg2) {
     } else {
         switch (arg2) {
         case 0:
-            arg0->f56 = arg1;
+            arg0->_bufPos = arg1;
             break;
         case 1:
-            arg0->f56 = arg0->f56 + arg1;
+            arg0->_bufPos = arg0->_bufPos + arg1;
             break;
         case 2:
-            arg0->f56 = arg0->f52 + arg1;
+            arg0->_bufPos = arg0->_fileSize + arg1;
             break;
         default:
             return -1;
         }
-        if (arg0->f56 > arg0->f52) {
-            arg0->f56 = arg0->f52;
-        } else if (arg0->f56 < 0) {
-            arg0->f56 = 0;
+        if (arg0->_bufPos > arg0->_fileSize) {
+            arg0->_bufPos = arg0->_fileSize;
+        } else if (arg0->_bufPos < 0) {
+            arg0->_bufPos = 0;
         }
         return 0;
     }
 }
 
-int Gap__Core__igMediaFile__vfunc_39(F_2ed170 *p) { if (p->f44) { int a = p->f24; C31 *o = p->f64; return o->vX(a); } return p->f56; }
-
+int Gap__Core__igMediaFile__vfunc_39(igMediaFileView *p) { if (p->_isBinary) { unsigned int a = p->_fileHandle; igMediaView *o = p->_media; return o->vfunc_31(a); } return p->_bufPos; }

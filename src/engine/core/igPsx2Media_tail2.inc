@@ -36,40 +36,40 @@ void FUN_0032db00(MediaRpcCompletion *c) {
     }
 }
 
-void Gap__Core__igPsx2Media__vfunc_03(O_32dc10 *arg0, int extra1) {
+void Gap__Core__igPsx2Media__vfunc_03(igPsx2MediaView *arg0, int extra1) {
     int i;
     int a;
-    T_32dc10 *t;
+    MediaHandlePool *t;
 
     Gap__Core__igObject__constructFields((int)arg0, extra1);
-    arg0->f8 = FUN_00300db0((int)arg0, 0x80, 0x40);
-    arg0->f20 = FUN_00300db0((int)arg0, 0x90, 0x10);
-    a = arg0->f8;
+    arg0->_headAndTailBuffer = (char *)FUN_00300db0((int)arg0, 0x80, 0x40);
+    arg0->_commandBuffer = (MediaIoRequest *)FUN_00300db0((int)arg0, 0x90, 0x10);
+    a = (int)arg0->_headAndTailBuffer;
     SyncDCache(a, a + 0x80);
-    t = ((T_32dc10 *)Memory_AllocateDefaultBuffer(0x10));
+    t = ((MediaHandlePool *)Memory_AllocateDefaultBuffer(0x10));
     if (t != 0) {
-        t->a0 = 8;
-        t->a4 = 8;
-        t->a2 = 8;
-        t->f12 = ((int)FUN_002ed2e0(t->a0, 0xC));
-        t->f8 = (short *)FUN_002ed2e0(t->a2, 2);
-        for (i = 0; i < t->a4; i++) {
-            t->f8[i] = i;
+        t->limit = 8;
+        t->count = 8;
+        t->capacity = 8;
+        t->rows = (MediaHandleRow *)FUN_002ed2e0(t->limit, 0xC);
+        t->freeList = (unsigned short *)FUN_002ed2e0(t->capacity, 2);
+        for (i = 0; i < t->count; i++) {
+            t->freeList[i] = i;
         }
     }
-    arg0->f28 = t;
+    arg0->_handlePool = t;
 }
 
-void Gap__Core__igPsx2Media__vfunc_04(S0_32dcf0 *arg0) {
-    void *temp_s0;
+void Gap__Core__igPsx2Media__vfunc_04(igPsx2MediaView *arg0) {
+    MediaHandlePool *temp_s0;
 
-    temp_s0 = (void *)(arg0->f1C);
+    temp_s0 = arg0->_handlePool;
     if (temp_s0 != 0) {
-        Memory_FreeBuffer((void *)(*(int *)((char *)(temp_s0) + 12)));
-        Memory_FreeBuffer((void *)(*(int *)((char *)(temp_s0) + 8)));
+        Memory_FreeBuffer((void *)temp_s0->rows);
+        Memory_FreeBuffer((void *)temp_s0->freeList);
         Memory_FreeBufferAliasB(temp_s0);
     }
-    arg0->f1C = 0;
+    arg0->_handlePool = 0;
     ((int *)&DAT_00587360)[0] = 0;
     Gap__Core__igObject__destructFields((int)arg0);
 }
@@ -88,41 +88,41 @@ void FUN_0032ded0(int arg0) {
     ((int *)&DAT_00587368)[0] = arg0;
 }
 
-unsigned short Gap__Core__igPsx2Media__vfunc_23(Arg_32df20 *self) {
-    Pool_32df20 *p;
+unsigned short Gap__Core__igPsx2Media__vfunc_23(igPsx2MediaView *self) {
+    MediaHandlePool *p;
     unsigned short r;
-    self->r->vf31(1);
-    p = self->pool;
-    if (p->nfree == 0) {
+    self->_sema->wait(1);
+    p = self->_handlePool;
+    if (p->count == 0) {
         int i;
-        p->items = (char*)thunk_Memory_ReallocateBuffer(p->items, (unsigned int)((p->count + 4) * 12));
-        memset(p->items + p->count * 12, 0, 48);
-        if (p->cap < 4) {
-            p->ids = (unsigned short*)Memory_ReallocateBuffer(p->ids, (unsigned int)8);
-            p->cap = 4;
+        p->rows = (MediaHandleRow *)thunk_Memory_ReallocateBuffer(p->rows, (unsigned int)((p->limit + 4) * 12));
+        memset((char *)p->rows + p->limit * 12, 0, 48);
+        if (p->capacity < 4) {
+            p->freeList = (unsigned short *)Memory_ReallocateBuffer(p->freeList, (unsigned int)8);
+            p->capacity = 4;
         }
-        i = 0; do { p->ids[i] = p->count + i; i++; } while (i < 4);
-        p->nfree = 4;
-        p->count += 4;
+        i = 0; do { p->freeList[i] = p->limit + i; i++; } while (i < 4);
+        p->count = 4;
+        p->limit += 4;
     }
-    r = p->ids[p->nfree - 1];
-    p->nfree = p->nfree - 1;
-    self->r->vf29();
+    r = p->freeList[p->count - 1];
+    p->count = p->count - 1;
+    self->_sema->signal();
     return r;
 }
 
-void Gap__Core__igPsx2Media__vfunc_24(MediaFields *media, int handle) {
-    media->sema->wait(1);
-    MediaHandlePool *pool = media->pool;
+void Gap__Core__igPsx2Media__vfunc_24(igPsx2MediaView *media, int handle) {
+    media->_sema->wait(1);
+    MediaHandlePool *pool = media->_handlePool;
     if (handle < pool->limit && handle >= 0) {
         if (pool->count >= pool->capacity) {
             pool->capacity += 8;
-            pool->freeList = (short *)Memory_ReallocateBuffer(pool->freeList, (unsigned int)(pool->capacity * 2));
+            pool->freeList = (unsigned short *)Memory_ReallocateBuffer(pool->freeList, (unsigned int)(pool->capacity * 2));
         }
         pool->freeList[pool->count] = handle;
         pool->count++;
     }
-    media->sema->release();
+    media->_sema->signal();
 }
 
 static inline void appendPath(const char *text, MediaPathBuffer *buffer) {
@@ -130,7 +130,7 @@ static inline void appendPath(const char *text, MediaPathBuffer *buffer) {
     igStringObj_Insert((IniStringView *)buffer, (char *)text, (unsigned int)length, (unsigned int)(strlen(text)));
 }
 
-void FUN_0032e130(MediaPathFields *self, int index, char **path) {
+void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
     bool usePrefix = true;
     bool isDisc = GPR_00554de0;
     char *colon = strchr(*path, ':');
@@ -161,50 +161,50 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     }
     if (usePrefix) {
         if (isDisc) {
-            igStringObj_Set((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
+            igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&DAT_00587368)));
             if (**path != '\\' && **path != '/') {
-                appendPath(DAT_004ffbe8, self->conversion);
+                appendPath(DAT_004ffbe8, self->_conversionString);
             }
-            appendPath(*path, self->conversion);
+            appendPath(*path, self->_conversionString);
             end = strlen(*path) + 6;
             for (i = 6; i < end; i++) {
-                p = self->conversion->text + i;
+                p = self->_conversionString->text + i;
                 if (*p == '/') {
                     *p = '\\';
                 } else {
                     *p = ((int)_toupper(*p));
                 }
             }
-            appendPath(DAT_004ffbf0, self->conversion);
+            appendPath(DAT_004ffbf0, self->_conversionString);
         } else {
-            igStringObj_Set((int)self->conversion, (int)((*(char * *)&DAT_00587368)));
-            appendPath(*path, self->conversion);
+            igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&DAT_00587368)));
+            appendPath(*path, self->_conversionString);
         }
-        text = self->conversion->text;
+        text = self->_conversionString->text;
         text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else if (isDisc && strchr(*path, ';') == 0) {
-        igStringObj_Set((int)self->conversion, (int)(*path));
+        igStringObj_Set((int)self->_conversionString, (int)(*path));
         stop = strlen(*path);
         for (j = 6; j < stop; j++) {
-            p = self->conversion->text + j;
+            p = self->_conversionString->text + j;
             if (*p == '/') {
                 *p = '\\';
             } else {
                 *p = ((int)_toupper(*p));
             }
         }
-        appendPath(DAT_004ffbf0, self->conversion);
-        text = self->conversion->text;
+        appendPath(DAT_004ffbf0, self->_conversionString);
+        text = self->_conversionString->text;
         text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
     } else {
         text = *path;
     }
     {
-        row = &self->handles->rows[index];
+        row = &self->_handlePool->rows[index];
         if ((*(int *)g_stringPool) == 0) {
             v = ((int)StringPool_Allocate(16));
             if (v != 0) {
-                v = ((int)StringPool_Construct((struct S_2eadf0 *)v));
+                v = ((int)StringPool_Construct((StringPool *)v));
             }
             (*(int *)g_stringPool) = v;
         }
@@ -219,12 +219,12 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
         }
         row->name = interned;
     }
-    igStringObj_Clear((S0_30b420 *)self->conversion);
+    igStringObj_Clear((IniStringView *)self->_conversionString);
 }
 
 /* Opens handle `slot` of the media on the IOP: names it, sends the open command with the mode's
  * sceOpen flags, and keeps the returned descriptor. */
-void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2Media *media, int slot, int **name, unsigned int mode)
+void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2MediaView *media, int slot, int **name, unsigned int mode)
 {
     int *command;
     int flags;
@@ -236,14 +236,14 @@ void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2Media *media, int slot,
     int n;
     int *word;
 
-    MediaResult locked = ((MediaSema *)media->_sema)->wait(1);
+    igResult locked = media->_sema->wait(1);
     int *nameRef;
-    handle = (MediaHandleRow *)(*(char **)((char *)media->_handlePool + 12) + slot * 12);
+    handle = &media->_handlePool->rows[slot];
     nameRef = *name;
     if (nameRef != 0) {
         nameRef[-1] = nameRef[-1] + 1;
     }
-    FUN_0032e130((MediaPathFields *)media, slot, (char **)&nameRef);
+    FUN_0032e130(media, slot, (char **)&nameRef);
     if (nameRef != 0) {
         header = nameRef - 2;
         n = nameRef[-1] - 1;
@@ -280,12 +280,12 @@ void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2Media *media, int slot,
     strcpy((char *)(command + 1), path);
     {
         int *reply = (int *)media->_commandBuffer;
-        MediaResult sent;
-        FUN_0032d6d0(&sent.v, (Ob_32d6d0 *)media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
+        igResult sent;
+        FUN_0032d6d0(&sent.v, media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
         fd = *reply;
         handle->fd = fd;
     }
-    MediaResult released = ((MediaSema *)media->_sema)->release();
+    igResult released = media->_sema->signal();
     if (fd < 0) {
         word = (int *)&g_resultFailure;
     } else {
@@ -294,32 +294,32 @@ void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2Media *media, int slot,
     *result = *word;
 }
 
-int FUN_0032e950(struct Z_32e950 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
+int FUN_0032e950(igPsx2MediaView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
     int sp4C;
     int temp_a0;
-    struct T_32e950 *temp_s1;
+    MediaIoRequest *temp_s1;
     int *p;
-    temp_s1 = arg0->f20;
-    p = &temp_s1->f32;
-    temp_s1->f0 = *(int *)(arg0->f28->f12 + arg1 * 12 + 8);
-    temp_s1->f4 = arg2;
-    temp_s1->f8 = arg3;
-    temp_s1->f12 = 0;
-    temp_s1->f16 = arg5;
-    temp_s1->f20 = arg4;
-    temp_s1->f24 = arg6;
-    temp_s1->f28 = arg7;
+    temp_s1 = arg0->_commandBuffer;
+    p = &temp_s1->reply;
+    temp_s1->fd = ((MediaHandleRow *)((char *)arg0->_handlePool->rows + arg1 * 12))->fd;
+    temp_s1->buffer = arg2;
+    temp_s1->size = arg3;
+    temp_s1->reserved = 0;
+    temp_s1->kind = arg5;
+    temp_s1->callback = arg4;
+    temp_s1->context = arg6;
+    temp_s1->extra = arg7;
     SyncDCache(arg2, arg2 + arg3);
-    temp_a0 = arg0->f8;
+    temp_a0 = (int)arg0->_headAndTailBuffer;
     SyncDCache(temp_a0, temp_a0 + 0x80);
-    FUN_0032d6d0(&sp4C, (Ob_32d6d0 *)arg0->f12, 6, (int)temp_s1, 0x20, (int)p, 0x10, 1);
+    FUN_0032d6d0(&sp4C, arg0->_connection, 6, (int)temp_s1, 0x20, (int)p, 0x10, 1);
     return *p;
 }
 
-void Gap__Core__igPsx2Media__vfunc_29(C_32eac0 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-    arg0->f16->v31(1);
-    FUN_0032e950((Z_32e950 *)arg0, arg1, arg2, arg3, arg4, 3, arg5, 0);
-    arg0->f16->v29();
+void Gap__Core__igPsx2Media__vfunc_29(igPsx2MediaView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+    arg0->_sema->wait(1);
+    FUN_0032e950(arg0, arg1, arg2, arg3, arg4, 3, arg5, 0);
+    arg0->_sema->signal();
 }
 
 int Gap__Core__igPsx2Media__vfunc_32(void) {

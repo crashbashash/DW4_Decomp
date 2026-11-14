@@ -5,7 +5,7 @@ void ***FUN_002e2fb0(void) {
     void **t;
     int name;
     int pool;
-    RC *old;
+    char *old;
     void *nw;
     int *hdr;
     int c;
@@ -16,19 +16,19 @@ void ***FUN_002e2fb0(void) {
         } else {
             a = (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         }
-        cell = t = (void **)((VC_216 *)a)->vX(4);
+        cell = t = (void **)((igMemoryPoolView *)a)->Allocate(4);
         if (t != 0) { *t = 0; }
         DAT_00586e18[0] = cell;
         name = DAT_004c2128[0];
         if (g_stringPool[0] == 0) {
             pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
-                pool = ((int)StringPool_Construct((S_2eadf0 *)pool));
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
             g_stringPool[0] = pool;
         }
         nw = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
-        old = (RC *)*cell;
+        old = (char *)*cell;
         if (old != 0) {
             hdr = (int *)((char *)old - 8);
             c = *(int *)((char *)old - 4) - 1;
@@ -52,7 +52,7 @@ void FUN_002e30b0(int *arg0, const char *name) {
     if (g_stringPool[0] == 0) {
         var_v0 = ((int)StringPool_Allocate(0x10));
         if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
         }
         g_stringPool[0] = var_v0;
     }
@@ -69,11 +69,11 @@ void FUN_002e30b0(int *arg0, const char *name) {
     arg0[3] = (int)temp_s0;
 }
 
-void Gap__igAdxFile__vfunc_38(void **arg0, long long arg1) {
+void Gap__igAdxFile__vfunc_38(igFileView *arg0, long long arg1) {
     signed char want = (signed char)arg1;
     signed char c;
     do {
-        c = (signed char)((VCa *)arg0)->vX();
+        c = (signed char)arg0->vfunc_33();
     } while (want != c && c != -1);
 }
 
@@ -138,7 +138,7 @@ void FUN_002e3280(int arg0) {
         if (g_stringPool[0] == 0) {
             var_v0 = ((int)StringPool_Allocate(0x10));
             if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((S_2eadf0 *)var_v0));
+                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
             }
             g_stringPool[0] = var_v0;
         }
@@ -156,8 +156,8 @@ void FUN_002e3280(int arg0) {
     }
 }
 
-void Gap__igAdxFile__vfunc_26(void **arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
-    arg3(((DW4VC_108_2 *)(arg0))->vX(arg1, 1, arg2), arg4);
+void Gap__igAdxFile__vfunc_26(igFileView *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
+    arg3(arg0->Read((void *)arg1, 1, arg2), arg4);
 }
 
 void FUN_002e33d0(void) {
@@ -167,7 +167,7 @@ void FUN_002e33d0(void) {
     int path;
     if (registry != 0) {
         text = (igStringObj *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
-        FUN_00306770(registry, 2, (const char *)text_searchFilePath, (T_306770 **)&text, searchPathKey, 0);
+        FUN_00306770(registry, 2, (const char *)text_searchFilePath, &text, searchPathKey, 0);
         path = text->_buffer;
         if (path == 0) {
             path = (int)g_stringObjEmptyText[0];
@@ -222,7 +222,7 @@ int FUN_002e34d0(char **arg0, char *arg1, int arg2) {
     return 1;
 }
 
-int Gap__igAdxFile__vfunc_39(struct AX *arg0, int arg1) {
+int Gap__igAdxFile__vfunc_39(igFileView *arg0, int arg1) {
     int s0;
     int *a0;
     int *hdr;
@@ -231,12 +231,12 @@ int Gap__igAdxFile__vfunc_39(struct AX *arg0, int arg1) {
     if (g_stringPool[0] == 0) {
         obj = ((int)StringPool_Allocate(0x10));
         if (obj != 0) {
-            obj = ((int)StringPool_Construct((struct S_2eadf0 *)obj));
+            obj = ((int)StringPool_Construct((StringPool *)obj));
         }
         g_stringPool[0] = obj;
     }
     s0 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1);
-    a0 = (int *)arg0->f40;
+    a0 = (int *)arg0->_completeFilename;
     if (a0 != 0) {
         hdr = a0 - 2;
         v = a0[-1] - 1;
@@ -245,7 +245,7 @@ int Gap__igAdxFile__vfunc_39(struct AX *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
         }
     }
-    arg0->f40 = s0;
+    arg0->_completeFilename = (char *)s0;
     return arg1;
 }
 
