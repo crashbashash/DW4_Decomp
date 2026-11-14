@@ -24,9 +24,7 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   ([source approvals](docs/engine/source-approvals.md)). The owner adds a row after reviewing the evidence
   that the original source used it. An agent writes one only when the owner has explicitly told it to add
   that specific routine or function, never on its own initiative or as part of a broader request ("match
-  everything", "clear the queue"). The one standing instruction: the integrator writes the row the owner's
-  way when a Fable 5.2 check recommends approving with high confidence; the report lists each such row, and
-  the owner can revoke it.
+  everything", "clear the queue").
 - **Scope.** The repository holds the decompilation and what it needs: source, build tables, tools,
   evidence and reference documentation. Agent handoffs, session logs, per-wave work reports, changelogs and
   accounts of how the repository was reorganised, player-facing guides and catalogues, and tools that
@@ -45,16 +43,14 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   quoted from runs on the final tree.
 - **Every landing includes the readability pass** on what it touches ([Readable](#matched-and-readable)).
 - **Sub-agent models are set by the kind of work** ([Delegated work](#delegated-work)): byte matching and
-  mechanical work start on Sonnet 5.5, the integrator (which runs on Opus 5.5) reviews every Sonnet result and
-  fixes what it could not match or explain (and does the readability pass), and Fable 5.2 is the last resort for
-  what Opus 5.5 cannot land. The integrator does no bulk mechanical work itself, and names each sub-agent's model
-  to the owner.
+  mechanical work start on Sonnet 5.5, and the integrator (which runs on Opus 5.5) reviews every Sonnet result
+  and fixes what it could not match or explain (and does the readability pass). The integrator does no bulk
+  mechanical work itself, and names each sub-agent's model to the owner.
 - **Owner decisions are presented one at a time, as a question** the owner answers (the options with a
   recommendation, and the evidence), and an approval row is written only on the owner's instruction for it.
-  An `asm` or `volatile` goes to the owner only after a Fable 5.2 sub-agent has checked whether it is needed:
-  it looks for plain C first, strips each keyword to show which change the bytes, and judges what remains
-  against the approval standard. A high-confidence Fable 5.2 approval is written without asking and listed in
-  the report; medium or low confidence, and anything Fable leaves open, goes to the owner as a question.
+  An `asm` or `volatile` goes to the owner only after an Opus 5.5 check of whether it is needed: it looks for
+  plain C first, strips each keyword to show which change the bytes, and judges what remains against the
+  approval standard.
 - **Names.** A proposed name with high or medium confidence that says what the thing is or does, and reads
   like a name a person on the original team would have written, is applied without asking and listed in the
   report, with its evidence (medium ones with the alternative considered). Low-confidence guesses stay out
@@ -231,7 +227,6 @@ The sub-agent's model is set by the kind of work. This is a requirement, not a p
   one per slice, when it is too large for the integrator alone or when several Sonnet results are waiting at once,
   so the reviews run in parallel. Understanding work with no Sonnet pass (a resisting shape, a tool change) starts
   at Opus 5.5.
-- **Last resort:** Fable 5.2, handed the Opus 5.5 report, for a function or shape Opus 5.5 still cannot land.
 
 How it is enforced:
 
@@ -243,13 +238,11 @@ How it is enforced:
   exact mapping or table to apply and the check that proves it was applied.
 - **Every leftover is handed on, in order.** A leftover is a function that still differs, a shape whose
   mechanism is unexplained, an extent or boundary nothing proves, or an approval item. Sonnet 5.5's go to the
-  integrator's Opus 5.5 review; what Opus 5.5 still cannot land goes to a Fable 5.2 sub-agent with the Opus
-  report, and every approval item goes through Fable 5.2 before it reaches the owner. Work does not count as done
-  before that, and listing a leftover under open questions without the handoffs is not done. If Fable 5.2 cannot
-  explain it either, the open question records the reports.
+  integrator's Opus 5.5 review, and every approval item goes through an Opus 5.5 check before it reaches the
+  owner. Work does not count as done before that. What Opus 5.5 still cannot land goes under the topic's open
+  questions with the reports.
 - **Reports carry the model.** A sub-agent's report states its model in its first line. A progress or
-  final report that credits a sub-agent's result names the model that produced it. The final report lists
-  every Fable 5.2 handoff with its outcome.
+  final report that credits a sub-agent's result names the model that produced it.
 
 ## Retail-game work
 
