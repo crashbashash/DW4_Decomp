@@ -6,16 +6,24 @@ config/SLUS-20836/units.tsv, by SHA-256) is published in the decomp.me compiler 
 and the Win32 loader in the wibo releases; this downloads each archive, unpacks it to the path
 the build expects and refuses any executable whose SHA-256 differs from the pinned one.
 
+It also builds a host `luac` from stock Lua 4.0.1 at local/lua-4.0.1/bin/luac, for
+scripts/lua_roundtrip.py: the upstream tarball is refused unless its SHA-256 is the one
+src/third_party/README.md records for the vendored Lua, then unpacked and built with a plain
+`make` (the stock tree needs no patch on a current gcc). The binary depends on the host
+compiler, so the tarball is what is pinned.
+
     python3 tools/download_tools.py            # everything missing
     python3 tools/download_tools.py --force    # re-download and re-check everything
 
-local/ is gitignored. An existing file with the right digest is left alone.
+local/ is gitignored. An existing file with the right digest is left alone, and an existing luac
+is kept.
 """
 import argparse
 import hashlib
 import io
 import os
 import stat
+import subprocess
 import sys
 import tarfile
 import urllib.request
@@ -39,6 +47,9 @@ ARCHIVES = {
 ASSEMBLERS = {
     "ee-gcc-2.9-as210": "local/ee-gcc2.96/bin/ee-as",
 }
+LUA_URL = "https://www.lua.org/ftp/lua-4.0.1.tar.gz"
+LUA_DIR = "local/lua-4.0.1"  # the tarball's top folder, unpacked into local/
+LUAC = LUA_DIR + "/bin/luac"
 
 
 def pinned():
@@ -89,6 +100,35 @@ def install(ident, path, digest, force):
     return True
 
 
+def lua_digest():
+    """The SHA-256 of the Lua 4.0.1 tarball, from the vendored library's row in src/third_party/README.md."""
+    for line in open(os.path.join(ROOT, "src", "third_party", "README.md"), encoding="utf-8"):
+        cells = [c.strip(" `") for c in line.split("|")]
+        if len(cells) > 3 and cells[1] == "lua/" and cells[2] == "Lua 4.0.1":
+            return cells[3]
+    raise SystemExit("src/third_party/README.md has no Lua 4.0.1 row")
+
+
+def install_luac(force):
+    dest = os.path.join(ROOT, LUAC)
+    if not force and os.path.exists(dest):
+        print(f"luac: {LUAC} present")
+        return True
+    digest = lua_digest()
+    data = fetch(LUA_URL)
+    if hashlib.sha256(data).hexdigest() != digest:
+        print(f"luac: {LUA_URL} has an unexpected SHA-256 (want {digest})", file=sys.stderr)
+        return False
+    with tarfile.open(fileobj=io.BytesIO(data)) as tar:
+        tar.extractall(os.path.join(ROOT, "local"), filter="data")
+    built = subprocess.run(["make"], cwd=os.path.join(ROOT, LUA_DIR), capture_output=True, text=True)
+    if built.returncode or not os.path.exists(dest):
+        print(f"luac: make in {LUA_DIR} failed:\n{built.stdout}{built.stderr}", file=sys.stderr)
+        return False
+    print(f"luac: {LUAC} built from the verified Lua 4.0.1 tarball")
+    return True
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--force", action="store_true", help="download again even when present")
@@ -115,6 +155,7 @@ def main(argv=None):
             ok = False
             continue
         ok = install(ident, path, digest, args.force) and ok
+    ok = install_luac(args.force) and ok
     return 0 if ok else 1
 
 

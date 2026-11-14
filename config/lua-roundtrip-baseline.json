@@ -1,0 +1,5 @@
+{
+ "chunks": 5291,
+ "exact": 4183,
+ "note": "Exact recompiles of lua/ (scripts/lua_roundtrip.py). Record deliberately with --update-baseline."
+}

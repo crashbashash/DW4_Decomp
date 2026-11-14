@@ -51,7 +51,7 @@ C_OBJ   := $(patsubst $(SRC)/%.c,$(BUILD)/src/%.o,$(C_SRC)) \
 
 export MWCIncludes := $(SRC)
 
-.PHONY: iso all symbols asm asm-ensure executable objdiff objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check
+.PHONY: iso all symbols asm asm-ensure executable objdiff objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check lua-roundtrip
 
 # The default target builds AND compares, the way a matching build should: a plain
 # `make` answers "does this tree still reproduce retail?". `make objs` is the
@@ -78,6 +78,7 @@ help:
 	@echo "make iso [DISC=path] — publishing step, not part of the build: the relinked executable in a copy of your disc, in build/$(GAMEID)/"
 	@echo "make hygiene — fail on host-identifying details in the tree (docs/host-details-policy.md)"
 	@echo "make inventory-check — fail if code the symbol map does not own grew past the recorded debt, or data/inventory-scan.tsv is stale"
+	@echo "make lua-roundtrip — recompile every lua/ chunk with stock Lua 4.0.1 luac and fail if fewer match retail than config/lua-roundtrip-baseline.json"
 	@echo "make clean"
 
 # Hard rule: nothing that identifies a developer's machine or account is committed. Also enforced by the
@@ -95,6 +96,12 @@ hygiene:
 inventory-check:
 	python3 -m unittest discover -s testing -p 'test_inventory_scan.py'
 	python3 scripts/inventory_scan.py --check
+
+# The decompiled Lua against its bytecode (docs/engine/lua-decompilation.md): every lua/ chunk recompiled
+# with the luac tools/download_tools.py builds, compared with the chunk in the script pack. Not part of
+# `make check`: it needs the script pack (AFS, below), not the executable.
+lua-roundtrip:
+	python3 scripts/lua_roundtrip.py --afs $(AFS)
 
 symbols:
 	python3 tools/split.py --symbols --symbols-only

@@ -114,6 +114,7 @@ puts these into `local/`:
 | `local/wibo` | wibo 1.2.0 |
 | `local/mwcps2/<build>/mwccps2.exe` | the Metrowerks CodeWarrior for PS2 builds the game was compiled with (3.0b52 for most of the engine and game, plus 3.0, 3.0.3, 3.0b38 and 2.4) |
 | `local/ee-gcc2.96/` | Sony EE GCC 2.96, for the Sony SDK and CRI middleware |
+| `local/lua-4.0.1/bin/luac` | a host `luac` built from stock Lua 4.0.1, for `make lua-roundtrip` (the decompiled `lua/` recompiled against the game's bytecode) |
 
 Each source file is compiled with the compiler and flags recorded for it in `config/SLUS-20836/units.tsv`
 ([build profiles](docs/engine/build-profiles.md), [unit compilers](docs/engine/unit-compilers.md)). A missing

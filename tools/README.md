@@ -6,6 +6,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 | Tool | Purpose |
 | --- | --- |
+| [`download_tools.py`](download_tools.py) | fetch wibo, the pinned MWCC and EE GCC builds into `local/` and verify their SHA-256; build a host `luac` from the verified Lua 4.0.1 tarball for `scripts/lua_roundtrip.py` |
 | [`check.py`](check.py) | coverage and correctness for the matching-decompilation build |
 | [`verify.py`](verify.py) | verify a candidate C function against the retail binary, WITH relocations |
 | [`linkgen.py`](linkgen.py) | build the relink inputs from config/SLUS-20836/layout.txt |

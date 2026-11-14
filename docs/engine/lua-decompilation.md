@@ -67,11 +67,23 @@ Tree builder: `scripts/build_lua_tree.py` (index: [lua-tree-layout](lua-tree-lay
 - Table constructors print their list part and record part separated by `;`
   (`SETLIST B` and `SETMAP U` consume `B` items and `U` pairs).
 
-Recompiling the rebuilt text with stock Lua 4.0.1 `luac -s` reproduces 4,183
-of the 5,291 chunks exactly (instruction words, constant tables, parameters,
-vararg flag and stack size, in every nested prototype); 69 more differ only in
-operands, 435 more only inside equal-length code. The rest recompile to
-different control flow, so the original bytecode stays the authority.
+### The round-trip check
+
+`scripts/lua_roundtrip.py` (`make lua-roundtrip`) recompiles every `lua/` chunk with stock
+Lua 4.0.1 `luac -s` and compares the result, function by function, with the chunk in
+`NDMW.AFS`: **exact** when instruction words, string and number constants, parameter count,
+vararg flag and stack size agree in the main function and every nested one; otherwise *same
+opcodes* (only operands differ), *same count* (equal instruction counts), *differs*, or *failed*
+(luac rejects the text). `--diff <entry> <chunk>` prints one chunk's first differing function as
+a disassembly diff. The `luac` is built by `tools/download_tools.py` at `local/lua-4.0.1/bin/luac`
+from the upstream tarball, verified against the SHA-256 in
+[`src/third_party/README.md`](../../src/third_party/README.md).
+
+The check fails when the exact count falls below `config/lua-roundtrip-baseline.json`, so a
+decompiler change may not lose an exact chunk; after a change that raises it, record the new count
+with `--update-baseline` and commit the file. It is not part of `make check`: it reads the script
+pack, not the executable. Chunks that are not exact recompile to different control flow, so the
+original bytecode stays the authority there.
 
 ## Script-API recap (the `be:` object)
 
