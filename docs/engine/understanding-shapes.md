@@ -85,6 +85,24 @@ IRDUMP_OUT=/tmp/irdump/flags.txt MWCIncludes=src gdb -q -batch -x tools/mwcc_ird
 
 Node numbers are the dump log's, so a node can be followed between the two.
 
+### The code generator's blocks under gdb
+
+**When:** instructions and registers are right and a branch's delay slot is filled where retail has a `nop` (or
+the reverse), or to see the live sets the back end works with. The compiler's own dump of its code-generator
+blocks is compiled out (its phase names remain: code selection, coalescing, CSE, loop invariants, scheduling
+before allocation, register allocation, macro expansion, the block pass, scheduling after allocation, delay
+slots), so `tools/mwcc_irdump/gdb_pcode.py` reads the blocks from memory around the delay-slot filler:
+
+```sh
+PCODE_OUT=/tmp/irdump/pcode.txt MWCIncludes=src gdb -q -batch -x tools/mwcc_irdump/gdb_pcode.py \
+    --args local/wibo local/mwcps2/3.0b52-030722/mwccps2.exe -c -O4,s -sdatathreshold 2 \
+    -inline level=8,bottomup -Iinclude /tmp/irdump/t.cpp -o /tmp/irdump/t.o
+```
+
+It writes every block with its predecessor and successor lists and its instructions before the filler runs, the
+use, def, live-in and live-out sets of the general registers, and the blocks after filling. Use a test file with
+one function. The rules it lets you check are under [Delay slots (b52)](#delay-slots-b52).
+
 ### The register-allocator tracer
 
 **When:** the instructions are right and only registers differ. `tools/dispatcher/regalloc.py` ties each register to
@@ -351,7 +369,15 @@ Units are named by their source file.
     the function's first parameter were stand-ins for it, and so were extra arguments passed to a variadic callee to
     hold the index and the object in `t0` and `t1`: with the idiom the callees take their real three and four
     arguments.
-  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fed50, 0x3064b0, 0x306510).
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fed50, 0x3064b0, 0x306510, 0x2d6f50).
+- **Both list walks in one function.** A function that first searches one list and then walks another has the
+  first count in the register after the scaled index and the second count in the register before it. The search
+  is an inline helper with `list->_count` in its condition (the optimizer hoists that count); the walk is the
+  smart-pointer idiom above. The list handed on after the loop goes through the holder's `get()`, a `const` read
+  that shares the load hoisted for the walk (`move a0,t2`; the plain field read loads again). A named local for
+  the searched list, which the walk's inner loop reads again, gave that node so many neighbours that it was
+  coloured first and took the lowest register; with the field read in place every local is declared where it is
+  first set and no declaration order is left to choose. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d6f50).
 - **A second read of a field through a `const` getter is a second load.** `lw s1,60(s2); jal TerminateThread;
   lw a0,60(s2)`: the id saved for later and the id passed to the call are loaded separately with nothing between
   them. The saved copy is a plain read (`int id = self->_threadID;`), the argument goes through the class's `const`
@@ -395,6 +421,47 @@ Units are named by their source file.
   returns, and that shared value keeps its own register; `end = s + list->count` makes the cursor the base and
   exchanges the base's register with the compared word's. The order of the two statements does not matter. *Unit:*
   `src/engine/core/CoreLibrary.cpp` (0x2d3d30).
+- **One address spelled two ways is computed twice.** A stack buffer's member address used by two calls in a
+  loop (`entry.name` for a format and for an `igStringRef`) is common-subexpression-eliminated into a saved
+  register; retail builds it at each use (`addiu a3,sp,208` and later `addiu s3,sp,208`). Spelling one use as
+  pointer arithmetic (`(char *)(&entry.stat + 1)`, the byte after the stat) and the other as the member keeps them
+  apart; casts or `&entry.name[0]` on the same member are folded together. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (`igPsx2Folder_ListFiles`).
+
+### Propagation (b52)
+
+- **A local that only ever holds zero is added as the zero register.**
+  - *Symptom:* `addu v0,v0,zero` after a call, in front of the add that sums the result (objdump prints it as
+    `move v0,v0`; the compiler's own moves are `daddu`). No type of the sum or of the callee gives it.
+  - *Cause:* the source adds a non-`const` local whose value is 0. `IRO_CopyAndConstantPropagation` replaces
+    the local with 0 after the front end's folding has run, and `IRO_ConstantFolding` only moves the constant to
+    the right: it does not remove `x + 0`. A literal `+ 0` and a `const int` are folded by the front end.
+  - *Spelling:* `int padding = 0;` and `size += field->ioSize(object) + padding;`. Where the local is declared
+    and which side of the sum it stands on make no difference. What the zero stood for in the original is not
+    known; the name is a guess.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d5960). The graphics library has the same instruction after a
+    load (0x17f1bc).
+- **An expression goes back into its use only when the variable has one use in its block and none in another.**
+  Read from the compiler (`IRO_ExpressionPropagation`, 0x5263b0): for each assignment `v = expression` it counts
+  the uses of `v` in the same flow node; a constant or a plain copy is always propagated, any other expression
+  only when that count is 1 and no other flow node reads `v`. Flow nodes are not merged again once the pass loop
+  has started. `v += constant` is merged into the later uses by `IRO_PropagateSelfAssignments`;
+  `v += <a load>` stays as it is, even when `v` holds a known constant. What this means for registers: the
+  optimizer's variables (declared locals, an inline's parameters and locals, the optimizer's temporaries, in the
+  order they are made) take their allocator ids before every expression temporary of the code generator, so a
+  value that stays a variable is coloured after the expression temporaries around it, and a value that is put
+  back into its use is coloured before the variables.
+- **Open: the list reserve in front of an append.** Four functions double a list's capacity when
+  `count + n` no longer fits (`lw count; lw capacity; add; slt at,capacity,sum`), with the sum in `v1` and the
+  capacity in `v0`. The capacity is a common-subexpression temporary, so the sum (and the count's load) must be
+  variables made before it. Two of the four (0x2d3be0, 0x30d230) keep the count in a local they use later and
+  hold the sum with an assignment inside the argument, `reserve(list, length + (offset = list->_count))`, which
+  is a stand-in: written as two statements the sum is put back into the comparison and `v0`/`v1` are exchanged.
+  The other two (0x30e000, 0x2eb6d0) read the count nowhere else and differ from retail by exactly that
+  exchange. A `const` parameter, a reference parameter, a `const` reference getter, the smart-pointer idiom, a
+  nested capacity setter and 4320 generated helper spellings (list type, where the sum is formed, both
+  comparisons, capacity and doubled-capacity locals) all leave the sum in the comparison. What the original
+  inline did that keeps the sum a variable in all four is not known.
 
 ### Inlining (b52)
 
@@ -461,8 +528,9 @@ Units are named by their source file.
   `pool = (int)pool;` kept it only because the cast hides the self-assignment. *Unit:* `src/game/beModelCtrl.cpp`.
 - **A bare truth test that opens a loop condition is materialised.** `sltu v1,zero,a0; xori v1,v1,0x1; bnez`
   for the first operand of `while (*a && *b && *a == *b)`, and a plain `beqz` for the second: the strcmp shape
-  written plainly. `*a != 0` there folds to `beqz`, and a `(bool)` cast is not needed. *Unit:*
-  `src/engine/core/CoreLibrary.cpp` (0x2d3d30).
+  written plainly. `*a != 0` there folds to `beqz`, and a `(bool)` cast is not needed. The remaining count of a
+  bounded scan does the same in `while (remaining && *p)`, with the cursor declared before the count. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d3d30, 0x30ab20).
 
 ### Types and values
 
@@ -530,6 +598,25 @@ Units are named by their source file.
   in the local's own slot, which stays in memory and is loaded at the return (4 bytes less); returning the call
   itself becomes a jump. The callee is declared with its `igResult` return, not an output pointer and an `int`.
   *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f0880 and the five pools' configure functions).
+- **Status results that take their slots in call order come from callees that return `igResult`.** The frame
+  holds one 4-byte slot per call, assigned downwards in the order of the calls (a semaphore `wait`, the RPC call,
+  the `signal`s on each return path), and a test of a result reloads it through its address
+  (`addiu a0,sp,60; lw a0,0(a0)`). That is a by-value `igResult` return used in place. Declaring the callee with an
+  output pointer and passing `&local.v` gives named locals, which take the top slots in declaration order ahead
+  of every temporary, and a test reads the slot directly. The RPC connection's `Bind`, `Call` and
+  `CallWithData` and `igPsx2_LoadIopModule(Ex)` return `igResult`; their bodies end in `return g_resultFailure;`
+  and `return *result;`, which compile as the stores through the hidden pointer did. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (igPsx2Media resetFields, Write, Seek, Tell).
+- **An argument cast to `int` for a variadic callee lets a loop hoist it.** In a loop calling
+  `igStringObj_Format(path, "%s/%s", ...)`, retail rebuilds the format's address before every call; passed as
+  `(int)DAT_004f9a78` to a callee declared `(int, int, ...)` the address moves into a saved register before the
+  loop (one more `sq`, 12 bytes longer). With the callee declared `(igStringObj *, const char *, ...)` and the
+  arguments passed as pointers, the address stays at the call. *Unit:* `src/engine/core/CoreLibrary.cpp`
+  (`igPsx2Folder_ListFiles`, `igPsx2Folder_ListDirectories`).
+- **A pointer argument cast to `int` takes a new allocator id.** `igStringObj_Trim` kept `self` in `s1` and the
+  duplicated text in `s0`; with `igObject_DuplicateString(int self, int string)` called as `((int)self, ...)` the
+  two swapped, whatever the declaration order or loop spelling. Declared `char *(void *self, const char *string)`
+  and called with `self` itself, retail's registers follow. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x30bee0).
 - **A member release with a null test of the member's address is an explicit destructor call.** A class's
   hand-written destructor releases each reference field behind `addiu v0,s1,68; beqz v0; lw a0,68(s1)`. It is
   `((igSmartPointer<igObject> *)&p->_field)->~igSmartPointer();` (and `~igStringRef()` for a string field): the
@@ -573,6 +660,36 @@ Units are named by their source file.
   so such a transcription matches under MWCC and reads as a function built by the other compiler. The `.sched`
   dump shows it: every store has the same priority and the one carrying the `REG_DEAD` notes heads the ready
   list. *Unit:* `src/cri/mps.c`.
+
+### Delay slots (b52)
+
+- **What the filler takes.** Read from the compiler (0x4c7690) and checked with the block dump. For a branch
+  whose slot the instruction above cannot fill it tries, in order: the first instruction of the target, moved
+  when the target has one predecessor and copied otherwise (an unconditional jump always may; a conditional
+  branch only when the instruction's destination is in neither the live-in nor the live-out set of the block
+  that ends with the branch); then the first instruction of the fall-through block, on the same liveness test
+  and only when that block has **exactly one** predecessor. Loads, stores and calls are never taken. `v0` is
+  live at the exit of every function that does not return a class, `void` ones included, so it is live from
+  entry to the first call of a `void` function; a parameter still in its argument register is live-in to the
+  entry block, so an instruction that reuses that register is not taken there.
+- **Slots left empty across a whole function: the predecessor lists were emptied.**
+  - *Symptom:* instructions and registers match, and three branches near the end of the function have a `nop`
+    where the candidate fills the slot with the first instruction of the `if` body (12 bytes short). Nested
+    `if`s and inline helpers change nothing.
+  - *Cause:* the block pass that runs before the filler retargets a conditional branch whose target begins with
+    an unconditional jump, deletes a jump to the next block and merges a block into its only predecessor. After
+    any one of these it sets every block's predecessor list to empty and does not rebuild it. With no
+    predecessors recorded the filler takes nothing from a fall-through block anywhere in the function; copies
+    from targets still happen. The optimizer removes such jumps itself, so one reaches the block pass only when
+    it appears in the code generator: a `return` that is not the function's last statement, or a block whose
+    only statement is a copy the register allocator coalesces away.
+  - *Spelling:* the walk of the free list is a `for` loop that reads the head again in its first clause,
+    `else { for (next = self->freeHead; next < end; next += link * 4) { ... } }`, after
+    `next = self->freeHead` was tested in the `if`. The second read is shared with the first, the copy into
+    `next` is coalesced, and the `else` block is left holding only the jump to the loop's test, which the
+    block pass retargets. With `for (; next < end; ...)` the three slots are filled. A `return;` closing the
+    last `if` body gives retail's bytes too (the jump to the epilogue is deleted) and has no reason.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x30cb80).
 
 ### Delay slots (EE GCC)
 

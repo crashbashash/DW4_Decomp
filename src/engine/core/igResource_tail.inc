@@ -60,6 +60,66 @@ void igResource_ReleaseDefaults(igResource *self) {
     igObject_ReleaseDefaults((int)self);
 }
 
+/* The pool the resource assigns to its files: the configured one, else the resource's own allocator. */
+#define RESOURCE_POOL(self, pool) ((self)->pool != 0 ? (igObject *)(self)->pool : (igObject *)igObject_GetAllocator((int)(self)))
+
+/* Returns the directory named `path`, else creates its IGB file (configured like the resource's
+ * files, in the resource's pools) and reads it synchronously through the search paths. */
+void *igResource_GetOrLoadDirectory(igResource *self, int path) {
+    igIGBFile *o;
+    igObject *pool;
+    int *old;
+    int v;
+    o = (igIGBFile *)igResource_GetDirectory(self, path).p;
+    if (o != 0) {
+        igDirectory_AddLoadedRef((igDirectoryView *)o);
+        return o;
+    }
+    igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create((int)RESOURCE_POOL(self, _temporaryMemoryPool)));
+    file.p->_sharingState = self->_IGBSharingState;
+    file.p->_forceChunkSize = self->_IGBChunkSize;
+    file.p->_useMemoryPoolAssignmentsState = self->_useMemoryPoolAssignmentsState;
+    pool = RESOURCE_POOL(self, _temporaryMemoryPool);
+    o = file.p;
+    if (pool != 0) pool->_refCount = pool->_refCount + 1;
+    REL_O(o->_temporaryMemoryPool)
+    o->_temporaryMemoryPool = (int)pool;
+    pool = RESOURCE_POOL(self, _dataMemoryPool);
+    o = file.p;
+    if (pool != 0) pool->_refCount = pool->_refCount + 1;
+    REL_O(o->_dataMemoryPool)
+    o->_dataMemoryPool = (int)pool;
+    pool = RESOURCE_POOL(self, _objectMemoryPool);
+    o = file.p;
+    if (pool != 0) pool->_refCount = pool->_refCount + 1;
+    REL_O(o->_objectMemoryPool)
+    o->_objectMemoryPool = (int)pool;
+    if (self->_asyncLoadState == 1) {
+        file.p->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
+    }
+    file.p->_validState = 0;
+    file.p->_loadPendingState = 1;
+    o = file.p;
+    if (g_stringPool[0] == 0) {
+        v = ((int)StringPool_Allocate(16));
+        if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
+        g_stringPool[0] = v;
+    }
+    v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    old = (int *)o->_name;
+    if (old != 0) {
+        int *hd = old - 2;
+        int c = old[-1] - 1;
+        old[-1] = c;
+        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
+    }
+    o->_name = v;
+    file.p->_managingResource = (int)self;
+    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
+    igResource_AddDirectory((int *)self, (int)file.p);
+    return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
+}
+
 void *igResource_LoadDirectory(igResource *self, int path) {
     igResult queued;
     igObject *r;
@@ -232,6 +292,83 @@ int igResource_GetDefaultResource(void) {
     return *(int *)((char *)((*(void **)0x586DC8)) + 64);
 }
 
+/* Returns the `wanted`th info object (counting from 0) of the kind named `metaName` in the resource's
+ * directory `name`, or 0. */
+int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const char *metaName, int wanted) {
+    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, (int)name);
+    igSmartPointer<igObject> meta((igObject *)igObjectSystem_FindMetaByNameDefault(metaName), kRetainReference);
+    int found;
+    unsigned int i;
+    if (directory.get() == 0 || meta.get() == 0) {
+        return 0;
+    }
+    found = 0;
+    for (i = 0; i < (unsigned int)igDirectory_GetInfoCount(directory.get()); i++) {
+        if (igObject_IsKindOf((void *)igDirectory_GetInfo(directory.get(), i), (igMetaObject *)meta.get()) != 0) {
+            if (found++ == wanted) {
+                return igDirectory_GetInfo(directory.get(), i);
+            }
+        }
+    }
+    return 0;
+}
+
+static inline igObjectDirEntryView *AsObjectDirEntry(void *p) {
+    if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) { return (igObjectDirEntryView *)p; }
+    return 0;
+}
+
+/* Replaces every object of the class named `fromName` in the directory by a new instance of the
+ * class named `toName`, copying the fields the two classes share by name and kind beyond igObject's;
+ * a converted object that is an igInfo is also added to the directory's info list. */
+void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromName, const char *toName) {
+    igMetaObject *fromMeta;
+    igMetaObject *toMeta;
+    int count;
+    int i;
+    int fieldCount;
+    int field;
+    igObjectDirEntryView *entry;
+    if (directory != 0) {
+        fromMeta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(fromName);
+        toMeta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(toName);
+        if (fromMeta != 0) {
+            count = directory->_count;
+            for (i = 0; i < count; i++) {
+                entry = AsObjectDirEntry(igDirectory_GetEntry((int *)directory, i));
+                if (entry != 0 && igObject_IsKindOf((void *)entry->_ref, fromMeta) != 0) {
+                    if (toMeta == 0) return;
+                    igSmartPointer<igObject> source((igObject *)entry->_ref, kRetainReference);
+                    igSmartPointer<igObject> target((igObject *)igMetaObject_CreateInstanceDefault(toMeta), kRetainReference);
+                    {
+                        /* drop the reference the creation returned */
+                        igObject *created = target.p;
+                        created->_refCount = created->_refCount - 1;
+                        if (((unsigned long long)(long long)created->_refCount & 0x7fffffULL) == 0) igObject_Destroy(created);
+                    }
+                    fieldCount = igMetaObject_GetFieldCount(fromMeta);
+                    for (field = igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]); field < fieldCount; field++) {
+                        igMetaField *from = (igMetaField *)igMetaObject_GetFieldAt(fromMeta, field);
+                        igMetaField *to = (igMetaField *)igMetaObject_FindFieldByName(toMeta, (const char *)from->_fieldName);
+                        if (to != 0) {
+                            bool compatible = igObject_IsKindOf(to, ((igObjectDispatchView *)from)->getMeta()) != 0;
+                            /* matching construct: the negation is materialised (sltu; xori; bnez); `!compatible`
+                             * folds into the branch, and only the explicit xor keeps it (understanding-shapes.md,
+                             * "A negated flag ... normalises first") */
+                            if (compatible ^ true) continue;
+                            igMetaField_ShallowCopy((int)from, (int)((char *)target.p + to->_offset - from->_offset), (int)source.p);
+                        }
+                    }
+                    igDirectory_ReplaceReference((igDirectoryView *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
+                    if (igObject_IsKindOf(target.p, (igMetaObject *)g_igInfo_metaObject[0]) != 0) {
+                        igDirectory_AddInfo(directory, target.p);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void igResource_WrapRootInSceneInfo(int arg0) {
     int s0m, s1m;
     void *s1;
@@ -275,3 +412,16 @@ void igResource_WrapRootInSceneInfo(int arg0) {
     }
 }
 
+/* With _autoCompatibility, brings directory `name` up to date: converts its igSceneWrapper objects
+ * to igSceneInfo, wraps a bare root in one and marks the directory compatible. */
+void igResource_FinishAsyncLoad(igResource *self, int name) {
+    igDirectory *directory;
+    if (self->_autoCompatibility != 0) {
+        directory = (igDirectory *)igResource_GetDirectory(self, name).p;
+        if (directory != 0) {
+            igDirectory_ConvertObjectsOfType(directory, (const char *)text_igSceneWrapper, (const char *)text_igSceneInfo);
+            igResource_WrapRootInSceneInfo((int)directory);
+            directory->_compatibleState = 1;
+        }
+    }
+}

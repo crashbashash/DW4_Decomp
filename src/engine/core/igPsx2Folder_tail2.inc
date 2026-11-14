@@ -112,39 +112,38 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
     return resolved;
 }
 
-int igPsx2_LoadIopModule(int a, int b, int c, int d, int e) {
-    int sp1C;
-    return igPsx2_LoadIopModuleEx((int *)a, b, c, d, e, &sp1C);
+igResult igPsx2_LoadIopModule(char *name, int kind, int argLength, const char *args) {
+    int moduleId;
+    return igPsx2_LoadIopModuleEx(name, kind, argLength, args, &moduleId);
 }
 
-int igPsx2_LoadIopModuleEx(int *arg0, int arg1, int arg2, int arg3, int arg4, int *arg5) {
-    int var_v0;
-    char *temp_v0;
+/* Resolves the module path, loads it over SIF (retrying cdrom loads until they succeed) and
+ * returns the IOP module id through moduleId. */
+igResult igPsx2_LoadIopModuleEx(char *name, int kind, int argLength, const char *args, int *moduleId) {
+    int id;
+    char *path;
 
-    if (arg3 > 0xFB) {
-        *arg0 = g_resultFailure.v;
-        return;
+    if (argLength > 0xFB) {
+        return g_resultFailure;
     }
-    temp_v0 = igPsx2_ResolveModulePath((char *)arg1, arg2);
-    if (temp_v0 == 0) {
-        *arg0 = g_resultFailure.v;
-        return;
+    path = igPsx2_ResolveModulePath(name, kind);
+    if (path == 0) {
+        return g_resultFailure;
     }
-    if (*temp_v0 == 0x63) {
+    if (*path == 'c') {
         do {
-            var_v0 = sceSifLoadModule(temp_v0, arg3, arg4);
-        } while (var_v0 < 0);
+            id = sceSifLoadModule(path, argLength, args);
+        } while (id < 0);
     } else {
-        var_v0 = sceSifLoadModule(temp_v0, arg3, arg4);
+        id = sceSifLoadModule(path, argLength, args);
     }
-    if (var_v0 < 0) {
-        Memory_FreeBufferAliasA(temp_v0);
-        *arg0 = g_resultFailure.v;
-        return;
+    if (id < 0) {
+        Memory_FreeBufferAliasA(path);
+        return g_resultFailure;
     }
-    *arg5 = var_v0;
-    Memory_FreeBufferAliasA(temp_v0);
-    *arg0 = g_resultSuccess.v;
+    *moduleId = id;
+    Memory_FreeBufferAliasA(path);
+    return g_resultSuccess;
 }
 
 void FUN_0032d070(void)

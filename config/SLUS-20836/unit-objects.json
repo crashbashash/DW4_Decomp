@@ -19943,6 +19943,7 @@
       "igCompoundMetaField_IsAlikeDeep": "0x002d5780",
       "igCompoundMetaField_IsAlikeShallow": "0x002d5820",
       "igCompoundMetaField_IsAlikeIgnore": "0x002d58c0",
+      "FUN_002d5960": "0x002d5960",
       "igCompoundMetaField_WriteRawFieldMem": "0x002d59f0",
       "igCompoundMetaField_ReadRawFieldMem": "0x002d5ad0",
       "igCompoundMetaField_SwapBytes": "0x002d5bb0",
@@ -19971,6 +19972,7 @@
       "List_RemoveWordAt": "0x002d6cf0",
       "List_BinarySearchWords": "0x002d6d70",
       "List_LowerBound": "0x002d6e60",
+      "igRendererOrderedList_Append": "0x002d6f50",
       "igDependencyOrderedList_AddDependency": "0x002d7090",
       "igDependencyOrderedList_Rebuild": "0x002d7130",
       "igRendererOrderedList_Clear": "0x002d7690",
@@ -20930,6 +20932,7 @@
       "igResource_StartAsyncLoading": "0x00308c80",
       "igResource_StopAsyncLoading": "0x00308e00",
       "igResource_ReleaseDefaults": "0x00308f00",
+      "igResource_GetOrLoadDirectory": "0x00308fb0",
       "igResource_LoadDirectory": "0x003092f0",
       "igResource_ReadFileWithSearchPaths": "0x00309640",
       "igResource_IsDirectoryLoaded": "0x00309740",
@@ -20937,7 +20940,10 @@
       "igResource_ClearDirectories": "0x00309870",
       "igResource_RemoveIGBFiles": "0x00309970",
       "igResource_GetDefaultResource": "0x00309a50",
+      "igDirectory_GetNthObjectOfType": "0x00309a60",
+      "igDirectory_ConvertObjectsOfType": "0x00309c90",
       "igResource_WrapRootInSceneInfo": "0x00309fe0",
+      "igResource_FinishAsyncLoad": "0x0030a260",
       "igShortArrayMetaField_SwapBytes": "0x0030a300",
       "igShortArrayMetaField_GetSize": "0x0030a360",
       "igShortMetaField_ValueFromString": "0x0030a370",
@@ -20962,6 +20968,7 @@
       "igStringMetaField_GetTypeSize": "0x0030aa00",
       "igStringMetaField_SetDefaultText": "0x0030aa10",
       "igStringMetaField_GetRawFieldMemSize": "0x0030aab0",
+      "igStringMetaField_ReadRawValue": "0x0030ab20",
       "igStringMetaField_WriteRawValue": "0x0030add0",
       "igStringMetaField_SwapValue": "0x0030ae90",
       "igStringArrayMetaField_SwapValue": "0x0030aea0",
@@ -20999,6 +21006,7 @@
       "igStringObj_Erase": "0x0030bbf0",
       "igStringObj_Split": "0x0030bce0",
       "igStrcasecmp": "0x0030bed0",
+      "igStringObj_Trim": "0x0030bee0",
       "igStringObjList_BinarySearch": "0x0030bfa0",
       "StringTable_Construct": "0x0030c0c0",
       "StringTable_Destroy": "0x0030c120",
@@ -21020,6 +21028,7 @@
       "StringChunk_FreeStorage": "0x0030ca30",
       "StringChunk_TakeBlock": "0x0030ca40",
       "StringChunk_MergeBlocks": "0x0030cb30",
+      "StringChunk_ReturnBlock": "0x0030cb80",
       "StringChunk_AllocateObject": "0x0030cce0",
       "StringChunk_DeleteObject": "0x0030cd00",
       "igStringRefList_ReleaseDefaults": "0x0030cd10",
@@ -21214,6 +21223,8 @@
       "igElfFile_GetSectionHeader": "0x00320ea0",
       "igElfFile_FindSectionByType": "0x00320ee0",
       "igElfFile_GetSymbol": "0x00320f70",
+      "igElfFile_LoadSymbols": "0x00320fb0",
+      "igElfFile_LoadSymbolTable": "0x003212b0",
       "igElfFile_DemangleName": "0x00321530",
       "igElfFile_Demangle": "0x00321780",
       "igElfFile_LookupValueName": "0x00321c10",
@@ -21480,7 +21491,10 @@
       "igPsx2File_Tell": "0x0032c080",
       "igPsx2File_InitDefaultPrefix": "0x0032c0c0",
       "igPsx2File_MakeCompletePath": "0x0032c110",
+      "igPsx2File_MakeCompleteFilename": "0x0032c190",
       "igPsx2File_JoinPrefix": "0x0032c240",
+      "igPsx2Folder_ListFiles": "0x0032c4d0",
+      "igPsx2Folder_ListDirectories": "0x0032c700",
       "igPsx2Folder_ListEntries": "0x0032c930",
       "igPsx2Folder_TrimPath": "0x0032cac0",
       "igPsx2_ResolveModulePath": "0x0032cb50",
@@ -21506,13 +21520,19 @@
       "Gap__Core__igPsx2Media__constructFields": "0x0032dc10",
       "Gap__Core__igPsx2Media__destructFields": "0x0032dcf0",
       "Gap__Core__igPsx2Media__userConstruct": "0x0032dd50",
+      "Gap__Core__igPsx2Media__resetFields": "0x0032dd80",
       "igPsx2Media_SetDevicePrefix": "0x0032ded0",
       "igPsx2Media_AllocateHandle": "0x0032df20",
       "igPsx2Media_FreeHandle": "0x0032e060",
       "igPsx2Media_MakeDevicePath": "0x0032e130",
       "igPsx2Media_Open": "0x0032e4d0",
+      "igPsx2Media_Close": "0x0032e690",
+      "igPsx2Media_Write": "0x0032e720",
       "igPsx2Media_SendIoRequest": "0x0032e950",
+      "igPsx2Media_Read": "0x0032ea10",
       "igPsx2Media_ReadAsync": "0x0032eac0",
+      "igPsx2Media_Seek": "0x0032eb70",
+      "igPsx2Media_Tell": "0x0032ec40",
       "Gap__Core__igPsx2Media__vfunc_32": "0x0032ecf0",
       "igPsx2Semaphore_SetInitialCount": "0x0032ed00",
       "igPsx2Semaphore_GetInitialCount": "0x0032ed40",
@@ -21530,6 +21550,8 @@
       "SystemAllocator_Deactivate": "0x0032f330",
       "FUN_0032f370": "0x0032f370",
       "SystemAllocator_GetStatistics": "0x0032f380",
+      "SystemAllocator_CollectHardwareRegions": "0x0032f4b0",
+      "SystemAllocator_CollectProgramRegions": "0x0032f5d0",
       "SystemAllocator_Sbrk": "0x0032f780",
       "igPsx2Thread_IsEqual": "0x0032f840",
       "igPsx2Thread_InitDefaults": "0x0032f860",
@@ -23507,31 +23529,6 @@
       "__dt__19SystemAllocatorBaseFv": "0x00328e00"
     },
     "symbol": "CoreLibrary_MarkRegistered"
-  },
-  "0x00308fb0": {
-    "duplicates": {
-      "__dt__20igSmartPointer<3Obj>Fv": "0x00130140",
-      "__dt__20igSmartPointer<3Res>Fv": "0x0025a230"
-    }
-  },
-  "0x00309a60": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
-    }
-  },
-  "0x0032c4d0": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__15FolderObjectRefFv": "0x00130140",
-      "__dt__15FolderStringRefFv": "0x00130720"
-    }
-  },
-  "0x0032c700": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__15FolderObjectRefFv": "0x00130140",
-      "__dt__15FolderStringRefFv": "0x00130720"
-    }
   },
   "0x00331f30": {
     "whole_file": true,

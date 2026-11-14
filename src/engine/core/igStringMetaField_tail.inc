@@ -140,6 +140,48 @@ int igStringMetaField_GetRawFieldMemSize(igStringMetaField *arg0, int arg1) {
     return var_s0;
 }
 
+/* The pool a temporary buffer for a field of `owner` comes from. */
+static inline igMemoryPoolView *temporaryPool(void *owner) {
+    igMemoryPoolView *pool = igObject_GetAllocator((int)owner);
+    return g_useOwnerAllocator != 0 ? pool : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
+}
+
+/* The raw form of a string field: a byte count, then the characters padded to a word. */
+struct RawStringValue { int size; char text[4]; };
+
+/* Reads a string written by igStringMetaField_WriteRawValue. Returns the bytes consumed. */
+int igStringMetaField_ReadRawValue(void *self, void *value, void *source, int directory, int swap) {
+    int consumed = 0;
+    igStringRef *string = (igStringRef *)value;
+    RawStringValue *raw = (RawStringValue *)source;
+    int size = raw->size;
+    if (swap != 0) {
+        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&size, 1);
+    }
+    consumed += 4;
+    if (size > 0) {
+        const char *p = raw->text;
+        int remaining = size;
+        while (remaining && *p) {
+            remaining--;
+            p++;
+        }
+        if (remaining != 0) {
+            *string = raw->text;
+        } else {
+            char *copy = (char *)temporaryPool(self)->Allocate(size + 1);
+            memcpy(copy, raw->text, size);
+            copy[size] = 0;
+            *string = copy;
+            temporaryPool(self)->Free(copy);
+        }
+        consumed += size;
+    } else {
+        *string = (char *)0;
+    }
+    return consumed;
+}
+
 int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, int swap) {
  char **v; char *cursor; int size; int len;
  v = (char **)value;
@@ -449,11 +491,11 @@ bool igStringObj_ParseBool(igStringObj *o, char *out) {
 }
 
 void igStringObj_SetInt(int arg0, int arg1, int arg2) {
-    igStringObj_Format(arg0, arg2, arg1);
+    igStringObj_Format((igStringObj *)arg0, (const char *)arg2, arg1);
 }
 
 void igStringObj_SetFloat(int string, void *format, float value) {
-    igStringObj_Format(string, (int)format, value);
+    igStringObj_Format((igStringObj *)string, (const char *)format, value);
 }
 
 void igStringObj_SetBool(int arg0, int arg1, int arg2) {
@@ -477,11 +519,11 @@ void igStringObj_SetBool(int arg0, int arg1, int arg2) {
     igStringObj_Set(arg0, (int)var_a1_2);
 }
 
-int igStringObj_Format(int arg0, int arg1, ...) {
+int igStringObj_Format(igStringObj *self, const char *format, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    return igStringObj_VFormat(arg0, arg1, (int)((char*)__builtin_next_arg(arg1) - off));
+    return igStringObj_VFormat((int)self, (int)format, (int)((char*)__builtin_next_arg(format) - off));
 }
 
 int igStringObj_VFormat(int arg0, int extra1, int extra2) {
@@ -642,7 +684,7 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
     }
     list->_count = 0;
     if (src->_buffer != 0) {
-        char *buf = ((char *)igObject_DuplicateString((int)src, src->_buffer));
+        char *buf = igObject_DuplicateString(src, (const char *)src->_buffer);
         for (unsigned i = 0; i < src->_length; i++) {
             if ((char)delim == buf[i]) buf[i] = 0;
         }
@@ -670,6 +712,27 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
 int igStrcasecmp(const char *s1, const char *s2)
 {
     return strcasecmp(s1, s2);
+}
+
+/* Strips leading and trailing white space (ctype _S) from the string. */
+void igStringObj_Trim(igStringObj *self) {
+    int n;
+    char *copy;
+    char *p;
+    if (self->_buffer != 0) {
+        copy = igObject_DuplicateString(self, (const char *)self->_buffer);
+        n = strlen(copy) - 1;
+        while (n >= 0 && (_ctype_[copy[n] + 1] & 8)) {
+            copy[n] = 0;
+            n -= 1;
+        }
+        p = copy;
+        while (*p != 0 && (_ctype_[*p + 1] & 8)) {
+            p += 1;
+        }
+        igStringObj_Set((int)self, (int)p);
+        Memory_FreeBuffer(copy);
+    }
 }
 
 int igStringObjList_BinarySearch(igStringObjList *self, int key, int (*cmp)(char *, int)) {

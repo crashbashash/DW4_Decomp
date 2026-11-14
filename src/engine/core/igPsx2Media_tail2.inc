@@ -79,6 +79,35 @@ void Gap__Core__igPsx2Media__userConstruct(int arg0) {
     igMedia_SetDefaultMedia(arg0);
 }
 
+/* Loads the sound and igFileIO IOP modules, binds the file RPC server, hooks the SIF completion
+ * handler and picks the host or cdrom device prefix. */
+void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
+    Gap__Core__igObject__resetFields((int)self, extra1);
+    if (igPsx2_LoadIopModule((char *)text_libsd_irx, 1, 0, 0) != g_resultSuccess) {
+        return;
+    }
+    if (igPsx2_LoadIopModule((char *)text_igFileIO_irx, 2, 0, 0) != g_resultSuccess) {
+        return;
+    }
+    self->_initialized = 1;
+    igPsx2IopRpcConnection_Bind(self->_connection, 0x12114);
+    igPsx2IopRpcConnection_CallWithData(self->_connection, 19, (int)self->_headAndTailBuffer, 0, 0);
+    DIntr();
+    sceSifAddCmdHandler(4, (void *)igPsx2Media_RpcCompletionHandler, 0);
+    EIntr();
+    DAT_00587360 = (MediaRpcShared *)self;
+    self->_sema->create();
+    if (DAT_00587338[0] == 0) {
+        GPR_00554de0 = 0;
+        if (DAT_00587368 == 0) {
+            DAT_00587368 = text_host0;
+        }
+    } else {
+        GPR_00554de0 = 1;
+        DAT_00587368 = (int *)text_cdrom0;
+    }
+}
+
 void igPsx2Media_SetDevicePrefix(int arg0) {
     if (strncasecmp(arg0, &text_cdrom[0], 5) == 0) {
         GPR_00554de0 = 1;
@@ -280,8 +309,7 @@ void igPsx2Media_Open(int *result, igPsx2MediaView *media, int slot, int **name,
     strcpy((char *)(command + 1), path);
     {
         int *reply = (int *)media->_commandBuffer;
-        igResult sent;
-        igPsx2IopRpcConnection_Call(&sent.v, media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
+        igResult sent = igPsx2IopRpcConnection_Call(media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
         fd = *reply;
         handle->fd = fd;
     }
@@ -294,8 +322,73 @@ void igPsx2Media_Open(int *result, igPsx2MediaView *media, int slot, int **name,
     *result = *word;
 }
 
-int igPsx2Media_SendIoRequest(igPsx2MediaView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
-    int sp4C;
+/* Closes the IOP descriptor of handle `slot`. */
+void igPsx2Media_Close(igPsx2MediaView *self, int slot) {
+    int reply;
+    self->_sema->wait(1);
+    igPsx2IopRpcConnection_CallWithData(self->_connection, 3, ((MediaHandleRow *)((char *)self->_handlePool->rows + slot * 12))->fd, &reply, 1);
+    self->_sema->signal();
+}
+
+/* Writes `size` bytes from `data` to handle `slot`. A buffer that is not 64-byte aligned is staged
+ * through the 0x8000-byte write buffer chunk by chunk; returns the bytes written or the IOP's
+ * negative error. */
+int igPsx2Media_Write(igPsx2MediaView *self, int slot, char *data, int size) {
+    int written;
+    MediaIoRequest *request;
+    int *reply;
+    int result;
+    int row;
+    int left;
+    int chunk;
+    self->_sema->wait(1);
+    request = self->_commandBuffer;
+    reply = &request->kind;
+    if ((int)data & 0x3F) {
+        if (self->_writeBuffer == 0) {
+            self->_writeBuffer = (char *)igObject_MallocAligned((int)self, 0x8000, 0x40);
+        }
+        row = slot * 3 * 4;
+        left = size;
+        while (left != 0) {
+            chunk = 0x8000;
+            if (left < 0x8001) {
+                chunk = left;
+            }
+            memcpy(self->_writeBuffer, data, chunk);
+            request->fd = ((MediaHandleRow *)((char *)self->_handlePool->rows + row))->fd;
+            request->buffer = (int)self->_writeBuffer;
+            request->size = chunk;
+            request->reserved = 0;
+            SyncDCache(self->_writeBuffer, self->_writeBuffer + chunk);
+            igPsx2IopRpcConnection_Call(self->_connection, 7, (int)request, 0x10, (int)reply, 0x10, 1);
+            written = *reply;
+            if (written != chunk) {
+                if (written < 0) {
+                    self->_sema->signal();
+                    return *reply;
+                }
+                self->_sema->signal();
+                return *reply + (size - left);
+            }
+            left -= chunk;
+            data += chunk;
+        }
+        self->_sema->signal();
+        return size;
+    }
+    request->fd = ((MediaHandleRow *)((char *)self->_handlePool->rows + slot * 12))->fd;
+    request->buffer = (int)data;
+    request->size = size;
+    request->reserved = 0;
+    SyncDCache(data, data + size);
+    igPsx2IopRpcConnection_Call(self->_connection, 7, (int)request, 0x10, (int)reply, 0x10, 1);
+    result = *reply;
+    self->_sema->signal();
+    return result;
+}
+
+int igPsx2Media_SendIoRequest(igPsx2MediaView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int *arg7) {
     int temp_a0;
     MediaIoRequest *temp_s1;
     int *p;
@@ -308,18 +401,62 @@ int igPsx2Media_SendIoRequest(igPsx2MediaView *arg0, int arg1, int arg2, int arg
     temp_s1->kind = arg5;
     temp_s1->callback = arg4;
     temp_s1->context = arg6;
-    temp_s1->extra = arg7;
+    temp_s1->extra = (int)arg7;
     SyncDCache(arg2, arg2 + arg3);
     temp_a0 = (int)arg0->_headAndTailBuffer;
     SyncDCache(temp_a0, temp_a0 + 0x80);
-    igPsx2IopRpcConnection_Call(&sp4C, arg0->_connection, 6, (int)temp_s1, 0x20, (int)p, 0x10, 1);
+    igPsx2IopRpcConnection_Call(arg0->_connection, 6, (int)temp_s1, 0x20, (int)p, 0x10, 1);
     return *p;
+}
+
+/* Reads `size` bytes of handle `slot` into `buffer`, sleeping until the completion handler wakes
+ * this thread; returns the byte count the IOP reported. */
+int igPsx2Media_Read(igPsx2MediaView *self, int slot, int buffer, int size) {
+    int done;
+    self->_sema->wait(1);
+    done = 0;
+    igPsx2Media_SendIoRequest(self, slot, buffer, size, 0, 3, GetThreadId(), &done);
+    self->_sema->signal();
+    SleepThread();
+    return done;
 }
 
 void igPsx2Media_ReadAsync(igPsx2MediaView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     arg0->_sema->wait(1);
     igPsx2Media_SendIoRequest(arg0, arg1, arg2, arg3, arg4, 3, arg5, 0);
     arg0->_sema->signal();
+}
+
+/* Moves handle `slot`'s file position (lseek `whence`); returns 0 or -1. */
+int igPsx2Media_Seek(igPsx2MediaView *self, int slot, int offset, int whence) {
+    int *request;
+    int *reply;
+    int position;
+    self->_sema->wait(1);
+    request = (int *)self->_commandBuffer;
+    reply = request + 4;
+    request[0] = ((MediaHandleRow *)((char *)self->_handlePool->rows + slot * 12))->fd;
+    request[1] = offset;
+    request[2] = whence;
+    igPsx2IopRpcConnection_Call(self->_connection, 4, (int)request, 16, (int)reply, 16, 1);
+    position = *reply;
+    self->_sema->signal();
+    return -(position < 0);
+}
+
+/* Returns handle `slot`'s file position (an lseek of 0 from the current position). */
+int igPsx2Media_Tell(igPsx2MediaView *self, int slot) {
+    MediaIoRequest *request;
+    self->_sema->wait(1);
+    request = self->_commandBuffer;
+    request->fd = ((MediaHandleRow *)((char *)self->_handlePool->rows + slot * 12))->fd;
+    request->buffer = 0;
+    request->size = 1;
+    slot = (int)&request->kind;
+    igPsx2IopRpcConnection_Call(self->_connection, 4, (int)request, 16, slot, 16, 1);
+    slot = *(int *)slot;
+    self->_sema->signal();
+    return slot;
 }
 
 int Gap__Core__igPsx2Media__vfunc_32(void) {

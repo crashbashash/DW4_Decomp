@@ -173,6 +173,50 @@ void SystemAllocator_GetStatistics(SystemAllocator *self, ThreadMemoryMap *map) 
     map->reserved = 0;
 }
 
+/* Allocates a zeroed DumpRegion row for [start, start + size) into `row`. */
+static inline void newRegion(DumpRegion *&row, unsigned start, unsigned size) {
+    DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
+    if (e != 0) e = DumpRegion_Init(e);
+    row = e;
+    e->start = start;
+    row->size = size;
+}
+
+/* Labels `row` and inserts it into `regions`, kept sorted by start address. */
+static inline void insertRegion(igDataList *regions, DumpRegion *&row, const char *annotation, const char *poolName) {
+    DumpRegion_SetAnnotation(row, annotation);
+    DumpRegion_SetPoolName(row, poolName);
+    List_InsertWords(regions, List_LowerBound(regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+}
+
+/* The PS2's fixed memories: the 32 MB of main RAM and the 16 KB scratchpad at 0x70000000. */
+void SystemAllocator_CollectHardwareRegions(SystemAllocator *self, igDataList *regions) {
+    DumpRegion *row;
+    SystemAllocatorBase_CollectHardwareRegions((int)self);
+    newRegion(row, 0, 0x02000000);
+    insertRegion(regions, row, text_Memory_Main, text_Platform);
+    newRegion(row, (unsigned)DAT_70000000, (unsigned)DAT_00004000);
+    insertRegion(regions, row, text_Memory_Fast, text_Platform);
+}
+
+/* The program sections the base class does not know: static constructors, vtables, small data. */
+void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *regions) {
+    DumpRegion *row;
+    char *vtables;
+    SystemAllocatorBase_CollectProgramRegions(self, (int)regions);
+    DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
+    if (e != 0) e = DumpRegion_Init(e);
+    row = e;
+    e->start = (unsigned)__ctors_start__;
+    vtables = DAT_00522480;
+    row->size = vtables - __ctors_start__;
+    insertRegion(regions, row, text_Section_Static_Cons, text_Program);
+    newRegion(row, (unsigned)vtables, __exception_table_start__ - vtables);
+    insertRegion(regions, row, text_Section_VTables, text_Program);
+    newRegion(row, (unsigned)DAT_00554974, (unsigned)DAT_0000050d);
+    insertRegion(regions, row, text_Section_Small_Data, text_Program);
+}
+
 int SystemAllocator_Sbrk(int arg0, int arg1) {
     int s1 = sbrk(arg1);
     int low;

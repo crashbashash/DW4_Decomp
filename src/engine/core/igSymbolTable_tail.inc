@@ -133,7 +133,7 @@ void igSymbolTable_GetSymbolAtAddress(int *out, igSymbolTableView *o, int a, int
     *out = r.v;
 }
 
-void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->vfunc_26(b)) { case -1: o->vfunc_29(a, b, c, d); break; default: break; } }
+void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->vfunc_26(b)) { case -1: o->addSymbol((const char *)a, (void *)b, c, d); break; default: break; } }
 
 unsigned int igSymbolTable_HashAddress(igSymbolTable *arg0, int arg1) {
     unsigned int temp_a2;

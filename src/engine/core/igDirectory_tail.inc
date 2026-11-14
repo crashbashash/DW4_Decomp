@@ -41,6 +41,57 @@ int List_LowerBound(igDataList *l, void *key, Cmp cmp) {
     return lo;
 }
 
+typedef igSmartPointer<igTDataList<igObject *> > igObjectListRef;
+
+/* Index of object in list, or -1. */
+static inline int indexOfObject(const igTDataList<igObject *> *list, igObject *object) {
+    int i;
+    for (i = 0; i < list->_count; i++) {
+        if (object == list->_data[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* Inserts object at index, holding a reference to it. */
+static inline void insertRetained(igTDataList<igObject *> *list, int index, igObject *object) {
+    if (object != 0) {
+        object->_refCount++;
+    }
+    List_InsertWords((igDataList *)list, index, 1, &object);
+}
+
+/* Adds object to the list, in front of the first listed object that the order ranks after it. An
+ * object the order does not rank goes at the end, and with `unique` set one already listed is left
+ * alone. */
+void igRendererOrderedList_Append(igDependencyOrderedListView *self, igObject *object, int unique) {
+    int rank = indexOfObject(self->_order, object);
+    if (rank < 0) {
+        if (unique != 0) {
+            ObjectList_AppendUniqueRetained(self->_objectList, object);
+        } else {
+            ObjectList_AppendRetained((igObjectList *)self->_objectList, object);
+        }
+        return;
+    }
+    int j = 0;
+    for (int i = 0; i < ((igObjectListRef &)self->_objectList)->count(); i++) {
+        igObject *listed = ((igObjectListRef &)self->_objectList)->get(i);
+        if (unique != 0 && listed == object) {
+            return;
+        }
+        while (j < rank && listed != self->_order->_data[j]) {
+            j++;
+        }
+        if (!(j < rank)) {
+            insertRetained(self->_objectList, i, object);
+            return;
+        }
+    }
+    ObjectList_AppendRetained((igObjectList *)((igObjectListRef &)self->_objectList).get(), object);
+}
+
 static inline int count_of(const igTDataList<DependencyPair> *list) { return list->_count; }
 
 /* Index of the dependency (k1, k2), or -1. */

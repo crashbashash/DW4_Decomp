@@ -177,11 +177,135 @@ int igElfFile_GetSymbol(void *arg0, int arg1) {
     if (base != 0 && arg1 >= 0 && arg1 <= *(int *)((char *)arg0 + 92)) return (int)(base + arg1*16); return 0;
 }
 
+/* Loads the symbol table (the first SHT_SYMTAB section) and its string table, which is the SHT_STRTAB
+ * section after it, before it or two after it that is not the section-name table; swaps the symbols
+ * when the file's byte order is not the machine's. */
+igResult igElfFile_LoadSymbols(ElfFileView *self) {
+    int index = igElfFile_FindSectionByType(self, 2, 0);
+    ElfSection *symbols;
+    ElfSection *before;
+    ElfSection *after;
+    ElfSection *next;
+    int expected;
+    if (index == -1) {
+        igReport_Printf(DAT_004fde00, self->path);
+        igReport_Flush();
+        self->Close();
+        return g_resultFailure;
+    }
+    symbols = igElfFile_GetSectionHeader(self, index);
+    before = igElfFile_GetSectionHeader(self, index - 1);
+    after = igElfFile_GetSectionHeader(self, index + 1);
+    next = igElfFile_GetSectionHeader(self, index + 2);
+    if (after != 0 && after->type == 3 && after->size != self->sectionNamesSize) {
+        self->stringsSize = after->size;
+        if (self->Load(after->offset, after->size, &self->strings) == g_resultFailure) {
+            return g_resultFailure;
+        }
+    } else if (before != 0 && before->type == 3 && before->size != self->sectionNamesSize) {
+        self->stringsSize = before->size;
+        if (self->Load(before->offset, before->size, &self->strings) == g_resultFailure) {
+            return g_resultFailure;
+        }
+    } else if (next != 0 && next->type == 3 && next->size != self->sectionNamesSize) {
+        self->stringsSize = next->size;
+        if (self->Load(next->offset, next->size, &self->strings) == g_resultFailure) {
+            return g_resultFailure;
+        }
+    } else {
+        igReport_Printf(DAT_004fde20, self->path);
+        igReport_Flush();
+        self->Close();
+        return g_resultFailure;
+    }
+    self->symbolCount = (unsigned)symbols->size >> 4;
+    if (self->Load(symbols->offset, symbols->size, &self->symbols) == g_resultFailure) {
+        return g_resultFailure;
+    }
+    expected = (GPR_005549b4 == 18) ? 2 : 1;
+    if (self->endian != expected) {
+        igElfFile_SwapSymbols((unsigned char *)self->symbols, self->symbolCount);
+    }
+    return g_resultSuccess;
+}
+
 static inline void prepareSink(igSymbolTableView *table, int count, unsigned low, unsigned top) {
     igSymbolTable_SetCapacity((int)table, count);
     igSymbolTable_SetHashCapacity((int)table, count * 4);
     igSymbolTable_SetAddressRange(table, low & ~1023, top);
     igSymbolTable_ReserveStorage(table);
+}
+
+/* Fills `table` with the file's symbols (only global, weak and local functions when
+ * `functionsOnly`), sized and address-ranged from a first pass over them. */
+igResult igElfFile_LoadSymbolTable(ElfFileView *self, igSymbolTableView *table, int functionsOnly) {
+    char text[264];
+    unsigned low;
+    int j;
+    int i;
+    ElfSymbol *entry;
+    int count;
+    unsigned high;
+    low = -1U;
+    high = 0;
+    count = 0;
+    if (self->symbolCount == 0) {
+        if (self->LoadSymbols() == g_resultFailure) {
+            return g_resultFailure;
+        }
+    }
+    if (self->symbolCount == 0) {
+        igReport_Printf(text_No_symbols_in_s, self->path);
+        igReport_Flush();
+        return g_resultFailure;
+    }
+    if (functionsOnly == 0) {
+        count = self->symbolCount;
+    }
+    for (i = 0; i < self->symbolCount; i++) {
+        ElfSymbol *sym = (ElfSymbol *)igElfFile_GetSymbol(self, i);
+        unsigned value = sym->value;
+        if (value == 0 || value == -1U) {
+            continue;
+        }
+        if (functionsOnly != 0) {
+            int info = sym->info;
+            int bind = info >> 4;
+            if (!(!((unsigned)(bind - STB_GLOBAL) > 1) || bind == STB_LOCAL)) {
+                continue;
+            }
+            if ((info & 15) != STT_FUNC) {
+                continue;
+            }
+            count++;
+        }
+        if (value < low) {
+            low = value;
+        }
+        if (high < value) {
+            high = value;
+        }
+    }
+    high = (high & ~1023) + 1024;
+    prepareSink(table, count, low, high);
+    for (j = 0; j < self->symbolCount; j++) {
+        entry = (ElfSymbol *)igElfFile_GetSymbol(self, j);
+        if (functionsOnly != 0) {
+            int info = entry->info;
+            int bind = info >> 4;
+            if (bind == STB_GLOBAL) {
+            } else if (bind == STB_WEAK) {
+            } else if (bind != STB_LOCAL) {
+                continue;
+            }
+            if ((info & 15) != STT_FUNC) {
+                continue;
+            }
+        }
+        self->Demangle((char *)self->strings + entry->name, text, 255, 0);
+        table->addSymbol(text, (void *)entry->value, entry->size, 0);
+    }
+    return g_resultSuccess;
 }
 
 void igElfFile_DemangleName(const char *in, char *out, int size) {

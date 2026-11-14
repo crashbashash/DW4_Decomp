@@ -806,10 +806,10 @@ void igObject_FreeMemory(int object, int storage) {
 /* Copy a C string into storage owned by `self`: allocate strlen + 1 bytes with the igObject
  * storage allocator (vtable slot 216, igObject_AllocateStorage), strcpy into it and return the
  * copy. */
-int igObject_DuplicateString(int self, int string) {
-    int copy;
+char *igObject_DuplicateString(void *self, const char *string) {
+    char *copy;
 
-    copy = igObject_AllocateStorage(self, strlen(string) + 1);
+    copy = (char *)igObject_AllocateStorage((int)self, strlen(string) + 1);
     strcpy(copy, string);
     return copy;
 }

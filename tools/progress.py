@@ -47,6 +47,7 @@ from unitprofiles import asm_body_names
 import asmsources
 import sourceapprovals
 import datamap
+import srctext
 import re
 import statistics
 import sys
@@ -799,11 +800,12 @@ _READABLE = {}
 
 def _function_texts(path):
     """({name: source text of that definition}, whole file, the file's global definitions) for one
-    file, comments and strings blanked; the global definitions are the file minus every function
+    file as the compiler sees it (a whole-file unit's `#include "src/..."` fragments expanded),
+    comments and strings blanked; the global definitions are the file minus every function
     definition."""
     from typed_coverage import strip_comments_and_strings
     try:
-        raw = open(path, errors="replace").read()
+        raw = srctext.read(path, errors="replace")
     except OSError:
         return {}, "", ""
     out = {}

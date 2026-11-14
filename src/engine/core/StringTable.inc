@@ -284,7 +284,7 @@ int StringChunk_AllocateToken(StringChunk *head, int size, StringChunk **chunkOu
  * its owner is told so it can drop the chunk. */
 void StringChunk_ReleaseHeader(StringChunk *self, int header) {
     StringTable_RemoveHeader(self->table, header);
-    StringChunk_ReturnBlock(self, header, strlen(header + 8) + 9);
+    StringChunk_ReturnBlock(self, (char *)header, strlen(header + 8) + 9);
     if (self->isEmpty != 0) {
         StringTable_NotifyEmptyChunk(self->table, self);
     }
@@ -358,6 +358,50 @@ int StringChunk_MergeBlocks(StringChunk *chunk, unsigned short *previous,
         }
         right[-1] += leftFooter[1];
         return right[-1] * 4;
+    }
+}
+
+/* Give `bytes` at `block` back to the free list, which is kept in address order, and merge the
+ * block with free neighbours on either side. */
+void StringChunk_ReturnBlock(StringChunk *self, char *block, unsigned int bytes) {
+    unsigned short units = (bytes + 3) >> 2;
+    int size = units * 4;
+    char *end = block + size;
+    char *previous = 0;
+    char *next = self->freeHead;
+    char *beforePrevious = 0;
+    if (next == 0 || end < next) {
+        self->freeHead = end;
+    } else {
+        unsigned short link;
+        for (next = self->freeHead; next < end; next += link * 4) {
+            link = ((StringBlockHeader *)(next - 4))->next;
+            beforePrevious = previous;
+            previous = next;
+            if (link == 0) {
+                next = 0;
+                break;
+            }
+        }
+    }
+    StringBlockHeader *footer = (StringBlockHeader *)(end - 4);
+    footer->size = units;
+    footer->next = next == 0 ? 0 : (next - end) >> 2;
+    if (previous != 0) {
+        ((StringBlockHeader *)(previous - 4))->next = (end - previous) >> 2;
+        if (end - size == previous) {
+            size = StringChunk_MergeBlocks(self, (unsigned short *)beforePrevious, (unsigned short *)previous, (unsigned short *)end);
+            previous = beforePrevious;
+        }
+    }
+    if (next != 0 && next - ((StringBlockHeader *)(next - 4))->size * 4 == end) {
+        size = StringChunk_MergeBlocks(self, (unsigned short *)previous, (unsigned short *)end, (unsigned short *)next);
+    }
+    if (0 <= self->largestFree && self->largestFree < size) {
+        self->largestFree = size;
+    }
+    if (size == self->capacity) {
+        self->isEmpty = 1;
     }
 }
 

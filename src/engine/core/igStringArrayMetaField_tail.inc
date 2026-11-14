@@ -11,7 +11,7 @@ int igStringArrayMetaField_ReadRawFieldMem(igStringArrayMetaField *arg0, void *p
     int start = arg2;
     int i;
     for (i = 0; i < arg0->_num; i++) {
-        arg2 = arg2 + igStringMetaField_ReadRawValue(arg0, arg1, arg2, arg3, arg4);
+        arg2 = arg2 + igStringMetaField_ReadRawValue((void *)arg0, (void *)arg1, (void *)arg2, arg3, arg4);
         arg1 += 4;
     }
     return arg2 - start;

@@ -255,6 +255,16 @@ int igCompoundMetaField_IsAlikeIgnore(igCompoundMetaField *arg0, int arg1, int a
     return 1;
 }
 
+int FUN_002d5960(igCompoundMetaField *self, int object) {
+    int size = 0;
+    int padding = 0;
+    int i;
+    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
+        size += ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->vfunc_49(object) + padding;
+    }
+    return size;
+}
+
 int igCompoundMetaField_WriteRawFieldMem(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
     int sum = 0;
     int n;

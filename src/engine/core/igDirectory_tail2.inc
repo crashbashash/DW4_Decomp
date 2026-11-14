@@ -142,7 +142,9 @@ static inline void setSlot(igTDataList<int> *l, int i, igObjectDispatchView *v) 
     }
 }
 
-int igDirectory_ReplaceReference(igDirectoryView *self, igObjectDispatchView **field, igObjectDispatchView **value) {
+/* Points every reference to `field`'s object (directory slots and the object-reference fields of
+ * the directory's objects) at `value`'s; returns the number replaced. */
+int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igVirtualObject> &field, const igSmartPointer<igVirtualObject> &value) {
     int changed = 0;
     int i;
     int j;
@@ -150,16 +152,16 @@ int igDirectory_ReplaceReference(igDirectoryView *self, igObjectDispatchView **f
     igObjectDispatchView *current;
     igObjectDirEntry *item;
     for (i = 0; i < self->_count; i++) {
-        current = *field;
+        current = ((igObjectDispatchView *)field.p);
         if ((igObjectDispatchView *)igDirectory_GetObject(self, i) == (igObjectDispatchView *)current) {
             if (self->_refList != 0) {
-                releaseBound(*field);
-                if (*value != 0) {
-                    (*value)->_refCount = (*value)->_refCount + 1;
+                releaseBound(((igObjectDispatchView *)field.p));
+                if (((igObjectDispatchView *)value.p) != 0) {
+                    ((igObjectDispatchView *)value.p)->_refCount = ((igObjectDispatchView *)value.p)->_refCount + 1;
                 }
-                setSlot(self->_refList, i, *value);
+                setSlot(self->_refList, i, ((igObjectDispatchView *)value.p));
             } else {
-                self->_data[i]->vfunc_23((int)*value);
+                self->_data[i]->vfunc_23((int)((igObjectDispatchView *)value.p));
             }
             changed++;
         }
@@ -174,8 +176,8 @@ int igDirectory_ReplaceReference(igDirectoryView *self, igObjectDispatchView **f
                 igObjectRefMetaField *f;
                 f = castRefField(((igObjectRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)source.get())->getMeta(), j)));
                 if (f != 0) {
-                    if (*(igObjectDispatchView **)((char *)source.get() + f->_offset) == *field) {
-                        igObjectRefMetaField_Assign(f, (void *)(source.get()), (igObject *)(*value));
+                    if (*(igObjectDispatchView **)((char *)source.get() + f->_offset) == ((igObjectDispatchView *)field.p)) {
+                        igObjectRefMetaField_Assign(f, (void *)(source.get()), (igObject *)((igObjectDispatchView *)value.p));
                         changed++;
                     }
                 }

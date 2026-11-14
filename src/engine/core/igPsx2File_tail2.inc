@@ -431,6 +431,15 @@ char *igPsx2File_MakeCompletePath(char *path) {
     return (char *)Memory_Reallocate(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
+/* Joins the file's device prefix and `path`, keeps the result as _completeFilename and returns it. */
+char *igPsx2File_MakeCompleteFilename(igPsx2FileView *self, char *path) {
+    igStringRef name = igPsx2File_JoinPrefix(self->_prefix, path);
+    retainString(name.p);
+    releaseString(self->_completeFilename);
+    self->_completeFilename = name.p;
+    return name.p;
+}
+
 static inline void append_32c240(const igSmartPointer<igStringObj> &ref, char *chars) {
     igStringObj *text = ref.p;
     int length = text->_length;
@@ -471,5 +480,63 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
     }
     igStringRef result(chars);
     return result;
+}
+
+/* Lists the folder's files: each sceDread entry's full path is stat'ed and directories skipped. */
+igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
+    FolderEntry entry;
+    FolderFileStat stat;
+    int handle = sceDopen(self->_folderName);
+    if (handle < 0) {
+        return igSmartPointer<igObject>(0, kRetainReference);
+    }
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    while (sceDread(handle, &entry) != 0) {
+        /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
+         * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
+        igStringObj_Format((igStringObj *)path.p, DAT_004f9a78, self->_folderName, (char *)(&entry.stat + 1));
+        char *full = (char *)((igStringObj *)path.p)->_buffer;
+        full = (full == 0) ? g_stringObjEmptyText[0] : full;
+        if (sceGetstat(full, &stat) != 0) {
+            continue;
+        }
+        if ((stat.mode & SCE_STM_FMT) == SCE_STM_FDIR) {
+            continue;
+        }
+        igStringRef name(entry.name);
+        StringList_AppendRetained(list.p, &name);
+    }
+    sceDclose(handle);
+    return list;
+}
+
+/* Lists the folder's subdirectories, the same walk keeping only S_IFDIR entries. */
+igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
+    FolderEntry entry;
+    FolderFileStat stat;
+    int handle = sceDopen(self->_folderName);
+    if (handle < 0) {
+        return igSmartPointer<igObject>(0, kRetainReference);
+    }
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    while (sceDread(handle, &entry) != 0) {
+        /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
+         * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
+        igStringObj_Format((igStringObj *)path.p, DAT_004f9a78, self->_folderName, (char *)(&entry.stat + 1));
+        char *full = (char *)((igStringObj *)path.p)->_buffer;
+        full = (full == 0) ? g_stringObjEmptyText[0] : full;
+        if (sceGetstat(full, &stat) != 0) {
+            continue;
+        }
+        if ((stat.mode & SCE_STM_FMT) != SCE_STM_FDIR) {
+            continue;
+        }
+        igStringRef name(entry.name);
+        StringList_AppendRetained(list.p, &name);
+    }
+    sceDclose(handle);
+    return list;
 }
 
