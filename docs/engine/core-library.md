@@ -173,10 +173,11 @@ warnings and errors (to `g_reportOutputFile` when set); `igErrorHandler` is the 
 ## What is open
 
 - **Resisting shapes.** [Understanding a resisting shape](understanding-shapes.md) records the causes found in
-  this unit (most entries name `CoreLibrary.cpp`); its open entries for core are the two `xori 1` in a row
-  (the semaphore functions below) and the malloc pool's free path (`0x3236a0`), which matches on PS2 only with
-  a variable its GameCube sibling reuses.
-- **Functions without source.** Five functions in the range have no definition in `src/` and link from the
+  this unit (most entries name `CoreLibrary.cpp`); its open entry for core is the malloc pool's free path
+  (`0x3236a0`), which matches on PS2 only with a variable its GameCube sibling reuses. The semaphore functions'
+  `sltu; xori; xori; andi 0xff` is solved: a `volatile` asm statement reads the interrupt status, and its block
+  skips the peephole pass that normally folds the pair (approval `#psx2-semaphore-interrupt-status`).
+- **Functions without source.** Three functions in the range have no definition in `src/` and link from the
   retail image:
   - `igDependencyOrderedList_TopologicalSort` (`0x2d7280`): gathers the nodes of the dependency pairs into a
     sorted pointer list and moves the nodes nothing depends on into the ordered list, flagging a cycle when it
@@ -184,10 +185,6 @@ warnings and errors (to `g_reportOutputFile` when set); `igErrorHandler` is the 
   - `igDriverDatabase_SetSubPropertyValue` (`0x2d9740`): creates a property's name and value lists when
     missing, then replaces the value of an interned name or appends the pair; the setter of
     `igDriverDatabase_GetSubPropertyValue`.
-  - `igPsx2Semaphore_Signal` (`0x32ef20`): signals the semaphore, choosing `SignalSema` or `iSignalSema` from
-    the interrupt-enable bit, which retail tests with the open `sltu; xori; xori; andi 0xff` sequence.
-  - `igPsx2Semaphore_Wait` (`0x32f060`): `WaitSema` or `PollSema` by the block flag, with the same
-    interrupt-state test.
   - `igPsx2Thread_ThreadEntry` (`0x32f7f0`): the entry `igPsx2Thread_Start` gives the kernel; calls the thread
     function with its argument, stores the result and finishes the thread through the thread manager. Retail
     zero-extends the incoming argument from 64 bits (`dsll32`/`dsrl32`) before using it as the thread object.

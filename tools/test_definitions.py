@@ -40,6 +40,11 @@ class KAndR(unittest.TestCase):
         self.assertIn("return 1", kept)
         self.assertNotIn("three", kept)
 
+    def test_a_block_head_written_in_both_arms_of_a_conditional_opens_once(self):
+        text = ("#ifdef __cplusplus\ntypedef struct A : public B {\n#else\ntypedef struct A {\n#endif\n    int x;\n} A;\n"
+                "static inline int one(void) { return 1; }\nint two(void) { return one(); }\n")
+        self.assertEqual(names(text), ["one", "two"])
+
     def test_one_line_macros_with_braces_are_not_definitions(self):
         text = ("#define ADD(x) do { (x)++; } while (0)\n#define DROP(x) do { (x)--; } while (0)\n"
                 "#define LONG(x) do { \\\n (x) = 0; } while (0)\nint f(int a) { ADD(a); DROP(a); return a; }\n")

@@ -94,37 +94,82 @@ def _text_count(text):
     return _count(text)
 
 
+@functools.lru_cache(maxsize=64)
+def _use_sites(text):
+    """(offsets of the asm statements and builtin calls `_count` counts, offsets of its volatile keywords)."""
+    spaced = _spaced(text)
+    asm = [start for start, _e, body in inline_asm.statements(text) if not inline_asm.is_hardware(body)]
+    asm += [m.start() for m in _BUILTIN.finditer(spaced)]
+    return tuple(asm), tuple(m.start() for m in _VOLATILE.finditer(spaced))
+
+
+def _reaching_count(text, name):
+    """`_count(_reachable_text(text, name))` without scanning the text again for each of a library unit's
+    thousands of members: a use reaches the function when the reachable text still holds its first character."""
+    reachable = _reachable_text(text, name)
+    asm, volatile = _use_sites(text)
+    return (sum(1 for at in asm if reachable[at] == text[at]),
+            sum(1 for at in volatile if reachable[at] == text[at]))
+
+
 def _reachable_text(text, name):
     """The text of function `name` with every other top-level definition blanked, except the inline
     helpers it reaches by name: those are compiled into it. A file-scope declaration or macro
     stays only when the function or a kept helper names something it declares, directly or through
     a type definition or macro it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
     global reaches the functions that use it, and a `volatile` member the functions that reach its type."""
-    defs = units.definitions(text)
+    defs, bodies, statements, blanked = _reach_plan(text)
     if not defs:
         return text
-    bodies = {nm: (s, e) for nm, s, e in defs}
     if name not in bodies:
         raise KeyError("%s is not defined here" % name)
     keep, pending = {name}, [name]
     while pending:
-        s, e = bodies[pending.pop()]
-        for word in set(_WORD.findall(_blank(text[s:e]))):
-            if word in bodies and word not in keep:
-                s2, _e2 = bodies[word]
-                if _INLINE.search(text[s2:text.index("{", s2)]):
-                    keep.add(word)
-                    pending.append(word)
-    out = list(text)
-    for nm, s, e in defs:
-        if nm not in keep:
-            for k in range(s, e):
-                if out[k] != "\n":
-                    out[k] = " "
-    kept = [bodies[nm] for nm in keep]
+        for word in bodies[pending.pop()][2]:
+            if word in bodies and word not in keep and bodies[word][4]:
+                keep.add(word)
+                pending.append(word)
     used = set()
-    for s, e in kept:
-        used.update(_NAME.findall(_blank(text[s:e])))
+    for nm in keep:
+        used.update(bodies[nm][3])
+    reached, grew = set(), True
+    while grew:
+        grew = False
+        for k, (_s, _e, keys, passes) in enumerate(statements):
+            if k not in reached and keys & used:
+                reached.add(k)
+                used |= passes
+                grew = True
+    gone = sorted([(s, e) for nm, s, e in defs if nm not in keep]
+                  + [(s, e) for k, (s, e, _keys, _passes) in enumerate(statements) if k not in reached])
+    out, at = [], 0
+    for s, e in gone:
+        if e <= at:
+            continue
+        s = max(s, at)
+        out.append(text[at:s])
+        out.append(blanked[s:e])
+        at = e
+    out.append(text[at:])
+    return "".join(out)
+
+
+_NOT_NEWLINE = re.compile(r"[^\n]")
+
+
+@functools.lru_cache(maxsize=64)
+def _reach_plan(text):
+    """What `_reachable_text` needs of one source text, built once: a library unit's thousands of members each
+    ask about the same text. -> (definitions, {name: (start, end, words, names, is inline)}, the file-scope
+    statements as (start, end, keys, passes), the text with everything but its newlines spaced out)."""
+    defs = units.definitions(text)
+    if not defs:
+        return defs, {}, [], ""
+    bodies = {}
+    for nm, s, e in defs:
+        body = _blank(text[s:e])
+        bodies[nm] = (s, e, frozenset(_WORD.findall(body)), frozenset(_NAME.findall(body)),
+                      bool(_INLINE.search(text[s:text.index("{", s)])))
     statements = []
     for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs]):
         body = _blank(text[s:e])
@@ -141,20 +186,7 @@ def _reachable_text(text, name):
             # a variable or function declaration passes on its type names, not its parameter names
             keys, passes = words, set(_NAME.findall(_unnest(body, "()"))) - _C_KEYWORDS
         statements.append((s, e, keys, passes))
-    reached, grew = set(), True
-    while grew:
-        grew = False
-        for k, (_s, _e, keys, passes) in enumerate(statements):
-            if k not in reached and keys & used:
-                reached.add(k)
-                used |= passes
-                grew = True
-    for k, (s, e, _keys, _passes) in enumerate(statements):
-        if k not in reached:
-            for j in range(s, e):
-                if out[j] != "\n":
-                    out[j] = " "
-    return "".join(out)
+    return defs, bodies, statements, _NOT_NEWLINE.sub(" ", text)
 
 
 _C_KEYWORDS = frozenset(
@@ -289,7 +321,7 @@ def uses(path, name):
     text, counted, _offsets = _source(path)
     # blanking only removes text, so a source with nothing to count has nothing to count for any of its
     # functions; a whole library unit holds thousands, and its reachable text is costly to build
-    a, v = _count(_reachable_text(text, name)) if counted else (0, 0)
+    a, v = _reaching_count(text, name) if counted else (0, 0)
     return {"asm": a, "volatile": v, "asm-function": int(name in unitprofiles.asm_body_names(path))}
 
 

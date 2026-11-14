@@ -82,6 +82,43 @@ void igPsx2Semaphore_Destroy(int *result, int *semaphore) {
     *result = *p;
 }
 
+/* The EE's interrupt-enable state: Status.IE (bit 0) masked by Status.EIE (bit 16, shifted down onto it).
+ * Bit 0 of the result is set while interrupts are enabled, that is, outside an interrupt handler.
+ *
+ * The statement is `volatile`, as Sony's Status reads are, and names its registers. The compiler skips its
+ * peephole pass for the block that holds a `volatile` asm statement, so in both callers the conversion to
+ * `bool` keeps both of its `xori 1` and its `andi 0xff`, and the receiver is read through its saved copy
+ * (docs/engine/understanding-shapes.md has the compiler's side). */
+static inline int interruptEnableStatus(void) {
+    int status;
+    __asm__ volatile("mfc0 $5, $12\n\tsrl $6, $5, 16\n\tand $5, $5, $6\n\tmove %0, $5" : "=r"(status));
+    return status;
+}
+
+/* igPsx2Semaphore::signal. A thread signals through the kernel call; an interrupt handler uses the
+ * interrupt-safe call, and only while the count is below the maximum. */
+void igPsx2Semaphore_Signal(int *result, igPsx2Semaphore *self) {
+    const igPsx2Semaphore *semaphore = self;  /* matching construct: the later reads go through a const view, which keeps its own register */
+    int status = self->_semaID;
+    bool interruptsEnabled = interruptEnableStatus() & 1;
+    const int *p;
+    if (semaphore->_semaID == -1) {
+        *result = g_resultFailure.v;
+        return;
+    }
+    if (interruptsEnabled) {
+        status = SignalSema(semaphore->_semaID);
+    } else {
+        SemaParam counts;
+        iReferSemaStatus(semaphore->_semaID, &counts);
+        if (counts.currentCount != counts.maxCount) {
+            status = iSignalSema(semaphore->_semaID);
+        }
+    }
+    p = status >= 0 ? &g_resultSuccess.v : &g_resultFailure.v;
+    *result = *p;
+}
+
 void igPsx2Semaphore_ISignal(int *result, void *semaphore) {
     const int *p;
     int semaId;
@@ -97,6 +134,37 @@ void igPsx2Semaphore_ISignal(int *result, void *semaphore) {
         }
         *result = *p;
     }
+}
+
+/* igPsx2Semaphore::wait. A thread waits (inside a stopping point, so the thread manager can suspend it)
+ * or polls; an interrupt handler polls with the interrupt-safe call, whose result is not kept. */
+void igPsx2Semaphore_Wait(int *result, igPsx2Semaphore *self, int block) {
+    const igPsx2Semaphore *semaphore = self;  /* matching construct: the const view, as in signal */
+    int status = self->_semaID;
+    bool interruptsEnabled = interruptEnableStatus() & 1;
+    const int *p;
+    if (semaphore->_semaID == -1) {
+        *result = g_resultFailure.v;
+        return;
+    }
+    if (interruptsEnabled) {
+        if (block) {
+            igPsx2ThreadView *thread = g_threadManager[0]->GetCurrentThread();
+            igPsx2Thread_EnterStoppingPoint(thread);
+            status = WaitSema(semaphore->_semaID);
+            igPsx2Thread_LeaveStoppingPoint(thread);
+        } else {
+            status = PollSema(semaphore->_semaID);
+        }
+    } else {
+        SemaParam counts;
+        iReferSemaStatus(semaphore->_semaID, &counts);
+        if (counts.currentCount != counts.maxCount) {
+            iPollSema(semaphore->_semaID);
+        }
+    }
+    p = status >= 0 ? &g_resultSuccess.v : &g_resultFailure.v;
+    *result = *p;
 }
 
 void igPsx2Semaphore_WaitBlocking(int *result, void *semaphore) {

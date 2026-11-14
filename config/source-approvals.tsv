@@ -225,3 +225,7 @@ volatile	ADXT_Init	2	#adxt-ready-count
 asm-function	__throw	1	#metrowerks-runtime-asm-functions
 asm	_sceMpegDispatchMpegCallback	2	#sony-gp-and-syscall-asm
 volatile	_sceMpegDispatchMpegCallback	1	#sony-gp-and-syscall-asm
+asm	igPsx2Semaphore_Signal	1	#psx2-semaphore-interrupt-status
+volatile	igPsx2Semaphore_Signal	1	#psx2-semaphore-interrupt-status
+asm	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status
+volatile	igPsx2Semaphore_Wait	1	#psx2-semaphore-interrupt-status

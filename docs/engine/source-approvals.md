@@ -497,7 +497,8 @@ register before taking a node from a shared pool, and one waits on the COP0 cond
   The compiler picks that register and never picks `a2` by itself, so the shift and the `and` were text of the
   statement, with `a2` named and clobbered: `mfc0 %0,$12; srl $6,%0,16; and %0,%0,$6`. Reading the register alone
   and testing it in C gives the same instructions with other registers. The builtin form names the read's
-  register by number, which explains the varying register of the five copies less well than `%0` does.
+  register by number, which explains the varying register of the five copies less well than `%0` does. (In the
+  two semaphore copies the operand form gives `v1` where retail has `a1`: #psx2-semaphore-interrupt-status.)
 * The statement is written without `volatile`: both functions match with or without it, so the keyword went.
 * The wait is five `nop`s, a `bc0f` back to its start and a `nop`, then a return with no frame: 36 bytes, the only
   `bc0f` in the executable. It is a `static` C function holding one `asm { }` block. Its only caller,
@@ -589,6 +590,45 @@ needs no `asm` row; the row is for its keyword.
   doubles and the body is 12 instructions shorter (352 bytes against 400). One keyword is enough: on either of
   two separate statements, or on the one statement, the function matches.
 * No pragma gives the retail shape without the keyword: nine variants, all a different size.
+
+### psx2-semaphore-interrupt-status
+
+The signal and wait functions of the PS2 semaphore class (0x32ef20 and 0x32f060) in the core whole file reach one
+`__asm__ volatile` statement through the inline `interruptEnableStatus` in
+`src/engine/core/igPsx2Semaphore_tail2.inc`: the COP0 Status read of #dma-channel-cop0, here with both registers
+named and the keyword kept. Each function has an `asm` row and a `volatile` row.
+
+* The owner approved, for these two functions, the status check written in assembly, and chose the `volatile`
+  statement over the equivalent pragma form below (2026-11-14). A COP0 register read has no C spelling, and each
+  function needs the test: outside an interrupt handler it makes the thread's kernel call (`SignalSema`,
+  `WaitSema` or `PollSema`), inside one the interrupt-safe call (`iReferSemaStatus`, then `iSignalSema` or
+  `iPollSema`).
+* The three instructions are those of the engine's other three copies of the test (#dma-channel-cop0): the read,
+  the shift into `a2`, the `and` back into the read's register. In both semaphore functions that register is
+  `a1`. With it left to the compiler (the `"=r"` operand of the statement in `src/engine/dmaChannel.c`) it is
+  `v1` and the mask lands in `a1`, two instructions off in each function; with `$5` named the bytes match. So
+  this copy names both registers and copies the result to its operand (`move %0, $5`), a copy the register
+  allocator removes: `mfc0 $5, $12; srl $6, $5, 16; and $5, $5, $6; move %0, $5`. It needs no clobber list: the
+  functions match with and without `: : "$5", "$6"`, so the list went.
+* The keyword changes the bytes. The compiler skips its peephole pass for the block that holds an
+  `__asm__ volatile` statement (a plain `__asm__`, an `asm { }` block and an `asm` function do not stop it), and
+  three things in each function need the pass off: the two `xori 1` of the conversion to `bool`, the `andi 0xff`
+  after them, and the receiver read through its saved copy. Stripped, the conversion folds to one `sltu` and
+  signal is 12 bytes short. Sony writes its Status reads the same way,
+  `__asm__ volatile("mfc0 %0, $12" : "=r"(status))` (#sony-libkernl-cop0-and-syscall).
+* It is an inline C function holding the statement, not an `asm` function: b52 never expands an `asm` function
+  (`static inline asm`, `inline asm`, `asm inline`, `#pragma always_inline on`, with or without its `jr ra`: the
+  caller gets a `jal`), and retail has the three instructions inside both callers.
+* Nothing after the `and` is assembly. Retail's `andi; sltu; xori; xori; andi 0xff` is the compiled conversion
+  `bool interruptsEnabled = interruptEnableStatus() & 1;`. Written in assembly instead, the same five
+  instructions come out in another order: an instruction that names a hard register (`zero` in `sltu`) is a
+  barrier for the scheduler, and the next statement's `lw a0,12(s1)` then follows the `sltu` where retail has
+  it right after the `and`.
+* An equivalent spelling exists and retail cannot tell the two apart: the same three instructions in an
+  `asm { }` block (`mfc0 a1, $12; srl a2, a1, 16; and a1, a1, a2; move status, a1`) with each function inside
+  `#pragma push` / `#pragma peephole off` / `#pragma pop`. It gives the same bytes for both functions and would
+  cost two optimiser pragmas in the [debt ratchet](debt-ratchet.md) in place of the keyword's rows.
+  [Understanding shapes](understanding-shapes.md#types-and-values) has the compiler's side.
 
 ### enbaya-vu0-macro
 

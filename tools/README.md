@@ -73,6 +73,8 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`retype_struct_member.py`](retype_struct_member.py) | bank the near-miss tier's mechanical source shapes |
 | [`scan_near.py`](scan_near.py) | compile every unmatched build/m2c draft, record its instruction diff |
 | [`queue_diag.py`](queue_diag.py) | cluster the unmatched queue by *why* each function misses |
+| [`notes_for.py`](notes_for.py) | print everything already written about one function or datum, by symbol or address: its check category, profile row, unit-objects role and other config rows, the comments and pragmas at its definition, and every document line naming it (an understanding-shapes line labelled with its lever); run before attacking a function |
+| [`levers.py`](levers.py) | the "Causes found" of `docs/engine/understanding-shapes.md` as `data/levers.jsonl` (generated: `--write` after editing the document, `--check` in `make hygiene`); `--symptom "<diff in machine terms>"` ranks the entries sharing it, `--section`, `--id`, and `--format prompt` for a block to hand to an agent |
 | [`asm_body_gen.py`](asm_body_gen.py) | emit a function as an MWCC `asm` body from the retail bytes, for local study (asm bodies are not committed) |
 | [`guard_b_gen.py`](guard_b_gen.py) | emit the 76-byte 'guard variant B' accessor as C++ |
 | [`register_gen.py`](register_gen.py) | emit the `<Class>_Register` registrars from the retail assembly |

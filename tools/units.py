@@ -154,6 +154,9 @@ def _cached_definitions(text):
     return tuple(_definitions(text))
 
 
+_DIRECTIVE = re.compile(r"#[ \t]*(\w+)")
+
+
 def _definitions(text):
     """-> [(name, start, end)] top-level function definitions, in file order.
 
@@ -166,9 +169,23 @@ def _definitions(text):
     out, depth, stmt_start, i, n = [], 0, 0, 0, len(clean)
     in_extern = False
     starts = []
+    conditionals = []
     while i < n:
         c = clean[i]
-        if c == "#" and depth == 0 and not clean[clean.rfind("\n", 0, i) + 1:i].strip():
+        line_start = c == "#" and not clean[clean.rfind("\n", 0, i) + 1:i].strip()
+        if line_start:
+            # both arms of a conditional start at the same nesting: a struct head written once per
+            # language (`#ifdef __cplusplus` / `struct A : public B {` / `#else` / `struct A {` / `#endif`)
+            # opens one block, and counting both would leave every later definition nested
+            directive = _DIRECTIVE.match(clean, i)
+            word = directive.group(1) if directive else ""
+            if word.startswith("if"):
+                conditionals.append(depth)
+            elif word in ("else", "elif") and conditionals:
+                depth = conditionals[-1]
+            elif word == "endif" and conditionals:
+                conditionals.pop()
+        if line_start and depth == 0:
             # a preprocessor line, continuations included, is skipped whole: braces in a
             # one-line `#define F(x) do { ... } while (0)` would otherwise end the statement
             # early and make the next directive read as a definition of `F`

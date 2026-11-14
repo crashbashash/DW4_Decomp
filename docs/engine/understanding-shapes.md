@@ -11,7 +11,10 @@ method and the reasons.
 
 ## The procedure
 
-1. **State the difference exactly.** Compile the candidate under the unit's profile and read the instruction diff:
+1. **State the difference exactly.** First read what is already written about the function:
+   `python3 tools/notes_for.py <symbol or 0xVA>` prints its status, profile and unit-objects row, the comments at its
+   definition and every document line naming it, an earlier refutation or open note included. Then compile the
+   candidate under the unit's profile and read the instruction diff:
    `python3 tools/check.py --no-cache --function 0xVA --cand <file>`, and for a whole listing
    `python3 tools/project.py cc --version SLUS-20836 <symbol> <file> <out>.o` then
    `mipsel-linux-gnu-objdump -dr -z <out>.o` (`-z` keeps runs of zero words: the three `nop`s MWCC pads a short
@@ -25,7 +28,8 @@ method and the reasons.
    wrote out by hand.
 3. **Form a hypothesis about the source**, not about the bytes: "the original reads the list through a `const`
    accessor", "the original used the class's inline `next()`". A hypothesis names a construct a programmer would
-   write.
+   write. `python3 tools/levers.py --symptom "<the difference in machine terms>"` lists the causes below that share
+   the symptom (`--format prompt` for a block to hand to an agent); each is a hypothesis until it reproduces here.
 4. **Test one variable at a time, with controls.** Change one thing, compile, count the differing words. Include
    the controls that tell the hypothesis from its neighbours: the same accessor non-`const`, the same read through a
    pointer instead of a reference, the construct on the other side of the comparison, the construct in both places.
@@ -257,7 +261,9 @@ which classes are game code. Destructor and template names in strings (`::~igSma
 ## Causes found
 
 Each entry: what the bytes show, why the compiler does it, the source spelling, and the unit where it was found.
-Units are named by their source file.
+Units are named by their source file. An entry is a `- **Title.**` bullet under a `###` heading with *Symptom:*,
+*Cause:*, *Spelling:* and *Unit:* parts (or prose and a *Unit:*); `data/levers.jsonl` is generated from them by
+`python3 tools/levers.py --write`, which is run after every edit here (`make hygiene` fails while it is stale).
 
 ### Loads shared or kept apart (b52)
 
@@ -279,7 +285,7 @@ Units are named by their source file.
   - *Cause:* an inline test taking `const igMetaObject *` gives the common-subexpression pass the address
     `meta + 36` to share between the update and the test.
   - *Spelling:* the test takes the object by reference, `hasValidity(const igMetaObject &meta, int bit)`.
-  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0, not landed: its frame is open, below).
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0).
 
 - **Two loads merge only when their types agree, `const` included.**
   - *Symptom:* a store reloads a pointer field the walk already loaded (`_data` loaded twice).
@@ -643,13 +649,6 @@ Units are named by their source file.
   test branches straight to the shared `move v0,s1` in front of the epilogue, which is the body enclosed in
   `if (!inProgress) { ... }` with one `return list;` after it. *Unit:* `src/engine/core/CoreLibrary.cpp`
   (0x2fe9c0).
-- **Open: a 256-byte buffer filled by a 15-byte copy.** 0x2fe9c0 builds a debug name: retail copies the 15-byte
-  literal `"igMetaObject: "` into `sp+176` with a block move (`ld`/`lwc1`/`lh`/`lbu`) and `strcat`s the class
-  name onto it, and its frame (448) places that buffer as 256 bytes under the next local. `char name[] = ...`
-  gives the copy but a 192-byte frame; `char name[256] = ...` copies all 256 bytes from a padded literal;
-  `strcpy` and `memcpy` stay calls under every profile tried (`-O4,s`, `-O4,p`, `-opt intrinsics`,
-  `#pragma inline_intrinsics on`, standard prototypes, C and C++); an unused or dead array takes no frame space.
-  With the name buffer aside, the draft matches every other instruction.
 
 ### Types and values
 
@@ -844,14 +843,49 @@ Units are named by their source file.
   from `static inline int hasValidity(...) { return (meta._validity & bit) != 0; }` tested as `if
   (!hasValidity(...))`; the same helper returning `bool` folds into `andi; bnez`, and `== true` compares with
   `1` (`bne v0,v1`). *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0).
-- **Open: `sltu; xori; xori; andi 0xff`.** Two functions (0x32ef20, 0x32f060) compute a `bool` from the COP0
-  status with that sequence; no other function in the executable has two `xori 1` on one register. What the
-  compiler does with the spellings tried: the front end folds `!!b` when `b` is `bool`, and the code generator
-  folds a remaining `ELOGNOT(ELOGNOT(x))` into `sltu` (`x != 0`); a `!` whose `bool` result is converted to
-  `int` or to a char type is followed by `andi 0xff`, and a `!` on a variable or on a char value starts with its
-  own `sltu`. So no source put two `xori` together without an `andi` between them, over some 4,500 generated
-  spellings (helper return types `bool`/`int`/`char`/`unsigned char`, `!`, `== 0`, `?:`, `^ 1`, `if`/`else`,
-  nested helpers, temporaries, assignment and comma expressions).
+- **`sltu; xori; xori; andi 0xff` is an `int`-to-`bool` conversion compiled with the peephole pass off.**
+  - *Symptom:* two functions (0x32ef20, 0x32f060) turn bit 0 of the COP0 status into a `bool` with that
+    sequence; no other function in the executable has two `xori 1` on one register. The same two functions copy
+    their receiver to a saved register and read `_semaID` through that copy (`move s1,a1` … `lw a0,12(s1)`)
+    where every other function keeps reading through the incoming `a1`.
+  - *Cause:* the code generator writes a conversion to `bool` as `x != 0` and two logical nots (`sne; xori 1;
+    xori 1`, fresh temporaries each), and a store into a `bool` as `andi 0xff`. The block peephole pass then
+    removes them. Its `xori` handler (0x512df0) turns the second `xori` into a copy of the first one's source
+    when the value it reads was produced in the same block by an `xori` with the same immediate, that source
+    is not written again in between (0x4bdf10), and the first `xori` does not write its own source
+    (0x511f20); the first then dies, and the `andi 0xff` of a value known to be 0 or 1 becomes a copy as
+    well. The same pass propagates copies (0x512050), which is what replaces a copied parameter by its
+    argument register. Two things skip the pass, and all three effects then appear together (both `xori`, the
+    `andi 0xff`, and the unpropagated copy of the receiver): an `__asm__ volatile(...)` statement, for the
+    block that holds it (a plain `__asm__`, an `asm { }` block and an `asm` function do not stop the pass), and
+    `#pragma peephole off` in force at the function's definition (it has to cover the function the conversion
+    is expanded into; around an inline helper alone it does nothing).
+  - *What does not give it:*
+    - Plain C under the unit's profile: each `!` on a variable starts with its own `sltu`, a nested `!!` is one
+      tree of fresh temporaries, and the pass folds it (some 60,000 generated spellings over three attempts).
+    - An `asm` function: b52 never expands one (`static inline asm`, `inline asm`, `asm inline`,
+      `#pragma always_inline on`, with or without the `jr ra`); the caller gets a `jal`.
+    - The instructions written in an `asm { }` block on a local: a pair in one block survives (the first
+      writes its own source), but an `asm` instruction that names a hard register is a barrier for the
+      scheduler, `sltu x,zero,x` names `zero`, and the `lw a0,12(s1)` of the next statement then comes after
+      the `sltu` where retail has it after the `and`. Retail's order is that of a three-instruction block
+      followed by compiled code.
+  - *The status read names `a1`:* with the read's register left to the compiler (the `"=r"` operand of the
+    statement in `src/engine/dmaChannel.c`, or an `asm { }` block on a local) it is `v1`, with the mask in
+    `a1`; retail has both in `a1`. `mfc0 $5, $12; srl $6, $5, 16; and $5, $5, $6; move %0, $5` gives it, and
+    the `move` is coalesced away. The statement needs no clobber list.
+  - *The receiver's two registers:* with the pass off a `const` copy of the parameter keeps its own register:
+    `const igPsx2Semaphore *semaphore = self;` declared first, the first read through `self` (`lw s0,12(a1)`)
+    and the later ones through the copy.
+  - *Spelling:* the read as one `__asm__ volatile("mfc0 $5, $12\n\tsrl $6, $5, 16\n\tand $5, $5, $6\n\tmove
+    %0, $5" : "=r"(status))` in an inline helper, and `bool interruptsEnabled = interruptEnableStatus() & 1;`
+    in the function. Without the keyword the conversion folds to one `sltu`.
+  - *The equivalent spelling:* the three instructions in an `asm { }` block (`mfc0 a1,$12; srl a2,a1,16; and
+    a1,a1,a2; move status,a1`) with the function inside `#pragma push` / `#pragma peephole off` /
+    `#pragma pop` gives the same bytes for both functions, and retail does not say which the original had.
+    With the pass off for whole functions, the two before the pair (0x32ede0, 0x32eea0) differ and the ones
+    after it, up to 0x32f380, are the same either way.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x32ef20, 0x32f060).
 
 ### Scheduling (b52)
 

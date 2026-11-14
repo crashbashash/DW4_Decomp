@@ -209,11 +209,24 @@ commit.
 
 Sub-agents draft; the integrator verifies and promotes. A sub-agent report lists, per function: address,
 symbol, candidate path (in its scratch directory), the exact `tools/check.py --function` (or `tools/verify.py`)
-command with flags, compiler path and SHA-256, the verifier's last line, and any `config/<GAMEID>/unit-*` rows
-the match needs. The integrator re-runs that command before promoting anything and treats an unreproduced
-claim as unmatched. Brief sub-agents with what matched and readable mean; they never run full builds and
-never write into the repository. An agent briefed on a resisting shape is pointed at
-[understanding a resisting shape](docs/engine/understanding-shapes.md), with the earlier agent's report.
+command with flags, compiler path and SHA-256, the candidate source's SHA-256, the verifier's last line, and
+any `config/<GAMEID>/unit-*` rows the match needs. The integrator re-runs that command before promoting
+anything and treats an unreproduced claim as unmatched. Brief sub-agents with what matched and readable mean;
+they never run full builds and never write into the repository. An agent briefed on a resisting shape is
+pointed at [understanding a resisting shape](docs/engine/understanding-shapes.md), with the earlier agent's
+report.
+
+A matching agent works each function the same way:
+
+- **Read what is already written first.** `python3 tools/notes_for.py <symbol or 0xVA>` prints its status,
+  profile, unit-objects row, source comments and every document line naming it; read each earlier refutation
+  and open note it shows, and do not retry a refuted spelling without a new reason. Then look the difference up:
+  `python3 tools/levers.py --symptom "<the difference in machine terms>"` lists the known causes sharing it.
+- **Fix the difference in order:** control flow and call order, then load and store order, then instruction
+  selection, then registers, then the frame. A later kind often moves when an earlier one is fixed.
+- **Stop on a budget.** About 30 attempts or 45 minutes on one function without the differing-word count
+  falling ends the attempt. The function is handed on with a note in the report: the best C, the remaining
+  diff, and the spellings tried with their results.
 
 The sub-agent's model is set by the kind of work. This is a requirement, not a preference:
 
