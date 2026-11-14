@@ -1,3 +1,111 @@
+/* Opens the file in `mode` (0-3 text, 4-7 binary: read, write, append, read-write; 8 read). A relative
+ * name is tried under each entry of the search path list until a device opens it. A text file is read
+ * whole into the buffer. */
+void Gap__Core__igMediaFile__vfunc_23(int *result, igMediaFileView *file, unsigned int mode) {
+    char *searchPaths;
+    char path[512];
+    bool absolute;
+    igMediaView *media;
+    igMediaView *previous;
+    int status;
+    char *p;
+    unsigned int n;
+
+    if (file->_isOpen == 1) {
+        *result = g_resultFailure.v;
+        return;
+    }
+    file->_openMode = mode;
+    switch (file->_openMode) {
+    case 0: case 1: case 2: case 3: case 8:
+        file->_isBinary = 0;
+        break;
+    case 4: case 5: case 6: case 7:
+        file->_isBinary = 1;
+        break;
+    }
+    switch (file->_openMode) {
+    case 1: case 5: file->_write = 1; file->_read = 0; break;
+    case 2: case 6: file->_write = 1; file->_read = 0; break;
+    case 3: case 7: file->_write = 1; file->_read = 1; break;
+    case 0: case 4: case 8: file->_write = 0; file->_read = 1; break;
+    }
+    file->_bufSize = 0;
+    p = path;
+    file->_bufPos = 0;
+    n = sizeof(path);
+    if (p != 0) {
+        do {
+            *p = 0;
+            n -= 1;
+            p += 1;
+        } while (n != 0);
+    }
+    absolute = FilePath_IsAbsolute(file->_fileName);
+    searchPaths = (char *)igAdxFile_GetSearchPaths();
+    status = g_resultFailure.v;
+    while (searchPaths != 0) {
+        if (absolute) {
+            path[0] = 0;
+            searchPaths = 0;
+        } else if (!igAdxFile_GetNextSearchPath(&searchPaths, path, sizeof(path))) {
+            continue;
+        }
+        strcat(path, file->_fileName);
+        previous = file->_media;
+        media = igMediaFile_FindDeviceForPath(path);
+        if (media != 0) {
+            media->_refCount = media->_refCount + 1;
+        }
+        RELEASE_REF(file->_media);
+        file->_media = media;
+        if (file->_media == 0) break;
+        if (file->_media != previous) {
+            if (previous != 0) {
+                previous->freeHandle(file->_fileHandle);
+            }
+            file->_fileHandle = file->_media->vfunc_23();
+        }
+        status = file->_media->vfunc_25(file->_fileHandle, path, file->_openMode).v;
+        if (status == g_resultSuccess.v) break;
+    }
+    if (status == g_resultFailure.v) {
+        if (GPR_00554c10 == 0) {
+            int rc = igReport_Detail(DAT_004f9bd0, file->_fileName);
+            if (rc != 1 && rc == 2) {
+                GPR_00554c10 = 1;
+            }
+        }
+        if (file->_media != 0) {
+            file->_media->freeHandle(file->_fileHandle);
+            RELEASE_REF(file->_media);
+            file->_media = 0;
+        }
+        *result = g_resultFailure.v;
+    } else {
+        file->_media->seek(file->_fileHandle, 0, 2);
+        file->_fileSize = file->_media->tell(file->_fileHandle);
+        file->_media->seek(file->_fileHandle, 0, 0);
+        if (file->_isBinary == 0) {
+            igMediaFile_SetFileSize(file, file->_fileSize);
+            if (file->_fileSize > 0) {
+                int count = file->_media->read(file->_fileHandle, file->_fBuf, file->_fileSize);
+                if (count != file->_fileSize) {
+                    file->_fileSize = count;
+                    igMediaFile_SetFileSize(file, count);
+                }
+            }
+        }
+        if (file->_openMode == 2) {
+            file->_bufPos = file->_fileSize;
+        } else {
+            file->_bufPos = 0;
+        }
+        file->_isOpen = 1;
+        *result = g_resultSuccess.v;
+    }
+}
+
 void igMediaFile_Close(igMediaFileView *self) {
     igMediaView *media;
 

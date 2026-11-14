@@ -36,6 +36,15 @@ template <class T, class U> static inline void assignReference(T *&field, const 
     field = (T *)next;
 }
 
+extern "C" void List_Reserve(igDataList *list, int capacity, int elementSize);
+
+/* Reallocates the list to hold `capacity` elements; a capacity below the count is ignored. */
+template <class T> static inline void setCapacity(igTDataList<T> *list, int capacity) {
+    if (capacity >= list->_count) {
+        List_Reserve((igDataList *)list, capacity, sizeof(T));
+    }
+}
+
 /* The allocator selector of each memory context, in the order of g_memoryContextNames: the program
  * constructs every one at start-up. */
 struct igMemoryPoolHandle {
@@ -994,13 +1003,13 @@ extern "C" void igUnsignedCharList_EnsureRegistered(void);
 extern "C" void igUnsignedCharList_Register(void);
 extern "C" void igUnsignedCharList_GetMetaObjectFunction(void);
 extern "C" void igUnsignedCharList_InitFields(void);
-extern "C" void igShortListList_Create(int arg0);
+extern "C" igTDataList<igTDataList<short> *> *igShortListList_Create(igMemoryPoolView *pool);
 extern "C" igMetaObject *igShortListList_GetOrCreateMetaObject(void);
 extern "C" int igShortListList_GetVTable(void);
 extern "C" void igShortListList_EnsureRegistered(void);
 extern "C" void igShortListList_Register(void);
 extern "C" void igShortListList_GetMetaObjectFunction(void);
-extern "C" void igShortList_Create(int arg0);
+extern "C" igTDataList<short> *igShortList_Create(igMemoryPoolView *pool);
 extern "C" igMetaObject *igShortList_GetOrCreateMetaObject(void);
 extern "C" int igShortList_GetVTable(void);
 extern "C" void igShortList_EnsureRegistered(void);
@@ -1327,7 +1336,7 @@ public:
     virtual igResult truncateCallStacks(int count);
     virtual unsigned int *getCallStack(int offset);
     virtual int addCallStack(int *stack);
-    virtual void d25();
+    virtual int vfunc_27(unsigned int *stack);
     virtual int findCallStack(unsigned int *stack);
     virtual unsigned int hashCallStack(unsigned int *stack);
     virtual int insertHashEntry(unsigned int *stack, int offset);
@@ -1470,19 +1479,20 @@ extern "C" int igEventTracker_GetEventFormat(void *arg0, int arg1);
 extern "C" int igEventTracker_GetEventTypeName(void *arg0, int arg1);
 extern "C" int igEventTracker_GetNotificationCodeName(void *arg0, int arg1);
 extern "C" int igEventTracker_InitEvent(int arg0);
-extern "C" int igEventTracker_CopyEvent(int arg0, int arg1);
+struct EventRecord;
+extern "C" EventRecord *igEventTracker_CopyEvent(EventRecord *copy, const EventRecord *source);
 extern "C" void *igEventTracker_InitMemoryEvent(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18);
 extern "C" void *igEventTracker_InitMarkerEvent(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8);
 extern "C" void *igEventTracker_DestructEvent(void *arg0, long long arg1);
 extern "C" void igEventTracker_ClearEvent(int arg0);
 extern "C" int igEventTracker_FindFreeEventDataSlot(void *arg0);
-extern "C" int igEventTracker_GetEventDataInt(int arg0, int arg1);
+extern "C" int igEventTracker_GetEventDataInt(const EventRecord *record, int slot);
 extern "C" void igEventTracker_SetEventDataInt(void *arg0, int arg1, int arg2);
-extern "C" int igEventTracker_GetEventDataUnsigned(int arg0, int arg1);
+extern "C" unsigned int igEventTracker_GetEventDataUnsigned(const EventRecord *record, int slot);
 extern "C" void igEventTracker_SetEventDataUnsigned(void *arg0, int arg1, int arg2);
-extern "C" int igEventTracker_GetEventDataString(int arg0, int arg1);
+extern "C" char *igEventTracker_GetEventDataString(const EventRecord *record, int slot);
 extern "C" void igEventTracker_SetEventDataString(void *arg0, int arg1, int arg2);
-extern "C" void igEventTracker_GetEventDataUnsigned3(int arg0, int arg1, void *arg2);
+extern "C" void igEventTracker_GetEventDataUnsigned3(const EventRecord *record, int slot, unsigned int *values);
 extern "C" int strcat(...);
 extern "C" void igExternalDirEntry_ReleaseDefaults(void **arg0);
 extern "C" void ***FUN_002e2fb0(void);
@@ -4024,7 +4034,7 @@ class igCallStackTracerView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int hasSymbols();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual unsigned int *vfunc_24(int maxDepth, int skip); virtual int hasSymbols();
     virtual void d24();
     virtual igResult lookupAddress(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
     virtual igResult vfunc_28(int addr, char *buf, int offset, char *name, int line, int format, long long output, long long outputSize);
@@ -4343,7 +4353,7 @@ enum igEventType {
     kEventTypeAny, kMemoryAllocation, kMemoryDetach, kMemoryDeallocation, kMemoryRead, kMemoryWrite, kObjectAllocation,
     kObjectDetach, kObjectDeallocation, kObjectRead, kObjectWrite, kMemberRead, kMemberWrite, kMarker, kNotification, kCustom
 };
-struct EventRecord { int type; int index; int address; int val; int f16; int markerType; int markerValue; char *markerName; int notificationType; int notificationCode; char *notificationText; char *group; char *str; char *memberName; char *annotation; char *f60; char *f64; int f68; int f72; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } };
+struct EventRecord { int type; int index; int address; int val; int f16; int markerType; int markerValue; char *markerName; int notificationType; int notificationCode; char *notificationText; char *group; char *str; char *memberName; char *annotation; char *f60; char *f64; int f68; int f72; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } const char *getSourceFile() const { return (const char *)f68; } int *getCallStack() const { return callStack; } int getAddress() const { return address; } int getIndex() const { return index; } int getAlignment() const { return f16; } int getLine() const { return f72; } int getNotificationCode() const { return notificationCode; } };
 /* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
 class igEventTrackerView : public igVirtualObject {
 public:
@@ -4355,16 +4365,17 @@ public:
     virtual void d23();
     virtual void AddEvent(EventRecord *record, int mode);
     virtual igResult vfunc_27(int offset, EventRecord *record);
-    virtual void d26();
+    virtual igResult vfunc_28(int offset, int *type);
     virtual igResult ReadEventKey(int offset, int *value);
-    virtual void d28(); virtual void d29();
+    virtual igResult vfunc_30(int offset, int *size);
+    virtual int vfunc_31(int address);
     virtual void GetStatistics(int, int, int *total, int *counts, int *, int *, int *, int *, int *, int *, int *, int, int, int *, int, int);  /* leak summary */
     virtual void GetStatisticsByName(int, int, int name, int *, int *, int *, int *);  /* per-name sizes */
     virtual int GetNextEventOffset(int offset);
     virtual int GetLeakCount();
     virtual void d34(); virtual void d35();
     virtual void vfunc_38(EventRecord *record, char *buffer, int size);  /* formats a record */
-    virtual void d37();
+    virtual igResult vfunc_39(int addr, char *format, char *output, int outputSize);  /* formats an address */
     virtual igResult ResolveAddress(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
     virtual void PrintEvent(int offset);
     virtual void d40();
@@ -4579,12 +4590,12 @@ struct igResourceView : public igObject {
 extern "C" igResourceView *g_globalContext;
 extern "C" char g_igIGBFile_readFileLabel[64];
 extern "C" igLongTimerView *g_igIGBFile_loadTimer[4];
-extern "C" char g_igIGBFile_blindObjects;
+extern "C" unsigned char g_igIGBFile_blindObjects;
 extern "C" unsigned char g_igIGBFile_oldVersionErrorSuppressed;
 extern "C" unsigned char g_igIGBFile_loadTimeReportSuppressed;
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" igResult FUN_002e4f60(igIGBFileView *self);
-extern "C" igResult FUN_002e63e0(void *);
+extern "C" igResult FUN_002e63e0(igIGBFileView *file);
 extern "C" igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode);
 extern "C" void igIGBFile_CloseFile(igIGBFileView *self);
 extern "C" igResult igIGBFile_OpenForWrite(igIGBFileView *f, const char *fileName);
@@ -4727,20 +4738,21 @@ public:
     RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4); RESERVED(5); RESERVED(6);
     RESERVED(7); RESERVED(8); RESERVED(9); RESERVED(10); RESERVED(11); RESERVED(12); RESERVED(13);
     RESERVED(14); RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19);
-    virtual void vfunc_22(); virtual void vfunc_23();
+    virtual void vfunc_22();
+    virtual int vfunc_23();                                                     /* +92: new handle */
     virtual int freeHandle(int handle);                                         /* +96 */
-    virtual void vfunc_25();
+    virtual igResult vfunc_25(int handle, igStringRef path, int mode);          /* +100: open */
     virtual int close(int handle);                                              /* +104 */
     virtual int write(int handle, const void *buffer, int size);                /* +108 */
     virtual int read(int handle, void *buffer, int size);                       /* +112 */
     virtual int readAsync(int handle, void *buffer, int size, int (*done)(int, int), int context); /* +116 */
     virtual int seek(int handle, int offset, int whence);                      /* +120 */
     virtual int tell(int handle);                                               /* +124 */
-    virtual int vfunc_32(int path, int prefixLength);                           /* +128 */
+    virtual int vfunc_32(const char *path, int prefixLength);                   /* +128: nonzero when the path prefix names this device */
 };
 extern "C" igMediaView *g_defaultMedia[4];
 extern "C" igSmartPointer<igObjectList> g_fileDeviceList;
-extern "C" igMediaView *igMediaFile_FindDeviceForPath(int arg0);
+extern "C" igMediaView *igMediaFile_FindDeviceForPath(const char *path);
 /* igMediaFile: a file on an igMedia device, either read straight through the device (_isBinary)
  * or held whole in _fBuf. */
 class igMediaFileView : public igFileView { public:
@@ -4754,6 +4766,9 @@ class igMediaFileView : public igFileView { public:
     unsigned char *_fBuf;
     igMediaView *_media;
 };
+extern "C" char DAT_004f9bd0[];
+extern "C" unsigned char GPR_00554c10;
+extern "C" void Gap__Core__igMediaFile__vfunc_23(int *result, igMediaFileView *file, unsigned int mode);
 extern "C" void igMediaFile_Close(igMediaFileView *arg0);
 extern "C" int Gap__Core__igMediaFile__vfunc_30(igMediaFileView *self, const char *format, ...);
 extern "C" char text_rb[];
@@ -6072,6 +6087,36 @@ extern "C" void Gap__Core__igArenaMemoryPool__destructFields(igArenaMemoryPool *
 extern "C" int g_igArenaMemoryPool_defaultPoolOptionFlags[4];
 extern "C" void Gap__Core__igArenaMemoryPool__resetFields(igArenaMemoryPool *self, int extra1);
 extern "C" unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *arg0, int arg1, int arg2);
+extern "C" char text_igArenaMemoryPool_E110_AssertOnMemoryOperation[];
+extern "C" char text_igArenaMemoryPool_free_E88_BadTailSentinel[];
+extern "C" char text_igArenaMemoryPool_free_E89_BadHeadSentinel[];
+extern "C" char text_igArenaMemoryPool_free_E107_BadHeadSentinelOffset[];
+extern "C" char text_igArenaMemoryPool_free_E108_BadTailSentinel[];
+extern "C" char text_igArenaMemoryPool_free_E112_WrongPool[];
+extern "C" char text_igArenaMemoryPool_free_E90_InvalidBlock[];
+extern "C" char text_igArenaMemoryPool_E101_MaximumSizeReached[];
+extern "C" char text_igArenaMemoryPool_memoryOperation_E91[];
+extern "C" char text_igArenaMemoryPool_realloc_E92_BadTailSentinel[];
+extern "C" char text_igArenaMemoryPool_realloc_E109_InvalidHeader[];
+extern "C" char text_igArenaMemoryPool_free_E113_WrongPool[];
+extern "C" char text_igArenaMemoryPool_memoryOperation_E94[];
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE110Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE88Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE89Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE107Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE108Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE112Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreGangDoubleFreeNotice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE90Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE101Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE91Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE92Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE109Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE113Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE65Notice;
+extern "C" unsigned char g_igArenaMemoryPool_ignoreE94Notice;
+extern "C" int DAT_004c2360[4];
+extern "C" void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block, int size, unsigned short alignment);
 extern "C" igResult igArenaMemoryPool_SystemFree(void *arg1, int arg2, long long arg3);
 class igArenaMemoryPoolView;
 extern "C" void igArenaMemoryPool_GetStackSize(igArenaMemoryPoolView *self);
@@ -6340,6 +6385,14 @@ static inline int chunkIsMapped(TaggedBlockHeader *h) {
     }
     return 0;
 }
+/* Whether a chunk was taken straight from the system allocator instead of the arena, which only the
+ * 12-byte header can say. */
+static inline int chunkIsExternal(TaggedBlockHeader *h) {
+    if (h->big == 1) {
+        return h->extraMarked;
+    }
+    return 0;
+}
 /* The `used` bit of a chunk's header says the chunk before it is in use (dlmalloc's PREV_INUSE). */
 static inline int chunkUsedBit(TaggedBlockHeader *h) {
     return h->used;
@@ -6512,6 +6565,24 @@ extern "C" void *igMallocMemoryPool_AllocateBlock(igMallocMemoryPoolView *self, 
 extern "C" void igMallocMemoryPool_FreeBlock(igMallocMemoryPoolView *self, unsigned char *p);
 struct TaggedTailByte { unsigned char low : 7; unsigned char extended : 1; };
 extern "C" void *igMallocMemoryPool_ReallocateBlock(igMallocMemoryPoolView *self, char *p, unsigned size);
+extern "C" char text_igMallocMemoryPool_E110_AssertOnMemoryOperation[];
+extern "C" char text_igMallocMemoryPool_free_E88_BadTailSentinel[];
+extern "C" char text_igMallocMemoryPool_free_E89_BadHeadSentinel[];
+extern "C" char text_igMallocMemoryPool_free_E107_BadHeadSentinelOffset[];
+extern "C" char text_igMallocMemoryPool_free_E108_BadTailSentinel[];
+extern "C" char text_igMallocMemoryPool_free_E112_WrongPool[];
+extern "C" char text_free_call_on_gang_alloced_memory[];
+extern "C" char text_igMallocMemoryPool_free_E90_InvalidBlock[];
+extern "C" char text_igMallocMemoryPool_E101_MaximumSizeReached[];
+extern "C" char text_igMallocMemoryPool_memoryOperation_E91[];
+extern "C" char text_igMallocMemoryPool_realloc_E92_BadTailSentinel[];
+extern "C" char text_igMallocMemoryPool_realloc_E109_InvalidHeader[];
+extern "C" char text_igMallocMemoryPool_free_E113_WrongPool[];
+extern "C" char text_igMallocMemoryPool_Invalid_or_corrupted_block[];
+extern "C" char text_E65_UnexpectedBlockSize[];
+extern "C" char text_E1_memoryOperation_didnt_align[];
+extern "C" char text_igMallocMemoryPool_memoryOperation_E94[];
+extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_101(igMallocMemoryPoolView *self, char *block, int size, unsigned short alignment);
 extern "C" void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsigned alignment, unsigned size);
 /* Each member of a gang allocation is preceded by this record: its byte distance from the first
  * member's record, and (first member only) the number of members still allocated. */
@@ -6643,9 +6714,23 @@ public:
     virtual int IsPageAllocated(void *block);
     virtual void MarkPages(unsigned int address, int size, int set);
     virtual unsigned GetBlockSize(void *block);
-    unsigned int refCount; char pad8[108]; igSmartPointer<igSemaphoreView> allocationLock; char pad120[16];
+    unsigned int refCount;
+    long long localAllocated, localFreed, localNetAllocated, localNetAllocatedHigh;
+    long long localAllocatedWithOverhead, localFreedWithOverhead, localNetAllocatedWithOverhead, localNetAllocatedWithOverheadHigh;
+    long long localAllocationCount, localFreeCount, localNetAllocationCount, localNetAllocationCountHigh;
+    unsigned char updateStatistics, updateGlobalStatistics; char pad106[6];
+    unsigned char isActive; char pad113[3];
+    igSmartPointer<igSemaphoreView> allocationLock;
+    unsigned long long maxSize;
+    igObject *eventTracker; int poolIndex;
     int messageLevel; int poolOptionFlags; unsigned *pageTables[32];
 };
+extern "C" char text_a_deallocation[], text_an_allocation[];
+extern "C" char text_igPageMemoryPool_E110_AssertOnMemoryOperation[], text_igPageMemoryPool_E101_MaximumSizeReached[];
+extern "C" char text_igPageMemoryPool_memoryOperation_E91[], text_igPageMemoryPool_memoryOperation_E94[];
+extern "C" unsigned char g_igPageMemoryPool_ignoreE110Notice, g_igPageMemoryPool_ignoreE101Notice;
+extern "C" unsigned char g_igPageMemoryPool_ignoreE91Notice, g_igPageMemoryPool_ignoreE94Notice;
+extern "C" void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, int size, unsigned short alignment);
 extern "C" void *igPageMemoryPool_Allocate(igPageMemoryPoolView *self, unsigned int size);
 extern "C" void *igPageMemoryPool_AllocateAligned(igPageMemoryPoolView *self, unsigned int size, unsigned int alignment);
 extern "C" void *igPageMemoryPool_Callocate(igPageMemoryPool *self, int count, int size);

@@ -1,8 +1,9 @@
 """gdb_pcode.py: the b52 code generator's blocks around its delay-slot filler (gdb script).
 
 The compiler's own PCode dump is compiled out (its dump routine is an empty function), so this reads the blocks
-from memory in the routine that fills delay slots (0x4c7a30): before the liveness pass, after it (use, def,
-live-in and live-out per block) and after the slots are filled. Each block is printed with its predecessor and
+from memory: on entry to the block pass (0x4c6d60), with a line for every change that pass makes, and in the
+routine that fills delay slots (0x4c7a30) before the liveness pass, after it (use, def, live-in and live-out per
+block) and after the slots are filled. Each block is printed with its predecessor and
 successor lists, each instruction with its operands and flags.
 
     PCODE_OUT=<out>.txt MWCIncludes=src gdb -q -batch -x tools/mwcc_irdump/gdb_pcode.py \
@@ -32,6 +33,12 @@ LIVE_INFO = 0x5B67A4       # per register class: array of {use, def, in, out} bi
 OPCODE_INFO = 0x5A84A0     # 44 bytes per opcode
 OPCODE_NAME = -24          # offset of the mnemonic pointer in an opcode's record
 BEFORE, LIVE, AFTER = 0x4C7A56, 0x4C7A61, 0x4C7A7B
+BLOCK_PASS = 0x4C6D60      # entry of the block pass ("After block optimization" is its phase name)
+# The three places where the block pass's per-block routine (0x4c6b80) reports a change; its argument, the block,
+# is at 0x1c(%esp) at each of them.
+CHANGES = {0x4C6C40: "retargeted the branch that ends it: the target began with an unconditional jump",
+           0x4C6CA1: "deleted the jump that ends it: the target is the next block",
+           0x4C6D47: "merged its only successor into it: the successor ends with a jump or the return"}
 REGISTERS = ['zero', 'at', 'v0', 'v1', 'a0', 'a1', 'a2', 'a3', 't0', 't1', 't2', 't3', 't4', 't5', 't6', 't7',
              's0', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 't8', 't9', 'k0', 'k1', 'gp', 'sp', 's8', 'ra']
 
@@ -119,7 +126,7 @@ def main():
             out.write("B%d use[%s] def[%s] in[%s] out[%s]\n" % (index, sets[0], sets[1], sets[2], sets[3]))
             block = rd(block, 4)
 
-    for address in (BEFORE, LIVE, AFTER):
+    for address in (BEFORE, LIVE, AFTER, BLOCK_PASS) + tuple(CHANGES):
         gdb.execute("break *%#x" % address)
     function, last = 0, None
     while True:
@@ -131,7 +138,11 @@ def main():
         if pc == last and pc != BEFORE:
             continue                      # gdb reports a stop twice after stepping off a breakpoint
         last = pc
-        if pc == BEFORE:
+        if pc == BLOCK_PASS:
+            blocks("function %d before the block pass" % (function + 1))
+        elif pc in CHANGES:
+            out.write("== block pass: B%d %s\n" % (rd(rd(g.esp() + 0x1C, 4) + 0x1C, 4), CHANGES[pc]))
+        elif pc == BEFORE:
             function += 1
             blocks("function %d before the delay slots" % function)
         elif pc == LIVE:

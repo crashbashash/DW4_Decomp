@@ -1963,7 +1963,7 @@ void igArenaMemoryPool_GangAllocAligned(int *status) {
 }
 
 static inline char *blockHeader(char *p) {
-    char *h = p - 4;
+    char *h = p - sizeof(int);
     if (((TaggedTailByte *)(p - 1))->extended == 1) h = p - 12;
     return h;
 }
@@ -2421,6 +2421,364 @@ void Gap__Core__igArenaMemoryPool__destructFields(igArenaMemoryPool *self) {
 void Gap__Core__igArenaMemoryPool__resetFields(igArenaMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
     self->_poolOptionFlags = (int) g_igArenaMemoryPool_defaultPoolOptionFlags[0];
+}
+
+/* The arena pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the block is
+ * (re)allocated from the arena, with the out-of-memory hook given a chance to make room before the
+ * maximum size refuses the request. With the sentinel option every block carries a head sentinel
+ * after `headBytes` of padding (the padding's size is kept in the word before it) and a tail
+ * sentinel in the last word of its chunk. */
+void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block, int size, unsigned short alignment) {
+    int newBytes;
+    int total;
+    bool moved;
+    /* matching construct: variant search — the initialiser is dead; it makes this the first of the
+     * three variables whose lifetimes the optimizer splits, which decides their stack slots */
+    int oldHeadBytes = 0;
+    int oldSize;
+    int oldBytes;
+    int sentinelBytes;
+    int oldSentinelBytes;
+    int headBytes;
+    TaggedBlockHeader *h;
+    char *result;
+    char *fresh;
+    TaggedBlockHeader *newHeader;
+    int r;
+
+    oldSize = 0;
+    oldBytes = 0;
+    oldHeadBytes = 0;
+    sentinelBytes = 0;
+    oldSentinelBytes = 0;
+    headBytes = 0;
+    h = 0;
+    moved = false;
+    DAT_005871e0[0]++;
+    if (hasPoolOption(self->_poolOptionFlags, 0x100)) {
+        if (self->_messageLevel >= 2 && g_igArenaMemoryPool_ignoreE110Notice == 0) {
+            r = igReportNotice(text_igArenaMemoryPool_E110_AssertOnMemoryOperation, (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+            if (r != 1 && r == 2) {
+                g_igArenaMemoryPool_ignoreE110Notice = 1;
+            }
+        }
+        if (self->HandleOutOfMemory(size, 4) == 0) {
+            return 0;
+        }
+    }
+    igArenaMemoryPool_Lock(self);
+    if (self->_alignment > alignment) {
+        alignment = self->_alignment;
+    }
+    if (alignment < 8u) {
+        alignment = 8;
+    }
+    if (hasPoolOption(self->_poolOptionFlags, 1)) {
+        headBytes = alignment;
+        sentinelBytes = headBytes + 4;
+        oldHeadBytes = headBytes;
+        oldSentinelBytes = sentinelBytes;
+    }
+    for (;;) {
+        if (size == -1) {
+            result = 0;
+            if (block != 0) {
+                if (sentinelBytes != 0) {
+                    if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
+                        oldHeadBytes = ((int *)block)[-2];
+                        block -= oldHeadBytes;
+                        oldSentinelBytes = oldHeadBytes + 4;
+                        h = (TaggedBlockHeader *)blockHeader(block);
+                        unsigned *tail = (unsigned *)((char *)h + chunkBytes(h) - 4);
+                        if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (g_igArenaMemoryPool_ignoreE88Notice == 0) {
+                                r = igReportNotice(text_igArenaMemoryPool_free_E88_BadTailSentinel, (unsigned)block + 8u, 0xBBBBBBBF, *tail);
+                                if (r != 1 && r == 2) {
+                                    g_igArenaMemoryPool_ignoreE88Notice = 1;
+                                }
+                            }
+                        }
+                    } else if (self->_messageLevel >= 1) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_igArenaMemoryPool_ignoreE89Notice == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_free_E89_BadHeadSentinel, block, 0xAAAAAAAF, ((unsigned *)block)[-1]);
+                            if (r != 1 && r == 2) {
+                                g_igArenaMemoryPool_ignoreE89Notice = 1;
+                            }
+                        }
+                    }
+                } else if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
+                    oldHeadBytes = ((int *)block)[-2];
+                    if (oldHeadBytes > 0x100010) {
+                        if (self->_messageLevel >= 1) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (g_igArenaMemoryPool_ignoreE107Notice == 0) {
+                                r = igReportNotice(text_igArenaMemoryPool_free_E107_BadHeadSentinelOffset, (unsigned)block + 8u, oldHeadBytes);
+                                if (r != 1 && r == 2) {
+                                    g_igArenaMemoryPool_ignoreE107Notice = 1;
+                                }
+                            }
+                        }
+                        igArenaMemoryPool_Unlock(self);
+                        return 0;
+                    }
+                    block -= oldHeadBytes;
+                    oldSentinelBytes = oldHeadBytes + 4;
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    unsigned *tail = (unsigned *)((char *)h + chunkBytes(h) - 4);
+                    if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_igArenaMemoryPool_ignoreE108Notice == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_free_E108_BadTailSentinel, (unsigned)block + 8u, 0xBBBBBBBF, *tail);
+                            if (r != 1 && r == 2) {
+                                g_igArenaMemoryPool_ignoreE108Notice = 1;
+                            }
+                        }
+                    }
+                } else {
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                }
+            } else {
+                igArenaMemoryPool_Unlock(self);
+                return 0;
+            }
+            if (h != 0) {
+                oldSize = payloadSize(h) - oldSentinelBytes;
+                oldBytes = chunkBytes(h);
+                if (DAT_004c2360[0] != 0) {
+                    FUN_0030f040((igArenaMemoryPool *)self, 2, (int)block, oldSize);
+                }
+                if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (g_igArenaMemoryPool_ignoreE112Notice == 0) {
+                        r = igReportNotice(text_igArenaMemoryPool_free_E112_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                        if (r != 1 && r == 2) {
+                            g_igArenaMemoryPool_ignoreE112Notice = 1;
+                        }
+                    }
+                }
+                if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                    memset(block, 0xFD, oldBytes - (h->big == 0 ? 4 : 12));
+                }
+                if (chunkIsExternal(h)) {
+                    g_activeSystemAllocator[0]->Free(h);
+                    if (self->_size == 0) {
+                        if (self->_updateStatistics) {
+                            self->UpdateStatistics(oldSize, oldBytes, 0);
+                        }
+                    }
+                } else if (h->marked) {
+                    GangRecord *record = (GangRecord *)padRecord(blockHeader(block));
+                    GangRecord *first = record;
+                    unsigned short offset = record->offset;
+                    if (offset) {
+                        first = (GangRecord *)((char *)record - offset);
+                    }
+                    if (first->count == 0 && self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreGangDoubleFreeNotice == 0) {
+                        r = igReportNotice(text_free_call_on_gang_alloced_memory, block);
+                        if (r != 1 && r == 2) {
+                            g_igArenaMemoryPool_ignoreGangDoubleFreeNotice = 1;
+                        }
+                    }
+                    self->_localFreeCount++;
+                    self->_localNetAllocationCount--;
+                    if (--first->count == 0) {
+                        unsigned *gang = (unsigned *)first - 1;
+                        if (self->_updateStatistics) {
+                            self->UpdateStatistics(*gang, *gang + 4, 0);
+                        }
+                        FUN_00318110(self, (char *)(gang - 1));
+                    }
+                } else {
+                    if (self->_updateStatistics) {
+                        self->UpdateStatistics(oldSize, oldBytes, 0);
+                    }
+                    FUN_00318110(self, block);
+                }
+            } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE90Notice == 0) {
+                r = igReportNotice(text_igArenaMemoryPool_free_E90_InvalidBlock, self->_poolIndex, block);
+                if (r != 1 && r == 2) {
+                    g_igArenaMemoryPool_ignoreE90Notice = 1;
+                }
+            }
+            break;
+        }
+        if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize) {
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+            }
+            if (self->HandleOutOfMemory(size, 1) != 0) {
+                continue;
+            }
+            if (hasPoolOption(self->_poolOptionFlags, 0x20)) {
+                if (self->_heapIntegrityCheckLevel > 0) {
+                    if (self->_messageLevel >= 1) {
+                        if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel >= 1) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (g_igArenaMemoryPool_ignoreE101Notice == 0) {
+                                r = igReportNotice(text_igArenaMemoryPool_E101_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                                if (r != 1 && r == 2) {
+                                    g_igArenaMemoryPool_ignoreE101Notice = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE91Notice == 0) {
+                r = igReportNotice(text_igArenaMemoryPool_memoryOperation_E91, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+                if (r != 1 && r == 2) {
+                    g_igArenaMemoryPool_ignoreE91Notice = 1;
+                }
+            }
+            result = 0;
+            break;
+        }
+        total = size + sentinelBytes;
+        if (block != 0) {
+            if (sentinelBytes != 0) {
+                if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
+                    oldHeadBytes = ((int *)block)[-2];
+                    block -= oldHeadBytes;
+                    oldSentinelBytes = oldHeadBytes + 4;
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    unsigned *tail = (unsigned *)((char *)h + chunkBytes(h) - 4);
+                    if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_igArenaMemoryPool_ignoreE92Notice == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_realloc_E92_BadTailSentinel, block + oldHeadBytes, 0xBBBBBBBF, *tail);
+                            if (r != 1 && r == 2) {
+                                g_igArenaMemoryPool_ignoreE92Notice = 1;
+                            }
+                        }
+                    }
+                } else {
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    if (igAllocator_ResolveEncodedIndex(chunkPoolIndex(h)) != self) {
+                        if (self->_messageLevel >= 1) {
+                            Memory_PrintPoolStatistics(0, self);
+                            if (g_igArenaMemoryPool_ignoreE109Notice == 0) {
+                                r = igReportNotice(text_igArenaMemoryPool_realloc_E109_InvalidHeader, block);
+                                if (r != 1 && r == 2) {
+                                    g_igArenaMemoryPool_ignoreE109Notice = 1;
+                                }
+                            }
+                        }
+                        igArenaMemoryPool_Unlock(self);
+                        return 0;
+                    }
+                }
+            } else {
+                h = (TaggedBlockHeader *)blockHeader(block);
+            }
+            if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
+                Memory_PrintPoolStatistics(0, self);
+                if (g_igArenaMemoryPool_ignoreE113Notice == 0) {
+                    r = igReportNotice(text_igArenaMemoryPool_free_E113_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                    if (r != 1 && r == 2) {
+                        g_igArenaMemoryPool_ignoreE113Notice = 1;
+                    }
+                }
+            }
+            oldSize = payloadSize(h) - oldSentinelBytes;
+            oldBytes = chunkBytes(h);
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 4, (int)block, oldSize);
+            }
+            if ((alignment <= 8u || oldSize >= size) && oldSentinelBytes == sentinelBytes && (unsigned)block % alignment == 0) {
+                fresh = (char *)FUN_003194c0(self, block, total);
+            } else {
+                fresh = (char *)FUN_0031b5d0(self, alignment, total);
+                moved = true;
+            }
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 4, (int)fresh, size);
+            }
+        } else if (alignment > 8u) {
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+            }
+            fresh = (char *)FUN_0031b5d0(self, alignment, total);
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 1, (int)fresh, size);
+            }
+        } else {
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+            }
+            fresh = (char *)FUN_00315170(self, total);
+            if (DAT_004c2360[0] != 0) {
+                FUN_0030f040((igArenaMemoryPool *)self, 1, (int)fresh, size);
+            }
+        }
+        if (fresh != 0) {
+            newHeader = (TaggedBlockHeader *)blockHeader(fresh);
+            newBytes = chunkBytes(newHeader);
+            if (self->_heapIntegrityCheckLevel > 0) {
+                if (self->_messageLevel >= 1) {
+                    if (total != payloadSize(newHeader) && self->_messageLevel >= 1) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_igArenaMemoryPool_ignoreE65Notice == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, newHeader, text_E65_UnexpectedBlockSize);
+                            if (r != 1 && r == 2) {
+                                g_igArenaMemoryPool_ignoreE65Notice = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            if (block != 0) {
+                if (moved) {
+                    memcpy(fresh + headBytes, block + oldHeadBytes, oldSize > size ? size : oldSize);
+                    if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                        memset(block, 0xFD, oldBytes - (h->big == 0 ? 4 : 12));
+                    }
+                    if (chunkIsExternal(h)) {
+                        if (self->_size == 0 && self->_updateStatistics) {
+                            self->UpdateStatistics(oldSize, oldBytes, 0);
+                        }
+                        g_activeSystemAllocator[0]->Free(h);
+                    } else {
+                        if (self->_updateStatistics) {
+                            self->UpdateStatistics(oldSize, oldBytes, 0);
+                        }
+                        FUN_00318110(self, block);
+                    }
+                } else if (self->_updateStatistics) {
+                    self->UpdateStatistics(oldSize, oldBytes, 0);
+                }
+            }
+            if (sentinelBytes != 0) {
+                *(unsigned *)(fresh + (headBytes - 4)) = 0xAAAAAAAF;
+                *(int *)(fresh + (headBytes - 8)) = headBytes;
+                fresh += headBytes;
+                *(unsigned *)((char *)newHeader + newBytes - 4) = 0xBBBBBBBF;
+            }
+            if (self->_updateStatistics) {
+                self->UpdateStatistics(size, newBytes, 1);
+            }
+            result = fresh;
+        } else {
+            if (self->_messageLevel >= 3) {
+                if (g_igArenaMemoryPool_ignoreE94Notice == 0) {
+                    r = igReportNotice(text_igArenaMemoryPool_memoryOperation_E94, self->_poolIndex, size);
+                    if (r != 1 && r == 2) {
+                        g_igArenaMemoryPool_ignoreE94Notice = 1;
+                    }
+                }
+            }
+            result = 0;
+        }
+        if (result != 0 && block == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                memset(result, 0xCD, size);
+            } else if (hasPoolOption(self->_poolOptionFlags, 4)) {
+                memset(result, 0, size);
+            }
+        }
+        break;
+    }
+    return (void *)igArenaMemoryPool_UnlockAndReturn(self, (int)result);
 }
 
 unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *self, int address, int size) {

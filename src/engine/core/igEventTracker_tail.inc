@@ -163,6 +163,323 @@ void igEventTracker_Reset(igEventTrackerView *self) {
     self->RebuildHashIndex(self->_hashIndex->_capacity);
 }
 
+/* The value seven bits at a time, low bits first; bit 7 marks a byte that is not the last. */
+static inline void encodeUnsigned(char *&p, unsigned int value) {
+    do {
+        *p = value & 0x7F;
+        value >>= 7;
+        if (value != 0) {
+            *p |= 0x80;
+        }
+        p++;
+    } while (value != 0);
+}
+
+/* As encodeUnsigned, ending when the rest is all sign bits; bit 6 of the last byte is the sign, so
+ * a byte of pure sign is added when the last data byte's bit 6 disagrees. */
+static inline void encodeSigned(char *&p, int value) {
+    char *q = p;
+    int sign;
+    char signBit;
+    if (value < 0) {
+        sign = -1;
+        signBit = 0x40;
+    } else {
+        sign = 0;
+        signBit = 0;
+    }
+    for (;;) {
+        *q = value & 0x7F;
+        value >>= 7;
+        if (value == sign) {
+            if ((*q & 0x40) != signBit) {
+                *q |= 0x80;
+                q++;
+                *q = sign & 0x7F;
+            }
+            break;
+        }
+        *q |= 0x80;
+        q++;
+    }
+    p = q + 1;
+}
+
+static inline void writeHalf(char *&p, unsigned int half) {
+    *p++ = half;
+    *p++ = half >> 8;
+}
+
+static inline void writeWord(char *&p, unsigned int word) {
+    writeHalf(p, word);
+    writeHalf(p, word >> 16);
+}
+
+static inline unsigned char tracksEventType(const igEventTrackerView &self, int type) {
+    return (self._eventTypeFilterFlags & (1 << type)) != 0;
+}
+
+static inline unsigned char tracksMarkerType(const igEventTrackerView &self, int type) {
+    return (self._markerTypeFilterFlags & (1 << type)) != 0;
+}
+
+static inline unsigned char tracksNotificationType(const igEventTrackerView &self, int type) {
+    return (self._notificationTypeFilterFlags & (1 << type)) != 0;
+}
+
+static inline unsigned char tracksField(const igEventTrackerView &self, int field) {
+    return (self._memoryFieldFilterFlags & field) != 0;
+}
+
+static inline unsigned char detachesAllocations(const igEventTrackerView &self) {
+    return self._detachAllocationsCounter != 0;
+}
+
+static inline unsigned char isFlagSet(const igEventTrackerView &self, int flag) {
+    return (self._flags & flag) != 0;
+}
+
+typedef igSmartPointer<igTDataList<signed char> > igCharListRef;
+
+/* Appends an event to the record list: its type, a length byte, the flags of the fields that follow,
+ * then those fields; strings go to the string tables and are stored as offsets. Returns the event's
+ * offset, or -1 when its type is filtered out or the tracker is already recording. */
+extern "C" int Gap__Core__igEventTracker__vfunc_26(igEventTrackerView *self, EventRecord *record, int callStackSkip);
+int Gap__Core__igEventTracker__vfunc_26(igEventTrackerView *self, EventRecord *record, int callStackSkip) {
+    unsigned int flags;
+    int group;
+    int className;
+    int memberName;
+    int annotation;
+    int sourceFile;
+    int poolName;
+    int callStack;
+    int slot;
+    int state;
+    int length;
+    int offset;
+    char *p;
+    if (!tracksEventType(*self, record->type)) {
+        return -1;
+    }
+    switch (record->type) {
+    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12:
+        break;
+    case 13:
+        if (!tracksMarkerType(*self, record->markerType)) {
+            return -1;
+        }
+        break;
+    case 14:
+        if (!tracksNotificationType(*self, record->notificationType)) {
+            return -1;
+        }
+        if (!tracksNotificationType(*self, record->notificationCode)) {
+            return -1;
+        }
+        break;
+    case 15:
+        break;
+    }
+    {
+        ScopedLock guard(self->_lock);
+        char buffer[32];
+        if (isFlagSet(*self, 2)) {
+            return -1;
+        }
+        self->_flags |= 2;
+        group = -1;
+        flags = 0;
+        className = -1;
+        memberName = -1;
+        annotation = -1;
+        callStack = -1;
+        p = buffer;
+        slot = 0;
+        sourceFile = -1;
+        poolName = -1;
+        offset = self->_eventRecords->_count;
+        encodeUnsigned(p, record->type);
+        if (tracksField(*self, 0x2)) {
+            if (record->group != 0 && *record->group != 0) {
+                group = igStringTable_FindOrAddString(self->_groups, (int)record->group);
+            }
+        }
+        if (tracksField(*self, 0x40)) {
+            if (record->str != 0 && *record->str != 0) {
+                className = igStringTable_FindOrAddString(self->_classNames, (int)record->str);
+            } else {
+                className = self->_eventClassNameOffset;
+            }
+        }
+        if (tracksField(*self, 0x80)) {
+            if (record->memberName != 0 && *record->memberName != 0) {
+                memberName = igStringTable_FindOrAddString(self->_memberNames, (int)record->memberName);
+            }
+        }
+        if (tracksField(*self, 0x4)) {
+            if (record->annotation != 0 && *record->annotation != 0) {
+                annotation = igStringTable_FindOrAddString(self->_annotations, (int)record->annotation);
+            }
+        }
+        if (tracksField(*self, 0x8)) {
+            if (record->f68 != 0 && *(char *)record->f68 != 0) {
+                sourceFile = igStringTable_FindOrAddString(self->_sourceFileNames, record->f68);
+            }
+        }
+        if (tracksField(*self, 0x10)) {
+            if (record->f64 != 0 && *record->f64 != 0) {
+                poolName = igStringTable_FindOrAddString(self->_groups, (int)record->f64);
+            }
+        }
+        if (tracksField(*self, 0x20)) {
+            if (callStackSkip != -1) {
+                callStack = ((igCallStackTableView *)self->_callStacks)->vfunc_27(self->_callStackTracer->vfunc_24(g_eventTrackerMaxCallStackDepth, callStackSkip + 1));
+                if (callStack != -1) {
+                    flags |= 0x20;
+                }
+            }
+        }
+        if (group != -1) flags |= 0x2;
+        if (className != -1) flags |= 0x40;
+        if (memberName != -1) flags |= 0x80;
+        if (annotation != -1) flags |= 0x4;
+        if (tracksField(*self, 0x100) && self->_eventTagOffset != -1) flags |= 0x100;
+        if (sourceFile != -1 || record->f72 != 0) flags |= 0x8;
+        if (poolName != -1) flags |= 0x10;
+        if (callStack != -1) flags |= 0x20;
+        if (tracksField(*self, 0x8000) && record->slotStates != 0) flags |= 0x8000;
+        switch (record->type) {
+        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: {
+            int previousType;
+            int size;
+            flags |= 0x1;
+            if (isFlagSet(*self, 8) && record->type == 3) {
+                int previous = self->vfunc_31(record->address);
+                if (previous != -1) {
+                    if (self->vfunc_28(previous, &previousType) == g_resultSuccess && previousType == 3) {
+                        annotation = igStringTable_FindOrAddString(self->_annotations, (int)"Double-deletion");
+                        flags |= 0x4;
+                    }
+                }
+            }
+            p++;
+            encodeUnsigned(p, flags);
+            writeWord(p, record->address);
+            if ((size = record->val) == 0 && (record->type == 3 || record->type == 8)) {
+                int previous = self->vfunc_31(record->address);
+                if (previous != -1) {
+                    self->vfunc_30(previous, &size);
+                }
+            }
+            encodeSigned(p, size);
+            encodeSigned(p, record->f16);
+            self->InsertHashIndex(record->address, offset);
+            break;
+        }
+        case 13: {
+            int name = -1;
+            if (record->markerType != 0) flags |= 0x200;
+            if (record->markerValue != 0) flags |= 0x400;
+            if (record->markerName != 0 && *record->markerName != 0) {
+                name = igStringTable_FindOrAddString(self->_annotations, (int)record->markerName);
+                if (name != -1) flags |= 0x800;
+            }
+            p++;
+            encodeUnsigned(p, flags);
+            if (record->markerType != 0) encodeUnsigned(p, record->markerType);
+            if (record->markerValue != 0) encodeSigned(p, record->markerValue);
+            if (name != -1) encodeSigned(p, name);
+            break;
+        }
+        case 14: {
+            int text = -1;
+            if (record->notificationType != 0) flags |= 0x1000;
+            if (record->notificationCode != 0) flags |= 0x2000;
+            if (record->notificationText != 0 && *record->notificationText != 0) {
+                text = igStringTable_FindOrAddString(self->_annotations, (int)record->notificationText);
+                if (text != -1) flags |= 0x4000;
+            }
+            p++;
+            encodeUnsigned(p, flags);
+            if (record->notificationType != 0) encodeUnsigned(p, record->notificationType);
+            if (record->notificationCode != 0) encodeSigned(p, record->notificationCode);
+            if (text != -1) encodeSigned(p, text);
+            break;
+        }
+        case 15:
+            p++;
+            encodeUnsigned(p, flags);
+            break;
+        default:
+            p++;
+            encodeUnsigned(p, flags);
+            break;
+        }
+        encodeSigned(p, self->_count);
+        if (group != -1) encodeSigned(p, group);
+        if (className != -1) encodeSigned(p, className);
+        if (memberName != -1) encodeSigned(p, memberName);
+        if (annotation != -1) encodeSigned(p, annotation);
+        if (tracksField(*self, 0x100)) {
+            if (self->_eventTagOffset != -1) encodeSigned(p, self->_eventTagOffset);
+        }
+        if (sourceFile != -1) {
+            encodeSigned(p, sourceFile);
+            encodeUnsigned(p, record->f72);
+        }
+        if (poolName != -1) encodeSigned(p, poolName);
+        if (callStack != -1) encodeSigned(p, callStack);
+        if (tracksField(*self, 0x8000)) {
+            if (record->slotStates != 0) {
+                encodeUnsigned(p, record->slotStates);
+                do {
+                    state = igEventTracker_GetEventDataType(record, slot);
+                    switch (state) {
+                    case 0:
+                        break;
+                    case 1:
+                        encodeSigned(p, igEventTracker_GetEventDataInt(record, slot));
+                        break;
+                    case 2:
+                        encodeUnsigned(p, igEventTracker_GetEventDataUnsigned(record, slot));
+                        break;
+                    case 3: {
+                        char *string = igEventTracker_GetEventDataString(record, slot);
+                        if (string != 0 && *string != 0) {
+                            int index = igStringTable_FindOrAddString(self->_annotations, (int)string);
+                            if (index != -1) encodeSigned(p, index);
+                        }
+                        break;
+                    }
+                    }
+                    slot++;
+                } while (state != 0);
+            }
+        }
+        length = p - buffer;
+        buffer[1] = (char)length - 2;
+        if (((igCharListRef &)self->_eventRecords)->count() + length > ((igCharListRef &)self->_eventRecords)->capacity()) {
+            setCapacity(((igCharListRef &)self->_eventRecords).get(), ((igCharListRef &)self->_eventRecords)->capacity() * 2);
+        }
+        List_AppendBytes((igDataList *)self->_eventRecords, length, (int)buffer, 1);
+        self->_count++;
+        self->_flags &= ~2;
+    }
+    if (detachesAllocations(*self) && (record->type == 1 || record->type == 6)) {
+        EventRecord detach;
+        igEventTracker_CopyEvent(&detach, record);
+        if (record->type == 1) {
+            detach.type = 2;
+        } else {
+            detach.type = 7;
+        }
+        self->AddEvent(&detach, callStackSkip + 1);
+        igEventTracker_DestructEvent(&detach, -1);
+    }
+    return offset;
+}
+
 /* An unaligned little-endian word of an event record. */
 static inline void readWord(const char *p, void *out) {
     *(int *)out = ((unsigned char)p[0]) | ((((unsigned char)p[1]) << 8) | ((((unsigned char)p[3]) << 24) | (((unsigned char)p[2]) << 16)));
@@ -810,6 +1127,433 @@ void igEventTracker_RebuildHashIndex(igEventTrackerView *self, int n) {
     }
 }
 
+/* String literals are read-only here, as in the original build: the literals shared with the
+ * call-stack formatter are its objects. */
+#pragma push
+#pragma readonly_strings on
+extern "C" const char *g_defaultEventFormat;
+extern "C" char *igObject_Release(igEventTrackerView *self, EventRecord *record, char *output, int outputSize);
+
+/* Formats one event as a line of text. Each format character is a field, optionally followed by a
+ * data slot number, a quoted printf specification ('...') and a call-stack frame format (^...^):
+ * a address, c call stack one frame a line, d data slots, e alignment, f source file name, g group,
+ * i index, j tag or the third data word, k one character for the event type, l source line,
+ * m member name, n annotation, o class name, p source path, q pool name, r call stack on one line,
+ * s size, t event type name, u marker type name, v marker value, w marker name, x notification type
+ * name, y notification code name, z notification text; "..." is literal text and \n \r \t are
+ * escapes. An object deallocation without a source file takes its location from the first
+ * call-stack frame outside the release functions. */
+char *igObject_Release(igEventTrackerView *self, EventRecord *record, char *output, int outputSize) {
+    int offset;
+    int line;
+    char function[256];
+    char spec[128];
+    char frameFormat[128];
+    char text[256];
+    char path[256];
+    EventRecord event;
+    const char *format;
+    igEventTracker_CopyEvent(&event, record);
+    if (outputSize != 0 && output != 0) {
+        *output = 0;
+    }
+    if (record == 0) {
+        igEventTracker_DestructEvent(&event, -1);
+        return output;
+    }
+    format = (const char *)igEventTracker_GetEventFormat(self, record->type);
+    if (format == 0 || *format == 0) {
+        switch (record->type) {
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: {
+            const char *memoryFormat = (const char *)self->_defaultMemoryEventFormat;
+            if (memoryFormat != 0 && *memoryFormat != 0) {
+                format = memoryFormat;
+            } else {
+                format = g_memoryEventFormat[0];
+            }
+            break;
+        }
+        case 13:
+            format = (const char *)g_markerEventFormat[0];
+            break;
+        case 14:
+            format = (const char *)g_notificationEventFormat[0];
+            break;
+        case 15:
+        default:
+            format = g_defaultEventFormat;
+            break;
+        }
+    }
+    switch (event.type) {
+    case 8:
+        if (event.getSourceFile() == 0 || *event.getSourceFile() == 0) {
+            int *frame = event.getCallStack();
+            if (frame != 0) {
+                while (*frame != 0) {
+                    self->ResolveAddress(*frame, function, 255, &offset, path, 255, &line);
+                    if (strstr(function, "igObject::internalRelease") == 0 && strstr(function, "igObject::release") == 0 &&
+                        strstr(function, "::~igSmartPointer<") == 0) {
+                        event.callStack = frame;
+                        event.f68 = (int)path;
+                        event.f72 = line;
+                        break;
+                    }
+                    frame++;
+                }
+            }
+        }
+        break;
+    }
+    while (*format != 0) {
+        char field = *format;
+        int slot;
+        int n;
+        spec[0] = 0;
+        format++;
+        frameFormat[0] = 0;
+        slot = -1;
+        if (*format >= '0' && *format <= '9') {
+            slot = 0;
+            while (*format >= '0' && *format <= '9') {
+                slot = slot * 10 + (*format - '0');
+                format++;
+            }
+        }
+        if (field != '"') {
+            while (*format == '\'' || *format == '^') {
+                if (*format == '\'') {
+                    n = 0;
+                    format++;
+                    while (*format && *format != '\'' && n < 127) {
+                        if (*format == '\\') {
+                            format++;
+                            switch (*format) {
+                            case 'n': spec[n++] = '\n'; break;
+                            case 'r': spec[n++] = '\r'; break;
+                            case 't': spec[n++] = '\t'; break;
+                            }
+                        } else {
+                            spec[n++] = *format;
+                        }
+                        format++;
+                    }
+                    spec[n] = 0;
+                    if (*format == '\'') {
+                        format++;
+                    }
+                }
+                if (*format == '^') {
+                    n = 0;
+                    format++;
+                    while (*format && *format != '^' && n < 127) {
+                        if (*format == '\\') {
+                            format++;
+                            switch (*format) {
+                            case 'n': frameFormat[n++] = '\n'; break;
+                            case 'r': frameFormat[n++] = '\r'; break;
+                            case 't': frameFormat[n++] = '\t'; break;
+                            }
+                        } else {
+                            frameFormat[n++] = *format;
+                        }
+                        format++;
+                    }
+                    frameFormat[n] = 0;
+                    if (*format == '^') {
+                        format++;
+                    }
+                }
+            }
+        }
+        text[0] = 0;
+        switch (field) {
+        case 'a':
+            sprintf(text, spec[0] != 0 ? spec : "0x%08x", event.getAddress());
+            break;
+        case 'c': {
+            int *frame = event.callStack;
+            if (frame != 0) {
+                while (*frame != 0) {
+                    self->vfunc_39(*frame, frameFormat, function, 255);
+                    sprintf(text, spec[0] != 0 ? spec : "\n%s", function);
+                    strncat(output, text, outputSize);
+                    if (outputSize != 0) {
+                        output[outputSize - 1] = 0;
+                    }
+                    text[0] = 0;
+                    if (strncmp(function, "main", 4) == 0) {
+                        break;
+                    }
+                    if (strstr(function, " main") != 0) {
+                        break;
+                    }
+                    frame++;
+                }
+            }
+            break;
+        }
+        case 'd': {
+            int end;
+            if (slot != -1) {
+                end = slot + 1;
+            } else {
+                slot = 0;
+                end = igEventTracker_FindFreeEventDataSlot(&event);
+            }
+            text[0] = 0;
+            for (; slot < end; slot++) {
+                switch (igEventTracker_GetEventDataType(&event, slot)) {
+                case 1:
+                    sprintf(text + strlen(text), spec[0] != 0 ? spec : "%d", igEventTracker_GetEventDataInt(&event, slot));
+                    break;
+                case 2:
+                    sprintf(text + strlen(text), spec[0] != 0 ? spec : "%u", igEventTracker_GetEventDataUnsigned(&event, slot));
+                    break;
+                case 3:
+                    sprintf(text + strlen(text), spec[0] != 0 ? spec : "%s",
+                            igEventTracker_GetEventDataString(&event, slot) != 0 ? igEventTracker_GetEventDataString(&event, slot)
+                                                                                     : (char *)emptyString_4);
+                    break;
+                case 0:
+                    continue;
+                default:
+                    continue;
+                }
+                if (slot < end - 1) {
+                    strcat(text, " ");
+                }
+            }
+            break;
+        }
+        case 'e':
+            sprintf(text, spec[0] != 0 ? spec : "%d", event.getAlignment());
+            break;
+        case 'f':
+            if (event.f68 != 0 && *(char *)event.f68 != 0) {
+                char *backslash = strrchr((char *)event.f68, '\\');
+                char *slash = strrchr((char *)event.f68, '/');
+                char *name;
+                if (backslash != 0 && slash != 0) {
+                    name = slash < backslash ? backslash : slash;
+                } else {
+                    name = backslash != 0 ? backslash : slash;
+                }
+                if (name != 0) {
+                    name++;
+                } else {
+                    name = (char *)event.f68;
+                }
+                if (name != 0 && *name != 0) {
+                    sprintf(text, spec[0] != 0 ? spec : "%s", name);
+                }
+            }
+            break;
+        case 'g':
+            if (event.group != 0 && *event.group != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.group);
+            }
+            break;
+        case 'i':
+            sprintf(text, spec[0] != 0 ? spec : "%d", event.getIndex());
+            break;
+        case 'j':
+            if (event.f60 != 0 && *event.f60 != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.f60);
+            } else if (igEventTracker_FindFreeEventDataSlot(&event) == 3) {
+                unsigned int words[3];
+                igEventTracker_GetEventDataUnsigned3(&event, 0, words);
+                if (words[2] != 0) {
+                    sprintf(text, spec[0] != 0 ? spec : "%d", words[2]);
+                }
+            }
+            break;
+        case 'k': {
+            char kind;
+            switch (event.type) {
+            case 1: kind = '+'; break;
+            case 2: kind = '*'; break;
+            case 3: kind = '-'; break;
+            case 4: kind = '<'; break;
+            case 5: kind = '>'; break;
+            case 6: kind = 'o'; break;
+            case 7: kind = 't'; break;
+            case 8: kind = 'd'; break;
+            case 9: kind = 'r'; break;
+            case 10: kind = 'w'; break;
+            case 11: kind = 'r'; break;
+            case 12: kind = 'w'; break;
+            case 13: kind = 'm'; break;
+            case 14: kind = 'n'; break;
+            case 15:
+            default: kind = 'c'; break;
+            }
+            sprintf(text, spec[0] != 0 ? spec : "%c", kind);
+            break;
+        }
+        case 'l':
+            sprintf(text, spec[0] != 0 ? spec : "%d", event.getLine());
+            break;
+        case 'm':
+            if (event.memberName != 0 && *event.memberName != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.memberName);
+            }
+            break;
+        case 'n':
+            if (event.annotation != 0 && *event.annotation != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.annotation);
+            }
+            break;
+        case 'o':
+            if (event.str != 0 && *event.str != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.str);
+            }
+            break;
+        case 'p':
+            if (event.f68 != 0 && *(char *)event.f68 != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.f68);
+            }
+            break;
+        case 'q':
+            if (event.f64 != 0 && *event.f64 != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.f64);
+            }
+            break;
+        case 'r': {
+            int *frame = event.callStack;
+            if (frame != 0) {
+                while (*frame != 0) {
+                    self->vfunc_39(*frame, frameFormat, function, 255);
+                    sprintf(text, spec[0] != 0 ? spec : "%s", function);
+                    frame++;
+                    if (*frame != 0) {
+                        if (spec[0] == 0) {
+                            strcat(text, " ");
+                        }
+                    }
+                    strncat(output, text, outputSize);
+                    if (outputSize != 0) {
+                        output[outputSize - 1] = 0;
+                    }
+                    text[0] = 0;
+                    if (strncmp(function, "main", 4) == 0) {
+                        break;
+                    }
+                    if (strstr(function, " main") != 0) {
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        case 's':
+            sprintf(text, spec[0] != 0 ? spec : "0x%06x", event.getVal());
+            break;
+        case 't': {
+            const char *name = (const char *)igEventTracker_GetEventTypeName(self, event.type);
+            if (name == 0) {
+                name = "(Unknown)";
+            }
+            sprintf(text, spec[0] != 0 ? spec : "%s", name);
+            break;
+        }
+        case 'u':
+            if (event.markerType != 0) {
+                const char *name = (const char *)igEventTracker_GetMarkerTypeName(self, event.markerType);
+                if (name == 0) {
+                    name = "(Unknown)";
+                }
+                sprintf(text, spec[0] != 0 ? spec : "%s", name);
+            }
+            break;
+        case 'v':
+            if (event.markerValue != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%d", event.markerValue);
+            } else if (igEventTracker_FindFreeEventDataSlot(&event) == 3) {
+                unsigned int words[3];
+                igEventTracker_GetEventDataUnsigned3(&event, 0, words);
+                sprintf(text, spec[0] != 0 ? spec : "%d", words[1]);
+            }
+            break;
+        case 'w':
+            if (event.markerName != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.markerName);
+            } else if (igEventTracker_FindFreeEventDataSlot(&event) == 3) {
+                unsigned int words[3];
+                igEventTracker_GetEventDataUnsigned3(&event, 0, words);
+                sprintf(text, spec[0] != 0 ? spec : "%u", words[0]);
+            }
+            break;
+        case 'x':
+            if (event.notificationType != 0) {
+                const char *name = (const char *)igEventTracker_GetNotificationTypeName(self, event.notificationType);
+                if (name == 0) {
+                    name = "(Unknown)";
+                }
+                sprintf(text, spec[0] != 0 ? spec : "%s", name);
+            }
+            break;
+        case 'y':
+            if (event.notificationCode != 0) {
+                const char *name = (const char *)igEventTracker_GetNotificationCodeName(self, event.notificationCode);
+                if (name != 0) {
+                    sprintf(text, spec[0] != 0 ? spec : "%s", name);
+                } else {
+                    sprintf(text, spec[0] != 0 ? spec : "%d", event.getNotificationCode());
+                }
+            }
+            break;
+        case 'z':
+            if (event.notificationText != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.notificationText);
+            }
+            break;
+        case '\\':
+            switch (*format++) {
+            case 'n': strcpy(text, "\n"); break;
+            case 'r': strcpy(text, "\r"); break;
+            case 't': strcpy(text, "\t"); break;
+            }
+            break;
+        case '"': {
+            int c;
+            while (*format && (c = *format) != '"') {
+                if (c == '\\') {
+                    format++;
+                    switch (*format) {
+                    case 'n': strcat(text, "\n"); break;
+                    case 'r': strcat(text, "\r"); break;
+                    case 't': strcat(text, "\t"); break;
+                    }
+                } else {
+                    sprintf(text + strlen(text), "%c", c);
+                }
+                format++;
+            }
+            if (*format == '"') {
+                format++;
+            }
+            break;
+        }
+        default:
+            sprintf(text, "%c", field);
+            break;
+        }
+        strncat(output, text, outputSize);
+    }
+    strncat(output, "\n", outputSize);
+    if (outputSize > 1) {
+        output[outputSize - 2] = '\n';
+    }
+    if (outputSize != 0) {
+        output[outputSize - 1] = 0;
+    }
+    igEventTracker_DestructEvent(&event, -1);
+    return output;
+}
+
+#pragma pop
+
 int igEventTracker_GetEventFormat(void *tracker, int type) {
     int nameOffset;
     int idx;
@@ -1136,9 +1880,9 @@ int igEventTracker_InitEvent(int record) {
     return record;
 }
 
-int igEventTracker_CopyEvent(int record, int source) {
-    memcpy(record, source, 0x94);
-    return record;
+EventRecord *igEventTracker_CopyEvent(EventRecord *copy, const EventRecord *source) {
+    memcpy(copy, source, sizeof(EventRecord));
+    return copy;
 }
 
 void *igEventTracker_InitMemoryEvent(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
@@ -1204,9 +1948,9 @@ int igEventTracker_GetEventDataType(EventRecord *record, int slot)
   return 0;
 }
 
-int igEventTracker_GetEventDataInt(int record, int slot) {
-    if (slot < 0x10) {
-        return ((EventRecord *)((slot << 2) + record))->slots[0]; /* matching construct: slots[slot] spelled as the record shifted by `slot` words, so the index is added before the base */
+int igEventTracker_GetEventDataInt(const EventRecord *record, int slot) {
+    if (slot < 16) {
+        return record->slots[slot];
     }
     return -1;
 }
@@ -1220,12 +1964,12 @@ void igEventTracker_SetEventDataInt(void *record, int slot, int value) {
     }
 }
 
-int igEventTracker_GetEventDataUnsigned(int record, int slot) {
-    int value;
+unsigned int igEventTracker_GetEventDataUnsigned(const EventRecord *record, int slot) {
+    unsigned int value;
 
-    value = -1;
-    if (slot < 0x10) {
-        value = ((EventRecord *)((slot << 2) + record))->slots[0]; /* matching construct: as in igEventTracker_GetEventDataInt */
+    value = (unsigned int)-1;
+    if (slot < 16) {
+        value = record->slots[slot];
     }
     return value;
 }
@@ -1240,8 +1984,12 @@ void igEventTracker_SetEventDataUnsigned(void *record, int slot, int value) {
     }
 }
 
-int igEventTracker_GetEventDataString(int record, int slot) {
-    int r = 0; if (slot < 0x10) { r = slot * 4; r += record; r = ((EventRecord *)r)->slots[0]; } return r; /* matching construct: as in igEventTracker_GetEventDataInt */
+char *igEventTracker_GetEventDataString(const EventRecord *record, int slot) {
+    char *string = 0;
+    if (slot < 16) {
+        string = (char *)record->slots[slot];
+    }
+    return string;
 }
 
 void igEventTracker_SetEventDataString(void *record, int slot, int value) {
@@ -1257,11 +2005,11 @@ void igEventTracker_SetEventDataString(void *record, int slot, int value) {
     }
 }
 
-void igEventTracker_GetEventDataUnsigned3(int record, int slot, void *out) {
-    if ((out != 0) && (slot < 0x10)) {
-        ((int *)out)[0] = igEventTracker_GetEventDataUnsigned(record, slot);
-        ((int *)out)[1] = igEventTracker_GetEventDataUnsigned(record, slot + 1);
-        ((int *)out)[2] = igEventTracker_GetEventDataUnsigned(record, slot + 2);
+void igEventTracker_GetEventDataUnsigned3(const EventRecord *record, int slot, unsigned int *values) {
+    if ((values != 0) && (slot < 16)) {
+        values[0] = igEventTracker_GetEventDataUnsigned(record, slot);
+        values[1] = igEventTracker_GetEventDataUnsigned(record, slot + 1);
+        values[2] = igEventTracker_GetEventDataUnsigned(record, slot + 2);
     }
 }
 

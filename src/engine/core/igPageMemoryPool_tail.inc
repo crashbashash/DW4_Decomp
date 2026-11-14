@@ -424,6 +424,121 @@ void igPageMemoryPool_SetPoolIndex(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 132) = arg1;
 }
 
+/* The page pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the size is
+ * rounded up to whole 4KB pages and the block (re)allocated from the system allocator, with the
+ * out-of-memory hook given a chance to make room before the maximum size refuses the request. */
+void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, int size, unsigned short alignment) {
+    unsigned int blockSize = 0;
+    void *result;
+    void *pages;
+    int r;
+
+    if (hasPageOption(self->poolOptionFlags, 0x40)) {
+        if (self->messageLevel >= 2 && g_igPageMemoryPool_ignoreE110Notice == 0) {
+            r = igReportNotice(text_igPageMemoryPool_E110_AssertOnMemoryOperation,
+                               (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+            if (r != 1 && r == 2) {
+                g_igPageMemoryPool_ignoreE110Notice = 1;
+            }
+        }
+        if (self->HandleOutOfMemory(size, 4) == 0) {
+            return 0;
+        }
+    }
+    igPageMemoryPool_Lock(self);
+    if (alignment < 4096) {
+        alignment = 4096;
+    }
+    for (;;) {
+        if (size == -1) {
+            result = 0;
+            blockSize = block != 0 ? self->GetBlockSize(block) : 0;
+            if (blockSize != 0 && hasPageOption(self->poolOptionFlags, 1)) {
+                memset(block, 0xFD, blockSize);
+            }
+            if (self->updateStatistics) {
+                self->UpdateStatistics(blockSize, blockSize, 0);
+            }
+            igPageMemoryPool_FreePages(self, (int)block, blockSize);
+            break;
+        }
+        if (size < 4096) {
+            size = 4096;
+        } else {
+            int partial = size % 4096;
+            if (partial != 0) {
+                size += 4096 - partial;
+            }
+        }
+        if ((unsigned int)(size + (int)self->localNetAllocated) > self->maxSize) {
+            if (self->HandleOutOfMemory(size, 1) != 0) {
+                continue;
+            }
+            if (hasPageOption(self->poolOptionFlags, 0x10)) {
+                if (self->messageLevel > 0) {
+                    if ((unsigned int)(size + (int)self->localNetAllocated) > self->maxSize && self->messageLevel > 0) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (g_igPageMemoryPool_ignoreE101Notice == 0) {
+                            r = igReportNotice(text_igPageMemoryPool_E101_MaximumSizeReached, (int)self->maxSize, (int)self->localNetAllocated);
+                            if (r != 1 && r == 2) {
+                                g_igPageMemoryPool_ignoreE101Notice = 1;
+                            }
+                        }
+                    }
+                }
+            } else if (self->messageLevel >= 3 && g_igPageMemoryPool_ignoreE91Notice == 0) {
+                r = igReportNotice(text_igPageMemoryPool_memoryOperation_E91, self->poolIndex, size, (int)self->localNetAllocated, (int)self->maxSize);
+                if (r != 1 && r == 2) {
+                    g_igPageMemoryPool_ignoreE91Notice = 1;
+                }
+            }
+            result = 0;
+            break;
+        }
+        if (block != 0) {
+            blockSize = self->GetBlockSize(block);
+            if (alignment <= 4096) {
+                pages = (void *)igPageMemoryPool_ReallocatePages(self, (int)block, size, blockSize);
+            } else {
+                pages = (void *)igPageMemoryPool_AllocatePagesAligned(self, alignment, size);
+            }
+        } else if (alignment > 4096) {
+            pages = (void *)igPageMemoryPool_AllocatePagesAligned(self, alignment, size);
+        } else {
+            pages = (void *)igPageMemoryPool_AllocatePages(self, size);
+        }
+        if (pages != 0) {
+            if (block != 0 && alignment > 4096) {
+                if (self->updateStatistics) {
+                    self->UpdateStatistics(blockSize, blockSize, 0);
+                }
+                igPageMemoryPool_FreePages(self, (int)block, blockSize);
+            }
+            if (self->updateStatistics) {
+                self->UpdateStatistics(size, size, 1);
+            }
+            result = pages;
+        } else {
+            if (self->messageLevel >= 3 && g_igPageMemoryPool_ignoreE94Notice == 0) {
+                r = igReportNotice(text_igPageMemoryPool_memoryOperation_E94, self->poolIndex, size);
+                if (r != 1 && r == 2) {
+                    g_igPageMemoryPool_ignoreE94Notice = 1;
+                }
+            }
+            result = 0;
+        }
+        if (result != 0 && block == 0) {
+            if (hasPageOption(self->poolOptionFlags, 1)) {
+                memset(result, 0xCD, size);
+            } else if (hasPageOption(self->poolOptionFlags, 2)) {
+                memset(result, 0, size);
+            }
+        }
+        break;
+    }
+    return (void *)igPageMemoryPool_UnlockAndReturn(self, (int)result);
+}
+
 int igPageMemoryPool_AllocatePages(igPageMemoryPoolView *arg0, int arg1) {
     int var_v0;
 

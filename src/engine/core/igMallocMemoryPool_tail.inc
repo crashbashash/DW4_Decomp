@@ -384,6 +384,251 @@ void igMallocMemoryPool_Free(igMallocMemoryPoolView *self, void *block)
     self->vfunc_101(block, -1, self->_alignment);
 }
 
+/* The malloc pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the block is
+ * (re)allocated from the system allocator, with the out-of-memory hook given a chance to make room
+ * before the maximum size refuses the request. With the sentinel option every block carries a head
+ * sentinel after `headBytes` of padding (the padding's size is kept in the word before it) and a
+ * tail sentinel in the last word of its chunk. */
+void *Gap__Core__igMallocMemoryPool__vfunc_101(igMallocMemoryPoolView *self, char *block, int size, unsigned short alignment) {
+    int newBytes;
+    int total;
+    bool moved;
+    int oldHeadBytes;
+    int oldSize;
+    int oldBytes;
+    int sentinelBytes;
+    int oldSentinelBytes;
+    int headBytes;
+    TaggedBlockHeader *h;
+    char *result;
+    char *fresh;
+    TaggedBlockHeader *newHeader;
+
+    oldSize = 0;
+    oldBytes = 0;
+    oldHeadBytes = 0;
+    sentinelBytes = 0;
+    oldSentinelBytes = 0;
+    headBytes = 0;
+    h = 0;
+    moved = false;
+    if (hasPoolOption(self->_poolOptionFlags, 0x100)) {
+        if (self->_messageLevel >= 2) {
+            igReport_Warning(text_igMallocMemoryPool_E110_AssertOnMemoryOperation, (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+        }
+        if (self->HandleOutOfMemory(size, 4) == 0) {
+            return 0;
+        }
+    }
+    igMallocMemoryPool_Lock(self);
+    if (self->_alignment > alignment) {
+        alignment = self->_alignment;
+    }
+    if (alignment < 8) {
+        alignment = 8;
+    }
+    if (hasPoolOption(self->_poolOptionFlags, 1)) {
+        headBytes = alignment;
+        sentinelBytes = headBytes + 4;
+        oldHeadBytes = headBytes;
+        oldSentinelBytes = sentinelBytes;
+    }
+    for (;;) {
+        if (size == -1) {
+            result = 0;
+            if (block != 0) {
+                if (sentinelBytes != 0) {
+                    unsigned head = ((unsigned *)block)[-1];
+                    if (head == 0xAAAAAAAF) {
+                        int offset = ((int *)block)[-2];
+                        block -= offset;
+                        oldSentinelBytes = offset + 4;
+                        h = (TaggedBlockHeader *)blockHeader(block);
+                        unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
+                        if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                            igReportError(text_igMallocMemoryPool_free_E88_BadTailSentinel, block + 8, 0xBBBBBBBF, tail);
+                        }
+                    } else if (self->_messageLevel >= 1) {
+                        igReportError(text_igMallocMemoryPool_free_E89_BadHeadSentinel, block, 0xAAAAAAAF, head);
+                    }
+                } else if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
+                    int offset = ((int *)block)[-2];
+                    if (offset > 0x100010) {
+                        if (self->_messageLevel >= 1) {
+                            igReportError(text_igMallocMemoryPool_free_E107_BadHeadSentinelOffset, block + 8, offset);
+                        }
+                        igMallocMemoryPool_Unlock(self);
+                        return 0;
+                    }
+                    block -= offset;
+                    oldSentinelBytes = offset + 4;
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
+                    if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                        igReportError(text_igMallocMemoryPool_free_E108_BadTailSentinel, block + 8, 0xBBBBBBBF, tail);
+                    }
+                } else {
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                }
+            } else {
+                igMallocMemoryPool_Unlock(self);
+                return 0;
+            }
+            if (h != 0) {
+                oldSize = payloadSize(h) - oldSentinelBytes;
+                oldBytes = chunkBytes(h);
+                if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
+                    igReportError(text_igMallocMemoryPool_free_E112_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                }
+                if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                    memset(block, 0xFD, payloadSize(h));
+                }
+                if (h->marked) {
+                    GangRecord *record = (GangRecord *)padRecord(blockHeader(block));
+                    GangRecord *first = record;
+                    unsigned short offset = record->offset;
+                    if (offset) {
+                        first = (GangRecord *)((char *)record - offset);
+                    }
+                    if (first->count == 0 && self->_messageLevel >= 3) {
+                        igReportNotice(text_free_call_on_gang_alloced_memory, block);
+                    }
+                    self->_localFreeCount++;
+                    self->_localNetAllocationCount--;
+                    if (--first->count == 0) {
+                        unsigned *gang = (unsigned *)first - 1;
+                        if (self->_updateStatistics) {
+                            self->UpdateStatistics(*gang, *gang + 4, 0);
+                        }
+                        igMallocMemoryPool_FreeBlock(self, (unsigned char *)(gang - 1));
+                    }
+                } else {
+                    if (self->_updateStatistics) {
+                        self->UpdateStatistics(oldSize, oldBytes, 0);
+                    }
+                    igMallocMemoryPool_FreeBlock(self, (unsigned char *)block);
+                }
+            } else if (self->_messageLevel >= 3) {
+                igReportNotice(text_igMallocMemoryPool_free_E90_InvalidBlock, self->_poolIndex, block);
+            }
+            break;
+        }
+        if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize) {
+            if (self->HandleOutOfMemory(size, 1) != 0) {
+                continue;
+            }
+            if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
+                if (self->_messageLevel >= 1) {
+                    if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel >= 1) {
+                        igReportError(text_igMallocMemoryPool_E101_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                    }
+                }
+            } else if (self->_messageLevel >= 3) {
+                igReportNotice(text_igMallocMemoryPool_memoryOperation_E91, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+            }
+            result = 0;
+            break;
+        }
+        total = size + sentinelBytes;
+        if (block != 0) {
+            if (sentinelBytes != 0) {
+                if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
+                    oldHeadBytes = ((int *)block)[-2];
+                    block -= oldHeadBytes;
+                    oldSentinelBytes = oldHeadBytes + 4;
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
+                    if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
+                        igReportError(text_igMallocMemoryPool_realloc_E92_BadTailSentinel, block + oldHeadBytes, 0xBBBBBBBF, tail);
+                    }
+                } else {
+                    h = (TaggedBlockHeader *)blockHeader(block);
+                    if (igAllocator_ResolveEncodedIndex(chunkPoolIndex(h)) != self) {
+                        if (self->_messageLevel >= 1) {
+                            igReportError(text_igMallocMemoryPool_realloc_E109_InvalidHeader, block);
+                        }
+                        igMallocMemoryPool_Unlock(self);
+                        return 0;
+                    }
+                }
+            } else {
+                h = (TaggedBlockHeader *)blockHeader(block);
+            }
+            if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
+                igReportError(text_igMallocMemoryPool_free_E113_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+            }
+            oldSize = payloadSize(h) - oldSentinelBytes;
+            oldBytes = chunkBytes(h);
+            if (alignment <= 8 && oldSentinelBytes == sentinelBytes && (unsigned)block % alignment == 0 && !h->relocated) {
+                fresh = (char *)igMallocMemoryPool_ReallocateBlock(self, block, total);
+            } else {
+                fresh = (char *)igMallocMemoryPool_AllocateAlignedBlock(self, alignment, total);
+                moved = true;
+            }
+        } else {
+            if (alignment != 8) {
+                fresh = (char *)igMallocMemoryPool_AllocateAlignedBlock(self, alignment, total);
+            } else {
+                fresh = (char *)igMallocMemoryPool_AllocateBlock(self, total);
+            }
+        }
+        if (fresh != 0) {
+            newHeader = (TaggedBlockHeader *)blockHeader(fresh);
+            newBytes = chunkBytes(newHeader);
+            if (self->_messageLevel >= 1) {
+                if (total != payloadSize(newHeader) && self->_messageLevel >= 1) {
+                    igReportError(text_igMallocMemoryPool_Invalid_or_corrupted_block, newHeader, text_E65_UnexpectedBlockSize);
+                }
+            }
+            if (alignment) {
+                if (self->_messageLevel >= 1) {
+                    if (((unsigned)fresh & (alignment - 1)) != 0 && self->_messageLevel >= 1) {
+                        igReportError(text_E1_memoryOperation_didnt_align, alignment, total, fresh);
+                    }
+                }
+            }
+            if (block != 0) {
+                if (moved) {
+                    memcpy(fresh + headBytes, block + oldHeadBytes, oldSize > size ? size : oldSize);
+                    if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                        memset(block, 0xFD, payloadSize(h));
+                    }
+                    if (self->_updateStatistics) {
+                        self->UpdateStatistics(oldSize, oldBytes, 0);
+                    }
+                    igMallocMemoryPool_FreeBlock(self, (unsigned char *)block);
+                } else if (self->_updateStatistics) {
+                    self->UpdateStatistics(oldSize, oldBytes, 0);
+                }
+            }
+            if (sentinelBytes != 0) {
+                *(unsigned *)(fresh + (headBytes - 4)) = 0xAAAAAAAF;
+                *(int *)(fresh + (headBytes - 8)) = headBytes;
+                fresh += headBytes;
+                *(unsigned *)((char *)newHeader + newBytes - 4) = 0xBBBBBBBF;
+            }
+            if (self->_updateStatistics) {
+                self->UpdateStatistics(size, newBytes, 1);
+            }
+            result = fresh;
+        } else {
+            if (self->_messageLevel >= 3) {
+                igReportNotice(text_igMallocMemoryPool_memoryOperation_E94, self->_poolIndex, size);
+            }
+            result = 0;
+        }
+        if (result != 0 && block == 0) {
+            if (hasPoolOption(self->_poolOptionFlags, 2)) {
+                memset(result, 0xCD, size);
+            } else if (hasPoolOption(self->_poolOptionFlags, 4)) {
+                memset(result, 0, size);
+            }
+        }
+        break;
+    }
+    return (void *)igMallocMemoryPool_UnlockAndReturn(self, (int)result);
+}
+
 int igMallocMemoryPool_OwnsAllocation(int pool, char *memory) {
     TaggedBlockHeader *h;
     int index;

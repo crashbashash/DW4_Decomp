@@ -800,6 +800,198 @@ igResult igIGBFile_ReadMetaObjectBuffer(igIGBFileView *self) {
     return igResult(status);
 }
 
+/* One persistent field of a metaobject in the file: the index of its type in the file's field
+ * types, its slot among the fields of the class that wrote it, and its size. */
+struct MetaTableField { short typeIndex; short slot; short size; };
+
+typedef igTDataList<short> igShortListData;
+
+static inline int fieldOffset(const igMetaField *field) { return field->_offset; }
+static inline unsigned short fieldSize(const igMetaField *field) { return field->_size; }
+
+/* Appends `field` to `meta` at the next offset that suits the field's own alignment. */
+static inline void appendAlignedField(igMetaObject *meta, igMetaField *field) {
+    int mask = ((igMetaFieldView *)field)->GetAlignment() - 1;
+    meta->_requiredAlignment = meta->_requiredAlignment < mask + 1 ? mask + 1 : meta->_requiredAlignment;
+    field->_offset = ~mask & (mask + meta->_sizeofSize);
+    igMetaObject_FinalizeAndAppendField(meta, field);
+}
+
+/* Reads the file's metaobject table into _metaObjectListInFile. From version 4 each record also
+ * lists the persistent fields its class had when the file was written, and the file's slot numbers
+ * are mapped to this program's: _metaFieldPerObjectIndices gets one list of slots per metaobject,
+ * each slot moved by the number of fields the class that declares it gained or lost since. A class
+ * this program does not have fails the read, unless blind objects are on: then a stand-in class is
+ * built from its parent and the listed fields, with one-byte fields filling the unlisted slots. */
+igResult FUN_002e63e0(igIGBFileView *file) {
+    int i;
+    int fieldWords;
+    bool hasFields;
+    MetaTableRecord *records;
+    MetaTableRecord *record;
+    char *name;
+    int stride;
+    assignReference(file->_metaObjectListInFile, igSmartPointer<igObjectList>((igObjectList *)igMetaObjectList_Create((int)file->_temporaryMemoryPool)));
+    setCapacity((igTDataList<igObject *> *)file->_metaObjectListInFile, file->_metaObjectCount);
+    igSmartPointer<igShortListData> slotShifts;
+    if (file->_magicVersion < 4) {
+        stride = 3;
+        fieldWords = 0;
+        hasFields = false;
+    } else {
+        fieldWords = 3;
+        hasFields = true;
+        stride = 6;
+        assignReference(file->_metaFieldPerObjectIndices, igSmartPointer<igTDataList<igShortListData *> >(igShortListList_Create(file->_temporaryMemoryPool)));
+        setCapacity(file->_metaFieldPerObjectIndices, file->_metaObjectCount);
+        {
+            igMemoryPoolView *pool = file->_temporaryMemoryPool;
+            slotShifts.release();
+            slotShifts.p = igShortList_Create(pool);
+        }
+        setCapacity(slotShifts.p, file->_metaObjectCount);
+    }
+    if (file->_endianSwap != 0) {
+        file->imf->SwapBytes(file->_metaObjectBuffer, stride * file->_metaObjectCount);
+    }
+    records = (MetaTableRecord *)file->_metaObjectBuffer;
+    record = records;
+    name = (char *)((int *)record + stride * file->_metaObjectCount);
+    for (i = 0; i < file->_metaObjectCount; i++) {
+        igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(name);
+        if (meta != 0) {
+            int majorVersion = record->majorVersion;
+            if (majorVersion == 0) {
+                majorVersion = 1;
+            }
+            if (majorVersion == meta->_majorVersion && record->minorVersion == meta->_minorVersion) {
+                ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)meta);
+                if (hasFields) {
+                    igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
+                    MetaTableField *field;
+                    int j;
+                    setCapacity(slots.p, record->fieldCount);
+                    ObjectList_AppendRetained((igObjectList *)file->_metaFieldPerObjectIndices, (igObject *)slots.p);
+                    field = (MetaTableField *)(name + record->nameSize);
+                    j = 0;
+                    if (file->_endianSwap != 0) {
+                        ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(field, fieldWords * record->fieldCount);
+                    }
+                    for (; j < record->fieldCount; j++) {
+                        /* The class that declares the slot: the nearest ancestor whose own slots reach it. */
+                        int firstOwnSlot = record->persistCount;
+                        int owner = i;
+                        short slot = field->slot;
+                        MetaTableRecord *ancestor = record;
+                        while (slot < firstOwnSlot) {
+                            owner = ancestor->parentIndex;
+                            ancestor = (MetaTableRecord *)((int *)records + owner * stride);
+                            firstOwnSlot = ancestor->persistCount;
+                        }
+                        slot += (*slotShifts.p)[owner];
+                        slots.p->append(slot);
+                        field = (MetaTableField *)((short *)field + fieldWords);
+                    }
+                    {
+                        short shift = igMetaObject_GetFieldCount(meta) - record->persistCount;
+                        slotShifts.p->append(shift);
+                    }
+                }
+            } else {
+                return g_resultFailure;
+            }
+        } else if (hasFields && g_igIGBFile_blindObjects != 0) {
+            int parentIndex = record->parentIndex;
+            MetaTableRecord *parentRecord = (MetaTableRecord *)((int *)records + parentIndex * stride);
+            igMetaObject *parent = ((igMetaObject **)file->_metaObjectListInFile->_data)[parentIndex];
+            int inherited;
+            int target;
+            int slot;
+            igMetaObject *blind;
+            MetaTableField *field;
+            int j;
+            if (parent->_abstractState != 0) {
+                return g_resultFailure;
+            }
+            slot = igMetaObject_GetPersistentFieldCount((int)parent);
+            inherited = igMetaObject_GetFieldCount(parent) - slot;
+            blind = (igMetaObject *)igMetaObject_Create((int)Memory_GetDefaultAllocator());
+            igMetaObject_SetName(blind, (int)name);
+            igMetaObject_InheritFromBase(blind, parent);
+            ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)blind);
+            field = (MetaTableField *)(name + record->nameSize);
+            if (file->_endianSwap != 0) {
+                ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(field, fieldWords * record->fieldCount);
+            }
+            for (j = 0; j < record->fieldCount; j++) {
+                igMetaField *created;
+                if (field->slot < parentRecord->persistCount) {
+                    field = (MetaTableField *)((short *)field + fieldWords);
+                    continue;
+                }
+                target = field->slot + (*slotShifts.p)[parentIndex] - inherited;
+                while (slot < target) {
+                    created = (igMetaField *)igCharMetaField_Create((int)file->_temporaryMemoryPool);
+                    created->_persistent = 0;
+                    igMetaField_Configure(created, "fakeField", 0, -1, blind);
+                    created->_internalIndex = slot;
+                    created->_size = 1;
+                    appendAlignedField(blind, created);
+                    slot++;
+                    blind->_sizeofSize = fieldOffset(created) + fieldSize(created);
+                }
+                created = (igMetaField *)igMetaObject_CreateInstance(
+                    ((igObjectDispatchView **)file->_metaFieldListInFile->_data)[field->typeIndex]->getMeta(), (igMemoryPoolView *)Memory_GetDefaultAllocator());
+                igMetaField_Configure(created, "Generated", 0, -1, blind);
+                created->_internalIndex = target;
+                created->_size = field->size;
+                appendAlignedField(blind, created);
+                slot++;
+                field = (MetaTableField *)((short *)field + fieldWords);
+                blind->_sizeofSize = fieldOffset(created) + fieldSize(created);
+            }
+            blind->_sizeofSize = (blind->_sizeofSize + blind->_requiredAlignment - 1) & ~(blind->_requiredAlignment - 1);
+            blind->_validity |= 4;
+            igObjectSystem_AppendMetaObject(g_objectSystem[0], blind);
+            igObjectSystem_RunRegistrationCallbacks((int *)g_objectSystem[0], (int)blind);
+            field = (MetaTableField *)(name + record->nameSize);
+            {
+                igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
+                ObjectList_AppendRetained((igObjectList *)file->_metaFieldPerObjectIndices, (igObject *)slots.p);
+                for (j = 0; j < record->fieldCount; j++) {
+                    int firstOwnSlot = record->persistCount;
+                    int owner = i;
+                    short fileSlot = field->slot;
+                    MetaTableRecord *ancestor = record;
+                    while (fileSlot < firstOwnSlot) {
+                        owner = ancestor->parentIndex;
+                        ancestor = (MetaTableRecord *)((int *)records + owner * stride);
+                        firstOwnSlot = ancestor->persistCount;
+                    }
+                    fileSlot += (*slotShifts.p)[owner];
+                    slots.p->append(fileSlot);
+                    field = (MetaTableField *)((short *)field + fieldWords);
+                }
+                {
+                    short shift = igMetaObject_GetFieldCount(blind) - record->persistCount;
+                    slotShifts.p->append(shift);
+                }
+            }
+        } else if (hasFields) {
+            return g_resultFailure;
+        } else {
+            return g_resultFailure;
+        }
+        name += record->nameSize;
+        if (hasFields) {
+            name += fieldWords * (record->fieldCount * 2);
+        }
+        record = (MetaTableRecord *)((int *)record + stride);
+    }
+    file->_metaObjectBuffer = 0;
+    return g_resultSuccess;
+}
+
 igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
     int n;
     char *p;

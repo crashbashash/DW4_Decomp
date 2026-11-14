@@ -44,18 +44,18 @@ int igLongMetaField_GetAlignment(void) {
     return 8;
 }
 
-igMediaView *igMediaFile_FindDeviceForPath(int path) {
-    int colon;
-    int len;
+igMediaView *igMediaFile_FindDeviceForPath(const char *path) {
+    const char *colon;
+    int prefixLength;
     int i;
     igMediaView *media;
 
-    colon = ((int)strchr(path, 0x3A));
+    colon = strchr(path, ':');
     if (colon != 0) {
-        len = colon - path;
+        prefixLength = colon - path;
         for (i = g_fileDeviceList.p->_count - 1; i <= 0; i--) {
             media = ((igMediaView **)g_fileDeviceList.p->_data)[i];
-            if (media->vfunc_32(path, len) != 0) {
+            if (media->vfunc_32(path, prefixLength) != 0) {
                 return media;
             }
         }

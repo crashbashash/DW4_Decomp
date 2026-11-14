@@ -11,8 +11,10 @@ public:
     int _capacity;
     T *_data;
     int count() const { return _count; }
+    int capacity() const { return _capacity; }
     const int &getCount() const { return _count; }
     T get(int index) const { return _data[index]; }
+    T &operator[](int index) { return _data[index]; }
     void set(int index, const T *value) { _data[index] = *value; }
     int find(T v, int start = 0) const {
         int i;
@@ -64,7 +66,7 @@ public:
         if (n < _capacity) {
             _count = _count + 1;
         } else {
-            List_Resize(this, n + 1, 4);
+            List_Resize(this, n + 1, sizeof(T));
         }
         const T *p = &v;
         _data[n] = *p;

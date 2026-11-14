@@ -53,6 +53,51 @@ int igVirtualCFuncMetaField_GetAlignment(void) {
     return 4;
 }
 
+/* The arena's allocation trigger, called on every operation while the trigger is armed. Each armed condition that
+ * holds sets one bit (pool, address, size, operation ordinal, event-tracker count); when every bit the trigger asks
+ * for is set, the installed handler runs, or else the event is reported. */
+void FUN_0030f040(igArenaMemoryPool *pool, int event, int address, int size) {
+    int matched;
+    int eventCount;
+
+    if (DAT_005871e8[0] != 0 && (matched = 0, eventCount = -1, (DAT_004c2330[0] & event) != 0)) {
+        if (DAT_004c2338[0] == pool->_poolIndex) {
+            matched |= 1;
+        }
+        if (address == DAT_004c2340[0]) {
+            matched |= 2;
+        }
+        if (size == DAT_004c2348[0]) {
+            matched |= 4;
+        }
+        if (DAT_005871e0[0] == DAT_004c2350[0]) {
+            matched |= 8;
+        }
+        if (DAT_004c2358[0] != -1) {
+            int tracker = (int)((igMemoryPoolView *)pool)->getEventTracker();
+            if (tracker != 0) {
+                eventCount = igEventTracker_GetCount((int *)tracker);
+                if (eventCount == DAT_004c2358[0]) {
+                    matched |= 0x10;
+                }
+            }
+        }
+        if (matched != 0 && DAT_005871e8[0] == (DAT_005871e8[0] & matched)) {
+            if (DAT_005871f0[0] != 0) {
+                DAT_005871f0[0](pool, event, address, size, DAT_005871e0[0], eventCount, matched);
+                return;
+            }
+            if (g_igArenaMemoryPool_defaultMessageLevel[0] < 4 && GPR_00554c34 == 0) {
+                int rc = igReportNotice((const char *)text_Arena_trigger_event_s_address_0x,
+                                        DAT_004c2310[event], address, size, DAT_005871e0[0], eventCount, matched);
+                if (rc != 1 && rc == 2) {
+                    GPR_00554c34 = 1;
+                }
+            }
+        }
+    }
+}
+
 static inline int isFreeChunk(TaggedBlockHeader *h) { if (h->big == 1) { return h->extraUsed; } return 0; }
 
 /* dlmalloc's malloc_init_state: empties the bins, sets the tuning defaults and, when the pool was

@@ -1,6 +1,6 @@
-void igShortListList_Create(int allocator) {
+igTDataList<igTDataList<short> *> *igShortListList_Create(igMemoryPoolView *pool) {
     igShortListList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586828), (igMemoryPoolView *)allocator);
+    return (igTDataList<igTDataList<short> *> *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586828), pool);
 }
 
 igMetaObject *igShortListList_GetOrCreateMetaObject(void) {

@@ -178,6 +178,42 @@ void igLocationTable_AddLocationIfMissing(igLocationTableView *o, int a1, char *
     switch (o->FindLocationIndex(a1)) { case -1: o->AddLocation(a1,a2,a3,a4,a5); break; default: break; }
 }
 
+typedef igSmartPointer<igTDataList<unsigned int> > igUnsignedIntListRef;
+
+/* Appends a location record unless the address already has one, doubling the record list when it is
+ * full, enters it in the hash index and returns its index. The function name and the source file go
+ * to the two string tables; -1 stands for none. */
+extern "C" int Gap__Core__igLocationTable__vfunc_29(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line);
+int Gap__Core__igLocationTable__vfunc_29(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line) {
+    int nameIndex;
+    int fileIndex;
+    int index;
+    LocationRecord record;
+    index = self->FindLocationIndex(address);
+    if (index != -1) {
+        return index;
+    }
+    fileIndex = nameIndex = -1;
+    index = self->_locations->_count / 5;
+    if (name != 0 && *name != 0) {
+        nameIndex = igStringTable_FindOrAddString(self->_symbolNames, (int)name);
+    }
+    if (sourceFile != 0 && *sourceFile != 0) {
+        fileIndex = igStringTable_FindOrAddString(self->_sourceFileNames, (int)sourceFile);
+    }
+    record.name = nameIndex;
+    record.offset = offset;
+    record.file = fileIndex;
+    record.line = line;
+    record.address = address;
+    if (((igUnsignedIntListRef &)self->_locations)->count() + 5 > ((igUnsignedIntListRef &)self->_locations)->capacity()) {
+        setCapacity(((igUnsignedIntListRef &)self->_locations).get(), ((igUnsignedIntListRef &)self->_locations)->capacity() * 2);
+    }
+    List_AppendWords((igDataList *)self->_locations, 5, (const int *)&record);
+    self->InsertHash(address, index);
+    return index;
+}
+
 /* Hash-bucket index for `key`: key modulo the hash-table size (`_hashCapacity`), or 0 when there
  * is none. */
 

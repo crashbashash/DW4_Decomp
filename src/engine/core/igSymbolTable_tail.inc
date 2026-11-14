@@ -135,6 +135,36 @@ void igSymbolTable_GetSymbolAtAddress(int *out, igSymbolTableView *o, int a, int
 
 void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->findSymbolIndex(b)) { case -1: o->addSymbol((const char *)a, (void *)b, c, d); break; default: break; } }
 
+typedef igSmartPointer<igTDataList<int> > igIntListRef;
+
+/* Appends a symbol record, doubling the record list when it is full, enters it in the hash index and
+ * returns its index. The name and the source file go to the two string tables; -1 stands for none. */
+extern "C" int Gap__Core__igSymbolTable__vfunc_29(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile);
+int Gap__Core__igSymbolTable__vfunc_29(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile) {
+    int nameIndex;
+    int pathIndex;
+    int index;
+    SymbolRecord record;
+    pathIndex = nameIndex = -1;
+    index = self->_symbols->_count / 4;
+    if (name != 0 && *name != 0) {
+        nameIndex = igStringTable_FindOrAddString(self->_symbolNames, (int)name);
+    }
+    if (sourceFile != 0 && *sourceFile != 0) {
+        pathIndex = igStringTable_FindOrAddString(self->_sourceFileNames, (int)sourceFile);
+    }
+    record.name = nameIndex;
+    record.path = pathIndex;
+    record.address = address;
+    record.size = size;
+    if (((igIntListRef &)self->_symbols)->count() + 4 > ((igIntListRef &)self->_symbols)->capacity()) {
+        setCapacity(((igIntListRef &)self->_symbols).get(), ((igIntListRef &)self->_symbols)->capacity() * 2);
+    }
+    List_AppendWords((igDataList *)self->_symbols, 4, (const int *)&record);
+    self->insertHashEntry(address, size, index);
+    return index;
+}
+
 unsigned int igSymbolTable_HashAddress(igSymbolTable *self, int address) {
     unsigned int hashCapacity;
     unsigned int increment;
