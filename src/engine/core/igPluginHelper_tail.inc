@@ -80,7 +80,7 @@ int igPluginHelper_ThreadLoop(Args *args) {
     queue = args->queue;
     fn = args->fn;
     Memory_FreeBuffer((void *)args);
-    for (queue->remove(&key, 1); fn(key) == g_resultSuccess; queue->remove(&key, 1)) {
+    for (queue->Remove(&key, 1); fn(key) == g_resultSuccess; queue->Remove(&key, 1)) {
     }
     return 0;
 }
@@ -92,10 +92,10 @@ void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize)
     args->fn = (igResult (*)(int))function;
     args->queue = (igStandardQueueView *)queue;
     a = (void **)(((void **)igThread_Create((int)a)));
-    ((igPsx2ThreadView *)a)->setFunction((int (*)(...))igPluginHelper_ThreadLoop);
-    ((igPsx2ThreadView *)a)->setArg((int)args);
-    ((igPsx2ThreadView *)a)->setStackSize(stackSize);
-    if (((igPsx2ThreadView *)a)->start() == g_resultSuccess) {
+    ((igPsx2ThreadView *)a)->SetFunction((int (*)(...))igPluginHelper_ThreadLoop);
+    ((igPsx2ThreadView *)a)->SetArg((int)args);
+    ((igPsx2ThreadView *)a)->SetStackSize(stackSize);
+    if (((igPsx2ThreadView *)a)->Start() == g_resultSuccess) {
         ObjectList_AppendRetained((igObjectList *)((igStandardQueueView *)queue)->_serviceThreads, (igObject *)a);
     }
     return a;
@@ -116,11 +116,11 @@ int igStandardQueue_StopServiceThreads(igStandardQueueView *queue) {
     n = ((igTDataList<igPsx2ThreadView *> *)queue->_serviceThreads)->_count;
     for (i = 0; i < n; i++) {
         thread = ((igTDataList<igPsx2ThreadView *> *)queue->_serviceThreads)->_data[i];
-        if (thread->isRunning()) {
-            terminated = thread->terminate();
+        if (thread->IsRunning()) {
+            terminated = thread->Terminate();
         }
-        if (thread->isRunning()) {
-            joined = ((igPsx2ThreadManagerView **)g_threadManager)[0]->getCurrentThread()->join(thread);
+        if (thread->IsRunning()) {
+            joined = ((igPsx2ThreadManagerView **)g_threadManager)[0]->GetCurrentThread()->Join(thread);
         }
         thread->_refCount = thread->_refCount - 1;
         if (((unsigned long long)((long long)(int)thread->_refCount << 0x29) >> 0x29) == 0) {

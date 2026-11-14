@@ -318,11 +318,11 @@ int igDriverDatabase_GetCpuType(void *text) {
 }
 
 bool igDriverDatabase_ReadLineFromFile(void *a0, igFileView *s, char *buf, int n) {
-    int c = s->getChar();
+    int c = s->GetChar();
     int i = 0;
     while (c != -1 && c != 10 && c != 13 && c != 0) {
         if (i < n - 2) buf[i] = c;
-        c = s->getChar();
+        c = s->GetChar();
         i++;
     }
     if (n - 2 < i) i = n - 2;

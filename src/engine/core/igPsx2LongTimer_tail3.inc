@@ -3,7 +3,7 @@ igMetaObject *igPsx2LongTimer_GetMeta(void) {
 }
 
 double igPsx2LongTimer_GetResolutionSeconds(igLongTimerView *self) {
-    long long nanoseconds = self->getResolution();
+    long long nanoseconds = self->GetResolution();
     return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 
@@ -11,24 +11,24 @@ long long igPsx2LongTimer_GetElapsedTime(igPsx2LongTimer *self) {
     if (self->_isStopped != 0) {
         return self->_additionalTime;
     }
-    return (self->_additionalTime + ((igLongTimerView *)self)->getCurrentTime()) - self->_startTime;
+    return (self->_additionalTime + ((igLongTimerView *)self)->GetCurrentTime()) - self->_startTime;
 }
 
 double igPsx2LongTimer_GetElapsedSeconds(igLongTimerView *self) {
-    long long nanoseconds = self->getElapsedTime();
+    long long nanoseconds = self->GetElapsedTime();
     return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 
 void igPsx2LongTimer_Start(igPsx2LongTimer *self) {
     if (self->_isStopped != 0) {
         self->_isStopped = 0;
-        self->_startTime = ((igLongTimerView *)self)->getCurrentTime();
+        self->_startTime = ((igLongTimerView *)self)->GetCurrentTime();
     }
 }
 
 void igPsx2LongTimer_Stop(igPsx2LongTimer *self) {
     if (self->_isStopped == 0) {
-        self->_additionalTime = self->_additionalTime + (((igLongTimerView *)self)->getCurrentTime() - self->_startTime);
+        self->_additionalTime = self->_additionalTime + (((igLongTimerView *)self)->GetCurrentTime() - self->_startTime);
         self->_isStopped = 1;
     }
 }
@@ -36,7 +36,7 @@ void igPsx2LongTimer_Stop(igPsx2LongTimer *self) {
 void igPsx2LongTimer_Reset(igPsx2LongTimer *self) {
     self->_additionalTime = self->_resetTime;
     if (self->_isStopped == 0) {
-        self->_startTime = ((igLongTimerView *)self)->getCurrentTime();
+        self->_startTime = ((igLongTimerView *)self)->GetCurrentTime();
     }
 }
 
@@ -51,11 +51,11 @@ void igPsx2LongTimer_ResetAndStop(igPsx2LongTimer *self) {
 void igPsx2LongTimer_Restart(igPsx2LongTimer *self) {
     self->_isStopped = 0;
     self->_additionalTime = self->_resetTime;
-    self->_startTime = ((igLongTimerView *)self)->getCurrentTime();
+    self->_startTime = ((igLongTimerView *)self)->GetCurrentTime();
 }
 
 void igPsx2LongTimer_SetResetTimeSeconds(igLongTimerView *self, double seconds) {
-    self->setResetTime((long long)(NANOSECONDS_PER_SECOND * seconds));
+    self->SetResetTime((long long)(NANOSECONDS_PER_SECOND * seconds));
 }
 
 /* Setter for the timer's reflected _resetTime field. */
@@ -69,7 +69,7 @@ long long igPsx2LongTimer_GetResetTime(igPsx2LongTimer *self) {
 }
 
 double igPsx2LongTimer_GetResetTimeSeconds(igLongTimerView *self) {
-    long long nanoseconds = self->getResetTime();
+    long long nanoseconds = self->GetResetTime();
     return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 

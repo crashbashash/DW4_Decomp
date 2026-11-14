@@ -9,7 +9,7 @@ void **__internalNonRefCountedObjectList_Create(int pool) {
         if (list != 0) {
             list = (void **)(((void **)ObjectPointerList_Construct((__internalNonRefCountedObjectList *)list, 1)));
         }
-        ((igObjectDispatchView *)(list))->initDefaults();
+        ((igObjectDispatchView *)(list))->InitDefaults();
         ((igObjectDispatchView *)(list))->userConstruct((int)(0));
     }
     return list;

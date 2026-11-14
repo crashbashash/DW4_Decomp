@@ -61,7 +61,7 @@ void igPointerList_InitFields(void) {
     meta = (igMetaObject *)g_igPointerList_metaObject[0];
     original = (igMetaField *)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)original);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)(original))->cloneViaMetadata((int)(1));
+    field = (igMemoryRefMetaField *)((igObjectDispatchView *)(original))->CloneViaMetadata((int)(1));
     field->_memType = igRawRefMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igPointerList_dataDescriptorCell[0]);

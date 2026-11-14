@@ -110,7 +110,7 @@ static inline igObjectList *asEntryList(igObject *object) {
 igMemoryDirEntry *igMemoryDirEntry_GetSharedEntry(igMemoryDirEntry *self, igIGBFile *file) {
     igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
-    int index = ((igObjectDispatchView *)self)->getMeta()->_index;
+    int index = ((igObjectDispatchView *)self)->GetMeta()->_index;
     if (lists->_count <= index) {
         ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
         objectListSetRetained(index, 0, lists.p);
@@ -195,7 +195,7 @@ void igMemoryDirEntry_RegisterRef(void) {
 
 void igMemoryDirEntry_ResolveRefOld(igMemoryDirEntryView *self, igIGBFileView *file)
 {
-    self->resolveRef(file);
+    self->ResolveRef(file);
 }
 
 void igMemoryDirEntry_ResolveMemory(igMemoryDirEntryView *self, igIGBFileView *r) {

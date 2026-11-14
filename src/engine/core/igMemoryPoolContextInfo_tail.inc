@@ -62,7 +62,7 @@ int igMemoryPoolContextInfo_GetAllocatorBySelector(MemoryContext *self, int sele
                 j = i - 1;
                 if (j >= 0) {
                     MemoryContext *parent = (MemoryContext *)g_memoryContextStack[j];
-                    if (parent != (MemoryContext *)self) r = (int)parent->getAllocatorBySelector(selector);
+                    if (parent != (MemoryContext *)self) r = (int)parent->GetAllocatorBySelector(selector);
                 }
             }
         }
@@ -82,7 +82,7 @@ void *igMemoryPoolContextInfo_GetMemoryPoolByName(MemoryContext *self, const cha
     if (name) {
         if (*name) {
             for (int i = 0; i < 46; ++i)
-                if (!strcmp(self->records[i].name, name)) return self->getAllocatorBySelector(i);
+                if (!strcmp(self->records[i].name, name)) return self->GetAllocatorBySelector(i);
         }
     }
     return 0;
@@ -419,12 +419,12 @@ void igMemoryPoolContextInfo_SetDirectory(igMemoryPoolContextInfo *self, int dir
 void igMemoryPoolContextInfo_Activate(MemoryContext *self) {
     ContextRecord *record = self->records;
     for (int i = 0; i < 46; i++) {
-        if (record->allocator != 0 && !((igMemoryPoolView *)record->allocator)->isActive()) {
-            ((igMemoryPoolView *)record->allocator)->activate();
+        if (record->allocator != 0 && !((igMemoryPoolView *)record->allocator)->IsActive()) {
+            ((igMemoryPoolView *)record->allocator)->Activate();
         }
         record++;
     }
-    self->setFlags(self->flags | 8);
+    self->SetFlags(self->flags | 8);
 }
 
 void igMemoryPoolContextInfo_DeactivatePools(MemoryContext *self) {
@@ -441,7 +441,7 @@ void igMemoryPoolContextInfo_DeactivatePools(MemoryContext *self) {
         }
         p = (igMemoryPoolView **)((ContextRecord *)p + 1);
     }
-    self->setFlags(self->flags & ~8);
+    self->SetFlags(self->flags & ~8);
 }
 
 void igMemoryPoolContextInfo_ResetPools(MemoryContext *self) {
@@ -528,7 +528,7 @@ void igMemoryPoolContextInfo_CreateDefaultPools(MemoryContext *self) {
             case 0:
                 p->SetDefaults();
                 if (g_bootstrapPoolPreSize[0] != 0) { p->SetPreSize(g_bootstrapPoolPreSize[0]); }
-                p->activate();
+                p->Activate();
                 ((ObjectSystemView *)(*(void * *)g_objectSystem))->bootstrapPool = p;
                 Memory_InitializeAllocatorRegistries((igObject *)p);
                 break;
@@ -541,7 +541,7 @@ void igMemoryPoolContextInfo_CreateDefaultPools(MemoryContext *self) {
             case 0:
                 p->SetDefaults();
                 if (g_bootstrapPoolPreSize[0] != 0) { p->SetPreSize(g_bootstrapPoolPreSize[0]); }
-                p->activate();
+                p->Activate();
                 ((ObjectSystemView *)(*(void * *)g_objectSystem))->bootstrapPool = p;
                 Memory_InitializeAllocatorRegistries((igObject *)p);
                 break;
@@ -550,19 +550,19 @@ void igMemoryPoolContextInfo_CreateDefaultPools(MemoryContext *self) {
                 p->SetDefaults();
                 if (g_systemPoolPreSize[0] != 0) { p->SetPreSize(g_systemPoolPreSize[0]); }
                 igMemoryPool_RegisterPool((void **)p);
-                p->activate();
+                p->Activate();
                 break;
             case 5:
                 p->SetDefaults();
                 if (g_metaDataPoolPreSize[0] != 0) { p->SetPreSize(g_metaDataPoolPreSize[0]); }
                 igMemoryPool_RegisterPool((void **)p);
-                p->activate();
+                p->Activate();
                 break;
             case 6:
                 p->SetDefaults();
                 if (g_stringPoolPreSize[0] != 0) { p->SetPreSize(g_stringPoolPreSize[0]); }
                 igMemoryPool_RegisterPool((void **)p);
-                p->activate();
+                p->Activate();
                 break;
             }
         }
@@ -654,7 +654,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
     igRegistry_GetValueBool(config, 2, text_updatePoolStatistics, (char *)&lockFlag, lockFlag, 0);
     g_igMemoryPool_defaultUpdateStatistics = lockFlag;
     igRegistry_GetValueBool(config, 2, text_useAliasMemoryPoolRelease, (char *)&useFlag, useFlag, 0);
-    self->setFlags(useFlag != 0 ? self->flags | 4 : self->flags & ~4);
+    self->SetFlags(useFlag != 0 ? self->flags | 4 : self->flags & ~4);
     igRegistry_GetValueFlags(config, 2, text_arenaMemoryPoolOptionFlagsReleas, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum(), &options, g_igArenaMemoryPool_defaultPoolOptionFlags[0], 0);
     igRegistry_GetValueEnum(config, 2, text_arenaMemoryPoolMessageLevelRelea, igArenaMemoryPool_GetMessageLevelMetaEnum(), &optB, g_igArenaMemoryPool_defaultMessageLevel[0], 0);
     igRegistry_GetValueEnum(config, 2, text_arenaMemoryPoolHeapIntegrityChec, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum(), &optC, g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel[0], 0);
@@ -679,7 +679,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
     if (self == top && fb == mainPool) {
         o = (igMemoryPoolView *)igArenaMemoryPool_Create((int)mainPool);
         if (nextSize > 0) { o->SetPreSize(nextSize); }
-        o->activate();
+        o->Activate();
         self->SetAllocator(3, (igObject *)o);
         ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
         if (((unsigned long long)((long long)(int)((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
@@ -710,19 +710,19 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
         self->SetAllocator(2, (igObject *)self->records[1].allocator);
     }
     self->ConfigureEventTracking();
-    o = self->getAllocatorBySelector(20);
+    o = self->GetAllocatorBySelector(20);
     if (o != mainPool && o != second) { ((ObjectSystemView *)g_objectSystem[0])->driverDataPool = o; }
-    o = self->getAllocatorBySelector(7);
+    o = self->GetAllocatorBySelector(7);
     if (o != mainPool && o != second) { ((ObjectSystemView *)g_objectSystem[0])->fastPool = o; }
     for (i = 0; i < 46; i++) {
         o = (igMemoryPoolView *)self->records[i].allocator;
-        if (o != 0 && o->isActive() == 0) { o->activate(); }
+        if (o != 0 && o->IsActive() == 0) { o->Activate(); }
     }
     if (g_igArenaMemoryPool_defaultPoolOptionFlags[0] & 8) {
         mainPool->EnableAllocationLock(1);
         if (second != mainPool) { second->EnableAllocationLock(1); }
     }
-    if (result == g_resultSuccess) { self->setFlags(self->flags | 8); }
+    if (result == g_resultSuccess) { self->SetFlags(self->flags | 8); }
     return result;
 }
 
@@ -756,7 +756,7 @@ void igMemoryPoolContextInfo_RemoveAllAllocators(MemoryContext *self) {
     while (index >= 0) {
         pool = *(igMemoryPoolView **)((char *)self + index * 144 + 20);
         if (pool != 0) {
-            meta = pool->getMeta();
+            meta = pool->GetMeta();
             meta->_instanceCount = meta->_instanceCount - 1;
         }
         index--;
@@ -1020,7 +1020,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *context, in
                     obj->_refCount = obj->_refCount - 1;
                     if (RC(obj) == 0) igObject_Destroy(obj);
                 }
-                if (((igMemoryPoolView *)obj)->isActive() == 0) ((igMemoryPoolView *)obj)->activate();
+                if (((igMemoryPoolView *)obj)->IsActive() == 0) ((igMemoryPoolView *)obj)->Activate();
                 *out = g_resultSuccess.v;
                 return;
             }
@@ -1060,10 +1060,10 @@ b78:
                     else a2 = 0x70000000;
                     r4 = ((igMemoryPoolView *)o2)->SetRawMemory(a2, (long long)size, 0);
                 } else if (strcmp(sub, text_Raw) != 0 && strcmp(sub, text_Custom) != 0) {
-                    a = (igMemoryPool *)ctx->getAllocatorByName((int)sub);
+                    a = (igMemoryPool *)ctx->GetAllocatorByName((int)sub);
                     if (a == 0) a = allocB;
 common:
-                    if (((igMemoryPoolView *)a)->isActive() == 0) ((igMemoryPoolView *)a)->activate();
+                    if (((igMemoryPoolView *)a)->IsActive() == 0) ((igMemoryPoolView *)a)->Activate();
                     r5 = ((igMemoryPoolView *)o2)->SetRawMemory((int)((igMemoryPoolView *)a)->Allocate(size), (long long)size, 1);
                     a->_refCount = a->_refCount + 1;
                     slot->storageFlags = slot->storageFlags | 1;
@@ -1076,7 +1076,7 @@ common:
         if (RC(o2) == 0) igObject_Destroy(o2);
     }
     }
-    if (((igMemoryPoolView *)obj)->isActive() == 0) ((igMemoryPoolView *)obj)->activate();
+    if (((igMemoryPoolView *)obj)->IsActive() == 0) ((igMemoryPoolView *)obj)->Activate();
     *out = g_resultSuccess.v;
 }
 
@@ -1099,7 +1099,7 @@ void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self
         if (ty == 0 || strstr(ty, &text_InhibitEventTracker[0]) == 0) {
             int h2 = (self->flags & 2) != 0;
             if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &text_UseEventTracker[0]) != 0)) {
-                o = (igEventTrackerView *)igEventTracker_Create((int)(self->getAllocatorBySelector(3)));
+                o = (igEventTrackerView *)igEventTracker_Create((int)(self->GetAllocatorBySelector(3)));
                 void *b = ((ObjectSystemView *)(*(void * *)g_objectSystem))->eventTrackerInitialCapacity;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
                 if (f != 0) b = f;
@@ -1109,7 +1109,7 @@ void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self
                 ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
                 if (RC2(o) == 0) igObject_Destroy(o);
             } else {
-                void *x = self->getAllocatorBySelector(1)->getEventTracker();
+                void *x = self->GetAllocatorBySelector(1)->GetEventTracker();
                 if (x != 0) trk->SetEventTracker(x);
             }
         }
@@ -1118,7 +1118,7 @@ void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self
         ps2 = &self->records[idx].descriptor; igMemoryPoolInfo *sub2 = *ps2;
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
         if (ty2 != 0 && strstr(ty2, &text_UseEventTracker[0]) != 0) {
-            o2 = (igEventTrackerView *)igEventTracker_Create((int)(self->getAllocatorBySelector(3)));
+            o2 = (igEventTrackerView *)igEventTracker_Create((int)(self->GetAllocatorBySelector(3)));
             void *b2 = ((ObjectSystemView *)(*(void * *)g_objectSystem))->eventTrackerInitialCapacity;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;
             if (f2 != 0) b2 = f2;
@@ -1212,10 +1212,10 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
     int notificationCodeFilter;
     igStringRef systemPoolEventTrackerFileName;
     igRegistry_GetValueBool(registry, 2, text_useGlobalEventTracker, (char *)&useGlobalEventTracker, globalTrackerByDefault, 0);
-    self->setFlags(useGlobalEventTracker ? self->flags | 1 : self->flags & ~1);
+    self->SetFlags(useGlobalEventTracker ? self->flags | 1 : self->flags & ~1);
     ((ObjectSystemView *)g_objectSystem[0])->useGlobalEventTracker = useGlobalEventTracker;
     igRegistry_GetValueBool(registry, 2, text_useSeparateEventTrackers, (char *)&useSeparateEventTrackers, useSeparateEventTrackers, 0);
-    self->setFlags(useSeparateEventTrackers ? self->flags | 2 : self->flags & ~2);
+    self->SetFlags(useSeparateEventTrackers ? self->flags | 2 : self->flags & ~2);
     igRegistry_GetValueBool(registry, 2, text_showLeaksOnExit, (char *)&showLeaksOnExit, 0, 0);
     ((ObjectSystemView *)g_objectSystem[0])->showLeaksOnExit = showLeaksOnExit;
     igRegistry_GetValueBool(registry, 2, text_showMemoryStatisticsOnExit, (char *)&showMemoryStatisticsOnExit, 0, 0);
@@ -1292,7 +1292,7 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
                 igMemoryPoolView *pool = (igMemoryPoolView *)self->records[i].allocator;
                 char *options = 0;
                 if (self->records[i].descriptor != 0) { options = (char *)self->records[i].descriptor->_releaseOptions; }
-                if (pool != 0 && pool->getEventTracker() == 0 && (options == 0 || strstr(options, text_InhibitEventTracker) == 0)) {
+                if (pool != 0 && pool->GetEventTracker() == 0 && (options == 0 || strstr(options, text_InhibitEventTracker) == 0)) {
                     if ((useSeparateEventTrackers != 0 && i != 1) || (options != 0 && strstr(options, text_UseEventTracker) != 0)) {
                         igEventTrackerView *own = (igEventTrackerView *)igEventTracker_Create(alloc);
                         igEventTracker_SetCapacity((int)own, trackerSizeFor(self->records[i].descriptor, initialCapacity));
@@ -1319,7 +1319,7 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
                 igMemoryPoolView *pool = (igMemoryPoolView *)self->records[i].allocator;
                 char *options = 0;
                 if (self->records[i].descriptor != 0) { options = (char *)self->records[i].descriptor->_releaseOptions; }
-                if (pool != 0 && pool->getEventTracker() == 0 && options != 0 && strstr(options, text_UseEventTracker) != 0) {
+                if (pool != 0 && pool->GetEventTracker() == 0 && options != 0 && strstr(options, text_UseEventTracker) != 0) {
                     igEventTrackerView *own = (igEventTrackerView *)igEventTracker_Create(alloc);
                     igEventTracker_SetCapacity((int)own, trackerSizeFor(self->records[i].descriptor, initialCapacity));
                     own->Initialize();
@@ -1417,12 +1417,12 @@ void igMemoryPoolContextInfo_ShutdownEventTrackers(MemoryContext *self) {
             int j;
             int seen;
             igEventTrackerView *o;
-            o = (igEventTrackerView *)p->getEventTracker();
+            o = (igEventTrackerView *)p->GetEventTracker();
             seen = 0;
             if (o != 0) {
                 for (j = 0; j < i; j++) {
                     igMemoryPoolView *q = (igMemoryPoolView *)self->records[j].allocator;
-                    if (q != 0 && q->getEventTracker() == o) { seen = 1; break; }
+                    if (q != 0 && q->GetEventTracker() == o) { seen = 1; break; }
                 }
                 if (o != 0 && seen == 0) {
                     if (((ObjectSystemView *)(*(void * *)g_objectSystem))->showLeaksOnExit != 0) {
@@ -1443,7 +1443,7 @@ void igMemoryPoolContextInfo_ShutdownEventTrackers(MemoryContext *self) {
     }
     for (int k = 0; k < 46; k++) {
         igMemoryPoolView *p = (igMemoryPoolView *)self->records[k].allocator;
-        if (p != 0 && p->getEventTracker() != 0) { p->SetEventTracker(0); }
+        if (p != 0 && p->GetEventTracker() != 0) { p->SetEventTracker(0); }
     }
 }
 
@@ -1463,13 +1463,13 @@ void igMemoryPoolContextInfo_SaveEventTrackers(MemoryContext *self) {
     do {
         t = *(igMemoryPoolView **)((char *)self + s4 * 144 + 20);
         if (t != 0) {
-            s1 = (igEventTrackerView *)t->getEventTracker();
+            s1 = (igEventTrackerView *)t->GetEventTracker();
             s2 = 0;
             if (s1 != 0) {
                 s3 = 0;
                 while (s3 < s4) {
                     t = *(igMemoryPoolView **)((char *)self + s3 * 144 + 20);
-                    if (t != 0 && t->getEventTracker() == s1) {
+                    if (t != 0 && t->GetEventTracker() == s1) {
                         s2 = 1;
                         break;
                     }
@@ -1543,13 +1543,13 @@ void igMemoryPoolContextInfo_SetEventTag(MemoryContext *self, int tag) {
     for (i = 0; i < 46; i++) {
         o = (igMemoryPoolView *)self->records[i].allocator;
         if (o != 0) {
-            id = (int)o->getEventTracker();
+            id = (int)o->GetEventTracker();
             found = 0;
             if (id != 0) {
                 for (j = 0; j < i; j++) {
                     igMemoryPoolView *o2 = (igMemoryPoolView *)self->records[j].allocator;
                     if (o2 != 0) {
-                        int r2 = (int)o2->getEventTracker();
+                        int r2 = (int)o2->GetEventTracker();
                         if (r2 == id) {
                             found = 1;
                             break;
@@ -1570,12 +1570,12 @@ void igMemoryPoolContextInfo_GetEventTag(MemoryContext *self, int value, int *ou
     for (i = 0; i < 46; i++) {
         igMemoryPoolView *pool = (igMemoryPoolView *)self->records[i].allocator;
         if (pool == 0) { continue; }
-        tracker = (char *)pool->getEventTracker();
+        tracker = (char *)pool->GetEventTracker();
         found = 0;
         if (tracker == 0) { continue; }
         for (j = 0; j < i; j++) {
             igMemoryPoolView *earlier = (igMemoryPoolView *)self->records[j].allocator;
-            if (earlier != 0 && earlier->getEventTracker() == tracker) {
+            if (earlier != 0 && earlier->GetEventTracker() == tracker) {
                 found = 1;
                 break;
             }
@@ -1596,12 +1596,12 @@ void igMemoryPoolContextInfo_SetEventTags(MemoryContext *self, int *paths, int n
     for (i = 0; i < 46; i++) {
         igMemoryPoolView *pool = (igMemoryPoolView *)self->records[i].allocator;
         if (pool == 0) { continue; }
-        tracker = (char *)pool->getEventTracker();
+        tracker = (char *)pool->GetEventTracker();
         found = 0;
         if (tracker == 0) { continue; }
         for (j = 0; j < i; j++) {
             igMemoryPoolView *earlier = (igMemoryPoolView *)self->records[j].allocator;
-            if (earlier != 0 && earlier->getEventTracker() == tracker) {
+            if (earlier != 0 && earlier->GetEventTracker() == tracker) {
                 found = 1;
                 break;
             }
@@ -1621,12 +1621,12 @@ void igMemoryPoolContextInfo_SetEventClassName(MemoryContext *self, int value) {
     for (i = 0; i < 46; i++) {
         igMemoryPoolView *pool = (igMemoryPoolView *)self->records[i].allocator;
         if (pool != 0) {
-            tracker = (char *)pool->getEventTracker();
+            tracker = (char *)pool->GetEventTracker();
             found = 0;
             if (tracker != 0) {
                 for (j = 0; j < i; j++) {
                     igMemoryPoolView *earlier = (igMemoryPoolView *)self->records[j].allocator;
-                    if (earlier != 0 && earlier->getEventTracker() == tracker) {
+                    if (earlier != 0 && earlier->GetEventTracker() == tracker) {
                         found = 1;
                         break;
                     }
@@ -1646,11 +1646,11 @@ void igMemoryPoolContextInfo_GetEventClassName(MemoryContext *slots, int value, 
     int id;
     for (i = 0; i < 46; i++) {
         igMemoryPoolView *o = (igMemoryPoolView *)slots->records[i].allocator;
-        if (o != 0 && (id = (int)o->getEventTracker(), found = 0, id != 0)) {
+        if (o != 0 && (id = (int)o->GetEventTracker(), found = 0, id != 0)) {
             for (j = 0; j < i; j++) {
                 igMemoryPoolView *o2 = (igMemoryPoolView *)slots->records[j].allocator;
                 int k;
-                if (o2 != 0 && (k = (int)o2->getEventTracker(), k == id)) {
+                if (o2 != 0 && (k = (int)o2->GetEventTracker(), k == id)) {
                     found = 1;
                     break;
                 }
@@ -1677,13 +1677,13 @@ void igMemoryPoolContextInfo_SetEventClassNames(MemoryContext *self, int *names,
     for (i = 0; i < 46; i++) {
         igMemoryPoolView *o = (igMemoryPoolView *)self->records[i].allocator;
         if (o != 0) {
-            id = (int)o->getEventTracker();
+            id = (int)o->GetEventTracker();
             dup = 0;
             if (id != 0) {
                 for (j = 0; j < i; j++) {
                     igMemoryPoolView *o2 = (igMemoryPoolView *)self->records[j].allocator;
                     int r;
-                    if (o2 != 0 && (r = (int)o2->getEventTracker(), r == id)) {
+                    if (o2 != 0 && (r = (int)o2->GetEventTracker(), r == id)) {
                         dup = 1;
                         break;
                     }
@@ -1714,12 +1714,12 @@ void igMemoryPoolContextInfo_SendMarker(MemoryContext *self, int markerType, int
     for (i = 0; i < 46; i++) {
         d = (igMemoryPoolView *)self->records[i].allocator;
         if (d != 0) {
-            r = (igEventTrackerView *)d->getEventTracker();
+            r = (igEventTrackerView *)d->GetEventTracker();
             found = 0;
             if (r != 0) {
                 for (j = 0; j < i; j++) {
                     igMemoryPoolView *e = (igMemoryPoolView *)self->records[j].allocator;
-                    if (e != 0 && e->getEventTracker() == r) {
+                    if (e != 0 && e->GetEventTracker() == r) {
                         found = 1;
                         break;
                     }
@@ -1745,7 +1745,7 @@ void igMemoryPoolContextInfo_PrintPoolStatistics(MemoryContext *self, char *titl
     index = 0;
     do {
         if (pool == *(igMemoryPoolView **)((char *)self + index * 144 + 20)) {
-            stats = pool->getMeta();
+            stats = pool->GetMeta();
             igReport_Printf(percent_s_paren_percent_s_dash_percent_s, title, self->GetPoolInfo(index), stats->_name);
             igReport_Flush();
             matches += 1;
@@ -1878,14 +1878,14 @@ void * Memory_GetAllocatorBySelector(int selector) {
     void **context;
 
     context = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((MemoryContext *)(context))->getAllocatorBySelector((int)(selector)));
+    return (void *)(((MemoryContext *)(context))->GetAllocatorBySelector((int)(selector)));
 }
 
 void * Memory_GetAllocatorByName(int name) {
     void **context;
 
     context = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((MemoryContext *)(context))->getAllocatorByName((int)(name)));
+    return (void *)(((MemoryContext *)(context))->GetAllocatorByName((int)(name)));
 }
 
 int Memory_GetPoolNameByIndex(int index) {
@@ -2128,7 +2128,7 @@ void igMemoryPoolContextInfo_Print(igMemoryPoolContextInfoView *self) {
         if ((info = (igInfoView *)igMemoryPoolContextInfo_GetMemoryPoolInfo(self, i)) != 0) {
             igReport_Printf(newline_2);
             igReport_Flush();
-            info->print();
+            info->Print();
         }
     }
 }

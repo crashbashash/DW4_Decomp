@@ -101,13 +101,13 @@ void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *
     from = *(igObjectDispatchView **)(src + self->_offset);
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
-            from->trimCapacity();
+            from->TrimCapacity();
             igObject_DeepCopy(to, from);
             return;
         }
         if (to == 0) {
-            from->trimCapacity();
-            copy = from->cloneViaMetadata(1);
+            from->TrimCapacity();
+            copy = from->CloneViaMetadata(1);
             igObjectRefMetaField_Assign(self, dst, copy);
             if (self->_destruct == 0 && copy != 0) {
                 copy->_refCount = copy->_refCount - 1;
@@ -136,7 +136,7 @@ void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *self, int dst, int s
             return;
         }
         if (to == 0) {
-            copy = (igObject *)from->cloneViaMetadata(0);
+            copy = (igObject *)from->CloneViaMetadata(0);
             igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)dst, (igObject *)copy);
             if ((self->_destruct == 0) && (copy != 0)) {
                 copy->_refCount = copy->_refCount - 1;
@@ -496,14 +496,14 @@ int igReport_VErrorPrintf(int format, int args) {
 
 void igReport_Flush(void) {
     if (g_reportOutputFile[0] != 0) {
-        g_reportOutputFile[0]->flush();
+        g_reportOutputFile[0]->Flush();
     }
     fflush(_impure_ptr->_stdout);
 }
 
 void igReport_FlushError(void) {
     if (g_reportErrorFile[0] != 0) {
-        g_reportErrorFile[0]->flush();
+        g_reportErrorFile[0]->Flush();
     }
     fflush(_impure_ptr->_stderr);
 }

@@ -74,7 +74,7 @@ void igStructMetaField_InitFields(void) {
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igStructMetaField_ctorTable, 3);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_size));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    field = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
+    field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     igUnsignedShortMetaField_SetDefaultValue((void **)field, (short)1);
     field->_persistent = 0;
     field->_externalEnumStorage = (int)g_igStructMetaField_sizeDescriptorCell;

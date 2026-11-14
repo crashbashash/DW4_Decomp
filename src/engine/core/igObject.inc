@@ -3,7 +3,7 @@ int igInfo_FindObjectReference(void **self, int directory, int target) {
     int i;
     int value;
     igMetaField *field;
-    meta = (int)((igObjectDispatchView *)(self))->getMeta();
+    meta = (int)((igObjectDispatchView *)(self))->GetMeta();
     for (i = 0; i < igMetaObject_GetFieldCount((igMetaObject *)meta); i++) {
         field = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
         if (igObject_IsKindOf((void *)field, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
@@ -23,7 +23,7 @@ int igObject_GetFieldValueByName(void **self, int name) {
     if (name == 0) {
         return 0;
     }
-    field = (igMetaField *)(igMetaObject_FindFieldByName((igMetaObject *)(((igObjectDispatchView *)(self))->getMeta()), (const char *)name));
+    field = (igMetaField *)(igMetaObject_FindFieldByName((igMetaObject *)(((igObjectDispatchView *)(self))->GetMeta()), (const char *)name));
     if (field == 0) {
         return 0;
     }

@@ -14,12 +14,12 @@ void igPsx2ThreadManager_FinishThread(igPsx2ThreadManagerView *manager, igPsx2Th
     igResult signalled;
     igSemaphoreView *done;
 
-    manager->removeThread(thread);
+    manager->RemoveThread(thread);
     int *tid = &thread->_threadID;
     ChangeThreadPriority(*tid, 1);
     *tid = -1;
     done = thread->_threadDoneSema;
-    signalled = done->signal();
+    signalled = done->Signal();
     thread->_refCount = (int)((int) (thread->_refCount - 1));
     if (((unsigned long long) ((long long) (int) thread->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(thread);

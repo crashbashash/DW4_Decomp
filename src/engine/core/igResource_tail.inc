@@ -1,8 +1,8 @@
 void igResource_StartAsyncLoading(igResourceView *self) {
     self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((int)self))).get();
-    self->_loadQueue->create();
+    self->_loadQueue->Create();
     self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize[0]);
-    self->_loadThread->setPriority(255);
+    self->_loadThread->SetPriority(255);
     self->_asyncLoadState = 1;
     ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->EnableAllocationLock(1);
 }
@@ -13,11 +13,11 @@ void igResource_StopAsyncLoading(igResourceView *self) {
     igStandardQueueView *queue;
     if (self->_asyncLoadState != 0) {
         self->_asyncLoadState = 0;
-        self->_loadQueue->insert(0, 1);
+        self->_loadQueue->Insert(0, 1);
         igPsx2ThreadView *current;
         thread = self->_loadThread;
-        current = ((igPsx2ThreadManagerView **)g_threadManager)[0]->getCurrentThread();
-        joined = current->join(thread);
+        current = ((igPsx2ThreadManagerView **)g_threadManager)[0]->GetCurrentThread();
+        joined = current->Join(thread);
         igStandardQueue_StopServiceThreads(self->_loadQueue);
         queue = self->_loadQueue;
         if (queue != 0) {
@@ -174,7 +174,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
         return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
     }
     igDirectory_AddLoadedRef((igDirectoryView *)file.p);
-    queued = ((igStandardQueueView *)self->_loadQueue)->insert((int)file.p, 1);
+    queued = ((igStandardQueueView *)self->_loadQueue)->Insert((int)file.p, 1);
     res = file.p;
     return res;
 }
@@ -351,7 +351,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         igMetaField *from = (igMetaField *)igMetaObject_GetFieldAt(fromMeta, field);
                         igMetaField *to = (igMetaField *)igMetaObject_FindFieldByName(toMeta, (const char *)from->_fieldName);
                         if (to != 0) {
-                            bool compatible = igObject_IsKindOf(to, ((igObjectDispatchView *)from)->getMeta()) != 0;
+                            bool compatible = igObject_IsKindOf(to, ((igObjectDispatchView *)from)->GetMeta()) != 0;
                             /* matching construct: the negation is materialised (sltu; xori; bnez); `!compatible`
                              * folds into the branch, and only the explicit xor keeps it (understanding-shapes.md,
                              * "A negated flag ... normalises first") */
@@ -391,10 +391,10 @@ void igResource_WrapRootInSceneInfo(int arg0) {
                         u->_refCount = u->_refCount - 1;
                         if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
                     }
-                    f1 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->getMeta(), (const char *)&text_sceneGraph[0]));
+                    f1 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_sceneGraph[0]));
                     igObjectRefMetaField_Assign(f1, (void *)sp5C, (igObject *)s1);
-                    f2 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->getMeta(), (const char *)&text_cameras[0]));
-                    f3 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->getMeta(), (const char *)&text_sceneGraphList[0]));
+                    f2 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_cameras[0]));
+                    f3 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_sceneGraphList[0]));
                     l = AsObjectList(*(void **)((char *)sp5C + f3->_offset));
                     if (l != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)l, (igObject *)s1);
                     igObjectRefMetaField_Assign(f2, (void *)sp5C, (igObject *)0);

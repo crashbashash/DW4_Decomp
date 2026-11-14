@@ -153,7 +153,7 @@ igMetaObject *igStringRefList_GetMeta(void) {
 
 void igStringRefList_UserPreWrite(igObjectDispatchView *self)
 {
-    self->trimCapacity();
+    self->TrimCapacity();
 }
 
 void igStringRefList_TrimCapacity(igStringRefList *l) {

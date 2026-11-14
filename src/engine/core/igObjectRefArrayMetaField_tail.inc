@@ -145,7 +145,7 @@ void igObjectRefArrayMetaField_DeepCopy(igObjectRefArrayMetaField *s, char *a1, 
         if (x != 0 && y != 0) {
             igObject_DeepCopy((igObjectDispatchView *)x, (igObjectDispatchView *)y);
         } else if (x == 0) {
-            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->cloneViaMetadata(1)));
+            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->CloneViaMetadata(1)));
         } else if (y == 0) {
             x->_refCount = x->_refCount - 1;
             if (((unsigned long long)((long long)(int)x->_refCount << 0x29) >> 0x29) == 0) {
@@ -178,7 +178,7 @@ void igObjectRefArrayMetaField_ShallowCopy(igObjectRefArrayMetaField *self, int 
             if (element != 0 && sourceElement != 0) {
                 igObject_ShallowCopy((igObjectDispatchView *)element, (int)sourceElement);
             } else if (element == 0) {
-                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)(sourceElement->cloneViaMetadata(1)));
+                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)(sourceElement->CloneViaMetadata(1)));
             } else if (sourceElement == 0) {
                 element->_refCount = element->_refCount - 1;
                 if ((element->_refCount & 0x7FFFFF) == 0) {

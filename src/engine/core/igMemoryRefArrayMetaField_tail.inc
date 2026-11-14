@@ -46,7 +46,7 @@ void igMemoryRefArrayMetaField_ReleaseElements(igMemoryRefArrayMetaField *self, 
                 for (j = 0; j < (int)count; j++) {
                     igObjectDispatchView **slot = (igObjectDispatchView **)(block + j * 4);
                     if (*slot != 0) {
-                        (*slot)->trimCapacity();
+                        (*slot)->TrimCapacity();
                         igObject_VisitFields((igObjectDispatchView *)(*slot), (int (*)(void *, void *, void *))visitor, (void *)context);
                     }
                 }

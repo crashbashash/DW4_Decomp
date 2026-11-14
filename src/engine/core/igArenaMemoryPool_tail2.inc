@@ -87,8 +87,8 @@ void igArenaMemoryPool_DisplayOutstandingAllocations(void *self0) {
  * (its successor's previous-in-use bit is set); a bad block bound or chunk size stops the walk with a
  * message. */
 void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
-    char *hi = self->getHighestAddress();
-    char *lo = self->getLowestAddress();
+    char *hi = self->GetHighestAddress();
+    char *lo = self->GetLowestAddress();
     TaggedBlockHeader *n;
     unsigned int size = 0;
     int count = 0;

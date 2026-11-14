@@ -1332,15 +1332,15 @@ public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int getCallStackCount();
-    virtual igResult truncateCallStacks(int count);
-    virtual unsigned int *getCallStack(int offset);
-    virtual int addCallStack(int *stack);
+    virtual int GetCallStackCount();
+    virtual igResult TruncateCallStacks(int count);
+    virtual unsigned int *GetCallStack(int offset);
+    virtual int AddCallStack(int *stack);
     virtual int vfunc_27(unsigned int *stack);
-    virtual int findCallStack(unsigned int *stack);
-    virtual unsigned int hashCallStack(unsigned int *stack);
-    virtual int insertHashEntry(unsigned int *stack, int offset);
-    virtual void rebuildHashIndex(int hashCapacity);
+    virtual int FindCallStack(unsigned int *stack);
+    virtual unsigned int HashCallStack(unsigned int *stack);
+    virtual int InsertHashEntry(unsigned int *stack, int offset);
+    virtual void RebuildHashIndex(int hashCapacity);
     int _capacity;
     int _hashCapacity;
     igTDataList<unsigned int> *_callStacks;
@@ -3741,24 +3741,24 @@ extern "C" void igAliasMemoryPool_SetEventTracker(igAliasMemoryPool *self, igObj
 class igFileView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
     virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual igResult openWithMode(int mode);                                            /* +92: open in a mode number */
-    virtual void closeHandle();                                                        /* +96: close the handle */
+    virtual igResult OpenWithMode(int mode);                                            /* +92: open in a mode number */
+    virtual void CloseHandle();                                                        /* +96: close the handle */
     /* Names the file and opens it in a mode string ("r", "wb", ...); nonzero (the file) on success. */
     virtual int Open(const char *name, const char *mode);                           /* +100 */
     virtual void Close();                                                           /* +104 */
     virtual int Read(void *buffer, int size, int count);                            /* +108 */
-    virtual void readAsync(void *buffer, int count, int (*done)(int, int), int context); /* +112 */
+    virtual void ReadAsync(void *buffer, int count, int (*done)(int, int), int context); /* +112 */
     virtual int Write(const void *buffer, int size, int count);                     /* +116 */
     virtual void vfunc_30();
     virtual void Print(const char *format, ...);                                    /* +124: printf */
-    virtual void flush();                                                        /* +128: flush */
-    virtual int getChar();                                                         /* +132: getc */
-    virtual void ungetChar(); virtual void putChar(); virtual void getString(); virtual void putString();
+    virtual void Flush();                                                        /* +128: flush */
+    virtual int GetChar();                                                         /* +132: getc */
+    virtual void UngetChar(); virtual void PutChar(); virtual void GetString(); virtual void PutString();
     virtual int Seek(int offset, int whence);                                       /* +152: -1 on failure */
-    virtual int tell();                                                         /* +156: tell */
-    virtual void skipToChar();
+    virtual int Tell();                                                         /* +156: tell */
+    virtual void SkipToChar();
     /* Prefixes the device of the file's folder (cdrom0:, host0:) and keeps the result as _completeFilename. */
-    virtual char *makeCompleteFilename(const char *name);                           /* +164 */
+    virtual char *MakeCompleteFilename(const char *name);                           /* +164 */
     char *_name;
     char *_fileName;
     int _readMode;
@@ -4055,9 +4055,9 @@ class igCallStackTracerView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual unsigned int *vfunc_24(int maxDepth, int skip); virtual int hasSymbols();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual unsigned int *vfunc_24(int maxDepth, int skip); virtual int HasSymbols();
     virtual void d24();
-    virtual igResult lookupAddress(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
+    virtual igResult LookupAddress(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
     virtual igResult vfunc_28(int addr, char *buf, int offset, char *name, int line, int format, long long output, long long outputSize);
     virtual void vfunc_29();
     virtual void vfunc_30();
@@ -4160,33 +4160,33 @@ class igIGBFileView;
 class igDirEntryView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
     virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18();
-    virtual igDirEntryView *cloneViaMetadata(int copyMode);                     /* vfunc_21 */
+    virtual igDirEntryView *CloneViaMetadata(int copyMode);                     /* vfunc_21 */
     virtual void d20();
-    virtual void setRef(int ref);
-    virtual void retainRef(int ref);
+    virtual void SetRef(int ref);
+    virtual void RetainRef(int ref);
     virtual void d25();
-    virtual igDirEntryView *resolve(igIGBFileView *file);                       /* vfunc_26 */
-    virtual void setReferenceIndex(int index);                                  /* vfunc_27 */
-    virtual void releaseSharedRef(int ref);
-    virtual void setMemoryPool(int pool);                                       /* vfunc_29 */
-    virtual int memoryPoolIndex();                                              /* vfunc_30 */
-    virtual void readFinished(igIGBFileView *file);                             /* vfunc_31 */
-    virtual void resolveEntry(igIGBFileView *file);
-    virtual void resolveRefOld(igIGBFileView *file);
-    virtual void resolveRef(igIGBFileView *file);
-    virtual void readMemory(igIGBFileView *file);
-    virtual void registerRef(int flag);
-    virtual void postProcess(igIGBFileView *file);
-    virtual int prepareWrite(igIGBFileView *file);
-    virtual int computeWriteSize(igIGBFileView *file);
-    virtual void writeObject(igIGBFileView *file);
-    virtual int writeMemory(igIGBFileView *file);
+    virtual igDirEntryView *Resolve(igIGBFileView *file);                       /* vfunc_26 */
+    virtual void SetReferenceIndex(int index);                                  /* vfunc_27 */
+    virtual void ReleaseSharedRef(int ref);
+    virtual void SetMemoryPool(int pool);                                       /* vfunc_29 */
+    virtual int MemoryPoolIndex();                                              /* vfunc_30 */
+    virtual void ReadFinished(igIGBFileView *file);                             /* vfunc_31 */
+    virtual void ResolveEntry(igIGBFileView *file);
+    virtual void ResolveRefOld(igIGBFileView *file);
+    virtual void ResolveRef(igIGBFileView *file);
+    virtual void ReadMemory(igIGBFileView *file);
+    virtual void RegisterRef(int flag);
+    virtual void PostProcess(igIGBFileView *file);
+    virtual int PrepareWrite(igIGBFileView *file);
+    virtual int ComputeWriteSize(igIGBFileView *file);
+    virtual void WriteObject(igIGBFileView *file);
+    virtual int WriteMemory(igIGBFileView *file);
     virtual void d42();
-    virtual int resolveDirectory(int loadFunction);
+    virtual int ResolveDirectory(int loadFunction);
     int _name; int _index; int _resolveMethod; int _refType; int _ref;
 };
 class igExternalDirEntryView : public igDirEntryView { public:
-    virtual int loadExternalFile(int loadFunction);
+    virtual int LoadExternalFile(int loadFunction);
     int _directoryName; int _entryName; int _entryIndex; int _externalFilePath;
 };
 /* igDirectory's own virtual slots. ABI view only: never instantiated. */
@@ -4194,7 +4194,7 @@ class igDirectoryDispatchView : public igDirectoryView { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
     virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void d21(); virtual void d22();
-    virtual int resolveExternalEntry(igExternalDirEntryView *entry);            /* vfunc_25 */
+    virtual int ResolveExternalEntry(igExternalDirEntryView *entry);            /* vfunc_25 */
 };
 class igExternalInfoEntryView : public igDirEntryView { public:
     char *_key; int _directoryIndex; char *_infoName;
@@ -4209,7 +4209,7 @@ class igExternalInfoEntryView : public igDirEntryView { public:
  * ABI view only: never instantiated. */
 class igObjectDispatchView {
 public:
-    virtual void destruct();
+    virtual void Destruct();
     virtual void constructFields(int flag);
     virtual void destructFields();
     virtual void userDeepCopy(igObjectDispatchView *source); virtual void userShallowCopy(int source);
@@ -4217,12 +4217,12 @@ public:
     virtual int userIsAlikeShallow(igObjectDispatchView *other);
     virtual void userConstruct(int flag);
     virtual void userDestruct();
-    virtual void initDefaults(); virtual void releaseDefaults();
+    virtual void InitDefaults(); virtual void ReleaseDefaults();
     virtual void resetFields(int flag);
     virtual void userPreWrite(); virtual void userWriteFilePreProcess(); virtual void userPostRead();
-    virtual void userPostLoad(); virtual void trimCapacity(); virtual void userApplyWriteProxy(int value); virtual void userMakeConcrete(igMetaObject *meta);
-    virtual igObject *cloneViaMetadata(int copyMode);
-    virtual igMetaObject *getMeta();
+    virtual void userPostLoad(); virtual void TrimCapacity(); virtual void userApplyWriteProxy(int value); virtual void userMakeConcrete(igMetaObject *meta);
+    virtual igObject *CloneViaMetadata(int copyMode);
+    virtual igMetaObject *GetMeta();
     unsigned int _refCount;
 };
 /* Removes the object at `index`, releasing it, and clears the vacated last slot. */
@@ -4492,15 +4492,15 @@ extern "C" int text_slash[4];
 extern "C" int text_root[4];
 class igIGBFileView : public igDirectoryView { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void setObjectCursor(int at);                                       /* vfunc_26 */
-    virtual int objectCursor();                                                 /* vfunc_27 */
-    virtual int writeFile(int);
+    virtual void SetObjectCursor(int at);                                       /* vfunc_26 */
+    virtual int ObjectCursor();                                                 /* vfunc_27 */
+    virtual int WriteFile(int);
     virtual int ReadFile(const char *path);
-    virtual igResult readFilePostProcess();
-    virtual igResult readFilePostProcessAll();
-    virtual igResult ensureConcrete();
-    virtual igResult readMemoryEntries();
-    virtual int writeMemoryRefs();
+    virtual igResult ReadFilePostProcess();
+    virtual igResult ReadFilePostProcessAll();
+    virtual igResult EnsureConcrete();
+    virtual igResult ReadMemoryEntries();
+    virtual int WriteMemoryRefs();
     int _majorVersion; int _minorVersion;                           /* +72 */
     int _chunkPlace; int _bufferPlace; int _bufferSize;             /* +80 */
     igObject *_entryPool;                                           /* +92 */
@@ -4565,11 +4565,11 @@ extern "C" void igExternalDirEntry_InitDefaults(igDirEntry *arg0);
 extern "C" void igExternalIndexedEntry_Resolve(igExternalIndexedEntry *arg0, void *arg1);
 class igInfoView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int findObjectReference(int directory, int object);
+    virtual int FindObjectReference(int directory, int object);
     virtual int GetFieldValueByName(int name);
     virtual igResult ReadFromRegistry(igRegistry *ini, char *section);
     virtual igResult vfunc_26(igRegistry *ini, int index);
-    virtual void print();                                                       /* vfunc_27 */
+    virtual void Print();                                                       /* vfunc_27 */
     unsigned int _refCount; int _name; int _directory; unsigned char _resolveState;
 };
 extern "C" void igExternalInfoEntry_Resolve(igExternalInfoEntry *self, igDirectory *directory);
@@ -4762,14 +4762,14 @@ public:
     RESERVED(14); RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19);
     virtual void vfunc_22();
     virtual int vfunc_23();                                                     /* +92: new handle */
-    virtual int freeHandle(int handle);                                         /* +96 */
+    virtual int FreeHandle(int handle);                                         /* +96 */
     virtual igResult vfunc_25(int handle, igStringRef path, int mode);          /* +100: open */
-    virtual int close(int handle);                                              /* +104 */
-    virtual int write(int handle, const void *buffer, int size);                /* +108 */
-    virtual int read(int handle, void *buffer, int size);                       /* +112 */
-    virtual int readAsync(int handle, void *buffer, int size, int (*done)(int, int), int context); /* +116 */
-    virtual int seek(int handle, int offset, int whence);                      /* +120 */
-    virtual int tell(int handle);                                               /* +124 */
+    virtual int Close(int handle);                                              /* +104 */
+    virtual int Write(int handle, const void *buffer, int size);                /* +108 */
+    virtual int Read(int handle, void *buffer, int size);                       /* +112 */
+    virtual int ReadAsync(int handle, void *buffer, int size, int (*done)(int, int), int context); /* +116 */
+    virtual int Seek(int handle, int offset, int whence);                      /* +120 */
+    virtual int Tell(int handle);                                               /* +124 */
     virtual int vfunc_32(const char *path, int prefixLength);                   /* +128: nonzero when the path prefix names this device */
 };
 extern "C" igMediaView *g_defaultMedia[4];
@@ -4916,14 +4916,14 @@ class igMemoryDictionaryView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
-    virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int setCapacity(int); virtual int initEntries(); virtual int clear();
-    virtual void resetEntries();
+    virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int SetCapacity(int); virtual int InitEntries(); virtual int Clear();
+    virtual void ResetEntries();
     virtual void d26(); virtual void d27();
-    virtual igResult getValue(int key, int *value);
-    virtual igResult insert(int key, int value);
-    virtual igResult remove(int);
-    virtual int hashKey(int key);
-    virtual igResult resize(int capacity);
+    virtual igResult GetValue(int key, int *value);
+    virtual igResult Insert(int key, int value);
+    virtual igResult Remove(int);
+    virtual int HashKey(int key);
+    virtual igResult Resize(int capacity);
     int _capacity;
     int _count;
     igTDataList<MemoryDictionaryEntry> *_memoryEntries;
@@ -5059,20 +5059,20 @@ public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
     virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual igMemoryPoolView *getAllocatorBySelector(int index);
-    virtual int getAllocatorByName(int name);
+    virtual igMemoryPoolView *GetAllocatorBySelector(int index);
+    virtual int GetAllocatorByName(int name);
     virtual void SetAllocator(int index, igObject *allocator);
     virtual int GetPoolInfo(int);
     virtual int GetPoolName(void *pool);
     virtual void d26();
     virtual int FindPoolIndexByName(int);
     virtual int GetPoolIndexByName(int handleName);                     /* record index for a pool handle name */
-    virtual int indexOfAllocator(void *pool);                 /* record index holding `pool`, -1 if none */
+    virtual int IndexOfAllocator(void *pool);                 /* record index holding `pool`, -1 if none */
     virtual void d30(); virtual void d31(); virtual void d32();
     virtual igResult SetPoolInfos(int, int);
     virtual igResult FillMemoryPoolInfo(int index, igMemoryPoolInfo *info);
     virtual igResult SetPoolInfo(int index, igMemoryPoolInfo *info, int build);
-    virtual void setFlags(unsigned flags);
+    virtual void SetFlags(unsigned flags);
     virtual void d37(); virtual void d38(); virtual void d39();
     virtual void CreateDefaultPools();
     virtual void vfunc_43();
@@ -5739,9 +5739,9 @@ static inline void igIntList_SetChecked(igIntList *list, int index, int value) {
  * hash table on or off. */
 class igStringTableView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual unsigned int hash(char *s);
-    virtual int insert(char *s, int offset);
-    virtual void setHashing(int enable);
+    virtual unsigned int Hash(char *s);
+    virtual int Insert(char *s, int offset);
+    virtual void SetHashing(int enable);
     unsigned int _refCount;
     int _capacity;
     int _hashCapacity;
@@ -5765,16 +5765,16 @@ extern "C" int igStructMetaField_IsConstruct(igStructMetaField *self);
 struct SymbolRecord { int name; int address; unsigned int size; int path; };
 class igSymbolTableView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int getSymbolCount();                                     /* slot 21: the number of symbols */
+    virtual int GetSymbolCount();                                     /* slot 21: the number of symbols */
     virtual void d22();
-    virtual igResult getSymbol(int, int, int, int, int, int, int);
-    virtual int findSymbolIndex(unsigned int address);
-    virtual igResult getSymbolAtAddress(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line); /* slot 25: the symbol at addr */
+    virtual igResult GetSymbol(int, int, int, int, int, int, int);
+    virtual int FindSymbolIndex(unsigned int address);
+    virtual igResult GetSymbolAtAddress(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line); /* slot 25: the symbol at addr */
     virtual void d26();
-    virtual void addSymbol(const char *name, void *address, unsigned int size, int flags);
-    virtual int hashAddress(int address);
-    virtual int insertHashEntry(int address, int size, int index);
-    virtual void rebuildHashIndex(int capacity);
+    virtual void AddSymbol(const char *name, void *address, unsigned int size, int flags);
+    virtual int HashAddress(int address);
+    virtual int InsertHashEntry(int address, int size, int index);
+    virtual void RebuildHashIndex(int capacity);
     unsigned int _refCount; int _capacity; int _hashCapacity; unsigned int _lowAddress; unsigned int _highAddress;
     unsigned int _hashIncrement; igTDataList<int> *_symbols; igTDataList<int> *_hashIndex; int _symbolNames; int _sourceFileNames;
 };
@@ -5997,8 +5997,8 @@ public:
     virtual unsigned int SystemAllocate(int address, int size);                       /* slot 103, byte 420 */
     virtual igResult SystemFree(char *address, int size);                         /* slot 104, byte 424 */
     virtual void d105(); virtual void d106();
-    virtual char *getLowestAddress();                                            /* slot 107, byte 436: vfunc_109 */
-    virtual char *getHighestAddress();                                           /* slot 108, byte 440: vfunc_110 */
+    virtual char *GetLowestAddress();                                            /* slot 107, byte 436: vfunc_109 */
+    virtual char *GetHighestAddress();                                           /* slot 108, byte 440: vfunc_110 */
     virtual void UpdateBlockList(char *address, int size);                             /* slot 109, byte 444 */
     unsigned int _refCount;
     long long _localAllocated;
@@ -6379,7 +6379,7 @@ static inline int chunkPoolIndex(TaggedBlockHeader *h) {
 }
 /* Whether a pointer can be one of this arena's chunks: inside the pool's address range, tagged with
  * its pool index, and of a size that ends inside the range. */
-#define IS_ARENA_CHUNK(self, p) ((char *)(p) >= (self)->getLowestAddress() && (char *)(p) < (self)->getHighestAddress() && chunkPoolIndex(p) == (self)->_poolIndex && payloadSize(p) < 0x20000000 && (char *)(p) + payloadSize(p) <= (self)->getHighestAddress())
+#define IS_ARENA_CHUNK(self, p) ((char *)(p) >= (self)->GetLowestAddress() && (char *)(p) < (self)->GetHighestAddress() && chunkPoolIndex(p) == (self)->_poolIndex && payloadSize(p) < 0x20000000 && (char *)(p) + payloadSize(p) <= (self)->GetHighestAddress())
 /* dlmalloc's largebin_index: the bin of a chunk of 256 bytes or more. */
 static inline unsigned int largeBinIndex(unsigned int size) {
     unsigned int x = size >> 8;
@@ -6823,29 +6823,29 @@ public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
     virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual igResult create();
-    virtual igResult destroy();
-    virtual int isCreated();
-    virtual igResult setInitialCount(int count);
-    virtual int getInitialCount();
-    virtual igResult setMaximumCount(int count);
-    virtual int getMaximumCount();
-    virtual int getCount();
-    virtual igResult signal();
-    virtual igResult iSignal();
-    virtual igResult wait(int block);
+    virtual igResult Create();
+    virtual igResult Destroy();
+    virtual int IsCreated();
+    virtual igResult SetInitialCount(int count);
+    virtual int GetInitialCount();
+    virtual igResult SetMaximumCount(int count);
+    virtual int GetMaximumCount();
+    virtual int GetCount();
+    virtual igResult Signal();
+    virtual igResult ISignal();
+    virtual igResult Wait(int block);
 };
 /* Holds a semaphore for the enclosing scope; a null semaphore is no lock. */
 struct ScopedLock {
     igSemaphoreView *lock;
     ScopedLock(igSemaphoreView *semaphore) : lock(semaphore) {
         if (lock != 0) {
-            lock->wait(1);
+            lock->Wait(1);
         }
     }
     ~ScopedLock() {
         if (lock != 0) {
-            lock->signal();
+            lock->Signal();
         }
     }
 };
@@ -6856,9 +6856,9 @@ public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual igPsx2ThreadView *getCurrentThread();
-    virtual void addThread(igPsx2ThreadView *thread);
-    virtual void removeThread(igPsx2ThreadView *thread);
+    virtual igPsx2ThreadView *GetCurrentThread();
+    virtual void AddThread(igPsx2ThreadView *thread);
+    virtual void RemoveThread(igPsx2ThreadView *thread);
     unsigned int _refCount;
     igTDataList<igPsx2ThreadView *> *_threadList;
     igSemaphoreView *_sema;
@@ -6871,27 +6871,27 @@ public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
     virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual igResult join(igPsx2ThreadView *thread);
-    virtual igResult sleep(int nanoseconds);
+    virtual igResult Join(igPsx2ThreadView *thread);
+    virtual igResult Sleep(int nanoseconds);
     virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27();
-    virtual igResult start();
+    virtual igResult Start();
     virtual void d29();
-    virtual int isRunning();
-    virtual igResult setFunction(int (*function)(...));
+    virtual int IsRunning();
+    virtual igResult SetFunction(int (*function)(...));
     virtual void d32();
-    virtual igResult setArg(int arg);
+    virtual igResult SetArg(int arg);
     virtual void d34(); virtual void d35(); virtual void d36();
-    virtual igResult setStackSize(unsigned int stackSize);
+    virtual igResult SetStackSize(unsigned int stackSize);
     virtual void d38();
     virtual void d39();
-    virtual int getStackAlignment();
+    virtual int GetStackAlignment();
     virtual void d41();
-    virtual igResult terminate();
+    virtual igResult Terminate();
     virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
-    virtual igResult setPriority(int priority);
+    virtual igResult SetPriority(int priority);
     virtual void d49(); virtual void d50();
     virtual void d51(); virtual void d52();
-    virtual void adoptCurrentThread();
+    virtual void AdoptCurrentThread();
     int _name;
     int _type;
     int _scope;
@@ -6920,13 +6920,13 @@ public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
     virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void create();
-    virtual void destroy();
-    virtual int isCreated();
-    virtual igResult insert(int value, int block);
-    virtual igResult remove(int *value, int block);
-    virtual unsigned int getCount();
-    virtual int isFull();
+    virtual void Create();
+    virtual void Destroy();
+    virtual int IsCreated();
+    virtual igResult Insert(int value, int block);
+    virtual igResult Remove(int *value, int block);
+    virtual unsigned int GetCount();
+    virtual int IsFull();
     int _serviceThreads;
     igSemaphoreView *_insertLock;
     igSemaphoreView *_removeLock;
@@ -7248,15 +7248,15 @@ public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual long long getResolution();
-    virtual double getElapsedSeconds();
-    virtual long long getElapsedTime();
-    virtual void start(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
-    virtual void setResetTime(long long nanoseconds);
+    virtual long long GetResolution();
+    virtual double GetElapsedSeconds();
+    virtual long long GetElapsedTime();
+    virtual void Start(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
+    virtual void SetResetTime(long long nanoseconds);
     virtual void d32();
-    virtual long long getResetTime();
+    virtual long long GetResetTime();
     virtual void d34();
-    virtual long long getCurrentTime();
+    virtual long long GetCurrentTime();
 };
 extern "C" double igPsx2LongTimer_GetResolutionSeconds(igLongTimerView *self);
 extern "C" double igPsx2LongTimer_GetElapsedSeconds(igLongTimerView *self);

@@ -9,7 +9,7 @@ void **igMetaObject_Create(int allocator) {
         if (metaObject != 0) {
             metaObject = (void **)(((void **)igMetaObject_Construct((igMetaObject *)metaObject, 1)));
         }
-        ((igObjectDispatchView *)(metaObject))->initDefaults();
+        ((igObjectDispatchView *)(metaObject))->InitDefaults();
         ((igObjectDispatchView *)(metaObject))->userConstruct((int)(0));
     }
     return metaObject;

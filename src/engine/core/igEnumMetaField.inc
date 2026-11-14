@@ -9,7 +9,7 @@ void **igEnumMetaField_Create(int pool) {
         if (field != 0) {
             field = (void **)(((void **)igEnumMetaField_Construct((int **)field, 1)));
         }
-        ((igObjectDispatchView *)(field))->initDefaults();
+        ((igObjectDispatchView *)(field))->InitDefaults();
         ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
     return field;

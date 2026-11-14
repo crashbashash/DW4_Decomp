@@ -152,9 +152,9 @@ void igObject_Construct(igObjectDispatchView *object, char *meta) {
     igObject_ZeroFields(object);
     igObject_ConstructFields(object);
     igObject_ResetUnconstructedFields(object);
-    object->initDefaults();
+    object->InitDefaults();
     object->userConstruct(0);
-    l = object->getMeta();
+    l = object->GetMeta();
     if (l != 0) {
         l->_instanceCount = l->_instanceCount + 1;
         if (l->_instances != 0) {
@@ -188,7 +188,7 @@ void igObject_RegisterInstance(void **object, void *meta) {
     ((igObjectDispatchView *)object)->constructFields(0);
     ((igObjectDispatchView *)object)->resetFields(0);
     ((igObjectDispatchView *)(object))->userConstruct((int)(1));
-    type = ((igObjectDispatchView *)(object))->getMeta();
+    type = ((igObjectDispatchView *)(object))->GetMeta();
     if (type != 0) {
         type->_instanceCount = (int)((int) (type->_instanceCount + 1));
         instances = type->_instances;
@@ -348,18 +348,18 @@ void igObject_Destroy(void *input) {
         igObjectDispatchView *object = (igObjectDispatchView *)input;
         if (!*g_objectSystem[0]) {
             object->userDestruct();
-            object->releaseDefaults();
-            object->destruct();
+            object->ReleaseDefaults();
+            object->Destruct();
             Memory_FreeBuffer(object);
             return;
         }
-        igMetaObject *type = object->getMeta();
+        igMetaObject *type = object->GetMeta();
         type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
         void *instances = (void *)type->_instances;
         if (instances) ObjectPointerList_EraseAt((__internalNonRefCountedObjectList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
-        object->trimCapacity();
+        object->TrimCapacity();
         object->userDestruct();
-        object->releaseDefaults();
+        object->ReleaseDefaults();
         igObject_DestructFieldValues((int *)object);
         igObject_ClearFieldValues((int *)object);
         Memory_FreeBuffer(igObject_GetAllocationBase(object));
@@ -369,7 +369,7 @@ void igObject_Destroy(void *input) {
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
 void igObject_ZeroFields(igObjectDispatchView *object) {
-    igMetaObject *meta = object->getMeta();
+    igMetaObject *meta = object->GetMeta();
     if (((meta != 0) && isValid(meta)) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 20) == 0) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 0) != 0)) {
         __internalObjectList *fields = (__internalObjectList *)meta->_metaFields;
         int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
@@ -381,7 +381,7 @@ void igObject_ZeroFields(igObjectDispatchView *object) {
 }
 
 void igObject_ConstructFields(igObjectDispatchView *object) {
-    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    __internalObjectList *fields = (__internalObjectList *)object->GetMeta()->_metaFields;
     int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
     int count = fields->_count;
     for (int i = first; i < count; i++) {
@@ -391,7 +391,7 @@ void igObject_ConstructFields(igObjectDispatchView *object) {
 }
 
 void igObject_ResetFields(igObjectDispatchView *object) {
-    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    __internalObjectList *fields = (__internalObjectList *)object->GetMeta()->_metaFields;
     int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
     int count = fields->_count;
     for (int i = first; i < count; i++) {
@@ -401,7 +401,7 @@ void igObject_ResetFields(igObjectDispatchView *object) {
 }
 
 void igObject_ResetUnconstructedFields(igObjectDispatchView *object) {
-    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    __internalObjectList *fields = (__internalObjectList *)object->GetMeta()->_metaFields;
     int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
     int count = fields->_count;
     for (int i = first; i < count; i++) {
@@ -419,7 +419,7 @@ void igObject_DestructFieldValues(int *object) {
     int n;
 
     ((igObjectDispatchView *)object)->destructFields();
-    q = (__internalObjectList *)((igObjectDispatchView *)object)->getMeta()->_metaFields;
+    q = (__internalObjectList *)((igObjectDispatchView *)object)->GetMeta()->_metaFields;
     i = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
     n = q->_count;
     for (; i < n; i++) {
@@ -432,7 +432,7 @@ void igObject_ClearFieldValues(int *object) {
     int i;
     int n;
 
-    q = (__internalObjectList *)((igObjectDispatchView *)object)->getMeta()->_metaFields;
+    q = (__internalObjectList *)((igObjectDispatchView *)object)->GetMeta()->_metaFields;
     i = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
     n = q->_count;
     for (; i < n; i++) {
@@ -441,7 +441,7 @@ void igObject_ClearFieldValues(int *object) {
 }
 
 int igObject_GetSerializedSize(igObjectDispatchView *object) {
-    igMetaObject *m0 = object->getMeta();
+    igMetaObject *m0 = object->GetMeta();
     igMetaObject *m;
     int size, i, n;
     igMetaObject *(*fp)();
@@ -456,7 +456,7 @@ int igObject_GetSerializedSize(igObjectDispatchView *object) {
 }
 
 int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
-    igMetaObject *meta = object->getMeta();
+    igMetaObject *meta = object->GetMeta();
     if (meta->_persistent == 0) {
         return 0;
     }
@@ -490,7 +490,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
     int count;
     int runTimeFields, readFields;
     igMetaField *field;
-    meta = object->getMeta();
+    meta = object->GetMeta();
     if (meta->_persistent == 0) return 0;
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 3);
@@ -542,7 +542,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
     short limit;
     igMetaFieldView *field;
     int size;
-    meta = object->getMeta();
+    meta = object->GetMeta();
     if (meta->_persistent == 0) {
         return 0;
     }
@@ -593,13 +593,13 @@ void igObject_Print(void **object, int depth, int indent) {
     unsigned int count;
     unsigned int i;
 
-    fields = (__internalObjectList *)(((igObjectDispatchView *)object)->getMeta()->_metaFields);
-    igReport_Printf(text_s0x_x_type_s, indent, object, ((igObjectDispatchView *)object)->getMeta()->_name);
+    fields = (__internalObjectList *)(((igObjectDispatchView *)object)->GetMeta()->_metaFields);
+    igReport_Printf(text_s0x_x_type_s, indent, object, ((igObjectDispatchView *)object)->GetMeta()->_name);
     igReport_Flush();
     if (depth != 0) {
         prefix = igObject_AllocateStorage((int)object, (strlen(indent) + 2) * 4);
         sprintf(prefix, &tab_percent_s[0], indent);
-        ((igObjectDispatchView *)object)->trimCapacity();
+        ((igObjectDispatchView *)object)->TrimCapacity();
         count = fields->_count;
         i = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
         igReport_Printf(percent_s_open_brace, indent);
@@ -616,7 +616,7 @@ void igObject_Print(void **object, int depth, int indent) {
 }
 
 void igObject_CopyFields(igObjectDispatchView *self, int source) {
-    __internalObjectList *meta = (__internalObjectList *)self->getMeta()->_metaFields;
+    __internalObjectList *meta = (__internalObjectList *)self->GetMeta()->_metaFields;
     int n = meta->_count;
     for (int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
         igMetaField_ConstructCopy(((int *)meta->_data)[i], (int)self, source);
@@ -629,9 +629,9 @@ void igObject_DeepCopy(igObjectDispatchView *self, igObjectDispatchView *source)
     int n;
     int i;
 
-    holder = self->getMeta();
-    self->trimCapacity();
-    source->trimCapacity();
+    holder = self->GetMeta();
+    self->TrimCapacity();
+    source->TrimCapacity();
     meta = (__internalObjectList *)holder->_metaFields;
     n = meta->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
@@ -641,7 +641,7 @@ void igObject_DeepCopy(igObjectDispatchView *self, igObjectDispatchView *source)
 }
 
 void igObject_ShallowCopy(igObjectDispatchView *self, int source) {
-    __internalObjectList *m = (__internalObjectList *)self->getMeta()->_metaFields;
+    __internalObjectList *m = (__internalObjectList *)self->GetMeta()->_metaFields;
     int n = m->_count;
     int i;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
@@ -654,8 +654,8 @@ int igObject_IsAlikeDeep(igObjectDispatchView *a, igObjectDispatchView *b) {
     int i;
     __internalObjectList *fl;
     int n;
-    if (b->getMeta() != a->getMeta()) return 0;
-    fl = (__internalObjectList *)a->getMeta()->_metaFields;
+    if (b->GetMeta() != a->GetMeta()) return 0;
+    fl = (__internalObjectList *)a->GetMeta()->_metaFields;
     n = fl->_count;
     i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
     for (; i < n; i++) {
@@ -669,11 +669,11 @@ int igObject_IsAlikeShallow(igObjectDispatchView *a, igObjectDispatchView *b) {
     int i;
     __internalObjectList *fields;
     int count;
-    meta = b->getMeta();
-    if (meta != a->getMeta()) {
+    meta = b->GetMeta();
+    if (meta != a->GetMeta()) {
         return 0;
     }
-    fields = (__internalObjectList *)a->getMeta()->_metaFields;
+    fields = (__internalObjectList *)a->GetMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
         if (igMetaField_IsAlikeShallow(((int *)fields->_data)[i], (int)a, (int)b) == 0) {
@@ -689,11 +689,11 @@ int igObject_IsAlikeExactly(void *a, void *b) {
     __internalObjectList *fields;
     int count;
 
-    meta = (int)((igObjectDispatchView *)b)->getMeta();
-    if (meta != (int)((igObjectDispatchView *)a)->getMeta()) {
+    meta = (int)((igObjectDispatchView *)b)->GetMeta();
+    if (meta != (int)((igObjectDispatchView *)a)->GetMeta()) {
         return 0;
     }
-    fields = (__internalObjectList *)((igObjectDispatchView *)a)->getMeta()->_metaFields;
+    fields = (__internalObjectList *)((igObjectDispatchView *)a)->GetMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
         if (igMetaField_IsAlikeExactly(((int *)fields->_data)[i], (int)a, (int)b) == 0) {
@@ -709,8 +709,8 @@ void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *co
     int i;
     igMetaFieldView *field;
     if(callback(object,0,context)==1)return;
-    object->trimCapacity();
-    fields=(__internalObjectList *)object->getMeta()->_metaFields;
+    object->TrimCapacity();
+    fields=(__internalObjectList *)object->GetMeta()->_metaFields;
     count=fields->_count;
     for(i=igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]);i<count;++i){
         field=((igMetaFieldView **)fields->_data)[i];
@@ -740,14 +740,14 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
     int metaObject;
     int copy;
 
-    metaObject = (int)((igObjectDispatchView *)(source))->getMeta();
+    metaObject = (int)((igObjectDispatchView *)(source))->GetMeta();
     copy = igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((int)source)));
     igObject_Copy(copy, (int)source, copyMode);
     return copy;
 }
 
 int igObject_IsKindOf(void *object, igMetaObject *kind) {
-    igMetaObject *meta = ((igObjectDispatchView *)object)->getMeta();
+    igMetaObject *meta = ((igObjectDispatchView *)object)->GetMeta();
     while (meta != 0) {
         if (meta == kind) return 1;
         meta = (igMetaObject *)meta->_parent;
@@ -756,7 +756,7 @@ int igObject_IsKindOf(void *object, igMetaObject *kind) {
 }
 
 void *igObject_GetAllocationBase(void *self) {
-    return (char *)self - ((igObjectDispatchView *)self)->getMeta()->_runTimeSize;
+    return (char *)self - ((igObjectDispatchView *)self)->GetMeta()->_runTimeSize;
 }
 
 /* Object storage dispatch: every helper re-selects the allocator from the object header
@@ -819,7 +819,7 @@ igMemoryPoolView *igObject_GetAllocator(int object) {
 }
 
 igSmartPointer<igObject> igObject_Clone(igObjectDispatchView *source, int copyMode) {
-    igSmartPointer<igObject> created(source->cloneViaMetadata(copyMode), kRetainReference);
+    igSmartPointer<igObject> created(source->CloneViaMetadata(copyMode), kRetainReference);
     created.release();
     return created;
 }

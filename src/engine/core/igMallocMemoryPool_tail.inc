@@ -33,14 +33,14 @@ igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *self, u
         igSmartPointer<igSemaphoreView> held(self->_allocationLock);
         self->_allocationLock.clear();
         if (held.p != 0) {
-            waited = held.p->wait(1);
-            destroyed = held.p->destroy();
+            waited = held.p->Wait(1);
+            destroyed = held.p->Destroy();
         }
         self->_allocationLock.clear();
     } else if (enable == 1) {
         if (self->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
         igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        created = semaphore.p->create();
+        created = semaphore.p->Create();
         self->_allocationLock = semaphore;
     }
     return igResult(g_resultSuccess.v);
@@ -124,7 +124,7 @@ void igMallocMemoryPool_Lock(void *pool) {
 
     lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->wait(1);
+        result = ((igSemaphoreView *)(lock))->Wait(1);
     }
 }
 
@@ -134,7 +134,7 @@ void igMallocMemoryPool_Unlock(void *pool) {
 
     lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->signal();
+        result = ((igSemaphoreView *)(lock))->Signal();
     }
 }
 
@@ -144,7 +144,7 @@ int igMallocMemoryPool_UnlockAndReturn(void *pool, int value) {
 
     lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->signal();
+        result = ((igSemaphoreView *)(lock))->Signal();
     }
     return value;
 }
@@ -216,7 +216,7 @@ igResult igMallocMemoryPool_GangAlloc(igMallocMemoryPoolView *self, int count, u
         for (i = 0; i < (unsigned short)count; i++) {
             alignments[i] = self->_alignment;
         }
-        igResult result = self->gangAllocAligned(count, sizes, blocks, alignments);
+        igResult result = self->GangAllocAligned(count, sizes, blocks, alignments);
         self->Free(alignments);
         return result;
     }

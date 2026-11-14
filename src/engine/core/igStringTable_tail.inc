@@ -20,7 +20,7 @@ void igStringTable_Reserve(void *object) {
     if (capacity >= strings->_count) {
         List_Reserve(strings, capacity, 1);
     }
-    ((igStringTableView *)self)->setHashing(self->_hashCapacity);
+    ((igStringTableView *)self)->SetHashing(self->_hashCapacity);
 }
 
 void igStringTable_Clear(igStringTableView *table) {
@@ -104,7 +104,7 @@ void igStringTable_Truncate(int *result, igStringTableView *table, int count) {
     hits = 0;
     if (count == 0) {
         setStringBytes(strings, 0);
-        table->setHashing(table->_hashCapacity);
+        table->SetHashing(table->_hashCapacity);
         *result = g_resultSuccess.v;
     } else {
         for (i = 0; i < n; i++) {
@@ -151,7 +151,7 @@ int igStringTable_AppendString(igStringTableView *self, char *s) {
     reserveStringBytes(self->_strings, length + (offset = self->_strings->_count));
     List_AppendBytes((igDataList *)self->_strings, length, (int)s, 1);
     if (self->_hashIndex != 0 && self->_hashIndex->_count != 0) {
-        self->insert(self->_strings->_data + offset, offset);
+        self->Insert(self->_strings->_data + offset, offset);
     }
     return offset;
 }
@@ -173,7 +173,7 @@ int igStringTable_Find(igStringTableView *self, unsigned int string) {
 
     t = self->_hashIndex;
     if (t != 0 && t->_count != 0) {
-        idx = self->hash((char *)string);
+        idx = self->Hash((char *)string);
         cnt = 0;
         n = self->_hashIndex->_count;
         for (;;) {
@@ -241,7 +241,7 @@ int igStringTable_InsertHash(igStringTableView *self, char *s, int offset) {
     igTDataList<int> *l;
 
     if (size != 0) {
-        idx = self->hash(s);
+        idx = self->Hash(s);
         l = self->_hashIndex;
         do {
             if (l->_data[idx] == -1) {
@@ -254,7 +254,7 @@ int igStringTable_InsertHash(igStringTableView *self, char *s, int offset) {
             }
             probes++;
         } while (probes < half);
-        self->setHashing(size * 2);
+        self->SetHashing(size * 2);
         return 0;
     }
 done:
@@ -308,7 +308,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
         p = base;
         end = base + self->_strings->_count;
         while (p < end) {
-            if (self->insert(p, p - base) == 0) {
+            if (self->Insert(p, p - base) == 0) {
                 return;
             }
             p += strlen(p) + 1;

@@ -528,7 +528,7 @@ void igStackMemoryPool_CollectMemoryRegions(igStackMemoryPool *self, igDataList 
     DumpRegion *entry;
     DumpRegion *created;
 
-    if (((igMemoryPoolView *)self)->isActive() != 0) {
+    if (((igMemoryPoolView *)self)->IsActive() != 0) {
         created = DumpRegion_Allocate(sizeof(DumpRegion));
         if (created != 0) {
             created = DumpRegion_Init(created);

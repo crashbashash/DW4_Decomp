@@ -47,13 +47,13 @@ int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, vo
         if (*source != 0 && entry == 0) {
             if (self->_parentMetaObject != 0) {
                 if (!g_igMemoryRefMetaField_unresolvedFieldRefWarned) {
-                    igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
+                    igMetaObject *meta = ((igObjectDispatchView *)self)->GetMeta();
                     int answer = igReportError(text_s_s_s_writeRawFieldMem_0x_x_0_0x, ((igMetaObject *)self->_parentMetaObject)->_name, self->_fieldName, meta->_name, source, (unsigned int)*source);
                     if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedFieldRefWarned = 1;
                 }
             } else {
                 if (!g_igMemoryRefMetaField_unresolvedRefWarned) {
-                    igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
+                    igMetaObject *meta = ((igObjectDispatchView *)self)->GetMeta();
                     int answer = igReportError(text_s_writeRawFieldMem_0x_x_0_0x_x_Not, meta->_name, source, (unsigned int)*source);
                     if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedRefWarned = 1;
                 }

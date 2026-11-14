@@ -16,7 +16,7 @@ public:
     virtual void InitDefaults();                                                     /* slot 9, byte 44: igObject's */
     virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual igMetaObject *getMeta();                                             /* slot 20, byte 88 */
+    virtual igMetaObject *GetMeta();                                             /* slot 20, byte 88 */
     virtual int HandleOutOfMemory(unsigned int size, int attempt);                        /* slot 21, byte 92: out-of-memory hook */
 #ifndef long
     virtual igResult SetRawMemory(int buffer, long long size, int owned);            /* slot 22, byte 96 */
@@ -28,10 +28,10 @@ public:
     virtual int Trim(int);                                                       /* slot 25, byte 108 */
     virtual int vfunc_28(int level);                                             /* slot 26, byte 112: asked for memory back when the system has none; nonzero when it freed some */
     virtual int vfunc_29();                                                      /* slot 27, byte 116 */
-    virtual void activate();                                                     /* slot 28, byte 120 */
+    virtual void Activate();                                                     /* slot 28, byte 120 */
     virtual void Reset();                                                     /* slot 29, byte 124 */
     virtual int Deactivate();                                                      /* slot 30, byte 128 */
-    virtual int isActive();                                                      /* slot 31, byte 132 */
+    virtual int IsActive();                                                      /* slot 31, byte 132 */
     virtual igResult EnableAllocationLock(int);                                              /* slot 32, byte 136 */
     virtual igResult SetSize(int size);                                            /* slot 33, byte 140 */
 #ifndef long
@@ -76,9 +76,9 @@ public:
     virtual void *ReallocateAligned(void *block, unsigned int size, unsigned short alignment); /* slot 57, byte 236 */
     virtual int StrDup(void *block);
     virtual void *StrDupAligned(const char *string, unsigned short alignment);        /* slot 59, byte 244: aligned string copy */
-    virtual igResult gangAlloc(int count, unsigned int *sizes, void **blocks);                                  /* slot 60, byte 248 */
-    virtual igResult gangAllocAligned(int count, unsigned int *sizes, void **blocks, unsigned short *alignments); /* slot 61, byte 252 */
-    virtual void gangFree(int count, void **blocks);                                                            /* slot 62, byte 256 */
+    virtual igResult GangAlloc(int count, unsigned int *sizes, void **blocks);                                  /* slot 60, byte 248 */
+    virtual igResult GangAllocAligned(int count, unsigned int *sizes, void **blocks, unsigned short *alignments); /* slot 61, byte 252 */
+    virtual void GangFree(int count, void **blocks);                                                            /* slot 62, byte 256 */
     virtual int vfunc_65(int);                                                   /* slot 63, byte 260 */
     virtual void Free(void *block);                                              /* slot 64, byte 264 */
     virtual void TrackEvent(void *, int, int);                                     /* slot 65, byte 268 */
@@ -90,7 +90,7 @@ public:
     virtual void d84();
     virtual int PrintStatistics(int);                                                   /* slot 85, byte 348 */
     virtual void DisplayOutstandingAllocations();                                                     /* slot 86, byte 352 */
-    virtual void *getEventTracker();                                             /* slot 87, byte 356 */
+    virtual void *GetEventTracker();                                             /* slot 87, byte 356 */
     virtual void SetEventTracker(void *tracker);                                        /* slot 88, byte 360 */
     virtual int GetPoolIndex();                                                  /* slot 89, byte 364 */
     virtual void SetPoolIndex(int index);                                        /* slot 90, byte 368 */

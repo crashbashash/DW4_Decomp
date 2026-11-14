@@ -65,7 +65,7 @@ void igDirectory_SetName(igDirectoryView *self, int name) {
 }
 
 int igDirectory_ResolveExternalEntry(igDirectoryView *c, igExternalDirEntryView *o) {
-if (o->_entryName != 0) { igDirEntryView *it = (igDirEntryView *)igDirectory_GetEntryByName((int)c, o->_entryName); if (it) { o->setRef(it->_ref); return 1; } } else { int i = o->_entryIndex; int n = c->_count; if (i >= 0 && i < n) { igDirEntryView *it = (igDirEntryView *)igDirectory_GetEntry((int *)c, i); o->setRef(it->_ref); return 1; } } return 0;
+if (o->_entryName != 0) { igDirEntryView *it = (igDirEntryView *)igDirectory_GetEntryByName((int)c, o->_entryName); if (it) { o->SetRef(it->_ref); return 1; } } else { int i = o->_entryIndex; int n = c->_count; if (i >= 0 && i < n) { igDirEntryView *it = (igDirEntryView *)igDirectory_GetEntry((int *)c, i); o->SetRef(it->_ref); return 1; } } return 0;
 }
 
 int igDirectory_GetInfoCount(void *directory) {
@@ -82,12 +82,12 @@ int igDirectory_AddLoadedRef(igDirectoryView *self) {
         self->_loadedRefCount = count;
         return count;
     }
-    waited = self->_loadingSemaphore->wait(1);
+    waited = self->_loadingSemaphore->Wait(1);
     count = self->_loadedRefCount;
     if (waited.v == g_resultSuccess.v) {
         count += 1;
         self->_loadedRefCount = count;
-        signalled = self->_loadingSemaphore->signal();
+        signalled = self->_loadingSemaphore->Signal();
     }
     return count;
 }
@@ -98,13 +98,13 @@ int igDirectory_UnrefLoaded(igDirectoryView *self) {
         left = self->_loadedRefCount - 1;
         self->_loadedRefCount = left;
     } else {
-        self->_loadingSemaphore->wait(1);
+        self->_loadingSemaphore->Wait(1);
         left = self->_loadedRefCount - 1;
         self->_loadedRefCount = left;
     }
     if (left <= 0) {
         if (self->_loadingSemaphore != 0) {
-            self->_loadingSemaphore->signal();
+            self->_loadingSemaphore->Signal();
         }
         if (self->_managingResource != 0) {
             igTDataList<igDirectoryView *> *list = (igTDataList<igDirectoryView *> *)self->_managingResource->_directoryList;
@@ -121,7 +121,7 @@ int igDirectory_UnrefLoaded(igDirectoryView *self) {
         }
     } else {
         if (self->_loadingSemaphore != 0) {
-            self->_loadingSemaphore->signal();
+            self->_loadingSemaphore->Signal();
         }
     }
     return left;
@@ -136,7 +136,7 @@ static inline igSemaphoreView *recreateLoadingSemaphore(igDirectoryView *directo
 
 void igDirectory_CreateLoadingSemaphore(igDirectoryView *directory) {
     if (directory->_loadingSemaphore == 0) {
-        recreateLoadingSemaphore(directory, AdoptReference())->create();
+        recreateLoadingSemaphore(directory, AdoptReference())->Create();
     }
 }
 

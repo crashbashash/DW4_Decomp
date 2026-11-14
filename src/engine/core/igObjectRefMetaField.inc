@@ -10,7 +10,7 @@ void **igObjectRefMetaField_Create(int allocator) {
         if (field != 0) {
             field = ((void **)igObjectRefMetaField_Construct((igObjectRefMetaField *)field, 1));
         }
-        ((igObjectDispatchView *)field)->initDefaults();
+        ((igObjectDispatchView *)field)->InitDefaults();
         ((igObjectDispatchView *)field)->userConstruct(0);
     }
     return field;

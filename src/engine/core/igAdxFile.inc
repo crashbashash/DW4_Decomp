@@ -73,7 +73,7 @@ void igFile_SkipToChar(igFileView *self, long long character) {
     signed char want = (signed char)character;
     signed char c;
     do {
-        c = (signed char)self->getChar();
+        c = (signed char)self->GetChar();
     } while (want != c && c != -1);
 }
 

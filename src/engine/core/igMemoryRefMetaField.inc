@@ -9,7 +9,7 @@ void **igMemoryRefMetaField_Create(int pool) {
         if (instance != 0) {
             instance = (void **)(((void **)igMemoryRefMetaField_Construct((igMemoryRefMetaField *)instance, 1)));
         }
-        ((igObjectDispatchView *)(instance))->initDefaults();
+        ((igObjectDispatchView *)(instance))->InitDefaults();
         ((igObjectDispatchView *)(instance))->userConstruct((int)(0));
     }
     return instance;
@@ -163,7 +163,7 @@ void igMemoryRefMetaField_InitFields(void) {
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igMemoryRefMetaField_ctorTable, 8);
     field = (igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_shallowCopyMethod);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    field = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
+    field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     igCharMetaField_SetDefaultValue((void **)field, 2);
     field->_externalEnumStorage = (int)g_igMemoryRefMetaField_shallowCopyMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);

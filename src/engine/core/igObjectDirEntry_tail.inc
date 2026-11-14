@@ -1,7 +1,7 @@
 /* Drop the entry's object reference: the _ref setter retains the new value and releases the old one,
  * so calling it with 0 releases the held object; the igObject default then runs. */
 void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self) {
-    ((igDirEntryView *)self)->setRef(0);
+    ((igDirEntryView *)self)->SetRef(0);
     igObject_ReleaseDefaults((int)self);
 }
 
@@ -17,7 +17,7 @@ static inline igObjectList *asObjectEntryList(igObject *object) {
 igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBFile *file) {
     igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
-    int index = ((igObjectDispatchView *)self)->getMeta()->_index;
+    int index = ((igObjectDispatchView *)self)->GetMeta()->_index;
     if (lists->_count <= index) {
         ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
         objectListSetRetained(index, 0, lists.p);
@@ -106,15 +106,15 @@ void igObjectDirEntry_SetRef(igObjectDirEntry *self, igObject *object) {
 
 /* Write the referenced object's persistent fields at the file's object cursor and move past them. */
 void igObjectDirEntry_WriteObject(igObjectDirEntry *self, igIGBFileView *file) {
-    int cursor = file->objectCursor();
-    file->setObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)self->_ref, (int *)cursor, (igIGBFile *)file,
+    int cursor = file->ObjectCursor();
+    file->SetObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)self->_ref, (int *)cursor, (igIGBFile *)file,
                                                                   (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
 }
 
 void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *self) {
     igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
     if (object != 0) {
-        int (*writeProxy)() = (int (*)())object->getMeta()->_writeProxy;
+        int (*writeProxy)() = (int (*)())object->GetMeta()->_writeProxy;
         if (writeProxy != 0) {
             igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)self, (igMetaObject *)writeProxy());
         }
@@ -128,7 +128,7 @@ void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *self, igIGBFile *fi
     void *meta;
 
     object = (igObjectDispatchView *)self->_ref;
-    igMetaObject *objectMeta = object->getMeta();
+    igMetaObject *objectMeta = object->GetMeta();
     meta = objectMeta;
     writeProxy = (void *(*)())objectMeta->_writeProxy;
     if (writeProxy != 0) {
@@ -161,19 +161,19 @@ void igObjectDirEntry_PostProcess(igObjectDirEntryView *self)
 /* Read the referenced object's fields from the file's object cursor and move past them. */
 void igObjectDirEntry_ResolveRefOld(igObjectDirEntry *self, igIGBFileView *file) {
     igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
-    int read = igObject_ReadFields(object, (FieldRecordHead *)file->objectCursor(), (igIGBFile *)file,
+    int read = igObject_ReadFields(object, (FieldRecordHead *)file->ObjectCursor(), (igIGBFile *)file,
                             (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
-    int cursor = file->objectCursor();
-    file->setObjectCursor(cursor + read);
+    int cursor = file->ObjectCursor();
+    file->SetObjectCursor(cursor + read);
 }
 
 /* Resolve the referenced object's references to other entries the same way, from the object cursor. */
 void igObjectDirEntry_ResolveRef(igObjectDirEntry *self, igIGBFileView *file) {
     igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
-    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->objectCursor(), (igDirectoryView *)file,
+    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->ObjectCursor(), (igDirectoryView *)file,
                             (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
-    int cursor = file->objectCursor();
-    file->setObjectCursor(cursor + read);
+    int cursor = file->ObjectCursor();
+    file->SetObjectCursor(cursor + read);
 }
 
 static inline void addRef(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }

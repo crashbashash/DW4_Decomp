@@ -641,7 +641,7 @@ void igRegistry_ParseFile(igRegistry *self, igFileView *file, int overwrite) {
 }
 
 bool igRegistry_ReadLine(void *unused, igFileView *s, char *buf, int *lines) {
-    int c = s->getChar();
+    int c = s->GetChar();
     int prev = 0;
     bool comment = false;
     int n = 0;
@@ -649,10 +649,10 @@ bool igRegistry_ReadLine(void *unused, igFileView *s, char *buf, int *lines) {
     bool lead = true;
     while (c != -1 && c != 0) {
         while (lead) {
-            if (c == 0x20 || c == 9) { prev = c; c = s->getChar(); }
+            if (c == 0x20 || c == 9) { prev = c; c = s->GetChar(); }
             else lead = false;
         }
-        if (c == 13) { c = s->getChar(); continue; }
+        if (c == 13) { c = s->GetChar(); continue; }
         if (c != 10) {
             if (!comment) {
                 if (c == 0x3B) comment = true;
@@ -670,7 +670,7 @@ bool igRegistry_ReadLine(void *unused, igFileView *s, char *buf, int *lines) {
         if (!comment) n -= 1;
     next:
         prev = c;
-        c = s->getChar();
+        c = s->GetChar();
     }
     if (n > 0 || c != -1) {
         ret = true;

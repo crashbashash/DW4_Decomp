@@ -303,7 +303,7 @@ igResult igElfFile_LoadSymbolTable(ElfFileView *self, igSymbolTableView *table, 
             }
         }
         self->Demangle((char *)self->strings + entry->name, text, 255, 0);
-        table->addSymbol(text, (void *)entry->value, entry->size, 0);
+        table->AddSymbol(text, (void *)entry->value, entry->size, 0);
     }
     return g_resultSuccess;
 }

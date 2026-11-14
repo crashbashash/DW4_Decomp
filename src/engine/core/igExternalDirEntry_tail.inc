@@ -20,7 +20,7 @@ void igExternalDirEntry_ReadFile(igExternalDirEntryView *self, void *file) {
         }
     }
     self->_externalFilePath = path;
-    self->resolveDirectory(((igIGBFile *)file)->_userLoadFunction);
+    self->ResolveDirectory(((igIGBFile *)file)->_userLoadFunction);
     if (self->_ref == 0 && g_igExternalDirEntry_loadFailureWarned == 0) {
         answer = igReport_Warning(text_igIGBFile_readFile_External_Entr, self->_entryName, self->_externalFilePath);
         if (answer != 1 && answer == 2) {
@@ -91,9 +91,9 @@ int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFu
         stream.get()->ReadFile(buf);
         igObject_FreeMemory((int)self, (int)buf);
     }
-    self->setRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
+    self->SetRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
     if (self->_ref == 0) {
-        self->setRef(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
+        self->SetRef(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
     }
     return self->_ref != 0;
 }
@@ -120,15 +120,15 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
         igDirectory_SetName((igDirectoryView *)directory.get(), self->_directoryName);
         igResource_AddDirectory((int *)resource, (int)directory.get());
     }
-    ((igDirectoryDispatchView *)directory.get())->resolveExternalEntry(self);
-    if (self->_ref == 0) self->loadExternalFile(loadFunction);
+    ((igDirectoryDispatchView *)directory.get())->ResolveExternalEntry(self);
+    if (self->_ref == 0) self->LoadExternalFile(loadFunction);
     if (self->_ref == 0 && loadFunction != 0) ((void (*)(igExternalDirEntryView *))loadFunction)(self);
     if (self->_ref != 0) {
-        igSmartPointer<igDirEntryView> entry(self->cloneViaMetadata(1), kRetainReference);
+        igSmartPointer<igDirEntryView> entry(self->CloneViaMetadata(1), kRetainReference);
         dropCreationReference(entry.get());
         igNamedObject_SetName((igNamedObject *)entry.get(), self->_entryName);
         entry->_refType = 0;
-        entry->setRef(self->_ref);
+        entry->SetRef(self->_ref);
         entry->_index = ((igDirectoryView *)directory.get())->_count;
         ObjectList_AppendRetained((igObjectList *)directory.get(), (igObject *)entry.get());
         return 1;
@@ -143,7 +143,7 @@ void igExternalDirEntry_InitDefaults(igDirEntry *self) {
 }
 
 void igExternalDirEntry_ReleaseDefaults(void **self) {
-    ((igDirEntryView *)(self))->setRef((int)(0));
+    ((igDirEntryView *)(self))->SetRef((int)(0));
     igObject_ReleaseDefaults((int)self);
 }
 

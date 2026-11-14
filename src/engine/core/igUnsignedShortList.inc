@@ -61,7 +61,7 @@ void igUnsignedShortList_InitFields(void) {
     meta = g_igUnsignedShortList_metaObject[0];
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->cloneViaMetadata(1);
+    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = igUnsignedShortMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)g_igUnsignedShortList_dataDescriptorCell;

@@ -72,9 +72,9 @@ igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mo
     int ok;
     igFile_SetFileName((int *)self, fileName);
     if (strcmp(mode, &text_r[0]) == 0) {
-        ok = self->openWithMode(0) == g_resultSuccess;
+        ok = self->OpenWithMode(0) == g_resultSuccess;
     } else if (strcmp(mode, &((int *)text_rb)[0]) == 0) {
-        ok = self->openWithMode(4) == g_resultSuccess;
+        ok = self->OpenWithMode(4) == g_resultSuccess;
     } else {
         return 0;
     }
@@ -83,7 +83,7 @@ igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mo
 
 void igMemoryFile_CloseFile(igMemoryFileView *self)
 {
-    self->closeHandle();
+    self->CloseHandle();
 }
 
 int igMemoryFile_Read(igMemoryFileView *self, void *buffer, int size, int count) {

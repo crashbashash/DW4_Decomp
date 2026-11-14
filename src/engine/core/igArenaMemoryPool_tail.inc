@@ -9,7 +9,7 @@ void **igArenaMemoryPool_Create(int allocator) {
         if (pool != 0) {
             pool = (void **)(((void **)igArenaMemoryPool_Construct((igArenaMemoryPool *)pool, 1)));
         }
-        ((igObjectDispatchView *)(pool))->initDefaults();
+        ((igObjectDispatchView *)(pool))->InitDefaults();
         ((igObjectDispatchView *)(pool))->userConstruct((int)(0));
     }
     return pool;

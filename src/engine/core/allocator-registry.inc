@@ -38,7 +38,7 @@ void igMemoryPool_CollectAllMemoryRegions(int regions, int unused) {
     i = g_secondaryAllocatorList[0]->count - 1;
     while (i >= 0) {
         pool = g_secondaryAllocatorList[0]->data[i];
-        if ((pool != 0) && (pool->isActive() != 0)) {
+        if ((pool != 0) && (pool->IsActive() != 0)) {
             pool->CollectMemoryRegions(regions);
         }
         i -= 1;
@@ -46,7 +46,7 @@ void igMemoryPool_CollectAllMemoryRegions(int regions, int unused) {
     j = g_primaryAllocatorList[0]->count - 1;
     while (j >= 0) {
         primary = g_primaryAllocatorList[0]->data[j];
-        if ((primary != 0) && (primary->isActive() != 0)) {
+        if ((primary != 0) && (primary->IsActive() != 0)) {
             primary->CollectMemoryRegions(regions);
         }
         j -= 1;

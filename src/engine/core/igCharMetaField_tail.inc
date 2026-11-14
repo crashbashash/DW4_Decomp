@@ -405,7 +405,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             --o->_refCount;
             if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)o));
         }
-        ((igObjectDispatchView *)self)->getMeta();
+        ((igObjectDispatchView *)self)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
         self->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
         if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) List_Reserve((igDataList *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts, 4);

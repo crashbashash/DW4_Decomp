@@ -9,7 +9,7 @@ void **InternalObjectList_Create(int allocator) {
         if (list != 0) {
             list = (void **)(((void **)InternalObjectList_Construct((__internalObjectList *)list, 1)));
         }
-        ((igObjectDispatchView *)(list))->initDefaults();
+        ((igObjectDispatchView *)(list))->InitDefaults();
         ((igObjectDispatchView *)(list))->userConstruct((int)(0));
     }
     return list;
@@ -88,7 +88,7 @@ void __internalObjectList_InitFields(void) {
     meta = g___internalObjectList_metaObject[0];
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
-    clone = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->cloneViaMetadata((int)(1)));
+    clone = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     clone->_refCounted = 1;
     clone->_externalEnumStorage = (int)(&g___internalObjectList_dataDescriptorCell[0]);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);

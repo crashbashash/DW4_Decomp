@@ -9,7 +9,7 @@ void **igShortMetaField_Create(int pool) {
         if (instance != 0) {
             instance = (void **)(((void **)igShortMetaField_Construct((int **)instance, 1)));
         }
-        ((igObjectDispatchView *)(instance))->initDefaults();
+        ((igObjectDispatchView *)(instance))->InitDefaults();
         ((igObjectDispatchView *)(instance))->userConstruct((int)(0));
     }
     return instance;

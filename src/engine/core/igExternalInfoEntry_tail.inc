@@ -20,7 +20,7 @@ bool igDirectory_AddExternalInfoRef(igDirectoryView *directory, igInfoView *info
     entry.get()->setDirectoryIndex(((igSmartPointer<igTDataList<igDirectoryView *> > &)directory->_externalDirectoryList)->find((igDirectoryView *)info->_directory));
     entry.get()->setInfoName(info->_name != 0 ? (char *)info->_name : (char *)emptyString);
     entry.get()->setKey(key);
-    entry.get()->setRef((int)object);
+    entry.get()->SetRef((int)object);
     entry.get()->_index = index;
     insertObject((igDataList *)directory, index, entry.get());
     return 1;

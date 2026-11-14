@@ -52,7 +52,7 @@ bool igMemoryPool_TrimAllPools(int unused, int flags) {
     i = g_secondaryAllocatorList[0]->count - 1;
     while (i >= 0) {
         secondary = g_secondaryAllocatorList[0]->data[i];
-        if (secondary != 0 && secondary->isActive() != 0 && secondary->Trim(flags) != 0) {
+        if (secondary != 0 && secondary->IsActive() != 0 && secondary->Trim(flags) != 0) {
             trimmed = true;
         }
         i--;
@@ -60,7 +60,7 @@ bool igMemoryPool_TrimAllPools(int unused, int flags) {
     j = g_primaryAllocatorList[0]->count - 1;
     while (j >= 0) {
         primary = g_primaryAllocatorList[0]->data[j];
-        if (primary != 0 && primary->isActive() != 0 && primary->Trim(flags) != 0) {
+        if (primary != 0 && primary->IsActive() != 0 && primary->Trim(flags) != 0) {
             trimmed = true;
         }
         j--;
@@ -105,7 +105,7 @@ void igMemoryPool_TrackEvent(void **pool, int record, int scope, int depth) {
     void **tracker;
 
     if ((scope == 0) || (scope & g_memoryEventScopeFlags[0])) {
-        tracker = (void **)(((igMemoryPoolView *)(pool))->getEventTracker());
+        tracker = (void **)(((igMemoryPoolView *)(pool))->GetEventTracker());
         if (tracker != 0) {
             ((igEventTrackerView *)tracker)->AddEvent((EventRecord *)record, depth + 1);
         }
@@ -250,7 +250,7 @@ void igMemoryPool_GangAllocTracked(igResult *result, igMemoryPoolView *pool, int
     unsigned int i;
     MemoryContext *ctx;
 
-    igResult res = pool->gangAlloc(count, (unsigned int *)sizes, (void **)blocks);
+    igResult res = pool->GangAlloc(count, (unsigned int *)sizes, (void **)blocks);
     if ((count != 0) && (sizes != 0) && (blocks != 0) && (res.v == g_resultSuccess.v)) {
         first = *blocks;
         total = 0;
@@ -273,7 +273,7 @@ void igMemoryPool_GangAllocAlignedTracked(igResult *result, igMemoryPoolView *po
     unsigned int i;
     MemoryContext *ctx;
 
-    igResult res = pool->gangAllocAligned(count, (unsigned int *)sizes, (void **)blocks, (unsigned short *)alignments);
+    igResult res = pool->GangAllocAligned(count, (unsigned int *)sizes, (void **)blocks, (unsigned short *)alignments);
     if ((count != 0) && (sizes != 0) && (blocks != 0) && (res.v == g_resultSuccess.v)) {
         first = *blocks;
         total = 0;
@@ -295,7 +295,7 @@ void igMemoryPool_GangFreeTracked(void **pool, unsigned int count, int *blocks, 
     unsigned int i;
     void **ctx;
 
-    ((igMemoryPoolView *)pool)->gangFree(count, (void **)blocks);
+    ((igMemoryPoolView *)pool)->GangFree(count, (void **)blocks);
     if ((count != 0) && (blocks != 0)) {
         total = 0;
         first = *blocks;

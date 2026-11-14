@@ -66,7 +66,7 @@ void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mod
             if (more) {
 open:
                 strcat(path, file->_fileName);
-                devicePath = file->makeCompleteFilename(path);
+                devicePath = file->MakeCompleteFilename(path);
                 if (*devicePath == 'c') {
                     retries = 10;
                     while ((fd = sceOpen(devicePath, flags)) < 0 && retries != 0) {
@@ -104,7 +104,7 @@ open:
 
 void igPsx2File_CloseHandle(igPsx2FileView *self) {
     if (self->_fileHandle >= 0) {
-        self->flush();
+        self->Flush();
         sceClose(self->_fileHandle);
         self->_fileHandle = -1;
         if (self->_fBuf != 0) {
@@ -130,42 +130,42 @@ void **igPsx2File_Open(void **self, const char *fileName, int modeText) {
 
     igFile_SetFileName((int *)self, fileName);
     if (strcmp(modeText, &text_r[0]) == 0) {
-        readResult = ((igFileView *)(self))->openWithMode((int)(0));
+        readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         opened = readResult.v;
         goto block_21;
     }
     if (strcmp(modeText, (int *)text_rb) == 0) {
-        readBinaryResult = ((igFileView *)(self))->openWithMode((int)(4));
+        readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
         opened = readBinaryResult.v;
         goto block_21;
     }
     if (strcmp(modeText, (int *)((char *)text_w)) == 0) {
-        writeResult = ((igFileView *)(self))->openWithMode((int)(1));
+        writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
         opened = writeResult.v;
         goto block_21;
     }
     if (strcmp(modeText, (int *)((char *)text_wb)) == 0) {
-        writeBinaryResult = ((igFileView *)(self))->openWithMode((int)(5));
+        writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
         opened = writeBinaryResult.v;
         goto block_21;
     }
     if ((strcmp(modeText, (int *)text_r_plus) == 0) || (strcmp(modeText, &text_w_plus[0]) == 0)) {
-        readWriteResult = ((igFileView *)(self))->openWithMode((int)(3));
+        readWriteResult = ((igFileView *)(self))->OpenWithMode((int)(3));
         opened = readWriteResult.v;
         goto block_21;
     }
     if ((strcmp(modeText, (int *)text_r_plus_b) == 0) || (strcmp(modeText, &text_w_plus_b[0]) == 0)) {
-        readWriteBinaryResult = ((igFileView *)(self))->openWithMode((int)(7));
+        readWriteBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
         opened = readWriteBinaryResult.v;
         goto block_21;
     }
     if ((strcmp(modeText, (int *)text_a) == 0) || (strcmp(modeText, &text_a_plus[0]) == 0)) {
-        appendResult = ((igFileView *)(self))->openWithMode((int)(2));
+        appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
         opened = appendResult.v;
         goto block_21;
     }
     if ((strcmp(modeText, (int *)text_ab) == 0) || (strcmp(modeText, &text_a_plus_b[0]) == 0)) {
-        appendBinaryResult = ((igFileView *)(self))->openWithMode((int)(6));
+        appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
         opened = appendBinaryResult.v;
         goto block_21;
     }
@@ -176,7 +176,7 @@ block_21:
 
 void igPsx2File_Close(igPsx2FileView *self)
 {
-    self->closeHandle();
+    self->CloseHandle();
 }
 
 void igPsx2File_GrowBuffer(igPsx2FileView *self, int size) {
@@ -207,7 +207,7 @@ int igPsx2File_Read(igPsx2FileView *self, int buffer, int size, int count) {
     if (self->_fileHandle < 0) {
         return -1;
     }
-    base = self->tell();
+    base = self->Tell();
     if (self->_isBinary == 1) {
         r = sceRead(self->_fileHandle, buffer, count * size);
         count = r / size;
@@ -457,7 +457,7 @@ int igPsx2File_Seek(igPsx2FileView *self, int offset, int whence) {
             s = sceLseek(self->_fileHandle, offset, 0);
             return -(s != offset);
         case 1:
-            s = self->tell();
+            s = self->Tell();
             return -(offset != sceLseek(self->_fileHandle, offset, 1) - s);
         case 2:
             sceLseek(self->_fileHandle, offset, 2);

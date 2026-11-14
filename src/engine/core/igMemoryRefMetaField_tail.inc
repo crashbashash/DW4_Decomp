@@ -109,7 +109,7 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *self, int destination, 
                 for (i = 0; i < (int)n; i++) {
                     igObjectDispatchView *e = *(igObjectDispatchView **)(src + i * 4);
                     int clone = 0;
-                    if (e != 0) clone = (int)e->cloneViaMetadata(1);
+                    if (e != 0) clone = (int)e->CloneViaMetadata(1);
                     *(int *)(dst + i * 4) = clone;
                 }
             }
@@ -171,7 +171,7 @@ void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *self, int object
             for (i = 0; i < (int)count; i++) {
                 element = elements[i];
                 if (element != 0) {
-                    element->trimCapacity();
+                    element->TrimCapacity();
                     igObject_VisitFields((igObjectDispatchView *)elements[i], (Visitor)visitor, (void *)context);
                 }
             }

@@ -47,7 +47,7 @@ void igMemoryDictionary_SetCurrent(void *dictionary) {
     if (current != dictionary) {
         if (current != 0) {
             ((void * *)g_memoryDictionary)[0] = (void *)(0);
-            ((igMemoryDictionaryView *)current)->clear();
+            ((igMemoryDictionaryView *)current)->Clear();
             ((igObject *)current)->_refCount = (int)((int) (((igObject *)current)->_refCount - 1));
             if (((unsigned long long) ((long long) (int) ((igObject *)current)->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(current);
@@ -61,7 +61,7 @@ igResult Memory_LookupAllocation(int address, int *poolOut) {
     int poolIndex;
     igMemoryDictionaryView *o = g_memoryDictionary[0];
     if (o != 0) {
-        int x = o->getValue(address, &poolIndex).get(); if (x == g_resultSuccess.v) {
+        int x = o->GetValue(address, &poolIndex).get(); if (x == g_resultSuccess.v) {
             *poolOut = (int)igAllocator_ResolveEncodedIndex(poolIndex);
             if (*poolOut != 0) {
                 return igResult(g_resultSuccess.v);
@@ -78,17 +78,17 @@ igResult Memory_RegisterAllocation(int address, igMemoryPoolView *pool) {
         dictionarySize = 0x1000;
         igRegistry_GetValueInt((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
         g_memoryDictionary[0] = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
-        g_memoryDictionary[0]->setCapacity(dictionarySize);
-        g_memoryDictionary[0]->initEntries();
+        g_memoryDictionary[0]->SetCapacity(dictionarySize);
+        g_memoryDictionary[0]->InitEntries();
         igMemoryDictionary_SetCurrent(g_memoryDictionary[0]);
     }
-    return g_memoryDictionary[0]->insert(address, pool->GetPoolIndex());
+    return g_memoryDictionary[0]->Insert(address, pool->GetPoolIndex());
 }
 
 igResult Memory_UnregisterAllocation(int address, igMemoryPoolView *pool) {
     igMemoryDictionaryView *p = g_memoryDictionary[0];
     if (p != 0) {
-        return p->remove(address);
+        return p->Remove(address);
     }
     return igResult(g_resultFailure.v);
 }
@@ -147,7 +147,7 @@ void *Memory_FindOwningAllocator(int address) {
     secondaryIndex = g_secondaryAllocatorList[0]->count - 1;
     while (secondaryIndex >= 0) {
         secondary = (igMemoryPoolView *)g_secondaryAllocatorList[0]->data[secondaryIndex];
-        if ((secondary != 0) && (secondary->isActive() != 0) && (secondary->OwnsAllocation((void *)address) != 0)) {
+        if ((secondary != 0) && (secondary->IsActive() != 0) && (secondary->OwnsAllocation((void *)address) != 0)) {
             return secondary;
         }
         secondaryIndex -= 1;
@@ -155,7 +155,7 @@ void *Memory_FindOwningAllocator(int address) {
     primaryIndex = g_primaryAllocatorList[0]->count - 1;
     while (primaryIndex >= 0) {
         primary = (igMemoryPoolView *)g_primaryAllocatorList[0]->data[primaryIndex];
-        if ((primary != 0) && (primary->isActive() != 0) && (primary->OwnsAllocation((void *)address) != 0)) {
+        if ((primary != 0) && (primary->IsActive() != 0) && (primary->OwnsAllocation((void *)address) != 0)) {
             return primary;
         }
         primaryIndex -= 1;

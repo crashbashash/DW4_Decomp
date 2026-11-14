@@ -40,7 +40,7 @@ int igPsx2Thread_GetArg(igPsx2Thread *self) {
 }
 
 igResult igPsx2Thread_SetStack(igPsx2ThreadView *self, int stack, int size) {
-    if (self->isRunning() == 0) {
+    if (self->IsRunning() == 0) {
         if (stack & 0xF) {
             return igResult(g_resultFailure.v);
         }

@@ -185,15 +185,15 @@ igResult igPageMemoryPool_EnableAllocationLock(igPageMemoryPoolView *arg1, int a
         igSmartPointer<igSemaphoreView> held(arg1->allocationLock);
         arg1->allocationLock.clear();
         if (held.p != 0) {
-            held.p->wait(1);
-            held.p->destroy();
+            held.p->Wait(1);
+            held.p->Destroy();
         }
     } else if ((arg2 & 0xFF) == 1) {
         if (arg1->allocationLock.p != 0) {
             return g_resultSuccess.v;
         }
         igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)arg1)))));
-        created.p->create();
+        created.p->Create();
         arg1->allocationLock = created;
     }
     return g_resultSuccess.v;
@@ -291,7 +291,7 @@ void igPageMemoryPool_Lock(void *arg0) {
 
     temp_a1 = (void **)((igPageMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
+        sp1C = ((igSemaphoreView *)(temp_a1))->Wait(1);
     }
 }
 
@@ -301,7 +301,7 @@ int igPageMemoryPool_UnlockAndReturn(void *arg0, int arg1) {
 
     temp_a1 = (void **)((igPageMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
+        sp2C = ((igSemaphoreView *)(temp_a1))->Signal();
     }
     return arg1;
 }

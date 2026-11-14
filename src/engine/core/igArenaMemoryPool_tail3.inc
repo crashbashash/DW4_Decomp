@@ -13,7 +13,7 @@ void igArenaMemoryPool_PrintStatistics(igArenaMemoryPoolView *self, char *title)
     messageLevel = named ? FUN_00312140(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)emptyString_4;
     heapCheck = named ? FUN_00312140(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)emptyString_4;
     flags = named ? FUN_00312020(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)emptyString_4;
-    igReport_Printf(g_igArenaMemoryPool_statisticsFormat, self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->getLowestAddress(), self->getHighestAddress(),
+    igReport_Printf(g_igArenaMemoryPool_statisticsFormat, self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->GetLowestAddress(), self->GetHighestAddress(),
                  igArenaMemoryPool_GetArenaCount(self), igArenaMemoryPool_GetArenaHighCount(self), self->GetPoolIndex(), flags, heapCheck, messageLevel);
     igReport_Flush();
 }
@@ -28,7 +28,7 @@ void igArenaMemoryPool_CollectMemoryRegions(igArenaMemoryPoolView *self, igDataL
     DumpRegion *created;
     int *block;
 
-    if (self->isActive() != 0) {
+    if (self->IsActive() != 0) {
         i = 0;
         if (arena->blockCount) {
             while (i < arena->blockCount) {
@@ -106,8 +106,8 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
 }
 
 igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
-    char *hi = self->getHighestAddress();
-    char *lo = self->getLowestAddress();
+    char *hi = self->GetHighestAddress();
+    char *lo = self->GetLowestAddress();
     /* Declared with the walk's other pointers, ahead of the flag: `n` and `ok` are the two values kept in
      * argument registers, and the later-numbered one, `ok`, takes a0. */
     TaggedBlockHeader *n;
@@ -483,8 +483,8 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
 igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
     char *top = (char *)self->_arenaState->top;
     char *walk = cur;
-    char *hi = self->getHighestAddress();
-    char *lo = self->getLowestAddress();
+    char *hi = self->GetHighestAddress();
+    char *lo = self->GetLowestAddress();
     TaggedBlockHeader *n;
     unsigned int size = 0;
     int count = 0;
@@ -1604,13 +1604,13 @@ void igArenaMemoryPool_EnableAllocationLock(int *ret, igArenaMemoryPool *p, int 
         releaseAllocationLock(p);
         p->_allocationLock = 0;
         if (lock.p != 0) {
-            lock->wait(1);
-            lock->destroy();
+            lock->Wait(1);
+            lock->Destroy();
         }
     } else if ((unsigned char)flag == 1) {
         if (p->_allocationLock != 0) { *ret = g_resultSuccess.v; return; }
         igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)p)))));
-        created->create();
+        created->Create();
         igSemaphoreView *t = created.p;
         if (t) t->_refCount = t->_refCount + 1;
         releaseAllocationLock(p);
@@ -1656,7 +1656,7 @@ long long igArenaMemoryPool_GetMaxSize(igArenaMemoryPool *self) {
 void igArenaMemoryPool_SetPreSize(int *status, igArenaMemoryPoolView *self, int preSize) {
     self->_preSize = preSize;
     self->_poolPreSized = 0;
-    if (self->isActive() != 0) {
+    if (self->IsActive() != 0) {
         self->Free(self->Allocate(0x10));
     }
     *status = g_resultSuccess.v;
@@ -1758,7 +1758,7 @@ void igArenaMemoryPool_Lock(igArenaMemoryPoolView *self) {
 
     lock = (void **)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->wait(1);
+        lockResult = ((igSemaphoreView *)(lock))->Wait(1);
     }
 }
 
@@ -1768,7 +1768,7 @@ void igArenaMemoryPool_Unlock(igArenaMemoryPoolView *self) {
 
     lock = (void **)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->signal();
+        lockResult = ((igSemaphoreView *)(lock))->Signal();
     }
 }
 
@@ -1778,7 +1778,7 @@ int igArenaMemoryPool_UnlockAndReturn(igArenaMemoryPoolView *self, int value) {
 
     lock = (void **)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->signal();
+        lockResult = ((igSemaphoreView *)(lock))->Signal();
     }
     return value;
 }
@@ -1850,7 +1850,7 @@ igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, uns
         for (i = 0; i < (unsigned short)count; i++) {
             alignments[i] = self->_alignment;
         }
-        igResult result = self->gangAllocAligned(count, sizes, blocks, alignments);
+        igResult result = self->GangAllocAligned(count, sizes, blocks, alignments);
         self->Free(alignments);
         return result;
     }
@@ -2273,7 +2273,7 @@ int igArenaMemoryPool_GetAllocationSize(int self, unsigned char *p) {
 void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
     int r;
     if ((f & 1) != (p->_poolOptionFlags & 1)) {
-        if (((igMemoryPoolView *)p)->isActive() != 0) {
+        if (((igMemoryPoolView *)p)->IsActive() != 0) {
             if (p->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, p);
                 if (g_igArenaMemoryPool_ignoreE111Notice == 0) {

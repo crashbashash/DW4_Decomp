@@ -56,7 +56,7 @@ void igLongList_InitFields(void) {
     meta = g_igLongList_metaObject[0];
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->cloneViaMetadata(1);
+    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = igLongMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igLongList_dataDescriptorCell[0]);

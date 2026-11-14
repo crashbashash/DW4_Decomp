@@ -29,7 +29,7 @@ void igMemoryDictionary_InitEntries(igMemoryDictionaryView *self) {
             List_Resize(l, b, 4);
         }
     }
-    self->resetEntries();
+    self->ResetEntries();
 }
 
 void igMemoryDictionary_Clear(igMemoryDictionaryView *self) {
@@ -93,7 +93,7 @@ void igMemoryDictionary_GetValue(igResult *result, igMemoryDictionaryView *self,
         result->v = g_resultSuccess.v;
         return;
     }
-    idx = self->hashKey(key);
+    idx = self->HashKey(key);
     s = self->_memoryEntries;
     n = s->_count / 2;
     res = g_resultFailure.v;
@@ -129,7 +129,7 @@ igResult igMemoryDictionary_Insert(igMemoryDictionaryView *self, int key, int va
     igTDataList<MemoryDictionaryEntry> *s;
     MemoryDictionaryEntry *e;
     if (cap != 0) {
-        idx = self->hashKey(key);
+        idx = self->HashKey(key);
         s = self->_memoryEntries;
         e = &s->_data[idx];
         do {
@@ -142,7 +142,7 @@ igResult igMemoryDictionary_Insert(igMemoryDictionaryView *self, int key, int va
                 e->value = val;
                 self->_count = self->_count + 1;
                 if (probes >= half) {
-                    return self->resize(cap * 2);
+                    return self->Resize(cap * 2);
                 }
                 return igResult(g_resultSuccess.v);
             }
@@ -170,7 +170,7 @@ igResult igMemoryDictionary_Remove(igMemoryDictionaryView *self, int key) {
     i = 0;
     half = self->_memoryEntries->_count / 2;
     if (half != 0) {
-        idx = self->hashKey(key);
+        idx = self->HashKey(key);
         t = self->_memoryEntries;
         e = t->_data + idx;
         do {
@@ -260,7 +260,7 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     self->_count = 0;
     for (i = 0; i < count; i += 2, entry += 2) {
         if (entry[0] != 0) {
-            self->insert(entry[0], entry[1]);
+            self->Insert(entry[0], entry[1]);
         }
     }
     result->v = g_resultSuccess.v;
@@ -280,8 +280,8 @@ void igMemoryDirEntry_SetMemType(igMemoryDirEntry *self, igObjectDispatchView *m
         n = l->_count;
         for (i = 0; i < n; i++) {
             o = ((igObjectDispatchView **)l->_data)[i];
-            r = o->getMeta();
-            if (r == memType->getMeta()) {
+            r = o->GetMeta();
+            if (r == memType->GetMeta()) {
                 self->_memTypeIndex = i;
                 return;
             }

@@ -27,7 +27,7 @@ void igSymbolTable_ReserveStorage(igSymbolTableView *self) {
     if (words >= symbols->_count) {
         List_Reserve((igDataList *)symbols, words, 4);
     }
-    self->rebuildHashIndex(self->_hashCapacity);
+    self->RebuildHashIndex(self->_hashCapacity);
     igStringTable_SetCapacity(self->_symbolNames, self->_capacity * 4);
     igStringTable_SetHashCapacity(self->_symbolNames, self->_capacity);
     igStringTable_Reserve((void *)self->_symbolNames);
@@ -87,7 +87,7 @@ if ((s = igStringTable_GetString((int *)self->_sourceFileNames, e->path)) != 0) 
 
 int igSymbolTable_FindSymbolIndex(igSymbolTableView *o, unsigned key) {
 SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int cnt; int e2; unsigned end1; unsigned end2; int k; unsigned st1; int j; SymbolRecord *en2; igTDataList<int> *l;
-    i0 = o->hashAddress(key);
+    i0 = o->HashAddress(key);
     i = i0;
     l = o->_hashIndex;
     cnt = l->_count;
@@ -126,14 +126,14 @@ SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int 
 
 void igSymbolTable_GetSymbolAtAddress(int *out, igSymbolTableView *o, int a, int b, int c, int d, int e, int f, int g, int *h) {
     igResult r;
-    int i = o->findSymbolIndex(a);
+    int i = o->FindSymbolIndex(a);
     r.v = g_resultFailure.v;
     *h = 0;
-    if (i != -1) r = o->getSymbol(i, b, c, d, e, f, g);
+    if (i != -1) r = o->GetSymbol(i, b, c, d, e, f, g);
     *out = r.v;
 }
 
-void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->findSymbolIndex(b)) { case -1: o->addSymbol((const char *)a, (void *)b, c, d); break; default: break; } }
+void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->FindSymbolIndex(b)) { case -1: o->AddSymbol((const char *)a, (void *)b, c, d); break; default: break; } }
 
 typedef igSmartPointer<igTDataList<int> > igIntListRef;
 
@@ -161,7 +161,7 @@ int igSymbolTable_AddSymbol(igSymbolTableView *self, const char *name, int addre
         setCapacity(((igIntListRef &)self->_symbols).get(), ((igIntListRef &)self->_symbols)->capacity() * 2);
     }
     List_AppendWords((igDataList *)self->_symbols, 4, (const int *)&record);
-    self->insertHashEntry(address, size, index);
+    self->InsertHashEntry(address, size, index);
     return index;
 }
 
@@ -189,7 +189,7 @@ int igSymbolTable_InsertHashEntry(igSymbolTableView *self, int key, int key2, in
     igTDataList<int> *l;
 
     if (size != 0) {
-        idx = self->hashAddress(key);
+        idx = self->HashAddress(key);
         l = self->_hashIndex;
         do {
             if (l->_data[idx] == -1) {
@@ -202,7 +202,7 @@ int igSymbolTable_InsertHashEntry(igSymbolTableView *self, int key, int key2, in
             }
             probes++;
         } while (probes < half);
-        self->rebuildHashIndex(size * 2);
+        self->RebuildHashIndex(size * 2);
         return 0;
     }
 done:
@@ -243,7 +243,7 @@ void igSymbolTable_RebuildHashIndex(igSymbolTableView *self, int n) {
     begin = (SymbolRecord *)l->_data;
     end = begin + l->_count / 4;
     for (e = begin; e < end; e++) {
-        int bb = e->size; if (self->insertHashEntry(e->address, bb, e - begin) == 0) {
+        int bb = e->size; if (self->InsertHashEntry(e->address, bb, e - begin) == 0) {
             break;
         }
     }

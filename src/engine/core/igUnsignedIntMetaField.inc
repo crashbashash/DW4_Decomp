@@ -9,7 +9,7 @@ void **igUnsignedIntMetaField_Create(int allocator) {
         if (field != 0) {
             field = (void **)(((void **)igUnsignedIntMetaField_Construct((igMetaField *)field, 1)));
         }
-        ((igObjectDispatchView *)(field))->initDefaults();
+        ((igObjectDispatchView *)(field))->InitDefaults();
         ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
     return field;

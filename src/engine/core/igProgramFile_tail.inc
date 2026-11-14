@@ -72,7 +72,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     }
     file->stream = (igFileView *)igFile_Create(allocator);
     igFile_SetFileName((int *)file->stream, file->path);
-    if (file->stream->openWithMode(4) == g_resultFailure) {
+    if (file->stream->OpenWithMode(4) == g_resultFailure) {
         igReport_Printf((const char *)&text_Unable_to_open_percent_s[0], (int)file->path);
         igReport_Flush();
         return g_resultFailure;
@@ -81,7 +81,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
 }
 
 void igProgramFile_Close(int *result, ProgramFileView *self) {
-    self->stream->closeHandle();
+    self->stream->CloseHandle();
     self->Reset();
     *result = g_resultSuccess.v;
 }

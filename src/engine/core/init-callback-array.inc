@@ -179,13 +179,13 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
             tracker->Initialize();
             self->resourceTempPool->SetEventTracker(tracker);
         }
-        self->resourceTempPool->activate();
+        self->resourceTempPool->Activate();
         setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
     }
     igRegistry_GetValueInt((int)self->configRegistry, 2, text_stringPoolStatisticsLevel, &self->stringPoolStatisticsLevel, 0, 0);
     igAdxFile_LoadSearchFilePath();
     g_igIGBFile_loadTimer[0] = (igLongTimerView *)igTimer_Create((int)self->systemPool);
-    g_igIGBFile_loadTimer[0]->start();
+    g_igIGBFile_loadTimer[0]->Start();
     igReport_Printf(newline_percent_s_newline_newline, g_alchemyVersionString);
     igReport_Flush();
     if (self->copyVTables != 0) {
@@ -267,7 +267,7 @@ void igObjectSystem_Terminate(ObjectSystemView *self) {
         pool = g_secondaryAllocatorList[0]->data[i];
         if (pool != 0) {
             pool->EnableAllocationLock(0);
-            tracker = (igEventTrackerView *)pool->getEventTracker();
+            tracker = (igEventTrackerView *)pool->GetEventTracker();
             if (tracker != 0) {
                 igEventTracker_SetThreadSafe(tracker, 0);
             }
@@ -278,7 +278,7 @@ void igObjectSystem_Terminate(ObjectSystemView *self) {
         pool = g_primaryAllocatorList[0]->data[i];
         if (pool != 0) {
             pool->EnableAllocationLock(0);
-            tracker = (igEventTrackerView *)pool->getEventTracker();
+            tracker = (igEventTrackerView *)pool->GetEventTracker();
             if (tracker != 0) {
                 igEventTracker_SetThreadSafe(tracker, 0);
             }

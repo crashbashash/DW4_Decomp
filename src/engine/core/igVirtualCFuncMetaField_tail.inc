@@ -74,7 +74,7 @@ void igArenaMemoryPool_CheckTriggerEvent(igArenaMemoryPool *pool, int event, int
             matched |= 8;
         }
         if (DAT_004c2358[0] != -1) {
-            int tracker = (int)((igMemoryPoolView *)pool)->getEventTracker();
+            int tracker = (int)((igMemoryPoolView *)pool)->GetEventTracker();
             if (tracker != 0) {
                 eventCount = igEventTracker_GetCount((int *)tracker);
                 if (eventCount == DAT_004c2358[0]) {
@@ -168,8 +168,8 @@ void igArenaMemoryPool_CheckChunk(igArenaMemoryPoolView *self, TaggedBlockHeader
     }
     size = (size + 3) & ~3;
     total = size + (h->words + 1) * 4;
-    high = self->getHighestAddress();
-    low = self->getLowestAddress();
+    high = self->GetHighestAddress();
+    low = self->GetLowestAddress();
     if (isFreeChunk(h) == 0) {
         if (h != state->top) {
             if (state->flags & 1) {
@@ -414,8 +414,8 @@ void igArenaMemoryPool_CheckBlock(igArenaMemoryPoolView *self, TaggedBlockHeader
     }
     size = (size + 3) & ~3;
     total = size + (h->words + 1) * 4;
-    high = self->getHighestAddress();
-    low = self->getLowestAddress();
+    high = self->GetHighestAddress();
+    low = self->GetLowestAddress();
     if (isFreeChunk(h) == 0) {
         if (h != state->top) {
             if (state->flags & 1) {

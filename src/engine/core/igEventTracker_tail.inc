@@ -21,7 +21,7 @@ void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
     if (open != 0) {
         if (self->_lock == 0) {
             igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)igObject_GetAllocator((int)self)))));
-            created.get()->create();
+            created.get()->Create();
             setLock(self, created.get());
         }
     } else {
@@ -30,7 +30,7 @@ void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
             kept.retain();
             setLock(self, 0);
             if (kept.get() != 0) {
-                kept.get()->destroy();
+                kept.get()->Destroy();
             }
         }
     }
@@ -104,7 +104,7 @@ void igEventTracker_Initialize(igEventTrackerView *self) {
     igCallStackTable_SetCapacity(self->_callStacks, 0x10000);
     igCallStackTable_SetHashCapacity((igCallStackTableView *)self->_callStacks, 0x1000);
     igCallStackTable_ApplyCapacity((igCallStackTableView *)self->_callStacks);
-    if (self->_callStackTracer->hasSymbols() != 0) {
+    if (self->_callStackTracer->HasSymbols() != 0) {
         StringPool_SetBlockSize((int)self->_locations, 0x4000);
         igLocationTable_SetHashCapacity((int)self->_locations, 0x4000);
         igLocationTable_Allocate(self->_locations);
@@ -129,7 +129,7 @@ void igEventTracker_Shutdown(igEventTrackerView *self) {
         igStringTable_Clear((igStringTableView *)self->_annotations);
         igStringTable_Clear((igStringTableView *)self->_sourceFileNames);
         igCallStackTable_Clear((igCallStackTableView *)self->_callStacks);
-        if (self->_callStackTracer->hasSymbols() != 0) {
+        if (self->_callStackTracer->HasSymbols() != 0) {
             igLocationTable_Clear(self->_locations);
         }
         if (0 <= self->_eventRecords->_capacity) {
@@ -571,7 +571,7 @@ igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRec
         decodeUnsigned(p, unsignedValue); record->f72 = unsignedValue;
     }
     if (flags & 0x10) { decodeSigned(p, value); record->f64 = igStringTable_GetString((int *)self->_groups, value); }
-    if (flags & 0x20) { decodeSigned(p, value); record->callStack = (int *)((igCallStackTableView *)self->_callStacks)->getCallStack(value); }
+    if (flags & 0x20) { decodeSigned(p, value); record->callStack = (int *)((igCallStackTableView *)self->_callStacks)->GetCallStack(value); }
     if (flags & 0x8000) {
         decodeUnsigned(p, unsignedValue); record->slotStates = unsignedValue;
         do {
@@ -955,7 +955,7 @@ void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wante
     int offset;
     int line;
     igEventTracker_InitEvent((int)&record);
-    if (self->_callStackTracer->hasSymbols() == 0) {
+    if (self->_callStackTracer->HasSymbols() == 0) {
         igEventTracker_DestructEvent(&record, -1);
         return;
     }
@@ -1624,8 +1624,8 @@ igResult igEventTracker_ResolveAddress(igEventTrackerView *self, int addr, char 
     if (igLocationTable_IsInitialized((void *)self->_locations) != 0) {
         s0 = self->_locations->GetLocation(addr, buf, size, offset, name, nameSize, line).v;
         if (s0 == g_resultFailure.v) {
-            if (self->_callStackTracer->hasSymbols() != 0) {
-                s0 = self->_callStackTracer->lookupAddress(addr, buf, size, offset, name, nameSize, line).v;
+            if (self->_callStackTracer->HasSymbols() != 0) {
+                s0 = self->_callStackTracer->LookupAddress(addr, buf, size, offset, name, nameSize, line).v;
                 self->_locations->AddLocation(addr, buf, *offset, name, *line);
                 g_igEventTracker_addressTracerLookups[0] = g_igEventTracker_addressTracerLookups[0] + 1;
                 goto join;
@@ -1633,7 +1633,7 @@ igResult igEventTracker_ResolveAddress(igEventTrackerView *self, int addr, char 
         }
         g_igEventTracker_addressCacheHits[0] += 1;
     } else {
-        s0 = self->_callStackTracer->lookupAddress(addr, buf, size, offset, name, nameSize, line).v;
+        s0 = self->_callStackTracer->LookupAddress(addr, buf, size, offset, name, nameSize, line).v;
         g_igEventTracker_addressTracerLookups[0] = g_igEventTracker_addressTracerLookups[0] + 1;
     }
 join:
@@ -1797,7 +1797,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
     o->_dataMemoryPool = (igMemoryPoolView *)a;
     file.p->_useMemoryPoolAssignmentsState = 1;
     igDirectory_AddObjectRecursive((int)file.p, (int)self, g_igEventTracker_memoryDataName[0], 0);
-    r = file.p->writeFile(fileName);
+    r = file.p->WriteFile(fileName);
     }
     self->_flags = had ? (self->_flags | 2) : (self->_flags & ~2);
     return igResult(r);
@@ -1812,12 +1812,12 @@ void igEventTracker_ResolveAllCallStackSymbols(igEventTrackerView *self) {
     int i;
     unsigned int *row;
     bool wasSet;
-    count = ((igCallStackTableView *)self->_callStacks)->getCallStackCount();
+    count = ((igCallStackTableView *)self->_callStacks)->GetCallStackCount();
     a = 0;
     b = 0;
     wasSet = (self->getFlags() & 2) != 0;
     self->_flags |= 2;
-    row = ((igCallStackTableView *)self->_callStacks)->getCallStack(0);
+    row = ((igCallStackTableView *)self->_callStacks)->GetCallStack(0);
     if (row != 0) {
         for (i = 0; i < count; i++) {
             while (*row != 0) {

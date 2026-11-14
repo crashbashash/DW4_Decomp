@@ -13,7 +13,7 @@ void **igStringMetaField_Create(int allocator) {
         if (field != 0) {
             field = ((void **)igStringMetaField_Construct((igStringMetaField *)field, 1));
         }
-        ((igObjectDispatchView *)field)->initDefaults();
+        ((igObjectDispatchView *)field)->InitDefaults();
         ((igObjectDispatchView *)field)->userConstruct(0);
     }
     return field;
@@ -110,7 +110,7 @@ void igStringMetaField_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igStringMetaField_ctorTable[0], 1);
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_shallowCopyMethod[0])));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
-    shallowCopyField = (igMetaField *)(((igObjectDispatchView *)(found))->cloneViaMetadata((int)(1)));
+    shallowCopyField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     igCharMetaField_SetDefaultValue((void **)shallowCopyField, 2);
     shallowCopyField->_externalEnumStorage = (int)(&g_igStringMetaField_shallowCopyMethodCell[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)shallowCopyField);
@@ -120,7 +120,7 @@ void igStringMetaField_InitFields(void) {
     }
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_destruct[0])));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
-    destructField = (igMetaField *)(((igObjectDispatchView *)(found))->cloneViaMetadata((int)(1)));
+    destructField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     igBoolMetaField_SetDefaultValue((void **)destructField, 1);
     destructField->_externalEnumStorage = (int)(&g_igStringMetaField_destructCell[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)destructField);

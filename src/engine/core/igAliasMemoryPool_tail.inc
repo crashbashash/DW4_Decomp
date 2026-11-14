@@ -92,15 +92,15 @@ igResult igAliasMemoryPool_EnableAllocationLock(igAliasMemoryPool *pool, int ena
         kept.retain();
         setLock(pool, 0);
         if (kept.get() != 0) {
-            kept.get()->wait(1);
-            kept.get()->destroy();
+            kept.get()->Wait(1);
+            kept.get()->Destroy();
         }
     } else if ((enable & 0xFF) == 1) {
         if (pool->_allocationLock != 0) {
             return g_resultSuccess.v;
         }
         igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)pool)))));
-        created.get()->create();
+        created.get()->Create();
         setLock(pool, created.get());
     }
     return g_resultSuccess.v;
@@ -195,7 +195,7 @@ void igAliasMemoryPool_Lock(igAliasMemoryPool *self) {
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->wait((int)(1));
+        status = ((igSemaphoreView *)(lockObject))->Wait((int)(1));
     }
 }
 
@@ -207,7 +207,7 @@ void igAliasMemoryPool_Unlock(igAliasMemoryPool *self) {
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->signal();
+        status = ((igSemaphoreView *)(lockObject))->Signal();
     }
 }
 
@@ -222,7 +222,7 @@ int igAliasMemoryPool_UnlockAndReturn(igAliasMemoryPool *self, int result) {
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->signal();
+        status = ((igSemaphoreView *)(lockObject))->Signal();
     }
     return result;
 }
@@ -282,7 +282,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *self, int block) {
 igResult igAliasMemoryPool_GangAlloc(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks) {
     igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
     if (pool != 0) {
-        return pool->gangAlloc(count, sizes, blocks);
+        return pool->GangAlloc(count, sizes, blocks);
     }
     return g_resultFailure;
 }
@@ -290,7 +290,7 @@ igResult igAliasMemoryPool_GangAlloc(igAliasMemoryPool *self, int count, unsigne
 igResult igAliasMemoryPool_GangAllocAligned(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks, unsigned short *alignments) {
     igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
     if (pool != 0) {
-        return pool->gangAllocAligned(count, sizes, blocks, alignments);
+        return pool->GangAllocAligned(count, sizes, blocks, alignments);
     }
     return g_resultFailure;
 }
@@ -298,7 +298,7 @@ igResult igAliasMemoryPool_GangAllocAligned(igAliasMemoryPool *self, int count, 
 void igAliasMemoryPool_GangFree(igAliasMemoryPool *self, int count, void **blocks) {
     igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
     if (pool != 0) {
-        pool->gangFree(count, blocks);
+        pool->GangFree(count, blocks);
     }
 }
 

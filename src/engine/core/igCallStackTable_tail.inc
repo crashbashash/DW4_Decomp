@@ -12,7 +12,7 @@ void igCallStackTable_ApplyCapacity(igCallStackTableView *table) {
     if (capacity >= callStacks->_count) {
         List_Reserve((igDataList *)callStacks, capacity, 4);
     }
-    table->rebuildHashIndex(table->_hashCapacity);
+    table->RebuildHashIndex(table->_hashCapacity);
 }
 
 void igCallStackTable_Clear(igCallStackTableView *table) {
@@ -54,7 +54,7 @@ void igCallStackTable_Clear(igCallStackTableView *table) {
 void igCallStackTable_RemoveAllCallStacks(igCallStackTableView *table) {
     igResult discarded;
 
-    discarded = table->truncateCallStacks(0);
+    discarded = table->TruncateCallStacks(0);
 }
 
 int igCallStackTable_GetCallStackCount(igCallStackTableView *table) {
@@ -138,14 +138,14 @@ extern "C" int Gap__Core__igCallStackTable__addCallStack(igCallStackTableView *s
     reserveCallStackWords(self->_callStacks, length + (offset = self->_callStacks->_count));
     List_AppendWords((igDataList *)self->_callStacks, length, stack);
     if (self->_hashIndex != 0 && self->_hashIndex->_count != 0) {
-        self->insertHashEntry(self->_callStacks->_data + offset, offset);
+        self->InsertHashEntry(self->_callStacks->_data + offset, offset);
     }
     return offset;
 }
 
 void igCallStackTable_InsertCallStack(igCallStackTableView *table, int *stack) {
-    switch (table->findCallStack((unsigned int *)stack)) {
-    case -1: table->addCallStack(stack); break;
+    switch (table->FindCallStack((unsigned int *)stack)) {
+    case -1: table->AddCallStack(stack); break;
     default: break;
     }
 }
@@ -183,7 +183,7 @@ extern "C" int Gap__Core__igCallStackTable__findCallStack(igCallStackTableView *
 
     index = self->_hashIndex;
     if (index != 0 && index->_count != 0) {
-        slot = self->hashCallStack(stack);
+        slot = self->HashCallStack(stack);
         tries = 0;
         n = self->_hashIndex->_count;
         for (;;) {
@@ -242,7 +242,7 @@ int igCallStackTable_InsertHashEntry(igCallStackTableView *self, unsigned int *s
     int h;
     igTDataList<int> *index;
     if (n != 0) {
-        h = self->hashCallStack(stack);
+        h = self->HashCallStack(stack);
         index = self->_hashIndex;
         do {
             if (index->_data[h] == -1) {
@@ -255,7 +255,7 @@ int igCallStackTable_InsertHashEntry(igCallStackTableView *self, unsigned int *s
             }
             tries++;
         } while (tries < half);
-        self->rebuildHashIndex(n * 2);
+        self->RebuildHashIndex(n * 2);
         return 0;
     }
 ok:
@@ -303,7 +303,7 @@ void igCallStackTable_RebuildHashIndex(igCallStackTableView *self, int hashCapac
         stack = stacks;
         stacksEnd = stacks + self->_callStacks->_count;
         while (stack < stacksEnd) {
-            if (!self->insertHashEntry(stack, stack - stacks)) return;
+            if (!self->InsertHashEntry(stack, stack - stacks)) return;
             cursor = stack;
             length = 0;
             while (*cursor++ != 0) length++;
