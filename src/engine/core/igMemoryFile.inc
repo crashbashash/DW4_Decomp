@@ -70,7 +70,7 @@ void *igFile_Destroy(igFile *self, short deleteFlag) {
             }
         }
         if (deleteFlag > 0) {
-            thunk_Memory_FreeBuffer((int)self);
+            Memory_FreeBufferAliasC((int)self);
         }
     }
     return self;

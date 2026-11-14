@@ -42,7 +42,7 @@ Obj_3be240 *FUN_003be240(Obj_3be240 *arg0, short arg1) {
         arg0->rel(&arg0->m44);
         arg0->rel(&arg0->m36);
         if (arg1 > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

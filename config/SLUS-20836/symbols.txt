@@ -10836,7 +10836,7 @@
 002b7ac0 000068 igTimer_Register
 002b7b30 000008 igTimer_GetMetaObjectFunction
 002b7b40 000018 igTimer_SetAbstractProxy
-002b7b60 000008 thunk_igLongTimer_GetMetaObject
+002b7b60 000008 igLongTimer_GetMetaObjectFunction
 002b7b70 000034 igThreadManager_Create
 002b7bb0 000048 igThreadManager_GetMetaObject
 002b7c00 00000c igThreadManager_EnsureRegistered
@@ -11942,7 +11942,7 @@
 002d0680 000008 igAliasMemoryPool_GetRawMemory
 002d0690 000010 igAliasMemoryPool_SetRawMemory
 002d06a0 000008 igAliasMemoryPool_IsAlchemyMemory
-002d06b0 000008 Gap__Core__igAliasMemoryPool__vfunc_29 Gap::Core::igAliasMemoryPool::vfunc_29
+002d06b0 000008 igAliasMemoryPool_IsSecondaryAllocator
 002d06c0 0001e4 igAliasMemoryPool_EnableAllocationLock
 002d08b0 000010 igAliasMemoryPool_SetSize
 002d08c0 000008 igAliasMemoryPool_GetSize
@@ -11956,8 +11956,8 @@
 002d0990 000010 Gap__Core__igAliasMemoryPool__vfunc_46 Gap::Core::igAliasMemoryPool::vfunc_46
 002d09a0 000008 igAliasMemoryPool_GetLocalNetAllocated
 002d09b0 000008 igAliasMemoryPool_GetLocalNetAllocatedWithOverhead
-002d09c0 000008 Gap__Core__igAliasMemoryPool__vfunc_101 Gap::Core::igAliasMemoryPool::vfunc_101
-002d09d0 000008 Gap__Core__igAliasMemoryPool__vfunc_102 Gap::Core::igAliasMemoryPool::vfunc_102
+002d09c0 000008 igAliasMemoryPool_GetLocalNetAllocatedHigh
+002d09d0 000008 igAliasMemoryPool_GetLocalNetAllocatedWithOverheadHigh
 002d09e0 000010 igAliasMemoryPool_GetFreeSize
 002d09f0 000014 igAliasMemoryPool_AllocateElement
 002d0a10 000034 igAliasMemoryPool_Lock
@@ -12001,10 +12001,10 @@
 002d1c20 000008 igObjectSystem_GetRootPath
 002d1c30 000008 igObjectSystem_GetBasePath
 002d1c40 0001f8 igObjectSystem_InitPaths
-002d1e40 00094c FUN_002d1e40
+002d1e40 00094c igObjectSystem_Initialize
 002d2790 00000c igMediaFile_GetPublishedMetaObject
 002d27a0 000054 igObjectSystem_PreExit
-002d2800 0005d8 FUN_002d2800
+002d2800 0005d8 igObjectSystem_Finalize
 002d2de0 000074 igObjectSystem_Exit
 002d2e60 0001f4 igObjectSystem_Shutdown
 002d3060 000008 igObjectSystem_AppendMetaObject
@@ -12054,9 +12054,9 @@
 002d4350 00004c igCallStackTracer_HasSymbols
 002d43a0 0000c4 igCallStackTracer_FormatAddress
 002d4470 000154 igCallStackTracer_LookupAddress
-002d45d0 0005b4 Gap__Core__igCallStackTracer__vfunc_28 Gap::Core::igCallStackTracer::vfunc_28
-002d4b90 000008 Gap__Core__igCallStackTracer__vfunc_29 Gap::Core::igCallStackTracer::vfunc_29
-002d4ba0 000008 Gap__Core__igCallStackTracer__vfunc_30 Gap::Core::igCallStackTracer::vfunc_30
+002d45d0 0005b4 igCallStackTracer_FormatLocation
+002d4b90 000008 igCallStackTracer_PreExit
+002d4ba0 000008 igCallStackTracer_Exit
 002d4bb0 000058 igCharArrayMetaField_SwapBytes
 002d4c10 000008 igCharArrayMetaField_GetSize
 002d4c20 000054 igCharArrayMetaField_SetDefaultElement
@@ -12089,7 +12089,7 @@
 002d5780 000094 igCompoundMetaField_IsAlikeDeep
 002d5820 000094 igCompoundMetaField_IsAlikeShallow
 002d58c0 000094 igCompoundMetaField_IsAlikeIgnore
-002d5960 000088 FUN_002d5960
+002d5960 000088 igCompoundMetaField_GetRawFieldMemSize
 002d59f0 0000d8 igCompoundMetaField_WriteRawFieldMem
 002d5ad0 0000d8 igCompoundMetaField_ReadRawFieldMem
 002d5bb0 0000c4 igCompoundMetaField_SwapBytes
@@ -12100,7 +12100,7 @@
 002d6090 000008 FUN_002d6090
 002d60a0 000008 FUN_002d60a0
 002d60b0 0002d0 igContext_BuildExtensionInfoList
-002d6380 00000c FUN_002d6380
+002d6380 00000c igContext_GetMeta
 002d6390 000048 igContext_GetExtensionInfoList
 002d63e0 0000d8 igContext_FindExtensionMeta
 002d64c0 000114 igContext_GetExtension
@@ -12121,7 +12121,7 @@
 002d6f50 00013c igRendererOrderedList_Append
 002d7090 0000a0 igDependencyOrderedList_AddDependency
 002d7130 000150 igDependencyOrderedList_Rebuild
-002d7280 00040c FUN_002d7280
+002d7280 00040c igDependencyOrderedList_TopologicalSort
 002d7690 0000bc igRendererOrderedList_Clear
 002d7750 00000c igObjectList_RemoveRetained
 002d7760 0000d4 igDependencyOrderedList_RemoveDependency
@@ -12151,7 +12151,7 @@
 002d7b00 000054 igDirectory_RegisterDependentMetaObjects
 002d7b60 0000f0 igDirectory_ReleaseDefaults
 002d7c50 000100 igDirectory_GetEntryByRef
-002d7d50 000008 thunk_igDirectory_GetEntry
+002d7d50 000008 igDirectory_GetEntryAlias
 002d7d60 00003c igDirectory_GetObject
 002d7da0 0000e4 igDirectory_SetEntryRef
 002d7e90 000074 igDirectory_GetEntry
@@ -12191,7 +12191,7 @@
 002d96c0 00002c igDriverDatabase_ReleaseDefaults
 002d96f0 00001c igDriverDatabase_SetCurrentProperty
 002d9710 00002c igDriverDatabase_GetCurrentProperty
-002d9740 0005a8 FUN_002d9740
+002d9740 0005a8 igDriverDatabase_SetSubPropertyValue
 002d9cf0 000320 igDriverDatabase_GetSubPropertyValue
 002da010 0001a4 igDriverDatabase_GatherProperties
 002da1c0 000544 igDriverDatabase_Load
@@ -12209,7 +12209,7 @@
 002dac90 000024 igDriverDatabase_GetCpuType
 002dacc0 0000dc igDriverDatabase_ReadLineFromFile
 002dada0 000094 igDriverDatabase_ReadLineFromString
-002dae40 0001fc FUN_002dae40
+002dae40 0001fc igDriverDatabase_ParseNode
 002db040 000184 igDriverDatabase_ProcessConfigNode
 002db1d0 00011c igDriverDatabase_ApplySettings
 002db2f0 000188 igDriverDatabase_ResolveSettingsSection
@@ -12245,7 +12245,7 @@
 002dc980 000008 igEnumMetaField_Destruct
 002dc990 000008 igEnumMetaField_GetSize
 002dc9a0 000008 igEnumMetaField_GetAlignment
-002dc9b0 000008 thunk_igErrorHandler_GetInstance
+002dc9b0 000008 igErrorHandler_GetInstanceAlias
 002dc9c0 00005c igErrorHandler_ReleaseInstance
 002dca20 000064 igErrorHandler_GetInstance
 002dca90 000008 igEventTracker_CodeReference
@@ -12257,22 +12257,22 @@
 002dce80 000180 igEventTracker_Initialize
 002dd000 0000ec igEventTracker_Shutdown
 002dd0f0 0000d0 igEventTracker_Reset
-002dd1c0 0012b4 Gap__Core__igEventTracker__vfunc_26 Gap::Core::igEventTracker::vfunc_26
-002de480 000bc8 Gap__Core__igEventTracker__vfunc_27 Gap::Core::igEventTracker::vfunc_27
+002dd1c0 0012b4 igEventTracker_AddEvent
+002de480 000bc8 igEventTracker_ReadEvent
 002df050 00006c igEventTracker_ReadEventType
 002df0c0 000100 igEventTracker_ReadEventKey
 002df1c0 000140 igEventTracker_ReadEventValue
-002df300 0003d0 Gap__Core__igEventTracker__vfunc_32 Gap::Core::igEventTracker::vfunc_32
+002df300 0003d0 igEventTracker_GetStatistics
 002df6d0 0001d0 igEventTracker_GetStatisticsByName
 002df8a0 0000e4 igEventTracker_FindIndex
 002df990 00007c igEventTracker_GetNextEventOffset
-002dfa10 000134 Gap__Core__igEventTracker__vfunc_35 Gap::Core::igEventTracker::vfunc_35
-002dfb50 000180 Gap__Core__igEventTracker__vfunc_36 Gap::Core::igEventTracker::vfunc_36
+002dfa10 000134 igEventTracker_GetLeakCount
+002dfb50 000180 igEventTracker_FindNextLeak
 002dfcd0 000220 igEventTracker_IgnoreEventsInFunction
 002dfef0 000034 igEventTracker_GetHashBucketIndex
 002dff30 000178 igEventTracker_InsertHashIndex
 002e00b0 000148 igEventTracker_RebuildHashIndex
-002e0200 0012ac igObject_Release
+002e0200 0012ac igEventTracker_FormatEvent
 002e14b0 000050 igEventTracker_GetEventFormat
 002e1500 000050 igEventTracker_GetEventTypeName
 002e1550 000050 igEventTracker_GetMarkerTypeName
@@ -12282,11 +12282,11 @@
 002e1710 0001dc igEventTracker_ResolveAddress
 002e18f0 000144 igEventTracker_PrintEvent
 002e1a40 000068 igEventTracker_PrintAllEvents
-002e1ab0 000100 Gap__Core__igEventTracker__vfunc_43 Gap::Core::igEventTracker::vfunc_43
+002e1ab0 000100 igEventTracker_PrintLeaks
 002e1bb0 000238 igEventTracker_WriteFile
 002e1df0 000120 igEventTracker_ResolveAllCallStackSymbols
-002e1f10 000014 Gap__Core__igEventTracker__vfunc_46 Gap::Core::igEventTracker::vfunc_46
-002e1f30 000014 Gap__Core__igEventTracker__vfunc_47 Gap::Core::igEventTracker::vfunc_47
+002e1f10 000014 igEventTracker_PreExit
+002e1f30 000014 igEventTracker_Exit
 002e1f50 0001d4 Gap__Core__igEventTracker__resetFields
 002e2130 000028 igEventTracker_InitEvent
 002e2160 00002c igEventTracker_CopyEvent
@@ -12312,8 +12312,8 @@
 002e2bf0 000038 igExternalDirEntry_ReleaseDefaults
 002e2c30 000070 igExternalIndexedEntry_Resolve
 002e2ca0 000090 igExternalInfoEntry_Resolve
-002e2d30 000280 FUN_002e2d30
-002e2fb0 0000fc FUN_002e2fb0
+002e2d30 000280 igDirectory_AddExternalInfoRef
+002e2fb0 0000fc igAdxFile_GetSearchPathHolder
 002e30b0 000094 igFile_SetFileName
 002e3150 000058 igFile_SkipToChar
 002e31b0 000008 igAdxFile_SetOpenMode
@@ -12348,7 +12348,7 @@
 002e4a40 000244 igIGBFile_BuildAlignmentBuffer
 002e4c90 0001d0 igIGBFile_BuildExternalDirectoryBuffer
 002e4e60 0000f4 igIGBFile_BuildDirectoryBuffer
-002e4f60 0001a8 FUN_002e4f60
+002e4f60 0001a8 igIGBFile_BuildIndexBuffer
 002e5110 0002d4 igIGBFile_ShareEntries
 002e53f0 0000f0 igIGBFile_WriteEntryBuffer
 002e54e0 0000a4 igIGBFile_AllocateObjectBuffer
@@ -12361,7 +12361,7 @@
 002e5f70 000114 igIGBFile_BeginRead
 002e6090 000294 igIGBFile_ReadHeader
 002e6330 0000ac igIGBFile_ReadMetaObjectBuffer
-002e63e0 000b70 FUN_002e63e0
+002e63e0 000b70 igIGBFile_ReadMetaObjectList
 002e6f50 0000a8 igIGBFile_SetupBasePath
 002e7000 000028 igIGBFile_RegisterBlindObjectsConfig
 002e7030 0000d0 igIGBFile_ReadNextChunk
@@ -12446,7 +12446,7 @@
 002eb3d0 0000bc igLocationTable_FindLocationIndex
 002eb490 00019c igLocationTable_GetLocation
 002eb630 0000a0 igLocationTable_AddLocationIfMissing
-002eb6d0 00016c Gap__Core__igLocationTable__vfunc_29 Gap::Core::igLocationTable::vfunc_29
+002eb6d0 00016c igLocationTable_AddLocation
 002eb840 000030 igLocationTable_Hash
 002eb870 000108 igLocationTable_InsertHash
 002eb980 000128 igLocationTable_Rehash
@@ -12462,7 +12462,7 @@
 002ebd60 000010 igMedia_AddMedia
 002ebd70 00005c igMedia_ReleaseMediaList
 002ebdd0 00000c igMedia_SetDefaultMedia
-002ebde0 000468 Gap__Core__igMediaFile__vfunc_23 Gap::Core::igMediaFile::vfunc_23
+002ebde0 000468 igMediaFile_OpenWithMode
 002ec250 0000bc igMediaFile_Close
 002ec310 000244 igMediaFile_OpenFile
 002ec560 000010 igMediaFile_CloseFile
@@ -12471,7 +12471,7 @@
 002ec710 0000c0 igMediaFile_ReadAsync
 002ec7d0 000128 igMediaFile_Write
 002ec900 000078 igMediaFile_Flush
-002ec980 0002c8 Gap__Core__igMediaFile__vfunc_30 Gap::Core::igMediaFile::vfunc_30
+002ec980 0002c8 igMediaFile_Scanf
 002ecc50 0000d4 igMediaFile_Printf
 002ecd30 000088 igMediaFile_GetChar
 002ecdc0 00005c igMediaFile_UngetChar
@@ -12490,7 +12490,7 @@
 002ed330 000074 Memory_ReallocateBuffer
 002ed3b0 000088 Memory_ReallocateAligned
 002ed440 000008 Memory_ReallocateBufferAlias
-002ed450 000008 thunk_Memory_ReallocateAligned
+002ed450 000008 Memory_ReallocateAlignedAlias
 002ed460 00004c Memory_FreeBuffer
 002ed4b0 000008 Memory_FreeBufferAliasA
 002ed4c0 00001c Memory_FreeBufferWithAllocator
@@ -12640,7 +12640,7 @@
 002f42e0 000058 Gap__Core__igMemoryPoolContextInfo__resetFields
 002f4340 00005c Gap__Core__igMemoryPoolContextInfo__destructFields
 002f43a0 000518 igMemoryPoolContextInfo_CreateDefaultPools
-002f48c0 000008 FUN_002f48c0
+002f48c0 000008 MemoryContext_OnStartupComplete
 002f48d0 000108 igMemoryPoolContextInfo_Shutdown
 002f49e0 000074 igMemoryPoolContextInfo_InitializeRecordNames
 002f4a60 000680 igMemoryPoolContextInfo_Initialize
@@ -12688,7 +12688,7 @@
 002f8be0 0000b8 igMemoryPoolContextInfo_FindMemoryPoolInfoByName
 002f8ca0 000170 igMemoryPoolContextInfo_FindMemoryPoolInfoByHandle
 002f8e10 0001d8 igMemoryPoolContextInfo_ReadFromRegistry
-002f8ff0 000604 Gap__Core__igMemoryPoolContextInfo__vfunc_26 Gap::Core::igMemoryPoolContextInfo::vfunc_26
+002f8ff0 000604 igMemoryPoolContextInfo_ReadFromRegistrySection
 002f9600 0000b8 igMemoryPoolContextInfo_Print
 002f96c0 0002f8 igMemoryPoolInfo_LoadFromRegistry
 002f99c0 000294 igMemoryPoolInfo_UserRegistryLoad
@@ -12879,7 +12879,7 @@
 002ff570 00021c igObject_InitFields
 002ff790 000070 igObject_AllocateRawStorage
 002ff800 000008 igObject_AllocateRawStorageDefault
-002ff810 000008 thunk_Memory_FreeBuffer
+002ff810 000008 Memory_FreeBufferAliasC
 002ff820 00010c igObject_Destroy
 002ff930 0000c8 igObject_ZeroFields
 002ffa00 0000a4 igObject_ConstructFields
@@ -13013,7 +13013,7 @@
 00304e60 000098 igPluginHelper_ThreadLoop
 00304f00 0000fc igQueue_StartServiceThread
 00305000 00019c igStandardQueue_StopServiceThreads
-003051a0 000008 thunk_igStandardQueue_StopServiceThreads
+003051a0 000008 igQueue_ReleaseDefaults
 003051b0 000058 igRawRefArrayMetaField_SwapBytes
 00305210 0000a0 igRawRefArrayMetaField_ReadRawFieldMem
 003052b0 0000ac igRawRefArrayMetaField_WriteRawFieldMem
@@ -13043,7 +13043,7 @@
 00305cc0 000008 igRefMetaField_Destruct
 00305cd0 000008 igRefMetaField_IsConstruct
 00305ce0 000008 igRefMetaField_GetAlignment
-00305cf0 000008 FUN_00305cf0
+00305cf0 000008 igRegistry_IsLoadingEnabled
 00305d00 000030 igRegistry_InitDefaults
 00305d30 000488 igRegistry_Load
 003061c0 000198 igRegistry_Merge
@@ -13224,7 +13224,7 @@
 0030dcf0 000198 igSymbolTable_FindSymbolIndex
 0030de90 0000d0 igSymbolTable_GetSymbolAtAddress
 0030df60 000094 igSymbolTable_AddSymbolIfMissing
-0030e000 000134 Gap__Core__igSymbolTable__vfunc_29 Gap::Core::igSymbolTable::vfunc_29
+0030e000 000134 igSymbolTable_AddSymbol
 0030e140 000048 igSymbolTable_HashAddress
 0030e190 000108 igSymbolTable_InsertHashEntry
 0030e2a0 000190 igSymbolTable_RebuildHashIndex
@@ -13278,14 +13278,14 @@
 0030ef90 000044 igVirtualCFuncMetaField_SetToDefault
 0030efe0 000044 igVirtualCFuncMetaField_CopyDefaultToValue
 0030f030 000008 igVirtualCFuncMetaField_GetAlignment
-0030f040 0001dc FUN_0030f040
-0030f220 0004e8 FUN_0030f220
+0030f040 0001dc igArenaMemoryPool_CheckTriggerEvent
+0030f220 0004e8 igArenaMemoryPool_InitMallocState
 0030f710 00037c igArenaMemoryPool_CheckChunk
 0030fa90 0006a8 igArenaMemoryPool_CheckFreeChunk
 00310140 00047c igArenaMemoryPool_CheckInUseChunk
 003105c0 000594 igArenaMemoryPool_CheckBlock
 00310b60 0000a0 igArenaMemoryPool_CheckInUseBlock
-00310c00 000d8c FUN_00310c00
+00310c00 000d8c igArenaMemoryPool_CheckMallocState
 00311990 00029c igArenaMemoryPool_UpdateBlockList
 00311c30 0000d8 igArenaMemoryPool_DisplayOutstandingAllocations
 00311d10 000310 igArenaMemoryPool_DisplayOutstandingAllocationsBlock
@@ -13296,17 +13296,17 @@
 00312520 000058 igArenaMemoryPool_CheckHeapLocked
 00312580 000044 igArenaMemoryPool_VerifyHeap
 003125d0 0001b4 igArenaMemoryPool_CheckHeap
-00312790 000408 FUN_00312790
-00312ba0 00196c FUN_00312ba0
-00314510 000484 FUN_00314510
+00312790 000408 igArenaMemoryPool_CheckHeapBlock
+00312ba0 00196c igArenaMemoryPool_SystemMalloc
+00314510 000484 igArenaMemoryPool_SystemTrim
 003149a0 0001a4 igArenaMemoryPool_Trim
 00314b50 0004fc igArenaMemoryPool_TrimArenaBlock
 00315050 000114 igArenaMemoryPool_RemoveFreeChunksInRange
-00315170 002f94 FUN_00315170
-00318110 000a24 FUN_00318110
-00318b40 000974 FUN_00318b40
-003194c0 002110 FUN_003194c0
-0031b5d0 0014f4 FUN_0031b5d0
+00315170 002f94 igArenaMemoryPool_Malloc
+00318110 000a24 igArenaMemoryPool_FreeChunk
+00318b40 000974 igArenaMemoryPool_MallocConsolidate
+003194c0 002110 igArenaMemoryPool_Realloc
+0031b5d0 0014f4 igArenaMemoryPool_MallocAligned
 0031cad0 000274 igArenaMemoryPool_Configure
 0031cd50 0000a0 igArenaMemoryPool_Activate
 0031cdf0 000068 igArenaMemoryPool_Reset
@@ -13315,7 +13315,7 @@
 0031ceb0 000008 igArenaMemoryPool_GetRawMemory
 0031cec0 0000b4 igArenaMemoryPool_SetRawMemory
 0031cf80 000008 igArenaMemoryPool_IsAlchemyMemory
-0031cf90 000008 Gap__Core__igArenaMemoryPool__vfunc_29 Gap::Core::igArenaMemoryPool::vfunc_29
+0031cf90 000008 igArenaMemoryPool_IsSecondaryAllocator
 0031cfa0 00020c igArenaMemoryPool_EnableAllocationLock
 0031d1b0 000010 igArenaMemoryPool_SetSize
 0031d1c0 000020 igArenaMemoryPool_GetSize
@@ -13334,7 +13334,7 @@
 0031d360 000008 igArenaMemoryPool_GetLocalNetAllocatedWithOverheadHigh
 0031d370 000020 igArenaMemoryPool_GetArenaCount
 0031d390 00000c igArenaMemoryPool_GetArenaHighCount
-0031d3a0 000020 Gap__Core__igArenaMemoryPool__vfunc_101 Gap::Core::igArenaMemoryPool::vfunc_101
+0031d3a0 000020 igArenaMemoryPool_GetSystemAllocated
 0031d3c0 000010 igArenaMemoryPool_GetFreeSize
 0031d3d0 000014 igArenaMemoryPool_AllocateElement
 0031d3f0 000034 igArenaMemoryPool_Lock
@@ -13346,7 +13346,7 @@
 0031d580 000090 igArenaMemoryPool_CallocateAligned
 0031d610 000014 igArenaMemoryPool_Reallocate
 0031d630 000010 igArenaMemoryPool_ReallocateAligned
-0031d640 0009d8 Gap__Core__igArenaMemoryPool__vfunc_62 Gap::Core::igArenaMemoryPool::vfunc_62
+0031d640 0009d8 igArenaMemoryPool_GangAlloc
 0031e020 000010 igArenaMemoryPool_GangAllocAligned
 0031e030 000074 Gap__Core__igArenaMemoryPool__freeSized Gap::Core::igArenaMemoryPool::freeSized
 0031e0b0 0005bc Gap__Core__igArenaMemoryPool__vfunc_65 Gap::Core::igArenaMemoryPool::vfunc_65
@@ -13428,7 +13428,7 @@
 003229b0 000090 igMallocMemoryPool_CallocateAligned
 00322a40 000014 igMallocMemoryPool_Reallocate
 00322a60 000010 igMallocMemoryPool_ReallocateAligned
-00322a70 000984 Gap__Core__igMallocMemoryPool__vfunc_62 Gap::Core::igMallocMemoryPool::vfunc_62
+00322a70 000984 igMallocMemoryPool_GangAlloc
 00323400 000010 igMallocMemoryPool_GangAllocAligned
 00323410 000074 igMallocMemoryPool_GangFree
 00323490 000030 Gap__Core__igMallocMemoryPool__resetFields
@@ -13437,7 +13437,7 @@
 00323600 00003c igMallocMemoryPool_CopyConstruct
 00323640 000034 igMallocMemoryPool_Destruct
 00323680 000018 igMallocMemoryPool_Free
-003236a0 000e18 Gap__Core__igMallocMemoryPool__vfunc_101 Gap::Core::igMallocMemoryPool::vfunc_101
+003236a0 000e18 igMallocMemoryPool_MemoryOperation
 003244c0 000094 igMallocMemoryPool_OwnsAllocation
 00324560 000008 Gap__Core__igMallocMemoryPool__vfunc_83 Gap::Core::igMallocMemoryPool::vfunc_83
 00324570 000074 igMallocMemoryPool_GetAllocationSize
@@ -13469,7 +13469,7 @@
 00325d30 000008 igPageMemoryPool_GetRawMemory
 00325d40 000010 igPageMemoryPool_SetRawMemory
 00325d50 000008 igPageMemoryPool_IsAlchemyMemory
-00325d60 000008 Gap__Core__igPageMemoryPool__vfunc_29 Gap::Core::igPageMemoryPool::vfunc_29
+00325d60 000008 igPageMemoryPool_IsSecondaryAllocator
 00325d70 00020c igPageMemoryPool_EnableAllocationLock
 00325f80 000010 igPageMemoryPool_SetSize
 00325f90 000008 igPageMemoryPool_GetSize
@@ -13484,7 +13484,7 @@
 00326030 000008 igPageMemoryPool_GetLocalNetAllocatedWithOverhead
 00326040 000008 igPageMemoryPool_GetLocalNetAllocatedHigh
 00326050 000008 igPageMemoryPool_GetLocalNetAllocatedWithOverheadHigh
-00326060 000008 Gap__Core__igPageMemoryPool__vfunc_101 Gap::Core::igPageMemoryPool::vfunc_101
+00326060 000008 igPageMemoryPool_GetSystemAllocated
 00326070 000010 igPageMemoryPool_GetFreeSize
 00326080 000008 igPageMemoryPool_AllocateElement
 00326090 000034 igPageMemoryPool_Lock
@@ -13651,7 +13651,7 @@
 0032b640 000118 igPsx2File_Read
 0032b760 000108 igPsx2File_Write
 0032b870 000054 igPsx2File_Flush
-0032b8d0 0002c8 Gap__Core__igPsx2File__vfunc_30 Gap::Core::igPsx2File::vfunc_30
+0032b8d0 0002c8 igPsx2File_Scanf
 0032bba0 0000d4 igPsx2File_Print
 0032bc80 000068 igPsx2File_GetChar
 0032bcf0 00005c igPsx2File_UngetChar
@@ -13704,7 +13704,7 @@
 0032eac0 0000ac igPsx2Media_ReadAsync
 0032eb70 0000cc igPsx2Media_Seek
 0032ec40 0000b0 igPsx2Media_Tell
-0032ecf0 000008 Gap__Core__igPsx2Media__vfunc_32 Gap::Core::igPsx2Media::vfunc_32
+0032ecf0 000008 igPsx2Media_HandlesDevice
 0032ed00 000034 igPsx2Semaphore_SetInitialCount
 0032ed40 000008 igPsx2Semaphore_GetInitialCount
 0032ed50 000034 igPsx2Semaphore_SetMaximumCount
@@ -13712,9 +13712,9 @@
 0032eda0 000038 igPsx2Semaphore_GetCount
 0032ede0 0000b8 igPsx2Semaphore_Create
 0032eea0 000078 igPsx2Semaphore_Destroy
-0032ef20 0000d0 Gap__Core__igPsx2Semaphore__vfunc_31 Gap::Core::igPsx2Semaphore::vfunc_31
+0032ef20 0000d0 igPsx2Semaphore_Signal
 0032eff0 000064 igPsx2Semaphore_ISignal
-0032f060 000114 Gap__Core__igPsx2Semaphore__vfunc_33 Gap::Core::igPsx2Semaphore::vfunc_33
+0032f060 000114 igPsx2Semaphore_Wait
 0032f180 000064 igPsx2Semaphore_WaitBlocking
 0032f1f0 000064 igPsx2Semaphore_IPoll
 0032f260 000034 SystemAllocator_Construct
@@ -13726,7 +13726,7 @@
 0032f4b0 000118 SystemAllocator_CollectHardwareRegions
 0032f5d0 0001ac SystemAllocator_CollectProgramRegions
 0032f780 000070 SystemAllocator_Sbrk
-0032f7f0 000044 FUN_0032f7f0
+0032f7f0 000044 igPsx2Thread_ThreadEntry
 0032f840 000014 igPsx2Thread_IsEqual
 0032f860 000058 igPsx2Thread_InitDefaults
 0032f8c0 000038 igPsx2Thread_AdoptCurrentThread
@@ -13801,7 +13801,7 @@
 00330f50 00000c igStandardQueue_GetMeta
 00330f60 00000c igStackMemoryPool_GetMeta
 00330f70 000008 igStackMemoryPool_IsAlchemyMemory
-00330f80 000008 Gap__Core__igStackMemoryPool__vfunc_29 Gap::Core::igStackMemoryPool::vfunc_29
+00330f80 000008 igStackMemoryPool_IsSecondaryAllocator
 00330f90 000010 igStackMemoryPool_SetMaxSize
 00330fa0 000008 Gap__Core__igStackMemoryPool__vfunc_83 Gap::Core::igStackMemoryPool::vfunc_83
 00330fb0 00000c igProgramFile_GetMeta
@@ -13844,7 +13844,7 @@
 00331220 00000c igMemoryRefArrayMetaField_GetDescriptor
 00331230 00000c igMemoryPoolInfo_GetMeta
 00331240 00000c igMemoryPoolContextInfo_GetMeta
-00331250 00000c FUN_00331250
+00331250 00000c MemoryContext_GetMeta
 00331260 00000c igMemoryFile_GetMeta
 00331270 00000c igMemoryDictionary_GetMeta
 00331280 00000c igMediaFile_GetMeta
@@ -13889,7 +13889,7 @@
 003314f0 000010 igMallocMemoryPool_SetRawMemory
 00331500 000008 igMallocMemoryPool_IsAlchemyMemory
 00331510 000008 igMallocMemoryPool_GetRawMemory
-00331520 000008 Gap__Core__igMallocMemoryPool__vfunc_29 Gap::Core::igMallocMemoryPool::vfunc_29
+00331520 000008 igMallocMemoryPool_IsSecondaryAllocator
 00331530 00000c igArenaMemoryPool_GetMeta
 00331540 00000c igPageMemoryPool_GetMeta
 00331550 00000c igAliasMemoryPool_GetMeta
@@ -13974,7 +13974,7 @@
 00331a40 00000c igNonRefCountedThreadList_GetElementMeta
 00331a50 000008 igDependencyList_GetElementSize
 00331a60 000008 igPointerList_GetElementSize
-00331a70 00009c FUN_00331a70
+00331a70 00009c List_LowerBoundWords
 00331b10 000008 igFloatList_GetElementSize
 00331b20 000008 igUnsignedCharList_GetElementSize
 00331b30 000008 igShortList_GetElementSize
@@ -14015,7 +14015,7 @@
 00331e20 000030 igFloatList_TrimCapacity
 00331e50 000030 igPointerList_TrimCapacity
 00331e80 000030 igDependencyList_TrimCapacity
-00331eb0 000080 FUN_00331eb0
+00331eb0 000080 igSmartPointer_igMediaList_Destruct
 00331f30 000048 Gap__igAdxAudio__vfunc_07 Gap::igAdxAudio::vfunc_07
 00331f80 00000c Gap__igAdxAudio__vfunc_20 Gap::igAdxAudio::vfunc_20
 00331f90 00001c Gap__igAdxAudio__vfunc_08 Gap::igAdxAudio::vfunc_08

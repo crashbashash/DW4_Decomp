@@ -131,7 +131,7 @@ Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
             arg0->rel(&arg0->m8);
         }
         if (arg1 > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

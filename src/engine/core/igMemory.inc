@@ -69,7 +69,7 @@ void *Memory_ReallocateBufferAlias(void *buffer, unsigned int size)
     return Memory_ReallocateBuffer(buffer, size);
 }
 
-void *thunk_Memory_ReallocateAligned(void *buffer, unsigned int size, unsigned short alignment)
+void *Memory_ReallocateAlignedAlias(void *buffer, unsigned int size, unsigned short alignment)
 {
     return Memory_ReallocateAligned(buffer, size, alignment);
 }

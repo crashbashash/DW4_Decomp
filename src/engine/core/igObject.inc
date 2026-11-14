@@ -9,7 +9,7 @@ int igInfo_FindObjectReference(void **self, int directory, int target) {
         if (igObject_IsKindOf((void *)field, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
           value = *(int *)((char *)self + field->_offset);
           if (value == target) {
-            FUN_002e2d30((igDirectoryView *)directory, (igInfoView *)self, (char *)field->_fieldName, (igObject *)target);
+            igDirectory_AddExternalInfoRef((igDirectoryView *)directory, (igInfoView *)self, (char *)field->_fieldName, (igObject *)target);
             return 1;
         }
         }

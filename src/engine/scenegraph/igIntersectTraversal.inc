@@ -65,7 +65,7 @@ O_19e150 *FUN_0019e150(O_19e150 *arg0, short arg1) {
                 if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
             }
         }
-        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
+        if (arg1 > 0) Memory_FreeBufferAliasC(arg0);
     }
     return arg0;
 }

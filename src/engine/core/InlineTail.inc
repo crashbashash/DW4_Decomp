@@ -62,7 +62,7 @@ unsigned char igStackMemoryPool_IsAlchemyMemory(igStackMemoryPool *self) {
 
 /* igStackMemoryPool vtable slot 29 (+0x74): constant leaf returning 1. The igArenaMemoryPool and
  * igMallocMemoryPool versions return 0 and igPageMemoryPool returns 1. */
-int Gap__Core__igStackMemoryPool__vfunc_29(igStackMemoryPool *self) {
+int igStackMemoryPool_IsSecondaryAllocator(igStackMemoryPool *self) {
     return 1;
 }
 
@@ -239,7 +239,7 @@ igMetaObject *igMemoryPoolContextInfo_GetMeta(void) {
     return g_igMemoryPoolContextInfo_metaObject[0];
 }
 
-int FUN_00331250(void) {
+int MemoryContext_GetMeta(void) {
     return g_igMemoryPoolContextInfo_metaObject_00585e98[0];
 }
 
@@ -421,7 +421,7 @@ int igMallocMemoryPool_GetRawMemory(void) {
     return 0;
 }
 
-int Gap__Core__igMallocMemoryPool__vfunc_29(void) {
+int igMallocMemoryPool_IsSecondaryAllocator(void) {
     return 0;
 }
 
@@ -764,7 +764,7 @@ int igPointerList_GetElementSize(void) {
     return 4;
 }
 
-int FUN_00331a70(igTDataList<unsigned int> *list, unsigned int *key) {
+int List_LowerBoundWords(igTDataList<unsigned int> *list, unsigned int *key) {
     unsigned int value;
     int lo;
     int hi;

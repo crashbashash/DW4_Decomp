@@ -139,8 +139,8 @@ typedef igSmartPointer<igTDataList<int> > igIntListRef;
 
 /* Appends a symbol record, doubling the record list when it is full, enters it in the hash index and
  * returns its index. The name and the source file go to the two string tables; -1 stands for none. */
-extern "C" int Gap__Core__igSymbolTable__vfunc_29(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile);
-int Gap__Core__igSymbolTable__vfunc_29(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile) {
+extern "C" int igSymbolTable_AddSymbol(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile);
+int igSymbolTable_AddSymbol(igSymbolTableView *self, const char *name, int address, unsigned int size, const char *sourceFile) {
     int nameIndex;
     int pathIndex;
     int index;

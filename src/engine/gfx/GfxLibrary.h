@@ -275,7 +275,7 @@ extern "C" int FUN_00131bc0(...);
 extern "C" int ObjectRef_Destruct_001363f0(...);
 extern "C" int DAT_00526410[4];
 extern "C" int igVertexArray2_GetVTable(void);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 struct Obj_14a910 {
     int *vt; char p4[4]; char *m8; T *m12; T *m16; T *m20;
     inline void rel(T **self) {
@@ -1365,7 +1365,7 @@ extern "C" int DAT_0048a140[4];
 extern "C" int DAT_0048a160[4];
 extern "C" void igPsx2BlendEquationExt_InitFields(void);
 extern "C" int sprintf(...);
-extern "C" int FUN_002d9740(int, int, int, char *);
+extern "C" int igDriverDatabase_SetSubPropertyValue(int, int, int, char *);
 struct T27 { int v[27]; };
 extern "C" T27 DAT_0048a180;
 extern "C" T27 DAT_0048a1f0;
@@ -2904,7 +2904,7 @@ struct ShaderSetup {
 extern "C" igIntList *igContextList_Create(void *allocator);
 extern "C" void igRegistry_GetValueBool(void *registry, int kind, const char *name, bool *found, int a, int b);
 extern "C" void igDriverDatabase_GatherProperties(void *builder, igIntList *list);
-extern "C" int FUN_00305cf0(void);
+extern "C" int igRegistry_IsLoadingEnabled(void);
 extern "C" int igDriverDatabase_Load(void *builder, const char *a, const char *b);
 extern "C" void igDriverDatabase_ApplyToRegistry(void *builder, void *registry, int kind, int flags);
 extern "C" void FUN_002daab0(void *builder, void *registry, int kind, int flags);
@@ -2998,7 +2998,7 @@ struct O520;
 struct S0_1690d0;
 struct Oab80;
 struct OB1d0;
-extern "C" void* thunk_Memory_ReallocateAligned(...);
+extern "C" void* Memory_ReallocateAlignedAlias(...);
 extern "C" void* Memory_FindBufferOwner(...);
 extern "C" void* Memory_AllocateBufferDirect(...);
 extern "C" int p2SetBlendWeightCount(...);

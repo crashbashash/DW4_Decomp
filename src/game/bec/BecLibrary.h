@@ -93,7 +93,7 @@ extern "C" int igMetaObject_NameFields(...);
 extern "C" void libBecRuntimePlugin_InitFields(void);
 extern "C" void *FUN_0033e830(void);
 extern "C" int beWeaponInfoRam_GetVTable(void);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" void FUN_0033ea40(void);
 extern "C" void *beWeaponInfoRam_Register(void);
 extern "C" void beWeaponInfoRam_GetMetaObject(void);

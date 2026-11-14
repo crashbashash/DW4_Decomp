@@ -253,7 +253,7 @@ int igPsx2File_Flush(igPsx2FileView *self) {
     if (self->_isBinary != 0) return 0; sceLseek(self->_fileHandle, 0, 0); sceWrite(self->_fileHandle, self->_fBuf, self->_fileSize); return 0;
 }
 
-int Gap__Core__igPsx2File__vfunc_30(igPsx2FileView *self, const char *format, ...) {
+int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...) {
     char *args;
     int n;
     int off;

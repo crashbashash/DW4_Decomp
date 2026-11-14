@@ -60,7 +60,7 @@ void igArenaMemoryPool_CheckHeapLocked(int *status, igArenaMemoryPoolView *self)
 
 void igArenaMemoryPool_VerifyHeap(int *status, igArenaMemoryPoolView *self) {
     igResult r = igArenaMemoryPool_CheckHeap(self);
-    FUN_00310c00(self);
+    igArenaMemoryPool_CheckMallocState(self);
     *status = r.v;
 }
 
@@ -97,7 +97,7 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     }
     for (i = 0; i < arena->blockCount; i += 2) {
         int *p = &arena->blocks[i];
-        if (FUN_00312790(self, i, (char *)p[0], (char *)p[1]) == g_resultFailure) {
+        if (igArenaMemoryPool_CheckHeapBlock(self, i, (char *)p[0], (char *)p[1]) == g_resultFailure) {
             result = g_resultFailure;
             break;
         }
@@ -105,7 +105,7 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     return result;
 }
 
-igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
+igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
     char *hi = self->getHighestAddress();
     char *lo = self->getLowestAddress();
     /* Declared with the walk's other pointers, ahead of the flag: `n` and `ok` are the two values kept in
@@ -218,7 +218,7 @@ bad:
  * chunk; failing that it takes a separate block, closes the old top off with two fenceposts and
  * frees what is left of it. A pre-sized pool asks for all of its pre-size at once. When the system
  * has nothing, the pool is asked to give memory back and the request is retried. */
-void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int bytes) {
+void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int nb, unsigned int bytes) {
     ArenaState *state;
     unsigned int pageMask;
     int tries;
@@ -353,7 +353,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
                 ((TaggedBlockHeader *)((char *)oldTop + (oldSize - 4)))->used = 1;
                 trimThreshold = state->trimThreshold;
                 state->trimThreshold = (unsigned int)-1;
-                FUN_00318110(self, chunkMemory(oldTop));
+                igArenaMemoryPool_FreeChunk(self, chunkMemory(oldTop));
                 state->trimThreshold = trimThreshold;
             } else if (oldSize != 0) {
                 initFencepost(oldTop);
@@ -403,7 +403,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
 
 /* dlmalloc's sYSTRIm: gives the pages at the end of the top chunk back to the system, keeping `pad`
  * bytes and, unless forced, the pool's pre-size. */
-int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
+int igArenaMemoryPool_SystemTrim(igArenaMemoryPoolView *self, unsigned int pad, int force) {
     ArenaState *state = self->_arenaState;
     unsigned int topSize;
     int extra;
@@ -431,7 +431,7 @@ int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
             state->top->used = 1;
             self->UpdateBlockList(released, -extra);
             if (self->_heapIntegrityCheckLevel >= 2) {
-                FUN_00310c00(self);
+                igArenaMemoryPool_CheckMallocState(self);
             }
             return 1;
         }
@@ -447,7 +447,7 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     bool trimmed;
     a = self->_arenaState;
     trimmed = false;
-    FUN_00318b40(self);
+    igArenaMemoryPool_MallocConsolidate(self);
     if (self->_size != 0) {
         return false;
     }
@@ -474,7 +474,7 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
             a->blockCount = a->blockCount - 2;
         }
     }
-    FUN_00314510(self, a->topPad, pad);
+    igArenaMemoryPool_SystemTrim(self, a->topPad, pad);
     return trimmed;
 }
 
@@ -647,7 +647,7 @@ void igArenaMemoryPool_RemoveFreeChunksInRange(int *status, igArenaMemoryPoolVie
  * chunk. A pool with the top-only option goes straight to the top. When the top is too small, a pool
  * on raw memory, or one not pre-sized, consolidates the fast bins and tries once more before the
  * system is asked. */
-void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
+void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) {
     ArenaState *state;
     unsigned int nb;
     unsigned int idx;
@@ -688,7 +688,7 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
         }
         if (!(state->maxFast & 1)) {
             if (state->maxFast == 0) {
-                FUN_00318b40(self);
+                igArenaMemoryPool_MallocConsolidate(self);
             }
             goto use_top;
         }
@@ -720,7 +720,7 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
         } else {
             idx = largeBinIndex(nb);
             if (state->maxFast & 2) {
-                FUN_00318b40(self);
+                igArenaMemoryPool_MallocConsolidate(self);
             }
         }
         while ((victim = chunkLinks(&state->bins[1].header)->back) != &state->bins[1].header) {
@@ -917,18 +917,18 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
         }
         if (self->_size != 0 || self->_poolPreSized == 0) {
             if (attempt-- != 0) {
-                FUN_00318b40(self);
+                igArenaMemoryPool_MallocConsolidate(self);
                 continue;
             }
         }
-        return FUN_00312ba0(self, nb, bytes);
+        return igArenaMemoryPool_SystemMalloc(self, nb, bytes);
     }
 }
 
 /* dlmalloc's fREe: a small chunk goes on its fast bin; any other is merged with its free neighbours
  * and put on the unsorted list or into the top chunk, and a large enough result consolidates the
  * fast bins and trims the top. */
-void FUN_00318110(igArenaMemoryPoolView *self, char *mem) {
+void igArenaMemoryPool_FreeChunk(igArenaMemoryPoolView *self, char *mem) {
     ArenaState *state;
     TaggedBlockHeader *p;
     unsigned int size;
@@ -1006,13 +1006,13 @@ void FUN_00318110(igArenaMemoryPoolView *self, char *mem) {
             }
             if (size >= 0x20000) {
                 if (state->maxFast & 2) {
-                    FUN_00318b40(self);
+                    igArenaMemoryPool_MallocConsolidate(self);
                 }
                 {
                     TaggedBlockHeader *top = state->top;
                     unsigned int payload = alignedPayloadSize(top);
                     if (payload + (top->words + 1) * 4 >= state->trimThreshold) {
-                        FUN_00314510(self, state->topPad, 0);
+                        igArenaMemoryPool_SystemTrim(self, state->topPad, 0);
                     }
                 }
             }
@@ -1023,7 +1023,7 @@ void FUN_00318110(igArenaMemoryPoolView *self, char *mem) {
 /* dlmalloc's malloc_consolidate: empties the fast bins, merging each chunk with its free neighbours
  * and putting the result on the unsorted list or into the top chunk. A state not yet set up is
  * initialised instead. */
-void FUN_00318b40(igArenaMemoryPoolView *self) {
+void igArenaMemoryPool_MallocConsolidate(igArenaMemoryPoolView *self) {
     ArenaState *state;
     TaggedBlockHeader **fb;
     TaggedBlockHeader **maxfb;
@@ -1096,9 +1096,9 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
             }
         } while (fb++ != maxfb);
     } else {
-        FUN_0030f220(self);
+        igArenaMemoryPool_InitMallocState(self);
         if (self->_heapIntegrityCheckLevel >= 2) {
-            FUN_00310c00(self);
+            igArenaMemoryPool_CheckMallocState(self);
         }
     }
 }
@@ -1108,7 +1108,7 @@ void FUN_00318b40(igArenaMemoryPoolView *self) {
  * and otherwise moves the payload to its new offset. The chunk is resized in place when it is big
  * enough or can grow into the top or a free neighbour; otherwise a new chunk is allocated, the
  * payload copied and the old chunk freed. A system-mapped chunk cannot be resized. */
-void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes) {
+void *igArenaMemoryPool_Realloc(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes) {
     ArenaState *state;
     unsigned int nb;
     TaggedBlockHeader *oldp;
@@ -1135,7 +1135,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
     nb = 0;
     keepHeader = false;
     if (oldmem == 0) {
-        return FUN_00315170(self, bytes);
+        return igArenaMemoryPool_Malloc(self, bytes);
     }
     if (bytes >= (unsigned int)-32) {
         if (self->HandleOutOfMemory(bytes, 1) == 0) {
@@ -1195,7 +1195,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
                     newp = oldp;
                     unlinkChunk(next);
                 } else {
-                    newmem = (char *)FUN_00315170(self, bytes);
+                    newmem = (char *)igArenaMemoryPool_Malloc(self, bytes);
                     if (newmem == 0) {
                         return 0;
                     }
@@ -1207,7 +1207,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
                     prevInUse = chunkUsedBit(oldp);
                     if (newp == next) {
                         if (self->_heapIntegrityCheckLevel >= 3) {
-                            FUN_00310c00(self);
+                            igArenaMemoryPool_CheckMallocState(self);
                         }
                         newsize += oldsize;
                         newp = oldp;
@@ -1244,7 +1244,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
                                 }
                             }
                         }
-                        FUN_00318110(self, oldmem);
+                        igArenaMemoryPool_FreeChunk(self, oldmem);
                         if (self->_heapIntegrityCheckLevel > 0) {
                             igArenaMemoryPool_CheckInUseChunk(self, newp);
                         }
@@ -1294,7 +1294,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
                 initChunkHeader(self, remainder, (unsigned int)-1, remainderSize, 0);
                 remainder->used = 1;
                 ((TaggedBlockHeader *)((char *)remainder + remainderSize))->used = 1;
-                FUN_00318110(self, chunkMemory(remainder));
+                igArenaMemoryPool_FreeChunk(self, chunkMemory(remainder));
             }
             if (self->_heapIntegrityCheckLevel > 0) {
                 igArenaMemoryPool_CheckInUseChunk(self, newp);
@@ -1302,7 +1302,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
             return chunkMemory(newp);
         }
         if (self->_heapIntegrityCheckLevel >= 2) {
-            FUN_00310c00(self);
+            igArenaMemoryPool_CheckMallocState(self);
         }
         if (self->HandleOutOfMemory(bytes, 3) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
@@ -1333,7 +1333,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
 
 /* dlmalloc's mEMALIGn: allocates with room to spare, then gives back the part before the aligned
  * address and, when it is big enough to stand as a chunk, the part after the request. */
-void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned int bytes) {
+void *igArenaMemoryPool_MallocAligned(igArenaMemoryPoolView *self, unsigned int alignment, unsigned int bytes) {
     unsigned int nb;
     char *m;
     TaggedBlockHeader *p;
@@ -1350,7 +1350,7 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
     }
     nb = 0;
     if (alignment <= 8) {
-        return FUN_00315170(self, bytes);
+        return igArenaMemoryPool_Malloc(self, bytes);
     }
     if (alignment < ((self->_smallestChunkSize + 7) & ~7)) {
         alignment = (self->_smallestChunkSize + 7) & ~7;
@@ -1372,7 +1372,7 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
             nb = self->_smallestChunkSize;
         }
     }
-    m = (char *)FUN_00315170(self, nb + alignment + ((self->_smallestChunkSize + 7) & ~7));
+    m = (char *)igArenaMemoryPool_Malloc(self, nb + alignment + ((self->_smallestChunkSize + 7) & ~7));
     if (m == 0) {
         return 0;
     }
@@ -1415,9 +1415,9 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
             initChunkHeader(self, p, (unsigned int)-1, leadsize, 0);
             p->used = used;
         }
-        FUN_00318110(self, chunkMemory(p));
+        igArenaMemoryPool_FreeChunk(self, chunkMemory(p));
         if (remainderSize != 0) {
-            FUN_00318110(self, chunkMemory(remainder));
+            igArenaMemoryPool_FreeChunk(self, chunkMemory(remainder));
         } else {
             igReport_Printf(text_remainder_was_empty);
             igReport_Flush();
@@ -1440,7 +1440,7 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
             remainder->used = 1;
             newsize = size - remainderSize;
             setChunkPayload(p, bytes, newsize);
-            FUN_00318110(self, chunkMemory(remainder));
+            igArenaMemoryPool_FreeChunk(self, chunkMemory(remainder));
         } else {
             setChunkPayload(p, bytes, size);
         }
@@ -1579,7 +1579,7 @@ unsigned char igArenaMemoryPool_IsAlchemyMemory(igArenaMemoryPool *self) {
  * igAllocator_EncodeIndex calls on an allocator: zero selects the primary allocator list (even
  * encoded index), nonzero the secondary list. igMallocMemoryPool also returns 0; igPageMemoryPool
  * and igStackMemoryPool return 1. The receiver is not read. */
-int Gap__Core__igArenaMemoryPool__vfunc_29(void) {
+int igArenaMemoryPool_IsSecondaryAllocator(void) {
     return 0;
 }
 
@@ -1733,7 +1733,7 @@ int igArenaMemoryPool_GetArenaHighCount(igArenaMemoryPoolView *self) {
     return self->_arenaState->maxBlockPairs;
 }
 
-long long Gap__Core__igArenaMemoryPool__vfunc_101(igArenaMemoryPool *self) {
+long long igArenaMemoryPool_GetSystemAllocated(igArenaMemoryPool *self) {
     long long size;
 
     size = self->_size;
@@ -1836,7 +1836,7 @@ void *igArenaMemoryPool_ReallocateAligned(igArenaMemoryPoolView *self, void *blo
 
 /* Gang allocation: one system block carries every requested block. The block starts with its own
  * byte count; each member is a GangRecord followed by a tagged header and the payload. */
-igResult Gap__Core__igArenaMemoryPool__vfunc_62(igArenaMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
+igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
     int guard = 0;
     char *block;
     unsigned total;
@@ -2107,7 +2107,7 @@ void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
     int *blocks;
 
     if (self->_size == 0) {
-        FUN_00318b40(self);
+        igArenaMemoryPool_MallocConsolidate(self);
     }
     if ((int)self->_localNetAllocated != 0) {
         name = ((int *)Memory_GetPoolName((int)self));
@@ -2547,7 +2547,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                 oldSize = payloadSize(h) - oldSentinelBytes;
                 oldBytes = chunkBytes(h);
                 if (DAT_004c2360[0] != 0) {
-                    FUN_0030f040((igArenaMemoryPool *)self, 2, (int)block, oldSize);
+                    igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 2, (int)block, oldSize);
                 }
                 if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
                     Memory_PrintPoolStatistics(0, self);
@@ -2588,13 +2588,13 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (self->_updateStatistics) {
                             self->UpdateStatistics(*gang, *gang + 4, 0);
                         }
-                        FUN_00318110(self, (char *)(gang - 1));
+                        igArenaMemoryPool_FreeChunk(self, (char *)(gang - 1));
                     }
                 } else {
                     if (self->_updateStatistics) {
                         self->UpdateStatistics(oldSize, oldBytes, 0);
                     }
-                    FUN_00318110(self, block);
+                    igArenaMemoryPool_FreeChunk(self, block);
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE90Notice == 0) {
                 r = igReportNotice(text_igArenaMemoryPool_free_E90_InvalidBlock, self->_poolIndex, block);
@@ -2606,7 +2606,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
         }
         if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize) {
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             if (self->HandleOutOfMemory(size, 1) != 0) {
                 continue;
@@ -2683,32 +2683,32 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             oldSize = payloadSize(h) - oldSentinelBytes;
             oldBytes = chunkBytes(h);
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 4, (int)block, oldSize);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)block, oldSize);
             }
             if ((alignment <= 8u || oldSize >= size) && oldSentinelBytes == sentinelBytes && (unsigned)block % alignment == 0) {
-                fresh = (char *)FUN_003194c0(self, block, total);
+                fresh = (char *)igArenaMemoryPool_Realloc(self, block, total);
             } else {
-                fresh = (char *)FUN_0031b5d0(self, alignment, total);
+                fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
                 moved = true;
             }
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 4, (int)fresh, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)fresh, size);
             }
         } else if (alignment > 8u) {
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
-            fresh = (char *)FUN_0031b5d0(self, alignment, total);
+            fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 1, (int)fresh, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         } else {
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 1, 0, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
-            fresh = (char *)FUN_00315170(self, total);
+            fresh = (char *)igArenaMemoryPool_Malloc(self, total);
             if (DAT_004c2360[0] != 0) {
-                FUN_0030f040((igArenaMemoryPool *)self, 1, (int)fresh, size);
+                igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         }
         if (fresh != 0) {
@@ -2742,7 +2742,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (self->_updateStatistics) {
                             self->UpdateStatistics(oldSize, oldBytes, 0);
                         }
-                        FUN_00318110(self, block);
+                        igArenaMemoryPool_FreeChunk(self, block);
                     }
                 } else if (self->_updateStatistics) {
                     self->UpdateStatistics(oldSize, oldBytes, 0);

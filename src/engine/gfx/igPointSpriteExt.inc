@@ -62,7 +62,7 @@ O *FUN_0014c440(O *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
+        if (arg1 > 0) Memory_FreeBufferAliasC(arg0);
     }
     return arg0;
 }
@@ -81,7 +81,7 @@ O_14c580 *FUN_0014c580(O_14c580 *arg0, short arg1) {
                 if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy(t2); }
             }
         }
-        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
+        if (arg1 > 0) Memory_FreeBufferAliasC(arg0);
     }
     return arg0;
 }

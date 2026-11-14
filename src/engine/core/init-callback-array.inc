@@ -112,7 +112,7 @@ static inline void setTemporaryMemoryPool(igResource *resource, igObject *pool) 
 void igObjectSystem_Initialize(ObjectSystemView *self) {
     igObjectSystem_InitPaths(self);
     self->configRegistry = (igRegistry *)igRegistry_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
-    if (g_loadAlchemyIni && FUN_00305cf0()) {
+    if (g_loadAlchemyIni && igRegistry_IsLoadingEnabled()) {
         if (g_alchemyIniPath != 0) {
             igSmartPointer<igObject> file((igObject *)igPsx2File_Create((int)ownerOrSystemPool()));
             clearPrefix(file);

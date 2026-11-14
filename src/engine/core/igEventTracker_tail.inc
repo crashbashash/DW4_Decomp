@@ -244,8 +244,8 @@ typedef igSmartPointer<igTDataList<signed char> > igCharListRef;
 /* Appends an event to the record list: its type, a length byte, the flags of the fields that follow,
  * then those fields; strings go to the string tables and are stored as offsets. Returns the event's
  * offset, or -1 when its type is filtered out or the tracker is already recording. */
-extern "C" int Gap__Core__igEventTracker__vfunc_26(igEventTrackerView *self, EventRecord *record, int callStackSkip);
-int Gap__Core__igEventTracker__vfunc_26(igEventTrackerView *self, EventRecord *record, int callStackSkip) {
+extern "C" int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int callStackSkip);
+int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int callStackSkip) {
     unsigned int flags;
     int group;
     int className;
@@ -521,8 +521,8 @@ static inline void decodeSigned(const char *&p, int &out) {
 
 /* Decodes the event stored at `offset`: its type, version and flags, then each field its flag says
  * is present, then the extra slots. */
-extern "C" igResult Gap__Core__igEventTracker__vfunc_27(igEventTrackerView *self, int offset, EventRecord *record);
-igResult Gap__Core__igEventTracker__vfunc_27(igEventTrackerView *self, int offset, EventRecord *record) {
+extern "C" igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRecord *record);
+igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRecord *record) {
     ScopedLock guard(self->_lock);
     unsigned int flags;
     int slot;
@@ -752,7 +752,7 @@ void igEventTracker_ReadEventValue(int *result, igEventTracker *self, char *reco
 /* Walks the events from `first` to `last` totalling memory: bytes allocated and freed, the net
  * amount and its peak, the largest allocation, and the net amount at the chosen occurrence of two
  * markers (-1: the last one); then counts the allocations in that range still outstanding. */
-void Gap__Core__igEventTracker__vfunc_32(igEventTrackerView *self, int first, int last, int *eventCount, int *typeCounts,
+void igEventTracker_GetStatistics(igEventTrackerView *self, int first, int last, int *eventCount, int *typeCounts,
                                          int *outstandingCount, unsigned int *allocatedBytes, unsigned int *freedBytes,
                                          unsigned int *netBytes, unsigned int *peakNetBytes, unsigned int *largestAllocation,
                                          unsigned int *netAtMarkerA, int markerA, int markerAOccurrence,
@@ -987,7 +987,7 @@ void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wante
 /* Map a hash value to a bucket of the tracker's hash index: the value modulo the count stored at
  * +8 of the `_hashIndex` object, or 0 while that count is 0. */
 
-int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self) {
+int igEventTracker_GetLeakCount(igEventTrackerView *self) {
     ScopedLock guard(self->_lock);
     int i;
     int count = self->_hashIndex->_count;
@@ -1009,7 +1009,7 @@ int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self) {
     return outstanding;
 }
 
-int Gap__Core__igEventTracker__vfunc_36(igEventTrackerView *self, int *cursor) {
+int igEventTracker_FindNextLeak(igEventTrackerView *self, int *cursor) {
     ScopedLock guard(self->_lock);
     int offset;
     int count = self->_hashIndex->_count;
@@ -1132,7 +1132,7 @@ void igEventTracker_RebuildHashIndex(igEventTrackerView *self, int n) {
 #pragma push
 #pragma readonly_strings on
 extern "C" const char *g_defaultEventFormat;
-extern "C" char *igObject_Release(igEventTrackerView *self, EventRecord *record, char *output, int outputSize);
+extern "C" char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, char *output, int outputSize);
 
 /* Formats one event as a line of text. Each format character is a field, optionally followed by a
  * data slot number, a quoted printf specification ('...') and a call-stack frame format (^...^):
@@ -1143,7 +1143,7 @@ extern "C" char *igObject_Release(igEventTrackerView *self, EventRecord *record,
  * name, y notification code name, z notification text; "..." is literal text and \n \r \t are
  * escapes. An object deallocation without a source file takes its location from the first
  * call-stack frame outside the release functions. */
-char *igObject_Release(igEventTrackerView *self, EventRecord *record, char *output, int outputSize) {
+char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, char *output, int outputSize) {
     int offset;
     int line;
     char function[256];
@@ -1733,7 +1733,7 @@ void igEventTracker_PrintAllEvents(igEventTrackerView *self) {
 
 
 
-void Gap__Core__igEventTracker__vfunc_43(igEventTrackerView *self) {
+void igEventTracker_PrintLeaks(igEventTrackerView *self) {
     int i;
     int count = self->_hashIndex->_count;
     int offset;
@@ -1831,12 +1831,12 @@ void igEventTracker_ResolveAllCallStackSymbols(igEventTrackerView *self) {
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_46(igEventTrackerView *self)
+void igEventTracker_PreExit(igEventTrackerView *self)
 {
     self->_callStackTracer->vfunc_29();
 }
 
-void Gap__Core__igEventTracker__vfunc_47(igEventTrackerView *self)
+void igEventTracker_Exit(igEventTrackerView *self)
 {
     self->_callStackTracer->vfunc_30();
 }

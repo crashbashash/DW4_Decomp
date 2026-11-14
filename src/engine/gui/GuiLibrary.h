@@ -73,7 +73,7 @@ extern "C" int StringRef_Destruct_00130720(...);
 union U { int vt; int w[16]; void *p[16]; char b[64]; };
 extern "C" int DAT_00540c10[4];
 extern "C" int igTextElement_GetVTable(void);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" int DAT_00541e90[4];
 extern "C" void *FUN_0044be30(igGeometryElement *arg0, short arg1);
 extern "C" int __dl__FPv(...);

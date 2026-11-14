@@ -571,7 +571,7 @@ void igMemoryPoolContextInfo_CreateDefaultPools(MemoryContext *self) {
     } while (i < 46);
 }
 
-void FUN_002f48c0(void) {
+void MemoryContext_OnStartupComplete(void) {
 
 }
 
@@ -1855,7 +1855,7 @@ void * igMemoryPoolContextInfo_Allocate(int size) {
 /* Object-system record pointer; byte 0 is the "object system active" flag. */
 void igMemoryPoolContextInfo_DeleteAllocation(void *allocation) {
     if (*g_objectSystem[0] != 0) {
-        thunk_Memory_FreeBuffer((int)allocation);
+        Memory_FreeBufferAliasC((int)allocation);
         return;
     }
     free(allocation);

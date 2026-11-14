@@ -11,7 +11,7 @@ void igExternalInfoEntry_Resolve(igExternalInfoEntry *self, igDirectory *directo
 
 /* Adds a directory entry that finds `object` again on load through `info`, under `key`; an object
  * already in the directory is not added twice. */
-bool FUN_002e2d30(igDirectoryView *directory, igInfoView *info, char *key, igObject *object) {
+bool igDirectory_AddExternalInfoRef(igDirectoryView *directory, igInfoView *info, char *key, igObject *object) {
     int index = igDirectory_FindSortedInsertIndex(directory, (igMetaField *)g_igDirEntry_refField[0], (unsigned int)object);
     if (index >= 0 && index < directory->_count && (igObject *)igDirectory_GetObject(directory, index) == object) {
         return 0;

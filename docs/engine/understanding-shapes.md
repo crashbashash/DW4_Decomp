@@ -692,6 +692,25 @@ Units are named by their source file.
 - **A negated flag passed to a `bool` parameter normalises first.** `sltu v0,zero,v0; xori a1,v0,0x1` before a
   call is `!attr->_enabled` passed to a virtual taking `bool`; with an `int` parameter `!x` compiles to a different
   sequence, and only the explicit `(x != 0) ^ 1` reproduces it. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **Open: two `xori 1` in a row.** Retail tests the interrupt-enable bit as `andi 1; sltu; xori 1; xori 1;
+  andi 0xff` before a branch, and no spelling found keeps both `xori`s. What the compiler does with `!`:
+  - The optimizer keeps `!!x` (`ELOGNOT(ELOGNOT(x))`); the front end folds it only when `x` is already a `bool`.
+  - A lowering pass before code generation wraps every `!` operand that is not a comparison, `!`, `&&` or `||`
+    in `x != 0` (that is the `sltu`).
+  - The code generator emits each `!` as exactly one `xori dst,src,1`; a conversion of a `!` result to a wider or
+    other byte type adds `andi 0xff`, and one of a comparison adds nothing.
+  - The pairs disappear in a PCode peephole on `xori`, run once per basic block after the block's def-use links
+    are built. It turns `xori c,b,1` into a copy of `a` when the instruction defining `b` is `xori b,a,1` in the
+    same block, the immediates are equal, and `a` is not redefined in between nor by the second `xori`. When the
+    definition of `b` is a copy, the copy is propagated first and the handler runs again. The `andi 0xff` of an
+    `sltu` result also goes.
+  - Retail's pair therefore had something between the two at that point: a copy that could not be propagated
+    (its source redefined before the second `!`), a block boundary removed later by the block pass, or the
+    second `xori` writing the first one's source register.
+  - About 50,000 generated spellings (inline nesting to three levels, `bool`/`char`/`int` locals and returns,
+    `^ 1`, `== 0`, ternaries, `if`/`else` assignments, compound `^=`, casts between the negations, reused and
+    twice-used locals) all fold the pair, put an `andi 0xff` or an `sltu` between the two, or keep a single `xori`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x32ef20, 0x32f060, not matched).
 - **A class-scope placement `delete` makes the constructor-throws cleanup.** `new (pool) T` with a matching
   `operator delete(void *, Pool *)` in the class gives the landing pad and exception table retail has around the
   constructor call. *Unit:* `src/game/be.cpp`.
@@ -814,11 +833,12 @@ Units are named by their source file.
   `slti` tests, a run of `c != 'c' && c != 'd' && ...` gives one `beq` each and is not merged, and a `switch` sorts its
   cases, so a chain in retail's own unsorted order (`u x i s S c-g C ] n-p`) is a flat `&&` chain. The spelling was
   found by a variant test. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
-- **A local initialised from a string literal copies exactly its own size.** `char name[] = "igMetaObject: ";` copies
-  its 15 bytes as `ld`, `lwc1`/`swc1`, `lh`, `lbu`; a larger array with the same initialiser copies a template of the
-  array's full size (`lq` loop), `memcpy` stays a call, and `strcpy` declared `(...)` stays a call. An array declared
-  and never used takes no frame space. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0, not matched: retail's
-  frame is 256 bytes larger than one 15-byte name explains).
+- **A large buffer that receives a literal's own size is a `strcpy` under read-only strings.** A 256-byte frame
+  slot filled by a 15-byte copy (`ld`, `lwc1`/`swc1`, `lh`, `lbu` from the literal) and then passed to `strcat` is
+  `char name[256]; strcpy(name, "igMetaObject: ");` with the literal read-only (the readonly-strings entry above).
+  `char name[] = "igMetaObject: ";` copies the same 15 bytes into a 15-byte slot (the frame 256 bytes short), a
+  larger array with the initialiser copies a template of the array's full size (`lq` loop), `memcpy` stays a call,
+  and an array declared and never used takes no frame space. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fe9c0).
 
 - **A bit test returning `int` from `!= 0` is materialised before the branch.** Retail's `andi; sltu; bnez` comes
   from `static inline int hasValidity(...) { return (meta._validity & bit) != 0; }` tested as `if

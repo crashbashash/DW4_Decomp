@@ -12,7 +12,7 @@
 
 extern "C" unsigned char g_InsightLibrary_registered;
 extern "C" void InsightLibrary_MarkRegistered(void);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" int DAT_0052d060[4];
 struct S {
     void *f0;

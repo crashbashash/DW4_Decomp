@@ -14,15 +14,15 @@ the notices name three of them: `igArenaDoCheckMallocState(E95)`, `igArenaSystem
 
 | Retail | dlmalloc 2.7 | Evidence |
 | --- | --- | --- |
-| `FUN_0030f220` | `malloc_init_state` | fills the 95 bins, sets the two 256 KB thresholds, makes raw memory the top chunk |
-| `FUN_00310c00` | `do_check_malloc_state` | walks the fast bins and the bins; its notices are E38 to E47, E95 and E96 |
-| `FUN_00312ba0` | `sYSMALLOc` | called once by `mALLOc`; asks the pool's slot 103 for system memory; reports as `igArenaSystemMalloc` |
-| `FUN_00314510` | `sYSTRIm` | called by `fREe` and by the pool's trim; gives pages back through slot 104 |
-| `FUN_00315170` | `mALLOc` | request size check, fast bins, small bins, `malloc_consolidate`, the bin scan; reports as `igArena_malloc` |
-| `FUN_00318110` | `fREe` | fast-bin push, else coalesce, unsorted list, trim over the threshold |
-| `FUN_00318b40` | `malloc_consolidate` | empties the fast bins; initialises a state whose fast limit is 0 |
-| `FUN_003194c0` | `rEALLOc` | calls `mALLOc`, `fREe`, `memcpy` and `memmove` |
-| `FUN_0031b5d0` | `mEMALIGn` | calls `mALLOc` with padding, frees the lead and the remainder |
+| `igArenaMemoryPool_InitMallocState` | `malloc_init_state` | fills the 95 bins, sets the two 256 KB thresholds, makes raw memory the top chunk |
+| `igArenaMemoryPool_CheckMallocState` | `do_check_malloc_state` | walks the fast bins and the bins; its notices are E38 to E47, E95 and E96 |
+| `igArenaMemoryPool_SystemMalloc` | `sYSMALLOc` | called once by `mALLOc`; asks the pool's slot 103 for system memory; reports as `igArenaSystemMalloc` |
+| `igArenaMemoryPool_SystemTrim` | `sYSTRIm` | called by `fREe` and by the pool's trim; gives pages back through slot 104 |
+| `igArenaMemoryPool_Malloc` | `mALLOc` | request size check, fast bins, small bins, `malloc_consolidate`, the bin scan; reports as `igArena_malloc` |
+| `igArenaMemoryPool_FreeChunk` | `fREe` | fast-bin push, else coalesce, unsorted list, trim over the threshold |
+| `igArenaMemoryPool_MallocConsolidate` | `malloc_consolidate` | empties the fast bins; initialises a state whose fast limit is 0 |
+| `igArenaMemoryPool_Realloc` | `rEALLOc` | calls `mALLOc`, `fREe`, `memcpy` and `memmove` |
+| `igArenaMemoryPool_MallocAligned` | `mEMALIGn` | calls `mALLOc` with padding, frees the lead and the remainder |
 
 The checks dlmalloc compiles in under `DEBUG` are always present and run by level: `check_chunk` and
 its relatives when `_heapIntegrityCheckLevel` is above 0, `check_malloc_state` at 2, and at 3 every

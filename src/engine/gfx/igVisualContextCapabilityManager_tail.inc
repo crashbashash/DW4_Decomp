@@ -527,7 +527,7 @@ void FUN_00166de0(int value)
     }
     ((int *)l->_data)[count] = value;
     igDriverDatabase_GatherProperties(builder, list);
-    if (FUN_00305cf0() != 0) {
+    if (igRegistry_IsLoadingEnabled() != 0) {
         if (igDriverDatabase_Load(builder, (const char *)DAT_004dc870, (const char *)DAT_004dc870) != 0) igDriverDatabase_ApplyToRegistry(builder, registry, 4, 0);
     }
     FUN_002daab0(builder, registry, 4, 0);

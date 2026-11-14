@@ -55,7 +55,7 @@ void *FUN_00350410(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
         OBJ(arg0->_hp)
         OBJ(arg0->_mHp)
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

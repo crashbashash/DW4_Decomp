@@ -200,7 +200,7 @@ int igRefMetaField_GetAlignment(void) {
     return 4;
 }
 
-int FUN_00305cf0(void)
+int igRegistry_IsLoadingEnabled(void)
 {
     return 1;
 }

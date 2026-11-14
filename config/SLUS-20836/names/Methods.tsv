@@ -17,7 +17,6 @@
 0x002466f0	igLuaState_RunBuffer	engine
 # references both `igObject::internalRelease` and `igObject::release` — the merged
 # release path.
-0x002e0200	igObject_Release	engine
 # the 1,608-byte body; a second function (0x2e25a0, 264 B) shares the assert and is
 # left unnamed rather than guessing which is which.
 0x002e95e0	igIGBFile_ReadFile	engine

@@ -31,7 +31,7 @@ void *FUN_00225790(struct S *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

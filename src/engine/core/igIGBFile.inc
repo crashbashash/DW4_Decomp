@@ -77,7 +77,7 @@ igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
         ((igSmartPointer<igObject> *)&p->_infoList)->~igSmartPointer();
         ((igSmartPointer<igObject> *)&p->_externalDirectoryList)->~igSmartPointer();
         ((igStringRef *)&p->_name)->~igStringRef();
-        if (n > 0) thunk_Memory_FreeBuffer((int)p);
+        if (n > 0) Memory_FreeBufferAliasC((int)p);
     }
     return p;
 }

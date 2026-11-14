@@ -57,7 +57,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_46(Obj46 *arg0, Src *arg1) {
     int i;
     p = arg0->f868;
     if (p->f4 <= 0) {
-        p->f16 = (Ent46 *)thunk_Memory_ReallocateAligned(p->f16, (p->f0 + 4) * 48, 16);
+        p->f16 = (Ent46 *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 48, 16);
         memset(p->f16 + p->f0, 0, 192);
         if (p->f2 < 4) {
             Buf46 *b = (Buf46 *)Memory_FindBufferOwner(p);
@@ -681,7 +681,7 @@ int FUN_0016ad20(ObjAd20 *arg0, int arg1, int arg2) {
     }
     p = arg0->f328;
     if (p->f4 <= 0) {
-        p->f16 = (EntAd20 *)thunk_Memory_ReallocateAligned(p->f16, (p->f0 + 4) * 24, 16);
+        p->f16 = (EntAd20 *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 24, 16);
         memset(p->f16 + p->f0, 0, 96);
         if (p->f2 < 4) {
             Buf46 *b = (Buf46 *)Memory_FindBufferOwner(p);

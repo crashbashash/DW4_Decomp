@@ -17,7 +17,7 @@ extern "C" int DAT_00528250[4];
 extern "C" void *g_objectSystem[4];
 struct R { int vt; unsigned int rc; };
 struct Obj { int *vt; char pad[24]; struct R *p; char pad2[0]; };
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 struct S {
     void *f0;
     char pad[24];
@@ -1456,7 +1456,7 @@ extern "C" int igObject_IsKindOf(...);
 extern "C" int igProperty_FindByName(...);
 struct AnimDbRecord { int vtable; unsigned int references; const char *name; };
 extern igMetaObject *g_igNamedObject_metaObject;
-extern "C" int FUN_002e2d30(...);
+extern "C" int igDirectory_AddExternalInfoRef(...);
 struct RecordRef {
     AnimDbRecord *p;
     RecordRef(AnimDbRecord *object) : p(object) {
@@ -2907,7 +2907,7 @@ extern "C" void *FUN_001e5c50(...);
 extern "C" void igStringObj_SetInt(IniValueObject *, int, void *);
 extern "C" void igStringObj_SetFloat(IniValueObject *, void *, float);
 extern "C" void igStringObj_SetBool(IniValueObject *, unsigned char, int);
-extern "C" void FUN_002d9740(IniValueTarget *, int, int, char *);
+extern "C" void igDriverDatabase_SetSubPropertyValue(IniValueTarget *, int, int, char *);
 extern "C" int DAT_004e4710[2];
 extern "C" int DAT_004e4718[2];
 struct IniSectionObject { int pad0; int _refCount; char *name; };

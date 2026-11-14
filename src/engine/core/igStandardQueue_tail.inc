@@ -45,7 +45,7 @@ void *igQueue_Destroy(igQueue *self, short flags) {
             }
         }
         if (flags > 0) {
-            thunk_Memory_FreeBuffer((int)self);
+            Memory_FreeBufferAliasC((int)self);
         }
     }
     return self;

@@ -135,7 +135,7 @@ This is confirmed three ways: the `size` value is a **pure function of the type 
 `igBool`/`igUnsignedChar` 1, `igShort` 2, `igLong`/`igDouble` 8, `igVec3f` 12,
 `igVec4f` 16, `igMatrix44f` 64, and large defaults for the array types
 `igIntArray` 128 / `igFloatArray` 768) rather than free-form per field, the type ids
-match the `ig*MetaField` names, and the loader's parser (`FUN_002e63e0`) walks the
+match the `ig*MetaField` names, and the loader's parser (`igIGBFile_ReadMetaObjectList`) walks the
 block with a **3-short stride** (`iStack_40 = 3`), taking `[1]` as the slot index (it
 adds a per-class base-table short to it, so `[1]` is *not* a finished byte offset) and
 `[2]` as the field's size (`*(short *)(field + 5) = psVar19[2]`).
@@ -204,7 +204,7 @@ so ordinal 11 is simply absent while ordinals 12…17 still map to indices 8…1
 The **byte offset is not encoded in the descriptor at all**: it is the class's
 declared field offset, i.e. exactly the `offset` already in `data/reflection.json`.
 The loader reaches it arithmetically (`descriptor[1] + shortTable[record[4]] -
-classBase`, `FUN_002e63e0`) because at runtime it has the reflection tables; the
+classBase`, `igIGBFile_ReadMetaObjectList`) because at runtime it has the reflection tables; the
 on-disc directory does not need to carry it. So for reading object data, take the
 offsets from the reflection dump and use the directory only to learn *which*
 classes and which declared fields are present.

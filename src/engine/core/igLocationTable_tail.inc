@@ -183,8 +183,8 @@ typedef igSmartPointer<igTDataList<unsigned int> > igUnsignedIntListRef;
 /* Appends a location record unless the address already has one, doubling the record list when it is
  * full, enters it in the hash index and returns its index. The function name and the source file go
  * to the two string tables; -1 stands for none. */
-extern "C" int Gap__Core__igLocationTable__vfunc_29(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line);
-int Gap__Core__igLocationTable__vfunc_29(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line) {
+extern "C" int igLocationTable_AddLocation(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line);
+int igLocationTable_AddLocation(igLocationTableView *self, int address, const char *name, int offset, const char *sourceFile, int line) {
     int nameIndex;
     int fileIndex;
     int index;

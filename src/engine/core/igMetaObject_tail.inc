@@ -524,3 +524,90 @@ void igMetaObject_RunStaticInit(StaticInitCallbacks *(*initialize)()){
     if(list){count=list->count;for(i=0;i<count;i++)list->functions[i]();igArray_Destruct((CallbackArray *)list, 1);}
 }
 
+/* The registration state bits of _validity: 1 the parent is registered, 2 the class is set up, 4 the
+ * registration is complete, 8 a registration is in progress. */
+static inline int hasValidity(const igMetaObject &meta, int bit) {
+    return (meta._validity & bit) != 0;
+}
+
+#pragma push
+#pragma readonly_strings on
+CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObject,
+    igMetaObjectRegisterFunction registerParent, igMetaObjectGetFunction getParentMetaObject,
+    igMetaObjectCallback getMetaObjectFunction, const char *className, int instanceSize,
+    igMetaObjectGetVTableFunction getVTable, igMetaObjectCallback initFields,
+    igMetaObjectCallback staticInitCallback, igMetaObjectCallback *callbacks)
+{
+    int pool = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData);
+    igMetaObject *meta;
+    CallbackArray *list;
+    bool firstRegistration;
+    if (*metaObject == 0) {
+        char name[256];
+        strcpy(name, "igMetaObject: ");
+        if (className != 0) {
+            strcat(name, className);
+        }
+        *metaObject = (igMetaObject *)igMetaObject_Create(pool);
+    }
+    meta = *metaObject;
+    list = 0;
+    if (!hasValidity(*meta, 8)) {
+        meta->_validity |= 8;
+        firstRegistration = false;
+        if (!hasValidity(*meta, 4)) {
+            if (!hasValidity(*meta, 2)) {
+                firstRegistration = true;
+                if (!hasValidity(*meta, 1)) {
+                    list = registerParent();
+                    igMetaObject_InheritFromBase(meta, getParentMetaObject());
+                    meta->_validity |= 1;
+                }
+                igMetaObject_SetName(meta, (int)className);
+                meta->_sizeofSize = instanceSize;
+                meta->_getMetaObjectFunction = (int)getMetaObjectFunction;
+                meta->_abstractState = abstract;
+                if (!abstract) {
+                    meta->_vTablePointer = getVTable();
+                }
+                if (initFields != 0) {
+                    initFields();
+                }
+                meta->_validity |= 2;
+                igMetaObject_AssignTypeId(meta);
+                meta->_refCount = meta->_refCount - 1;
+                if ((meta->_refCount & 0x7FFFFF) == 0) igObject_Destroy(meta);
+                ObjectSystemView *system = ((ObjectSystemView **)g_objectSystem)[0];
+                if (system->copyVTables != 0 && system->fastPool != 0 && system->vtableClassNames != 0 &&
+                    igStringTable_Find(system->vtableClassNames, (unsigned int)className) != -1) {
+                    igMetaObject_CopyVTable(meta, ((ObjectSystemView **)g_objectSystem)[0]->fastPool);
+                }
+            }
+            igMetaObject_FinalizeFieldLayout(meta);
+            if (meta->_setupFunction != 0) {
+                ((void (*)(igMetaObject *))meta->_setupFunction)(meta);
+            }
+            if (list == 0) {
+                CallbackArray *array = (CallbackArray *)Memory_AllocateBufferDirect(12,
+                    (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+                if (array != 0) {
+                    array = igArray_Construct(array);
+                }
+                list = array;
+            }
+            if (callbacks != 0) {
+                igMetaObjectCallback *callback;
+                for (callback = callbacks; *callback != 0; callback++) {
+                    igArray_Append(list, (int)*callback);
+                }
+            }
+            if (firstRegistration && staticInitCallback != 0) {
+                igArray_Append(list, (int)staticInitCallback);
+            }
+            meta->_validity |= 4;
+        }
+        meta->_validity &= ~8;
+    }
+    return list;
+}
+#pragma pop

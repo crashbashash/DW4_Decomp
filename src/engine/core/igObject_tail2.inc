@@ -338,7 +338,7 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *r
 
 void *igObject_AllocateRawStorageDefault(int size,int prefix){return igObject_AllocateRawStorage(size,prefix,0);}
 
-int thunk_Memory_FreeBuffer(int extra0)
+int Memory_FreeBufferAliasC(int extra0)
 {
     return Memory_FreeBuffer((void *)extra0);
 }

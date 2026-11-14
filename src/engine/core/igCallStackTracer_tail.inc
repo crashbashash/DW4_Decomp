@@ -62,13 +62,13 @@ igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int si
 #pragma readonly_strings on
 extern "C" const char *g_callStackFormat;
 extern "C" char *strrchr(const char *, int);
-extern "C" igResult Gap__Core__igCallStackTracer__vfunc_28(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
+extern "C" igResult igCallStackTracer_FormatLocation(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
                                                            const char *format, char *output, int outputSize);
 
 /* Formats one call-stack entry. Each format character is a field, optionally followed by a quoted
  * printf specification: a address, s function, o offset, l line, p source path, f source file name;
  * "..." is literal text and \n \r \t are escapes. */
-igResult Gap__Core__igCallStackTracer__vfunc_28(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
+igResult igCallStackTracer_FormatLocation(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
                                                 const char *format, char *output, int outputSize) {
     igResult result = g_resultSuccess;
     char spec[256];
@@ -183,11 +183,11 @@ igResult Gap__Core__igCallStackTracer__vfunc_28(igCallStackTracerView *self, int
 
 #pragma pop
 
-void Gap__Core__igCallStackTracer__vfunc_29(void) {
+void igCallStackTracer_PreExit(void) {
 
 }
 
-void Gap__Core__igCallStackTracer__vfunc_30(void) {
+void igCallStackTracer_Exit(void) {
 
 }
 

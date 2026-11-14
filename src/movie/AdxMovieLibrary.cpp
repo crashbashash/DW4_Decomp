@@ -257,7 +257,7 @@ extern "C" char g_igMovieCodecList_callbackList[];
 extern "C" igMetaObject *g_igMovieCodec_metaObject[4];
 union U_335670 { int vt; char b[16]; };
 extern "C" int DAT_00533d60[4];
-extern "C" int thunk_Memory_FreeBuffer(struct O *);
+extern "C" int Memory_FreeBufferAliasC(struct O *);
 typedef struct O { int vt; int pad; int f8; } O;
 extern "C" O *FUN_00335700(O *arg0, long long arg1);
 extern "C" const char igMovieCodec_className[];
@@ -1036,7 +1036,7 @@ O *FUN_00335700(O *arg0, long long arg1) {
             }
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

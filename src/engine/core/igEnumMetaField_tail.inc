@@ -53,7 +53,7 @@ int igEnumMetaField_GetAlignment(void) {
     return 4;
 }
 
-int thunk_igErrorHandler_GetInstance()
+int igErrorHandler_GetInstanceAlias()
 {
     return igErrorHandler_GetInstance();
 }

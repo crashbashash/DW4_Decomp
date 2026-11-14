@@ -112,7 +112,7 @@ void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            thunk_Memory_FreeBuffer(arg0);
+            Memory_FreeBufferAliasC(arg0);
         }
     }
     return arg0;

@@ -45,10 +45,10 @@ void igTimer_GetMetaObjectFunction(void) {
 }
 
 void igTimer_SetAbstractProxy(void) {
-    *(int *)((char *)(((void * *)g_igTimer_metaObject)[0]) + 60) = (int)(&thunk_igLongTimer_GetMetaObject);
+    *(int *)((char *)(((void * *)g_igTimer_metaObject)[0]) + 60) = (int)(&igLongTimer_GetMetaObjectFunction);
 }
 
-void thunk_igLongTimer_GetMetaObject(void) {
+void igLongTimer_GetMetaObjectFunction(void) {
     igLongTimer_GetMetaObject();
 }
 

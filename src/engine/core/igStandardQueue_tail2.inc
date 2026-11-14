@@ -10,7 +10,7 @@ void igStandardQueue_ReleaseDefaults(igStandardQueueView *self) {
     if (self->isCreated() != 0) {
         self->destroy();
     }
-    thunk_igStandardQueue_StopServiceThreads((int)self);
+    igQueue_ReleaseDefaults((int)self);
 }
 
 void igStandardQueue_Create(igStandardQueue *self) {

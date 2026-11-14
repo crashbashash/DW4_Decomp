@@ -412,17 +412,17 @@ igResult igIGBFile_BuildDirectoryBuffer(igIGBFile *file) {
     file->_entryBufferSize = 0;
     file->_entryCount = ((igObjectList *)file->_uniqueEntryList)->_count;
     for (i = 0; i < file->_entryCount; i++) {
-        file->_entryBufferSize = file->_entryBufferSize + igObject_GetSerializedSize((igObjectDispatchView *)thunk_igDirectory_GetEntry((int *)file->_uniqueEntryList, i));
+        file->_entryBufferSize = file->_entryBufferSize + igObject_GetSerializedSize((igObjectDispatchView *)igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i));
     }
     file->_dirBuf = (int)((igMemoryPoolView *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
     cursor = (char *)file->_dirBuf;
     for (i = 0; i < file->_entryCount; i++) {
-        cursor += igObject_WritePersistentFields((igObjectDispatchView *)thunk_igDirectory_GetEntry((int *)file->_uniqueEntryList, i), (int *)cursor, 0, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+        cursor += igObject_WritePersistentFields((igObjectDispatchView *)igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i), (int *)cursor, 0, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     }
     return g_resultSuccess;
 }
 
-igResult FUN_002e4f60(igIGBFileView *self) {
+igResult igIGBFile_BuildIndexBuffer(igIGBFileView *self) {
     int count = self->_count;
     int i;
     self->_indexBufferSize = count * 2 + 8;
@@ -667,7 +667,7 @@ int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     igResult directoryResult = igIGBFile_BuildDirectoryBuffer((igIGBFile *)self);
     pp = (int *)((int)&directoryResult + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igResult sharedBufferResult = FUN_002e4f60(self);
+    igResult sharedBufferResult = igIGBFile_BuildIndexBuffer(self);
     pp = (int *)((int)&sharedBufferResult + 0);
     if (*pp == g_resultFailure.v) return 0;
     }
@@ -823,7 +823,7 @@ static inline void appendAlignedField(igMetaObject *meta, igMetaField *field) {
  * each slot moved by the number of fields the class that declares it gained or lost since. A class
  * this program does not have fails the read, unless blind objects are on: then a stand-in class is
  * built from its parent and the listed fields, with one-byte fields filling the unlisted slots. */
-igResult FUN_002e63e0(igIGBFileView *file) {
+igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
     int i;
     int fieldWords;
     bool hasFields;
@@ -1150,7 +1150,7 @@ igResult igIGBFile_ReadObjectIndex(igIGBFileView *self) {
         if (self->_endianSwap != 0) { self->smf->SwapBytes(self->_chunk, words); }
         base = (unsigned int)(pos - 8) >> 1;
         for (i = 0; i < words; i++) {
-            igDirEntryView *o = (igDirEntryView *)thunk_igDirectory_GetEntry((int *)self->_uniqueEntryList, ((short *)self->_chunk)[i]);
+            igDirEntryView *o = (igDirEntryView *)igDirectory_GetEntryAlias((int *)self->_uniqueEntryList, ((short *)self->_chunk)[i]);
             int index;
             igDirEntryView *old;
             int n;
@@ -1694,7 +1694,7 @@ int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
     if (igIGBFile_ReadAlignmentTable(self).failed()) return igIGBFile_AbortRead(self);
   }
   if (igIGBFile_ReadMetaObjectBuffer(self).failed()) return igIGBFile_AbortRead(self);
-  if (FUN_002e63e0(self).failed()) return igIGBFile_AbortRead(self);
+  if (igIGBFile_ReadMetaObjectList(self).failed()) return igIGBFile_AbortRead(self);
   if (igIGBFile_SetupBasePath(self).failed()) return igIGBFile_AbortRead(self);
   if (self->_magicVersion >= 5) {
     if (igIGBFile_ReadExternalDirectories(self).failed()) return igIGBFile_AbortRead(self);

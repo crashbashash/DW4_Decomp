@@ -202,7 +202,7 @@ void *igMallocMemoryPool_ReallocateAligned(igMallocMemoryPoolView *self, void *b
 
 /* Gang allocation: one system block carries every requested block. The block starts with its own
  * byte count; each member is a GangRecord followed by a tagged header and the payload. */
-igResult Gap__Core__igMallocMemoryPool__vfunc_62(igMallocMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
+igResult igMallocMemoryPool_GangAlloc(igMallocMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
     int guard = 0;
     char *block;
     unsigned total;
@@ -389,7 +389,7 @@ void igMallocMemoryPool_Free(igMallocMemoryPoolView *self, void *block)
  * before the maximum size refuses the request. With the sentinel option every block carries a head
  * sentinel after `headBytes` of padding (the padding's size is kept in the word before it) and a
  * tail sentinel in the last word of its chunk. */
-void *Gap__Core__igMallocMemoryPool__vfunc_101(igMallocMemoryPoolView *self, char *block, int size, unsigned short alignment) {
+void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *block, int size, unsigned short alignment) {
     int newBytes;
     int total;
     bool moved;

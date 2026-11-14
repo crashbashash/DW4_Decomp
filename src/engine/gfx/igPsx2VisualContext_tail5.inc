@@ -910,7 +910,7 @@ int FUN_0017aa20(TexContext *context, int width, int height, int format, int kin
     int i;
 
     if (list->freeCount <= 0) {
-        list->data = (TexEntry *)(thunk_Memory_ReallocateAligned(list->data, (list->count + 4) * sizeof(TexEntry), 16));
+        list->data = (TexEntry *)(Memory_ReallocateAlignedAlias(list->data, (list->count + 4) * sizeof(TexEntry), 16));
         memset(&list->data[list->count], 0, 4 * sizeof(TexEntry));
         if (list->freeCapacity < 4) {
             list->freeIndices = FUN_002ed520(list)->reallocate(list->freeIndices, 8);

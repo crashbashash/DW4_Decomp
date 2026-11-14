@@ -94,7 +94,7 @@ void *igMemoryRefMetaField_Destroy(igMemoryRefMetaField *self, long long flags) 
             }
         }
         if ((short)flags > 0) {
-            thunk_Memory_FreeBuffer((int)self);
+            Memory_FreeBufferAliasC((int)self);
         }
     }
     return self;
@@ -122,7 +122,7 @@ void *igRefMetaField_Destroy(igRefMetaField *self, short flags) {
             }
         }
         if (flags > 0) {
-            thunk_Memory_FreeBuffer((int)self);
+            Memory_FreeBufferAliasC((int)self);
         }
     }
     return self;

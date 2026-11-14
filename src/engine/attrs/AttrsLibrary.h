@@ -216,7 +216,7 @@ extern "C" int DAT_00485b40[4];
 extern "C" int DAT_00485b50[4];
 extern "C" void igTextureMatrixAttr_InitFields(void);
 extern "C" void **FUN_00131aa0(void **arg0, short arg1);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" int DAT_0052fde0[4];
 extern "C" int g_igNamedObject_vtable[4];
 struct S {

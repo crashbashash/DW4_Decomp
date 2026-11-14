@@ -26,17 +26,17 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
             igStringObj_SetInt(text.p, value->value.i, DAT_004e4710);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText[0] : s;
-            FUN_002d9740(target, 10, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue(target, 10, igObjectStringMap_GetNameAt(list, i), s);
         } else if (igObject_IsKindOf(value, FUN_001e4fc0()) != 0) {
             igStringObj_SetFloat(text.p, DAT_004e4718, value->value.f);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText[0] : s;
-            FUN_002d9740(target, 11, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue(target, 11, igObjectStringMap_GetNameAt(list, i), s);
         } else if (igObject_IsKindOf(value, FUN_001e5c50()) != 0) {
             igStringObj_SetBool(text.p, value->value.b, 0);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText[0] : s;
-            FUN_002d9740(target, 12, igObjectStringMap_GetNameAt(list, i), s);
+            igDriverDatabase_SetSubPropertyValue(target, 12, igObjectStringMap_GetNameAt(list, i), s);
         }
     }
 }

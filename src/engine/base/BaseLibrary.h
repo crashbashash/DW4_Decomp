@@ -220,7 +220,7 @@ extern int g_igBoolMetaField_metaObject[4];
 
 extern "C" {
 void igMetaObject_RunStaticInit(...);
-int thunk_Memory_FreeBuffer(...);
+int Memory_FreeBufferAliasC(...);
 int igObject_InitHeader(...);
 int igMetaObject_RegisterClass(...);
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);

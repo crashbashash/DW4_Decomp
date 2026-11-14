@@ -50,7 +50,7 @@ void igErrorHandler_RegisterExitCallback(void) {
 }
 
 void igErrorHandler_StaticInitCallback(void) {
-    thunk_igErrorHandler_GetInstance();
+    igErrorHandler_GetInstanceAlias();
 }
 
 void igErrorHandler_ExitCallback(void) {

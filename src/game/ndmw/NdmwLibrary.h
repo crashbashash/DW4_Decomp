@@ -118,7 +118,7 @@ extern "C" void beNDMWTitle2_InitFields(void);
 extern "C" void beNDMWShopTitle03_Create(int arg0);
 extern "C" void *FUN_003b2c40(void);
 extern "C" int beNDMWShopTitle03_GetVTable(void);
-extern "C" int thunk_Memory_FreeBuffer(...);
+extern "C" int Memory_FreeBufferAliasC(...);
 extern "C" void **FUN_003b2f30(void **arg0, int arg1);
 extern "C" void **FUN_003b2fb0(void **arg0, short arg1);
 extern "C" int ObjectRef_Destruct_001c6460(...);

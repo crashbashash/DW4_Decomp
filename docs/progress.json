@@ -43,8 +43,8 @@
   {
    "hi": 1024,
    "lo": 513,
-   "matched": 550,
-   "matched_bytes": 391228,
+   "matched": 551,
+   "matched_bytes": 391972,
    "total": 675,
    "total_bytes": 481776
   },
@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 3020012,
-    "functions": 19904
+    "bytes": 3020756,
+    "functions": 19905
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 0,
   "fully_matched": {
-   "bytes": 3026016,
-   "functions": 19991
+   "bytes": 3026760,
+   "functions": 19992
   },
   "fully_verified": {
-   "bytes": 3020012,
-   "functions": 19904
+   "bytes": 3020756,
+   "functions": 19905
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,11 +142,11 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 6004,
-  "fully_matched": 3026016,
-  "fully_verified": 3020012,
+  "fully_matched": 3026760,
+  "fully_verified": 3020756,
   "functions_asm_body": 0,
   "functions_assembly": 87,
-  "matched": 3037484,
+  "matched": 3038228,
   "total": 3472716
  },
  "data_bytes": {
@@ -354,17 +354,17 @@
    "struct.c": 33,
    "unapproved.bytes": 8960,
    "unapproved.functions": 21,
-   "unmatched.bytes": 429228,
-   "unmatched.functions": 557
+   "unmatched.bytes": 428484,
+   "unmatched.functions": 556
   }
  },
  "functions": {
-  "fully_matched": 19991,
-  "fully_verified": 19904,
-  "matched": 19931,
-  "named": 14395,
-  "named_semantic": 7909,
-  "named_semantic_matched": 7648,
+  "fully_matched": 19992,
+  "fully_verified": 19905,
+  "matched": 19932,
+  "named": 14429,
+  "named_semantic": 7975,
+  "named_semantic_matched": 7710,
   "total": 20575
  },
  "largest": [
@@ -389,7 +389,7 @@
    "va": "0x00286d28"
   },
   {
-   "name": "FUN_00315170",
+   "name": "igArenaMemoryPool_Malloc",
    "size": 12180,
    "va": "0x00315170"
   },
@@ -420,15 +420,15 @@
   }
  ],
  "link": {
-  "asm_bytes": 429228,
+  "asm_bytes": 428484,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 6004,
   "from_assembly_units": 87,
-  "from_c_bytes": 3053276,
-  "from_c_pct": 67.24,
-  "from_c_units": 19931,
+  "from_c_bytes": 3054020,
+  "from_c_pct": 67.25,
+  "from_c_units": 19932,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
   "jtbl_bytes": 15792,
@@ -436,7 +436,7 @@
  },
  "median_size": {
   "matched": 72,
-  "unmatched": 444
+  "unmatched": 442
  },
  "metadata": {
   "asm_units": 20575,
@@ -452,43 +452,43 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1438984,
+  "bytes": 1488768,
   "failing": {
    "addresses": {
-    "bytes": 1385332,
-    "functions": 9045
+    "bytes": 1324716,
+    "functions": 9005
    },
    "fields": {
-    "bytes": 473204,
-    "functions": 2096
+    "bytes": 469284,
+    "functions": 2094
    },
    "idioms": {
-    "bytes": 665660,
-    "functions": 3387
+    "bytes": 661740,
+    "functions": 3385
    },
    "name": {
-    "bytes": 968072,
-    "functions": 8473
+    "bytes": 889340,
+    "functions": 8412
    },
    "placed": {
     "bytes": 24192,
     "functions": 110
    },
    "references": {
-    "bytes": 1049068,
-    "functions": 5470
+    "bytes": 998760,
+    "functions": 5442
    },
    "types": {
     "bytes": 505504,
     "functions": 1845
    },
    "virtuals": {
-    "bytes": 292364,
-    "functions": 831
+    "bytes": 288444,
+    "functions": 829
    }
   },
-  "functions": 8186,
-  "matched_functions": 19991
+  "functions": 8247,
+  "matched_functions": 19992
  },
  "regions": [
   {
@@ -550,8 +550,8 @@
   {
    "hi": 3319168,
    "lo": 3035344,
-   "matched": 1274,
-   "matched_bytes": 275280,
+   "matched": 1275,
+   "matched_bytes": 276024,
    "total": 1275,
    "total_bytes": 276024
   },
@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 4562,
-  "pct": 44.25,
-  "recovered": 29406,
+  "pct": 44.64,
+  "recovered": 29675,
   "synthetic": 6145,
-  "total": 66452,
+  "total": 66470,
   "typeable": 327,
   "typeable_pct": 0.49
  }

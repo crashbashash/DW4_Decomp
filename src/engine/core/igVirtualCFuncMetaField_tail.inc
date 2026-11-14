@@ -56,7 +56,7 @@ int igVirtualCFuncMetaField_GetAlignment(void) {
 /* The arena's allocation trigger, called on every operation while the trigger is armed. Each armed condition that
  * holds sets one bit (pool, address, size, operation ordinal, event-tracker count); when every bit the trigger asks
  * for is set, the installed handler runs, or else the event is reported. */
-void FUN_0030f040(igArenaMemoryPool *pool, int event, int address, int size) {
+void igArenaMemoryPool_CheckTriggerEvent(igArenaMemoryPool *pool, int event, int address, int size) {
     int matched;
     int eventCount;
 
@@ -102,7 +102,7 @@ static inline int isFreeChunk(TaggedBlockHeader *h) { if (h->big == 1) { return 
 
 /* dlmalloc's malloc_init_state: empties the bins, sets the tuning defaults and, when the pool was
  * given raw memory, makes all of it the top chunk. */
-void FUN_0030f220(igArenaMemoryPoolView *self) {
+void igArenaMemoryPool_InitMallocState(igArenaMemoryPoolView *self) {
     ArenaState *state = self->_arenaState;
     unsigned long long size = self->_size;
     int i;
@@ -527,7 +527,7 @@ void igArenaMemoryPool_CheckInUseBlock(void *pool, unsigned char *chunk, int req
 
 /* dlmalloc's do_check_malloc_state: walks every fast bin and every bin, checking each chunk, that
  * it sits in the right bin, and that the bin map and the fast-chunk flag agree with what is there. */
-void FUN_00310c00(igArenaMemoryPoolView *self) {
+void igArenaMemoryPool_CheckMallocState(igArenaMemoryPoolView *self) {
     unsigned int i;
     TaggedBlockHeader *p;
     TaggedBlockHeader *q;

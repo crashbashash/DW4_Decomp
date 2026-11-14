@@ -67,7 +67,7 @@ int igAliasMemoryPool_IsAlchemyMemory(void) {
 }
 
 /* Slot 29, fixed result 0. */
-int Gap__Core__igAliasMemoryPool__vfunc_29(void) {
+int igAliasMemoryPool_IsSecondaryAllocator(void) {
     return 0;
 }
 
@@ -173,11 +173,11 @@ long long igAliasMemoryPool_GetLocalNetAllocatedWithOverhead(igAliasMemoryPool *
     return self->_allocedBytes;
 }
 
-long long Gap__Core__igAliasMemoryPool__vfunc_101(igAliasMemoryPool *self) {
+long long igAliasMemoryPool_GetLocalNetAllocatedHigh(igAliasMemoryPool *self) {
     return self->_allocedBytesHigh;
 }
 
-long long Gap__Core__igAliasMemoryPool__vfunc_102(igAliasMemoryPool *self) {
+long long igAliasMemoryPool_GetLocalNetAllocatedWithOverheadHigh(igAliasMemoryPool *self) {
     return self->_allocedBytesHigh;
 }
 

@@ -459,7 +459,7 @@ int igPsx2Media_Tell(igPsx2MediaView *self, int slot) {
     return slot;
 }
 
-int Gap__Core__igPsx2Media__vfunc_32(void) {
+int igPsx2Media_HandlesDevice(void) {
     return 1;
 }
 

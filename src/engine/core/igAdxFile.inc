@@ -1,4 +1,4 @@
-void ***FUN_002e2fb0(void) {
+void ***igAdxFile_GetSearchPathHolder(void) {
     void **a;
     void **al;
     void **cell;
@@ -119,7 +119,7 @@ void igAdxFile_SetBasePath(int path) {
     void *oldText;
 
     if (path == 0) {
-        oldSlot = (void **)(*FUN_002e2fb0());
+        oldSlot = (void **)(*igAdxFile_GetSearchPathHolder());
         if (oldSlot != 0) {
             if (oldSlot != 0) {
                 oldText = (void *)(*oldSlot);
@@ -135,7 +135,7 @@ void igAdxFile_SetBasePath(int path) {
             Memory_FreeBuffer(oldSlot);
         }
     } else {
-        slot = (void **)(*FUN_002e2fb0());
+        slot = (void **)(*igAdxFile_GetSearchPathHolder());
         if (g_stringPool[0] == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
@@ -179,7 +179,7 @@ void igAdxFile_LoadSearchFilePath(void) {
 }
 
 int igAdxFile_GetSearchPaths(void) {
-    return **((int **)FUN_002e2fb0());
+    return **((int **)igAdxFile_GetSearchPathHolder());
 }
 
 int igAdxFile_GetNextSearchPath(char **cursor, char *out, int outSize) {

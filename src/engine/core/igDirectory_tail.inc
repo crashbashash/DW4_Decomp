@@ -109,7 +109,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *self, in
     pair = (DependencyPair *)((char *)pairs->_data + n * 8);
     pair->a = dependent;
     pair->b = dependency;
-    FUN_002d7280(self);
+    igDependencyOrderedList_TopologicalSort(self);
     igDependencyOrderedList_Rebuild(self);
 }
 
@@ -177,7 +177,7 @@ void igDependencyOrderedList_RemoveDependency(int *result, igDependencyOrderedLi
         status = g_resultFailure.v;
     }
     if (self->_hasCircularDependencies != 0) {
-        FUN_002d7280(self);
+        igDependencyOrderedList_TopologicalSort(self);
         igDependencyOrderedList_Rebuild(self);
     }
     *result = status;
@@ -199,7 +199,7 @@ void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *sel
         }
     }
     if (self->_hasCircularDependencies != 0) {
-        FUN_002d7280(self);
+        igDependencyOrderedList_TopologicalSort(self);
         igDependencyOrderedList_Rebuild(self);
     }
 }

@@ -1,7 +1,7 @@
 /* Opens the file in `mode` (0-3 text, 4-7 binary: read, write, append, read-write; 8 read). A relative
  * name is tried under each entry of the search path list until a device opens it. A text file is read
  * whole into the buffer. */
-void Gap__Core__igMediaFile__vfunc_23(int *result, igMediaFileView *file, unsigned int mode) {
+void igMediaFile_OpenWithMode(int *result, igMediaFileView *file, unsigned int mode) {
     char *searchPaths;
     char path[512];
     bool absolute;
@@ -284,7 +284,7 @@ int igMediaFile_Flush(igMediaFileView *self) {
 
 static inline int isSpace(int c) { return _ctype_[c + 1] & 8; }
 
-int Gap__Core__igMediaFile__vfunc_30(igMediaFileView *self, const char *format, ...) {
+int igMediaFile_Scanf(igMediaFileView *self, const char *format, ...) {
     char *args;
     int n;
     int off;

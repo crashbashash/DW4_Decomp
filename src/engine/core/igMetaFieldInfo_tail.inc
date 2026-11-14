@@ -6,7 +6,7 @@ int igMetaFieldInfo_FindObjectReference(igMetaFieldInfoView *self, int directory
     if (field != 0) {
         int name = igMetaField_GetMangledName(field, (void **)allocator);
         if (ObjectPointerList_FindIndex((char *)(((ObjectSystemView **)g_objectSystem)[0]->metaRegistry), field->_parentMetaObject) != -1 || self->FindByName(name) != 0) {
-            result = FUN_002e2d30((igDirectoryView *)directory, (igInfoView *)self, (char *)name, (igObject *)target) & 0xFF;
+            result = igDirectory_AddExternalInfoRef((igDirectoryView *)directory, (igInfoView *)self, (char *)name, (igObject *)target) & 0xFF;
         }
         allocator->Free((void *)name);
     }

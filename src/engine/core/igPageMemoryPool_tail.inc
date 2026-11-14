@@ -169,7 +169,7 @@ int igPageMemoryPool_IsAlchemyMemory(igPageMemoryPool *self) {
     return 0;
 }
 
-int Gap__Core__igPageMemoryPool__vfunc_29(igPageMemoryPool *self) {
+int igPageMemoryPool_IsSecondaryAllocator(igPageMemoryPool *self) {
     return 1;
 }
 
@@ -273,7 +273,7 @@ long long igPageMemoryPool_GetLocalNetAllocatedWithOverheadHigh(void *arg0) {
     return *(long long *)((char *)arg0 + 64);
 }
 
-long long Gap__Core__igPageMemoryPool__vfunc_101(void *arg0) {
+long long igPageMemoryPool_GetSystemAllocated(void *arg0) {
     return *(long long *)((char *)arg0 + 56);
 }
 

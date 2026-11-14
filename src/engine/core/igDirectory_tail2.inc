@@ -74,7 +74,7 @@ found:
     return igProperty_FindBySortedKey((void *)self, (void *)g_igDirEntry_refField[0], (int)key);
 }
 
-void *thunk_igDirectory_GetEntry(int *directory, int index)
+void *igDirectory_GetEntryAlias(int *directory, int index)
 {
     return igDirectory_GetEntry(directory, index);
 }

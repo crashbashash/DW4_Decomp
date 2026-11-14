@@ -22,7 +22,7 @@ void igLongTimer_Register(void) {
         g_igLongTimer_metaObject,
         (igMetaObjectRegisterFunction)igTimer_Register,
         igTimer_GetPublishedMetaObject,
-        thunk_igLongTimer_GetMetaObject,
+        igLongTimer_GetMetaObjectFunction,
         igLongTimer_className,
         0x28,
         0,

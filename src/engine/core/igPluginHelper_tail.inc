@@ -147,7 +147,7 @@ int igStandardQueue_StopServiceThreads(igStandardQueueView *queue) {
     }
 }
 
-int thunk_igStandardQueue_StopServiceThreads(int extra0)
+int igQueue_ReleaseDefaults(int extra0)
 {
     return igStandardQueue_StopServiceThreads((igStandardQueueView *)extra0);
 }

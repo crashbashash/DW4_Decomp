@@ -255,7 +255,7 @@ int igCompoundMetaField_IsAlikeIgnore(igCompoundMetaField *self, int object, int
     return 1;
 }
 
-int FUN_002d5960(igCompoundMetaField *self, int object) {
+int igCompoundMetaField_GetRawFieldMemSize(igCompoundMetaField *self, int object) {
     int size = 0;
     int padding = 0;
     int i;
@@ -448,7 +448,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
     }
 }
 
-int FUN_002d6380(void) {
+int igContext_GetMeta(void) {
     return ((int *)g_igContext_metaObject)[0];
 }
 

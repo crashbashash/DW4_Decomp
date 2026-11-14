@@ -65,7 +65,7 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
     if (list->find(current) != -1) {
         RecordRef named(castToNamed(current));
         if (named.p != 0) {
-            return (unsigned char)FUN_002e2d30(file, self, nameOf(named.p), object);
+            return (unsigned char)igDirectory_AddExternalInfoRef(file, self, nameOf(named.p), object);
         }
     }
     return 0;
@@ -76,7 +76,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
     char name[4096];
     int r;
     if ((void *)obj == (void *)db) {
-        return FUN_002e2d30(file, db, nameOf(db->_name), obj);
+        return igDirectory_AddExternalInfoRef(file, db, nameOf(db->_name), obj);
     }
     if ((unsigned char)FUN_001aedd0(db, (igTDataList<AnimDbRecord *> *)db->_animationList, file, (AnimDbRecord *)obj) == 1) {
         return 1;
@@ -115,7 +115,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             for (a = 0; a < total; a++) {
                 if ((AnimDbObject *)list->_data[a]->_source == target) {
                     sprintf(name, text_s_s_d, DAT_004e44f8, nameOf(skin.p->_name), a);
-                    r = (unsigned char)FUN_002e2d30(file, db, name, obj);
+                    r = (unsigned char)igDirectory_AddExternalInfoRef(file, db, name, obj);
                     return r;
                 }
             }

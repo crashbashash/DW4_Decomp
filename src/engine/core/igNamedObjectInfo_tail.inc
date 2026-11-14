@@ -6,7 +6,7 @@ void igNamedObjectInfo_FindObjectReference(igNamedObjectInfo *self, int file, ig
     for (int i = 0; i < ((igNamedObjectListRef &)self->_objects)->count(); i++) {
         igNamedObject *named = ((igNamedObjectListRef &)self->_objects)->get(i);
         if (named == object) {
-            FUN_002e2d30((igDirectoryView *)file, (igInfoView *)self, named->_name ? (char *)named->_name : (char *)emptyString, (igObject *)object);
+            igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)self, named->_name ? (char *)named->_name : (char *)emptyString, (igObject *)object);
             return;
         }
     }

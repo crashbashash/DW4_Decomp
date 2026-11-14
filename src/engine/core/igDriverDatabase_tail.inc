@@ -178,7 +178,7 @@ igTDataList<ConfigNode *> *igDriverDatabase_ParseDatabase(igDriverDatabase *s) {
     }
     s->_dbIndex = v;
     do {
-        r = FUN_002dae40(s);
+        r = igDriverDatabase_ParseNode(s);
         if (r != 0) {
             cnt = l->_count;
             if (cnt < l->_capacity) {
@@ -354,7 +354,7 @@ bool igDriverDatabase_ReadLineFromString(igDriverDatabase *self, char **cursor, 
 
 /* Parses the next node of the database text: a SETTINGS block or a section headed by one of the
  * keywords. Returns 0 at the end of the text or on a parse error. */
-ConfigNode *FUN_002dae40(igDriverDatabase *self) {
+ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
     igStringObj *word = 0;
     ConfigNode *result = 0;
     int i;
@@ -685,7 +685,7 @@ int igDriverDatabase_ParsePropertyBlock(igDriverDatabase *self, ConfigSectionNod
     self->_dbIndex++;
     igDriverDatabase_SkipWhitespace((int *)self);
     while (*(char *)self->_dbIndex != '}' && *(char *)self->_dbIndex != 0) {
-        child = (ConfigNode *)FUN_002dae40(self);
+        child = (ConfigNode *)igDriverDatabase_ParseNode(self);
         if (child == 0) {
             break;
         }
