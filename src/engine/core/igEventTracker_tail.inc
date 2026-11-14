@@ -323,18 +323,18 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
             }
         }
         if (tracksField(*self, 0x8)) {
-            if (record->f68 != 0 && *(char *)record->f68 != 0) {
-                sourceFile = igStringTable_FindOrAddString(self->_sourceFileNames, record->f68);
+            if (record->sourceFile != 0 && *(char *)record->sourceFile != 0) {
+                sourceFile = igStringTable_FindOrAddString(self->_sourceFileNames, record->sourceFile);
             }
         }
         if (tracksField(*self, 0x10)) {
-            if (record->f64 != 0 && *record->f64 != 0) {
-                poolName = igStringTable_FindOrAddString(self->_groups, (int)record->f64);
+            if (record->poolName != 0 && *record->poolName != 0) {
+                poolName = igStringTable_FindOrAddString(self->_groups, (int)record->poolName);
             }
         }
         if (tracksField(*self, 0x20)) {
             if (callStackSkip != -1) {
-                callStack = ((igCallStackTableView *)self->_callStacks)->vfunc_27(self->_callStackTracer->vfunc_24(g_eventTrackerMaxCallStackDepth, callStackSkip + 1));
+                callStack = ((igCallStackTableView *)self->_callStacks)->InsertCallStack(self->_callStackTracer->CaptureCallStack(g_eventTrackerMaxCallStackDepth, callStackSkip + 1));
                 if (callStack != -1) {
                     flags |= 0x20;
                 }
@@ -345,7 +345,7 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
         if (memberName != -1) flags |= 0x80;
         if (annotation != -1) flags |= 0x4;
         if (tracksField(*self, 0x100) && self->_eventTagOffset != -1) flags |= 0x100;
-        if (sourceFile != -1 || record->f72 != 0) flags |= 0x8;
+        if (sourceFile != -1 || record->line != 0) flags |= 0x8;
         if (poolName != -1) flags |= 0x10;
         if (callStack != -1) flags |= 0x20;
         if (tracksField(*self, 0x8000) && record->slotStates != 0) flags |= 0x8000;
@@ -355,9 +355,9 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
             int size;
             flags |= 0x1;
             if (isFlagSet(*self, 8) && record->type == 3) {
-                int previous = self->vfunc_31(record->address);
+                int previous = self->FindIndex(record->address);
                 if (previous != -1) {
-                    if (self->vfunc_28(previous, &previousType) == g_resultSuccess && previousType == 3) {
+                    if (self->ReadEventType(previous, &previousType) == g_resultSuccess && previousType == 3) {
                         annotation = igStringTable_FindOrAddString(self->_annotations, (int)"Double-deletion");
                         flags |= 0x4;
                     }
@@ -367,13 +367,13 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
             encodeUnsigned(p, flags);
             writeWord(p, record->address);
             if ((size = record->val) == 0 && (record->type == 3 || record->type == 8)) {
-                int previous = self->vfunc_31(record->address);
+                int previous = self->FindIndex(record->address);
                 if (previous != -1) {
-                    self->vfunc_30(previous, &size);
+                    self->ReadEventValue(previous, &size);
                 }
             }
             encodeSigned(p, size);
-            encodeSigned(p, record->f16);
+            encodeSigned(p, record->alignment);
             self->InsertHashIndex(record->address, offset);
             break;
         }
@@ -426,7 +426,7 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
         }
         if (sourceFile != -1) {
             encodeSigned(p, sourceFile);
-            encodeUnsigned(p, record->f72);
+            encodeUnsigned(p, record->line);
         }
         if (poolName != -1) encodeSigned(p, poolName);
         if (callStack != -1) encodeSigned(p, callStack);
@@ -551,7 +551,7 @@ igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRec
         readWord(p, &record->address);
         p += 4;
         decodeSigned(p, value); record->val = value;
-        decodeSigned(p, value); record->f16 = value;
+        decodeSigned(p, value); record->alignment = value;
     }
     if (flags & 0x200) { decodeUnsigned(p, unsignedValue); record->markerType = unsignedValue; }
     if (flags & 0x400) { decodeSigned(p, value); record->markerValue = value; }
@@ -564,13 +564,13 @@ igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRec
     if (flags & 0x40) { decodeSigned(p, value); record->str = igStringTable_GetString((int *)self->_classNames, value); }
     if (flags & 0x80) { decodeSigned(p, value); record->memberName = igStringTable_GetString((int *)self->_memberNames, value); }
     if (flags & 0x4) { decodeSigned(p, value); record->annotation = igStringTable_GetString((int *)self->_annotations, value); }
-    if (flags & 0x100) { decodeSigned(p, value); record->f60 = igStringTable_GetString((int *)self->_groups, value); }
+    if (flags & 0x100) { decodeSigned(p, value); record->eventTag = igStringTable_GetString((int *)self->_groups, value); }
     if (flags & 0x8) {
         decodeSigned(p, value);
-        record->f68 = (int)igStringTable_GetString((int *)self->_sourceFileNames, value);
-        decodeUnsigned(p, unsignedValue); record->f72 = unsignedValue;
+        record->sourceFile = (int)igStringTable_GetString((int *)self->_sourceFileNames, value);
+        decodeUnsigned(p, unsignedValue); record->line = unsignedValue;
     }
-    if (flags & 0x10) { decodeSigned(p, value); record->f64 = igStringTable_GetString((int *)self->_groups, value); }
+    if (flags & 0x10) { decodeSigned(p, value); record->poolName = igStringTable_GetString((int *)self->_groups, value); }
     if (flags & 0x20) { decodeSigned(p, value); record->callStack = (int *)((igCallStackTableView *)self->_callStacks)->GetCallStack(value); }
     if (flags & 0x8000) {
         decodeUnsigned(p, unsignedValue); record->slotStates = unsignedValue;
@@ -787,7 +787,7 @@ void igEventTracker_GetStatistics(igEventTrackerView *self, int first, int last,
         offset = self->GetNextEventOffset(offset);
     }
     do {
-        if (self->vfunc_27(offset, &record) != g_resultSuccess) break;
+        if (self->ReadEvent(offset, &record) != g_resultSuccess) break;
         type = record.type;
         (*eventCount)++;
         if (typeCounts != 0 && type >= 0 && type < 32) {
@@ -834,7 +834,7 @@ void igEventTracker_GetStatistics(igEventTrackerView *self, int first, int last,
     } while (i < last && offset != -1);
     for (i = 0; i < count; i++) {
         offset = self->_hashIndex->_data[i];
-        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+        if (offset != -1 && self->ReadEvent(offset, &record) != g_resultFailure) {
             if (record.index >= first && record.index <= last) {
                 int type = record.type;
                 if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
@@ -867,7 +867,7 @@ void igEventTracker_GetStatisticsByName(igEventTrackerView *self, int first, int
         index += 1;
     }
     for (;;) {
-        int c = self->vfunc_27(offset, &ev).get();
+        int c = self->ReadEvent(offset, &ev).get();
         if (c != g_resultSuccess.v) break;
         if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {
@@ -961,7 +961,7 @@ void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wante
     }
     for (i = 0; i < n; i++) {
         int at = self->_hashIndex->_data[i];
-        if (at != -1 && self->vfunc_27(at, &record) != g_resultFailure && record.type != 3) {
+        if (at != -1 && self->ReadEvent(at, &record) != g_resultFailure && record.type != 3) {
             int **frame = &record.callStack;
             if (*frame == 0) {
                 continue;
@@ -973,8 +973,8 @@ void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wante
                 }
                 if (strstr(name, wanted) != 0) {
                     record.type = 3;
-                    record.f68 = 0;
-                    record.f72 = 0;
+                    record.sourceFile = 0;
+                    record.line = 0;
                     self->AddEvent(&record, -1);
                 }
                 *frame = *frame + 1;
@@ -998,7 +998,7 @@ int igEventTracker_GetLeakCount(igEventTrackerView *self) {
     outstanding = 0;
     for (i = 0; i < count; i++) {
         offset = self->_hashIndex->_data[i];
-        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+        if (offset != -1 && self->ReadEvent(offset, &record) != g_resultFailure) {
             int type = record.type;
             if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
                 outstanding++;
@@ -1017,7 +1017,7 @@ int igEventTracker_FindNextLeak(igEventTrackerView *self, int *cursor) {
     igEventTracker_InitEvent((int)&record);
     for (; *cursor < count; (*cursor)++) {
         offset = self->_hashIndex->_data[*cursor];
-        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+        if (offset != -1 && self->ReadEvent(offset, &record) != g_resultFailure) {
             int type = record.type;
             if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
                 (*cursor)++;
@@ -1195,8 +1195,8 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
                     if (strstr(function, "igObject::internalRelease") == 0 && strstr(function, "igObject::release") == 0 &&
                         strstr(function, "::~igSmartPointer<") == 0) {
                         event.callStack = frame;
-                        event.f68 = (int)path;
-                        event.f72 = line;
+                        event.sourceFile = (int)path;
+                        event.line = line;
                         break;
                     }
                     frame++;
@@ -1275,7 +1275,7 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
             int *frame = event.callStack;
             if (frame != 0) {
                 while (*frame != 0) {
-                    self->vfunc_39(*frame, frameFormat, function, 255);
+                    self->FormatAddress(*frame, frameFormat, function, 255);
                     sprintf(text, spec[0] != 0 ? spec : "\n%s", function);
                     strncat(output, text, outputSize);
                     if (outputSize != 0) {
@@ -1330,9 +1330,9 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
             sprintf(text, spec[0] != 0 ? spec : "%d", event.getAlignment());
             break;
         case 'f':
-            if (event.f68 != 0 && *(char *)event.f68 != 0) {
-                char *backslash = strrchr((char *)event.f68, '\\');
-                char *slash = strrchr((char *)event.f68, '/');
+            if (event.sourceFile != 0 && *(char *)event.sourceFile != 0) {
+                char *backslash = strrchr((char *)event.sourceFile, '\\');
+                char *slash = strrchr((char *)event.sourceFile, '/');
                 char *name;
                 if (backslash != 0 && slash != 0) {
                     name = slash < backslash ? backslash : slash;
@@ -1342,7 +1342,7 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
                 if (name != 0) {
                     name++;
                 } else {
-                    name = (char *)event.f68;
+                    name = (char *)event.sourceFile;
                 }
                 if (name != 0 && *name != 0) {
                     sprintf(text, spec[0] != 0 ? spec : "%s", name);
@@ -1358,8 +1358,8 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
             sprintf(text, spec[0] != 0 ? spec : "%d", event.getIndex());
             break;
         case 'j':
-            if (event.f60 != 0 && *event.f60 != 0) {
-                sprintf(text, spec[0] != 0 ? spec : "%s", event.f60);
+            if (event.eventTag != 0 && *event.eventTag != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.eventTag);
             } else if (igEventTracker_FindFreeEventDataSlot(&event) == 3) {
                 unsigned int words[3];
                 igEventTracker_GetEventDataUnsigned3(&event, 0, words);
@@ -1410,20 +1410,20 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
             }
             break;
         case 'p':
-            if (event.f68 != 0 && *(char *)event.f68 != 0) {
-                sprintf(text, spec[0] != 0 ? spec : "%s", event.f68);
+            if (event.sourceFile != 0 && *(char *)event.sourceFile != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.sourceFile);
             }
             break;
         case 'q':
-            if (event.f64 != 0 && *event.f64 != 0) {
-                sprintf(text, spec[0] != 0 ? spec : "%s", event.f64);
+            if (event.poolName != 0 && *event.poolName != 0) {
+                sprintf(text, spec[0] != 0 ? spec : "%s", event.poolName);
             }
             break;
         case 'r': {
             int *frame = event.callStack;
             if (frame != 0) {
                 while (*frame != 0) {
-                    self->vfunc_39(*frame, frameFormat, function, 255);
+                    self->FormatAddress(*frame, frameFormat, function, 255);
                     sprintf(text, spec[0] != 0 ? spec : "%s", function);
                     frame++;
                     if (*frame != 0) {
@@ -1615,7 +1615,7 @@ igResult igEventTracker_FormatAddress(igEventTrackerView *self, int addr, int fo
     int offset;
     int line;
     igResult r = self->ResolveAddress(addr, buf, 255, &offset, name, 255, &line);
-    self->_callStackTracer->vfunc_28(addr, buf, offset, name, line, format, output, outputSize);
+    self->_callStackTracer->FormatLocation(addr, buf, offset, name, line, format, output, outputSize);
     return r;
 }
 
@@ -1645,11 +1645,11 @@ join:
 void igEventTracker_PrintEvent(igEventTrackerView *self, int offset) {
     EventRecord record;
     igEventTracker_InitEvent((int)&record);
-    if (self->vfunc_27(offset, &record) != g_resultSuccess) {
+    if (self->ReadEvent(offset, &record) != g_resultSuccess) {
         igEventTracker_DestructEvent(&record, -1);
         return;
     }
-    self->vfunc_38(&record, self->_formatBuffer, 0x2003);
+    self->FormatEvent(&record, self->_formatBuffer, 0x2003);
     {
         ScopedLock guard(self->_lock);
         int length = strlen(self->_formatBuffer);
@@ -1741,7 +1741,7 @@ void igEventTracker_PrintLeaks(igEventTrackerView *self) {
     igEventTracker_InitEvent((int)&record);
     for (i = 0; i < count; i++) {
         offset = self->_hashIndex->_data[i];
-        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+        if (offset != -1 && self->ReadEvent(offset, &record) != g_resultFailure) {
             int type = record.type;
             if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
                 self->PrintEvent(offset);
@@ -1833,12 +1833,12 @@ void igEventTracker_ResolveAllCallStackSymbols(igEventTrackerView *self) {
 
 void igEventTracker_PreExit(igEventTrackerView *self)
 {
-    self->_callStackTracer->vfunc_29();
+    self->_callStackTracer->PreExit();
 }
 
 void igEventTracker_Exit(igEventTrackerView *self)
 {
-    self->_callStackTracer->vfunc_30();
+    self->_callStackTracer->Exit();
 }
 
 void Gap__Core__igEventTracker__resetFields(igEventTrackerView *self) {
@@ -1885,35 +1885,37 @@ EventRecord *igEventTracker_CopyEvent(EventRecord *copy, const EventRecord *sour
     return copy;
 }
 
-void *igEventTracker_InitMemoryEvent(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
-    igEventTracker_ClearEvent((int)arg0);
-    *(int *)((char *)arg0 + 0) = arg1;
-    *(void **)((char *)arg0 + 8) = arg2;
-    *(int *)((char *)arg0 + 12) = arg3;
-    *(int *)((char *)arg0 + 16) = arg4;
-    *(int *)((char *)arg0 + 44) = arg5;
-    *(int *)((char *)arg0 + 48) = arg6;
-    *(int *)((char *)arg0 + 52) = arg7;
-    *(int *)((char *)arg0 + 56) = arg_sp0;
-    *(int *)((char *)arg0 + 68) = arg_sp8;
-    *(int *)((char *)arg0 + 72) = arg_sp10;
-    *(int *)((char *)arg0 + 64) = arg_sp18;
-    return arg0;
+void *igEventTracker_InitMemoryEvent(void *record, int type, void *address, int size, int alignment, int group, int className, int memberName, int annotation, int sourceFile, int line, int poolName) {
+    EventRecord *event = (EventRecord *)record;
+    igEventTracker_ClearEvent((int)record);
+    event->type = type;
+    event->address = (int)address;
+    event->val = size;
+    event->alignment = alignment;
+    event->group = (char *)group;
+    event->str = (char *)className;
+    event->memberName = (char *)memberName;
+    event->annotation = (char *)annotation;
+    event->sourceFile = sourceFile;
+    event->line = line;
+    event->poolName = (char *)poolName;
+    return record;
 }
 
-void *igEventTracker_InitMarkerEvent(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8) {
-    igEventTracker_ClearEvent((int)arg0);
-    *(int *)((char *)arg0 + 0) = 0xD;
-    *(int *)((char *)arg0 + 20) = arg1;
-    *(int *)((char *)arg0 + 24) = arg2;
-    *(int *)((char *)arg0 + 28) = arg3;
-    *(int *)((char *)arg0 + 44) = arg4;
-    *(int *)((char *)arg0 + 48) = arg5;
-    *(int *)((char *)arg0 + 52) = arg6;
-    *(int *)((char *)arg0 + 56) = arg7;
-    *(int *)((char *)arg0 + 68) = arg_sp0;
-    *(int *)((char *)arg0 + 72) = arg_sp8;
-    return arg0;
+void *igEventTracker_InitMarkerEvent(void *record, int markerType, int markerValue, int markerName, int group, int className, int memberName, int annotation, int sourceFile, int line) {
+    EventRecord *event = (EventRecord *)record;
+    igEventTracker_ClearEvent((int)record);
+    event->type = kMarker;
+    event->markerType = markerType;
+    event->markerValue = markerValue;
+    event->markerName = (char *)markerName;
+    event->group = (char *)group;
+    event->str = (char *)className;
+    event->memberName = (char *)memberName;
+    event->annotation = (char *)annotation;
+    event->sourceFile = sourceFile;
+    event->line = line;
+    return record;
 }
 
 void *igEventTracker_DestructEvent(void *record, long long deleteFlag) {

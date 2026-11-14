@@ -32,11 +32,11 @@ int beFileListInfoManager_GetVTable(void) {
     obj.w13 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053a4e0[0];
-    FUN_001d35d0(&obj.w13, -1);
-    FUN_001d35d0(&obj.w12, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w13, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w12, -1);
     igSmartPointer_igDirectoryList_Destruct(&obj.w11, -1);
-    FUN_001d35d0(&obj.w10, -1);
-    ObjectRef_Destruct_001c6460(&obj.w9, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w10, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj.w9, -1);
     FUN_00231030(&obj, 0);
     return t;
 }

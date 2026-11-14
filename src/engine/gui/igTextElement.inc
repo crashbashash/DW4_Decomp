@@ -27,7 +27,7 @@ int igTextElement_GetVTable(void) {
     u.w[13] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00540c10[0]);
-    StringRef_Destruct_00130720(&u.w[13], -1);
+    igStringRef_Destruct(&u.w[13], -1);
     FUN_001353b0(&u.w[12], -1);
     FUN_0044bf10((void **)&u.w[11], -1);
     FUN_0044be30((igGeometryElement *)u.b, 0);

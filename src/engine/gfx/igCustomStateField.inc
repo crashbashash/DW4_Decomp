@@ -52,7 +52,7 @@ int igCustomStateField_GetVTable(void) {
     return temp_s0;
 }
 
-void **FUN_0014ec50(void **arg0, int arg1) {
+void **igSmartPointer_igMetaField_Destruct(void **arg0, int arg1) {
     int *o;
 
     if (arg0 != 0) {

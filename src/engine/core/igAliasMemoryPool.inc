@@ -44,7 +44,7 @@ int igAliasMemoryPool_GetVTable(void) {
     igObject *trackerSlot;
     igObject *aliasedSlot;
 
-    FUN_002d1500(&pool);
+    igAliasMemoryPool_Initialize(&pool);
     vtable = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     pool._vtable = (int)&g_igAliasMemoryPool_vtable[0];
     aliasedSlot = (igObject *)&pool._aliasedMemoryPool;

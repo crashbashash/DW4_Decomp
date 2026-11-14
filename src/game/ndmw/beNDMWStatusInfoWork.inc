@@ -39,8 +39,8 @@ int beNDMWStatusInfoWork_GetVTable(void) {
     FUN_003b6090((void **)(&obj.w[5]), (long long)(-1));
     FUN_003b6090((void **)(&obj.w[4]), (long long)(-1));
     FUN_003b6090((void **)(&obj.w[3]), (long long)(-1));
-    ObjectRef_Destruct_00150eb0(&obj.w[2], -1);
-    ObjectRef_Destruct_00150eb0(&obj.w[1], -1);
+    igSmartPointer_igIntList_Destruct(&obj.w[2], -1);
+    igSmartPointer_igIntList_Destruct(&obj.w[1], -1);
     return r;
 }
 

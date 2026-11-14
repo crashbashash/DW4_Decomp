@@ -22,7 +22,7 @@ int beWaterPlainInfoRam_GetVTable(void) {
     obj.vt = &DAT_00539a70[0];
     FUN_00340240((void **)&obj.w44, (long long)(-1));
     FUN_003401c0((struct Ref **)&obj.w38, (short)(-1));
-    ObjectRef_Destruct_00150eb0(&obj.w23, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w23, -1);
     FUN_001354b0(&obj.w22, -1);
     FUN_001338d0(&obj.w21, -1);
     FUN_0033e920((S *)&obj, (long long)0);

@@ -15,7 +15,6 @@
 0x001ae750	igAnimationCombiner_AddAnimation	engine
 0x001ae780	igAnimationCombiner_ResetToPose	engine
 0x001af510	igAnimationState_UpdateLocalTime	engine
-0x001c6460	ObjectRef_Destruct_001c6460	engine
 0x001dd4b0	UnsignedDivMod64_Cached	engine
 0x001e6d30	Vec3f_FromString	engine
 0x001e74b0	p2EnableCapability	engine

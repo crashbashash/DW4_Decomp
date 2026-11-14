@@ -21,9 +21,9 @@ int beMessengerDelay_GetVTable(void) {
     temp_s3 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00536d70[0]);
     FUN_00357a90((void **)&u.w[10], -1);
-    StringRef_Destruct_00130720(&u.w[9], -1);
-    StringRef_Destruct_00130720(&u.w[7], -1);
-    StringRef_Destruct_00130720(&u.w[6], -1);
+    igStringRef_Destruct(&u.w[9], -1);
+    igStringRef_Destruct(&u.w[7], -1);
+    igStringRef_Destruct(&u.w[6], -1);
     return temp_s3;
 }
 

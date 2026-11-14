@@ -52,7 +52,7 @@ int igIntMetaField_GetVTable(void) {
     int *header;
     int count;
 
-    FUN_002ea420((char *)&field);
+    igIntMetaField_Init((igMetaField *)&field);
     vtable = *(int *)((char *)&field + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     field._vtable = (int)&g_igMetaField_vtable[0];
     nameSlot = (char *)&field._fieldName;

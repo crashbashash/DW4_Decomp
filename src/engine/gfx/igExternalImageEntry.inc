@@ -25,7 +25,7 @@ int igExternalImageEntry_GetVTable(void) {
     return r;
 }
 
-void *FUN_0014f4e0(struct S *arg0, short arg1) {
+void *igDirEntry_Destroy(struct S *arg0, short arg1) {
     void *p;
     int *h;
     int rc;

@@ -63,7 +63,7 @@ int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *self, int property, i
         interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
     }
     key = interned;
-    idx = FUN_001cafc0(names.p, &key, 0);
+    idx = igStringRefList_IndexOf(names.p, &key, 0);
     releaseString((const char *)key);
     if (idx >= 0) {
         StringList_CopyRetained(&value, values.p, idx);
@@ -127,13 +127,13 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
         if (rootPath != 0 && strlen(rootPath) != 0) {
             igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
             folder.p->setFolderName((char *)rootPath);
-            opened = openPath(self, folder.p->vfunc_23(name.p));
+            opened = openPath(self, folder.p->GetFullPath(name.p));
         }
     }
     if (opened == 0) {
         igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
         folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)(((int *)g_objectSystem)[0])));
-        opened = openPath(self, folder.p->vfunc_23(name.p));
+        opened = openPath(self, folder.p->GetFullPath(name.p));
     }
     if (opened == 0) {
         igRelease((igObject *)self->_databaseFile);
@@ -226,7 +226,7 @@ first:
 
 void *igDriverDatabase_ConfigNode_Destruct(void *node, long long deleteFlag) {
     if (node != 0) {
-        *(int *)((char *)(node) + 4) = (int)(&g_ConfigNode_vtable[0]);
+        ((ConfigNodeData *)node)->vtable = (int)(&g_ConfigNode_vtable[0]);
         if (((long long) (deleteFlag << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasB((void *)node);
         }
@@ -550,15 +550,15 @@ bool igDriverDatabase_ReadToken(char *parser, int *out) {
     return found;
 }
 
-bool igDriverDatabase_ParseOperator(char *parser, int *out) {
+bool igDriverDatabase_ParseOperator(igDriverDatabase *self, int *out) {
     char buf[4096];
     bool found;
     int i;
 
     found = false;
-    igDriverDatabase_SkipWhitespace((int *)parser);
-    if (sscanf(*(int *)(parser + 52), &operatorScanFormat[0], buf) == 1) {
-        *(int *)(parser + 52) = *(int *)(parser + 52) + strlen(buf);
+    igDriverDatabase_SkipWhitespace((int *)self);
+    if (sscanf(self->_dbIndex, &operatorScanFormat[0], buf) == 1) {
+        self->_dbIndex = self->_dbIndex + strlen(buf);
         for (i = 0; i < 3; i++) {
             if (strcmp(buf, g_driverDatabaseOperators[i]) == 0) {
                 *out = i;
@@ -623,7 +623,7 @@ int igDriverDatabase_ParseSettingsBlock(igDriverDatabase *self, ConfigSettingsNo
         if (!igDriverDatabase_ParseIdentifier(self, (int *)&key)) {
             return 0;
         }
-        if (!igDriverDatabase_ParseOperator((char *)self, &mode)) {
+        if (!igDriverDatabase_ParseOperator(self, &mode)) {
             dropText(key);
             key = 0;
             return 0;
@@ -668,7 +668,7 @@ int igDriverDatabase_ParsePropertyBlock(igDriverDatabase *self, ConfigSectionNod
     igStringObj *expected = 0;
     ConfigNode *child;
     igDriverDatabase_ParseParenthesizedIdentifier(self, (int *)&out->selector);
-    if (!igDriverDatabase_ParseOperator((char *)self, &mode)) {
+    if (!igDriverDatabase_ParseOperator(self, &mode)) {
         return 0;
     }
     out->compareMode = mode;
@@ -810,7 +810,7 @@ bool igDriverDatabase_CompareFloat(int unused, int mode, float a, float b) {
 int igDriverDatabase_CompareBool(int p, unsigned char a, int m, unsigned char b) { switch (m) { case 0: return a == b; case 1: goto z; case 2: return a != b; } z: return 0; }
 
 void *igDriverDatabase_Setting_Construct(void *self) {
-    *(int *)((char *)(self) + 8) = (int)(&g_ConfigPair_vtable[0]);
+    ((ConfigPairData *)self)->vtable = (int)(&g_ConfigPair_vtable[0]);
     ((ConfigPair *)self)->key = (igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     ((ConfigPair *)self)->value = (igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     return self;
@@ -820,7 +820,7 @@ ConfigPair *igDriverDatabase_Setting_Destruct(ConfigPair *self, int delete_stora
     igStringObj *p;
     igStringObj *q;
     if (self) {
-        *(int **)((char *)self + 8) = &g_ConfigPair_vtable[0];
+        ((ConfigPairData *)self)->vtable = (int)&g_ConfigPair_vtable[0];
         p = self->key;
         --p->_refCount;
         if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0)

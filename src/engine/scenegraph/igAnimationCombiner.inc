@@ -19,7 +19,7 @@ int igAnimationCombiner_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00529630[0];
     FUN_001a8780((struct R * *)&obj.w14, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w13, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w13, -1);
     FUN_001a8700((ObjectRefWord *)&obj.w12, -1);
     FUN_001a8620((struct S_1a8620 *)&obj, 0);
     return t;

@@ -25,12 +25,12 @@ int beSvPlatDataPS2_GetVTable(void) {
     *(int *)&u.b[212] = 0;
     t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00538bc0[0];
-    FUN_0014aa70(&u.b[212], -1);
-    StringRef_Destruct_00130720(&u.b[192], -1);
-    StringRef_Destruct_00130720(&u.b[188], -1);
-    StringRef_Destruct_00130720(&u.b[184], -1);
-    StringRef_Destruct_00130720(&u.b[28], -1);
-    StringRef_Destruct_00130720(&u.b[24], -1);
+    igSmartPointer_igObjectList_Destruct(&u.b[212], -1);
+    igStringRef_Destruct(&u.b[192], -1);
+    igStringRef_Destruct(&u.b[188], -1);
+    igStringRef_Destruct(&u.b[184], -1);
+    igStringRef_Destruct(&u.b[28], -1);
+    igStringRef_Destruct(&u.b[24], -1);
     FUN_00347150((O_347150 *)u.b, (short)0);
     return t;
 }

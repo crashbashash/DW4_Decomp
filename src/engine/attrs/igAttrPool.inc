@@ -76,7 +76,7 @@ void **FUN_0013a800(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_0013a880(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

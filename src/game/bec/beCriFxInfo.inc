@@ -25,8 +25,8 @@ int beCriFxInfo_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00534ef0[0];
     FUN_00366d80((void **)pb, -1);
-    StringRef_Destruct_00130720(pa, -1);
-    FUN_00131b20(&obj, 0);
+    igStringRef_Destruct(pa, -1);
+    igInfo_Destroy(&obj, 0);
     return r;
 }
 

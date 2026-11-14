@@ -36,7 +36,7 @@ void Gap__Sg__igNode__vfunc_17(void *arg0) {
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 
-void **FUN_001d35d0(struct Ref **self, short flag) {
+void **igSmartPointer_igInfoList_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -67,7 +67,7 @@ void **FUN_001d3650(void **arg0, long long arg1) {
     return arg0;
 }
 
-O *FUN_001d36d0(O *arg0, short arg1) {
+O *igSmartPointer_igDirectory_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }

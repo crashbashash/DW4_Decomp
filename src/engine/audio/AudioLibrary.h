@@ -316,7 +316,7 @@ void igAudioContext_InitFields(void);
 void thunk_FUN_00143150(void);
 igMetaObject *FUN_00143150(void);
 void **FUN_00143250(void **arg0, short arg1);
-void **FUN_001432d0(struct RefCountBits **self, short flag);
+void **igSmartPointer_igThread_Destruct(struct RefCountBits **self, short flag);
 void **FUN_00143350(void **arg0, long long arg1);
 void FUN_001433d0(void);
 void igPsx2AudioContext_Register(void);

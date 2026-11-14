@@ -29,15 +29,15 @@ int beMessengerArgData_GetVTable(void) {
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00536ca0[0];
-    ObjectRef_Destruct_001c6460(&obj.w11, -1);
-    FUN_0014aa70(&obj.w10, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj.w11, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w10, -1);
     FUN_001998f0(&obj.w9, -1);
     FUN_001374b0(&obj.w8, -1);
     FUN_00195190(&obj.w7, -1);
     FUN_001354b0(&obj.w6, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w5, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w5, -1);
     FUN_00226990(&obj.w4, -1);
-    StringRef_Destruct_00130720(&obj.w3, -1);
+    igStringRef_Destruct(&obj.w3, -1);
     return t;
 }
 

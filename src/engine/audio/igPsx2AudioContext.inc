@@ -30,7 +30,7 @@ int igPsx2AudioContext_GetVTable(void) {
     u.vt = (int)&DAT_00524a80[0];
     FUN_00143350((void **)&u.b[48], -1);
     FUN_00143350((void **)&u.b[20], -1);
-    FUN_001432d0((struct RefCountBits **)&u.b[16], -1);
+    igSmartPointer_igThread_Destruct((struct RefCountBits **)&u.b[16], -1);
     FUN_00143250((void **)&u.b[12], -1);
     return t;
 }
@@ -53,7 +53,7 @@ void **FUN_00143250(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001432d0(struct RefCountBits **self, short flag) {
+void **igSmartPointer_igThread_Destruct(struct RefCountBits **self, short flag) {
     struct RefCountBits *p;
     if (self != 0) {
         p = *self;

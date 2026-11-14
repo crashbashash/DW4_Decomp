@@ -33,7 +33,7 @@ int beNDMWAfsSetup_GetVTable(void) {
     FUN_003cafa0((igObject **)&obj.w7, (short)(-1));
     FUN_0025a2b0(&obj.w6, -1);
     FUN_0025a2b0(&obj.w5, -1);
-    FUN_001d35d0(&obj.w4, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
     FUN_00231030(&obj, 0);
     return t;
 }

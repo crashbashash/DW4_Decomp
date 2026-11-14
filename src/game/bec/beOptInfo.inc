@@ -18,9 +18,9 @@ int beOptInfo_GetVTable(void) {
     o.b = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00538590[0];
-    StringRef_Destruct_00130720(&o.b, -1);
-    StringRef_Destruct_00130720(&o.a, -1);
-    FUN_00131b20(&o, 0);
+    igStringRef_Destruct(&o.b, -1);
+    igStringRef_Destruct(&o.a, -1);
+    igInfo_Destroy(&o, 0);
     return r;
 }
 

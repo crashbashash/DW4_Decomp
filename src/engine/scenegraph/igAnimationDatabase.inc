@@ -39,7 +39,7 @@ int igAnimationDatabase_GetVTable(void) {
     FUN_001a6350((struct Ref * *)p18, -1);
     FUN_001a7980((void * *)p17, -1);
     FUN_001a7900((ObjectRefWord *)p16, -1);
-    FUN_00131b20(&o, 0);
+    igInfo_Destroy(&o, 0);
     return r;
 }
 

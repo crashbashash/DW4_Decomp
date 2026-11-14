@@ -21,8 +21,8 @@ int beMessengerGroup_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00536e40[0];
     FUN_0033ec00((igObject **)&obj.w5, (short)(-1));
-    ObjectRef_Destruct_00150eb0(&obj.w4, -1);
-    ObjectRef_Destruct_001c6460(&obj.w3, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w4, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj.w3, -1);
     FUN_00131bc0(&obj, 0);
     return t;
 }

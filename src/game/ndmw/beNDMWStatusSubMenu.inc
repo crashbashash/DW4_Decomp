@@ -29,8 +29,8 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     u.w[25] = 0;
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053ec20[0]);
-    ObjectRef_Destruct_00150eb0(&u.w[25], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[24], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[25], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[24], -1);
     FUN_003b90a0((void **)(&u.w[22]), (short)(-1));
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
     return temp_s2;

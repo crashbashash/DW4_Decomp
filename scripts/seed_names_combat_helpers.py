@@ -5,9 +5,7 @@ Semantic roles, not asserted original method spelling. WAZALIST/_baseNo/_recNo
 and GETMATRIX/GETHP, retail unwind cleanup records, and whole-body instruction
 comparisons provide the evidence.
 """
-ROWS = [(0x130720, "StringRef_Destruct_00130720", "engine"),
-        (0x1363F0, "ObjectRef_Destruct_001363f0", "engine"),
-        (0x150EB0, "ObjectRef_Destruct_00150eb0", "engine"),
+ROWS = [(0x1363F0, "ObjectRef_Destruct_001363f0", "engine"),
         (0x33E9C0, "ObjectRef_Destruct_0033e9c0", "engine"),
         (0x3C9BE0, "FightCom_GetMetaEnum", "game"),
         (0x3C9C40, "GameRamMessage_GetMetaEnum", "game"),

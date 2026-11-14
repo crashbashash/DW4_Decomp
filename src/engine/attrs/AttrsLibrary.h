@@ -77,7 +77,7 @@ extern "C" void igViewportAttr_InitFields(void);
 /* Interned-string wrapper cleanup. */
 typedef struct StringRefWord { char *value; } StringRefWord;
 extern "C" void StringChunk_ReleaseHeader(...);
-extern "C" StringRefWord *StringRef_Destruct_00130720(StringRefWord *self,int delete_storage);
+extern "C" StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage);
 extern "C" igMetaObject *g_igVertexBlendStateAttr_metaObject[4];
 extern "C" igMetaObject *igVertexBlendStateAttr_GetMetaObject(void);
 struct Obj { int *vt; char pad[12]; };
@@ -224,7 +224,7 @@ struct S {
     char pad[4];
     void *f8;
 };
-extern "C" void *FUN_00131b20(struct S *arg0, short arg1);
+extern "C" void *igInfo_Destroy(struct S *arg0, short arg1);
 struct S_131bc0 {
     void *f0;
     void *f4;
@@ -619,7 +619,7 @@ extern "C" int DAT_00486210[4];
 extern "C" int DAT_00486218[4];
 extern "C" void igMultiPassStateAttr_InitFields(void);
 extern "C" void **FUN_001353b0(void **arg0, short arg1);
-extern "C" ObjectRefWord *FUN_00135430(ObjectRefWord *self,int delete_storage);
+extern "C" ObjectRefWord *igSmartPointer_igPointerList_Destruct(ObjectRefWord *self,int delete_storage);
 struct R_1354b0 { int vt; unsigned int rc; };
 extern "C" struct R_1354b0 **FUN_001354b0(struct R_1354b0 **arg0, short arg1);
 extern "C" igMetaObject *g_igObject_metaObject[4];
@@ -1157,7 +1157,7 @@ union U_13a6d0 { int vt; char b[32]; };
 extern "C" int igAttrPool_GetVTable(void);
 typedef struct S_temp_a0_13a800 { char pad4[4]; int f4; } S_temp_a0_13a800;
 extern "C" void **FUN_0013a800(void **arg0, short arg1);
-extern "C" ObjectRefWord *FUN_0013a880(ObjectRefWord *self,int delete_storage);
+extern "C" ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" void FUN_0013a900(void);
 extern "C" char igObject_Register[];
 extern "C" char g_igAttrPool_callbackList[];

@@ -28,7 +28,7 @@ int beNDMWShopSelect02_GetVTable(void) {
     o.f112 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_005401b0[0];
-    ObjectRef_Destruct_00150eb0(&o.f112, -1);
+    igSmartPointer_igIntList_Destruct(&o.f112, -1);
     FUN_003b4050((struct S_3b4050 *)&o, (short)0);
     return r;
 }

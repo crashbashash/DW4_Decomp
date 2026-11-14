@@ -25,11 +25,11 @@ int beSvDeliver_GetVTable(void) {
     temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_005388b0[0]);
     FUN_00349080((void **)(&u.w[16]), (long long)(-1));
-    ObjectRef_Destruct_00150eb0(&u.w[15], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[14], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[13], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[12], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[3], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[15], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[14], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[13], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[12], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[3], -1);
     return temp_s5;
 }
 

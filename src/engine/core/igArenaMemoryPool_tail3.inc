@@ -10,9 +10,9 @@ void igArenaMemoryPool_PrintStatistics(igArenaMemoryPoolView *self, char *title)
     int named;
     igMemoryPool_PrintStatistics((igMemoryPool *)self, title);
     named = ((ObjectSystemView *)g_objectSystem[0])->metaEnumList != 0;
-    messageLevel = named ? FUN_00312140(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)emptyString_4;
-    heapCheck = named ? FUN_00312140(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)emptyString_4;
-    flags = named ? FUN_00312020(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)emptyString_4;
+    messageLevel = named ? igMetaEnum_GetValueName(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)emptyString_4;
+    heapCheck = named ? igMetaEnum_GetValueName(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)emptyString_4;
+    flags = named ? igMetaEnum_GetNamesByMask(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)emptyString_4;
     igReport_Printf(g_igArenaMemoryPool_statisticsFormat, self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->GetLowestAddress(), self->GetHighestAddress(),
                  igArenaMemoryPool_GetArenaCount(self), igArenaMemoryPool_GetArenaHighCount(self), self->GetPoolIndex(), flags, heapCheck, messageLevel);
     igReport_Flush();
@@ -358,17 +358,17 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
             } else if (oldSize != 0) {
                 initFencepost(oldTop);
                 oldTop->used = 1;
-                initFencepost((TaggedBlockHeader *)((char *)oldTop + 4));
-                ((TaggedBlockHeader *)((char *)oldTop + 4))->used = 1;
+                initFencepost(chunkAtOffset(oldTop, 4));
+                chunkAtOffset(oldTop, 4)->used = 1;
             }
             return chunkMemory(p);
         }
         if (tries < 2) {
             tries++;
-            if (self->vfunc_28(0) != 0) {
+            if (self->TrimAllPools(0) != 0) {
                 continue;
             }
-            if (self->vfunc_28(1) != 0) {
+            if (self->TrimAllPools(1) != 0) {
                 continue;
             }
         }
@@ -493,10 +493,10 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
     if (cur < lo || hi < cur) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d20 == 0) {
-                int r = igReportNotice(DAT_004fcc00, index, cur, lo, hi);
+            if (g_igArenaMemoryPool_ignoreE77Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E77_BlockOutOfRange, index, cur, lo, hi);
                 if (r != 1 && r == 2) {
-                    GPR_00554d20 = 1;
+                    g_igArenaMemoryPool_ignoreE77Notice = 1;
                 }
             }
         }
@@ -505,10 +505,10 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
     if (end < lo || hi < end) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d24 == 0) {
-                int r = igReportNotice(DAT_004fcc70, index, end, lo, hi);
+            if (g_igArenaMemoryPool_ignoreE78Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E78_BlockEndOutOfRange, index, end, lo, hi);
                 if (r != 1 && r == 2) {
-                    GPR_00554d24 = 1;
+                    g_igArenaMemoryPool_ignoreE78Notice = 1;
                 }
             }
         }
@@ -517,10 +517,10 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
     if (end < cur) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d28 == 0) {
-                int r = igReportNotice(DAT_004fcce0, index, end, cur);
+            if (g_igArenaMemoryPool_ignoreE79Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E79_EndBeforeStart, index, end, cur);
                 if (r != 1 && r == 2) {
-                    GPR_00554d28 = 1;
+                    g_igArenaMemoryPool_ignoreE79Notice = 1;
                 }
             }
         }
@@ -529,10 +529,10 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
     if (!((TaggedBlockHeader *)cur)->used) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d2c == 0) {
-                int r = igReportNotice(DAT_004fcd50);
+            if (g_igArenaMemoryPool_ignoreE80Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E80_ArenaCorrupted);
                 if (r != 1 && r == 2) {
-                    GPR_00554d2c = 1;
+                    g_igArenaMemoryPool_ignoreE80Notice = 1;
                 }
             }
         }
@@ -588,10 +588,10 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
 bad:
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d30 == 0) {
-                int r = igReportNotice(DAT_004fcdd0, walk, index, count, size, cur, end);
+            if (g_igArenaMemoryPool_ignoreE81Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E81_InvalidChunkSize, walk, index, count, size, cur, end);
                 if (r != 1 && r == 2) {
-                    GPR_00554d30 = 1;
+                    g_igArenaMemoryPool_ignoreE81Notice = 1;
                 }
             }
         }
@@ -830,7 +830,7 @@ void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) 
                 bit = 1;
             }
             while ((bit & map) == 0) {
-                bin = (TaggedBlockHeader *)((char *)bin + 20);
+                bin = nextBin(bin);
                 bit <<= 1;
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(bit != 0) && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
@@ -845,7 +845,7 @@ void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) 
             victim = chunkLinks(bin)->back;
             if (victim == bin) {
                 state->binMap[block] = map &= ~bit;
-                bin = (TaggedBlockHeader *)((char *)bin + 20);
+                bin = nextBin(bin);
                 bit <<= 1;
             } else {
                 size = chunkBytes(victim);
@@ -1931,19 +1931,19 @@ igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, uns
                     if (self->_messageLevel > 0) {
                         if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
                             Memory_PrintPoolStatistics(0, self);
-                            if (GPR_00554d50 == 0) {
-                                int r = igReportNotice((const char *)DAT_004fd410, (unsigned)self->_maxSize, (int)self->_localNetAllocated);
+                            if (g_igArenaMemoryPool_ignoreE98Notice == 0) {
+                                int r = igReportNotice((const char *)text_igArenaMemoryPool_E98_MaximumSizeReached, (unsigned)self->_maxSize, (int)self->_localNetAllocated);
                                 if (r != 1 && r == 2) {
-                                    GPR_00554d50 = 1;
+                                    g_igArenaMemoryPool_ignoreE98Notice = 1;
                                 }
                             }
                         }
                     }
                 }
-            } else if (self->_messageLevel >= 3 && GPR_00554d54 == 0) {
-                int r = igReportNotice((const char *)DAT_004fd480, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+            } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE100Notice == 0) {
+                int r = igReportNotice((const char *)text_igMallocMemoryPool_E100_RequestRefused, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
                 if (r != 1 && r == 2) {
-                    GPR_00554d54 = 1;
+                    g_igArenaMemoryPool_ignoreE100Notice = 1;
                 }
             }
             break;
@@ -1982,7 +1982,7 @@ void Gap__Core__igArenaMemoryPool__freeSized(igArenaMemoryPoolView *self, unsign
 
 /* Allocates a block straight from the system allocator on the pool's behalf. The block always takes
  * the 12-byte header, with `extraMarked` set to tell it from an arena chunk. */
-int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size) {
+int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) {
     char *result;
     int guard;
     igArenaMemoryPool_Lock(self);
@@ -2013,10 +2013,10 @@ int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size
                     result += 8;
                     *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
                 }
-            } else if (self->_messageLevel >= 3 && GPR_00554d58 == 0) {
-                int r = igReportNotice((const char *)DAT_004fd500, self->_poolIndex, size);
+            } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE82Notice == 0) {
+                int r = igReportNotice((const char *)text_igArenaMemoryPool_E82_MallocFailed, self->_poolIndex, size);
                 if (r != 1 && r == 2) {
-                    GPR_00554d58 = 1;
+                    g_igArenaMemoryPool_ignoreE82Notice = 1;
                 }
             }
             break;
@@ -2027,19 +2027,19 @@ int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size
                     if (self->_messageLevel > 0) {
                         if ((unsigned)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
                             Memory_PrintPoolStatistics(0, self);
-                            if (GPR_00554d5c == 0) {
-                                int r = igReportNotice((const char *)DAT_004fd550, (int)self->_maxSize, (int)self->_localNetAllocated);
+                            if (g_igArenaMemoryPool_ignoreE99Notice == 0) {
+                                int r = igReportNotice((const char *)text_igArenaMemoryPool_E99_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
                                 if (r != 1 && r == 2) {
-                                    GPR_00554d5c = 1;
+                                    g_igArenaMemoryPool_ignoreE99Notice = 1;
                                 }
                             }
                         }
                     }
                 }
-            } else if (self->_messageLevel >= 3 && GPR_00554d60 == 0) {
-                int r = igReportNotice((const char *)DAT_004fd5c0, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+            } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE83Notice == 0) {
+                int r = igReportNotice((const char *)text_igMallocMemoryPool_E83_RequestRefused, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
                 if (r != 1 && r == 2) {
-                    GPR_00554d60 = 1;
+                    g_igArenaMemoryPool_ignoreE83Notice = 1;
                 }
             }
             break;
@@ -2454,7 +2454,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
     headBytes = 0;
     h = 0;
     moved = false;
-    DAT_005871e0[0]++;
+    g_arenaOperationOrdinal[0]++;
     if (hasPoolOption(self->_poolOptionFlags, 0x100)) {
         if (self->_messageLevel >= 2 && g_igArenaMemoryPool_ignoreE110Notice == 0) {
             r = igReportNotice(text_igArenaMemoryPool_E110_AssertOnMemoryOperation, (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
@@ -2546,7 +2546,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             if (h != 0) {
                 oldSize = payloadSize(h) - oldSentinelBytes;
                 oldBytes = chunkBytes(h);
-                if (DAT_004c2360[0] != 0) {
+                if (g_arenaTriggerCheck[0] != 0) {
                     igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 2, (int)block, oldSize);
                 }
                 if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
@@ -2605,7 +2605,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             break;
         }
         if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize) {
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             if (self->HandleOutOfMemory(size, 1) != 0) {
@@ -2682,7 +2682,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             }
             oldSize = payloadSize(h) - oldSentinelBytes;
             oldBytes = chunkBytes(h);
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)block, oldSize);
             }
             if ((alignment <= 8u || oldSize >= size) && oldSentinelBytes == sentinelBytes && (unsigned)block % alignment == 0) {
@@ -2691,23 +2691,23 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                 fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
                 moved = true;
             }
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)fresh, size);
             }
         } else if (alignment > 8u) {
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         } else {
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             fresh = (char *)igArenaMemoryPool_Malloc(self, total);
-            if (DAT_004c2360[0] != 0) {
+            if (g_arenaTriggerCheck[0] != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         }
@@ -2793,16 +2793,16 @@ unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *self, int addre
     block = g_activeSystemAllocator[0]->AllocateRange(address, size);
     if (block != -1U) {
         self->_systemAllocated = self->_systemAllocated + size;
-        /* matching construct: hand — the address bounds are written through untyped offsets (lowestAddress,
-         * highestAddress); typed ArenaState stores let the compiler skip the second _arenaState load retail makes. */
+        /* matching construct: hand — the address bounds are stored as ints through an untyped state pointer;
+         * typed ArenaState stores let the compiler skip the second _arenaState load retail makes. */
         state = (void *)(self->_arenaState);
-        if (block < (unsigned int) *(int *)((char *)(state) + 2060)) {
-            *(int *)((char *)(state) + 2060) = block;
+        if (block < ((ArenaState *)state)->lowestAddress) {
+            *(int *)&((ArenaState *)state)->lowestAddress = block;
         }
         stateAgain = (void *)(self->_arenaState);
         blockEnd = block + size;
-        if ((unsigned int) *(int *)((char *)(stateAgain) + 2064) < blockEnd) {
-            *(int *)((char *)(stateAgain) + 2064) = blockEnd;
+        if (((ArenaState *)stateAgain)->highestAddress < blockEnd) {
+            *(int *)&((ArenaState *)stateAgain)->highestAddress = blockEnd;
         }
     }
     return block;

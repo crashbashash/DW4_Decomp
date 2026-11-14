@@ -39,7 +39,7 @@ int beSound_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053b3d0[0];
     FUN_00344440((void **)(&o.f[9]), (short)(-1));
-    StringRef_Destruct_00130720(p17, -1);
+    igStringRef_Destruct(p17, -1);
     FUN_0033de20((void **)p16, (short)(-1));
     FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
     return r;

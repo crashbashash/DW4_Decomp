@@ -46,7 +46,7 @@ int igInsightCore_GetVTable(void) {
     FUN_00232ae0((ObjectRefWord *)&obj.w7, -1);
     FUN_00130140(&obj.w6, -1);
     FUN_00143350(&obj.w5, -1);
-    FUN_001d35d0(&obj.w4, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
     FUN_00232a60((O *)&obj.w3, -1);
     FUN_00231210((void **)&obj.w2, -1);
     return t;

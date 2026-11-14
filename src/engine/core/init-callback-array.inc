@@ -50,7 +50,7 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     igLongMetaField_EnsureRegistered();
     igUnsignedCharMetaField_EnsureRegistered();
     ((int *)g_igRefMetaField_descriptor)[0] = igRawRefMetaField_GetDefaultDescriptor();
-    ((MemoryContext * *)g_currentMemoryContext)[0]->vfunc_43();
+    ((MemoryContext * *)g_currentMemoryContext)[0]->OnStartupComplete();
 }
 
 int igObjectSystem_GetRootPath(int *p)
@@ -228,7 +228,7 @@ void igObjectSystem_PreExit(ObjectSystemView *self) {
     self->preExitDone = 1;
     tracker = self->globalEventTracker;
     if (tracker != 0) {
-        tracker->vfunc_46();
+        tracker->PreExit();
         igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)&text_exitPre[0]);
     }
 }
@@ -242,7 +242,7 @@ static inline void releaseObject(igObject *object) {
 /* Undo igObjectSystem_Initialize: stop the resource manager, run the exit callbacks, drop the classes
  * registered since the set-up, and release the configuration registry, the resource manager and the
  * other managers the set-up created. */
-void igObjectSystem_Terminate(ObjectSystemView *self) {
+void igObjectSystem_Finalize(ObjectSystemView *self) {
     igResource *resource;
     igMemoryPoolView *pool;
     igEventTrackerView *tracker;
@@ -335,7 +335,7 @@ void igObjectSystem_Terminate(ObjectSystemView *self) {
 
 void igObjectSystem_Exit(ObjectSystemView *self) {
     if (self->globalEventTracker != 0) {
-        self->globalEventTracker->vfunc_47();
+        self->globalEventTracker->Exit();
         igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)(&text_exitIn[0]));
     }
     if (self->saveEventTrackerOnExit != 0 && ((MemoryContext * *)g_currentMemoryContext)[0] != 0) {

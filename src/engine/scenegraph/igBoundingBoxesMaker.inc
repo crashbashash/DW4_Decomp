@@ -23,8 +23,8 @@ int igBoundingBoxesMaker_GetVTable(void) {
     obj.w[8] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052a4a0[0];
-    FUN_0013a880(&obj.w[8], -1);
-    FUN_001489a0(&obj.w[7], -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w[8], -1);
+    igSmartPointer_igStringObj_Destruct(&obj.w[7], -1);
     FUN_0014dd40(&obj.w[5], -1);
     FUN_00198190((void * *)&obj.w[4], -1);
     return r;

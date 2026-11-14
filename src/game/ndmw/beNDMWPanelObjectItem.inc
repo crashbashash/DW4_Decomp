@@ -26,8 +26,8 @@ int beNDMWPanelObjectItem_GetVTable(void) {
     obj.w16 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053e130[0];
-    ObjectRef_Destruct_00150eb0(&obj.w16, -1);
-    FUN_0014aa70(&obj.w15, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w16, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w15, -1);
     FUN_003be240((Obj_3be240 *)&obj, (short)0);
     return t;
 }

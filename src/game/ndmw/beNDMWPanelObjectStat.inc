@@ -29,8 +29,8 @@ int beNDMWPanelObjectStat_GetVTable(void) {
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053e0c0[0]);
     FUN_003bde80((struct Ref **)(&u.w[17]), (short)(-1));
-    ObjectRef_Destruct_00150eb0(&u.w[16], -1);
-    ObjectRef_Destruct_001c6460(&u.w[15], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[16], -1);
+    igSmartPointer_igStringRefList_Destruct(&u.w[15], -1);
     FUN_003be240((Obj_3be240 *)u.b, (short)0);
     return temp_s2;
 }

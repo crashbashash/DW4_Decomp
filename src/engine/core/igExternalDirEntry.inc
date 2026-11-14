@@ -21,10 +21,10 @@ int igExternalDirEntry_GetVTable(void) {
     entry._externalFilePath = 0;
     vtable = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     entry._vtable = (int)&g_igExternalDirEntry_vtable[0];
-    StringRef_Destruct_00130720(&entry._externalFilePath, -1);
-    StringRef_Destruct_00130720(&entry._entryName, -1);
-    StringRef_Destruct_00130720(&entry._directoryName, -1);
-    FUN_0014f4e0(&entry, 0);
+    igStringRef_Destruct(&entry._externalFilePath, -1);
+    igStringRef_Destruct(&entry._entryName, -1);
+    igStringRef_Destruct(&entry._directoryName, -1);
+    igDirEntry_Destroy(&entry, 0);
     return vtable;
 }
 

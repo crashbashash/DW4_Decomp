@@ -31,7 +31,7 @@ int beTargetObj_GetVTable(void) {
     temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053ba50[0]);
     FUN_001374b0(&u.w[6], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[5], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[5], -1);
     FUN_001374b0(&u.w[4], -1);
     FUN_00231030(u.b, 0);
     return temp_s2;

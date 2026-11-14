@@ -24,13 +24,13 @@ bool igRegistry_Load(igRegistry *self, char *name, char *dir) {
         if (dir != 0 && strlen(dir) != 0) {
             igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
             folder.p->setFolderName(dir);
-            found = openPath(self, folder.p->vfunc_23(held.p));
+            found = openPath(self, folder.p->GetFullPath(held.p));
         }
     }
     if (found == 0) {
         igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
         folder.p->setFolderName(((char *)igObjectSystem_GetBasePath((int *)((*(void * *)g_objectSystem)))));
-        found = openPath(self, folder.p->vfunc_23(held.p));
+        found = openPath(self, folder.p->GetFullPath(held.p));
     }
     if (found == 0) {
         return false;

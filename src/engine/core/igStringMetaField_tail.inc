@@ -191,7 +191,7 @@ int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, 
   size = (len + 3) & ~3;
   *(int *)cursor = size;
   if (swap != 0) {
-   igMetaFieldView *d = (igMetaFieldView *)FUN_002c3090();
+   igMetaFieldView *d = (igMetaFieldView *)igIntMetaField_GetDefaultDescriptor();
    d->SwapBytes((int *)cursor, 1);
   }
   cursor += 4;
@@ -430,7 +430,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         igStringObj_SetN(self, (int)insert, (int)n);
     } else {
     total = n + self->_length;
-    buf = FUN_00300d70(self, total + 1);
+    buf = (char *)igObject_AllocateStorage((int)self, total + 1);
     if (at >= self->_length) {
         memcpy(buf, (char *)self->_buffer, self->_length);
         memcpy(buf + self->_length, insert, n);

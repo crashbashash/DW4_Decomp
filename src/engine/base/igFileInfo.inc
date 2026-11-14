@@ -28,8 +28,8 @@ int igFileInfo_GetVTable(void) {
     obj.vt = &DAT_0052c170[0];
     FUN_00229040((R **)&obj.w[5], -1);
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);
-    FUN_001d35d0(&obj.w[3], -1);
-    FUN_001d36d0(&obj.w[2], -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w[3], -1);
+    igSmartPointer_igDirectory_Destruct(&obj.w[2], -1);
     FUN_00131bc0(&obj, 0);
     return r;
 }
@@ -124,7 +124,7 @@ int *FUN_00229260(int *p)
     return p;
 }
 
-int *FUN_00229270(int *p)
+int *igStringRef_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;

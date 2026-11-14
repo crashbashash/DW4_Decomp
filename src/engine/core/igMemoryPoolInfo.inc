@@ -31,19 +31,19 @@ int igMemoryPoolInfo_GetVTable(void) {
     info._releaseMessages = 0;
     t = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     info._vtable = (int)&g_igMemoryPoolInfo_vtable[0];
-    StringRef_Destruct_00130720(&info._releaseMessages, -1);
-    StringRef_Destruct_00130720(&info._debugMessages, -1);
-    StringRef_Destruct_00130720(&info._releaseChecking, -1);
-    StringRef_Destruct_00130720(&info._debugChecking, -1);
-    StringRef_Destruct_00130720(&info._releaseOptions, -1);
-    StringRef_Destruct_00130720(&info._debugOptions, -1);
-    StringRef_Destruct_00130720(&info._scope, -1);
-    StringRef_Destruct_00130720(&info._source, -1);
-    StringRef_Destruct_00130720(&info._arenaType, -1);
-    StringRef_Destruct_00130720(&info._class, -1);
-    StringRef_Destruct_00130720(&info._aliasedTo, -1);
-    StringRef_Destruct_00130720(&info._handleName, -1);
-    FUN_00131b20(&info, 0);
+    igStringRef_Destruct(&info._releaseMessages, -1);
+    igStringRef_Destruct(&info._debugMessages, -1);
+    igStringRef_Destruct(&info._releaseChecking, -1);
+    igStringRef_Destruct(&info._debugChecking, -1);
+    igStringRef_Destruct(&info._releaseOptions, -1);
+    igStringRef_Destruct(&info._debugOptions, -1);
+    igStringRef_Destruct(&info._scope, -1);
+    igStringRef_Destruct(&info._source, -1);
+    igStringRef_Destruct(&info._arenaType, -1);
+    igStringRef_Destruct(&info._class, -1);
+    igStringRef_Destruct(&info._aliasedTo, -1);
+    igStringRef_Destruct(&info._handleName, -1);
+    igInfo_Destroy(&info, 0);
     return t;
 }
 

@@ -151,17 +151,17 @@ int igMallocMemoryPool_UnlockAndReturn(void *pool, int value) {
 
 void *igMallocMemoryPool_Allocate(igMallocMemoryPoolView *self, unsigned int size)
 {
-    return self->vfunc_101(0, size, self->_alignment);
+    return self->MemoryOperation(0, size, self->_alignment);
 }
 
 void *igMallocMemoryPool_AllocateAligned(igMallocMemoryPoolView *self, unsigned int size, unsigned int alignment)
 {
-    return self->vfunc_101(0, size, alignment);
+    return self->MemoryOperation(0, size, alignment);
 }
 
 void *igMallocMemoryPool_Callocate(igMallocMemoryPool *self, int count, int size) {
     int total = count * size;
-    void *p = ((igMallocMemoryPoolView *)self)->vfunc_101(0, total, self->_alignment);
+    void *p = ((igMallocMemoryPoolView *)self)->MemoryOperation(0, total, self->_alignment);
     if (p != 0) {
         if (total != 0) {
             if (hasPoolOption(self->_poolOptionFlags, 2) || !hasPoolOption(self->_poolOptionFlags, 4)) {
@@ -178,7 +178,7 @@ int igMallocMemoryPool_CallocateAligned(igMallocMemoryPool *self, int count, int
     int options;
 
     bytes = count * size;
-    block = ((igMallocMemoryPoolView *)self)->vfunc_101(0, bytes);
+    block = ((igMallocMemoryPoolView *)self)->MemoryOperation(0, bytes);
     if (block != 0) {
         if (bytes != 0) {
             options = self->_poolOptionFlags;
@@ -192,12 +192,12 @@ int igMallocMemoryPool_CallocateAligned(igMallocMemoryPool *self, int count, int
 
 void *igMallocMemoryPool_Reallocate(igMallocMemoryPoolView *self, void *block, unsigned int size)
 {
-    return self->vfunc_101(block, size, self->_alignment);
+    return self->MemoryOperation(block, size, self->_alignment);
 }
 
 void *igMallocMemoryPool_ReallocateAligned(igMallocMemoryPoolView *self, void *block, int size, unsigned int alignment)
 {
-    return self->vfunc_101(block, size, alignment);
+    return self->MemoryOperation(block, size, alignment);
 }
 
 /* Gang allocation: one system block carries every requested block. The block starts with its own
@@ -295,11 +295,11 @@ igResult igMallocMemoryPool_GangAlloc(igMallocMemoryPoolView *self, int count, u
             if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
                 if (self->_messageLevel > 0) {
                     if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
-                        igReportError((const char *)DAT_004fe940, (int)self->_maxSize, (int)self->_localNetAllocated);
+                        igReportError((const char *)text_igMallocMemoryPool_E98_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
                     }
                 }
             } else if (self->_messageLevel >= 3) {
-                igReportNotice((const char *)DAT_004fd480, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+                igReportNotice((const char *)text_igMallocMemoryPool_E100_RequestRefused, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
             }
             break;
         }
@@ -381,7 +381,7 @@ void igMallocMemoryPool_Destruct(igMallocMemoryPool *self) {
 
 void igMallocMemoryPool_Free(igMallocMemoryPoolView *self, void *block)
 {
-    self->vfunc_101(block, -1, self->_alignment);
+    self->MemoryOperation(block, -1, self->_alignment);
 }
 
 /* The malloc pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the block is

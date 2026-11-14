@@ -27,7 +27,7 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
             return g_resultFailure;
         }
     }
-    if (self->vfunc_26(ini, index) == g_resultSuccess) {
+    if (self->UserRegistryLoad(ini, index) == g_resultSuccess) {
         return g_resultSuccess;
     }
     return g_resultFailure;

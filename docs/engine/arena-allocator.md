@@ -90,8 +90,8 @@ the bottom-up inliner keeps the general routine as a call.
   it is reached the state becomes 2, with a notice when option 0x40 is set. A block the system
   cannot place after the top becomes a new top, and the old top is closed with two fenceposts and
   freed, as dlmalloc does for foreign `sbrk` memory.
-- **Retries.** `sYSMALLOc` asks slot 26 of the pool for memory back (levels 0 and 1, twice at most)
-  and then the out-of-memory hook (slot 21, attempt 3) before it reports E103 and returns 0; any of
+- **Retries.** `sYSMALLOc` asks the pool to trim every active pool (slot 26, `TrimAllPools`, at levels 0
+  and 1, twice at most) and then the out-of-memory hook (slot 21, attempt 3) before it reports E103 and returns 0; any of
   them answering nonzero restarts it. `mALLOc` consolidates the fast bins and scans once more
   before it calls `sYSMALLOc`, when the pool sits on raw memory or is not pre-sized. Option 0x10
   makes `mALLOc` allocate from the top only.
@@ -128,5 +128,3 @@ the bottom-up inliner keeps the general routine as a call.
 - The four allocator entry points keep their address names. The notices give `igArenaSystemMalloc`
   for `sYSMALLOc` and `igArena_malloc` for `mALLOc`; `igArena_free`, `igArena_realloc` and
   `igArena_memalign` would follow the second pattern but no string confirms them.
-- Slot 26 of the pool (`vfunc_28(int level)`) is known only from its use in `sYSMALLOc`: called with
-  0 and then 1, a nonzero answer meaning memory came back.

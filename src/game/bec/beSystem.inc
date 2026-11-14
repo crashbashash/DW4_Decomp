@@ -39,12 +39,12 @@ int beSystem_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053b510[0];
     FUN_00229350(&obj.w20, -1);
-    FUN_001d35d0(&obj.w19, -1);
-    FUN_001489a0(&obj.w18, -1);
-    FUN_001d36d0(&obj.w17, -1);
-    StringRef_Destruct_00130720(&obj.w15, -1);
-    StringRef_Destruct_00130720(&obj.w14, -1);
-    ObjectRef_Destruct_001c6460(&obj.w13, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w19, -1);
+    igSmartPointer_igStringObj_Destruct(&obj.w18, -1);
+    igSmartPointer_igDirectory_Destruct(&obj.w17, -1);
+    igStringRef_Destruct(&obj.w15, -1);
+    igStringRef_Destruct(&obj.w14, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj.w13, -1);
     FUN_00342eb0((void **)&obj.w12, (short)(-1));
     FUN_00231030(&obj, 0);
     return t;

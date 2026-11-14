@@ -29,7 +29,7 @@ int beNDMWShopSelect00_GetVTable(void) {
     obj.f70 = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_00540290[0]);
-    StringRef_Destruct_00130720(&obj.f70, -1);
+    igStringRef_Destruct(&obj.f70, -1);
     FUN_003b4050((struct S_3b4050 *)&obj, (short)0);
     return temp_s0;
 }

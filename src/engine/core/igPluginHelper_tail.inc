@@ -62,7 +62,7 @@ void Gap__Core__igPluginHelper__userDestruct(igPluginHelper *self) {
         if (library != 0) {
             library->_refCount = library->_refCount + 1;
         }
-        ((igLibraryLoaderView *)self->_libraryLoader)->vfunc_24(&library);
+        ((igLibraryLoaderView *)self->_libraryLoader)->UnloadLibrary(&library);
         if (library != 0) {
             library->_refCount = library->_refCount - 1;
             if ((library->_refCount & 0x7fffff) == 0) {

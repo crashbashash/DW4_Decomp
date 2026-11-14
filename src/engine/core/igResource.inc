@@ -36,17 +36,17 @@ int igResource_GetVTable(void) {
     resource._objectMemoryPool = 0;
     t = *(int *)((char *)&resource + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     resource._vtable = (int)&g_igResource_vtable[0];
-    FUN_001509f0(&resource._objectMemoryPool, -1);
-    FUN_001509f0(&resource._dataMemoryPool, -1);
-    FUN_001509f0(&resource._temporaryMemoryPool, -1);
-    ObjectRef_Destruct_00150eb0(&resource._alignmentValues, -1);
-    FUN_001a0790(&resource._alignmentStrings, -1);
-    FUN_001432d0(&resource._loadThread, -1);
+    igSmartPointer_igMemoryPool_Destruct(&resource._objectMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct(&resource._dataMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct(&resource._temporaryMemoryPool, -1);
+    igSmartPointer_igIntList_Destruct(&resource._alignmentValues, -1);
+    igSmartPointer_igStringObjList_Destruct(&resource._alignmentStrings, -1);
+    igSmartPointer_igThread_Destruct(&resource._loadThread, -1);
     igSmartPointer_igQueue_Destruct((igQueue **)&resource._loadQueue, -1);
-    StringRef_Destruct_00130720(&resource._absoluteFilePath, -1);
-    StringRef_Destruct_00130720(&resource._relativeFilePath, -1);
+    igStringRef_Destruct(&resource._absoluteFilePath, -1);
+    igStringRef_Destruct(&resource._relativeFilePath, -1);
     igSmartPointer_igDirectoryList_Destruct((void **)&resource._directoryList, -1);
-    FUN_001d36d0(&resource._imageDirectory, -1);
+    igSmartPointer_igDirectory_Destruct(&resource._imageDirectory, -1);
     return t;
 }
 

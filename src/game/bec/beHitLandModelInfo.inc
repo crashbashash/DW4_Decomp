@@ -19,7 +19,7 @@ int beHitLandModelInfo_GetVTable(void) {
     obj.vt = &DAT_005363d0[0];
     FUN_00343260((ObjectRefWord *)&obj.w9, -1);
     FUN_00343260((ObjectRefWord *)&obj.w8, -1);
-    FUN_0014aa70(&obj.w7, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w7, -1);
     FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
     return t;
 }

@@ -25,8 +25,8 @@ int beFileListInfo_GetVTable(void) {
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00535870[0];
     FUN_00199450(p1, -1);
-    StringRef_Destruct_00130720(p2, -1);
-    FUN_00131b20(u.b, 0);
+    igStringRef_Destruct(p2, -1);
+    igInfo_Destroy(u.b, 0);
     return temp_s1;
 }
 

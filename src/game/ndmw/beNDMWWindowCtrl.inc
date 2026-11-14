@@ -3,11 +3,11 @@ beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, long long fla
         self->_vtable = (int)g_beNDMWWindowCtrl_vtable;
         if (self) {
             self->_vtable = (int)g_beNDMWWindow_vtable;
-            ObjectRef_Destruct_001c6460(&self->_modelCloseSeqNameList, -1);
-            ObjectRef_Destruct_00150eb0(&self->_modelCloseRamNoList, -1);
-            ObjectRef_Destruct_001c6460(&self->_modelCloseInfoNameList, -1);
-            ObjectRef_Destruct_001c6460(&self->_textCloseNameList, -1);
-            ObjectRef_Destruct_001c6460(&self->_textCloseTypeList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseSeqNameList, -1);
+            igSmartPointer_igIntList_Destruct(&self->_modelCloseRamNoList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseInfoNameList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_textCloseNameList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_textCloseTypeList, -1);
             FUN_003b2f30((void **)&self->_mother, -1);
             FUN_003b2fb0((void **)&self->_subWindow, (short)(-1));
         }

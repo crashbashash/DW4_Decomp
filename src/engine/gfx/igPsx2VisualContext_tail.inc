@@ -36,7 +36,7 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_001510e0((igVisualContext *)p);
     s.vt = &DAT_00525870[0];
     q = (char *)&s + 332;
-    FUN_001510d0((int *)q);
+    igSmartPointer_igIntList_Construct((int *)q);
     FUN_001510a0((int)((char *)&s + 772));
     FUN_00151090((int)(p + 876));
     FUN_00151080((int *)(p + 940));
@@ -74,12 +74,12 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00137260((char *)&s + 948, -1);
     FUN_001372e0((char *)&s + 944, -1);
     FUN_00150f30((O_1506b0 *)((char *)&s + 940), -1);
-    ObjectRef_Destruct_00150eb0((ObjectRefWord *)q, -1);
+    igSmartPointer_igIntList_Destruct((ObjectRefWord *)q, -1);
     FUN_00150af0((Obj_1506b0 *)&s, 0);
     return r;
 }
 
-void **FUN_001509f0(struct Ref **self, short flag) {
+void **igSmartPointer_igMemoryPool_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -137,7 +137,7 @@ Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *ObjectRef_Destruct_00150eb0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igIntList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -212,7 +212,7 @@ int FUN_001510a0(int arg0) {
     return arg0;
 }
 
-int *FUN_001510d0(int *p)
+int *igSmartPointer_igIntList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;

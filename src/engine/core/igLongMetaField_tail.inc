@@ -55,7 +55,7 @@ igMediaView *igMediaFile_FindDeviceForPath(const char *path) {
         prefixLength = colon - path;
         for (i = g_fileDeviceList.p->_count - 1; i <= 0; i--) {
             media = ((igMediaView **)g_fileDeviceList.p->_data)[i];
-            if (media->vfunc_32(path, prefixLength) != 0) {
+            if (media->HandlesDevice(path, prefixLength) != 0) {
                 return media;
             }
         }

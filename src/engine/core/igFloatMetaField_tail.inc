@@ -14,7 +14,7 @@ int igFloatMetaField_GetAlignment(void) {
 }
 
 void igFolder_SetFolderName(igFolderView *self, const char *name) {
-    igSmartPointer<igStringObj> h = self->vfunc_23(name);
+    igSmartPointer<igStringObj> h = self->GetFullPath(name);
     char *text = (char *)h.p->_buffer;
     text = (text == 0) ? g_stringObjEmptyText[0] : text;
     self->_folderName = text;

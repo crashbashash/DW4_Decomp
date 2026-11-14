@@ -37,10 +37,10 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     obj.f2C = 0;
     temp_s5 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_0053d5d0[0]);
-    ObjectRef_Destruct_00150eb0(&obj.f2C, -1);
-    ObjectRef_Destruct_001c6460(&obj.f28, -1);
+    igSmartPointer_igIntList_Destruct(&obj.f2C, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj.f28, -1);
     FUN_003bde80((struct Ref **)&obj.f24, (short)(-1));
-    StringRef_Destruct_00130720(&obj.f20, -1);
+    igStringRef_Destruct(&obj.f20, -1);
     FUN_003bde00((void **)&obj.f18, (short)(-1));
     FUN_003bdd80((void **)&obj.f14, -1);
     FUN_003bdd00((ObjectRefWord *)&obj.f10, -1);

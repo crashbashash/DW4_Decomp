@@ -205,40 +205,40 @@ int FUN_0032f370(void) {
     return 6;
 }
 
-void SystemAllocator_GetStatistics(SystemAllocator *self, ThreadMemoryMap *map) {
+void SystemAllocator_GetStatistics(SystemAllocator *self, SystemMemoryStatistics *stats) {
     unsigned top;
     unsigned marker;
     unsigned bottom;
-    int size;
-    unsigned regionSize;
+    int heapTop;
+    unsigned stackSize;
     unsigned end;
     end = (unsigned)_end;
     marker = end;
-    regionSize = (unsigned)_stack_size;
+    stackSize = (unsigned)_stack_size;
     top = (unsigned)&marker;
-    top -= top % regionSize;
-    bottom = top - regionSize;
-    size = self->GetStackSize();
-    if (size == -1) {
-        size = g_rangeEnd[0];
+    top -= top % stackSize;
+    bottom = top - stackSize;
+    heapTop = self->GetStackSize();
+    if (heapTop == -1) {
+        heapTop = g_rangeEnd[0];
     }
-    SystemAllocatorBase_GetStatistics(self, (int *)map);
-    map->stackTop = top;
-    map->stackBottom = bottom - size;
-    map->stackSize = size;
-    map->textStart = (unsigned)(DAT_000ffff0 + 16);
-    map->textSize = (unsigned)(Gap__Bec__beFont__vfunc_32 + 0x90);
-    map->dataStart = (unsigned)__new_handler;
-    map->dataSize = end - (unsigned)__new_handler;
-    map->bssStart = (unsigned)__new_handler;
-    map->bssSize = (unsigned)DAT_000d2c64;
-    map->gp = (unsigned)DAT_00554e81;
-    map->sbssSize = (unsigned)DAT_000383ff;
-    map->stackRegion = top;
-    map->stackRegionSize = regionSize;
-    map->scratchpad = (unsigned)DAT_70000000;
-    map->scratchpadSize = (unsigned)DAT_00004000;
-    map->reserved = 0;
+    SystemAllocatorBase_GetStatistics(self, (int *)stats);
+    stats->totalSystemMemorySize = top;
+    stats->freeFromTop = bottom - heapTop;
+    stats->heapTop = heapTop;
+    stats->codeStart = (int)__code_start__;
+    stats->codeSize = (int)(Gap__Bec__beFont__vfunc_32 + 0x90);
+    stats->dataStart = (int)__data_start__;
+    stats->dataSize = end - (unsigned)__data_start__;
+    stats->initializedStart = (int)__data_start__;
+    stats->initializedSize = (int)__initialized_data_size__;
+    stats->uninitializedStart = (int)__uninitialized_data_start__;
+    stats->uninitializedSize = (int)__uninitialized_data_size__;
+    stats->stackStart = top;
+    stats->stackSize = stackSize;
+    stats->fastStart = (int)__fast_memory_start__;
+    stats->fastSize = (int)__fast_memory_size__;
+    stats->virtualSize = 0;
 }
 
 /* Allocates a zeroed DumpRegion row for [start, start + size) into `row`. */
@@ -263,7 +263,7 @@ void SystemAllocator_CollectHardwareRegions(SystemAllocator *self, igDataList *r
     SystemAllocatorBase_CollectHardwareRegions((int)self);
     newRegion(row, 0, 0x02000000);
     insertRegion(regions, row, text_Memory_Main, text_Platform);
-    newRegion(row, (unsigned)DAT_70000000, (unsigned)DAT_00004000);
+    newRegion(row, (unsigned)__fast_memory_start__, (unsigned)__fast_memory_size__);
     insertRegion(regions, row, text_Memory_Fast, text_Platform);
 }
 
@@ -276,12 +276,12 @@ void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *re
     if (e != 0) e = DumpRegion_Init(e);
     row = e;
     e->start = (unsigned)__ctors_start__;
-    vtables = DAT_00522480;
+    vtables = __ctors_end__;
     row->size = vtables - __ctors_start__;
     insertRegion(regions, row, text_Section_Static_Cons, text_Program);
     newRegion(row, (unsigned)vtables, __exception_table_start__ - vtables);
     insertRegion(regions, row, text_Section_VTables, text_Program);
-    newRegion(row, (unsigned)DAT_00554974, (unsigned)DAT_0000050d);
+    newRegion(row, (unsigned)__small_data_start__, (unsigned)__small_data_size__);
     insertRegion(regions, row, text_Section_Small_Data, text_Program);
 }
 

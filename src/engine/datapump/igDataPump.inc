@@ -24,9 +24,9 @@ int igDataPump_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052b950[0];
     FUN_001c7600(&obj.w6, -1);
-    StringRef_Destruct_00130720(&obj.w5, -1);
-    StringRef_Destruct_00130720(&obj.w4, -1);
-    FUN_0014ec50(&obj.w3, -1);
+    igStringRef_Destruct(&obj.w5, -1);
+    igStringRef_Destruct(&obj.w4, -1);
+    igSmartPointer_igMetaField_Destruct(&obj.w3, -1);
     ObjectRef_Destruct_001363f0(&obj.w2, -1);
     return t;
 }

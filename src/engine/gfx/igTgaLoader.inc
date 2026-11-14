@@ -35,7 +35,7 @@ int igTgaLoader_GetVTable(void) {
     return temp_s0;
 }
 
-void **FUN_00150180(void **arg0, short arg1) {
+void **igSmartPointer_igFile_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {

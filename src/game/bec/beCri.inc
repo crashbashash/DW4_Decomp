@@ -32,8 +32,8 @@ int beCri_GetVTable(void) {
     obj.w[11] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053a3e0[0];
-    FUN_0014aa70(&obj.w[11], -1);
-    FUN_001d35d0(&obj.w[10], -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w[11], -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w[10], -1);
     FUN_00367aa0((struct Ref **)(&obj.w[9]), (short)(-1));
     FUN_00367a20((void **)(&obj.w[8]), (short)(-1));
     FUN_00367a20((void **)(&obj.w[7]), (short)(-1));

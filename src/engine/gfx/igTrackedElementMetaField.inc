@@ -47,7 +47,7 @@ int igTrackedElementMetaField_GetVTable(void) {
     return temp_s0;
 }
 
-ObjectRefWord *FUN_0014e420(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igMetaFieldList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

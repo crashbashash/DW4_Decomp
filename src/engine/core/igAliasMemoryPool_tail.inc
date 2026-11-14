@@ -262,17 +262,17 @@ void *igAliasMemoryPool_Reallocate(igAliasMemoryPool *self,void *old,unsigned in
 
 void *igAliasMemoryPool_ReallocateAligned(igAliasMemoryPool *self,void *old,unsigned int size,unsigned short alignment){return (void *)((igAliasMemoryPoolView *)self)->ManageAllocation((int)old,size,alignment);}
 
-int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *self, int block) {
+int igAliasMemoryPool_AllocateFromSystem(igAliasMemoryPool *self, int size) {
     long long allocatedBefore;
     int result;
-    long long released;
+    long long added;
 
     if (self->_aliasedMemoryPool != 0) {
         allocatedBefore = ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetLocalNetAllocatedWithOverhead();
-        result = ((igMemoryPoolView *)self->_aliasedMemoryPool)->vfunc_65(block);
-        released = ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetLocalNetAllocatedWithOverhead() - allocatedBefore;
+        result = ((igMemoryPoolView *)self->_aliasedMemoryPool)->AllocateFromSystem(size);
+        added = ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetLocalNetAllocatedWithOverhead() - allocatedBefore;
         if (self->_updateStatistics != 0) {
-            ((igMemoryPoolView *)self)->UpdateStatistics(block, (int)released, 1);
+            ((igMemoryPoolView *)self)->UpdateStatistics(size, (int)added, 1);
         }
         return result;
     }
@@ -356,8 +356,8 @@ void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *name) 
     }
     allocated = self->GetLocalNetAllocated();
     allocatedWithOverhead = (int)self->GetLocalNetAllocatedWithOverhead();
-    allocatedHigh = self->vfunc_101();
-    allocatedWithOverheadHigh = (long long)self->vfunc_102();
+    allocatedHigh = self->GetLocalNetAllocatedHigh();
+    allocatedWithOverheadHigh = (long long)self->GetLocalNetAllocatedWithOverheadHigh();
     maxSize = (long long)self->GetMaxSize();
     igReport_Printf(text_Aliased_memory_pool_percent_s, poolName, allocated, allocatedWithOverhead, allocatedHigh, allocatedWithOverheadHigh, (long long)allocCount, (long long)freeCount, (long long)(int)netCount, (long long)netCountHigh, (long long)maxSize, self->GetPoolIndex());
     igReport_Flush();
@@ -587,7 +587,7 @@ void igObjectSystem_Release(void) {
         igObjectSystem_PreExit((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
     }
     if (--g_objectSystemRefCount[0] == 0) {
-        igObjectSystem_Terminate(((ObjectSystemView **)g_objectSystem)[0]);
+        igObjectSystem_Finalize(((ObjectSystemView **)g_objectSystem)[0]);
         igObjectSystem_Shutdown((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
         core = ((ObjectSystemView **)g_objectSystem)[0];
         if (core != 0) {
@@ -646,24 +646,24 @@ void *igObjectSystem_Construct(ObjectSystemView *self) {
     self->basePath.p = 0;
     self->started = 0;
     self->preExitDone = 0;
-    *(char *)((char *)(self) + 22) = 0;
+    self->exitDone = 0;
     self->active = 0;
     self->metaRegistry = 0;
     self->bootstrapPool = 0;
-    *(int *)((char *)(self) + 32) = 0;
+    self->f32 = 0;
     self->metaEnumList = 0;
     self->exitCallbacks = 0;
     self->registrationCallbacks = 0;
     self->configRegistry = 0;
-    *(int *)((char *)(self) + 68) = 0;
-    *(int *)((char *)(self) + 72) = 0;
+    self->resourceTempPool = 0;
+    self->resourceTempPoolSize = 0;
     self->useGlobalEventTracker = 0;
     self->saveEventTrackerOnExit = 0;
     self->showLeaksOnExit = 0;
     self->showMemoryStatisticsOnExit = 0;
     self->showObjectStatisticsOnExit = 0;
     self->reportHeaderVersionMismatch = 0;
-    *(char *)((char *)(self) + 122) = 0;
+    self->warnOnDllDateMismatch = 0;
     self->eventTrackerInitialCapacity = (void *)0x80000;
     self->eventTrackerEventTypeFilter = -1;
     self->eventTrackerMarkerTypeFilter = -1;
@@ -677,15 +677,15 @@ void *igObjectSystem_Construct(ObjectSystemView *self) {
     self->symbolTable = 0;
     self->globalEventTracker = 0;
     self->systemPool = 0;
-    *(char *)((char *)(self) + 92) = 0;
+    self->f92 = 0;
     self->fastPool = 0;
     self->driverDataPool = 0;
-    *(int *)((char *)(self) + 100) = 0;
-    *(int *)((char *)(self) + 104) = 0;
-    *(int *)((char *)(self) + 60) = 0;
+    self->copyVTables = 0;
+    self->vtableClassNames = 0;
+    self->driverDatabase = 0;
     self->vtableProbeOffset = 0;
-    *(int *)((char *)(self) + 76) = 0;
-    *(int *)((char *)(self) + 108) = 0;
+    self->pluginHelper = 0;
+    self->f108 = 0;
     self->retainedObject = 0;
     return self;
 }

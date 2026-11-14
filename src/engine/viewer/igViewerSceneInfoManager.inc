@@ -94,9 +94,9 @@ int igViewerSceneInfoManager_GetVTable(void) {
     FUN_003cafa0(p352, -1);
     FUN_00459ce0((void **)p344, -1);
     FUN_00131aa0(p340, -1);
-    FUN_0014aa70(p316, -1);
+    igSmartPointer_igObjectList_Destruct(p316, -1);
     FUN_00458470(p312, -1);
-    FUN_0014aa70(p308, -1);
+    igSmartPointer_igObjectList_Destruct(p308, -1);
     FUN_0044c1c0(p304, -1);
     FUN_00459c60((ObjectRefWord *)p300, -1);
     FUN_00459be0((void **)p296, -1);

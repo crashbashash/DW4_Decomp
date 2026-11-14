@@ -240,7 +240,7 @@ igMetaObject *igMemoryPoolContextInfo_GetMeta(void) {
 }
 
 int MemoryContext_GetMeta(void) {
-    return g_igMemoryPoolContextInfo_metaObject_00585e98[0];
+    return g_MemoryContext_metaObject[0];
 }
 
 int igMemoryFile_GetMeta(void) {

@@ -110,7 +110,7 @@ void **FUN_00131aa0(void **arg0, short arg1) {
     return arg0;
 }
 
-void *FUN_00131b20(struct S *arg0, short arg1) {
+void *igInfo_Destroy(struct S *arg0, short arg1) {
     void *p;
     int *h;
     int rc;

@@ -7,7 +7,7 @@ void thunk_FUN_001b6c50(void) {
     FUN_001b6c50();
 }
 
-int *FUN_001a4510(int *p)
+int *igSmartPointer_igMetaObjectList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;

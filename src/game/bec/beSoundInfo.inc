@@ -22,7 +22,7 @@ int beSoundInfo_GetVTable(void) {
     *(int *)&u.b[32] = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_005393b0[0];
-    StringRef_Destruct_00130720(&u.b[32], -1);
+    igStringRef_Destruct(&u.b[32], -1);
     FUN_00199450(p1, -1);
     FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
     return temp_s1;

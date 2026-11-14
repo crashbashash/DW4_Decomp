@@ -407,7 +407,7 @@ extern "C" char REMOVE_2[];
 extern "C" char GETBONEMATRIX[];
 extern "C" void * DAT_00561288[4];
 extern "C" void Gap__Core__igObject__vfunc_31(beModelCtrl *self, beBaseInfoRam *ram);
-extern "C" int FUN_001cafc0(int list, StringRef *key, int);
+extern "C" int igStringRefList_IndexOf(int list, StringRef *key, int);
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 extern "C" int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work);
 struct Rel { static inline void go(igAABox *object) {
@@ -1618,7 +1618,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
     }
     {
         StringRef key((char *)token);
-        idx = FUN_001cafc0((int)seqList, &key, 0);
+        idx = igStringRefList_IndexOf((int)seqList, &key, 0);
     }
     if (idx != -1) {
         if (seqName == 0) {
@@ -2313,7 +2313,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
         }
         {
             StringRef key((char *)token);
-            slot = FUN_001cafc0(work->_labelSeqList, &key, 0);
+            slot = igStringRefList_IndexOf(work->_labelSeqList, &key, 0);
         }
         if (slot != -1) {
             index = ((int *)((igIntList *)work->_labelOffsetList)->_data)[slot];

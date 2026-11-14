@@ -28,7 +28,7 @@ int beNDMWShopCtrlA0_GetVTable(void) {
     obj.w22 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053fc70[0];
-    ObjectRef_Destruct_00150eb0(&obj.w22, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w22, -1);
     FUN_003b7fe0((O *)&obj.w21, (short)(-1));
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return t;

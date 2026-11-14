@@ -31,7 +31,7 @@ int igVertexArray2_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00526410[0];
     FUN_0014aaf0((ObjectRefWord *)&obj.w[4], -1);
-    FUN_0014aa70((void **)&obj.w[3], -1);
+    igSmartPointer_igObjectList_Destruct((void **)&obj.w[3], -1);
     ObjectRef_Destruct_001363f0(&obj.w[2], -1);
     FUN_00131bc0(&obj, 0);
     return r;
@@ -54,7 +54,7 @@ Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_0014aa70(void **arg0, short arg1) {
+void **igSmartPointer_igObjectList_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {

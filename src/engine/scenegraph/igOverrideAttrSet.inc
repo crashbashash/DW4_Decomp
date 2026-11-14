@@ -56,7 +56,7 @@ void thunk_igOverrideAttrSet_GetMetaObject(void) {
     igOverrideAttrSet_GetMetaObject();
 }
 
-struct R **FUN_0019c840(struct R **arg0, short arg1) {
+struct R **igSmartPointer_igMetaObject_Destruct(struct R **arg0, short arg1) {
     struct R *temp_a0;
 
     if (arg0 != 0) {

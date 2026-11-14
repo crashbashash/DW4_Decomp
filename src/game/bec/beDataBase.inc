@@ -39,7 +39,7 @@ int beDataBase_GetVTable(void) {
     FUN_00199450(&u.w[10], -1);
     FUN_001354b0(&u.w[9], -1);
     FUN_00199450(&u.w[8], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[7], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[7], -1);
     FUN_00199450(&u.w[6], -1);
     FUN_001648f0(&u.w[5], -1);
     FUN_00199450(&u.w[4], -1);

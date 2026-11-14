@@ -29,7 +29,7 @@ void igCallStackTracer_FormatAddress(igResult *result, igCallStackTracerView *se
     int offset;
     int line;
     igResult resolved = self->LookupAddress(addr, buf, 255, &offset, name, 255, &line);
-    igResult formatted = self->vfunc_28(addr, buf, offset, name, line, format, output, outputSize);
+    igResult formatted = self->FormatLocation(addr, buf, offset, name, line, format, output, outputSize);
     result->v = resolved.v;
 }
 

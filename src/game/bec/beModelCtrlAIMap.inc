@@ -21,8 +21,8 @@ int beModelCtrlAIMap_GetVTable(void) {
     u.w[12] = 0;
     temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00537900[0]);
-    StringRef_Destruct_00130720(&u.w[12], -1);
-    StringRef_Destruct_00130720(&u.w[11], -1);
+    igStringRef_Destruct(&u.w[12], -1);
+    igStringRef_Destruct(&u.w[11], -1);
     FUN_00354490((struct R **)(&u.w[10]), (short)(-1));
     FUN_00354490((struct R **)(&u.w[9]), (short)(-1));
     FUN_00354490((struct R **)(&u.w[8]), (short)(-1));

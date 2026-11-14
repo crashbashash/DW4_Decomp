@@ -26,7 +26,7 @@ int beNDMWStatusCtrlBit_GetVTable(void) {
     o.f84 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_0053ed50[0];
-    ObjectRef_Destruct_00150eb0(&o.f84, -1);
+    igSmartPointer_igIntList_Destruct(&o.f84, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
     return r;
 }

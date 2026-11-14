@@ -34,7 +34,7 @@ int igSceneInfo_GetVTable(void) {
     FUN_0019b1f0((void * *)&obj.w7, -1);
     FUN_00131aa0(&obj.w6, -1);
     FUN_00198210((ObjectRefWord *)&obj.w5, -1);
-    FUN_00131b20(&obj, 0);
+    igInfo_Destroy(&obj, 0);
     return t;
 }
 

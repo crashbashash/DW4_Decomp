@@ -9,7 +9,7 @@ int igPsx2CallStackTracer_CaptureCallStack(igCallStackTracerView *tracer) {
     } else {
         List_Resize(tracer, index + 1, 4);
     }
-    *(int *)((char *)tracer->_data + (index * 4)) = DAT_004c2618[0];
+    tracer->_data[index] = g_igPsx2CallStackTracer_terminatorAddress[0];
     return (int)tracer->_data;
 }
 

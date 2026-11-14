@@ -346,7 +346,7 @@ void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *
         void *item = itemAt(items, i);
         RetainedString name = StringList_CopyRetained((igStringRefList *)names, i);
         int index;
-        index = FUN_001cafc0((struct L_1cafc0 *)lookup, name, 0);
+        index = igStringRefList_IndexOf((struct L_1cafc0 *)lookup, name, 0);
         if (index != -1) {
             RetainedString fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;

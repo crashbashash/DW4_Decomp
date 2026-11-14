@@ -27,7 +27,7 @@ int igAppearance_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052a090[0];
     FUN_001958f0((void * *)&obj.w7, -1);
-    FUN_001a0790((void * *)&obj.w6, -1);
+    igSmartPointer_igStringObjList_Destruct((void * *)&obj.w6, -1);
     FUN_001a63d0((void * *)&obj.w5, -1);
     FUN_001a6350((struct Ref * *)&obj.w4, -1);
     FUN_001a62d0((void * *)&obj.w3, -1);

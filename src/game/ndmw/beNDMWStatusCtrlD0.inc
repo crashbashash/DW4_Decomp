@@ -32,7 +32,7 @@ int beNDMWStatusCtrlD0_GetVTable(void) {
     temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = (&DAT_0053eed0[0]);
     FUN_00226990(&obj.f70, -1);
-    ObjectRef_Destruct_00150eb0(&obj.f64, -1);
+    igSmartPointer_igIntList_Destruct(&obj.f64, -1);
     FUN_003b6770((int **)&obj, (long long)0);
     return temp_s1;
 }

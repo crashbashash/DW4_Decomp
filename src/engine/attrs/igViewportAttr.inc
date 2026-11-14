@@ -86,7 +86,7 @@ void igViewportAttr_InitFields(void) {
     igMetaObject_NameFields(temp_s0, &g_igViewportAttr_fieldTable[0], &DAT_00485980[0], &DAT_004859a0[0], temp_s2);
 }
 
-StringRefWord *StringRef_Destruct_00130720(StringRefWord *self,int delete_storage) {
+StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage) {
     if(self) {
         char *value=self->value;
         if(value) {

@@ -22,9 +22,9 @@ int igObjectDirEntry_GetVTable(void) {
     o._typeMetaName = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o._vtable = (int)&g_igObjectDirEntry_vtable[0];
-    StringRef_Destruct_00130720(&o._typeMetaName, -1);
-    FUN_0019c840(&o._typeMeta, -1);
-    FUN_0014f4e0(&o, 0);
+    igStringRef_Destruct(&o._typeMetaName, -1);
+    igSmartPointer_igMetaObject_Destruct(&o._typeMeta, -1);
+    igDirEntry_Destroy(&o, 0);
     return r;
 }
 

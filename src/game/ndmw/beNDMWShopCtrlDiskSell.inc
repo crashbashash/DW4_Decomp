@@ -27,7 +27,7 @@ int beNDMWShopCtrlDiskSell_GetVTable(void) {
     u.w[21] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_0053f950[0]);
-    ObjectRef_Destruct_00150eb0(&u.w[21], -1);
+    igSmartPointer_igIntList_Destruct(&u.w[21], -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)(&u.w[0]), (long long)0);
     return temp_s0;
 }

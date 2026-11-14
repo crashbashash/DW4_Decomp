@@ -19,10 +19,9 @@ int igBoolMetaField_Clone(int source, int pool) {
     int copy;
     if (*g_objectSystem[0]) {
         igBoolMetaField_EnsureRegistered();
-        FUN_00300c60(source, pool);
-        return;
+        return igObject_CloneViaMetadata((void **)source, pool);
     }
-    copy = FUN_002ff800(0x34, 0);
+    copy = (int)igObject_AllocateRawStorageDefault(0x34, 0);
     if (copy) copy = ((int)igBoolMetaField_CopyConstruct((int **)copy, source));
     return copy;
 }

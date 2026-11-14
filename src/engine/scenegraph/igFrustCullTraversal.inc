@@ -279,7 +279,7 @@ void **FUN_001a0710(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001a0790(void **arg0, long long arg1) {
+void **igSmartPointer_igStringObjList_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {

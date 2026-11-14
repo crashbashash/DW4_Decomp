@@ -68,7 +68,7 @@ bool igMemoryPool_TrimAllPools(int unused, int flags) {
     return trimmed;
 }
 
-void *FUN_002f0c80(igMemoryPoolView *self, unsigned int size)
+void *igMemoryPool_AllocateFromSystem(igMemoryPoolView *self, unsigned int size)
 {
     return self->Allocate(size);
 }
@@ -311,9 +311,9 @@ void igMemoryPool_GangFreeTracked(void **pool, unsigned int count, int *blocks, 
     }
 }
 
-int FUN_002f1e30(igMemoryPoolView *pool, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_AllocateFromSystemTracked(igMemoryPoolView *pool, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
-    void *block = (void *)pool->vfunc_65(size);
+    void *block = (void *)pool->AllocateFromSystem(size);
     if (block != 0) {
         igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, (unsigned short)pool->GetAlignment(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->GetPoolName(pool));
         pool->TrackEvent(&record, filter, depth + 1);
@@ -332,7 +332,7 @@ void igMemoryPool_FreeTracked(igMemoryPoolView *pool, void *block, int filter, i
     pool->Free(block);
 }
 
-void FUN_002f2070(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
+void igMemoryPool_FreeFromSystemTracked(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     if (block != 0) {
         igEventTracker_InitMemoryEvent(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->GetPoolName(pool));

@@ -26,8 +26,8 @@ public:
     virtual void d23();
     virtual int GetRawMemory(...);                                                   /* slot 24, byte 104: the raw memory block; callers pass a stray argument or none */
     virtual int Trim(int);                                                       /* slot 25, byte 108 */
-    virtual int vfunc_28(int level);                                             /* slot 26, byte 112: asked for memory back when the system has none; nonzero when it freed some */
-    virtual int vfunc_29();                                                      /* slot 27, byte 116 */
+    virtual int TrimAllPools(int level);                                         /* slot 26, byte 112: asked for memory back when the system has none; nonzero when it freed some */
+    virtual int IsSecondaryAllocator();                                          /* slot 27, byte 116 */
     virtual void Activate();                                                     /* slot 28, byte 120 */
     virtual void Reset();                                                     /* slot 29, byte 124 */
     virtual int Deactivate();                                                      /* slot 30, byte 128 */
@@ -79,7 +79,7 @@ public:
     virtual igResult GangAlloc(int count, unsigned int *sizes, void **blocks);                                  /* slot 60, byte 248 */
     virtual igResult GangAllocAligned(int count, unsigned int *sizes, void **blocks, unsigned short *alignments); /* slot 61, byte 252 */
     virtual void GangFree(int count, void **blocks);                                                            /* slot 62, byte 256 */
-    virtual int vfunc_65(int);                                                   /* slot 63, byte 260 */
+    virtual int AllocateFromSystem(int size);                                    /* slot 63, byte 260 */
     virtual void Free(void *block);                                              /* slot 64, byte 264 */
     virtual void TrackEvent(void *, int, int);                                     /* slot 65, byte 268 */
     virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72();

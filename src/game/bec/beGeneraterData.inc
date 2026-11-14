@@ -23,10 +23,10 @@ int beGeneraterData_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00535eb0[0];
     FUN_0035fcd0((O *)&obj.w16, (short)(-1));
-    StringRef_Destruct_00130720(&obj.w15, -1);
-    StringRef_Destruct_00130720(&obj.w13, -1);
-    StringRef_Destruct_00130720(&obj.w11, -1);
-    StringRef_Destruct_00130720(&obj.w10, -1);
+    igStringRef_Destruct(&obj.w15, -1);
+    igStringRef_Destruct(&obj.w13, -1);
+    igStringRef_Destruct(&obj.w11, -1);
+    igStringRef_Destruct(&obj.w10, -1);
     FUN_001354b0(&obj.w8, -1);
     FUN_001374b0(&obj.w7, -1);
     FUN_00131bc0(&obj, 0);

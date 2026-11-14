@@ -255,8 +255,6 @@
 0x00238b40	Gap::Gui::igEventReceiver::vfunc_23	engine
 0x00238c50	Gap::Core::igDependencyOrderedList::vfunc_22	engine
 0x00259bf0	Gap::Core::igPsx2Thread::vfunc_39	engine
-0x002d0c10	Gap::Core::igAliasMemoryPool::vfunc_65	engine
-0x0031e0b0	Gap::Core::igArenaMemoryPool::vfunc_65	engine
 0x0031eda0	Gap::Core::igArenaMemoryPool::vfunc_83	engine
 0x003208c0	Gap::Core::igArenaMemoryPool::vfunc_108	engine
 0x00324560	Gap::Core::igMallocMemoryPool::vfunc_83	engine

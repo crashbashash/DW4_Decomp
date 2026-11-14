@@ -28,7 +28,7 @@ int beNDMWMdlItem_GetVTable(void) {
     o.f48 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &DAT_00540450[0];
-    FUN_0014aa70(&o.f48, -1);
+    igSmartPointer_igObjectList_Destruct(&o.f48, -1);
     FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
     return r;
 }

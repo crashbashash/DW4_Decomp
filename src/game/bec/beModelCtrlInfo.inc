@@ -15,7 +15,7 @@ int beModelCtrlInfo_GetVTable(void) {
     u.w[7] = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&DAT_00537c10[0]);
-    StringRef_Destruct_00130720(&u.w[7], -1);
+    igStringRef_Destruct(&u.w[7], -1);
     FUN_0033ec80((struct S_33ec80 *)(&u.w[0]), (short)0);
     return temp_s0;
 }

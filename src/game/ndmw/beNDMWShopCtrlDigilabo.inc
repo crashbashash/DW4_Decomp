@@ -30,8 +30,8 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053fae0[0];
     FUN_0019d200(&obj.w23, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w22, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w21, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w22, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w21, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return t;
 }

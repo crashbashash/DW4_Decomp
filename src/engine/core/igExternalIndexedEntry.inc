@@ -17,9 +17,9 @@ int igExternalIndexedEntry_GetVTable(void) {
     entry._objectType = 0;
     vtable = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     entry._vtable = (int)(&g_igExternalIndexedEntry_vtable[0]);
-    FUN_0019c840(&entry._objectType, -1);
-    FUN_0019c840(&entry._entryType, -1);
-    FUN_0014f4e0(&entry, 0);
+    igSmartPointer_igMetaObject_Destruct(&entry._objectType, -1);
+    igSmartPointer_igMetaObject_Destruct(&entry._entryType, -1);
+    igDirEntry_Destroy(&entry, 0);
     return vtable;
 }
 

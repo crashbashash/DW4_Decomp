@@ -27,16 +27,16 @@ int igIniShaderFactory_GetVTable(void) {
     FUN_0014dd40(&obj.w14, -1);
     FUN_0014dd40(&obj.w13, -1);
     FUN_0019ef30((ObjectRefWord *)&obj.w12, -1);
-    FUN_001509f0(&obj.w11, -1);
-    StringRef_Destruct_00130720(&obj.w9, -1);
-    FUN_0019eeb0((void * *)&obj.w8, -1);
-    FUN_0019eeb0((void * *)&obj.w7, -1);
-    StringRef_Destruct_00130720(&obj.w6, -1);
+    igSmartPointer_igMemoryPool_Destruct(&obj.w11, -1);
+    igStringRef_Destruct(&obj.w9, -1);
+    igSmartPointer_igRegistry_Destruct((void * *)&obj.w8, -1);
+    igSmartPointer_igRegistry_Destruct((void * *)&obj.w7, -1);
+    igStringRef_Destruct(&obj.w6, -1);
     FUN_00199330((struct T_199330 *)&obj, 0);
     return t;
 }
 
-void **FUN_0019eeb0(void **arg0, short arg1) {
+void **igSmartPointer_igRegistry_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

@@ -30,8 +30,8 @@ int beMatCtrl_GetVTable(void) {
     obj.w[14] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053aad0[0];
-    ObjectRef_Destruct_00150eb0(&obj.w[14], -1);
-    ObjectRef_Destruct_00150eb0(&obj.w[13], -1);
+    igSmartPointer_igIntList_Destruct(&obj.w[14], -1);
+    igSmartPointer_igIntList_Destruct(&obj.w[13], -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return r;
 }

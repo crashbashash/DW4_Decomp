@@ -6,12 +6,12 @@ void igMemoryPool_SetPoolIndex(void) {
 
 }
 
-/* Encode an allocator as its registry index: vfunc_29() == 0 allocators live in the
+/* Encode an allocator as its registry index: IsSecondaryAllocator() == 0 allocators live in the
  * primary list (code = index << 1), the rest in the secondary one (code =
  * index << 1 | 1); 0 when the object system is inactive.  An absent allocator
  * is not rejected, it encodes the -1 from IndexOf. */
 int igAllocator_EncodeIndex(igMemoryPoolView *allocator){
-    if(*g_objectSystem[0]&&!allocator->vfunc_29())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList[0],allocator)<<1;
+    if(*g_objectSystem[0]&&!allocator->IsSecondaryAllocator())return (unsigned)igMemoryPoolInfoList_IndexOf(g_primaryAllocatorList[0],allocator)<<1;
     unsigned char result=0;
     if(*g_objectSystem[0])return ((unsigned)igMemoryPoolInfoList_IndexOf(g_secondaryAllocatorList[0],allocator)<<1)|1;
     return result;

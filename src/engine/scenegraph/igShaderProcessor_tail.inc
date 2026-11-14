@@ -2,7 +2,7 @@ igMetaObject *Gap__Sg__igShaderProcessor__vfunc_22(void) {
     return g_igShaderProcessor_metaObject[0];
 }
 
-int FUN_001cafc0(struct L_1cafc0 *arg0, IniStrRef name, int arg2) {
+int igStringRefList_IndexOf(struct L_1cafc0 *arg0, IniStrRef name, int arg2) {
     int n = arg0->n;
     int i = arg2;
     int r;

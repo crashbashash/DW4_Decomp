@@ -33,13 +33,13 @@ int igDriverDatabase_GetVTable(void) {
     db._rawDatabase = 0;
     r = *(int *)((char *)&db + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     db._vtable = (int)&g_igDriverDatabase_vtable[0];
-    FUN_001489a0(&db._rawDatabase, -1);
-    FUN_001489a0(&db._databaseFileName, -1);
-    FUN_00150180(&db._databaseFile, -1);
-    FUN_0019eeb0(&db._overrideSource, -1);
-    FUN_00227e70(&db._subPropertyValues, -1);
-    FUN_00227e70(&db._subPropertyNames, -1);
-    FUN_001a0790(&db._currentProperties, -1);
+    igSmartPointer_igStringObj_Destruct(&db._rawDatabase, -1);
+    igSmartPointer_igStringObj_Destruct(&db._databaseFileName, -1);
+    igSmartPointer_igFile_Destruct(&db._databaseFile, -1);
+    igSmartPointer_igRegistry_Destruct(&db._overrideSource, -1);
+    igSmartPointer_igStringRefListList_Destruct(&db._subPropertyValues, -1);
+    igSmartPointer_igStringRefListList_Destruct(&db._subPropertyNames, -1);
+    igSmartPointer_igStringObjList_Destruct(&db._currentProperties, -1);
     return r;
 }
 

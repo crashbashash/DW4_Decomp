@@ -36,11 +36,11 @@ int beFont_GetVTable(void) {
     obj.w16 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053a5c0[0];
-    StringRef_Destruct_00130720(&obj.w16, -1);
-    StringRef_Destruct_00130720(&obj.w15, -1);
-    FUN_001489a0(&obj.w14, -1);
+    igStringRef_Destruct(&obj.w16, -1);
+    igStringRef_Destruct(&obj.w15, -1);
+    igSmartPointer_igStringObj_Destruct(&obj.w14, -1);
     FUN_001354b0(&obj.w13, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w12, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w12, -1);
     FUN_003620f0((void **)&obj.w11, (short)(-1));
     FUN_00362070((ObjectRefWord *)&obj.w9, -1);
     FUN_001d97f0(&obj.w8, -1);

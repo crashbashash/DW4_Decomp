@@ -29,12 +29,12 @@ int igActorManager_GetVTable(void) {
     obj.w13 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_005429f0[0];
-    FUN_0014aa70(&obj.w13, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w13, -1);
     FUN_004584f0(&obj.w12, -1);
     FUN_0019ab90(&obj.w11, -1);
     FUN_0019ab90(&obj.w10, -1);
-    FUN_0013a880(&obj.w9, -1);
-    FUN_00135430(&obj.w8, -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
+    igSmartPointer_igPointerList_Destruct(&obj.w8, -1);
     FUN_0045e420((O *)&obj.w7, -1);
     FUN_001aa310(&obj.w6, -1);
     FUN_001958f0(&obj.w5, -1);

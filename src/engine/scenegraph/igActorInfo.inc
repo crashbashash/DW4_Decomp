@@ -24,7 +24,7 @@ int igActorInfo_GetVTable(void) {
     FUN_001aa390((void * *)&obj.w7, -1);
     FUN_001aa310((void * *)&obj.w6, -1);
     FUN_001aa290((void * *)&obj.w5, -1);
-    FUN_00131b20(&obj, 0);
+    igInfo_Destroy(&obj, 0);
     return t;
 }
 

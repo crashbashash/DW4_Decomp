@@ -64,16 +64,16 @@ void igMediaFile_OpenWithMode(int *result, igMediaFileView *file, unsigned int m
             if (previous != 0) {
                 previous->FreeHandle(file->_fileHandle);
             }
-            file->_fileHandle = file->_media->vfunc_23();
+            file->_fileHandle = file->_media->AllocateHandle();
         }
-        status = file->_media->vfunc_25(file->_fileHandle, path, file->_openMode).v;
+        status = file->_media->Open(file->_fileHandle, path, file->_openMode).v;
         if (status == g_resultSuccess.v) break;
     }
     if (status == g_resultFailure.v) {
-        if (GPR_00554c10 == 0) {
-            int rc = igReport_Detail(DAT_004f9bd0, file->_fileName);
+        if (g_igMediaFile_openNoticeIgnored == 0) {
+            int rc = igReport_Detail(text_Could_not_open_file_s, file->_fileName);
             if (rc != 1 && rc == 2) {
-                GPR_00554c10 = 1;
+                g_igMediaFile_openNoticeIgnored = 1;
             }
         }
         if (file->_media != 0) {

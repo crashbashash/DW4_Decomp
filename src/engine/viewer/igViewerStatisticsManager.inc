@@ -21,9 +21,9 @@ int igViewerStatisticsManager_GetVTable(void) {
     obj.w10 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &DAT_005425b0[0];
-    FUN_0014e420(&obj.w10, -1);
-    FUN_0013a880(&obj.w9, -1);
-    FUN_001489a0(&obj.w7, -1);
+    igSmartPointer_igMetaFieldList_Destruct(&obj.w10, -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
+    igSmartPointer_igStringObj_Destruct(&obj.w7, -1);
     FUN_0025a2b0(&obj.w6, -1);
     FUN_0025a2b0(&obj.w5, -1);
     FUN_004583f0(&obj.w4, -1);

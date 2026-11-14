@@ -502,7 +502,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
     if (extension == 0) {
         extension = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)self))))));
         if (extension != 0) {
-            if (((igContextExtView *)extension)->vfunc_28(self) == 0) {
+            if (((igContextExtView *)extension)->IsSupported(self) == 0) {
                 extension->_refCount = extension->_refCount - 1;
                 if ((extension->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(extension);
@@ -514,7 +514,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
                 if ((extension->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(extension);
                 }
-                ((igContextExtView *)extension)->vfunc_29(self);
+                ((igContextExtView *)extension)->SetContext(self);
             }
         }
     }

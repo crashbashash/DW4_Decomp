@@ -60,38 +60,38 @@ void igArenaMemoryPool_CheckTriggerEvent(igArenaMemoryPool *pool, int event, int
     int matched;
     int eventCount;
 
-    if (DAT_005871e8[0] != 0 && (matched = 0, eventCount = -1, (DAT_004c2330[0] & event) != 0)) {
-        if (DAT_004c2338[0] == pool->_poolIndex) {
+    if (g_arenaTriggerConditions[0] != 0 && (matched = 0, eventCount = -1, (g_arenaTriggerEventMask[0] & event) != 0)) {
+        if (g_arenaTriggerPoolIndex[0] == pool->_poolIndex) {
             matched |= 1;
         }
-        if (address == DAT_004c2340[0]) {
+        if (address == g_arenaTriggerAddress[0]) {
             matched |= 2;
         }
-        if (size == DAT_004c2348[0]) {
+        if (size == g_arenaTriggerSize[0]) {
             matched |= 4;
         }
-        if (DAT_005871e0[0] == DAT_004c2350[0]) {
+        if (g_arenaOperationOrdinal[0] == g_arenaTriggerOrdinal[0]) {
             matched |= 8;
         }
-        if (DAT_004c2358[0] != -1) {
+        if (g_arenaTriggerEventCount[0] != -1) {
             int tracker = (int)((igMemoryPoolView *)pool)->GetEventTracker();
             if (tracker != 0) {
                 eventCount = igEventTracker_GetCount((int *)tracker);
-                if (eventCount == DAT_004c2358[0]) {
+                if (eventCount == g_arenaTriggerEventCount[0]) {
                     matched |= 0x10;
                 }
             }
         }
-        if (matched != 0 && DAT_005871e8[0] == (DAT_005871e8[0] & matched)) {
-            if (DAT_005871f0[0] != 0) {
-                DAT_005871f0[0](pool, event, address, size, DAT_005871e0[0], eventCount, matched);
+        if (matched != 0 && g_arenaTriggerConditions[0] == (g_arenaTriggerConditions[0] & matched)) {
+            if (g_arenaTriggerHandler[0] != 0) {
+                g_arenaTriggerHandler[0](pool, event, address, size, g_arenaOperationOrdinal[0], eventCount, matched);
                 return;
             }
-            if (g_igArenaMemoryPool_defaultMessageLevel[0] < 4 && GPR_00554c34 == 0) {
+            if (g_igArenaMemoryPool_defaultMessageLevel[0] < 4 && g_arenaTriggerNoticeIgnored == 0) {
                 int rc = igReportNotice((const char *)text_Arena_trigger_event_s_address_0x,
-                                        DAT_004c2310[event], address, size, DAT_005871e0[0], eventCount, matched);
+                                        g_arenaTriggerEventNames[event], address, size, g_arenaOperationOrdinal[0], eventCount, matched);
                 if (rc != 1 && rc == 2) {
-                    GPR_00554c34 = 1;
+                    g_arenaTriggerNoticeIgnored = 1;
                 }
             }
         }

@@ -31,8 +31,8 @@ int igStatisticsItem_GetVTable(void) {
     FUN_00458e40((ObjectRefWord *)&obj.w11, -1);
     FUN_00458dc0((void **)&obj.w10, -1);
     FUN_003cafa0(&obj.w9, -1);
-    StringRef_Destruct_00130720(&obj.w7, -1);
-    StringRef_Destruct_00130720(&obj.w6, -1);
+    igStringRef_Destruct(&obj.w7, -1);
+    igStringRef_Destruct(&obj.w6, -1);
     return t;
 }
 

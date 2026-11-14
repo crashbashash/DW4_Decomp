@@ -26,10 +26,10 @@ int beDemoKeepMes_GetVTable(void) {
     *(int *)&u.b[40] = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_00535610[0];
-    StringRef_Destruct_00130720(&u.b[40], -1);
-    StringRef_Destruct_00130720(&u.b[36], -1);
-    StringRef_Destruct_00130720(&u.b[28], -1);
-    StringRef_Destruct_00130720(&u.b[24], -1);
+    igStringRef_Destruct(&u.b[40], -1);
+    igStringRef_Destruct(&u.b[36], -1);
+    igStringRef_Destruct(&u.b[28], -1);
+    igStringRef_Destruct(&u.b[24], -1);
     return r;
 }
 

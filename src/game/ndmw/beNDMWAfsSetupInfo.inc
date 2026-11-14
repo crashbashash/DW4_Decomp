@@ -18,7 +18,7 @@ int beNDMWAfsSetupInfo_GetVTable(void) {
     o.vt = DAT_0053c470;
     FUN_003ca610((ObjectRefWord_3ca610 *)(&o.f[5]), -1);
     FUN_00333760(&o.f[4], -1);
-    FUN_00131b20(&o, 0);
+    igInfo_Destroy(&o, 0);
     return r;
 }
 

@@ -24,10 +24,10 @@ int igOptInterface_GetVTable(void) {
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052be10[0];
-    FUN_001d35d0(&obj.w11, -1);
+    igSmartPointer_igInfoList_Destruct(&obj.w11, -1);
     FUN_00225b90((void **)&obj.w10, -1);
-    StringRef_Destruct_00130720(&obj.w9, -1);
-    FUN_0013a880(&obj.w8, -1);
+    igStringRef_Destruct(&obj.w9, -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w8, -1);
     return t;
 }
 

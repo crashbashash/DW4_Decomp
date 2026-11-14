@@ -19,7 +19,7 @@ int igFloatArrayMetaField_GetVTable(void) {
     int *header;
     int refCount;
 
-    FUN_002fbfe0((char *)&prototype);
+    igMetaField_Init((igMetaField *)&prototype);
     prototype._vtable = (int)&g_igFloatArrayMetaField_vtable[0];
     vtable = *(int *)((char *)&prototype + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     prototype._vtable = (int)&g_igMetaField_vtable[0];

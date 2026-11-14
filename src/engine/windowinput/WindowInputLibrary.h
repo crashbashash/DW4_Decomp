@@ -309,7 +309,7 @@ struct PropertyText : igObject { char *chars; };
 extern "C" void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 extern "C" int __dl__FPv(...);
-extern "C" void **FUN_001489a0(void **arg0, short arg1);
+extern "C" void **igSmartPointer_igStringObj_Destruct(void **arg0, short arg1);
 extern "C" void Gap__igPsx2Controller__vfunc_36(igPsx2Controller *self, igObject *window);
 extern "C" void Gap__igPsx2Controller__vfunc_33(void *arg0, short arg1);
 extern "C" int Gap__igPsx2ControllerManager__vfunc_25(igPsx2ControllerManager *arg0);

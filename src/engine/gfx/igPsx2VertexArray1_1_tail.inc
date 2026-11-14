@@ -26,8 +26,8 @@ int igPsx2VertexArray1_1_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_00525190[0];
     FUN_00152560((void **)&obj.w[13], -1);
-    FUN_00135430(&obj.w[12], -1);
-    FUN_00135430(&obj.w[11], -1);
+    igSmartPointer_igPointerList_Destruct(&obj.w[12], -1);
+    igSmartPointer_igPointerList_Destruct(&obj.w[11], -1);
     FUN_001524c0((S_1524c0 *)&obj, 0);
     return t;
 }

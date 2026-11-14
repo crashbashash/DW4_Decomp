@@ -30,7 +30,7 @@ int beNDMWStatusCtrlSkill_GetVTable(void) {
     *(int *)&u.b[104] = 0;
     temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ec80[0];
-    ObjectRef_Destruct_00150eb0(&u.b[104], -1);
+    igSmartPointer_igIntList_Destruct(&u.b[104], -1);
     FUN_003b8980((ObjectRefWord *)p1, -1);
     FUN_003b6770((int **)u.b, (long long)0);
     return temp_s1;

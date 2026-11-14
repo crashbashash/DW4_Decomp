@@ -29,7 +29,7 @@ int igInfoManagerOrderedList_GetVTable(void) {
     return r;
 }
 
-ObjectRefWord *FUN_00233590(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igDependencyList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -47,10 +47,10 @@ int **FUN_00233610(int **arg0, long long arg1) {
         *arg0 = &DAT_0052cbc0[0];
         if (arg0 != 0) {
             *arg0 = &DAT_0052cc20[0];
-            ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x14), -1);
-            FUN_00135430((int **)((char *)arg0 + 0x10), -1);
-            FUN_00233590((ObjectRefWord *)((char *)arg0 + 0xC), -1);
-            FUN_0014aa70((int **)((char *)arg0 + 8), -1);
+            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
+            igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
+            igSmartPointer_igDependencyList_Destruct((ObjectRefWord *)((char *)arg0 + 0xC), -1);
+            igSmartPointer_igObjectList_Destruct((int **)((char *)arg0 + 8), -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);

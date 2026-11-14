@@ -62,11 +62,11 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
         }
         if (arg0 != 0) {
             arg0->f0 = &g_beNDMWWindow_vtable[0];
-            ObjectRef_Destruct_001c6460(&arg0->f76, -1);
-            ObjectRef_Destruct_00150eb0(&arg0->f72, -1);
-            ObjectRef_Destruct_001c6460(&arg0->f68, -1);
-            ObjectRef_Destruct_001c6460(&arg0->f64, -1);
-            ObjectRef_Destruct_001c6460(&arg0->f60, -1);
+            igSmartPointer_igStringRefList_Destruct(&arg0->f76, -1);
+            igSmartPointer_igIntList_Destruct(&arg0->f72, -1);
+            igSmartPointer_igStringRefList_Destruct(&arg0->f68, -1);
+            igSmartPointer_igStringRefList_Destruct(&arg0->f64, -1);
+            igSmartPointer_igStringRefList_Destruct(&arg0->f60, -1);
             FUN_003b2f30((void **)&arg0->f56, -1);
             FUN_003b2fb0((void **)&arg0->f52, (short)(-1));
         }

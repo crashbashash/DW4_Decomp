@@ -129,7 +129,7 @@ extern "C" int FUN_00131aa0(int *, int);
 extern "C" int FUN_00132390(int *, int);
 extern "C" int FUN_001d3650(int *, int);
 extern "C" int ObjectRef_Destruct_001363f0(int *, int);
-extern "C" int StringRef_Destruct_00130720(int *, int);
+extern "C" int igStringRef_Destruct(int *, int);
 extern "C" int igMovieInfo_GetVTable(void);
 extern "C" void **FUN_003363c0(void **arg0, long long arg1);
 extern "C" void **FUN_00336440(void **arg0, int arg1);
@@ -305,7 +305,7 @@ extern "C" int DAT_004c2990[4];
 extern "C" int IG_MOVIE_TYPE[4];
 extern "C" int DAT_005877a8[4];
 extern "C" igMetaObject *g_igMovieInfo_metaObject[4];
-extern "C" int FUN_00131b20(struct Obj_334e50 *, int);
+extern "C" int igInfo_Destroy(struct Obj_334e50 *, int);
 extern "C" int DAT_00533910[4];
 struct igMetaObject_3364e0;
 extern "C" igMetaObject_3364e0 *igInfo_GetPublishedMetaObject(void);
@@ -1396,10 +1396,10 @@ int igMovieInfo_GetVTable(void) {
     FUN_00132390(&obj.w21, -1);
     FUN_001d3650(&obj.w20, -1);
     FUN_00336440((void **)&obj.w18, -1);
-    StringRef_Destruct_00130720(&obj.w17, -1);
+    igStringRef_Destruct(&obj.w17, -1);
     FUN_003363c0((void **)&obj.w12, (long long)(-1));
-    StringRef_Destruct_00130720(&obj.w5, -1);
-    FUN_00131b20(&obj, 0);
+    igStringRef_Destruct(&obj.w5, -1);
+    igInfo_Destroy(&obj, 0);
     return t;
 }
 

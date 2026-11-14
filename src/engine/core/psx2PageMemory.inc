@@ -33,7 +33,7 @@ int SystemAllocatorBase_Allocate(void *self, int size) {
     return block;
 }
 
-int FUN_00328f20(int self, int size) {
+int SystemAllocatorBase_Memalign(int self, int size) {
     int block;
 
     block = malloc(size);
@@ -163,7 +163,7 @@ unsigned SystemAllocatorBase_AllocateRange(SystemAllocator *self, unsigned a, in
         }
     }
     if (r != (unsigned)-1) {
-        igResult x = self->vfunc_46(r, n, 1);
+        igResult x = self->MarkRange(r, n, 1);
         igResult y = self->SetPageState(3, r, n);
     }
     return r;
@@ -562,7 +562,7 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
     self->GetStatistics(&stats);
     igSmartPointer<igPointerList> list((igPointerList *)igPointerList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
     if (list->_count <= 1024) {
-        FUN_002d6680(list, 1024, 4);
+        List_Reserve((igDataList *)list.p, 1024, 4);
     }
     if (a != 0) {
         self->CollectHardwareRegions(list);
@@ -716,7 +716,7 @@ int SystemAllocatorBase_Sbrk(void) {
     return -1;
 }
 
-void SystemAllocatorBase_ReserveRange(int *status, SystemAllocator *self, int address, int size) {igResult stateResult = self->SetPageState(1, address, size); igResult markResult = self->vfunc_46(address, size, 0);*status = g_resultSuccess.v;}
+void SystemAllocatorBase_ReserveRange(int *status, SystemAllocator *self, int address, int size) {igResult stateResult = self->SetPageState(1, address, size); igResult markResult = self->MarkRange(address, size, 0);*status = g_resultSuccess.v;}
 
 void *SystemAllocatorBase_AllocateTable(SystemAllocator *self, unsigned int size)
 {
@@ -728,7 +728,7 @@ void SystemAllocatorBase_FreeTable(SystemAllocator *self, void *block)
     self->Free(block);
 }
 
-void FUN_0032ac60(int *status) {
+void SystemAllocatorBase_MarkRange(int *status) {
     *status = g_resultSuccess.v;
 }
 

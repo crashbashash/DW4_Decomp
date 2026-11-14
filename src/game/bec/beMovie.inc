@@ -31,7 +31,7 @@ int beMovie_GetVTable(void) {
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053bad0[0];
-    StringRef_Destruct_00130720(&obj.w9, -1);
+    igStringRef_Destruct(&obj.w9, -1);
     FUN_003369f0(&obj.w8, -1);
     FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
     return t;

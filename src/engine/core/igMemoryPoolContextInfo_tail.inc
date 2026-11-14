@@ -319,7 +319,7 @@ void igMemoryPoolContextInfo_FillMemoryPoolInfo(int *result, MemoryContext *cont
                         if (((igArenaMemoryPoolView *)object)->GetLocalNetAllocatedWithOverheadHigh() > object->GetPreSize()) {
                             entry->descriptor->_size = (int)((igArenaMemoryPoolView *)object)->GetLocalNetAllocatedWithOverheadHigh();
                         }
-                    } else if (object->vfunc_29() != 0) {
+                    } else if (object->IsSecondaryAllocator() != 0) {
                         entry->descriptor->_size = (int)object->GetSize();
                     }
                 } else if (object->GetSize() != 0) {
@@ -1254,7 +1254,7 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
         igSymbolTable *loaded = (igSymbolTable *)igSymbolTable_Create(alloc);
         if (loader != 0) {
             if (loader->Open((char *)symbolsFileName.p) == g_resultSuccess) {
-                if (loader->vfunc_28(loaded, 1) == g_resultFailure) {
+                if (loader->LoadSymbolTable(loaded, 1) == g_resultFailure) {
                     loaded->_refCount = loaded->_refCount - 1;
                     if (((unsigned long long)((long long)(int)loaded->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(loaded);
                     loaded = 0;

@@ -188,7 +188,7 @@ igResult igElfFile_LoadSymbols(ElfFileView *self) {
     ElfSection *next;
     int expected;
     if (index == -1) {
-        igReport_Printf(DAT_004fde00, self->path);
+        igReport_Printf(text_No_symbol_section_in_s, self->path);
         igReport_Flush();
         self->Close();
         return g_resultFailure;
@@ -213,7 +213,7 @@ igResult igElfFile_LoadSymbols(ElfFileView *self) {
             return g_resultFailure;
         }
     } else {
-        igReport_Printf(DAT_004fde20, self->path);
+        igReport_Printf(text_Can_t_find_symbol_string_table_i, self->path);
         igReport_Flush();
         self->Close();
         return g_resultFailure;

@@ -22,10 +22,10 @@ int beMessengerWork_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&DAT_00536f10[0];
     FUN_0033ec00((igObject **)&obj._findRamList, (short)(-1));
-    ObjectRef_Destruct_00150eb0(&obj._findRamNoList, -1);
-    StringRef_Destruct_00130720(&obj._message, -1);
-    StringRef_Destruct_00130720(&obj._infoName, -1);
-    StringRef_Destruct_00130720(&obj._groupName, -1);
+    igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
+    igStringRef_Destruct(&obj._message, -1);
+    igStringRef_Destruct(&obj._infoName, -1);
+    igStringRef_Destruct(&obj._groupName, -1);
     return t;
 }
 

@@ -17,10 +17,10 @@ int igDependencyOrderedList_GetVTable(void) {
     list._checkPoints = 0;
     t = *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     list._vtable = (int)&g_igDependencyOrderedList_vtable[0];
-    ObjectRef_Destruct_001c6460(&list._checkPoints, -1);
-    FUN_00135430(&list._order, -1);
-    FUN_00233590(&list._dependencies, -1);
-    FUN_0014aa70(&list._objectList, -1);
+    igSmartPointer_igStringRefList_Destruct(&list._checkPoints, -1);
+    igSmartPointer_igPointerList_Destruct(&list._order, -1);
+    igSmartPointer_igDependencyList_Destruct(&list._dependencies, -1);
+    igSmartPointer_igObjectList_Destruct(&list._objectList, -1);
     return t;
 }
 

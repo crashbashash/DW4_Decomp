@@ -46,11 +46,11 @@ int igDirectory_GetVTable(void) {
     dir._vtable = (int)&g_igDirectory_vtable[0];
     igSmartPointer_igSemaphore_Destruct((igObject **)&dir._loadingSemaphore, -1);
     igSmartPointer_igShortListList_Destruct((igSmartPointer<igObject> *)p188, -1);
-    FUN_00135430(p172, -1);
-    FUN_001d36d0(p168, -1);
-    FUN_001d35d0(p156, -1);
+    igSmartPointer_igPointerList_Destruct(p172, -1);
+    igSmartPointer_igDirectory_Destruct(p168, -1);
+    igSmartPointer_igInfoList_Destruct(p156, -1);
     igSmartPointer_igDirectoryList_Destruct((void **)p152, -1);
-    StringRef_Destruct_00130720(p148, -1);
+    igStringRef_Destruct(p148, -1);
     return vtable;
 }
 

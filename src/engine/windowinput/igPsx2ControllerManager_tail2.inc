@@ -89,7 +89,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
     }
 }
 
-void **FUN_001489a0(void **arg0, short arg1) {
+void **igSmartPointer_igStringObj_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {

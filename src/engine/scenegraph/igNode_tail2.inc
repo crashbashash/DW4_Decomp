@@ -33,7 +33,7 @@ void FUN_001c63e0(int arg0, int arg1) {
     }
 }
 
-void **ObjectRef_Destruct_001c6460(void **arg0, short arg1) {
+void **igSmartPointer_igStringRefList_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

@@ -98,7 +98,7 @@ void igMemoryPool_RegisterPool(void **pool) {
     int idx;
     int flag;
 
-    if (((igMemoryPoolView *)pool)->vfunc_29() == 0) {
+    if (((igMemoryPoolView *)pool)->IsSecondaryAllocator() == 0) {
         list = g_primaryAllocatorList[0];
         idx = list->count;
         flag = 0;
@@ -125,7 +125,7 @@ void igMemoryPool_RegisterPool(void **pool) {
 void igMemoryPool_UnregisterPool(void **pool) {
     int index;
 
-    if (((igMemoryPoolView *)pool)->vfunc_29() == 0) {
+    if (((igMemoryPoolView *)pool)->IsSecondaryAllocator() == 0) {
         index = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (igMemoryPoolView *)pool);
         if (index >= 0) {
             *(int *)(*((int * *)g_primaryAllocatorList)[0] + (index * 4)) = 0;

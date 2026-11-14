@@ -24,9 +24,9 @@ int igItemInterface_GetVTable(void) {
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c0f0[0];
-    FUN_00227e70((void **)&obj.w11, -1);
+    igSmartPointer_igStringRefListList_Destruct((void **)&obj.w11, -1);
     FUN_00227df0((ObjectRefWord *)&obj.w10, -1);
-    FUN_0013a880(&obj.w9, -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
     FUN_00227d70((void **)&obj.w8, -1);
     return t;
 }
@@ -63,7 +63,7 @@ ObjectRefWord *FUN_00227df0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void **FUN_00227e70(void **arg0, short arg1) {
+void **igSmartPointer_igStringRefListList_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

@@ -35,25 +35,25 @@ void igResource_StopAsyncLoading(igResourceView *self) {
 }
 
 void igResource_ReleaseDefaults(igResource *self) {
-    igObject *temp_a0;
-    igObject *temp_a0_2;
+    igObject *strings;
+    igObject *values;
 
     if (self->_asyncLoadState == 1) {
         igResource_StopAsyncLoading((igResourceView *)self);
     }
-    temp_a0 = (igObject *)self->_alignmentStrings;
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = temp_a0->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+    strings = (igObject *)self->_alignmentStrings;
+    if (strings != 0) {
+        strings->_refCount = strings->_refCount - 1;
+        if (((unsigned long long) ((long long)(int) strings->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(strings);
         }
     }
     self->_alignmentStrings = 0;
-    temp_a0_2 = (igObject *)self->_alignmentValues;
-    if (temp_a0_2 != 0) {
-        temp_a0_2->_refCount = temp_a0_2->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) temp_a0_2->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0_2);
+    values = (igObject *)self->_alignmentValues;
+    if (values != 0) {
+        values->_refCount = values->_refCount - 1;
+        if (((unsigned long long) ((long long)(int) values->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(values);
         }
     }
     self->_alignmentValues = 0;
@@ -369,38 +369,38 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
     }
 }
 
-void igResource_WrapRootInSceneInfo(int arg0) {
-    int s0m, s1m;
-    void *s1;
-    igObject *sp5C;
-    if (arg0 != 0) {
-        s0m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igNode[0]);
-        if (s0m != 0) {
-            s1 = ((void *)igDirectory_GetObjectByName(arg0, (int)&text_root[0]));
-            if (s1 != 0 && igObject_IsKindOf(s1, (igMetaObject *)s0m) != 0) {
-                s1m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igSceneInfo[0]);
-                if (s1m != 0) {
+void igResource_WrapRootInSceneInfo(int directory) {
+    int nodeMeta, infoMeta;
+    void *root;
+    igObject *info;
+    if (directory != 0) {
+        nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)&text_igNode[0]);
+        if (nodeMeta != 0) {
+            root = ((void *)igDirectory_GetObjectByName(directory, (int)&text_root[0]));
+            if (root != 0 && igObject_IsKindOf(root, (igMetaObject *)nodeMeta) != 0) {
+                infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)&text_igSceneInfo[0]);
+                if (infoMeta != 0) {
                     igObject *t;
-                    igObjectRefMetaField *f1, *f2, *f3;
-                    void *l;
-                    sp5C = (igObject *)igMetaObject_CreateInstanceDefault((void *)s1m);
-                    t = *(igObject **)&sp5C;
+                    igObjectRefMetaField *sceneGraphField, *camerasField, *sceneGraphListField;
+                    void *sceneGraphList;
+                    info = (igObject *)igMetaObject_CreateInstanceDefault((void *)infoMeta);
+                    t = *(igObject **)&info;
                     if (t) t->_refCount = t->_refCount + 1;
                     {
-                        igObject *u = sp5C;
+                        igObject *u = info;
                         u->_refCount = u->_refCount - 1;
                         if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
                     }
-                    f1 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_sceneGraph[0]));
-                    igObjectRefMetaField_Assign(f1, (void *)sp5C, (igObject *)s1);
-                    f2 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_cameras[0]));
-                    f3 = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)sp5C)->GetMeta(), (const char *)&text_sceneGraphList[0]));
-                    l = AsObjectList(*(void **)((char *)sp5C + f3->_offset));
-                    if (l != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)l, (igObject *)s1);
-                    igObjectRefMetaField_Assign(f2, (void *)sp5C, (igObject *)0);
-                    igDirectory_AddInfo((void *)arg0, (void *)sp5C);
+                    sceneGraphField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_sceneGraph[0]));
+                    igObjectRefMetaField_Assign(sceneGraphField, (void *)info, (igObject *)root);
+                    camerasField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_cameras[0]));
+                    sceneGraphListField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_sceneGraphList[0]));
+                    sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
+                    if (sceneGraphList != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)sceneGraphList, (igObject *)root);
+                    igObjectRefMetaField_Assign(camerasField, (void *)info, (igObject *)0);
+                    igDirectory_AddInfo((void *)directory, (void *)info);
                     {
-                        igObject *u = sp5C;
+                        igObject *u = info;
                         if (u != 0) {
                             u->_refCount = u->_refCount - 1;
                             if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);

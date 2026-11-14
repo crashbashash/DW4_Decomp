@@ -32,7 +32,7 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     obj.vt = &DAT_0053edb0[0];
     FUN_003b9ba0((ObjectRefWord *)(&obj.w[24]), -1);
     FUN_003b6090((void **)(&obj.w[23]), (long long)(-1));
-    ObjectRef_Destruct_00150eb0(&obj.w[21], -1);
+    igSmartPointer_igIntList_Destruct(&obj.w[21], -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)((int *)&obj), (long long)0);
     return t;
 }

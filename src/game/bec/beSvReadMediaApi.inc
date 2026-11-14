@@ -22,7 +22,7 @@ int beSvReadMediaApi_GetVTable(void) {
     obj.w20 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0053be40[0];
-    FUN_0014aa70(&obj.w20, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w20, -1);
     FUN_003493b0((O *)&obj.w19, (short)(-1));
     FUN_00349080((void **)&obj.w17, (long long)(-1));
     FUN_00348390((struct S_348390 *)&obj, (short)0);

@@ -35,11 +35,11 @@ int igAttrStackManager_GetVTable(void) {
     FUN_0019ff90((struct T_19fde0 * *)&obj.w14, -1);
     FUN_0019ff10((struct R * *)&obj.w13, -1);
     FUN_001380e0(&obj.w11, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w10, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w10, -1);
     FUN_001380e0(&obj.w9, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w8, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w7, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w6, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w8, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w7, -1);
+    igSmartPointer_igIntList_Destruct(&obj.w6, -1);
     FUN_0013bfe0(&obj.w5, -1);
     FUN_001a5540((void * *)&obj.w4, -1);
     return t;

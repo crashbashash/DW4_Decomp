@@ -23,7 +23,7 @@ int igPsx2File_GetVTable(void) {
     f._prefix = 0;
     vtable = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     f._vtable = (int)&g_igPsx2File_vtable[0];
-    FUN_00130720(&f._prefix, -1);
+    igStringRef_Destruct(&f._prefix, -1);
     igFile_Destroy((igFile *)&f, (short)0);
     return vtable;
 }

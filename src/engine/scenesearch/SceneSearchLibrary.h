@@ -35,10 +35,10 @@ extern "C" char g_igSearchSceneGraph_callbackList[];
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
 extern "C" int igObject_InitHeader(...);
-extern "C" int FUN_0019c840(...);
+extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_002293d0(...);
 extern "C" int FUN_00131bc0(...);
-extern "C" int StringRef_Destruct_00130720(...);
+extern "C" int igStringRef_Destruct(...);
 extern "C" int DAT_0052d0d0[4];
 extern "C" void *g_objectSystem[4];
 

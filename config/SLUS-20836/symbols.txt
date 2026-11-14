@@ -961,7 +961,7 @@
 00130600 000008 thunk_igViewportAttr_GetMetaObject
 00130610 00000c FUN_00130610
 00130620 0000f8 igViewportAttr_InitFields
-00130720 000074 StringRef_Destruct_00130720
+00130720 000074 igStringRef_Destruct
 001307a0 000048 igVertexBlendStateAttr_GetMetaObject
 001307f0 00003c igVertexBlendStateAttr_GetVTable
 00130830 00000c FUN_00130830
@@ -1023,7 +1023,7 @@
 00131970 000008 thunk_igTextureMatrixAttr_GetMetaObject
 00131980 000120 igTextureMatrixAttr_InitFields
 00131aa0 000080 FUN_00131aa0
-00131b20 000098 FUN_00131b20
+00131b20 000098 igInfo_Destroy
 00131bc0 000088 FUN_00131bc0
 00131c50 00000c FUN_00131c50
 00131c60 000034 FUN_00131c60
@@ -1180,7 +1180,7 @@
 00135330 000008 thunk_igMultiPassStateAttr_GetMetaObject
 00135340 000070 igMultiPassStateAttr_InitFields
 001353b0 000080 FUN_001353b0
-00135430 000080 FUN_00135430
+00135430 000080 igSmartPointer_igPointerList_Destruct
 001354b0 000080 FUN_001354b0
 00135530 00000c igObject_GetMetaObject_ParentAccessor
 00135540 000048 FUN_00135540
@@ -1425,7 +1425,7 @@
 0013a680 000048 igAttrPool_GetMetaObject
 0013a6d0 000124 igAttrPool_GetVTable
 0013a800 000080 FUN_0013a800
-0013a880 000080 FUN_0013a880
+0013a880 000080 igSmartPointer_igMetaObjectList_Destruct
 0013a900 00000c FUN_0013a900
 0013a910 00007c igAttrPool_Register
 0013a990 000008 thunk_igAttrPool_GetMetaObject
@@ -1894,7 +1894,7 @@
 00143150 000048 FUN_00143150
 001431a0 0000b0 igPsx2AudioContext_GetVTable
 00143250 000080 FUN_00143250
-001432d0 000080 FUN_001432d0
+001432d0 000080 igSmartPointer_igThread_Destruct
 00143350 000080 FUN_00143350
 001433d0 00000c FUN_001433d0
 001433e0 000074 igPsx2AudioContext_Register
@@ -2067,7 +2067,7 @@
 001480a0 0000b4 FUN_001480a0
 00148160 000460 FUN_00148160
 001485c0 0003dc Gap__igPsx2ControllerManager__vfunc_24 Gap::igPsx2ControllerManager::vfunc_24
-001489a0 000080 FUN_001489a0
+001489a0 000080 igSmartPointer_igStringObj_Destruct
 00148a20 000074 Gap__igPsx2Controller__vfunc_36 Gap::igPsx2Controller::vfunc_36
 00148aa0 000008 Gap__igPsx2Controller__vfunc_33 Gap::igPsx2Controller::vfunc_33
 00148ab0 000030 Gap__igPsx2ControllerManager__vfunc_25 Gap::igPsx2ControllerManager::vfunc_25
@@ -2174,7 +2174,7 @@
 0014a810 000048 igVertexArray2_GetMetaObject
 0014a860 0000a4 igVertexArray2_GetVTable
 0014a910 000158 FUN_0014a910
-0014aa70 000080 FUN_0014aa70
+0014aa70 000080 igSmartPointer_igObjectList_Destruct
 0014aaf0 000080 FUN_0014aaf0
 0014ab70 00000c FUN_0014ab70
 0014ab80 000074 igVertexArray2_Register
@@ -2343,7 +2343,7 @@
 0014e2a0 000054 FUN_0014e2a0
 0014e300 000048 igTrackedElementMetaField_GetMetaObject
 0014e350 0000d0 igTrackedElementMetaField_GetVTable
-0014e420 000080 FUN_0014e420
+0014e420 000080 igSmartPointer_igMetaFieldList_Destruct
 0014e4a0 00000c FUN_0014e4a0
 0014e4b0 00006c igTrackedElementMetaField_Register
 0014e520 000008 thunk_igTrackedElementMetaField_GetMetaObject
@@ -2362,7 +2362,7 @@
 0014eae0 000034 FUN_0014eae0
 0014eb20 000048 igCustomStateField_GetMetaObject
 0014eb70 0000d4 igCustomStateField_GetVTable
-0014ec50 000080 FUN_0014ec50
+0014ec50 000080 igSmartPointer_igMetaField_Destruct
 0014ecd0 00000c FUN_0014ecd0
 0014ece0 000074 igCustomStateField_Register
 0014ed60 000008 thunk_igCustomStateField_GetMetaObject
@@ -2393,7 +2393,7 @@
 0014f410 000008 thunk_igGenericCapabilityManager_GetMetaObject
 0014f420 000048 FUN_0014f420
 0014f470 000068 igExternalImageEntry_GetVTable
-0014f4e0 000098 FUN_0014f4e0
+0014f4e0 000098 igDirEntry_Destroy
 0014f580 000144 FUN_0014f580
 0014f6d0 00000c FUN_0014f6d0
 0014f6e0 000064 igExternalImageEntry_Register
@@ -2436,7 +2436,7 @@
 00150060 000034 FUN_00150060
 001500a0 000048 igTgaLoader_GetMetaObject
 001500f0 00008c igTgaLoader_GetVTable
-00150180 000080 FUN_00150180
+00150180 000080 igSmartPointer_igFile_Destruct
 00150200 00000c FUN_00150200
 00150210 000074 igTgaLoader_Register
 00150290 000008 thunk_igTgaLoader_GetMetaObject
@@ -2456,10 +2456,10 @@
 00150770 000048 FUN_00150770
 001507c0 000048 igPsx2VisualContext_GetMetaObject
 00150810 0001d8 igPsx2VisualContext_GetVTable
-001509f0 000080 FUN_001509f0
+001509f0 000080 igSmartPointer_igMemoryPool_Destruct
 00150a70 000080 FUN_00150a70
 00150af0 0003bc FUN_00150af0
-00150eb0 000080 ObjectRef_Destruct_00150eb0
+00150eb0 000080 igSmartPointer_igIntList_Destruct
 00150f30 000080 FUN_00150f30
 00150fb0 000080 FUN_00150fb0
 00151030 00001c FUN_00151030
@@ -2469,7 +2469,7 @@
 00151080 00000c FUN_00151080
 00151090 000008 FUN_00151090
 001510a0 000028 FUN_001510a0
-001510d0 00000c FUN_001510d0
+001510d0 00000c igSmartPointer_igIntList_Construct
 001510e0 0000a4 FUN_001510e0
 00151190 00000c FUN_00151190
 001511a0 00000c FUN_001511a0
@@ -4305,7 +4305,7 @@
 0019c7b0 00000c FUN_0019c7b0
 0019c7c0 000064 igOverrideAttrSet_Register
 0019c830 000008 thunk_igOverrideAttrSet_GetMetaObject
-0019c840 000080 FUN_0019c840
+0019c840 000080 igSmartPointer_igMetaObject_Destruct
 0019c8c0 000048 FUN_0019c8c0
 0019c910 000048 igNonRefCountedNodeList_GetMetaObject
 0019c960 00003c igNonRefCountedNodeList_GetVTable
@@ -4408,7 +4408,7 @@
 0019ec70 0000b0 igInterpretedShaderData_InitFields
 0019ed20 000048 igIniShaderFactory_GetMetaObject
 0019ed70 000138 igIniShaderFactory_GetVTable
-0019eeb0 000080 FUN_0019eeb0
+0019eeb0 000080 igSmartPointer_igRegistry_Destruct
 0019ef30 000080 FUN_0019ef30
 0019efb0 00000c FUN_0019efb0
 0019efc0 000074 igIniShaderFactory_Register
@@ -4473,7 +4473,7 @@
 001a0610 000080 FUN_001a0610
 001a0690 000080 FUN_001a0690
 001a0710 000080 FUN_001a0710
-001a0790 000080 FUN_001a0790
+001a0790 000080 igSmartPointer_igStringObjList_Destruct
 001a0810 000080 FUN_001a0810
 001a0890 000080 FUN_001a0890
 001a0910 0006e4 FUN_001a0910
@@ -4613,7 +4613,7 @@
 001a3e70 000658 igCommonTraversal_InitFields
 001a44d0 000028 FUN_001a44d0
 001a4500 000008 thunk_FUN_001b6c50
-001a4510 00000c FUN_001a4510
+001a4510 00000c igSmartPointer_igMetaObjectList_Construct
 001a4520 000034 FUN_001a4520
 001a4560 000048 FUN_001a4560
 001a45b0 000048 igCamera_GetMetaObject
@@ -5256,7 +5256,7 @@
 001c6340 00008c FUN_001c6340
 001c63d0 000008 Gap__Sg__igNode__vfunc_27 Gap::Sg::igNode::vfunc_27
 001c63e0 00007c FUN_001c63e0
-001c6460 000080 ObjectRef_Destruct_001c6460
+001c6460 000080 igSmartPointer_igStringRefList_Destruct
 001c64e0 000034 StringList_CopyRetained
 001c6520 000198 FUN_001c6520
 001c66c0 0008dc FUN_001c66c0
@@ -5272,7 +5272,7 @@
 001ca6c0 000714 FUN_001ca6c0
 001cade0 0001d0 FUN_001cade0
 001cafb0 00000c Gap__Sg__igShaderProcessor__vfunc_22 Gap::Sg::igShaderProcessor::vfunc_22
-001cafc0 00004c FUN_001cafc0
+001cafc0 00004c igStringRefList_IndexOf
 001cb010 0001e0 FUN_001cb010
 001cb1f0 0000d4 FUN_001cb1f0
 001cb2d0 000068 FUN_001cb2d0
@@ -5347,9 +5347,9 @@
 001d3410 00013c FUN_001d3410
 001d3550 00003c FUN_001d3550
 001d3590 00003c Gap__Sg__igNode__vfunc_17 Gap::Sg::igNode::vfunc_17
-001d35d0 000080 FUN_001d35d0
+001d35d0 000080 igSmartPointer_igInfoList_Destruct
 001d3650 000080 FUN_001d3650
-001d36d0 000080 FUN_001d36d0
+001d36d0 000080 igSmartPointer_igDirectory_Destruct
 001d3750 000248 Gap__Sg__igPlanarShadowShader__vfunc_09 Gap::Sg::igPlanarShadowShader::vfunc_09
 001d39a0 00000c Gap__Sg__igPlanarShadowShader__vfunc_22 Gap::Sg::igPlanarShadowShader::vfunc_22
 001d39b0 000244 Gap__Sg__igPlanarShadowShader__vfunc_10 Gap::Sg::igPlanarShadowShader::vfunc_10
@@ -6502,7 +6502,7 @@
 00227cc0 0000b0 igItemInterface_GetVTable
 00227d70 000080 FUN_00227d70
 00227df0 000080 FUN_00227df0
-00227e70 000080 FUN_00227e70
+00227e70 000080 igSmartPointer_igStringRefListList_Destruct
 00227ef0 00000c FUN_00227ef0
 00227f00 000074 igItemInterface_Register
 00227f80 000008 thunk_igItemInterface_GetMetaObject
@@ -6556,7 +6556,7 @@
 00229150 000008 thunk_igFileInfo_GetMetaObject
 00229160 0000f8 igFileInfo_InitFields
 00229260 00000c FUN_00229260
-00229270 00000c FUN_00229270
+00229270 00000c igStringRef_Construct
 00229280 000048 igBase_GetMetaObject
 002292d0 00000c FUN_002292d0
 002292e0 000060 igBase_Register
@@ -6839,7 +6839,7 @@
 00233480 000048 FUN_00233480
 002334d0 000048 igInfoManagerOrderedList_GetMetaObject
 00233520 000068 igInfoManagerOrderedList_GetVTable
-00233590 000080 FUN_00233590
+00233590 000080 igSmartPointer_igDependencyList_Destruct
 00233610 000098 FUN_00233610
 002336b0 00000c FUN_002336b0
 002336c0 00006c igInfoManagerOrderedList_Register
@@ -11969,7 +11969,7 @@
 002d0b70 000064 igAliasMemoryPool_CallocateAligned
 002d0be0 000014 igAliasMemoryPool_Reallocate
 002d0c00 000010 igAliasMemoryPool_ReallocateAligned
-002d0c10 0000bc Gap__Core__igAliasMemoryPool__vfunc_65 Gap::Core::igAliasMemoryPool::vfunc_65
+002d0c10 0000bc igAliasMemoryPool_AllocateFromSystem
 002d0cd0 000040 igAliasMemoryPool_GangAlloc
 002d0d10 000040 igAliasMemoryPool_GangAllocAligned
 002d0d50 000030 igAliasMemoryPool_GangFree
@@ -12584,7 +12584,7 @@
 002f0b30 000008 igMemoryPool_DisplayOutstandingAllocations
 002f0b40 000008 igMemoryPool_Trim
 002f0b50 000128 igMemoryPool_TrimAllPools
-002f0c80 000010 FUN_002f0c80
+002f0c80 000010 igMemoryPool_AllocateFromSystem
 002f0c90 00005c igMemoryPool_StrDup
 002f0cf0 00006c igMemoryPool_StrDupAligned
 002f0d60 000008 igMemoryPool_GetEventTracker
@@ -12603,9 +12603,9 @@
 002f19f0 000178 igMemoryPool_GangAllocTracked
 002f1b70 000160 igMemoryPool_GangAllocAlignedTracked
 002f1cd0 000158 igMemoryPool_GangFreeTracked
-002f1e30 000124 FUN_002f1e30
+002f1e30 000124 igMemoryPool_AllocateFromSystemTracked
 002f1f60 000104 igMemoryPool_FreeTracked
-002f2070 000104 FUN_002f2070
+002f2070 000104 igMemoryPool_FreeFromSystemTracked
 002f2180 000078 Memory_InitializeAllocatorRegistries
 002f2200 000060 Memory_ShutdownAllocatorRegistries
 002f2260 00000c igMemoryPool_SetDefaults
@@ -13349,7 +13349,7 @@
 0031d640 0009d8 igArenaMemoryPool_GangAlloc
 0031e020 000010 igArenaMemoryPool_GangAllocAligned
 0031e030 000074 Gap__Core__igArenaMemoryPool__freeSized Gap::Core::igArenaMemoryPool::freeSized
-0031e0b0 0005bc Gap__Core__igArenaMemoryPool__vfunc_65 Gap::Core::igArenaMemoryPool::vfunc_65
+0031e0b0 0005bc igArenaMemoryPool_AllocateFromSystem
 0031e670 000234 igArenaMemoryPool_SetDefaults
 0031e8b0 0002e0 igArenaMemoryPool_Shutdown
 0031eb90 00003c igArenaMemoryPool_Initialize
@@ -13584,7 +13584,7 @@
 00328e00 00004c SystemAllocatorBase_Destruct
 00328e50 000074 SystemAllocatorBase_ReleasePageTables
 00328ed0 00004c SystemAllocatorBase_Allocate
-00328f20 00004c FUN_00328f20
+00328f20 00004c SystemAllocatorBase_Memalign
 00328f70 00000c SystemAllocatorBase_Callocate
 00328f80 00000c SystemAllocatorBase_Reallocate
 00328f90 00006c SystemAllocatorBase_DuplicateString
@@ -13632,7 +13632,7 @@
 0032abb0 00008c SystemAllocatorBase_ReserveRange
 0032ac40 000010 SystemAllocatorBase_AllocateTable
 0032ac50 000010 SystemAllocatorBase_FreeTable
-0032ac60 000010 FUN_0032ac60
+0032ac60 000010 SystemAllocatorBase_MarkRange
 0032ac70 000024 PageTable_GetState
 0032aca0 000038 PageTable_SetState
 0032ace0 000068 PageTable_SetStateRange

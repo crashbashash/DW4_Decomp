@@ -154,11 +154,11 @@ int **FUN_003b3030(int **arg0, long long arg1) {
         *arg0 = &DAT_0053f790[0];
         if (arg0 != 0) {
             *arg0 = &g_beNDMWWindow_vtable[0];
-            ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x4C), -1);
-            ObjectRef_Destruct_00150eb0((int **)((char *)arg0 + 0x48), -1);
-            ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x44), -1);
-            ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x40), -1);
-            ObjectRef_Destruct_001c6460((int **)((char *)arg0 + 0x3C), -1);
+            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x4C), -1);
+            igSmartPointer_igIntList_Destruct((int **)((char *)arg0 + 0x48), -1);
+            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x44), -1);
+            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x40), -1);
+            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x3C), -1);
             FUN_003b2f30((void **)((int **)((char *)arg0 + 0x38)), -1);
             FUN_003b2fb0((void **)((int **)((char *)arg0 + 0x34)), (short)(-1));
         }

@@ -25,9 +25,9 @@ int igListenerInterface_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_0052c080[0];
     FUN_00226db0((T_2 **)&obj.w11, -1);
-    FUN_0013a880(&obj.w10, -1);
+    igSmartPointer_igMetaObjectList_Destruct(&obj.w10, -1);
     FUN_00226db0((T_2 **)&obj.w9, -1);
-    FUN_0014aa70(&obj.w8, -1);
+    igSmartPointer_igObjectList_Destruct(&obj.w8, -1);
     return t;
 }
 

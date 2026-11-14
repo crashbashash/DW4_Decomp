@@ -24,7 +24,7 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ce60[0];
-    FUN_0014aa70(p, -1);
+    igSmartPointer_igObjectList_Destruct(p, -1);
     FUN_0033ec80(u.b, 0);
     return temp_s0;
 }

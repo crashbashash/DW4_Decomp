@@ -962,6 +962,27 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   candidate can disagree with it there. *Probe:* `float fb(float x) { return x * 0.7f + 0.1f + 0.3f * x; }` and
   `const char *sc(void) { return "beta"; }`, with and without
   `float fa(float x) { return x * 0.3f + 0.7f; } const char *sa(void) { return "beta"; }` before them.
+- **Open: a parameter that colours as an optimiser temporary.** `igDriverDatabase_SetSubPropertyValue`
+  (0x2d9740): the draft is 361 instructions against 362, and every remaining difference is a register except one
+  `nop`. The frame (160 bytes, six holder slots) matches with the two list holders and four string references
+  declared in that order, and each new list is stored into its table slot in the order of the `setRetained`
+  inline (retain, release the old element, then the bounds-checked store); with those the draft is 1444 bytes
+  against 1448. Retail keeps the name in `s4`, the value in `s3` and the property in `s1`; the draft has property,
+  name, value in `s4`, `s3`, `s2`. The allocator replay's graph-edit search finds no single edit that gives
+  retail's colours; every two-edit solution gives `index` an id after the smart-pointer members are broken out
+  into temporaries (between the `names` member's node and `index*4`), then swaps the second store's list and the
+  `values` member. So retail holds `index` in a value the optimiser creates, not in the parameter's own web. A copy
+  of the parameter cannot do it: b52's coalescer merges every non-interfering copy into the lower id. Tried
+  without change: a one-member struct, a struct with a constructor, `index = index + 0`, a copy inside the `if`
+  block; a volatile copy is worse.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d9740, not matched).
+- **Open: the topological sort's code, not its colouring.** `igDependencyOrderedList_TopologicalSort` (0x2d7280):
+  the draft is 260 words against 259, with 46 register-only and 4 other differences. Retail builds each of the two
+  list holders from its `igPointerList_Create` call where it is declared (no zero store at entry); with that the
+  frame matches exactly. Neither single nor paired graph edits reach retail's colours (best 70 of 87 constrained
+  nodes), so the register differences follow from a code difference; the call-sequence census finds no close
+  donor (best ratio 0.38).
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d7280, not matched).
 - **Open: a lone zero-extension of the parameter used as the object.** `igPsx2Thread_ThreadEntry` (0x32f7f0)
   begins `dsll32 s0,a0,0; dsrl32 s0,s0,0` and then uses `s0` as the thread (`lw v0,40(s0); jalr v0; lw a0,28(s0)`,
   `sw v0,52(s0)`, `move a1,s0` into `igPsx2ThreadManager_FinishThread`). It is the only function in the executable

@@ -159,7 +159,7 @@ extern "C" R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3
 int FUN_00229e20(struct L *arg0, int *arg1) {
     int h;
     int lo, hi, mid, base, res;
-    FUN_00229270(&h);
+    igStringRef_Construct(&h);
     lo = 0;
     hi = arg0->n - 1;
     while (lo < hi) {
@@ -168,21 +168,21 @@ int FUN_00229e20(struct L *arg0, int *arg1) {
         FUN_00229fb0((void **)&h, (void **)(base + mid * 4));
         if (FUN_00229f90(&h, arg1) != 0) { lo = mid + 1; continue; }
         if (FUN_00229f70(&h, arg1) != 0) { hi = mid - 1; continue; }
-        StringRef_Destruct_00130720(&h, -1);
+        igStringRef_Destruct(&h, -1);
         res = mid;
         goto done;
     }
     if (arg0->n == 0) {
-        StringRef_Destruct_00130720(&h, -1);
+        igStringRef_Destruct(&h, -1);
         res = -1;
     } else {
         base = FUN_0022a030((int *)arg0);
         FUN_00229fb0((void **)&h, (void **)(base + lo * 4));
         if (FUN_00229f90(arg1, &h) != 0 || FUN_00229f70(arg1, &h) != 0) {
-            StringRef_Destruct_00130720(&h, -1);
+            igStringRef_Destruct(&h, -1);
             res = -1;
         } else {
-            StringRef_Destruct_00130720(&h, -1);
+            igStringRef_Destruct(&h, -1);
             res = lo;
         }
     }

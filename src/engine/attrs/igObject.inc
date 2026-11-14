@@ -15,7 +15,7 @@ void **FUN_001353b0(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_00135430(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igPointerList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

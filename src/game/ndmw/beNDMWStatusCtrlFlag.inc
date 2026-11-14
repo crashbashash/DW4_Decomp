@@ -29,7 +29,7 @@ int beNDMWStatusCtrlFlag_GetVTable(void) {
     *(int *)ps = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&DAT_0053ee10[0];
-    ObjectRef_Destruct_00150eb0(ps, -1);
+    igSmartPointer_igIntList_Destruct(ps, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
     return temp_s0;
 }

@@ -26,9 +26,9 @@ int igExternalInfoEntry_GetVTable(void) {
     *q = 0;
     vtable = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
-    FUN_00130720(q, -1);
-    FUN_00130720(p, -1);
-    FUN_0014f4e0(&entry, 0);
+    igStringRef_Destruct(q, -1);
+    igStringRef_Destruct(p, -1);
+    igDirEntry_Destroy(&entry, 0);
     return vtable;
 }
 
