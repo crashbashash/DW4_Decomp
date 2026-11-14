@@ -724,13 +724,29 @@ def _walk(top, ext):
 REGION_LABELS = collections.OrderedDict([
     ("Game", "Game"), ("Alchemy", "Alchemy engine"), ("Lua", "Lua 4.0.1 interpreter"),
     ("CRI ADX", "CRI ADX"), ("CRI Sofdec", "CRI Sofdec"), ("PNG", "libpng and zlib"),
-    ("Sony", "Sony SDK"), ("newlib", "newlib"), ("libgcc", "libgcc"), ("Metrowerks", "Metrowerks runtime"),
-    ("Static", "Static initialisers")])
+    ("Sony", "Sony SDK"), ("newlib", "newlib"), ("libgcc", "libgcc"), ("Metrowerks", "Metrowerks runtime")])
 REGION_ORDER = list(REGION_LABELS.values())
+_SINIT_OWNERS = {}
+
+
+def _sinit_owner(va):
+    """The start of the whole-file unit whose row emits the static initialiser at `va`, or None.
+
+    The linker gathers every file's `.init` at 0x51fd00, but each initialiser compiles from the file
+    that defines the objects it constructs, so the README counts it with that file's library."""
+    if not _SINIT_OWNERS:
+        rows = json.load(open(os.path.join(ROOT, "config", "SLUS-20836", "unit-objects.json")))
+        for start, row in rows.items():
+            for name, address in row.get("emitted", {}).items():
+                if name.startswith("__sinit_"):
+                    _SINIT_OWNERS[int(address, 16)] = int(start, 16)
+    return _SINIT_OWNERS.get(va)
 
 
 def region_of(va):
     row = regions.of(va)
+    if row is not None and row.group == "Static" and _sinit_owner(va) is not None:
+        row = regions.of(_sinit_owner(va))
     if row is None or row.group not in REGION_LABELS:
         raise ValueError("0x%x is outside every code region" % va)
     return REGION_LABELS[row.group]

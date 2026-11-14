@@ -291,7 +291,8 @@ data. An object that `data-names.tsv` already names keeps that name, defined by 
 `data-names.tsv` row goes; each other whole-file unit that references it lists it as a `data` row. All sixteen
 initialisers of the range compile from their owning files, so no `units.tsv` row covers `0x51fd00` up to
 `0x522438`. A translation unit has one initialiser, so a row places at most one: a range retail serves with two
-initialisers is two files.
+initialisers is two files. `tools/progress.py` counts each initialiser with its owning unit's library in the
+README's region table; `regions.tsv` and the module map keep the range, which describe the image.
 
 `symbols.txt` names each initialiser of the range by that same string, dot included (`__sinit_be.cpp`), from
 `config/SLUS-20836/names/StaticInitializers.tsv`: `tools/split.py` keeps the dot of a `__sinit_` name, which C
