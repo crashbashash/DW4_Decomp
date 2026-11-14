@@ -302,51 +302,51 @@ void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField *
     }
 }
 
-void igMetaObject_FinalizeFieldLayout(LayoutMeta *arg0) {
+void igMetaObject_FinalizeFieldLayout(igMetaObject *arg0) {
     int off;
     int minAlign;
     unsigned short sz;
     int i;
-    LayoutField *f;
+    igMetaFieldView *f;
     int count;
     int nneg;
     int end;
     unsigned short maxAlign;
     int maxEnd;
     bool flag;
-    count = igMetaObject_GetFieldCount((igMetaObject *)arg0);
+    count = igMetaObject_GetFieldCount(arg0);
     off = 0;
     maxEnd = 0;
     minAlign = 4;
     nneg = 0;
     maxAlign = 4;
     for (i = 0; i < count; i++) {
-        f = (LayoutField *)igMetaObject_GetFieldAt((igMetaObject *)arg0, i);
-        sz = f->vX();
+        f = (igMetaFieldView *)igMetaObject_GetFieldAt(arg0, i);
+        sz = f->vfunc_27();
         if (maxAlign < sz) maxAlign = sz;
-        if (f->neg != 0) {
+        if (f->_isRunTime != 0) {
             nneg++;
-            off = ~(sz - 1) & (off - f->sz);
-            f->off = off;
+            off = ~(sz - 1) & (off - f->_size);
+            f->_offset = off;
         } else {
             flag = 0;
-            if (arg0->parent == 0 || igMetaObject_GetFieldCount((igMetaObject *)arg0->parent) <= i) {
+            if (arg0->_parent == 0 || igMetaObject_GetFieldCount((igMetaObject *)arg0->_parent) <= i) {
                 flag = 1;
-            } else if ((LayoutField *)igMetaObject_GetFieldAt((igMetaObject *)arg0->parent, i) != f) {
+            } else if ((igMetaFieldView *)igMetaObject_GetFieldAt((igMetaObject *)arg0->_parent, i) != f) {
                 flag = 1;
             }
             if (flag) {
-                f->idx = i - nneg;
-                f->owner = arg0;
+                f->_internalIndex = i - nneg;
+                f->_parentMetaObject = (int)arg0;
             }
             minAlign = (sz < minAlign) ? minAlign : sz;
         }
-        end = f->off; end += f->sz;
+        end = f->_offset; end += f->_size;
         if (maxEnd < end) maxEnd = end;
     }
-    arg0->w88 = maxAlign;
-    if (arg0->w72 != -1) arg0->w32 = -(off & ~(minAlign - 1));
-    arg0->w36 |= 4;
+    arg0->_requiredAlignment = maxAlign;
+    if (arg0->_sizeofSize != -1) arg0->_runTimeSize = -(off & ~(minAlign - 1));
+    arg0->_validity |= 4;
     FUN_002d3150((int *)(((void * *)g_objectSystem)[0]), (int)arg0);
 }
 
@@ -461,7 +461,7 @@ void FUN_002fe5a0(int arg0) {
     int var_s0;
     temp_s1 = igMetaObject_CountTree((MetaTreeNode *)arg0);
     for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-        igMetaObject_FinalizeFieldLayout((LayoutMeta *)FUN_002fe300((igMetaObject *)arg0, var_s0));
+        igMetaObject_FinalizeFieldLayout((igMetaObject *)FUN_002fe300((igMetaObject *)arg0, var_s0));
     }
 }
 

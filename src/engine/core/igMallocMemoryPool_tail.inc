@@ -206,11 +206,11 @@ void Gap__Core__igMallocMemoryPool__vfunc_63(int *arg0) {
     *arg0 = g_resultFailure.v;
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_64(MallocPoolFreeView *self, unsigned int size, char **block) {
+void Gap__Core__igMallocMemoryPool__vfunc_64(igMallocMemoryPoolView *self, unsigned int size, char **block) {
     char *q = padRecord(blockHeader(*block));
     self->_localFreeCount += *(unsigned short *)(q + 2);
     self->_localNetAllocationCount -= size;
-    self->Release((char *)((int)q - 4) - 4);
+    self->Free((char *)((int)q - 4) - 4);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_13(igMallocMemoryPool *self, int extra1) {
@@ -461,11 +461,11 @@ unsigned char Gap__Core__igMallocMemoryPool__vfunc_33(igMallocMemoryPool *self) 
     return self->_isActive;
 }
 
-static inline int usesAligned(TaggedPool *p) { return (p->flags & 0x20) != 0; }
+static inline int usesAligned(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x20) != 0; }
 
-static inline int usesSized(TaggedPool *p) { return (p->flags & 0x10) != 0; }
+static inline int usesSized(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x10) != 0; }
 
-void *FUN_00324be0(TaggedPool *self, unsigned size) {
+void *FUN_00324be0(igMallocMemoryPoolView *self, unsigned size) {
     unsigned overhead;
     unsigned total;
     void *block;
@@ -473,7 +473,7 @@ void *FUN_00324be0(TaggedPool *self, unsigned size) {
     int id;
     unsigned end;
     unsigned aligned;
-    unsigned slot = self->index >> 1;
+    unsigned slot = (unsigned)self->_poolIndex >> 1;
     if (size >= 0x80000 || slot >= 32) {
         overhead = 12;
     } else {
@@ -516,7 +516,7 @@ void *FUN_00324be0(TaggedPool *self, unsigned size) {
     return 0;
 }
 
-void FUN_00324ec0(TaggedPool *self, unsigned char *p) {
+void FUN_00324ec0(igMallocMemoryPoolView *self, unsigned char *p) {
     TaggedBlockHeader *h = (TaggedBlockHeader *)(p - 4);
     unsigned size;
     if (((TaggedTailByte *)(p - 1))->extended == 1) {
@@ -551,7 +551,7 @@ void FUN_00324ec0(TaggedPool *self, unsigned char *p) {
     }
 }
 
-void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
+void *FUN_00325060(igMallocMemoryPoolView *self, char *p, unsigned size) {
     TaggedBlockHeader *h;
     unsigned end;
     unsigned aligned;
@@ -585,7 +585,7 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
     used = (used + 3) & ~3;
     total = used + (h->words + 1) * 4;
     oldOverhead = big == 0 ? 4 : 12;
-    slot = self->index >> 1;
+    slot = (unsigned)self->_poolIndex >> 1;
     if (size >= 0x80000 || slot >= 32) {
         newOverhead = 12;
     } else {
@@ -618,7 +618,7 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
         memmove(block + (newOverhead + 4), block + (oldOverhead + 4), kept < size ? kept : size);
     }
     fresh = (TaggedBlockHeader *)(block + 4);
-    index = self->index >> 1;
+    index = (unsigned)self->_poolIndex >> 1;
     fresh->poolLow = index;
     fresh->relocated = 0;
     fresh->marked = 0;
@@ -643,11 +643,11 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
     return (char *)fresh + (fresh->big == 0 ? 4 : 12);
 }
 
-static inline int usesAligned_3254a0(TaggedAlignedPool *p) { return (p->flags & 0x20) != 0; }
+static inline int usesAligned_3254a0(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x20) != 0; }
 
-static inline int usesSized_3254a0(TaggedAlignedPool *p) { return (p->flags & 0x10) != 0; }
+static inline int usesSized_3254a0(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x10) != 0; }
 
-void *FUN_003254a0(TaggedAlignedPool *self, unsigned alignment, unsigned size) {
+void *FUN_003254a0(igMallocMemoryPoolView *self, unsigned alignment, unsigned size) {
     unsigned overhead;
     unsigned total;
     char *block;
@@ -657,12 +657,12 @@ void *FUN_003254a0(TaggedAlignedPool *self, unsigned alignment, unsigned size) {
     unsigned end;
     unsigned aligned;
     unsigned slot;
-    unsigned minimum = self->minAlignment;
+    unsigned minimum = self->_alignment;
     alignment = minimum < alignment ? alignment : minimum;
     if (alignment <= 3) {
         alignment = 4;
     }
-    slot = self->index >> 1;
+    slot = (unsigned)self->_poolIndex >> 1;
     total = size + alignment;
     if (size >= 0x80000 || slot >= 32) {
         overhead = 12;

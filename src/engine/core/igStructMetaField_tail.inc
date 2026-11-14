@@ -60,12 +60,12 @@ void Gap__Core__igStructMetaField__vfunc_28(igStructMetaField *self, int instanc
         ((int (*)(...))self->_cppConstructor)(instance + self->_offset);
         return;
     }
-    igMetaField_SetToDefault((DefaultCopyField *)self, instance);
+    igMetaField_SetToDefault((igMetaField *)self, instance);
 }
 
-void Gap__Core__igStructMetaField__vfunc_30(igStructMetaFieldView *self, void *object)
+void Gap__Core__igStructMetaField__vfunc_30(igMetaFieldView *self, void *object)
 {
-    self->SetToDefault(object);
+    self->SetToDefault((int)object);
 }
 
 /* Predicate: true when the struct field metadata has a C++ constructor hook (`_cppConstructor`,

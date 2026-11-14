@@ -164,7 +164,7 @@ void igResource_UnloadDirectory(igResource *self, int name) {
     if (entry->_managingResource == 0) {
         entry->_managingResource = (int)self;
     }
-    int remaining = FUN_002d91c0((RefCountedHandle *)found.get());
+    int remaining = FUN_002d91c0((igDirectoryView *)found.get());
     if (current && remaining <= 0) {
         igRelease((igObject *)self->_imageDirectory);
         self->_imageDirectory = 0;

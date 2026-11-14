@@ -17,7 +17,7 @@ void Gap__Core__igDirectory__vfunc_12(igDirectoryView *arg0) {
 
     if (arg0->_managingResource != 0) {
         for (i = 0; i < arg0->_externalDirectoryList->_count; i++) {
-            igResource_UnloadDirectory((igResource *)arg0->_managingResource, arg0->_externalDirectoryList->_data[i]->_name);
+            igResource_UnloadDirectory(arg0->_managingResource, arg0->_externalDirectoryList->_data[i]->_name);
         }
     }
     temp_s2 = FUN_002d9120(arg0);
@@ -113,7 +113,7 @@ void *FUN_002d7e90(int *arg0, int arg1) {
     return (void *)((int *)arg0[4])[arg1];
 }
 
-static inline void releaseBound(FieldBindObject *o) {
+static inline void releaseBound(igObjectDispatchView *o) {
     if (o != 0) {
         o->_refCount = (int)o->_refCount - 1;
         if ((o->_refCount & 0x7FFFFF) == 0) {
@@ -122,60 +122,60 @@ static inline void releaseBound(FieldBindObject *o) {
     }
 }
 
-static inline FieldBindItem *castBinding(FieldBindItem *o) {
+static inline igObjectDirEntry *castBinding(igObjectDirEntry *o) {
     if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) {
         return o;
     }
     return 0;
 }
 
-static inline FieldBindItem *castRefField(FieldBindItem *o) {
+static inline igObjectRefMetaField *castRefField(igObjectRefMetaField *o) {
     if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)((*(int *)g_igObjectRefMetaField_metaObject))) != 0) {
         return o;
     }
     return 0;
 }
 
-static inline void setSlot(FieldBindSlotList *l, int i, FieldBindObject *v) {
-    if (l->count != 0 && i >= 0 && i < l->count) {
-        l->data[i] = (FieldBindObject *)v;
+static inline void setSlot(igTDataList<int> *l, int i, igObjectDispatchView *v) {
+    if (l->_count != 0 && i >= 0 && i < l->_count) {
+        l->_data[i] = (int)v;
     }
 }
 
-int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **value) {
+int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDispatchView **value) {
     int changed = 0;
     int i;
     int j;
     int n;
-    FieldBindObject *current;
-    FieldBindItem *item;
-    for (i = 0; i < self->count; i++) {
+    igObjectDispatchView *current;
+    igObjectDirEntry *item;
+    for (i = 0; i < self->_count; i++) {
         current = *field;
-        if ((FieldBindObject *)FUN_002d7d60(self, i) == (FieldBindObject *)current) {
-            if (self->overrides != 0) {
+        if ((igObjectDispatchView *)FUN_002d7d60(self, i) == (igObjectDispatchView *)current) {
+            if (self->_refList != 0) {
                 releaseBound(*field);
                 if (*value != 0) {
                     (*value)->_refCount = (*value)->_refCount + 1;
                 }
-                setSlot(self->overrides, i, *value);
+                setSlot(self->_refList, i, *value);
             } else {
-                self->targets[i]->Assign(*value);
+                self->_data[i]->vfunc_23((int)*value);
             }
             changed++;
         }
-        item = castBinding((FieldBindItem *)FUN_002d7e90((int *)self, i));
+        item = castBinding((igObjectDirEntry *)FUN_002d7e90((int *)self, i));
         if (item != 0) {
-            igSmartPointer<igVirtualObject> source(item->source, kRetainReference);
+            igSmartPointer<igVirtualObject> source((igVirtualObject *)item->_ref, kRetainReference);
             if (source.get() == 0) {
                 continue;
             }
-            n = igMetaObject_GetFieldCount((igMetaObject *)(((FieldBindObject *)source.get())->GetMeta()));
+            n = igMetaObject_GetFieldCount(((igObjectDispatchView *)source.get())->getMeta());
             for (j = 0; j < n; j++) {
-                FieldBindItem *f;
-                f = castRefField(((FieldBindItem *)igMetaObject_GetFieldAt((igMetaObject *)(((FieldBindObject *)source.get())->GetMeta()), j)));
+                igObjectRefMetaField *f;
+                f = castRefField(((igObjectRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)source.get())->getMeta(), j)));
                 if (f != 0) {
-                    if (*(FieldBindObject **)((char *)source.get() + f->offset) == *field) {
-                        igObjectRefMetaField_Assign((igObjectRefMetaField *)f, (void *)(source.get()), (igObject *)(*value));
+                    if (*(igObjectDispatchView **)((char *)source.get() + f->_offset) == *field) {
+                        igObjectRefMetaField_Assign(f, (void *)(source.get()), (igObject *)(*value));
                         changed++;
                     }
                 }
@@ -186,16 +186,16 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **
 }
 
 void FUN_002d81f0(void *arg0, int arg1) {
-    FUN_002d8230((RemovableListHolder *)arg0, (igObject *)((void *)igProperty_FindByName((igObjectList *)(*(int *)((char *)arg0 + 28)), (igMetaField *)(*(int *)0x585BE0), arg1)));
+    FUN_002d8230((igDirectoryView *)arg0, (igObject *)((void *)igProperty_FindByName((igObjectList *)(*(int *)((char *)arg0 + 28)), (igMetaField *)(*(int *)0x585BE0), arg1)));
 }
 
-void FUN_002d8230(RemovableListHolder *h, igObject *object) {
+void FUN_002d8230(igDirectoryView *h, igObject *object) {
     int idx;
     RemovableList *f;
-    f = h->list;
+    f = (RemovableList *)h->_infoList;
     idx = f->find(object);
     if (-1 < idx) {
-        h->list->removeAt(idx);
+        ((RemovableList *)h->_infoList)->removeAt(idx);
     }
 }
 
@@ -259,7 +259,7 @@ int FUN_002d8520(int arg0, VisitorFieldView *arg1, igDirectoryView *arg2) {
             return 1;
         }
     }
-    FUN_002d87b0((FieldLinkSet *)arg2, (FieldLinkObject *)arg0, 0, 0);
+    FUN_002d87b0(arg2, (igObjectDispatchView *)arg0, 0, 0);
     return 0;
 }
 
@@ -302,50 +302,50 @@ int FUN_002d86b0(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2) {
     return lo;
 }
 
-int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user) {
+int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod) {
     int index = 0;
-    FieldLinkInfo *info;
+    igMetaObject *info;
     void *pool;
     int mode;
     if (obj == 0) {
         return -1;
     }
-    if (self->count > 0) {
-        index = FUN_002d86b0((igDirectoryView *)self, (igMetaField *)DAT_00586730[0], (unsigned)obj);
-        if (self->count > index && (FieldLinkObject *)FUN_002d7d60(self, index) == obj) {
+    if (self->_count > 0) {
+        index = FUN_002d86b0(self, (igMetaField *)DAT_00586730[0], (unsigned)obj);
+        if (self->_count > index && (igObjectDispatchView *)FUN_002d7d60(self, index) == obj) {
             return -1;
         }
     }
     if (obj != 0) {
-        obj->Touch();
+        obj->vfunc_16();
         if (igObject_IsKindOf(self, (igMetaObject *)((*(int *)g_igIGBFile_metaObject))) != 0) {
-            if (self->mode == 1) {
-                obj->Prepare();
+            if (self->_autoWriteFilePreProcessState == 1) {
+                obj->vfunc_13();
             }
             {
-                FieldLinkInfo *m = obj->GetMeta();
-                int (*fn)() = m->poolFor;
+                igMetaObject *m = obj->getMeta();
+                int (*fn)() = (int (*)())m->_writeProxy;
                 if (fn != 0) {
-                    self->reset = 0;
-                    obj->SetPool(fn());
+                    self->_concreteState = 0;
+                    obj->vfunc_17(fn());
                 }
             }
         }
     }
-    igSmartPointer<FieldLinkRecord> record(((FieldLinkRecord *)FUN_002bd8f0((int)(((void *)igObject_GetAllocator((int)self))))));
-    record.get()->index = index;
-    RetainedWord<FieldLinkRecord> inserted(record.get());
+    igSmartPointer<igDirEntryView> record(((igDirEntryView *)FUN_002bd8f0((int)(((void *)igObject_GetAllocator((int)self))))));
+    record.get()->_index = index;
+    RetainedWord<igDirEntryView> inserted(record.get());
     List_InsertWords((igDataList *)self, index, 1, &inserted);
     if (name != 0) {
         igNamedObject_SetName((igNamedObject *)(record.get()), (int)name);
     }
-    record.get()->user = user;
-    record.get()->extra = 0;
-    record.get()->Assign(obj);
-    if (self->tracks != 0) {
-        info = obj->GetMeta();
+    record.get()->_resolveMethod = resolveMethod;
+    record.get()->_refType = 0;
+    record.get()->vfunc_23((int)obj);
+    if (self->_useMemoryPoolAssignmentsState != 0) {
+        info = obj->getMeta();
         pool = 0;
-        if (self->namedPools != 0 && info != 0 && ((char *)igMetaObject_GetPoolName((int *)info)) != 0) {
+        if (self->_forceWriteMemoryPoolInfoFromMetaState != 0 && info != 0 && ((char *)igMetaObject_GetPoolName((int *)info)) != 0) {
             pool = Memory_GetAllocatorByName((int)(((char *)igMetaObject_GetPoolName((int *)info))));
         }
         if (pool == 0) {
@@ -356,11 +356,11 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
             if (mode == 1 || mode == 2) {
                 mode = -1;
             }
-            record.get()->SetContext(mode);
+            record.get()->setMemoryPool(mode);
         }
     }
     if (obj != 0) {
-        FUN_00301590((igObjectDirEntry *)(record.get()), (igMetaObject *)(obj->GetMeta()));
+        FUN_00301590((igObjectDirEntry *)(record.get()), obj->getMeta());
     }
     return index;
 }

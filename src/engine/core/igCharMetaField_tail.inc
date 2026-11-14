@@ -255,7 +255,7 @@ int FUN_002d58c0(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4) {
+int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
     int sum = 0;
     int n;
     int base;

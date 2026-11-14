@@ -1,32 +1,32 @@
 void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int lo, int len) {
-    Ranges *r;
+    ArenaState *r;
     int i;
     bool found;
     unsigned int hi;
     found = 0;
-    r = (Ranges *)o->_arenaState;
-    r->total += len;
+    r = (ArenaState *)o->_arenaState;
+    r->systemBytes += len;
     if (len < 0) hi = lo; else hi = lo + len;
-    i = r->count - 2;
+    i = r->blockCount - 2;
     for (; i >= 0; i -= 2) {
-        unsigned int *e = (unsigned int *)((char *)r->data + i * 4);
+        unsigned int *e = (unsigned int *)((char *)r->blocks + i * 4);
         unsigned int a = e[0];
         unsigned int *h;
         if (lo >= a && (h = e + 1, lo <= e[1])) {
             if (found) {
                 if (o->_messageLevel >= 2 && GPR_00554ce4 == 0) {
-                    int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->data, h, a);
+                    int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->blocks, h, a);
                     if (rc != 1 && rc == 2) GPR_00554ce4 = 1;
                 }
                 return;
             } else {
                 if (len < 0 && a == hi) {
-                    int n = r->count;
+                    int n = r->blockCount;
                     int j = i + 2;
                     if (j < n) {
-                        memcpy(e, (char *)r->data + j * 4, (n - j) * 4);
+                        memcpy(e, (char *)r->blocks + j * 4, (n - j) * 4);
                     }
-                    r->count -= 2;
+                    r->blockCount -= 2;
                 } else if (len < 0 || e[1] < hi) {
                     *h = hi;
                 }
@@ -38,15 +38,15 @@ void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int 
     }
     if (!found && len >= 0) {
         int ncap;
-        int cap = r->cap;
-if (r->count >= cap) {
+        int cap = r->blockCapacity;
+if (r->blockCount >= cap) {
             void *np;
             ncap = cap + 2;
             if (ncap == 0) ncap = 512;
-            np = g_activeSystemAllocator[0]->Reallocate(r->data, ncap * 4);
+            np = g_activeSystemAllocator[0]->Reallocate(r->blocks, ncap * 4);
             if (np != 0) {
-                r->data = (unsigned int *)np;
-                r->cap = ncap;
+                r->blocks = (int *)np;
+                r->blockCapacity = ncap;
             } else {
                 if (o->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, o);
@@ -60,22 +60,22 @@ if (r->count >= cap) {
         }
         {
             int h;
-            r->data[r->count] = lo;
-            r->data[r->count + 1] = lo + len;
-            r->count += 2;
-            h = r->count / 2;
-            if (r->half < h) r->half = h;
+            r->blocks[r->blockCount] = lo;
+            r->blocks[r->blockCount + 1] = lo + len;
+            r->blockCount += 2;
+            h = r->blockCount / 2;
+            if (r->maxBlockPairs < h) r->maxBlockPairs = h;
         }
     }
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_88(void *self0) {
- ArenaPoolView *s; ArenaBlockTable *arena; int i;
- s = (ArenaPoolView *)self0;
- arena = s->arena;
- if (arena->count == 0 || arena->blocks == 0 || arena->capacity == 0) { return; }
- if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) { return; }
- for (i = 0; i < arena->count; i += 2) {
+ igArenaMemoryPoolView *s; ArenaState *arena; int i;
+ s = (igArenaMemoryPoolView *)self0;
+ arena = s->_arenaState;
+ if (arena->blockCount == 0 || arena->blocks == 0 || arena->blockCapacity == 0) { return; }
+ if (arena->blockCount < 0 || arena->blockCapacity < 0 || arena->blockCount > arena->blockCapacity) { return; }
+ for (i = 0; i < arena->blockCount; i += 2) {
    int *p = &arena->blocks[i];
    igArenaMemoryPool_DisplayOutstandingAllocationsBlock(s, i, p[0], p[1]);
  }

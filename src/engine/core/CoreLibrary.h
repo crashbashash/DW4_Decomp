@@ -158,7 +158,7 @@ extern igMemoryPoolHandle kIGMemoryPoolHandleUser15;
 #define REL(o) if ((o) != 0) { (o)->_refCount = (int)(o)->_refCount - 1; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((void *)o); } }
 #define REL_O(p) { igObject *q_ = (igObject *)(p); if (q_) { q_->_refCount = q_->_refCount - 1; if (((unsigned long long)(long long)(int)q_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q_); } }
 #define ASSIGN_O(o, fld, val) { igObject *n_ = (val); (o) = (igIGBFile *)file.p; if (n_ != 0) n_->_refCount = n_->_refCount + 1; REL_O((o)->fld) (o)->fld = (int)n_; }
-#define OFF(p) (((struct LinkByte *)(p))->b7 == 0 ? 4 : 12)
+#define OFF(p) (((TaggedBlockHeader *)(p))->big == 0 ? 4 : 12)
 #define NEXT(p) (*(int *)((char *)(p) + OFF(p) + 4))
 #define PREV(p) (*(int *)((char *)(p) + OFF(p)))
 #define VCALL(o, off) (*(PF *)(*(char **)(o) + (off)))
@@ -1674,7 +1674,8 @@ extern "C" void igMetaField_IgnoreReset(void);
 extern "C" int FUN_002fc620(void);
 extern "C" int igMetaField_AlignSize(void *p, int size);
 extern "C" int FUN_002fc780(void *field, void *object, char *data, void *directory, unsigned char swap);
-extern "C" unsigned short igMetaField_WriteRawFieldMem(unsigned short *arg0, int arg1, int arg2, int arg3, int arg4);
+class igMetaFieldView;
+extern "C" unsigned short igMetaField_WriteRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" void igMetaField_ShallowCopy(int a0, int a1, int a2);
 extern "C" void igMetaField_DeepCopy(int a0, int a1, int a2);
 extern "C" void igMetaField_ConstructCopy(int a0, int a1, int a2);
@@ -1755,10 +1756,10 @@ extern "C" void FUN_00300c00(int arg0, int arg1, int arg2);
 extern "C" int igObject_CloneViaMetadata(void **source, int copyMode);
 extern "C" void *igObject_GetAllocationBase(void *self);
 extern "C" int igObject_AllocateStorage(int object, int size);
-extern "C" int FUN_00300db0(int object, int size, int alignment);
+extern "C" int FUN_00300db0(int object, int size, unsigned short alignment);
 extern "C" int FUN_00300e00(int object, int size, int option);
 extern "C" int FUN_00300e50(int object, int storage, int size);
-extern "C" int FUN_00300ea0(int object, int storage, int size, int alignment);
+extern "C" int FUN_00300ea0(int object, int storage, int size, unsigned short alignment);
 extern "C" void igObject_FreeStorage(int object, int storage);
 extern "C" void FUN_00300f50(int object, int storage);
 extern "C" int igObject_DuplicateString(int self, int string);
@@ -1970,8 +1971,7 @@ extern "C" void FUN_0031d3f0(void *arg0);
 extern "C" void FUN_0031d430(void *arg0);
 extern "C" int FUN_0031d460(void *arg0, int arg1);
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_63(int *arg0);
-class MallocPoolFreeView;
-extern "C" void Gap__Core__igArenaMemoryPool__freeSized(MallocPoolFreeView *self, unsigned int size, char **block);
+extern "C" void Gap__Core__igArenaMemoryPool__freeSized(igArenaMemoryPoolView *self, unsigned int size, char **block);
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_02(void **self);
 extern "C" int Gap__Core__igArenaMemoryPool__vfunc_85(void *self, unsigned char *p);
 extern "C" int Gap__Core__igArenaMemoryPool__vfunc_83(void);
@@ -4152,13 +4152,22 @@ public:
     virtual int IsAlikeShallow(int a, int b);                                   /* +188 */
     virtual int vfunc_48(int a, int b);                                         /* +192 */
     RESERVED(47);                                                               /* +196 */
-    virtual int WriteRawFieldMem(int dest, int source, int a3, int a4);         /* +200 */
+    virtual int WriteRawFieldMem(int dest, int source, int a3, unsigned char swap); /* +200 */
     virtual int ReadRawFieldMem(int dest, int source, int a3, int a4);          /* +204 */
     virtual int SwapBytes(void *buffer, int count);                               /* +208 */
     virtual void SwapValue(int object);                                         /* +212 */
     RESERVED(52); RESERVED(53);                                                 /* +216, +220 */
-    virtual void vfunc_56(int object, int text, int a3);                        /* +224 */
+    virtual int vfunc_56(int object, int text, int a3);                         /* +224 */
     virtual RecoveryString vfunc_57(int object, int a2);                        /* +228 */
+    RESERVED(56); RESERVED(57);                                                 /* +232, +236 */
+    virtual int IsConstruct();                                                  /* +240 */
+    unsigned int _refCount;
+    int _offset; int _fieldName; short _typeIndex; short _internalIndex; unsigned short _size; char _pad22[2];
+    int _parentMetaObject; int _externalEnumStorage; int _default;
+    char _resetMethod; unsigned char _isRunTime; unsigned char _persistent; char _shallowCopyMethod;
+    char _deepCopyMethod; char _constructCopyMethod; char _isAlikeExactlyMethod; char _isAlikeDeepMethod;
+    char _isAlikeShallowMethod; char _pad45[3];
+    int _invarianceFunction;
 };
 extern "C" void FUN_002d3950(igCallStackTableView *table);
 extern "C" void Gap__Core__igCallStackTable__vfunc_24(igResult *result, igCallStackTableView *table, int count);
@@ -4285,7 +4294,7 @@ extern "C" int FUN_002d56e0(igCompoundMetaField *arg0, int arg1, int arg2);
 extern "C" int FUN_002d5780(igCompoundMetaField *arg0, int arg1, int arg2);
 extern "C" int FUN_002d5820(igCompoundMetaField *arg0, int arg1, int arg2);
 extern "C" int FUN_002d58c0(igCompoundMetaField *arg0, int arg1, int arg2);
-extern "C" int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4);
 extern "C" int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" void FUN_002d5bb0(igMetaFieldView *arg0, int arg1, int arg2);
 extern "C" int DAT_004f95e8[4];
@@ -4374,11 +4383,11 @@ struct igDirectoryView;
 struct igDirectoryListView { int _vtable; unsigned int _refCount; int _count; int _capacity; igDirectoryView **_data; };
 class igDirEntryView;
 class igInfoView;
-struct igDirectoryView {
-    int _vtable; unsigned int _refCount; int _count; int _capacity; igDirEntryView **_data; int _name;
-    igDirectoryListView *_externalDirectoryList; igTDataList<igInfoView *> *_infoList; int _managingResource;
+struct igDirectoryView : public igVirtualObject {
+    int _count; int _capacity; igDirEntryView **_data; int _name;
+    igDirectoryListView *_externalDirectoryList; igTDataList<igInfoView *> *_infoList; igResource *_managingResource;
     unsigned char _sharingState; unsigned char _trackUniqueEntries; char _pad38[2];
-    int _uniqueEntryList; igTDataList<int> *_refList;
+    igObjectList *_uniqueEntryList; igTDataList<int> *_refList;
     unsigned char _loadPendingState; unsigned char _validState; unsigned char _compatibleState; char _pad51[1];
     int _loadedRefCount; unsigned char _concreteState; char _pad57[3]; int _metaFieldPerObjectIndices;
     unsigned char _autoWriteFilePreProcessState; unsigned char _useMemoryPoolAssignmentsState;
@@ -4415,34 +4424,28 @@ class igDirEntryView : public igVirtualObject { public:
 class igExternalDirEntryView : public igDirEntryView { public:
     int _directoryName; int _entryName; int _entryIndex; int _externalFilePath;
 };
-struct FieldBindMeta;
-class FieldBindObject : public igVirtualObject { public:
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual FieldBindMeta *GetMeta();
-    virtual void Assign(void *value);
-
+/* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
+ * are the class header). The reflected igObject is the same object seen as data. Named slots carry
+ * the igObject symbol names (Gap::Core::igObject::<name>, igObject_CloneViaMetadata); vfunc_NN
+ * keeps the symbol's slot number. Slot 17 takes the value the meta-object's write proxy returns.
+ * ABI view only: never instantiated. */
+class igObjectDispatchView {
+public:
+    virtual void vfunc_00();
+    virtual void constructFields(int flag);
+    virtual void destructFields();
+    virtual void vfunc_03(); virtual void vfunc_04(); virtual void vfunc_05();
+    virtual int vfunc_06(igObjectDispatchView *other);
+    virtual void userConstruct(int flag);
+    virtual void userDestruct();
+    virtual void vfunc_09(); virtual void vfunc_10();
+    virtual void resetFields(int flag);
+    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14();
+    virtual void vfunc_15(); virtual void vfunc_16(); virtual void vfunc_17(int value); virtual void vfunc_18();
+    virtual igObject *cloneViaMetadata(int copyMode);
+    virtual igMetaObject *getMeta();
+    unsigned int _refCount;
 };
-struct FieldBindSlotList : public igObject { int count; int capacity; FieldBindObject **data; };
-struct FieldBindSet : public igObject { int count; int pad12; FieldBindObject **targets; char pad20[24]; FieldBindSlotList *overrides; };
-struct FieldBindItem { int pad0; int pad4; int offset; char pad12[12]; FieldBindObject *source; };
 struct RemovableList : igTDataList<igObject *> {
     void removeAt(int index) {
         igObject *o = _data[index];
@@ -4456,47 +4459,7 @@ struct RemovableList : igTDataList<igObject *> {
         _data[_count] = 0;
     }
 };
-struct RemovableListHolder { char pad[28]; RemovableList *list; };
-struct Ent8520;
-struct FieldLinkInfo;
-class FieldLinkObject : public igVirtualObject { public:
-    virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12();
-    virtual void Prepare();
-    virtual void s14(); virtual void s15();
-    virtual void Touch();
-    virtual void SetPool(int pool);
-    virtual void s18(); virtual void s19();
-    virtual FieldLinkInfo *GetMeta();
-    virtual void Assign(void *value);
-    virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26();
-    virtual void SetContext(int mode);
-    virtual void s28();
-};
-struct FieldLinkInfo { char pad[64]; int (*poolFor)(); };
-struct FieldLinkRecord : FieldLinkObject { int pad8; int index; int user; int extra; };
-struct FieldLinkSet : public igObject { int count; char pad12[44]; char reset; char pad57[7]; unsigned char mode; unsigned char tracks; unsigned char namedPools; };
 class Tgt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void v80(void *);  };
-struct Coll { char pad[8]; unsigned n; char pad2[44]; unsigned char done; };
-struct Item { int pad[6]; int f24; };
-struct Cont { int pad[2]; int count; };
-struct RefCountResult { int w0; RefCountResult() {} RefCountResult(const RefCountResult &o) { w0 = o.w0; } };
-class RefCountLock { public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
-    virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28();
-    virtual RefCountResult Unlock();
-    virtual void s30();
-    virtual RefCountResult Acquire(int wait);
-};
-struct RefCountedHandle;
-typedef igTDataList<RefCountedHandle *> RefCountOwnerList;
-struct RefCountOwnerHolder { char pad[16]; RefCountOwnerList *list; };
-struct RefCountedHandle { int _vtable; unsigned int _refCount; char pad8[24]; RefCountOwnerHolder *holder; char pad36[16]; int refs; char pad56[12]; RefCountLock *lock; };
 struct ConfigureResult { int value; };
 struct Driver {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
@@ -4513,8 +4476,8 @@ extern "C" int g_propertyNameField[4];
 extern "C" void Gap__Core__igDirectory__vfunc_12(igDirectoryView *arg0);
 extern "C" int FUN_002d7c50(igDirectoryView *arg0, unsigned key);
 extern "C" void FUN_002d7da0(igDirectoryView *a, int i, int x);
-extern "C" int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **value);
-extern "C" void FUN_002d8230(RemovableListHolder *h, igObject *object);
+extern "C" int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDispatchView **value);
+extern "C" void FUN_002d8230(igDirectoryView *h, igObject *object);
 extern "C" int FUN_002d83b0(igDirectoryView *arg0, int arg1, int arg2);
 class VisitorFieldView;
 extern "C" int FUN_002d8520(int arg0, VisitorFieldView *arg1, igDirectoryView *arg2);
@@ -4527,7 +4490,7 @@ template <class T> struct RetainedWord {
         }
     }
 };
-extern "C" int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user);
+extern "C" int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod);
 extern "C" int FUN_002d8a80(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, unsigned char arg7);
 struct Retained {
     igDirEntryView *p;
@@ -4538,10 +4501,10 @@ struct Retained {
     }
 };
 extern "C" int FUN_002d8d00(igDirectoryView *list, int key, int name, int val);
-extern "C" void FUN_002d8f20(Coll *arg0);
+extern "C" void FUN_002d8f20(igDirectoryView *arg0);
 extern "C" void FUN_002d8fe0(igDirectoryView *arg0, int arg1);
-extern "C" int Gap__Core__igDirectory__vfunc_25(Cont *c, igExternalDirEntryView *o);
-extern "C" int FUN_002d91c0(RefCountedHandle *self);
+extern "C" int Gap__Core__igDirectory__vfunc_25(igDirectoryView *c, igExternalDirEntryView *o);
+extern "C" int FUN_002d91c0(igDirectoryView *self);
 extern "C" void FUN_002d9330(DriverOwner *owner);
 extern "C" void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *arg0, int arg1, int arg2);
 extern "C" int igDoubleArrayMetaField_GetSize(igDoubleArrayMetaField *self);
@@ -4803,7 +4766,7 @@ extern "C" void FUN_002e26b0(igExternalDirEntry *arg0, int arg1);
 extern "C" void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObject *arg1);
 extern "C" int DAT_004f9a48[4];
 extern "C" int text_root[4];
-class igIGBFileView : public igVirtualObject { public:
+class igIGBFileView : public igDirectoryView { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
     virtual int vfunc_28(int);
     virtual int ReadFile(const char *path);
@@ -4812,22 +4775,6 @@ class igIGBFileView : public igVirtualObject { public:
     virtual igResult vfunc_32();
     virtual igResult vfunc_33();
     virtual int vfunc_34();
-    int _count;                                                     /* +8 */
-    int _capacity;
-    igDirEntryView **_data;
-    char *_name;
-    igDirectoryListView *_externalDirectoryList;                    /* +24 */
-    igObjectList *_infoList;
-    igResource *_managingResource;
-    unsigned char _sharingState; unsigned char _trackUniqueEntries; char _pad38[2];
-    igObjectList *_uniqueEntryList;                                 /* +40 */
-    igIntList *_refList;
-    unsigned char _loadPendingState; unsigned char _validState; unsigned char _compatibleState; char _pad51[1];
-    int _loadedRefCount;
-    unsigned char _concreteState; char _pad57[3];
-    igIntList *_metaFieldPerObjectIndices;                          /* +60 */
-    unsigned char _autoWriteFilePreProcessState; unsigned char _useMemoryPoolAssignmentsState; unsigned char _forceWriteMemoryPoolInfoFromMetaState; char _pad67[1];
-    igSemaphoreView *_loadingSemaphore;
     int _majorVersion; int _minorVersion;                           /* +72 */
     int _chunkPlace; int _bufferPlace; int _bufferSize;             /* +80 */
     igObject *_entryPool;                                           /* +92 */
@@ -4941,7 +4888,6 @@ public:
 };
 struct LogContext { char pad[56]; int f56; };
 struct FieldOffsetInfo { char pad[8]; int f8; };
-struct ReflectedRefObject { int vt; int rc; };
 struct ReflectedNameObject { int vt; int rc; char *name; };
 struct ReflectedNameList { int vt; int rc; int count; int cap; ReflectedNameObject **data; };
 struct ReflectedRegistry { char p0[44]; ReflectedNameList *names; igTDataList<int> *values; };
@@ -5027,8 +4973,8 @@ extern "C" igResult FUN_002e7ed0(igIGBFileView *arg1);
 struct IgbRegistryTable { char p0[8]; igObjectDispatchView **data; int count; };
 extern "C" igResult FUN_002e7f20(igIGBFileView *self);
 extern "C" void Gap__Core__igIGBFile__vfunc_13(igIGBFileView *arg0);
-class RefObjectHolder { public: ReflectedRefObject *p; RefObjectHolder(void *o) : p((ReflectedRefObject *)o) { if (p != 0) { p->rc = p->rc + 1; } }
- ~RefObjectHolder() { ReflectedRefObject *object = p; if (object) { --object->rc; if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
+class RefObjectHolder { public: igObject *p; RefObjectHolder(void *o) : p((igObject *)o) { if (p != 0) { p->_refCount = p->_refCount + 1; } }
+ ~RefObjectHolder() { igObject *object = p; if (object) { --object->_refCount; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 class TypeListHolder { public: igTDataList<int> *p; TypeListHolder(igTDataList<int> *v) { p = v; }
  ~TypeListHolder() { if (p != 0) { p->_refCount = p->_refCount - 1; if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(p); } } } };
 /* An .igb table section header: its byte size, a version word and the entry count. */
@@ -5954,57 +5900,22 @@ class FieldSizeDispatchView { public: virtual void d0(); virtual void d1(); virt
 extern "C" void igMetaField_EnsureDefaultStorage(igMetaField *field);
 extern "C" void igMetaField_SetDefault(igMetaField *self, int defaultValue);
 extern "C" void igMetaField_SetFieldName(igMetaField *self, void **newName);
-class FieldResetDispatchView {public: virtual void reserved0(); virtual void reserved1(); virtual void reserved2(); virtual void reserved3(); virtual void reserved4(); virtual void reserved5(); virtual void reserved6(); virtual void reserved7(); virtual void reserved8(); virtual void reserved9(); virtual void reserved10(); virtual void reserved11(); virtual void reserved12(); virtual void reserved13(); virtual void reserved14(); virtual void reserved15(); virtual void reserved16(); virtual void reserved17(); virtual void reserved18(); virtual void reserved19(); virtual void reserved20(); virtual void reserved21(); virtual void reserved22(); virtual void reserved23(); virtual void reserved24(); virtual void reserved25(); virtual void Reset0(void *); virtual void Reset3(void *); virtual void Reset2(void *);};
 extern "C" void igMetaField_Reset(igMetaField *field,void *object);
-struct DefaultCopyField { int a, b; int off; int c[2]; unsigned short sz; short d; int e[2]; int def; };
-extern "C" void igMetaField_SetToDefault(DefaultCopyField *arg0, int arg1);
-struct DefaultValueField { int pad0[2]; int f8; int pad1[2]; unsigned short f20; short pad2; int pad3[2]; int f32; };
-extern "C" void igMetaField_CopyDefaultToValue(DefaultValueField *arg0, int arg1);
-struct igMetaObj { char pad[18]; short id; };
-class TypeIndexView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual igMetaObj *vX();
-    char pad[12];
-    short typeIndex;
-};
-extern "C" short igMetaField_GetTypeIndex(TypeIndexView *arg0);
-class FieldBuildDispatchView { public: virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3(); virtual void r4(); virtual void r5(); virtual void r6(); virtual void r7(); virtual void r8(); virtual void r9(); virtual void r10(); virtual void r11(); virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15(); virtual void r16(); virtual void r17(); virtual void r18(); virtual void r19(); virtual void r20(); virtual void *TypeInfo(); virtual void r96(); virtual int TypeSize(); virtual void r104(); virtual void r108(); virtual void r112(); virtual void r116(); virtual void r120(); virtual void r124(); virtual void r128(); virtual void r132(); virtual void r136(); virtual void SetDefault(void *); };
+extern "C" void igMetaField_SetToDefault(igMetaField *arg0, int arg1);
+extern "C" void igMetaField_CopyDefaultToValue(igMetaField *arg0, int arg1);
+extern "C" short igMetaField_GetTypeIndex(igMetaFieldView *arg0);
 extern "C" void igMetaField_FinalizeDescriptor(igMetaField *field);
-/* Rounds size up to a multiple of the field's alignment: (size + a - 1) & ~(a - 1). Reusing the
- * mask local for its complement (m = ~m) orders the temporaries so the nor lands in v0 and the sum
- * in v1. */
-struct AlignmentView {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
-    virtual int v25();
-};
-class FieldWriteDispatchView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual int Write(void *,void *,void *,unsigned char); };
 extern "C" int igMetaField_WritePersistentValue(igMetaField *field,void *object,void *output,void *context,unsigned char swap);
 /* The class lists its virtual methods first so the vptr stays at offset 0 and the data words
  * follow at +4/+8. */
 struct PersistentSizeView { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48();  virtual int v49(int, int); int pad; int f; };
 extern "C" int FUN_002fc740(PersistentSizeView *field, char *object, char *data, igIGBFile *file, unsigned char endianSwap);
 class ReadSizeView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual int vX(int); };
-class RawReadView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void vX(int, int); char pad4[16]; unsigned short f20; };
-extern "C" unsigned short igMetaField_ReadRawFieldMem(RawReadView *arg0, int arg1, int arg2, int arg3, int arg4);
-class RawWriteView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void vX(int, int); };
+extern "C" unsigned short igMetaField_ReadRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int FUN_002fc8a0(igMetaField *arg0);
-class CopyDispatchView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();
-    virtual void v0();
-    virtual void v1();
-    virtual void v2();
-    virtual void v3();
-    virtual void v4();
-};
-extern "C" void igMetaField_CopyByTechnique(CopyDispatchView *arg0, int arg1, int arg2, int arg3);
+extern "C" void igMetaField_CopyByTechnique(igMetaFieldView *arg0, int arg1, int arg2, int arg3);
 extern "C" void FUN_002fc9f0(igMetaField *arg0, int arg1, int arg2);
 extern "C" void FUN_002fca30(igMetaField *field, void *object);
-class TypeSizeView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 struct InternedStrings {
     static inline int get() {
         if (g_stringPool[0] == 0) {
@@ -6018,8 +5929,7 @@ struct InternedStrings {
     }
 };
 extern "C" RecoveryString FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4);
-class ElementWriteView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vB(); virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3(); virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7(); virtual void e8(); virtual void e9(); virtual void e10(); virtual void e11(); virtual void e12(); virtual void e13(); virtual void e14(); virtual void e15(); virtual void e16(); virtual void e17(); virtual void e18(); virtual void e19(); virtual void e20(); virtual void e21(); virtual void e22(); virtual void e23(); virtual void e24(); virtual void e25(); virtual void e26(); virtual void e27(); virtual void e28(); virtual int vC(int, int, int); };
-extern "C" int FUN_002fcce0(ElementWriteView *arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" int FUN_002fcce0(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
 class FieldValueView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual int vX(int); };
 extern "C" int FUN_002fcdb0(igMetaField *arg0, int arg1);
 class igMetaFieldResultView {
@@ -6037,60 +5947,18 @@ public:
 };
 extern "C" igResult FUN_002fcdf0(igMetaFieldResultView *self, char *object);
 extern "C" int igMetaField_Write(igMetaField *arg0);
-struct ByteCompareField { char pad[8]; int base; char pad2[8]; unsigned short n; };
-extern "C" int FUN_002fcf90(ByteCompareField *arg0, unsigned char *arg1, unsigned char *arg2);
-class igMetaFieldSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
-    virtual void ConstructValue(void *object);
-    virtual void d30();
-    virtual void ZeroValue(void *object);
-    virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
-    virtual void d40(); virtual void d41(); virtual void d42();
-    virtual bool vfunc_43(const void *left, const void *right);
-    virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51();
-    virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57();
-    virtual int IsConstruct();
-};
-extern "C" bool FUN_002fcfe0(igMetaFieldSlots *self, const void *left, const void *right);
-extern "C" bool FUN_002fcff0(igMetaFieldSlots *self, const void *left, const void *right);
+extern "C" int FUN_002fcf90(igMetaField *arg0, unsigned char *arg1, unsigned char *arg2);
+extern "C" int FUN_002fcfe0(igMetaFieldView *self, const void *left, const void *right);
+extern "C" int FUN_002fcff0(igMetaFieldView *self, const void *left, const void *right);
 struct PrintString { char *p; PrintString() {} };
 struct PrintView {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54();
     virtual PrintString vX(int, int);
 };
-struct PrintField { int vt; int pad; int f8; int fc; };
-struct CopyInField { int p[2]; int a; int q[2]; unsigned short h; };
-extern "C" void FUN_002fd130(CopyInField *arg0, int arg1, int arg2);
-class igMetaFieldAssignView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual void vfunc_22(void *object, const void *value);
-    unsigned int _refCount;
-    int _offset;
-};
-extern "C" void FUN_002fd150(igMetaFieldAssignView *self, void *object, igMetaFieldAssignView *field, char *source);
-struct SwapBytesField { char p[20]; unsigned short size; };
-extern "C" void igMetaField_SwapBytes(SwapBytesField *arg0, unsigned char *arg1, int arg2);
-class igMetaFieldSwapView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
-    virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
-    virtual void d48(); virtual void d49();
-    virtual void SwapBytes(void *value, int count);
-    unsigned int _refCount;
-    int _offset;
-};
-extern "C" void igMetaField_SwapValue(igMetaFieldSwapView *self, char *object);
+extern "C" void FUN_002fd130(igMetaField *arg0, int arg1, int arg2);
+extern "C" void FUN_002fd150(igMetaFieldView *self, void *object, igMetaFieldView *field, char *source);
+extern "C" void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2);
+extern "C" void igMetaField_SwapValue(igMetaFieldView *self, char *object);
 class MangledNameAllocatorView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int vX(int); };
 extern "C" int igMetaField_GetMangledName(igMetaField *arg0, void **arg1);
 /* igMetaFieldInfo's own virtual functions past igObject's (slot n at vtable byte offset 4 * n);
@@ -6120,10 +5988,6 @@ struct StaticInitCallbacks { void (**functions)(); int count; };
 class MemoryPool { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int IsActive(); virtual igResult EnableAllocationLock(int enable); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int vX(int); };
 struct CreateMeta { char p[26]; unsigned char f26; char q[5]; int f32; char r[24]; CreateMeta *(*f60)(); char s[8]; int f72; char t[20]; char *f96; };
 struct PooledMeta { char p[26]; unsigned char f26; char q[5]; int f32; int f36; char r[20]; PooledMeta *(*f60)(); char s[8]; int f72; char t[20]; char *f96; };
-class LayoutField { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(); char p0[4]; int off; char p1[6]; short idx; unsigned short sz; char p2[2]; void *owner; char p3[9]; unsigned char neg; };
-struct LayoutMeta {
-    char p0[32]; int w32; int w36; char p1[16]; LayoutMeta *parent; char p2[12]; int w72; char p3[12]; unsigned short w88;
-};
 struct AncestorMeta { char p[56]; AncestorMeta *f56; };
 struct ChainMeta { char p[4]; int refs; char p8[48]; ChainMeta *parent; };
 struct ChainRef { ChainMeta *p; ChainRef(ChainMeta *o) : p(o) { if (p != 0) { p->refs = p->refs + 1; } } };
@@ -6164,7 +6028,7 @@ extern "C" int igMetaObject_GetFieldAt(igMetaObject *self, int index);
 extern "C" void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 extern "C" void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count);
 extern "C" void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField ***handles,int *offsets,int start);
-extern "C" void igMetaObject_FinalizeFieldLayout(LayoutMeta *arg0);
+extern "C" void igMetaObject_FinalizeFieldLayout(igMetaObject *arg0);
 extern "C" int FUN_002fe290(AncestorMeta *arg0, AncestorMeta *arg1);
 extern "C" int igMetaObject_GetChildCount(igMetaObject *arg0);
 extern "C" int igMetaObject_GetChildAt(igMetaObject *self, int index);
@@ -6181,62 +6045,6 @@ extern "C" void igNamedObject_SetName(igNamedObject *arg0, int arg1);
 /* Name-or-default is a ?: expression, not an if with an empty then-arm. */
 extern "C" void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, igNamedObject *object);
 extern "C" int FUN_002feeb0(igTDataList<int> *list, igMetaField *field, int value);
-/* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
- * are the class header). The reflected igObject is the same object seen as data. Named slots carry
- * the igObject symbol names (Gap::Core::igObject::<name>, igObject_CloneViaMetadata); vfunc_NN
- * keeps the symbol's slot number. ABI view only: never instantiated. */
-class igObjectDispatchView {
-public:
-    virtual void vfunc_00();
-    virtual void constructFields(int flag);
-    virtual void destructFields();
-    virtual void vfunc_03(); virtual void vfunc_04(); virtual void vfunc_05();
-    virtual int vfunc_06(igObjectDispatchView *other);
-    virtual void userConstruct(int flag);
-    virtual void userDestruct();
-    virtual void vfunc_09(); virtual void vfunc_10();
-    virtual void resetFields(int flag);
-    virtual void vfunc_12(); virtual void vfunc_13(); virtual void vfunc_14();
-    virtual void vfunc_15(); virtual void vfunc_16(); virtual void vfunc_17(); virtual void vfunc_18();
-    virtual igObject *cloneViaMetadata(int copyMode);
-    virtual igMetaObject *getMeta();
-};
-/* RESERVED(n) declares unused virtual slot n so the named slots land on the
- * right byte offsets. */
-
-/* Observed ABI view of the allocator vtable byte offsets the storage helpers call through, not an
- * original type; it is never instantiated. Only slots 216 (AllocateStorage) and 264 (FreeStorage)
- * are named by the original symbols; the other slots keep their byte offset. */
-class Allocator {
-public:
-    /* The first two vtable words are the class header, so slot n sits at byte
-     * offset 8 + 4 * n (slot 52 = +216). */
-    RESERVED(0); RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4);
-    RESERVED(5); RESERVED(6); RESERVED(7); RESERVED(8); RESERVED(9);
-    RESERVED(10); RESERVED(11); RESERVED(12); RESERVED(13); RESERVED(14);
-    RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19);
-    RESERVED(20); RESERVED(21); RESERVED(22); RESERVED(23); RESERVED(24);
-    RESERVED(25); RESERVED(26); RESERVED(27); RESERVED(28); RESERVED(29);
-    RESERVED(30); RESERVED(31); RESERVED(32); RESERVED(33); RESERVED(34);
-    RESERVED(35); RESERVED(36); RESERVED(37); RESERVED(38); RESERVED(39);
-    RESERVED(40); RESERVED(41); RESERVED(42); RESERVED(43); RESERVED(44);
-    RESERVED(45); RESERVED(46); RESERVED(47); RESERVED(48); RESERVED(49);
-    RESERVED(50); RESERVED(51);
-    virtual int allocate_storage(int size);                                   /* +216 */
-    virtual int slot_220(int size, int alignment);                            /* +220: callers pass 0x10/0x80 */
-    virtual int slot_224(int size, int option);                               /* +224: metadata default storage passes 1 */
-    RESERVED(55);                                                             /* +228 */
-    virtual int slot_232(int storage, int size);                              /* +232: callers pass (old storage, size) */
-    virtual int slot_236(int storage, int size, int alignment);               /* +236: callers pass 0x80 */
-    RESERVED(58); RESERVED(59); RESERVED(60); RESERVED(61); RESERVED(62);     /* +240..+260 */
-    RESERVED(63);
-    virtual void free_storage(int storage);                                   /* +264 */
-};
-/* Byte-swapping descriptor of a metafield type: slot 50 swaps `count` words in place. */
-class SwapDescriptor { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49();
- virtual void Swap(void *, int);
-};
 struct ObjectHeader { int *vt; unsigned refs : 23; unsigned flag : 1; unsigned char b7; };
 extern "C" int g_igObject_vtable[4];
 extern "C" char igObject_className[];
@@ -6347,7 +6155,6 @@ struct SizeField {
 };
 extern "C" int igObject_GetSerializedSize(SizeObject *arg0);
 extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap);
-struct ReadField { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(void*); };
 /* An object record in an .igb object section: its meta-object index and byte size, then (old format)
  * the count of persistent fields written. */
 struct FieldRecordHead { int kind; int size; int fieldCount; };
@@ -6450,40 +6257,8 @@ extern "C" void igObject_VisitFields(VisitorObjectView *object,Visitor callback,
 /* Stand-in for the object's vtable: vX is slot 20, the metaobject accessor. */
 class KindVC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(int); };
 extern "C" int igObject_IsKindOf(void *object, igMetaObject *kind);
-/* MetadataDispatchView declares observed byte slot 88; do not instantiate. */
-class MetadataDispatchView { public:
-virtual void d0();
-virtual void d1();
-virtual void d2();
-virtual void d3();
-virtual void d4();
-virtual void d5();
-virtual void d6();
-virtual void d7();
-virtual void d8();
-virtual void d9();
-virtual void d10();
-virtual void d11();
-virtual void d12();
-virtual void d13();
-virtual void d14();
-virtual void d15();
-virtual void d16();
-virtual void d17();
-virtual void d18();
-virtual void d19();
-virtual igMetaObject *GetMetadata(); };
-extern "C" Allocator *igObject_GetAllocator(int a0);
-struct ClonedObject : public igObject { };
-class CloneSource { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual ClonedObject *v84(int); };
-extern "C" igSmartPointer<ClonedObject> FUN_00301010(CloneSource *arg1, int arg2);
-/* ABI dispatch view of virtual slot 92 (21 leading virtuals); never instantiated. */
-class DirEntryRefSetterView { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int SetRef(int);
-};
+extern "C" igMemoryPoolView *igObject_GetAllocator(int a0);
+extern "C" igSmartPointer<igObject> FUN_00301010(igObjectDispatchView *arg1, int arg2);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_12(igObjectDirEntry *self);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 struct ObjectDirEntryList : public igObjectList {
@@ -6973,15 +6748,7 @@ extern "C" int Gap__Core__igStructMetaField__vfunc_27(igStructMetaField *self);
 extern "C" void Gap__Core__igStructMetaField__vfunc_31(igStructMetaField *self, int instance);
 extern "C" void Gap__Core__igStructMetaField__vfunc_32(igStructMetaField *self, int instance);
 extern "C" void Gap__Core__igStructMetaField__vfunc_28(igStructMetaField *self, int instance);
-class igStructMetaFieldView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25();
-    virtual void SetToDefault(void *object);
-};
-extern "C" void Gap__Core__igStructMetaField__vfunc_30(igStructMetaFieldView *self, void *object);
+extern "C" void Gap__Core__igStructMetaField__vfunc_30(igMetaFieldView *self, void *object);
 extern "C" int Gap__Core__igStructMetaField__vfunc_60(igStructMetaField *self);
 struct SymbolRecord { int name; int address; unsigned int size; int path; };
 class igSymbolTableView { public:
@@ -7039,15 +6806,8 @@ extern "C" int DAT_005871e8[4];
 extern "C" int (*DAT_005871f0[4])(void *, int, int, int, int, int, int);
 extern "C" unsigned char GPR_00554c34;
 extern "C" void FUN_0030f040(igArenaMemoryPool *arg0, int arg1, int arg2, int arg3);
-struct ArenaChunkWord { unsigned lo:5; unsigned size:19; unsigned mid:7; unsigned big:1; };
-struct ArenaChunkBytes { unsigned char inUse:1; unsigned char align:4; unsigned char pad:3; char p1[2]; unsigned char mid:7; unsigned char big:1; char p2[4]; unsigned short ext:12; unsigned short pad2:4; char p3; unsigned char free:1; };
-struct ArenaCheckState { char pad[44]; char *top; char pad2[1968]; int flags; };
-class ArenaCheckPool { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106();
- virtual char *Low();
- virtual char *High();
- char pad[108]; ArenaCheckState *state; char pad2[68]; int errorLevel; int checkLevel; int pad3[2]; int minimum;
-};
+struct TaggedBlockHeader;
+struct ArenaState;
 extern "C" char text_igArenaMemoryPool_Invalid_or_cor[];
 extern "C" char text_E3_Below_used_address_range[];
 extern "C" char text_E4_Above_used_address_range[];
@@ -7060,7 +6820,7 @@ extern "C" unsigned char GPR_00554c44;
 extern "C" unsigned char GPR_00554c48;
 extern "C" unsigned char GPR_00554c4c;
 extern "C" unsigned char GPR_00554c50;
-extern "C" void igArenaMemoryPool_CheckChunk(ArenaCheckPool *self, ArenaChunkBytes *h);
+extern "C" void igArenaMemoryPool_CheckChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h);
 extern "C" char text_E21_This_block_should_be_marked[];
 extern "C" char text_E22_Corrupted_free_list[];
 extern "C" char text_E23_This_block_should_be_marked[];
@@ -7069,8 +6829,8 @@ extern "C" unsigned char g_igArenaMemoryPool_ignoreE21Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE22Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE23Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE24Notice;
-extern "C" void igArenaMemoryPool_CheckFreeChunk(ArenaCheckPool *self, ArenaChunkBytes *h);
-extern "C" void igArenaMemoryPool_CheckInUseChunk(ArenaCheckPool *self, ArenaChunkBytes *h);
+extern "C" void igArenaMemoryPool_CheckFreeChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h);
+extern "C" void igArenaMemoryPool_CheckInUseChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h);
 extern "C" char text_E25_Below_used_address_range[];
 extern "C" char text_E26_Above_used_address_range[];
 extern "C" char text_E27_Block_size_less_than[];
@@ -7089,43 +6849,26 @@ extern "C" unsigned char GPR_00554ca0;
 extern "C" unsigned char GPR_00554ca4;
 extern "C" unsigned char GPR_00554ca8;
 extern "C" unsigned char GPR_00554cac;
-extern "C" void FUN_003105c0(ArenaCheckPool *self, ArenaChunkBytes *h, int requested);
+extern "C" void FUN_003105c0(igArenaMemoryPoolView *self, TaggedBlockHeader *h, int requested);
 extern "C" int text_E37_Corrupted_header[4];
 extern "C" unsigned char DAT_00554cb0;
 extern "C" char text_igArenaMemoryPool_E67_Block_list[];
 extern "C" char text_igArenaMemoryPool_E68_Unable_to[];
 extern "C" unsigned char GPR_00554ce4;
 extern "C" unsigned char GPR_00554ce8;
-typedef struct Ranges {
-    char pad[2020];
-    unsigned int *data;   /* 2020 */
-    int cap;              /* 2024 */
-    int count;            /* 2028 */
-    int half;             /* 2032 */
-    char pad2[20];
-    int total;            /* 2056 */
-} Ranges;
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int lo, int len);
-typedef struct ArenaBlockTable { char pad[2020]; int *blocks; int capacity; int count; } ArenaBlockTable;
-typedef struct ArenaPoolView { char pad[112]; ArenaBlockTable *arena; } ArenaPoolView;
 extern "C" int DAT_004f9950[];
 extern "C" char DAT_004fc1e0[];
 extern "C" int text_Pool_d_of_d_tot_0x_06x[4];
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_96(igArenaMemoryPool *arg0, int arg1);
-class igArenaMemoryPoolView;
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, igArenaMemoryPoolView *arg1);
-struct RefObject { int word0; int references; };
-struct TagByte { unsigned char lo:7; unsigned char flag:1; };
 extern "C" char text_Unable_to_allocate_memory_for_ar[];
 extern "C" int DAT_00587200[4];
 extern "C" char text_igArenaMemoryPool_checkHeap_E69[];
 extern "C" char text_igArenaMemoryPool_checkHeap_E70[];
 extern "C" unsigned char GPR_00554cec;
 extern "C" unsigned char GPR_00554cf0;
-struct CheckHeapArena { char pad[2020]; int *blocks; int capacity; int count; };
-struct CheckHeapPool { char pad[112]; CheckHeapArena *arena; char pad2[72]; int verbosity; };
-class HeapBoundsPool;
-extern "C" igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self);
+extern "C" igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self);
 extern "C" char DAT_004fc490[];
 extern "C" char DAT_004fc500[];
 extern "C" char DAT_004fc570[];
@@ -7136,44 +6879,13 @@ extern "C" unsigned char GPR_00554cf8;
 extern "C" unsigned char GPR_00554cfc;
 extern "C" unsigned char GPR_00554d00;
 extern "C" unsigned char GPR_00554d04;
-/* Arena block header: in-use bit, alignment padding in words, size (low 19 bits, high 12 bits in
- * the third word when `big` is set). */
-struct ArenaBlockHeader {
-    unsigned used : 1;
-    unsigned padWords : 4;
-    unsigned size : 19;
-    unsigned mid : 7;
-    unsigned big : 1;
-    unsigned w1;
-    unsigned sizeHigh : 12;
-    unsigned rest : 20;
-};
-class HeapBoundsPool { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
-    virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49();
-    virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59();
-    virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69();
-    virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79();
-    virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89();
-    virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99();
-    virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106();
-    virtual char *HeapStart();
-    virtual char *HeapEnd();
-    char pad4[184]; int messageLevel; char pad192[8]; int minBlockSize;
-};
-extern "C" igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end);
+extern "C" igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *end);
 extern "C" unsigned char GPR_00554d1c;
 extern "C" char text_igArenaMemoryPool_trim_E76_Arena[];
-struct TrimArena { char p0[1992]; int top; char p1[24]; int *blocks; int capacity; int count; };
-struct TrimPool { char p0[112]; TrimArena *arena; char p1[44]; long long locked; char p2[20]; int debug; };
-extern "C" igResult igArenaMemoryPool_TrimArenaBlock(TrimPool *, int, int, int);
-extern "C" bool igArenaMemoryPool_Trim(TrimPool *self, int pad);
-/* The link pair sits at +4 or +12 depending on the top bit of the node's byte 3; `b7 == 0 ? 4 :
- * 12` gives the movn form. */
-struct LinkByte { char pad[3]; unsigned char b0:1, b1:1, b2:1, b3:1, b4:1, b5:1, b6:1, b7:1; };
+extern "C" igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *, int, int, int);
+extern "C" bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad);
+/* A free chunk's link pair sits past its header, at +4 or +12 as the header is short or `big`;
+ * `big == 0 ? 4 : 12` gives the movn form. */
 extern "C" void FUN_00315050(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigned int arg3);
 /* igMemoryPoolInfo's string getters, as the pools' configure functions read them: this build takes
  * the release set of the options, checking and messages strings. */
@@ -7190,12 +6902,18 @@ extern "C" char text_LightChecking[];
 extern "C" char text_ModerateChecking[];
 extern "C" char text_HeavyChecking[];
 extern "C" igResult Gap__Core__igArenaMemoryPool__vfunc_45(igArenaMemoryPool *pool, igMemoryPoolInfo *info);
-/* The arena's 0x814-byte state record: the allocator's bins, then the list of system blocks it
- * has taken, the raw memory it was given and the address range its system blocks cover. */
+/* The arena's 0x814-byte state record: the allocator's bins (the top chunk at 44; bit 0 of the
+ * flags at 2016 makes the chunk checks test the used address range), then the list of system
+ * blocks it has taken (count / 2 peaks in maxBlockPairs, their bytes sum in systemBytes), the raw
+ * memory it was given and the address range its system blocks cover. */
 struct ArenaState {
-    char _bins[2020];
-    int *blocks; int blockCapacity; int blockCount; int f2032;
-    int rawMemory; char _pad2040[4]; int f2044; int f2048; char _pad2052[4]; int f2056;
+    char _bins[44];
+    char *top;
+    char _bins48[1944];
+    int f1992; char _pad1996[20];
+    int flags;
+    int *blocks; int blockCapacity; int blockCount; int maxBlockPairs;
+    int rawMemory; char _pad2040[4]; int f2044; int f2048; char _pad2052[4]; int systemBytes;
     unsigned int lowestAddress; unsigned int highestAddress;
 };
 /* igArenaMemoryPool's own slots (97 on) after the shared igMemoryPool table. */
@@ -7205,6 +6923,9 @@ public:
     virtual igResult vfunc_102();                                                /* slot 100, byte 408 */
     virtual igResult vfunc_103();                                                /* slot 101, byte 412 */
     virtual void *MemoryOperation(void *block, int size, unsigned int alignment); /* slot 102, byte 416 */
+    virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106();
+    virtual char *getLowestAddress();                                            /* slot 107, byte 436: vfunc_109 */
+    virtual char *getHighestAddress();                                           /* slot 108, byte 440: vfunc_110 */
     unsigned int _refCount;
     long long _localAllocated;
     long long _localFreed;
@@ -7224,7 +6945,7 @@ public:
     ArenaState *_arenaState;
     unsigned char _isActive;
     char _pad117[3];
-    RefObject *_allocationLock;
+    igObject *_allocationLock;
     int _rawMemory;
     unsigned char _isAlchemyMemory;
     char _pad129[7];
@@ -7236,7 +6957,7 @@ public:
     unsigned int _preSize;
     unsigned short _alignment;
     char _pad174[2];
-    RefObject *_eventTracker;
+    igObject *_eventTracker;
     int _poolIndex;
     int _heapIntegrityCheckLevel;
     int _messageLevel;
@@ -7271,10 +6992,10 @@ extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_58(igArenaMemoryPoolView *s
 extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_59(igArenaMemoryPoolView *self, void *block, int size, unsigned int alignment);
 extern "C" unsigned char GPR_00554d64;
 extern "C" unsigned char GPR_00554d68;
-static inline void releaseRefObject(RefObject *object) {
+static inline void releaseRefObject(igObject *object) {
     if (object) {
-        --object->references;
-        if (((unsigned long long)((long long)object->references << 0x29) >> 0x29) == 0)
+        --object->_refCount;
+        if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0)
             igObject_Destroy(object);
     }
 }
@@ -7449,12 +7170,33 @@ public:
     virtual void d97(); virtual void d98();
     virtual void *vfunc_101(void *block, unsigned int size, ...);
     unsigned int _refCount;
-    char _pad8[108];
+    long long _localAllocated;
+    long long _localFreed;
+    long long _localNetAllocated;
+    long long _localNetAllocatedHigh;
+    long long _localAllocatedWithOverhead;
+    long long _localFreedWithOverhead;
+    long long _localNetAllocatedWithOverhead;
+    long long _localNetAllocatedWithOverheadHigh;
+    long long _localAllocationCount;
+    long long _localFreeCount;
+    long long _localNetAllocationCount;
+    long long _localNetAllocationCountHigh;
+    unsigned char _updateStatistics;
+    unsigned char _updateGlobalStatistics;
+    char _pad106[6];
+    unsigned char _isActive;
+    char _pad113[3];
     igSmartPointer<igSemaphoreView> _allocationLock;
     int _poolIndex;
     unsigned int _elementSize;
-    char _pad128[16];
+    unsigned long long _maxSize;
+    unsigned long long _size;
     unsigned short _alignment;
+    char _pad146[2];
+    igObject *_eventTracker;
+    int _messageLevel;
+    int _poolOptionFlags;
 };
 extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_53(igMallocMemoryPoolView *self);
 extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_54(igMallocMemoryPoolView *self, unsigned int size);
@@ -7463,17 +7205,7 @@ extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_56(igMallocMemoryPool *sel
 extern "C" int Gap__Core__igMallocMemoryPool__vfunc_57(igMallocMemoryPool *arg0, int arg1, int arg2);
 extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_58(igMallocMemoryPoolView *self, void *block, unsigned int size);
 extern "C" void *Gap__Core__igMallocMemoryPool__vfunc_59(igMallocMemoryPoolView *self, void *block, int size, unsigned int alignment);
-class MallocPoolFreeView { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63();
-    virtual void Release(void *block);
-    unsigned int _refCount;
-    char _pad8[72];
-    long long _localFreeCount;
-    long long _localNetAllocationCount;
-};
-struct MallocBlockTag { unsigned char lo : 5; unsigned char mid : 1; unsigned char padded : 1; unsigned char flag : 1; };
-struct MallocBlockEnd { unsigned char b : 7; unsigned char flag : 1; };
-extern "C" void Gap__Core__igMallocMemoryPool__vfunc_64(MallocPoolFreeView *self, unsigned int size, char **block);
+extern "C" void Gap__Core__igMallocMemoryPool__vfunc_64(igMallocMemoryPoolView *self, unsigned int size, char **block);
 extern "C" int g_poolOptionFlagsDefault_004c25f8[4];
 extern "C" void Gap__Core__igMallocMemoryPool__vfunc_13(igMallocMemoryPool *self, int extra1);
 extern "C" void Gap__Core__igMallocMemoryPool__vfunc_97(igMallocMemoryPool *self);
@@ -7504,13 +7236,11 @@ struct TaggedBlockHeader {
     unsigned char extraTag : 5;
     unsigned char extraBig : 1;
 };
-class TaggedPool { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual int GetPoolIndex(); char pad4[116]; unsigned index; char pad124[32]; unsigned flags; };
-extern "C" void *FUN_00324be0(TaggedPool *self, unsigned size);
-extern "C" void FUN_00324ec0(TaggedPool *self, unsigned char *p);
+extern "C" void *FUN_00324be0(igMallocMemoryPoolView *self, unsigned size);
+extern "C" void FUN_00324ec0(igMallocMemoryPoolView *self, unsigned char *p);
 struct TaggedTailByte { unsigned char low : 7; unsigned char extended : 1; };
-extern "C" void *FUN_00325060(TaggedPool *self, char *p, unsigned size);
-class TaggedAlignedPool { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual int GetPoolIndex(); char pad4[116]; unsigned index; char pad124[20]; unsigned short minAlignment; char pad146[10]; unsigned flags; };
-extern "C" void *FUN_003254a0(TaggedAlignedPool *self, unsigned alignment, unsigned size);
+extern "C" void *FUN_00325060(igMallocMemoryPoolView *self, char *p, unsigned size);
+extern "C" void *FUN_003254a0(igMallocMemoryPoolView *self, unsigned alignment, unsigned size);
 extern "C" void *FUN_003257d0(igPageMemoryPool *arg0);
 extern "C" void *FUN_00325810(igPageMemoryPool *arg0, int extra1);
 extern "C" int DAT_004fc120[4];
@@ -7614,15 +7344,8 @@ extern "C" int Gap__Core__igStackMemoryPool__vfunc_54(igStackMemoryPool *arg0, i
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_55(igStackMemoryPool *arg0, int size, unsigned short arg2);
 extern "C" void *Gap__Core__igStackMemoryPool__vfunc_56(igStackMemoryPool *s, int count, int size);
 extern "C" void *Gap__Core__igStackMemoryPool__vfunc_57(igStackMemoryPool *s, int count, int size, unsigned short a);
-typedef struct StackPoolFields {
-    char pad0[112];
-    unsigned short alignment;
-    char pad1[18];
-    unsigned top;
-    unsigned *end;
-} StackPoolFields;
-extern "C" void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, unsigned short count, unsigned *sizes, unsigned *out);
-extern "C" void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, unsigned short count, unsigned *sizes, unsigned *out, unsigned short *aligns);
+extern "C" void Gap__Core__igStackMemoryPool__vfunc_62(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out);
+extern "C" void Gap__Core__igStackMemoryPool__vfunc_63(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out, unsigned short *aligns);
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_84(igStackMemoryPool *arg0, unsigned int arg1);
 extern "C" bool Gap__Core__igStackMemoryPool__vfunc_85(igStackMemoryPool *s, unsigned a);
 extern "C" void Gap__Core__igStackMemoryPool__vfunc_64(igStackMemoryPool *self, unsigned count, unsigned *ptrs);

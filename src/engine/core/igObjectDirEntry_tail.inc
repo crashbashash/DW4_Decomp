@@ -2,7 +2,7 @@
  * retains the new value and releases the old one, so calling it with 0 releases the held object;
  * the igObject default of this slot (an empty stub) then runs. */
 void Gap__Core__igObjectDirEntry__vfunc_12(igObjectDirEntry *self) {
-    ((DirEntryRefSetterView *)self)->SetRef((int)(0));
+    ((igDirEntryView *)self)->vfunc_23(0);
     Gap__Core__igObject__vfunc_10((int)self);
 }
 

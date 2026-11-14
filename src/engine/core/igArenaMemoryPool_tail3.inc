@@ -5,18 +5,18 @@ void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, igArenaMemoryPoolView *a
     *arg0 = r.v;
 }
 
-igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
-    CheckHeapArena *arena = self->arena;
+igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
+    ArenaState *arena = self->_arenaState;
     igResult result;
     int i;
     int r;
 
     result = g_resultSuccess;
-    if (arena->count == 0) {
+    if (arena->blockCount == 0) {
         return g_resultSuccess;
     }
-    if (arena->blocks == 0 || arena->capacity == 0) {
-        if (self->verbosity > 0) {
+    if (arena->blocks == 0 || arena->blockCapacity == 0) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cec == 0) {
                 r = igReportNotice(text_igArenaMemoryPool_checkHeap_E69);
@@ -27,8 +27,8 @@ igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
         }
         result = g_resultFailure;
     }
-    if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
-        if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
+    if (arena->blockCount < 0 || arena->blockCapacity < 0 || arena->blockCount > arena->blockCapacity) {
+        if (self->_messageLevel >= 3 && GPR_00554cf0 == 0) {
             r = igReportNotice(text_igArenaMemoryPool_checkHeap_E70);
             if (r != 1 && r == 2) {
                 GPR_00554cf0 = 1;
@@ -36,9 +36,9 @@ igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
         }
         return g_resultFailure;
     }
-    for (i = 0; i < arena->count; i += 2) {
+    for (i = 0; i < arena->blockCount; i += 2) {
         int *p = &arena->blocks[i];
-        if (FUN_00312790((HeapBoundsPool *)self, i, (char *)p[0], (char *)p[1]) == g_resultFailure) {
+        if (FUN_00312790(self, i, (char *)p[0], (char *)p[1]) == g_resultFailure) {
             result = g_resultFailure;
             break;
         }
@@ -46,17 +46,17 @@ igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
     return result;
 }
 
-igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
-    char *hi = self->HeapEnd();
-    char *lo = self->HeapStart();
+igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
+    char *hi = self->getHighestAddress();
+    char *lo = self->getLowestAddress();
     /* Declared with the walk's other pointers, ahead of the flag: `n` and `ok` are the two values kept in
      * argument registers, and the later-numbered one, `ok`, takes a0. */
-    ArenaBlockHeader *n;
+    TaggedBlockHeader *n;
     unsigned int size = 0;
     int count = 0;
     bool ok = false;
     if (cur < lo || hi < cur) {
-        if (self->messageLevel > 0) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf4 == 0) {
                 int r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
@@ -68,7 +68,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         return g_resultFailure;
     }
     if (end < lo || hi < end) {
-        if (self->messageLevel > 0) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf8 == 0) {
                 int r = igReportNotice(DAT_004fc500, index, end, lo, hi);
@@ -80,7 +80,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         return g_resultFailure;
     }
     if (end < cur) {
-        if (self->messageLevel > 0) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cfc == 0) {
                 int r = igReportNotice(DAT_004fc570, index, end, cur);
@@ -91,8 +91,8 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         }
         return g_resultFailure;
     }
-    if (!((ArenaBlockHeader *)cur)->used) {
-        if (self->messageLevel > 0) {
+    if (!((TaggedBlockHeader *)cur)->used) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d00 == 0) {
                 int r = igReportNotice(DAT_004fc5e0);
@@ -104,15 +104,15 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         return g_resultFailure;
     }
     while (cur < end) {
-        ArenaBlockHeader *h = (ArenaBlockHeader *)cur;
+        TaggedBlockHeader *h = (TaggedBlockHeader *)cur;
         unsigned int sz = h->size;
         if (h->big == 1) {
             sz += h->sizeHigh << 19;
         }
         sz = (sz + 3) & ~3;
-        size = sz + (h->padWords + 1) * 4;
-        int min = self->minBlockSize;
-        n = (ArenaBlockHeader *)(cur + size);
+        size = sz + (h->words + 1) * 4;
+        int min = self->_smallestChunkSize;
+        n = (TaggedBlockHeader *)(cur + size);
         if (size < min) {
             if (end - cur <= min) {
                 ok = true;
@@ -140,7 +140,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     }
     if (cur != end && !ok) {
 bad:
-        if (self->messageLevel > 0) {
+        if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d04 == 0) {
                 int r = igReportNotice(DAT_004fc660, cur, index, count, size);
@@ -154,21 +154,21 @@ bad:
     return g_resultSuccess;
 }
 
-bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
+bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     int count;
     int cap;
-    TrimArena *a;
+    ArenaState *a;
     int i;
     bool trimmed;
-    a = self->arena;
+    a = self->_arenaState;
     trimmed = false;
     FUN_00318b40(self);
-    if (self->locked != 0) {
+    if (self->_size != 0) {
         return false;
     }
-    count = a->count;
-    if (count < 0 || (cap = a->capacity) < 0 || count > cap) {
-        if (self->debug >= 3) {
+    count = a->blockCount;
+    if (count < 0 || (cap = a->blockCapacity) < 0 || count > cap) {
+        if (self->_messageLevel >= 3) {
             if (GPR_00554d1c == 0) {
                 int r = igReportNotice(text_igArenaMemoryPool_trim_E76_Arena);
                 if (r != 1 && r == 2) {
@@ -178,18 +178,18 @@ bool igArenaMemoryPool_Trim(TrimPool *self, int pad) {
         }
         return false;
     }
-    for (i = a->count - 2; i >= 0; i -= 2) {
+    for (i = a->blockCount - 2; i >= 0; i -= 2) {
         if (igArenaMemoryPool_TrimArenaBlock(self, i, a->blocks[i], a->blocks[i + 1]) == g_resultSuccess) {
-            if (i < a->count - 2) {
-                memcpy(a->blocks + i, a->blocks + (i + 2), (a->count - (i + 2)) * 4);
+            if (i < a->blockCount - 2) {
+                memcpy(a->blocks + i, a->blocks + (i + 2), (a->blockCount - (i + 2)) * 4);
             }
             trimmed = true;
-            a->blocks[a->count - 1] = 0;
-            a->blocks[a->count - 2] = 0;
-            a->count = a->count - 2;
+            a->blocks[a->blockCount - 1] = 0;
+            a->blocks[a->blockCount - 2] = 0;
+            a->blockCount = a->blockCount - 2;
         }
     }
-    FUN_00314510(self, a->top, pad);
+    FUN_00314510(self, a->f1992, pad);
     return trimmed;
 }
 
@@ -329,7 +329,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_24(int *out, igArenaMemoryPoolView *p, 
         p->_isAlchemyMemory = isAlchemyMemory;
         p->_arenaState->f2044 = (int)usable;
         p->_arenaState->f2048 = (int)usable;
-        p->_arenaState->f2056 = (int)usable;
+        p->_arenaState->systemBytes = (int)usable;
         p->vfunc_51();
         p->_systemAllocated = 0;
         p->_updateGlobalStatistics = isAlchemyMemory;
@@ -610,20 +610,20 @@ void Gap__Core__igArenaMemoryPool__vfunc_63(int *arg0) {
 
 static inline char *blockHeader(char *p) {
     char *h = p - 4;
-    if (((MallocBlockEnd *)(p - 1))->flag == 1) h = p - 12;
+    if (((TaggedTailByte *)(p - 1))->extended == 1) h = p - 12;
     return h;
 }
 
 static inline char *padRecord(char *h) {
-    if (((MallocBlockTag *)(h + 3))->padded) return h - 10;
+    if (((TaggedBlockHeader *)h)->relocated) return h - 10;
     return h - 8;
 }
 
-void Gap__Core__igArenaMemoryPool__freeSized(MallocPoolFreeView *self, unsigned int size, char **block) {
+void Gap__Core__igArenaMemoryPool__freeSized(igArenaMemoryPoolView *self, unsigned int size, char **block) {
     char *q = padRecord(blockHeader(*block));
     self->_localFreeCount += *(unsigned short *)(q + 2);
     self->_localNetAllocationCount -= size;
-    self->Release((char *)((int)q - 4) - 4);
+    self->Free((char *)((int)q - 4) - 4);
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_97(igArenaMemoryPoolView *self) {
@@ -672,7 +672,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(igArenaMemoryPoolView *self) {
         }
         self->_arenaState->blockCapacity = 0x200;
         self->_arenaState->blockCount = 0;
-        self->_arenaState->f2032 = 0;
+        self->_arenaState->maxBlockPairs = 0;
         self->_arenaState->lowestAddress = -1;
         self->_arenaState->highestAddress = 0;
     }
@@ -734,7 +734,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_98(igArenaMemoryPoolView *arg0) {
             g_activeSystemAllocator[0]->Free(blocks);
             arg0->_arenaState->blockCapacity = 0;
             arg0->_arenaState->blockCount = 0;
-            arg0->_arenaState->f2032 = 0;
+            arg0->_arenaState->maxBlockPairs = 0;
         }
         g_activeSystemAllocator[0]->Free((void *)arg0->_arenaState);
         arg0->_arenaState = 0;
@@ -796,7 +796,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_85(void *self, unsigned char *p) {
         }
     }
     h = (TaggedBlockHeader *)(p - 4);
-    if (((struct TagByte *)(p - 1))->flag == 1) {
+    if (((TaggedTailByte *)(p - 1))->extended == 1) {
         h = (TaggedBlockHeader *)(p - 12);
     }
     if (h == 0) {
@@ -822,7 +822,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_84(int arg0, unsigned char *p) {
         off = *(unsigned int *)(p - 8);
         p = p - off;
         h = (TaggedBlockHeader *)(p - 4);
-        if (((struct TagByte *)(p - 1))->flag == 1) {
+        if (((TaggedTailByte *)(p - 1))->extended == 1) {
             h = (TaggedBlockHeader *)(p - 12);
         }
         if (h == 0) {
@@ -836,7 +836,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_84(int arg0, unsigned char *p) {
         return v - (off + 4);
     }
     h = (TaggedBlockHeader *)(p - 4);
-    if (((struct TagByte *)(p - 1))->flag == 1) {
+    if (((TaggedTailByte *)(p - 1))->extended == 1) {
         h = (TaggedBlockHeader *)(p - 12);
     }
     if (h == 0) {
@@ -963,7 +963,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_95(int arg0, unsigned char *p) {
         if (off < 0x100011) { p = p - off; } else { return -1; }
     }
     a0 = (TaggedBlockHeader *)(p - 4);
-    if (((struct TagByte *)(p - 1))->flag == 1) { a0 = (TaggedBlockHeader *)(p - 12); }
+    if (((TaggedTailByte *)(p - 1))->extended == 1) { a0 = (TaggedBlockHeader *)(p - 12); }
     if (a0 == 0) return -1;
     if (a0->big == 0) { v = a0->poolLow; } else { v = a0->poolLow + (a0->poolHigh << 5); }
     return v * 2;
@@ -983,7 +983,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_03(igArenaMemoryPoolView *arg0, int arg
         }
         arg0->_arenaState->blockCapacity = 0x200;
         arg0->_arenaState->blockCount = 0;
-        arg0->_arenaState->f2032 = 0;
+        arg0->_arenaState->maxBlockPairs = 0;
         arg0->_arenaState->lowestAddress = -1;
         arg0->_arenaState->highestAddress = 0;
     }
@@ -1044,7 +1044,7 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long
 
 void Gap__Core__igArenaMemoryPool__vfunc_107(igArenaMemoryPoolView *self)
 {
-    (*(igObjectDispatchView **)g_activeSystemAllocator)->vfunc_17();
+    g_activeSystemAllocator[0]->GetStackSize();
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_108(void) {

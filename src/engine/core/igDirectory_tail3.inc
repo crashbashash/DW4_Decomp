@@ -17,12 +17,12 @@ void *FUN_002d8f10(int arg0, int arg1) {
     return ((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1));
 }
 
-void FUN_002d8f20(Coll *arg0) {
+void FUN_002d8f20(igDirectoryView *arg0) {
     unsigned n;
     unsigned i;
     igObjectDirEntry *e;
-    if (arg0->done != 1) {
-        n = arg0->n;
+    if (arg0->_concreteState != 1) {
+        n = arg0->_count;
         i = 0;
         while (i < n) {
             e = (igObjectDirEntry *)FUN_002d7e90((int *)arg0, i);
@@ -33,7 +33,7 @@ void FUN_002d8f20(Coll *arg0) {
             }
             i++;
         }
-        arg0->done = 1;
+        arg0->_concreteState = 1;
     }
 }
 
@@ -64,8 +64,8 @@ void FUN_002d8fe0(igDirectoryView *arg0, int arg1) {
     arg0->_name = (int)temp_s0;
 }
 
-int Gap__Core__igDirectory__vfunc_25(Cont *c, igExternalDirEntryView *o) {
-if (o->_entryName != 0) { Item *it = (Item *)FUN_002d8f10((int)c, o->_entryName); if (it) { o->vfunc_23(it->f24); return 1; } } else { int i = o->_entryIndex; int n = c->count; if (i >= 0 && i < n) { Item *it = (Item *)FUN_002d7e90((int *)c, i); o->vfunc_23(it->f24); return 1; } } return 0;
+int Gap__Core__igDirectory__vfunc_25(igDirectoryView *c, igExternalDirEntryView *o) {
+if (o->_entryName != 0) { igDirEntryView *it = (igDirEntryView *)FUN_002d8f10((int)c, o->_entryName); if (it) { o->vfunc_23(it->_ref); return 1; } } else { int i = o->_entryIndex; int n = c->_count; if (i >= 0 && i < n) { igDirEntryView *it = (igDirEntryView *)FUN_002d7e90((int *)c, i); o->vfunc_23(it->_ref); return 1; } } return 0;
 }
 
 int FUN_002d9120(void *arg0) {
@@ -92,24 +92,24 @@ int FUN_002d9130(igDirectoryView *arg0) {
     return v;
 }
 
-int FUN_002d91c0(RefCountedHandle *self) {
+int FUN_002d91c0(igDirectoryView *self) {
     int left;
-    if (self->lock == 0) {
-        left = self->refs - 1;
-        self->refs = left;
+    if (self->_loadingSemaphore == 0) {
+        left = self->_loadedRefCount - 1;
+        self->_loadedRefCount = left;
     } else {
-        self->lock->Acquire(1);
-        left = self->refs - 1;
-        self->refs = left;
+        self->_loadingSemaphore->wait(1);
+        left = self->_loadedRefCount - 1;
+        self->_loadedRefCount = left;
     }
     if (left <= 0) {
-        if (self->lock != 0) {
-            self->lock->Unlock();
+        if (self->_loadingSemaphore != 0) {
+            self->_loadingSemaphore->signal();
         }
-        if (self->holder != 0) {
-            RefCountOwnerList *list = self->holder->list;
+        if (self->_managingResource != 0) {
+            igTDataList<igDirectoryView *> *list = (igTDataList<igDirectoryView *> *)self->_managingResource->_directoryList;
             int index = list->find(self);
-            RefCountedHandle *o = list->_data[index];
+            igDirectoryView *o = list->_data[index];
             if (o != 0) {
                 o->_refCount = (int)o->_refCount - 1;
                 if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
@@ -120,8 +120,8 @@ int FUN_002d91c0(RefCountedHandle *self) {
             list->_data[list->_count] = 0;
         }
     } else {
-        if (self->lock != 0) {
-            self->lock->Unlock();
+        if (self->_loadingSemaphore != 0) {
+            self->_loadingSemaphore->signal();
         }
     }
     return left;

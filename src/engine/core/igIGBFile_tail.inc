@@ -320,7 +320,7 @@ igResult FUN_002e42d0(igIGBFileView *self) {
             for (; j < n; j++) {
                 f = ((igMetaField **)fields->_data)[j];
                 if (f->_persistent != 0 && f->_isRunTime == 0) {
-                    p[0] = igMetaField_GetTypeIndex((TypeIndexView *)f);
+                    p[0] = igMetaField_GetTypeIndex((igMetaFieldView *)f);
                     p[1] = f->_internalIndex;
                     p[2] = f->_size;
                     p += 3;
@@ -463,14 +463,14 @@ igResult FUN_002e5110(igIGBFileView *self) {
     int i;
     if (self->_sharedEntries != 0) { return g_resultSuccess; }
     {
-        igIntList *old = self->_refList;
+        igTDataList<int> *old = self->_refList;
         int pool = (int)self->_temporaryMemoryPool;
         IG_OBJECT_RELEASE(old);
-        self->_refList = (igIntList *)FUN_002c9130(pool);
+        self->_refList = (igTDataList<int> *)FUN_002c9130(pool);
     }
     {
         int c = self->_count;
-        igIntList *l = self->_refList;
+        igTDataList<int> *l = self->_refList;
         if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { List_Resize(l, c, 4); } }
     }
     {
@@ -498,7 +498,7 @@ igResult FUN_002e5110(igIGBFileView *self) {
         }
         {
             int word;
-            igIntList *w = self->_refList;
+            igTDataList<int> *w = self->_refList;
             word = o->_ref;
             int k = w->_count;
             if (k != 0 && i >= 0 && k > i) { ((int *)w->_data)[i] = word; }
@@ -884,7 +884,7 @@ SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
     record = (int *)(file->_chunk + file->_chunkPlace);
     metaIndex = *record;
     if (file->_endianSwap != 0) {
-        ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(&metaIndex, 1);
+        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&metaIndex, 1);
     }
     igSmartPointer<IgbReadEntry> object(castToKind((IgbReadEntry *)igMetaObject_CreateInstanceWithPool(((PooledMeta **)((igObjectList *)file->_metaObjectListInFile)->_data)[metaIndex], (MemoryPool *)file->_temporaryMemoryPool)), kRetainReference);
     object->release();
@@ -997,8 +997,8 @@ igResult FUN_002e78b0(igIGBFileView *arg1) {
     int temp_s1;
     int temp_s0;
     int i;
-    igIntList *temp_a0;
-    igIntList *temp_a0_2;
+    igTDataList<int> *temp_a0;
+    igTDataList<int> *temp_a0_2;
     temp_a0 = arg1->_refList;
     temp_s1 = arg1->_count;
     temp_s0 = (int)arg1->_temporaryMemoryPool;
@@ -1008,7 +1008,7 @@ igResult FUN_002e78b0(igIGBFileView *arg1) {
             igObject_Destroy(temp_a0);
         }
     }
-    arg1->_refList = (igIntList *)FUN_002c9130(temp_s0);
+    arg1->_refList = (igTDataList<int> *)FUN_002c9130(temp_s0);
     temp_a0_2 = arg1->_refList;
     if (temp_s1 >= 0) {
         if (temp_s1 <= temp_a0_2->_capacity) {
@@ -1030,12 +1030,12 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
     file->_bufferPlace = 0;
     file->_bufferSize = file->_entryBufferSize;
     if (file->_sharingState != 0) {
-        igIntList *old = file->_refList;
+        igTDataList<int> *old = file->_refList;
         pool = (int)file->_temporaryMemoryPool;
         igRelease((igObject *)old);
-        file->_refList = (igIntList *)FUN_002c9130(pool);
+        file->_refList = (igTDataList<int> *)FUN_002c9130(pool);
         int count = file->_entryCount;
-        igIntList *indices = file->_refList;
+        igTDataList<int> *indices = file->_refList;
         if (count >= 0) {
             if (count <= indices->_capacity) {
                 indices->_count = count;
@@ -1070,7 +1070,7 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
         object->readFinished(file);
         if (file->_sharingState != 0) {
             int reference = object->_ref;
-            igIntList *indices = file->_refList;
+            igTDataList<int> *indices = file->_refList;
             if (indices->_count != 0 && i >= 0 && i < indices->_count) {
                 ((int *)indices->_data)[i] = reference;
             }
@@ -1374,7 +1374,7 @@ igResult FUN_002e8d40(igIGBFileView *arg1) {
         }
         t = (igObject *)arg1->_infoList;
         IG_OBJECT_RELEASE(t);
-        arg1->_infoList = (igObjectList *)temp_s0;
+        arg1->_infoList = (igTDataList<igInfoView *> *)temp_s0;
     }
     return g_resultSuccess;
 }
@@ -1582,7 +1582,7 @@ int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
 
 void Gap__Core__igIGBFile__vfunc_32(int *arg0, void *arg1) {
     if (*(unsigned char *)((char *)(arg1) + 56) == 0) {
-        FUN_002d8f20((Coll *)arg1);
+        FUN_002d8f20((igDirectoryView *)arg1);
     }
     *arg0 = g_resultSuccess.v;
 }
