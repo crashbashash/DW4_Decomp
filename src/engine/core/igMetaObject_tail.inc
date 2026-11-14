@@ -289,6 +289,19 @@ void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int co
     }
 }
 
+void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField ***handles,int *offsets,int start){
+    int count;
+    int row;
+    igMetaField *field;
+    count=igMetaObject_GetFieldCount(meta);
+    row=0;
+    for(;start<count;start++,row++){
+        field=((FieldPointerStorage *)meta->_metaFields)->data[start];
+        igMetaField_Configure(field,names[row],handles[row],offsets[row],meta);
+        igMetaField_FinalizeDescriptor(field);
+    }
+}
+
 void igMetaObject_FinalizeFieldLayout(LayoutMeta *arg0) {
     int off;
     int minAlign;

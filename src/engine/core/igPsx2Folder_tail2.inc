@@ -56,6 +56,75 @@ static inline FolderAllocator *currentAllocator(void) {
     return ((FolderAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
 }
 
+char *FUN_0032cb50(char *name, int kind) {
+    char *joined = 0;
+    char *resolved = 0;
+    if (kind == 0) {
+        joined = (char *)FUN_002ed5a0(name, (igMemoryPool_2ed1c0 *)currentAllocator());
+    } else {
+        char *dirs[3];
+        const char *key;
+        igSmartPointer<igObject> path((igObject *)igStringObj_Create((int)currentAllocator()));
+        if (kind == 1) {
+            key = text_sonyModulePath;
+        } else {
+            key = text_intrinsicModulePath;
+        }
+        if (FUN_00306770(*(int *)(g_objectSystem[0] + 56), 2, key, (T_306770 **)&path, (const char *)DAT_004f7910, 0) != 0) {
+            FUN_0032cac0((S_32cac0 *)path.p);
+            char *dir = (char *)((igStringObj *)path.p)->_buffer;
+            dir = (dir == 0) ? g_stringObjEmptyText[0] : dir;
+            FolderAllocator *allocator = currentAllocator();
+            joined = allocator->Allocate(strlen(dir) + strlen(name) + 2);
+            sprintf(joined, (const char *)DAT_004f9a78, dir, name);
+        } else if (DAT_00587338[0] != 0) {
+            FolderAllocator *allocator = currentAllocator();
+            joined = allocator->Allocate(strlen(name) + 10);
+            sprintf(joined, text_MODULES_s, name);
+        } else {
+            FolderAllocator *allocator = currentAllocator();
+            char *candidate = allocator->Allocate(strlen(name) + 40);
+            int i;
+            if (kind == 1) {
+                dirs[0] = text_usr_local_sce_iop_modules;
+                dirs[1] = text_c_usr_local_sce_iop_modules;
+                dirs[2] = text_c_cygwin_usr_local_sce_iop_modul;
+            } else {
+                dirs[0] = text_usr_local_Alchemy_iop_modules;
+                dirs[1] = text_c_Alchemy_iop_modules;
+                dirs[2] = 0;
+            }
+            for (i = 0; i < 3; i++) {
+                if (dirs[i] != 0) {
+                    int file;
+                    sprintf(candidate, (const char *)DAT_004f9a78, dirs[i], name);
+                    resolved = FUN_0032c110(candidate);
+                    file = sceOpen(resolved, 1);
+                    if (file < 0) {
+                        Memory_FreeBufferAliasA(resolved);
+                        continue;
+                    }
+                    sceClose(file);
+                    break;
+                }
+            }
+            Memory_FreeBufferAliasA(candidate);
+            if (i == 3) {
+                return 0;
+            }
+        }
+    }
+    if (resolved == 0) {
+        resolved = FUN_0032c110(joined);
+        Memory_FreeBufferAliasA(joined);
+    }
+    if ((unsigned int)strlen(resolved) > 251) {
+        Memory_FreeBufferAliasA(resolved);
+        return 0;
+    }
+    return resolved;
+}
+
 int igPsx2_LoadIopModule(int a, int b, int c, int d, int e) {
     int sp1C;
     return FUN_0032cf70((int *)a, b, c, d, e, &sp1C);
@@ -150,22 +219,43 @@ static inline int internPool(void) {
     return g_stringPool[0];
 }
 
-static inline void setName(O_32d220 *object, int name) {
+static inline void setName(igPsx2FileView *object, int name) {
     int *interned = (int *)((void *)StringPool_Intern((StringPool *)(internPool()), (const char *)name));
-    if (object->f72 != 0) {
-        int *header = (int *)object->f72 - 2;
-        int count = ((int *)object->f72)[-1] - 1;
-        ((int *)object->f72)[-1] = count;
+    if (object->_prefix != 0) {
+        int *header = (int *)object->_prefix - 2;
+        int count = ((int *)object->_prefix)[-1] - 1;
+        ((int *)object->_prefix)[-1] = count;
         if (count == 0) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
         }
     }
-    object->f72 = interned;
+    object->_prefix = (char *)interned;
 }
 
 static inline int fileAllocator(void) {
     int a = ((int)FUN_002f8a20());
     return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+}
+
+void FUN_0032d220(void) {
+    unsigned char enabled;
+    FUN_00306e50(*(int *)(g_objectSystem[0] + 56), 2, (const char *)text_useOutputFilesForAtmon, (char *)&enabled, 1, 0);
+    if (enabled != 0) {
+        FUN_00304350(0);
+        FUN_003043c0(0);
+        igSmartPointer<igPsx2FileView> first((igPsx2FileView *)FUN_002d01a0(fileAllocator()));
+        igSmartPointer<igPsx2FileView> second((igPsx2FileView *)FUN_002d01a0(fileAllocator()));
+        if (DAT_00587338[0] != 0) {
+            setName(first.p, DAT_00587358[0]);
+            setName(second.p, DAT_00587358[0]);
+        }
+        if (first->open(text_stdout_txt, (const char *)DAT_004f9c50) != 0) {
+            FUN_00304350((Q_304350 *)first.p);
+        }
+        if (second->open(text_stderr_txt, (const char *)DAT_004f9c50) != 0) {
+            FUN_003043c0((R_3043c0 *)second.p);
+        }
+    }
 }
 
 void FUN_0032d4b0(int *arg0, char *arg1) {

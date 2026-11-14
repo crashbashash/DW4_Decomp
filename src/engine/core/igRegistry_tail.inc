@@ -208,7 +208,7 @@ bool FUN_003066b0(int arg0, int arg1, const char *arg2, float *arg3, int arg4, f
     return var_s0;
 }
 
-int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4, int arg5) {
+int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, const char *arg4, int arg5) {
     Node *node;
     T_306770 *t;
     T_306770 *old;
@@ -228,7 +228,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
         *arg3 = t;
     } else {
     h.ref = ((T_306770 *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
-    igStringObj_Set((int)h.ref, arg4);
+    igStringObj_Set((int)h.ref, (int)arg4);
     t = h.ref;
     if (t) {
         ++t->references;
@@ -241,7 +241,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, int arg4
     }
     *arg3 = t;
     if (arg5 != 0) {
-        FUN_00307700((void *)arg0, arg1, arg2, arg4);
+        FUN_00307700((void *)arg0, arg1, arg2, (int)arg4);
     }
     h.release();
     }
@@ -723,12 +723,36 @@ static inline int allocator(void) {
     return ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
-static inline char *text_3085c0(ShortStr_3085c0 *s) {
-    char *t = s->text_3085c0;
+static inline char *levelText(igStringObj *s) {
+    char *t = (char *)s->_buffer;
     if (t == 0) {
         return (*(char * *)g_stringObjEmptyText);
     }
     return t;
+}
+
+void FUN_003085c0(void) {
+    GPR_00554c30 = 1;
+    igRegistry *config = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+    if (config != 0) {
+        FUN_00306e50((int)config, 2, text_assertOnErrors, (char *)&GPR_005549b0, 1, 0);
+        igStringObj *name = (igStringObj *)igStringObj_Create(allocator());
+        if (FUN_00306770((int)config, 2, text_defaultReportLevel, (T_306770 **)&name, (char *)DAT_004f7910, 0) != 0) {
+            char *t = levelText(name);
+            if (strcmp(t, text_kDetail) == 0) {
+                DAT_004c22d8 = 6;
+            } else if (strcmp(t, text_kInfo) == 0) {
+                DAT_004c22d8 = 5;
+            } else if (strcmp(t, text_kNotice) == 0) {
+                DAT_004c22d8 = 4;
+            } else if (strcmp(t, text_kWarning) == 0) {
+                DAT_004c22d8 = 2;
+            } else if (strcmp(t, text_kError) == 0) {
+                DAT_004c22d8 = 1;
+            }
+        }
+        igRelease(name);
+    }
 }
 
 void FUN_00308770(void) {

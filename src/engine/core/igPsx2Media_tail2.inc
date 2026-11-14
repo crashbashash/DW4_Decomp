@@ -222,6 +222,78 @@ void FUN_0032e130(MediaPathFields *self, int index, char **path) {
     igStringObj_Clear((S0_30b420 *)self->conversion);
 }
 
+/* Opens handle `slot` of the media on the IOP: names it, sends the open command with the mode's
+ * sceOpen flags, and keeps the returned descriptor. */
+void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2Media *media, int slot, int **name, unsigned int mode)
+{
+    int *command;
+    int flags;
+    int *header;
+    MediaHandleRow *handle;
+    int commandSize;
+    char *path;
+    int fd;
+    int n;
+    int *word;
+
+    MediaResult locked = ((MediaSema *)media->_sema)->wait(1);
+    int *nameRef;
+    handle = (MediaHandleRow *)(*(char **)((char *)media->_handlePool + 12) + slot * 12);
+    nameRef = *name;
+    if (nameRef != 0) {
+        nameRef[-1] = nameRef[-1] + 1;
+    }
+    FUN_0032e130((MediaPathFields *)media, slot, (char **)&nameRef);
+    if (nameRef != 0) {
+        header = nameRef - 2;
+        n = nameRef[-1] - 1;
+        nameRef[-1] = n;
+        if (n == 0) {
+            StringChunk_ReleaseHeader((StringChunkOwnerView *)*header, (int)header);
+        }
+    }
+    handle->mode = mode;
+    path = handle->name;
+    n = strlen(path) + 5;
+    commandSize = (n + 15) & -16;
+    command = (int *)((char *)media->_commandBuffer + 16);
+    flags = SCE_RDONLY;
+    switch (handle->mode) {
+    case 0:
+    case 4:
+    case 8:
+        break;
+    case 1:
+    case 5:
+        flags = SCE_TRUNC | SCE_CREAT | SCE_WRONLY;
+        break;
+    case 2:
+    case 6:
+        flags = SCE_CREAT | SCE_APPEND | SCE_WRONLY;
+        break;
+    case 3:
+    case 7:
+        flags = SCE_CREAT | SCE_RDWR;
+        break;
+    }
+    *command = flags;
+    strcpy((char *)(command + 1), path);
+    {
+        int *reply = (int *)media->_commandBuffer;
+        MediaResult sent;
+        FUN_0032d6d0(&sent.v, (Ob_32d6d0 *)media->_connection, 2, (int)command, commandSize, (int)reply, 16, 1);
+        fd = *reply;
+        handle->fd = fd;
+    }
+    MediaResult released = ((MediaSema *)media->_sema)->release();
+    if (fd < 0) {
+        word = (int *)&g_resultFailure;
+    } else {
+        word = (int *)&g_resultSuccess;
+    }
+    *result = *word;
+}
+
 int FUN_0032e950(struct Z_32e950 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
     int sp4C;
     int temp_a0;

@@ -54,3 +54,27 @@ void thunk_igExternalDirEntry_GetMetaObject(void) {
     igExternalDirEntry_GetMetaObject();
 }
 
+void FUN_002c55f0(void) {
+    igMetaObject *meta = g_igExternalDirEntry_metaObject[0];
+    int base = igMetaObject_GetFieldCount(meta);
+    igMetaField *field;
+    int index;
+    int fields;
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igExternalDirEntry_ctorTable, 4);
+    fields = meta->_metaFields;
+    index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
+    field = (igMetaField *)igObjectRefMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    igMetaField_Configure(field, (const char *)text_ref, DAT_00586458, 0x18, meta);
+    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject[0];
+    field->_persistent = 0;
+    field->_externalEnumStorage = (int)DAT_00586458;
+    igMetaObject_FinalizeAndReplaceField(meta, index, field);
+    releaseField(field);
+    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base), (int)text_Intrinsic);
+    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base + 1), (int)text_default_2);
+    field = (igMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
+    igStringMetaField_SetDefaultText((int *)field, (int)DAT_004f7910);
+    field->_persistent = 0;
+    igMetaObject_NameFields(meta, (const char **)g_igExternalDirEntry_fieldTable, (igMetaField ***)DAT_004c0cf0, DAT_004c0d00, base);
+}
+

@@ -535,6 +535,107 @@ void Gap__Core__igPageMemoryPool__vfunc_104(O_325850 *o, unsigned int a, int n, 
     }
 }
 
+/* Size of the block that starts at `block`, 0 when no block starts there. A table word holds two
+ * bits per page, "first page of a block" (even bits) and "last page of a block" (odd bits,
+ * 0xAAAAAAAA); the size is counted page by page up to the first last-page bit. */
+unsigned igPageMemoryPool_GetBlockSize(PageMemoryPoolView *self, void *block) {
+    unsigned slot = (unsigned)block >> 27;
+    unsigned *tbl = self->pageTables[slot];
+    unsigned size = 4096;
+    unsigned page;
+    unsigned bit;
+    unsigned end;
+    unsigned word;
+    unsigned mask;
+    if (tbl == 0) {
+        return 0;
+    }
+    page = ((unsigned)block & 0x7ffffff) >> 12;
+    bit = page & 15;
+    word = page >> 4;
+    end = 2 << (bit * 2);
+    if (((1 << (bit * 2)) & tbl[word]) == 0) {
+        return 0;
+    }
+    if ((tbl[word] & 0xAAAAAAAA) != 0) {
+        for (; end != 0; end <<= 2) {
+            if (end & tbl[word]) {
+                return size;
+            }
+            size += 4096;
+        }
+    } else {
+        size += (16 - bit) << 12;
+    }
+    for (;;) {
+        word++;
+        if (word >= 2048) {
+            slot++;
+            if (slot >= 32) {
+                return 0;
+            }
+            word = 0;
+            tbl = self->pageTables[slot];
+            if (tbl == 0) {
+                return 0;
+            }
+        }
+        if ((tbl[word] & 0xAAAAAAAA) != 0) {
+            for (mask = 2; mask != 0; mask <<= 2) {
+                if (mask & tbl[word]) {
+                    return size;
+                }
+                size += 4096;
+            }
+            if (self->messageLevel >= 1) {
+                Memory_PrintPoolStatistics(0, self);
+                if (GPR_00554dd8 == 0) {
+                    int r = igReportNotice((const char *)text_igPageMemoryPool_getBlockSize_Sh);
+                    if (r != 1 && r == 2) {
+                        GPR_00554dd8 = 1;
+                    }
+                }
+            }
+        } else {
+            size += 0x10000;
+        }
+    }
+}
+
+void Gap__Core__igPageMemoryPool__vfunc_88(PageMemoryPoolView *self) {
+    int table;
+    unsigned int *bits;
+    unsigned int word;
+    unsigned int page;
+    int address;
+    int tableBase;
+
+    table = 0;
+    do {
+        bits = self->pageTables[table];
+        word = 0;
+        if (bits != 0) {
+            tableBase = table << 27;
+            do {
+                if (*bits != 0) {
+                    page = 0;
+                    do {
+                        if (*bits & (1 << page)) {
+                            address = (page << 12) + (tableBase + (word << 17));
+                            FUN_00304430((const char *)DAT_004fc120, address, ((V88_325850 *)self)->vX(address));
+                            FUN_00304680();
+                        }
+                        page++;
+                    } while (page < 32U);
+                }
+                word++;
+                bits++;
+            } while (word < 0x800U);
+        }
+        table++;
+    } while (table < 32);
+}
+
 void Gap__Core__igPageMemoryPool__vfunc_87(int extra0, int extra1) {
     FUN_002f08d0((igMemoryPool *)extra0, (char *)extra1);
 }

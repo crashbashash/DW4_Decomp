@@ -392,6 +392,92 @@ int FUN_00329b40(void *arg0, void *arg1, int *arg2, int *arg3) {
     return 1;
 }
 
+void FUN_00329b60(V_328e00 *arg0) {
+    char line[256];
+    unsigned int page;
+    unsigned int index;
+    int pos;
+    int table;
+    int column;
+
+    page = 0;
+    do {
+        table = DAT_00587220[page];
+        if (table != 0) {
+            pos = 0;
+            index = 0;
+            do {
+                column = index & 0x3F;
+                if (column == 0) {
+                    sprintf(line, &DAT_004ff5c0[0], (page << 0x1A) + (index << 0xC));
+                    pos = 0xB;
+                }
+                line[pos] = (char) (FUN_0032ac70(table, index) + 0x30);
+                pos += 1;
+                if (column == 0x3F) {
+                    strcpy(line + pos, &DAT_004f95c8[0]);
+                    FUN_00304430(line);
+                    FUN_00304680();
+                    pos = 0;
+                }
+                index += 1;
+            } while (index < 0x4000U);
+        } else {
+            FUN_00304430(&DAT_004ff5c8[0], page << 0x1A);
+            FUN_00304680();
+        }
+        page += 1;
+    } while (page < 0x40U);
+    arg0->vX();
+}
+
+void FUN_00329ca0(int unused, unsigned int addr, int len) {
+    char buf[256];
+    unsigned int lo0, hi0;
+    unsigned int startPage = addr >> 26;
+    unsigned int end = addr + len;
+    unsigned int endPage = end >> 26;
+    unsigned int page = startPage;
+    unsigned int j = 0;
+    unsigned int counter = 0;
+    int pos = 0;
+    lo0 = (addr & 0x3FFFFFF) >> 12;
+    hi0 = (end & 0x3FFFFFF) >> 12;
+    if (len == 0) return;
+    while (page <= endPage) {
+        int table = DAT_00587220[page];
+        if (table != 0) {
+            unsigned int lo, hi;
+            if (startPage < page) lo = 0; else lo = lo0;
+            if (page < endPage) hi = 0x4000; else hi = hi0;
+            for (j = lo; j < hi; ) {
+                FUN_0032ac70(table, j);
+                if ((counter & 0x3F) == 0) {
+                    sprintf(buf, &DAT_004ff5c0[0], addr);
+                    pos = 11;
+                }
+                buf[pos] = FUN_0032ac70(table, counter) + 0x30;
+                pos++;
+                if ((counter & 0x3F) == 0x3F) {
+                    strcpy(buf + pos, &DAT_004f95c8[0]);
+                    FUN_00304430(buf);
+                    FUN_00304680();
+                    pos = 0;
+                }
+                j++;
+                counter++;
+                addr += 0x1000;
+            }
+        }
+        page++;
+    }
+    if (!(counter & 0x3F)) {
+        strcpy(buf + pos, &DAT_004f95c8[0]);
+        FUN_00304430(buf);
+        FUN_00304680();
+    }
+}
+
 void FUN_00329e70(Obj_328e00 *arg0) {
     int buf[21];
     arg0->vf(buf);
@@ -481,6 +567,58 @@ void FUN_0032a220(int arg0) {
 
 int FUN_0032a260(int **arg0, int **arg1) {
     return **arg0 - **arg1;
+}
+
+void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c, int d) {
+    char text[84];
+    char region[160];
+    int i;
+    int count;
+    FUN_00304430(DAT_004ffa00, title == 0 ? text_Memory_Map : title);
+    FUN_00304680();
+    self->Describe(text);
+    igSmartPointer<igPointerList> list((igPointerList *)FUN_002c9130((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
+    if (list->_count <= 1024) {
+        FUN_002d6680(list, 1024, 4);
+    }
+    if (a != 0) {
+        self->CollectA(list);
+    }
+    if (b != 0) {
+        self->CollectB(list);
+    }
+    if (c != 0) {
+        self->CollectC(list);
+    }
+    if (d != 0) {
+        self->CollectD(list);
+    }
+    count = list->_count;
+    if (path != 0 && count != 0) {
+        igSmartPointer<EventTrackerDump> tracker((EventTrackerDump *)FUN_002c5780((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
+        FUN_002dcc40((int)tracker.p, list->_count);
+        tracker->_flags |= 0x10;
+        tracker->_memoryFieldFilterFlags = ~0x20;
+        tracker->Begin();
+        for (i = 0; i < count; i++) {
+            DumpRegion *e = ((DumpRegion **)list->_data)[i];
+            FUN_002e2190(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->name, 0, 0, (int)e->kind);
+            tracker->Add(region, 0);
+            FUN_002e2300(region, -1);
+        }
+        tracker->Write(path);
+        tracker->End();
+    }
+    FUN_00304430(DAT_004ffa10, text_Start, text_End, text_Size, text_Pool_Name, text_Annotation);
+    FUN_00304680();
+    for (i = 0; i < count; i++) {
+        DumpRegion *e = ((DumpRegion **)list->_data)[i];
+        FUN_00304430(DAT_004ffa60, e->start, e->start + e->size, e->size, e->kind, e->name);
+        FUN_00304680();
+        FUN_0032a130((int)e, 1);
+    }
+    FUN_00304430(DAT_004f95c8);
+    FUN_00304680();
 }
 
 void FUN_0032a5f0(int extra0)

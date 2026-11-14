@@ -416,9 +416,3 @@ the result class itself: a view of it through a cast to another class shares the
   inlined vector methods, which that search cannot write. b50 and b52 are not separated.
 * **Why Viewer takes `,p`.** Its build settings are the game's, not Alchemy's, though nothing in the image
   says why.
-* **Alias names in one-function files.** 38 one-function files under `src/engine/` still spell the status
-  objects and pool handles by their alias names (`g_statusSucceeded`, `g_allocatorFailureStatus`,
-  `g_defaultAllocatorSelector`, `g_ndmwAllocatorSelector`, `DAT_005870xx`, ...), resolved through rows in
-  `config/SLUS-20836/data-names.tsv`. Moving them to `g_resultSuccess`/`g_resultFailure`/`kIGMemoryPoolHandle*`
-  needs `tools/verify.py`'s `defined_outside` check to exempt the defining unit's own data rows; until then the
-  alias rows stay.

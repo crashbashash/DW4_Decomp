@@ -42,7 +42,7 @@ void ***FUN_002e2fb0(void) {
     return &DAT_00586e18[0];
 }
 
-void FUN_002e30b0(int *arg0, int arg1) {
+void FUN_002e30b0(int *arg0, const char *name) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -56,7 +56,7 @@ void FUN_002e30b0(int *arg0, int arg1) {
         }
         g_stringPool[0] = var_v0;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
+    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], name)));
     temp_a0 = (void *)arg0[3];
     if (temp_a0 != 0) {
         temp_a1 = (int *)((char *)temp_a0 - 8);
@@ -158,6 +158,23 @@ void FUN_002e3280(int arg0) {
 
 void Gap__igAdxFile__vfunc_26(void **arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
     arg3(((DW4VC_108_2 *)(arg0))->vX(arg1, 1, arg2), arg4);
+}
+
+void FUN_002e33d0(void) {
+    const char *searchPathKey = (const char *)DAT_004c2128[0];
+    int registry = ((LogContext **)g_objectSystem)[0]->f56;
+    igStringObj *text;
+    int path;
+    if (registry != 0) {
+        text = (igStringObj *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
+        FUN_00306770(registry, 2, (const char *)text_searchFilePath, (T_306770 **)&text, searchPathKey, 0);
+        path = text->_buffer;
+        if (path == 0) {
+            path = (int)g_stringObjEmptyText[0];
+        }
+        FUN_002e3280(path);
+        igRelease(text);
+    }
 }
 
 int FUN_002e34a0(void) {

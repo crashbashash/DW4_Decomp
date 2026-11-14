@@ -49,7 +49,7 @@ if (r->count >= cap) {
                 r->cap = ncap;
             } else {
                 if (o->lvlB > 0) {
-                    Memory_PrintPoolStatistics(0, (int)o);
+                    Memory_PrintPoolStatistics(0, o);
                     if (GPR_00554ce8 == 0) {
                         int rc = igReportNotice(text_igArenaMemoryPool_E68_Unable_to);
                         if (rc != 1 && rc == 2) GPR_00554ce8 = 1;

@@ -128,17 +128,17 @@ int FUN_002f1410(F_2f1410 *arg0, int arg1, int arg2, int arg3, int arg4, int arg
 
     if (arg1 != 0) {
         size = ((int)Memory_GetBufferSize((void *)arg1));
-        FUN_002e2190(sp170, 3, arg1, size, (unsigned short)arg0->v152(), arg4, 0, 0, arg5, arg6, arg7, ((Ctx_2f1410 *)((void *)Memory_GetCurrentContextAlias()))->v108(arg0));
+        FUN_002e2190(sp170, 3, (void *)arg1, size, (unsigned short)arg0->v152(), arg4, 0, 0, arg5, arg6, arg7, ((Ctx_2f1410 *)((void *)Memory_GetCurrentContextAlias()))->v108(arg0));
         arg0->v268(sp170, arg3, arg_sp0 + 1);
-        FUN_002e2300((int)sp170, -1);
+        FUN_002e2300(sp170, -1);
     }
     arg1 = arg0->v232(arg1, arg2);
     if (arg1 != 0) {
         flags2 = arg0->v152() & 0xFFFF;
         ctx2 = (Ctx_2f1410 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spD0, 1, arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->v108(arg0));
+        FUN_002e2190(spD0, 1, (void *)arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->v108(arg0));
         arg0->v268(spD0, arg3, arg_sp0 + 1);
-        FUN_002e2300((int)spD0, -1);
+        FUN_002e2300(spD0, -1);
     }
     return arg1;
 }
@@ -160,9 +160,9 @@ void FUN_002f19f0(R_2f19f0 *arg0, F_2f19f0 *arg1, int arg2, int *arg3, int *arg4
         }
         flags = arg1->v152() & 0xFFFF;
         ctx = (Ctx_2f19f0 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spB0, 1, first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->v108(arg1));
+        FUN_002e2190(spB0, 1, (void *)first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->v108(arg1));
         arg1->v268(spB0, arg5, arg_sp10 + 1);
-        FUN_002e2300((int)spB0, -1);
+        FUN_002e2300(spB0, -1);
     }
     *arg0 = res;
 }
@@ -182,9 +182,9 @@ void FUN_002f1b70(R_2f1b70 *arg0, F_2f1b70 *arg1, int arg2, int *arg3, int *arg4
             total += arg3[i];
         }
         ctx = (Ctx_2f1b70 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spA0, 1, first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->v108(arg1));
+        FUN_002e2190(spA0, 1, (void *)first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->v108(arg1));
         arg1->v268(spA0, arg6, arg_sp18 + 1);
-        FUN_002e2300((int)spA0, -1);
+        FUN_002e2300(spA0, -1);
     }
     *arg0 = res;
 }
@@ -206,9 +206,9 @@ void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4,
             }
         }
         ctx = (void **)(((void **)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spE0, 3, first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((DW4VC_108_1_2f1cd0 *)(ctx))->vX((int)(arg0)));
+        FUN_002e2190(spE0, 3, (void *)first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((DW4VC_108_1_2f1cd0 *)(ctx))->vX((int)(arg0)));
         ((DW4VC_268_3_2f1cd0 *)(arg0))->vX(spE0, (int)(arg3), (int)(arg_sp0 + 1));
-        FUN_002e2300((int)spE0, -1);
+        FUN_002e2300(spE0, -1);
     }
 }
 

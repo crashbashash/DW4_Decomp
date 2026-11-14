@@ -358,7 +358,7 @@ void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int
         var_s1 += 1;
         if (var_s1 >= arg2 || var_s0 == -1) break;
     }
-    FUN_002e2300((int)&ev, (long long)(-1));
+    FUN_002e2300(&ev, (long long)(-1));
 }
 
 int Gap__Core__igEventTracker__vfunc_31(ET *arg0, int arg1) {
@@ -746,10 +746,10 @@ int FUN_002e2160(int arg0, int arg1) {
     return arg0;
 }
 
-void *FUN_002e2190(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
+void *FUN_002e2190(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
     FUN_002e2350((int)arg0);
     *(int *)((char *)arg0 + 0) = arg1;
-    *(int *)((char *)arg0 + 8) = arg2;
+    *(void **)((char *)arg0 + 8) = arg2;
     *(int *)((char *)arg0 + 12) = arg3;
     *(int *)((char *)arg0 + 16) = arg4;
     *(int *)((char *)arg0 + 44) = arg5;
@@ -777,10 +777,10 @@ void *FUN_002e2250(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
     return arg0;
 }
 
-int FUN_002e2300(int arg0, long long arg1) {
+void *FUN_002e2300(void *arg0, long long arg1) {
     if (arg0 != 0) {
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasB((void *)arg0);
+            Memory_FreeBufferAliasB(arg0);
         }
     }
     return arg0;

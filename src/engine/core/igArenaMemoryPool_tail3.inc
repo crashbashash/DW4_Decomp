@@ -5,6 +5,47 @@ void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, VC_312520 *arg1) {
     *arg0 = r.v;
 }
 
+igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
+    CheckHeapArena *arena = self->arena;
+    igResult result;
+    int i;
+    int r;
+
+    result = g_resultSuccess;
+    if (arena->count == 0) {
+        return g_resultSuccess;
+    }
+    if (arena->blocks == 0 || arena->capacity == 0) {
+        if (self->verbosity > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554cec == 0) {
+                r = igReportNotice(text_igArenaMemoryPool_checkHeap_E69);
+                if (r != 1 && r == 2) {
+                    GPR_00554cec = 1;
+                }
+            }
+        }
+        result = g_resultFailure;
+    }
+    if (arena->count < 0 || arena->capacity < 0 || arena->count > arena->capacity) {
+        if (self->verbosity >= 3 && GPR_00554cf0 == 0) {
+            r = igReportNotice(text_igArenaMemoryPool_checkHeap_E70);
+            if (r != 1 && r == 2) {
+                GPR_00554cf0 = 1;
+            }
+        }
+        return g_resultFailure;
+    }
+    for (i = 0; i < arena->count; i += 2) {
+        int *p = &arena->blocks[i];
+        if (FUN_00312790((HeapBoundsPool *)self, i, (char *)p[0], (char *)p[1]) == g_resultFailure) {
+            result = g_resultFailure;
+            break;
+        }
+    }
+    return result;
+}
+
 igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     ArenaBlockHeader *n;  /* matching construct: declaration-order walk — `n` declared first */
     char *hi;
@@ -24,7 +65,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     ok = false;
     if (cur < lo || hi < cur) {
         if (self->messageLevel > 0) {
-            Memory_PrintPoolStatistics(0, (int)self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf4 == 0) {
                 r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
                 if (r != 1 && r == 2) {
@@ -36,7 +77,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     }
     if (end < lo || hi < end) {
         if (self->messageLevel > 0) {
-            Memory_PrintPoolStatistics(0, (int)self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf8 == 0) {
                 r = igReportNotice(DAT_004fc500, index, end, lo, hi);
                 if (r != 1 && r == 2) {
@@ -48,7 +89,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     }
     if (end < cur) {
         if (self->messageLevel > 0) {
-            Memory_PrintPoolStatistics(0, (int)self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cfc == 0) {
                 r = igReportNotice(DAT_004fc570, index, end, cur);
                 if (r != 1 && r == 2) {
@@ -60,7 +101,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     }
     if (!((ArenaBlockHeader *)cur)->used) {
         if (self->messageLevel > 0) {
-            Memory_PrintPoolStatistics(0, (int)self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d00 == 0) {
                 r = igReportNotice(DAT_004fc5e0);
                 if (r != 1 && r == 2) {
@@ -107,7 +148,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
     if (cur != end && !ok) {
 bad:
         if (self->messageLevel > 0) {
-            Memory_PrintPoolStatistics(0, (int)self);
+            Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d04 == 0) {
                 r = igReportNotice(DAT_004fc660, cur, index, count, size);
                 if (r != 1 && r == 2) {
@@ -821,7 +862,7 @@ void igArenaMemoryPool_SetPoolOptionFlags(SetFlagsPool *p, int f) {
     if ((f & 1) != (p->flags & 1)) {
         if (p->vX(f & 1) != 0) {
             if (p->cnt > 0) {
-                Memory_PrintPoolStatistics(0, (int)p);
+                Memory_PrintPoolStatistics(0, p);
                 if (GPR_00554d78 == 0) {
                     r = igReportNotice(DAT_004fd7a0);
                     if (r != 1) { if (r == 2) { GPR_00554d78 = 1; } }

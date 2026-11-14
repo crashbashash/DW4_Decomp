@@ -88,7 +88,7 @@ int FUN_00304e60(Args *args) {
     return 0;
 }
 
-void **FUN_00304f00(void *arg0, int arg1, int arg2) {
+void **FUN_00304f00(void *arg0, int arg1, unsigned stackSize) {
     void **a; void *b;
     a = (void **)(((void **)igObject_GetAllocator((int)arg0)));
     b = (void *)(((DW4VC_216_1 *)(a))->vX((int)(8)));
@@ -97,7 +97,7 @@ void **FUN_00304f00(void *arg0, int arg1, int arg2) {
     a = (void **)(((void **)FUN_002b7f40((int)a)));
     ((DW4VCSR_132_1 *)(a))->vX((int (*)(...))FUN_00304e60);
     ((DW4VCSR_140_1 *)(a))->vX((int)(b));
-    ((DW4VCSR_156_1 *)(a))->vX((int)(arg2));
+    ((DW4VCSR_156_1 *)(a))->vX((int)(stackSize));
     if (((DW4VCSR_120_0 *)(a))->vX() == g_resultSuccess) {
         ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)a);
     }

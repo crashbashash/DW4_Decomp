@@ -73,6 +73,67 @@ void Gap__Core__igElfFile__vfunc_23(igElfFile *arg0) {
     arg0->_symbols = 0;
 }
 
+void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *path) {
+    if (Gap__Core__igProgramFile__vfunc_24((igProgramFile *)self, path) == g_resultFailure) {
+        *result = g_resultFailure.v;
+        return;
+    }
+    if (self->file->Read(self->magic, 0x34, 1) != 1) {
+        FUN_00304430(DAT_004fdda0, self->path);
+        FUN_00304680();
+        self->Close();
+        *result = g_resultFailure.v;
+        return;
+    }
+    int hostEndian = 1;
+    int fileEndian = self->endian;
+    if (GPR_005549b4 == 0x12) {
+        hostEndian = 2;
+    }
+    if (fileEndian != hostEndian) {
+        FUN_003209a0(self->magic);
+    }
+    if (self->magic[0] != 0x7F || self->magic[1] != 'E' || self->magic[2] != 'L' || self->magic[3] != 'F') {
+        FUN_00304430((const char *)DAT_004fddc0, self->path);
+        FUN_00304680();
+        self->Close();
+        *result = g_resultFailure.v;
+        return;
+    }
+    int sectionOffset = self->sectionHeaderOffset;
+    if (sectionOffset == 0) {
+        FUN_00304430((const char *)DAT_004fdde0, self->path, sectionOffset);
+        FUN_00304680();
+        self->Close();
+        *result = g_resultFailure.v;
+        return;
+    }
+    if (self->Load(sectionOffset, self->sectionHeaderCount * self->sectionHeaderEntrySize, &self->sectionHeaders) == g_resultFailure) {
+        *result = g_resultFailure.v;
+        return;
+    }
+    if (GPR_005549b4 == 0x12) {
+        hostEndian = 2;
+    } else {
+        hostEndian = 1;
+    }
+    if (self->endian != hostEndian) {
+        FUN_00320a20((unsigned char *)self->sectionHeaders, self->sectionHeaderCount);
+    }
+    self->sectionCount = self->sectionHeaderCount;
+    if (self->sectionNameIndex != 0) {
+        ElfSection *section = (ElfSection *)FUN_00320ea0((S_320ea0 *)self, self->sectionNameIndex);
+        if (section != 0 && section->type == 3) {
+            self->sectionNamesSize = section->size;
+            if (self->Load(section->offset, section->size, &self->sectionNames) == g_resultFailure) {
+                *result = g_resultFailure.v;
+                return;
+            }
+        }
+    }
+    *result = g_resultSuccess.v;
+}
+
 void Gap__Core__igElfFile__vfunc_25(int arg0, void *arg1) {
     int temp_a1;
     int temp_a1_2;

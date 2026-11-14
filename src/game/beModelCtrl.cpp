@@ -176,6 +176,8 @@ extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int igAABox_Transform(...);
 extern "C" bool FUN_0018b050(void *, int);
 extern "C" void FUN_00191670(void *, void *, float);
+extern "C" int FUN_001910c0(void *, float, float, float);
+extern "C" void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram);
 extern "C" int beModelCtrl_GetMessageEnum(void);
 extern "C" void beModelCtrlSubCom_AddSound(int, const char *, float);
 extern "C" void beMessenger_AppendBool(int, unsigned char);
@@ -2341,6 +2343,67 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
         }
     }
     return index;
+}
+
+/* Euler rotation given in degrees, applied to a matrix.
+ * matching construct: hand search — reading x into a local first swaps the float registers of the
+ * x angle and the degrees-to-radians constant */
+static inline void SetEulerDegrees(float *matrix, const Vec3 &degrees) {
+    float x = degrees.x;
+    FUN_001910c0(matrix, 0.017453292f * x, 0.017453292f * degrees.y, 0.017453292f * degrees.z);
+}
+
+/* Install the optional placement carried by the generate message: a position (with an optional
+ * Euler rotation in degrees) or a full matrix, applied to the model node's matrix. */
+void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
+    float rotation[3];
+    float position[4];
+    float matrix[16];
+    float given[16];
+    beModelCtrlInfoRamData *ramData;
+    int allocator;
+    igObject *created;
+    igObject *old;
+    if (ram->_dataList == 0) {
+        allocator = igObject_GetAllocator(ram);
+        if (g_useOwnerAllocator != 0) {
+            /* matching construct: self-assignment keeps the retail select of the allocator */
+            allocator = (int)allocator;
+        } else {
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        }
+        {
+            igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
+            created = ref.p;
+            if (created != 0) {
+                created->_refCount = created->_refCount + 1;
+            }
+            old = (igObject *)ram->_dataList;
+            if (old != 0) {
+                old->_refCount = old->_refCount - 1;
+                if ((old->_refCount & 0x7FFFFF) == 0) {
+                    igObject_Destroy(old);
+                }
+            }
+            ram->_dataList = (int)created;
+        }
+    }
+    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3);
+    if (beMessenger_GetVec3Count(self->_messenger) != 0) {
+        igMatrix44f_Copy(matrix, (char *)ramData->_node + 0x20);
+        beMessenger_GetVec3((Vec3 *)position, self->_messenger, 0);
+        igMatrix44f_SetTranslation(matrix, position);
+        if (beMessenger_GetVec3Count(self->_messenger) == 2) {
+            beMessenger_GetVec3((Vec3 *)rotation, self->_messenger, 1);
+            SetEulerDegrees(matrix, *(Vec3 *)rotation);
+        }
+        ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(matrix);
+        return;
+    }
+    if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
+        beMessenger_GetMatrix(given, self->_messenger, 0);
+        ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(given);
+    }
 }
 
 /* Owning stack reference to the freshly created bound box; released on scope exit once the node

@@ -18954,6 +18954,7 @@
       "igObjectDirEntry_Register": "0x002bda20",
       "thunk_igObjectDirEntry_GetMetaObject": "0x002bdaa0",
       "FUN_002bdab0": "0x002bdab0",
+      "igObjectDirEntry_InitFields": "0x002bdac0",
       "igNonRefCountedObjectList_GetMetaObject": "0x002bdca0",
       "igNonRefCountedObjectList_GetVTable": "0x002bdcf0",
       "FUN_002bdd30": "0x002bdd30",
@@ -19018,6 +19019,7 @@
       "igMemoryRefMetaField_EnsureRegistered": "0x002bf680",
       "igMemoryRefMetaField_Register": "0x002bf690",
       "thunk_igMemoryRefMetaField_GetMetaObject": "0x002bf700",
+      "FUN_002bf710": "0x002bf710",
       "FUN_002bf990": "0x002bf990",
       "FUN_002bfa60": "0x002bfa60",
       "igMemoryRefArrayMetaField_GetMetaObject": "0x002bfaa0",
@@ -19282,6 +19284,7 @@
       "FUN_002c5550": "0x002c5550",
       "igExternalDirEntry_Register": "0x002c5560",
       "thunk_igExternalDirEntry_GetMetaObject": "0x002c55e0",
+      "FUN_002c55f0": "0x002c55f0",
       "FUN_002c5780": "0x002c5780",
       "FUN_002c57c0": "0x002c57c0",
       "igEventTracker_GetMetaObject": "0x002c5810",
@@ -19824,6 +19827,7 @@
       "Gap__Core__igAliasMemoryPool__vfunc_63": "0x002d0d10",
       "Gap__Core__igAliasMemoryPool__vfunc_64": "0x002d0d50",
       "igAliasMemoryPool_Free": "0x002d0d80",
+      "igAliasMemoryPool_OwnsAllocation": "0x002d0da0",
       "igAliasMemoryPool_GetAllocationSize": "0x002d0e30",
       "igAliasMemoryPool_PrintStatistics": "0x002d0e50",
       "igAliasMemoryPool_GetEventTracker": "0x002d1020",
@@ -20139,6 +20143,7 @@
       "FilePath_HasDirectory": "0x002e3220",
       "FUN_002e3280": "0x002e3280",
       "Gap__igAdxFile__vfunc_26": "0x002e3380",
+      "FUN_002e33d0": "0x002e33d0",
       "FUN_002e34a0": "0x002e34a0",
       "FUN_002e34d0": "0x002e34d0",
       "Gap__igAdxFile__vfunc_39": "0x002e3610",
@@ -20164,7 +20169,9 @@
       "FUN_002e47f0": "0x002e47f0",
       "FUN_002e4a40": "0x002e4a40",
       "FUN_002e4c90": "0x002e4c90",
+      "FUN_002e4e60": "0x002e4e60",
       "FUN_002e5110": "0x002e5110",
+      "FUN_002e53f0": "0x002e53f0",
       "FUN_002e54e0": "0x002e54e0",
       "FUN_002e5590": "0x002e5590",
       "FUN_002e56f0": "0x002e56f0",
@@ -20178,6 +20185,7 @@
       "FUN_002e6f50": "0x002e6f50",
       "FUN_002e7000": "0x002e7000",
       "FUN_002e7030": "0x002e7030",
+      "igIGBFile_ReadObject": "0x002e7100",
       "igIGBFile_ReadObjectSection": "0x002e7390",
       "FUN_002e7640": "0x002e7640",
       "FUN_002e78b0": "0x002e78b0",
@@ -20309,6 +20317,7 @@
       "FUN_002ed5a0": "0x002ed5a0",
       "Memory_FreeBufferAliasB": "0x002ed5c0",
       "Memory_FreeOwnedBufferUnchecked": "0x002ed5d0",
+      "FUN_002ed610": "0x002ed610",
       "FUN_002ee430": "0x002ee430",
       "FUN_002ee4a0": "0x002ee4a0",
       "Gap__Core__igMemoryDictionary__vfunc_23": "0x002ee510",
@@ -20368,6 +20377,7 @@
       "FUN_002f00e0": "0x002f00e0",
       "FUN_002f00f0": "0x002f00f0",
       "FUN_002f0180": "0x002f0180",
+      "FUN_002f0220": "0x002f0220",
       "FUN_002f0320": "0x002f0320",
       "FUN_002f0370": "0x002f0370",
       "FUN_002f0460": "0x002f0460",
@@ -20435,6 +20445,7 @@
       "FUN_002f48c0": "0x002f48c0",
       "FUN_002f48d0": "0x002f48d0",
       "igMemoryPoolContextInfo_InitializeRecordNames": "0x002f49e0",
+      "FUN_002f4a60": "0x002f4a60",
       "FUN_002f50e0": "0x002f50e0",
       "FUN_002f5220": "0x002f5220",
       "FUN_002f5230": "0x002f5230",
@@ -20443,9 +20454,11 @@
       "MemoryContext_BuildAllocator": "0x002f5cd0",
       "MemoryContext_BuildAndAttachEventTracker": "0x002f64e0",
       "MemoryContext_RemoveAllocator": "0x002f6780",
+      "FUN_002f69b0": "0x002f69b0",
       "FUN_002f7410": "0x002f7410",
       "FUN_002f7420": "0x002f7420",
       "FUN_002f78b0": "0x002f78b0",
+      "FUN_002f7a70": "0x002f7a70",
       "FUN_002f7bc0": "0x002f7bc0",
       "FUN_002f7cc0": "0x002f7cc0",
       "FUN_002f7e00": "0x002f7e00",
@@ -20453,6 +20466,7 @@
       "FUN_002f8020": "0x002f8020",
       "FUN_002f8160": "0x002f8160",
       "FUN_002f8280": "0x002f8280",
+      "FUN_002f8420": "0x002f8420",
       "FUN_002f8580": "0x002f8580",
       "Memory_GetCurrentContext": "0x002f8680",
       "FUN_002f86e0": "0x002f86e0",
@@ -20474,6 +20488,7 @@
       "FUN_002f8b20": "0x002f8b20",
       "FUN_002f8be0": "0x002f8be0",
       "FUN_002f8ca0": "0x002f8ca0",
+      "Gap__Core__igMemoryPoolContextInfo__vfunc_25": "0x002f8e10",
       "Gap__Core__igMemoryPoolInfo__vfunc_26": "0x002f99c0",
       "Gap__Core__igMemoryPoolInfo__vfunc_18": "0x002f9c60",
       "igMemoryPoolInfoList_Init": "0x002fa4d0",
@@ -20602,6 +20617,7 @@
       "igMetaObject_GetFieldAt": "0x002fdf00",
       "igMetaObject_FindFieldByName": "0x002fdf20",
       "igMetaObject_CreateFields": "0x002fdf40",
+      "igMetaObject_NameFields": "0x002fe000",
       "igMetaObject_FinalizeFieldLayout": "0x002fe0d0",
       "FUN_002fe290": "0x002fe290",
       "igMetaObject_GetChildCount": "0x002fe2c0",
@@ -20669,7 +20685,14 @@
       "igObject_GetSerializedSize": "0x002ffd40",
       "igObject_WritePersistentFields": "0x002ffe10",
       "FUN_002fff90": "0x002fff90",
+      "FUN_00300250": "0x00300250",
       "FUN_00300490": "0x00300490",
+      "FUN_00300600": "0x00300600",
+      "FUN_003006a0": "0x003006a0",
+      "FUN_00300770": "0x00300770",
+      "igObject_IsAlikeDeep": "0x00300820",
+      "igObject_IsAlikeShallow": "0x00300920",
+      "igObject_IsAlikeExactly": "0x00300a20",
       "igObject_VisitFields": "0x00300b00",
       "FUN_00300c00": "0x00300c00",
       "igObject_CloneViaMetadata": "0x00300c60",
@@ -20837,12 +20860,14 @@
       "FUN_00308390": "0x00308390",
       "FUN_00308400": "0x00308400",
       "FUN_00308540": "0x00308540",
+      "FUN_003085c0": "0x003085c0",
       "FUN_00308770": "0x00308770",
       "FUN_003087a0": "0x003087a0",
       "FUN_00308850": "0x00308850",
       "FUN_00308860": "0x00308860",
       "FUN_00308a90": "0x00308a90",
       "FUN_00308c00": "0x00308c00",
+      "igResource_StartAsyncLoading": "0x00308c80",
       "igResource_StopAsyncLoading": "0x00308e00",
       "Gap__Core__igResource__vfunc_12": "0x00308f00",
       "igResource_LoadDirectory": "0x003092f0",
@@ -21033,6 +21058,7 @@
       "igMetaEnum_GetNamesByMask": "0x00312020",
       "igMetaEnum_GetValueName": "0x00312140",
       "Gap__Core__igArenaMemoryPool__vfunc_102": "0x00312520",
+      "igArenaMemoryPool_CheckHeap": "0x003125d0",
       "FUN_00312790": "0x00312790",
       "igArenaMemoryPool_Trim": "0x003149a0",
       "FUN_00315050": "0x00315050",
@@ -21111,6 +21137,7 @@
       "FUN_00320a20": "0x00320a20",
       "FUN_00320aa0": "0x00320aa0",
       "Gap__Core__igElfFile__vfunc_23": "0x00320af0",
+      "Gap__Core__igElfFile__vfunc_24": "0x00320b50",
       "Gap__Core__igElfFile__vfunc_25": "0x00320e10",
       "FUN_00320ea0": "0x00320ea0",
       "FUN_00320ee0": "0x00320ee0",
@@ -21235,9 +21262,12 @@
       "FUN_00326b80": "0x00326b80",
       "Gap__Core__igPageMemoryPool__vfunc_103": "0x00326c30",
       "Gap__Core__igPageMemoryPool__vfunc_104": "0x00326c90",
+      "igPageMemoryPool_GetBlockSize": "0x00326e30",
+      "Gap__Core__igPageMemoryPool__vfunc_88": "0x00327010",
       "Gap__Core__igPageMemoryPool__vfunc_87": "0x00327120",
       "Gap__Core__igPageMemoryPool__vfunc_96": "0x00327130",
       "Gap__Core__igProgramFile__vfunc_23": "0x00327140",
+      "Gap__Core__igProgramFile__vfunc_24": "0x00327210",
       "Gap__Core__igProgramFile__vfunc_25": "0x00327380",
       "Gap__Core__igProgramFile__vfunc_26": "0x003273e0",
       "Gap__Core__igProgramFile__vfunc_27": "0x00327580",
@@ -21282,6 +21312,7 @@
       "Gap__Core__igStackMemoryPool__vfunc_86": "0x00328480",
       "Gap__Core__igStackMemoryPool__vfunc_91": "0x003284b0",
       "Gap__Core__igStackMemoryPool__vfunc_92": "0x003284c0",
+      "Gap__Core__igStackMemoryPool__vfunc_96": "0x003284d0",
       "Gap__Core__igStandardQueue__vfunc_11": "0x00328590",
       "Gap__Core__igStandardQueue__vfunc_12": "0x00328620",
       "Gap__Core__igStandardQueue__vfunc_23": "0x00328670",
@@ -21329,6 +21360,8 @@
       "FUN_00329b10": "0x00329b10",
       "FUN_00329b20": "0x00329b20",
       "FUN_00329b40": "0x00329b40",
+      "FUN_00329b60": "0x00329b60",
+      "FUN_00329ca0": "0x00329ca0",
       "FUN_00329e70": "0x00329e70",
       "FUN_0032a100": "0x0032a100",
       "FUN_0032a130": "0x0032a130",
@@ -21337,6 +21370,7 @@
       "FUN_0032a1e0": "0x0032a1e0",
       "FUN_0032a220": "0x0032a220",
       "FUN_0032a260": "0x0032a260",
+      "FUN_0032a280": "0x0032a280",
       "FUN_0032a5f0": "0x0032a5f0",
       "FUN_0032a600": "0x0032a600",
       "FUN_0032a900": "0x0032a900",
@@ -21373,14 +21407,17 @@
       "Gap__Core__igPsx2File__vfunc_38": "0x0032bf30",
       "Gap__Core__igPsx2File__vfunc_39": "0x0032c080",
       "FUN_0032c0c0": "0x0032c0c0",
+      "FUN_0032c110": "0x0032c110",
       "FUN_0032c240": "0x0032c240",
       "Gap__Core__igPsx2Folder__vfunc_26": "0x0032c930",
       "FUN_0032cac0": "0x0032cac0",
+      "FUN_0032cb50": "0x0032cb50",
       "igPsx2_LoadIopModule": "0x0032cf50",
       "FUN_0032cf70": "0x0032cf70",
       "FUN_0032d070": "0x0032d070",
       "FUN_0032d080": "0x0032d080",
       "FUN_0032d1f0": "0x0032d1f0",
+      "FUN_0032d220": "0x0032d220",
       "FUN_0032d4b0": "0x0032d4b0",
       "Gap__Core__igPsx2IopRpcConnection__vfunc_12": "0x0032d5f0",
       "FUN_0032d640": "0x0032d640",
@@ -21400,6 +21437,7 @@
       "Gap__Core__igPsx2Media__vfunc_23": "0x0032df20",
       "Gap__Core__igPsx2Media__vfunc_24": "0x0032e060",
       "FUN_0032e130": "0x0032e130",
+      "Gap__Core__igPsx2Media__vfunc_25": "0x0032e4d0",
       "FUN_0032e950": "0x0032e950",
       "Gap__Core__igPsx2Media__vfunc_29": "0x0032eac0",
       "Gap__Core__igPsx2Media__vfunc_32": "0x0032ecf0",
@@ -21431,10 +21469,12 @@
       "Gap__Core__igPsx2Thread__vfunc_27": "0x0032fba0",
       "Gap__Core__igPsx2Thread__vfunc_46": "0x0032fbf0",
       "Gap__Core__igPsx2Thread__vfunc_48": "0x0032fc40",
+      "Gap__Core__igPsx2Thread__vfunc_50": "0x0032fc90",
       "Gap__Core__igPsx2Thread__vfunc_45": "0x0032fd50",
       "Gap__Core__igPsx2Thread__vfunc_28": "0x0032fe90",
       "Gap__Core__igPsx2Thread__vfunc_47": "0x0032fee0",
       "Gap__Core__igPsx2Thread__vfunc_49": "0x0032ff30",
+      "Gap__Core__igPsx2Thread__vfunc_51": "0x0032ff80",
       "Gap__Core__igPsx2Thread__vfunc_30": "0x00330040",
       "Gap__Core__igPsx2Thread__vfunc_32": "0x003301f0",
       "Gap__Core__igPsx2Thread__vfunc_31": "0x00330240",
@@ -21708,6 +21748,9 @@
       "Gap__Core__igDependencyList__vfunc_18": "0x00331e80",
       "__dt__30igSmartPointer<12igObjectList>Fv": "0x00331eb0",
       "__sinit_CoreLibrary.cpp": "0x00521360"
+    },
+    "duplicates": {
+      "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
     },
     "data": {
       "DAT_00004000": "0x00004000",
@@ -23031,7 +23074,6 @@
       "igMemoryPool_className": "0x004f6b40",
       "igMemoryRefArrayMetaField_className": "0x004f69a0",
       "igMemoryRefMetaField_GetPublishedMetaObject": "0x002bfbf0",
-      "igMemoryRefMetaField_InitFields_002bf710": "0x002bf710",
       "igMemoryRefMetaField_className": "0x004f6920",
       "igMetaEnum_className": "0x004f6908",
       "igMetaFieldInfo_className": "0x004f6720",
@@ -23320,11 +23362,13 @@
       "__vt__15SystemAllocator": "0x0052d8b0"
     },
     "anon": [
+      "0x004f9d00",
       "0x004f9d20",
       "0x004fa560",
       "0x004fb330",
       "0x004ffb80",
       "0x004ffbb0",
+      "0x004ffd70",
       "0x00586f30",
       "0x00587370"
     ],
@@ -23356,9 +23400,9 @@
       "__dt__22igSmartPointer<5R8d00>Fv",
       "__dt__24igSmartPointer<7RefPool>Fv",
       "__dt__25igSmartPointer<8Instance>Fv",
+      "__dt__32igSmartPointer<14igPsx2FileView>Fv",
       "__dt__25igSmartPointer<8R_30e480>Fv",
       "__dt__25igSmartPointer<8X_2fbf90>Fv",
-      "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__26igSmartPointer<9EntryList>Fv",
       "__dt__26igSmartPointer<9Ob_308a90>Fv",
       "__dt__26igSmartPointer<9Ob_325850>Fv",
@@ -23369,11 +23413,14 @@
       "__dt__28igSmartPointer<10ObjectList>Fv",
       "__dt__28igSmartPointer<10Tbl_2eeae0>Fv",
       "__dt__30igSmartPointer<12ClonedObject>Fv",
+      "__dt__30igSmartPointer<12IgbReadEntry>Fv",
       "__dt__30igSmartPointer<12IniPairEntry>Fv",
       "__dt__31igSmartPointer<13SectionObject>Fv",
+      "__dt__31igSmartPointer<13igPointerList>Fv",
       "__dt__33igSmartPointer<15FieldLinkRecord>Fv",
       "__dt__33igSmartPointer<15igVirtualObject>Fv",
       "__dt__34igSmartPointer<16EntryList_3010f0>Fv",
+      "__dt__34igSmartPointer<16EventTrackerDump>Fv",
       "__dt__36igSmartPointer<18ConfigPlatformText>Fv",
       "__dt__36igSmartPointer<18igPluginRepository>Fv",
       "__dt__3MemFv",
@@ -23436,26 +23483,10 @@
       "__dt__20igSmartPointer<3Obj>Fv": "0x00130140"
     }
   },
-  "0x002e7100": {
-    "duplicates": {
-      "__dt__20igSmartPointer<3T30>Fv": "0x00130140"
-    }
-  },
-  "0x002f8e10": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1R>Fv": "0x0025a230"
-    }
-  },
   "0x00304840": {
     "duplicates": {
       "__dt__36igSmartPointer<18igPluginRepository>Fv": "0x0025a230"
     }
-  },
-  "0x00308c80": {
-    "duplicates": {
-      "__dt__19igSmartPointer<2RO>Fv": "0x130140"
-    },
-    "emitted": {}
   },
   "0x00308fb0": {
     "duplicates": {
@@ -23466,11 +23497,6 @@
   "0x00309a60": {
     "duplicates": {
       "__dt__25igSmartPointer<8igObject>Fv": "0x00130140"
-    }
-  },
-  "0x0032a280": {
-    "duplicates": {
-      "__dt__13DumpObjectRefFv": "0x00130140"
     }
   },
   "0x0032c4d0": {
@@ -23485,17 +23511,6 @@
     "duplicates": {
       "__dt__15FolderObjectRefFv": "0x00130140",
       "__dt__15FolderStringRefFv": "0x00130720"
-    }
-  },
-  "0x0032cb50": {
-    "emitted": {},
-    "duplicates": {
-      "__dt__15FolderObjectRefFv": "0x00130140"
-    }
-  },
-  "0x0032d220": {
-    "duplicates": {
-      "__dt__18igSmartPointer<1O>Fv": "0x0025a230"
     }
   },
   "0x00331f30": {
@@ -30050,6 +30065,7 @@
       "Gap__Core__igObject__vfunc_31": "0x00395b50",
       "Gap__Core__igObject__vfunc_46": "0x003960e0",
       "beModelCtrlInfoWork_FindSeqLabel": "0x003960f0",
+      "beModelCtrl__OnGenerate": "0x00396740",
       "beModelCtrl_UpdateBound": "0x00396940",
       "Gap__Bec__beModelCtrl__vfunc_33": "0x00396a80",
       "__dt__9ObjRef<4>Fv": "0x00398c20",
@@ -30217,16 +30233,6 @@
       "FUN_001ca620": "0x001ca620"
     },
     "symbol": "beMeterCtrlNode_TraversalFunction"
-  },
-  "0x00396740": {
-    "duplicates": {
-      "__dt__25igSmartPointer<8igObject>Fv": "0x0033e9c0"
-    },
-    "exceptions": {
-      "index": "0x0054efcc",
-      "table": "0x00543b74",
-      "table_size": "0x000010"
-    }
   },
   "0x00398e50": {
     "whole_file": true,

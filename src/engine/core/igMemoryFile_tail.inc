@@ -69,9 +69,9 @@ void Gap__Core__igMemoryFile__vfunc_24(void *arg0) {
     *(char *)((char *)(arg0) + 44) = 0;
 }
 
-MF_2efc50 *Gap__Core__igMemoryFile__vfunc_25(MF_2efc50 *arg0, int arg1, int arg2) {
+MF_2efc50 *Gap__Core__igMemoryFile__vfunc_25(MF_2efc50 *arg0, const char *fileName, int arg2) {
     int ok;
-    FUN_002e30b0((int *)arg0, arg1);
+    FUN_002e30b0((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         ok = arg0->vX(0).Ok();
     } else if (strcmp(arg2, &((int *)DAT_004f9c48)[0]) == 0) {

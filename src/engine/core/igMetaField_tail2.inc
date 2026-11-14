@@ -134,7 +134,7 @@ int igMetaField_GetSize(void) {
 /* Interned strings are reference counted in place: the count sits at (string - 4) and the owning
  * StringChunk header at (string - 8); dropping the last reference hands the header back with
  * StringChunk_ReleaseHeader. */
-void igMetaField_Configure(igMetaField *self, int fieldName, int externalEnumStorage, int offset, int parentMetaObject) {
+void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField **externalEnumStorage, int offset, igMetaObject *parentMetaObject) {
     void *internedName;
     int *chunkHeader;
     int refCount;
@@ -151,7 +151,7 @@ void igMetaField_Configure(igMetaField *self, int fieldName, int externalEnumSto
             }
             g_stringPool[0] = pool;
         }
-        name = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)fieldName));
+        name = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], fieldName));
     }
     internedName = name;
     igMetaField_SetFieldName(self, &internedName);
@@ -163,9 +163,9 @@ void igMetaField_Configure(igMetaField *self, int fieldName, int externalEnumSto
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*chunkHeader), (int)chunkHeader);
         }
     }
-    self->_externalEnumStorage = externalEnumStorage;
+    self->_externalEnumStorage = (int)externalEnumStorage;
     self->_offset = offset;
-    self->_parentMetaObject = parentMetaObject;
+    self->_parentMetaObject = (int)parentMetaObject;
     igMetaField_EnsureDefaultStorage(self);
 }
 
@@ -272,8 +272,8 @@ int FUN_002fc740(PersistentSizeView *p, int a1, int a2, int extra3, int extra4) 
     return (r + 3) & -4;
 }
 
-int FUN_002fc780(void *arg0, int arg1, int extra2, int extra3, int extra4) {
-    return (((ReadSizeView *)((int *)((char *)(arg0) + 0)))->vX((int)(arg1 + *(int *)((char *)(arg0) + 8))) + 3) & ~3;
+int FUN_002fc780(void *field, void *object, char *data, void *directory, int swap) {
+    return (((ReadSizeView *)field)->vX((int)object + *(int *)((char *)field + 8)) + 3) & ~3;
 }
 
 unsigned short igMetaField_ReadRawFieldMem(RawReadView *arg0, int arg1, int arg2, int arg3, int arg4) {
@@ -319,15 +319,15 @@ void igMetaField_CopyByTechnique(CopyDispatchView *arg0, int arg1, int arg2, int
     }
 }
 
-void igMetaField_ShallowCopy(int a0, int a1, int a2, int a3) {
+void igMetaField_ShallowCopy(int a0, int a1, int a2) {
     igMetaField_CopyByTechnique((CopyDispatchView *)a0, a1, a2, *(char *)((char *)a0 + 39));
 }
 
-void igMetaField_DeepCopy(int a0, int a1, int a2, int a3) {
+void igMetaField_DeepCopy(int a0, int a1, int a2) {
     igMetaField_CopyByTechnique((CopyDispatchView *)a0, a1, a2, *(char *)((char *)a0 + 40));
 }
 
-void igMetaField_ConstructCopy(int a0, int a1, int a2, int a3) {
+void igMetaField_ConstructCopy(int a0, int a1, int a2) {
     igMetaField_CopyByTechnique((CopyDispatchView *)a0, a1, a2, *(char *)((char *)a0 + 41));
 }
 
@@ -459,15 +459,15 @@ int igMetaField_IsAlikeByTechnique(void **arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-int igMetaField_IsAlikeExactly(int a0, int a1, int a2, int a3) {
+int igMetaField_IsAlikeExactly(int a0, int a1, int a2) {
     return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 42));
 }
 
-int igMetaField_IsAlikeDeep(int a0, int a1, int a2, int a3) {
+int igMetaField_IsAlikeDeep(int a0, int a1, int a2) {
     return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 43));
 }
 
-int igMetaField_IsAlikeShallow(int a0, int a1, int a2, int a3) {
+int igMetaField_IsAlikeShallow(int a0, int a1, int a2) {
     return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 44));
 }
 
@@ -504,7 +504,7 @@ int FUN_002fd000(void) {
 }
 
 unsigned char FUN_002fd010(int a0, int a1, int a2, int a3) {
-    return (igMetaField_IsAlikeExactly(a0, a1, a2, a3) != 0) ^ 1;
+    return (igMetaField_IsAlikeExactly(a0, a1, a2) != 0) ^ 1;
 }
 
 /* igMetaField slot +0xa8 (ReleaseElements), base implementation: a plain field owns no elements to

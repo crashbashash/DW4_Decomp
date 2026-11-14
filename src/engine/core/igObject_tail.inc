@@ -74,6 +74,19 @@ R_2f0180 FUN_002f0180(int arg1, int *arg2) {
     return R_2f0180(g_resultFailure.v);
 }
 
+R_2f0220 FUN_002f0220(int arg1, V_2f0220 *arg2) {
+    int dictionarySize;
+    if (DAT_00586f68[0] == 0) {
+        dictionarySize = 0x1000;
+        FUN_003065f0(((MemoryContextState *)g_objectSystem[0])->config, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
+        DAT_00586f68[0] = (V_2f0220 *)FUN_002c1070((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
+        DAT_00586f68[0]->vA(dictionarySize);
+        DAT_00586f68[0]->vB();
+        FUN_002f00f0(DAT_00586f68[0]);
+    }
+    return DAT_00586f68[0]->vC(arg1, arg2->vD());
+}
+
 R_2f0320 FUN_002f0320(int arg1, V_2f0220 *pool) {
     C_2f0320 *p = ((C_2f0320 * *)DAT_00586f68)[0];
     if (p != 0) {

@@ -143,7 +143,7 @@ void igMemoryRefMetaField_Register(void) {
         igMemoryRefMetaField_className,
         0x50, /* instance size */
         igMemoryRefMetaField_GetVTable,
-        &igMemoryRefMetaField_InitFields_002bf710[0],   /* field adder (igMetaObject_CreateFields) */
+        FUN_002bf710,   /* field adder (igMetaObject_CreateFields) */
         0, /* extra callback item */
         g_igMemoryRefMetaField_callbackList /* callback list */
     );
@@ -151,6 +151,45 @@ void igMemoryRefMetaField_Register(void) {
 
 void thunk_igMemoryRefMetaField_GetMetaObject(void) {
     igMemoryRefMetaField_GetMetaObject();
+}
+
+void FUN_002bf710(void) {
+    igMetaObject *meta = g_igMemoryRefMetaField_metaObject[0];
+    int base = igMetaObject_GetFieldCount(meta);
+    igMetaField *field;
+    igObjectRefMetaField *ref;
+    int index;
+    int fields;
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igMemoryRefMetaField_ctorTable, 8);
+    field = (igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_shallowCopyMethod);
+    index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
+    field = ((DescriptorCloneView *)field)->Clone(1);
+    FUN_002d4e40((void **)field, 2);
+    field->_externalEnumStorage = (int)DAT_00585d90;
+    igMetaObject_FinalizeAndReplaceField(meta, index, field);
+    releaseField(field);
+    ((igMetaField *)igMetaObject_GetFieldAt(meta, base))->_persistent = 0;
+    ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
+    ref->_metaObject = (int)FUN_002beca0();
+    ref->_refCounted = 0;
+    ref->_deepCopyMethod = 1;
+    FUN_002d3890((void **)igMetaObject_GetFieldAt(meta, base + 2), 1);
+    FUN_002d3890((void **)igMetaObject_GetFieldAt(meta, base + 3), 1);
+    fields = meta->_metaFields;
+    index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
+    field = (igMetaField *)FUN_002c5fb0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    igMetaField_Configure(field, (const char *)text_resetMethod, DAT_00585db8, 0x24, meta);
+    FUN_002dc7a0((igEnumMetaFieldView *)field, DAT_004c0020);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)FUN_002bec40;
+    field->_externalEnumStorage = (int)DAT_00585db8;
+    igMetaObject_FinalizeAndReplaceField(meta, index, field);
+    releaseField(field);
+    FUN_002d3890((void **)igMetaObject_GetFieldAt(meta, base + 4), 1);
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 5), -1);
+    ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
+    ref->_metaObject = (int)FUN_002beca0();
+    ref->_deepCopyMethod = 1;
+    igMetaObject_NameFields(meta, (const char **)g_igMemoryRefMetaField_fieldTable, (igMetaField ***)DAT_004bffe0, DAT_004c0000, base);
 }
 
 void FUN_002bf990(void) {

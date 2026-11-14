@@ -645,6 +645,108 @@ void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self
     } while (index < CONTEXT_RECORD_COUNT);
 }
 
+igResult FUN_002f4a60(PoolConfigManager *self) {
+    unsigned char useFlag;
+    unsigned char lockFlag;
+    unsigned char optFlag;
+    int options;
+    int optB;
+    int optC;
+    int mainSize;
+    int nextSize;
+    PoolConfigObject *mainPool;
+    int i;
+    int config;
+    PoolConfigObject *o;
+    PoolConfigObject *second;
+    config = ((PoolConfigContext *)g_objectSystem[0])->config;
+    mainPool = ((PoolConfigContext *)g_objectSystem[0])->main;
+    second = ((PoolConfigContext *)g_objectSystem[0])->second;
+    options = DAT_004c2370[0];
+    mainSize = 0;
+    nextSize = 0;
+    optB = DAT_004c2368[0];
+    optC = DAT_005871f8[0];
+    igResult result = g_resultSuccess;
+    useFlag = (self->flags & 4) != 0;
+    lockFlag = GPR_00554994;
+    FUN_003065f0(config, 2, text_bootstrapPoolPreSize, &mainSize, 0, 0);
+    if (mainSize > 0) { mainPool->setName(mainSize); }
+    FUN_00306e50(config, 2, text_updatePoolStatistics, (char *)&lockFlag, lockFlag, 0);
+    GPR_00554994 = lockFlag;
+    FUN_00306e50(config, 2, text_useAliasMemoryPoolRelease, (char *)&useFlag, useFlag, 0);
+    self->setFlags(useFlag != 0 ? self->flags | 4 : self->flags & ~4);
+    FUN_00307550(config, 2, text_arenaMemoryPoolOptionFlagsReleas, FUN_002cd990(), &options, DAT_004c2370[0], 0);
+    FUN_00307470(config, 2, text_arenaMemoryPoolMessageLevelRelea, FUN_002cd9f0(), &optB, DAT_004c2368[0], 0);
+    FUN_00307470(config, 2, text_arenaMemoryPoolHeapIntegrityChec, FUN_002cda50(), &optC, DAT_005871f8[0], 0);
+    {
+        int v = (options & 0x200) != 0;
+        optFlag = v;
+        FUN_00306e50(config, 2, text_inhibitArenaCountMessage, (char *)&optFlag, v, 0);
+    }
+    if (optFlag != 0) { options |= 0x200; }
+    DAT_004c2370[0] = options;
+    DAT_004c2368[0] = optB;
+    DAT_005871f8[0] = optC;
+    for (i = 0; i < 46; i++) {
+        o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
+        if (o != 0 && igObject_IsKindOf(o, g_igArenaMemoryPool_metaObject[0]) != 0) {
+            igArenaMemoryPool_SetPoolOptionFlags((SetFlagsPool *)o, (options & ~1) | (o->options & 1));
+        }
+    }
+    FUN_003065f0(config, 2, text_nonTrackedPoolPreSize, &nextSize, 0, 0);
+    PoolConfigManager *top = (PoolConfigManager *)(*(void **)DAT_00586fd0);
+    PoolConfigObject *fb = self->fallback;
+    if (self == top && fb == mainPool) {
+        o = (PoolConfigObject *)FUN_002cdab0((int)mainPool);
+        if (nextSize > 0) { o->setName(nextSize); }
+        o->finish();
+        self->setPool(3, o);
+        o->rc = o->rc - 1;
+        if (((unsigned long long)((long long)(int)o->rc << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+    }
+    if (self->readConfig(config, (int)DAT_004c2228[0]) == g_resultFailure) { result = g_resultFailure; }
+    if (self->setDefault(self->defaultSize, 0) == g_resultFailure) { result = g_resultFailure; }
+    if (self->apply() == g_resultFailure) { result = g_resultFailure; }
+    if (g_useOwnerAllocator == 0) {
+        for (i = 0; i < 46; i++) {
+            if (i != 0) {
+                PoolConfigObject **slot = (PoolConfigObject **)((char *)self + i * 144 + 20);
+                PoolConfigObject *p = *slot;
+                if (p == mainPool) {
+                    p->rc = p->rc - 1;
+                    if (((unsigned long long)((long long)(int)p->rc << 0x29) >> 0x29) == 0) igObject_Destroy(p);
+                    *slot = 0;
+                }
+            }
+        }
+        for (i = 0; i < 46; i++) {
+            if (i == 2) {
+                self->setPool(i, self->third);
+            } else {
+                if (self->build(i, 0) == g_resultFailure) { result = g_resultFailure; }
+            }
+        }
+    } else {
+        self->setPool(2, self->third);
+    }
+    self->finish();
+    o = self->poolFor(20);
+    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a88 = o; }
+    o = self->poolFor(7);
+    if (o != mainPool && o != second) { ((PoolConfigContext *)g_objectSystem[0])->a96 = o; }
+    for (i = 0; i < 46; i++) {
+        o = *(PoolConfigObject **)((char *)self + i * 144 + 20);
+        if (o != 0 && o->inUse() == 0) { o->finish(); }
+    }
+    if (DAT_004c2370[0] & 8) {
+        mainPool->lock(1);
+        if (second != mainPool) { second->lock(1); }
+    }
+    if (result == g_resultSuccess) { self->setFlags(self->flags | 8); }
+    return result;
+}
+
 /* The skip list 6/5/4/0 is a switch, which leaves the compare-chain delay slots empty. The second
  * loop is dead code and is kept. */
 void FUN_002f50e0(Mgr *arg0) {
@@ -1101,6 +1203,190 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
     }
 }
 
+static inline int trackerSizeFor(PoolDescRecord *record, int fallback) {
+    int size = fallback;
+    int n = record->a80;
+    if (n != 0) { size = n; }
+    return size;
+}
+
+void FUN_002f69b0(PoolSetup *self) {
+    /* matching construct: greedy declaration-order sweep — the locals' order sets the s-register choice */
+    unsigned char trackEvents;
+    unsigned char trackAll;
+    unsigned char flag118;
+    unsigned char flag117;
+    unsigned char flag119;
+    unsigned char flag120;
+    unsigned char optionA;
+    unsigned char optionB;
+    char *stringA;
+    char *stringB;
+    char *stringC;
+    char *stringD;
+    char *stringF;
+    int trackerSize;
+    int value172;
+    int value128;
+    int value132;
+    int value136;
+    int value140;
+    char *stringE;
+    TrackedPool *mainPool;
+    int alloc;
+    PoolLoader *loader;
+    LoadedObject *loaded;
+    int config;
+    int i;
+    TrackedPool *secondPool;
+    EventTracker *tracker;
+    EventTracker *t;
+    TrackedPool *pool;
+    char *options;
+    int j;
+    TrackedPool *unitPool;
+    char *unitOptions;
+    EventTracker *unitTracker;
+    config = ((MemoryContextState *)g_objectSystem[0])->config;
+    mainPool = ((MemoryContextState *)g_objectSystem[0])->main;
+    secondPool = ((MemoryContextState *)g_objectSystem[0])->second;
+    alloc = FUN_002f00e0();
+    int defaultTrackEvents = (self->flags & 1) != 0;
+    trackEvents = defaultTrackEvents;
+    trackAll = (self->flags & 2) != 0;
+    stringA = 0;
+    stringB = 0;
+    stringC = 0;
+    stringD = 0;
+    stringF = 0;
+    stringE = 0;
+    FUN_00306e50(config, 2, text_useGlobalEventTracker, (char *)&trackEvents, defaultTrackEvents, 0);
+    self->setFlags(trackEvents ? self->flags | 1 : self->flags & ~1);
+    ((MemoryContextState *)g_objectSystem[0])->trackEvents = trackEvents;
+    FUN_00306e50(config, 2, text_useSeparateEventTrackers, (char *)&trackAll, trackAll, 0);
+    self->setFlags(trackAll ? self->flags | 2 : self->flags & ~2);
+    FUN_00306e50(config, 2, text_showLeaksOnExit, (char *)&flag118, 0, 0);
+    ((MemoryContextState *)g_objectSystem[0])->flag118 = flag118;
+    FUN_00306e50(config, 2, text_showMemoryStatisticsOnExit, (char *)&flag119, 0, 0);
+    ((MemoryContextState *)g_objectSystem[0])->flag119 = flag119;
+    FUN_00306e50(config, 2, text_showObjectStatisticsOnExit, (char *)&flag120, 0, 0);
+    ((MemoryContextState *)g_objectSystem[0])->flag120 = flag120;
+    FUN_003065f0(config, 2, text_eventTrackerInitialCapacity, &trackerSize, 0x80000, 0);
+    ((MemoryContextState *)g_objectSystem[0])->value124 = trackerSize;
+    FUN_003065f0(config, 2, text_eventTrackerEventTypeFilter, &value128, -1, 0);
+    ((MemoryContextState *)g_objectSystem[0])->value128 = value128;
+    FUN_003065f0(config, 2, text_eventTrackerMarkerTypeFilter, &value132, -1, 0);
+    ((MemoryContextState *)g_objectSystem[0])->value132 = value132;
+    FUN_003065f0(config, 2, text_eventTrackerMaxCallStackDepth, &DAT_004c1eb0, DAT_004c1eb0, 0);
+    FUN_003065f0(config, 2, text_eventTrackerNotificationTypeFilt, &value136, -1, 0);
+    ((MemoryContextState *)g_objectSystem[0])->value136 = value136;
+    FUN_003065f0(config, 2, text_eventTrackerNotificationCodeFilt, &value140, -1, 0);
+    ((MemoryContextState *)g_objectSystem[0])->value140 = value140;
+    FUN_00306910(config, 2, text_memoryEventFormat, (int **)&stringA, (char *)DAT_004f7910, 0);
+    FUN_002d31d0((N *)g_objectSystem[0], stringA);
+    FUN_00306910(config, 2, text_markerEventFormat, (int **)&stringB, (char *)DAT_004f7910, 0);
+    FUN_002d3240((S_2d3240 *)g_objectSystem[0], stringB);
+    FUN_00306910(config, 2, text_notificationEventFormat, (int **)&stringC, (char *)DAT_004f7910, 0);
+    FUN_002d32b0((O_2d32b0 *)g_objectSystem[0], stringC);
+    FUN_003065f0(config, 2, text_eventTrackerScopeFlags, &value172, -1, 0);
+    FUN_002f0db0(value172);
+    FUN_00306e50(config, 2, text_saveEventTrackerOnExit, (char *)&flag117, 0, 0);
+    ((MemoryContextState *)g_objectSystem[0])->flag117 = flag117;
+    FUN_00306910(config, 2, text_eventTrackerFileName, (int **)&stringD, (char *)DAT_004f7910, 0);
+    FUN_002d3320((char *)g_objectSystem[0], stringD);
+    FUN_00306910(config, 2, text_systemPoolEventTrackerFileName, (int **)&stringE, (char *)DAT_004f7910, 0);
+    FUN_002d3370((char *)g_objectSystem[0], stringE);
+    FUN_00306910(config, 2, text_symbolsFileName, (int **)&stringF, (char *)DAT_004f7910, 0);
+    FUN_002d33c0(g_objectSystem[0], (int)stringF);
+    if (stringF != 0 && *stringF != 0) {
+        loader = (PoolLoader *)FUN_002cec00(alloc);
+        loaded = (LoadedObject *)FUN_002b8500(alloc);
+        if (loader != 0) {
+            if (loader->load(stringF) == g_resultSuccess) {
+                if (loader->attach(loaded, 1) == g_resultFailure) {
+                    loaded->rc.u.w = loaded->rc.u.w - 1;
+                    if (loaded->rc.u.b.cnt == 0) igObject_Destroy(loaded);
+                    loaded = 0;
+                }
+                optionA = 0;
+                FUN_00306e50(config, 2, text_showSectionHeaders, (char *)&optionA, 0, 0);
+                if (optionA != 0) { loader->optionA(); }
+                optionB = 0;
+                FUN_00306e50(config, 2, text_showSymbols, (char *)&optionB, 0, 0);
+                if (optionB != 0) { loader->optionB(); }
+                loader->finish();
+            }
+            loader->rc.u.w = loader->rc.u.w - 1;
+            if (loader->rc.u.b.cnt == 0) igObject_Destroy(loader);
+        }
+        ((MemoryContextState *)g_objectSystem[0])->loaded = loaded;
+    }
+    if (trackEvents != 0) {
+        tracker = (EventTracker *)FUN_002c5780(alloc);
+        FUN_002dcc40((int)tracker, trackerSize);
+        tracker->start();
+        tracker->users = tracker->users + 1;
+        if (*stringE != 0) {
+            if (secondPool != mainPool) {
+                t = (EventTracker *)FUN_002c5780(alloc);
+                FUN_002dcc40((int)t, 0x6000);
+                t->start();
+                secondPool->setTracker(t);
+                t->rc.u.w = t->rc.u.w - 1;
+                if (t->rc.u.b.cnt == 0) igObject_Destroy(t);
+            }
+        }
+        for (i = 0; i < 46; i++) {
+            if (i != 3) {
+                pool = (TrackedPool *)self->slots[i].pool;
+                options = 0;
+                if (self->slots[i].record != 0) { options = self->slots[i].record->s60; }
+                if (pool != 0 && pool->hasTracker() == 0 && (options == 0 || strstr(options, text_InhibitEventTracker) == 0)) {
+                    if ((trackAll != 0 && i != 1) || (options != 0 && strstr(options, text_UseEventTracker) != 0)) {
+                        t = (EventTracker *)FUN_002c5780(alloc);
+                        FUN_002dcc40((int)t, trackerSizeFor(self->slots[i].record, trackerSize));
+                        t->start();
+                        pool->setTracker(t);
+                        t->rc.u.w = t->rc.u.w - 1;
+                        if (t->rc.u.b.cnt == 0) igObject_Destroy(t);
+                    } else {
+                        pool->setTracker(tracker);
+                    }
+                }
+            }
+        }
+        tracker->users = tracker->users - 1;
+        if ((int)tracker->rc.u.b.cnt > 1) {
+            ((MemoryContextState *)g_objectSystem[0])->tracker = tracker;
+        } else {
+            tracker->rc.u.w = tracker->rc.u.w - 1;
+            if (tracker->rc.u.b.cnt == 0) igObject_Destroy(tracker);
+        }
+    } else {
+        for (j = 0; j < 46; j++) {
+            if (j != 3) {
+                unitPool = (TrackedPool *)self->slots[j].pool;
+                unitOptions = 0;
+                if (self->slots[j].record != 0) { unitOptions = self->slots[j].record->s60; }
+                if (unitPool != 0 && unitPool->hasTracker() == 0 && unitOptions != 0 && strstr(unitOptions, text_UseEventTracker) != 0) {
+                    unitTracker = (EventTracker *)FUN_002c5780(alloc);
+                    FUN_002dcc40((int)unitTracker, trackerSizeFor(self->slots[j].record, trackerSize));
+                    unitTracker->start();
+                    unitPool->setTracker(unitTracker);
+                    unitTracker->rc.u.w = unitTracker->rc.u.w - 1;
+                    if (unitTracker->rc.u.b.cnt == 0) igObject_Destroy(unitTracker);
+                }
+            }
+        }
+    }
+    releaseString(stringE);
+    releaseString(stringF);
+    releaseString(stringD);
+    releaseString(stringC);
+    releaseString(stringB);
+    releaseString(stringA);
+}
+
 static inline void releaseString_2f25d0(char *p) {
     if (p != 0) {
         StringHeader *h = (StringHeader *)(p - 8);
@@ -1108,13 +1394,6 @@ static inline void releaseString_2f25d0(char *p) {
         h->refs = n;
         if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->chunk, (int)h); }
     }
-}
-
-static inline int trackerSizeFor(PoolDescRecord *record, int fallback) {
-    int size = fallback;
-    int n = record->a80;
-    if (n != 0) { size = n; }
-    return size;
 }
 
 void FUN_002f7410(int arg0, int arg1) {
@@ -1279,6 +1558,38 @@ b16:
         }
         s4 += 1;
     } while (s4 < 46);
+}
+
+igResult FUN_002f7a70(SlotPool *self, unsigned int kind, int free) {
+    int i;
+    PoolSlotEntry *e;
+    igResult r;
+    unsigned int flags;
+    i = 0;
+    e = (PoolSlotEntry *)((char *)self + 20);
+    r = g_resultSuccess;
+    do {
+        flags = e->flags;
+        if ((flags & 0xFBFFFFFF) != 0 && (flags & 0xFFFFFF) == kind) {
+            if (free != 0) {
+                if (e->owner != 0) {
+                    if (flags & 0x02000000) {
+                        e->owner->vDrop();
+                    }
+                    if (e->flags & 0x01000000) {
+                        self->vFree(i);
+                    }
+                }
+            } else if (flags & 0x01000000) {
+                if (self->vRelease(i, 1) == g_resultFailure) {
+                    r = g_resultFailure;
+                }
+            }
+        }
+        i++;
+        e++;
+    } while (i < 46);
+    return r;
 }
 
 void FUN_002f7bc0(Ent_2f25d0 *arg0, int arg1) {
@@ -1507,10 +1818,42 @@ void FUN_002f8280(Slot6 *arg0, int arg1, int arg2, int arg3) {
                 if (found == 0 && r != 0 && ((r->flags & 0x2000) ? 1 : 0) && ((r->mask & (1 << arg1)) ? 1 : 0)) {
                     FUN_002e2250((void *)sp, arg1, arg2, arg3, 0, 0, 0, 0, (int)0, (int)0);
                     r->v24(sp, -1);
-                    FUN_002e2300((int)sp, (long long)(-1));
+                    FUN_002e2300(sp, (long long)(-1));
                 }
             }
         }
+    }
+}
+
+void FUN_002f8420(VA_2f25d0 *arg0, char *arg1, VB2 *arg2) {
+    int index, matches, first;
+    Z *stats;
+    matches = 0;
+    first = -1;
+    if (arg1 == 0) {
+        arg1 = text_Pool_statistics;
+    }
+    index = 0;
+    do {
+        if (arg2 == *(VB2 **)((char *)arg0 + index * 144 + 20)) {
+            stats = (Z *)arg2->v88();
+            FUN_00304430(DAT_004fab20, arg1, arg0->v104(index), stats->f28);
+            FUN_00304680();
+            matches += 1;
+            if (matches == 1) {
+                first = index;
+            }
+        }
+        index += 1;
+    } while (index < 46);
+    if (matches == 0) {
+        FUN_00304430(DAT_004f90b0, arg1);
+        FUN_00304680();
+    }
+    arg2->v348(0);
+    if (first != -1) {
+        FUN_00304430(DAT_004fab30, g_memoryContextNames[first], first);
+        FUN_00304680();
     }
 }
 
@@ -1609,12 +1952,12 @@ void igMemoryPoolContextInfo_DeleteAllocation(void *allocation) {
     free(allocation);
 }
 
-void Memory_PrintPoolStatistics(int arg0, int arg1) {
-    if (arg1 != 0) {
-        ((DW4VC_260_2 *)(((void ** *)DAT_00586fd0)[0]))->vX((int)(arg0), (int)(arg1));
+void Memory_PrintPoolStatistics(int arg0, void *pool) {
+    if (pool != 0) {
+        ((DW4VC_260_2 *)(((void ** *)DAT_00586fd0)[0]))->vX((int)(arg0), (int)(pool));
         return;
     }
-    ((DW4VC_264_2 *)(((void ** *)DAT_00586fd0)[0]))->vX((int)(arg0), (int)(arg1));
+    ((DW4VC_264_2 *)(((void ** *)DAT_00586fd0)[0]))->vX((int)(arg0), (int)(pool));
 }
 
 int Memory_GetCurrentContextAlias()
@@ -1767,3 +2110,26 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
     return 0;
 }
 
+/* The smart pointer is declared and never assigned: retail clears its slot on entry and releases it on
+ * every return, so the source had the local with its use compiled out. */
+igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev_2f8e10 *self, IniSectionsView *ini, char *section) {
+    igSmartPointer<igObject> unused;
+    int index;
+    if (ini == 0) {
+        ini = (IniSectionsView *)((MemoryContextState *)g_objectSystem[0])->config;
+    }
+    if (ini == 0) {
+        return g_resultFailure;
+    }
+    if (section == 0 || *section == 0) {
+        section = DAT_004c2228[0];
+    }
+    index = FUN_00306360(ini, section, 0);
+    if (index == -1) {
+        return g_resultFailure;
+    }
+    if (self->get(ini, index) == g_resultSuccess) {
+        return g_resultSuccess;
+    }
+    return g_resultFailure;
+}

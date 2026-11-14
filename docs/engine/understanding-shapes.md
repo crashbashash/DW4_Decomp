@@ -100,6 +100,9 @@ python3 tools/dispatcher/regalloc.py 0xVA <file> --compiler local/mwcps2/combat/
 Ids are what decide colours: select pops nodes in reverse id order, so a later id colours first. Declared locals
 take ids in declaration order (parameters first). The locals and temporaries of inlined functions take theirs after
 all of the caller's locals, mid-block C++ declarations included, and a second web of one variable takes a late id.
+A local of class type is the exception: it has no id of its own. `IRO_ScalarizeClassDataMembers` replaces its
+member with a temporary that takes its id after every declared local and every inline's parameter, wherever the
+class local is declared (see [declaration order](#declaration-order-and-evaluation-order)).
 Compiler-made values (a strength-reduced offset, a hoisted invariant, a CSE temporary) take ids when the phase that
 makes them runs. So registers follow the order values come into existence, and a value that has to colour early is
 the caller's declared variable, not an inline's local. A whole-file unit with code outside the function is refused;
@@ -279,6 +282,23 @@ Units are named by their source file.
   `_data[_count - 1]` written in place folds the `- 1` into the load as `lw -4(v0)`. The index as an inline
   accessor's argument (`stack->get(stack->_count - 1)` with `T get(int index) const`) or as a named local
   (`int last = count - 1;`) keeps the subtraction. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
+- **In a loop built for size, an indexed read is loaded on every pass.**
+  - *Symptom:* a scan loop reloads one table word each pass, through an address computed once before the loop,
+    though nothing in the loop stores or calls and the word was already loaded for a test in front of the loop. A
+    pointer local read as `*w` shares the load and is 20 bytes short; a cast on the pointer (`*(unsigned *)w`) keeps
+    the read and is not the source.
+  - *Cause:* written as `table[word]`, the read has an invariant address expression. `IRO_MoveInvariantExpressions`
+    moves that address to a temporary in front of the loop and leaves the load of it inside: the unit builds
+    `-O4,s`, which keeps the loop's test at the bottom behind a jump, so the read is not in the loop's first block.
+    `IRO_CommonSubs` then makes the temporary a copy of the address the earlier read computed (one `addu`, one
+    register), but a load through the temporary is not the expression loaded before the loop, so it stays. A
+    pointer local leaves no address to move: `*w` in the loop is the expression read before it and takes its value.
+    Under `-O4,p` the loop is rotated and the same source shares the load.
+  - *Spelling:* index the table at every read (`if (mask & table[word])`), with no pointer or value local. The
+    same source compiled by CodeWarrior for GameCube 2.6 with `-O4,s` gives the GameCube build's function word for
+    word, which also settled the statement order, a `>= 1` comparison and the parameter's pointer type. The Xbox
+    build shares the load, so the source has no `volatile`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp`.
 
 ### Inlining (b52)
 
@@ -400,6 +420,36 @@ Units are named by their source file.
     stood before. *Unit:* `src/game/beDemoManager.cpp`.
   - An inline's arguments are evaluated before its body: `AppendRecordString(self->_messenger, db, record, key)`
     loads the messenger into a saved register before the call inside it. *Unit:* `src/game/beNDMWShopCtrl00.cpp`.
+- **A class local is numbered after every declared local, wherever it is declared.**
+  - *Symptom:* instructions identical, two saved registers exchanged between a result object and a pointer local
+    (`s2`/`s3`). The result declared `int` and read as `.v` matches; declared as its class it does not, and no
+    declaration position of it or of the other locals changes anything.
+  - *Cause:* a class local is not a register candidate. `IRO_ScalarizeClassDataMembers`, the first phase of the
+    optimizer's loop, replaces its one member with a temporary (`*(result) = ...` becomes `*(@1793) = ...` in the
+    dump), and the temporary takes its allocator id then: after all the function's declared locals, mid-block ones
+    included, and after the parameters of the inlines already expanded (`operator==`'s `this`), but before the
+    optimizer's later temporaries and before the second and later webs of a reused variable. Retail colours the
+    pointer first, so the pointer has the later id. No declared pointer can have one; a later web of a variable
+    the function reuses does. Traced: block-local pointer 42, result 49, result coloured first; pointer as a
+    later web 62, result 48, retail's colours.
+  - *Spelling:* `igResult result = g_resultSuccess;`, and the new pool kept in the function's one pool pointer,
+    which the loops before and after it also use, not in a block-local of its own. With the pointer reused both
+    `int` and `igResult` match, so the `int` only compensated for the block-local.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f4a60).
+- **An argument that carries an integer conversion is loaded before the plain ones.**
+  - *Symptom:* a call passes two fields of one row as its third and fourth arguments and loads the fourth first,
+    with the row pointer in the third's register (`lw a3,4(a2); lw a2,0(a2)`); the plain spelling loads them in
+    order with the row in `a3`. A `(long long)` cast on the fourth argument gives retail's order although the
+    parameter is 32-bit.
+  - *Cause:* the two spellings differ in the IR by one conversion node on that argument. Any integer conversion
+    does it, an implicit one between `int` and `unsigned` included; a cast between an integer and a pointer does
+    not. Of the four combinations (conversion on the third, the fourth, both, neither) the fourth is loaded first
+    exactly when it carries one, and the row pointer takes the register of the argument loaded last.
+  - *Spelling:* the field and the parameter in their own types, which differ in sign: `unsigned size` in the row,
+    `int size` in the callee, the argument passed plain. An `int` field with an `unsigned` parameter gives the same
+    bytes, here and in the callee's other callers; the row's size is printed as `0x%08x` beside its addresses, so
+    the field is the unsigned one.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp`.
 - **m2c offset variables steal saved registers.** A user `offset += 4` with `data + offset` is a source variable
   coloured before the slot pointer; an index loop over `&data[i]` lets the compiler make the offset itself, with
   retail's registers. Rewrite m2c's strength-reduced loops as index loops first. *Unit:*

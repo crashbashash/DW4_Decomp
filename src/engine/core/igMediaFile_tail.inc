@@ -22,7 +22,7 @@ void Gap__Core__igMediaFile__vfunc_24(S_2ec250 *arg0) {
     }
 }
 
-void **Gap__Core__igMediaFile__vfunc_25(void **arg0, int arg1, int arg2) {
+void **Gap__Core__igMediaFile__vfunc_25(void **arg0, const char *fileName, int arg2) {
     DW4SR4 sp4C;
     DW4SR4 sp48;
     DW4SR4 sp44;
@@ -33,7 +33,7 @@ void **Gap__Core__igMediaFile__vfunc_25(void **arg0, int arg1, int arg2) {
     DW4SR4 sp30;
     int var_v1;
 
-    FUN_002e30b0((int *)arg0, arg1);
+    FUN_002e30b0((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         sp4C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(0));
         var_v1 = sp4C.w0;

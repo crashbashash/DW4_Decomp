@@ -102,7 +102,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char 
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
             from->prepareCopy();
-            FUN_003006a0((void **)to, (void **)from);
+            FUN_003006a0((ShallowObject *)to, (ShallowObject *)from);
             return;
         }
         if (to == 0) {

@@ -221,8 +221,8 @@ void Gap__Core__igSymbolTable__vfunc_32(Table_30e2a0 *self, int n) {
     }
 }
 
-int FUN_0030e430(int *arg0, void *arg1, int arg2) {
-    *(int *)((char *)arg1 + 24) = arg2;
-    *arg0 = *(int *)0x4FB410;
+igResult FUN_0030e430(igPsx2Thread *self, int priority) {
+    self->_priority = priority;
+    return g_resultSuccess;
 }
 

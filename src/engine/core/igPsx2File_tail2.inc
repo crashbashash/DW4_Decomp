@@ -117,7 +117,7 @@ void Gap__Core__igPsx2File__vfunc_24(int *arg0) {
     }
 }
 
-void **Gap__Core__igPsx2File__vfunc_25(void **arg0, int arg1, int arg2) {
+void **Gap__Core__igPsx2File__vfunc_25(void **arg0, const char *fileName, int arg2) {
     DW4SR4 sp4C;
     DW4SR4 sp48;
     DW4SR4 sp44;
@@ -128,7 +128,7 @@ void **Gap__Core__igPsx2File__vfunc_25(void **arg0, int arg1, int arg2) {
     DW4SR4 sp30;
     int var_v1;
 
-    FUN_002e30b0((int *)arg0, arg1);
+    FUN_002e30b0((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         sp4C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(0));
         var_v1 = sp4C.w0;
@@ -433,13 +433,18 @@ void FUN_0032c0c0(void) {
     }
 }
 
+char *FUN_0032c110(char *path) {
+    StringRef_32c240 text = FUN_0032c240((char *)DAT_00587330[0], path);
+    return (char *)FUN_002ed5a0(text.p, (igMemoryPool_2ed1c0 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
+}
+
 static inline void append_32c240(const igSmartPointer<Text> &ref, char *chars) {
     Text *text = ref.p;
     int length = text->length;
     igStringObj_Insert((IniStringView *)text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
 }
 
-StringRef_32c240 FUN_0032c240(char *prefix, char *path, int extra2) {
+StringRef_32c240 FUN_0032c240(char *prefix, char *path) {
     char *chars;
     int limit, i;
     char c;

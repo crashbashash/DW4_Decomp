@@ -5805,8 +5805,6 @@
 0x004fb3d8	text_cameras	string-literal
 0x004fb3f0	text_sceneGraphList	string-literal
 0x004fb400	text_igSceneWrapper	string-literal
-0x004fb410	g_statusSucceeded	recovered-global
-0x004fb418	g_allocatorFailureStatus	recovered-global
 0x004fb420	text_hd_n	string-literal
 0x004fb430	TRUE	string-literal
 0x004fb438	FALSE	string-literal
@@ -9013,12 +9011,6 @@
 0x00586f20	g_stringPool	recovered-global
 0x00586f58	g_primaryAllocatorList	recovered-global
 0x00586f60	g_secondaryAllocatorList	recovered-global
-0x00587018	g_allocatorSelector	recovered-global
-0x00587040	g_metadataAllocatorKey	recovered-global
-0x00587060	g_temporaryAllocatorSelector	recovered-global
-0x00587098	g_defaultAllocatorKey	recovered-global
-0x00587108	g_ndmwAllocatorSelector	recovered-global
-0x00587110	g_defaultAllocatorSelector	recovered-global
 0x00587198	g_igObject_metaObject	class-handle
 0x005871d0	g_threadManager	recovered-global
 0x00587218	g_activeSystemAllocator	recovered-global

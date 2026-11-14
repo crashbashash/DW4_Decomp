@@ -1,3 +1,12 @@
+void igResource_StartAsyncLoading(AsyncListOwner *self) {
+    self->list = igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
+    ((V92 *)self->list.get())->vA();
+    self->field = (igObject *)FUN_00304f00(self->list.get(), (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
+    ((V200 *)self->field.get())->vB(255);
+    self->ready = 1;
+    ((V136 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vC(1);
+}
+
 void igResource_StopAsyncLoading(PairOwnerView *arg0) {
     PairCallStatus sp3C, sp38;
     PairCountedObject *q;

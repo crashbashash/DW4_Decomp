@@ -571,3 +571,20 @@ void Gap__Core__igStackMemoryPool__vfunc_92(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 144) = arg1;
 }
 
+void Gap__Core__igStackMemoryPool__vfunc_96(igStackMemoryPool *self, igDataList *list) {
+    Ent_328e00 *entry;
+    Ent_328e00 *created;
+
+    if (((DW4VC_132_0 *)self)->vX() != 0) {
+        created = FUN_0032a1e0(0xA8);
+        if (created != 0) {
+            created = FUN_0032a100(created);
+        }
+        entry = created;
+        created->w0 = self->_rawMemory;
+        entry->w4 = (int)self->_totalSize;
+        FUN_0032a180((char *)entry, &text_Pool_igStackMemoryPool[0]);
+        FUN_0032a1b0((char *)entry, (int *)FUN_002f89a0((int)self));
+        List_InsertWords(list, FUN_002d6e60((L_2d6e60 *)list, &entry, (Cmp)FUN_0032a260), 1, &entry);
+    }
+}

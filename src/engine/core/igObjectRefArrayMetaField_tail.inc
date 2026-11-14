@@ -143,7 +143,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_36(S_302cb0 *s, char *a1, char 
         V_302cb0 *y = *(V_302cb0 **)(a2 + base + off);
         if (x == 0 && y == 0) break;
         if (x != 0 && y != 0) {
-            FUN_003006a0((void **)x, (void **)y);
+            FUN_003006a0((ShallowObject *)x, (ShallowObject *)y);
         } else if (x == 0) {
             FUN_00302780((struct A_302780 *)s, (int)a1, i, (struct R_302780 *)(y->v19(1)));
         } else if (y == 0) {

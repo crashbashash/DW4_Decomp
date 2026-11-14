@@ -11976,7 +11976,7 @@
 002ed5a0	FUN_002ed5a0	match	-
 002ed5c0	Memory_FreeBufferAliasB	match	-
 002ed5d0	Memory_FreeOwnedBufferUnchecked	match	-
-002ed610	FUN_002ed610	match	jump table 0x4f9d00: 8 entries, 32 bytes, matches retail
+002ed610	FUN_002ed610	match	-
 002ee430	FUN_002ee430	match	-
 002ee4a0	FUN_002ee4a0	match	-
 002ee510	Gap__Core__igMemoryDictionary__vfunc_23	match	-
@@ -12163,7 +12163,7 @@
 002f8b20	FUN_002f8b20	match	-
 002f8be0	FUN_002f8be0	match	-
 002f8ca0	FUN_002f8ca0	match	-
-002f8e10	Gap__Core__igMemoryPoolContextInfo__vfunc_25	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1R>Fv 128B (compared under the profile of its retail unit)
+002f8e10	Gap__Core__igMemoryPoolContextInfo__vfunc_25	match	-
 002f9600	Gap__Core__igMemoryPoolContextInfo__vfunc_27	match	-
 002f96c0	Gap__Core__igMemoryPoolInfo__vfunc_25	match	-
 002f99c0	Gap__Core__igMemoryPoolInfo__vfunc_26	match	-
@@ -13125,7 +13125,7 @@
 0032d070	FUN_0032d070	match	-
 0032d080	FUN_0032d080	match	-
 0032d1f0	FUN_0032d1f0	match	-
-0032d220	FUN_0032d220	match	DEFERRED duplicate 0x25a230 __dt__18igSmartPointer<1O>Fv 128B (compared under the profile of its retail unit)
+0032d220	FUN_0032d220	match	-
 0032d4b0	FUN_0032d4b0	match	-
 0032d5a0	Gap__Core__igPsx2IopRpcConnection__vfunc_11	match	-
 0032d5f0	Gap__Core__igPsx2IopRpcConnection__vfunc_12	match	-
@@ -13147,7 +13147,7 @@
 0032df20	Gap__Core__igPsx2Media__vfunc_23	match	-
 0032e060	Gap__Core__igPsx2Media__vfunc_24	match	-
 0032e130	FUN_0032e130	match	-
-0032e4d0	Gap__Core__igPsx2Media__vfunc_25	match	jump table 0x4ffd70: 9 entries, 36 bytes, matches retail
+0032e4d0	Gap__Core__igPsx2Media__vfunc_25	match	-
 0032e690	Gap__Core__igPsx2Media__vfunc_26	match	-
 0032e720	Gap__Core__igPsx2Media__vfunc_27	match	-
 0032e950	FUN_0032e950	match	-
@@ -16682,7 +16682,7 @@
 00395b50	Gap__Core__igObject__vfunc_31	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960e0	Gap__Core__igObject__vfunc_46	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 003960f0	beModelCtrlInfoWork_FindSeqLabel	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
-00396740	beModelCtrl__OnGenerate	unapproved	unapproved: 1 volatile without an approval row
+00396740	beModelCtrl__OnGenerate	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396940	beModelCtrl_UpdateBound	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00396a80	Gap__Bec__beModelCtrl__vfunc_33	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)
 00398c20	FUN_00398c20	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)

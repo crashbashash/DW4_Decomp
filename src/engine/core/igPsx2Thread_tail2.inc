@@ -115,6 +115,19 @@ void Gap__Core__igPsx2Thread__vfunc_48(int *status, igPsx2Thread *self) {
     *status = *word;
 }
 
+void Gap__Core__igPsx2Thread__vfunc_50(int *status, igPsx2Thread *self, int priority) {
+    if (FUN_0030e430(self, priority) != g_resultSuccess) {
+        *status = g_resultFailure.v;
+        return;
+    }
+    if (self->_threadID != -1) {
+        const int *word = ChangeThreadPriority(self->_threadID, self->_priority / 2) < 0 ? &g_resultFailure.v : &g_resultSuccess.v;
+        *status = *word;
+        return;
+    }
+    *status = g_resultSuccess.v;
+}
+
 void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O45 *arg1) {
     /* matching construct: variant search — decl order [4, 3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     const O45 *view = arg1;
@@ -186,6 +199,19 @@ void Gap__Core__igPsx2Thread__vfunc_49(int *status, igPsx2Thread *self) {
         word = &g_resultSuccess.v;
     }
     *status = *word;
+}
+
+void Gap__Core__igPsx2Thread__vfunc_51(int *status, igPsx2Thread *self, int priority) {
+    if (FUN_0030e430(self, priority) != g_resultSuccess) {
+        *status = g_resultFailure.v;
+        return;
+    }
+    if (self->_threadID != -1) {
+        const int *word = iChangeThreadPriority(self->_threadID, self->_priority / 2) < 0 ? &g_resultFailure.v : &g_resultSuccess.v;
+        *status = *word;
+        return;
+    }
+    *status = g_resultSuccess.v;
 }
 
 void Gap__Core__igPsx2Thread__vfunc_30(int *out, Obj30 *o) {
