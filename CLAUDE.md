@@ -55,10 +55,10 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   it looks for plain C first, strips each keyword to show which change the bytes, and judges what remains
   against the approval standard. A high-confidence Fable 5.2 approval is written without asking and listed in
   the report; medium or low confidence, and anything Fable leaves open, goes to the owner as a question.
-- **Names.** A proposed name with high confidence that says what the thing is or does, and reads like a name
-  a person on the original team would have written, is applied without asking and listed in the report.
-  Medium-confidence names go to the owner as a question; low-confidence guesses stay out until there is more
-  evidence.
+- **Names.** A proposed name with high or medium confidence that says what the thing is or does, and reads
+  like a name a person on the original team would have written, is applied without asking and listed in the
+  report, with its evidence (medium ones with the alternative considered). Low-confidence guesses stay out
+  until there is more evidence.
 
 ## Layout
 

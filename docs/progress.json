@@ -27,32 +27,32 @@
   {
    "hi": 256,
    "lo": 129,
-   "matched": 2855,
-   "matched_bytes": 515564,
+   "matched": 2856,
+   "matched_bytes": 515820,
    "total": 2928,
    "total_bytes": 530340
   },
   {
    "hi": 512,
    "lo": 257,
-   "matched": 1365,
-   "matched_bytes": 480416,
+   "matched": 1370,
+   "matched_bytes": 482416,
    "total": 1486,
    "total_bytes": 526344
   },
   {
    "hi": 1024,
    "lo": 513,
-   "matched": 544,
-   "matched_bytes": 386728,
+   "matched": 547,
+   "matched_bytes": 389128,
    "total": 675,
    "total_bytes": 481776
   },
   {
    "hi": 4096,
    "lo": 1025,
-   "matched": 278,
-   "matched_bytes": 493336,
+   "matched": 279,
+   "matched_bytes": 495040,
    "total": 408,
    "total_bytes": 732288
   },
@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 2925692,
-    "functions": 19861
+    "bytes": 2932052,
+    "functions": 19871
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 0,
   "fully_matched": {
-   "bytes": 2931696,
-   "functions": 19948
+   "bytes": 2938056,
+   "functions": 19958
   },
   "fully_verified": {
-   "bytes": 2925692,
-   "functions": 19861
+   "bytes": 2932052,
+   "functions": 19871
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,11 +142,11 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 6004,
-  "fully_matched": 2931696,
-  "fully_verified": 2925692,
+  "fully_matched": 2938056,
+  "fully_verified": 2932052,
   "functions_asm_body": 0,
   "functions_assembly": 87,
-  "matched": 2943164,
+  "matched": 2949524,
   "total": 3472716
  },
  "data_bytes": {
@@ -334,12 +334,12 @@
    "compile.functions": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 6538,
+   "fun_dat_refs": 5926,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 153,
+   "m2c_idiom.units": 111,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -351,20 +351,20 @@
    "raw_casts.reflected": 360,
    "struct.a": 19,
    "struct.b": 0,
-   "struct.c": 38,
+   "struct.c": 36,
    "unapproved.bytes": 8960,
    "unapproved.functions": 21,
-   "unmatched.bytes": 523548,
-   "unmatched.functions": 600
+   "unmatched.bytes": 517188,
+   "unmatched.functions": 590
   }
  },
  "functions": {
-  "fully_matched": 19948,
-  "fully_verified": 19861,
-  "matched": 19888,
+  "fully_matched": 19958,
+  "fully_verified": 19871,
+  "matched": 19898,
   "named": 13067,
   "named_semantic": 5700,
-  "named_semantic_matched": 5429,
+  "named_semantic_matched": 5432,
   "total": 20575
  },
  "largest": [
@@ -420,18 +420,18 @@
   }
  ],
  "link": {
-  "asm_bytes": 523548,
+  "asm_bytes": 517188,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 6004,
   "from_assembly_units": 87,
-  "from_c_bytes": 2958552,
-  "from_c_pct": 65.15,
-  "from_c_units": 19888,
+  "from_c_bytes": 2964976,
+  "from_c_pct": 65.29,
+  "from_c_units": 19898,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
-  "jtbl_bytes": 15388,
+  "jtbl_bytes": 15452,
   "section_bytes": 4541184
  },
  "median_size": {
@@ -452,43 +452,43 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1547612,
+  "bytes": 1552896,
   "failing": {
    "addresses": {
-    "bytes": 1035844,
-    "functions": 7068
+    "bytes": 1030696,
+    "functions": 7050
    },
    "fields": {
-    "bytes": 171972,
-    "functions": 535
+    "bytes": 166340,
+    "functions": 514
    },
    "idioms": {
-    "bytes": 182276,
-    "functions": 466
+    "bytes": 171064,
+    "functions": 424
    },
    "name": {
-    "bytes": 1152892,
-    "functions": 10664
+    "bytes": 1156388,
+    "functions": 10671
    },
    "placed": {
-    "bytes": 47336,
-    "functions": 175
+    "bytes": 32200,
+    "functions": 129
    },
    "references": {
-    "bytes": 344876,
-    "functions": 1266
+    "bytes": 327912,
+    "functions": 1216
    },
    "types": {
-    "bytes": 166428,
-    "functions": 266
+    "bytes": 158940,
+    "functions": 238
    },
    "virtuals": {
-    "bytes": 116288,
-    "functions": 209
+    "bytes": 109760,
+    "functions": 188
    }
   },
-  "functions": 8763,
-  "matched_functions": 19948
+  "functions": 8775,
+  "matched_functions": 19958
  },
  "regions": [
   {
@@ -542,16 +542,16 @@
   {
    "hi": 3035344,
    "lo": 2751520,
-   "matched": 2329,
-   "matched_bytes": 223900,
+   "matched": 2336,
+   "matched_bytes": 227396,
    "total": 2409,
    "total_bytes": 271020
   },
   {
    "hi": 3319168,
    "lo": 3035344,
-   "matched": 1247,
-   "matched_bytes": 203540,
+   "matched": 1250,
+   "matched_bytes": 206404,
    "total": 1275,
    "total_bytes": 276024
   },
@@ -622,11 +622,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5112,
-  "pct": 42.49,
-  "recovered": 27671,
-  "synthetic": 6136,
-  "total": 65117,
+  "offset_casts": 5083,
+  "pct": 42.68,
+  "recovered": 27807,
+  "synthetic": 6050,
+  "total": 65159,
   "typeable": 360,
   "typeable_pct": 0.55
  }

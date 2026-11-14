@@ -62,7 +62,11 @@ public:
 #endif
     virtual void vfunc_50(int, int, int);                                        /* slot 48, byte 200 */
     virtual void vfunc_51();                                                     /* slot 49, byte 204 */
-    virtual void vfunc_52(long long, long long, int);                                        /* slot 50, byte 208: global statistics update */
+#ifndef long
+    virtual void vfunc_52(long long, long long, int);                            /* slot 50, byte 208: global statistics update */
+#else
+    virtual void vfunc_52(int, int, int);
+#endif
     virtual void *vfunc_53();                                                    /* slot 51, byte 212: allocate one element */
     virtual void *Allocate(unsigned int size);                                   /* slot 52, byte 216 */
     virtual void *AllocateAligned(unsigned int size, unsigned short alignment);  /* slot 53, byte 220 */
