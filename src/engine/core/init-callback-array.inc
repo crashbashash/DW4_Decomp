@@ -64,15 +64,11 @@ int FUN_002d1c30(int *p)
 }
 
 void FUN_002d1c40(ObjectSystemView *arg0) {
-    igString env;
-    char *text = (char *)getenv(IG_ROOT);
-    text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)text));
-    env.adopt(text);
-    arg0->rootPath.assign(env);
-    text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)DAT_004f9468));
-    arg0->basePath.adopt(text);
-    text = ((char *)StringPool_Intern((StringPool *)(Pool::get()), (const char *)DAT_004f9470));
-    arg0->basePath.adopt(text);
+    igStringRef env;
+    env = (char *)getenv(IG_ROOT);
+    arg0->rootPath = env;
+    arg0->basePath = (char *)DAT_004f9468;
+    arg0->basePath = (char *)DAT_004f9470;
 }
 
 igMetaObject *FUN_002d2790(void) {

@@ -27,7 +27,7 @@ int igPsx2Folder_GetVTable(void) {
             v0 = v1[-1] - 1;
             v1[-1] = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
             }
         }
     }

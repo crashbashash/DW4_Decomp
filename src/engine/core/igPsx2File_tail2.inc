@@ -427,7 +427,7 @@ void FUN_0032c0c0(void) {
 }
 
 char *FUN_0032c110(char *path) {
-    InternedString text = FUN_0032c240((char *)DAT_00587330[0], path);
+    igStringRef text = FUN_0032c240((char *)DAT_00587330[0], path);
     return (char *)FUN_002ed5a0(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
@@ -437,7 +437,7 @@ static inline void append_32c240(const igSmartPointer<igStringObj> &ref, char *c
     igStringObj_Insert(text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
 }
 
-InternedString FUN_0032c240(char *prefix, char *path) {
+igStringRef FUN_0032c240(char *prefix, char *path) {
     char *chars;
     int limit, i;
     char c;
@@ -469,7 +469,7 @@ InternedString FUN_0032c240(char *prefix, char *path) {
     if (chars == 0) {
         chars = g_stringObjEmptyText[0];
     }
-    InternedString result(chars);
+    igStringRef result(chars);
     return result;
 }
 

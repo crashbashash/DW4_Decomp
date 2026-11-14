@@ -276,7 +276,7 @@ void igObject_InitFields(void) {
         temp_v0_2 = *(int *)((char *)(sp2C) - 4) - 1;
         *(int *)((char *)(sp2C) - 4) = temp_v0_2;
         if (temp_v0_2 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     temp_v0->_persistent = 0;
@@ -308,7 +308,7 @@ void igObject_InitFields(void) {
         temp_v0_4 = *(int *)((char *)(sp28) - 4) - 1;
         *(int *)((char *)(sp28) - 4) = temp_v0_4;
         if (temp_v0_4 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1_2), (int)temp_a1_2);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (int)temp_a1_2);
         }
     }
     temp_v0_3->_persistent = 0;

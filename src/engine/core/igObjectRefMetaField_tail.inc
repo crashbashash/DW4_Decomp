@@ -517,7 +517,7 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
         int count = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
     target->_location = (int)text;
@@ -544,7 +544,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, in
         left = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = left;
         if (left == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
     repository->_location = interned;
@@ -569,7 +569,7 @@ static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, ch
         left = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = left;
         if (left == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
     repository->_location = interned;

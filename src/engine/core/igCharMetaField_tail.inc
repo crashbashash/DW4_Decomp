@@ -341,19 +341,19 @@ int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3) {
     return a + b;
 }
 
-int FUN_002d5df0(RecoveryString *out, igMetaFieldView *ctx, int a2, int a3) {
+int FUN_002d5df0(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
     char *sepA = (char *)&DAT_004f95f8[0];
     char *sepB = (char *)&DAT_004f9600[0];
     igMetaFieldList *list = (igMetaFieldList *)ctx->vfunc_23()->_fieldList;
     int n = list->_count;
-    RecoveryString *arr = (RecoveryString *)((void *)FUN_00300e00((int)ctx, n, 4));
+    igStringRef *arr = (igStringRef *)((void *)FUN_00300e00((int)ctx, n, 4));
     int total = 9;
     int i;
     for (i = 0; i < n; i++) {
         int off = i * 4;
         igMetaFieldView *e = ((igMetaFieldView **)list->_data)[i];
-        *(RecoveryString *)((char *)arr + off) = e->vfunc_57(a2 + ((igMetaField *)e)->_offset, a3);
-        total += strlen(((RecoveryString *)((char *)arr + off))->p) + 1;
+        *(igStringRef *)((char *)arr + off) = e->vfunc_57(a2 + ((igMetaField *)e)->_offset, a3);
+        total += strlen(((igStringRef *)((char *)arr + off))->p) + 1;
     }
     char *buf = ((char *)igObject_AllocateStorage((int)ctx, total));
     strcpy(buf, sepA);
@@ -366,17 +366,7 @@ int FUN_002d5df0(RecoveryString *out, igMetaFieldView *ctx, int a2, int a3) {
         p++;
     }
     strcpy(p, sepB);
-    char *r;
-    if (buf == 0) r = 0;
-    else {
-        if (g_stringPool[0] == 0) {
-            int v = ((int)StringPool_Allocate(0x10));
-            if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-            g_stringPool[0] = v;
-        }
-        r = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf);
-    }
-    RecoveryString res(r);
+    igStringRef res(buf);
     FUN_00300f50((int)ctx, (int)buf);
     out->p = res.p;
     if (out->p != 0) *(int *)(out->p - 4) = *(int *)(out->p - 4) + 1;
@@ -398,7 +388,7 @@ void FUN_002d60b0(igContext *arg0) {
         int i;
         l = ((igContextExtInfoList *)FUN_002cb4b0(((int)igObject_GetAllocator((int)arg0))));
         if (l != 0) ++l->_refCount;
-        Util::rel((igObject *)arg0->_pExtList);
+        igRelease((igObject *)arg0->_pExtList);
         arg0->_pExtList = (int)l;
         {
             igContextExtInfoList *o = (igContextExtInfoList *)arg0->_pExtList;
@@ -418,7 +408,7 @@ void FUN_002d60b0(igContext *arg0) {
             nd = ((igMetaObject *)FUN_002fe300((igMetaObject *)meta, i + 1));
             it = ((igContextExtInfo *)FUN_002cb660(((int)igObject_GetAllocator((int)arg0))));
             if (nd != 0) ++nd->_refCount;
-            Util::rel((igObject *)it->_pMeta);
+            igRelease((igObject *)it->_pMeta);
             it->_pMeta = (int)nd;
             nm = nd->_name;
             if (g_stringPool[0] == 0) {
@@ -433,14 +423,14 @@ void FUN_002d60b0(igContext *arg0) {
                     int *h = (int *)(old - 8);
                     int c = *(int *)(old - 4) - 1;
                     *(int *)(old - 4) = c;
-                    if (c == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+                    if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
                 }
                 it->_pName = sv;
             }
             it->_pVendorName = 0;
             lst = (igContextExtInfoList *)arg0->_pExtList;
             if (it != 0) ++it->_refCount;
-            Util::rel(((igObject **)lst->_data)[i]);
+            igRelease(((igObject **)lst->_data)[i]);
             if (lst->_count != 0 && i >= 0 && i < lst->_count) ((igContextExtInfo **)lst->_data)[i] = it;
             --it->_refCount;
             if ((it->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)it));

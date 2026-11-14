@@ -12,21 +12,6 @@ int FUN_002e3a10(void *arg0, int arg1) {
     return sp1C;
 }
 
-inline StreamHolder::~StreamHolder() {
-    IG_OBJECT_RELEASE(p);
-}
-
-static inline void assign(igIGBFileView *self, const StreamHolder &h) {
-    igFileView *v = h.p;
-    igFileView *old;
-    if (v != 0) {
-        v->_refCount = v->_refCount + 1;
-    }
-    old = self->_file;
-    IG_OBJECT_RELEASE(old);
-    self->_file = v;
-}
-
 igResult FUN_002e3a60(igIGBFileView *self, const char *fileName, int mode) {
     if (fileName == 0 && self->_file == 0) {
         return g_resultFailure;
@@ -35,10 +20,7 @@ igResult FUN_002e3a60(igIGBFileView *self, const char *fileName, int mode) {
         return self->_file->vfunc_23(mode);
     }
     if (self->_file == 0 && fileName != 0) {
-        {
-            StreamHolder h(((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
-            assign(self, h);
-        }
+        assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
         if (self->_file == 0) {
             return g_resultFailure;
         }
@@ -46,10 +28,7 @@ igResult FUN_002e3a60(igIGBFileView *self, const char *fileName, int mode) {
         return self->_file->vfunc_23(mode);
     }
     self->_file->vfunc_24();
-    {
-        StreamHolder h(((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
-        assign(self, h);
-    }
+    assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
     FUN_002e30b0((int *)self->_file, fileName);
     return self->_file->vfunc_23(mode);
 }
@@ -99,7 +78,7 @@ void FUN_002e3d30(int *arg0) {
             temp_v1 = *(int *)((char *)(temp_a0_3) - 4) - 1;
             *(int *)((char *)(temp_a0_3) - 4) = temp_v1;
             if (!temp_v1) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
             }
         }
         arg0[5] = (int)(temp_s0);
@@ -131,24 +110,9 @@ igResult FUN_002e3e30(igIGBFileView *f, const char *fileName) {
 
 igResult FUN_002e3f50(igIGBFileView *arg1) {
     igMetaObject *meta;
-    ObjectRefWord h;
-    igObject *np;
-    igObject *old;
     unsigned int n;
     unsigned int i;
-    h.value = ((igObject *)FUN_002c8e10((int)arg1->_temporaryMemoryPool));
-    np = h.value;
-    if (np) {
-        ++np->_refCount;
-    }
-    old = (igObject *)arg1->_metaObjectListInFile;
-    if (old) {
-        --old->_refCount;
-        if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(old);
-    }
-    arg1->_metaObjectListInFile = (igObjectList *)np;
-    h.releaseField();
+    assignReference(arg1->_metaObjectListInFile, igSmartPointer<igObjectList>((igObjectList *)FUN_002c8e10((int)arg1->_temporaryMemoryPool)));
     FUN_002fe600((igTDataList<igMetaObject *> *)arg1->_metaObjectListInFile, (igMetaObject *)g_igDirEntry_metaObject[0]);
     meta = g_igDirEntry_metaObject[0];
     n = ((unsigned int)igMetaObject_CountTree((igMetaObject *)meta));
@@ -209,7 +173,7 @@ igResult FUN_002e4240(igIGBFile *arg1) {
     return g_resultSuccess;
 }
 
-static inline void bump(const IntListHolder &r, int off) { int *c = (int *)((char *)r.p->_data + off); *c = *c + 1; }
+static inline void bump(const igSmartPointer<igTDataList<int> > &r, int off) { int *c = (int *)((char *)r.p->_data + off); *c = *c + 1; }
 
 static inline void fillWords(igTDataList<int> *l, int c, int *value) {
     if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { List_Resize(l, c, 4); } }
@@ -230,7 +194,7 @@ igResult FUN_002e42d0(igIGBFileView *self) {
     self->_metaObjectCount = self->_metaObjectListInFile->_count;
     self->_metaObjectBufferSize = self->_metaObjectCount * 24;
     {
-    IntListHolder inherited((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
+    igSmartPointer<igTDataList<int> > inherited((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
     fillWords(inherited.p, self->_metaObjectCount, 0);
     {
         int n = inherited.p->_count;
@@ -239,7 +203,7 @@ igResult FUN_002e42d0(igIGBFileView *self) {
         for (k = 0; k < n; k++) { d[k] = DAT_004c2130[0]; }
     }
     {
-    IntListHolder persistent((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
+    igSmartPointer<igTDataList<int> > persistent((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
     fillWords(persistent.p, self->_metaObjectCount, 0);
     {
         int n = persistent.p->_count;
@@ -371,14 +335,14 @@ igResult FUN_002e47f0(igIGBFileView *arg1) {
     return g_resultSuccess;
 }
 
-static inline char *nameOf(const NameListHolder &r, int i) {
+static inline char *nameOf(const igSmartPointer<igTDataList<igStringObj *> > &r, int i) {
     char *n = (char *)r.p->_data[i]->_buffer;
     n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
     return n;
 }
 
 igResult FUN_002e4a40(igIGBFileView *self) {
-    NameListHolder names(g_globalContext->_alignmentStrings);
+    igSmartPointer<igTDataList<igStringObj *> > names(g_globalContext->_alignmentStrings, kRetainReference);
     int i;
     int *lengths;
     char *out;
@@ -492,9 +456,7 @@ igResult FUN_002e5110(igIGBFileView *self) {
         igDirEntryView *old;
         int c;
         if (o == o->resolve(self)) {
-            igObjectList *list = self->_uniqueEntryList;
-            IgbFixRetain keep(o);
-            List_InsertWords((igDataList *)list, FUN_00142bb0(list, &keep), 1, &keep);
+            insertObjectSorted(self->_uniqueEntryList, o);
         }
         {
             int word;
@@ -1187,15 +1149,6 @@ void Gap__Core__igIGBFile__vfunc_13(igIGBFileView *arg0) {
     arg0->_objectMemoryPool = (igMemoryPoolView *)s0;
 }
 
-static inline void assignTypes(igIGBFileView *self, const TypeListHolder &h) {
-    igTDataList<int> *v = h.p;
-    igTDataList<int> *old;
-    if (v != 0) { v->_refCount = v->_refCount + 1; }
-    old = (igTDataList<int> *)self->_alignmentListInFile;
-    if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
-    self->_alignmentListInFile = (igIntList *)v;
-}
-
 static inline void addType(igTDataList<int> *l, int v) {
     int idx;
     idx = l->_count;
@@ -1221,14 +1174,11 @@ igResult FUN_002e82a0(igIGBFileView *self) {
     if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, self->_alignmentCount); }
     name = (char *)sizes + self->_alignmentCount * 4;
     {
-    RefObjectHolder names(g_globalContext->_alignmentStrings);
-    RefObjectHolder values(g_globalContext->_alignmentValues);
+    igSmartPointer<igTDataList<igStringObj *> > names(g_globalContext->_alignmentStrings, kRetainReference);
+    igSmartPointer<igTDataList<int> > values(g_globalContext->_alignmentValues, kRetainReference);
     nameCount = 0;
-    if (names.p != 0) { nameCount = ((igTDataList<igStringObj *> *)names.p)->_count; }
-    {
-        TypeListHolder h((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
-        assignTypes(self, h);
-    }
+    if (names.p != 0) { nameCount = names.p->_count; }
+    assignReference(self->_alignmentListInFile, igSmartPointer<igTDataList<int> >((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool)));
     {
         igTDataList<int> *l = (igTDataList<int> *)self->_alignmentListInFile;
         int want = self->_alignmentCount;
@@ -1239,11 +1189,11 @@ igResult FUN_002e82a0(igIGBFileView *self) {
         value = 16;
         int j;
         for (j = 0; j < nameCount; j++) {
-            char *n = (char *)((igTDataList<igStringObj *> *)names.p)->_data[j]->_buffer;
+            char *n = (char *)names.p->_data[j]->_buffer;
             n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
             if (strcmp(n, name) == 0) { found = true; break; }
         }
-        if (found) { value = ((igTDataList<int> *)values.p)->_data[j]; }
+        if (found) { value = values.p->_data[j]; }
         addType((igTDataList<int> *)self->_alignmentListInFile, value);
         name += sizes[i];
     }
@@ -1278,7 +1228,7 @@ igResult FUN_002e8670(igIGBFileView *arg1) {
     } else {
         for (i = 0; i < n; i++) {
             if (igObject_IsKindOf(arg1->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) {
-                DirEntryHolder e((igDirEntryView *)FUN_002d7e90((int *)arg1, i));
+                igSmartPointer<igDirEntryView> e((igDirEntryView *)FUN_002d7e90((int *)arg1, i), kRetainReference);
                 e.p->vfunc_34(arg1);
             }
         }
@@ -1395,7 +1345,7 @@ static inline void setPooled(char **dst, char *src) {
         StringTokenHeader *h = (StringTokenHeader *)(old - 8);
         int n = h->refCount - 1;
         h->refCount = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunk *)h->owner, (int)h); }
     }
     *dst = v;
 }
@@ -1607,7 +1557,7 @@ igResult Gap__Core__igIGBFile__vfunc_31(igIGBFileView *self) {
     igResult result = g_resultSuccess;
     int i;
     for (i = 0; i < self->_externalDirectoryList->_count; i++) {
-        ExternalFileHolder o(castInfo((igIGBFileView *)self->_externalDirectoryList->_data[i]));
+        igSmartPointer<igIGBFileView> o(castInfo((igIGBFileView *)self->_externalDirectoryList->_data[i]), kRetainReference);
         if (o.p != 0) {
             if (o.p->vfunc_31() == g_resultFailure) {
                 result = g_resultFailure;

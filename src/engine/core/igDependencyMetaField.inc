@@ -40,7 +40,7 @@ int igDependencyMetaField_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
             }
         }
     }
@@ -143,7 +143,7 @@ void FUN_002c8250(int arg0) {
         temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;
         *(int *)((char *)(sp3C) - 4) = temp_v0;
         if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     *(int *)((char *)(temp_s0) + 8) = 0;
@@ -173,7 +173,7 @@ void FUN_002c8250(int arg0) {
         temp_v0_2 = *(int *)((char *)(sp38) - 4) - 1;
         *(int *)((char *)(sp38) - 4) = temp_v0_2;
         if (temp_v0_2 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1_2), (int)temp_a1_2);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (int)temp_a1_2);
         }
     }
     *(int *)((char *)(temp_s0_2) + 8) = 4;

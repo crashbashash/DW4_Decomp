@@ -41,7 +41,7 @@ igMetaField *igMetaField_Init(igMetaField *field){
         oldHeader=(int *)(oldName-8);
         refCount=*(int *)(oldName-4)-1;
         *(int *)(oldName-4)=refCount;
-        if(!refCount)StringChunk_ReleaseHeader((StringChunkOwnerView *)(*oldHeader), (int)oldHeader);
+        if(!refCount)StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
     }
     field->_fieldName=(int)emptyToken;
     field->_parentMetaObject=0;
@@ -83,7 +83,7 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
         refCount = *(int *)(name - 4) - 1;
         *(int *)(name - 4) = refCount;
         if (!refCount) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*nameHeader), (int)nameHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*nameHeader), (int)nameHeader);
         }
     }
     dest->_fieldName = source->_fieldName;
@@ -160,7 +160,7 @@ void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField
         refCount = *(int *)((char *)internedName - 4) - 1;
         *(int *)((char *)internedName - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*chunkHeader), (int)chunkHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*chunkHeader), (int)chunkHeader);
         }
     }
     self->_externalEnumStorage = (int)externalEnumStorage;
@@ -205,7 +205,7 @@ void igMetaField_SetFieldName(igMetaField *self, void **newName) {
         refCount = *(int *)((char *)previous - 4) - 1;
         *(int *)((char *)previous - 4) = refCount;
         if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*chunkHeader), (int)chunkHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*chunkHeader), (int)chunkHeader);
         }
     }
     self->_fieldName = (int)*newName;
@@ -358,20 +358,20 @@ int FUN_002fca50(void **arg0) {
     return ((igMetaFieldView *)(arg0))->GetSize() & 0xFFFF;
 }
 
-RecoveryString FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4)
+igStringRef FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4)
 {
     int i;
-    RecoveryString *list;
+    igStringRef *list;
     int total;
     int cnt;
     char *buf;
     char *p;
 
-    list = (RecoveryString *)((char *)igObject_AllocateStorage((int)arg1, arg3 * 4));
+    list = (igStringRef *)((char *)igObject_AllocateStorage((int)arg1, arg3 * 4));
     total = 0;
     cnt = 0;
     for (i = 0; i < arg3; i++) {
-        RecoveryString part = arg1->vfunc_57(arg2, arg4);
+        igStringRef part = arg1->vfunc_57(arg2, arg4);
         if (part.p != 0) {
             list[cnt++] = part;
             total += strlen(part.p);
@@ -384,7 +384,7 @@ RecoveryString FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4)
         p += sprintf(p, DAT_004f95a0, list[i].p);
     }
     *p = 0;
-    RecoveryString result(buf == 0 ? (char *)0 : ((char *)StringPool_Intern((StringPool *)(InternedStrings::get()), (const char *)buf)));
+    igStringRef result(buf);
     FUN_00300f50((int)arg1, (int)list);
     FUN_00300f50((int)arg1, (int)buf);
     return result;
@@ -413,7 +413,7 @@ int FUN_002fcdb0(igMetaFieldView *field, int object, int text, int directory) {
     return 0;
 }
 
-RecoveryString FUN_002fcdf0(igMetaFieldView *self, char *object, int directory)
+igStringRef FUN_002fcdf0(igMetaFieldView *self, char *object, int directory)
 {
     return self->vfunc_57((int)(object + self->_offset), directory);
 }
@@ -534,7 +534,7 @@ void igMetaField_ClearValue(void) {
 }
 
 void igMetaField_Print(void *arg0, int arg1, int arg2, const char *arg3) {
-    RecoveryString s = ((igMetaFieldView *)arg0)->vfunc_57(arg1 + ((igMetaField *)arg0)->_offset, 0);
+    igStringRef s = ((igMetaFieldView *)arg0)->vfunc_57(arg1 + ((igMetaField *)arg0)->_offset, 0);
     if (arg3 == 0) arg3 = &GPR_00554c28;
     FUN_00304430(DAT_004faf00, arg3, ((igMetaField *)arg0)->_fieldName, s.p);
     FUN_00304680();

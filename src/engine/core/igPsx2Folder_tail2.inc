@@ -8,21 +8,7 @@ igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(igPsx2Folder *self) {
     }
     igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
     while (sceDread(handle, &entry) != 0) {
-        char *name = (entry.bytes + 64);
-        char *interned;
-        if (name == 0) {
-            interned = 0;
-        } else {
-            if ((*(int *)g_stringPool) == 0) {
-                int v = ((int)StringPool_Allocate(16));
-                if (v != 0) {
-                    v = ((int)StringPool_Construct((StringPool *)v));
-                }
-                (*(int *)g_stringPool) = v;
-            }
-            interned = ((char *)StringPool_Intern((StringPool *)((*(int *)g_stringPool)), (const char *)name));
-        }
-        igString text(interned);
+        igStringRef text(entry.bytes + 64);
         StringList_AppendRetained(list.p, &text);
     }
     sceDclose(handle);
@@ -227,7 +213,7 @@ static inline void setName(igPsx2FileView *object, int name) {
         int count = ((int *)object->_prefix)[-1] - 1;
         ((int *)object->_prefix)[-1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
     object->_prefix = (char *)interned;

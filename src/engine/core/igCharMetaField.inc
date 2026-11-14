@@ -53,7 +53,7 @@ int igCharMetaField_GetVTable(void) {
             temp_v0 = temp_v1[-1] - 1;
             temp_v1[-1] = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
             }
         }
     }

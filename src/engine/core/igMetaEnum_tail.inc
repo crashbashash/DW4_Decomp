@@ -16,7 +16,7 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
             if (retained) {
                 header = (int *)(retained - 8);
                 if (--*(int *)(retained - 4) == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*header), (int)header);
+                    StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
                 }
             }
             if (match) {
@@ -93,15 +93,6 @@ static inline int pool_2fbc70(void) {
     return (*(int *)g_stringPool);
 }
 
-static inline void dropString(char *s) {
-    if (s != 0) {
-        int *hd = (int *)(s - 8);
-        int rc = ((int *)s)[-1] - 1;
-        ((int *)s)[-1] = rc;
-        if (rc == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd); }
-    }
-}
-
 static inline void dropNames_2fbc70(igTDataList<char *> *o) {
     IG_OBJECT_RELEASE(o);
 }
@@ -126,7 +117,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)name));
     old = e->name;
-    dropString(old);
+    releaseString(old);
     e->name = v;
     a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     dropNames_2fbc70(e->names);
@@ -156,10 +147,10 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
             slot = &nl->_data[i];
             if (held != 0) { ((int *)held)[-1] = ((int *)held)[-1] + 1; }
             old = *slot;
-            dropString(old);
+            releaseString(old);
             *slot = held;
         }
-        dropString(held);
+        releaseString(held);
         setValue(e->values, i, &values[i]);
     }
     FUN_002d30b0((int *)((*(int *)g_objectSystem)), (int)e);

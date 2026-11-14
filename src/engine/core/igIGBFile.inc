@@ -54,9 +54,9 @@ int igIGBFile_GetVTable(void) {
     return temp_s5;
 }
 
-ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage) {
+igSmartPointer<igObject> *FUN_002c3a80(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
-        igObject *object=self->value;
+        igObject *object=self->p;
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
@@ -70,13 +70,13 @@ ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage) {
 igDirectory *FUN_002c3b00(igDirectory *p, short n) {
     if (p) {
         p->_vtable = (int)&DAT_00530890[0];
-        ((ObjectRefWord *)&p->_loadingSemaphore)->release();
-        ((ObjectRefWord *)&p->_metaFieldPerObjectIndices)->release();
-        ((ObjectRefWord *)&p->_refList)->release();
-        ((ObjectRefWord *)&p->_uniqueEntryList)->release();
-        ((ObjectRefWord *)&p->_infoList)->release();
-        ((ObjectRefWord *)&p->_externalDirectoryList)->release();
-        ((PooledStringWord *)&p->_name)->release();
+        ((igSmartPointer<igObject> *)&p->_loadingSemaphore)->~igSmartPointer();
+        ((igSmartPointer<igObject> *)&p->_metaFieldPerObjectIndices)->~igSmartPointer();
+        ((igSmartPointer<igObject> *)&p->_refList)->~igSmartPointer();
+        ((igSmartPointer<igObject> *)&p->_uniqueEntryList)->~igSmartPointer();
+        ((igSmartPointer<igObject> *)&p->_infoList)->~igSmartPointer();
+        ((igSmartPointer<igObject> *)&p->_externalDirectoryList)->~igSmartPointer();
+        ((igStringRef *)&p->_name)->~igStringRef();
         if (n > 0) thunk_FUN_002ed460__002ff810((int)p);
     }
     return p;

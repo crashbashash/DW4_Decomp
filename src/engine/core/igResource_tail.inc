@@ -61,7 +61,6 @@ void Gap__Core__igResource__vfunc_12(igResource *self) {
 }
 
 void *igResource_LoadDirectory(igResource *self, int path) {
-    IgbFileHolder file;
     igResult queued;
     igObject *r;
     int v;
@@ -77,10 +76,10 @@ void *igResource_LoadDirectory(igResource *self, int path) {
         FUN_002d9130((igDirectoryView *)r);
         return r;
     }
-    file.p = (igObject *)FUN_002c37e0(self->_temporaryMemoryPool);
-    ((igIGBFile *)file.p)->_sharingState = self->_IGBSharingState;
-    ((igIGBFile *)file.p)->_forceChunkSize = self->_IGBChunkSize;
-    ((igIGBFile *)file.p)->_useMemoryPoolAssignmentsState = self->_useMemoryPoolAssignmentsState;
+    igSmartPointer<igIGBFile> file((igIGBFile *)FUN_002c37e0(self->_temporaryMemoryPool));
+    file.p->_sharingState = self->_IGBSharingState;
+    file.p->_forceChunkSize = self->_IGBChunkSize;
+    file.p->_useMemoryPoolAssignmentsState = self->_useMemoryPoolAssignmentsState;
     pool = (igObject *)self->_temporaryMemoryPool;
     if (pool != 0) { ASSIGN_O(o, _temporaryMemoryPool, pool) }
     pool = (igObject *)self->_dataMemoryPool;
@@ -88,12 +87,12 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     pool = (igObject *)self->_objectMemoryPool;
     if (pool != 0) { ASSIGN_O(o, _objectMemoryPool, pool) }
     if (self->_asyncLoadState == 1) {
-        ((igIGBFile *)file.p)->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
+        file.p->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
         FUN_002d9330((igDirectoryView *)file.p);
     }
-    ((igIGBFile *)file.p)->_validState = 0;
-    ((igIGBFile *)file.p)->_loadPendingState = 1;
-    o = (igIGBFile *)file.p;
+    file.p->_validState = 0;
+    file.p->_loadPendingState = 1;
+    o = file.p;
     if (g_stringPool[0] == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
@@ -105,21 +104,18 @@ void *igResource_LoadDirectory(igResource *self, int path) {
         hd = old - 2;
         c = old[-1] - 1;
         old[-1] = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
     }
     o->_name = v;
-    ((igIGBFile *)file.p)->_managingResource = (int)self;
+    file.p->_managingResource = (int)self;
     FUN_002d9130((igDirectoryView *)file.p);
     FUN_00308850((int *)self, (int)file.p);
     if (self->_asyncLoadState == 0) {
-        res = ((void *)FUN_00309640(self, (igIGBFileView *)file.p));
-        REL_O(file.p)
-        return res;
+        return FUN_00309640(self, (igIGBFileView *)file.p);
     }
     FUN_002d9130((igDirectoryView *)file.p);
     queued = ((igStandardQueueView *)self->_loadQueue)->insert((int)file.p, 1);
     res = file.p;
-    REL_O(file.p)
     return res;
 }
 

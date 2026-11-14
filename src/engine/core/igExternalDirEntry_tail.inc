@@ -16,7 +16,7 @@ void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void 
         v = *(int *)(old - 4) - 1;
         *(int *)(old - 4) = v;
         if (v == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
         }
     }
     arg0->_externalFilePath = s2;
@@ -50,7 +50,7 @@ void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {
         temp_v1 = temp_a0[-1] - 1;
         temp_a0[-1] = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     arg0->_directoryName = (int)temp_s0;

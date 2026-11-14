@@ -23,7 +23,7 @@ char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3) {
                 v = sp9C[-1] - 1;
                 sp9C[-1] = v;
                 if (v == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
+                    StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
                 }
             }
             n++;
@@ -46,7 +46,7 @@ char *igMetaEnum_GetValueName(char *arg0, int arg1, int arg2, int arg3) {
         c = s[-1] - 1;
         s[-1] = c;
         if (c == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+            StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
         }
     }
     return arg0;

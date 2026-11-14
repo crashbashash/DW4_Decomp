@@ -45,7 +45,7 @@ int igDirectory_GetVTable(void) {
     temp_s = *(int *)((char *)&dir + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     dir._vtable = (int)&DAT_00530890[0];
     FUN_002ba970((igObject **)&dir._loadingSemaphore, -1);
-    FUN_002c3a80((ObjectRefWord *)p188, -1);
+    FUN_002c3a80((igSmartPointer<igObject> *)p188, -1);
     FUN_00135430(p172, -1);
     FUN_001d36d0(p168, -1);
     FUN_001d35d0(p156, -1);

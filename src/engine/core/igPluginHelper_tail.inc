@@ -41,7 +41,7 @@ void FUN_00304b10(void *self) {
                         StringList_CopyRetained(&string, values, j);
                         text = string;
                         FUN_00304840((igPluginHelper *)self, (int)(keyText(key)), (int)text);
-                        dropString(string);
+                        releaseString(string);
                     }
                     dropValues_304b10(held);
                     dropKey(key);

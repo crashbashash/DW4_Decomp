@@ -63,7 +63,7 @@ void *FUN_002bf4c0(igMemoryRefMetaField *arg0, long long arg1) {
                 v0 = *(int *)(p - 4) - 1;
                 *(int *)(p - 4) = v0;
                 if (v0 == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*a1), (int)a1);
+                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
                 }
             }
         }
@@ -87,7 +87,7 @@ void *FUN_002bf4c0(igMemoryRefMetaField *arg0, long long arg1) {
                         v0 = *(int *)(p - 4) - 1;
                         *(int *)(p - 4) = v0;
                         if (v0 == 0) {
-                            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*a1), (int)a1);
+                            StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
                         }
                     }
                 }
@@ -116,7 +116,7 @@ void *FUN_002bf5e0(igRefMetaField *arg0, short arg1) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
                     }
                 }
             }

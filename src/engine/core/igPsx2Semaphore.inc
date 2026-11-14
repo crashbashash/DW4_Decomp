@@ -2,9 +2,9 @@ void thunk_igPsx2Semaphore_GetMetaObject(void) {
     igPsx2Semaphore_GetMetaObject();
 }
 
-ObjectRefWord *FUN_002ba7f0(ObjectRefWord *self,int delete_storage) {
+igSmartPointer<igObject> *FUN_002ba7f0(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
-        igObject *object=self->value;
+        igObject *object=self->p;
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)

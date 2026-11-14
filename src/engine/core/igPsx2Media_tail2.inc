@@ -214,7 +214,7 @@ void FUN_0032e130(igPsx2MediaView *self, int index, char **path) {
             int r = ((int *)row->name)[-1] - 1;
             ((int *)row->name)[-1] = r;
             if (r == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
+                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
             }
         }
         row->name = interned;
@@ -249,7 +249,7 @@ void Gap__Core__igPsx2Media__vfunc_25(int *result, igPsx2MediaView *media, int s
         n = nameRef[-1] - 1;
         nameRef[-1] = n;
         if (n == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)*header, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)*header, (int)header);
         }
     }
     handle->mode = mode;

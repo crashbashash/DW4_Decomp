@@ -75,13 +75,13 @@ void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1) {
     (igSmartPointer<igMetaObject> &)arg0->_typeMeta = arg1;
     if (arg1) {
         char *name = (char *)arg1->_name;
-        void *pool = Pool::get();
-        s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)name));
+        StringPool *pool = InternedStrings::get();
+        s0 = ((char *)StringPool_Intern(pool, (const char *)name));
         releaseString((const char *)arg0->_typeMetaName);
         arg0->_typeMetaName = (int)s0;
     } else {
-        void *pool = Pool::get();
-        s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)text_NoMeta));
+        StringPool *pool = InternedStrings::get();
+        s0 = ((char *)StringPool_Intern(pool, (const char *)text_NoMeta));
         releaseString((const char *)arg0->_typeMetaName);
         arg0->_typeMetaName = (int)s0;
     }

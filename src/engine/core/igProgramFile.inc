@@ -34,7 +34,7 @@ int igProgramFile_GetVTable(void) {
             v0 = *(int *)(o - 4) - 1;
             *(int *)(o - 4) = v0;
             if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*a1), (int)a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
             }
         }
     }

@@ -1,15 +1,3 @@
-static inline void setAt_2d9540(igDriverDatabase *database, int index, const PropertyRef &value) {
-    igObject *retained = value.p;
-    igObjectList *list = (igObjectList *)database->_currentProperties;
-    if (retained != 0) {
-        retained->_refCount++;
-    }
-    release(((igObject **)list->_data)[index]);
-    if (list->_count != 0 && index >= 0 && index < list->_count) {
-        ((igObject **)list->_data)[index] = retained;
-    }
-}
-
 void Gap__Core__igDriverDatabase__vfunc_12(int self) {
     FUN_002da770((int *)self);
     Gap__Core__igObject__vfunc_10(self);
@@ -91,7 +79,7 @@ void FUN_002da010(void *self, igTDataList<igVisualContextView *> *list) {
     }
 }
 
-static inline int openPath(igDriverDatabase *database, const FolderPath &path) {
+static inline int openPath(igDriverDatabase *database, const igSmartPointer<igStringObj> &path) {
     igFileView *file = (igFileView *)database->_databaseFile;
     int text = path.p->_buffer;
     if (text == 0) text = ((int *)g_stringObjEmptyText)[0];
@@ -100,24 +88,14 @@ static inline int openPath(igDriverDatabase *database, const FolderPath &path) {
 
 int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
     int s0;
-    const char *tok;
-    if (arg1 == 0) {
-        tok = 0;
-    } else {
-        POOL()
-        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), arg1));
-    }
-    StringRef name(tok);
+    igStringRef name((char *)arg1);
     const char *p5 = name.p;
     if (p5 == 0 || strlen(p5) == 0) {
-        POOL()
-        tok = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), (const char *)&text_drivers_ini[0]));
-        releaseString(name.p);
-        name.p = tok;
+        name = (char *)&text_drivers_ini[0];
     }
     {
         int al = ((int)igObject_GetAllocator((int)arg0));
-        release_2da1c0((igObject *)arg0->_databaseFile);
+        igRelease((igObject *)arg0->_databaseFile);
         arg0->_databaseFile = (int)((igObject *)igFile_Create(al));
     }
     s0 = ((igFileView *)arg0->_databaseFile)->Open(name.p, (const char *)&DAT_004f96a8[0]);
@@ -126,21 +104,25 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
             arg2 = ((const char *)FUN_002d1c20((int *)(((int *)g_objectSystem)[0])));
         }
         if (arg2 != 0 && strlen(arg2) != 0) {
-            BLOCK(FUN_002c43b0, arg2)
+            igSmartPointer<igFolderView> folder((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)arg0))));
+            folder.p->setFolderName((char *)arg2);
+            s0 = openPath(arg0, folder.p->vfunc_23(name.p));
         }
     }
     if (s0 == 0) {
-        BLOCK(FUN_002c43b0, ((const char *)FUN_002d1c30((int *)(((int *)g_objectSystem)[0]))))
+        igSmartPointer<igFolderView> folder((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)arg0))));
+        folder.p->setFolderName((char *)FUN_002d1c30((int *)(((int *)g_objectSystem)[0])));
+        s0 = openPath(arg0, folder.p->vfunc_23(name.p));
     }
     if (s0 == 0) {
-        release_2da1c0((igObject *)arg0->_databaseFile);
+        igRelease((igObject *)arg0->_databaseFile);
         arg0->_databaseFile = 0;
         return 0;
     }
     igStringObj_Set(arg0->_databaseFileName, *(int *)((char *)s0 + 12));
     FUN_002daac0(arg0, arg0->_databaseFile);
     ((igFileView *)arg0->_databaseFile)->Close();
-    release_2da1c0((igObject *)arg0->_databaseFile);
+    igRelease((igObject *)arg0->_databaseFile);
     arg0->_databaseFile = 0;
     return 1;
 }

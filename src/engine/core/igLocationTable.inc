@@ -30,10 +30,10 @@ int igLocationTable_GetVTable(void) {
     o._sourceFileNames = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o._vtable = (int)&DAT_0052fc50[0];
-    FUN_002b8740((ObjectRefWord *)&o._sourceFileNames, -1);
-    FUN_002b8740((ObjectRefWord *)p18, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&o._sourceFileNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)p18, -1);
     FUN_002b86c0((void **)p17, -1);
-    FUN_002b8640((ObjectRefWord *)p16, -1);
+    FUN_002b8640((igSmartPointer<igObject> *)p16, -1);
     return r;
 }
 

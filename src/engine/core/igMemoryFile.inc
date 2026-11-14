@@ -40,7 +40,7 @@ void *FUN_002c0790(igFile *arg0, short arg1) {
                 rc = *(int *)((char *)(p) - 4) - 1;
                 *(int *)((char *)(p) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+                    StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
                 }
             }
         }
@@ -51,7 +51,7 @@ void *FUN_002c0790(igFile *arg0, short arg1) {
                 rc = *(int *)((char *)(p) - 4) - 1;
                 *(int *)((char *)(p) - 4) = rc;
                 if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+                    StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
                 }
             }
         }
@@ -64,7 +64,7 @@ void *FUN_002c0790(igFile *arg0, short arg1) {
                     rc = *(int *)((char *)(p) - 4) - 1;
                     *(int *)((char *)(p) - 4) = rc;
                     if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+                        StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
                     }
                 }
             }

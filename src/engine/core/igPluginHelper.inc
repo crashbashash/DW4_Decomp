@@ -22,7 +22,7 @@ int igPluginHelper_GetVTable(void) {
     helper._loadedPlugins = 0;
     t = *(int *)((char *)&helper + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     helper._vtable = (int)&DAT_0052eee0[0];
-    FUN_002bc540((ObjectRefWord *)(&helper._loadedPlugins), -1);
+    FUN_002bc540((igSmartPointer<igObject> *)(&helper._loadedPlugins), -1);
     FUN_002bc4c0((void **)(&helper._libraryLoader), (short)(-1));
     FUN_002bc440((void **)(&helper._repositoryList), (long long)(-1));
     StringRef_Destruct_00130720(&helper._pluginExtension, -1);
@@ -65,9 +65,9 @@ void **FUN_002bc4c0(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_002bc540(ObjectRefWord *self,int delete_storage) {
+igSmartPointer<igObject> *FUN_002bc540(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
-        igObject *object=self->value;
+        igObject *object=self->p;
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)

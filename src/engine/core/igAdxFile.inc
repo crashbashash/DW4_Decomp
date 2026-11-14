@@ -34,7 +34,7 @@ void ***FUN_002e2fb0(void) {
             c = *(int *)((char *)old - 4) - 1;
             *(int *)((char *)old - 4) = c;
             if (c == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
+                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
             }
         }
         *cell = nw;
@@ -63,7 +63,7 @@ void FUN_002e30b0(int *arg0, const char *name) {
         temp_v1 = *(int *)((char *)(temp_a0) - 4) - 1;
         *(int *)((char *)(temp_a0) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     arg0[3] = (int)temp_s0;
@@ -127,7 +127,7 @@ void FUN_002e3280(int arg0) {
                     temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
                     *(int *)((char *)(temp_v1) - 4) = temp_v0;
                     if (temp_v0 == 0) {
-                        StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+                        StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
                     }
                 }
             }
@@ -149,7 +149,7 @@ void FUN_002e3280(int arg0) {
             temp_v1_2 = *(int *)((char *)(temp_a0) - 4) - 1;
             *(int *)((char *)(temp_a0) - 4) = temp_v1_2;
             if (temp_v1_2 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1_2), (int)temp_a1_2);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (int)temp_a1_2);
             }
         }
         *temp_s1 = temp_s0_2;
@@ -242,7 +242,7 @@ int Gap__igAdxFile__vfunc_39(igFileView *arg0, int arg1) {
         v = a0[-1] - 1;
         a0[-1] = v;
         if (v == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
+            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
         }
     }
     arg0->_completeFilename = (char *)s0;

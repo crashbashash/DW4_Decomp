@@ -31,7 +31,7 @@ void Gap__Core__igStringRefList__vfunc_12(void *self0) {
             rc = old[-1] - 1;
             old[-1] = rc;
             if (rc == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+                StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
             }
         }
         *slot = (char *)v;
@@ -71,7 +71,7 @@ void StringList_Resize(igTDataList<char *> *arg0, int arg1) {
                 v1 = old[-1] - 1;
                 old[-1] = v1;
                 if (v1 == 0) {
-                    StringChunk_ReleaseHeader((StringChunkOwnerView *)(*a1), (int)a1);
+                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (int)a1);
                 }
             }
             *slot = (char *)nw;

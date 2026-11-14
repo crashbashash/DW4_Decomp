@@ -12,6 +12,30 @@ extern "C" {
 #undef __extension__
 }
 
+/* igSmartPointer's release for a list held as igTDataList<T>. */
+template <class T> static inline void igRelease(igTDataList<T> *o) {
+    if (o != 0) {
+        o->_refCount = o->_refCount - 1;
+        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+    }
+}
+
+/* Assigning a smart pointer to an object-reference field: the field takes its own reference on the
+ * new object and drops the one it held. */
+template <class T, class U> static inline void assignReference(T *&field, const igSmartPointer<U> &value) {
+    U *next = value.p;
+    T *old;
+    if (next != 0) {
+        next->_refCount = next->_refCount + 1;
+    }
+    old = field;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
+    }
+    field = (T *)next;
+}
+
 /* The allocator selector of each memory context, in the order of g_memoryContextNames: the program
  * constructs every one at start-up. */
 struct igMemoryPoolHandle {
@@ -67,16 +91,6 @@ extern igMemoryPoolHandle kIGMemoryPoolHandleUser13;
 extern igMemoryPoolHandle kIGMemoryPoolHandleUser14;
 extern igMemoryPoolHandle kIGMemoryPoolHandleUser15;
 }
-#define POOL() { if (((void * *)g_stringPool)[0] == 0) { void *pool = StringPool_Allocate(0x10); if (pool != 0) pool = ((void *)StringPool_Construct((StringPool *)pool)); ((void * *)g_stringPool)[0] = pool; } }
-#define BLOCK(ctor, strsrc) { \
-    igSmartPointer<igFolder> candidate((igFolder *)ctor(((int)igObject_GetAllocator((int)arg0)))); \
-    const char *src = strsrc; \
-    igFolder *o = candidate.p; \
-    POOL() \
-    src = ((const char *)StringPool_Intern((StringPool *)(((void * *)g_stringPool)[0]), src)); \
-    { const char *old = (const char *)o->_folderName; releaseString(old); o->_folderName = (int)src; } \
-    s0 = openPath(arg0, ((igFolderView *)candidate.p)->vfunc_23(name.p)); \
-    }
 #include "dw4/igobject_release.h"
 /* Releases a reference field through a copy, so the field is read once. */
 #define RELEASE_REF(p) do { igObject *t_ = (igObject *)(p); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long)((long long)(int)t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } } while (0)
@@ -105,7 +119,7 @@ union igRefCountWord {
 #define CONTEXT_RECORDS_OFFSET 0x14
 #define CONTEXT_RECORD_NAME_MAX 0x7F
 #define ASSIGN_TOKEN(field, source)                                           \
-    text = (source);                                                          \
+    text = (const char *)(source);                                            \
     if ((*(void * *)g_stringPool) == 0) {                                               \
         poolObj = StringPool_Allocate(16);                                           \
         if (poolObj != 0) {                                                   \
@@ -114,16 +128,16 @@ union igRefCountWord {
         (*(void * *)g_stringPool) = poolObj;                                            \
     }                                                                         \
     token = ((char *)StringPool_Intern((StringPool *)((*(void * *)g_stringPool)), text));          \
-    old = (field);                                                            \
+    old = (StringToken *)(field);                                             \
     if (old != 0) {                                                           \
         header = (StringTokenHeader *)old - 1;                                \
         count = header->refCount - 1;                                         \
         header->refCount = count;                                             \
         if (count == 0) {                                                     \
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)header->owner, (int)header);                 \
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);                 \
         }                                                                     \
     }                                                                         \
-    (field) = token
+    (field) = (int)token
 #define ASSIGN_TOKEN_DIRECT(field, source)                                           \
     if ((*(void * *)g_stringPool) == 0) {                                               \
         poolObj = StringPool_Allocate(16);                                           \
@@ -133,16 +147,16 @@ union igRefCountWord {
         (*(void * *)g_stringPool) = poolObj;                                            \
     }                                                                         \
     token = ((char *)StringPool_Intern((StringPool *)((*(void * *)g_stringPool)), (source)));          \
-    old = (field);                                                            \
+    old = (StringToken *)(field);                                             \
     if (old != 0) {                                                           \
         header = (StringTokenHeader *)old - 1;                                \
         count = header->refCount - 1;                                         \
         header->refCount = count;                                             \
         if (count == 0) {                                                     \
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)header->owner, (int)header);                 \
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);                 \
         }                                                                     \
     }                                                                         \
-    (field) = token
+    (field) = (int)token
 #define NEW_LARGE_POOL(p) { p = newLargePool(); }
 #define NEW_SMALL(p) { p = newSmallPool(); }
 #define NEW_POOL(p) { if (DAT_00586de8 != 0) { if (strcmp(DAT_00586de8, igArenaMemoryPool_className) == 0) { NEW_LARGE_POOL(p) } else if (strcmp(DAT_00586de8, igMallocMemoryPool_className) == 0) { NEW_SMALL(p) } else { NEW_LARGE_POOL(p) } } else { NEW_LARGE_POOL(p) } }
@@ -162,7 +176,7 @@ union igRefCountWord {
         hd_ = (int *)(old_ - 8); \
         v_ = *(int *)(old_ - 4) - 1; \
         *(int *)(old_ - 4) = v_; \
-        if (v_ == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd_), (int)hd_); \
+        if (v_ == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd_), (int)hd_); \
     } \
     arg0->field = s_; }
 #define RESERVED(n) virtual void reserved_##n()
@@ -180,13 +194,14 @@ union igRefCountWord {
 
 extern "C" int __init_cpp(...);
 extern "C" int __fini_cpp(...);
-struct StringChunkOwnerView;
-extern "C" void StringChunk_ReleaseHeader(StringChunkOwnerView *self, int header);
+struct StringTable;
+struct StringChunk;
+extern "C" void StringChunk_ReleaseHeader(StringChunk *self, int header);
 extern "C" void * StringPool_Allocate(int arg0);
 /* 16-byte string intern pool (g_stringPool[0]). */
 typedef struct StringPool {
-    int table;      /* +0   StringTable (hash of interned strings) */
-    int chunks;     /* +4   head StringChunk of the storage chain */
+    StringTable *table; /* +0   sorted table of the interned strings */
+    StringChunk *chunks; /* +4  head chunk of the storage chain */
     int chunkSize;  /* +8   bytes per new chunk (0x4000) */
     int pool;       /* +12  igMemoryPool the table and chunks come from */
 } StringPool;
@@ -1895,11 +1910,12 @@ extern "C" int FUN_0030ba90(void *arg0, char *arg1);
 extern "C" int FUN_0030bb40(char *arg0, char *arg1);
 extern "C" int thunk_strcasecmp(const char *s1, const char *s2);
 extern "C" int StringChunk_ReturnBlock(...);
-extern "C" void *StringTable_Construct(void *arg0, void *arg1, int arg2);
+extern "C" StringTable *StringTable_Construct(StringTable *table, StringPool *pool, int capacity);
 extern "C" void StringTable_SetSynchronization(int arg0);
-extern "C" int StringTable_Find(int arg0, int arg1);
-extern "C" void *StringTable_Register(int arg0, void *arg1, int arg2, int arg3);
-extern "C" void StringTable_RemoveHeader(int arg0, int arg1);
+extern "C" int StringTable_Find(StringTable *table, int text);
+struct StringTokenHeader;
+extern "C" StringTokenHeader *StringTable_Register(StringTable *table, StringTokenHeader *header, StringChunk *chunk, int text);
+extern "C" void StringTable_RemoveHeader(StringTable *table, int header);
 extern "C" int StringTable_DeleteObject(int object);
 extern "C" int StringChunk_DeleteObject(int object);
 extern "C" void Gap__Core__igStringRefList__vfunc_12(void *self0);
@@ -2561,35 +2577,11 @@ extern "C" char igThreadList_className[];
 extern "C" igMetaObject *g_igSymbolTable_metaObject[4];
 extern "C" igMetaObject *igSymbolTable_GetMetaObject(void);
 extern "C" int DAT_0052e730[4];
-/* Deleting destructor; the deletion flag is a signed short. */
-typedef struct ObjectRefWord {
-    igObject *value;
-    /* Both releases keep the word's address taken; release reads the field once into a local,
-     * releaseField reads the field directly each time. */
-    inline void release() {
-        igObject **self = &value;
-        if (self) {
-            igObject *object = value;
-            if (object) {
-                --object->_refCount;
-                if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                    igObject_Destroy((void *)object);
-            }
-        }
-    }
-    inline void releaseField() {
-        igObject **self = &value;
-        if (self) {
-            if (value) {
-                --value->_refCount;
-                if (((unsigned long long)(long long)(int)value->_refCount & 0x7fffffULL) == 0)
-                    igObject_Destroy(value);
-            }
-        }
-    }
-} ObjectRefWord;
-extern "C" ObjectRefWord *FUN_002b8640(ObjectRefWord *self,int delete_storage);
-extern "C" ObjectRefWord *FUN_002b8740(ObjectRefWord *self,int delete_storage);
+/* igSmartPointer's deleting destructor as retail emitted it out of line, one copy per pointee
+ * class (FUN_002b8640, FUN_002b8740, FUN_002ba7f0, FUN_002bc540, FUN_002c3a80); the deletion flag
+ * is a signed short. */
+extern "C" igSmartPointer<igObject> *FUN_002b8640(igSmartPointer<igObject> *self,int delete_storage);
+extern "C" igSmartPointer<igObject> *FUN_002b8740(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" char g_igSymbolTable_callbackList[];
 extern "C" char igSymbolTable_className[];
 extern "C" int g_igSymbolTable_ctorTable[4];
@@ -2686,7 +2678,7 @@ extern "C" igMetaObject *g_igSemaphore_metaObject[4];
 extern "C" igMetaObject *igSemaphore_GetMetaObject(void);
 extern "C" char igSemaphore_className[];
 extern "C" int igSemaphore_InitFields_002ba7c0[4];
-extern "C" ObjectRefWord *FUN_002ba7f0(ObjectRefWord *self,int delete_storage);
+extern "C" igSmartPointer<igObject> *FUN_002ba7f0(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" void **FUN_002ba970(igObject **self, short flag);
 extern "C" igMetaObject *g_igResource_metaObject[4];
 extern "C" igMetaObject *igResource_GetMetaObject(void);
@@ -2756,7 +2748,7 @@ extern "C" int DAT_004bf9d0[4];
 extern "C" igMetaObject *g_igPluginHelper_metaObject[4];
 extern "C" igMetaObject *igPluginHelper_GetMetaObject(void);
 extern "C" int DAT_0052eee0[4];
-extern "C" ObjectRefWord *FUN_002bc540(ObjectRefWord *self,int delete_storage);
+extern "C" igSmartPointer<igObject> *FUN_002bc540(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" char g_igPluginHelper_callbackList[];
 extern "C" char igPluginHelper_className[];
 extern "C" int g_igPluginHelper_ctorTable[4];
@@ -3112,24 +3104,9 @@ extern "C" igMetaObject *g_igIGBFile_metaObject[4];
 extern "C" igMetaObject *igIGBFile_GetMetaObject(void);
 extern "C" int DAT_0052fe50[4];
 extern "C" int DAT_0052fe40[8];
-extern "C" ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage);
+extern "C" igSmartPointer<igObject> *FUN_002c3a80(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" int DAT_00530890[4];
-/* A pooled-string field: the string's chunk and reference count sit in the two words ahead of it. */
-struct PooledStringWord {
-    int *v;
-    inline void release() {
-        int **self = &v;
-        if (self) {
-            int *o = v;
-            if (o) {
-                int *h = o - 2;
-                int c = o[-1] - 1;
-                o[-1] = c;
-                if (c == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
-            }
-        }
-    }
-};
+
 extern "C" igDirectory *FUN_002c3b00(igDirectory *p, short n);
 extern "C" int DAT_00524a20[4];
 extern "C" int DAT_005309b0[4];
@@ -3850,61 +3827,67 @@ extern "C" void FUN_002d1a00(ObjectSystemView *self);
 extern "C" int IG_ROOT[4];
 extern "C" int DAT_004f9468[4];
 extern "C" int DAT_004f9470[4];
-struct igString {
-    char *p;
-    igString() : p(0) {}
-    igString(char *text) : p(text) {}
-    ~igString() {
-        char *s = p;
-        if (s) {
-            int *header = (int *)(s - 8);
-            int count = *(int *)(s - 4) - 1;
-            *(int *)(s - 4) = count;
-            if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)*header, (int)header);
-            }
+extern "C" int StringPool_Intern(StringPool *pool, const char *name);
+/* Header stored in front of every interned string token. */
+struct StringTokenHeader { int owner; int refCount; };
+static inline void retainString(const char *string) {
+    if (string != 0) {
+        StringTokenHeader *header = (StringTokenHeader *)string - 1;
+        header->refCount = header->refCount + 1;
+    }
+}
+static inline void releaseString(const char *string) {
+    if (string != 0) {
+        StringTokenHeader *header = (StringTokenHeader *)string - 1;
+        int count = header->refCount - 1;
+        header->refCount = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);
         }
     }
-    void adopt(char *text) {
-        char *s = p;
-        if (s) {
-            int *header = (int *)(s - 8);
-            int count = *(int *)(s - 4) - 1;
-            *(int *)(s - 4) = count;
-            if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)*header, (int)header);
+}
+/* The shared intern pool g_stringPool[0], created on first use. */
+struct InternedStrings {
+    static inline StringPool *get() {
+        if (g_stringPool[0] == 0) {
+            StringPool *pool = (StringPool *)StringPool_Allocate(16);
+            if (pool != 0) {
+                pool = StringPool_Construct(pool);
             }
+            g_stringPool[0] = (int)pool;
         }
-        p = text;
-    }
-    void assign(const igString &other) {
-        char *o = other.p;
-        char *s;
-        if (o) {
-            *(int *)(o - 4) = *(int *)(o - 4) + 1;
-        }
-        s = p;
-        if (s) {
-            int *header = (int *)(s - 8);
-            int count = *(int *)(s - 4) - 1;
-            *(int *)(s - 4) = count;
-            if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)*header, (int)header);
-            }
-        }
-        p = other.p;
+        return (StringPool *)g_stringPool[0];
     }
 };
-struct Pool { static inline void *get() {
-    if (((void * *)g_stringPool)[0] == 0) {
-        void *p = (void *)StringPool_Allocate(16);
-        if (p != 0) {
-            p = ((void *)StringPool_Construct((StringPool *)p));
+/* A reference to a string interned in the shared pool. Constructing or assigning from characters
+ * interns them; copies share the token and count it. */
+struct igStringRef {
+    char *p;
+    igStringRef() : p(0) {}
+    igStringRef(char *chars) {
+        char *interned;
+        if (chars == 0) {
+            interned = 0;
+        } else {
+            interned = (char *)StringPool_Intern(InternedStrings::get(), chars);
         }
-        ((void * *)g_stringPool)[0] = p;
+        p = interned;
     }
-    return ((void * *)g_stringPool)[0];
-} };
+    igStringRef(const igStringRef &other) : p(other.p) { retainString(p); }
+    ~igStringRef() { releaseString(p); }
+    igStringRef &operator=(const igStringRef &other) {
+        retainString(other.p);
+        releaseString(p);
+        p = other.p;
+        return *this;
+    }
+    igStringRef &operator=(char *chars) {
+        char *interned = (char *)StringPool_Intern(InternedStrings::get(), chars);
+        releaseString(p);
+        p = interned;
+        return *this;
+    }
+};
 extern "C" void FUN_002d1c40(ObjectSystemView *arg0);
 extern "C" int text_exitPre[4];
 extern "C" void FUN_002d27a0(ObjectSystemView *arg0);
@@ -3965,8 +3948,8 @@ typedef struct ObjectSystemView {
     char notificationEventFormat[128];
     char unknown528[388];
     int vtableProbeOffset;        /* zero: the EnsureRegistered probes read the vtable word through it */
-    igString rootPath;            /* IG_ROOT from the environment */
-    igString basePath;
+    igStringRef rootPath;         /* IG_ROOT from the environment */
+    igStringRef basePath;
     /* FUN_002f69b0 reads these two through calls: as plain member reads their locals take other saved registers. */
     igMemoryPoolView *getSystemPool() { return systemPool; }
     int getConfigRegistry() { return (int)configRegistry; }
@@ -4000,7 +3983,6 @@ extern "C" int DAT_00531540[4];
  * the root-class symbol names (igMetaField_<Name>, or the igMemoryRefMetaField override that names
  * the slot); vfunc_NN slots have no name yet. Slots 2-22 are igObject's. ABI view only: never
  * instantiated. */
-struct RecoveryString;
 class igMetaFieldView {
 public:
     RESERVED(0); RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4); RESERVED(5); RESERVED(6);
@@ -4039,7 +4021,7 @@ public:
     virtual void SwapValue(int object);                                         /* +212 */
     RESERVED(52); RESERVED(53);                                                 /* +216, +220 */
     virtual int vfunc_56(int object, int text, int directory);                  /* +224 */
-    virtual RecoveryString vfunc_57(int object, int directory);                 /* +228 */
+    virtual igStringRef vfunc_57(int object, int directory);                    /* +228 */
     RESERVED(56); RESERVED(57);                                                 /* +232, +236 */
     virtual int IsConstruct();                                                  /* +240 */
     unsigned int _refCount;
@@ -4117,34 +4099,7 @@ extern "C" int DAT_004f95e8[4];
 extern "C" int DAT_004f95f0[4];
 extern "C" int DAT_004f95f8[4];
 extern "C" int DAT_004f9600[4];
-struct RecoveryString {
-    char *p;
-    RecoveryString(char *q) { p = q; }
-    RecoveryString(const RecoveryString &o) { p = o.p; if (p != 0) *(int *)(p - 4) = *(int *)(p - 4) + 1; }
-    ~RecoveryString() {
-        if (p != 0) {
-            int *t = (int *)(p - 8);
-            int v = *(int *)(p - 4) - 1;
-            *(int *)(p - 4) = v;
-            if (v == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)*t, (int)t);
-        }
-    }
-    RecoveryString &operator=(const RecoveryString &o) {
-        if (o.p != 0) *(int *)(o.p - 4) = *(int *)(o.p - 4) + 1;
-        if (p != 0) {
-            int *t = (int *)(p - 8);
-            int v = *(int *)(p - 4) - 1;
-            *(int *)(p - 4) = v;
-            if (v == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)*t, (int)t);
-        }
-        p = o.p;
-        return *this;
-    }
-};
-extern "C" int FUN_002d5df0(RecoveryString *out, igMetaFieldView *ctx, int a2, int a3);
-struct Util {
-    static inline void rel(igObject *o) { if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)o); } }
-};
+extern "C" int FUN_002d5df0(igStringRef *out, igMetaFieldView *ctx, int a2, int a3);
 extern "C" void FUN_002d60b0(igContext *arg0);
 extern "C" int FUN_002d6390(igContext *arg0);
 extern "C" int FUN_002d63e0(igContext *arg0, int arg1);
@@ -4273,6 +4228,12 @@ extern "C" void FUN_002d8230(igDirectoryView *h, igObject *object);
 extern "C" int FUN_002d83b0(igDirectoryView *arg0, int arg1, int arg2);
 extern "C" int FUN_002d8520(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2);
 extern "C" int FUN_002d86b0(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2);
+/* The pointer word an object list copies in on insert, holding the reference the list takes. It is
+ * a class member, not a plain pointer local: FUN_002d87b0 and FUN_002e5110 store the word and load
+ * it back from its stack slot before the null test (`sw v0,104(sp); lw v1,104(sp); beqz v1`), which
+ * MWCC emits for a member read after the constructor's store. A scalar local or parameter is tested
+ * from the register and stored in the branch delay slot (712 bytes against retail's 716, and 720
+ * against 724). */
 template <class T> struct RetainedWord {
     T *p;
     RetainedWord(T *object) : p(object) {
@@ -4281,16 +4242,13 @@ template <class T> struct RetainedWord {
         }
     }
 };
+/* An object list's insert: the list takes its own reference, then copies the pointer word in. */
+template <class T> static inline void insertObject(igDataList *list, int index, T *object) {
+    RetainedWord<T> word(object);
+    List_InsertWords(list, index, 1, &word);
+}
 extern "C" int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod);
 extern "C" int FUN_002d8a80(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, unsigned char arg7);
-struct Retained {
-    igDirEntryView *p;
-    Retained(igDirEntryView *object) : p(object) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
-};
 extern "C" int FUN_002d8d00(igDirectoryView *list, int key, int name, int val);
 extern "C" void FUN_002d8f20(igDirectoryView *arg0);
 extern "C" void FUN_002d8fe0(igDirectoryView *arg0, int arg1);
@@ -4302,21 +4260,6 @@ extern "C" int igDoubleArrayMetaField_GetSize(igDoubleArrayMetaField *self);
 extern "C" int text_lg_n[4];
 extern "C" int DAT_004f9610[4];
 extern "C" int text_driverDatabaseVerbose[4];
-static inline void release(igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((void *)object);
-        }
-    }
-}
-struct PropertyRef;
-static inline void setAt_2d9540(igDriverDatabase *database, int index, const PropertyRef &value);
-struct PropertyRef {
-    igObject *p;
-    PropertyRef(igObject *object) : p(object) {}
-    ~PropertyRef() { release(p); }
-};
 extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *database);
 extern "C" int FUN_001cafc0(igObject *, int *, int);
 extern "C" int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2);
@@ -4335,43 +4278,15 @@ extern "C" char *g_stringObjEmptyText[4];
 extern "C" void FUN_002da010(void *self, igTDataList<igVisualContextView *> *list);
 extern "C" int text_drivers_ini[4];
 extern "C" int DAT_004f96a8[4];
-static inline void release_2da1c0(igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
-}
-/* The igStringObj igFolder slot 21 returns by value (the callee builds an igSmartPointer<igObject>).
- * Its destructor re-reads p after the decrement, as IG_OBJECT_RELEASE does: igSmartPointer's
- * igRelease(p) reads the pointer once, which drops FUN_00305d30's reload of the returned slot. */
-struct FolderPath { igStringObj *p; FolderPath() {} ~FolderPath() { IG_OBJECT_RELEASE(p); } };
-/* Header stored in front of every interned string token. */
-struct StringTokenHeader { int owner; int refCount; };
-static inline void releaseString(const char *string) {
-    if (string != 0) {
-        StringTokenHeader *header = (StringTokenHeader *)string - 1;
-        int count = header->refCount - 1;
-        header->refCount = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)header->owner, (int)header);
-        }
-    }
-}
-struct StringRef {
-    const char *p;
-    StringRef() : p(0) {}
-    StringRef(const char *string) : p(string) {}
-    ~StringRef() { releaseString(p); }
-};
+
 /* igFolder: a search folder; slot 21 joins _folderName with a file name. */
 class igFolderView : public igVirtualObject { public:
     RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4); RESERVED(5); RESERVED(6); RESERVED(7);
     RESERVED(8); RESERVED(9); RESERVED(10); RESERVED(11); RESERVED(12); RESERVED(13); RESERVED(14);
     RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19); RESERVED(20);
-    virtual FolderPath vfunc_23(const char *name);                              /* +92 */
-    char *_folderName;
+    virtual igSmartPointer<igStringObj> vfunc_23(const char *name);             /* +92 */
+    igStringRef _folderName;
+    void setFolderName(char *name) { _folderName = name; }
 };
 extern "C" int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2);
 /* A node of the parsed driver database (vtable DAT_00530618); section and settings nodes extend it.
@@ -4439,8 +4354,6 @@ class igLocationTableView : public igVirtualObject { public:
  * 16 words in slots (FUN_002e2360..FUN_002e2520). */
 struct EventRecord { int type; int pad4[2]; int val; int pad16[8]; char *str; int pad52[7]; unsigned int slotStates; int slots[16]; int getVal() const { return val; } };
 /* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
-/* A bare result word: igResult's constructors would change how the caller takes the return. */
-struct EventReadResult { int code; int Code() { return code; } };
 class igEventTrackerView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -4450,7 +4363,7 @@ public:
     virtual void vfunc_24();                                                    /* slot 22, byte 96: closes what vfunc_23 began */
     virtual void d23();
     virtual void vfunc_26(EventRecord *record, int mode);
-    virtual EventReadResult vfunc_27(int offset, EventRecord *record);
+    virtual igResult vfunc_27(int offset, EventRecord *record);
     virtual void d26();
     virtual igResult vfunc_29(int offset, int *value);
     virtual void d28(); virtual void d29();
@@ -4669,7 +4582,6 @@ extern "C" unsigned char GPR_00554c0c;
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" igResult FUN_002e4f60(void *);
 extern "C" igResult FUN_002e63e0(void *);
-struct StreamHolder { igFileView *p; StreamHolder(igFileView *v) { p = v; } ~StreamHolder(); };
 extern "C" igResult FUN_002e3a60(igIGBFileView *self, const char *fileName, int mode);
 extern "C" void FUN_002e3cb0(igIGBFileView *self);
 extern "C" igResult FUN_002e3e30(igIGBFileView *f, const char *fileName);
@@ -4679,20 +4591,20 @@ extern "C" igResult FUN_002e4120(igIGBFileView *o);
 extern "C" igResult FUN_002e4240(igIGBFile *arg1);
 /* One metaobject record of an .igb file's metaobject table. */
 struct MetaTableRecord { int nameSize; int majorVersion; int minorVersion; int fieldCount; int parentIndex; int persistCount; };
-class IntListHolder { public: igTDataList<int> *p; IntListHolder(igTDataList<int> *o) : p(o) { }
- ~IntListHolder() { igTDataList<int> *object = p; if (object) { --object->_refCount; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 /* A metaobject's parent reference as a one-word key passed by reference: the key is stored to the
  * stack and reloaded from there. */
 struct MetaTableKey { int v; };
 extern "C" igResult FUN_002e42d0(igIGBFileView *self);
 extern "C" igResult FUN_002e47f0(igIGBFileView *arg1);
-class NameListHolder { public: igTDataList<igStringObj *> *p; NameListHolder(igTDataList<igStringObj *> *o) : p(o) { if (p != 0) { p->_refCount = (int)p->_refCount + 1; } }
- ~NameListHolder() { igTDataList<igStringObj *> *object = p; if (object) { object->_refCount = (int)object->_refCount - 1; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 extern "C" igResult FUN_002e4a40(igIGBFileView *self);
 extern "C" igResult FUN_002e4c90(igIGBFileView *self);
 extern "C" igResult FUN_002e4e60(igIGBFile *file);
-struct IgbFixRetain { igDirEntryView *p; IgbFixRetain(igDirEntryView *o) : p(o) { if (p != 0) { p->_refCount = p->_refCount + 1; } } };
-extern "C" int FUN_00142bb0(igObjectList *, IgbFixRetain *);
+extern "C" int FUN_00142bb0(igObjectList *list, void *key);
+/* An object list's sorted insert: FUN_00142bb0 finds the position by the pointer's value. */
+template <class T> static inline void insertObjectSorted(igObjectList *list, T *object) {
+    RetainedWord<T> word(object);
+    List_InsertWords((igDataList *)list, FUN_00142bb0(list, &word), 1, &word);
+}
 extern "C" igResult FUN_002e5110(igIGBFileView *self);
 extern "C" igResult FUN_002e53f0(igIGBFile *file);
 extern "C" igResult FUN_002e54e0(igIGBFileView *o);
@@ -4735,25 +4647,9 @@ static inline igObjectDispatchView *registeredMetaField(__internalObjectList *fi
 }
 extern "C" igResult FUN_002e7f20(igIGBFileView *self);
 extern "C" void Gap__Core__igIGBFile__vfunc_13(igIGBFileView *arg0);
-class RefObjectHolder { public: igObject *p; RefObjectHolder(void *o) : p((igObject *)o) { if (p != 0) { p->_refCount = p->_refCount + 1; } }
- ~RefObjectHolder() { igObject *object = p; if (object) { --object->_refCount; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
-class TypeListHolder { public: igTDataList<int> *p; TypeListHolder(igTDataList<int> *v) { p = v; }
- ~TypeListHolder() { if (p != 0) { p->_refCount = p->_refCount - 1; if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(p); } } } };
 /* An .igb table section header: its byte size, a version word and the entry count. */
 struct IgbSectionHeader { int size; int pad; int count; };
 extern "C" igResult FUN_002e82a0(igIGBFileView *self);
-struct DirEntryHolder {
-    igDirEntryView *p;
-    DirEntryHolder(igDirEntryView *o) : p(o) { if (p != 0) { p->_refCount = p->_refCount + 1; } }
-    ~DirEntryHolder() {
-        igDirEntryView *object = p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
-    }
-};
 extern "C" igResult FUN_002e8670(igIGBFileView *arg1);
 extern "C" igResult FUN_002e8880(igIGBFileView *arg1);
 extern "C" void FUN_002e8a40(igIGBFileView *a);
@@ -4772,8 +4668,6 @@ extern "C" igResult FUN_002e9560(igIGBFileView *arg1);
  * Each reader result is an unnamed temporary with its own stack word. */
 extern "C" int igIGBFile_ReadFile(igIGBFileView *self, const char *path);
 extern "C" void Gap__Core__igIGBFile__vfunc_30(int *arg0, igIGBFileView *arg1);
-class ExternalFileHolder { public: igIGBFileView *p; ExternalFileHolder(igIGBFileView *o) : p(o) { if (p != 0) { p->_refCount = p->_refCount + 1; } }
- ~ExternalFileHolder() { igIGBFileView *object = p; if (object) { --object->_refCount; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 extern "C" igResult Gap__Core__igIGBFile__vfunc_31(igIGBFileView *self);
 extern "C" int Gap__Core__igIGBFile__vfunc_34(igIGBFileView *o);
 extern "C" igResult igIGBFile_GetSectionBuffer(igIGBFileView *arg1, int arg2);
@@ -4805,7 +4699,6 @@ extern "C" void InternalObjectList_SetCount(__internalObjectList *list,int count
 extern "C" int MetaRefList_AppendRetained(__internalObjectList *list, igObject *value);
 extern "C" void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value);
 extern "C" void StringPool_DestroyChunks(StringPool *pool);
-extern "C" int StringPool_Intern(StringPool *pool, const char *name);
 extern "C" void * StringPool_Allocate(int arg0);
 extern "C" void FUN_002eb150(igLocationTableView *table);
 extern "C" int Gap__Core__igLocationTable__vfunc_23(igLocationTable *self);
@@ -5183,57 +5076,8 @@ extern "C" igResult FUN_002f2f40(MemoryContext *self, int file);
 extern "C" igResult FUN_002f3060(MemoryContext *self, int file, int arg);
 typedef void StringToken;
 /* a token points at the interned text; its header precedes it */
-/* Pool descriptor defaults (entry +0x84): interned-string sources and integer limits. */
-struct PoolDefaults {
-    char pad0[0x18];
-    const char *text0;       /* +0x18 */
-    int limit;               /* +0x1c */
-    int field20;
-    int field24;
-    const char *text1;       /* +0x28 */
-    const char *text2;
-    const char *text3;
-    const char *text4;
-    const char *text5;
-    const char *text6;
-    const char *text7;
-    const char *text8;
-    const char *text9;
-    const char *text10;      /* +0x4c */
-    int field50;             /* +0x50 */
-};
-struct PoolEntry {
-    igMemoryPoolView *object; /* +0x00 */
-    char name[0x80];         /* +0x04 */
-    PoolDefaults *defaults;  /* +0x84 */
-    char pad88[8];
-};
-struct PoolTable {
-    char pad0[0x14];
-    PoolEntry entries[46];   /* +0x14, 0x90 bytes each */
-};
-/* The pool handle object being filled; string members hold interned tokens. */
-struct PoolHandle {
-    char pad0[0x14];
-    StringToken *handleName; /* +0x14 */
-    StringToken *token0;     /* +0x18 */
-    int limit;               /* +0x1c */
-    int field20;
-    int field24;
-    StringToken *token1;     /* +0x28 */
-    StringToken *token2;
-    StringToken *token3;
-    StringToken *token4;
-    StringToken *token5;
-    StringToken *token6;
-    StringToken *token7;
-    StringToken *token8;
-    StringToken *token9;
-    StringToken *token10;    /* +0x4c */
-    int field50;             /* +0x50 */
-};
 extern "C" char text_kIGMemoryPoolHandle_s[];
-extern "C" void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle);
+extern "C" void FUN_002f31b0(int *result, MemoryContext *context, int index, igMemoryPoolInfo *info);
 extern "C" igResult FUN_002f3910(MemoryContext *self, int index, igMemoryPoolInfo *desc, int build);
 extern "C" void FUN_002f4110(MemoryContext *arg0);
 extern "C" char *DAT_00586de8;
@@ -5243,18 +5087,7 @@ extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
 extern "C" void FUN_002f43a0(MemoryContext *self);
 extern "C" int D_00587010[4];
-/* The 46 records follow the 20-byte object header.  Retail steps one pointer
- * by whole records from the context base, so that pointer sits 20 bytes before
- * the record it works on; this view reproduces it (name is 24 bytes in). */
-/* The records seen in 144-byte strides from the object base: entry i's allocator word is
- * records[i].allocator (base + 20 + 144 * i). Retail indexes the context this way when it walks the
- * allocators. */
-struct ContextRecordStride { char head[20]; void *allocator; char rest[120]; };
-typedef struct ContextPrefixedRecord {
-    char header[20];
-    ContextRecord record;
-} ContextPrefixedRecord;
-extern "C" void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self);
+extern "C" void igMemoryPoolContextInfo_InitializeRecordNames(MemoryContext *self);
 extern "C" char text_bootstrapPoolPreSize[];
 extern "C" char text_updatePoolStatistics[];
 extern "C" char text_useAliasMemoryPoolRelease[];
@@ -5320,16 +5153,16 @@ extern "C" char DAT_004fa990[];
 extern "C" char DAT_004fa9b0[];
 extern "C" char DAT_004fa9d0[];
 enum LeakKind { LeakKindFirst = 0, LeakKindCount = 32 };
-extern "C" void FUN_002f7420(ContextRecordStride *self);
+extern "C" void FUN_002f7420(MemoryContext *self);
 extern "C" char text_s_igm[];
 extern "C" void FUN_002f78b0(MemoryContext *arg0);
 extern "C" igResult FUN_002f7a70(MemoryContext *self, unsigned int kind, int free);
-extern "C" void FUN_002f7bc0(ContextRecordStride *arg0, int arg1);
+extern "C" void FUN_002f7bc0(MemoryContext *arg0, int arg1);
 extern "C" void FUN_002f7cc0(MemoryContext *self, int arg1, int *out, int n);
 extern "C" void FUN_002f7e00(MemoryContext *self, int *paths, int n);
-extern "C" void FUN_002f8020(ContextRecordStride *slots, int arg1, int *out, int n);
-extern "C" void FUN_002f8160(ContextRecordStride *arg0, int *arg1, int arg2);
-extern "C" void FUN_002f8280(ContextRecordStride *arg0, int arg1, int arg2, int arg3);
+extern "C" void FUN_002f8020(MemoryContext *slots, int arg1, int *out, int n);
+extern "C" void FUN_002f8160(MemoryContext *arg0, int *arg1, int arg2);
+extern "C" void FUN_002f8280(MemoryContext *arg0, int arg1, int arg2, int arg3);
 extern "C" char text_Pool_statistics[];
 extern "C" char DAT_004fab20[];
 extern "C" char DAT_004fab30[];
@@ -5337,7 +5170,7 @@ extern "C" void FUN_002f8420(MemoryContext *arg0, char *arg1, igMemoryPoolView *
 extern "C" char DAT_004f95c8[];
 extern "C" int DAT_004fab70[4];
 extern "C" int text_Combined_pool_statistics[4];
-extern "C" void FUN_002f8580(ContextRecordStride *arg0, int *arg1);
+extern "C" void FUN_002f8580(MemoryContext *arg0, int *arg1);
 extern "C" int DAT_00586ffc[4];
 extern "C" igResult FUN_002f86e0(void *arg1);
 extern "C" igObject *FUN_002f8760(void);
@@ -5457,26 +5290,14 @@ extern "C" int FUN_002fc8a0(igMetaField *arg0);
 extern "C" void igMetaField_CopyByTechnique(igMetaFieldView *arg0, int arg1, int arg2, int arg3);
 extern "C" void FUN_002fc9f0(igMetaField *arg0, int arg1, int arg2);
 extern "C" void FUN_002fca30(igMetaField *field, void *object);
-struct InternedStrings {
-    static inline int get() {
-        if (g_stringPool[0] == 0) {
-            int pool = ((int)StringPool_Allocate(16));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool[0] = pool;
-        }
-        return g_stringPool[0];
-    }
-};
-extern "C" RecoveryString FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4);
+extern "C" igStringRef FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4);
 extern "C" int FUN_002fcce0(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
 extern "C" int FUN_002fcdb0(igMetaFieldView *field, int object, int text, int directory);
 extern "C" int igMetaField_Write(igMetaField *arg0);
 extern "C" int FUN_002fcf90(igMetaField *arg0, unsigned char *arg1, unsigned char *arg2);
 extern "C" int FUN_002fcfe0(igMetaFieldView *self, const void *left, const void *right);
 extern "C" int FUN_002fcff0(igMetaFieldView *self, const void *left, const void *right);
-extern "C" RecoveryString FUN_002fcdf0(igMetaFieldView *self, char *object, int directory);
+extern "C" igStringRef FUN_002fcdf0(igMetaFieldView *self, char *object, int directory);
 extern "C" void FUN_002fd130(igMetaField *arg0, int arg1, int arg2);
 extern "C" void FUN_002fd150(igMetaFieldView *self, void *object, igMetaFieldView *field, char *source);
 extern "C" void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2);
@@ -5503,29 +5324,10 @@ struct StaticInitCallbacks { void (**functions)(); int count; };
  * or drop the pool's _allocationLock semaphore); slot 52 allocates. The callers take IsActive's
  * result at full width: declared unsigned char or bool, the `== 0` test in FUN_002f4070 gains the
  * `andi 0xff` of a byte-returning callee (156 bytes against retail's 152). */
-/* Takes one reference on a metaobject without releasing it: the list it is copied into owns it. */
-struct ChainRef { igMetaObject *p; ChainRef(igMetaObject *o) : p(o) { if (p != 0) { p->_refCount = p->_refCount + 1; } } };
 extern "C" int g_igMetaObject_vtable[4];
 extern "C" igMetaField *g_fieldNameMember[4];
 extern "C" int FUN_002fd610(Instance **out, int meta);
-static inline void releaseObject_2fd610(igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) igObject_Destroy(object);
-    }
-}
-struct CreatedRef {
-    igObject *p;
-    CreatedRef(igObject *object) : p(object) {
-        if (p != 0) p->_refCount = p->_refCount + 1;
-    }
-    CreatedRef(const CreatedRef &other) : p(other.p) {
-        if (p != 0) p->_refCount = p->_refCount + 1;
-    }
-    ~CreatedRef() { releaseObject_2fd610(p); }
-    igObject *get() const { return p; }
-};
-extern "C" CreatedRef FUN_002fd6e0(int meta, int pool);
+extern "C" igSmartPointer<igObject> FUN_002fd6e0(int meta, int pool);
 extern "C" void *igMetaObject_Construct(igMetaObject *meta, int extra1);
 extern "C" igMetaObject *igMetaObject_Init(igMetaObject *meta);
 extern "C" void *igMetaObject_CopyConstruct(igMetaObject *meta,void *source);
@@ -5722,7 +5524,7 @@ extern "C" char DAT_004fb0d8[];
 extern "C" char text_Reference_d[];
 extern "C" char text_Reference_1[];
 extern "C" char GPR_00554c2c;
-extern "C" int FUN_00305800(RecoveryString *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6);
+extern "C" int FUN_00305800(igStringRef *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6);
 extern "C" int FUN_00305aa0(int self, int str, int *out, int n, igDirectory *list);
 extern "C" int FUN_00305bd0(igRefMetaField *arg0, int arg1, int arg2);
 extern "C" int g_igStringMetaField_vtable[4];
@@ -5738,21 +5540,6 @@ extern "C" bool FUN_00305d30(igRegistry *self, char *name, char *dir);
 extern "C" int FUN_003061c0(void *self, igRegistry *inc, int overwrite);
 extern "C" char *DAT_004fb160[];
 extern "C" int FUN_00306360(igRegistry *self, char *name, int create);
-/* Holds the igStringObj a registry string lookup creates for its default text. */
-struct StringObjHolder {
-    igStringObj *ref;
-    inline void release() {
-        igStringObj **self = &ref;
-        if (self) {
-            igStringObj *object = ref;
-            if (object) {
-                --object->_refCount;
-                if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                    igObject_Destroy((void *)object);
-            }
-        }
-    }
-};
 extern "C" int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const char *arg4, int arg5);
 extern "C" char DAT_004fb190[];
 extern "C" int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list, int create);
@@ -5766,17 +5553,6 @@ extern "C" char DAT_004fb200[];
 extern "C" char text_showRegistryQueries[];
 extern "C" void FUN_00307870(igRegistry *self, int file, int overwrite);
 extern "C" bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines);
-/* Arena handles (4-byte refs) of the reflected int fields are followed through casts. */
-struct RegistryValueRef {
-    igRegistryValue *p;
-    ~RegistryValueRef() {
-        igRegistryValue *q = p;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if (((unsigned long long)(long long)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q);
-        }
-    }
-};
 extern "C" igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3);
 extern "C" char DAT_004fb280[];
 extern "C" int DAT_005871c0;
@@ -5805,16 +5581,6 @@ extern "C" char GPR_00554c30;
 extern "C" int text_igImageDirectory[4];
 extern "C" int DAT_00586670[4];
 extern "C" igSmartPointer<igObject> FUN_003087a0(void *directory, int name);
-struct MemberRef {
-    igObject *p;
-    MemberRef(igObject *object) : p(object) {}
-    ~MemberRef() {
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if ((p->_refCount & 0x7FFFFF) == 0) igObject_Destroy(p);
-        }
-    }
-};
 extern "C" void FUN_00308860(igResource *self, int name, int value);
 extern "C" igDirectory *FUN_00308a90(igResource *self);
 extern "C" int g_resourceLoaderStackSize[4];
@@ -5825,8 +5591,6 @@ extern "C" void igResource_StartAsyncLoading(igResourceView *self);
 extern "C" void igResource_StopAsyncLoading(igResourceView *self);
 extern "C" void Gap__Core__igResource__vfunc_12(igResource *self);
 extern "C" void *FUN_00308fb0(igResource *arg0, int arg1);
-/* Holds the igIGBFile a directory load creates. */
-struct IgbFileHolder { igObject *p; ~IgbFileHolder() {} };
 extern "C" void *igResource_LoadDirectory(igResource *self, int path);
 extern "C" igIGBFileView *FUN_00309640(igResource *self, igIGBFileView *file);
 extern "C" void igResource_UnloadDirectory(igResource *self, int name);
@@ -5884,58 +5648,45 @@ extern "C" int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned i
 extern "C" void FUN_0030bce0(igStringObj *src, long long delim, igTDataList<char *> *list);
 extern "C" void FUN_0030bee0(igStringObj *self);
 extern "C" int FUN_0030bfa0(igStringObjList *self, int key, int (*cmp)(char *, int));
-/* 24-byte target ABI view. Field labels do not assert the original C++ member spelling. */
-typedef struct {
-    int pool;
-    unsigned count, step, capacity;
-    void **data;
-    int cleanup;
-} StringTableLayout;
-typedef char StringTableLayoutSize[(sizeof(StringTableLayout) == 24) ? 1 : -1];
-struct StringTableSearchView { int pad[1]; unsigned int cnt; unsigned int n; int pad12; int *tab; };
-struct StringTableInsertView { char pad[4]; unsigned cnt; unsigned f8; int f12; char *f16; };
-struct StringTableChunkList { int first; int pad[4]; int cnt; };
-/* 36-byte string chunk. References are 4-byte values in this ABI. */
-typedef struct StringChunk {
-    int table;          /* +0   owning string pool */
-    int next;           /* +4   next chunk in the chain */
-    int previous;       /* +8   previous chunk in the chain */
-    unsigned int capacity; /* +12  storage size in bytes */
-    int storage;        /* +16  allocator-provided storage base */
-    int storageEnd;     /* +20  end of the storage */
-    int freeHead;       /* +24  end address of the first free block */
-    int largestFree;    /* +28  cached largest free size, -1 = unknown */
-    char isEmpty;       /* +32  no strings live in the chunk */
-} StringChunk;
-/* A string chunk as its release path sees it. Field labels do not assert the original member
- * spelling. */
-typedef struct StringChunkOwnerView {
-    int owner;                  /* +0  the pool that owns the chunk */
-    struct StringChunkOwnerView *next; /* +4 */
-    struct StringChunkOwnerView *prev; /* +8 */
-    unsigned capacity;          /* +12 storage size in bytes */
-    char pad16[16];             /* +16 storage pointers, not used here */
-    unsigned char is_empty;     /* +32 set at construction, cleared by StringChunk_AllocateToken */
-} StringChunkOwnerView;
-typedef char StringChunkOwnerViewSize[(sizeof(StringChunkOwnerView) == 36) ? 1 : -1];
-struct StringChunkPool { struct StringChunkPool *f0; int f4; int f8; int f12; };
-struct StringChunkTokenView { struct StringChunkPool *f0; struct StringChunkTokenView *next; int f8; unsigned f12; int p16[3]; int f28; char f32; };
+/* The intern pool's sorted string table (24 bytes): `entries` holds the token headers in strcmp
+ * order of their text, and the lookup halves `step` (a power of two not above `count`). */
+struct StringTable {
+    StringPool *pool;            /* +0  owning intern pool */
+    unsigned int count;          /* +4  live entries */
+    unsigned int step;           /* +8  first binary-search step */
+    unsigned int capacity;       /* +12 entry slots allocated */
+    StringTokenHeader **entries; /* +16 */
+    int emptyChunks;             /* +20 empty chunks seen while only the head chunk exists */
+};
+typedef char StringTableSize[(sizeof(StringTable) == 24) ? 1 : -1];
+/* 36-byte storage chunk of the intern pool. Blocks are carved from the free blocks, which are
+ * chained by their end addresses (StringBlockHeader footers). */
+struct StringChunk {
+    StringTable *table;     /* +0  table of the owning pool */
+    StringChunk *next;      /* +4  next chunk in the chain */
+    StringChunk *previous;  /* +8  previous chunk in the chain */
+    unsigned int capacity;  /* +12 storage size in bytes */
+    char *storage;          /* +16 allocator-provided storage base */
+    char *storageEnd;       /* +20 end of the storage */
+    char *freeHead;         /* +24 end address of the first free block, 0 when full */
+    int largestFree;        /* +28 cached largest free size in bytes, -1 = unknown */
+    unsigned char isEmpty;  /* +32 no strings live in the chunk */
+};
+typedef char StringChunkSize[(sizeof(StringChunk) == 36) ? 1 : -1];
 typedef struct StringBlockHeader { unsigned short next; unsigned short size; } StringBlockHeader;
-typedef struct StringChunkState { char pad[24]; char *free; int largest; } StringChunkState;
 extern "C" void *DAT_005871c8[4];
-extern "C" void *StringTable_Destroy(StringTableLayout *self, long long delete_flag);
-extern "C" void StringTable_NotifyEmptyChunk(StringTableChunkList *arg0, void *arg1);
-extern "C" int StringTable_SearchRetained(struct StringTableSearchView *arg0, int arg1, int *arg2, unsigned int *arg3);
-extern "C" void StringTable_EraseAt(StringTableLayout *self, unsigned index);
-extern "C" void StringTable_InsertAt(struct StringTableInsertView *arg0, int arg1, int arg2);
+extern "C" void *StringTable_Destroy(StringTable *self, long long delete_flag);
+extern "C" void StringTable_NotifyEmptyChunk(StringTable *table, StringChunk *chunk);
+extern "C" int StringTable_SearchRetained(StringTable *table, int text, int *found, unsigned int *index);
+extern "C" void StringTable_EraseAt(StringTable *self, unsigned index);
+extern "C" void StringTable_InsertAt(StringTable *table, int header, int index);
 extern "C" void *StringTable_AllocateObject(unsigned int size, igMemoryPoolView *pool);
-extern "C" void *StringChunk_Construct(StringChunk *chunk, int previous, int table, int capacity);
+extern "C" StringChunk *StringChunk_Construct(StringChunk *chunk, StringChunk *previous, StringTable *table, int capacity);
 extern "C" StringChunk *StringChunk_Destroy(StringChunk *chunk, long long deleteFlags);
-extern "C" int StringChunk_AllocateToken(struct StringChunkTokenView *arg0, int arg1, struct StringChunkTokenView **arg2, int *arg3);
-extern "C" void StringChunk_ReleaseHeader(StringChunkOwnerView *self, int header);
+extern "C" int StringChunk_AllocateToken(StringChunk *head, int size, StringChunk **chunkOut, int *headerOut);
 extern "C" void StringChunk_InitializeStorage(StringChunk *chunk);
 extern "C" int StringChunk_FreeStorage(StringChunk *chunk);
-extern "C" char *StringChunk_TakeBlock(StringChunkState *self, unsigned int bytes);
+extern "C" char *StringChunk_TakeBlock(StringChunk *self, unsigned int bytes);
 extern "C" int StringChunk_MergeBlocks(StringChunk *chunk, unsigned short *previous, unsigned short *left, unsigned short *right);
 extern "C" void *StringChunk_AllocateObject(unsigned int size, igMemoryPoolView *pool);
 extern "C" void StringList_Resize(igTDataList<char *> *list, int count);
@@ -6596,21 +6347,19 @@ public:
     virtual igResult iSignal();
     virtual igResult wait(int block);
 };
+/* Holds a semaphore for the enclosing scope; a null semaphore is no lock. */
 struct ScopedLock {
-    igSemaphoreView *lockable;
-    ScopedLock(igSemaphoreView *l) : lockable(l) {
-        igSemaphoreView *o = lockable;
-        if (o != 0) { o->wait(1); }
+    igSemaphoreView *lock;
+    ScopedLock(igSemaphoreView *semaphore) : lock(semaphore) {
+        if (lock != 0) {
+            lock->wait(1);
+        }
     }
     ~ScopedLock() {
-        igSemaphoreView *o = lockable;
-        if (o != 0) { o->signal(); }
+        if (lock != 0) {
+            lock->signal();
+        }
     }
-};
-struct EventTrackerScopedLock {
-    igSemaphoreView *l;
-    EventTrackerScopedLock(igSemaphoreView *m) { l = m; if (l != 0) { l->wait(1); } }
-    ~EventTrackerScopedLock() { if (l != 0) { l->signal(); } }
 };
 class igPsx2ThreadView;
 /* igPsx2ThreadManager: slot 21 finds the calling thread, slots 22 and 23 add and remove a thread. */
@@ -6828,43 +6577,7 @@ extern "C" int DAT_00587330[4];
 extern "C" int *Gap__Core__igPsx2File__vfunc_41(igPsx2File *self, int arg1);
 extern "C" char DAT_004ffbe8[];
 extern "C" char DAT_004ffbf0[];
-/* A string interned in the global string pool, held by reference count. */
-struct InternedString {
-    char *p;
-    InternedString(char *chars) {
-        char *interned;
-        if (chars == 0) {
-            interned = 0;
-        } else {
-            if (g_stringPool[0] == 0) {
-                int pool = ((int)StringPool_Allocate(16));
-                if (pool != 0) {
-                    pool = ((int)StringPool_Construct((StringPool *)pool));
-                }
-                g_stringPool[0] = pool;
-            }
-            interned = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)chars));
-        }
-        p = interned;
-    }
-    InternedString(const InternedString &other) : p(other.p) {
-        if (p != 0) {
-            ((int *)p)[-1] = ((int *)p)[-1] + 1;
-        }
-    }
-    ~InternedString() {
-        char *chars = p;
-        if (chars != 0) {
-            int *header = (int *)chars - 2;
-            int left = header[1] - 1;
-            header[1] = left;
-            if (left == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)header[0], (int)header);
-            }
-        }
-    }
-};
-extern "C" InternedString FUN_0032c240(char *prefix, char *path);
+extern "C" igStringRef FUN_0032c240(char *prefix, char *path);
 struct FolderFileStat { int mode; char rest[60]; };
 extern "C" int sceGetstat(const char *, FolderFileStat *);
 extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_24(igPsx2Folder *self);

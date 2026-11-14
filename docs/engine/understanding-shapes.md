@@ -353,6 +353,24 @@ Units are named by their source file.
     so the first read is the member itself.
   - *Spelling:* `Entry *entry = (Entry *)found.p; ... remaining = unload((Handle *)found.get());`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x309750).
+- **A temporary smart pointer's release reloads the pointer.**
+  - *Symptom:* a freshly created object is assigned to a field, then released with the slot read twice:
+    `lw v1,104(sp); beqz v1; lw v0,4(v1); addiu v0,v0,-1; sw v0,4(v1); lw a0,104(sp); lw v0,4(a0); dsll32 ...`.
+    The out-of-line destructor of the same template (0x130140, and five copies in this unit) reads the member
+    once, so the reload looked like a second holder class with a re-reading destructor.
+  - *Cause:* the holder is a temporary: built in an argument bound to a `const igSmartPointer<T> &` parameter of
+    an inline, or returned by value and used in place. Its destructor runs at the end of the full expression
+    with the release's parameter folded back into the temporary's member, as in the entry above. A named local
+    passed to the same inline has its address taken and is released from one read (0x2e3a60: 580 bytes against
+    retail's 588). The compiler pass was not traced.
+  - *Spelling:* `assignReference(self->_file, igSmartPointer<igFileView>(create(pool)));` and
+    `found = openPath(self, folder.p->vfunc_23(name));`, written in the function itself. The same call inside a
+    second inline helper's `return` reads once (0x305d30: 1152 against 1160).
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2e3a60, 0x2e3f50, 0x2e82a0, 0x305d30, 0x2da1c0, 0x308860).
+- **A returned pointer taken through the holder's conversion keeps its own copy for the release.** `lw s0,140(sp);
+  move a0,s0; beqz a0; move v0,s0`, with the count updated through `a0`: `return holder;` (`operator T *`) or
+  `return holder.get();`. `return holder.p;` shares the read with the destructor and updates the count through
+  `s0` (856 bytes against 868). *Unit:* `src/engine/core/CoreLibrary.cpp` (0x307c10).
 - **A base pointer the walk keeps is a field read, not the cursor.** `end = list->data + list->count` after
   `s = list->data` shares one load of `data` with the cursor's start and with the `s - list->data` the function
   returns, and that shared value keeps its own register; `end = s + list->count` makes the cursor the base and
@@ -475,6 +493,29 @@ Units are named by their source file.
   in the local's own slot, which stays in memory and is loaded at the return (4 bytes less); returning the call
   itself becomes a jump. The callee is declared with its `igResult` return, not an output pointer and an `int`.
   *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f0880 and the five pools' configure functions).
+- **A member release with a null test of the member's address is an explicit destructor call.** A class's
+  hand-written destructor releases each reference field behind `addiu v0,s1,68; beqz v0; lw a0,68(s1)`. It is
+  `((igSmartPointer<igObject> *)&p->_field)->~igSmartPointer();` (and `~igStringRef()` for a string field): the
+  expanded destructor keeps its test of `this`. A helper spelling the test (`T **self = &field; if (self)`) is
+  not the source. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2c3b00).
+- **A list's inserted pointer word is a class member.** `sw v0,104(sp); lw v1,104(sp); beqz v1` before the
+  reference increment and `List_InsertWords(list, index, 1, &word)`: the word is the member of a one-word
+  class with a retaining constructor (`RetainedWord<T>`), read back after the constructor's store. A pointer
+  local or parameter whose address is passed is tested from the register and stored in the branch's delay slot
+  (712 bytes against 716). A word built inside an inline helper is allocated after the caller's earlier inline
+  parameters; where retail has it first, the word is declared in the function. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d87b0, 0x2e5110, 0x2fe600).
+- **A class result read through a member function is read through its address.** After the `jalr`,
+  `addiu v1,sp,332` and later `lw v1,0(v1)`: `tracker->vfunc_27(offset, &record).get()` on an `igResult`
+  returned by value. Reading the member (`.v`) loads the slot directly (460 bytes against 464), and an `int`
+  return has no result slot (452). A
+  second result struct with its own accessor is not needed. *Unit:* `src/engine/core/CoreLibrary.cpp`
+  (`igEventTracker::vfunc_33`).
+- **An interned-string holder interns in its constructor.** A null test of the characters, the string pool
+  created on first use, the intern call and a store to a stack slot, later released, is `igStringRef name(chars);`.
+  The same sequence without the null test, followed by the release of the old token, is the assignment
+  `name = chars;`. Holders with an adopting constructor fed by hand-written intern code were the same class.
+  *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2da1c0, 0x2d1c40, 0x305d30, 0x2fca80, 0x32c240).
 
 ### Scheduling (EE GCC)
 

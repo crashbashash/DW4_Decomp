@@ -334,8 +334,7 @@ int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, i
     }
     igSmartPointer<igDirEntryView> record(((igDirEntryView *)FUN_002bd8f0((int)(((void *)igObject_GetAllocator((int)self))))));
     record.get()->_index = index;
-    RetainedWord<igDirEntryView> inserted(record.get());
-    List_InsertWords((igDataList *)self, index, 1, &inserted);
+    insertObject((igDataList *)self, index, record.get());
     if (name != 0) {
         igNamedObject_SetName((igNamedObject *)(record.get()), (int)name);
     }
@@ -378,8 +377,7 @@ int FUN_002d8a80(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, 
     if (arg3 == 0) arg3 = FUN_002cc2c0();
     igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)FUN_002c0d80(FUN_00301000(arg0))));
     record.get()->_index = s0;
-    RetainedWord<igMemoryDirEntryView> inserted(record.get());
-    List_InsertWords((igDataList *)arg0, s0, 1, &inserted);
+    insertObject((igDataList *)arg0, s0, record.get());
     if (arg5) igNamedObject_SetName((igNamedObject *)(record.get()), arg5);
     record.get()->_resolveMethod = arg6;
     record.get()->_refType = 1;
@@ -421,8 +419,7 @@ int FUN_002d8d00(igDirectoryView *list, int key, int name, int val) {
     entry.get()->_refType = 2;
     entry.get()->vfunc_23(key);
     entry.get()->_index = idx;
-    Retained retained(entry.get());
-    List_InsertWords((igDataList *)list, idx, 1, &retained);
+    insertObject((igDataList *)list, idx, entry.get());
     return entry.get()->_index;
 }
 

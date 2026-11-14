@@ -4,27 +4,18 @@ static inline void retain(Instance *object) {
     }
 }
 
-static inline void release_2fd610(Instance *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
-}
-
 int FUN_002fd610(Instance **out, int meta) {
     igSmartPointer<Instance> created((Instance *)igMetaObject_CreateInstanceDefault((void *)meta), kRetainReference);
-    release_2fd610(created.p);
+    igRelease(created.p);
     *out = created.p;
     retain(*out);
     return 0;
 }
 
-/* The new instance arrives with one reference; the holder takes its own and drops that one. */
-CreatedRef FUN_002fd6e0(int meta, int pool) {
-    CreatedRef created((igObject *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)pool));
-    releaseObject_2fd610(created.get());
+/* The new instance arrives with one reference; the pointer takes its own and drops that one. */
+igSmartPointer<igObject> FUN_002fd6e0(int meta, int pool) {
+    igSmartPointer<igObject> created((igObject *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)pool), kRetainReference);
+    igRelease(created.get());
     return created;
 }
 
@@ -79,7 +70,7 @@ igMetaObject *igMetaObject_Init(igMetaObject *meta){
     /* Drop the old pool-name token: owner chunk at -8, reference count at -4. */
     oldName=meta->_poolName;
     if(oldName){oldHeader=(int *)(oldName-8);refCount=*(int *)(oldName-4)-1;*(int *)(oldName-4)=refCount;
-        if(!refCount)StringChunk_ReleaseHeader((StringChunkOwnerView *)(*oldHeader), (int)oldHeader);
+        if(!refCount)StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
     }
     meta->_poolName=(int)emptyToken;return meta;
 }
@@ -244,7 +235,7 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
         refCount = *(int *)(oldName - 4) - 1;
         *(int *)(oldName - 4) = refCount;
         if (!refCount) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*oldHeader), (int)oldHeader);
+            StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
         }
     }
     meta->_name = internedName;
@@ -472,8 +463,10 @@ int FUN_002fe600(igTDataList<igMetaObject *> *list, igMetaObject *object) {
     }
     int n = list->count();
     while (i == -1 && object != 0) {
-        ChainRef retained(object);
-        List_InsertWords((igDataList *)list, n, 1, &retained);
+        /* insertObject() written out: as an inlined call its word is allocated after the first
+         * find()'s key, at 72(sp) with the key at 76(sp); retail has them the other way round. */
+        RetainedWord<igMetaObject> word(object);
+        List_InsertWords((igDataList *)list, n, 1, &word);
         object = (igMetaObject *)object->_parent;
         i = list->find(object);
     }

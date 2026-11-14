@@ -27,7 +27,7 @@ int igStructMetaField_GetVTable(void) {
             h = s - 2;
             c = s[-1] - 1;
             s[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+            if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
         }
     }
     return r;

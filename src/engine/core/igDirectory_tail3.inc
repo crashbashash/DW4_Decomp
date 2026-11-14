@@ -58,7 +58,7 @@ void FUN_002d8fe0(igDirectoryView *arg0, int arg1) {
         temp_v1 = temp_a0[-1] - 1;
         temp_a0[-1] = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     arg0->_name = (int)temp_s0;

@@ -54,7 +54,7 @@ int igEnumMetaField_GetVTable(void) {
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
             *(int *)((char *)(temp_v1) - 4) = temp_v0;
             if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
             }
         }
     }

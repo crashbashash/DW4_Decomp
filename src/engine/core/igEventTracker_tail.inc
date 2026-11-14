@@ -66,7 +66,7 @@ void FUN_002dcc60(igEventTrackerView *tracker, int tag) {
 }
 
 void FUN_002dcd70(igEventTrackerView *tracker, int className) {
-    EventTrackerScopedLock guard(tracker->_lock);
+    ScopedLock guard(tracker->_lock);
     if (tracker->isBusy() != false) {
         return;
     }
@@ -146,7 +146,7 @@ void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
 }
 
 void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *arg0) {
-    EventTrackerScopedLock guard(arg0->_lock);
+    ScopedLock guard(arg0->_lock);
     arg0->_count = 0;
     FUN_0030d050(arg0->_groups);
     FUN_0030d050(arg0->_classNames);
@@ -340,7 +340,7 @@ void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int
         var_s1 += 1;
     }
     for (;;) {
-        int c = arg0->vfunc_27(var_s0, &ev).Code();
+        int c = arg0->vfunc_27(var_s0, &ev).get();
         if (c != g_resultSuccess.v) break;
         if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {

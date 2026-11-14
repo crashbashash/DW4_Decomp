@@ -41,17 +41,17 @@ int igEventTracker_GetVTable(void) {
     tracker._callStackTracer = 0;
     t = *(int *)((char *)&tracker + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     tracker._vtable = (int)&DAT_00530420[0];
-    FUN_002ba7f0((ObjectRefWord *)&tracker._callStackTracer, -1);
+    FUN_002ba7f0((igSmartPointer<igObject> *)&tracker._callStackTracer, -1);
     FUN_002b86c0((void **)&tracker._hashIndex, -1);
     FUN_002b8f10((igObject **)&tracker._eventRecords, -1);
     FUN_002ba870((void **)&tracker._locations, -1);
     FUN_002ba8f0((void **)&tracker._callStacks, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._sourceFileNames, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._annotations, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._memberNames, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._classNames, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._groups, -1);
-    FUN_002b8740((ObjectRefWord *)&tracker._names, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._sourceFileNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._annotations, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._memberNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._classNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._groups, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&tracker._names, -1);
     FUN_002ba970((igObject **)&tracker._lock, -1);
     return t;
 }

@@ -32,7 +32,7 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
         temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
         *(int *)((char *)(temp_v1) - 4) = temp_v0;
         if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     *arg1 = temp_s0;
@@ -70,7 +70,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
         count = header->refCount - 1;
         header->refCount = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)header->owner, (int)header);
+            StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);
         }
     }
 }
@@ -116,7 +116,7 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
         temp_v1 = *(int *)((char *)(temp_a0) - 4) - 1;
         *(int *)((char *)(temp_a0) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
     *temp_s1 = temp_s0;
@@ -198,7 +198,7 @@ void igStringMetaField_ResetValue(int *arg0, int arg1) {
         v = h[1] - 1;
         h[1] = v;
         if (v == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
+            StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
         }
     }
 }
@@ -218,7 +218,7 @@ void igStringMetaField_CopyValue(igStringMetaField *arg0, int arg1, int arg2) {
         temp_v1 = *(int *)((char *)(sp1C) - 4) - 1;
         *(int *)((char *)(sp1C) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
 }
@@ -237,7 +237,7 @@ void Gap__Core__igStringMetaField__vfunc_38(igStringArrayMetaField *arg0, int ar
         temp_v1 = *(int *)((char *)(sp1C) - 4) - 1;
         *(int *)((char *)(sp1C) - 4) = temp_v1;
         if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
+            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
         }
     }
 }
@@ -279,7 +279,7 @@ void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
             count = header->refCount - 1;
             header->refCount = count;
             if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)header->owner, (int)header);
+                StringChunk_ReleaseHeader((StringChunk *)header->owner, (int)header);
             }
         }
     }

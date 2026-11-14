@@ -3,87 +3,41 @@ void Gap__Core__igRegistry__vfunc_11(void *arg0) {
     ObjectList_ResizeRetained((igTDataList<igObject *> *)(*(int *)((char *)arg0 + 8)), 0x100);
 }
 
-static inline int pool_305d30() {
-    if ((*(int *)g_stringPool) == 0) {
-        int p = ((int)StringPool_Allocate(0x10));
-        if (p != 0) { p = ((int)StringPool_Construct((StringPool *)p)); }
-        (*(int *)g_stringPool) = p;
-    }
-    return (*(int *)g_stringPool);
-}
-
-static inline void assign_305d30(char **slot, char *text) {
-    char *v = ((char *)StringPool_Intern((StringPool *)(pool_305d30()), (const char *)text));
-    char *old = *slot;
-    dropString(old);
-    *slot = v;
-}
-
-static inline void setText(igFolderView *o, char *text) {
-    char *v = ((char *)StringPool_Intern((StringPool *)(pool_305d30()), (const char *)text));
-    char *old = o->_folderName;
-    dropString(old);
-    o->_folderName = v;
-}
-
-static inline void dropPath(igFolderView *o) {
-    if (o != 0) {
-        o->_refCount = (int)o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
-}
-
 static inline char *pathText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
-static inline int tryPath(igRegistry *self, igFolderView *base, char *name) {
-    FolderPath joined = base->vfunc_23(name);
+static inline int openPath(igRegistry *self, const igSmartPointer<igStringObj> &path) {
     igFileView *file = (igFileView *)self->_registryFile;
-    return file->Open(pathText(joined.p), ((char *)DAT_004f96a8));
+    return file->Open(pathText(path.p), ((char *)DAT_004f96a8));
 }
 
 bool FUN_00305d30(igRegistry *self, char *name, char *dir) {
-    char *held;
-    char *interned;
     int found;
-    igFolderView *base;
-    igFolderView *other;
-    char *second;
-    if (name == 0) {
-        interned = 0;
-    } else {
-        interned = ((char *)StringPool_Intern((StringPool *)(pool_305d30()), (const char *)name));
+    igStringRef held(name);
+    if (held.p == 0 || strlen(held.p) == 0) {
+        held = text_alchemy_ini;
     }
-    *(char **)&held = interned;
-    if (held == 0 || strlen(held) == 0) {
-        assign_305d30(&held, text_alchemy_ini);
-    }
-    found = ((igFileView *)self->_registryFile)->Open(held, ((char *)DAT_004f96a8));
+    found = ((igFileView *)self->_registryFile)->Open(held.p, ((char *)DAT_004f96a8));
     if (found == 0) {
         if (dir == 0 || strlen(dir) == 0) {
             dir = ((char *)FUN_002d1c20((int *)((*(void * *)g_objectSystem))));
         }
         if (dir != 0 && strlen(dir) != 0) {
-            *(igFolderView **)&base = ((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
-            setText(base, dir);
-            found = tryPath(self, base, held);
-            dropPath(base);
+            igSmartPointer<igFolderView> folder((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
+            folder.p->setFolderName(dir);
+            found = openPath(self, folder.p->vfunc_23(held.p));
         }
     }
     if (found == 0) {
-        *(igFolderView **)&other = ((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
-        second = ((char *)FUN_002d1c30((int *)((*(void * *)g_objectSystem))));
-        setText(other, second);
-        found = tryPath(self, other, held);
-        dropPath(other);
+        igSmartPointer<igFolderView> folder((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
+        folder.p->setFolderName(((char *)FUN_002d1c30((int *)((*(void * *)g_objectSystem)))));
+        found = openPath(self, folder.p->vfunc_23(held.p));
     }
     if (found == 0) {
-        dropString(held);
         return false;
     }
     FUN_003077a0(self);
     FUN_00307870(self, self->_registryFile, 1);
     ((igFileView *)self->_registryFile)->Close();
-    dropString(held);
     return true;
 }
 
@@ -180,7 +134,6 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const
     igRegistryValue *node;
     igStringObj *t;
     igStringObj *old;
-    StringObjHolder h;
     node = FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0);
     if (node != 0) {
         t = (igStringObj *)node->_value;
@@ -195,23 +148,22 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const
         }
         *arg3 = t;
     } else {
-    h.ref = ((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
-    igStringObj_Set((int)h.ref, (int)arg4);
-    t = h.ref;
-    if (t) {
-        ++t->_refCount;
-    }
-    old = *arg3;
-    if (old) {
-        --old->_refCount;
-        if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((void *)old);
-    }
-    *arg3 = t;
-    if (arg5 != 0) {
-        FUN_00307700((void *)arg0, arg1, arg2, (int)arg4);
-    }
-    h.release();
+        igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator(arg0))));
+        igStringObj_Set((int)created.p, (int)arg4);
+        t = created.p;
+        if (t) {
+            ++t->_refCount;
+        }
+        old = *arg3;
+        if (old) {
+            --old->_refCount;
+            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)old);
+        }
+        *arg3 = t;
+        if (arg5 != 0) {
+            FUN_00307700((void *)arg0, arg1, arg2, (int)arg4);
+        }
     }
     return node != 0;
 }
@@ -240,7 +192,7 @@ static inline void assign_306910(int **slot, char *s) {
         rc = old[-1] - 1;
         old[-1] = rc;
         if (rc == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
         }
     }
     *slot = v;
@@ -290,7 +242,7 @@ static inline void releaseRef(int *old) {
         rc = old[-1] - 1;
         old[-1] = rc;
         if (rc == 0) {
-            StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+            StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
         }
     }
 }
@@ -517,8 +469,7 @@ bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines) {
 igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3) {
     int s2 = 0;
     int s1 = -1;
-    RegistryValueRef r;
-    r.p = 0;
+    igSmartPointer<igRegistryValue> r;
     for (; s2 < ((igRegistryValueList *)arg0->_valueTable)->_count; s2++) {
         igRegistryValue *s0 = ((igRegistryValue **)((igRegistryValueList *)arg0->_valueTable)->_data)[s2];
         igRegistryValue *old;
@@ -534,14 +485,12 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int 
             if (arg0->_valueNameCaseSensitive != 0) {
                 nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)g_stringObjEmptyText)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
                 if (strcmp(nm, arg2) == 0) {
-                    igRegistryValue *ret = r.p;
-                    return ret;
+                    return r;
                 }
             } else {
                 nm = (((igStringObj *)r.p->_valueName)->_buffer == 0) ? ((int *)g_stringObjEmptyText)[0] : ((igStringObj *)r.p->_valueName)->_buffer;
                 if (thunk_strcasecmp((const char *)nm, arg2) == 0) {
-                    igRegistryValue *ret = r.p;
-                    return ret;
+                    return r;
                 }
             }
         } else if (r.p == 0 && s1 < 0) {
@@ -575,10 +524,7 @@ igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int 
         if (l->_count != 0 && s1 >= 0 && s1 < l->_count) ((igRegistryValue **)l->_data)[s1] = (igRegistryValue *)arg0;
         r.p->_section = arg1;
         igStringObj_Set((int)(((igStringObj *)r.p->_valueName)), (int)arg2);
-        {
-            igRegistryValue *ret = r.p;
-            return ret;
-        }
+        return r;
     }
     return 0;
 }
@@ -731,7 +677,7 @@ int FUN_00308850(int *p, int extra1)
     return ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)p + 16)), (igObject *)extra1);
 }
 
-static inline void setNames(igResource *self, const MemberRef &value) {
+static inline void setNames(igResource *self, const igSmartPointer<igObject> &value) {
     igObject *held = value.p;
     igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
@@ -743,7 +689,7 @@ static inline void setNames(igResource *self, const MemberRef &value) {
     self->_alignmentStrings = (int)held;
 }
 
-static inline void setValues(igResource *self, const MemberRef &value) {
+static inline void setValues(igResource *self, const igSmartPointer<igObject> &value) {
     igObject *held = value.p;
     igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
@@ -757,8 +703,8 @@ static inline void setValues(igResource *self, const MemberRef &value) {
 
 void FUN_00308860(igResource *self, int name, int value) {
     if (self->_alignmentStrings == 0) {
-        setNames(self, MemberRef((igObject *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
-        setValues(self, MemberRef((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
+        setNames(self, igSmartPointer<igObject>((igObject *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
+        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     }
     igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self)))));
     igStringObj_Set((int)entry.p, name);
@@ -808,7 +754,7 @@ igDirectory *FUN_00308a90(igResource *self) {
             v = *(int *)(old - 4) - 1;
             *(int *)(old - 4) = v;
             if (v == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
+                StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
             }
         }
         s0->_name = s2;

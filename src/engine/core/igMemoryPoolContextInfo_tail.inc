@@ -286,21 +286,20 @@ igResult FUN_002f3060(MemoryContext *self, int file, int arg) {
     return result;
 }
 
-/* Fills one memory-pool handle object from the pool descriptor table: looks up descriptor `index`
- * (0x90 bytes each, from +0x14 of the table) and, when the index is in 0..45, copies it into the
- * handle object: the descriptor name via igNamedObject_SetName, the integer size/limit fields
- * (+0x1c..+0x24, +0x50), and ten interned strings (+0x18, +0x28..+0x4c, each assigned through the
- * shared StringPool with the usual retain/release of the old token). The descriptor's attached
- * object (+0 of the entry) supplies +0x1c when it reports a size; the handle name (+0x14) is built
- * from the table name 'kIGMemoryPoolHandle%s'. The status written through `result` is g_resultSuccess
- * on success and g_resultFailure for an out-of-range index. */
-void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
+/* MemoryContext slot 34: fills `info` from record `index`. When the index is in 0..45 it copies the
+ * record name via igNamedObject_SetName and, if the record has a descriptor, the descriptor's
+ * integer fields and its ten interned strings (each assigned through the shared StringPool with the
+ * usual retain/release of the old token). The record's allocator updates the descriptor's _size
+ * first when it reports a size. _handleName is built from 'kIGMemoryPoolHandle%s' and the record's
+ * context name. The status written through `result` is g_resultSuccess on success and
+ * g_resultFailure for an out-of-range index. */
+void FUN_002f31b0(int *result, MemoryContext *context, int index, igMemoryPoolInfo *info)
 {
     StringToken *old;
     const char *text;
     igMemoryPoolView *object;
     StringTokenHeader *header;
-    PoolEntry *entry;
+    ContextRecord *entry;
     char nameBuf[128];
     void *poolObj;
     int count;
@@ -309,65 +308,56 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
 
     status = g_resultSuccess.v;
     if (index >= 0 && index < 46) {
-        entry = &table->entries[index];
-        igNamedObject_SetName((igNamedObject *)handle, (int)entry->name);
-        if (entry->defaults != 0) {
-            ASSIGN_TOKEN(handle->token0, entry->defaults->text0);
-            object = table->entries[index].object;
+        entry = &context->records[index];
+        igNamedObject_SetName((igNamedObject *)info, (int)entry->name);
+        if (entry->descriptor != 0) {
+            ASSIGN_TOKEN(info->_aliasedTo, entry->descriptor->_aliasedTo);
+            object = (igMemoryPoolView *)context->records[index].allocator;
             if (object != 0) {
                 if (igObject_IsKindOf(object, (igMetaObject *)g_igArenaMemoryPool_metaObject[0]) != 0) {
                     if (object->vfunc_44() != 0) {
                         if (((igArenaMemoryPoolView *)object)->vfunc_100() > object->vfunc_44()) {
-                            entry->defaults->limit = (int)((igArenaMemoryPoolView *)object)->vfunc_100();
+                            entry->descriptor->_size = (int)((igArenaMemoryPoolView *)object)->vfunc_100();
                         }
                     } else if (object->vfunc_29() != 0) {
-                        entry->defaults->limit = (int)object->vfunc_36();
+                        entry->descriptor->_size = (int)object->vfunc_36();
                     }
                 } else if (object->vfunc_36() != 0) {
-                    entry->defaults->limit = (int)object->vfunc_36();
+                    entry->descriptor->_size = (int)object->vfunc_36();
                 }
             }
-            handle->limit = entry->defaults->limit;
-            handle->field20 = entry->defaults->field20;
-            handle->field24 = entry->defaults->field24;
-            ASSIGN_TOKEN(handle->token1, entry->defaults->text1);
-            ASSIGN_TOKEN(handle->token2, entry->defaults->text2);
-            ASSIGN_TOKEN(handle->token3, entry->defaults->text3);
-            ASSIGN_TOKEN(handle->token4, entry->defaults->text4);
-            ASSIGN_TOKEN(handle->token5, entry->defaults->text5);
-            ASSIGN_TOKEN(handle->token6, entry->defaults->text6);
-            ASSIGN_TOKEN(handle->token7, entry->defaults->text7);
-            ASSIGN_TOKEN(handle->token8, entry->defaults->text8);
-            ASSIGN_TOKEN(handle->token9, entry->defaults->text9);
-            ASSIGN_TOKEN(handle->token10, entry->defaults->text10);
-            handle->field50 = entry->defaults->field50;
+            info->_size = entry->descriptor->_size;
+            info->_maxSize = entry->descriptor->_maxSize;
+            info->_address = entry->descriptor->_address;
+            ASSIGN_TOKEN(info->_class, entry->descriptor->_class);
+            ASSIGN_TOKEN(info->_arenaType, entry->descriptor->_arenaType);
+            ASSIGN_TOKEN(info->_source, entry->descriptor->_source);
+            ASSIGN_TOKEN(info->_scope, entry->descriptor->_scope);
+            ASSIGN_TOKEN(info->_debugOptions, entry->descriptor->_debugOptions);
+            ASSIGN_TOKEN(info->_releaseOptions, entry->descriptor->_releaseOptions);
+            ASSIGN_TOKEN(info->_debugChecking, entry->descriptor->_debugChecking);
+            ASSIGN_TOKEN(info->_releaseChecking, entry->descriptor->_releaseChecking);
+            ASSIGN_TOKEN(info->_debugMessages, entry->descriptor->_debugMessages);
+            ASSIGN_TOKEN(info->_releaseMessages, entry->descriptor->_releaseMessages);
+            info->_eventTrackerCapacity = entry->descriptor->_eventTrackerCapacity;
         }
         sprintf(nameBuf, text_kIGMemoryPoolHandle_s, g_memoryContextNames[index]);
-        ASSIGN_TOKEN_DIRECT(handle->handleName, nameBuf);
+        ASSIGN_TOKEN_DIRECT(info->_handleName, nameBuf);
     } else {
         status = g_resultFailure.v;
     }
     *result = status;
 }
 
-static inline void *descPool() {
-    if ((*(void * *)g_stringPool) == 0) {
-        void *p = StringPool_Allocate(16);
-        if (p != 0) { p = ((void *)StringPool_Construct((StringPool *)p)); }
-        (*(void * *)g_stringPool) = p;
-    }
-    return (*(void * *)g_stringPool);
-}
-
 /* Interns `src` into a reflected igStringMetaField word, releasing the previous token. */
 static inline void setDescString(int *dst, char *src) {
-    char *v = ((char *)StringPool_Intern((StringPool *)(descPool()), src));
+    char *v = ((char *)StringPool_Intern(InternedStrings::get(), src));
     char *old = (char *)*dst;
     if (old != 0) {
         StringTokenHeader *h = (StringTokenHeader *)(old - 8);
         int n = h->refCount - 1;
         h->refCount = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunk *)h->owner, (int)h); }
     }
     *dst = (int)v;
 }
@@ -623,16 +613,14 @@ void FUN_002f48d0(char *arg0) {
  * copied with a 127-character limit and the 128th byte is cleared explicitly. Called by the
  * constructor and the destructor. strncpy is a strncpy-like bounded string copy (dest, source,
  * limit). */
-void igMemoryPoolContextInfo_InitializeRecordNames(igMemoryPoolContextInfo *self) {
+void igMemoryPoolContextInfo_InitializeRecordNames(MemoryContext *self) {
     int index;
-    ContextPrefixedRecord *entry;
 
     index = 0;
     do {
-        entry = (ContextPrefixedRecord *)((char *)self + index * sizeof(ContextRecord));
-        strncpy(entry->record.name, g_memoryContextNames[index], CONTEXT_NAME_LIMIT);
+        strncpy(self->records[index].name, g_memoryContextNames[index], CONTEXT_NAME_LIMIT);
+        self->records[index].name[CONTEXT_NAME_LIMIT] = 0;
         index += 1;
-        entry->record.name[CONTEXT_NAME_LIMIT] = 0;
     } while (index < CONTEXT_RECORD_COUNT);
 }
 
@@ -1101,13 +1089,12 @@ void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self
     int tv;
     igMemoryPoolInfo **ps;
     igResult t = self->BuildAllocator(idx, 1); tv = t.v;
-    int off = idx * 0x90; ContextPrefixedRecord *slot = (ContextPrefixedRecord *)(off + (int)self);
-    trk = (igMemoryPoolView *)slot->record.allocator;
+    trk = (igMemoryPoolView *)self->records[idx].allocator;
     /* +12 of the context is igInfo::_directory in reflection but is read here as a flag word. The second flag test below stays on MemoryContext::flags: typing both makes MWCC hoist the member address into a saved register. */
     int h1 = (((igMemoryPoolContextInfo *)self)->_directory & 1) != 0;
     if (h1) {
         ty = 0;
-        ps = (igMemoryPoolInfo **)&slot->record.descriptor; igMemoryPoolInfo *sub = *ps;
+        ps = &self->records[idx].descriptor; igMemoryPoolInfo *sub = *ps;
         if (sub != 0) ty = (void *)sub->_releaseOptions;
         if (ty == 0 || strstr(ty, &text_InhibitEventTracker[0]) == 0) {
             int h2 = (self->flags & 2) != 0;
@@ -1128,7 +1115,7 @@ void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self
         }
     } else {
         void *ty2 = 0;
-        ps2 = (igMemoryPoolInfo **)&slot->record.descriptor; igMemoryPoolInfo *sub2 = *ps2;
+        ps2 = &self->records[idx].descriptor; igMemoryPoolInfo *sub2 = *ps2;
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
         if (ty2 != 0 && strstr(ty2, &text_UseEventTracker[0]) != 0) {
             o2 = (igEventTrackerView *)FUN_002c5780((int)(self->getAllocatorBySelector(3)));
@@ -1212,18 +1199,18 @@ void FUN_002f69b0(MemoryContext *self) {
     unsigned char saveEventTrackerOnExit;
     unsigned char showMemoryStatisticsOnExit;
     unsigned char showObjectStatisticsOnExit;
-    StringRef memoryEventFormat;
-    StringRef markerEventFormat;
-    StringRef notificationEventFormat;
-    StringRef eventTrackerFileName;
-    StringRef symbolsFileName;
+    igStringRef memoryEventFormat;
+    igStringRef markerEventFormat;
+    igStringRef notificationEventFormat;
+    igStringRef eventTrackerFileName;
+    igStringRef symbolsFileName;
     int initialCapacity;
     int scopeFlags;
     int eventTypeFilter;
     int markerTypeFilter;
     int notificationTypeFilter;
     int notificationCodeFilter;
-    StringRef systemPoolEventTrackerFileName;
+    igStringRef systemPoolEventTrackerFileName;
     FUN_00306e50(registry, 2, text_useGlobalEventTracker, (char *)&useGlobalEventTracker, globalTrackerByDefault, 0);
     self->setFlags(useGlobalEventTracker ? self->flags | 1 : self->flags & ~1);
     ((ObjectSystemView *)g_objectSystem[0])->useGlobalEventTracker = useGlobalEventTracker;
@@ -1350,7 +1337,7 @@ static inline void releaseString_2f25d0(char *p) {
         StringTokenHeader *h = (StringTokenHeader *)(p - 8);
         int n = h->refCount - 1;
         h->refCount = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunk *)h->owner, (int)h); }
     }
 }
 
@@ -1358,7 +1345,7 @@ void FUN_002f7410(int arg0, int arg1) {
     strcmp(*(int *)((char *)(arg0) + 0), *(int *)((char *)(arg1) + 0));
 }
 
-void FUN_002f7420(ContextRecordStride *self) {
+void FUN_002f7420(MemoryContext *self) {
     int sizeA;
     int sizeB;
     int sizeC;
@@ -1425,7 +1412,7 @@ void FUN_002f7420(ContextRecordStride *self) {
         }
     }
     for (i = 0; i < 46; i++) {
-        igMemoryPoolView *p = (igMemoryPoolView *)self[i].allocator;
+        igMemoryPoolView *p = (igMemoryPoolView *)self->records[i].allocator;
         if (p != 0) {
             int j;
             int seen;
@@ -1434,7 +1421,7 @@ void FUN_002f7420(ContextRecordStride *self) {
             seen = 0;
             if (o != 0) {
                 for (j = 0; j < i; j++) {
-                    igMemoryPoolView *q = (igMemoryPoolView *)self[j].allocator;
+                    igMemoryPoolView *q = (igMemoryPoolView *)self->records[j].allocator;
                     if (q != 0 && q->getEventTracker() == o) { seen = 1; break; }
                 }
                 if (o != 0 && seen == 0) {
@@ -1455,7 +1442,7 @@ void FUN_002f7420(ContextRecordStride *self) {
         }
     }
     for (int k = 0; k < 46; k++) {
-        igMemoryPoolView *p = (igMemoryPoolView *)self[k].allocator;
+        igMemoryPoolView *p = (igMemoryPoolView *)self->records[k].allocator;
         if (p != 0 && p->getEventTracker() != 0) { p->vfunc_90(0); }
     }
 }
@@ -1550,17 +1537,17 @@ igResult FUN_002f7a70(MemoryContext *self, unsigned int kind, int free) {
     return r;
 }
 
-void FUN_002f7bc0(ContextRecordStride *arg0, int arg1) {
+void FUN_002f7bc0(MemoryContext *arg0, int arg1) {
     int i, j, found, id;
     igMemoryPoolView *o;
     for (i = 0; i < 46; i++) {
-        o = (igMemoryPoolView *)arg0[i].allocator;
+        o = (igMemoryPoolView *)arg0->records[i].allocator;
         if (o != 0) {
             id = (int)o->getEventTracker();
             found = 0;
             if (id != 0) {
                 for (j = 0; j < i; j++) {
-                    igMemoryPoolView *o2 = (igMemoryPoolView *)arg0[j].allocator;
+                    igMemoryPoolView *o2 = (igMemoryPoolView *)arg0->records[j].allocator;
                     if (o2 != 0) {
                         int r2 = (int)o2->getEventTracker();
                         if (r2 == id) {
@@ -1652,16 +1639,16 @@ void FUN_002f7f20(MemoryContext *self, int arg1) {
     }
 }
 
-void FUN_002f8020(ContextRecordStride *slots, int arg1, int *out, int n) {
+void FUN_002f8020(MemoryContext *slots, int arg1, int *out, int n) {
     int i;
     int j;
     int found;
     int id;
     for (i = 0; i < 46; i++) {
-        igMemoryPoolView *o = (igMemoryPoolView *)slots[i].allocator;
+        igMemoryPoolView *o = (igMemoryPoolView *)slots->records[i].allocator;
         if (o != 0 && (id = (int)o->getEventTracker(), found = 0, id != 0)) {
             for (j = 0; j < i; j++) {
-                igMemoryPoolView *o2 = (igMemoryPoolView *)slots[j].allocator;
+                igMemoryPoolView *o2 = (igMemoryPoolView *)slots->records[j].allocator;
                 int k;
                 if (o2 != 0 && (k = (int)o2->getEventTracker(), k == id)) {
                     found = 1;
@@ -1682,19 +1669,19 @@ void FUN_002f8020(ContextRecordStride *slots, int arg1, int *out, int n) {
 }
 
 /* The comma expression pins the operand order of the duplicate test. */
-void FUN_002f8160(ContextRecordStride *arg0, int *arg1, int arg2) {
+void FUN_002f8160(MemoryContext *arg0, int *arg1, int arg2) {
     int i;
     int j;
     int dup;
     int id;
     for (i = 0; i < 46; i++) {
-        igMemoryPoolView *o = (igMemoryPoolView *)arg0[i].allocator;
+        igMemoryPoolView *o = (igMemoryPoolView *)arg0->records[i].allocator;
         if (o != 0) {
             id = (int)o->getEventTracker();
             dup = 0;
             if (id != 0) {
                 for (j = 0; j < i; j++) {
-                    igMemoryPoolView *o2 = (igMemoryPoolView *)arg0[j].allocator;
+                    igMemoryPoolView *o2 = (igMemoryPoolView *)arg0->records[j].allocator;
                     int r;
                     if (o2 != 0 && (r = (int)o2->getEventTracker(), r == id)) {
                         dup = 1;
@@ -1717,7 +1704,7 @@ void FUN_002f8160(ContextRecordStride *arg0, int *arg1, int arg2) {
 
 /* The flag tests are `((x & m) ? 1 : 0) &&`; the ternary gives the materialised sltu. The two
  * later virtual slots are dummy-virtual stubs. */
-void FUN_002f8280(ContextRecordStride *arg0, int arg1, int arg2, int arg3) {
+void FUN_002f8280(MemoryContext *arg0, int arg1, int arg2, int arg3) {
     int sp[40];
     int i;
     int j;
@@ -1725,13 +1712,13 @@ void FUN_002f8280(ContextRecordStride *arg0, int arg1, int arg2, int arg3) {
     igEventTrackerView *r;
     igMemoryPoolView *d;
     for (i = 0; i < 46; i++) {
-        d = (igMemoryPoolView *)arg0[i].allocator;
+        d = (igMemoryPoolView *)arg0->records[i].allocator;
         if (d != 0) {
             r = (igEventTrackerView *)d->getEventTracker();
             found = 0;
             if (r != 0) {
                 for (j = 0; j < i; j++) {
-                    igMemoryPoolView *e = (igMemoryPoolView *)arg0[j].allocator;
+                    igMemoryPoolView *e = (igMemoryPoolView *)arg0->records[j].allocator;
                     if (e != 0 && e->getEventTracker() == r) {
                         found = 1;
                         break;
@@ -1779,7 +1766,7 @@ void FUN_002f8420(MemoryContext *arg0, char *arg1, igMemoryPoolView *arg2) {
     }
 }
 
-void FUN_002f8580(ContextRecordStride *arg0, int *arg1) {
+void FUN_002f8580(MemoryContext *arg0, int *arg1) {
     int *var_a1;
     int temp_a2;
     int j;
@@ -1793,18 +1780,18 @@ void FUN_002f8580(ContextRecordStride *arg0, int *arg1) {
     FUN_00304680();
     i = 0;
     do {
-        temp_a2 = (int)arg0[i].allocator;
+        temp_a2 = (int)arg0->records[i].allocator;
         found = 0;
         if (temp_a2 != 0) {
             for (j = 0; j < i; j++) {
-                int w = (int)arg0[j].allocator;
+                int w = (int)arg0->records[j].allocator;
                 if (w == temp_a2) {
                     found = 1;
                     break;
                 }
             }
             if (found == 0) {
-                ((MemoryContext *)(arg0))->vfunc_65((int)(0), (int)(temp_a2));
+                arg0->vfunc_65((int)(0), (int)(temp_a2));
             }
         }
         i += 1;

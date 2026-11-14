@@ -49,14 +49,13 @@ char *FUN_003057b0(char *s, char ch) {
     return r;
 }
 
-int FUN_00305800(RecoveryString *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6) {
+int FUN_00305800(igStringRef *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6) {
     char spC0[256];
     char spA0[32];
     igMemoryPoolView *a;
     char *buf;
     char *w;
     int i;
-    int v;
 
     if (arg5 == 0) arg5 = &GPR_00554c2c;
     if (arg6 == -1) arg6 = strlen(arg5) + 5;
@@ -89,18 +88,7 @@ block12:
             sprintf(w, text_Reference_1);
         }
     }
-    int *pi;
-    if (buf == 0) {
-        pi = 0;
-    } else {
-        if (g_stringPool[0] == 0) {
-            v = ((int)StringPool_Allocate(16));
-            if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-            g_stringPool[0] = v;
-        }
-        pi = ((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf));
-    }
-    RecoveryString sp1CC((char *)pi);
+    igStringRef sp1CC(buf);
     a = ((igMemoryPoolView *)igObject_GetAllocator((int)arg1));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     a->Free(buf);

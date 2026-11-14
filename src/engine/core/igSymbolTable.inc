@@ -24,16 +24,16 @@ int igSymbolTable_GetVTable(void) {
     table._sourceFileNames = 0;
     temp_s3 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     table._vtable = (int)(&DAT_0052e730[0]);
-    FUN_002b8740((ObjectRefWord *)&table._sourceFileNames, -1);
-    FUN_002b8740((ObjectRefWord *)&table._symbolNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&table._sourceFileNames, -1);
+    FUN_002b8740((igSmartPointer<igObject> *)&table._symbolNames, -1);
     FUN_002b86c0((void **)&table._hashIndex, -1);
-    FUN_002b8640((ObjectRefWord *)&table._symbols, -1);
+    FUN_002b8640((igSmartPointer<igObject> *)&table._symbols, -1);
     return temp_s3;
 }
 
-ObjectRefWord *FUN_002b8640(ObjectRefWord *self,int delete_storage) {
+igSmartPointer<igObject> *FUN_002b8640(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
-        igObject *object=self->value;
+        igObject *object=self->p;
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
@@ -61,9 +61,9 @@ void **FUN_002b86c0(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_002b8740(ObjectRefWord *self,int delete_storage) {
+igSmartPointer<igObject> *FUN_002b8740(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
-        igObject *object=self->value;
+        igObject *object=self->p;
         if(object) {
             --object->_refCount;
             if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)

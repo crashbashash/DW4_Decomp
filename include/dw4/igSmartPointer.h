@@ -29,6 +29,10 @@ static inline void igRelease(igVirtualObject *o) {
 struct AdoptReference {};
 enum RetainReference { kRetainReference };
 
+/* A temporary smart pointer (one built in an argument bound to a const reference, or a by-value
+ * return used in place) is released with p reloaded from its stack slot after the count store. A
+ * named local passed the same way is released from one read. So a caller that shows the reload
+ * holds a temporary, not a second class. */
 template <class T> struct igSmartPointer {
     T *p;
     igSmartPointer() : p(0) {}

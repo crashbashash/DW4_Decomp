@@ -33,7 +33,7 @@ int igMemoryDirEntry_GetVTable(void) {
             tc1 = tv1[-1] - 1;
             tv1[-1] = tc1;
             if (tc1 == 0) {
-                StringChunk_ReleaseHeader((StringChunkOwnerView *)(*ta1), (int)ta1);
+                StringChunk_ReleaseHeader((StringChunk *)(*ta1), (int)ta1);
             }
         }
     }
