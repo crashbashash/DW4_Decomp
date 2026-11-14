@@ -91,7 +91,7 @@ void FUN_002da010(void *self, igTDataList<igVisualContextView *> *list) {
     }
 }
 
-static inline int openPath(igDriverDatabase *database, const Mem &path) {
+static inline int openPath(igDriverDatabase *database, const FolderPath &path) {
     igFileView *file = (igFileView *)database->_databaseFile;
     int text = path.p->_buffer;
     if (text == 0) text = ((int *)g_stringObjEmptyText)[0];

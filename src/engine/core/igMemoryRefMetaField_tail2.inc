@@ -1,21 +1,21 @@
-static inline void dropNames(igTDataList<ReflectedNameObject *> *o) {
+static inline void dropNames(igTDataList<igStringObj *> *o) {
     IG_OBJECT_RELEASE(o);
 }
 
-static inline int countOf(igTDataList<ReflectedNameObject *> *l) { if (l != 0) { return l->_count; } return 0; }
+static inline int countOf(igTDataList<igStringObj *> *l) { if (l != 0) { return l->_count; } return 0; }
 
-static inline char *textOf_2fb280(ReflectedNameObject *s) { char *t = s->name; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
+static inline char *textOf_2fb280(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *name) {
-    igTDataList<ReflectedNameObject *> *names;
-    igTDataList<ReflectedNameObject *> *held;
+    igTDataList<igStringObj *> *names;
+    igTDataList<igStringObj *> *held;
     int n;
     int i;
     if (name == 0) {
         self->_alignmentType = -1;
         return;
     }
-    *(igTDataList<ReflectedNameObject *> **)&names = g_globalContext->names;
+    *(igTDataList<igStringObj *> **)&names = g_globalContext->_alignmentStrings;
     held = names;
     if (held != 0) { held->_refCount = (int)held->_refCount + 1; }
     n = countOf(names);

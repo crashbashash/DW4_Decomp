@@ -12,20 +12,20 @@ int igPsx2Thread_GetVTable(void) {
     char *o;
     int *a1;
     int v0;
-    S_ref *p0, *p1;
+    igObject *p0, *p1;
     igObject_InitHeader((igObject *)&thread);
-    p0 = (S_ref *)&thread._name;
+    p0 = (igObject *)&thread._name;
     *(int *)p0 = 0;
     thread._vtable = (int)&DAT_0052d7c0[0];
-    p1 = (S_ref *)&thread._threadDoneSema;
+    p1 = (igObject *)&thread._threadDoneSema;
     *(int *)p1 = 0;
     t = *(int *)((char *)&thread + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     thread._vtable = (int)&DAT_0052d7c0[0];
     if (p1 != 0) {
-        p1 = *(S_ref **)p1;
+        p1 = *(igObject **)p1;
         if (p1 != 0) {
-            p1->f4 = (int)((int) (p1->f4 - 1));
-            if (((unsigned long long) ((long long) p1->f4 << 0x29) >> 0x29) == 0) {
+            p1->_refCount = (int)((int) (p1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) p1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p1);
             }
         }

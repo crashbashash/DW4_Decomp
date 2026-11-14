@@ -38,27 +38,27 @@ done:
 int igMallocMemoryPool_GetVTable(void) {
     igMallocMemoryPool pool;
     int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
+    igObject *q0;
+    igObject *q1;
     FUN_003235c0(&pool);
     temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     pool._vtable = (int)&DAT_00530e90[0];
-    q0 = (S_ref *)&pool._eventTracker;
+    q0 = (igObject *)&pool._eventTracker;
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
     }
-    q1 = (S_ref *)&pool._allocationLock;
+    q1 = (igObject *)&pool._allocationLock;
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)((int) (q1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }

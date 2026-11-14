@@ -21,21 +21,21 @@ int igElfFile_GetVTable(void) {
     int *tv1, *ta1;
     int tc1;
     char *q1;
-    S_ref *q2;
+    igObject *q2;
     igObject_InitHeader((igObject *)&elf);
     elf._vtable = (int)&DAT_0052e010[0];
     q1 = (char *)&elf._fileName;
     *(int *)q1 = 0;
-    q2 = (S_ref *)&elf._file;
+    q2 = (igObject *)&elf._file;
     *(int *)q2 = 0;
     elf._vtable = (int)&DAT_0052e0a0[0];
     r = *(int *)((char *)&elf + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     elf._vtable = (int)&DAT_0052e010[0];
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)((int) (q2->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }

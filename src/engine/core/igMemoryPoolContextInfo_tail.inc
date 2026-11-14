@@ -1739,7 +1739,7 @@ void FUN_002f8280(ContextRecordStride *arg0, int arg1, int arg2, int arg3) {
                 }
                 if (found == 0 && r != 0 && ((r->_eventTypeFilterFlags & 0x2000) ? 1 : 0) && ((r->_markerTypeFilterFlags & (1 << arg1)) ? 1 : 0)) {
                     FUN_002e2250((void *)sp, arg1, arg2, arg3, 0, 0, 0, 0, (int)0, (int)0);
-                    r->vfunc_26((EventRecordInfo *)sp, -1);
+                    r->vfunc_26((EventRecord *)sp, -1);
                     FUN_002e2300(sp, (long long)(-1));
                 }
             }

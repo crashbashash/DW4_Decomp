@@ -800,11 +800,11 @@ int FUN_002e2360(void *arg0) {
     return 0;
 }
 
-int FUN_002e23b0(struct BitSlots *arg0, int arg1)
+int FUN_002e23b0(EventRecord *record, int slot)
 {
-  if (arg1 < 0x10)
+  if (slot < 0x10)
   {
-    return (arg0->bits >> (arg1 * 2)) & 3;
+    return (record->slotStates >> (slot * 2)) & 3;
   }
   return 0;
 }

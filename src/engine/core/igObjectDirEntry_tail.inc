@@ -106,7 +106,7 @@ void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *obj
 }
 
 void Gap__Core__igObjectDirEntry__vfunc_38(igObjectDirEntryView *arg0) {
-    igObjectDispatchView *a = arg0->_ref;
+    igObjectDispatchView *a = (igObjectDispatchView *)arg0->_ref;
     if (a != 0) {
         int (*f)() = (int (*)())a->getMeta()->_writeProxy;
         if (f != 0) {
@@ -121,7 +121,7 @@ void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile
     igObjectDispatchView *temp_s0;
     void *var_v0;
 
-    temp_s0 = arg0->_ref;
+    temp_s0 = (igObjectDispatchView *)arg0->_ref;
     igMetaObject *r = temp_s0->getMeta();
     var_v0 = r;
     temp_v1 = (void *(*)())r->_writeProxy;
@@ -149,7 +149,7 @@ void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1) {
 
 void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self)
 {
-    self->_ref->vfunc_15();
+    ((igObjectDispatchView *)self->_ref)->vfunc_15();
 }
 
 static inline void addRef(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
@@ -159,28 +159,27 @@ static inline void dropRef(igObject *o) {
     if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
 }
 
-static inline void setMeta(DirEntrySelf *self, igObject *m) {
-    igObject *old;
+static inline void setMeta(igObjectDirEntryView *self, igMetaObject *m) {
+    igMetaObject *old;
     addRef(m);
-    old = self->typeMeta;
+    old = self->_typeMeta;
     if (old != 0) { dropRef(old); }
-    self->typeMeta = m;
+    self->_typeMeta = m;
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *file) {
+void Gap__Core__igObjectDirEntry__vfunc_31(igObjectDirEntryView *self, igIGBFileView *file) {
     int index;
-    igObject *m;
     igObject *obj;
     int pool;
     int sel;
-    index = self->typeMetaIndex;
+    index = self->_typeMetaIndex;
     if (index == -1) {
-        setMeta(self, ((igObject *)igObjectSystem_FindMetaByNameDefault((const char *)self->typeMetaName)));
+        setMeta(self, ((igMetaObject *)igObjectSystem_FindMetaByNameDefault((const char *)self->_typeMetaName)));
     } else {
-        setMeta(self, ((igObject **)file->_metaObjectListInFile->_data)[index]);
+        setMeta(self, ((igMetaObject **)file->_metaObjectListInFile->_data)[index]);
     }
-    if (self->typeMeta != 0) {
-        sel = self->pool;
+    if (self->_typeMeta != 0) {
+        sel = self->_memoryPoolHandle;
         if (sel == -1 || sel == 1 || sel == 2) {
             pool = (int)file->_objectMemoryPool;
         } else {
@@ -189,16 +188,16 @@ void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *fi
                 pool = (int)file->_objectMemoryPool;
             }
         }
-        obj = ((igObject *)igMetaObject_CreateInstanceWithPool((igMetaObject *)self->typeMeta, (igMemoryPoolView *)pool));
+        obj = ((igObject *)igMetaObject_CreateInstanceWithPool(self->_typeMeta, (igMemoryPoolView *)pool));
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
-            FUN_002d7da0((igDirectoryView *)file, self->index, (int)0);
+            FUN_002d7da0((igDirectoryView *)file, self->_index, (int)0);
             return;
         }
-        FUN_002d7da0((igDirectoryView *)file, self->index, (int)obj);
+        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)obj);
         dropRef(obj);
     } else {
-        FUN_002d7da0((igDirectoryView *)file, self->index, (int)0);
+        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)0);
     }
 }
 

@@ -15,14 +15,14 @@ int igContextExtInfo_GetVTable(void) {
     igContextExtInfo info;
     int temp_s0;
     int *q0;
-    S_ref *q1;
+    igObject *q1;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
     igObject_InitHeader((igObject *)&info);
     info._vtable = (int)&DAT_005318b0[0];
-    q1 = (S_ref *)&info._pMeta;
+    q1 = (igObject *)&info._pMeta;
     *(int *)q1 = 0;
     q0 = &info._pName;
     *(int *)q0 = 0;
@@ -40,10 +40,10 @@ int igContextExtInfo_GetVTable(void) {
         }
     }
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)((int) (q1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }

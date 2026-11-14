@@ -79,9 +79,9 @@ block12:
         }
         w = buf + strlen(buf);
         if (arg4 != 0) {
-            Rec *r = ((Rec *)FUN_002d7c50((igDirectoryView *)arg4, (unsigned)(*arg2)));
+            igDirEntryView *r = ((igDirEntryView *)FUN_002d7c50((igDirectoryView *)arg4, (unsigned)(*arg2)));
             if (r != 0) {
-                sprintf(w, text_Reference_d, r->name);
+                sprintf(w, text_Reference_d, r->_index);
             } else {
                 sprintf(w, text_Reference_1);
             }

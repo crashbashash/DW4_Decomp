@@ -24,14 +24,14 @@ static inline void *pool() {
     return ((void * *)g_stringPool)[0];
 }
 
-void FUN_002e3850(Named *self, int key) {
-    Holder h = self->Find(key);
+void FUN_002e3850(igFolderView *self, const char *name) {
+    FolderPath h = self->vfunc_23(name);
     char *text = (char *)h.p->_buffer;
     char *v;
     char *old;
     text = (text == 0) ? g_stringObjEmptyText[0] : text;
     v = ((char *)StringPool_Intern((StringPool *)(pool()), (const char *)text));
-    old = self->name;
+    old = self->_folderName;
     if (old != 0) {
         int *hdr = (int *)(old - 8);
         int r = ((int *)old)[-1] - 1;
@@ -40,7 +40,6 @@ void FUN_002e3850(Named *self, int key) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hdr), (int)hdr);
         }
     }
-    self->name = v;
-    IG_OBJECT_RELEASE(h.p);
+    self->_folderName = v;
 }
 

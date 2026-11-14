@@ -1,4 +1,4 @@
-void igResource_StartAsyncLoading(ResourceAsyncView *self) {
+void igResource_StartAsyncLoading(igResourceView *self) {
     self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
     self->_loadQueue->create();
     self->_loadThread = (igPsx2ThreadView *)FUN_00304f00(self->_loadQueue, (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
@@ -7,7 +7,7 @@ void igResource_StartAsyncLoading(ResourceAsyncView *self) {
     ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vfunc_34(1);
 }
 
-void igResource_StopAsyncLoading(ResourceAsyncView *self) {
+void igResource_StopAsyncLoading(igResourceView *self) {
     igResult joined;
     igPsx2ThreadView *thread;
     igStandardQueueView *queue;
@@ -35,24 +35,24 @@ void igResource_StopAsyncLoading(ResourceAsyncView *self) {
 }
 
 void Gap__Core__igResource__vfunc_12(igResource *self) {
-    S_ref *temp_a0;
-    S_ref *temp_a0_2;
+    igObject *temp_a0;
+    igObject *temp_a0_2;
 
     if (self->_asyncLoadState == 1) {
-        igResource_StopAsyncLoading((ResourceAsyncView *)self);
+        igResource_StopAsyncLoading((igResourceView *)self);
     }
-    temp_a0 = (S_ref *)self->_alignmentStrings;
+    temp_a0 = (igObject *)self->_alignmentStrings;
     if (temp_a0 != 0) {
-        temp_a0->f4 = temp_a0->f4 - 1;
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
+        temp_a0->_refCount = temp_a0->_refCount - 1;
+        if (((unsigned long long) ((long long)(int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0);
         }
     }
     self->_alignmentStrings = 0;
-    temp_a0_2 = (S_ref *)self->_alignmentValues;
+    temp_a0_2 = (igObject *)self->_alignmentValues;
     if (temp_a0_2 != 0) {
-        temp_a0_2->f4 = temp_a0_2->f4 - 1;
-        if (((unsigned long long) ((long long) temp_a0_2->f4 << 0x29) >> 0x29) == 0) {
+        temp_a0_2->_refCount = temp_a0_2->_refCount - 1;
+        if (((unsigned long long) ((long long)(int) temp_a0_2->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0_2);
         }
     }

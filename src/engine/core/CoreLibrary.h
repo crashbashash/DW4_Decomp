@@ -1563,7 +1563,8 @@ extern "C" void FUN_002ef9a0(void);
 extern "C" void FUN_002ef9d0(void);
 extern "C" void FUN_002efa20(int arg0, int arg1, int arg2);
 extern "C" void FUN_002efae0(int arg0, int *arg1, int *arg2);
-extern "C" void Gap__Core__igMemoryFile__vfunc_24(void *arg0);
+class igMemoryFileView;
+extern "C" void Gap__Core__igMemoryFile__vfunc_24(igMemoryFileView *self);
 extern "C" int Gap__Core__igMemoryFile__vfunc_29(void);
 extern "C" int Gap__Core__igMemoryFile__vfunc_30(void *arg0, int arg1, ...);
 extern "C" int Gap__Core__igMemoryFile__vfunc_31(int a, int b, ...);
@@ -1571,7 +1572,7 @@ extern "C" int Gap__Core__igMemoryFile__vfunc_32(void);
 extern "C" int Gap__Core__igMemoryFile__vfunc_35(void);
 extern "C" int Gap__Core__igMemoryFile__vfunc_36(void);
 extern "C" int Gap__Core__igMemoryFile__vfunc_37(void);
-extern "C" int Gap__Core__igMemoryFile__vfunc_38(int *arg0, int arg1, int arg2);
+extern "C" int Gap__Core__igMemoryFile__vfunc_38(igMemoryFileView *self, int offset, int whence);
 extern "C" int Gap__Core__igMemoryFile__vfunc_34(void);
 extern "C" int **igMemoryPool_Initialize(int **arg0);
 extern "C" int **FUN_002effb0(int **arg0);
@@ -2699,7 +2700,6 @@ extern "C" int DAT_004bf7e0[4];
 extern "C" int DAT_004bf830[4];
 extern "C" igMetaObject *g_igRegistry_metaObject[4];
 extern "C" igMetaObject *igRegistry_GetMetaObject(void);
-typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 extern "C" int DAT_0052ebf0[4];
 extern "C" char g_igRegistry_callbackList[];
 extern "C" char igRegistry_className[];
@@ -2887,7 +2887,6 @@ extern "C" int g_igMetaField_ctorTable[4];
 extern "C" int g_igMetaField_fieldTable[4];
 extern "C" int DAT_004bfea0[4];
 extern "C" int DAT_004bfef0[4];
-struct Fld { char p0[38]; char f38; char f39; char f40; char p41[12]; char f53; char p54[2]; int f56; char f60; char p61[3]; char f64; char f65; };
 extern "C" igMetaObject *g_igMetaEnum_metaObject[4];
 extern "C" igMetaObject *igMetaEnum_GetMetaObject(void);
 extern "C" int DAT_00532b50[4];
@@ -3516,11 +3515,7 @@ extern "C" int g_igCompoundMetaField_fieldTable[4];
 extern "C" int DAT_004c14d8[4];
 extern "C" int DAT_004c14e0[4];
 extern "C" void * DAT_00586920[4];
-typedef struct Owner {
-    char pad[52];
-    int field52;
-} Owner;
-extern "C" void FUN_002cbf50(Owner *owner);
+extern "C" void FUN_002cbf50(igCompoundMetaField *self);
 extern "C" igMetaObject *g_igCharMetaField_metaObject[4];
 extern "C" igMetaObject *igCharMetaField_GetMetaObject(void);
 extern "C" char g_igCharMetaField_callbackList[];
@@ -4348,7 +4343,10 @@ static inline void release_2da1c0(igObject *object) {
         }
     }
 }
-struct Mem { igStringObj *p; Mem() {} ~Mem() { release_2da1c0(p); } };
+/* The igStringObj igFolder slot 21 returns by value (the callee builds an igSmartPointer<igObject>).
+ * Its destructor re-reads p after the decrement, as IG_OBJECT_RELEASE does: igSmartPointer's
+ * igRelease(p) reads the pointer once, which drops FUN_00305d30's reload of the returned slot. */
+struct FolderPath { igStringObj *p; FolderPath() {} ~FolderPath() { IG_OBJECT_RELEASE(p); } };
 /* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
 static inline void releaseString(const char *string) {
@@ -4367,7 +4365,14 @@ struct StringRef {
     StringRef(const char *string) : p(string) {}
     ~StringRef() { releaseString(p); }
 };
-struct igFolderView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual Mem vfunc_23(const char *name); };
+/* igFolder: a search folder; slot 21 joins _folderName with a file name. */
+class igFolderView : public igVirtualObject { public:
+    RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4); RESERVED(5); RESERVED(6); RESERVED(7);
+    RESERVED(8); RESERVED(9); RESERVED(10); RESERVED(11); RESERVED(12); RESERVED(13); RESERVED(14);
+    RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19); RESERVED(20);
+    virtual FolderPath vfunc_23(const char *name);                              /* +92 */
+    char *_folderName;
+};
 extern "C" int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2);
 /* A node of the parsed driver database (vtable DAT_00530618); section and settings nodes extend it.
  * Slot 0 is the deleting destructor. */
@@ -4429,12 +4434,13 @@ class igLocationTableView : public igVirtualObject { public:
     virtual void vfunc_32(int capacity);
     int _capacity; int _hashCapacity; igTDataList<unsigned int> *_locations; igTDataList<int> *_hashIndex; int _symbolNames; int _sourceFileNames;
 };
-/* An event record decoded from the tracker's record stream. */
-struct EventRecord { int type; int pad[2]; int val; int pad2[8]; char *str; int rest[26]; int getVal() const { return val; } };
+/* One igEventTracker event (148 bytes): cleared by FUN_002e2350, built by FUN_002e2190/FUN_002e2250,
+ * stored by vfunc_26 and decoded back by vfunc_27. slotStates holds a 2-bit state for each of the
+ * 16 words in slots (FUN_002e2360..FUN_002e2520). */
+struct EventRecord { int type; int pad4[2]; int val; int pad16[8]; char *str; int pad52[7]; unsigned int slotStates; int slots[16]; int getVal() const { return val; } };
 /* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
 /* A bare result word: igResult's constructors would change how the caller takes the return. */
 struct EventReadResult { int code; int Code() { return code; } };
-struct EventRecordInfo;
 class igEventTrackerView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -4443,7 +4449,7 @@ public:
     virtual void vfunc_23();                                                    /* slot 21, byte 92 */
     virtual void vfunc_24();                                                    /* slot 22, byte 96: closes what vfunc_23 began */
     virtual void d23();
-    virtual void vfunc_26(EventRecordInfo *info, int mode);
+    virtual void vfunc_26(EventRecord *record, int mode);
     virtual EventReadResult vfunc_27(int offset, EventRecord *record);
     virtual void d26();
     virtual igResult vfunc_29(int offset, int *value);
@@ -4507,7 +4513,6 @@ extern "C" void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *self);
 extern "C" int DAT_004c1ea8[4];
 extern "C" void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7);
 extern "C" int Gap__Core__igEventTracker__vfunc_31(igEventTrackerView *self, int value);
-struct EventRecordInfo { int kind; char pad4[64]; int f68; int f72; int *pending; char pad80[80]; };
 extern "C" char text_main[];
 extern "C" void Gap__Core__igEventTracker__vfunc_37(igEventTrackerView *self, char *wanted);
 extern "C" unsigned int Gap__Core__igEventTracker__vfunc_48(igEventTracker *self, unsigned int hash);
@@ -4535,8 +4540,7 @@ extern "C" int DAT_004c1f60[32];
 extern "C" int DAT_004c1fe0[16];
 extern "C" int DAT_004c2020[64];
 extern "C" void Gap__Core__igEventTracker__vfunc_13(igEventTrackerView *self);
-struct BitSlots { char pad[80]; unsigned int bits; };
-extern "C" int FUN_002e23b0(struct BitSlots *arg0, int arg1);
+extern "C" int FUN_002e23b0(EventRecord *record, int slot);
 extern "C" char DAT_004f99f0[];
 extern "C" unsigned char GPR_00554c00;
 extern "C" void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void *arg1);
@@ -4629,43 +4633,10 @@ extern "C" int igFloatArrayMetaField_GetSize(igFloatArrayMetaField *self);
 extern "C" void igFloatArrayMetaField_SwapBytes(igFloatArrayMetaField *arg0, int arg1, int arg2);
 extern "C" int DAT_004f9a68[4];
 extern "C" int DAT_004f9a70[4];
-struct Holder { igStringObj *p; Holder() {} Holder(const Holder &o) { p = o.p; } };
-class Named { public:
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual Holder Find(int key);
-    int rc;
-    char *name;
-};
-extern "C" void FUN_002e3850(Named *self, int key);
+extern "C" void FUN_002e3850(igFolderView *self, const char *name);
 extern "C" int DAT_004f9a78[4];
 extern "C" igSmartPointer<igObject> Gap__Core__igFolder__vfunc_23(igFolder *folder, int name);
-class Clock {
-public:
-  virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15(); virtual void c16(); virtual void c17(); virtual void c18(); virtual void c19(); virtual void c20(); virtual void c21(); virtual void c22();
-  virtual int now();
-};
-struct ReflectedNameObject { int vt; int rc; char *name; };
-struct ReflectedRegistry { char p0[44]; igTDataList<ReflectedNameObject *> *names; igTDataList<int> *values; };
+class igLongTimerView;
 extern "C" int DAT_004c2130[4];
 extern "C" int DAT_004c2138[4];
 extern "C" int DAT_004c2140[4];
@@ -4675,9 +4646,23 @@ extern "C" int text_readFile_s[4];
 extern "C" char DAT_004f9af0[];
 extern "C" char text_Total_Time_to_load_s_f_seconds[];
 extern "C" igMetaField *DAT_00586280[4];
-extern "C" ReflectedRegistry *g_globalContext;
+/* igResource: the resource manager (g_globalContext): loaded directories, the asynchronous loader,
+ * and the memory alignment names and values .igb files are matched against. */
+class igStandardQueueView;
+class igPsx2ThreadView;
+struct igResourceView : public igObject {
+    unsigned char _useMemoryPoolAssignmentsState; char _pad9[3];
+    int _imageDirectory; int _directoryList; int _relativeFilePath; int _absoluteFilePath;
+    unsigned char _asyncLoadState; char _pad29[3];
+    igSmartPointer<igStandardQueueView> _loadQueue;
+    igSmartPointer<igPsx2ThreadView> _loadThread;
+    unsigned char _autoCompatibility; char _pad41[3];
+    igTDataList<igStringObj *> *_alignmentStrings;
+    igTDataList<int> *_alignmentValues;
+};
+extern "C" igResourceView *g_globalContext;
 extern "C" char DAT_00586e20[64];
-extern "C" Clock *DAT_005871d8[4];
+extern "C" igLongTimerView *DAT_005871d8[4];
 extern "C" char GPR_00554c04;
 extern "C" unsigned char GPR_00554c08;
 extern "C" unsigned char GPR_00554c0c;
@@ -4701,8 +4686,8 @@ class IntListHolder { public: igTDataList<int> *p; IntListHolder(igTDataList<int
 struct MetaTableKey { int v; };
 extern "C" igResult FUN_002e42d0(igIGBFileView *self);
 extern "C" igResult FUN_002e47f0(igIGBFileView *arg1);
-class NameListHolder { public: igTDataList<ReflectedNameObject *> *p; NameListHolder(igTDataList<ReflectedNameObject *> *o) : p(o) { if (p != 0) { p->_refCount = (int)p->_refCount + 1; } }
- ~NameListHolder() { igTDataList<ReflectedNameObject *> *object = p; if (object) { object->_refCount = (int)object->_refCount - 1; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
+class NameListHolder { public: igTDataList<igStringObj *> *p; NameListHolder(igTDataList<igStringObj *> *o) : p(o) { if (p != 0) { p->_refCount = (int)p->_refCount + 1; } }
+ ~NameListHolder() { igTDataList<igStringObj *> *object = p; if (object) { object->_refCount = (int)object->_refCount - 1; if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) igObject_Destroy(object); } } };
 extern "C" igResult FUN_002e4a40(igIGBFileView *self);
 extern "C" igResult FUN_002e4c90(igIGBFileView *self);
 extern "C" igResult FUN_002e4e60(igIGBFile *file);
@@ -5051,21 +5036,20 @@ extern "C" void Gap__Core__igMemoryDirEntry__vfunc_34(igMemoryDirEntryView *self
 extern "C" void Gap__Core__igMemoryDirEntry__vfunc_29(igMemoryDirEntry *self, int memoryPoolHandle);
 extern "C" int Gap__Core__igMemoryDirEntry__vfunc_30(igMemoryDirEntry *self);
 extern "C" int *DAT_00586f48[4];
-struct MemoryFileHead { char p[12]; int f12; char p16[4]; unsigned int f20; int f24; char p28[16]; unsigned char open; char p2[3]; int data; int size; int pos; };
-extern "C" void Gap__Core__igMemoryFile__vfunc_23(int *arg0, struct MemoryFileHead *arg1, unsigned int arg2);
-extern "C" igFileView *Gap__Core__igMemoryFile__vfunc_25(igFileView *arg0, const char *fileName, int arg2);
-class igMemoryFileView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual void vfunc_22();
+/* igMemoryFile: an igFile reading a registered memory buffer (_buffer, _iBufferSize bytes) instead of
+ * a device; the file name is looked up in the igMemoryFileEntry list on open. */
+class igMemoryFileView : public igFileView { public:
+    unsigned char _bIsOpen;
+    char *_buffer;
+    int _iBufferSize;
+    int _iSeekPosition;
 };
+extern "C" void Gap__Core__igMemoryFile__vfunc_23(int *arg0, igMemoryFileView *self, unsigned int mode);
+extern "C" igFileView *Gap__Core__igMemoryFile__vfunc_25(igFileView *arg0, const char *fileName, int arg2);
 extern "C" void Gap__Core__igMemoryFile__vfunc_26(igMemoryFileView *self);
-struct MemoryFileBody { char p[44]; unsigned char open; char p2[3]; char *data; int size; int pos; };
-extern "C" int Gap__Core__igMemoryFile__vfunc_27(struct MemoryFileBody *arg0, void *arg1, int arg2, int arg3);
-extern "C" char Gap__Core__igMemoryFile__vfunc_33(igMemoryFile *arg0);
-extern "C" int Gap__Core__igMemoryFile__vfunc_39(igMemoryFile *self);
+extern "C" int Gap__Core__igMemoryFile__vfunc_27(igMemoryFileView *self, void *buffer, int size, int count);
+extern "C" char Gap__Core__igMemoryFile__vfunc_33(igMemoryFileView *self);
+extern "C" int Gap__Core__igMemoryFile__vfunc_39(igMemoryFileView *self);
 extern "C" int DAT_0052f620[4];
 extern "C" int g_beModelCtrlInfo_metaObject[4];
 extern "C" unsigned char GPR_00554994;
@@ -5624,13 +5608,10 @@ extern "C" void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *object);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_40(igObjectDirEntry *arg0, void *arg1);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1);
-class igObjectDirEntryView {
-public:
-    int _vtable;
-    unsigned int _refCount;
-    char _pad8[16];
-    igObjectDispatchView *_ref;
-    int _typeMeta;
+/* igObjectDirEntry: a directory entry holding one object (_ref) of meta-object _typeMeta; the IGB
+ * file stores the type as _typeMetaIndex into its meta-object list, or by _typeMetaName. */
+class igObjectDirEntryView : public igDirEntryView { public:
+    igMetaObject *_typeMeta;
     int _typeMetaName;
     int _majorVersion;
     int _minorVersion;
@@ -5641,8 +5622,7 @@ extern "C" void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_33(igObjectDirEntry *arg0, void *arg1);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_34(igObjectDirEntry *arg0, void *arg1);
-typedef struct DirEntrySelf { char pad[12]; int index; char pad2[12]; igObject *typeMeta; int typeMetaName; char pad3[8]; int pool; int typeMetaIndex; } DirEntrySelf;
-extern "C" void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *file);
+extern "C" void Gap__Core__igObjectDirEntry__vfunc_31(igObjectDirEntryView *self, igIGBFileView *file);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_24(igObjectDirEntry *self, igObject *object);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_25(igObjectDirEntry *self, igObject *object);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_29(igObjectDirEntry *self, int memoryPoolHandle);
@@ -5691,8 +5671,7 @@ extern "C" void *igObjectRefMetaField_Init(igObjectRefMetaField *self);
 extern "C" void *FUN_00303c60(igObjectRefMetaField *arg0, void *arg1);
 extern "C" void FUN_00303cd0(igObjectStringMap *self, int name, void *object);
 typedef igTDataList<igObject *> FieldList;
-struct FieldTable { char pad[8]; FieldList *fields; };
-extern "C" int FUN_00303dc0(FieldTable *table, int name);
+extern "C" int FUN_00303dc0(igObjectStringMap *map, int name);
 extern "C" void FUN_00303ed0(igObjectStringMap *o);
 extern "C" void FUN_00304030(igObjectStringMap *arg0, int arg1);
 class igPsx2FileView;
@@ -5743,7 +5722,6 @@ extern "C" char DAT_004fb0d8[];
 extern "C" char text_Reference_d[];
 extern "C" char text_Reference_1[];
 extern "C" char GPR_00554c2c;
-struct Rec { char p[12]; char *name; };
 extern "C" int FUN_00305800(RecoveryString *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6);
 extern "C" int FUN_00305aa0(int self, int str, int *out, int n, igDirectory *list);
 extern "C" int FUN_00305bd0(igRefMetaField *arg0, int arg1, int arg2);
@@ -5755,13 +5733,6 @@ extern "C" void *igStringMetaField_Construct(igStringMetaField *self, int extra1
 extern "C" void *igStringMetaField_Init(igStringMetaField *self);
 extern "C" void *igUnsignedIntMetaField_Construct(igMetaField *self, int extra1);
 extern "C" void *igUnsignedIntMetaField_Init(igMetaField *self);
-class IniPathObject;
-struct IniPathHandle { IniPathObject *p; IniPathHandle() {} IniPathHandle(const IniPathHandle &o) { p = o.p; } };
-class IniPathObject { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); 
- virtual IniPathHandle Join(char *);
- int _refCount; char *text;
-};
 extern "C" char text_alchemy_ini[];
 extern "C" bool FUN_00305d30(igRegistry *self, char *name, char *dir);
 extern "C" int FUN_003061c0(void *self, igRegistry *inc, int overwrite);
@@ -5809,8 +5780,7 @@ struct RegistryValueRef {
 extern "C" igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3);
 extern "C" char DAT_004fb280[];
 extern "C" int DAT_005871c0;
-typedef struct IniIncludeFile { char pad[12]; char *dir; } IniIncludeFile;
-extern "C" void FUN_00307fd0(void *self, IniIncludeFile *file, char *line, int lineNo, int overwrite);
+extern "C" void FUN_00307fd0(void *self, igFileView *file, char *line, int lineNo, int overwrite);
 extern "C" int UNKNOWN[4];
 extern "C" int INTERNAL_ERROR[4];
 extern "C" int ERROR[4];
@@ -5850,9 +5820,9 @@ extern "C" igDirectory *FUN_00308a90(igResource *self);
 extern "C" int g_resourceLoaderStackSize[4];
 /* igResource (reflected.h) with its asynchronous-loading fields: the queue the loader thread
  * serves and the thread. */
-struct ResourceAsyncView { char pad[28]; unsigned char _asyncLoadState; char pad29[3]; igSmartPointer<igStandardQueueView> _loadQueue; igSmartPointer<igPsx2ThreadView> _loadThread; };
-extern "C" void igResource_StartAsyncLoading(ResourceAsyncView *self);
-extern "C" void igResource_StopAsyncLoading(ResourceAsyncView *self);
+
+extern "C" void igResource_StartAsyncLoading(igResourceView *self);
+extern "C" void igResource_StopAsyncLoading(igResourceView *self);
 extern "C" void Gap__Core__igResource__vfunc_12(igResource *self);
 extern "C" void *FUN_00308fb0(igResource *arg0, int arg1);
 /* Holds the igIGBFile a directory load creates. */
@@ -6950,7 +6920,8 @@ struct MediaHandleRow { char *name; unsigned int mode; int fd; };
 struct MediaHandlePool { unsigned short limit; unsigned short capacity; unsigned short count; short pad; unsigned short *freeList; MediaHandleRow *rows; };
 /* An IOP file request in igPsx2Media's command buffer; the IOP writes its result to reply. */
 struct MediaIoRequest { int fd; int buffer; int size; int reserved; int kind; int callback; int context; int extra; int reply; };
-struct igPsx2MediaView : public igObject {
+/* igPsx2Media: the PS2 igMedia device, forwarding file requests to the igFileIO IOP module over RPC. */
+class igPsx2MediaView : public igMediaView { public:
     char *_headAndTailBuffer;
     igPsx2IopRpcConnectionView *_connection;
     igSemaphoreView *_sema;
@@ -7070,7 +7041,7 @@ public:
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
     virtual long long vfunc_24();
-    virtual void d23();
+    virtual double vfunc_25();                                                  /* +100: elapsed seconds */
     virtual long long vfunc_26();
     virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
     virtual void setResetTime(long long nanoseconds);

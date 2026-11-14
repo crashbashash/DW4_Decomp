@@ -9,7 +9,7 @@ igMetaObject *igNamedObjectInfo_GetMetaObject(void)
 int igNamedObjectInfo_GetVTable(void) {
     igNamedObjectInfo info;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     int *q1;
     int *temp_v1;
     int *temp_a1;
@@ -19,15 +19,15 @@ int igNamedObjectInfo_GetVTable(void) {
     q1 = &info._name;
     *(int *)q1 = 0;
     info._vtable = (int)&DAT_0052f150[0];
-    q0 = (S_ref *)&info._objects;
+    q0 = (igObject *)&info._objects;
     *(int *)q0 = 0;
     temp_s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     info._vtable = (int)&DAT_0052f150[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }

@@ -9,7 +9,7 @@ igMetaObject *igDependencyMetaField_GetMetaObject(void)
 int igDependencyMetaField_GetVTable(void) {
     igDependencyMetaField u;
     int temp_s0;
-    S_ref *q0;
+    igObject *q0;
     char *q1;
     int *temp_v1;
     int *temp_a1;
@@ -17,16 +17,16 @@ int igDependencyMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&u);
     u._vtable = (int)&DAT_00531740[0];
-    q0 = (S_ref *)&u._fieldList;
+    q0 = (igObject *)&u._fieldList;
     *(int *)q0 = 0;
     u._vtable = (int)&DAT_00532260[0];
     temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     u._vtable = (int)&DAT_00531740[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }

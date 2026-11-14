@@ -372,13 +372,13 @@ igResult FUN_002e47f0(igIGBFileView *arg1) {
 }
 
 static inline char *nameOf(const NameListHolder &r, int i) {
-    char *n = r.p->_data[i]->name;
+    char *n = (char *)r.p->_data[i]->_buffer;
     n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
     return n;
 }
 
 igResult FUN_002e4a40(igIGBFileView *self) {
-    NameListHolder names(g_globalContext->names);
+    NameListHolder names(g_globalContext->_alignmentStrings);
     int i;
     int *lengths;
     char *out;
@@ -1221,10 +1221,10 @@ igResult FUN_002e82a0(igIGBFileView *self) {
     if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, self->_alignmentCount); }
     name = (char *)sizes + self->_alignmentCount * 4;
     {
-    RefObjectHolder names(g_globalContext->names);
-    RefObjectHolder values(g_globalContext->values);
+    RefObjectHolder names(g_globalContext->_alignmentStrings);
+    RefObjectHolder values(g_globalContext->_alignmentValues);
     nameCount = 0;
-    if (names.p != 0) { nameCount = ((igTDataList<ReflectedNameObject *> *)names.p)->_count; }
+    if (names.p != 0) { nameCount = ((igTDataList<igStringObj *> *)names.p)->_count; }
     {
         TypeListHolder h((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
         assignTypes(self, h);
@@ -1239,7 +1239,7 @@ igResult FUN_002e82a0(igIGBFileView *self) {
         value = 16;
         int j;
         for (j = 0; j < nameCount; j++) {
-            char *n = ((igTDataList<ReflectedNameObject *> *)names.p)->_data[j]->name;
+            char *n = (char *)((igTDataList<igStringObj *> *)names.p)->_data[j]->_buffer;
             n = (n == 0) ? (*(char * *)g_stringObjEmptyText) : n;
             if (strcmp(n, name) == 0) { found = true; break; }
         }
@@ -1514,9 +1514,9 @@ igResult FUN_002e9560(igIGBFileView *arg1) {
 }
 
 int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
-  int startTime;
+  double startTime;
   sprintf(DAT_00586e20, text_readFile_s, path);
-  startTime = DAT_005871d8[0]->now();
+  startTime = DAT_005871d8[0]->vfunc_25();
   self->_validState = 0;
   self->_loadPendingState = 1;
   self->_concreteState = 0;
@@ -1574,7 +1574,7 @@ int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
   self->_validState = 1;
   self->_loadPendingState = 0;
   if (!GPR_00554c0c) {
-    int answer = FUN_00308240(text_Total_Time_to_load_s_f_seconds, path, dpsub(DAT_005871d8[0]->now(), startTime));
+    int answer = FUN_00308240(text_Total_Time_to_load_s_f_seconds, path, DAT_005871d8[0]->vfunc_25() - startTime);
     if (answer != 1 && answer == 2) GPR_00554c0c = 1;
   }
   return self->_count;

@@ -586,7 +586,7 @@ void FUN_0032a280(SystemAllocator *self, char *title, char *path, int a, int b, 
         for (i = 0; i < count; i++) {
             DumpRegion *e = ((DumpRegion **)list->_data)[i];
             FUN_002e2190(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->annotation, 0, 0, (int)e->poolName);
-            tracker->vfunc_26((EventRecordInfo *)region, 0);
+            tracker->vfunc_26((EventRecord *)region, 0);
             FUN_002e2300(region, -1);
         }
         tracker->vfunc_44(path);

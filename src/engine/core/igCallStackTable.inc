@@ -16,31 +16,31 @@ igMetaObject *igCallStackTable_GetMetaObject(void)
 int igCallStackTable_GetVTable(void) {
     igCallStackTable table;
     int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
+    igObject *q0;
+    igObject *q1;
 
     igObject_InitHeader((igObject *)&table);
     table._vtable = (int)&DAT_00530c00[0];
-    q1 = (S_ref *)&table._callStacks;
+    q1 = (igObject *)&table._callStacks;
     *(int *)q1 = 0;
-    q0 = (S_ref *)&table._hashIndex;
+    q0 = (igObject *)&table._hashIndex;
     *(int *)q0 = 0;
     temp_s0 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     table._vtable = (int)&DAT_00530c00[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
     }
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)((int) (q1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }

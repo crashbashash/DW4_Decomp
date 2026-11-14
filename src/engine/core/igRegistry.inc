@@ -21,43 +21,43 @@ igMetaObject *igRegistry_GetMetaObject(void)
 int igRegistry_GetVTable(void) {
     igRegistry registry;
     int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
+    igObject *q0;
+    igObject *q1;
+    igObject *q2;
 
     igObject_InitHeader((igObject *)&registry);
     registry._vtable = (int)&DAT_0052ebf0[0];
-    q2 = (S_ref *)&registry._valueTable;
+    q2 = (igObject *)&registry._valueTable;
     *(int *)q2 = 0;
-    q1 = (S_ref *)&registry._registryFile;
+    q1 = (igObject *)&registry._registryFile;
     *(int *)q1 = 0;
-    q0 = (S_ref *)&registry._additionalSectionNames;
+    q0 = (igObject *)&registry._additionalSectionNames;
     *(int *)q0 = 0;
     temp_s0 = *(int *)((char *)&registry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     registry._vtable = (int)&DAT_0052ebf0[0];
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }
     }
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)((int) (q1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }
     }
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)((int) (q2->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }

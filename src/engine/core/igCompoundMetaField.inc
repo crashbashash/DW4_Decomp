@@ -72,9 +72,9 @@ int FUN_002cbf40(void) {
     return 1;
 }
 
-void FUN_002cbf50(Owner *owner)
+void FUN_002cbf50(igCompoundMetaField *self)
 {
-    FUN_002cbf60(owner->field52);
+    FUN_002cbf60(self->_fieldList);
 }
 
 void FUN_002cbf60(int value)

@@ -40,39 +40,39 @@ done:
 int igAliasMemoryPool_GetVTable(void) {
     igAliasMemoryPool pool;
     int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
+    igObject *q0;
+    igObject *q1;
+    igObject *q2;
 
     FUN_002d1500(&pool);
     temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     pool._vtable = (int)&g_igAliasMemoryPool_vtable[0];
-    q2 = (S_ref *)&pool._aliasedMemoryPool;
+    q2 = (igObject *)&pool._aliasedMemoryPool;
     if (q2 != 0) {
-        q2 = *(S_ref **)q2;
+        q2 = *(igObject **)q2;
         if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
+            q2->_refCount = (int)((int) (q2->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q2);
             }
         }
     }
-    q1 = (S_ref *)&pool._eventTracker;
+    q1 = (igObject *)&pool._eventTracker;
     if (q1 != 0) {
-        q1 = *(S_ref **)q1;
+        q1 = *(igObject **)q1;
         if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
+            q1->_refCount = (int)((int) (q1->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q1);
             }
         }
     }
-    q0 = (S_ref *)&pool._allocationLock;
+    q0 = (igObject *)&pool._allocationLock;
     if (q0 != 0) {
-        q0 = *(S_ref **)q0;
+        q0 = *(igObject **)q0;
         if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
+            q0->_refCount = (int)((int) (q0->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(q0);
             }
         }

@@ -19,41 +19,34 @@ static inline void assign_305d30(char **slot, char *text) {
     *slot = v;
 }
 
-static inline void setText(IniPathObject *o, char *text) {
+static inline void setText(igFolderView *o, char *text) {
     char *v = ((char *)StringPool_Intern((StringPool *)(pool_305d30()), (const char *)text));
-    char *old = o->text;
+    char *old = o->_folderName;
     dropString(old);
-    o->text = v;
+    o->_folderName = v;
 }
 
-static inline void dropPath(IniPathObject *o) {
+static inline void dropPath(igFolderView *o) {
     if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
+        o->_refCount = (int)o->_refCount - 1;
+        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
     }
 }
 
-static inline char *pathText(IniPathObject *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
+static inline char *pathText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
-static inline int tryPath(igRegistry *self, IniPathObject *base, char *name) {
-    IniPathHandle joined = base->Join(name);
+static inline int tryPath(igRegistry *self, igFolderView *base, char *name) {
+    FolderPath joined = base->vfunc_23(name);
     igFileView *file = (igFileView *)self->_registryFile;
-    int found = file->Open(pathText(joined.p), ((char *)DAT_004f96a8));
-    IniPathObject *held = joined.p;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        held = joined.p;
-        if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(held); }
-    }
-    return found;
+    return file->Open(pathText(joined.p), ((char *)DAT_004f96a8));
 }
 
 bool FUN_00305d30(igRegistry *self, char *name, char *dir) {
     char *held;
     char *interned;
     int found;
-    IniPathObject *base;
-    IniPathObject *other;
+    igFolderView *base;
+    igFolderView *other;
     char *second;
     if (name == 0) {
         interned = 0;
@@ -70,14 +63,14 @@ bool FUN_00305d30(igRegistry *self, char *name, char *dir) {
             dir = ((char *)FUN_002d1c20((int *)((*(void * *)g_objectSystem))));
         }
         if (dir != 0 && strlen(dir) != 0) {
-            *(IniPathObject **)&base = ((IniPathObject *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
+            *(igFolderView **)&base = ((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
             setText(base, dir);
             found = tryPath(self, base, held);
             dropPath(base);
         }
     }
     if (found == 0) {
-        *(IniPathObject **)&other = ((IniPathObject *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
+        *(igFolderView **)&other = ((igFolderView *)FUN_002c43b0(((int)igObject_GetAllocator((int)self))));
         second = ((char *)FUN_002d1c30((int *)((*(void * *)g_objectSystem))));
         setText(other, second);
         found = tryPath(self, other, held);

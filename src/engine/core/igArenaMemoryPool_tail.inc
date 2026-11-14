@@ -43,28 +43,28 @@ done:
 int igArenaMemoryPool_GetVTable(void) {
     igArenaMemoryPool pool;
     int temp_s0;
-    S_ref *p;
-    S_ref *r;
+    igObject *p;
+    igObject *r;
 
     FUN_0031eb90(&pool);
     temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     pool._vtable = (int)&DAT_00531030[0];
-    p = (S_ref *)&pool._eventTracker;
+    p = (igObject *)&pool._eventTracker;
     if (p != 0) {
-        p = *(S_ref **)p;
+        p = *(igObject **)p;
         if (p != 0) {
-            p->f4 = (int)((int) (p->f4 - 1));
-            if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+            p->_refCount = (int)((int) (p->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
         }
     }
-    r = (S_ref *)&pool._allocationLock;
+    r = (igObject *)&pool._allocationLock;
     if (r != 0) {
-        r = *(S_ref **)r;
+        r = *(igObject **)r;
         if (r != 0) {
-            r->f4 = (int)((int) (r->f4 - 1));
-            if (((unsigned long long) ((long long) r->f4 << 0x29) >> 0x29) == 0) {
+            r->_refCount = (int)((int) (r->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) r->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(r);
             }
         }
