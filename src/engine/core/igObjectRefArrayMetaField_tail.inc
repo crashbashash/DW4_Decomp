@@ -113,7 +113,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_28(void *arg0, int arg1) {
     for (var_s0 = 0; var_s0 < *(int *)((char *)(arg0) + 68); var_s0++) {
         temp_a0 = *(int *)(arg1 + *(int *)((char *)(arg0) + 8) + (var_s0 * 4));
         if (temp_a0 != 0) {
-            igObject_ResetFields((void **)temp_a0);
+            igObject_ResetFields((igObjectDispatchView *)temp_a0);
         }
     }
 }
@@ -198,7 +198,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_39(S_302f10 *arg0, int arg1) {
     for (i = 0; i < arg0->n; i++) {
         int *p = (int *)(arg1 + arg0->base + (i * 4));
         if (*p != 0) {
-            igObject_ResetFields((void **)(*p));
+            igObject_ResetFields((igObjectDispatchView *)(*p));
         }
     }
 }

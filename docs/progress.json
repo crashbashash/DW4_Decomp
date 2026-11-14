@@ -362,7 +362,7 @@
   "fully_matched": 19948,
   "fully_verified": 19861,
   "matched": 19888,
-  "named": 13065,
+  "named": 13067,
   "named_semantic": 5700,
   "named_semantic_matched": 5429,
   "total": 20575
@@ -452,11 +452,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1546580,
+  "bytes": 1547612,
   "failing": {
    "addresses": {
-    "bytes": 1036876,
-    "functions": 7070
+    "bytes": 1035844,
+    "functions": 7068
    },
    "fields": {
     "bytes": 172448,
@@ -467,8 +467,8 @@
     "functions": 466
    },
    "name": {
-    "bytes": 1153924,
-    "functions": 10666
+    "bytes": 1152892,
+    "functions": 10664
    },
    "placed": {
     "bytes": 47336,
@@ -487,7 +487,7 @@
     "functions": 210
    }
   },
-  "functions": 8761,
+  "functions": 8763,
   "matched_functions": 19948
  },
  "regions": [
@@ -622,11 +622,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5245,
-  "pct": 38.73,
-  "recovered": 25232,
-  "synthetic": 7883,
-  "total": 65146,
+  "offset_casts": 5218,
+  "pct": 38.8,
+  "recovered": 25278,
+  "synthetic": 7844,
+  "total": 65155,
   "typeable": 376,
   "typeable_pct": 0.58
  }

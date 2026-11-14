@@ -1,36 +1,36 @@
-void igResource_StartAsyncLoading(AsyncListOwner *self) {
-    self->list = igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
-    ((V92 *)self->list.get())->vA();
-    self->field = (igObject *)FUN_00304f00(self->list.get(), (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
-    ((V200 *)self->field.get())->vB(255);
-    self->ready = 1;
-    ((V136 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vC(1);
+void igResource_StartAsyncLoading(ResourceAsyncView *self) {
+    self->_loadQueue = igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
+    ((ResourceLoadQueue *)self->_loadQueue.get())->AllocateStorage();
+    self->_loadThread = (igObject *)FUN_00304f00(self->_loadQueue.get(), (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
+    ((ResourceLoadThread *)self->_loadThread.get())->SetPriority(255);
+    self->_asyncLoadState = 1;
+    ((MemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->EnableAllocationLock(1);
 }
 
-void igResource_StopAsyncLoading(PairOwnerView *arg0) {
-    PairCallStatus sp3C, sp38;
+void igResource_StopAsyncLoading(ResourceAsyncRawView *self) {
+    PairCallStatus sp38;
     PairCountedObject *q;
-    PairSourceView *x;
-    if (arg0->f28 != 0) {
-        arg0->f28 = 0;
-        sp3C = arg0->f32->m104(0, 1);
+    ResourceLoadQueue *x;
+    if (self->_asyncLoadState != 0) {
+        self->_asyncLoadState = 0;
+        self->_loadQueue->Insert(0, 1);
         PairQueryTarget *z;
-        q = arg0->f36;
+        q = self->_loadThread;
         z = ((PairQueryHost * *)g_threadManager)[0]->m92();
         sp38 = z->m96(q);
-        FUN_00305000((H_305000 *)arg0->f32);
-        x = arg0->f32;
+        FUN_00305000((H_305000 *)self->_loadQueue);
+        x = self->_loadQueue;
         if (x != 0) {
             ((PairCountedRef *)x)->f4 = ((PairCountedRef *)x)->f4 - 1;
             if (((unsigned long long) ((long long) ((PairCountedRef *)x)->f4 << 0x29) >> 0x29) == 0) igObject_Destroy(x);
         }
-        arg0->f32 = 0;
-        q = arg0->f36;
+        self->_loadQueue = 0;
+        q = self->_loadThread;
         if (q != 0) {
             q->f4 = q->f4 - 1;
             if (((unsigned long long) ((long long) q->f4 << 0x29) >> 0x29) == 0) igObject_Destroy(q);
         }
-        arg0->f36 = 0;
+        self->_loadThread = 0;
     }
 }
 
@@ -39,7 +39,7 @@ void Gap__Core__igResource__vfunc_12(T_308f00 *arg0) {
     S_ref *temp_a0_2;
 
     if (arg0->f28 == 1) {
-        igResource_StopAsyncLoading((PairOwnerView *)arg0);
+        igResource_StopAsyncLoading((ResourceAsyncRawView *)arg0);
     }
     temp_a0 = arg0->f44;
     if (temp_a0 != 0) {
@@ -144,22 +144,27 @@ P_309640 *FUN_00309640(P_309640 *arg0, P_309640 *arg1) {
     return arg1;
 }
 
+/* The directory is read from `found` twice. The second read, the call's argument, goes through the
+ * smart pointer's accessor: calling a member takes `found`'s address, so the release in its
+ * destructor binds the object to a temporary once instead of reading `found` again after the count
+ * is stored, and the read is repeated behind the store through `entry`. The first read is the
+ * member itself, an unmarked read the early return's release shares; the shared class's accessors
+ * are `const`, and a read through one is not shared with the destructor's (the original accessor
+ * left an unmarked read, as a non-const one does). */
 void igResource_UnloadDirectory(W_309750 *arg0, int arg1) {
     igSmartPointer<igObject> found = FUN_003087a0(arg0, arg1);
     S1_309750 *entry = (S1_309750 *)found.p;
-    bool current;
-    int remaining;
     if (entry == 0) {
         return;
     }
-    current = false;
+    bool current = false;
     if (entry == arg0->f12) {
         current = true;
     }
     if (entry->f32 == 0) {
         entry->f32 = (S1_309750 *)arg0;
     }
-    remaining = FUN_002d91c0((RefCountedHandle *)found.get()); /* matching construct: manual — get() rather than .p keeps the release from re-reading found */
+    int remaining = FUN_002d91c0((RefCountedHandle *)found.get());
     if (current && remaining <= 0) {
         igRelease((igObject *)arg0->f12);
         arg0->f12 = 0;

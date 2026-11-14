@@ -152,15 +152,11 @@ int Gap__Core__igAliasMemoryPool__vfunc_40(igAliasMemoryPool *self) {
     return self->_elementSize;
 }
 
-/* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).
- * The shared helper also reads a1 (the pool) and a2 (a request descriptor) from its asm, and this
- * wrapper passes both through untouched, which is why only the local cell is named at the call.
- * The helper leaves the success word (g_resultSuccess) in the cell. */
-void Gap__Core__igAliasMemoryPool__vfunc_45(int *outStatus, int extra1, int extra2) {
-    int status;
-
-    FUN_002f0880(&status, (void **)extra1, (void *)extra2);
-    *outStatus = status;
+/* Configures the pool from its info record: the base class's step only. The result is a local
+ * copied out, as in the pools that go on to read the info's strings. */
+igResult Gap__Core__igAliasMemoryPool__vfunc_45(igAliasMemoryPool *self, igMemoryPoolInfo *info) {
+    igResult result = FUN_002f0880((void **)self, (void *)info);
+    return result;
 }
 
 long long Gap__Core__igAliasMemoryPool__vfunc_46(igAliasMemoryPool *arg0) {
@@ -283,28 +279,26 @@ int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *arg0, int arg1) {
     return 0;
 }
 
-R62 Gap__Core__igAliasMemoryPool__vfunc_62(igAliasMemoryPool *arg1) {
-    DW4VC_248_0 *o = (DW4VC_248_0 *)arg1->_aliasedMemoryPool;
-    if (o != 0) {
-        return o->vX();
+igResult Gap__Core__igAliasMemoryPool__vfunc_62(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks) {
+    igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
+    if (pool != 0) {
+        return pool->gangAlloc(count, sizes, blocks);
     }
-    return R62(g_resultFailure.v);
+    return g_resultFailure;
 }
 
-R63 Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *arg1) {
-    C_2d0550 *p = (C_2d0550 *)arg1->_aliasedMemoryPool;
-    if (p != 0) {
-        return p->vX();
+igResult Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks, unsigned short *alignments) {
+    igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
+    if (pool != 0) {
+        return pool->gangAllocAligned(count, sizes, blocks, alignments);
     }
-    return R63(g_resultFailure.v);
+    return g_resultFailure;
 }
 
-void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *arg0) {
-    void **temp_a0;
-
-    temp_a0 = (void **)(arg0->_aliasedMemoryPool);
-    if (temp_a0 != 0) {
-        ((DW4VC_256_0 *)(temp_a0))->vX();
+void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *self, int count, void **blocks) {
+    igMemoryPoolView *pool = (igMemoryPoolView *)self->_aliasedMemoryPool;
+    if (pool != 0) {
+        pool->gangFree(count, blocks);
     }
 }
 

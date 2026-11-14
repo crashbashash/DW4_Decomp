@@ -1,26 +1,21 @@
-void Gap__Core__igMallocMemoryPool__vfunc_45(int *arg0, struct A1 *arg1, struct A2 *arg2) {
-    /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    int var_s2;
-    int temp_s1;
-    int r;
-    int sp6C;
-    FUN_002f0880(&sp6C, (void **)arg1, (void *)arg2);
-    r = sp6C;
-    temp_s1 = arg2->f76;
-    if (temp_s1 != 0) {
-        var_s2 = arg1->f152;
-        if (((int)strstr(temp_s1, &text_NoMessages[0])) != 0) {
-            var_s2 = 0;
-        } else if (((int)strstr(temp_s1, &text_ErrorMessages[0])) != 0) {
-            var_s2 = 1;
-        } else if (((int)strstr(temp_s1, &text_WarningMessages[0])) != 0) {
-            var_s2 = 2;
-        } else if (((int)strstr(temp_s1, &text_Notifications[0])) != 0) {
-            var_s2 = 3;
+igResult Gap__Core__igMallocMemoryPool__vfunc_45(igMallocMemoryPool *self, igMemoryPoolInfo *info) {
+    igResult result;
+    result = FUN_002f0880((void **)self, (void *)info);
+    const char *messages = igMemoryPoolInfo_messages(info);
+    if (messages != 0) {
+        int level = self->_messageLevel;
+        if (strstr(messages, (char *)text_NoMessages) != 0) {
+            level = 0;
+        } else if (strstr(messages, (char *)text_ErrorMessages) != 0) {
+            level = 1;
+        } else if (strstr(messages, (char *)text_WarningMessages) != 0) {
+            level = 2;
+        } else if (strstr(messages, (char *)text_Notifications) != 0) {
+            level = 3;
         }
-        arg1->f152 = var_s2;
+        self->_messageLevel = level;
     }
-    *arg0 = r;
+    return result;
 }
 
 /* Empties the pool and marks it active: the 64-bit _size (+136) is cleared and _isActive (+112)

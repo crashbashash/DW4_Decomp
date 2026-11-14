@@ -5,7 +5,7 @@ void **FUN_002c5fb0(int arg0) {
         igEnumMetaField_EnsureRegistered();
         var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igEnumMetaField_metaObject[0], (MemoryPool *)arg0)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, (void **)arg0)));
+        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, (igMemoryPoolView *)arg0)));
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_002dc8c0((int **)var_s0, 1)));
         }

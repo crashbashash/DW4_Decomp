@@ -78,7 +78,7 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
         *result = g_resultFailure.v;
         return;
     }
-    if (self->file->Read(self->magic, 0x34, 1) != 1) {
+    if (self->stream->Read(self->magic, 0x34, 1) != 1) {
         FUN_00304430(DAT_004fdda0, self->path);
         FUN_00304680();
         self->Close();
@@ -122,7 +122,7 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
     }
     self->sectionCount = self->sectionHeaderCount;
     if (self->sectionNameIndex != 0) {
-        ElfSection *section = (ElfSection *)FUN_00320ea0((S_320ea0 *)self, self->sectionNameIndex);
+        ElfSection *section = FUN_00320ea0(self, self->sectionNameIndex);
         if (section != 0 && section->type == 3) {
             self->sectionNamesSize = section->size;
             if (self->Load(section->offset, section->size, &self->sectionNames) == g_resultFailure) {
@@ -134,46 +134,37 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
     *result = g_resultSuccess.v;
 }
 
-void Gap__Core__igElfFile__vfunc_25(int arg0, void *arg1) {
-    int temp_a1;
-    int temp_a1_2;
-    int temp_a1_3;
-    int temp_a1_4;
-
-    temp_a1 = *(int *)((char *)arg1 + 80);
-    if (temp_a1 != 0) {
-        FUN_00300f50((int)arg1, temp_a1);
+void Gap__Core__igElfFile__vfunc_25(int *result, ElfFileView *self) {
+    if (self->sectionHeaders != 0) {
+        FUN_00300f50((int)self, (int)self->sectionHeaders);
     }
-    temp_a1_2 = *(int *)((char *)arg1 + 72);
-    if (temp_a1_2 != 0) {
-        FUN_00300f50((int)arg1, temp_a1_2);
+    if (self->sectionNames != 0) {
+        FUN_00300f50((int)self, (int)self->sectionNames);
     }
-    temp_a1_3 = *(int *)((char *)arg1 + 88);
-    if (temp_a1_3 != 0) {
-        FUN_00300f50((int)arg1, temp_a1_3);
+    if (self->strings != 0) {
+        FUN_00300f50((int)self, (int)self->strings);
     }
-    temp_a1_4 = *(int *)((char *)arg1 + 96);
-    if (temp_a1_4 != 0) {
-        FUN_00300f50((int)arg1, temp_a1_4);
+    if (self->symbols != 0) {
+        FUN_00300f50((int)self, (int)self->symbols);
     }
-    Gap__Core__igProgramFile__vfunc_25((int *)arg0, arg1);
+    Gap__Core__igProgramFile__vfunc_25(result, self);
 }
 
-int FUN_00320ea0(struct S_320ea0 *arg0, int arg1) {
-    int base = arg0->f80;
-    if (base != 0 && arg1 >= 0 && arg1 <= arg0->f76) {
-        return base + arg1 * arg0->f62;
+ElfSection *FUN_00320ea0(ElfFileView *self, int index) {
+    char *base = (char *)self->sectionHeaders;
+    if (base != 0 && index >= 0 && index <= self->sectionCount) {
+        return (ElfSection *)(base + index * self->sectionHeaderEntrySize);
     }
     return 0;
 }
 
-int FUN_00320ee0(struct S_320ee0 *arg0, int arg1, int arg2) {
+int FUN_00320ee0(ElfFileView *self, int type, int nth) {
     int i;
     int t;
-    for (i = 0; i < arg0->n; i++) {
-        t = ((struct E_320ee0 *)FUN_00320ea0((S_320ea0 *)arg0, i))->f4;
-        if (t == arg1) {
-            if (arg2-- == 0) {
+    for (i = 0; i < self->sectionCount; i++) {
+        t = FUN_00320ea0(self, i)->type;
+        if (t == type) {
+            if (nth-- == 0) {
                 return i;
             }
         }
@@ -527,7 +518,7 @@ void Gap__Core__igElfFile__vfunc_31(int *arg0) {
     FUN_00304430(DAT_004fe370, temp_a1, temp_a1);
     FUN_00304680();
     for (var_s0 = 0; var_s0 < arg0[19]; var_s0++) {
-        FUN_00322040((A_322040 *)arg0, var_s0, (B_322040 *)(FUN_00320ea0((S_320ea0 *)arg0, var_s0)));
+        FUN_00322040((A_322040 *)arg0, var_s0, (B_322040 *)(FUN_00320ea0((ElfFileView *)arg0, var_s0)));
     }
 }
 
@@ -576,7 +567,7 @@ void FUN_00322240(igElfFile *arg0, int arg1, unsigned char *arg2) {
     int *temp_v0;
     char *var_s0;
 
-    temp_v0 = ((int *)FUN_00320ea0((S_320ea0 *)arg0, *(unsigned short *)(arg2 + 14)));
+    temp_v0 = ((int *)FUN_00320ea0((ElfFileView *)arg0, *(unsigned short *)(arg2 + 14)));
     if (temp_v0 != 0) {
         var_s0 = (char *)(arg0->_sectionHeaderStringTable + *temp_v0);
     } else {

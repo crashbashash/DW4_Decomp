@@ -11162,7 +11162,7 @@
 002bf680 00000c igMemoryRefMetaField_EnsureRegistered
 002bf690 00006c igMemoryRefMetaField_Register
 002bf700 000008 thunk_igMemoryRefMetaField_GetMetaObject
-002bf710 00027c FUN_002bf710
+002bf710 00027c igMemoryRefMetaField_InitFields
 002bf990 0000c8 FUN_002bf990
 002bfa60 000034 FUN_002bfa60
 002bfaa0 000048 igMemoryRefArrayMetaField_GetMetaObject
@@ -11427,7 +11427,7 @@
 002c5550 00000c FUN_002c5550
 002c5560 000074 igExternalDirEntry_Register
 002c55e0 000008 thunk_igExternalDirEntry_GetMetaObject
-002c55f0 00018c FUN_002c55f0
+002c55f0 00018c igExternalDirEntry_InitFields
 002c5780 000034 FUN_002c5780
 002c57c0 000048 FUN_002c57c0
 002c5810 000048 igEventTracker_GetMetaObject

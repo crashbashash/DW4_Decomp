@@ -405,7 +405,7 @@ void FUN_002d60b0(igContext *arg0) {
             --o->_refCount;
             if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)o));
         }
-        ((DummyVirtualContext *)arg0)->vX();
+        ((igObjectDispatchView *)arg0)->getMeta();
         meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
         arg0->_iNumExts = igMetaObject_CountTree((MetaTreeNode *)meta) - 1;
         if (arg0->_iNumExts >= ((igContextExtInfoList *)arg0->_pExtList)->_count) List_Reserve((L_2d6680 *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts, 4);

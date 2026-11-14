@@ -45,9 +45,10 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   quoted from runs on the final tree.
 - **Every landing includes the readability pass** on what it touches ([Readable](#matched-and-readable)).
 - **Sub-agent models are set by the kind of work** ([Delegated work](#delegated-work)): byte matching and
-  mechanical work start on Sonnet 5.5, Opus 5.5 reviews every Sonnet result and fixes what it could not
-  match or explain (and does the readability pass), and Fable 5.2 is the last resort for what Opus 5.5 cannot
-  land. The integrator does no bulk mechanical work itself, and names each sub-agent's model to the owner.
+  mechanical work start on Sonnet 5.5, the integrator (which runs on Opus 5.5) reviews every Sonnet result and
+  fixes what it could not match or explain (and does the readability pass), and Fable 5.2 is the last resort for
+  what Opus 5.5 cannot land. The integrator does no bulk mechanical work itself, and names each sub-agent's model
+  to the owner.
 - **Owner decisions are presented one at a time, as a question** the owner answers (the options with a
   recommendation, and the evidence), and an approval row is written only on the owner's instruction for it.
   An `asm` or `volatile` goes to the owner only after a Fable 5.2 sub-agent has checked whether it is needed:
@@ -224,10 +225,12 @@ The sub-agent's model is set by the kind of work. This is a requirement, not a p
   rows, landing agents' files, collecting data): Sonnet 5.5.
 - **Byte matching, first pass** (drafting functions, folding a range into whole files, matching them under the
   unit profile): Sonnet 5.5. Its report lists what matched and, separately, what it could not match or explain.
-- **Review and fix:** Opus 5.5 reviews every Sonnet 5.5 matching result before it lands: real types and names,
-  no byte-only spellings or stray `asm`/`volatile`, extents and rows right, the readability pass done. It fixes
-  what Sonnet left unmatched or unexplained. Understanding work with no Sonnet pass (a resisting shape, a tool
-  change) starts here.
+- **Review and fix:** the integrator, which runs on Opus 5.5, reviews every Sonnet 5.5 matching result before it
+  lands: real types and names, no byte-only spellings or stray `asm`/`volatile`, extents and rows right, the
+  readability pass done. It fixes what Sonnet left unmatched or unexplained. Opus 5.5 sub-agents take the review,
+  one per slice, when it is too large for the integrator alone or when several Sonnet results are waiting at once,
+  so the reviews run in parallel. Understanding work with no Sonnet pass (a resisting shape, a tool change) starts
+  at Opus 5.5.
 - **Last resort:** Fable 5.2, handed the Opus 5.5 report, for a function or shape Opus 5.5 still cannot land.
 
 How it is enforced:
@@ -240,9 +243,9 @@ How it is enforced:
   exact mapping or table to apply and the check that proves it was applied.
 - **Every leftover is handed on, in order.** A leftover is a function that still differs, a shape whose
   mechanism is unexplained, an extent or boundary nothing proves, or an approval item. Sonnet 5.5's go to the
-  Opus 5.5 review; what Opus 5.5 still cannot land goes to a Fable 5.2 sub-agent with the Opus report, and
-  every approval item goes through Fable 5.2 before it reaches the owner. Work does not count as done before
-  that, and listing a leftover under open questions without the handoffs is not done. If Fable 5.2 cannot
+  integrator's Opus 5.5 review; what Opus 5.5 still cannot land goes to a Fable 5.2 sub-agent with the Opus
+  report, and every approval item goes through Fable 5.2 before it reaches the owner. Work does not count as done
+  before that, and listing a leftover under open questions without the handoffs is not done. If Fable 5.2 cannot
   explain it either, the open question records the reports.
 - **Reports carry the model.** A sub-agent's report states its model in its first line. A progress or
   final report that credits a sub-agent's result names the model that produced it. The final report lists

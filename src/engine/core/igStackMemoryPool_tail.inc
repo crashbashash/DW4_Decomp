@@ -1,12 +1,8 @@
-/* Output-first status wrapper. The status word is returned through the hidden output pointer (a0).
- * The shared helper also reads a1 (the pool) and a2 (a request descriptor) from its asm, and this
- * wrapper passes both through untouched, which is why only the local cell is named at the call.
- * The helper leaves the success word (g_resultSuccess) in the cell. */
-void Gap__Core__igStackMemoryPool__vfunc_45(int *outStatus, int extra1, int extra2) {
-    int status;
-
-    FUN_002f0880(&status, (void **)extra1, (void *)extra2);
-    *outStatus = status;
+/* Configures the pool from its info record: the base class's step only. The result is a local
+ * copied out, as in the pools that go on to read the info's strings. */
+igResult Gap__Core__igStackMemoryPool__vfunc_45(igStackMemoryPool *self, igMemoryPoolInfo *info) {
+    igResult result = FUN_002f0880((void **)self, (void *)info);
+    return result;
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_30(S30 *p) {
@@ -295,41 +291,27 @@ static inline unsigned short effectiveAlign(StackPoolFields *pool, unsigned shor
     return wanted > pool->alignment ? wanted : pool->alignment;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, int n, unsigned *sizes, unsigned *out) {
-    /* matching construct: declaration-order sweep (random shuffles, then single moves) — the order of the locals sets their registers */
-    unsigned pad;
+/* Allocates `count` blocks at once. Three attempts: the worst-case total (every block padded by a
+ * full alignment) fits, so each block is carved off the pool directly; the total without padding
+ * fits, so the blocks are laid out against a local copy of the top and committed only if all of
+ * them fit; otherwise every result is cleared. One index serves all four loops (its later uses
+ * are numbered after every other local), and the pool's top is read from the pool where it is
+ * used: the second attempt reads the unmoved top for each block, as retail does. */
+void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, unsigned short count, unsigned *sizes, unsigned *out) {
     unsigned i;
     unsigned total = 0;
-    unsigned mask;
-    unsigned start;
-    unsigned avail;
-    unsigned start2;
-    unsigned *end;
-    unsigned size;
-    unsigned low;
-    unsigned count;
-    unsigned j;
-    unsigned scaled;
-    unsigned l;
-    unsigned pad2;
-    unsigned size2;
-    unsigned k;
-    i = 0;
-    count = (unsigned short)n;
-    for (; i < count; i++) {
+    for (i = 0; i < count; i++) {
         total += sizes[i];
     }
-    mask = pool->alignment - 1;
+    unsigned mask = pool->alignment - 1;
     total += (mask + 4) * count;
-    low = pool->top;
-    end = pool->end;
-    avail = (unsigned)(end + 1) - low;
+    unsigned avail = (unsigned)(pool->end + 1) - pool->top;
     if (total <= avail) {
-        for (j = 0; j < count; j++) {
-            start = pool->top;
-            pad = mask & (pool->alignment - (start & mask));
-            size = pad + sizes[j];
-            out[j] = start + pad;
+        unsigned *end = pool->end;
+        for (i = 0; i < count; i++) {
+            unsigned pad = mask & (pool->alignment - (pool->top & mask));
+            unsigned size = pad + sizes[i];
+            out[i] = pool->top + pad;
             pool->top += size;
             *end = size;
             end--;
@@ -339,74 +321,51 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, StackPoolFields *pool, 
         return;
     }
     if (total - mask * count <= avail) {
-        for (k = 0; k < count; k++) {
-            start2 = pool->top;
-            pad2 = mask & (pool->alignment - (start2 & mask));
-            scaled = k * 4;
-            size2 = pad2 + *(unsigned *)((char *)sizes + scaled);
-            if ((unsigned)end - low < size2) {
+        unsigned *end = pool->end;
+        unsigned low = pool->top;
+        for (i = 0; i < count; i++) {
+            unsigned pad = mask & (pool->alignment - (pool->top & mask));
+            unsigned size = pad + sizes[i];
+            if ((unsigned)end - low < size) {
                 break;
             }
-            *(unsigned *)((char *)out + scaled) = start2 + pad2;
-            low += size2;
-            *end = size2;
+            out[i] = pool->top + pad;
+            low += size;
+            *end = size;
             end--;
         }
-        if (k == count) {
+        if (i == count) {
             pool->top = low;
             pool->end = end;
             *result = g_resultSuccess.v;
             return;
         }
     }
-    for (l = 0; l < count; l++) {
-        out[l] = 0;
+    for (i = 0; i < count; i++) {
+        out[i] = 0;
     }
     *result = g_resultFailure.v;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, int n, unsigned *sizes, unsigned *out, unsigned short *aligns) {
+void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, unsigned short count, unsigned *sizes, unsigned *out, unsigned short *aligns) {
+    unsigned i;
     unsigned total = 0;
     unsigned padding = 0;
-    unsigned size2;
-    unsigned align;
-    unsigned align2;
-    unsigned mask2;
-    unsigned i;
-    unsigned l;
-    unsigned *end;
-    unsigned low;
-    unsigned pad;
-    unsigned count;
-    unsigned mask;
-    unsigned start;
-    unsigned start2;
-    unsigned size;
-    unsigned avail;
-    unsigned pad2;
-    unsigned scaled;
-    unsigned k;
-    unsigned j;
-    i = 0;
-    count = (unsigned short)n;
-    for (; i < count; i++) {
+    for (i = 0; i < count; i++) {
         total += sizes[i];
         padding += effectiveAlign(pool, aligns[i]);
     }
-    padding -= n & 0xffff;
+    padding -= count;
     total += padding + count * 4;
-    low = pool->top;
-    end = pool->end;
-    avail = (unsigned)(end + 1) - low;
+    unsigned avail = (unsigned)(pool->end + 1) - pool->top;
     if (total <= avail) {
-        for (j = 0; j < count; j++) {
-            align = effectiveAlign(pool, aligns[j]);
-            start = pool->top;
-            mask = align - 1;
-            mask &= align - (start & mask);
-            pad = mask;
-            size = pad + sizes[j];
-            out[j] = start + pad;
+        unsigned *end = pool->end;
+        for (i = 0; i < count; i++) {
+            unsigned align = effectiveAlign(pool, aligns[i]);
+            unsigned mask = align - 1;
+            unsigned pad = mask & (align - (pool->top & mask));
+            unsigned size = pad + sizes[i];
+            out[i] = pool->top + pad;
             pool->top += size;
             *end = size;
             end--;
@@ -416,31 +375,30 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
         return;
     }
     if (total - padding <= avail) {
-        for (k = 0; k < count; k++) {
-            align2 = effectiveAlign(pool, aligns[k]);
-            start2 = pool->top;
-            mask2 = align2 - 1;
-            mask2 &= align2 - (start2 & mask2);
-            pad2 = mask2;
-            scaled = k * 4;
-            size2 = pad2 + *(unsigned *)((char *)sizes + scaled);
-            if ((unsigned)end - low < size2) {
+        unsigned *end = pool->end;
+        unsigned low = pool->top;
+        for (i = 0; i < count; i++) {
+            unsigned align = effectiveAlign(pool, aligns[i]);
+            unsigned mask = align - 1;
+            unsigned pad = mask & (align - (pool->top & mask));
+            unsigned size = pad + sizes[i];
+            if ((unsigned)end - low < size) {
                 break;
             }
-            *(unsigned *)((char *)out + scaled) = start2 + pad2;
-            low += size2;
-            *end = size2;
+            out[i] = pool->top + pad;
+            low += size;
+            *end = size;
             end--;
         }
-        if (k == count) {
+        if (i == count) {
             pool->top = low;
             pool->end = end;
             *result = g_resultSuccess.v;
             return;
         }
     }
-    for (l = 0; l < count; l++) {
-        out[l] = 0;
+    for (i = 0; i < count; i++) {
+        out[i] = 0;
     }
     *result = g_resultFailure.v;
 }
@@ -572,19 +530,19 @@ void Gap__Core__igStackMemoryPool__vfunc_92(void *arg0, int arg1) {
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_96(igStackMemoryPool *self, igDataList *list) {
-    Ent_328e00 *entry;
-    Ent_328e00 *created;
+    DumpRegion *entry;
+    DumpRegion *created;
 
-    if (((DW4VC_132_0 *)self)->vX() != 0) {
-        created = FUN_0032a1e0(0xA8);
+    if (((MemoryPool *)self)->IsActive() != 0) {
+        created = FUN_0032a1e0(sizeof(DumpRegion));
         if (created != 0) {
             created = FUN_0032a100(created);
         }
         entry = created;
-        created->w0 = self->_rawMemory;
-        entry->w4 = (int)self->_totalSize;
-        FUN_0032a180((char *)entry, &text_Pool_igStackMemoryPool[0]);
-        FUN_0032a1b0((char *)entry, (int *)FUN_002f89a0((int)self));
+        created->start = self->_rawMemory;
+        entry->size = self->_totalSize;
+        FUN_0032a180(entry, text_Pool_igStackMemoryPool);
+        FUN_0032a1b0(entry, (const char *)FUN_002f89a0((int)self));
         List_InsertWords(list, FUN_002d6e60((L_2d6e60 *)list, &entry, (Cmp)FUN_0032a260), 1, &entry);
     }
 }

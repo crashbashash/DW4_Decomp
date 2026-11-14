@@ -5,7 +5,7 @@ void **InternalObjectList_Create(int allocator) {
         __internalObjectList_EnsureRegistered();
         list = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g___internalObjectList_metaObject)[0]), (MemoryPool *)allocator)));
     } else {
-        list = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (void **)allocator)));
+        list = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)allocator)));
         if (list != 0) {
             list = (void **)(((void **)InternalObjectList_Construct((PointerList *)list, 1)));
         }

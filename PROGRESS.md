@@ -41,12 +41,12 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**8,761** of the 19,948 matched functions are readable: **1,546,580** code bytes, **44.5 %** of the code.
+**8,763** of the 19,948 matched functions are readable: **1,547,612** code bytes, **44.6 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,666 | 1,153,924 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 7,070 | 1,036,876 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 10,664 | 1,152,892 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 7,068 | 1,035,844 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 266 | 166,428 |
 | it sits in its class or module file, not `src/unmatched/` | 175 | 47,336 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,266 | 344,876 |
@@ -171,14 +171,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 13,065 of 20,575 |
+| functions with a recovered name (any: role names included) | 13,067 of 20,575 |
 | functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 5,700 of 20,575 (5,429 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 25,232 of 65,146 (38.73 %) |
+| field accesses using a **recovered** type (not an offset cast) | 25,278 of 65,155 (38.80 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

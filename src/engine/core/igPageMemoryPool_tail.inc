@@ -45,62 +45,51 @@ void Gap__Core__igPageMemoryPool__vfunc_13(igPageMemoryPool *self, int extra1) {
     memset((char *)self + 0x90, 0, 0x80);
 }
 
-void Gap__Core__igPageMemoryPool__vfunc_45(int *arg0, struct A1_325850 *arg1, struct A2_325850 *arg2) {
-    /* matching construct: variant search — decl order [7, 6, 5, 4, 3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    int var_s6;
-    int var_s3;
-    int var_a1;
-    int temp_s5;
-    int temp_s4;
-    int temp_s3;
-    int r;
-    int sp8C;
-
-    FUN_002f0880(&sp8C, (void **)arg1, (void *)arg2);
-    r = sp8C;
-    temp_s5 = arg2->f60;
-    temp_s4 = arg2->f76;
-    temp_s3 = arg2->f48;
-    if (temp_s5 != 0) {
-        var_s6 = 0;
-        if (((int)strstr(temp_s5, &text_Fill[0])) != 0) {
-            var_s6 |= 1;
+igResult Gap__Core__igPageMemoryPool__vfunc_45(igPageMemoryPool *self, igMemoryPoolInfo *info) {
+    igResult result;
+    result = FUN_002f0880((void **)self, (void *)info);
+    const char *options = igMemoryPoolInfo_options(info);
+    const char *messages = igMemoryPoolInfo_messages(info);
+    const char *source = igMemoryPoolInfo_source(info);
+    if (options != 0) {
+        int flags = 0;
+        if (strstr(options, (char *)text_Fill) != 0) {
+            flags |= 1;
         }
-        if (((int)strstr(temp_s5, &text_Zero[0])) != 0) {
-            var_s6 |= 2;
+        if (strstr(options, (char *)text_Zero) != 0) {
+            flags |= 2;
         }
-        if (((int)strstr(temp_s5, &text_Physical[0])) != 0) {
-            var_s6 |= 8;
+        if (strstr(options, (char *)text_Physical) != 0) {
+            flags |= 8;
         }
-        if (((int)strstr(temp_s5, &text_AutoLock[0])) != 0) {
-            var_s6 |= 4;
+        if (strstr(options, (char *)text_AutoLock) != 0) {
+            flags |= 4;
         }
-        if (((int)strstr(temp_s5, &text_SystemMemoryExhausted[0])) != 0) {
-            var_s6 |= 0x20;
+        if (strstr(options, (char *)text_SystemMemoryExhausted) != 0) {
+            flags |= 0x20;
         }
-        var_a1 = var_s6;
-        if (((int)strstr(temp_s5, &text_MaxSizeReached[0])) != 0) {
-            var_a1 = var_s6 | 0x10;
+        if (strstr(options, (char *)text_MaxSizeReached) != 0) {
+            flags |= 0x10;
         }
-        FUN_00326330(arg1, var_a1);
+        FUN_00326330(self, flags);
     }
-    if ((temp_s3 != 0) && (((int)strstr(temp_s3, &text_Physical[0])) != 0)) {
-        FUN_00326330(arg1, arg1->f140 | 8);
+    if (source != 0 && strstr(source, (char *)text_Physical) != 0) {
+        FUN_00326330(self, self->_poolOptionFlags | 8);
     }
-    if (temp_s4 != 0) {
-        var_s3 = arg1->f136;
-        if (((int)strstr(temp_s4, &text_NoMessages[0])) != 0) {
-            var_s3 = 0;
-        } else if (((int)strstr(temp_s4, &text_ErrorMessages[0])) != 0) {
-            var_s3 = 1;
-        } else if (((int)strstr(temp_s4, &text_WarningMessages[0])) != 0) {
-            var_s3 = 2;
-        } else if (((int)strstr(temp_s4, &text_Notifications[0])) != 0) {
-            var_s3 = 3;
+    if (messages != 0) {
+        int level = self->_messageLevel;
+        if (strstr(messages, (char *)text_NoMessages) != 0) {
+            level = 0;
+        } else if (strstr(messages, (char *)text_ErrorMessages) != 0) {
+            level = 1;
+        } else if (strstr(messages, (char *)text_WarningMessages) != 0) {
+            level = 2;
+        } else if (strstr(messages, (char *)text_Notifications) != 0) {
+            level = 3;
         }
-        arg1->f136 = var_s3;
+        self->_messageLevel = level;
     }
-    *arg0 = r;
+    return result;
 }
 
 void Gap__Core__igPageMemoryPool__vfunc_30(C30_325850 *arg0) {
@@ -538,7 +527,7 @@ void Gap__Core__igPageMemoryPool__vfunc_104(O_325850 *o, unsigned int a, int n, 
 /* Size of the block that starts at `block`, 0 when no block starts there. A table word holds two
  * bits per page, "first page of a block" (even bits) and "last page of a block" (odd bits,
  * 0xAAAAAAAA); the size is counted page by page up to the first last-page bit. */
-unsigned igPageMemoryPool_GetBlockSize(PageMemoryPoolView *self, void *block) {
+unsigned igPageMemoryPool_GetBlockSize(igPageMemoryPoolView *self, void *block) {
     unsigned slot = (unsigned)block >> 27;
     unsigned *tbl = self->pageTables[slot];
     unsigned size = 4096;
@@ -602,7 +591,7 @@ unsigned igPageMemoryPool_GetBlockSize(PageMemoryPoolView *self, void *block) {
     }
 }
 
-void Gap__Core__igPageMemoryPool__vfunc_88(PageMemoryPoolView *self) {
+void Gap__Core__igPageMemoryPool__vfunc_88(igPageMemoryPoolView *self) {
     int table;
     unsigned int *bits;
     unsigned int word;
@@ -622,7 +611,7 @@ void Gap__Core__igPageMemoryPool__vfunc_88(PageMemoryPoolView *self) {
                     do {
                         if (*bits & (1 << page)) {
                             address = (page << 12) + (tableBase + (word << 17));
-                            FUN_00304430((const char *)DAT_004fc120, address, ((V88_325850 *)self)->vX(address));
+                            FUN_00304430((const char *)DAT_004fc120, address, self->GetBlockSize((void *)address));
                             FUN_00304680();
                         }
                         page++;

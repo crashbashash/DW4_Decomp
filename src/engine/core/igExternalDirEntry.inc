@@ -44,7 +44,7 @@ void igExternalDirEntry_Register(void) {
         igExternalDirEntry_className,
         0x2C, /* instance size */
         igExternalDirEntry_GetVTable,
-        FUN_002c55f0,
+        igExternalDirEntry_InitFields,
         0,                                          /* static-initializer callback item (appended on fresh configuration) */
         g_igExternalDirEntry_callbackList  /* 0-terminated dependency-callback list */
     );
@@ -54,7 +54,7 @@ void thunk_igExternalDirEntry_GetMetaObject(void) {
     igExternalDirEntry_GetMetaObject();
 }
 
-void FUN_002c55f0(void) {
+void igExternalDirEntry_InitFields(void) {
     igMetaObject *meta = g_igExternalDirEntry_metaObject[0];
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;

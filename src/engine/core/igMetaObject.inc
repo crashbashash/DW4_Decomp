@@ -5,7 +5,7 @@ void **igMetaObject_Create(int allocator) {
         igMetaObject_EnsureRegistered();
         metaObject = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igMetaObject_metaObject)[0]), (MemoryPool *)allocator)));
     } else {
-        metaObject = (void **)(((void **)igObject_AllocateRawStorage(0x64, 0, (void **)allocator)));
+        metaObject = (void **)(((void **)igObject_AllocateRawStorage(0x64, 0, (igMemoryPoolView *)allocator)));
         if (metaObject != 0) {
             metaObject = (void **)(((void **)igMetaObject_Construct((igMetaObject *)metaObject, 1)));
         }

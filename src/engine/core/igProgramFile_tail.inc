@@ -3,7 +3,7 @@ void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0) {
     int temp_v1;
     int var_v0;
     char *temp_a0;
-    T_327140 *temp_a0_2;
+    ProgramFileStream *temp_a0_2;
     char *temp_s1;
 
     if (g_stringPool[0] == 0) {
@@ -24,10 +24,10 @@ void Gap__Core__igProgramFile__vfunc_23(igProgramFile *arg0) {
         }
     }
     arg0->_fileName = (int)temp_s1;
-    temp_a0_2 = (T_327140 *)arg0->_file;
+    temp_a0_2 = (ProgramFileStream *)arg0->_file;
     if (temp_a0_2 != 0) {
-        --temp_a0_2->references;
-        if (((unsigned long long)(long long)temp_a0_2->references & 0x7fffffULL) == 0) {
+        --temp_a0_2->refCount;
+        if (((unsigned long long)(long long)temp_a0_2->refCount & 0x7fffffULL) == 0) {
             igObject_Destroy(temp_a0_2);
         }
     }
@@ -43,7 +43,7 @@ igResult Gap__Core__igProgramFile__vfunc_24(igProgramFile *self, const char *pat
     int name;
     ProgramFileStream *stream;
     int refs;
-    ((VA_327140 *)self)->vX();
+    file->Reset();
     if (g_stringPool[0] == 0) {
         pool = (int)StringPool_Allocate(0x10);
         if (pool != 0) {
@@ -80,48 +80,42 @@ igResult Gap__Core__igProgramFile__vfunc_24(igProgramFile *self, const char *pat
     return g_resultSuccess;
 }
 
-void Gap__Core__igProgramFile__vfunc_25(int *arg0, void *arg1) {
-    void **temp_a0;
-
-    temp_a0 = (void **)(*(int *)((char *)(arg1) + 12));
-    ((DW4VC_96_0 *)(temp_a0))->vX();
-    ((DW4VC_92_0 *)(((char *)(arg1) + 0)))->vX();
-    *arg0 = g_resultSuccess.v;
+void Gap__Core__igProgramFile__vfunc_25(int *result, ProgramFileView *self) {
+    self->stream->Close();
+    self->Reset();
+    *result = g_resultSuccess.v;
 }
 
-void Gap__Core__igProgramFile__vfunc_26(int *arg0, OF *arg1, int arg2, int arg3, int *arg4) {
-    SR4 sp6C;
-    SR4 sp68;
-    SR4 sp64;
-    Strm *s;
-    s = arg1->f12;
-    if (s->v38(arg2, 0) == -1) {
-        FUN_00304430(DAT_004ff510, arg2, arg1->f8);
+void Gap__Core__igProgramFile__vfunc_26(int *result, ProgramFileView *self, int offset, int size, void **dest) {
+    ProgramFileStream *stream;
+    stream = self->stream;
+    if (stream->Seek(offset, 0) == -1) {
+        FUN_00304430(DAT_004ff510, offset, self->path);
         FUN_00304680();
-        sp6C = ((Obj_327140 *)arg1)->v25();
-        *arg0 = g_resultFailure.v;
+        self->Close();
+        *result = g_resultFailure.v;
         return;
     }
-    if (*arg4 == 0) {
-        *arg4 = igObject_AllocateStorage((int)arg1, arg3);
-        if (*arg4 == 0) {
-            FUN_00304430(DAT_004ff540, arg3, arg1->f8);
+    if (*dest == 0) {
+        *dest = (void *)igObject_AllocateStorage((int)self, size);
+        if (*dest == 0) {
+            FUN_00304430(DAT_004ff540, size, self->path);
             FUN_00304680();
-            sp68 = ((Obj_327140 *)arg1)->v25();
-            *arg0 = g_resultFailure.v;
+            self->Close();
+            *result = g_resultFailure.v;
             return;
         }
     }
-    memset(*arg4, 0, arg3);
-    s = arg1->f12;
-    if (s->v27(*arg4, arg3, 1) != 1) {
-        FUN_00304430(DAT_004fdda0, arg1->f8);
+    memset(*dest, 0, size);
+    stream = self->stream;
+    if (stream->Read(*dest, size, 1) != 1) {
+        FUN_00304430(DAT_004fdda0, self->path);
         FUN_00304680();
-        sp64 = ((Obj_327140 *)arg1)->v25();
-        *arg0 = g_resultFailure.v;
+        self->Close();
+        *result = g_resultFailure.v;
         return;
     }
-    *arg0 = g_resultSuccess.v;
+    *result = g_resultSuccess.v;
 }
 
 /* igProgramFile vtable slot 27: status leaf. Ignores the object and writes the engine's current

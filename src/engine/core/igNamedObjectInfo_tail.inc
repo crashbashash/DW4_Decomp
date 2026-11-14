@@ -1,17 +1,16 @@
-void Gap__Core__igNamedObjectInfo__vfunc_23(This *arg0, int arg1, Obj_2fed50 *arg2) {
-    Arr_2fed50 *a;
-    int i = 0;
-    /* matching construct: cxx_sweep — arg0->a assigned in the loop test */
-    while (i < (a = arg0->a)->n) {
-        Obj_2fed50 *o = (Obj_2fed50 *)a->d[i];
-        if (o == arg2) {
-            int *nm = o->name ? o->name : emptyString;
- FUN_002e2d30(arg1, arg0, nm, arg2, i, arg0);
+typedef igSmartPointer<igTDataList<igNamedObject *> > igNamedObjectListRef;
+
+/* Writes the directory entry for `object`: under its own name when the info lists it, else through
+ * the base class, which looks for the object among the info's reference fields. */
+void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, igNamedObject *object) {
+    for (int i = 0; i < ((igNamedObjectListRef &)self->_objects)->count(); i++) {
+        igNamedObject *named = ((igNamedObjectListRef &)self->_objects)->get(i);
+        if (named == object) {
+            FUN_002e2d30(file, self, named->_name ? (int *)named->_name : emptyString, object);
             return;
         }
-        i++;
     }
-    FUN_002ea0d0((void **)arg0, arg1, (int)arg2, (int)arg2, i);
+    FUN_002ea0d0((void **)self, file, (int)object);
 }
 
 int FUN_002feeb0(struct L_2feeb0 *arg0, struct K *arg1, int arg2) {

@@ -5,7 +5,7 @@ void **igMemoryRefMetaField_Create(int arg0) {
         igMemoryRefMetaField_EnsureRegistered();
         var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igMemoryRefMetaField_metaObject)[0]), (MemoryPool *)arg0)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x50, 0, (void **)arg0)));
+        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x50, 0, (igMemoryPoolView *)arg0)));
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)igMemoryRefMetaField_Construct((igMemoryRefMetaField *)var_s0, 1)));
         }
@@ -143,7 +143,7 @@ void igMemoryRefMetaField_Register(void) {
         igMemoryRefMetaField_className,
         0x50, /* instance size */
         igMemoryRefMetaField_GetVTable,
-        FUN_002bf710,   /* field adder (igMetaObject_CreateFields) */
+        igMemoryRefMetaField_InitFields,   /* field adder (igMetaObject_CreateFields) */
         0, /* extra callback item */
         g_igMemoryRefMetaField_callbackList /* callback list */
     );
@@ -153,7 +153,7 @@ void thunk_igMemoryRefMetaField_GetMetaObject(void) {
     igMemoryRefMetaField_GetMetaObject();
 }
 
-void FUN_002bf710(void) {
+void igMemoryRefMetaField_InitFields(void) {
     igMetaObject *meta = g_igMemoryRefMetaField_metaObject[0];
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;

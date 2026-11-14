@@ -20,11 +20,11 @@ igMetaObject *igDataList_GetMetaObject(void)
 }
 
 int igDataList_GetVTable(void) {
-    struct ObjFrame obj;
+    igDataList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj.head);
-    obj.head._vtable = (int)&DAT_005309b0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_005309b0[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void igDataList_EnsureRegistered(void)

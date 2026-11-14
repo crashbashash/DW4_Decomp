@@ -2,53 +2,41 @@ igMetaObject *Gap__Core__igPsx2LongTimer__vfunc_22(void) {
     return g_igPsx2LongTimer_metaObject[0];
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_23(void **arg0) {
-    int temp_s0_2;
-    int temp_v0;
-    int temp_s0;
-
-    temp_v0 = ((DW4VC_96_0 *)(arg0))->vX();
-    temp_s0 = __floatdidf(__moddi3(temp_v0, 0x3B9ACA00));
-    temp_s0_2 = dpdiv(temp_s0, litodp(0x3B9ACA00));
-    dpadd(__floatdidf(__divdi3(temp_v0, 0x3B9ACA00)), temp_s0_2);
+double Gap__Core__igPsx2LongTimer__vfunc_23(igLongTimerView *self) {
+    long long nanoseconds = self->vfunc_24();
+    return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 
-long long Gap__Core__igPsx2LongTimer__vfunc_26(igPsx2LongTimer *arg0) {
-    if (arg0->_isStopped != 0) {
-        return arg0->_additionalTime;
+long long Gap__Core__igPsx2LongTimer__vfunc_26(igPsx2LongTimer *self) {
+    if (self->_isStopped != 0) {
+        return self->_additionalTime;
     }
-    return (arg0->_additionalTime + ((DW4VC_148_0 *)(((char *)(arg0) + 0)))->vX()) - arg0->_startTime;
+    return (self->_additionalTime + ((igLongTimerView *)self)->vfunc_37()) - self->_startTime;
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_25(void **arg0) {
-    int temp_s0_2;
-    int temp_v0;
-    int temp_s0;
-
-    temp_v0 = ((DW4VC_104_0 *)(arg0))->vX();
-    temp_s0 = __floatdidf(__moddi3(temp_v0, 0x3B9ACA00));
-    temp_s0_2 = dpdiv(temp_s0, litodp(0x3B9ACA00));
-    dpadd(__floatdidf(__divdi3(temp_v0, 0x3B9ACA00)), temp_s0_2);
+double Gap__Core__igPsx2LongTimer__vfunc_25(igLongTimerView *self) {
+    long long nanoseconds = self->vfunc_26();
+    return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_27(S_330be0 *arg0) {
-    if (arg0->f32 != 0) {
-        arg0->f32 = 0;
-        arg0->f8 = arg0->vX();
+void Gap__Core__igPsx2LongTimer__vfunc_27(igPsx2LongTimer *self) {
+    if (self->_isStopped != 0) {
+        self->_isStopped = 0;
+        self->_startTime = ((igLongTimerView *)self)->vfunc_37();
     }
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_28(F_330c20 *arg0) {
-    if (arg0->done == 0) {
-        arg0->b = arg0->b + (((VC_330c20 *)arg0)->vX() - arg0->a);
-        arg0->done = 1;
+void Gap__Core__igPsx2LongTimer__vfunc_28(igPsx2LongTimer *self) {
+    if (self->_isStopped == 0) {
+        self->_additionalTime = self->_additionalTime + (((igLongTimerView *)self)->vfunc_37() - self->_startTime);
+        self->_isStopped = 1;
     }
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_29(igPsx2LongTimer *arg0) {
-    arg0->_additionalTime = (long long) arg0->_resetTime;
-    if (arg0->_isStopped == 0) {
-        arg0->_startTime = ((DW4VC_148_0 *)(((char *)(arg0) + 0)))->vX();
+void Gap__Core__igPsx2LongTimer__vfunc_29(igPsx2LongTimer *self) {
+    self->_additionalTime = self->_resetTime;
+    if (self->_isStopped == 0) {
+        self->_startTime = ((igLongTimerView *)self)->vfunc_37();
     }
 }
 
@@ -57,17 +45,17 @@ void Gap__Core__igPsx2LongTimer__vfunc_29(igPsx2LongTimer *arg0) {
 
 void Gap__Core__igPsx2LongTimer__vfunc_30(igPsx2LongTimer *self) {
     self->_isStopped = 1;
-    self->_additionalTime = (long long) self->_resetTime;
+    self->_additionalTime = self->_resetTime;
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_31(igPsx2LongTimer *arg0) {
-    arg0->_isStopped = 0;
-    arg0->_additionalTime = (long long) arg0->_resetTime;
-    arg0->_startTime = ((DW4VC_148_0 *)(((char *)(arg0) + 0)))->vX();
+void Gap__Core__igPsx2LongTimer__vfunc_31(igPsx2LongTimer *self) {
+    self->_isStopped = 0;
+    self->_additionalTime = self->_resetTime;
+    self->_startTime = ((igLongTimerView *)self)->vfunc_37();
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_32(void **self, int seconds_as_double) {
-    ((DW4VC_132_1 *)(self))->vX((int)(__fixdfdi(dpmul(litodp(NANOSECONDS_PER_SECOND), seconds_as_double))));
+void Gap__Core__igPsx2LongTimer__vfunc_32(igLongTimerView *self, double seconds) {
+    self->setResetTime((long long)(NANOSECONDS_PER_SECOND * seconds));
 }
 
 /* Setter for the timer's reflected _resetTime field. */
@@ -80,14 +68,9 @@ long long Gap__Core__igPsx2LongTimer__vfunc_35(igPsx2LongTimer *self) {
     return self->_resetTime;
 }
 
-void Gap__Core__igPsx2LongTimer__vfunc_34(void **self) {
-    int remainderNsAsDouble; /* the EE soft-float helpers pass doubles as integer register pairs */
-    int presetNs;
-    int fractionSeconds;
-
-    presetNs = ((DW4VC_140_0 *)(self))->vX();
-    fractionSeconds = dpdiv((__floatdidf(__moddi3(presetNs, NANOSECONDS_PER_SECOND))), litodp(NANOSECONDS_PER_SECOND));
-    dpadd(__floatdidf(__divdi3(presetNs, NANOSECONDS_PER_SECOND)), fractionSeconds);
+double Gap__Core__igPsx2LongTimer__vfunc_34(igLongTimerView *self) {
+    long long nanoseconds = self->getResetTime();
+    return (double)(nanoseconds / NANOSECONDS_PER_SECOND) + (double)(nanoseconds % NANOSECONDS_PER_SECOND) / NANOSECONDS_PER_SECOND;
 }
 
 /* Reports whether the timer is stopped: returns _isStopped (+32). */

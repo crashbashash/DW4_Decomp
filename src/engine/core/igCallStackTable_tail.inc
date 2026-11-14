@@ -178,8 +178,7 @@ static inline int callStackDepth(const unsigned int *stack) {
 }
 /* strcmp over zero-terminated return-address arrays. */
 static inline int compareCallStacks(const unsigned int *a, const unsigned int *b) {
-    /* matching construct: manual variant search — (bool) test gives retail's sltu/xori end-of-stack check */
-    while ((bool)*a && *b != 0 && *a == *b) {
+    while (*a && *b && *a == *b) {
         a++;
         b++;
     }
@@ -224,9 +223,8 @@ extern "C" int Gap__Core__igCallStackTable__findCallStack(CallStackTableFindView
             }
         }
     }
-    /* matching construct: manual variant search — end computed before the cursor; colours the base register */
-    end = self->words->data + self->words->count;
     s = self->words->data;
+    end = self->words->data + self->words->count;
     while (s < end) {
         if (compareCallStacks(stack, s) == 0) {
             return s - self->words->data;

@@ -12,21 +12,14 @@ igObject *FUN_00328e00(igObject *self, long long deleteFlags) {
 }
 
 void FUN_00328e50(void **arg0) {
-    /* matching construct: variant search — decl order [2, 1, 0]; the unit compiler assigns stack slots and registers in declaration order */
-    unsigned int var_s1;
-    int temp_a1;
-    int *temp_s0;
-
-    var_s1 = 0;
-    do {
-        temp_s0 = &DAT_00587220[var_s1];
-        temp_a1 = *temp_s0;
-        if (temp_a1 != 0) {
-            ((DW4VC_180_1 *)(arg0))->vX((int)(temp_a1));
-            *temp_s0 = 0;
+    for (unsigned int i = 0; i < 64; i++) {
+        int *slot = &DAT_00587220[i];
+        int table = *slot;
+        if (table != 0) {
+            ((DW4VC_180_1 *)(arg0))->vX(table);
+            *slot = 0;
         }
-        var_s1 += 1;
-    } while (var_s1 < 0x40U);
+    }
 }
 
 int FUN_00328ed0(void *arg0, int arg1) {
@@ -260,15 +253,12 @@ int FUN_003296d0(igPsx2CallStackTracer *self) {
 }
 
 R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
-    unsigned int lo0, hi0;
-    /* matching construct: declaration order — end declared before startPage takes s3, startPage s2 */
     unsigned int end = addr + len;
     unsigned int startPage = addr >> 26;
     unsigned int endPage = end >> 26;
-    unsigned int page = startPage;
-    lo0 = (addr & 0x3FFFFFF) >> 12;
-    hi0 = (end & 0x3FFFFFF) >> 12;
-    while (page <= endPage) {
+    unsigned int lo0 = (addr & 0x3FFFFFF) >> 12;
+    unsigned int hi0 = (end & 0x3FFFFFF) >> 12;
+    for (unsigned int page = startPage; page <= endPage; page++) {
         int *slot = &DAT_00587220[page];
         int table = *slot;
         unsigned int lo, hi;
@@ -280,7 +270,6 @@ R460 FUN_003296e0(DW4VC_176_1 *self, int state, unsigned int addr, int len) {
         if (startPage < page) lo = 0; else lo = lo0;
         if (page < endPage) hi = 0x4000; else hi = hi0;
         FUN_0032ace0(table, lo, hi - lo, state);
-        page++;
     }
     if (addr < g_rangeStart[0]) g_rangeStart[0] = addr;
     if (g_rangeEnd[0] < end) g_rangeEnd[0] = end;
@@ -527,46 +516,40 @@ void FUN_00329e70(Obj_328e00 *arg0) {
     FUN_00304680();
 }
 
-Ent_328e00 *FUN_0032a100(Ent_328e00 *arg0) {
-    memset(arg0, 0, 0xA8);
-    return arg0;
+DumpRegion *FUN_0032a100(DumpRegion *row) {
+    memset(row, 0, sizeof(DumpRegion));
+    return row;
 }
 
-int FUN_0032a130(int arg0, long long arg1) {
-    if (arg0 != 0) {
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            FUN_0032a220(arg0);
+DumpRegion *FUN_0032a130(DumpRegion *row, short flags) {
+    if (row != 0) {
+        if (flags > 0) {
+            FUN_0032a220(row);
         }
     }
-    return arg0;
+    return row;
 }
 
-void FUN_0032a180(char *arg0, int *arg1) {
-    strncpy(arg0 + 8, arg1, 0x4F);
-    arg0[87] = 0;
+void FUN_0032a180(DumpRegion *row, const char *annotation) {
+    strncpy(row->annotation, annotation, sizeof(row->annotation) - 1);
+    row->annotation[sizeof(row->annotation) - 1] = 0;
 }
 
-int FUN_0032a1b0(char *arg0, int *arg1) {
-    strncpy(arg0 + 0x58, arg1, 0x4F);
-    arg0[167] = 0;
+void FUN_0032a1b0(DumpRegion *row, const char *poolName) {
+    strncpy(row->poolName, poolName, sizeof(row->poolName) - 1);
+    row->poolName[sizeof(row->poolName) - 1] = 0;
 }
 
-Ent_328e00 *FUN_0032a1e0(int arg0) {
-    void **temp_v0;
-
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
-    return (Ent_328e00 *)((DW4VC_216_1 *)(temp_v0))->vX((int)(arg0));
+DumpRegion *FUN_0032a1e0(int size) {
+    return (DumpRegion *)((DW4VC_216_1 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->vX(size);
 }
 
-void FUN_0032a220(int arg0) {
-    void **temp_v0;
-
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
-    ((DW4VC_264_1 *)(temp_v0))->vX((int)(arg0));
+void FUN_0032a220(void *block) {
+    ((DW4VC_264_1 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked))->vX((int)block);
 }
 
-int FUN_0032a260(int **arg0, int **arg1) {
-    return **arg0 - **arg1;
+int FUN_0032a260(DumpRegion **a, DumpRegion **b) {
+    return (*a)->start - (*b)->start;
 }
 
 void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c, int d) {
@@ -602,7 +585,7 @@ void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c,
         tracker->Begin();
         for (i = 0; i < count; i++) {
             DumpRegion *e = ((DumpRegion **)list->_data)[i];
-            FUN_002e2190(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->name, 0, 0, (int)e->kind);
+            FUN_002e2190(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->annotation, 0, 0, (int)e->poolName);
             tracker->Add(region, 0);
             FUN_002e2300(region, -1);
         }
@@ -613,9 +596,9 @@ void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c,
     FUN_00304680();
     for (i = 0; i < count; i++) {
         DumpRegion *e = ((DumpRegion **)list->_data)[i];
-        FUN_00304430(DAT_004ffa60, e->start, e->start + e->size, e->size, e->kind, e->name);
+        FUN_00304430(DAT_004ffa60, e->start, e->start + e->size, e->size, e->poolName, e->annotation);
         FUN_00304680();
-        FUN_0032a130((int)e, 1);
+        FUN_0032a130(e, 1);
     }
     FUN_00304430(DAT_004f95c8);
     FUN_00304680();
@@ -626,69 +609,69 @@ void FUN_0032a5f0(int extra0)
 }
 
 void FUN_0032a600(A600 *arg0, int arg1) {
-    Ent_328e00 *spDC;
+    DumpRegion *row;
     Out600 out;
     int *s1;
     arg0->v23(&out);
     s1 = &out.a0;
     if (*s1 != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = *s1;
-        spDC->w4 = out.b0;
-        FUN_0032a180((char *)spDC, &text_Section_Code[0]);
-        FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = *s1;
+        row->size = out.b0;
+        FUN_0032a180(row, text_Section_Code);
+        FUN_0032a1b0(row, text_Program);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a1;
     if (*s1 != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = *s1;
-        spDC->w4 = out.b1;
-        FUN_0032a180((char *)spDC, &text_Section_Data[0]);
-        FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = *s1;
+        row->size = out.b1;
+        FUN_0032a180(row, text_Section_Data);
+        FUN_0032a1b0(row, text_Program);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a2;
     if (*s1 != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = *s1;
-        spDC->w4 = out.b2;
-        FUN_0032a180((char *)spDC, &text_Section_Initialized_Data[0]);
-        FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = *s1;
+        row->size = out.b2;
+        FUN_0032a180(row, text_Section_Initialized_Data);
+        FUN_0032a1b0(row, text_Program);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a3;
     if (*s1 != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = *s1;
-        spDC->w4 = out.b3;
-        FUN_0032a180((char *)spDC, &text_Section_Uninitialized_Data[0]);
-        FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = *s1;
+        row->size = out.b3;
+        FUN_0032a180(row, text_Section_Uninitialized_Data);
+        FUN_0032a1b0(row, text_Program);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a4;
     if (*s1 != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = *s1;
-        spDC->w4 = out.b4;
-        FUN_0032a180((char *)spDC, &text_Section_Stack_Data[0]);
-        FUN_0032a1b0((char *)spDC, &text_Program[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = *s1;
+        row->size = out.b4;
+        FUN_0032a180(row, text_Section_Stack_Data);
+        FUN_0032a1b0(row, text_Program);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
 }
 
 void FUN_0032a900(A900 *arg0, int arg1) {
-    Ent_328e00 *spDC;
+    DumpRegion *row;
     Out900 out;
     unsigned i;
     unsigned j;
@@ -699,29 +682,29 @@ void FUN_0032a900(A900 *arg0, int arg1) {
         if (s0 != 0) for (j = 0; j < 0x4000U; j += s1) {
             s2 = FUN_0032ac70(s0, j);
             s1 = FUN_0032ad50(s0, j, 0x4000 - j, s2, 3);
-            Ent_328e00 *e = FUN_0032a1e0(168);
+            DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
             if (e != 0) e = FUN_0032a100(e);
-            spDC = e;
-            e->w0 = (i << 26) + (j << 12);
-            spDC->w4 = s1 << 12;
+            row = e;
+            e->start = (i << 26) + (j << 12);
+            row->size = s1 << 12;
             switch (s2) {
-            case 0: FUN_0032a180((char *)spDC, &text_Heap_Unknown[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
-            case 1: FUN_0032a180((char *)spDC, &text_Heap_Free[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
-            case 2: FUN_0032a180((char *)spDC, &text_Heap_Blocked[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
-            case 3: FUN_0032a180((char *)spDC, &text_Heap_Allocated[0]); FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]); break;
+            case 0: FUN_0032a180(row, text_Heap_Unknown); FUN_0032a1b0(row, text_SystemHeap); break;
+            case 1: FUN_0032a180(row, text_Heap_Free); FUN_0032a1b0(row, text_SystemHeap); break;
+            case 2: FUN_0032a180(row, text_Heap_Blocked); FUN_0032a1b0(row, text_SystemHeap); break;
+            case 3: FUN_0032a180(row, text_Heap_Allocated); FUN_0032a1b0(row, text_SystemHeap); break;
             }
-            List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+            List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
         }
     }
     if (out.b != -1 && out.a != -1) {
-        Ent_328e00 *e = FUN_0032a1e0(168);
+        DumpRegion *e = FUN_0032a1e0(sizeof(DumpRegion));
         if (e != 0) e = FUN_0032a100(e);
-        spDC = e;
-        e->w0 = out.b;
-        spDC->w4 = out.a;
-        FUN_0032a180((char *)spDC, &text_Heap_Free_from_top[0]);
-        FUN_0032a1b0((char *)spDC, &text_SystemHeap[0]);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &spDC, (Cmp)FUN_0032a260), 1, &spDC);
+        row = e;
+        e->start = out.b;
+        row->size = out.a;
+        FUN_0032a180(row, text_Heap_Free_from_top);
+        FUN_0032a1b0(row, text_SystemHeap);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
 }
 

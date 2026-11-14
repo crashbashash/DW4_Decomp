@@ -196,7 +196,7 @@ void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4,
     unsigned int i;
     void **ctx;
 
-    ((DW4VC_256_0 *)(arg0))->vX();
+    ((igMemoryPoolView *)arg0)->gangFree(arg1, (void **)arg2);
     if ((arg1 != 0) && (arg2 != 0)) {
         total = 0;
         first = *arg2;

@@ -149,9 +149,9 @@ void igObject_Construct(ConstructedObject *arg0, char *arg1) {
     } else {
         arg0->u.c.id = 0;
     }
-    igObject_ZeroFields((void **)arg0);
-    igObject_ConstructFields((void **)arg0);
-    igObject_ResetUnconstructedFields((void **)arg0);
+    igObject_ZeroFields((igObjectDispatchView *)arg0);
+    igObject_ConstructFields((igObjectDispatchView *)arg0);
+    igObject_ResetUnconstructedFields((igObjectDispatchView *)arg0);
     arg0->v11();
     arg0->v9(0);
     l = arg0->v22();
@@ -175,7 +175,7 @@ void igObject_ConstructPooled(PooledHeader *arg0, char *arg1) {
     } else {
         arg0->rest = 0;
     }
-    igObject_ZeroFields((void **)arg0);
+    igObject_ZeroFields((igObjectDispatchView *)arg0);
 }
 
 void igObject_RegisterInstance(void **arg0, void *arg1) {
@@ -320,20 +320,20 @@ void igObject_InitFields(void) {
     }
 }
 
-char *igObject_AllocateRawStorage(int size, int prefix_size, void **requested_allocator) {
+char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *requested_pool) {
     int total_size;
-    void **allocator;
+    igMemoryPoolView *pool;
 
-    allocator = requested_allocator;
+    pool = requested_pool;
     total_size = size + prefix_size;
-    if (allocator == 0) {
-        allocator = (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap);
+    if (pool == 0) {
+        pool = (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap);
     }
-    if (allocator == 0) {
-        /* no allocator at all: the prefix is not added on this path (retail behaviour) */
+    if (pool == 0) {
+        /* no pool at all: the prefix is not added on this path (retail behaviour) */
         return ((char *)malloc(total_size));
     }
-    return ((DW4VC_216_2 *)allocator)->vX(total_size) + prefix_size;
+    return (char *)pool->Allocate(total_size) + prefix_size;
 }
 
 void *igObject_AllocateRawStorageDefault(int size,int prefix){return igObject_AllocateRawStorage(size,prefix,0);}
@@ -343,101 +343,74 @@ int thunk_FUN_002ed460__002ff810(int extra0)
     return Memory_FreeBuffer((void *)extra0);
 }
 
-void igObject_Destroy(void *input){
-    igObjectDispatchView *object;
-    igMetaObject *type;
-    void *instances;
-    if(g_objectSystem[0]){
-        unsigned char mode=*g_objectSystem[0];
-        /* matching construct: hand search — the copy is taken after the mode load; taken at the top of the function it moves into the null-system branch's delay slot */
-        object=(igObjectDispatchView *)input;
-        if(!mode){
-            object->slot_08();object->slot_10();object->slot_00();
-            Memory_FreeBuffer(object);return;
+void igObject_Destroy(void *input) {
+    if (g_objectSystem[0]) {
+        igObjectDispatchView *object = (igObjectDispatchView *)input;
+        if (!*g_objectSystem[0]) {
+            object->slot_08();
+            object->slot_10();
+            object->slot_00();
+            Memory_FreeBuffer(object);
+            return;
         }
-        type=object->slot_20();
-        type->_instanceCount=(int)((unsigned)type->_instanceCount-1);
-        instances=(void *)type->_instances;
-        if(instances)ObjectPointerList_EraseAt((PointerList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
-        object->slot_16();object->slot_08();object->slot_10();
-        igObject_DestructFieldValues((int *)object);igObject_ClearFieldValues((int *)object);
+        igMetaObject *type = object->getMeta();
+        type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
+        void *instances = (void *)type->_instances;
+        if (instances) ObjectPointerList_EraseAt((PointerList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
+        object->slot_16();
+        object->slot_08();
+        object->slot_10();
+        igObject_DestructFieldValues((int *)object);
+        igObject_ClearFieldValues((int *)object);
         Memory_FreeBuffer(igObject_GetAllocationBase(object));
     }
 }
 
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
-void igObject_ZeroFields(void **arg0) {
-    igMetaObject *temp_v0;
-    int var_s3;
-    void **temp_a0;
-    void *temp_s1;
-    int temp_s0;
-
-    temp_v0 = (igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX());
-    if (((temp_v0 != 0) && isValid(temp_v0)) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 20) == 0) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 0) != 0)) {
-        temp_s1 = (void *)(temp_v0->_metaFields);
-        var_s3 = *(int *)((char *)(g_igObject_metaObject[0]->_metaFields) + 12);
-        temp_s0 = *(int *)((char *)(temp_s1) + 12);
-        for (; var_s3 < temp_s0; var_s3++) {
-            temp_a0 = (void **)(*(int *)(*(int *)((char *)(temp_s1) + 8) + (var_s3 * 4)));
-            ((DW4VC_132_1 *)(temp_a0))->vX((int)(arg0));
+void igObject_ZeroFields(igObjectDispatchView *object) {
+    igMetaObject *meta = object->getMeta();
+    if (((meta != 0) && isValid(meta)) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 20) == 0) || (*(unsigned char *)((char *)(g_objectSystem[0]) + 0) != 0)) {
+        __internalObjectList *fields = (__internalObjectList *)meta->_metaFields;
+        int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+        int count = fields->_count;
+        for (int i = first; i < count; i++) {
+            ((igMetaFieldSlots **)fields->_data)[i]->ZeroValue(object);
         }
     }
 }
 
-void igObject_ConstructFields(void **arg0) {
-    /* matching construct: variant search — decl order [3, 2, 1, 0]; the declaration order of the locals sets their stack slot and register assignment */
-    char *meta;
-    void **o;
-    int n;
-    int i;
-
-    meta = (char *)(*(int *)((char *)(((DW4VC_88_0 *)(arg0))->vX()) + 40));
-    i = *(int *)((char *)(*(int *)((char *)(g_igObject_metaObject[0]) + 40)) + 12);
-    n = *(int *)(meta + 12);
-    while (i < n) {
-        o = (void **)(*(int *)(*(int *)(meta + 8) + (i * 4)));
-        ((DW4VC_124_1 *)(o))->vX((int)(arg0));
-        i++;
+void igObject_ConstructFields(igObjectDispatchView *object) {
+    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+    int count = fields->_count;
+    for (int i = first; i < count; i++) {
+        ((igMetaFieldSlots **)fields->_data)[i]->ConstructValue(object);
     }
-    ((DW4VC_12_1 *)(arg0))->vX((int)(1));
+    object->constructFields(1);
 }
 
-void igObject_ResetFields(void **arg0) {
-    /* matching construct: variant search — decl order [2, 1, 0]; the declaration order of the locals sets their stack slot and register assignment */
-    List_2fef20 *temp_s2;
-    int temp_s1;
-    int var_s0;
-
-    temp_s2 = ((V88_2fef20 *)arg0)->vX()->f40;
-    var_s0 = ((ResetMeta *)g_igObject_metaObject[0])->f40->count;
-    temp_s1 = temp_s2->count;
-    while (var_s0 < temp_s1) {
-        igMetaField_Reset((igMetaField *)temp_s2->data[var_s0], (void *)arg0);
-        var_s0++;
+void igObject_ResetFields(igObjectDispatchView *object) {
+    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+    int count = fields->_count;
+    for (int i = first; i < count; i++) {
+        igMetaField_Reset(((igMetaField **)fields->_data)[i], object);
     }
-    ((V52 *)arg0)->vX(1);
+    object->resetFields(1);
 }
 
-void igObject_ResetUnconstructedFields(void **arg0) {
-    /* matching construct: variant search — decl order [3, 2, 1, 0]; the declaration order of the locals sets their stack slot and register assignment */
-    char *meta;
-    void **o;
-    int n;
-    int i;
-
-    meta = (char *)(*(int *)((char *)(((DW4VC_88_0 *)(arg0))->vX()) + 40));
-    i = *(int *)((char *)(*(int *)((char *)(g_igObject_metaObject[0]) + 40)) + 12);
-    n = *(int *)(meta + 12);
-    while (i < n) {
-        o = (void **)(*(int *)(*(int *)(meta + 8) + (i * 4)));
-        if (((DW4VC_240_0 *)(o))->vX() == 0) {
-            igMetaField_Reset((igMetaField *)o, (void *)arg0);
+void igObject_ResetUnconstructedFields(igObjectDispatchView *object) {
+    __internalObjectList *fields = (__internalObjectList *)object->getMeta()->_metaFields;
+    int first = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+    int count = fields->_count;
+    for (int i = first; i < count; i++) {
+        igMetaFieldSlots *field = ((igMetaFieldSlots **)fields->_data)[i];
+        if (field->IsConstruct() == 0) {
+            igMetaField_Reset((igMetaField *)field, object);
         }
-        i++;
     }
-    ((DW4VC_52_1 *)(arg0))->vX((int)(1));
+    object->resetFields(1);
 }
 
 void igObject_DestructFieldValues(int *arg0) {
@@ -643,17 +616,10 @@ void FUN_00300490(void **arg0, int arg1, int arg2) {
 }
 
 void FUN_00300600(ShallowObject *self, int source) {
-    /* matching construct: variant search — decl order [2, 1, 0]; the declaration order of the locals sets their stack slot and register assignment */
-    ShallowFields *meta;
-    int n;
-    int i;
-
-    meta = self->v20()->meta;
-    n = meta->count;
-    i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
-    while (i < n) {
+    ShallowFields *meta = self->v20()->meta;
+    int n = meta->count;
+    for (int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
         igMetaField_ConstructCopy(meta->arr[i], (int)self, source);
-        i++;
     }
 }
 

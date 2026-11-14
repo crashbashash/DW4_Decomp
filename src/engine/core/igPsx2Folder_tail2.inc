@@ -1,11 +1,12 @@
-FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
+igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
     FolderEntryWide entry;
     int handle = sceDopen(self->path);
     if (handle < 0) {
-        return FolderObjectRef(0);
+        /* The empty result is built with the retaining constructor: retail stores the 0 into the
+         * result and re-reads it for the reference-count test. */
+        return igSmartPointer<igObject>(0, kRetainReference);
     }
-    FolderObjectRef list;
-    list.obj = ((FolderObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
     while (sceDread(handle, &entry) != 0) {
         char *name = (entry.bytes + 64);
         char *interned;
@@ -21,8 +22,8 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
             }
             interned = ((char *)StringPool_Intern((StringPool *)((*(int *)g_stringPool)), (const char *)name));
         }
-        FolderStringRef text(interned);
-        StringList_AppendRetained(list.obj, &text);
+        igString text(interned);
+        StringList_AppendRetained(list.p, &text);
     }
     sceDclose(handle);
     return list;

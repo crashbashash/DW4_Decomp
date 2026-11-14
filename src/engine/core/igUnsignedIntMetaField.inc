@@ -5,7 +5,7 @@ void **igUnsignedIntMetaField_Create(int allocator) {
         igUnsignedIntMetaField_EnsureRegistered();
         field = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igUnsignedIntMetaField_metaObject)[0]), (MemoryPool *)allocator)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (void **)allocator)));
+        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)allocator)));
         if (field != 0) {
             field = (void **)(((void **)igUnsignedIntMetaField_Construct((igMetaField *)field, 1)));
         }

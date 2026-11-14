@@ -128,44 +128,31 @@ void Gap__Core__igPsx2Thread__vfunc_50(int *status, igPsx2Thread *self, int prio
     *status = g_resultSuccess.v;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_45(int *arg0, O45 *arg1) {
-    /* matching construct: variant search — decl order [4, 3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    const O45 *view = arg1;
-    H4 sp5C;
-    int temp_s1;
-    int temp_s0_2;
-    int temp_s0;
-    const int *var_v1_2;
-
-    if (arg1->f44 != 0) {
-        *arg0 = g_resultFailure.v;
-        return;
+/* The thread's const id getter. A read through it is a `const int` read, which is not merged with
+ * a plain read of the field: terminate() loads the id once for its saved copy and once for the call. */
+static inline int igPsx2Thread_getThreadID(const igPsx2Thread *thread) { return thread->_threadID; }
+igResult Gap__Core__igPsx2Thread__vfunc_45(igPsx2Thread *self) {
+    if (self->_isMaster != 0) {
+        return g_resultFailure;
     }
-    if ((arg1->f56 != 0) && (arg1->f58 == 0)) {
-        arg1->f57 = 1;
-        *arg0 = g_resultSuccess.v;
-        return;
+    if (self->_isDeferred != 0 && self->_atStoppingPoint == 0) {
+        self->_stopRequested = 1;
+        return g_resultSuccess;
     }
-    temp_s0 = arg1->f60;
-    if (temp_s0 == GetThreadId()) {
-        FUN_00330440((igPsx2Thread *)arg1, 0);
+    if (self->_threadID == GetThreadId()) {
+        FUN_00330440(self, 0);
     }
-    g_threadManager[0]->v23(arg1);
-    temp_s1 = view->f60;
-    temp_s0_2 = TerminateThread(arg1->f60);
-    arg1->f60 = -1;
-    sp5C = arg1->f48->vX();
-    arg1->rc4 = arg1->rc4 - 1;
-    if ((arg1->rc4 & 0x7FFFFF) == 0) {
-        igObject_Destroy(arg1);
+    g_threadManager[0]->v23((O45 *)self);
+    int id = self->_threadID;
+    int status = TerminateThread(igPsx2Thread_getThreadID(self));
+    self->_threadID = -1;
+    H4 signalled = ((DW4VC_124 *)self->_threadDoneSema)->vX();
+    --self->_refCount;
+    if ((self->_refCount & 0x7fffff) == 0) {
+        igObject_Destroy(self);
     }
-    DeleteThread(temp_s1);
-    if (temp_s0_2 < 0) {
-        var_v1_2 = &g_resultFailure.v;
-    } else {
-        var_v1_2 = &g_resultSuccess.v;
-    }
-    *arg0 = *var_v1_2;
+    DeleteThread(id);
+    return status < 0 ? g_resultFailure : g_resultSuccess;
 }
 
 void Gap__Core__igPsx2Thread__vfunc_28(int *arg0, void *arg1) {

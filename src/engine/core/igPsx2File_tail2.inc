@@ -325,37 +325,30 @@ int Gap__Core__igPsx2File__vfunc_35(F_32bd50 *arg0, unsigned char arg1) {
 }
 
 char *Gap__Core__igPsx2File__vfunc_36(S_32bdd0 *arg0, char *arg1, int arg2) {
-    /* matching construct: variant search — decl order [2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    int var_a5;
-    int temp_a3;
-    int temp_v1;
-
     if (arg1 == 0) {
         return 0;
     }
     if (arg0->f3c != 0) {
         return 0;
     }
-    temp_v1 = arg0->f38;
-    temp_a3 = arg0->f34;
-    if (temp_a3 >= temp_v1) {
+    if (arg0->f34 >= arg0->f38) {
         return 0;
     }
+    int i = 0;
     arg2 = arg2 - 1;
-    var_a5 = 0;
-    if ((arg2 + temp_a3) >= temp_v1) {
-        arg2 = temp_v1 - temp_a3;
+    if (arg2 + arg0->f34 >= arg0->f38) {
+        arg2 = arg0->f38 - arg0->f34;
     }
-    while (var_a5 < arg2) {
-        temp_a3 = arg0->f2c[arg0->f34];
-        arg1[var_a5] = temp_a3;
-        var_a5 += 1;
+    while (i < arg2) {
+        unsigned char c = arg0->f2c[arg0->f34];
+        arg1[i] = c;
+        i++;
         arg0->f34 = arg0->f34 + 1;
-        if (temp_a3 == 0xA) {
+        if (c == 10) {
             break;
         }
     }
-    arg1[var_a5] = 0;
+    arg1[i] = 0;
     return arg1;
 }
 

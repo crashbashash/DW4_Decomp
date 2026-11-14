@@ -53,7 +53,7 @@ int FUN_002f0870(void) {
     return 0;
 }
 
-void FUN_002f0880(int *arg0, void **arg1, void *arg2) {
+igResult FUN_002f0880(void **arg1, void *arg2) {
     DW4SR4 sp2C;
     int temp_v1;
 
@@ -61,6 +61,6 @@ void FUN_002f0880(int *arg0, void **arg1, void *arg2) {
     if (temp_v1 != 0) {
         sp2C = ((DW4VCSR_164_1 *)(arg1))->vX((long long)temp_v1);
     }
-    *arg0 = g_resultSuccess.v;
+    return g_resultSuccess;
 }
 

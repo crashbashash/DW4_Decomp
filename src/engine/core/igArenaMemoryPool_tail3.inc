@@ -47,27 +47,19 @@ igResult igArenaMemoryPool_CheckHeap(CheckHeapPool *self) {
 }
 
 igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
-    ArenaBlockHeader *n;  /* matching construct: declaration-order walk — `n` declared first */
-    char *hi;
-    char *lo;
-    unsigned int size;
-    int count;
-    bool ok;
-    int r;
-    ArenaBlockHeader *h;
-    unsigned int sz;
-    unsigned int nsz;
-    int min;
-    hi = self->HeapEnd();
-    lo = self->HeapStart();
-    size = 0;
-    count = 0;
-    ok = false;
+    char *hi = self->HeapEnd();
+    char *lo = self->HeapStart();
+    /* Declared with the walk's other pointers, ahead of the flag: `n` and `ok` are the two values kept in
+     * argument registers, and the later-numbered one, `ok`, takes a0. */
+    ArenaBlockHeader *n;
+    unsigned int size = 0;
+    int count = 0;
+    bool ok = false;
     if (cur < lo || hi < cur) {
         if (self->messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf4 == 0) {
-                r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
+                int r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
                 if (r != 1 && r == 2) {
                     GPR_00554cf4 = 1;
                 }
@@ -79,7 +71,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         if (self->messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cf8 == 0) {
-                r = igReportNotice(DAT_004fc500, index, end, lo, hi);
+                int r = igReportNotice(DAT_004fc500, index, end, lo, hi);
                 if (r != 1 && r == 2) {
                     GPR_00554cf8 = 1;
                 }
@@ -91,7 +83,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         if (self->messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554cfc == 0) {
-                r = igReportNotice(DAT_004fc570, index, end, cur);
+                int r = igReportNotice(DAT_004fc570, index, end, cur);
                 if (r != 1 && r == 2) {
                     GPR_00554cfc = 1;
                 }
@@ -103,7 +95,7 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         if (self->messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d00 == 0) {
-                r = igReportNotice(DAT_004fc5e0);
+                int r = igReportNotice(DAT_004fc5e0);
                 if (r != 1 && r == 2) {
                     GPR_00554d00 = 1;
                 }
@@ -112,20 +104,21 @@ igResult FUN_00312790(HeapBoundsPool *self, int index, char *cur, char *end) {
         return g_resultFailure;
     }
     while (cur < end) {
-        h = (ArenaBlockHeader *)cur;
-        sz = h->size;
+        ArenaBlockHeader *h = (ArenaBlockHeader *)cur;
+        unsigned int sz = h->size;
         if (h->big == 1) {
             sz += h->sizeHigh << 19;
         }
         sz = (sz + 3) & ~3;
         size = sz + (h->padWords + 1) * 4;
-        min = self->minBlockSize;
+        int min = self->minBlockSize;
         n = (ArenaBlockHeader *)(cur + size);
         if (size < min) {
             if (end - cur <= min) {
                 ok = true;
                 break;
             }
+            unsigned int nsz;
             if (n->big == 0) {
                 nsz = n->size;
             } else {
@@ -150,7 +143,7 @@ bad:
         if (self->messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (GPR_00554d04 == 0) {
-                r = igReportNotice(DAT_004fc660, cur, index, count, size);
+                int r = igReportNotice(DAT_004fc660, cur, index, count, size);
                 if (r != 1 && r == 2) {
                     GPR_00554d04 = 1;
                 }
@@ -228,20 +221,14 @@ void FUN_00315050(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigne
     *arg0 = g_resultSuccess.v;
 }
 
-void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, struct PoolRequest *request) {
-    char *options;
-    int flags;
-    char *integrityCheck;
-    char *messages;
-    int result;
-    int status;
-    FUN_002f0880(&status, (void **)pool, (void *)request);
-    result = status;
-    options = request->options;
-    integrityCheck = request->integrityCheck;
-    messages = request->messages;
+igResult Gap__Core__igArenaMemoryPool__vfunc_45(igArenaMemoryPool *pool, igMemoryPoolInfo *info) {
+    igResult result;
+    result = FUN_002f0880((void **)pool, (void *)info);
+    const char *options = igMemoryPoolInfo_options(info);
+    const char *integrityCheck = igMemoryPoolInfo_checking(info);
+    const char *messages = igMemoryPoolInfo_messages(info);
     if (options) {
-        flags = 0;
+        int flags = 0;
         if (strstr(options, ((char *)text_Fill))) flags |= 2;
         if (strstr(options, ((char *)text_Zero))) flags |= 4;
         if (strstr(options, text_Sentinels)) flags |= 1;
@@ -281,7 +268,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_45(int *out, igArenaMemoryPool *pool, s
         }
         pool->_messageLevel = level;
     }
-    *out = result;
+    return result;
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_30(Pool30 *arg0) {
@@ -435,7 +422,7 @@ long long Gap__Core__igArenaMemoryPool__vfunc_42(igArenaMemoryPool *self) {
 void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2) {
     *(int *)((char *)(arg1) + 168) = arg2;
     *(int *)((char *)(arg1) + 196) = 0;
-    if (((DW4VC_132_0 *)(((char *)(arg1) + 0)))->vX() != 0) {
+    if (((MemoryPool *)arg1)->IsActive() != 0) {
         ((DW4VC_264_1 *)(((char *)(arg1) + 0)))->vX((int)(((DW4VC_216_1 *)(((char *)(arg1) + 0)))->vX((int)(0x10))));
     }
     *arg0 = g_resultSuccess.v;

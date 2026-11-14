@@ -116,53 +116,30 @@ int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
 
 static inline char *text_306360(IniNameText *s) { char *t = s->text_306360; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
-int FUN_003064b0(int arg0, int arg1) {
-    int *e;
-    int i;
-    int *list;
-    int cnt;
+typedef igSmartPointer<igTDataList<IniPairEntry *> > IniPairListRef;
 
-    list = *(int **)(arg0 + 8);
-    cnt = 0;
-    arg0 = list[2];
-    for (i = 0; i < arg0; i++) {
-        e = *(int **)(list[4] + (i * 4));
-        if (e != 0 && e[2] == arg1) {
-            cnt++;
+/* The number of keys a section holds. */
+int FUN_003064b0(int registry, int section) {
+    int keys = 0;
+    for (int i = 0; i < ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->count(); i++) {
+        IniPairEntry *entry = ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->get(i);
+        if (entry != 0 && entry->section == section) {
+            keys++;
         }
     }
-    return cnt;
+    return keys;
 }
 
 /* Copies the index-th key of a section to *key, retained; false when the section has fewer keys. */
 bool igRegistry_GetKeyName(int registry, int section, int index, IniKeyText **key) {
-    IniPairEntry *entry;
-    IniKeyText *value;
-    IniKeyText *old;
     int i;
-    bool found;
-    int seen;
-    IniPairList *pairs = ((IniIncludeView *)registry)->pairs;
-    /* matching construct: manual variant search — the pair count reuses the registry parameter, as the section key counter above does */
-    registry = pairs->count;
-    seen = 0;
-    found = false;
-    for (i = 0; i < registry; i++) {
-        entry = pairs->data[i];
+    int seen = 0;
+    bool found = false;
+    for (i = 0; i < ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->count(); i++) {
+        IniPairEntry *entry = ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->get(i);
         if (entry != 0 && entry->section == section) {
             if (seen == index) {
-                value = (IniKeyText *)entry->key;
-                if (value != 0) {
-                    value->_refCount++;
-                }
-                old = *key;
-                if (old != 0) {
-                    old->_refCount = old->_refCount - 1;
-                    if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(old);
-                    }
-                }
-                *key = value;
+                *(igSmartPointer<IniKeyText> *)key = (IniKeyText *)entry->key;
                 found = true;
                 break;
             }

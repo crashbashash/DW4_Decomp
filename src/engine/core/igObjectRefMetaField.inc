@@ -6,7 +6,7 @@ void **igObjectRefMetaField_Create(int allocator) {
         igObjectRefMetaField_EnsureRegistered();
         field = ((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igObjectRefMetaField_metaObject)[0]), (MemoryPool *)allocator));
     } else {
-        field = ((void **)igObject_AllocateRawStorage(0x44, 0, (void **)allocator));
+        field = ((void **)igObject_AllocateRawStorage(0x44, 0, (igMemoryPoolView *)allocator));
         if (field != 0) {
             field = ((void **)igObjectRefMetaField_Construct((igObjectRefMetaField *)field, 1));
         }

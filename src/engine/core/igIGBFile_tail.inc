@@ -27,14 +27,14 @@ static inline void assign(MediaStreamOwner *self, const StreamHolder &h) {
     self->stream = v;
 }
 
-igResult FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
-    if (data == 0 && self->stream == 0) {
+igResult FUN_002e3a60(MediaStreamOwner *self, const char *fileName, int mode) {
+    if (fileName == 0 && self->stream == 0) {
         return g_resultFailure;
     }
-    if (data == 0 && self->stream != 0) {
+    if (fileName == 0 && self->stream != 0) {
         return self->stream->Open(mode);
     }
-    if (self->stream == 0 && data != 0) {
+    if (self->stream == 0 && fileName != 0) {
         {
             StreamHolder h(((MediaStream *)igFile_Create((int)self->source)));
             assign(self, h);
@@ -42,7 +42,7 @@ igResult FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
         if (self->stream == 0) {
             return g_resultFailure;
         }
-        FUN_002e30b0((int *)self->stream, (const char *)data);
+        FUN_002e30b0((int *)self->stream, fileName);
         return self->stream->Open(mode);
     }
     self->stream->Close();
@@ -50,7 +50,7 @@ igResult FUN_002e3a60(MediaStreamOwner *self, int data, int mode) {
         StreamHolder h(((MediaStream *)igFile_Create((int)self->source)));
         assign(self, h);
     }
-    FUN_002e30b0((int *)self->stream, (const char *)data);
+    FUN_002e30b0((int *)self->stream, fileName);
     return self->stream->Open(mode);
 }
 
@@ -106,13 +106,13 @@ void FUN_002e3d30(int *arg0) {
     }
 }
 
-igResult FUN_002e3e30(RecordFile *f, int mode) {
-    if (f->handle == 0 && mode == 0) {
+igResult FUN_002e3e30(RecordFile *f, const char *fileName) {
+    if (f->handle == 0 && fileName == 0) {
         return g_resultFailure;
     }
     if (f->handle == 0) {
-        if (FUN_002e3a60((MediaStreamOwner *)f, mode, 5) == g_resultFailure) {
-            if (mode != 0) {
+        if (FUN_002e3a60((MediaStreamOwner *)f, fileName, 5) == g_resultFailure) {
+            if (fileName != 0) {
                 Ref5 *h = f->handle;
                 if (h != 0) {
                     h->_refCount = (int)h->_refCount - 1;
@@ -635,10 +635,10 @@ igResult FUN_002e5ac0(void *arg1) {
     return g_resultSuccess;
 }
 
-int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1) {
+int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, const char *fileName) {
     int *pp; Rel23 *t; Rel23 *t2; Rel23 *a; Rel23 *b;
     FUN_00306e50(((LogContext * *)g_objectSystem)[0]->f56, 2, (const char *)text_forceWriteMemoryPoolInfoFromMeta, (char *)((char *)arg0 + 0x42), 0, 0);
-    igResult sp7C = FUN_002e3e30((RecordFile *)arg0, arg1);
+    igResult sp7C = FUN_002e3e30((RecordFile *)arg0, fileName);
     pp = (int *)((int)&sp7C + 0);
     if (*pp == g_resultFailure.v) return 0;
     igResult sp78 = FUN_002e5ac0(arg0);
@@ -713,17 +713,17 @@ int Gap__Core__igIGBFile__vfunc_28(C23 *arg0, int arg1) {
     return arg0->f8;
 }
 
-igResult FUN_002e5f70(T24 *arg1, int arg2) {
+igResult FUN_002e5f70(T24 *arg1, const char *fileName) {
     Obj24 *o;
     int *pp;
-    if ((arg1->f104 == 0) && (arg2 == 0)) {
+    if ((arg1->f104 == 0) && (fileName == 0)) {
         return g_resultFailure;
     }
     if (arg1->f104 == 0) {
-        igResult r = FUN_002e3a60((MediaStreamOwner *)arg1, arg2, 4);
+        igResult r = FUN_002e3a60((MediaStreamOwner *)arg1, fileName, 4);
         pp = (int *)((int)&r + 0);
         if (*pp == g_resultFailure.v) {
-            if (arg2 != 0) {
+            if (fileName != 0) {
                 o = arg1->f104;
                 if (o != 0) {
                     o->refs = o->refs - 1;
@@ -1355,35 +1355,14 @@ void FUN_002e8a40(T44 *a) {
 }
 
 void Gap__Core__igIGBFile__vfunc_04(S_arg0 *arg0) {
-    /* matching construct: variant search — local declaration order [4, 3, 2, 1, 0] decides the stack slots and registers */
-    int var_s1;
-    int temp_s0;
-    S_ref_2e3a10 *temp_a0_3;
-    S_ref_2e3a10 *temp_a0_2;
-    S_list *temp_v0;
-
-    temp_v0 = arg0->f44;
-    if (temp_v0 != 0) {
-        temp_s0 = temp_v0->f8;
-        for (var_s1 = 0; var_s1 < temp_s0; var_s1++) {
-            arg0->f16[var_s1]->vX(arg0->f44->f16[var_s1]);
+    if (arg0->f44 != 0) {
+        for (int i = 0, count = arg0->f44->f8; i < count; i++) {
+            arg0->f16[i]->vX(arg0->f44->f16[i]);
         }
-        temp_a0_2 = (S_ref_2e3a10 *)arg0->f44;
-        if (temp_a0_2 != 0) {
-            temp_a0_2->references = temp_a0_2->references - 1;
-            if (((unsigned long long)(long long)temp_a0_2->references & 0x7fffffULL) == 0) {
-                igObject_Destroy(temp_a0_2);
-            }
-        }
+        REL44((R44 *)arg0->f44);
         arg0->f44 = 0;
     }
-    temp_a0_3 = (S_ref_2e3a10 *)arg0->f44;
-    if (temp_a0_3 != 0) {
-        temp_a0_3->references = temp_a0_3->references - 1;
-        if (((unsigned long long)(long long)temp_a0_3->references & 0x7fffffULL) == 0) {
-            igObject_Destroy(temp_a0_3);
-        }
-    }
+    REL44((R44 *)arg0->f44);
     arg0->f44 = 0;
     Gap__Core__igObject__destructFields((int)arg0);
 }
@@ -1549,7 +1528,7 @@ igResult FUN_002e9560(void *arg1) {
     return g_resultSuccess;
 }
 
-int igIGBFile_ReadFile(File *self, int path) {
+int igIGBFile_ReadFile(File *self, const char *path) {
   int startTime;
   sprintf(DAT_00586e20, text_readFile_s, path);
   startTime = DAT_005871d8[0]->now();

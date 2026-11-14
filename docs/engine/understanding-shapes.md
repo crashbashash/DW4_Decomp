@@ -315,6 +315,49 @@ Units are named by their source file.
     word, which also settled the statement order, a `>= 1` comparison and the parameter's pointer type. The Xbox
     build shares the load, so the source has no `volatile`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp`.
+- **In a loop built for size the count is hoisted and `_data` is not: the list idiom again.**
+  - *Symptom:* a list walk loads the list and its count once in front of the loop and `_data` on every pass
+    (`lw a2,20(a0); lw v1,8(a2)` before, `lw v0,16(a2)` inside), with the count in `v1` and the scaled index in
+    `a0`. A list local, plain field reads, a count local and `count()`/`get()` on a cast pointer all give the same
+    instructions with the count and the scaled index exchanged, four bytes longer because the delay slot of the
+    loop's branch stays empty.
+  - *Cause:* under `-O4,s` the loop is entered at its test, so the test is the loop's first block and the code
+    generator hoists the loads the test holds, the list and the count; the body's `_data` load stays. That needs
+    the optimizer to have left the count in the test: the pointer `operator->() const` returns is a temporary
+    assigned where the call stands, which keeps the read from being moved as an invariant (an assignment written
+    in the condition does the same). A count the optimizer hoists takes the register after the scaled index; the
+    allocator's numbering of the two was not traced.
+  - *Spelling:* `for (int i = 0; i < ((ListRef &)self->_objects)->count(); i++) { T *o = ((ListRef &)self->_objects)->get(i); }`.
+    An assignment inside the condition (`while (i < (list = self->_objects)->_count)`) and the pair count kept in
+    the function's first parameter were stand-ins for it, and so were extra arguments passed to a variadic callee to
+    hold the index and the object in `t0` and `t1`: with the idiom the callees take their real three and four
+    arguments.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2fed50, 0x3064b0, 0x306510).
+- **A second read of a field through a `const` getter is a second load.** `lw s1,60(s2); jal TerminateThread;
+  lw a0,60(s2)`: the id saved for later and the id passed to the call are loaded separately with nothing between
+  them. The saved copy is a plain read (`int id = self->_threadID;`), the argument goes through the class's `const`
+  getter, a `const int` read. The getter on the saved copy instead gives the two loads too but numbers the copy
+  after the call's result, and their saved registers are exchanged. *Unit:* `src/engine/core/CoreLibrary.cpp`
+  (0x32fd50).
+- **Calling a member of a smart-pointer local changes its destructor's release.**
+  - *Symptom:* a function holds a returned smart pointer in a stack slot, reads it once into a register for its
+    tests, reads it again for a call's argument, and its destructor's release, at the early return and at the end,
+    reads the slot once. With every read spelled `.p` each release reads the slot again after storing the count
+    (8 bytes more); with every read spelled `get()` the early return loads the slot twice (4 bytes more).
+  - *Cause:* the inliner folds the release's parameter back into `found.p`, read wherever the parameter is used,
+    as long as nothing takes the local's address. A member call does (`this`), and the parameter is then bound to
+    a temporary once. The destructor's read is unmarked; a read through a `const` accessor is marked and is not
+    shared with it. Retail's first read is shared with the early return's release, so it is unmarked, and the
+    argument's read comes from a member call. With non-`const` accessors `entry = found.get()` and
+    `call(found.get())` give retail's bytes; the shared class's accessors are `const` (184 uses outside this unit),
+    so the first read is the member itself.
+  - *Spelling:* `Entry *entry = (Entry *)found.p; ... remaining = unload((Handle *)found.get());`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x309750).
+- **A base pointer the walk keeps is a field read, not the cursor.** `end = list->data + list->count` after
+  `s = list->data` shares one load of `data` with the cursor's start and with the `s - list->data` the function
+  returns, and that shared value keeps its own register; `end = s + list->count` makes the cursor the base and
+  exchanges the base's register with the compared word's. The order of the two statements does not matter. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d3d30).
 
 ### Inlining (b52)
 
@@ -361,6 +404,10 @@ Units are named by their source file.
   `pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(...)`. Written as
   `if (flag) pool = pool; else pool = ...;` the self-assignment is deleted and the function is 8 bytes short;
   `pool = (int)pool;` kept it only because the cast hides the self-assignment. *Unit:* `src/game/beModelCtrl.cpp`.
+- **A bare truth test that opens a loop condition is materialised.** `sltu v1,zero,a0; xori v1,v1,0x1; bnez`
+  for the first operand of `while (*a && *b && *a == *b)`, and a plain `beqz` for the second: the strcmp shape
+  written plainly. `*a != 0` there folds to `beqz`, and a `(bool)` cast is not needed. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d3d30).
 
 ### Types and values
 
@@ -392,6 +439,42 @@ Units are named by their source file.
 - **An aggregate initializer copy gives a struct's real size.** A local initialised from a `.data` template is
   copied whole (`lq`/`sq` loop), and the template's size in retail is the struct's size; that settled a 48-byte
   Sony struct a 36-byte header had cut short. *Unit:* `src/cri/adxps2.c`.
+- **An empty smart-pointer result built through the retaining constructor keeps its reference test.**
+  - *Symptom:* an early-return path stores 0 into the returned holder and loads it straight back for a
+    reference-count test (`sw zero,0(s1); lw a0,0(s1); beqz a0`) that can never pass.
+  - *Cause:* a by-value class result lives in the caller's memory behind the hidden result pointer. The
+    retaining constructor's `retain()` reads the member it just stored through that pointer, and the read is
+    not folded to the constant.
+  - *Spelling:* `return igSmartPointer<igObject>(0, kRetainReference);`. The default constructor leaves the test
+    out (the function is 40 bytes short). For the holder that is returned on the other path, the adopting
+    constructor `list(create(...))` is the source; a default-constructed `list` assigned afterwards keeps a dead
+    `sw zero` in a delay slot.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (`igPsx2Folder::vfunc_26`).
+- **Soft-float `double` arithmetic is written as `double`.** A run of `litodp`, `dpmul`, `dpdiv`, `dpadd`,
+  `__floatdidf`, `__fixdfdi`, `__divdi3` and `__moddi3` calls with the same integer constant loaded before several
+  of them is plain arithmetic on a `double` and a `long long`: the unit has no hardware doubles, so b52 calls a
+  helper for every operation, and it converts an integer constant to `double` at run time
+  (`litodp(1000000000)`) instead of folding it. `(long long)(1000000000 * seconds)` and
+  `(double)(ns / 1000000000) + (double)(ns % 1000000000) / 1000000000` give the calls in retail's order, with the
+  right operand of the sum evaluated first. Helper calls written out by hand with `int` arguments are not the
+  source. *Unit:* `src/engine/core/CoreLibrary.cpp`.
+- **The stack object of a vtable getter is an instance of the class.** The frame is the 16-byte save area plus
+  the class's registered instance size, rounded up to 16, so a 20-byte class gives the 48-byte frame; a local
+  padded by hand to the slot's apparent 32 bytes is not needed. *Unit:* `src/engine/core/CoreLibrary.cpp`.
+- **The frame holds address-taken locals in declaration order, and a class local is built where it is declared.**
+  Locals whose address is passed (out-parameters of a reader) lie from the top of the frame downwards in the
+  order they are declared, one-byte ones packed, whatever order they are used in, so the slots give the original
+  declaration block. A local of a class with a constructor is initialised at its declaration and destroyed in
+  reverse order at the end: the position of its zero store among the surrounding statements shows where the
+  block stands (after the first assignments, not at the top of the function), and the order of the releases at
+  the end gives the construction order. Six interned strings released by hand in an odd order were six string
+  holders declared in two groups around the integers. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f69b0).
+- **A result copied from a base-class call is assigned, not initialised.** `jal base; lw s0,108(sp)` right after
+  the call, the result kept in a saved register to the end: `igResult result; result = Base::configure(info);`
+  leaves the returned temporary in its slot and copies it. `igResult result = base(...)` builds the call's value
+  in the local's own slot, which stays in memory and is loaded at the return (4 bytes less); returning the call
+  itself becomes a jump. The callee is declared with its `igResult` return, not an output pointer and an `int`.
+  *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f0880 and the five pools' configure functions).
 
 ### Scheduling (EE GCC)
 
@@ -492,6 +575,88 @@ Units are named by their source file.
     and when that value is spilled the frame has one more 4-byte slot (192 bytes against 176). The callee takes
     the pointer type and the parameter is passed plain.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ffe10, 0x2fff90).
+- **A loop index started from a named value is declared last.**
+  - *Symptom:* a walk over a list from a start count to an end count has the index and the end count in each
+    other's saved register (`s0`/`s1`); the start count is loaded before the end count, so declaring the index
+    first and assigning it there gives the wrong registers, and only an index declared after the count but
+    assigned before it matched.
+  - *Cause:* the source names the start: `int first = base->_count; int count = fields->_count;
+    for (int i = first; i < count; i++)`. The copy `i = first` is propagated, `first` never reaches the allocator
+    and takes no id, and `i`, declared in the `for`, is numbered after `count` (traced: list 33, count 34,
+    index 35; with `int i = base->_count; int count = ...` index 34, count 35).
+  - *Spelling:* as above, each local declared where it is first set. Four field walks of one class take this
+    shape.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ff930, 0x2ffa00, 0x2ffab0, 0x2ffb50).
+- **A value read through an inline getter is numbered after the declared locals.**
+  - *Symptom:* a function loads three fields of one global into saved registers and then makes a call; the
+    registers fit no declaration order in which the locals are declared where they are assigned. A search found
+    an order with the first and third of them declared after locals that are first set much later.
+  - *Cause:* a local initialised from an inline function's return value takes the return temporary's id, which
+    is made after all of the caller's declared locals (traced: the two values leave the declared range 33-47
+    and become node 71 and a neighbour). Controls: both getters are needed; either one alone, or neither,
+    differs; the second field read plainly or through a getter makes no difference.
+  - *Spelling:* the two values through inline member getters of the object that holds them, the other field
+    read directly, and every local declared at its first assignment, loop indices and block-locals in their
+    blocks. No declaration order is left to choose.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f69b0).
+- **A typed view of a `void *` parameter is copied where it is declared.**
+  - *Symptom:* `beqz system,end; nop; lbu mode; bnez mode; move s1,a0`: the parameter's copy to a saved register
+    sits in the second branch's delay slot and the first slot is empty. Declared at the top of the function the
+    copy fills the first slot.
+  - *Cause:* the copy is an assignment and is emitted in the block that holds it; the delay-slot filler then
+    moves it over the load into the next branch's slot.
+  - *Spelling:* the view declared as the first statement inside the `if (system)` block, the other locals after
+    it where they are first set. A separate local for the mode byte is not needed.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ff820).
+- **C-style declarations at the top keep their order; parameters need no copies.** A duplicate search over a
+  record table (`i`, `j`, a found flag, the value) has the value in `s0` and the flag in `s1`, though the value is
+  set first: the four are declared together at the top as `int i, j, found; T *value;` (traced ids 34-37). The
+  value or the flag declared in its block exchanges two registers. Six sibling functions share the order.
+  Copies of the output pointer and the remaining count into locals changed nothing: the parameters are
+  stepped directly. The same class walks its records with a pointer declared before the index
+  (`record++` beside `i++`) where retail keeps a stepped pointer, and indexes `records[i]` where retail
+  multiplies on every pass; the unit builds for size and does not turn one into the other.
+  *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2f4070, 0x2f7cc0, 0x2f7e00, 0x2f7f20).
+- **A pointer an inline getter returns is numbered after the caller's block locals.**
+  - *Symptom:* a configure function reads strings from its info record at the top and parses each in a block
+    with a local of its own (a flags word, a level); retail gives the block local the higher saved register, the
+    plain spelling gives it to the string, and the only declaration order that matches has the block locals
+    declared at the top, ahead of the strings.
+  - *Cause:* the string read through an inline getter that returns the pointer is the getter's result, numbered
+    with the inline's values after every local the caller declares, block locals included, so it colours first.
+    The getter's parameter may be `const` or not. An `int` getter with the cast at the call, an `int` local and
+    a plain field read all keep the declared local's early number.
+  - *Spelling:* `const char *messages = igMemoryPoolInfo_messages(info);` with
+    `static inline const char *igMemoryPoolInfo_messages(const igMemoryPoolInfo *info)`, every local declared
+    where it is first set, the result an `igResult` assigned from the base call.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x3223d0, 0x325940, the arena pool's).
+- **Fields read where they are used leave no locals to order.**
+  - A reader's `gets` compares, clamps and subtracts its position and length: `if (f->pos >= f->len) return 0;`
+    and `if (n + f->pos >= f->len) n = f->len - f->pos;`. The shared reads are the optimizer's temporaries,
+    numbered as it makes them; `int len = f->len; int pos = f->pos;` loads the same two words into exchanged
+    registers, and matched only with the locals declared in the reverse of the order they are set. *Unit:* `src/engine/core/CoreLibrary.cpp`
+    (0x2ecea0, 0x32bdd0).
+  - A stack pool's free space is `(unsigned)(pool->end + 1) - pool->top` straight from the fields, and the
+    running `end` and `low` are declared in the branch that walks them; the padding step reads `pool->top` in
+    place (`mask & (align - (pool->top & mask))`, `out[i] = pool->top + pad`). Locals for the top, declared at
+    the head of the function, exchanged registers and changed the order of the size arithmetic.
+  - **A reused index is numbered late.** One `unsigned i` serving every loop of a function has a web per loop,
+    and each web after the first is numbered after all the declared locals, so the index takes a lower register
+    than the locals of the loop it runs. An index per loop takes the higher one. Seventeen locals whose order a
+    search had found reduce to the function written this way, with the count an `unsigned short` parameter used
+    directly (its widened copy is the compiler's and takes the lowest register, where a declared count local
+    took a higher one).
+    *Unit:* `src/engine/core/CoreLibrary.cpp` (0x327d40, 0x327ed0).
+- **Where a pair of locals is all that is left of an order.**
+  - `for (int i = 0, count = list->count; i < count; i++)` numbers the index before the count, which a count
+    declared in front of the loop does not; an `int` getter for the count changes nothing. *Unit:*
+    `src/engine/core/CoreLibrary.cpp` (0x2e8c40).
+  - Two values that never cross a call share the argument registers, and the later-numbered takes `a0`: a
+    heap walk's next-block pointer is declared with the function's other pointers, ahead of its `ok` flag, and
+    every other local sits where it is first set. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x312790).
+  - An index declared at the head of the function (`int i; int seen = 0; bool found = false;`) is numbered
+    before the counters zeroed beside it and takes the higher temporary register. *Unit:*
+    `src/engine/core/CoreLibrary.cpp` (0x306510).
 - **m2c offset variables steal saved registers.** A user `offset += 4` with `data + offset` is a source variable
   coloured before the slot pointer; an index loop over `&data[i]` lets the compiler make the offset itself, with
   retail's registers. Rewrite m2c's strength-reduced loops as index loops first. *Unit:*

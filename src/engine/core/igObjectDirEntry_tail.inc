@@ -72,22 +72,17 @@ void Gap__Core__igObjectDirEntry__vfunc_28(igObjectDirEntry *self, igObject *obj
 
 void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1) {
     char *s0;
-    if (arg1) {
-        arg1->_refCount++;
-    }
-    /* matching construct: _typeMeta/_typeMetaName are 4-byte reference fields (int); cast to the typed pointer */
-    Rel::go((igObject *)arg0->_typeMeta);
-    arg0->_typeMeta = (int)arg1;
+    (igSmartPointer<igMetaObject> &)arg0->_typeMeta = arg1;
     if (arg1) {
         char *name = (char *)arg1->_name;
         void *pool = Pool::get();
         s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)name));
-        SRel::go((char *)arg0->_typeMetaName);
+        releaseString((const char *)arg0->_typeMetaName);
         arg0->_typeMetaName = (int)s0;
     } else {
         void *pool = Pool::get();
         s0 = ((char *)StringPool_Intern((StringPool *)pool, (const char *)text_NoMeta));
-        SRel::go((char *)arg0->_typeMetaName);
+        releaseString((const char *)arg0->_typeMetaName);
         arg0->_typeMetaName = (int)s0;
     }
 }

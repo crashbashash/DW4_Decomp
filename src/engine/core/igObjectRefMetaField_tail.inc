@@ -80,7 +80,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_28(void *arg0, int arg1) {
 
     temp_a0 = *(int *)(arg1 + *(int *)((char *)arg0 + 8));
     if (temp_a0 != 0) {
-        igObject_ResetFields((void **)temp_a0);
+        igObject_ResetFields((igObjectDispatchView *)temp_a0);
     }
 }
 
@@ -155,7 +155,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int i
 
     object = *(int *)(instance + self->_offset);
     if (object != 0) {
-        igObject_ResetFields((void **)object);
+        igObject_ResetFields((igObjectDispatchView *)object);
     }
 }
 

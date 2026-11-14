@@ -5,7 +5,7 @@ void **FUN_002ccab0(int arg0) {
         FUN_002ccca0();
         var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igBoolMetaField_metaObject[0], (MemoryPool *)arg0)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (void **)arg0)));
+        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)arg0)));
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_002d37b0((int **)var_s0, 1)));
         }

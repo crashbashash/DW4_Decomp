@@ -9,7 +9,7 @@ void FUN_002d1a00(S_2d1a00 *self) {
     self->f916 = 0;
     if (((P_2d1a00 * *)DAT_00586fd0)[0] == 0) {
         m = FUN_002f87f0(0x19F4);
-        if (m != 0) m = ((P_2d1a00 *)igMemoryPoolContextInfo_Construct((igMemoryPoolContextInfo *)m));
+        if (m != 0) m = ((P_2d1a00 *)igMemoryPoolContextInfo_Construct((ContextView *)m));
         ((P_2d1a00 * *)DAT_00586fd0)[0] = (P_2d1a00 *)m;
     }
     ((P_2d1a00 * *)DAT_00586fd0)[0]->v40();
