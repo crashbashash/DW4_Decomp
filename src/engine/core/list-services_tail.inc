@@ -47,30 +47,28 @@ void ObjectList_ResizeRetained(igTDataList<igObject *> *arg0, int arg1) {
     memset((char *)arg0->_data + n * 4, 0, (arg1 - n) * 4);
 }
 
-static inline int find(ObjectListView *l, ObjectListItem **vp, int i) {
-    int n = l->count;
-    ObjectListItem *v = *vp;
+static inline int find(igTDataList<igObject *> *l, igObject **vp, int i) {
+    int n = l->_count;
+    igObject *v = *vp;
     for (; i < n; i++) {
-        if (v == l->data[i]) {
+        if (v == l->_data[i]) {
             return i;
         }
     }
     return -1;
 }
 
-static inline void release_302000(ObjectListItem *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } } }
-
-igResult ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *value, int start, int extra3) {
-    ObjectListItem *v;
+igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start, int extra3) {
+    igObject *v;
     int i;
-    *(ObjectListItem **)&v = value;
+    *(igObject **)&v = value;
     i = find(self, &v, start);
     if (i >= 0) {
-        ObjectListItem *o = self->data[i];
+        igObject *o = self->_data[i];
         unsigned int k = i;
-        if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } }
+        IG_OBJECT_RELEASE(o);
         List_RemoveWordAt((igDataList *)self, k);
-        self->data[self->count] = 0;
+        self->_data[self->_count] = 0;
         return g_resultSuccess;
     }
     return g_resultFailure;
@@ -198,55 +196,50 @@ int igProperty_FindInsertionIndex(void *arg0, void *arg1, unsigned int arg2) {
     return lo;
 }
 
-static inline void retain_302540(ObjectListItem *o) { if (o != 0) { o->_refCount = o->_refCount + 1; } }
+static inline void retain_302540(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
 
-static inline void release_302540(ObjectListItem *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(o);
-        }
-    }
+static inline void release_302540(igObject *o) {
+    IG_OBJECT_RELEASE(o);
 }
 
-static inline void setAt_302540(ObjectListView *l, int i, ObjectListItem *v, int off) {
-    int n = l->count;
+static inline void setAt_302540(igTDataList<igObject *> *l, int i, igObject *v, int off) {
+    int n = l->_count;
     if (n != 0 && i >= 0 && i < n) {
-        *(ObjectListItem **)((char *)l->data + off) = v;
+        *(igObject **)((char *)l->_data + off) = v;
     }
 }
 
-static inline void setPrev(ObjectListView *l, int i, ObjectListItem *v, int off) {
-    int n = l->count;
+static inline void setPrev(igTDataList<igObject *> *l, int i, igObject *v, int off) {
+    int n = l->_count;
     if (n != 0 && i >= 0 && i < n) {
-        ((ObjectListItem **)((char *)l->data + off))[-1] = v;
+        ((igObject **)((char *)l->_data + off))[-1] = v;
     }
 }
 
-void FUN_00302540(ObjectListView *self, Field *field) {
-int i; int n; ObjectListItem *a; ObjectListItem *b; int off; int swapped; unsigned int prev; unsigned int cur; ObjectListItem **p;
+void FUN_00302540(igTDataList<igObject *> *self, Field *field) {
+int i; int n; igObject *a; igObject *b; int off; int swapped; unsigned int prev; unsigned int cur; igObject **p;
 
     if (field == 0) {
         return;
     }
-    n = self->count;
+    n = self->_count;
     swapped = 1;
     if (n < 2) { return; }
     while (swapped > 0) {
         swapped = 0;
-        prev = *(unsigned int *)((char *)self->data[0] + field->_offset);
+        prev = *(unsigned int *)((char *)self->_data[0] + field->_offset);
         for (i = 1; i < n; i++) {
             off = i * 4;
-            p = (ObjectListItem **)((char *)self->data + off);
+            p = (igObject **)((char *)self->_data + off);
             b = p[0];
             cur = *(unsigned int *)((char *)b + field->_offset);
             if (cur < prev) {
                 a = p[-1];
                 retain_302540(a);
-                release_302540(*(ObjectListItem **)((char *)self->data + off));
+                release_302540(*(igObject **)((char *)self->_data + off));
                 setAt_302540(self, i, a, off);
                 retain_302540(b);
-                release_302540(*(ObjectListItem **)((char *)self->data + off - 4));
+                release_302540(*(igObject **)((char *)self->_data + off - 4));
                 setPrev(self, i - 1, b, off);
                 swapped = 1;
             } 

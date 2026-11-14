@@ -23,7 +23,7 @@ int FUN_002fd610(Instance **out, int meta) {
 
 /* The new instance arrives with one reference; the holder takes its own and drops that one. */
 CreatedRef FUN_002fd6e0(int meta, int pool) {
-    CreatedRef created((igObject *)igMetaObject_CreateInstance((CreateMeta *)meta, (MemoryPool *)pool));
+    CreatedRef created((igObject *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)pool));
     releaseObject_2fd610(created.get());
     return created;
 }
@@ -44,7 +44,7 @@ void *igMetaObject_Construct(igMetaObject *meta, int extra1){
  * pool name, creating the shared string pool on first use. No previous lists are released. */
 igMetaObject *igMetaObject_Init(igMetaObject *meta){
     int pool,oldName,refCount;int *oldHeader;void *emptyToken;
-    igObject_InitHeader((struct ObjectHeader *)meta);meta->_vtable=(int)g_igMetaObject_vtable;
+    igObject_InitHeader((igObject *)meta);meta->_vtable=(int)g_igMetaObject_vtable;
     meta->_name=0;
     meta->_poolName=0;
     meta->_metaFields=0;
@@ -87,7 +87,7 @@ igMetaObject *igMetaObject_Init(igMetaObject *meta){
 /* Copy-construct: base header copy, vtable stamp and cleared names; the other
  * metadata members are not copied here. */
 void *igMetaObject_CopyConstruct(igMetaObject *meta,void *source){
-    igObject_CopyConstructHeader((CopyHeader *)meta, (CopyHeader *)source);
+    igObject_CopyConstructHeader((igObject *)meta, (igObject *)source);
     meta->_vtable=(int)g_igMetaObject_vtable;
     meta->_name=0;
     meta->_poolName=0;
@@ -110,85 +110,85 @@ void igMetaObject_ReleaseLists(igMetaObject *meta){
     }
 }
 
-void *igMetaObject_CreateInstanceDefault(void *meta){return (void *)igMetaObject_CreateInstance((CreateMeta *)meta,((MemoryPool *)Memory_GetDefaultAllocator()));}
+void *igMetaObject_CreateInstanceDefault(void *meta){return (void *)igMetaObject_CreateInstance((igMetaObject *)meta,((igMemoryPoolView *)Memory_GetDefaultAllocator()));}
 
-int igMetaObject_CreateInstance(CreateMeta *arg0, MemoryPool *arg1) {
+int igMetaObject_CreateInstance(igMetaObject *arg0, igMemoryPoolView *arg1) {
     int temp_s1;
     int temp_s1_2;
     char *temp_a0;
-    MemoryPool *var_s2;
-    MemoryPool *var_v0;
-    CreateMeta *(*temp_v0)();
+    igMemoryPoolView *var_s2;
+    igMemoryPoolView *var_v0;
+    igMetaObject *(*temp_v0)();
 
     var_s2 = arg1;
-    temp_v0 = arg0->f60;
+    temp_v0 = (igMetaObject *(*)())arg0->_abstractProxy;
     if (temp_v0 != 0) {
         return igMetaObject_CreateInstance(temp_v0(), var_s2);
     }
-    if (arg0->f26 == 1) {
+    if (arg0->_abstractState == 1) {
         return 0;
     }
     if (var_s2 == 0) {
-        temp_a0 = arg0->f96;
+        temp_a0 = (char *)arg0->_poolName;
         if ((temp_a0 != 0) && (*temp_a0 != 0)) {
-            var_s2 = ((MemoryPool *)Memory_GetAllocatorByName((int)temp_a0));
+            var_s2 = ((igMemoryPoolView *)Memory_GetAllocatorByName((int)temp_a0));
             if (var_s2 == 0) {
-                var_v0 = ((MemoryPool *)Memory_GetDefaultAllocator());
+                var_v0 = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
                 goto block_10;
             }
         } else {
-            var_v0 = ((MemoryPool *)Memory_GetDefaultAllocator());
+            var_v0 = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
 block_10:
             var_s2 = var_v0;
         }
     }
-    temp_s1_2 = arg0->f32;
-    temp_s1 = var_s2->vX(temp_s1_2 + arg0->f72);
+    temp_s1_2 = arg0->_runTimeSize;
+    temp_s1 = (int)var_s2->Allocate(temp_s1_2 + arg0->_sizeofSize);
     temp_s1 = temp_s1 + temp_s1_2;
     if (temp_s1 != 0) {
-        igObject_Construct((ConstructedObject *)temp_s1, (char *)arg0);
+        igObject_Construct((igObjectDispatchView *)temp_s1, (char *)arg0);
     }
     return temp_s1;
 }
 
-int igMetaObject_CreateInstanceWithPool(PooledMeta *arg0, MemoryPool *arg1) {
+int igMetaObject_CreateInstanceWithPool(igMetaObject *arg0, igMemoryPoolView *arg1) {
     int temp_s1;
     int temp_s1_2;
     char *temp_a0;
-    MemoryPool *var_s2;
-    MemoryPool *var_v0;
-    PooledMeta *(*temp_v0)();
+    igMemoryPoolView *var_s2;
+    igMemoryPoolView *var_v0;
+    igMetaObject *(*temp_v0)();
 
     var_s2 = arg1;
-    if (((arg0->f36 & 4) != 0) == 0) {
+    if (((arg0->_validity & 4) != 0) == 0) {
         return 0;
     }
-    temp_v0 = arg0->f60;
+    temp_v0 = (igMetaObject *(*)())arg0->_abstractProxy;
     if (temp_v0 != 0) {
         return igMetaObject_CreateInstanceWithPool(temp_v0(), var_s2);
     }
-    if (arg0->f26 == 1) {
+    if (arg0->_abstractState == 1) {
         return 0;
     }
     if (var_s2 == 0) {
-        temp_a0 = arg0->f96;
+        temp_a0 = (char *)arg0->_poolName;
         if ((temp_a0 != 0) && (*temp_a0 != 0)) {
-            var_s2 = ((MemoryPool *)Memory_GetAllocatorByName((int)temp_a0));
+            var_s2 = ((igMemoryPoolView *)Memory_GetAllocatorByName((int)temp_a0));
             if (var_s2 == 0) {
-                var_v0 = ((MemoryPool *)Memory_GetDefaultAllocator());
+                var_v0 = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
                 goto block_10;
             }
         } else {
-            var_v0 = ((MemoryPool *)Memory_GetDefaultAllocator());
+            var_v0 = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
 block_10:
             var_s2 = var_v0;
         }
     }
-    temp_s1_2 = arg0->f32;
-    temp_s1 = var_s2->vX(temp_s1_2 + arg0->f72);
+    temp_s1_2 = arg0->_runTimeSize;
+    temp_s1 = (int)var_s2->Allocate(temp_s1_2 + arg0->_sizeofSize);
     temp_s1 = temp_s1 + temp_s1_2;
     if (temp_s1 != 0) {
-        igObject_ConstructPooled((PooledHeader *)temp_s1, (char *)arg0);
+        igObject_ConstructPooled((igObject *)temp_s1, (char *)arg0);
     }
     return temp_s1;
 }
@@ -196,28 +196,28 @@ block_10:
 void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *parent){
     if(parent!=0){
         if(parent->_children==0)parent->_children=(int)FUN_002c29c0((int)(Memory_GetAllocatorBySelector(*(int *)0x587040)));
-        ObjectPointerList_Append((PointerList *)((void *)parent->_children), (int)meta);
+        ObjectPointerList_Append((__internalNonRefCountedObjectList *)((void *)parent->_children), (int)meta);
         meta->_parent=(int)parent;
         meta->_vTablePointer=parent->_vTablePointer;
         meta->_requiredAlignment=((igMetaObject *)meta->_parent)->_requiredAlignment;
         meta->_runTimeSize=((igMetaObject *)meta->_parent)->_runTimeSize;
         meta->_sizeofSize=((igMetaObject *)meta->_parent)->_sizeofSize;
-        int count=((FieldPointerStorage *)parent->_metaFields)->count;
+        int count=((__internalObjectList *)parent->_metaFields)->_count;
         for(int i=0;i<count;i++)igMetaObject_AppendField(meta,(igMetaField *)igMetaObject_GetFieldAt(parent,i));
     }
 }
 
-int igMetaObject_CountInstances(MetaTreeNode *arg0, int arg1) {
-    int s2 = arg0->f44;
-    MetaTreeList *l;
+int igMetaObject_CountInstances(igMetaObject *arg0, int arg1) {
+    int s2 = arg0->_instanceCount;
+    __internalObjectList *l;
     int s1;
     int s0;
     if (arg1 != 0) {
-        l = arg0->f52;
+        l = (__internalObjectList *)arg0->_children;
         if (l != 0) {
-            s0 = l->n;
+            s0 = l->_count;
             for (s1 = 0; s1 < s0; s1++) {
-                s2 += igMetaObject_CountInstances(arg0->f52->arr[s1], 1);
+                s2 += igMetaObject_CountInstances(((igMetaObject **)((__internalObjectList *)arg0->_children)->_data)[s1], 1);
             }
         }
     }
@@ -252,7 +252,7 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
 
 void igMetaObject_AppendField(igMetaObject *meta, igMetaField *field)
 {
-    MetaRefList_AppendRetained((PointerList *)((void *)meta->_metaFields), (RefHeader *)field);
+    MetaRefList_AppendRetained((__internalObjectList *)((void *)meta->_metaFields), (igObject *)field);
 }
 
 void igMetaObject_FinalizeAndAppendField(void *meta,void *field){
@@ -261,7 +261,7 @@ void igMetaObject_FinalizeAndAppendField(void *meta,void *field){
 
 void igMetaObject_FinalizeAndReplaceField(igMetaObject *meta,int index,igMetaField *field){
     igMetaField_FinalizeDescriptor((igMetaField *)field);
-    InternalObjectList_SetAtRetained((PointerList *)((void *)meta->_metaFields), index, (RefHeader *)field);
+    InternalObjectList_SetAtRetained((__internalObjectList *)((void *)meta->_metaFields), index, (igObject *)field);
 }
 
 int FUN_002fdef0(int a0, int a1)
@@ -275,7 +275,7 @@ int igMetaObject_GetFieldAt(igMetaObject *self, int index) {
 }
 
 void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
-    return ObjectPointerList_FindByStringField((FieldPointerList *)((void *)meta->_metaFields), g_fieldNameMember[0], name);
+    return ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember[0], name);
 }
 
 void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
@@ -296,7 +296,7 @@ void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField *
     count=igMetaObject_GetFieldCount(meta);
     row=0;
     for(;start<count;start++,row++){
-        field=((FieldPointerStorage *)meta->_metaFields)->data[start];
+        field=((igMetaField **)((__internalObjectList *)meta->_metaFields)->_data)[start];
         igMetaField_Configure(field,names[row],handles[row],offsets[row],meta);
         igMetaField_FinalizeDescriptor(field);
     }
@@ -350,12 +350,12 @@ void igMetaObject_FinalizeFieldLayout(igMetaObject *arg0) {
     FUN_002d3150((int *)(((void * *)g_objectSystem)[0]), (int)arg0);
 }
 
-int FUN_002fe290(AncestorMeta *arg0, AncestorMeta *arg1) {
+int FUN_002fe290(igMetaObject *arg0, igMetaObject *arg1) {
     while (arg0 != 0) {
         if (arg1 == arg0) {
             return 1;
         }
-        arg0 = arg0->f56;
+        arg0 = (igMetaObject *)arg0->_parent;
     }
     return 0;
 }
@@ -391,7 +391,7 @@ void *FUN_002fe300(igMetaObject *arg0, int arg1) {
     acc = 1;
     for (i = 0; i < cnt; i++) {
         k = ((igMetaObject **)*(int *)(arg0->_children + 8))[i];
-        v = igMetaObject_CountTree((MetaTreeNode *)k);
+        v = igMetaObject_CountTree((igMetaObject *)k);
         v += acc;
         if (arg1 < v) {
             return FUN_002fe300(k, arg1 - acc);
@@ -401,16 +401,16 @@ void *FUN_002fe300(igMetaObject *arg0, int arg1) {
     return 0;
 }
 
-int igMetaObject_CountTree(MetaTreeNode *arg0) {
-    MetaTreeList *l = arg0->f52;
+int igMetaObject_CountTree(igMetaObject *arg0) {
+    __internalObjectList *l = (__internalObjectList *)arg0->_children;
     int s2;
     int s1;
     int s0;
     if (l == 0) return 1;
-    s1 = l->n;
+    s1 = l->_count;
     s2 = 1;
     for (s0 = 0; s0 < s1; s0++) {
-        s2 += igMetaObject_CountTree(arg0->f52->arr[s0]);
+        s2 += igMetaObject_CountTree(((igMetaObject **)((__internalObjectList *)arg0->_children)->_data)[s0]);
     }
     return s2;
 }
@@ -442,12 +442,12 @@ void igMetaObject_AddField(igMetaObject *arg0, void *arg1) {
     *(char *)((char *)(arg1) + 37) = 1;
     *(int *)((char *)(arg1) + 24) = (int)(arg0);
     igMetaField_FinalizeDescriptor((igMetaField *)arg1);
-    idx = MetaRefList_AppendRetained((PointerList *)((void *)arg0->_metaFields), (RefHeader *)arg1);
-    n = igMetaObject_CountTree((MetaTreeNode *)arg0);
+    idx = MetaRefList_AppendRetained((__internalObjectList *)((void *)arg0->_metaFields), (igObject *)arg1);
+    n = igMetaObject_CountTree((igMetaObject *)arg0);
     for (i = 1; i < n; i++) {
         m = (char *)FUN_002fe300(arg0, i);
         *(int *)(m + 36) = *(int *)(m + 36) & ~4;
-        InternalObjectList_InsertRetained((PointerList *)(*(int *)(m + 40)), idx, (RefHeader *)arg1);
+        InternalObjectList_InsertRetained((__internalObjectList *)(*(int *)(m + 40)), idx, (igObject *)arg1);
     }
 }
 
@@ -459,13 +459,13 @@ void FUN_002fe570(igMetaObject *arg0, void *arg1) {
 void FUN_002fe5a0(int arg0) {
     int temp_s1;
     int var_s0;
-    temp_s1 = igMetaObject_CountTree((MetaTreeNode *)arg0);
+    temp_s1 = igMetaObject_CountTree((igMetaObject *)arg0);
     for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
         igMetaObject_FinalizeFieldLayout((igMetaObject *)FUN_002fe300((igMetaObject *)arg0, var_s0));
     }
 }
 
-int FUN_002fe600(igTDataList<ChainMeta *> *list, ChainMeta *object) {
+int FUN_002fe600(igTDataList<igMetaObject *> *list, igMetaObject *object) {
     int i = list->find(object);
     if (i != -1) {
         return i;
@@ -474,7 +474,7 @@ int FUN_002fe600(igTDataList<ChainMeta *> *list, ChainMeta *object) {
     while (i == -1 && object != 0) {
         ChainRef retained(object);
         List_InsertWords((igDataList *)list, n, 1, &retained);
-        object = object->parent;
+        object = (igMetaObject *)object->_parent;
         i = list->find(object);
     }
     return list->_count - 1;
@@ -502,19 +502,19 @@ void igMetaObject_AssignTypeId(igMetaObject *meta){
     }
 }
 
-void FUN_002fe810(int *out, PoolNameMeta *s, MemoryPool *a) {
-    if (s->buf == 0) { *out = g_resultFailure.v; return; }
-    if (s->f26 != 0) { *out = g_resultFailure.v; return; }
-    if (a == 0) a = ((MemoryPool *)Memory_GetDefaultAllocator());
-    int *p; int *base = s->buf;
+void FUN_002fe810(int *out, igMetaObject *s, igMemoryPoolView *a) {
+    if (s->_vTablePointer == 0) { *out = g_resultFailure.v; return; }
+    if (s->_abstractState != 0) { *out = g_resultFailure.v; return; }
+    if (a == 0) a = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
+    int *p; int *base = (int *)s->_vTablePointer;
     p = base;
     while (!*p) p++;
     while (*p != 0) p++;
     int n = (char *)p - (char *)base;
-    int *nb = (int *)a->vX(n);
+    int *nb = (int *)a->Allocate(n);
     if (nb == 0) { *out = g_resultFailure.v; return; }
-    memcpy(nb, s->buf, n);
-    s->buf = nb;
+    memcpy(nb, (int *)s->_vTablePointer, n);
+    s->_vTablePointer = (int)nb;
     *out = g_resultSuccess.v;
 }
 

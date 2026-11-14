@@ -71,12 +71,12 @@ int Gap__Core__igAliasMemoryPool__vfunc_29(void) {
     return 0;
 }
 
-static inline void setLock(igAliasMemoryPool *pool, Lock *lock) {
-    Lock *previous;
+static inline void setLock(igAliasMemoryPool *pool, igSemaphoreView *lock) {
+    igSemaphoreView *previous;
     if (lock != 0) {
         lock->_refCount = lock->_refCount + 1;
     }
-    previous = (Lock *)pool->_allocationLock;
+    previous = (igSemaphoreView *)pool->_allocationLock;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
@@ -86,21 +86,21 @@ static inline void setLock(igAliasMemoryPool *pool, Lock *lock) {
     pool->_allocationLock = (int)lock;
 }
 
-LockStatus Gap__Core__igAliasMemoryPool__vfunc_34(igAliasMemoryPool *pool, int enable) {
+igResult Gap__Core__igAliasMemoryPool__vfunc_34(igAliasMemoryPool *pool, int enable) {
     if ((enable & 0xFF) == 0) {
-        igSmartPointer<Lock> kept((Lock *)pool->_allocationLock);
+        igSmartPointer<igSemaphoreView> kept((igSemaphoreView *)pool->_allocationLock);
         kept.retain();
         setLock(pool, 0);
         if (kept.get() != 0) {
             kept.get()->wait(1);
-            kept.get()->close();
+            kept.get()->destroy();
         }
     } else if ((enable & 0xFF) == 1) {
         if (pool->_allocationLock != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<Lock> created((Lock *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)pool)))));
-        created.get()->open();
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)pool)))));
+        created.get()->create();
         setLock(pool, created.get());
     }
     return g_resultSuccess.v;
@@ -190,24 +190,24 @@ void *Gap__Core__igAliasMemoryPool__vfunc_53(igAliasMemoryPool *self){return ((i
 /* Take the pool's allocation lock: when a lock object is attached (_allocationLock), call its
  * virtual method at vtable offset 132 with 1. The status it returns is discarded. */
 void igAliasMemoryPool_Lock(igAliasMemoryPool *self) {
-    LockCallStatus status;
+    igResult status;
     void **lockObject;
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((AllocationLockVtable *)(lockObject))->lock((int)(1));
+        status = ((igSemaphoreView *)(lockObject))->wait((int)(1));
     }
 }
 
 /* Release the pool's allocation lock: when a lock object is attached (_allocationLock), call its
  * virtual method at vtable offset 124. The status it returns is discarded. */
 void igAliasMemoryPool_Unlock(igAliasMemoryPool *self) {
-    LockCallStatus status;
+    igResult status;
     void **lockObject;
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((AllocationLockVtable *)(lockObject))->unlock();
+        status = ((igSemaphoreView *)(lockObject))->signal();
     }
 }
 
@@ -217,12 +217,12 @@ void igAliasMemoryPool_Unlock(igAliasMemoryPool *self) {
  * write `return igAliasMemoryPool_UnlockAndReturn(pool, result)` to leave a locked section while
  * preserving its result. */
 int igAliasMemoryPool_UnlockAndReturn(igAliasMemoryPool *self, int result) {
-    LockCallStatus status;
+    igResult status;
     void **lockObject;
 
     lockObject = (void **)(self->_allocationLock);
     if (lockObject != 0) {
-        status = ((AllocationLockVtable *)(lockObject))->unlock();
+        status = ((igSemaphoreView *)(lockObject))->signal();
     }
     return result;
 }

@@ -4,12 +4,12 @@ int igRefMetaField_GetSize(void) {
 
 void igRefMetaField_ZeroValue(igMetaField *field,void *object) {
     int destination=(int)object+field->_offset;
-    memset(destination,0,((FieldSizeDispatchView *)field)->GetTypeSize() & 0xffff);
+    memset(destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
 }
 
 void igRefMetaField_ClearValue(igMetaField *field,void *object) {
     int destination=(int)object+field->_offset;
-    memset(destination,0,((FieldSizeDispatchView *)field)->GetTypeSize() & 0xffff);
+    memset(destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
 }
 
 int igRefMetaField_ReadRawFieldMem(void *arg0, int a1, int *arg2, int arg3, int arg4) {

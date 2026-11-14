@@ -4,10 +4,10 @@ void thunk_igPsx2Semaphore_GetMetaObject(void) {
 
 ObjectRefWord *FUN_002ba7f0(ObjectRefWord *self,int delete_storage) {
     if(self) {
-        ObjectRefTarget *object=self->value;
+        igObject *object=self->value;
         if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
+            --object->_refCount;
+            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
                 igObject_Destroy((void *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
@@ -51,13 +51,13 @@ void **FUN_002ba8f0(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_002ba970(struct Ref **self, short flag) {
-    struct Ref *p;
+void **FUN_002ba970(igObject **self, short flag) {
+    igObject *p;
     if (self != 0) {
         p = *self;
         if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy(p);
+            ((igRefCountWord *)&p->_refCount)->word = ((igRefCountWord *)&p->_refCount)->word - 1;
+            if (((igRefCountWord *)&p->_refCount)->bits.count == 0) igObject_Destroy(p);
         }
         if (flag > 0) __dl__FPv(self);
     }

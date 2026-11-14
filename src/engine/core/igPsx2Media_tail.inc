@@ -1,6 +1,6 @@
 void FUN_002cf900(int arg0) {
     FUN_002cfac0();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586CF8), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igPsx2Media_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igPsx2Media_GetVTable(void) {
     void *temp_a0;
     void *temp_v1;
 
-    igObject_InitHeader((ObjectHeader *)&media);
+    igObject_InitHeader((igObject *)&media);
     media._vtable = (int)(&DAT_0052da00[0]);
     q0 = (S_ref *)&media._connection;
     *(int *)q0 = 0;

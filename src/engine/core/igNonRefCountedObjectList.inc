@@ -9,7 +9,7 @@ igMetaObject *igNonRefCountedObjectList_GetMetaObject(void)
 int igNonRefCountedObjectList_GetVTable(void) {
     igNonRefCountedObjectList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00524500[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

@@ -19,7 +19,7 @@ int igCallStackTable_GetVTable(void) {
     S_ref *q0;
     S_ref *q1;
 
-    igObject_InitHeader((ObjectHeader *)&table);
+    igObject_InitHeader((igObject *)&table);
     table._vtable = (int)&DAT_00530c00[0];
     q1 = (S_ref *)&table._callStacks;
     *(int *)q1 = 0;

@@ -22,7 +22,7 @@ int igObjectStringMap_GetVTable(void) {
     int temp_v0;
     int *q8;
     int *q12;
-    igObject_InitHeader((struct ObjectHeader *)&map);
+    igObject_InitHeader((igObject *)&map);
     map._vtable = (int)&DAT_00532d80[0];
     q8 = &map._names;
     *q8 = 0;

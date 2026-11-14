@@ -7,11 +7,8 @@ static inline void dropKey(IniKeyText *o) {
     }
 }
 
-static inline void dropValues_304b10(IniValueList *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
+static inline void dropValues_304b10(igTDataList<char *> *o) {
+    IG_OBJECT_RELEASE(o);
 }
 
 void FUN_00304b10(void *self) {
@@ -21,11 +18,11 @@ void FUN_00304b10(void *self) {
     unsigned int i;
     int j;
     IniKeyText *key;
-    IniValueList *values;
+    igTDataList<char *> *values;
     char *string;
     char *text;
-    IniValueList *held;
-    ini = (*(IniSystemTables * *)g_objectSystem)->ini;
+    igTDataList<char *> *held;
+    ini = (*(ObjectSystemView **)g_objectSystem)->configRegistry;
     section = FUN_00306360((igRegistry *)ini, PLUGINS, 1);
     if (section >= 0) {
         n = ((unsigned int)FUN_003064b0((int)ini, section));
@@ -34,13 +31,13 @@ void FUN_00304b10(void *self) {
             if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
                 dropKey(key);
             } else {
-                *(IniValueList **)&values = ((IniValueList *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
+                *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
                 held = values;
                 if (FUN_00306aa0(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
                     dropValues_304b10(values);
                     dropKey(key);
                 } else {
-                    for (j = 0; j < (held = values)->count; j++) {
+                    for (j = 0; j < (held = values)->_count; j++) {
                         StringList_CopyRetained(&string, values, j);
                         text = string;
                         FUN_00304840((igPluginHelper *)self, (int)(keyText(key)), (int)text);

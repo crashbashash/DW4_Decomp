@@ -1,6 +1,6 @@
 void * FUN_002bc0d0(int arg0) {
     FUN_002bc1b0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585AA8), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AA8), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002bc110(void) {

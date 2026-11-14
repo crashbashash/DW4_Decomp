@@ -14,7 +14,7 @@ int igPsx2Semaphore_GetVTable(void) {
     int temp_v0;
     void *temp_v1;
 
-    igObject_InitHeader((struct ObjectHeader *)&semaphore);
+    igObject_InitHeader((igObject *)&semaphore);
     q = (void **)&semaphore._name;
     *q = 0;
     semaphore._vtable = (int)&g_igNamedObject_vtable[0];

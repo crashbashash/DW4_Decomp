@@ -1,6 +1,6 @@
 void FUN_002c45f0(int arg0) {
     FUN_002c4710();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586378), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586378), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igFloatMetaField_GetMetaObject(void)
@@ -66,10 +66,10 @@ void FUN_002c47a0(void) {
     void *temp_s0;
 
     if (DAT_00586380[0] == 0) {
-        DAT_00586380[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igFloatMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        DAT_00586380[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(DAT_00586380[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
             {
                 void *held = (void *)DAT_00586380[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;

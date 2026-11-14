@@ -10,7 +10,7 @@ int igMediaFile_GetVTable(void) {
     igMediaFile file;
     int temp_s0;
     char *ps;
-    igObject_InitHeader((ObjectHeader *)&file);
+    igObject_InitHeader((igObject *)&file);
     file._name = 0;
     file._fileName = 0;
     file._completeFilename = 0;

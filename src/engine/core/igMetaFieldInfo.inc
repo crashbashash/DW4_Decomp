@@ -13,7 +13,7 @@ int igMetaFieldInfo_GetVTable(void) {
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((ObjectHeader *)&u);
+    igObject_InitHeader((igObject *)&u);
     ps = (char *)&u._name;
     *(int *)ps = 0;
     u._vtable = (int)&g_igNamedObject_vtable[0];

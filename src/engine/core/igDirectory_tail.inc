@@ -41,10 +41,13 @@ int FUN_002d6e60(igDataList *l, void *key, Cmp cmp) {
     return lo;
 }
 
-static inline int count_of(const igDependencyListView *list) { return list->_count; }
+static inline int count_of(const igTDataList<DependencyPair> *list) { return list->_count; }
+
+/* Index of the dependency (k1, k2), or -1. */
+static inline int findDependency(igTDataList<DependencyPair> *list, int k1, int k2) { int i; for (i = 0; i < list->_count; i++) { DependencyPair *p = &list->_data[i]; int v = (k1 == p->a); if (v) { v = (k2 == p->b); } if (v) { return i; } } return -1; }
 
 void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
-    int n; igDependencyListView *q; DependencyPair *it;
+    int n; igTDataList<DependencyPair> *q; DependencyPair *it;
     q = arg0->_dependencies;
     n = q->_count;
     if (n < q->_capacity) {
@@ -60,13 +63,13 @@ void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
 }
 
 void FUN_002d7130(igDependencyOrderedListView *owner) {
-    igSmartPointer<ObjectList> copy(((ObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
-    ObjectList_AppendRetainedList((int)copy.p, (igTDataList<igObject *> *)owner->_objectList);
-    ObjectList *children = owner->_objectList;
-    int count = children->count;
+    igSmartPointer<igObjectList> copy(((igObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
+    ObjectList_AppendRetainedList((int)copy.p, owner->_objectList);
+    igTDataList<igObject *> *children = owner->_objectList;
+    int count = children->_count;
     int i;
     for (i = 0; i < count; i++) {
-        igObject *child = children->data[i];
+        igObject *child = children->_data[i];
         if (child != 0) {
             child->_refCount = child->_refCount - 1;
             if ((child->_refCount & 0x7FFFFF) == 0) {
@@ -74,26 +77,26 @@ void FUN_002d7130(igDependencyOrderedListView *owner) {
             }
         }
     }
-    int end = children->count;
+    int end = children->_count;
     int j;
     for (j = 0; j < end; j++) {
-        children->data[j] = 0;
+        children->_data[j] = 0;
     }
-    children->count = 0;
-    for (i = 0; i < copy->count; i++) {
-        igRendererOrderedList_Append(owner, copy->data[i], 0);
+    children->_count = 0;
+    for (i = 0; i < copy->_count; i++) {
+        igRendererOrderedList_Append(owner, ((igObject **)copy->_data)[i], 0);
     }
 }
 
 void igRendererOrderedList_Clear(char *arg0) {
-    ObjectList *l;
+    igTDataList<igObject *> *l;
     int n;
     int i;
     igObject *t;
-    l = *(ObjectList **)(arg0 + 8);
-    n = l->count;
+    l = *(igTDataList<igObject *> **)(arg0 + 8);
+    n = l->_count;
     for (i = 0; i < n; i++) {
-        t = l->data[i];
+        t = l->_data[i];
         if (t != 0) {
             t->_refCount = (int)((int) (t->_refCount - 1));
             if (((unsigned long long) ((long long)(int) t->_refCount << 0x29) >> 0x29) == 0) {
@@ -101,16 +104,16 @@ void igRendererOrderedList_Clear(char *arg0) {
             }
         }
     }
-    n = l->count;
+    n = l->_count;
     for (i = 0; i < n; i++) {
-        l->data[i] = 0;
+        l->_data[i] = 0;
     }
-    l->count = 0;
+    l->_count = 0;
 }
 
 void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {
-    igDependencyListView *temp_a0 = arg1->_dependencies;
-    int idx = temp_a0->Find(arg2, arg3);
+    igTDataList<DependencyPair> *temp_a0 = arg1->_dependencies;
+    int idx = findDependency(temp_a0, arg2, arg3);
     int var_s2;
     if (idx >= 0) {
         List_RemoveAt((igDataList *)temp_a0, idx, 8);
@@ -127,7 +130,7 @@ void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int ar
 
 void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1) {
     int var_s0;
-    igDependencyListView *temp_a0;
+    igTDataList<DependencyPair> *temp_a0;
     int *temp_v1;
     int a, b;
 

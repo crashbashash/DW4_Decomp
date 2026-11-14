@@ -11,7 +11,7 @@ int igStandardQueue_GetVTable(void) {
     int temp_s2;
     int *p2;
     int *p1;
-    igObject_InitHeader((struct ObjectHeader *)&queue);
+    igObject_InitHeader((igObject *)&queue);
     queue._serviceThreads = 0;
     queue._vtable = (int)&DAT_0052ddf0[0];
     p1 = &queue._insertLock;
@@ -21,9 +21,9 @@ int igStandardQueue_GetVTable(void) {
     queue._queueSema = 0;
     temp_s2 = *(int *)((char *)&queue + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     queue._vtable = (int)&DAT_0052ddf0[0];
-    FUN_002ba970((Ref **)&queue._queueSema, -1);
-    FUN_002ba970((Ref **)p2, -1);
-    FUN_002ba970((Ref **)p1, -1);
+    FUN_002ba970((igObject **)&queue._queueSema, -1);
+    FUN_002ba970((igObject **)p2, -1);
+    FUN_002ba970((igObject **)p1, -1);
     FUN_002cf040((igQueue *)&queue, 0);
     return temp_s2;
 }

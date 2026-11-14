@@ -15,7 +15,7 @@ igMetaObject *igDependencyList_GetMetaObject(void)
 
 int igDependencyList_GetVTable(void) {
     int obj[8];
-    igObject_InitHeader((ObjectHeader *)obj);
+    igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&DAT_00532360[0];
     return *(int *)((char *)obj + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
 }

@@ -28,19 +28,19 @@ extern "C" void List_InsertWords(igDataList *list, int index, int count, const v
     }
 }
 
-void List_AppendWords(WordList *arg0, int arg1, int arg2) {
-    int temp_a1;
-    int temp_s0;
+void List_AppendWords(igDataList *list, int count, const int *words) {
+    int newCount;
+    int oldCount;
 
-    if ((arg1 >= 0) && (arg1 != 0)) {
-        temp_s0 = arg0->count;
-        temp_a1 = temp_s0 + arg1;
-        if (temp_a1 <= arg0->cap) {
-            arg0->count = temp_a1;
+    if ((count >= 0) && (count != 0)) {
+        oldCount = list->_count;
+        newCount = oldCount + count;
+        if (newCount <= list->_capacity) {
+            list->_count = newCount;
         } else {
-            List_Resize(arg0, temp_a1, 4);
+            List_Resize(list, newCount, 4);
         }
-        memcpy(arg0->data + temp_s0, arg2, arg1 * 4);
+        memcpy((int *)list->_data + oldCount, words, count * 4);
     }
 }
 

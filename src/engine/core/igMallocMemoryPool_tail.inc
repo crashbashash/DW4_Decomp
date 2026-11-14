@@ -221,7 +221,7 @@ void Gap__Core__igMallocMemoryPool__vfunc_13(igMallocMemoryPool *self, int extra
 void Gap__Core__igMallocMemoryPool__vfunc_97(igMallocMemoryPool *self) {
     igObject *r;
     self->_refCount = 0;
-    ((RefCount *)&self->_refCount)->u.b.cnt = 1;
+    ((igRefCountWord *)&self->_refCount)->bits.count = 1;
     *((char *)self + 7) = 0;
     self->_poolIndex = 0;
     ((igMemoryPoolView *)self)->vfunc_51();

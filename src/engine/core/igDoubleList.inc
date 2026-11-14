@@ -16,7 +16,7 @@ igMetaObject *igDoubleList_GetMetaObject(void)
 int igDoubleList_GetVTable(void) {
     igDoubleList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_0052b630[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

@@ -3,7 +3,7 @@ void **igMetaObject_Create(int allocator) {
 
     if (*g_objectSystem[0] != 0) {
         igMetaObject_EnsureRegistered();
-        metaObject = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igMetaObject_metaObject)[0]), (MemoryPool *)allocator)));
+        metaObject = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)(((int *)g_igMetaObject_metaObject)[0]), (igMemoryPoolView *)allocator)));
     } else {
         metaObject = (void **)(((void **)igObject_AllocateRawStorage(0x64, 0, (igMemoryPoolView *)allocator)));
         if (metaObject != 0) {
@@ -179,6 +179,6 @@ void igMetaObject_InitFields(void) {
 
 void FUN_002bea90(int arg0) {
     FUN_002bebb0();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585CB8), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585CB8), (igMemoryPoolView *)arg0);
 }
 

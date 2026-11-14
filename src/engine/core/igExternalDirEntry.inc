@@ -13,7 +13,7 @@ int igExternalDirEntry_GetVTable(void) {
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
-    igObject_InitHeader((ObjectHeader *)&entry);
+    igObject_InitHeader((igObject *)&entry);
     entry._name = 0;
     entry._vtable = (int)&DAT_00530360[0];
     entry._directoryName = 0;

@@ -4,7 +4,7 @@ void thunk_igElfFile_GetMetaObject(void) {
 
 void * FUN_002cec00(int arg0) {
     FUN_002ced70();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586C00), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586C00), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igElfFile_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igElfFile_GetVTable(void) {
     int tc1;
     char *q1;
     S_ref *q2;
-    igObject_InitHeader((ObjectHeader *)&elf);
+    igObject_InitHeader((igObject *)&elf);
     elf._vtable = (int)&DAT_0052e010[0];
     q1 = (char *)&elf._fileName;
     *(int *)q1 = 0;

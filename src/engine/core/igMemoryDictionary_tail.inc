@@ -13,7 +13,7 @@ void Gap__Core__igMemoryDictionary__vfunc_24(igMemoryDictionary *self, int capac
 void Gap__Core__igMemoryDictionary__vfunc_25(igMemoryDictionaryView *self) {
     int a;
     int b;
-    MemoryDictionaryEntryList *l;
+    igTDataList<MemoryDictionaryEntry> *l;
 
     a = self->_capacity * 2;
     l = self->_memoryEntries;
@@ -33,8 +33,8 @@ void Gap__Core__igMemoryDictionary__vfunc_25(igMemoryDictionaryView *self) {
 }
 
 void Gap__Core__igMemoryDictionary__vfunc_26(igMemoryDictionaryView *self) {
-    MemoryDictionaryEntryList *entries;
-    MemoryDictionaryEntryList *entries2;
+    igTDataList<MemoryDictionaryEntry> *entries;
+    igTDataList<MemoryDictionaryEntry> *entries2;
 
     entries = self->_memoryEntries;
     if (0 <= entries->_capacity) {
@@ -58,7 +58,7 @@ int Gap__Core__igMemoryDictionary__vfunc_28(igMemoryDictionary *self) {
 }
 
 void Gap__Core__igMemoryDictionary__vfunc_27(igMemoryDictionaryView *self) {
-    MemoryDictionaryEntryList *t; int half; int j; MemoryDictionaryEntry *pp; int n; int i;
+    igTDataList<MemoryDictionaryEntry> *t; int half; int j; MemoryDictionaryEntry *pp; int n; int i;
     t = self->_memoryEntries;
     half = *(int *)&t->_count / 2;
     pp = t->_data;
@@ -86,7 +86,7 @@ void Gap__Core__igMemoryDictionary__vfunc_30(igResult *result, igMemoryDictionar
     int n;
     int i;
     int res;
-    MemoryDictionaryEntryList *s;
+    igTDataList<MemoryDictionaryEntry> *s;
     e = &self->_memoryEntries->_data[self->_cachedIndex];
     if (e->key == key) {
         *value = e->value;
@@ -126,7 +126,7 @@ igResult Gap__Core__igMemoryDictionary__vfunc_31(igMemoryDictionaryView *self, i
     int cap = self->_memoryEntries->_count / 2;
     int half = cap / 2;
     int idx;
-    MemoryDictionaryEntryList *s;
+    igTDataList<MemoryDictionaryEntry> *s;
     MemoryDictionaryEntry *e;
     if (cap != 0) {
         idx = self->vfunc_33(key);
@@ -165,7 +165,7 @@ igResult Gap__Core__igMemoryDictionary__vfunc_32(igMemoryDictionaryView *self, i
     int idx;
     MemoryDictionaryEntry *e;
     MemoryDictionaryEntry *next;
-    MemoryDictionaryEntryList *t;
+    igTDataList<MemoryDictionaryEntry> *t;
 
     i = 0;
     half = self->_memoryEntries->_count / 2;
@@ -216,11 +216,11 @@ unsigned int Gap__Core__igMemoryDictionary__vfunc_33(igMemoryDictionary *self, u
 }
 
 int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionaryView *self, int capacity) {
-    igSmartPointer<MemoryDictionaryEntryList> previous(self->_memoryEntries, kRetainReference);
+    igSmartPointer<igIntList> previous((igIntList *)self->_memoryEntries, kRetainReference);
     int count = previous.get()->_count;
     int *entry = (int *)previous.get()->_data;
     int allocator;
-    MemoryDictionaryEntryList *table;
+    igTDataList<MemoryDictionaryEntry> *table;
     int words;
     int i;
     self->_capacity = capacity;
@@ -233,7 +233,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionary
             igObject_Destroy(table);
         }
     }
-    self->_memoryEntries = (MemoryDictionaryEntryList *)FUN_002ca260(allocator);
+    self->_memoryEntries = (igTDataList<MemoryDictionaryEntry> *)FUN_002ca260(allocator);
     words = self->_capacity * 2;
     if (words >= self->_memoryEntries->_count) {
         List_Reserve((igDataList *)self->_memoryEntries, words, 4);

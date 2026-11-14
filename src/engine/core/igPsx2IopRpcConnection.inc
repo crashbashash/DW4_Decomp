@@ -1,6 +1,6 @@
 void FUN_002cfe10(int arg0) {
     FUN_002cff30();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586D48), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D48), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_002cfe50(void) {
@@ -20,7 +20,7 @@ igMetaObject *igPsx2IopRpcConnection_GetMetaObject(void)
 
 int igPsx2IopRpcConnection_GetVTable(void) {
     igPsx2IopRpcConnection connection;
-    igObject_InitHeader((struct ObjectHeader *)&connection);
+    igObject_InitHeader((igObject *)&connection);
     connection._vtable = (int)&DAT_0052db30[0];
     return *(int *)((char *)&connection + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

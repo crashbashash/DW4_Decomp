@@ -16,7 +16,7 @@ igMetaObject *igMemoryPoolInfoList_GetMetaObject(void)
 int igMemoryPoolInfoList_GetVTable(void) {
     igMemoryPoolInfoList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_005329e0[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

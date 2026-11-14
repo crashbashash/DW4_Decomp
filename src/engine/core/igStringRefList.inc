@@ -1,6 +1,6 @@
 void * igStringRefList_Create(int arg0) {
     FUN_002b9200();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5858D8), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858D8), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002b9120(void) {
@@ -21,7 +21,7 @@ igMetaObject *igStringRefList_GetMetaObject(void)
 int igStringRefList_GetVTable(void) {
     igStringRefList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_0052e930[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

@@ -12,7 +12,7 @@ int igProgramFile_GetVTable(void) {
     int *a1;
     int v0;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
+    igObject_InitHeader((igObject *)&obj);
     *(int **)&obj._vtable = &DAT_0052e010[0];
     obj._fileName = 0;
     obj._file = 0;

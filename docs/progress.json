@@ -348,7 +348,7 @@
    "orphan.bytes": 0,
    "profile_split.bytes": 19492,
    "profile_split.units": 3,
-   "raw_casts.reflected": 362,
+   "raw_casts.reflected": 361,
    "struct.a": 19,
    "struct.b": 0,
    "struct.c": 38,
@@ -622,12 +622,12 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5157,
-  "pct": 41.88,
-  "recovered": 27318,
-  "synthetic": 6312,
-  "total": 65226,
-  "typeable": 362,
+  "offset_casts": 5151,
+  "pct": 42.2,
+  "recovered": 27520,
+  "synthetic": 6168,
+  "total": 65209,
+  "typeable": 361,
   "typeable_pct": 0.55
  }
 }

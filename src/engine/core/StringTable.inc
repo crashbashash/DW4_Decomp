@@ -22,22 +22,22 @@ void *StringTable_Destroy(StringTableLayout *self, long long delete_flag) {
 
 void StringTable_SetSynchronization(int arg0) {
     int var_v0;
-    SyncLockView *o;
-    SyncLockRef *p;
+    igSemaphoreView *o;
+    igObject *p;
     if (arg0 != 0) {
         if (DAT_005871c8[0] == 0) {
             var_v0 = ((int)FUN_002f8a20());
 var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-            o = (SyncLockView *)FUN_002ba650(var_v0);
-            o->vX();
+            o = (igSemaphoreView *)FUN_002ba650(var_v0);
+            o->create();
             DAT_005871c8[0] = o;
         }
     } else {
-        p = (SyncLockRef *)DAT_005871c8[0];
+        p = (igObject *)DAT_005871c8[0];
         if (p != 0) {
             DAT_005871c8[0] = 0;
-            p->references = p->references - 1;
-            if (((unsigned long long)(long long)p->references & 0x7fffffULL) == 0) {
+            p->_refCount = (int)p->_refCount - 1;
+            if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0) {
                 igObject_Destroy(p);
             }
         }

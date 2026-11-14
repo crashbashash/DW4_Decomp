@@ -45,8 +45,8 @@ void FUN_002eb150(igLocationTableView *table) {
             List_Reserve((igDataList *)hashIndex, 0, 4);
         }
     }
-    FUN_0030cfa0((ClearOwner *)table->_symbolNames);
-    FUN_0030cfa0((ClearOwner *)table->_sourceFileNames);
+    FUN_0030cfa0((igStringTableView *)table->_symbolNames);
+    FUN_0030cfa0((igStringTableView *)table->_sourceFileNames);
 }
 
 int FUN_002eb210(void *arg0) {
@@ -191,28 +191,28 @@ unsigned int Gap__Core__igLocationTable__vfunc_30(igLocationTable *self, unsigne
     return 0U;
 }
 
-int Gap__Core__igLocationTable__vfunc_31(LocationHashTable *self, int key, int value) {
+int Gap__Core__igLocationTable__vfunc_31(igLocationTableView *self, int address, int index) {
     int probes = 0;
-    int size = self->table->count;
+    int size = self->_hashIndex->_count;
     int limit = size / 2;
     int i;
-    LocationHashWords *t;
+    igTDataList<int> *t;
     int *data;
     if (size != 0) {
-        i = self->slot(key);
-        t = self->table;
-        data = t->data;
+        i = self->vfunc_30(address);
+        t = self->_hashIndex;
+        data = t->_data;
         do {
             if (data[i] == -1) {
-                int n = t->count;
-                if (n != 0 && i >= 0 && n > i) { ((LocationHashWords *)t)->data[i] = value; }
+                int n = t->_count;
+                if (n != 0 && i >= 0 && n > i) { ((int *)((igIntList *)t)->_data)[i] = index; }
                 goto done;
             }
             i++;
             if (i >= size) { i = 0; }
             probes++;
         } while (probes < limit);
-        self->rehash(size * 2);
+        self->vfunc_32(size * 2);
         return 0;
     }
 done:

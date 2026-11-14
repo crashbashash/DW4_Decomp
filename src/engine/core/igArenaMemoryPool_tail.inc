@@ -3,7 +3,7 @@ void **FUN_002cdab0(int arg0) {
 
     if (*g_objectSystem[0] != 0) {
         FUN_002cdcf0();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g_igArenaMemoryPool_metaObject[0], (MemoryPool *)arg0)));
+        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igArenaMemoryPool_metaObject[0], (igMemoryPoolView *)arg0)));
     } else {
         var_s0 = (void **)(((void **)FUN_002f0040(0xD0, 0, arg0)));
         if (var_s0 != 0) {

@@ -528,7 +528,7 @@ void Gap__Core__igStackMemoryPool__vfunc_96(igStackMemoryPool *self, igDataList 
     DumpRegion *entry;
     DumpRegion *created;
 
-    if (((MemoryPool *)self)->IsActive() != 0) {
+    if (((igMemoryPoolView *)self)->isActive() != 0) {
         created = FUN_0032a1e0(sizeof(DumpRegion));
         if (created != 0) {
             created = FUN_0032a100(created);

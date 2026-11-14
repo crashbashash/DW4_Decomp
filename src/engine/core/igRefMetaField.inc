@@ -47,10 +47,10 @@ void FUN_002bb930(void) {
     int t;
 
     if (g_igRefMetaField_descriptor[0] == 0) {
-        g_igRefMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igRefMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igRefMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igRefMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igRefMetaField_descriptor[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((__internalObjectList *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
             o = (igRefMetaField *)g_igRefMetaField_descriptor[0];
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {

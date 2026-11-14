@@ -149,8 +149,8 @@ int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, 
   size = (len + 3) & ~3;
   *(int *)cursor = size;
   if (swap != 0) {
-   Desc *d = (Desc *)FUN_002c3090();
-   d->vSwap((int *)cursor, 1);
+   igMetaFieldView *d = (igMetaFieldView *)FUN_002c3090();
+   d->SwapBytes((int *)cursor, 1);
   }
   cursor += 4;
   strcpy(cursor, *v);

@@ -1,6 +1,6 @@
 void FUN_002cce40(int arg0) {
     FUN_002ccf60();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586998), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586998), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igBoolArrayMetaField_GetMetaObject(void)
@@ -83,16 +83,16 @@ void FUN_002cd0a0(void) {
     int len;
 
     if (DAT_005869a0[0] == 0) {
-        DAT_005869a0[0] = ((igBoolArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igBoolArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        DAT_005869a0[0] = ((igBoolArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igBoolArrayMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = DAT_005869a0[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
             p = DAT_005869a0[0];
             p->_refCount = p->_refCount - 1;
             if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
-            len = ((PointerList *)FUN_002fc250())->count;
+            len = FUN_002fc250()->_count;
             DAT_005869a0[0]->_internalIndex = len - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)DAT_005869a0[0]);
         }

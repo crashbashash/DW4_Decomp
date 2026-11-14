@@ -1,6 +1,6 @@
 void * FUN_002c5780(int arg0) {
     FUN_002c59e0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586480), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586480), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002c57c0(void) {
@@ -25,7 +25,7 @@ done:
 int igEventTracker_GetVTable(void) {
     igEventTracker tracker;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&tracker);
+    igObject_InitHeader((igObject *)&tracker);
     tracker._vtable = (int)&DAT_00530420[0];
     tracker._lock = 0;
     tracker._names = 0;
@@ -52,7 +52,7 @@ int igEventTracker_GetVTable(void) {
     FUN_002b8740((ObjectRefWord *)&tracker._classNames, -1);
     FUN_002b8740((ObjectRefWord *)&tracker._groups, -1);
     FUN_002b8740((ObjectRefWord *)&tracker._names, -1);
-    FUN_002ba970((Ref **)&tracker._lock, -1);
+    FUN_002ba970((igObject **)&tracker._lock, -1);
     return t;
 }
 

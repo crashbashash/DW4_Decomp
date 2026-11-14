@@ -15,7 +15,7 @@ igMetaObject *igDirectoryList_GetMetaObject(void)
 
 int igDirectoryList_GetVTable(void) {
     igDirectoryList list;
-    igObject_InitHeader((ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_005323c0[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

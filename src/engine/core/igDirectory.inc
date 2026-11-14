@@ -1,6 +1,6 @@
 void * FUN_002c72c0(int arg0) {
     FUN_002c74b0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586668), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586668), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002c7300(void) {
@@ -27,7 +27,7 @@ int igDirectory_GetVTable(void) {
     char *p156;
     char *p152;
     char *p148;
-    igObject_InitHeader((ObjectHeader *)&dir);
+    igObject_InitHeader((igObject *)&dir);
     dir._vtable = (int)&DAT_00530890[0];
     p148 = (char *)&dir._name;
     *(int *)p148 = 0;
@@ -44,7 +44,7 @@ int igDirectory_GetVTable(void) {
     dir._loadingSemaphore = 0;
     temp_s = *(int *)((char *)&dir + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     dir._vtable = (int)&DAT_00530890[0];
-    FUN_002ba970((Ref **)&dir._loadingSemaphore, -1);
+    FUN_002ba970((igObject **)&dir._loadingSemaphore, -1);
     FUN_002c3a80((ObjectRefWord *)p188, -1);
     FUN_00135430(p172, -1);
     FUN_001d36d0(p168, -1);

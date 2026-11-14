@@ -1,6 +1,6 @@
 int FUN_002d01a0(int arg0) {
     FUN_002d02b0();
-    return igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586D70), (MemoryPool *)arg0);
+    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D70), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igPsx2File_GetMetaObject(void)
@@ -15,7 +15,7 @@ int igPsx2File_GetVTable(void) {
     igPsx2File f;
     int temp_s0;
 
-    igObject_InitHeader((struct ObjectHeader *)&f);
+    igObject_InitHeader((igObject *)&f);
     f._name = 0;
     f._fileName = 0;
     f._completeFilename = 0;

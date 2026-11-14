@@ -1,6 +1,6 @@
 int FUN_002c5e10(int arg0) {
     FUN_002c5ee0();
-    return igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586590), (MemoryPool *)arg0);
+    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586590), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igErrorHandler_GetMetaObject(void)
@@ -14,7 +14,7 @@ igMetaObject *igErrorHandler_GetMetaObject(void)
 int igErrorHandler_GetVTable(void) {
     igErrorHandler handler;
 
-    igObject_InitHeader((struct ObjectHeader *)&handler);
+    igObject_InitHeader((igObject *)&handler);
     handler._vtable = (int)&DAT_00532530[0];
     return *(int *)((char *)&handler + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

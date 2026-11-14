@@ -7,7 +7,7 @@ int FUN_002c66f0(void) {
 
 void FUN_002c6750(int arg0) {
     FUN_002c68f0();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5865D0), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igDriverDatabase_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igDriverDatabase_GetVTable(void) {
     igDriverDatabase db;
     int r;
 
-    igObject_InitHeader((struct ObjectHeader *)&db);
+    igObject_InitHeader((igObject *)&db);
     db._vtable = (int)&DAT_00530630[0];
     db._currentProperties = 0;
     db._subPropertyNames = 0;

@@ -2,35 +2,35 @@ void FUN_002dca90(void)
 {
 }
 
-static inline void setPool(PoolOwner *self, RefPool *pool) {
-    RefPool *previous;
+static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
+    igSemaphoreView *previous;
     if (pool != 0) {
         pool->_refCount = pool->_refCount + 1;
     }
-    previous = self->pool;
+    previous = self->_lock;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;
         if ((previous->_refCount & 0x7FFFFF) == 0) {
             igObject_Destroy(previous);
         }
     }
-    self->pool = pool;
+    self->_lock = pool;
 }
 
-void FUN_002dcaa0(PoolOwner *self, int open) {
+void FUN_002dcaa0(igEventTrackerView *self, int open) {
     if (open != 0) {
-        if (self->pool == 0) {
-            igSmartPointer<RefPool> created(((RefPool *)FUN_002ba650(((int)igObject_GetAllocator((int)self)))));
-            created.get()->open();
-            setPool(self, created.get());
+        if (self->_lock == 0) {
+            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)FUN_002ba650(((int)igObject_GetAllocator((int)self)))));
+            created.get()->create();
+            setLock(self, created.get());
         }
     } else {
-        if (self->pool != 0) {
-            igSmartPointer<RefPool> kept(self->pool);
+        if (self->_lock != 0) {
+            igSmartPointer<igSemaphoreView> kept(self->_lock);
             kept.retain();
-            setPool(self, 0);
+            setLock(self, 0);
             if (kept.get() != 0) {
-                kept.get()->close();
+                kept.get()->destroy();
             }
         }
     }
@@ -116,18 +116,18 @@ void Gap__Core__igEventTracker__vfunc_23(igEventTrackerView *arg0) {
     arg0->vfunc_50(arg0->_capacity * 2);
     FUN_002dca90();
     arg0->_codeReferenceAddress = (int)FUN_002dca90;
-    FUN_002dcaa0((PoolOwner *)arg0, 1);
+    FUN_002dcaa0(arg0, 1);
 }
 
 void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
     int busy = (arg0->getFlags() & 2) != 0;
     if (!busy) {
         arg0->_flags = arg0->_flags | 2;
-        FUN_0030cfa0((struct ClearOwner *)arg0->_groups);
-        FUN_0030cfa0((struct ClearOwner *)arg0->_classNames);
-        FUN_0030cfa0((struct ClearOwner *)arg0->_sourceFileNames);
-        FUN_0030cfa0((struct ClearOwner *)arg0->_annotations);
-        FUN_0030cfa0((struct ClearOwner *)arg0->_sourceFileNames);
+        FUN_0030cfa0((igStringTableView *)arg0->_groups);
+        FUN_0030cfa0((igStringTableView *)arg0->_classNames);
+        FUN_0030cfa0((igStringTableView *)arg0->_sourceFileNames);
+        FUN_0030cfa0((igStringTableView *)arg0->_annotations);
+        FUN_0030cfa0((igStringTableView *)arg0->_sourceFileNames);
         FUN_002d3950((igCallStackTableView *)arg0->_callStacks);
         if (arg0->_callStackTracer->vfunc_25() != 0) {
             FUN_002eb150(arg0->_locations);
@@ -140,7 +140,7 @@ void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
         if (!(0 < arg0->_eventRecords->_count)) {
             List_Reserve((igDataList *)arg0->_eventRecords, 0, 1);
         }
-        FUN_002dcaa0((PoolOwner *)arg0, 0);
+        FUN_002dcaa0(arg0, 0);
         arg0->_flags = arg0->_flags & ~2;
     }
 }

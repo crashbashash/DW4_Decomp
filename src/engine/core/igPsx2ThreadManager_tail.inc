@@ -9,7 +9,7 @@ igMetaObject *igPsx2ThreadManager_GetMetaObject(void)
 int igPsx2ThreadManager_GetVTable(void) {
     igPsx2ThreadManager manager;
 
-    igObject_InitHeader((struct ObjectHeader *)&manager);
+    igObject_InitHeader((igObject *)&manager);
     manager._vtable = (int)&DAT_0052d750[0];
     return *(int *)((char *)&manager + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

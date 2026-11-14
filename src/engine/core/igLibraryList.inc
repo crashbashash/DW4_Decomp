@@ -16,7 +16,7 @@ igMetaObject *igLibraryList_GetMetaObject(void)
 int igLibraryList_GetVTable(void) {
     int tmp[8];
     int off;
-    igObject_InitHeader((ObjectHeader *)&tmp[0]);
+    igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&DAT_00532830[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);

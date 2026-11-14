@@ -20,11 +20,11 @@ void FUN_0030da20(igSymbolTableView *arg0, unsigned arg1, unsigned arg2) {
 }
 
 void FUN_0030daa0(igSymbolTableView *arg0) {
-    igIntListView *temp_a0;
+    igTDataList<int> *temp_a0;
     int temp_a1;
     temp_a1 = arg0->_capacity * 4;
     temp_a0 = arg0->_symbols;
-    if (temp_a1 >= temp_a0->count) {
+    if (temp_a1 >= temp_a0->_count) {
         List_Reserve((igDataList *)temp_a0, temp_a1, 4);
     }
     arg0->vfunc_32(arg0->_hashCapacity);
@@ -44,11 +44,11 @@ int Gap__Core__igSymbolTable__vfunc_23(igSymbolTable *self) {
 }
 
 void Gap__Core__igSymbolTable__vfunc_24(int *arg0, igSymbolTableView *arg1, int arg2) {
-    igIntListView *l = arg1->_symbols;
+    igTDataList<int> *l = arg1->_symbols;
     int n = arg2 << 2;
     if (n >= 0) {
-        if (n <= l->capacity) {
-            l->count = n;
+        if (n <= l->_capacity) {
+            l->_count = n;
         } else {
             List_Resize((void *)l, n, 4);
         }
@@ -86,16 +86,16 @@ if ((s = FUN_0030d1d0((int *)self->_sourceFileNames, e->path)) != 0) { strncpy(p
 }
 
 int Gap__Core__igSymbolTable__vfunc_26(igSymbolTableView *o, unsigned key) {
-SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int cnt; int e2; unsigned end1; unsigned end2; int k; unsigned st1; int j; SymbolRecord *en2; igIntListView *l;
+SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int cnt; int e2; unsigned end1; unsigned end2; int k; unsigned st1; int j; SymbolRecord *en2; igTDataList<int> *l;
     i0 = o->vfunc_30(key);
     i = i0;
     l = o->_hashIndex;
-    cnt = l->count;
+    cnt = l->_count;
     j = 0;
     for (;;) {
-        e1 = l->data[i];
+        e1 = l->_data[i];
         if (e1 == -1) break;
-        en1 = &((SymbolRecord *)o->_symbols->data)[e1];
+        en1 = &((SymbolRecord *)o->_symbols->_data)[e1];
         len1 = en1->size;
         if (len1 != 0) { st1 = en1->address; end1 = st1 + len1; }
         else { st1 = en1->address; end1 = st1 + len1 + 1; }
@@ -114,7 +114,7 @@ SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int 
     while (k > 0) {
         e2 = l2->_data[k];
         if (e2 == -1) return -1;
-        en2 = &((SymbolRecord *)o->_symbols->data)[e2];
+        en2 = &((SymbolRecord *)o->_symbols->_data)[e2];
         len2 = en2->size;
         if (len2 != 0) { st2 = en2->address; end2 = st2 + len2; }
         else { st2 = en2->address; end2 = st2 + len2 + 1; }
@@ -151,21 +151,19 @@ unsigned int Gap__Core__igSymbolTable__vfunc_30(igSymbolTable *arg0, int arg1) {
     return var_v0;
 }
 
-static inline void setAt_30e190(igIntListView *l, int i, int v) { if (l->count != 0 && i >= 0 && i < l->count) { ((igTDataList<int> *)l)->_data[i] = v; } }
-
 int Gap__Core__igSymbolTable__vfunc_31(igSymbolTableView *self, int key, int key2, int value) {
     int probes = 0;
-    int size = self->_hashIndex->count;
+    int size = self->_hashIndex->_count;
     int half = size / 2;
     int idx;
-    igIntListView *l;
+    igTDataList<int> *l;
 
     if (size != 0) {
         idx = self->vfunc_30(key);
         l = self->_hashIndex;
         do {
-            if (l->data[idx] == -1) {
-                setAt_30e190(l, idx, value);
+            if (l->_data[idx] == -1) {
+                igIntList_SetChecked((igIntList *)l, idx, value);
                 goto done;
             }
             idx++;
@@ -181,12 +179,12 @@ done:
     return 1;
 }
 
-static inline void reserve(igIntListView *l, int n) { if (n >= l->count) { List_Reserve((igDataList *)l, n, 4); } }
+static inline void reserve(igTDataList<int> *l, int n) { if (n >= l->_count) { List_Reserve((igDataList *)l, n, 4); } }
 
-static inline void setCount_30e2a0(igIntListView *l, int n) { if (n >= 0) { if (n <= l->capacity) { l->count = n; } else { List_Resize(l, n, 4); } } }
+static inline void setCount_30e2a0(igTDataList<int> *l, int n) { if (n >= 0) { if (n <= l->_capacity) { l->_count = n; } else { List_Resize(l, n, 4); } } }
 
 void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
-    igIntListView *l;
+    igTDataList<int> *l;
     int count;
     int *data;
     int i;
@@ -198,8 +196,8 @@ void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
     reserve(self->_hashIndex, n);
     setCount_30e2a0(self->_hashIndex, n);
     l = self->_hashIndex;
-    count = l->count;
-    data = l->data;
+    count = l->_count;
+    data = l->_data;
     for (i = 0; i < count; i++) {
         data[i] = DAT_004c2300;
     }
@@ -212,8 +210,8 @@ void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
         self->_hashIncrement = 1;
     }
     l = self->_symbols;
-    begin = (SymbolRecord *)l->data;
-    end = begin + l->count / 4;
+    begin = (SymbolRecord *)l->_data;
+    end = begin + l->_count / 4;
     for (e = begin; e < end; e++) {
         int bb = e->size; if (self->vfunc_31(e->address, bb, e - begin) == 0) {
             break;

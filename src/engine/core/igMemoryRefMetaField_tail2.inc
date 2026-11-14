@@ -1,29 +1,26 @@
-static inline void dropNames(AlignmentNameList *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
+static inline void dropNames(igTDataList<ReflectedNameObject *> *o) {
+    IG_OBJECT_RELEASE(o);
 }
 
-static inline int countOf(AlignmentNameList *l) { if (l != 0) { return l->count; } return 0; }
+static inline int countOf(igTDataList<ReflectedNameObject *> *l) { if (l != 0) { return l->_count; } return 0; }
 
-static inline char *textOf_2fb280(AlignmentName *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
+static inline char *textOf_2fb280(ReflectedNameObject *s) { char *t = s->name; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name) {
-    AlignmentNameList *names;
-    AlignmentNameList *held;
+    igTDataList<ReflectedNameObject *> *names;
+    igTDataList<ReflectedNameObject *> *held;
     int n;
     int i;
     if (name == 0) {
         self->alignmentType = -1;
         return;
     }
-    *(AlignmentNameList **)&names = *(AlignmentNameList **)((*(char * *)&g_globalContext) + 44);
+    *(igTDataList<ReflectedNameObject *> **)&names = g_globalContext->names;
     held = names;
-    if (held != 0) { held->_refCount = held->_refCount + 1; }
+    if (held != 0) { held->_refCount = (int)held->_refCount + 1; }
     n = countOf(names);
     for (i = 0; i < n; i++) {
-        if (strcmp(textOf_2fb280((*(AlignmentName ***)((char *)names + 16))[i]), name) == 0) {
+        if (strcmp(textOf_2fb280(names->_data[i]), name) == 0) {
             self->alignmentType = i;
             dropNames(names);
             return;
@@ -87,7 +84,7 @@ int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *arg0, int arg1, int a
         return 0;
     }
     for (i = 0; i < n; i++) {
-        if (!(igObject_IsAlikeDeep((DeepObject *)(*(int *)(a + i * 4)), (DeepObject *)(*(int *)(b + i * 4))) & 0xFF)) {
+        if (!(igObject_IsAlikeDeep((igObjectDispatchView *)(*(int *)(a + i * 4)), (igObjectDispatchView *)(*(int *)(b + i * 4))) & 0xFF)) {
             return 0;
         }
     }

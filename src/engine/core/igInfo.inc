@@ -13,7 +13,7 @@ int igInfo_GetVTable(void) {
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((struct ObjectHeader *)&info);
+    igObject_InitHeader((igObject *)&info);
     ps = &info._name;
     *(int *)ps = 0;
     info._vtable = (int)&g_igNamedObject_vtable[0];

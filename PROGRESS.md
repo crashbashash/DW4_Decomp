@@ -87,7 +87,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.b` | 0 | 0 | 0 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 66 | 38 | -28 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 193 | 153 | -40 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 379 | 362 | -17 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `raw_casts.reflected` | 379 | 361 | -18 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
 | `fun_dat_refs` | 9,743 | 6,538 | -3205 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
@@ -178,7 +178,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 27,318 of 65,226 (41.88 %) |
+| field accesses using a **recovered** type (not an offset cast) | 27,520 of 65,209 (42.20 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

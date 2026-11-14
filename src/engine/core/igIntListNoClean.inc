@@ -1,6 +1,6 @@
 void * FUN_002ca8b0(int arg0) {
     FUN_002ca9d0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586878), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586878), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002ca8f0(void) {
@@ -21,7 +21,7 @@ igMetaObject *igIntListNoClean_GetMetaObject(void)
 int igIntListNoClean_GetVTable(void) {
     igIntListNoClean list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00531b10[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

@@ -270,7 +270,7 @@ int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsign
     return sum;
 }
 
-int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4) {
+int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
     igMetaFieldView *temp_a0;
     int var_s7;
     int temp_v0;
@@ -407,7 +407,7 @@ void FUN_002d60b0(igContext *arg0) {
         }
         ((igObjectDispatchView *)arg0)->getMeta();
         meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
-        arg0->_iNumExts = igMetaObject_CountTree((MetaTreeNode *)meta) - 1;
+        arg0->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
         if (arg0->_iNumExts >= ((igContextExtInfoList *)arg0->_pExtList)->_count) List_Reserve((igDataList *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts, 4);
         ObjectList_ResizeRetained((igTDataList<igObject *> *)((igContextExtInfoList *)arg0->_pExtList), arg0->_iNumExts);
         for (i = 0; i < arg0->_iNumExts; i++) {
@@ -500,7 +500,7 @@ void *FUN_002d64c0(igVisualContext *arg0, int extra1) {
     }
     var_s0 = (igObject *)(((void *)FUN_002d65e0((igContext *)arg0, temp_v0)));
     if (var_s0 == 0) {
-        var_s0 = (igObject *)(((void *)igMetaObject_CreateInstance((CreateMeta *)temp_v0, (MemoryPool *)(((int)igObject_GetAllocator((int)arg0))))));
+        var_s0 = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)temp_v0, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)arg0))))));
         if (var_s0 != 0) {
             if (((igContextExtView *)var_s0)->vfunc_28(arg0) == 0) {
                 var_s0->_refCount = var_s0->_refCount - 1;

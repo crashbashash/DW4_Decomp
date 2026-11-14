@@ -1,6 +1,6 @@
 void * FUN_002bd680(int arg0) {
     igObjectList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585B60), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B60), (igMemoryPoolView *)arg0));
 }
 
 /* Created with allocation only, no field registration, when missing. */
@@ -22,7 +22,7 @@ igMetaObject *igObjectList_GetMetaObject(void)
 int igObjectList_GetVTable(void) {
     igObjectList obj;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
+    igObject_InitHeader((igObject *)&obj);
     obj._vtable = (int)&DAT_005249b0[0];
     return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

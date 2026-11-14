@@ -172,7 +172,7 @@ void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *arg0, int arg1, 
                 e = arr[i];
                 if (e != 0) {
                     e->vfunc_16();
-                    igObject_VisitFields((VisitorObjectView *)arr[i], (Visitor)arg2, (void *)arg3);
+                    igObject_VisitFields((igObjectDispatchView *)arr[i], (Visitor)arg2, (void *)arg3);
                 }
             }
         }

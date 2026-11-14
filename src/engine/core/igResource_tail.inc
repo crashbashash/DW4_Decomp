@@ -4,12 +4,12 @@ void igResource_StartAsyncLoading(ResourceAsyncView *self) {
     self->_loadThread = (igObject *)FUN_00304f00(self->_loadQueue.get(), (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
     ((ResourceLoadThread *)self->_loadThread.get())->SetPriority(255);
     self->_asyncLoadState = 1;
-    ((MemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->EnableAllocationLock(1);
+    ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vfunc_34(1);
 }
 
 void igResource_StopAsyncLoading(ResourceAsyncRawView *self) {
     PairCallStatus sp38;
-    PairCountedObject *q;
+    igObject *q;
     ResourceLoadQueue *x;
     if (self->_asyncLoadState != 0) {
         self->_asyncLoadState = 0;
@@ -21,14 +21,14 @@ void igResource_StopAsyncLoading(ResourceAsyncRawView *self) {
         FUN_00305000((igStandardQueueView *)self->_loadQueue);
         x = self->_loadQueue;
         if (x != 0) {
-            ((PairCountedRef *)x)->f4 = ((PairCountedRef *)x)->f4 - 1;
-            if (((unsigned long long) ((long long) ((PairCountedRef *)x)->f4 << 0x29) >> 0x29) == 0) igObject_Destroy(x);
+            ((igObject *)x)->_refCount = (int)((igObject *)x)->_refCount - 1;
+            if (((unsigned long long) ((long long)(int) ((igObject *)x)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(x);
         }
         self->_loadQueue = 0;
         q = self->_loadThread;
         if (q != 0) {
-            q->f4 = q->f4 - 1;
-            if (((unsigned long long) ((long long) q->f4 << 0x29) >> 0x29) == 0) igObject_Destroy(q);
+            q->_refCount = (int)q->_refCount - 1;
+            if (((unsigned long long) ((long long)(int) q->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(q);
         }
         self->_loadThread = 0;
     }
@@ -89,7 +89,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     if (pool != 0) { ASSIGN_O(o, _objectMemoryPool, pool) }
     if (self->_asyncLoadState == 1) {
         ((igIGBFile *)file.p)->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
-        FUN_002d9330((DriverOwner *)file.p);
+        FUN_002d9330((igDirectoryView *)file.p);
     }
     ((igIGBFile *)file.p)->_validState = 0;
     ((igIGBFile *)file.p)->_loadPendingState = 1;

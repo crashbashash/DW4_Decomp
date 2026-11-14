@@ -1,6 +1,6 @@
 void FUN_002c0690(int arg0) {
     FUN_002c0890();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585F18), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igMemoryFile_GetMetaObject(void)
@@ -15,7 +15,7 @@ int igMemoryFile_GetVTable(void) {
     igMemoryFile file;
     int temp_s0;
 
-    igObject_InitHeader((ObjectHeader *)&file);
+    igObject_InitHeader((igObject *)&file);
     file._name = 0;
     file._fileName = 0;
     file._completeFilename = 0;

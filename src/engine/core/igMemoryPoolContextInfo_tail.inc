@@ -2,7 +2,7 @@
  * constructor retains what it is given), a reference count of one in the low 23 bits of the
  * reference word, the records cleared and then named. */
 MemoryContext *igMemoryPoolContextInfo_Construct(MemoryContext *self) {
-    igObject_InitHeader((struct ObjectHeader *)self);
+    igObject_InitHeader((igObject *)self);
     *(char **)self = g_igMemoryPoolContextInfo_vtable;
     self->usedRecords = 30;
     self->flags = 0;
@@ -11,7 +11,7 @@ MemoryContext *igMemoryPoolContextInfo_Construct(MemoryContext *self) {
         self->contextInfo->_refCount += 1;
     }
     self->_refCount = 0;
-    ((RefCount *)&self->_refCount)->u.b.cnt = 1;
+    ((igRefCountWord *)&self->_refCount)->bits.count = 1;
     memset(self->records, 0, sizeof(self->records));
     self->InitializeRecordNames();
     return self;
@@ -202,13 +202,13 @@ int FUN_002f2cd0(int arg0, int arg1) {
 
 igResult FUN_002f2d20(MemoryContext *self, int config, int section) {
     int temp_s0;
-    Ref *temp_a0;
+    igObject *temp_a0;
     if (self->contextInfo == 0) {
         temp_s0 = ((int)igObject_GetAllocator((int)self));
-        temp_a0 = (Ref *)self->contextInfo;
+        temp_a0 = (igObject *)self->contextInfo;
         if (temp_a0 != 0) {
-            temp_a0->u.w = temp_a0->u.w - 1;
-            if (temp_a0->u.b.cnt == 0) igObject_Destroy(temp_a0);
+            ((igRefCountWord *)&temp_a0->_refCount)->word = ((igRefCountWord *)&temp_a0->_refCount)->word - 1;
+            if (((igRefCountWord *)&temp_a0->_refCount)->bits.count == 0) igObject_Destroy(temp_a0);
         }
         self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(temp_s0);
     }
@@ -225,13 +225,13 @@ igResult FUN_002f2d20(MemoryContext *self, int config, int section) {
 
 igResult FUN_002f2e30(MemoryContext *self, int config, int index) {
     int temp_s0;
-    Ref *temp_a0;
+    igObject *temp_a0;
     if (self->contextInfo == 0) {
         temp_s0 = ((int)igObject_GetAllocator((int)self));
-        temp_a0 = (Ref *)self->contextInfo;
+        temp_a0 = (igObject *)self->contextInfo;
         if (temp_a0 != 0) {
-            temp_a0->u.w = temp_a0->u.w - 1;
-            if (temp_a0->u.b.cnt == 0) igObject_Destroy(temp_a0);
+            ((igRefCountWord *)&temp_a0->_refCount)->word = ((igRefCountWord *)&temp_a0->_refCount)->word - 1;
+            if (((igRefCountWord *)&temp_a0->_refCount)->bits.count == 0) igObject_Destroy(temp_a0);
         }
         self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(temp_s0);
     }
@@ -1046,7 +1046,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         }
     }
     {
-        obj = ((igMemoryPool *)igMetaObject_CreateInstance((CreateMeta *)meta, (MemoryPool *)allocA));
+        obj = ((igMemoryPool *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)allocA));
         igMemoryPool *o2 = obj;
         int size = cfg->_size;
         al = size + (g_activeSystemAllocator[0]->vfunc_21() - 1);
@@ -1387,7 +1387,7 @@ void FUN_002f7420(ContextRecordStride *self) {
             int *list;
             names = tracker->_classNames;
             if (names != 0) {
-                n = FUN_0030d080((CountOwner *)names);
+                n = FUN_0030d080((igStringTableView *)names);
                 bytes = n * 4;
                 it = 0;
                 list = ((int *)FUN_002ee430((unsigned int)bytes));
@@ -1397,7 +1397,7 @@ void FUN_002f7420(ContextRecordStride *self) {
                 for (k = 0; k < n; k++) {
                     if (it == -1) { break; }
                     list[k] = ((int)FUN_0030d1d0((int *)names, it));
-                    it = FUN_0030d4a0((struct NextOwner *)names, it);
+                    it = FUN_0030d4a0((igStringTableView *)names, it);
                 }
                 qsort(list, n, 4, (int (*)(const void *, const void *))FUN_002f7410);
                 for (it = 0; it < n; it++) {
@@ -1837,16 +1837,16 @@ igResult FUN_002f86e0(void *arg1) {
     }
 }
 
-struct ContextStackEntry *FUN_002f8760(void) {
+igObject *FUN_002f8760(void) {
     int n;
-    struct ContextStackEntry *s;
+    igObject *s;
     if (DAT_00587010[0] > 0 && DAT_00587010[0] < 5) {
         n = DAT_00587010[0] - 1;
         DAT_00587010[0] = n;
-        s = (struct ContextStackEntry *)DAT_00587000[n];
+        s = (igObject *)DAT_00587000[n];
         if (s != 0) {
-            s->u.w = s->u.w - 1;
-            if (s->u.b.cnt == 0) igObject_Destroy(s);
+            ((igRefCountWord *)&s->_refCount)->word = ((igRefCountWord *)&s->_refCount)->word - 1;
+            if (((igRefCountWord *)&s->_refCount)->bits.count == 0) igObject_Destroy(s);
         }
         return s;
     }

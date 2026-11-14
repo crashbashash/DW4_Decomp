@@ -1,6 +1,6 @@
 void FUN_002bc300(int arg0) {
     FUN_002bc5c0();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585AB8), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igPluginHelper_GetMetaObject(void)
@@ -14,7 +14,7 @@ igMetaObject *igPluginHelper_GetMetaObject(void)
 int igPluginHelper_GetVTable(void) {
     igPluginHelper helper;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&helper);
+    igObject_InitHeader((igObject *)&helper);
     helper._vtable = (int)&DAT_0052eee0[0];
     helper._pluginExtension = 0;
     helper._repositoryList = 0;
@@ -67,10 +67,10 @@ void **FUN_002bc4c0(void **arg0, short arg1) {
 
 ObjectRefWord *FUN_002bc540(ObjectRefWord *self,int delete_storage) {
     if(self) {
-        ObjectRefTarget *object=self->value;
+        igObject *object=self->value;
         if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
+            --object->_refCount;
+            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
                 igObject_Destroy((void *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);

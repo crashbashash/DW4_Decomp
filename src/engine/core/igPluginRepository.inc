@@ -7,7 +7,7 @@ int FUN_002bc8d0(void) {
 
 int FUN_002bc930(int arg0) {
     FUN_002bca90();
-    return igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585AF0), (MemoryPool *)arg0);
+    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AF0), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igPluginRepository_GetMetaObject(void)
@@ -27,7 +27,7 @@ int igPluginRepository_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((struct ObjectHeader *)&repository);
+    igObject_InitHeader((igObject *)&repository);
     q1 = &repository._name;
     *(int *)q1 = 0;
     repository._vtable = (int)&DAT_00532de0[0];

@@ -16,7 +16,7 @@ igMetaObject *igContextExtList_GetMetaObject(void)
 int igContextExtList_GetVTable(void) {
     igContextExtList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00531980[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

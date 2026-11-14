@@ -3,11 +3,11 @@ void **InternalObjectList_Create(int allocator) {
 
     if (*g_objectSystem[0] != 0) {
         __internalObjectList_EnsureRegistered();
-        list = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g___internalObjectList_metaObject)[0]), (MemoryPool *)allocator)));
+        list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)(((int *)g___internalObjectList_metaObject)[0]), (igMemoryPoolView *)allocator)));
     } else {
         list = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)allocator)));
         if (list != 0) {
-            list = (void **)(((void **)InternalObjectList_Construct((PointerList *)list, 1)));
+            list = (void **)(((void **)InternalObjectList_Construct((__internalObjectList *)list, 1)));
         }
         ((igObjectDispatchView *)(list))->vfunc_09();
         ((igObjectDispatchView *)(list))->userConstruct((int)(0));
@@ -24,7 +24,7 @@ int FUN_002c2710(int arg0, int arg1) {
     }
     temp_v0 = ((int)igObject_AllocateRawStorageDefault(0x10, 0));
     if (temp_v0 != 0) {
-        temp_v0 = ((int)InternalObjectList_CopyConstruct((PointerList *)temp_v0, (PointerList *)arg0));
+        temp_v0 = ((int)InternalObjectList_CopyConstruct((__internalObjectList *)temp_v0, (__internalObjectList *)arg0));
     }
     return temp_v0;
 }
@@ -46,7 +46,7 @@ igMetaObject *__internalObjectList_GetMetaObject(void)
 
 int __internalObjectList_GetVTable(void) {
     int o[4];
-    InternalObjectList_Init((PointerList *)o);
+    InternalObjectList_Init((__internalObjectList *)o);
     return *(int *)((char *)o + *(int *)((char *)((int * *)g_objectSystem)[0] + 916));
 }
 

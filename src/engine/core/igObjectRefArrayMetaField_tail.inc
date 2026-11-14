@@ -57,7 +57,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_31(igObjectRefArrayMetaField *a
             var_s1 = ((int)igObject_GetAllocator(arg1));
         }
         for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
-            temp_v0 = ((igObject *)igMetaObject_CreateInstance((CreateMeta *)arg0->_metaObject, (MemoryPool *)var_s1));
+            temp_v0 = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)arg0->_metaObject, (igMemoryPoolView *)var_s1));
             FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)temp_v0);
             if (arg0->_refCounted != 0) {
                 temp_v0->_refCount = temp_v0->_refCount - 1;
@@ -143,7 +143,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_36(igObjectRefArrayMetaField *s
         igObjectDispatchView *y = *(igObjectDispatchView **)(a2 + base + off);
         if (x == 0 && y == 0) break;
         if (x != 0 && y != 0) {
-            FUN_003006a0((ShallowObject *)x, (ShallowObject *)y);
+            FUN_003006a0((igObjectDispatchView *)x, (igObjectDispatchView *)y);
         } else if (x == 0) {
             FUN_00302780((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->cloneViaMetadata(1)));
         } else if (y == 0) {
@@ -176,7 +176,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_38(int *arg0, int arg1, int arg
         a1 = *(igObjectDispatchView **)(p2 + off);
         if (a0 != 0 || a1 != 0) {
             if (a0 != 0 && a1 != 0) {
-                FUN_00300770((ShallowObject *)a0, (int)a1);
+                FUN_00300770((igObjectDispatchView *)a0, (int)a1);
             } else if (a0 == 0) {
                 FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(a1->cloneViaMetadata(1)));
             } else if (a1 == 0) {
@@ -230,7 +230,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_42(igObjectRefArrayMetaField *a
     for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
         temp_a0 = *(int *)(arg1 + arg0->_offset + (var_s0 * 4));
         if (temp_a0 != 0) {
-            igObject_VisitFields((VisitorObjectView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
+            igObject_VisitFields((igObjectDispatchView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
         }
     }
 }
@@ -265,7 +265,7 @@ int Gap__Core__igObjectRefArrayMetaField__vfunc_46(igObjectRefArrayMetaField *ar
             if (a == 0 || b == 0) {
                 return 0;
             }
-            if (!(igObject_IsAlikeDeep((DeepObject *)a, (DeepObject *)b) & 0xFF)) {
+            if (!(igObject_IsAlikeDeep((igObjectDispatchView *)a, (igObjectDispatchView *)b) & 0xFF)) {
                 return 0;
             }
         }

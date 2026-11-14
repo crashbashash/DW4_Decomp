@@ -15,7 +15,7 @@ int igNamedObjectInfo_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((struct ObjectHeader *)&info);
+    igObject_InitHeader((igObject *)&info);
     q1 = &info._name;
     *(int *)q1 = 0;
     info._vtable = (int)&DAT_0052f150[0];

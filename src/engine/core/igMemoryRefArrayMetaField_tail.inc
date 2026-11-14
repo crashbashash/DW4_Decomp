@@ -47,7 +47,7 @@ void igMemoryRefArrayMetaField_ReleaseElements(igMemoryRefArrayMetaField *arg0, 
                     igObjectDispatchView **temp_s0 = (igObjectDispatchView **)(temp_s2 + var_s1 * 4);
                     if (*temp_s0 != 0) {
                         (*temp_s0)->vfunc_16();
-                        igObject_VisitFields((VisitorObjectView *)(*temp_s0), (int (*)(void *, void *, void *))arg2, (void *)arg3);
+                        igObject_VisitFields((igObjectDispatchView *)(*temp_s0), (int (*)(void *, void *, void *))arg2, (void *)arg3);
                     }
                 }
             }

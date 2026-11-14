@@ -426,7 +426,7 @@ long long Gap__Core__igArenaMemoryPool__vfunc_42(igArenaMemoryPool *self) {
 void Gap__Core__igArenaMemoryPool__vfunc_43(int *arg0, void *arg1, int arg2) {
     *(int *)((char *)(arg1) + 168) = arg2;
     *(int *)((char *)(arg1) + 196) = 0;
-    if (((MemoryPool *)arg1)->IsActive() != 0) {
+    if (((igMemoryPoolView *)arg1)->isActive() != 0) {
         ((igMemoryPoolView *)arg1)->Free(((igMemoryPoolView *)arg1)->Allocate(0x10));
     }
     *arg0 = g_resultSuccess.v;
@@ -630,7 +630,7 @@ void Gap__Core__igArenaMemoryPool__vfunc_97(igArenaMemoryPoolView *self) {
     int v;
     FUN_002f2260(self);
     self->_refCount = 0;
-    ((Bits *)&self->_refCount)->refs = 1;
+    ((igRefCountWord *)&self->_refCount)->bits.count = 1;
     ((char *)self)[7] = 0;
     self->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
     if (self->_arenaState == 0 && GPR_00554d64 == 0) {

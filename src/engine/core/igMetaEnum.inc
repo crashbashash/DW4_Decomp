@@ -1,6 +1,6 @@
 void * FUN_002befe0(int arg0) {
     FUN_002bf190();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585D60), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585D60), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igMetaEnum_GetMetaObject(void)
@@ -21,7 +21,7 @@ int igMetaEnum_GetVTable(void) {
     void **q4c;
     void **q48;
     void **q50;
-    igObject_InitHeader((ObjectHeader *)&u);
+    igObject_InitHeader((igObject *)&u);
     q48 = (void **)&u._name;
     q4c = (void **)&u._names;
     q50 = (void **)&u._values;

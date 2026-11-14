@@ -19,7 +19,7 @@ int igLocationTable_GetVTable(void) {
     int *p17;
     int *p16;
     int r;
-    igObject_InitHeader((struct ObjectHeader *)&o);
+    igObject_InitHeader((igObject *)&o);
     o._vtable = (int)&DAT_0052fc50[0];
     p16 = &o._locations;
     *p16 = 0;

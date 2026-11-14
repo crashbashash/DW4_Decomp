@@ -15,7 +15,7 @@ void FUN_002d1a00(ObjectSystemView *self) {
     self->metaRegistry = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
     l = (__internalObjectList *)self->metaRegistry;
     if (l->_data == 0) n = 0; else n = Memory_GetBufferSize((void *)l->_data) >> 2;
-    if ((int)n < 0x401) ObjectPointerList_EnsureIndex((PointerList *)l, 0x400);
+    if ((int)n < 0x401) ObjectPointerList_EnsureIndex((__internalNonRefCountedObjectList *)l, 0x400);
     self->auxObjectList = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
@@ -113,9 +113,9 @@ void FUN_002d2e60(ObjectSystemView *arg0) {
     if (DAT_00586fd0[0] != 0) {
         DAT_00586fd0[0]->vfunc_47();
     }
-    InternalObjectList_SetCount((PointerList *)DAT_00587188[0], arg0->bootMetaFieldCount);
+    InternalObjectList_SetCount((__internalObjectList *)DAT_00587188[0], arg0->bootMetaFieldCount);
     for (i = arg0->metaObjectCount - 1; i >= arg0->bootMetaObjectCount; i--) {
-        InternalObjectList_SetAtRetained((PointerList *)arg0->metaRegistry, i, (RefHeader *)0);
+        InternalObjectList_SetAtRetained((__internalObjectList *)arg0->metaRegistry, i, (igObject *)0);
     }
     arg0->active = 0;
     o = (igObject *)DAT_00587188[0];
@@ -148,19 +148,19 @@ void FUN_002d2e60(ObjectSystemView *arg0) {
 
 /* Register a metaobject in the object system's registry, retaining it. */
 void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
-    MetaRefList_AppendRetained((PointerList *)((ObjectSystemView *)system)->metaRegistry, (RefHeader *)meta);
+    MetaRefList_AppendRetained((__internalObjectList *)((ObjectSystemView *)system)->metaRegistry, (igObject *)meta);
 }
 
 int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className) {
     if (objectSystem->active != 0) {
-        return (int)ObjectPointerList_FindByStringField((FieldPointerList *)objectSystem->metaRegistry, g_igMetaObjectNameField[0], className);
+        return (int)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)objectSystem->metaRegistry, g_igMetaObjectNameField[0], className);
     }
     return 0;
 }
 
 int FUN_002d30b0(int *p, int extra1)
 {
-    return MetaRefList_AppendRetained((PointerList *)(*(int *)((char *)p + 36)), (RefHeader *)extra1);
+    return MetaRefList_AppendRetained((__internalObjectList *)(*(int *)((char *)p + 36)), (igObject *)extra1);
 }
 
 int FUN_002d30c0(int *p, int extra1)
@@ -171,8 +171,8 @@ int FUN_002d30c0(int *p, int extra1)
 void FUN_002d30d0(ObjectSystemView *arg0, int (*arg1)(int)) {
     int i;
 
-    for (i = 0; i < ((PointerList *)arg0->metaRegistry)->count; i++) {
-        arg1(((PointerList *)arg0->metaRegistry)->data[i]);
+    for (i = 0; i < ((__internalObjectList *)arg0->metaRegistry)->_count; i++) {
+        arg1(((int *)((__internalObjectList *)arg0->metaRegistry)->_data)[i]);
     }
     igArray_Append((CallbackArray *)arg0->registrationCallbacks, (int)arg1);
 }

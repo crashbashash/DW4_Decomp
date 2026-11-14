@@ -1,6 +1,6 @@
 void * FUN_002cb660(int arg0) {
     FUN_002cb7c0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5868C8), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C8), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igContextExtInfo_GetMetaObject(void)
@@ -20,7 +20,7 @@ int igContextExtInfo_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((struct ObjectHeader *)&info);
+    igObject_InitHeader((igObject *)&info);
     info._vtable = (int)&DAT_005318b0[0];
     q1 = (S_ref *)&info._pMeta;
     *(int *)q1 = 0;

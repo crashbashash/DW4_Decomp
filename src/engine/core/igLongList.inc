@@ -16,7 +16,7 @@ igMetaObject *igLongList_GetMetaObject(void)
 int igLongList_GetVTable(void) {
     igLongList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00531bd0[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

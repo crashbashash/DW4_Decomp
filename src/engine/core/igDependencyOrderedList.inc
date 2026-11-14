@@ -9,7 +9,7 @@ igMetaObject *igDependencyOrderedList_GetMetaObject(void)
 int igDependencyOrderedList_GetVTable(void) {
     igDependencyOrderedList list;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_0052cc20[0];
     list._objectList = 0;
     list._dependencies = 0;

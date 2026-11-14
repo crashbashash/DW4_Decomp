@@ -4,24 +4,24 @@ void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self, int e
     igObject_ConstructHeader(self);
     self->_vtable = (int)(&g_ObjectPointerList_vtable[0]);
     if (self != 0) {
-        ObjectPointerList_Init((PointerList *)self);
+        ObjectPointerList_Init(self);
     }
     allocator = (void **)(((void **)igObject_GetAllocator((int)self)));
     self->_data = (int)((igMemoryPoolView *)allocator)->Allocate(0x10);
     return self;
 }
 
-PointerList *ObjectPointerList_Init(PointerList *list) {
-    igObject_InitHeader((struct ObjectHeader *)list);
-    *(int *)list = (int)g_ObjectPointerList_vtable;
-    list->data = 0;
-    list->count = 0;
+__internalNonRefCountedObjectList *ObjectPointerList_Init(__internalNonRefCountedObjectList *list) {
+    igObject_InitHeader((igObject *)list);
+    list->_vtable = (int)g_ObjectPointerList_vtable;
+    list->_data = 0;
+    list->_count = 0;
     return list;
 }
 
 __internalNonRefCountedObjectList *ObjectPointerList_CopyConstruct(__internalNonRefCountedObjectList *self, __internalNonRefCountedObjectList *source) {
     int bytes;
-    igObject_CopyConstructHeader((CopyHeader *)self, (CopyHeader *)source);
+    igObject_CopyConstructHeader((igObject *)self, (igObject *)source);
     self->_vtable = (int)g_ObjectPointerList_vtable;
     self->_count = source->_count;
     if (source->_data) {
@@ -47,11 +47,11 @@ void ObjectPointerList_Destruct(__internalNonRefCountedObjectList *self) {
     Gap__Core__igObject__vfunc_00__002ff0a0((int)self);
 }
 
-static inline unsigned int pointerListCapacity(PointerList *list) {
-    return list->data == 0 ? 0 : Memory_GetBufferSize(list->data) >> 2;
+static inline unsigned int pointerListCapacity(__internalNonRefCountedObjectList *list) {
+    return list->_data == 0 ? 0 : Memory_GetBufferSize((void *)list->_data) >> 2;
 }
 
-void ObjectPointerList_EnsureIndex(PointerList *list, int index) {
+void ObjectPointerList_EnsureIndex(__internalNonRefCountedObjectList *list, int index) {
     if (index >= (int)pointerListCapacity(list)) {
         unsigned int old = pointerListCapacity(list);
         unsigned int n = old;
@@ -61,19 +61,19 @@ void ObjectPointerList_EnsureIndex(PointerList *list, int index) {
         while (!(index < (int)n)) {
             if ((int)n < 512) n *= 2; else n += 512;
         }
-        list->data = (int *)FUN_00300e50((int)list, (int)list->data, n * 4);
-        char *p = (char *)list->data;
+        list->_data = FUN_00300e50((int)list, list->_data, n * 4);
+        char *p = (char *)list->_data;
         p += old * 4;
         memset(p, 0, (n - old) * 4);
     }
 }
 
-void *ObjectPointerList_FindByStringField(FieldPointerList *list,igMetaField *selector,const char *name){
+void *ObjectPointerList_FindByStringField(__internalNonRefCountedObjectList *list,igMetaField *selector,const char *name){
     int i;int byteOffset;
-    for(i=0;i<list->count;i++){
+    for(i=0;i<list->_count;i++){
         byteOffset=i*4;
-        if(strcmp(*(char **)((char *)*(void **)((char *)list->data+byteOffset)+selector->_offset),name)==0)
-            return *(void **)((char *)list->data+byteOffset);
+        if(strcmp(*(char **)((char *)*(void **)((char *)list->_data+byteOffset)+selector->_offset),name)==0)
+            return *(void **)((char *)list->_data+byteOffset);
     }
     return 0;
 }
@@ -92,24 +92,24 @@ int ObjectPointerList_FindIndex(char *arg0, int arg1) {
     return -1;
 }
 
-void ObjectPointerList_ClearUnused(PointerList *list){
-    int i=list->count;
-    while(i<(int)(list->data?Memory_GetBufferSize(list->data)>>2:0)){list->data[i]=0;i++;}
+void ObjectPointerList_ClearUnused(__internalNonRefCountedObjectList *list){
+    int i=list->_count;
+    while(i<(int)(list->_data?Memory_GetBufferSize((void *)list->_data)>>2:0)){((int *)list->_data)[i]=0;i++;}
 }
 
-void ObjectPointerList_Insert(PointerList *list,int index,int value){
-    int i;int count=list->count;
-    unsigned capacity;void *buffer=list->data;
+void ObjectPointerList_Insert(__internalNonRefCountedObjectList *list,int index,int value){
+    int i;int count=list->_count;
+    unsigned capacity;void *buffer=(void *)list->_data;
     if(buffer==0){capacity=0;}else{capacity=Memory_GetBufferSize(buffer)>>2;}
     if(count>=(int)capacity)ObjectPointerList_EnsureIndex(list,count);
-    i=list->count;
-    while(i>index){list->data[i]=list->data[i-1];i--;}
-    list->data[index]=value;
-    list->count++;
+    i=list->_count;
+    while(i>index){((int *)list->_data)[i]=((int *)list->_data)[i-1];i--;}
+    ((int *)list->_data)[index]=value;
+    list->_count++;
 }
 
-void ObjectPointerList_SetCount(PointerList *list, int count) {
-    void *buffer = list->data;
+void ObjectPointerList_SetCount(__internalNonRefCountedObjectList *list, int count) {
+    void *buffer = (void *)list->_data;
     unsigned capacity;
     if (buffer == 0) {
         capacity = 0;
@@ -118,30 +118,30 @@ void ObjectPointerList_SetCount(PointerList *list, int count) {
     }
     if (count >= (int)capacity)
         ObjectPointerList_EnsureIndex(list, count);
-    list->count = count;
+    list->_count = count;
 }
 
-int ObjectPointerList_EraseAt(PointerList *list,int index){
+int ObjectPointerList_EraseAt(__internalNonRefCountedObjectList *list,int index){
     int i;
-    if(index<list->count){
-        for(i=index;i<list->count-1;i++)list->data[i]=list->data[i+1];
-        list->count--;
+    if(index<list->_count){
+        for(i=index;i<list->_count-1;i++)((int *)list->_data)[i]=((int *)list->_data)[i+1];
+        list->_count--;
         return index;
     }
     return -1;
 }
 
-int ObjectPointerList_Append(PointerList *list,int value){
-    int count=list->count;
-    unsigned capacity;void *buffer=list->data;
+int ObjectPointerList_Append(__internalNonRefCountedObjectList *list,int value){
+    int count=list->_count;
+    unsigned capacity;void *buffer=(void *)list->_data;
     if(buffer==0){capacity=0;}else{capacity=Memory_GetBufferSize(buffer)>>2;}
     if(count>=(int)capacity)ObjectPointerList_EnsureIndex(list,count);
-    list->data[list->count]=value;
-    return list->count++;
+    ((int *)list->_data)[list->_count]=value;
+    return list->_count++;
 }
 
-void ObjectPointerList_SetAt(PointerList *list, int index, int value) {
-    void *buffer = list->data;
+void ObjectPointerList_SetAt(__internalNonRefCountedObjectList *list, int index, int value) {
+    void *buffer = (void *)list->_data;
     unsigned capacity;
     if (buffer == 0) {
         capacity = 0;
@@ -150,6 +150,6 @@ void ObjectPointerList_SetAt(PointerList *list, int index, int value) {
     }
     if (index >= (int)capacity)
         ObjectPointerList_EnsureIndex(list, index);
-    list->data[index] = value;
+    ((int *)list->_data)[index] = value;
 }
 

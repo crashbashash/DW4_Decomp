@@ -16,7 +16,7 @@ igMetaObject *igPointerListList_GetMetaObject(void)
 int igPointerListList_GetVTable(void) {
     igPointerListList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00531f50[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

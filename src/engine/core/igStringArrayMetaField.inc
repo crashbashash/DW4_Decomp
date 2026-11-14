@@ -77,10 +77,10 @@ void FUN_002b9ec0(void) {
     int *g;
 
     if (DAT_00585938[0] == 0) {
-        DAT_00585938[0] = ((int *)igMetaObject_CreateInstance((CreateMeta *)g_igStringArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        DAT_00585938[0] = ((int *)igMetaObject_CreateInstance((igMetaObject *)g_igStringArrayMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         s0 = DAT_00585938[0];
         if (s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((int *)FUN_002fc250())), (RefHeader *)s0);
+            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)s0);
             g = DAT_00585938[0];
             g[1] = g[1] - 1;
             if ((g[1] & 0x7FFFFF) == 0) {

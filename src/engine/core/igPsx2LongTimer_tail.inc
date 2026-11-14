@@ -9,7 +9,7 @@ igMetaObject *igPsx2LongTimer_GetMetaObject(void)
 int igPsx2LongTimer_GetVTable(void) {
     igPsx2LongTimer timer;
 
-    igObject_InitHeader((struct ObjectHeader *)&timer);
+    igObject_InitHeader((igObject *)&timer);
     timer._vtable = (int)&DAT_0052da90[0];
     return *(int *)((char *)&timer + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

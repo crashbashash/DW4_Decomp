@@ -28,7 +28,7 @@ void FUN_002d8f20(igDirectoryView *arg0) {
             e = (igObjectDirEntry *)FUN_002d7e90((int *)arg0, i);
             if (e != 0 && igObject_IsKindOf(e, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) {
                 if (e->_typeMeta != 0 && ((igMetaObject *)e->_typeMeta)->_abstractProxy != 0) {
-                    ((Tgt *)e->_ref)->v80((void *)e->_typeMeta);
+                    ((igObjectDispatchView *)e->_ref)->vfunc_18((igMetaObject *)e->_typeMeta);
                 }
             }
             i++;
@@ -127,21 +127,16 @@ int FUN_002d91c0(igDirectoryView *self) {
     return left;
 }
 
-static inline Driver *recreateDriver(DriverOwner *owner, DriverType) {
-    Driver *old = owner->driver;
-    if (old != 0) {
-        old->references = old->references - 1;
-        if ((old->references & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
-    owner->driver = ((Driver *)FUN_002ba650(0));
-    return owner->driver;
+/* The new semaphore arrives with its reference already counted (an adopted reference). */
+static inline igSemaphoreView *recreateLoadingSemaphore(igDirectoryView *directory, AdoptReference) {
+    igRelease(directory->_loadingSemaphore);
+    directory->_loadingSemaphore = ((igSemaphoreView *)FUN_002ba650(0));
+    return directory->_loadingSemaphore;
 }
 
-void FUN_002d9330(DriverOwner *owner) {
-    if (owner->driver == 0) {
-        recreateDriver(owner, DriverType())->configure();
+void FUN_002d9330(igDirectoryView *directory) {
+    if (directory->_loadingSemaphore == 0) {
+        recreateLoadingSemaphore(directory, AdoptReference())->create();
     }
 }
 

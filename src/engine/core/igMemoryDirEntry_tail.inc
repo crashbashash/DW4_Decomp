@@ -38,12 +38,12 @@ void Gap__Core__igMemoryDirEntry__vfunc_41(igMemoryDirEntry *arg0, igIGBFile *ar
     int s2 = arg1->_bytesRemainingInChunk;
     int s8 = arg1->_chunk;
     int cnt = arg0->_memSize;
-    Cod *s1 = (Cod *)arg0->_memType;
+    igMetaFieldView *s1 = (igMetaFieldView *)arg0->_memType;
     int esz = ((igMetaField *)s1)->_size;
     int per = cnt / esz;
     int s0, s7, i, src, j, dst, t0, t1, t2;
     if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && arg1->_endianSwap != 0) {
-        s1->v50(arg0->_ref, per);
+        s1->SwapBytes((void *)arg0->_ref, per);
     }
     s7 = 0;
     i = 0;
@@ -57,7 +57,7 @@ void Gap__Core__igMemoryDirEntry__vfunc_41(igMemoryDirEntry *arg0, igIGBFile *ar
             s7 = (t1 < q) ? t1 : q;
             dst = s8 + s3;
             for (j = 0; j < s7; j++) {
-                s1->v48(src + j * esz, dst + j * esz, arg1, arg1->_endianSwap);
+                s1->WriteRawFieldMem(src + j * esz, dst + j * esz, (int)arg1, arg1->_endianSwap);
             }
         } else {
             memcpy(s8 + s3, src, s0);
@@ -83,7 +83,7 @@ void Gap__Core__igMemoryDirEntry__vfunc_41(igMemoryDirEntry *arg0, igIGBFile *ar
             s4 = s2;
         }
         if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && arg1->_endianSwap != 0) {
-            s1->v50(arg0->_ref, per);
+            s1->SwapBytes((void *)arg0->_ref, per);
         }
         arg1->_memoryBytesCopied = s6;
         arg1->_bytesRemainingInChunk = s2;
@@ -102,30 +102,30 @@ void Gap__Core__igMemoryDirEntry__vfunc_39(igMemoryDirEntry *self, igIGBFile *fi
     file->_memoryRefBufferSize = file->_memoryRefBufferSize + ((self->_memSize + 3) & ~3);
 }
 
-static inline EntryList *asEntryList(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (EntryList *)object;
+static inline igObjectList *asEntryList(igObject *object) {
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (igObjectList *)object;
     return 0;
 }
 
-igMemoryDirEntry *Gap__Core__igMemoryDirEntry__vfunc_26(igMemoryDirEntry *self, DirFile *file) {
-    igSmartPointer<EntryList> lists(file->sharedEntries, kRetainReference);
+igMemoryDirEntry *Gap__Core__igMemoryDirEntry__vfunc_26(igMemoryDirEntry *self, igIGBFile *file) {
+    igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
-    int index = ((DirEntryView *)self)->getMeta()->index;
+    int index = ((igObjectDispatchView *)self)->getMeta()->_index;
     if (lists->_count <= index) {
         ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
-        lists->set(index, 0);
+        objectListSetRetained(index, 0, lists.p);
     }
-    igSmartPointer<EntryList> entries(asEntryList(((igObject **)lists->_data)[index]), kRetainReference);
+    igSmartPointer<igObjectList> entries(asEntryList(((igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
-        int pool = file->pool;
+        int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((EntryList *)FUN_002bd680(pool));
-        lists->set(index, entries.p);
+        entries.p = ((igObjectList *)FUN_002bd680(pool));
+        objectListSetRetained(index, entries.p, lists.p);
     }
     int i;
     int count = entries->_count;
     self->_index = -1;
-    EntryList *list = entries.p;
+    igObjectList *list = entries.p;
     for (i = 0; i < count; i++) {
         igMemoryDirEntry *entry = ((igMemoryDirEntry **)list->_data)[i];
         if (entry->_memTypeIndex == self->_memTypeIndex && entry->_memSize == self->_memSize &&
@@ -198,29 +198,29 @@ void Gap__Core__igMemoryDirEntry__vfunc_33(igMemoryDirEntryView *self, igIGBFile
     self->vfunc_34(file);
 }
 
-void Gap__Core__igMemoryDirEntry__vfunc_34(MemoryDirEntryView *self, MemoryDirReader *r) {
-    MemoryDirField *f = r->fields->data[self->fieldIndex];
+void Gap__Core__igMemoryDirEntry__vfunc_34(MemoryDirEntryView *self, igIGBFileView *r) {
+    igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[self->fieldIndex];
     self->field = f;
-    if (((igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && r->swapped != 0) {
-        f->swapArray(self->base, self->size / f->elementSize);
+    if (((igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && r->_endianSwap != 0) {
+        f->SwapBytes((void *)self->base, self->size / f->_size);
     }
     if (igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
-        int esize = f->elementSize;
+        int esize = f->_size;
         int count = self->size / esize;
         int base = self->base;
         unsigned char saved = 0;
         int isSwap = igObject_IsKindOf(f, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) & 0xff;
         int i;
         if (isSwap != 0) {
-            saved = f->swapFlag;
-            f->swapFlag = self->swapFlag;
+            saved = ((igObjectRefMetaField *)f)->_refCounted;
+            ((igObjectRefMetaField *)f)->_refCounted = self->swapFlag;
         }
         for (i = 0; i < count; i++) {
             int p = base + i * esize;
-            f->fix(p, p, r, r->swapped);
+            f->ReadRawFieldMem(p, p, (int)r, r->_endianSwap);
         }
         if (isSwap != 0) {
-            f->swapFlag = saved;
+            ((igObjectRefMetaField *)f)->_refCounted = saved;
         }
     }
 }

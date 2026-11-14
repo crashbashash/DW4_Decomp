@@ -18,7 +18,7 @@ igMetaField *igMetaField_Init(igMetaField *field){
     void *emptyToken;
     int oldName,refCount;
     int *oldHeader;
-    igObject_InitHeader((struct ObjectHeader *)field);
+    igObject_InitHeader((igObject *)field);
     field->_vtable=(int)g_igMetaField_vtable;
     field->_fieldName=0;
     field->_offset=0;
@@ -63,7 +63,7 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     int refCount;
     int *nameHeader;
 
-    igObject_CopyConstructHeader((CopyHeader *)dest, (CopyHeader *)source);
+    igObject_CopyConstructHeader((igObject *)dest, (igObject *)source);
     dest->_vtable = (int)g_igMetaField_vtable;
     dest->_fieldName = 0;
     dest->_offset = source->_offset;
@@ -114,11 +114,11 @@ void igMetaField_Destruct(igMetaField *arg0) {
     Gap__Core__igObject__vfunc_00__002ff0a0((int)arg0);
 }
 
-int FUN_002fc250(void) {
+__internalObjectList *FUN_002fc250(void) {
     if (((int *)DAT_00587188)[0] == 0) {
         ((int *)DAT_00587188)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     }
-    return ((int *)DAT_00587188)[0];
+    return ((__internalObjectList **)DAT_00587188)[0];
 }
 
 /* igMetaField slot +0x6c: a constant leaf returning -1. The receiver is not touched,
@@ -170,7 +170,7 @@ void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField
 }
 
 void igMetaField_EnsureDefaultStorage(igMetaField *field){
-    field->_size=(unsigned short)((FieldSizeDispatchView *)field)->GetTypeSize();
+    field->_size=(unsigned short)((igMetaFieldView *)field)->GetSize();
     if(field->_default==0)field->_default=(int)FUN_00300e00((int)field, (int)field->_size, 1);
     else {
         int size=field->_size;
@@ -270,13 +270,13 @@ int igMetaField_WritePersistentValue(igMetaField *field,void *object,void *outpu
     return (((igMetaFieldView *)field)->WriteRawFieldMem((int)((char *)object+field->_offset),(int)output,(int)context,swap)+3)&~3;
 }
 
-int FUN_002fc740(PersistentSizeView *field, char *object, char *data, igIGBFile *file, unsigned char endianSwap) {
-    int size = field->v49((int)object + field->f, (int)data + 4) + 4;
+int FUN_002fc740(igMetaFieldView *field, char *object, char *data, igIGBFile *file, unsigned char endianSwap) {
+    int size = field->ReadRawFieldMem((int)object + field->_offset, (int)data + 4, (int)file, endianSwap) + 4;
     return (size + 3) & -4;
 }
 
-int FUN_002fc780(void *field, void *object, char *data, void *directory, unsigned char swap) {
-    return (((ReadSizeView *)field)->vX((int)object + *(int *)((char *)field + 8)) + 3) & ~3;
+int FUN_002fc780(igMetaFieldView *field, void *object, char *data, void *directory, unsigned char swap) {
+    return (field->ReadRawFieldMem((int)object + field->_offset, (int)data, (int)directory, swap) + 3) & ~3;
 }
 
 unsigned short igMetaField_ReadRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4) {
@@ -407,15 +407,15 @@ int FUN_002fcce0(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4) 
     return s2 - arg1;
 }
 
-int FUN_002fcdb0(igMetaField *arg0, int arg1) {
-    int temp_a1 = arg1 + arg0->_offset;
-    if (temp_a1 != 0) { return ((FieldValueView *)(((char *)(arg0) + 0)))->vX(temp_a1); }
+int FUN_002fcdb0(igMetaFieldView *field, int object, int text, int directory) {
+    int value = object + field->_offset;
+    if (value != 0) { return field->vfunc_56(value, text, directory); }
     return 0;
 }
 
-igResult FUN_002fcdf0(igMetaFieldResultView *self, char *object)
+RecoveryString FUN_002fcdf0(igMetaFieldView *self, char *object, int directory)
 {
-    return self->vfunc_55(object + self->_offset);
+    return self->vfunc_57((int)(object + self->_offset), directory);
 }
 
 void FUN_002fce10(int arg0, int arg1, int arg2) {
@@ -534,16 +534,10 @@ void igMetaField_ClearValue(void) {
 }
 
 void igMetaField_Print(void *arg0, int arg1, int arg2, const char *arg3) {
-    PrintString s = ((PrintView *)arg0)->vX(arg1 + ((igMetaField *)arg0)->_offset, 0);
+    RecoveryString s = ((igMetaFieldView *)arg0)->vfunc_57(arg1 + ((igMetaField *)arg0)->_offset, 0);
     if (arg3 == 0) arg3 = &GPR_00554c28;
     FUN_00304430(DAT_004faf00, arg3, ((igMetaField *)arg0)->_fieldName, s.p);
     FUN_00304680();
-    if (s.p != 0) {
-        int *h = (int *)(s.p - 8);
-        int c = *(int *)(s.p - 4) - 1;
-        *(int *)(s.p - 4) = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunkOwnerView *)(*h), (int)h);
-    }
 }
 
 void FUN_002fd130(igMetaField *arg0, int arg1, int arg2) {

@@ -1,19 +1,19 @@
-struct ObjectHeader *igObject_InitHeader(struct ObjectHeader *p) {
-    p->vt = &g_igObject_vtable[0];
-    p->refs = 1;
-    p->flag = 0;
-    p->b7 = 0;
+igObject *igObject_InitHeader(igObject *p) {
+    p->_vtable = (int)&g_igObject_vtable[0];
+    ((igRefCountWord *)&p->_refCount)->header.count = 1;
+    ((igRefCountWord *)&p->_refCount)->header.flag = 0;
+    ((igRefCountWord *)&p->_refCount)->header.poolIndex = 0;
     return p;
 }
 
-CopyHeader *igObject_CopyConstructHeader(CopyHeader *arg0, CopyHeader *arg1) {
-    arg0->vt = (int)&g_igObject_vtable[0];
+igObject *igObject_CopyConstructHeader(igObject *arg0, igObject *arg1) {
+    arg0->_vtable = (int)&g_igObject_vtable[0];
     if (arg0 != 0) {
-        igObject_InitHeader((ObjectHeader *)arg0);
+        igObject_InitHeader(arg0);
     }
-    arg0->hi = arg1->hi;
+    ((igRefCountWord *)&arg0->_refCount)->bytes.flag = ((igRefCountWord *)&arg1->_refCount)->bytes.flag;
     if (*g_objectSystem[0] != 0) {
-        arg0->b7 = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0))))));
+        ((igRefCountWord *)&arg0->_refCount)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0))))));
     }
     return arg0;
 }
@@ -23,7 +23,7 @@ igObject *igObject_ConstructHeader(igObject *self) {
 
     self->_vtable = (int)(&g_igObject_vtable[0]);
     if (self != 0) {
-        igObject_InitHeader((ObjectHeader *)self);
+        igObject_InitHeader((igObject *)self);
     }
     if (*g_objectSystem[0] != 0) {
         owner = (void **)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))));
@@ -136,44 +136,44 @@ void Gap__Core__igObject__vfunc_18(void)
 {
 }
 
-void igObject_Construct(ConstructedObject *arg0, char *arg1) {
+void igObject_Construct(igObjectDispatchView *arg0, char *arg1) {
     igMemoryPoolView *a;
     igMetaObject *l;
     *(int *)((char *)arg0 + *(int *)((char *)g_objectSystem[0] + 916)) = *(int *)(arg1 + 92);
-    arg0->u.w4 = 0;
-    arg0->u.b.cnt = 1;
-    arg0->u.c.hi = 0;
+    ((igRefCountWord *)&arg0->_refCount)->word = 0;
+    ((igRefCountWord *)&arg0->_refCount)->bits.count = 1;
+    ((igRefCountWord *)&arg0->_refCount)->bytes.flag = 0;
     a = (igMemoryPoolView *)Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0)));
     if (a != 0) {
-        arg0->u.c.id = a->GetPoolIndex();
+        ((igRefCountWord *)&arg0->_refCount)->bytes.poolIndex = a->GetPoolIndex();
     } else {
-        arg0->u.c.id = 0;
+        ((igRefCountWord *)&arg0->_refCount)->bytes.poolIndex = 0;
     }
-    igObject_ZeroFields((igObjectDispatchView *)arg0);
-    igObject_ConstructFields((igObjectDispatchView *)arg0);
-    igObject_ResetUnconstructedFields((igObjectDispatchView *)arg0);
-    arg0->v11();
-    arg0->v9(0);
-    l = arg0->v22();
+    igObject_ZeroFields(arg0);
+    igObject_ConstructFields(arg0);
+    igObject_ResetUnconstructedFields(arg0);
+    arg0->vfunc_09();
+    arg0->userConstruct(0);
+    l = arg0->getMeta();
     if (l != 0) {
         l->_instanceCount = l->_instanceCount + 1;
         if (l->_instances != 0) {
-            ObjectPointerList_Append((PointerList *)l->_instances, (int)arg0);
+            ObjectPointerList_Append((__internalNonRefCountedObjectList *)l->_instances, (int)arg0);
         }
     }
 }
 
-void igObject_ConstructPooled(PooledHeader *arg0, char *arg1) {
+void igObject_ConstructPooled(igObject *arg0, char *arg1) {
     igMemoryPoolView *g;
 
     *(int *)((char *)arg0 + *(int *)((char *)(g_objectSystem[0]) + 916)) = *(int *)(arg1 + 92);
-    arg0->refs = 1;
-    arg0->flag = 0 & 1;
+    ((igRefCountWord *)&arg0->_refCount)->pooled.count = 1;
+    ((igRefCountWord *)&arg0->_refCount)->pooled.flag = 0 & 1;
     g = (igMemoryPoolView *)Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0)));
     if (g != 0) {
-        arg0->rest = g->GetPoolIndex();
+        ((igRefCountWord *)&arg0->_refCount)->pooled.poolIndex = g->GetPoolIndex();
     } else {
-        arg0->rest = 0;
+        ((igRefCountWord *)&arg0->_refCount)->pooled.poolIndex = 0;
     }
     igObject_ZeroFields((igObjectDispatchView *)arg0);
 }
@@ -183,7 +183,7 @@ void igObject_RegisterInstance(void **arg0, void *arg1) {
     void *temp_v0;
 
     if ((arg1 != 0) && (*(int *)((char *)(arg1) + 60) != 0)) {
-        ((igObjectDispatchView *)arg0)->vfunc_18();
+        ((igObjectDispatchView *)arg0)->vfunc_18((igMetaObject *)arg1);
     }
     ((igObjectDispatchView *)arg0)->constructFields(0);
     ((igObjectDispatchView *)arg0)->resetFields(0);
@@ -193,7 +193,7 @@ void igObject_RegisterInstance(void **arg0, void *arg1) {
         *(int *)((char *)(temp_v0) + 44) = (int)((int) (*(int *)((char *)(temp_v0) + 44) + 1));
         temp_a0 = *(int *)((char *)(temp_v0) + 48);
         if (temp_a0 != 0) {
-            ObjectPointerList_Append((PointerList *)temp_a0, (int)arg0);
+            ObjectPointerList_Append((__internalNonRefCountedObjectList *)temp_a0, (int)arg0);
         }
     }
 }
@@ -216,7 +216,7 @@ void *igObject_GetNoParentMetaObject(void){return 0;}
 int igObject_GetVTable(void) {
     int o[2];
 
-    igObject_InitHeader((ObjectHeader *)o);
+    igObject_InitHeader((igObject *)o);
     return *(int *)((char *)o + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -356,7 +356,7 @@ void igObject_Destroy(void *input) {
         igMetaObject *type = object->getMeta();
         type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
         void *instances = (void *)type->_instances;
-        if (instances) ObjectPointerList_EraseAt((PointerList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
+        if (instances) ObjectPointerList_EraseAt((__internalNonRefCountedObjectList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
         object->vfunc_16();
         object->userDestruct();
         object->vfunc_10();
@@ -414,48 +414,48 @@ void igObject_ResetUnconstructedFields(igObjectDispatchView *object) {
 }
 
 void igObject_DestructFieldValues(int *arg0) {
-    DestructFieldList *q;
+    __internalObjectList *q;
     int i;
     int n;
 
-    ((DestructSelf *)arg0)->vX();
-    q = (DestructFieldList *)((int *)((MetaSource *)arg0)->vX())[10];
-    i = ((DestructFieldList *)((int *)g_igObject_metaObject[0])[10])->count;
-    n = q->count;
+    ((igObjectDispatchView *)arg0)->destructFields();
+    q = (__internalObjectList *)((igObjectDispatchView *)arg0)->getMeta()->_metaFields;
+    i = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+    n = q->_count;
     for (; i < n; i++) {
-        q->data[i]->vX(arg0);
+        ((igMetaFieldView **)q->_data)[i]->DestructValue((int)arg0);
     }
 }
 
 void igObject_ClearFieldValues(int *arg0) {
-    ClearFieldList *q;
+    __internalObjectList *q;
     int i;
     int n;
 
-    q = (ClearFieldList *)((int *)((MetaSource *)arg0)->vX())[10];
-    i = ((ClearFieldList *)((int *)g_igObject_metaObject[0])[10])->count;
-    n = q->count;
+    q = (__internalObjectList *)((igObjectDispatchView *)arg0)->getMeta()->_metaFields;
+    i = ((__internalObjectList *)g_igObject_metaObject[0]->_metaFields)->_count;
+    n = q->_count;
     for (; i < n; i++) {
-        q->data[i]->vX(arg0);
+        ((igMetaFieldView **)q->_data)[i]->ClearValue((int)arg0);
     }
 }
 
-int igObject_GetSerializedSize(SizeObject *arg0) {
-    SizeMeta *m0 = arg0->GetMeta();
-    SizeMeta *m;
+int igObject_GetSerializedSize(igObjectDispatchView *arg0) {
+    igMetaObject *m0 = arg0->getMeta();
+    igMetaObject *m;
     int size, i, n;
-    SizeMeta *(*fp)();
-    fp = m0->f40;
+    igMetaObject *(*fp)();
+    fp = (igMetaObject *(*)())m0->_writeProxy;
     if (fp != 0) { m = fp(); } else { m = m0; }
-    if (m->b19 == 0) return 0;
+    if (m->_persistent == 0) return 0;
     size = 8;
     i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
-    n = igMetaObject_GetFieldCount((igMetaObject *)m);
-    for (; i < n; i++) { size += ((SizeField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)m, i)))->GetSize(arg0); }
+    n = igMetaObject_GetFieldCount(m);
+    for (; i < n; i++) { size += ((igMetaFieldView *)igMetaObject_GetFieldAt(m, i))->vfunc_49((int)arg0); }
     return size;
 }
 
-int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
+int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
     igMetaObject *meta = object->getMeta();
     if (meta->_persistent == 0) {
         return 0;
@@ -464,12 +464,12 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     int index = 0;
     igMetaObject *writeMeta = (meta->_writeProxy != 0) ? ((igMetaObject *(*)())meta->_writeProxy)() : meta;
     if (metaObjectList != 0) {
-        index = FUN_002fe600(metaObjectList, (ChainMeta *)writeMeta);
+        index = FUN_002fe600(metaObjectList, writeMeta);
     }
     int count = igMetaObject_GetFieldCount(writeMeta);
     int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
     buffer[0] = index;
-    buffer[1] = igObject_GetSerializedSize((SizeObject *)object);
+    buffer[1] = igObject_GetSerializedSize(object);
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(buffer, 2);
     }
@@ -480,17 +480,17 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
             buffer = (int *)((char *)buffer + igMetaField_WritePersistentValue(field, object, buffer, file, endianSwap));
         }
     }
-    return igObject_GetSerializedSize((SizeObject *)object);
+    return igObject_GetSerializedSize(object);
 }
 
-int FUN_002fff90(ReadObject *object, FieldRecordHead *head, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
+int FUN_002fff90(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
     igMetaObject *meta;
     char *data;
     int i;
     int count;
     int runTimeFields, readFields;
     igMetaField *field;
-    meta = object->v20();
+    meta = object->getMeta();
     if (meta->_persistent == 0) return 0;
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 3);
@@ -517,22 +517,22 @@ int FUN_002fff90(ReadObject *object, FieldRecordHead *head, igIGBFile *file, igT
                 if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
             } else {
                 readFields += 1;
-                data += FUN_002fc740((PersistentSizeView *)field, (char *)object, data, file, endianSwap);
+                data += FUN_002fc740((igMetaFieldView *)field, (char *)object, data, file, endianSwap);
             }
         }
     }
     {
         int size = head->size;
         if (endianSwap) ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 3);
-        object->v14();
+        object->vfunc_14();
         return size;
     }
 }
 
-int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *dir, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
-    FieldMetaView *meta;
-    FieldListTable *lists;
-    FieldOffsetList *offsets;
+int FUN_00300250(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+    igMetaObject *meta;
+    igTDataList<igTDataList<short> *> *lists;
+    igTDataList<short> *offsets;
     char *data;
     int i;
     int first;
@@ -540,41 +540,41 @@ int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *d
     int done;
     int next;
     short limit;
-    FieldEntryView *field;
+    igMetaFieldView *field;
     int size;
-    meta = object->Meta();
+    meta = object->getMeta();
     if (meta->_persistent == 0) {
         return 0;
     }
-    lists = dir->lists;
+    lists = dir->_metaFieldPerObjectIndices;
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 2);
     }
-    offsets = lists->data[head->kind];
+    offsets = lists->_data[head->kind];
     data = (char *)head + 8;
     first = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
-    count = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    count = igMetaObject_GetFieldCount(meta);
     done = 0;
     next = 0;
-    if (offsets->count == 0) {
+    if (offsets->_count == 0) {
         limit = count;
     } else {
-        limit = offsets->data[next++];
+        limit = offsets->_data[next++];
     }
     for (i = first; i < count; i++) {
-        field = (FieldEntryView *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
+        field = (igMetaFieldView *)igMetaObject_GetFieldAt(meta, i);
         if (i < limit) {
-            field->Prepare(object);
-            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || field->_skipReset == 0) {
+            field->ConstructValue((int)object);
+            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || ((igRefMetaField *)field)->_construct == 0) {
                 igMetaField_Reset((igMetaField *)field, object);
             }
         } else {
             done++;
             data += FUN_002fc780(field, object, data, dir, endianSwap);
-            if (done == offsets->count) {
+            if (done == offsets->_count) {
                 limit = count;
             } else {
-                limit = offsets->data[next++];
+                limit = offsets->_data[next++];
             }
         }
     }
@@ -582,7 +582,7 @@ int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *d
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 2);
     }
-    object->Finish();
+    object->vfunc_14();
     return size;
 }
 
@@ -615,53 +615,53 @@ void FUN_00300490(void **arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_00300600(ShallowObject *self, int source) {
-    __internalObjectList *meta = (__internalObjectList *)self->v20()->_metaFields;
+void FUN_00300600(igObjectDispatchView *self, int source) {
+    __internalObjectList *meta = (__internalObjectList *)self->getMeta()->_metaFields;
     int n = meta->_count;
     for (int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
         igMetaField_ConstructCopy(((int *)meta->_data)[i], (int)self, source);
     }
 }
 
-void FUN_003006a0(ShallowObject *self, ShallowObject *source) {
+void FUN_003006a0(igObjectDispatchView *self, igObjectDispatchView *source) {
     igMetaObject *holder;
     __internalObjectList *meta;
     int n;
     int i;
 
-    holder = self->v20();
-    self->v16();
-    source->v16();
+    holder = self->getMeta();
+    self->vfunc_16();
+    source->vfunc_16();
     meta = (__internalObjectList *)holder->_metaFields;
     n = meta->_count;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
         igMetaField_DeepCopy(((int *)meta->_data)[i], (int)self, (int)source);
     }
-    self->v3(source);
+    self->vfunc_03(source);
 }
 
-void FUN_00300770(ShallowObject *self, int source) {
-    __internalObjectList *m = (__internalObjectList *)self->v20()->_metaFields;
+void FUN_00300770(igObjectDispatchView *self, int source) {
+    __internalObjectList *m = (__internalObjectList *)self->getMeta()->_metaFields;
     int n = m->_count;
     int i;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
         igMetaField_ShallowCopy(((int *)m->_data)[i], (int)self, source);
     }
-    self->v4(source);
+    self->vfunc_04(source);
 }
 
-int igObject_IsAlikeDeep(DeepObject *a, DeepObject *b) {
+int igObject_IsAlikeDeep(igObjectDispatchView *a, igObjectDispatchView *b) {
     int i;
     __internalObjectList *fl;
     int n;
-    if (b->v20() != a->v20()) return 0;
-    fl = (__internalObjectList *)a->v20()->_metaFields;
+    if (b->getMeta() != a->getMeta()) return 0;
+    fl = (__internalObjectList *)a->getMeta()->_metaFields;
     n = fl->_count;
     i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
     for (; i < n; i++) {
         if (igMetaField_IsAlikeDeep(((int *)fl->_data)[i], (int)a, (int)b) == 0) return 0;
     }
-    return a->v5(b);
+    return a->vfunc_05(b);
 }
 
 int igObject_IsAlikeShallow(igObjectDispatchView *arg0, igObjectDispatchView *arg1) {
@@ -703,31 +703,31 @@ int igObject_IsAlikeExactly(void *arg0, void *arg1) {
     return 1;
 }
 
-void igObject_VisitFields(VisitorObjectView *object,Visitor callback,void *context){
+void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *context){
     __internalObjectList *fields;
     int count;
     int i;
-    VisitorFieldView *field;
+    igMetaFieldView *field;
     if(callback(object,0,context)==1)return;
-    object->Prepare();
-    fields=(__internalObjectList *)object->Meta()->_metaFields;
+    object->vfunc_16();
+    fields=(__internalObjectList *)object->getMeta()->_metaFields;
     count=fields->_count;
     for(i=igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]);i<count;++i){
-        field=((VisitorFieldView **)fields->_data)[i];
-        if(callback(object,field,context)!=1)field->Visit(object,callback,context);
+        field=((igMetaFieldView **)fields->_data)[i];
+        if(callback(object,field,context)!=1)field->ReleaseElements((int)object,(int)callback,(int)context);
     }
 }
 
 void FUN_00300c00(int arg0, int arg1, int arg2) {
     switch (arg2) {
     case 1:
-        FUN_003006a0((ShallowObject *)arg0, (ShallowObject *)arg1);
+        FUN_003006a0((igObjectDispatchView *)arg0, (igObjectDispatchView *)arg1);
         break;
     case 0:
-        FUN_00300770((ShallowObject *)arg0, arg1);
+        FUN_00300770((igObjectDispatchView *)arg0, arg1);
         break;
     case 2:
-        FUN_00300600((ShallowObject *)arg0, arg1);
+        FUN_00300600((igObjectDispatchView *)arg0, arg1);
         break;
     }
 }
@@ -741,13 +741,13 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
     int copy;
 
     metaObject = (int)((igObjectDispatchView *)(source))->getMeta();
-    copy = igMetaObject_CreateInstance((CreateMeta *)metaObject, (MemoryPool *)(igObject_GetAllocator((int)source)));
+    copy = igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((int)source)));
     FUN_00300c00(copy, (int)source, copyMode);
     return copy;
 }
 
 int igObject_IsKindOf(void *object, igMetaObject *kind) {
-    igMetaObject *meta = (igMetaObject *)((KindVC *)object)->vX((int)kind);
+    igMetaObject *meta = ((igObjectDispatchView *)object)->getMeta();
     while (meta != 0) {
         if (meta == kind) return 1;
         meta = (igMetaObject *)meta->_parent;

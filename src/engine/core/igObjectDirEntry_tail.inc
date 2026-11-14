@@ -10,28 +10,28 @@ static inline const char *nameOf_3010f0(const igObjectDirEntry *entry) {
     return entry->_name != 0 ? (const char *)entry->_name : ((char *)emptyString);
 }
 
-static inline ObjectDirEntryList *asEntryList_3010f0(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (ObjectDirEntryList *)object;
+static inline igObjectList *asEntryList_3010f0(igObject *object) {
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (igObjectList *)object;
     return 0;
 }
 
 igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, igIGBFile *file) {
-    igSmartPointer<ObjectDirEntryList> lists((ObjectDirEntryList *)file->_entryPool, kRetainReference);
+    igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
-    int index = ((DirEntryView *)self)->getMeta()->index;
+    int index = ((igObjectDispatchView *)self)->getMeta()->_index;
     if (lists->_count <= index) {
         ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
-        lists->set(index, 0);
+        objectListSetRetained(index, 0, lists.p);
     }
-    igSmartPointer<ObjectDirEntryList> entries(asEntryList_3010f0(((igObject **)lists->_data)[index]), kRetainReference);
+    igSmartPointer<igObjectList> entries(asEntryList_3010f0(((igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
         int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((ObjectDirEntryList *)FUN_002bd680(pool));
-        lists->set(index, entries.p);
+        entries.p = ((igObjectList *)FUN_002bd680(pool));
+        objectListSetRetained(index, entries.p, lists.p);
     }
     int i;
-    ObjectDirEntryList *list;
+    igObjectList *list;
     igObjectDirEntry *entry;
     int count;
     count = entries->_count;
@@ -41,7 +41,7 @@ igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, 
         entry = ((igObjectDirEntry **)list->_data)[i];
         if (entry->_typeMeta == self->_typeMeta && nameOf_3010f0(entry) == nameOf_3010f0(self) &&
             entry->_memoryPoolHandle == self->_memoryPoolHandle) {
-            return list->at(i);
+            return objectDirEntryAt(list, i);
         }
     }
     ObjectList_AppendRetained((igObjectList *)list, (igObject *)self);
@@ -128,9 +128,9 @@ void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile
     if (temp_v1 != 0) {
         var_v0 = temp_v1();
     }
-    arg0->_typeMetaIndex = FUN_002fe600((igTDataList<ChainMeta *> *)arg1->_metaObjectListInFile, (ChainMeta *)var_v0);
+    arg0->_typeMetaIndex = FUN_002fe600((igTDataList<igMetaObject *> *)arg1->_metaObjectListInFile, (igMetaObject *)var_v0);
     temp_s0_2 = arg1->_objectBufferSize;
-    arg1->_objectBufferSize = temp_s0_2 + igObject_GetSerializedSize((SizeObject *)temp_s0);
+    arg1->_objectBufferSize = temp_s0_2 + igObject_GetSerializedSize((igObjectDispatchView *)temp_s0);
     arg1->_objectCount = arg1->_objectCount + 1;
 }
 
@@ -152,15 +152,15 @@ void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self)
     self->_ref->vfunc_15();
 }
 
-static inline void addRef(DirEntryCounted *o) { if (o != 0) { o->_refCount = o->_refCount + 1; } }
+static inline void addRef(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
 
-static inline void dropRef(DirEntryCounted *o) {
-    o->_refCount = o->_refCount - 1;
-    if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
+static inline void dropRef(igObject *o) {
+    o->_refCount = (int)o->_refCount - 1;
+    if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
 }
 
-static inline void setMeta(DirEntrySelf *self, DirEntryCounted *m) {
-    DirEntryCounted *old;
+static inline void setMeta(DirEntrySelf *self, igObject *m) {
+    igObject *old;
     addRef(m);
     old = self->typeMeta;
     if (old != 0) { dropRef(old); }
@@ -169,15 +169,15 @@ static inline void setMeta(DirEntrySelf *self, DirEntryCounted *m) {
 
 void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *file) {
     int index;
-    DirEntryCounted *m;
-    DirEntryCounted *obj;
+    igObject *m;
+    igObject *obj;
     int pool;
     int sel;
     index = self->typeMetaIndex;
     if (index == -1) {
-        setMeta(self, ((DirEntryCounted *)igObjectSystem_FindMetaByNameDefault((const char *)self->typeMetaName)));
+        setMeta(self, ((igObject *)igObjectSystem_FindMetaByNameDefault((const char *)self->typeMetaName)));
     } else {
-        setMeta(self, ((DirEntryCounted **)file->_metaObjectListInFile->_data)[index]);
+        setMeta(self, ((igObject **)file->_metaObjectListInFile->_data)[index]);
     }
     if (self->typeMeta != 0) {
         sel = self->pool;
@@ -189,7 +189,7 @@ void Gap__Core__igObjectDirEntry__vfunc_31(DirEntrySelf *self, igIGBFileView *fi
                 pool = (int)file->_objectMemoryPool;
             }
         }
-        obj = ((DirEntryCounted *)igMetaObject_CreateInstanceWithPool((PooledMeta *)self->typeMeta, (MemoryPool *)pool));
+        obj = ((igObject *)igMetaObject_CreateInstanceWithPool((igMetaObject *)self->typeMeta, (igMemoryPoolView *)pool));
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
             FUN_002d7da0((igDirectoryView *)file, self->index, (int)0);

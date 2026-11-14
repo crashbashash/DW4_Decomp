@@ -28,7 +28,7 @@ int FUN_002b7ee0(void) {
 
 void * FUN_002b7f40(int arg0) {
     FUN_002b8020();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x5857C8), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5857C8), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *FUN_002b7f80(void) {

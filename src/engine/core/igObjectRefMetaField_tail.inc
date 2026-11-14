@@ -59,7 +59,7 @@ void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *objec
     const char *name=(const char *)field->_poolName;
     if(name&&*name){allocator=Memory_GetAllocatorByName((int)name);if(!allocator)allocator=((void *)igObject_GetAllocator((int)object));}
     else allocator=((void *)igObject_GetAllocator((int)object));
-    igObject *child=(igObject *)igMetaObject_CreateInstance((CreateMeta *)((void *)field->_metaObject), (MemoryPool *)allocator);
+    igObject *child=(igObject *)igMetaObject_CreateInstance((igMetaObject *)((void *)field->_metaObject), (igMemoryPoolView *)allocator);
     igObjectRefMetaField_Assign(field,object,child);
     if((field->_refCounted||field->_destruct)&&child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}
 }
@@ -93,22 +93,22 @@ void Gap__Core__igObjectRefMetaField__vfunc_37(int arg0, int arg1, int arg2) {
 }
 
 void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char *dst, char *src) {
-    CopyableObject *to;
-    CopyableObject *from;
-    CopyableObject *copy;
+    igObjectDispatchView *to;
+    igObjectDispatchView *from;
+    igObject *copy;
 
-    to = *(CopyableObject **)(dst + self->_offset);
-    from = *(CopyableObject **)(src + self->_offset);
+    to = *(igObjectDispatchView **)(dst + self->_offset);
+    from = *(igObjectDispatchView **)(src + self->_offset);
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
-            from->prepareCopy();
-            FUN_003006a0((ShallowObject *)to, (ShallowObject *)from);
+            from->vfunc_16();
+            FUN_003006a0(to, from);
             return;
         }
         if (to == 0) {
-            from->prepareCopy();
-            copy = from->duplicate(1);
-            igObjectRefMetaField_Assign(self, dst, (igObject *)copy);
+            from->vfunc_16();
+            copy = from->cloneViaMetadata(1);
+            igObjectRefMetaField_Assign(self, dst, copy);
             if (self->_destruct == 0 && copy != 0) {
                 copy->_refCount = copy->_refCount - 1;
                 if ((copy->_refCount & 0x7FFFFF) == 0) {
@@ -132,7 +132,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int a
     temp_a1 = *(igObjectDispatchView **)(arg2 + off);
     if ((temp_a0 != 0) || (temp_a1 != 0)) {
         if ((temp_a0 != 0) && (temp_a1 != 0)) {
-            FUN_00300770((ShallowObject *)temp_a0, (int)temp_a1);
+            FUN_00300770((igObjectDispatchView *)temp_a0, (int)temp_a1);
             return;
         }
         if (temp_a0 == 0) {
@@ -164,7 +164,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int a
 
     temp_a0 = *(int *)(arg1 + arg0->_offset);
     if (temp_a0 != 0) {
-        igObject_VisitFields((VisitorObjectView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
+        igObject_VisitFields((igObjectDispatchView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
     }
 }
 
@@ -206,7 +206,7 @@ int Gap__Core__igObjectRefMetaField__vfunc_46(igObjectRefMetaField *self, int ob
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return igObject_IsAlikeDeep((DeepObject *)refA, (DeepObject *)refB);
+    return igObject_IsAlikeDeep((igObjectDispatchView *)refA, (igObjectDispatchView *)refB);
 }
 
 int Gap__Core__igObjectRefMetaField__vfunc_47(igObjectRefMetaField *self, int objectA, int objectB) {

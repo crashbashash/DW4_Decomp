@@ -1,5 +1,5 @@
 FieldNameView *igMetaField_FindByName(int arg0, char *arg1) {
-    FieldNameView *found; char *q; char *s8; int n; int i; int j; int fc; MetaObjectNameView *o; MetaObjectListView *list; char *nm; FieldNameView *f;
+    FieldNameView *found; char *q; char *s8; int n; int i; int j; int fc; MetaObjectNameView *o; __internalObjectList *list; char *nm; FieldNameView *f;
     found = 0;
     if (strncmp(arg1, DAT_004c22b8[0], strlen(DAT_004c22b8[0])) == 0) {
         arg1 = arg1 + strlen(DAT_004c22b8[0]);
@@ -7,12 +7,12 @@ FieldNameView *igMetaField_FindByName(int arg0, char *arg1) {
         if (q != 0) {
             s8 = q + strlen(DAT_004c22c0[0]);
             i = 0;
-            list = ((MetaObjectRegistryView * *)g_objectSystem)[0]->f24;
-            n = list->n;
+            list = (__internalObjectList *)((ObjectSystemView **)g_objectSystem)[0]->metaRegistry;
+            n = list->_count;
             goto test;
 body:
             o = 0;
-            if (i < list->n) { o = list->data[i]; }
+            if (i < list->_count) { o = ((MetaObjectNameView **)list->_data)[i]; }
             nm = o->f28;
             if (strncmp(nm, arg1, strlen(nm)) == 0) {
                 fc = igMetaObject_GetFieldCount((igMetaObject *)o);

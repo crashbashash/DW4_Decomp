@@ -13,7 +13,7 @@ int igPsx2Folder_GetVTable(void) {
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((ObjectHeader *)&folder);
+    igObject_InitHeader((igObject *)&folder);
     ps = (char *)&folder._folderName;
     *(int *)ps = 0;
     folder._vtable = (int)&DAT_0052fee0[0];

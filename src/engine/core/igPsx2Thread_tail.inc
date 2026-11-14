@@ -13,7 +13,7 @@ int igPsx2Thread_GetVTable(void) {
     int *a1;
     int v0;
     S_ref *p0, *p1;
-    igObject_InitHeader((struct ObjectHeader *)&thread);
+    igObject_InitHeader((igObject *)&thread);
     p0 = (S_ref *)&thread._name;
     *(int *)p0 = 0;
     thread._vtable = (int)&DAT_0052d7c0[0];

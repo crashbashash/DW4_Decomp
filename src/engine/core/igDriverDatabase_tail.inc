@@ -71,7 +71,7 @@ static inline char *textOf(const igSmartPointer<ConfigPlatformText> &ref) {
     return s;
 }
 
-void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
+void FUN_002da010(void *self, igTDataList<ConfigPlatformSource *> *list) {
     int i;
     igSmartPointer<ConfigPlatformText> text(((ConfigPlatformText *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     if (FUN_002dac30((void *)(text.get())) != 0) {
@@ -83,11 +83,11 @@ void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
     if (FUN_002dac90((void *)(text.get())) != 0) {
         FUN_002d96f0(self, 7, (int)(textOf(text)));
     }
-    if (list == 0 || list->count == 0) {
+    if (list == 0 || list->_count == 0) {
         return;
     }
-    for (i = 0; i < list->count; i++) {
-        list->data[i]->Describe(self);
+    for (i = 0; i < list->_count; i++) {
+        list->_data[i]->Describe(self);
     }
 }
 
@@ -159,15 +159,15 @@ int FUN_002da770(int *p)
     return igStringObj_Clear((igStringObj *)(*(int *)((char *)p + 40)));
 }
 
-static inline int n_of(const TrackedEntryList *list) { return list->count; }
+static inline int n_of(const igTDataList<TrackedEntry *> *list) { return list->_count; }
 
-TrackedEntryList *FUN_002da780(igDriverDatabase *s) {
+igTDataList<TrackedEntry *> *FUN_002da780(igDriverDatabase *s) {
     int cnt;
     int r;
-    TrackedEntryList *l;
+    igTDataList<TrackedEntry *> *l;
     int v;
 
-    l = ((TrackedEntryList *)FUN_002c8450(((int)igObject_GetAllocator((int)s))));
+    l = ((igTDataList<TrackedEntry *> *)FUN_002c8450(((int)igObject_GetAllocator((int)s))));
     s->_currentLine = 1;
     v = ((igStringObj *)s->_rawDatabase)->_buffer;
     if (v == 0) {
@@ -177,35 +177,35 @@ TrackedEntryList *FUN_002da780(igDriverDatabase *s) {
     do {
         r = FUN_002dae40(s);
         if (r != 0) {
-            cnt = l->count;
-            if (cnt < l->cap) {
-                l->count = n_of(l) + 1;
+            cnt = l->_count;
+            if (cnt < l->_capacity) {
+                l->_count = n_of(l) + 1;
             } else {
                 List_Resize(l, cnt + 1, 4);
             }
-            l->data[cnt] = (TrackedEntry *)r;
+            l->_data[cnt] = (TrackedEntry *)r;
         }
     } while (r != 0);
     return l;
 }
 
-static inline void clearSlot(TrackedEntryList *l, int i) {
-    if (l->count != 0 && i >= 0 && i < l->count) {
-        l->data[i] = 0;
+static inline void clearSlot(igTDataList<TrackedEntry *> *l, int i) {
+    if (l->_count != 0 && i >= 0 && i < l->_count) {
+        l->_data[i] = 0;
     }
 }
 
-void FUN_002da850(void *self, TrackedEntryList *list) {
+void FUN_002da850(void *self, igTDataList<TrackedEntry *> *list) {
     int i = 0;
     goto first;
 next:
-    if (list->data[i] != 0) {
-        list->data[i]->Delete(1);
+    if (list->_data[i] != 0) {
+        list->_data[i]->Delete(1);
     }
     clearSlot(list, i);
     i++;
 test:
-    if (i < list->count) {
+    if (i < list->_count) {
         goto next;
     }
 done:
@@ -215,7 +215,7 @@ done:
     }
     return;
 first:
-    if (0 < list->count) {
+    if (0 < list->_count) {
         goto test;
     }
     goto done;
@@ -233,14 +233,14 @@ void *FUN_002da940(void *arg0, long long arg1) {
 
 int FUN_002da990(igDriverDatabase *arg0, int arg1, int arg2, int arg3) {
     int r;
-    TrackedEntryList *a;
+    igTDataList<TrackedEntry *> *a;
     int i;
     igSmartPointer<igRegistry> sp7C(((igRegistry *)FUN_002baff0(((int)igObject_GetAllocator((int)arg0)))));
     a = FUN_002da780(arg0);
-    for (i = 0; i < a->count; i++) {
-        FUN_002db040((void *)arg0, (int)a->data[i], (void *)sp7C.p, (void *)arg2);
+    for (i = 0; i < a->_count; i++) {
+        FUN_002db040((void *)arg0, (int)a->_data[i], (void *)sp7C.p, (void *)arg2);
     }
-    FUN_003061c0((void *)arg1, (IniIncludeView *)sp7C.p, arg3);
+    FUN_003061c0((void *)arg1, sp7C.p, arg3);
     r = *(char *)arg0->_dbIndex == 0;
     FUN_002da850((void *)arg0, a);
     FUN_002da770((int *)arg0);
@@ -302,14 +302,6 @@ bool FUN_002dacc0(void *a0, igFileView *s, char *buf, int n) {
     buf[i] = 10;
     buf[i+1] = 0;
     return i > 0 || ~c != 0;
-}
-
-static inline char *text(KeyValueText *s) {
-    char *t = s->text;
-    if (t == 0) {
-        t = g_stringObjEmptyText[0];
-    }
-    return t;
 }
 
 static inline void releaseValue(ConfigValueToken *t) {
@@ -413,14 +405,14 @@ static inline void releaseToken(ConfigToken *n) {
     }
 }
 
-static inline void append(ConfigChildList *l, int v) {
-    int i = l->count;
-    if (i < l->capacity) {
-        l->count = l->getCount() + 1;
+static inline void append(igTDataList<int> *l, int v) {
+    int i = l->_count;
+    if (i < l->_capacity) {
+        l->_count = l->count() + 1;
     } else {
         List_Resize((void *)l, i + 1, 4);
     }
-    l->data[i] = v;
+    l->_data[i] = v;
 }
 
 static inline char *textOf_2dba50(ConfigToken *n) { char *t = n->text; return (t == 0) ? g_stringObjEmptyText[0] : t; }

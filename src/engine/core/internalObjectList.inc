@@ -1,58 +1,58 @@
-void *InternalObjectList_Construct(PointerList *list, int extra1) {
+void *InternalObjectList_Construct(__internalObjectList *list, int extra1) {
     ObjectPointerList_Construct((__internalNonRefCountedObjectList *)list, extra1);
-    *(int *)list = (int)g_InternalObjectList_vtable;
+    list->_vtable = (int)g_InternalObjectList_vtable;
     return list;
 }
 
-void *InternalObjectList_Init(PointerList *list) {
-    ObjectPointerList_Init((PointerList *)list);
-    *(int *)list = (int)g_InternalObjectList_vtable;
+void *InternalObjectList_Init(__internalObjectList *list) {
+    ObjectPointerList_Init((__internalNonRefCountedObjectList *)list);
+    list->_vtable = (int)g_InternalObjectList_vtable;
     return list;
 }
 
-void *InternalObjectList_CopyConstruct(PointerList *list, PointerList *source) {
+void *InternalObjectList_CopyConstruct(__internalObjectList *list, __internalObjectList *source) {
     ObjectPointerList_CopyConstruct((__internalNonRefCountedObjectList *)list, (__internalNonRefCountedObjectList *)source);
-    *(int *)list = (int)g_InternalObjectList_vtable;
+    list->_vtable = (int)g_InternalObjectList_vtable;
     return list;
 }
 
-void InternalObjectList_Destruct(PointerList *list){InternalObjectList_SetCount(list,0);ObjectPointerList_Destruct((__internalNonRefCountedObjectList *)list);}
+void InternalObjectList_Destruct(__internalObjectList *list){InternalObjectList_SetCount(list,0);ObjectPointerList_Destruct((__internalNonRefCountedObjectList *)list);}
 
-void InternalObjectList_InsertRetained(PointerList *list, int index, RefHeader *value) {
+void InternalObjectList_InsertRetained(__internalObjectList *list, int index, igObject *value) {
     if (value)
-        ++value->refs;
-    ObjectPointerList_Insert(list, index, (int)value);
+        ++value->_refCount;
+    ObjectPointerList_Insert((__internalNonRefCountedObjectList *)list, index, (int)value);
 }
 
-void InternalObjectList_SetCount(PointerList *list,int count){
-    int i=list->count;
+void InternalObjectList_SetCount(__internalObjectList *list,int count){
+    int i=list->_count;
     if(count<i){
         i--;
         while(i>=count){
-            RefHeader *item=(RefHeader *)list->data[i];
-            if(item){--item->refs;if(!(item->refs&0x7fffff))igObject_Destroy(item);}
+            igObject *item=((igObject **)list->_data)[i];
+            if(item){--item->_refCount;if(!(item->_refCount&0x7fffff))igObject_Destroy(item);}
             i--;
         }
     }
-    ObjectPointerList_SetCount(list,count);
+    ObjectPointerList_SetCount((__internalNonRefCountedObjectList *)list,count);
 }
 
-int MetaRefList_AppendRetained(PointerList *list, RefHeader *value) {
+int MetaRefList_AppendRetained(__internalObjectList *list, igObject *value) {
     if (value)
-        ++value->refs;
-    return ObjectPointerList_Append(list, (int)value);
+        ++value->_refCount;
+    return ObjectPointerList_Append((__internalNonRefCountedObjectList *)list, (int)value);
 }
 
-void InternalObjectList_SetAtRetained(PointerList *list, int index, RefHeader *value) {
-    RefHeader *old;
+void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value) {
+    igObject *old;
     if (value)
-        ++value->refs;
-    old = (RefHeader *)list->data[index];
+        ++value->_refCount;
+    old = ((igObject **)list->_data)[index];
     if (old) {
-        --old->refs;
-        if (!(old->refs & REF_COUNT_MASK))
+        --old->_refCount;
+        if (!(old->_refCount & REF_COUNT_MASK))
             igObject_Destroy(old);
     }
-    ObjectPointerList_SetAt(list, index, (int)value);
+    ObjectPointerList_SetAt((__internalNonRefCountedObjectList *)list, index, (int)value);
 }
 

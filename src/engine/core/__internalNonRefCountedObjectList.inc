@@ -3,7 +3,7 @@ void **FUN_002c29c0(int arg0) {
 
     if (*g_objectSystem[0] != 0) {
         FUN_002c2bb0();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)g___internalNonRefCountedObjectList_metaObject[0], (MemoryPool *)arg0)));
+        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g___internalNonRefCountedObjectList_metaObject[0], (igMemoryPoolView *)arg0)));
     } else {
         var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)arg0)));
         if (var_s0 != 0) {
@@ -47,7 +47,7 @@ igMetaObject *__internalNonRefCountedObjectList_GetMetaObject(void)
 int __internalNonRefCountedObjectList_GetVTable(void) {
     int o[4];
 
-    ObjectPointerList_Init((PointerList *)o);
+    ObjectPointerList_Init((__internalNonRefCountedObjectList *)o);
     return *(int *)((char *)o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

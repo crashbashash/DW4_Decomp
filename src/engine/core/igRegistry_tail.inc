@@ -96,11 +96,11 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
 
 static inline char *textOf_3061c0(IniPairText *s) { char *t = s->text; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
-int FUN_003061c0(void *self, IniIncludeView *inc, int overwrite) {
+int FUN_003061c0(void *self, igRegistry *inc, int overwrite) {
     int i = 0;
     igSmartPointer<IniPairEntry> cur;
-    for (; i < inc->pairs->count; i++) {
-        cur = inc->pairs->data[i];
+    for (; i < ((igTDataList<IniPairEntry *> *)inc->_valueTable)->_count; i++) {
+        cur = ((igTDataList<IniPairEntry *> *)inc->_valueTable)->_data[i];
         if (cur.p != 0) {
             int section = FUN_00306360((igRegistry *)self, (char *)(FUN_00307f80(inc, cur.p->section)), 1);
             if (overwrite == 0 && ((int)FUN_00307c10((igRegistry *)self, section, textOf_3061c0(cur.p->key), 0)) != 0) {
@@ -121,8 +121,8 @@ typedef igSmartPointer<igTDataList<IniPairEntry *> > IniPairListRef;
 /* The number of keys a section holds. */
 int FUN_003064b0(int registry, int section) {
     int keys = 0;
-    for (int i = 0; i < ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->count(); i++) {
-        IniPairEntry *entry = ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->get(i);
+    for (int i = 0; i < ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->count(); i++) {
+        IniPairEntry *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
         if (entry != 0 && entry->section == section) {
             keys++;
         }
@@ -135,8 +135,8 @@ bool igRegistry_GetKeyName(int registry, int section, int index, IniKeyText **ke
     int i;
     int seen = 0;
     bool found = false;
-    for (i = 0; i < ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->count(); i++) {
-        IniPairEntry *entry = ((IniPairListRef &)((IniIncludeView *)registry)->pairs)->get(i);
+    for (i = 0; i < ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->count(); i++) {
+        IniPairEntry *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
         if (entry != 0 && entry->section == section) {
             if (seen == index) {
                 *(igSmartPointer<IniKeyText> *)key = (IniKeyText *)entry->key;

@@ -1,6 +1,6 @@
 void FUN_002ba9f0(int arg0) {
     FUN_002bad40();
-    igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585978), (MemoryPool *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585978), (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_002baa30(void) {
@@ -21,7 +21,7 @@ igMetaObject *igResource_GetMetaObject(void)
 int igResource_GetVTable(void) {
     igResource resource;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&resource);
+    igObject_InitHeader((igObject *)&resource);
     resource._vtable = (int)&DAT_0052eb90[0];
     resource._imageDirectory = 0;
     resource._directoryList = 0;

@@ -16,7 +16,7 @@ igMetaObject *igCharListNoClean_GetMetaObject(void)
 int igCharListNoClean_GetVTable(void) {
     igCharListNoClean list;
 
-    igObject_InitHeader((struct ObjectHeader *)&list);
+    igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&DAT_00531a50[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }

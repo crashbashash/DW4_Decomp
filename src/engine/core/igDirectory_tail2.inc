@@ -191,11 +191,11 @@ void FUN_002d81f0(void *arg0, int arg1) {
 
 void FUN_002d8230(igDirectoryView *h, igObject *object) {
     int idx;
-    RemovableList *f;
-    f = (RemovableList *)h->_infoList;
+    igTDataList<igObject *> *f;
+    f = (igTDataList<igObject *> *)h->_infoList;
     idx = f->find(object);
     if (-1 < idx) {
-        ((RemovableList *)h->_infoList)->removeAt(idx);
+        objectListRemoveRetained((igTDataList<igObject *> *)h->_infoList, idx);
     }
 }
 
@@ -241,14 +241,14 @@ int FUN_002d8460(void *dir, unsigned key) {
     return 0;
 }
 
-int FUN_002d8520(int arg0, VisitorFieldView *arg1, igDirectoryView *arg2) {
+int FUN_002d8520(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2) {
     int i;
     int n;
     if (arg0 == 0) {
         return 1;
     }
     if (arg1 != 0) {
-        return arg1->Write(arg0) == -1;
+        return arg1->Write(arg0, (int)arg2) == -1;
     }
     if ((FUN_002d8460(arg2, arg0) & 0xFF) == 1) {
         return 1;
@@ -267,7 +267,7 @@ int FUN_002d8620(int arg0, int arg1, int arg2, int extra3) {
     int temp_v0;
 
     if (arg1 != 0) {
-        igObject_VisitFields((VisitorObjectView *)arg1, (int (*)(void *, void *, void *))&FUN_002d8520, (void *)arg0);
+        igObject_VisitFields((igObjectDispatchView *)arg1, (int (*)(void *, void *, void *))&FUN_002d8520, (void *)arg0);
         temp_v0 = FUN_002d86b0((igDirectoryView *)arg0, (igMetaField *)DAT_00586730[0], arg1);
         igNamedObject_SetName((igNamedObject *)(FUN_002d7e90((int *)arg0, temp_v0)), arg2);
         return temp_v0;

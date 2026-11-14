@@ -10,7 +10,7 @@ int igExternalIndexedEntry_GetVTable(void) {
     igExternalIndexedEntry entry;
     int temp_s1;
 
-    igObject_InitHeader((ObjectHeader *)&entry);
+    igObject_InitHeader((igObject *)&entry);
     entry._name = 0;
     entry._vtable = (int)(&DAT_005302b0[0]);
     entry._entryType = 0;

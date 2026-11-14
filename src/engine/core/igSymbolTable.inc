@@ -1,6 +1,6 @@
 void * FUN_002b8500(int arg0) {
     FUN_002b87c0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x585830), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585830), (igMemoryPoolView *)arg0));
 }
 
 igMetaObject *igSymbolTable_GetMetaObject(void)
@@ -16,7 +16,7 @@ int igSymbolTable_GetVTable(void) {
 
     int temp_s3;
 
-    igObject_InitHeader((ObjectHeader *)&table);
+    igObject_InitHeader((igObject *)&table);
     table._vtable = (int)(&DAT_0052e730[0]);
     table._symbols = 0;
     table._hashIndex = 0;
@@ -33,10 +33,10 @@ int igSymbolTable_GetVTable(void) {
 
 ObjectRefWord *FUN_002b8640(ObjectRefWord *self,int delete_storage) {
     if(self) {
-        ObjectRefTarget *object=self->value;
+        igObject *object=self->value;
         if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
+            --object->_refCount;
+            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
                 igObject_Destroy((void *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
@@ -63,10 +63,10 @@ void **FUN_002b86c0(void **arg0, short arg1) {
 
 ObjectRefWord *FUN_002b8740(ObjectRefWord *self,int delete_storage) {
     if(self) {
-        ObjectRefTarget *object=self->value;
+        igObject *object=self->value;
         if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
+            --object->_refCount;
+            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
                 igObject_Destroy((void *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);

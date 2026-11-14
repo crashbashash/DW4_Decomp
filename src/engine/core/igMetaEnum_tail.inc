@@ -8,8 +8,8 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
     int retained;
     int *header;
 
-    if ((NameList *)meta->_names) {
-        count = ((NameList *)meta->_names)->count;
+    if ((igTDataList<char *> *)meta->_names) {
+        count = ((igTDataList<char *> *)meta->_names)->_count;
         for (index = 0; index < count; ++index) {
             StringList_CopyRetained(&retained, (void *)meta->_names, index);
             match = strcmp((const char *)retained, name) == 0;
@@ -20,7 +20,7 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
                 }
             }
             if (match) {
-                *value = ((NameList *)meta->_values)->data[index];
+                *value = ((igTDataList<int> *)meta->_values)->_data[index];
                 *status = g_resultSuccess.v;
                 return;
             }
@@ -102,21 +102,15 @@ static inline void dropString(char *s) {
     }
 }
 
-static inline void dropNames_2fbc70(MetaEnumNameList *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
+static inline void dropNames_2fbc70(igTDataList<char *> *o) {
+    IG_OBJECT_RELEASE(o);
 }
 
-static inline void dropValues(MetaEnumValueList *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
+static inline void dropValues(igTDataList<int> *o) {
+    IG_OBJECT_RELEASE(o);
 }
 
-static inline void setValue(MetaEnumValueList *l, int i, int *v) { if (l->count != 0 && i >= 0 && i < l->count) { l->data[i] = *v; } }
+static inline void setValue(igTDataList<int> *l, int i, int *v) { if (l->_count != 0 && i >= 0 && i < l->_count) { l->_data[i] = *v; } }
 
 MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count) {
     MetaEnumView *e;
@@ -125,8 +119,8 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     char *entry;
     char *held;
     char *old;
-    MetaEnumNameList *nl;
-    MetaEnumValueList *vl;
+    igTDataList<char *> *nl;
+    igTDataList<int> *vl;
     int a;
     char **slot;
     e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
@@ -136,15 +130,15 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     e->name = v;
     a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     dropNames_2fbc70(e->names);
-    e->names = ((MetaEnumNameList *)igStringRefList_Create(a));
-    StringList_Resize((StringRefListView *)e->names, count);
+    e->names = ((igTDataList<char *> *)igStringRefList_Create(a));
+    StringList_Resize(e->names, count);
     a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     dropValues(e->values);
-    e->values = ((MetaEnumValueList *)igIntList_Create(a));
+    e->values = ((igTDataList<int> *)igIntList_Create(a));
     vl = e->values;
     if (count >= 0) {
-        if (!(count > vl->capacity)) {
-            vl->count = count;
+        if (!(count > vl->_capacity)) {
+            vl->_count = count;
         } else {
             List_Resize((void *)vl, count, 4);
         }
@@ -158,8 +152,8 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
         }
         *(char **)&held = v;
         nl = e->names;
-        if (nl->count != 0 && i >= 0 && i < nl->count) {
-            slot = &nl->data[i];
+        if (nl->_count != 0 && i >= 0 && i < nl->_count) {
+            slot = &nl->_data[i];
             if (held != 0) { ((int *)held)[-1] = ((int *)held)[-1] + 1; }
             old = *slot;
             dropString(old);

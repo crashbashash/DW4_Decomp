@@ -3,7 +3,7 @@ void **igUnsignedIntMetaField_Create(int allocator) {
 
     if (*g_objectSystem[0] != 0) {
         igUnsignedIntMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((CreateMeta *)(((int *)g_igUnsignedIntMetaField_metaObject)[0]), (MemoryPool *)allocator)));
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)(((int *)g_igUnsignedIntMetaField_metaObject)[0]), (igMemoryPoolView *)allocator)));
     } else {
         field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)allocator)));
         if (field != 0) {
@@ -90,10 +90,10 @@ void FUN_002b6fa0(void) {
     void *temp_s0;
 
     if (g_igUnsignedIntMetaField_descriptor[0] == 0) {
-        g_igUnsignedIntMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedIntMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        g_igUnsignedIntMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedIntMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igUnsignedIntMetaField_descriptor[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((void *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igUnsignedIntMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;

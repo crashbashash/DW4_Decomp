@@ -2,7 +2,7 @@ FactoryPoolView *igAliasMemoryPool_Create(void *allocator) {
     FactoryPoolView *pool;
     if (*g_objectSystem[0]) {
         igAliasMemoryPool_EnsureRegistered();
-        pool=((FactoryPoolView *)igMetaObject_CreateInstance((CreateMeta *)(((void * *)g_igAliasMemoryPool_metaObject)[0]), (MemoryPool *)allocator));
+        pool=((FactoryPoolView *)igMetaObject_CreateInstance((igMetaObject *)(((void * *)g_igAliasMemoryPool_metaObject)[0]), (igMemoryPoolView *)allocator));
     } else {
         pool=((FactoryPoolView *)FUN_002f0040(184, 0, (int)allocator));
         if(pool)pool=((FactoryPoolView *)igAliasMemoryPool_Construct((igAliasMemoryPool *)pool, 1));

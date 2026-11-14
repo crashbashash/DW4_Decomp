@@ -1,6 +1,6 @@
 void * FUN_002c37e0(int arg0) {
     FUN_002c3de0();
-    return (void *)(igMetaObject_CreateInstance((CreateMeta *)(*(int *)0x586140), (MemoryPool *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586140), (igMemoryPoolView *)arg0));
 }
 
 int FUN_002c3820(void) {
@@ -56,10 +56,10 @@ int igIGBFile_GetVTable(void) {
 
 ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage) {
     if(self) {
-        ObjectRefTarget *object=self->value;
+        igObject *object=self->value;
         if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
+            --object->_refCount;
+            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
                 igObject_Destroy((void *)object);
         }
         if((short)delete_storage>0) __dl__FPv(self);
@@ -113,7 +113,7 @@ int *FUN_002c3d50(int *p)
 }
 
 void *FUN_002c3d60(igIGBFile *arg0) {
-    igObject_InitHeader((struct ObjectHeader *)arg0);
+    igObject_InitHeader((igObject *)arg0);
     arg0->_vtable = (int)(&DAT_005309b0[0]);
     arg0->_vtable = (int)(&DAT_00524a20[0]);
     arg0->_vtable = (int)(&DAT_005249b0[0]);
