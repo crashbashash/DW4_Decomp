@@ -571,8 +571,9 @@ branches to the function's end. Retail has `sw CHCR; b; nop` in the VIF0 and VIF
   function is the same size with `li v1,389` loaded once before the switch. The match needs the keyword and the
   stores written `v = 389; *Dn_CHCR = v;` together: with the keyword and `*Dn_CHCR = 389;` the load is still
   hoisted. No pragma replaces the keyword (`opt_propagation`, `opt_common_subs`, `opt_loop_invariants`,
-  `opt_dead_assignments`, `opt_lifetimes`, `opt_dead_code`, `global_optimizer`, `peephole` and `scheduling` off,
-  `optimization_level` 0 to 3 all differ).
+  `opt_dead_assignments`, `opt_lifetimes`, `opt_dead_code`, `global_optimizer` and `peephole` off,
+  `optimization_level` 0 to 3 all differ; `schedule off` makes the function 612 bytes against retail's 560).
+  `scheduling off` is not a b52 pragma (`warn_illpragma` reports it) and compiles as if it were absent.
 * The second counted keyword is the file's `volatile` declaration of the watchdog's flag word at `0x56d670`,
   where the busy bits it sets live ([dma-channel-shared-words](#dma-channel-shared-words)). It is inert in this
   function, which matches without it, and counts only because the function names the declaration.

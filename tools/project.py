@@ -94,9 +94,11 @@ def _units(cfg):
                   key=lambda item: item[1][0][1])
 
 
-def compile_unit(version, name, source, out):
+def compile_unit(version, name, source, out, extra_flags="", quiet=False):
     """Compile one function the way tools/check.py does: its definition extracted from `source`
-    (units.standalone; an emitted member builds its owner) under its unit profile."""
+    (units.standalone; an emitted member builds its owner) under its unit profile. `extra_flags` are
+    appended to the profile's flags (tools/listing.py adds `-g` for MWCC's debug records); `quiet`
+    swallows the compiler's messages."""
     import cc
     import unitobjects
     import units
@@ -122,8 +124,9 @@ def compile_unit(version, name, source, out):
         with tempfile.TemporaryDirectory(prefix="dw4_cc_") as tmpdir:
             stage = os.path.join(tmpdir, "unit.o")
             argv = cc.compile_argv(os.path.join(ROOT, WIBO), profile.compiler,
-                                   unitprofiles.command_flags(profile), path, stage)
-            code = subprocess.run(argv, env=env, cwd=ROOT).returncode
+                                   (unitprofiles.command_flags(profile) + " " + extra_flags).strip(), path, stage)
+            code = subprocess.run(argv, env=env, cwd=ROOT,
+                                  capture_output=quiet).returncode
             if code == 0 and not os.path.exists(stage):
                 print(f"cc: {name}: the compiler wrote no object", file=sys.stderr)
                 code = 1

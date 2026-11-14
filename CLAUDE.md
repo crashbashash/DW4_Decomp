@@ -178,6 +178,10 @@ A task is complete only when the report quotes these four lines verbatim from ru
    with the reason).
 4. `make hygiene`: `check_host_details: clean`.
 
+Each passing run stamps the tree it ran on, and the pre-push hook refuses a commit whose tree lacks a stamp
+from all four, so commit exactly the tree the four ran on; `DW4_PUSH_DOCS_ONLY=1` lets a commit that changes
+only `docs/` and `*.md` files through ([the local stamp](docs/engine/oracle-runner.md#the-local-stamp)).
+
 Run `make check-fresh` and `make link-fresh` (cache ignored) before any commit that changes
 `config/<GAMEID>/units.tsv`, `unit-*`, `extent-overrides.tsv`, `jumptables.txt`, `compiler-runtime-symbols.tsv`
 or `tools/`, and before a milestone. A drop in the `match` count is a regression, including a function

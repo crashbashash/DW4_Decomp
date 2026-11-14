@@ -14,15 +14,21 @@ experiments.  `ALLOCATION.md` explains the rules and how the receiver was brough
 ## Small functions
 
     python3 tools/dispatcher/regalloc.py FUNCTION_OR_VA CANDIDATE.c[pp] [--flags "..."] [--compiler EXE] [--max-pool N] [--show-all] [--no-suggest]
+        [--no-edits] [--edit-pool N] [--edit-show N] [--edit-depth 1|2]
 
 Run from the repository root.  `FUNCTION_OR_VA` is a symbol of `config/SLUS-20836/symbols.txt` or a VA (`0x1c5870`).  The tool takes the
-compiler and flags the build uses for that function (`config/SLUS-20836/unit-compilers.tsv`, `config/SLUS-20836/unit-flags.tsv`, else the default
-`-O3 -Iinclude` with the 3.0 compiler), prints `tools/verify.py`'s verdict and instruction diff (classified: register-only,
+compiler and flags the build uses for that function (its `config/SLUS-20836/units.tsv` profile, or a provisional row of
+`unit-compilers.tsv`/`unit-flags.tsv`, as `tools/verify.py` compiles it), prints `tools/verify.py`'s verdict and instruction diff (classified: register-only,
 same registers with the operands swapped, other), traces the compiler's last general-register colouring of the candidate
 and reports, for every node whose register differs from retail, its id, cost, degree, push position, neighbours and what it
 is.  It then replays simplify/select on the dumped graph (checked against the compiler's own pushes and colours) and searches the
 permutations of the node ids of the involved nodes for an order that gives retail's colours; the order is printed with the
-instruction that defines each node.  Exit status 0 = match, 1 = still different, 2 = tool error.
+instruction that defines each node.  Last it searches single graph edits around the involved nodes (renumber, merge, delete,
+add an interference, add neighbours, un-coalesce; pairs when no single edit is enough), replays each and prints the ones that
+give retail's colours with the guessed source name of every node and the nodes the coalescer merged into it
+([graph edits](../../docs/engine/register-allocation.md#b52-coalescing-and-the-graph-edit-search)).  The instruction diff is
+aligned (difflib), so one missing `nop` does not turn the rest into differences; a whole-file candidate works (the colouring
+pass that fits the function is chosen).  Exit status 0 = match, 1 = still different, 2 = tool error.
 
 Typical loop: `python3 tools/m2c_batch.py --only NAME --keep-all --max-size 4096` writes the draft to `build/m2c/NAME.c`;
 copy it, make the instruction sequence match first (anything marked "not a register difference"), then run the tool and apply
@@ -34,7 +40,8 @@ by the SHA-256 of the executable), `regalloc_sim.py` (replay) and the IR dump ad
 
 What it cannot do:
 
-* It only runs for a compiler build it has a patch profile for (`local/mwcps2/3.0-011126` and the pinned combat build); for any
+* It only runs for a compiler build it has a patch profile for (`local/mwcps2/3.0b52-030722`, `local/mwcps2/3.0-011126` and
+  the pinned combat build; coalescing is recorded for b52 and combat); for any
   other build it stops with "no trace profile".  gdb, GNU `as`/`ld` with 32-bit x86 support, `local/wibo`,
   `mipsel-linux-gnu-objdump` and permission to ptrace the loader are required.
 * It explains *register choice only*.  A different instruction sequence (size, order, extra moves, a `t9` virtual call,
@@ -42,8 +49,9 @@ What it cannot do:
 * The alignment between the compiler's IR and the emitted instructions is a register-set heuristic; heavy scheduling or large
   address-materialising sequences leave some nodes without an instruction ("IR op ..."), and a node tied to conflicting retail
   registers is excluded from the search.
-* The only lever it searches is the id order (declaration position, web joins).  Costs, extra edges (a longer live range) and
-  different webs are not searched; "no permutation" means one of those is needed.
+* The levers it searches are the id order and single graph edits (or pairs).  An edit is a graph change; turning it into
+  source is up to you (the printed names are a declaration-order guess), and an un-coalesce edit takes the split node's cost
+  from its survivor.
 * Spills: it follows the last pass, but a function that spills in retail but not in the candidate (or the reverse) is
   structural.
 * Pools of more than 8 nodes are searched by random swaps, not exhaustively.

@@ -222,8 +222,10 @@ Committed files, and the gitignored working directories the analysis writes to. 
   of a change runs it on the final tree and quotes its lines, and the self-hosted
   [oracle runner](engine/oracle-runner.md) runs it again on every pushed commit. The **pre-push hook**
   (`.githooks/pre-push`, enabled by `scripts/install_git_hooks.sh`) does not run it a third time: it
-  checks the pushed lines and commit messages for host details, and applies the oracle-change rule
-  when a push touches the oracle's own files.
+  checks the pushed lines and commit messages for host details, refuses a commit whose tree has no stamp
+  from the author's passing `make check`, `make link`, `make typed-check` and `make hygiene`
+  ([the local stamp](engine/oracle-runner.md#the-local-stamp)), and applies the oracle-change rule when a
+  push touches the oracle's own files.
 - **Game data stays out of the repo.** `.gitignore` enforces it; a disc image dropped into a working
   directory is easy to do and easy to miss, and `git add -f` is never the answer.
 - **No host details, ever; this is enforced.** Nothing that identifies a developer's machine or account (absolute home

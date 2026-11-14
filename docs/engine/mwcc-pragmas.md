@@ -60,8 +60,7 @@ the function's code comes from an inline helper, the pragma goes around the call
 ## The pragmas
 
 Policy column: **free** (no rule restricts it), **scoped** (allowed with `push`/`pop` as documented),
-**owner, counted** (a rise of `opt_pragma.statements` needs the owner), **owner, not counted** (the same kind of
-flag change, which the counter does not see; ask before landing it), **diagnostic** (scratch copies only, never
+**owner, counted** (a rise of `opt_pragma.statements` needs the owner), **diagnostic** (scratch copies only, never
 in `src/`), **runtime** (the Metrowerks runtime files only).
 
 ### Optimiser
@@ -89,26 +88,26 @@ in `src/`), **runtime** (the Metrowerks runtime files only).
 | Pragma | Effect on b52 | Policy |
 |---|---|---|
 | `schedule off` | Verified: no scheduler pass. Instructions stay in the order the code generator wrote them and no delay slot is filled (`jr ra; nop`). The tool for reading that order ([MWCC with its scheduler off](understanding-shapes.md#mwcc-with-its-scheduler-off)) | diagnostic |
-| `conditional_move off` | Verified: `movz`/`movn` selects become a branch and moves | owner, not counted |
-| `tailcall off` | Verified: a tail call `j f` becomes a frame, `jal f` and a return | owner, not counted |
-| `far_call on` | Verified: each call loads its target from a `gp`-relative `@dp` word and goes through `jalr` | owner, not counted |
-| `interrupt on` | Verified: the function saves every register it touches and ends with `eret` | owner, not counted |
-| `padloop on` | Verified: no change on b52 (see mvc2 below) | owner, not counted |
-| `usefloatacc`, `fast_fptosi`, `fastmath`, `prefetch`, `inline_intrinsics` | Verified: no change in the probes. `strcpy`/`memcpy` stay calls under `inline_intrinsics on` ([understanding shapes](understanding-shapes.md#types-and-values)) | owner, not counted |
+| `conditional_move off` | Verified: `movz`/`movn` selects become a branch and moves | owner, counted |
+| `tailcall off` | Verified: a tail call `j f` becomes a frame, `jal f` and a return | owner, counted |
+| `far_call on` | Verified: each call loads its target from a `gp`-relative `@dp` word and goes through `jalr` | owner, counted |
+| `interrupt on` | Verified: the function saves every register it touches and ends with `eret` | owner, counted |
+| `padloop on` | Verified: no change on b52 (see mvc2 below) | owner, counted |
+| `usefloatacc`, `fast_fptosi`, `fastmath`, `prefetch`, `inline_intrinsics` | Verified: no change in the probes. `strcpy`/`memcpy` stay calls under `inline_intrinsics on` ([understanding shapes](understanding-shapes.md#types-and-values)) | owner, counted |
 
 ### Data and language
 
 | Pragma | Effect on b52 | Policy |
 |---|---|---|
 | `readonly_strings on` | Verified: string literals go to `.rodata` instead of `.data`, the same as `-str readonly`; the setting at the closing brace places every literal of the function. The source form of the flag for functions of a unit whose row does not carry it ([understanding shapes](understanding-shapes.md#types-and-values)); used in three core files | scoped |
-| `pool_strings on` | Verified: the file's literals become one `.rodata` object | owner, not counted |
-| `dont_reuse_strings on` | Verified: an equal literal in a second function gets its own copy | owner, not counted |
-| `explicit_zero_data on` | Verified: zero-initialised globals go to `.data` instead of `.bss` | owner, not counted |
-| `const_strings on` | Verified: no change in section | owner, not counted |
-| `reverse_bitfields on` | Verified: bit-fields are allocated from the other end of their unit (a 3-bit first field at bits 29–31, byte 3, instead of bits 0–2, byte 0). Acts on the `struct` definitions written under it | owner, not counted |
-| `unsigned_char on` | Verified: plain `char` loads with `lbu` | owner, not counted |
-| `enumsalwaysint off` | Verified: an enum takes the smallest type that holds its values (a 1-byte `.sbss` object instead of 4-byte `.bss`) | owner, not counted |
-| `cats off` | Verified: the object loses its `.mwcats` section, no code change | owner, not counted |
+| `pool_strings on` | Verified: the file's literals become one `.rodata` object | owner, counted |
+| `dont_reuse_strings on` | Verified: an equal literal in a second function gets its own copy | owner, counted |
+| `explicit_zero_data on` | Verified: zero-initialised globals go to `.data` instead of `.bss` | owner, counted |
+| `const_strings on` | Verified: no change in section | owner, counted |
+| `reverse_bitfields on` | Verified: bit-fields are allocated from the other end of their unit (a 3-bit first field at bits 29–31, byte 3, instead of bits 0–2, byte 0). Acts on the `struct` definitions written under it | owner, counted |
+| `unsigned_char on` | Verified: plain `char` loads with `lbu` | owner, counted |
+| `enumsalwaysint off` | Verified: an enum takes the smallest type that holds its values (a 1-byte `.sbss` object instead of 4-byte `.bss`) | owner, counted |
+| `cats off` | Verified: the object loses its `.mwcats` section, no code change | owner, counted |
 | `cplusplus on` … `cplusplus reset` | Compiles a region of a `.c` file as C++ (classes, `extern "C"`); used in `src/engine/p2texture.c` | free |
 | `exception_terminate`, `exception_magic` | Markers of Metrowerks' own exception handler; in `src/runtime/ExceptionHandler.cpp` | runtime |
 | `push`, `pop` | See above | free |
@@ -120,11 +119,11 @@ Accepted names not listed here are front-end and warning switches (`warn_*`, `AN
 ## The rules for gated pragmas
 
 - An optimiser pragma in `src/` is counted by `opt_pragma.statements` in the [debt ratchet](debt-ratchet.md); a
-  rise needs the owner (owner rule 2026-11-08). The counter's pattern (`OPT_PRAGMA_RE` in `tools/progress.py`)
-  covers `opt_*`, `optimi[sz]e*`, `optimization_level`, `inline_depth`, `auto_inline`, `dont_inline`,
-  `always_inline`, `peephole`, `global_optimizer` and `scheduling`. `scheduling` is not a b52 pragma, and the
-  real `schedule`, `conditional_move`, `tailcall` and the data and layout switches are not counted, so review
-  has to catch those; the `opt_\w+` part also counts `opt_dumptypes`, which never belongs in `src/` anyway.
+  rise needs the owner (owner rule 2026-11-08). The counter (`OPT_PRAGMAS` in `tools/progress.py`) is the exact
+  list of names b52 accepts that change code or data: every `opt_*`, `optimization_level`, `optimize_for_size`,
+  `global_optimizer`, `peephole`, the inlining pragmas, the MIPS back-end switches (`schedule`,
+  `conditional_move`, `tailcall`, …) and the data pragmas. `push`, `pop`, `cplusplus`, the exception markers and
+  names b52 ignores are not counted, nor a `readonly_strings` inside a closed `push`/`pop` (the scoped form).
 - A function is matched only under its unit's profile ([matched and readable](../../CLAUDE.md#matched-and-readable),
   [build profiles](build-profiles.md)). `optimize_for_size` or `optimization_level` around a function changes
   that function's profile from inside the file, so it is the same question as a per-function override.
@@ -153,8 +152,8 @@ about it. What was tested here is marked.
   [STYLE.md](https://github.com/Raikaru/Persona4-Decompilation/blob/main/docs/STYLE.md))** allows a scoped
   optimiser pragma only when the typed body matches with it and not without, with a `measured:` comment;
   scopes single functions with `push`/`pop`; and reports that `optimization_level` resets the optimiser
-  switches (verified on b52, above). Its `tools/pragma_audit.py` checks pragma spellings, which would have
-  caught `scheduling` in our counter.
+  switches (verified on b52, above). Its `tools/pragma_audit.py` checks pragma spellings; our counter once
+  listed the non-pragma `scheduling`, which such a check catches.
 - **Marvel vs. Capcom 2 (MWCC PS2 3.0.3 and 3.0-011126,
   [COMPILER.md](https://github.com/devin-thomas/mvc2-ps2/blob/main/docs/COMPILER.md))** reports that `#pragma
   padloop on` pads loop back-edges under 3.0-011126 but not under 3.0.3 (no change on b52, verified), and that

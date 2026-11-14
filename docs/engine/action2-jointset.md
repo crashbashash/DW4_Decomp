@@ -134,11 +134,14 @@ accessors are `beMessenger_AppendBool`, `AppendInt`, `GetInt`, `GetFloat`, `GetV
 
 ## Compiler profile
 
-The unit builds under `-O4,p`. The peephole sub-flag `p` matters: under `-O3` MWCC materialises an
-integral `1e9f` literal as an integer + `cvt.s.w`; with any level that carries `,p` it loads the IEEE-754
-bits `0x4e6e6b28` directly (`lui 0x4e6e; ori 0x6b28; mtc1`), which is what retail does. The sub-flag has
-no source-level equivalent (`#pragma peephole`, `#pragma opt_peephole`, `#pragma optimization_level` are
-all ignored).
+The unit builds under `-O4,p`. The sub-flag `p` (optimise for speed rather than size; it is not the
+peephole pass) matters: under `-O3` or `-O4,s` MWCC materialises an integral `1e9f` literal as an integer +
+`cvt.s.w`; with any level that carries `,p` it loads the IEEE-754 bits `0x4e6e6b28` directly
+(`lui 0x4e6e; ori 0x6b28; mtc1`), which is what retail does. Its source form is `#pragma optimize_for_size
+off`: around a function of an `-O3` or `-O4,s` file it gives the bits load, and `optimize_for_size on` in an
+`-O4,p` file gives the integer form back (verified on b52). `#pragma peephole off` and `#pragma
+optimization_level 1`…`4` leave the integer form, and `#pragma opt_peephole` is not a b52 pragma. The pragma
+is counted by `opt_pragma.statements` in the [debt ratchet](debt-ratchet.md), so a use needs the owner.
 
 `beAction2JOINTSET_Start` gets retail's integer register allocation only when the bias goes through a
 `long long` temporary for the start time:

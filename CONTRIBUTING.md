@@ -56,6 +56,11 @@ make hygiene      # nothing private is about to be published
 
 If you changed `tools/` or the tables in `config/`, use `make check-fresh` and `make link-fresh`.
 
+Each of the four records the tree it passed on, and the pre-push hook refuses a commit whose tree lacks any
+of the four records, so commit exactly the tree you checked (new files included, stray files removed). A
+commit that only changes `docs/` or `*.md` files can be pushed with `DW4_PUSH_DOCS_ONLY=1 git push`
+([details](docs/engine/oracle-runner.md#the-local-stamp)).
+
 ## Making a pull request
 
 1. Fork the repo and run `scripts/install_git_hooks.sh` once in your clone.

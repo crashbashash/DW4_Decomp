@@ -21,7 +21,8 @@ method and the reasons.
    loop with are otherwise printed as `...` and the listing looks 12 bytes short per loop). Write it down in
    machine terms: "the body reloads `52(s0)` where ours
    reuses the guard's load", "the count gets `a0`, retail's `a0` is the list", "four bytes short, the delay slot is
-   filled". A size difference, an order difference and a register difference have different causes.
+   filled". A size difference, an order difference and a register difference have different causes. A frame
+   difference is stated slot by slot by [frame slots against retail](#frame-slots-against-retail).
 2. **Read the function and its unit.** Real types from `include/dw4/reflected.h`, what each value is for, how the
    same class does the same thing elsewhere, and the GameCube and Xbox builds of the function (below). Most
    resisting shapes are an idiom of the original code base (an accessor, a smart pointer, a helper) that the draft
@@ -30,6 +31,8 @@ method and the reasons.
    accessor", "the original used the class's inline `next()`". A hypothesis names a construct a programmer would
    write. `python3 tools/levers.py --symptom "<the difference in machine terms>"` lists the causes below that share
    the symptom (`--format prompt` for a block to hand to an agent); each is a hypothesis until it reproduces here.
+   The [signature census](#signature-census-of-a-residual) lists matched code with the shape retail has,
+   which is where such a construct is found.
 4. **Test one variable at a time, with controls.** Change one thing, compile, count the differing words. Include
    the controls that tell the hypothesis from its neighbours: the same accessor non-`const`, the same read through a
    pointer instead of a reference, the construct on the other side of the comparison, the construct in both places.
@@ -117,13 +120,22 @@ The rules it lets you check are under [Delay slots (b52)](#delay-slots-b52).
 
 **When:** the instructions are right and only registers differ. `tools/dispatcher/regalloc.py` ties each register to
 its allocator node and searches the id orders that give retail's colours
-([usage](../../tools/dispatcher/README.md), [model](register-allocation.md)). It has no profile for b52; the combat
-build follows the same rules on the shapes tried so far, so run it as a proxy with the unit's flags:
+([usage](../../tools/dispatcher/README.md), [model](register-allocation.md)). It has a b52 profile and takes the
+unit's compiler and flags from `units.tsv`; a whole-file candidate works (about a minute for `CoreLibrary.cpp`), and a test
+file with the unit header, the inline helpers and the function traces in a second:
 
 ```sh
-python3 tools/dispatcher/regalloc.py 0xVA <file> --compiler local/mwcps2/combat/mwccps2.exe \
-    --flags "-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude"
+python3 tools/dispatcher/regalloc.py 0xVA src/engine/core/CoreLibrary.cpp
 ```
+
+After the id permutations it tries single graph edits (renumber, merge, delete, interference, degree, un-coalesce) and pairs
+of them, and names the nodes of the edits that give retail's colours
+([graph edits](register-allocation.md#b52-coalescing-and-the-graph-edit-search)).
+
+Coalescing on b52 (verified, [details](register-allocation.md#b52-coalescing-and-the-graph-edit-search)): every copy whose
+two sides do not overlap is merged into the **lower** id before colouring, a copy between two declared locals included, and a
+merged node adds no degree to its neighbours. So a local copy of a parameter keeps the parameter's id and cannot move its
+colour.
 
 Ids are what decide colours: select pops nodes in reverse id order, so a later id colours first. Declared locals
 take ids in declaration order (parameters first). The locals and temporaries of inlined functions take theirs after
@@ -133,8 +145,7 @@ member with a temporary that takes its id after every declared local and every i
 class local is declared (see [declaration order](#declaration-order-and-evaluation-order)).
 Compiler-made values (a strength-reduced offset, a hoisted invariant, a CSE temporary) take ids when the phase that
 makes them runs. So registers follow the order values come into existence, and a value that has to colour early is
-the caller's declared variable, not an inline's local. A whole-file unit with code outside the function is refused;
-copy the function into a test file.
+the caller's declared variable, not an inline's local.
 
 ### MWCC with its scheduler off
 
@@ -212,6 +223,50 @@ nothing; same size in another order means it only steers scheduling; fewer instr
 Then try the plain spellings that would keep the same access: `const` for `volatile`, another type of the same size,
 an accessor. On an `asm` statement try the operand form the upstream text uses before concluding the keyword is
 needed.
+
+### Frame slots against retail
+
+**When:** the diff shows stack offsets that do not agree, the frame size differs, or a slot is stored at another
+point. `tools/frameslots.py` compiles the candidate the way `check.py` does and lists both frames: the size, the
+saved registers by register, and every other slot with its widest access, whether its address is taken and the
+instruction that first touches it. Slots are paired through the aligned instructions that use them, so a frame
+16 bytes larger is compared from the top instead of marking every slot.
+
+```sh
+python3 tools/frameslots.py 0xVA --cand <file> [--registers]
+```
+
+The candidate's slots carry their source names. b52 writes DWARF 1 records under `-g`, one `.debug` and one
+`.line` section per function, with each parameter's and local's location (a frame offset or a register, one per
+variable) in declaration order, and `-g` does not change the code: every function body of the core unit and of two
+game units (the `-O4,s` and `-O4,p` profiles) is the same with and without it (verified on b52). The tool still
+compares the two bodies before using the records. `--registers` adds the register of every variable, which names
+the parameter or local behind a register difference. A slot marked `early` is one the candidate writes before
+retail does: a local initialised at the head of the function that retail initialises at its first assignment, for
+example a smart pointer default-constructed at the top where retail constructs it from the call that fills it.
+
+### Signature census of a residual
+
+**When:** a hunk resists the obvious spellings, before calling it a floor or starting a permuter. If code that
+already matches has the same retail shape, its source is a spelling that gives it (the idea is Persona 4's
+"signature census before permuting"; the call-sequence form is dotr's `callsim`). `tools/residual_census.py` aligns
+the candidate's masked listing with retail's, takes each hunk with a few instructions of context, masks registers
+and immediates (keeping load and store widths, frame and small-data bases, branch directions and constant shift
+amounts) and searches the retail code of every matched function that has source:
+
+```sh
+python3 tools/residual_census.py 0xVA --cand <file> [--registers] [--lines]
+python3 tools/residual_census.py 0xVA --at 0xOFF:N        # a retail window, for a function with no draft
+python3 tools/residual_census.py 0xVA --calls             # matched functions with the most similar calls
+```
+
+Hits are ranked by the same source file, then the same profile, and printed with the definition's `file:line`;
+`--lines` compiles the hits with `-g` and prints the source lines behind the window (MWCC units only; a line outside
+the definition is an inline's). When the full window has no hit the context narrows, and a long hunk is censused
+again in pieces. A register-only hunk is censused only with `--registers`, which keeps each instruction's register
+pattern (saved registers and temporaries renamed in order of appearance). Zero hits for a short window is a reason
+to look at control flow and the parameters' types before spelling: a parameter zero-extended into a saved register
+at entry (`dsll32 s0,a0,0; dsrl32 s0,s0,0` straight after the saves) has no hit in the matched corpus.
 
 ### The GameCube and Xbox builds
 
@@ -506,6 +561,22 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     member is the header, and `&state->bins[i].header` for a bin. The other functions of the allocator matched
     with either typing; only the ones with loops tell them apart.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator, 0x315170).
+- **What `IRO_CommonSubs` shares, and what stops it (probed).**
+  - A load repeated with nothing between is shared whatever its base: a global field (`G.c`), a field through a
+    pointer parameter (`p->c`), a member at offset 0 (`p->a`). The GameCube rules "a register-local base is never
+    a candidate" and "offset 0 is never one" do not hold on b52.
+  - A call or a store through a pointer kills the shared load; a store to a plain local does not.
+  - Once the load is killed, a field address is not kept: `G + 8` and `p + 8` are reloaded as `lw 8(at)` and
+    `lw 8(a0)`, never `addiu t,base,8; lw 0(t)`. An indexed address is kept across the store for a global array
+    and a pointer parameter alike (`Garr + (i << 2)`, `p + (i << 2)`), and the index `i << 2` takes a temporary of
+    its own beside it.
+  - The temporary is created at the second occurrence. In `*q = i * 12; q[1] = j * 20; q[2] = j * 20;
+    q[3] = i * 12;` the dump numbers the `j * 20` temporary first (`@9`, `@11`); with `q[2] = i * 12; q[3] = j * 20`
+    the `i * 12` one is first (`@20`, `@22`).
+  - *Probe:* `ph.py <log> "after IRO_CommonSubs" --fold --all` on
+    `struct S { int a, b, c, d; }; S G; int Garr[16]; void h();` with
+    `int k1(int *q) { int x = G.c; *q = 1; int y = G.c; return x + y; }`, the same through `S *p`, with `h()` in
+    place of the store, with `int z = a; z = z * a;` in its place, and with `Garr[i]` / `p[i]`.
 
 ### Propagation (b52)
 
@@ -649,6 +720,14 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   test branches straight to the shared `move v0,s1` in front of the epilogue, which is the body enclosed in
   `if (!inProgress) { ... }` with one `return list;` after it. *Unit:* `src/engine/core/CoreLibrary.cpp`
   (0x2fe9c0).
+- **An empty `if` is gone before register allocation.** A stripped assert spelled `if (c) {}` leaves nothing:
+  `IRO_RemoveRedundantJumps`, the first optimizer phase, deletes the test, and `if (p->a) {}` after two calls
+  gives the same bytes as `(void)0`, where a kept test would have needed `p` after both calls. On GameCube 1.2.5
+  the dead compare is said to be deleted only after colouring; on b52 an empty `if` cannot explain a register
+  difference.
+  *Probe:* `int F(S *p, S *q) { int x = p->a + q->b; int y = h(x, 1); int z = h(y, x); ASSERT; return z; }` with
+  `ASSERT` as `(void)0`, `if (x > 3) {}`, `if (p->a) {}`, `if (x != z) {}`, `if (x > 3) {} else {}` and a `?:` of
+  two `(void)0`: one listing for all six.
 
 ### Types and values
 
@@ -691,25 +770,6 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **A negated flag passed to a `bool` parameter normalises first.** `sltu v0,zero,v0; xori a1,v0,0x1` before a
   call is `!attr->_enabled` passed to a virtual taking `bool`; with an `int` parameter `!x` compiles to a different
   sequence, and only the explicit `(x != 0) ^ 1` reproduces it. *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp`.
-- **Open: two `xori 1` in a row.** Retail tests the interrupt-enable bit as `andi 1; sltu; xori 1; xori 1;
-  andi 0xff` before a branch, and no spelling found keeps both `xori`s. What the compiler does with `!`:
-  - The optimizer keeps `!!x` (`ELOGNOT(ELOGNOT(x))`); the front end folds it only when `x` is already a `bool`.
-  - A lowering pass before code generation wraps every `!` operand that is not a comparison, `!`, `&&` or `||`
-    in `x != 0` (that is the `sltu`).
-  - The code generator emits each `!` as exactly one `xori dst,src,1`; a conversion of a `!` result to a wider or
-    other byte type adds `andi 0xff`, and one of a comparison adds nothing.
-  - The pairs disappear in a PCode peephole on `xori`, run once per basic block after the block's def-use links
-    are built. It turns `xori c,b,1` into a copy of `a` when the instruction defining `b` is `xori b,a,1` in the
-    same block, the immediates are equal, and `a` is not redefined in between nor by the second `xori`. When the
-    definition of `b` is a copy, the copy is propagated first and the handler runs again. The `andi 0xff` of an
-    `sltu` result also goes.
-  - Retail's pair therefore had something between the two at that point: a copy that could not be propagated
-    (its source redefined before the second `!`), a block boundary removed later by the block pass, or the
-    second `xori` writing the first one's source register.
-  - About 50,000 generated spellings (inline nesting to three levels, `bool`/`char`/`int` locals and returns,
-    `^ 1`, `== 0`, ternaries, `if`/`else` assignments, compound `^=`, casts between the negations, reused and
-    twice-used locals) all fold the pair, put an `andi 0xff` or an `sltu` between the two, or keep a single `xori`.
-  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x32ef20, 0x32f060, not matched).
 - **A class-scope placement `delete` makes the constructor-throws cleanup.** `new (pool) T` with a matching
   `operator delete(void *, Pool *)` in the class gives the landing pad and exception table retail has around the
   constructor call. *Unit:* `src/game/be.cpp`.
@@ -886,6 +946,42 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     With the pass off for whole functions, the two before the pair (0x32ede0, 0x32eea0) differ and the ones
     after it, up to 0x32f380, are the same either way.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x32ef20, 0x32f060).
+- **`daddiu` builds a constant whose type is a narrow unsigned one (probed).** `x = 7; if (c) x = 5;` with `x`
+  an `unsigned char`, `unsigned short` or `bool` gives `daddiu v0,zero,7` and `daddiu v0,zero,5`, whether `x` is
+  then returned, stored to a field of its type or passed on; so does a constant stored into a bit-field (signed or
+  unsigned, the value already shifted into place). `signed char`, plain `char` (signed under MWCC), `short`,
+  `int`, `unsigned` and `long` give `addiu`. A constant returned directly, stored through a pointer, passed as an
+  argument, or assigned to the variable in both arms of an `if`/`else` is `addiu` whatever the type.
+  *Probe:* `T W(int c) { T x = 7; if (c) x = 5; return x; }` and `void P(S *t, int c) { T x = 7; if (c) x = 5;
+  t->f = x; }` for each type `T`, `struct B { unsigned u3 : 3; int s3 : 3; }` with `b->u3 = 5; b->s3 = 2;`.
+- **Pooled literals are shared across the file.** A float constant that needs memory (`0.3f`, `0.7f`, loaded
+  `lwc1 $f1,0(gp)` from `.lit4`) and a string literal are emitted once per file: a later function that uses the
+  same value references the earlier function's literal. Compiled alone, the later function gets its own. Constants
+  that fit `lui` (`3.5f`, `1.25f`) are built in place and are not shared. So a function's literal references
+  depend on the functions before it, and the whole-file unit decides; a one-function `check.py --function`
+  candidate can disagree with it there. *Probe:* `float fb(float x) { return x * 0.7f + 0.1f + 0.3f * x; }` and
+  `const char *sc(void) { return "beta"; }`, with and without
+  `float fa(float x) { return x * 0.3f + 0.7f; } const char *sa(void) { return "beta"; }` before them.
+- **Open: a lone zero-extension of the parameter used as the object.** `igPsx2Thread_ThreadEntry` (0x32f7f0)
+  begins `dsll32 s0,a0,0; dsrl32 s0,s0,0` and then uses `s0` as the thread (`lw v0,40(s0); jalr v0; lw a0,28(s0)`,
+  `sw v0,52(s0)`, `move a1,s0` into `igPsx2ThreadManager_FinishThread`). It is the only function in the executable
+  that uses a zero-extended register as a base. What b52 does with the spellings tried:
+  - A pointer or `unsigned` parameter used as the object gives `move s0,a0`.
+  - Widening a 32-bit `unsigned` (or a pointer) to 64-bit `unsigned long` (`long` is 64-bit under MWCC) gives
+    `dsll32/dsrl32`, and every conversion of a 64-bit value back to a pointer or to `unsigned int` adds
+    `dsll32/dsra32`: `(T *)(unsigned long)arg`, an `unsigned long` local or parameter, an inline taking
+    `unsigned long`, `(T *)((char *)0 + v)`, `(T *)(v & 0xFFFFFFFF)`, 64-bit address arithmetic, in C and C++.
+  - A union or `*(T **)&v` reread of the widened value goes through the stack (`sd`; `lw`).
+  - Passing the object to a callee declared with an `unsigned long` parameter puts the zero-extension on the
+    argument (`dsll32 a1,s0,0; dsrl32 a1,a1,0`), with `move s0,a0` at entry.
+  - A `long long` or `unsigned long long` parameter cast to the thread pointer gives retail's code except one
+    word: `dsra32` where retail has `dsrl32`.
+  - `#pragma peephole off` changes none of these, so no peephole removes the sign-extension after a widening;
+    retail's pair is not a widening whose narrowing was cleaned up.
+  - *Probe:* `struct Th { int pad[7]; int _arg; int a, b; int _function; int c, d; int _result; };` and
+    `extern "C" void E(unsigned int arg) { Th *t = (Th *)(unsigned long)arg; t->_result =
+    ((int (*)(int))t->_function)(t->_arg); igPsx2ThreadManager_FinishThread(g_threadManager[0], t); }`, with
+    the parameter and the conversion varied as listed.
 
 ### Scheduling (b52)
 
@@ -1053,6 +1149,24 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     fall-through's first instruction. The two placements also number the temporaries differently.
   - *Spelling:* `if (!space) { piece[used++] = c; i++; } state = 2;`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
+
+### MWCC builds compared (3.0, b38, b52)
+
+- **Check the build before looking for a spelling of `movz` or of a slot fill.** The same probes compiled with
+  `-O4,p -sdatathreshold 2` under 3.0 (011126, `default`), b38 (`combat`) and b52:
+  - `movz` from a ternary whose arms are parameters or constants (`c ? a : b`, `c ? 5 : 7`, `c ? a : 0`,
+    `c ? kOff : kOn` with enum constants) on all three. `int` arms `0` and `1` (`c ? 0 : 1`, `c ? 1 : 0`) give
+    `movz` under 3.0 and `sltu` (with `xori` for `c ? 0 : 1`) under b38 and b52. Arms that load (`p->a`) branch on
+    all three.
+  - 3.0 fills slots that b38 and b52 leave empty: an `if`/`else if`/`else` of three calls followed by a store has
+    the `b` to the join filled with a copy of the join's first instruction (`li v1,7`, three predecessors) under
+    3.0 and a `nop` under b38 and b52; a `while (c--) { if (*p) break; p++; }` loop is two instructions shorter
+    under 3.0, where b38 and b52 leave a `nop` between its load and the `bnez` that tests it and another in a slot.
+  - A `for` loop summing `p[i]` keeps an index and an add under 3.0 and walks the pointer under b38 and b52.
+  - b38 and b52 gave the same listing for every probe.
+  - *Probe:* `int t1(int c, int a, int b) { return c ? a : b; }`, `int i1(int c) { return c ? 0 : 1; }`,
+    `void u3(int *p, int c) { if (c > 3) g(1); else if (c > 1) g(2); else g(3); p[2] = 7; }`,
+    `int u4(int *p, int c) { while (c--) { if (*p) break; p++; } return *p; }`.
 
 ### Declaration order and evaluation order
 
@@ -1456,11 +1570,47 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   other way in one of two call sites. The tracer asks for the object's id after the token's; taking the holder
   by reference and reading the object into a local declared after the token gives it. *Unit:*
   `src/engine/core/CoreLibrary.cpp` (0x2d1e40).
+- **How a call's arguments are lowered (probed under `#pragma schedule off`).** Three steps, in this order:
+  - An argument that contains a call, an inline with a statement body included, is evaluated first:
+    `f3(p->x, q->y, g())` calls `g` before it loads either field.
+  - Every other argument is made ready. One that carries a conversion is loaded here, ahead of the constants:
+    `fi(5, 6, p->s)` with an `int` parameter and `fs3(5, 6, (short)p->x)` with a `short` one start with `lh a2`.
+    A plain load only has its base kept (`move v0,a1` when the base's register is about to be filled), and a
+    computed value is computed (`addiu a1,a2,1`).
+  - The argument registers are then filled in parameter order, constants and deferred loads together:
+    `f3(p->x, k + 1, q->y)` gives `addiu a1,a2,1; lw a0,0(a0); lw a2,4(v0)`, `fs3(5, 6, p->s)` gives
+    `li a0,5; li a1,6; lh a2,8(v0)`. A ninth argument is stored to the stack before `a0` to `t3` are filled.
+  - A constant both stored and passed is built once into a temporary and copied: `p->x = 10; f3(10, p->y, 3);`
+    gives `li v0,10; sw v0,0(a0); move a0,v0`, not `li a0,10`.
+  - "An argument that carries an integer conversion is loaded before the plain ones" (above) is the second step.
+  - *Probe:* `struct S { int x; int y; short s; };` with the calls quoted, `void fs3(int, int, short);`,
+    `void fi(int, int, int);`, and `static inline int inl(S *p) { int t = p->y; if (t) t++; return t; }` passed as
+    `f3(p->x, inl(q), 7)`.
+- **The left operand is evaluated first unless the right one is heavier (probed under `#pragma schedule
+  off`).** In `(sum of n loads from p) - (sum of m loads from q)` the right side is evaluated first exactly when
+  m > n, for n and m from 0 (a parameter) to 4; at equal weight the left goes first, so swapping the operands of a
+  subtraction swaps the loads. `p[0] - (q[0] + qv)` loads `p` first and `p[0] - (q[0] + qv + qv)` loads `q` first,
+  as with `^`. This fits the b210 rule read by the Persona 4 project, right first when its cost exceeds the left's
+  by more than 2, with one load and its add worth at least 3; the costs themselves were not read from b52. To move
+  the order, make one side heavier.
+  *Probe:* `int M(int *p, int *q, int pv, int qv) { return (p[0] + p[1]) - (q[0] + q[1] + q[2]); }` and its
+  variants, first instruction that reads `a0` or `a1` compared.
 
 ### `asm` and `volatile`
 
-- **An `asm` statement without outputs is volatile already.** Its keyword does nothing; strip it. A review of the
-  Sony kernel rows found 47 of their 63 keywords removable.
+- **An `asm` statement without outputs is volatile already.** Its keyword does not keep it or move it; strip it.
+  A review of the Sony kernel rows found 47 of their 63 keywords removable. The keyword still changes the code
+  around it when the block has a peephole candidate (next entry), so run the strip test on the whole function.
+- **A `volatile` `asm` statement opens a basic block that the peephole skips (probed).** The code generator starts
+  a block at an `__asm__ volatile(...)` statement, with or without outputs, and marks it (block flag `0x80` in
+  `gdb_pcode.py`'s dump, `0x04` otherwise). The PCode peephole then leaves the rest of that block alone: `bool b =
+  !!(s & 1);` after the statement keeps `sltu; xori 1; xori 1; andi 0xff`, as `#pragma peephole off` does, while
+  a plain `__asm__` (with or without outputs), an MWCC `asm { }` block, an `asm` function earlier in the file or a
+  `volatile` statement in an earlier block or function leaves the peephole on and folds the pair to `sltu`. The
+  GameCube 1.2.5 rule that an `asm` function turns the peephole off for the rest of the file does not hold on b52.
+  *Probe:* `int f(int *p, int s) { __asm__ volatile("sync"); bool b = !!(s & 1); if (*p == -1) return g; if (b)
+  return SignalSema(*p); return iSignalSema(*p); }`, then without `volatile`, with `asm { mfc0 s, $12 }`, and with
+  `if (q) g = 2;` between the statement and `b`.
 - **Sony's input-operand form.** A `$gp` store spelled with its word as an output (`"=m"`) can be moved and needs
   the keyword; Sony's text passes it as an input, `__asm__("sw $28,%0" : : "m"(word))`, which is fixed already. A
   `"memory"` clobber, as every helper in Sony's `eekernel.h` has, does what a keyword on a syscall statement did.

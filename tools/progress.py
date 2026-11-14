@@ -476,7 +476,7 @@ DEBT_COUNTERS = [
     ("inventory.unsymbolised_bytes", "instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py)"),
     ("profile_split.units", "units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
     ("profile_split.bytes", "bytes of those"),
-    ("opt_pragma.statements", "optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source"),
+    ("opt_pragma.statements", "optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source"),
 ]
 
 
@@ -514,8 +514,43 @@ def debt_struct_counts():
         return None
 
 
-OPT_PRAGMA_RE = re.compile(r"^\s*#\s*pragma\s+(?:opt_\w+|optimi[sz]e\w*|optimization_level|inline_depth|"
-                           r"auto_inline|peephole|scheduling|global_optimizer|dont_inline|always_inline)\b", re.M)
+# Every pragma b52 accepts that changes the code or data the compiler emits (the names of its pragma table,
+# checked with `#pragma warn_illpragma on`), except the free (`push`, `pop`, `cplusplus`) and runtime
+# (`exception_*`) ones: docs/engine/mwcc-pragmas.md. A name b52 does not know (`scheduling`, `opt_peephole`)
+# is ignored by the compiler and is not counted.
+OPT_PRAGMAS = frozenset((
+    # the optimiser
+    "optimization_level optimize_for_size global_optimizer peephole "
+    "opt_classresults opt_common_subs opt_loop_invariants opt_propagation opt_unroll_loops opt_lifetimes "
+    "opt_strength_reduction opt_strength_reduction_strict opt_dead_code opt_dead_assignments opt_vectorize_loops "
+    "opt_pointer_analysis opt_scalarize opt_prelinearize opt_treetransformation opt_arithtransformation "
+    "opt_rebuildconditionals opt_rebuildlogicals opt_generateconditionalassignments opt_removeemptyloops "
+    "opt_alwaysdumpopts opt_rotateloops opt_optimizenonregaccess opt_movepostops opt_findoptimalunrollfactor "
+    "opt_findoptimalvectorunrollfactor opt_unrollpostloop opt_unrollvectorpostloop opt_createvectortemps "
+    "opt_unpromotetypes opt_dumptypes opt_scalarizebitfields opt_propagatemultiplydivideassignments "
+    "opt_moveinvariantsinaddressexpr opt_convertfpconsts opt_markcounterloops opt_markvariablecounterloops "
+    "opt_pulloutconstants opt_defineargorder opt_useexpressioncostswhenlinearizingassignments "
+    "opt_intelcompareoplinearizationhack opt_rearrangemultiplesubscripts opt_returnloopdepthinstatementvalue "
+    "opt_marknonregtemps opt_addgotounrolledlooptest opt_addtogetherconstantpartsoftreeexpressions "
+    "opt_propagateequivalentscalartypes opt_unpromoteenumtointconversions opt_unpromotemultipliestochartype "
+    "opt_dospecialmultiplyunpromotion opt_docrossconversionofinductionreference "
+    "opt_intrinsicfunctioncallscanhavesideeffects opt_collapselogicalselectionintobittest "
+    "opt_collapselogicalselectionintobittest_uselonglong opt_reverseloops opt_foldconstants "
+    "opt_optimizecontrolflow opt_serializeassignments opt_branchlessexpensivethandiv opt_repositioncode "
+    "opt_decomposeaggregates opt_recomposeaggregates opt_scalarizeliveranges "
+    # inlining
+    "auto_inline dont_inline always_inline inline_depth inline_bottom_up inline_bottom_up_once defer_codegen "
+    "inline_intrinsics "
+    # the MIPS back end
+    "schedule conditional_move tailcall far_call interrupt padloop usefloatacc fast_fptosi fastmath prefetch "
+    "longlong fp_library gencvtcheck trunc sqrt floatsp32 nofpregforblkmv divbyzerocheck nomacro dividefix "
+    "irocseglobaladdresses enable_vu0_registers vu0_register_number cats "
+    # data placement and types
+    "readonly_strings pool_strings dont_reuse_strings explicit_zero_data const_strings reverse_bitfields "
+    "unsigned_char enumsalwaysint").split())
+PRAGMA_LINE_RE = re.compile(r"^\s*#\s*pragma\s+(\w+)", re.M)
+# allowed by rule between `#pragma push` and `#pragma pop` (understanding-shapes.md, "String literals are read-only")
+SCOPED_PRAGMAS = {"readonly_strings"}
 # The static initialisers are collected from every library's units, so no one profile is theirs.
 PROFILE_SPLIT_EXEMPT = {"static-initialisers"}
 
@@ -551,15 +586,32 @@ def profile_split():
     return units, size
 
 
+def count_opt_pragmas(text):
+    """OPT_PRAGMAS lines in one source; a SCOPED_PRAGMAS line counts only outside a closed push/pop."""
+    n, open_scopes = 0, []
+    for name in PRAGMA_LINE_RE.findall(text):
+        if name == "push":
+            open_scopes.append(0)
+        elif name == "pop":
+            if open_scopes:
+                open_scopes.pop()
+        elif name in OPT_PRAGMAS:
+            if name in SCOPED_PRAGMAS and open_scopes:
+                open_scopes[-1] += 1
+            else:
+                n += 1
+    return n + sum(open_scopes)       # a push never popped leaks the setting to the end of the file
+
+
 def opt_pragmas():
-    """Optimiser pragma lines under src/."""
+    """Optimiser and code-generation pragma lines under src/ (count_opt_pragmas)."""
     n = 0
     for root, _dirs, files in os.walk(os.path.join(ROOT, "src")):
         for f in files:
             # a build's temporary copies (`dw4u_*`) come and go while it runs
             if f.endswith((".c", ".cpp", ".h", ".inc")) and not f.startswith("dw4u_"):
                 try:
-                    n += len(OPT_PRAGMA_RE.findall(open(os.path.join(root, f), errors="replace").read()))
+                    n += count_opt_pragmas(open(os.path.join(root, f), errors="replace").read())
                 except FileNotFoundError:
                     continue
     return n

@@ -97,7 +97,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inventory.unsymbolised_bytes` | 0 | 0 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
-| `opt_pragma.statements` | 0 | 0 | 0 | optimiser pragmas in src/ (`opt_*`, `optimize_for_size`, `inline_depth`, ...): a flag change written in the source |
+| `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
 
 ## The data half
 

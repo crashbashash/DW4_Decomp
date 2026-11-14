@@ -128,12 +128,18 @@ retail's single-region behaviour is not observable, only the whole function's).
 Requirements: gdb, 32-bit capable `as`/`ld`, the wibo loader; the script patches the compiler's memory image in the debugged
 process only and refuses to run if the bytes at its patch sites differ from the pinned build.
 
+Without the tracer, `python3 tools/frameslots.py 0xVA --cand <file> --registers` names the variable behind each of the
+candidate's registers from the debug records b52 writes under `-g`, which leaves the code unchanged (one location per
+variable; [frame slots against retail](understanding-shapes.md#frame-slots-against-retail)). It works under b52, which has no
+tracer profile.
+
 ## Small functions: tool and lessons
 
 `python3 tools/dispatcher/regalloc.py FUNCTION_OR_VA CANDIDATE.c[pp]` ([usage and limits](../../tools/dispatcher/README.md)) runs the
-tracer on any single function with the compiler and flags the build uses for it (the 3.0 default compiler and the combat build
-both have patch profiles), ties the differing registers of the emitted code to graph nodes, replays simplify/select, and
-searches the id permutations that give retail's colours.  What the first sweep of near-miss functions showed (all verified byte
+tracer on any single function with the compiler and flags the build uses for it (its `units.tsv` profile; b52, the 3.0
+default compiler and the combat build have patch profiles), ties the differing registers of the emitted code to graph nodes,
+replays simplify/select, searches the id permutations that give retail's colours, and then searches single graph edits
+([below](#b52-coalescing-and-the-graph-edit-search)).  What the first sweep of near-miss functions showed (all verified byte
 for byte):
 
 * Ids follow the order the IR builder creates values, and that order is **not** the order of the source text for a commutative
@@ -156,3 +162,49 @@ for byte):
 * Alternate compiler at `-O3,p`: accumulating a sum in place on the call-result web (`r = call << 18; r += prop->field; b = r;`)
   instead of `b = field + (call << 18)` keeps the first sum out of the saved register holding `b` across the second call, producing
   retail's `move s1,v0` in the `jal` delay slot and the trailing `nop`.
+
+## b52: coalescing and the graph-edit search
+
+The tracer has a b52 profile (`local/mwcps2/3.0b52-030722`, the compiler of the core and most engine units): every patch site
+is the combat site + 0x550 with the same bytes. A whole `CoreLibrary.cpp` traces in about a minute (3,260 colouring passes);
+`regalloc.py` keeps the pass whose IR fits the requested function, so a whole-file candidate works. A test file that holds
+`#include "src/engine/core/CoreLibrary.h"`, the inline helpers and the one function gave the same instructions as the whole
+file for 0x2d9740 and traces in under a second.
+
+**Coalescing (b52, verified).** The coalescer is its own pass (0x4bc7e0, phase name "After coalesceregisters"), run twice
+before colouring. Read from the code and checked on every general-register pass of `CoreLibrary.cpp`:
+
+* it merges the two nodes of every copy that do not interfere, with no degree test; the only vetoes are `zero` and nodes
+  marked by its graph builder (0x4bbe50). The surviving node is always the **lower id** (alias array at `[0x58acd0]`;
+  35,255 merged nodes in 3,251 passes, none into a higher id);
+* the colouring graph is built afterwards from the rewritten code, so a merged node has no edges and degree 0 and appears in
+  no neighbour list (0 exceptions in the same passes). A coalesced node therefore adds **no** degree to its neighbours; the
+  sms rule "a coalesced node adds +1 to every neighbour" (GC/1.2.5) does not hold on b52;
+* a copy between two declared locals coalesces like any other copy: in
+  `int x = 0, y, i; for (...) x += p[i]; y = x; while (y > 100) y -= g(y); return y;` the copy `y = x` reaches the allocator
+  and `y` (id 35) is merged into `x` (34). The sms rule "a move between two named locals never coalesces" does not hold
+  either;
+* so a local copy of a parameter (`int i = index;`, a one-member struct holding it, a copy inside one branch) keeps the
+  parameter's id when the two do not overlap: it cannot move the parameter's colour. On 0x2d9740 these spellings gave the same
+  graph as the draft. Simplify also skips nodes flagged 4 (degree 0, no edges); the replay leaves them out. With that the
+  replay gives the compiler's push order and colours in 3,246 of the 3,251 passes; the other 5 are not explained.
+
+**Graph edits** (the sms tip "replay the allocator when only registers differ"). After the id permutations, `regalloc.py`
+tries one edit at a time on the involved nodes and their most connected neighbours, replays each, and prints the ones that
+give retail's colours, with the `name` of each node guessed from the declaration order and the nodes the coalescer merged into
+it. The edits: renumber a node just below/above another (a declaration or creation-order change), merge two non-adjacent nodes
+(one variable; the merged web keeps the lower id, as the coalescer does), delete a node, add an interference, add k neighbours,
+and split a coalesced node off its survivor (the copy then has to survive: on b52 only when the two overlap). When no single
+edit is a full solution it tries pairs (`--edit-depth 1` turns that off). About 2,000 replays take a second for a 240-node
+graph.
+
+What it found:
+
+* 0x2d9740 (`igDriverDatabase_SetSubPropertyValue`, MatchY's draft rebased): no single edit, but every two-edit solution
+  starts with the same one: `index` (node 33) needs an id between node 71 (the `names` smart pointer's scalarised member) and
+  node 74 (`index * 4`, a CSE temporary); then the list loaded for the second store (node 42) and `values`' member (72) must
+  swap order. Retail's `index` is therefore a value the optimizer creates after class members are scalarised, not the
+  parameter's own web, which the local-copy spellings above cannot produce. Not matched.
+* 0x2d7280 (`igDependencyOrderedList_TopologicalSort`, MatchC's draft): 22 nodes over the whole function and 4 non-register
+  differences; no single edit or pair reaches retail (best: 70 of 87 constrained nodes), so the remaining difference is in the code, not the colouring. Not matched.
+

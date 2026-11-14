@@ -11,6 +11,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`verify.py`](verify.py) | verify a candidate C function against the retail binary, WITH relocations |
 | [`linkgen.py`](linkgen.py) | build the relink inputs from config/SLUS-20836/layout.txt |
 | [`linkcheck.py`](linkcheck.py) | compare a relinked section against the retail binary |
+| [`gate_stamp.py`](gate_stamp.py) | record the tree id each of `make check`, `make link`, `make typed-check` and `make hygiene` passed on; `.githooks/pre-push` refuses a commit whose tree lacks one (`status [REV]` lists a tree's stamps) |
 | [`make_iso.py`](make_iso.py) | `make iso`: write the built executable into a copy of your disc image, in `build/` |
 | [`layout.py`](layout.py) | turn the symbol map into a DISJOINT, ordered tiling of the section |
 | [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members (a file's static initialiser included, found in the static-initializer table), duplicates (reached by call, vtable or exception table; profile twins included), stripped functions, named data, the addresses of anonymous data (`anon`), externals and the owner's `symbol` |
@@ -75,6 +76,9 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`queue_diag.py`](queue_diag.py) | cluster the unmatched queue by *why* each function misses |
 | [`notes_for.py`](notes_for.py) | print everything already written about one function or datum, by symbol or address: its check category, profile row, unit-objects role and other config rows, the comments and pragmas at its definition, and every document line naming it (an understanding-shapes line labelled with its lever); run before attacking a function |
 | [`levers.py`](levers.py) | the "Causes found" of `docs/engine/understanding-shapes.md` as `data/levers.jsonl` (generated: `--write` after editing the document, `--check` in `make hygiene`); `--symptom "<diff in machine terms>"` ranks the entries sharing it, `--section`, `--id`, and `--format prompt` for a block to hand to an agent |
+| [`frameslots.py`](frameslots.py) | compare one function's stack frame with retail's: frame size, saved registers, every slot's offset, width, address-taken flag and first use, paired through the aligned instructions; candidate slots named from b52's `-g` records |
+| [`residual_census.py`](residual_census.py) | mask a candidate's residual hunks (or a retail window, or the call sequence) into a signature and list the matched functions whose retail code has it, with their `file:line` and, under `--lines`, the source lines behind the window |
+| [`listing.py`](listing.py) | the instruction listings and MWCC `-g` (DWARF 1) records the two tools above share |
 | [`asm_body_gen.py`](asm_body_gen.py) | emit a function as an MWCC `asm` body from the retail bytes, for local study (asm bodies are not committed) |
 | [`guard_b_gen.py`](guard_b_gen.py) | emit the 76-byte 'guard variant B' accessor as C++ |
 | [`register_gen.py`](register_gen.py) | emit the `<Class>_Register` registrars from the retail assembly |
@@ -94,7 +98,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`
 
 ## Subfolders
 

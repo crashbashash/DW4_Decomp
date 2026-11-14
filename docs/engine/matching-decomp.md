@@ -355,7 +355,10 @@ instruments that showed it are in [understanding a resisting shape](understandin
   differs from `n >= 2`, and `0 <= x` gives `slt at,v,zero`.
 * **`igResult` compares.** `addiu v1,sp,N; lw v1,0(v1)` comes from a one-word class with a user copy constructor
   and `operator==(const R &)`, compared directly on the call's temporary. A named local folds the address away.
-* **`daddiu reg,zero,N`** is a constant assigned to a `bool`, `short` or `char` variable.
+* **`daddiu reg,zero,N`** is a constant assigned to an `unsigned char`, `unsigned short` or `bool` variable that
+  stays a variable (`x = 7; if (c) x = 5;`), or a constant inserted into a bit-field (signed or unsigned). A
+  `signed char`, plain `char` (signed under MWCC), `short`, `int` or `unsigned` destination, and a constant
+  returned, passed or stored directly, give `addiu` (b52, [understanding shapes](understanding-shapes.md#types-and-values)).
 * **An inline destructor always emits its out-of-line copy.** Its body must be spelled as retail's copy is, and the
   function needs a `duplicates` row in `unit-objects.json`, which the verifier checks against retail's bytes.
 * **A field reloaded where the compiler would reuse an earlier load (`b52`).** Common-subexpression elimination
@@ -498,8 +501,9 @@ instruments that showed it are in [understanding a resisting shape](understandin
   count changes the registers. A `const int &v` parameter keeps the value's load after the test.
 * **Swapped operands of a commutative operation:** load into the variable, then use a compound
   operator: `v = p[0]; v |= p[1] << 8;`.
-* **`movz` from a ternary** comes from enum constants, `b ? kOff : kOn`. Plain integers fold to
-  `sltu` and `xori`.
+* **`movz` from a ternary** comes from any ternary whose arms are parameters or constants, `c ? a : b`,
+  `c ? 5 : 7`, enum constants `b ? kOff : kOn`, on all three MWCC builds. Plain `int` `0`/`1` arms fold to `sltu`
+  and `xori` under b38 and b52 and stay `movz` under 3.0 (011126).
 * **A field added into or subtracted from memory** takes retail's register order through an
   unsigned temporary or a cast on the compound assignment: `{ unsigned q = r->f; r->f = q - n; }`,
   `*p += (int)x;`. The plain form swaps `v1` and `a0`.

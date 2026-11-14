@@ -1,5 +1,6 @@
 #!/bin/sh
-# pre-push: what a push cannot take back, and the rule that guards the byte oracle's own files.
+# pre-push: what a push cannot take back, the stamp of the author's own gate runs, and the rule
+# that guards the byte oracle's own files.
 #
 # The byte oracle is NOT run here. Whoever made the change runs the gates on the final tree
 # (CONTRIBUTING.md, "Checking your work"), and the oracle runner (.github/workflows/oracle.yml)
@@ -9,7 +10,11 @@
 #   1. host details: the lines and commit messages being pushed carry nothing that identifies
 #      a machine or an account (scripts/check_host_details.py). Published text cannot be
 #      recalled, so this is the one check that has to happen before the push leaves;
-#   2. the oracle-change rule, only when the pushed commits touch the oracle's own files
+#   2. the gate stamp: every pushed commit's tree passed `make check`, `make link`,
+#      `make typed-check` and `make hygiene` in this clone (the targets stamp the tree they pass
+#      on: tools/gate_stamp.py). A commit that changes only files under docs/ or `*.md` files may
+#      go without a stamp when the push sets DW4_PUSH_DOCS_ONLY=1;
+#   3. the oracle-change rule, only when the pushed commits touch the oracle's own files
 #      (.githooks/oracle-files.txt): the tools unit tests pass, every counterexample still
 #      fails to verify, and each such commit carries an `oracle-change:` line.
 #
@@ -20,7 +25,8 @@
 #     (`functions.fully_verified` in docs/progress.json), `make link` BYTE-IDENTICAL, orphans
 #     within the recorded debt, and the debt ratchet's exit code in DEBT_RC.
 #   DW4_PREPUSH_ORACLE_ONLY=1 .githooks/pre-push RANGE UNITTEST_LOG ORACLE_LOG
-# testing/test_prepush_gate.py runs both on sample logs (no build).
+#   DW4_PREPUSH_STAMP_ONLY=1 .githooks/pre-push COMMIT...   (the gate-stamp rule alone)
+# testing/test_prepush_gate.py runs them on sample logs and a temporary stamp file (no build).
 #
 # Enable once per clone: scripts/install_git_hooks.sh.
 set -u
@@ -144,6 +150,40 @@ oracle_rule() {
     return $ok
 }
 
+# ---- the gate stamp ----------------------------------------------------------------------
+# docs_only COMMIT — true when the commit changes nothing outside docs/ and `*.md` files.
+docs_only() {
+    git rev-parse -q --verify "$1^" >/dev/null || return 1      # a root commit
+    ! git diff --name-only "$1^" "$1" | grep -q -v -e '^docs/' -e '\.md$'
+}
+
+# stamp_rule COMMIT... — prints its lines, returns 0/1.
+stamp_rule() {
+    ok=0; hint_docs=0
+    for c in "$@"; do
+        c=$(git rev-parse -q --verify "$c^{commit}" 2>/dev/null || echo "$c")
+        lack=$(python3 tools/gate_stamp.py missing "$c" 2>&1) && continue
+        short=${c%${c#?????????}}
+        if docs_only "$c"; then
+            if [ "${DW4_PUSH_DOCS_ONLY:-}" = "1" ]; then
+                echo "gate stamp: $short changes only docs/ and *.md files; pushed without a stamp (DW4_PUSH_DOCS_ONLY=1)"
+                continue
+            fi
+            hint_docs=1
+        fi
+        # shellcheck disable=SC2086
+        echo "gate stamp: $short $(git log -1 --format=%s "$c" | cut -c1-60): its tree has no passing stamp for:" $lack "  REFUSED"
+        ok=1
+    done
+    if [ "$ok" -ne 0 ]; then
+        echo "  run make check, make link, make typed-check and make hygiene on exactly the tree you commit; each"
+        echo "  stamps the tree it passes on (\`python3 tools/gate_stamp.py status REV\` lists a commit's stamps)"
+        [ "$hint_docs" -eq 0 ] ||
+            echo "  a commit that changes only docs/ and *.md files may be pushed with DW4_PUSH_DOCS_ONLY=1"
+    fi
+    return $ok
+}
+
 if [ "${DW4_PREPUSH_GATE_ONLY:-}" = "1" ]; then
     gate "$1" "$2" "$3"
     exit $?
@@ -152,10 +192,15 @@ if [ "${DW4_PREPUSH_ORACLE_ONLY:-}" = "1" ]; then
     oracle_rule "$1" "$2" "$3"
     exit $?
 fi
+if [ "${DW4_PREPUSH_STAMP_ONLY:-}" = "1" ]; then
+    stamp_rule "$@"
+    exit $?
+fi
 
 # ---- a real push -------------------------------------------------------------------------
 # stdin: "<local ref> <local sha> <remote ref> <remote sha>" per ref being pushed.
 ranges=""
+tips=""
 whole_tree=0
 zero=0000000000000000000000000000000000000000
 while read -r local_ref local_sha remote_ref remote_sha; do
@@ -172,6 +217,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
         ranges="$ranges $base..$local_sha"
     else
         whole_tree=1
+        tips="$tips $local_sha"
     fi
 done
 
@@ -183,6 +229,15 @@ done
 if [ "$whole_tree" -eq 1 ]; then
     echo "pre-push: no comparable base for a pushed ref; host details in the whole tree"
     python3 scripts/check_host_details.py --tree || rc=1
+fi
+
+# ---- the gate stamp: every pushed commit, or the pushed tip where there is no range ------
+# shellcheck disable=SC2086
+commits=$( { for range in $ranges; do git rev-list --reverse "$range"; done; for t in $tips; do echo "$t"; done; } | awk '!seen[$0]++')
+if [ -n "$commits" ]; then
+    echo "pre-push: gate stamps of $(echo "$commits" | wc -l | tr -d ' ') pushed commit(s)"
+    # shellcheck disable=SC2086
+    stamp_rule $commits || rc=1
 fi
 
 # ---- the oracle-change rule, for every pushed range that touches the oracle's files ------

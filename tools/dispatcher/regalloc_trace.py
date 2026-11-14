@@ -18,7 +18,8 @@ another one).  Earlier versions read the first pass, whose receiver colour is no
                simplify/select passes on such a dump so that what-if changes (ids, costs, edges) can be tested in milliseconds.
 
 For any single function use tools/dispatcher/regalloc.py (it imports trace() from here); this script is the dispatcher-sized CLI.
-Compilers: the patch profiles in PROFILES cover local/mwcps2/combat (the dispatcher's) and local/mwcps2/3.0-011126 (the tree default);
+Compilers: the patch profiles in PROFILES cover local/mwcps2/combat (the dispatcher's), local/mwcps2/3.0-011126 (the tree default)
+and local/mwcps2/3.0b52-030722 (the core and most engine units); trace(coalesce=True) also records b52's/combat's coalescing;
 pass --compiler EXE and --min-nodes 1 to trace a small function by hand.  --adj DIR now also stores the IR of each pass (adjN.json:
 {cls, adj, blocks}); regalloc_sim.py reads both layouts.
 
@@ -42,6 +43,9 @@ LOGBASE = 0x20000000
 # places where simplify() removes a node (first scan / spill pick / rescan), each a 5-byte `or word [reg+0x14], 2` that is replaced
 # by a jump into the cave; CALL_SIMP / CALL_SEL are the call sites of simplify() and select() in the colouring driver; SF is the
 # first spill pick (costs exist from there on).  Coloring.c: simplify() and select(), GPR and FPR classes colour in separate passes.
+# COAL = (call of the coalescing step in the coalescer's per-class loop, the call after that loop, the alias array pointer): the
+# coalescer (b52 0x4bc7e0, "After coalesceregisters") runs before colouring and merges the two nodes of every copy that do not
+# interfere; the helper reads its interference graph before the first step and its alias array after the loop (class 0 only).
 # The patched compiler is identified by the SHA-256 of the executable; any other build is refused.
 PROFILES = {
     # local/mwcps2/combat/mwccps2.exe: simplify at 0x4c3f30, select at 0x4c42a0.
@@ -50,7 +54,7 @@ PROFILES = {
         SIMPLIFY=0x4C3F30, SELECT=0x4C42A0,
         SA=(0x4C400F, "eax", 0x4C4014), SB=(0x4C4179, "ecx", 0x4C417E), SC=(0x4C4249, "edx", 0x4C424E),
         CALL_SIMP=0x4C4654, CALL_SEL=0x4C465A,
-        SF=(0x4C4060, "d9eed9ee89d9", "fldz\n  fldz\n  mov ecx, ebx", 0x4C4066)),
+        SF=(0x4C4060, "d9eed9ee89d9", "fldz\n  fldz\n  mov ecx, ebx", 0x4C4066), COAL=(0x4BC2CF, 0x4BC2D8, 0x588BA0)),
     # local/mwcps2/3.0-011126/mwccps2.exe (the tree's default compiler): simplify at 0x4aedc0, select at 0x4af0f0.
     "0e16a5d6205101f840f85c02664f21cd63b39a0dec2dff417b3a61b4477f0e00": dict(
         name="3.0-011126", CAVE=0x50C400, LOGP=0x57E800, FLAG=0x57E804, CLS=0x57E036, CNT=0x57CAA4, BASE=0x57C778, BLOCKS=0x57C750, IRN=0x22, IRO=0x34,
@@ -58,6 +62,15 @@ PROFILES = {
         SA=(0x4AEE8D, "edx", 0x4AEE92), SB=(0x4AEFE7, "edx", 0x4AEFEC), SC=(0x4AF0A7, "edx", 0x4AF0AC),
         CALL_SIMP=0x4AF497, CALL_SEL=0x4AF49D,
         SF=(0x4AEED5, "d9eed9eed9ee89da", "fldz\n  fldz\n  fldz\n  mov edx, ebx", 0x4AEEDD)),
+    # local/mwcps2/3.0b52-030722/mwccps2.exe (the core and most engine units): simplify at 0x4c4480, select at 0x4c47f0.  Every
+    # code site is the combat site + 0x550 with identical bytes; the data addresses are read from the same instructions.  The cave
+    # sits in the slack of the last .text page (128-aligned: the cave's .balign is absolute), LOGP/FLAG in the slack of the last .bss page.
+    "4a9d1289d2b444e240d79dd7f579eb2c0179f15d191fe51c0ac7d387e6de646c": dict(
+        name="3.0b52-030722", CAVE=0x53E200, LOGP=0x5B7FC0, FLAG=0x5B7FC4, CLS=0x5B7F5D, CNT=0x5B6880, BASE=0x5B63C4, BLOCKS=0x5B639C, IRN=0x2A, IRO=0x3C,
+        SIMPLIFY=0x4C4480, SELECT=0x4C47F0,
+        SA=(0x4C455F, "eax", 0x4C4564), SB=(0x4C46C9, "ecx", 0x4C46CE), SC=(0x4C4799, "edx", 0x4C479E),
+        CALL_SIMP=0x4C4BA4, CALL_SEL=0x4C4BAA,
+        SF=(0x4C45B0, "d9eed9ee89d9", "fldz\n  fldz\n  mov ecx, ebx", 0x4C45B6), COAL=(0x4BC81F, 0x4BC828, 0x58ACD0)),
 }
 # Default: the pinned alternate compiler of the dispatcher.
 DEFAULT_COMPILER = "local/mwcps2/combat/mwccps2.exe"
@@ -182,21 +195,23 @@ def build_cave(tmp, P):
 # (node +0x1a -> edge {+0xc lo, +0xe hi, +4 next-if-id<hi, +8 next-otherwise}) and the IR (block list: +0x28 weight, +0x14 first
 # instruction, +0 next; instruction: +0 next, +0xc opcode, +0x2a operand count, operands of 0x16 bytes at +0x3c: kind, class,
 # flags (s16), node (s16)) and continues.  One adjN.json per pass: {cls, adj: {node: [neighbours]}, blocks: [[weight, [[op, [[kind,
-# class, flags, node], ...]], ...]]]}.
+# class, flags, node], ...]], ...]]]}.  With a COAL profile entry it also records every general-register coalescing run in
+# coalesce.json: [{pass: index of the next adjN.json, pre: {node: [neighbours]} before the first merge, alias: {node: node}}]
+# (the coalescer keeps the lower id of a merged pair, so alias maps the higher one to it; the array is the coalescer's own).
 ADJ_HELPER = r"""
 import gdb, struct, json, os
 OUT = os.environ["REGALLOC_ADJ_DIR"]
 MINNODES = int(os.environ.get("REGALLOC_MIN_NODES", "1"))
 N = [0]
-def dump():
+COAL = []
+def mem():
     inf = gdb.selected_inferior()
     rd = lambda a, n: bytes(inf.read_memory(a, n))
-    u32 = lambda a: struct.unpack("<I", rd(a, 4))[0]
+    return rd, lambda a: struct.unpack("<I", rd(a, 4))[0]
+def cur_class(rd):
     cls = rd(%(CLS)#x, 1)[0]
-    cls = cls - 256 if cls > 127 else cls
-    cnt = u32(%(CNT)#x + cls * 4)
-    if cnt < MINNODES:
-        return
+    return cls - 256 if cls > 127 else cls
+def walk_adj(rd, u32, cnt):
     base = u32(%(BASE)#x)
     raw = rd(base, cnt * 30)
     adj = {}
@@ -212,6 +227,14 @@ def dump():
             else:
                 lst.append(lo); e = nr
         adj[nid] = lst
+    return adj
+def dump():
+    rd, u32 = mem()
+    cls = cur_class(rd)
+    cnt = u32(%(CNT)#x + cls * 4)
+    if cnt < MINNODES:
+        return
+    adj = walk_adj(rd, u32, cnt)
     blocks = []
     b = u32(%(BLOCKS)#x)
     while b and len(blocks) < 100000:
@@ -232,15 +255,41 @@ def dump():
         b = u32(b)
     json.dump(dict(cls=cls, adj=adj, blocks=blocks), open(os.path.join(OUT, "adj%%d.json" %% N[0]), "w"))
     N[0] += 1
+class CoalBP(gdb.Breakpoint):
+    def __init__(self, addr, post):
+        super().__init__("*%%#x" %% addr, internal=True)
+        self.post = post
+    def stop(self):
+        rd, u32 = mem()
+        if cur_class(rd) != 0:
+            return False
+        cnt = u32(%(CNT)#x)
+        if not self.post:
+            if not COAL or "alias" in COAL[-1]:
+                COAL.append(dict(pre=walk_adj(rd, u32, cnt)))
+            return False
+        if COAL and "alias" not in COAL[-1] and cnt >= MINNODES:
+            raw = rd(u32(%(ALIAS)#x), cnt * 2)
+            al = struct.unpack("<%%dh" %% cnt, raw)
+            COAL[-1].update(passno=N[0], alias={i: a for i, a in enumerate(al) if a != i and a >= 0})
+        elif COAL and "alias" not in COAL[-1]:
+            COAL.pop()
+        return False
+def arm_coalesce():
+    if %(COALPRE)#x:
+        CoalBP(%(COALPRE)#x, False)
+        CoalBP(%(COALPOST)#x, True)
 def drive():
     gdb.execute("run")
     while gdb.selected_inferior().pid != 0 and (int(gdb.parse_and_eval("$pc")) & 0xffffffff) == %(TRAPPC)#x:
         dump()
         gdb.execute("continue")
+    if COAL:
+        json.dump([c for c in COAL if "alias" in c], open(os.path.join(OUT, "coalesce.json"), "w"))
 """
 
 
-def gdb_script(tmp, cave, srcdir, P):
+def gdb_script(tmp, cave, srcdir, P, coalesce=False):
     S = sites(P)
     L = ["set pagination off", "set confirm off", "set debuginfod enabled off", "set $done = 0", "catch syscall openat",
          "commands 1", "silent", "if $done == 0", 'if $_streq((char*)$rsi, "%s")' % srcdir, "set $done = 1",
@@ -254,12 +303,16 @@ def gdb_script(tmp, cave, srcdir, P):
         op = 0xE8 if kind == "call" else 0xE9
         enc = bytes([op]) + struct.pack("<i", rel) + b"\x90" * (plen - 5)
         L += ["set {unsigned char}%#x = %#x" % (a + i, b) for i, b in enumerate(enc)]
-    L += ["set {int}%#x = %#x" % (P["LOGP"], LOGBASE), "set {int}%#x = 0" % P["FLAG"], 'printf "PATCHED\\n"', "else", 'printf "UNSUPPORTED-COMPILER\\n"',
+    L += ["set {int}%#x = %#x" % (P["LOGP"], LOGBASE), "set {int}%#x = 0" % P["FLAG"]]
+    if P.get("COAL") and coalesce:
+        L.append("python arm_coalesce()")
+    L += ['printf "PATCHED\\n"', "else", 'printf "UNSUPPORTED-COMPILER\\n"',
           "end", "end", "end", "continue", "end", "catch syscall exit_group", "python drive()", "set $end = *(int*)%#x" % P["LOGP"],
           "if $end > %#x" % LOGBASE, "dump binary memory %s/log.bin %#x $end" % (tmp, LOGBASE), "end"]
     path = os.path.join(tmp, "run.gdb")
     helper = os.path.join(tmp, "adj.py")
-    open(helper, "w").write(ADJ_HELPER % dict(P, TRAPPC=P["CAVE"] + 0x181))
+    coal = P.get("COAL") or (0, 0, 0)
+    open(helper, "w").write(ADJ_HELPER % dict(P, TRAPPC=P["CAVE"] + 0x181, COALPRE=coal[0], COALPOST=coal[1], ALIAS=coal[2]))
     L.insert(1, "source %s" % helper)
     open(path, "w").write("\n".join(L) + "\n")
     return path
@@ -320,11 +373,13 @@ def isolate_case(text, keep):
     return "\n".join(out + lines[end:])
 
 
-def trace(source, flags="-O3,p -Iinclude", compiler=None, text=None, adj_dir=None, min_nodes=1, timeout=900):
+def trace(source, flags="-O3,p -Iinclude", compiler=None, text=None, adj_dir=None, min_nodes=1, timeout=900, coalesce=False):
     """Compile `source` (path; or `text` written to a scratch file named like it) with the patched `compiler` (default the
     dispatcher's pinned build) and return the colouring passes in compile order, each a dict
     {cls, init, snap, final, push, adj, blocks}: init = nodes before simplify, snap = nodes at the first spill pick (carries costs),
-    final = nodes after select (carries colours), push = push order, adj = {node: [neighbours]}, blocks = the IR."""
+    final = nodes after select (carries colours), push = push order, adj = {node: [neighbours]}, blocks = the IR.
+    coalesce=True (compilers with a COAL profile entry) adds to every general-register pass after a coalescing run
+    `alias` = {merged node: surviving node} (chains resolved) and `pre_adj` = the coalescer's graph before its first merge."""
     import json
     compiler = os.path.abspath(compiler or MWCC)
     P = profile_for(compiler)
@@ -345,7 +400,7 @@ def trace(source, flags="-O3,p -Iinclude", compiler=None, text=None, adj_dir=Non
         # private to this run
         objdir = os.path.join(tmp, "obj")
         os.mkdir(objdir)
-        script = gdb_script(tmp, cave, objdir, P)
+        script = gdb_script(tmp, cave, objdir, P, coalesce)
         env = dict(os.environ, MWCIncludes=srcdir, REGALLOC_ADJ_DIR=os.path.abspath(adjdir), REGALLOC_MIN_NODES=str(min_nodes))
         obj = os.path.join(objdir, "t.o")
         r = subprocess.run(["gdb", "-q", "-batch", "-x", script, "--args", WIBO, compiler, "-c", *flags.split(), src, "-o", obj],
@@ -362,6 +417,26 @@ def trace(source, flags="-O3,p -Iinclude", compiler=None, text=None, adj_dir=Non
                 g = json.load(open(f))
                 p["adj"] = {int(a): b for a, b in g["adj"].items()}
                 p["blocks"] = g["blocks"]
+        cf = os.path.join(adjdir, "coalesce.json")
+        if coalesce and os.path.exists(cf):
+            # the coalescer runs twice per function (the second run rarely merges anything); runs before the same pass are one
+            # history: the first run's graph, every run's merges
+            merged = []
+            for c in json.load(open(cf)):                         # chronological
+                al = {int(a): b for a, b in c["alias"].items()}
+                if merged and merged[-1][0] == c["passno"]:
+                    merged[-1][1].update(al)
+                else:
+                    merged.append((c["passno"], al, {int(a): b for a, b in c["pre"].items()}))
+            for passno, al, pre in merged:
+                for a in list(al):
+                    seen = {a}
+                    while al[a] in al and al[a] not in seen:      # a node merged into one that was merged again
+                        seen.add(al[a])
+                        al[a] = al[al[a]]
+                for p in passes[passno:]:
+                    if p["cls"] == 0:
+                        p["alias"], p["pre_adj"] = al, pre
         keep_obj = None
         if os.path.exists(obj):
             keep_obj = open(obj, "rb").read()

@@ -46,15 +46,33 @@ share, so an oracle run never overlaps a developer's `make check`; the two simpl
 Run interactive builds through the same lock (`flock "$DW4_BUILD_LOCK" make check`) and a push
 will not slow a build that is already running.
 
+## The local stamp
+
+The author's own runs are recorded, so a push can tell a verified commit from an unverified one without
+building again. `make check` (or `check-fresh`), `make link` (or `link-fresh`), `make typed-check` and
+`make hygiene` each end with `tools/gate_stamp.py pass <gate>`, which appends the tree id of the working tree
+(every file that is not ignored, as on disk) to `dw4-gate-stamps` in the git common directory. A gate that
+fails never gets there. A tree that changed during the run is not stamped, except for the files the gates
+regenerate themselves (`data/check-categories.tsv`, `config/SLUS-20836/layout.txt`), and `check` is stamped
+only when its match count is at least `functions.fully_verified` in HEAD's `docs/progress.json`. The stamp
+never changes a target's exit code; when it cannot stamp it prints one `gate-stamp: … not stamped` line.
+
+`.githooks/pre-push` then refuses every pushed commit whose tree lacks any of the four stamps (only the tip
+when a pushed ref has no base this clone can compare with). Commit exactly the tree you verified: a new file
+left out of the commit, or a stray untracked file present during the run, gives the commit another tree id.
+`python3 tools/gate_stamp.py status REV` lists the stamps of a commit's tree, and `status` alone those of
+the working tree. A commit that changes only files under `docs/` and `*.md` files is let through without
+stamps when the push sets `DW4_PUSH_DOCS_ONLY=1`; any other commit in that push still needs them.
+
 ## What it cannot do
 
-- **It does not block a push, and nothing local does either.** A failing oracle
+- **It does not block a push.** A failing oracle
   run is visible as a red status on the commit, in the *Actions* tab and in the run summary; the
   branch still moves. The pre-push hook does not run `make check` or `make link` (the author's
   run and this runner already cover them, and a third full build per push proves nothing new).
-  So the first line of defence is the author's quoted
-  gate lines, and a red run here means the commit is fixed forward at once. The hook
-  blocks what cannot be recalled after a push: host details in the pushed lines and messages.
+  It blocks what cannot be recalled after a push, host details in the pushed lines and messages,
+  and a commit whose tree has no record of the author's four gates passing on it
+  ([the local stamp](#the-local-stamp)). A red run here means the commit is fixed forward at once.
 - To make the oracle *required*: branch protection with `oracle` as a required status check on
   `main`, after which a red run blocks the merge. Nothing in the workflow needs to change for that.
 - It runs on one machine. If the runner is offline, pushes queue in GitHub until it returns

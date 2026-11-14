@@ -51,6 +51,10 @@ C_OBJ   := $(patsubst $(SRC)/%.c,$(BUILD)/src/%.o,$(C_SRC)) \
 
 export MWCIncludes := $(SRC)
 
+# The four gates stamp the tree they pass on (tools/gate_stamp.py), which .githooks/pre-push requires
+# of every pushed commit. The stamp never changes a target's verdict.
+STAMP := python3 tools/gate_stamp.py
+
 .PHONY: iso all symbols asm asm-ensure executable objdiff objs objs-build check report verify link progress clean help rules hygiene check-fresh link-fresh vtable-slots-check struct-report inventory-check lua-roundtrip
 
 # The default target builds AND compares, the way a matching build should: a plain
@@ -84,11 +88,13 @@ help:
 # Hard rule: nothing that identifies a developer's machine or account is committed. Also enforced by the
 # .githooks pre-commit/commit-msg hooks (scripts/install_git_hooks.sh) and the hygiene CI workflow.
 hygiene:
+	@$(STAMP) start hygiene
 	python3 testing/test_check_host_details.py
 	python3 testing/test_buildcache.py
 	python3 scripts/check_host_details.py --tree
 	python3 scripts/check_doc_function_names.py
 	python3 tools/levers.py --check
+	@$(STAMP) pass hygiene
 
 # The function inventory (docs/engine/function-inventory.md): scripts/inventory_scan.py walks every
 # `data` unit of config/SLUS-20836/layout.txt for instruction-shaped bodies and writes data/inventory-scan.tsv;
@@ -144,10 +150,14 @@ $(BUILD)/src/%.o: $(SRC)/%.cpp
 # Results are cached by content in build/cache/ (tools/buildcache.py): a rerun only recompiles what changed.
 # `make check-fresh` / `make link-fresh` ignore the cache; run them once before publishing a milestone.
 check: asm-ensure
+	@$(STAMP) start check
 	python3 tools/check.py --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
+	@$(STAMP) pass check
 
 check-fresh: asm-ensure
+	@$(STAMP) start check
 	python3 tools/check.py --no-cache --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
+	@$(STAMP) pass check
 
 # --- the derived-rule fixtures (no toolchain; the pack paths are pointed at your copies) ----
 # The texture pack's pool order and the model pack's offline geometry chain are re-derived from
@@ -180,21 +190,25 @@ verify:
 # `.` inside a section as offset from its start). Needs -G0 and _gp, both for the
 # GP-relative relocations in the C objects.
 link:
+	@$(STAMP) start link
 	python3 tools/layout.py >/dev/null
 	python3 tools/linkgen.py --all
 	mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf
 	python3 tools/linkcheck.py build/game.elf
 	python3 tools/project.py image --version $(GAMEID) build/game.elf
+	@$(STAMP) pass link
 
 iso: link
 	python3 tools/make_iso.py --version $(GAMEID) $(if $(DISC),--disc "$(DISC)")
 
 link-fresh:
+	@$(STAMP) start link
 	python3 tools/layout.py >/dev/null
 	python3 tools/linkgen.py --all --no-cache
 	mipsel-linux-gnu-ld -T build/link.ld -G0 --no-warn-mismatch -o build/game.elf
 	python3 tools/linkcheck.py build/game.elf
 	python3 tools/project.py image --version $(GAMEID) build/game.elf
+	@$(STAMP) pass link
 
 # objdiff.json and the base and target objects for the diff tool. The tool runs
 # `make objdiff <object>`, so the pattern rule accepts the object it names.
@@ -224,7 +238,9 @@ typed:
 	python3 tools/typed_coverage.py --by-class
 
 typed-check:
+	@$(STAMP) start typed-check
 	python3 tools/typed_coverage.py --check
+	@$(STAMP) pass typed-check
 
 typed-baseline:
 	python3 tools/typed_coverage.py --update-baseline

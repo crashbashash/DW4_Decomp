@@ -17,6 +17,8 @@ Run from the repository root, on a test file with one function. What to read fro
 - The filler takes the first instruction of the fall-through block only when that block has exactly one
   predecessor and the instruction's destination is in neither the live-in nor the live-out set of the block that
   ends with the branch.
+- A block with flag `0x80` (`flags=0084`) starts at a `volatile` `asm` statement, and the PCode peephole skips it:
+  a `!!` there keeps both `xori`s and its `andi 0xff`.
 
 Immediate operands of kind 3 are printed as `#?`; register, memory-offset and label operands are decoded.
 """

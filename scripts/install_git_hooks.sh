@@ -1,7 +1,8 @@
 #!/bin/sh
 # Enable the repository's git hooks for this clone:
 #   pre-commit / commit-msg  — host-detail checks (docs/host-details-policy.md)
-#   pre-push                 — host details in the pushed lines and messages, and the
+#   pre-push                 — host details in the pushed lines and messages, the stamps the four
+#                              gates leave on the trees they pass (tools/gate_stamp.py), and the
 #                              oracle-change rule; the byte oracle runs on the oracle runner
 set -e
 cd "$(git rev-parse --show-toplevel)"

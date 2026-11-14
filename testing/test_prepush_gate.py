@@ -217,5 +217,90 @@ class OracleChangeRule(unittest.TestCase):
         self.assertIn("no cover line", out)
 
 
+class GateStamp(unittest.TestCase):
+    """tools/gate_stamp.py and the hook's stamp rule on a throwaway repository with its own copy of the tool."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="dw4-gate-stamp-")
+        self.addCleanup(self.temp.cleanup)
+        self.repo = os.path.join(self.temp.name, "repo")
+        self.env = dict(os.environ, DW4_GATE_STAMPS=os.path.join(self.temp.name, "stamps"))
+        os.makedirs(os.path.join(self.repo, "tools"))
+        with open(os.path.join(ROOT, "tools", "gate_stamp.py")) as src:
+            self.write("tools/gate_stamp.py", src.read())
+        self.write(".gitignore", "build/\n")
+        self.write("docs/progress.json", '{"functions": {"fully_verified": 2}}\n')
+        self.write("src/a.c", "int a;\n")
+        self.git("init", "-q", "-b", "main")
+        self.git("config", "user.email", "test@example.invalid")
+        self.git("config", "user.name", "test")
+        self.commit_all("base")
+
+    def git(self, *args):
+        return subprocess.run(["git", *args], cwd=self.repo, check=True, capture_output=True, text=True).stdout
+
+    def write(self, path, text):
+        full = os.path.join(self.repo, path)
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        open(full, "w").write(text)
+
+    def commit_all(self, message):
+        self.git("add", "-A")
+        self.git("commit", "-q", "--allow-empty", "-m", message)
+        return self.git("rev-parse", "HEAD").strip()
+
+    def stamp(self, *args):
+        return subprocess.run([sys.executable, "tools/gate_stamp.py", *args], cwd=self.repo, env=self.env,
+                              capture_output=True, text=True).stdout
+
+    def run_gate(self, gate, during=None):
+        self.stamp("start", gate)
+        if gate == "check":
+            self.write("build/check-categories.tsv", "# header\n00100000\ta\tmatch\t-\n00100010\tb\tmatch\t-\n")
+        if during:
+            during()
+        return self.stamp("pass", gate)
+
+    def stamp_rule(self, *commits, docs_only=False):
+        env = dict(self.env, DW4_PREPUSH_STAMP_ONLY="1", DW4_PUSH_DOCS_ONLY="1" if docs_only else "")
+        r = subprocess.run(["sh", HOOK, *commits], capture_output=True, text=True, env=env, cwd=self.repo)
+        return r.returncode, r.stdout + r.stderr
+
+    def test_regenerated_output_keeps_the_stamp_other_edits_lose_it(self):
+        out = self.run_gate("link", lambda: self.write("config/SLUS-20836/layout.txt", "regenerated\n"))
+        self.assertIn("gate-stamp: link passed", out)
+        out = self.run_gate("link", lambda: self.write("src/a.c", "int a = 1;\n"))
+        self.assertIn("the tree changed during the run (src/a.c)", out)
+
+    def test_check_needs_the_match_count_of_head(self):
+        self.write("docs/progress.json", '{"functions": {"fully_verified": 3}}\n')
+        self.commit_all("baseline 3")
+        self.assertIn("2 match, below functions.fully_verified 3", self.run_gate("check"))
+
+    def test_push_needs_all_four_stamps(self):
+        for gate in ("check", "link", "typed-check"):
+            self.run_gate(gate)
+        head = self.commit_all("work")
+        rc, out = self.stamp_rule(head)
+        self.assertEqual(rc, 1, out)
+        self.assertIn("no passing stamp for: hygiene", out)
+        self.run_gate("hygiene")
+        self.assertEqual(self.stamp_rule(head)[0], 0)
+
+    def test_docs_only_commit_needs_the_override(self):
+        for gate in ("check", "link", "typed-check", "hygiene"):
+            self.run_gate(gate)
+        stamped = self.commit_all("work")
+        self.write("docs/notes.md", "notes\n")
+        docs = self.commit_all("docs")
+        rc, out = self.stamp_rule(stamped, docs)
+        self.assertEqual(rc, 1, out)
+        self.assertIn("DW4_PUSH_DOCS_ONLY=1", out)
+        self.assertEqual(self.stamp_rule(stamped, docs, docs_only=True)[0], 0)
+        self.write("src/a.c", "int a = 2;\n")
+        code = self.commit_all("code")
+        self.assertEqual(self.stamp_rule(code, docs_only=True)[0], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

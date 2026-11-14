@@ -181,10 +181,25 @@ warnings and errors (to `g_reportOutputFile` when set); `igErrorHandler` is the 
   retail image:
   - `igDependencyOrderedList_TopologicalSort` (`0x2d7280`): gathers the nodes of the dependency pairs into a
     sorted pointer list and moves the nodes nothing depends on into the ordered list, flagging a cycle when it
-    has to pick one; called before `igDependencyOrderedList_Rebuild`.
+    has to pick one; called before `igDependencyOrderedList_Rebuild`. Its two list holders sit in the top frame
+    slots (140, 136) and retail first writes each with the result of the `igPointerList_Create` that makes it:
+    there are no zero stores at entry, so each holder is constructed from that call where it is declared (a draft
+    that declares both at the top zeroes both slots before the first call).
   - `igDriverDatabase_SetSubPropertyValue` (`0x2d9740`): creates a property's name and value lists when
     missing, then replaces the value of an interned name or appends the pair; the setter of
-    `igDriverDatabase_GetSubPropertyValue`.
+    `igDriverDatabase_GetSubPropertyValue`. The frame (160 bytes, six 4-byte holder slots) is reproduced by a
+    draft with the two list holders and four string references declared in that order. Each new list is put into
+    its table slot as retain, release of the old element, then a store guarded by `count != 0 && index >= 0 &&
+    index < count`, the order of the `setRetained` inline in `igSerialScheduler_tail.inc`; with that order a
+    draft is 1444 bytes against 1448. Retail keeps the name in `s4`, the value in `s3` and the property in `s1`
+    (its scaled index in `s0`); a draft with the parameters in that order gets `s4`, `s3`, `s2` for property,
+    name, value. The allocator's graph-edit search ([register allocation](register-allocation.md)) finds no
+    single edit; every two-edit solution gives `index` an id after the smart-pointer members are broken out into
+    temporaries, so retail holds it in a value the optimiser creates, not in the parameter's own web.
   - `igPsx2Thread_ThreadEntry` (`0x32f7f0`): the entry `igPsx2Thread_Start` gives the kernel; calls the thread
     function with its argument, stores the result and finishes the thread through the thread manager. Retail
-    zero-extends the incoming argument from 64 bits (`dsll32`/`dsrl32`) before using it as the thread object.
+    zero-extends the incoming argument from 64 bits (`dsll32`/`dsrl32`) before using it as the thread object;
+    no matched function has that entry shape (a parameter widened into a saved register straight after the
+    saves). Declaring the parameter as a 64-bit integer (`unsigned long long` or `long long`) and casting it to the
+    thread pointer, directly or through `unsigned int`, gives retail's instructions but one: `dsra32` where
+    retail has `dsrl32` (b52, the unit's profile). A 32-bit parameter widened in the body adds code at entry.
