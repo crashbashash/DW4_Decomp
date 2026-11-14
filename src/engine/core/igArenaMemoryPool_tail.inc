@@ -1,31 +1,31 @@
-void **igArenaMemoryPool_Create(int arg0) {
-    void **var_s0;
+void **igArenaMemoryPool_Create(int allocator) {
+    void **pool;
 
     if (*g_objectSystem[0] != 0) {
         igArenaMemoryPool_EnsureRegistered();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igArenaMemoryPool_metaObject[0], (igMemoryPoolView *)arg0)));
+        pool = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igArenaMemoryPool_metaObject[0], (igMemoryPoolView *)allocator)));
     } else {
-        var_s0 = (void **)(((void **)igObject_OperatorNew(0xD0, 0, arg0)));
-        if (var_s0 != 0) {
-            var_s0 = (void **)(((void **)igArenaMemoryPool_Construct((igArenaMemoryPool *)var_s0, 1)));
+        pool = (void **)(((void **)igObject_OperatorNew(0xD0, 0, allocator)));
+        if (pool != 0) {
+            pool = (void **)(((void **)igArenaMemoryPool_Construct((igArenaMemoryPool *)pool, 1)));
         }
-        ((igObjectDispatchView *)(var_s0))->vfunc_09();
-        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
+        ((igObjectDispatchView *)(pool))->initDefaults();
+        ((igObjectDispatchView *)(pool))->userConstruct((int)(0));
     }
-    return var_s0;
+    return pool;
 }
 
-int igArenaMemoryPool_Clone(int arg0, int arg1) {
-    int temp_v0;
+int igArenaMemoryPool_Clone(int source, int copyMode) {
+    int copy;
     if (*g_objectSystem[0] != 0) {
         igArenaMemoryPool_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)arg0, arg1);
+        return igObject_CloneViaMetadata((void **)source, copyMode);
     }
-    temp_v0 = ((int)igObject_OperatorNew(0xD0, 0, ((int)Memory_GetDefaultAllocator())));
-    if (temp_v0 != 0) {
-        temp_v0 = ((int)igArenaMemoryPool_CopyConstruct((igArenaMemoryPool *)temp_v0, arg0));
+    copy = ((int)igObject_OperatorNew(0xD0, 0, ((int)Memory_GetDefaultAllocator())));
+    if (copy != 0) {
+        copy = ((int)igArenaMemoryPool_CopyConstruct((igArenaMemoryPool *)copy, source));
     }
-    return temp_v0;
+    return copy;
 }
 
 igMetaObject *igArenaMemoryPool_GetMetaObject(void)
@@ -42,13 +42,13 @@ done:
 
 int igArenaMemoryPool_GetVTable(void) {
     igArenaMemoryPool pool;
-    int temp_s0;
+    int vtable;
     igObject *p;
     igObject *r;
 
     igArenaMemoryPool_Initialize(&pool);
-    temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    pool._vtable = (int)&DAT_00531030[0];
+    vtable = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&g_igArenaMemoryPool_vtable[0];
     p = (igObject *)&pool._eventTracker;
     if (p != 0) {
         p = *(igObject **)p;
@@ -69,7 +69,7 @@ int igArenaMemoryPool_GetVTable(void) {
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igArenaMemoryPool_EnsureRegistered(void)
@@ -116,16 +116,16 @@ void igArenaMemoryPool_InitFields(void) {
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 12), -1);
     heapIntegrityCheckLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
-    defaultHeapCheck = DAT_005871f8[0];
+    defaultHeapCheck = g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel[0];
     igEnumMetaField_SetDefaultValue((igMetaFieldView *)heapIntegrityCheckLevel, &defaultHeapCheck);
     heapIntegrityCheckLevel->_getMetaEnumFunction = (int)igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum;
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 14);
-    defaultMessageLevel = DAT_004c2368[0];
+    defaultMessageLevel = g_igArenaMemoryPool_defaultMessageLevel[0];
     igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, &defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igArenaMemoryPool_GetMessageLevelMetaEnum;
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 15), DAT_004c2370[0]);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 15), g_igArenaMemoryPool_defaultPoolOptionFlags[0]);
     igUnsignedIntMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 17), 16);
-    igMetaObject_NameFields(meta, (const char **)g_igArenaMemoryPool_fieldTable, (igMetaField ***)DAT_004c18b0, DAT_004c1900, base);
+    igMetaObject_NameFields(meta, (const char **)g_igArenaMemoryPool_fieldTable, (igMetaField ***)g_igArenaMemoryPool_fieldDescriptors, g_igArenaMemoryPool_fieldOffsets, base);
     g_igArenaMemoryPool_metaObject[0]->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }
 

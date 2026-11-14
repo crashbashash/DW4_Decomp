@@ -78,14 +78,14 @@ void *ObjectPointerList_FindByStringField(__internalNonRefCountedObjectList *lis
     return 0;
 }
 
-int ObjectPointerList_FindIndex(char *arg0, int arg1) {
-    int *d = *(int **)(arg0 + 8);
-    int n = *(int *)(arg0 + 12);
+int ObjectPointerList_FindIndex(char *list, int object) {
+    int *d = (int *)((__internalNonRefCountedObjectList *)list)->_data;
+    int n = ((__internalNonRefCountedObjectList *)list)->_count;
     int i;
-    int v;
+    int entry;
     for (i = 0; i < n; i++) {
-        v = d[i];
-        if (v == arg1) {
+        entry = d[i];
+        if (entry == object) {
             return i;
         }
     }

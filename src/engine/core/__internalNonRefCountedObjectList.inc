@@ -1,32 +1,32 @@
-void **__internalNonRefCountedObjectList_Create(int arg0) {
-    void **var_s0;
+void **__internalNonRefCountedObjectList_Create(int pool) {
+    void **list;
 
     if (*g_objectSystem[0] != 0) {
         __internalNonRefCountedObjectList_EnsureRegistered();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g___internalNonRefCountedObjectList_metaObject[0], (igMemoryPoolView *)arg0)));
+        list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g___internalNonRefCountedObjectList_metaObject[0], (igMemoryPoolView *)pool)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)arg0)));
-        if (var_s0 != 0) {
-            var_s0 = (void **)(((void **)ObjectPointerList_Construct((__internalNonRefCountedObjectList *)var_s0, 1)));
+        list = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)pool)));
+        if (list != 0) {
+            list = (void **)(((void **)ObjectPointerList_Construct((__internalNonRefCountedObjectList *)list, 1)));
         }
-        ((igObjectDispatchView *)(var_s0))->vfunc_09();
-        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
+        ((igObjectDispatchView *)(list))->initDefaults();
+        ((igObjectDispatchView *)(list))->userConstruct((int)(0));
     }
-    return var_s0;
+    return list;
 }
 
-int __internalNonRefCountedObjectList_Clone(int arg0, int arg1) {
-    int temp_v0;
+int __internalNonRefCountedObjectList_Clone(int source, int copyMode) {
+    int copy;
 
     if (*g_objectSystem[0] != 0) {
         __internalNonRefCountedObjectList_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)arg0, arg1);
+        return igObject_CloneViaMetadata((void **)source, copyMode);
     }
-    temp_v0 = ((int)igObject_AllocateRawStorageDefault(0x10, 0));
-    if (temp_v0 != 0) {
-        temp_v0 = ((int)ObjectPointerList_CopyConstruct((__internalNonRefCountedObjectList *)temp_v0, (__internalNonRefCountedObjectList *)arg0));
+    copy = ((int)igObject_AllocateRawStorageDefault(0x10, 0));
+    if (copy != 0) {
+        copy = ((int)ObjectPointerList_CopyConstruct((__internalNonRefCountedObjectList *)copy, (__internalNonRefCountedObjectList *)source));
     }
-    return temp_v0;
+    return copy;
 }
 
 igMetaObject *__internalNonRefCountedObjectList_GetOrCreateMetaObject(void) {
@@ -77,21 +77,21 @@ void __internalNonRefCountedObjectList_GetMetaObjectFunction(void) {
 }
 
 void __internalNonRefCountedObjectList_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int first;
+    void *field;
+    void *meta;
 
-    temp_s0 = (void *)g___internalNonRefCountedObjectList_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g___internalNonRefCountedObjectList_ctorTable[0], 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igObjectRefMetaField_GetDefaultDescriptor();
-    ((igMemoryRefMetaField *)temp_s1)->_memSize = 0x40;
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g___internalNonRefCountedObjectList_fieldTable[0], (igMetaField ***)&DAT_004c05d0[0], &DAT_004c05d8[0], temp_s2);
+    meta = (void *)g___internalNonRefCountedObjectList_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g___internalNonRefCountedObjectList_ctorTable[0], 2);
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
+    ((igMemoryRefMetaField *)field)->_memType = igObjectRefMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memSize = 0x40;
+    ((igRefMetaField *)field)->_construct = 1;
+    ((igRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    ((igMemoryRefMetaField *)field)->_refCounted = 0;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g___internalNonRefCountedObjectList_fieldTable[0], (igMetaField ***)&g___internalNonRefCountedObjectList_fieldDescriptors[0], &g___internalNonRefCountedObjectList_fieldOffsets[0], first);
 }
 

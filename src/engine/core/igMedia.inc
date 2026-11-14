@@ -29,7 +29,7 @@ void igMedia_Register(void) {
         igMedia_className,
         8,
         0,
-        (igMetaObjectCallback)igMedia_InitFields_002c1810,
+        igMedia_SetAbstractProxy,
         igMedia_StaticInitCallback,
         0
     );

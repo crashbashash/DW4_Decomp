@@ -1,32 +1,32 @@
-int igUnsignedCharMetaField_ValueFromString(void *arg0, char *arg1, int arg2) {
-    int sp2C;
-    int sp28;
+int igUnsignedCharMetaField_ValueFromString(void *self, char *value, int text) {
+    int consumed;
+    int parsed;
 
-    sp2C = 0;
-    sp28 = 0;
-    sscanf(arg2, &DAT_004fb440[0], &sp28, &sp2C);
-    *arg1 = (char) sp28;
-    return sp2C;
+    consumed = 0;
+    parsed = 0;
+    sscanf(text, &text_u_n[0], &parsed, &consumed);
+    *value = (char) parsed;
+    return consumed;
 }
 
-void igUnsignedCharMetaField_ValueToString(int *arg0, int arg1, unsigned char *arg2) {
-    int sp20[256];
-    int var_v0;
-    int var_v1;
-    sprintf(sp20, &DAT_004f9948[0], *arg2);
-    if (sp20 == 0) {
-        var_v1 = 0;
+void igUnsignedCharMetaField_ValueToString(int *result, int self, unsigned char *value) {
+    int text[256];
+    int pool;
+    int interned;
+    sprintf(text, &percent_u[0], *value);
+    if (text == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text);
     }
-    *arg0 = var_v1;
+    *result = interned;
 }
 
 /* igMetaField slot +0x64 (GetSize): the byte size of one field value. An unsigned char is a single
@@ -35,11 +35,11 @@ int igUnsignedCharMetaField_GetSize(void) {
     return 1;
 }
 
-void igUnsignedCharMetaField_SetDefaultValue(void **arg0, char arg1) {
-    char sp1F;
+void igUnsignedCharMetaField_SetDefaultValue(void **self, char value) {
+    char defaultValue;
 
-    sp1F = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
+    defaultValue = value;
+    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
 }
 
 int igUnsignedCharMetaField_GetAlignment(void) {

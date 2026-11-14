@@ -1,6 +1,6 @@
-void igUnsignedCharMetaField_Create(int arg0) {
+void igUnsignedCharMetaField_Create(int pool) {
     igUnsignedCharMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585760), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585760), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igUnsignedCharMetaField_GetMetaObject(void)
@@ -18,7 +18,7 @@ int igUnsignedCharMetaField_GetVTable(void) {
     int v0;
     int t;
     igMetaField_Init((igMetaField *)&obj);
-    obj._vtable = (int)&DAT_0052e530[0];
+    obj._vtable = (int)&g_igUnsignedCharMetaField_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     obj._vtable = (int)&g_igMetaField_vtable[0];
     if (&obj._fieldName != 0) {
@@ -62,21 +62,21 @@ void igUnsignedCharMetaField_GetMetaObjectFunction(void) {
 }
 
 void igUnsignedCharMetaField_CreateDefaultDescriptor(void) {
-    void *temp_s0;
+    void *descriptor;
 
     if (g_igUnsignedCharMetaField_descriptor[0] == 0) {
         g_igUnsignedCharMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedCharMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        temp_s0 = (void *)(g_igUnsignedCharMetaField_descriptor[0]);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+        descriptor = (void *)(g_igUnsignedCharMetaField_descriptor[0]);
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igUnsignedCharMetaField_descriptor[0];
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
+                ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
+                if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(g_igUnsignedCharMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
+            ((igMetaField *)g_igUnsignedCharMetaField_descriptor[0])->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
             igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedCharMetaField_descriptor[0]);
         }
     }

@@ -1,6 +1,6 @@
-int igErrorHandler_Create(int arg0) {
+int igErrorHandler_Create(int allocator) {
     igErrorHandler_EnsureRegistered();
-    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586590), (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586590), (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igErrorHandler_GetMetaObject(void)
@@ -15,7 +15,7 @@ int igErrorHandler_GetVTable(void) {
     igErrorHandler handler;
 
     igObject_InitHeader((igObject *)&handler);
-    handler._vtable = (int)&DAT_00532530[0];
+    handler._vtable = (int)&g_igErrorHandler_vtable[0];
     return *(int *)((char *)&handler + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

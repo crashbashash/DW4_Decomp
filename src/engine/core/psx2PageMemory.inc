@@ -13,58 +13,58 @@ igObject *SystemAllocatorBase_Destruct(igObject *self, long long deleteFlags) {
 
 void SystemAllocatorBase_ReleasePageTables(SystemAllocator *self) {
     for (unsigned int i = 0; i < 64; i++) {
-        int *slot = &DAT_00587220[i];
+        int *slot = &g_systemPageTables[i];
         int table = *slot;
         if (table != 0) {
-            self->vfunc_45((void *)table);
+            self->FreeTable((void *)table);
             *slot = 0;
         }
     }
 }
 
-int SystemAllocatorBase_Allocate(void *arg0, int arg1) {
-    int temp_v0;
+int SystemAllocatorBase_Allocate(void *self, int size) {
+    int block;
 
-    temp_v0 = malloc(arg1);
-    if (temp_v0 == DAT_00587328[0]) {
-        igReport_Printf(DAT_004ff590, DAT_00587328[0]);
+    block = malloc(size);
+    if (block == igSystemMallocTriggerAddress[0]) {
+        igReport_Printf(text_igSystemMallocTriggerAddress_0x, igSystemMallocTriggerAddress[0]);
         igReport_Flush();
     }
-    return temp_v0;
+    return block;
 }
 
-int FUN_00328f20(int arg0, int arg1) {
-    int temp_v0;
+int FUN_00328f20(int self, int size) {
+    int block;
 
-    temp_v0 = malloc(arg1);
-    if (temp_v0 == DAT_00587328[0]) {
-        igReport_Printf(DAT_004ff590, DAT_00587328[0]);
+    block = malloc(size);
+    if (block == igSystemMallocTriggerAddress[0]) {
+        igReport_Printf(text_igSystemMallocTriggerAddress_0x, igSystemMallocTriggerAddress[0]);
         igReport_Flush();
     }
-    return temp_v0;
+    return block;
 }
 
 void SystemAllocatorBase_Callocate(int unused, int a, int b) {
     calloc(a, b);
 }
 
-void SystemAllocatorBase_Reallocate(int arg0, int arg1, int arg2) {
-    realloc(arg1, arg2);
+void SystemAllocatorBase_Reallocate(int self, int block, int size) {
+    realloc(block, size);
 }
 
-int SystemAllocatorBase_DuplicateString(SystemAllocator *self, int *arg1) {
-    int *var_s1;
-    int temp_v0;
+int SystemAllocatorBase_DuplicateString(SystemAllocator *self, int *string) {
+    int *text;
+    int copy;
 
-    var_s1 = (int *)(arg1);
-    if (var_s1 == 0) {
-        var_s1 = (int *)(&DAT_004f7910[0]);
+    text = (int *)(string);
+    if (text == 0) {
+        text = (int *)(&emptyString_4[0]);
     }
-    temp_v0 = (int)self->Allocate(strlen(var_s1) + 1);
-    if (temp_v0 != 0) {
-        strcpy(temp_v0, var_s1);
+    copy = (int)self->Allocate(strlen(text) + 1);
+    if (copy != 0) {
+        strcpy(copy, text);
     }
-    return temp_v0;
+    return copy;
 }
 
 void SystemAllocatorBase_Free(int a0, int a1) {
@@ -73,34 +73,34 @@ void SystemAllocatorBase_Free(int a0, int a1) {
 
 void SystemAllocatorBase_AllocateSized(SystemAllocator *self, unsigned int size)
 {
-    self->vfunc_17(0, size);
+    self->AllocateRange(0, size);
 }
 
-void SystemAllocatorBase_FreeSized(SystemAllocator *self, int arg1, int arg2) {
-    igResult sp1C;
+void SystemAllocatorBase_FreeSized(SystemAllocator *self, int block, int size) {
+    igResult result;
 
-    sp1C = self->vfunc_18(arg1, arg2);
+    result = self->FreeRange(block, size);
 }
 
-int SystemAllocatorBase_ReallocateSized(SystemAllocator *self, int arg1, unsigned int arg2, unsigned int arg3) {
-    igResult sp5C;
-    igResult sp58;
-    int temp_v0;
+int SystemAllocatorBase_ReallocateSized(SystemAllocator *self, int block, unsigned int size, unsigned int oldSize) {
+    igResult freeResult;
+    igResult releaseResult;
+    int moved;
 
-    if (arg2 < arg3) {
-        sp5C = self->vfunc_18(arg1 + arg2, arg3 - arg2);
-        return arg1;
+    if (size < oldSize) {
+        freeResult = self->FreeRange(block + size, oldSize - size);
+        return block;
     }
-    if (self->vfunc_17(arg1 + arg3, arg2 - arg3) != -1) {
-        return arg1;
+    if (self->AllocateRange(block + oldSize, size - oldSize) != -1) {
+        return block;
     }
-    temp_v0 = self->vfunc_17(0, arg2);
-    if (temp_v0 == -1) {
+    moved = self->AllocateRange(0, size);
+    if (moved == -1) {
         return 0;
     }
-    memcpy(temp_v0, arg1, arg3);
-    sp58 = self->vfunc_18(arg1, arg3);
-    return temp_v0;
+    memcpy(moved, block, oldSize);
+    releaseResult = self->FreeRange(block, oldSize);
+    return moved;
 }
 
 void SystemAllocatorBase_AllocateAligned(SystemAllocator *self, unsigned int size)
@@ -120,12 +120,12 @@ void SystemAllocatorBase_ReallocateAligned(SystemAllocator *self, void *block, u
 
 void SystemAllocatorBase_AdjustHeap(SystemAllocator *self, int n) {
     if (n > 0) {
-        if (self->vfunc_17(self->GetStackSize(), n) == -1) {
-            self->vfunc_17(0, n);
+        if (self->AllocateRange(self->GetStackSize(), n) == -1) {
+            self->AllocateRange(0, n);
         }
     } else if (n < 0) {
         int pos = self->GetStackSize();
-        self->vfunc_18(pos + n, -n);
+        self->FreeRange(pos + n, -n);
         self->GetStackSize();
     } else {
         self->GetStackSize();
@@ -135,28 +135,28 @@ void SystemAllocatorBase_AdjustHeap(SystemAllocator *self, int n) {
 unsigned SystemAllocatorBase_AllocateRange(SystemAllocator *self, unsigned a, int n) {
     unsigned r = -1;
     if (a == 0) {
-        unsigned t = self->vfunc_29(n);
+        unsigned t = self->FindFreeRange(n);
         r = t;
-        if (t == (unsigned)-1) r = self->vfunc_42(n);
-    } else if (self->vfunc_28(a, n) != 0) {
+        if (t == (unsigned)-1) r = self->Sbrk(n);
+    } else if (self->IsRangeFree(a, n) != 0) {
         r = a;
     } else {
         unsigned c = self->GetStackSize();
         if (c == a) {
-            r = self->vfunc_42(n);
+            r = self->Sbrk(n);
             if (r != a) {
                 if (r != (unsigned)-1) {
-                    self->vfunc_42(-n);
+                    self->Sbrk(-n);
                     r = -1;
                 }
             }
         } else {
             unsigned e = a + n;
-            if (a <= c && c < e && self->vfunc_28(a, c - a) != 0) {
+            if (a <= c && c < e && self->IsRangeFree(a, c - a) != 0) {
                 int m = e - c;
-                r = self->vfunc_42(m);
+                r = self->Sbrk(m);
                 if (r != a && r != (unsigned)-1) {
-                    self->vfunc_42(-m);
+                    self->Sbrk(-m);
                     r = -1;
                 }
             }
@@ -164,21 +164,21 @@ unsigned SystemAllocatorBase_AllocateRange(SystemAllocator *self, unsigned a, in
     }
     if (r != (unsigned)-1) {
         igResult x = self->vfunc_46(r, n, 1);
-        igResult y = self->vfunc_27(3, r, n);
+        igResult y = self->SetPageState(3, r, n);
     }
     return r;
 }
 
-igResult SystemAllocatorBase_FreeRange(SystemAllocator *self, int arg2, int arg3) {
-    int r17 = self->GetStackSize();
-    if (r17 == arg2 + arg3) {
-        int t = self->vfunc_42(-arg3);
-        if (t != -1) {
-            self->vfunc_27(0, t, arg3);
+igResult SystemAllocatorBase_FreeRange(SystemAllocator *self, int address, int size) {
+    int top = self->GetStackSize();
+    if (top == address + size) {
+        int start = self->Sbrk(-size);
+        if (start != -1) {
+            self->SetPageState(0, start, size);
             return igResult(g_resultSuccess.v);
         }
     } else {
-        return self->vfunc_43(arg2, arg3);
+        return self->ReserveRange(address, size);
     }
     return igResult(g_resultFailure.v);
 }
@@ -188,7 +188,7 @@ igResult SystemAllocatorBase_FreeRange(SystemAllocator *self, int arg2, int arg3
 int SystemAllocatorBase_GetStackSize(SystemAllocator *self) {
     int result;
 
-    result = self->vfunc_42(0);
+    result = self->Sbrk(0);
     if (result == 0) {
         result = -1;
     }
@@ -233,7 +233,7 @@ void SystemAllocatorBase_GetStatistics(SystemAllocator *self, int *out) {
     memset(&s, 0, 16);
     i = 0;
     do {
-        int t = DAT_00587220[i];
+        int t = g_systemPageTables[i];
         if (t != 0) {
             PageTable_CountStates(t, &s);
         }
@@ -259,11 +259,11 @@ igResult SystemAllocatorBase_SetPageState(SystemAllocator *self, int state, unsi
     unsigned int lo0 = (addr & 0x3FFFFFF) >> 12;
     unsigned int hi0 = (end & 0x3FFFFFF) >> 12;
     for (unsigned int page = startPage; page <= endPage; page++) {
-        int *slot = &DAT_00587220[page];
+        int *slot = &g_systemPageTables[page];
         int table = *slot;
         unsigned int lo, hi;
         if (table == 0) {
-            table = (int)self->vfunc_44(0x1000);
+            table = (int)self->AllocateTable(0x1000);
             memset(table, 0, 0x1000);
             *slot = table;
         }
@@ -288,7 +288,7 @@ int SystemAllocatorBase_IsRangeFree(void *self, unsigned int addr, unsigned int 
     if (len == 0) return 0;
     {
         while (i <= s4) {
-            p = DAT_00587220[i];
+            p = g_systemPageTables[i];
             if (p != 0) {
                 lo = loB;
                 if (i > s5) lo = 0;
@@ -336,7 +336,7 @@ unsigned int SystemAllocatorBase_FindFreeRange(void *self, int size) {
         } else {
             s8 = 0x4000;
         }
-        p = DAT_00587220[s3];
+        p = g_systemPageTables[s3];
         if (p != 0) {
             while (s2 < s8) {
                 r = PageTable_GetState(p, s2);
@@ -369,15 +369,15 @@ int FUN_00329b10(void) {
     return -1;
 }
 
-void FUN_00329b20(void *arg0, int *arg1, int *arg2, int *arg3) {
-    *arg1 = -1;
-    *arg2 = -1;
-    *arg3 = -1;
+void FUN_00329b20(void *self, int *first, int *second, int *third) {
+    *first = -1;
+    *second = -1;
+    *third = -1;
 }
 
-int FUN_00329b40(void *arg0, void *arg1, int *arg2, int *arg3) {
-    *arg2 = -1;
-    *arg3 = -1;
+int FUN_00329b40(void *self, void *region, int *first, int *second) {
+    *first = -1;
+    *second = -1;
     return 1;
 }
 
@@ -391,20 +391,20 @@ void SystemAllocatorBase_DumpPageTables(SystemAllocator *self) {
 
     page = 0;
     do {
-        table = DAT_00587220[page];
+        table = g_systemPageTables[page];
         if (table != 0) {
             pos = 0;
             index = 0;
             do {
                 column = index & 0x3F;
                 if (column == 0) {
-                    sprintf(line, &DAT_004ff5c0[0], (page << 0x1A) + (index << 0xC));
+                    sprintf(line, &percent_08x_colon[0], (page << 0x1A) + (index << 0xC));
                     pos = 0xB;
                 }
                 line[pos] = (char) (PageTable_GetState(table, index) + 0x30);
                 pos += 1;
                 if (column == 0x3F) {
-                    strcpy(line + pos, &DAT_004f95c8[0]);
+                    strcpy(line + pos, &newline_2[0]);
                     igReport_Printf(line);
                     igReport_Flush();
                     pos = 0;
@@ -412,12 +412,12 @@ void SystemAllocatorBase_DumpPageTables(SystemAllocator *self) {
                 index += 1;
             } while (index < 0x4000U);
         } else {
-            igReport_Printf(&DAT_004ff5c8[0], page << 0x1A);
+            igReport_Printf(&text_08x_null[0], page << 0x1A);
             igReport_Flush();
         }
         page += 1;
     } while (page < 0x40U);
-    self->vfunc_36();
+    self->PrintStatistics();
 }
 
 void SystemAllocatorBase_DumpPageRange(int unused, unsigned int addr, int len) {
@@ -434,7 +434,7 @@ void SystemAllocatorBase_DumpPageRange(int unused, unsigned int addr, int len) {
     hi0 = (end & 0x3FFFFFF) >> 12;
     if (len == 0) return;
     while (page <= endPage) {
-        int table = DAT_00587220[page];
+        int table = g_systemPageTables[page];
         if (table != 0) {
             unsigned int lo, hi;
             if (startPage < page) lo = 0; else lo = lo0;
@@ -442,13 +442,13 @@ void SystemAllocatorBase_DumpPageRange(int unused, unsigned int addr, int len) {
             for (j = lo; j < hi; ) {
                 PageTable_GetState(table, j);
                 if ((counter & 0x3F) == 0) {
-                    sprintf(buf, &DAT_004ff5c0[0], addr);
+                    sprintf(buf, &percent_08x_colon[0], addr);
                     pos = 11;
                 }
                 buf[pos] = PageTable_GetState(table, counter) + 0x30;
                 pos++;
                 if ((counter & 0x3F) == 0x3F) {
-                    strcpy(buf + pos, &DAT_004f95c8[0]);
+                    strcpy(buf + pos, &newline_2[0]);
                     igReport_Printf(buf);
                     igReport_Flush();
                     pos = 0;
@@ -461,7 +461,7 @@ void SystemAllocatorBase_DumpPageRange(int unused, unsigned int addr, int len) {
         page++;
     }
     if (!(counter & 0x3F)) {
-        strcpy(buf + pos, &DAT_004f95c8[0]);
+        strcpy(buf + pos, &newline_2[0]);
         igReport_Printf(buf);
         igReport_Flush();
     }
@@ -470,49 +470,49 @@ void SystemAllocatorBase_DumpPageRange(int unused, unsigned int addr, int len) {
 void SystemAllocatorBase_PrintStatistics(SystemAllocator *self) {
     SystemMemoryStatistics stats;
     self->GetStatistics(&stats);
-    igReport_Printf(DAT_004ff5e0);
+    igReport_Printf(text_System_memory_statistics);
     igReport_Flush();
-    igReport_Printf(DAT_004ff600, stats.totalSystemMemorySize, stats.totalSystemMemorySize);
+    igReport_Printf(text_totalSystemMemorySize_d_0x_x, stats.totalSystemMemorySize, stats.totalSystemMemorySize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff630, stats.allocationSpan, stats.allocationSpan);
+    igReport_Printf(text_allocationSpan_d_0x_x, stats.allocationSpan, stats.allocationSpan);
     igReport_Flush();
-    igReport_Printf(DAT_004ff660, stats.maximumSpan, stats.maximumSpan);
+    igReport_Printf(text_maximumSpan_d_0x_x, stats.maximumSpan, stats.maximumSpan);
     igReport_Flush();
-    igReport_Printf(DAT_004ff690, stats.allocatedAndInUse, stats.allocatedAndInUse);
+    igReport_Printf(text_allocatedAndInUse_d_0x_x, stats.allocatedAndInUse, stats.allocatedAndInUse);
     igReport_Flush();
-    igReport_Printf(DAT_004ff6c0, stats.allocatedAndAvailable, stats.allocatedAndAvailable);
+    igReport_Printf(text_allocatedAndAvailable_d_0x_x, stats.allocatedAndAvailable, stats.allocatedAndAvailable);
     igReport_Flush();
-    igReport_Printf(DAT_004ff6f0, stats.freeFromTop, stats.freeFromTop);
+    igReport_Printf(text_freeFromTop_d_0x_x, stats.freeFromTop, stats.freeFromTop);
     igReport_Flush();
-    igReport_Printf(DAT_004ff720, stats.codeStart, stats.codeStart);
+    igReport_Printf(text_codeStart_d_0x_x, stats.codeStart, stats.codeStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff750, stats.codeSize, stats.codeSize);
+    igReport_Printf(text_codeSize_d_0x_x, stats.codeSize, stats.codeSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff780, stats.dataStart, stats.dataStart);
+    igReport_Printf(text_dataStart_d_0x_x, stats.dataStart, stats.dataStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff7b0, stats.dataSize, stats.dataSize);
+    igReport_Printf(text_dataSize_d_0x_x, stats.dataSize, stats.dataSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff7e0, stats.initializedStart, stats.initializedStart);
+    igReport_Printf(text_initializedStart_d_0x_x, stats.initializedStart, stats.initializedStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff810, stats.initializedSize, stats.initializedSize);
+    igReport_Printf(text_initializedSize_d_0x_x, stats.initializedSize, stats.initializedSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff840, stats.uninitializedStart, stats.uninitializedStart);
+    igReport_Printf(text_uninitializedStart_d_0x_x, stats.uninitializedStart, stats.uninitializedStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff870, stats.uninitializedSize, stats.uninitializedSize);
+    igReport_Printf(text_uninitializedSize_d_0x_x, stats.uninitializedSize, stats.uninitializedSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff8a0, stats.stackStart, stats.stackStart);
+    igReport_Printf(text_stackStart_d_0x_x, stats.stackStart, stats.stackStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff8d0, stats.stackSize, stats.stackSize);
+    igReport_Printf(text_stackSize_d_0x_x, stats.stackSize, stats.stackSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff900, stats.fastStart, stats.fastStart);
+    igReport_Printf(text_fastStart_d_0x_x, stats.fastStart, stats.fastStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff930, stats.fastSize, stats.fastSize);
+    igReport_Printf(text_fastSize_d_0x_x, stats.fastSize, stats.fastSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff960, stats.virtualStart, stats.virtualStart);
+    igReport_Printf(text_virtualStart_d_0x_x, stats.virtualStart, stats.virtualStart);
     igReport_Flush();
-    igReport_Printf(DAT_004ff990, stats.virtualSize, stats.virtualSize);
+    igReport_Printf(text_virtualSize_d_0x_x, stats.virtualSize, stats.virtualSize);
     igReport_Flush();
-    igReport_Printf(DAT_004ff9c0, stats.heapTop, stats.heapTop);
+    igReport_Printf(text_heapTop_d_0x_x, stats.heapTop, stats.heapTop);
     igReport_Flush();
 }
 
@@ -557,7 +557,7 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
     char region[160];
     int i;
     int count;
-    igReport_Printf(DAT_004ffa00, title == 0 ? text_Memory_Map : title);
+    igReport_Printf(percent_s_colon_newlines, title == 0 ? text_Memory_Map : title);
     igReport_Flush();
     self->GetStatistics(&stats);
     igSmartPointer<igPointerList> list((igPointerList *)igPointerList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
@@ -565,7 +565,7 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
         FUN_002d6680(list, 1024, 4);
     }
     if (a != 0) {
-        self->vfunc_38(list);
+        self->CollectHardwareRegions(list);
     }
     if (b != 0) {
         self->CollectProgramRegions(list);
@@ -574,7 +574,7 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
         self->CollectHeapRegions(list);
     }
     if (d != 0) {
-        self->vfunc_41(list);
+        self->CollectPoolRegions(list);
     }
     count = list->_count;
     if (path != 0 && count != 0) {
@@ -582,25 +582,25 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
         igEventTracker_SetCapacity((int)tracker.p, list->_count);
         tracker->_flags |= 0x10;
         tracker->_memoryFieldFilterFlags = ~0x20;
-        tracker->vfunc_23();
+        tracker->Initialize();
         for (i = 0; i < count; i++) {
             DumpRegion *e = ((DumpRegion **)list->_data)[i];
             igEventTracker_InitMemoryEvent(region, 1, (void *)e->start, e->size, 0, 0, 0, 0, (int)e->annotation, 0, 0, (int)e->poolName);
-            tracker->vfunc_26((EventRecord *)region, 0);
+            tracker->AddEvent((EventRecord *)region, 0);
             igEventTracker_DestructEvent(region, -1);
         }
-        tracker->vfunc_44(path);
-        tracker->vfunc_24();
+        tracker->WriteFile(path);
+        tracker->Shutdown();
     }
-    igReport_Printf(DAT_004ffa10, text_Start, text_End, text_Size, text_Pool_Name, text_Annotation);
+    igReport_Printf(text_10s_10s_10s_14s_s, text_Start, text_End, text_Size, text_Pool_Name, text_Annotation);
     igReport_Flush();
     for (i = 0; i < count; i++) {
         DumpRegion *e = ((DumpRegion **)list->_data)[i];
-        igReport_Printf(DAT_004ffa60, e->start, e->start + e->size, e->size, e->poolName, e->annotation);
+        igReport_Printf(text_0x_08x_0x_08x_0x_08x_14s_s, e->start, e->start + e->size, e->size, e->poolName, e->annotation);
         igReport_Flush();
         DumpRegion_Destruct(e, 1);
     }
-    igReport_Printf(DAT_004f95c8);
+    igReport_Printf(newline_2);
     igReport_Flush();
 }
 
@@ -608,92 +608,92 @@ void SystemAllocatorBase_CollectHardwareRegions(int extra0)
 {
 }
 
-void SystemAllocatorBase_CollectProgramRegions(SystemAllocator *self, int arg1) {
+void SystemAllocatorBase_CollectProgramRegions(SystemAllocator *self, int regions) {
     DumpRegion *row;
     SystemMemoryStatistics out;
-    int *s1;
+    int *start;
     self->GetStatistics(&out);
-    s1 = &out.codeStart;
-    if (*s1 != -1) {
+    start = &out.codeStart;
+    if (*start != -1) {
         DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
         if (e != 0) e = DumpRegion_Init(e);
         row = e;
-        e->start = *s1;
+        e->start = *start;
         row->size = out.codeSize;
         DumpRegion_SetAnnotation(row, text_Section_Code);
         DumpRegion_SetPoolName(row, text_Program);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
-    s1 = &out.dataStart;
-    if (*s1 != -1) {
+    start = &out.dataStart;
+    if (*start != -1) {
         DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
         if (e != 0) e = DumpRegion_Init(e);
         row = e;
-        e->start = *s1;
+        e->start = *start;
         row->size = out.dataSize;
         DumpRegion_SetAnnotation(row, text_Section_Data);
         DumpRegion_SetPoolName(row, text_Program);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
-    s1 = &out.initializedStart;
-    if (*s1 != -1) {
+    start = &out.initializedStart;
+    if (*start != -1) {
         DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
         if (e != 0) e = DumpRegion_Init(e);
         row = e;
-        e->start = *s1;
+        e->start = *start;
         row->size = out.initializedSize;
         DumpRegion_SetAnnotation(row, text_Section_Initialized_Data);
         DumpRegion_SetPoolName(row, text_Program);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
-    s1 = &out.uninitializedStart;
-    if (*s1 != -1) {
+    start = &out.uninitializedStart;
+    if (*start != -1) {
         DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
         if (e != 0) e = DumpRegion_Init(e);
         row = e;
-        e->start = *s1;
+        e->start = *start;
         row->size = out.uninitializedSize;
         DumpRegion_SetAnnotation(row, text_Section_Uninitialized_Data);
         DumpRegion_SetPoolName(row, text_Program);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
-    s1 = &out.stackStart;
-    if (*s1 != -1) {
+    start = &out.stackStart;
+    if (*start != -1) {
         DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
         if (e != 0) e = DumpRegion_Init(e);
         row = e;
-        e->start = *s1;
+        e->start = *start;
         row->size = out.stackSize;
         DumpRegion_SetAnnotation(row, text_Section_Stack_Data);
         DumpRegion_SetPoolName(row, text_Program);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
 }
 
-void SystemAllocatorBase_CollectHeapRegions(SystemAllocator *self, int arg1) {
+void SystemAllocatorBase_CollectHeapRegions(SystemAllocator *self, int regions) {
     DumpRegion *row;
     SystemMemoryStatistics out;
     unsigned i;
     unsigned j;
-    int s2; int s1; int s0;
+    int state; int run; int table;
     self->GetStatistics(&out);
     for (i = 0; i < 0x40U; i++) {
-        s0 = DAT_00587220[i];
-        if (s0 != 0) for (j = 0; j < 0x4000U; j += s1) {
-            s2 = PageTable_GetState(s0, j);
-            s1 = PageTable_CountRun(s0, j, 0x4000 - j, s2, 3);
+        table = g_systemPageTables[i];
+        if (table != 0) for (j = 0; j < 0x4000U; j += run) {
+            state = PageTable_GetState(table, j);
+            run = PageTable_CountRun(table, j, 0x4000 - j, state, 3);
             DumpRegion *e = DumpRegion_Allocate(sizeof(DumpRegion));
             if (e != 0) e = DumpRegion_Init(e);
             row = e;
             e->start = (i << 26) + (j << 12);
-            row->size = s1 << 12;
-            switch (s2) {
+            row->size = run << 12;
+            switch (state) {
             case 0: DumpRegion_SetAnnotation(row, text_Heap_Unknown); DumpRegion_SetPoolName(row, text_SystemHeap); break;
             case 1: DumpRegion_SetAnnotation(row, text_Heap_Free); DumpRegion_SetPoolName(row, text_SystemHeap); break;
             case 2: DumpRegion_SetAnnotation(row, text_Heap_Blocked); DumpRegion_SetPoolName(row, text_SystemHeap); break;
             case 3: DumpRegion_SetAnnotation(row, text_Heap_Allocated); DumpRegion_SetPoolName(row, text_SystemHeap); break;
             }
-            List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+            List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
         }
     }
     if (out.heapTop != -1 && out.freeFromTop != -1) {
@@ -704,7 +704,7 @@ void SystemAllocatorBase_CollectHeapRegions(SystemAllocator *self, int arg1) {
         row->size = out.freeFromTop;
         DumpRegion_SetAnnotation(row, text_Heap_Free_from_top);
         DumpRegion_SetPoolName(row, text_SystemHeap);
-        List_InsertWords((igDataList *)arg1, List_LowerBound((igDataList *)arg1, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
+        List_InsertWords((igDataList *)regions, List_LowerBound((igDataList *)regions, &row, (Cmp)DumpRegion_CompareStart), 1, &row);
     }
 }
 
@@ -716,7 +716,7 @@ int SystemAllocatorBase_Sbrk(void) {
     return -1;
 }
 
-void SystemAllocatorBase_ReserveRange(int *arg0, SystemAllocator *self, int arg2, int arg3) {igResult a = self->vfunc_27(1, arg2, arg3); igResult b = self->vfunc_46(arg2, arg3, 0);*arg0 = g_resultSuccess.v;}
+void SystemAllocatorBase_ReserveRange(int *status, SystemAllocator *self, int address, int size) {igResult stateResult = self->SetPageState(1, address, size); igResult markResult = self->vfunc_46(address, size, 0);*status = g_resultSuccess.v;}
 
 void *SystemAllocatorBase_AllocateTable(SystemAllocator *self, unsigned int size)
 {
@@ -728,52 +728,52 @@ void SystemAllocatorBase_FreeTable(SystemAllocator *self, void *block)
     self->Free(block);
 }
 
-void FUN_0032ac60(int *arg0) {
-    *arg0 = g_resultSuccess.v;
+void FUN_0032ac60(int *status) {
+    *status = g_resultSuccess.v;
 }
 
-int PageTable_GetState(int arg0, unsigned int arg1) {
-    return (((unsigned int *)arg0)[arg1 >> 4] >> ((arg1 & 0xF) * 2)) & 3;
+int PageTable_GetState(int table, unsigned int page) {
+    return (((unsigned int *)table)[page >> 4] >> ((page & 0xF) * 2)) & 3;
 }
 
-void PageTable_SetState(int arg0, unsigned int arg1, int arg2) {
-    int *temp_a2;
-    int temp_a3;
+void PageTable_SetState(int table, unsigned int page, int state) {
+    int *word;
+    int shift;
 
-    temp_a3 = (arg1 & 0xF) * 2;
-    temp_a2 = (int *)(arg0 + ((arg1 >> 4) * 4));
-    *temp_a2 = (~(3 << temp_a3) & *temp_a2) | (arg2 << temp_a3);
+    shift = (page & 0xF) * 2;
+    word = (int *)(table + ((page >> 4) * 4));
+    *word = (~(3 << shift) & *word) | (state << shift);
 }
 
-void PageTable_SetStateRange(int arg0, int arg1, int arg2, int arg3) {
-    while (arg2-- != 0) {
-        PageTable_SetState(arg0, arg1, arg3);
-        arg1++;
+void PageTable_SetStateRange(int table, int page, int count, int state) {
+    while (count-- != 0) {
+        PageTable_SetState(table, page, state);
+        page++;
     }
 }
 
-int PageTable_CountRun(int arg0, unsigned int arg1, int arg2, int arg3, int arg4) {
-    int n = 0;
-    for (; arg1 < 0x4000U; arg1++) {
-        if (arg2-- == 0) return n;
-        if (arg3 != (arg4 & PageTable_GetState(arg0, arg1))) return n;
-        n++;
+int PageTable_CountRun(int table, unsigned int page, int limit, int state, int mask) {
+    int count = 0;
+    for (; page < 0x4000U; page++) {
+        if (limit-- == 0) return count;
+        if (state != (mask & PageTable_GetState(table, page))) return count;
+        count++;
     }
-    return n;
+    return count;
 }
 
-void PageTable_CountStates(int arg0, void *arg1) {
-    int *temp_a1;
-    int temp_v1;
-    int var_s2;
+void PageTable_CountStates(int table, void *counts) {
+    int *counter;
+    int offset;
+    int page;
 
-    var_s2 = 0;
+    page = 0;
     do {
-        temp_v1 = PageTable_GetState(arg0, var_s2) * 4;
-        var_s2 += 1;
-        temp_a1 = (int *)((char *)arg1 + temp_v1);
-        *temp_a1 += 1;
-    } while (var_s2 < 0x4000);
+        offset = PageTable_GetState(table, page) * 4;
+        page += 1;
+        counter = (int *)((char *)counts + offset);
+        *counter += 1;
+    } while (page < 0x4000);
 }
 
 void SystemAllocator_EnsureCreated(void) {

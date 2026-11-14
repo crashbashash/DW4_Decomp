@@ -1,37 +1,37 @@
-void igProgramFile_Reset(igProgramFile *arg0) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    char *temp_a0;
-    igFileView *temp_a0_2;
-    char *temp_s1;
+void igProgramFile_Reset(igProgramFile *self) {
+    int *header;
+    int count;
+    int pool;
+    char *oldName;
+    igFileView *file;
+    char *name;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s1 = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
-    temp_a0 = (char *)arg0->_fileName;
-    if (temp_a0 != 0) {
-        temp_a1 = (int *)(temp_a0 - 8);
-        temp_v1 = *(int *)(temp_a0 - 4) - 1;
-        *(int *)(temp_a0 - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
-        }
-    }
-    arg0->_fileName = (int)temp_s1;
-    temp_a0_2 = (igFileView *)arg0->_file;
-    if (temp_a0_2 != 0) {
-        --temp_a0_2->_refCount;
-        if (((unsigned long long)(long long)(int)temp_a0_2->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(temp_a0_2);
+    name = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
+    oldName = (char *)self->_fileName;
+    if (oldName != 0) {
+        header = (int *)(oldName - 8);
+        count = *(int *)(oldName - 4) - 1;
+        *(int *)(oldName - 4) = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0->_file = 0;
+    self->_fileName = (int)name;
+    file = (igFileView *)self->_file;
+    if (file != 0) {
+        --file->_refCount;
+        if (((unsigned long long)(long long)(int)file->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy(file);
+        }
+    }
+    self->_file = 0;
 }
 
 igResult igProgramFile_Open(igProgramFile *self, const char *path) {
@@ -72,8 +72,8 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     }
     file->stream = (igFileView *)igFile_Create(allocator);
     igFile_SetFileName((int *)file->stream, file->path);
-    if (file->stream->vfunc_23(4) == g_resultFailure) {
-        igReport_Printf((const char *)&DAT_004ff4f0[0], (int)file->path);
+    if (file->stream->openWithMode(4) == g_resultFailure) {
+        igReport_Printf((const char *)&text_Unable_to_open_percent_s[0], (int)file->path);
         igReport_Flush();
         return g_resultFailure;
     }
@@ -81,7 +81,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
 }
 
 void igProgramFile_Close(int *result, ProgramFileView *self) {
-    self->stream->vfunc_24();
+    self->stream->closeHandle();
     self->Reset();
     *result = g_resultSuccess.v;
 }
@@ -90,7 +90,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     igFileView *stream;
     stream = self->stream;
     if (stream->Seek(offset, 0) == -1) {
-        igReport_Printf(DAT_004ff510, offset, self->path);
+        igReport_Printf(text_Error_seeking_to_offset_0x_percent_x_in_percent_s, offset, self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
@@ -99,7 +99,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     if (*dest == 0) {
         *dest = (void *)igObject_AllocateStorage((int)self, size);
         if (*dest == 0) {
-            igReport_Printf(DAT_004ff540, size, self->path);
+            igReport_Printf(text_Error_allocating_buffer_size_0x_percent_x, size, self->path);
             igReport_Flush();
             self->Close();
             *result = g_resultFailure.v;
@@ -109,7 +109,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     memset(*dest, 0, size);
     stream = self->stream;
     if (stream->Read(*dest, size, 1) != 1) {
-        igReport_Printf(DAT_004fdda0, self->path);
+        igReport_Printf(text_Error_reading_percent_s, self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;

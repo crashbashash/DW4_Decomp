@@ -1,6 +1,6 @@
-void * igContextExtInfoList_Create(int arg0) {
+void * igContextExtInfoList_Create(int pool) {
     igContextExtInfoList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C0), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C0), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igContextExtInfoList_GetOrCreateMetaObject(void) {
@@ -22,7 +22,7 @@ int igContextExtInfoList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&DAT_00531910[0];
+    tmp[0] = (int)&g_igContextExtInfoList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }

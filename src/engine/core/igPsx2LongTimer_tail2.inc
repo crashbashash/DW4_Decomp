@@ -10,7 +10,7 @@ int igPsx2LongTimer_GetResolution(void) {
 }
 
 void igPsx2LongTimer_InitTimer(void) {
-    GPR_00554ddc = 1;
+    g_igPsx2LongTimer_initialized = 1;
     p2InitTimer();
 }
 

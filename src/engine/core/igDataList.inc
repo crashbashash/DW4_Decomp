@@ -1,6 +1,6 @@
-void * igDataList_Create(int arg0) {
+void * igDataList_Create(int pool) {
     igDataList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586788), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586788), (igMemoryPoolView *)pool));
 }
 
 /* Created with allocation only when missing. */
@@ -23,7 +23,7 @@ int igDataList_GetVTable(void) {
     igDataList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_005309b0[0];
+    list._vtable = (int)&g_igDataList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -54,18 +54,18 @@ void igDataList_GetMetaObjectFunction(void) {
 }
 
 void igDataList_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *field;
+    void *meta;
 
-    temp_s0 = (void *)g_igDataList_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igDataList_ctorTable[0], 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igDataList_fieldTable[0], (igMetaField ***)&DAT_004c13a0[0], &DAT_004c13b0[0], temp_s2);
+    meta = (void *)g_igDataList_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igDataList_ctorTable[0], 3);
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igDataList_fieldTable[0], (igMetaField ***)&g_igDataList_fieldDescriptors[0], &g_igDataList_fieldOffsets[0], base);
 }
 

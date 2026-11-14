@@ -1,6 +1,6 @@
-void * igMediaList_Create(int arg0) {
+void * igMediaList_Create(int pool) {
     igMediaList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586018), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586018), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMediaList_GetMetaObject(void)
@@ -15,7 +15,7 @@ int igMediaList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&DAT_005328a0[0];
+    tmp[0] = (int)&g_igMediaList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }

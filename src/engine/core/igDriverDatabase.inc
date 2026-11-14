@@ -1,13 +1,13 @@
 int igDriverDatabase_GetSectionOverrideModeMetaEnum(void) {
-    if (DAT_005865c8[0] == 0) {
-        DAT_005865c8[0] = ((int)igMetaEnum_Create((char *)(&SECTION_OVERRIDE_MODE[0]), (char **)(&DAT_004c0fb8[0]), &DAT_004c0fc0[0], 2));
+    if (g_sectionOverrideModeMetaEnum[0] == 0) {
+        g_sectionOverrideModeMetaEnum[0] = ((int)igMetaEnum_Create((char *)(&SECTION_OVERRIDE_MODE[0]), (char **)(&g_sectionOverrideModeNames[0]), &g_sectionOverrideModeValues[0], 2));
     }
-    return DAT_005865c8[0];
+    return g_sectionOverrideModeMetaEnum[0];
 }
 
-void igDriverDatabase_Create(int arg0) {
+void igDriverDatabase_Create(int pool) {
     igDriverDatabase_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igDriverDatabase_GetMetaObject(void)
@@ -23,7 +23,7 @@ int igDriverDatabase_GetVTable(void) {
     int r;
 
     igObject_InitHeader((igObject *)&db);
-    db._vtable = (int)&DAT_00530630[0];
+    db._vtable = (int)&g_igDriverDatabase_vtable[0];
     db._currentProperties = 0;
     db._subPropertyNames = 0;
     db._subPropertyValues = 0;
@@ -32,7 +32,7 @@ int igDriverDatabase_GetVTable(void) {
     db._databaseFileName = 0;
     db._rawDatabase = 0;
     r = *(int *)((char *)&db + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    db._vtable = (int)&DAT_00530630[0];
+    db._vtable = (int)&g_igDriverDatabase_vtable[0];
     FUN_001489a0(&db._rawDatabase, -1);
     FUN_001489a0(&db._databaseFileName, -1);
     FUN_00150180(&db._databaseFile, -1);
@@ -70,63 +70,63 @@ void igDriverDatabase_GetMetaObjectFunction(void) {
 }
 
 void igDriverDatabase_InitFields(void) {
-    int temp_s1;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
-    void *temp_s0;
+    int base;
+    void *currentPropertiesField;
+    void *subPropertyNamesField;
+    void *subPropertyValuesField;
+    void *overrideSourceField;
+    void *databaseFileField;
+    void *databaseFileNameField;
+    void *rawDatabaseField;
+    void *overrideModeField;
+    void *currentLineField;
+    void *dbIndexField;
+    void *meta;
 
-    temp_s0 = (void *)g_igDriverDatabase_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igDriverDatabase_ctorTable[0], 0xC);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igStringRefListList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igStringRefListList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4))), -1);
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)temp_v0, (const int *)&DAT_004c10b0[0]);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&igDriverDatabase_GetSectionOverrideModeMetaEnum);
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igFile_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_5)->_persistent = 0;
-    ((igObjectRefMetaField *)temp_s2_5)->_deepCopyMethod = 3;
-    ((igObjectRefMetaField *)temp_s2_5)->_shallowCopyMethod = 3;
-    temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
-    ((igObjectRefMetaField *)temp_s2_6)->_persistent = 0;
-    ((igObjectRefMetaField *)temp_s2_6)->_deepCopyMethod = 3;
-    ((igObjectRefMetaField *)temp_s2_6)->_shallowCopyMethod = 3;
-    temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_7)->_construct = 1;
-    ((igObjectRefMetaField *)temp_s2_7)->_persistent = 0;
-    ((igObjectRefMetaField *)temp_s2_7)->_deepCopyMethod = 3;
-    ((igObjectRefMetaField *)temp_s2_7)->_shallowCopyMethod = 3;
-    temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
-    ((igIntMetaField *)temp_v0_2)->_persistent = 0;
-    ((igIntMetaField *)temp_v0_2)->_deepCopyMethod = 3;
-    ((igIntMetaField *)temp_v0_2)->_shallowCopyMethod = 3;
-    ((igBoolMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)))->_persistent = 0;
-    temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    ((igRawRefMetaField *)temp_v0_3)->_persistent = 0;
-    ((igRawRefMetaField *)temp_v0_3)->_deepCopyMethod = 3;
-    ((igRawRefMetaField *)temp_v0_3)->_shallowCopyMethod = 3;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igDriverDatabase_fieldTable[0], (igMetaField ***)&DAT_004c1050[0], &DAT_004c1080[0], temp_s1);
+    meta = (void *)g_igDriverDatabase_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igDriverDatabase_ctorTable[0], 0xC);
+    currentPropertiesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)currentPropertiesField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)currentPropertiesField)->_construct = 1;
+    subPropertyNamesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)subPropertyNamesField)->_metaObject = (int)igStringRefListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subPropertyNamesField)->_construct = 1;
+    subPropertyValuesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)subPropertyValuesField)->_metaObject = (int)igStringRefListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subPropertyValuesField)->_construct = 1;
+    overrideSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)overrideSourceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), -1);
+    overrideModeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)overrideModeField, (const int *)&g_igDriverDatabase_defaultSectionOverrideMode[0]);
+    ((igEnumMetaField *)overrideModeField)->_getMetaEnumFunction = (int)(&igDriverDatabase_GetSectionOverrideModeMetaEnum);
+    databaseFileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
+    ((igObjectRefMetaField *)databaseFileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)databaseFileField)->_persistent = 0;
+    ((igObjectRefMetaField *)databaseFileField)->_deepCopyMethod = 3;
+    ((igObjectRefMetaField *)databaseFileField)->_shallowCopyMethod = 3;
+    databaseFileNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7)));
+    ((igObjectRefMetaField *)databaseFileNameField)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)databaseFileNameField)->_construct = 1;
+    ((igObjectRefMetaField *)databaseFileNameField)->_persistent = 0;
+    ((igObjectRefMetaField *)databaseFileNameField)->_deepCopyMethod = 3;
+    ((igObjectRefMetaField *)databaseFileNameField)->_shallowCopyMethod = 3;
+    rawDatabaseField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8)));
+    ((igObjectRefMetaField *)rawDatabaseField)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)rawDatabaseField)->_construct = 1;
+    ((igObjectRefMetaField *)rawDatabaseField)->_persistent = 0;
+    ((igObjectRefMetaField *)rawDatabaseField)->_deepCopyMethod = 3;
+    ((igObjectRefMetaField *)rawDatabaseField)->_shallowCopyMethod = 3;
+    currentLineField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9)));
+    ((igIntMetaField *)currentLineField)->_persistent = 0;
+    ((igIntMetaField *)currentLineField)->_deepCopyMethod = 3;
+    ((igIntMetaField *)currentLineField)->_shallowCopyMethod = 3;
+    ((igBoolMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA)))->_persistent = 0;
+    dbIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB)));
+    ((igRawRefMetaField *)dbIndexField)->_persistent = 0;
+    ((igRawRefMetaField *)dbIndexField)->_deepCopyMethod = 3;
+    ((igRawRefMetaField *)dbIndexField)->_shallowCopyMethod = 3;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igDriverDatabase_fieldTable[0], (igMetaField ***)&g_igDriverDatabase_fieldDescriptors[0], &g_igDriverDatabase_fieldOffsets[0], base);
 }
 

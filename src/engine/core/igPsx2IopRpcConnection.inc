@@ -1,6 +1,6 @@
-void igPsx2IopRpcConnection_Create(int arg0) {
+void igPsx2IopRpcConnection_Create(int pool) {
     igPsx2IopRpcConnection_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D48), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D48), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2IopRpcConnection_GetOrCreateMetaObject(void) {
@@ -21,7 +21,7 @@ igMetaObject *igPsx2IopRpcConnection_GetMetaObject(void)
 int igPsx2IopRpcConnection_GetVTable(void) {
     igPsx2IopRpcConnection connection;
     igObject_InitHeader((igObject *)&connection);
-    connection._vtable = (int)&DAT_0052db30[0];
+    connection._vtable = (int)&g_igPsx2IopRpcConnection_vtable[0];
     return *(int *)((char *)&connection + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -52,12 +52,12 @@ void igPsx2IopRpcConnection_GetMetaObjectFunction(void) {
 }
 
 void igPsx2IopRpcConnection_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int first;
+    void *meta;
 
-    temp_s0 = (void *)g_igPsx2IopRpcConnection_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2IopRpcConnection_ctorTable[0], 3);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2IopRpcConnection_fieldTable[0], (igMetaField ***)&DAT_004c1df0[0], &DAT_004c1e00[0], temp_s1);
+    meta = (void *)g_igPsx2IopRpcConnection_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2IopRpcConnection_ctorTable[0], 3);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2IopRpcConnection_fieldTable[0], (igMetaField ***)&g_igPsx2IopRpcConnection_fieldDescriptors[0], &g_igPsx2IopRpcConnection_fieldOffsets[0], first);
 }
 

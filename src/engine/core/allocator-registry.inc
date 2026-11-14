@@ -29,45 +29,46 @@ void igMemoryPool_CollectMemoryRegions(void) {
 
 }
 
-void igMemoryPool_CollectAllMemoryRegions(int arg0, int extra1) {
-    int var_s2;
-    igMemoryPoolView *temp_s1;
-    igMemoryPoolView *temp_s2;
-    int var_s1;
+void igMemoryPool_CollectAllMemoryRegions(int regions, int unused) {
+    int i;
+    igMemoryPoolView *pool;
+    igMemoryPoolView *primary;
+    int j;
 
-    var_s2 = g_secondaryAllocatorList[0]->count - 1;
-    while (var_s2 >= 0) {
-        temp_s1 = g_secondaryAllocatorList[0]->data[var_s2];
-        if ((temp_s1 != 0) && (temp_s1->isActive() != 0)) {
-            temp_s1->vfunc_96(arg0);
+    i = g_secondaryAllocatorList[0]->count - 1;
+    while (i >= 0) {
+        pool = g_secondaryAllocatorList[0]->data[i];
+        if ((pool != 0) && (pool->isActive() != 0)) {
+            pool->CollectMemoryRegions(regions);
         }
-        var_s2 -= 1;
+        i -= 1;
     }
-    var_s1 = g_primaryAllocatorList[0]->count - 1;
-    while (var_s1 >= 0) {
-        temp_s2 = g_primaryAllocatorList[0]->data[var_s1];
-        if ((temp_s2 != 0) && (temp_s2->isActive() != 0)) {
-            temp_s2->vfunc_96(arg0);
+    j = g_primaryAllocatorList[0]->count - 1;
+    while (j >= 0) {
+        primary = g_primaryAllocatorList[0]->data[j];
+        if ((primary != 0) && (primary->isActive() != 0)) {
+            primary->CollectMemoryRegions(regions);
         }
-        var_s1 -= 1;
+        j -= 1;
     }
 }
 
-void igMemoryPool_SetPreSize(int *arg0) {
-    *arg0 = g_resultFailure.v;
+void igMemoryPool_SetPreSize(int *status) {
+    *status = g_resultFailure.v;
 }
 
 int igMemoryPool_GetPreSize(void) {
     return 0;
 }
 
-igResult igMemoryPool_Configure(void **pool, void *info) {
+igResult igMemoryPool_Configure(void **pool, void *object) {
+    igMemoryPoolInfo *info = (igMemoryPoolInfo *)object;
     igResult discarded;
-    int temp_v1;
+    int maxSize;
 
-    temp_v1 = *(int *)((char *)(info) + 32);
-    if (temp_v1 != 0) {
-        discarded = ((igMemoryPoolView *)pool)->vfunc_41((long long)temp_v1);
+    maxSize = info->_maxSize;
+    if (maxSize != 0) {
+        discarded = ((igMemoryPoolView *)pool)->SetMaxSize((long long)maxSize);
     }
     return g_resultSuccess;
 }

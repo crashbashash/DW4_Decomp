@@ -1,30 +1,30 @@
-int igLongMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igLongMetaField_ValueFromString(int self, int unused, int string) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &text_ld_n[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(string, &text_ld_n[0], unused, &consumed);
+    return consumed;
 }
 
-void igLongMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
-    int sp20[256];
-    int var_v0;
-    int var_v1;
+void igLongMetaField_ValueToString(int *out, int self, long long *value) {
+    int text[256];
+    int pool;
+    int interned;
 
-    sprintf(&sp20[0], &DAT_004f9bc0[0], *arg2);
-    if (&sp20[0] == 0) {
-        var_v1 = 0;
+    sprintf(&text[0], &percent_ld[0], *value);
+    if (&text[0] == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&sp20[0]);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text[0]);
     }
-    *arg0 = var_v1;
+    *out = interned;
 }
 
 /* igLongMetaField vtable slot +0x64 (GetSize): the byte size of one field value. A "long" field is
@@ -33,59 +33,59 @@ int igLongMetaField_GetSize(void) {
     return 8;
 }
 
-void igLongMetaField_SetDefault(void **arg0, long long arg1) {
-    long long sp18;
+void igLongMetaField_SetDefault(void **self, long long value) {
+    long long stored;
 
-    sp18 = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
+    stored = value;
+    ((igMetaFieldView *)(self))->SetDefault(&stored);
 }
 
 int igLongMetaField_GetAlignment(void) {
     return 8;
 }
 
-igMediaView *igMediaFile_FindDeviceForPath(int arg0) {
-    int temp_v0;
+igMediaView *igMediaFile_FindDeviceForPath(int path) {
+    int colon;
     int len;
-    int var_s0;
-    igMediaView *temp_s3;
+    int i;
+    igMediaView *media;
 
-    temp_v0 = ((int)strchr(arg0, 0x3A));
-    if (temp_v0 != 0) {
-        len = temp_v0 - arg0;
-        for (var_s0 = g_fileDeviceList.p->_count - 1; var_s0 <= 0; var_s0--) {
-            temp_s3 = ((igMediaView **)g_fileDeviceList.p->_data)[var_s0];
-            if (temp_s3->vfunc_32(arg0, len) != 0) {
-                return temp_s3;
+    colon = ((int)strchr(path, 0x3A));
+    if (colon != 0) {
+        len = colon - path;
+        for (i = g_fileDeviceList.p->_count - 1; i <= 0; i--) {
+            media = ((igMediaView **)g_fileDeviceList.p->_data)[i];
+            if (media->vfunc_32(path, len) != 0) {
+                return media;
             }
         }
     }
-    return DAT_00586f28[0];
+    return g_defaultMedia[0];
 }
 
 void igMedia_CreateMediaList(void) {
-    int temp_s0;
-    char *o;
+    int pool;
+    igObjectList *list;
 
-    temp_s0 = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    o = (char *)g_fileDeviceList.p;
-    if (o != 0) {
-        *(int *)(o + 4) = *(int *)(o + 4) - 1;
-        if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-            igObject_Destroy(o);
+    pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    list = g_fileDeviceList.p;
+    if (list != 0) {
+        list->_refCount = list->_refCount - 1;
+        if ((list->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(list);
         }
     }
-    g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(temp_s0));
+    g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(pool));
 }
 
-void igMedia_AddMedia(int arg0) {
-    ObjectList_AppendRetained(g_fileDeviceList.p, (igObject *)arg0);
+void igMedia_AddMedia(int media) {
+    ObjectList_AppendRetained(g_fileDeviceList.p, (igObject *)media);
 }
 
 void igMedia_ReleaseMediaList(void) {
     int *o;
 
-    ((int *)DAT_00586f28)[0] = 0;
+    ((int *)g_defaultMedia)[0] = 0;
     o = (int *)g_fileDeviceList.p;
     if (o != 0) {
         o[1] = o[1] - 1;
@@ -96,7 +96,7 @@ void igMedia_ReleaseMediaList(void) {
     g_fileDeviceList.p = 0;
 }
 
-void igMedia_SetDefaultMedia(int arg0) {
-    *(int *)0x586F28 = arg0;
+void igMedia_SetDefaultMedia(int media) {
+    *(int *)0x586F28 = media;
 }
 

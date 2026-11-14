@@ -14,9 +14,9 @@ void igArenaMemoryPool_UpdateBlockList(igArenaMemoryPool *o, unsigned int lo, in
         unsigned int *h;
         if (lo >= a && (h = e + 1, lo <= e[1])) {
             if (found) {
-                if (o->_messageLevel >= 2 && GPR_00554ce4 == 0) {
+                if (o->_messageLevel >= 2 && g_arenaBlockListNoticeIgnored == 0) {
                     int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->blocks, h, a);
-                    if (rc != 1 && rc == 2) GPR_00554ce4 = 1;
+                    if (rc != 1 && rc == 2) g_arenaBlockListNoticeIgnored = 1;
                 }
                 return;
             } else {
@@ -50,9 +50,9 @@ if (r->blockCount >= cap) {
             } else {
                 if (o->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, o);
-                    if (GPR_00554ce8 == 0) {
+                    if (g_arenaBlockListGrowNoticeIgnored == 0) {
                         int rc = igReportNotice(text_igArenaMemoryPool_E68_Unable_to);
-                        if (rc != 1 && rc == 2) GPR_00554ce8 = 1;
+                        if (rc != 1 && rc == 2) g_arenaBlockListGrowNoticeIgnored = 1;
                     }
                 }
                 return;
@@ -79,7 +79,7 @@ void igArenaMemoryPool_DisplayOutstandingAllocations(void *self0) {
    int *p = &arena->blocks[i];
    igArenaMemoryPool_DisplayOutstandingAllocationsBlock(s, i, (char *)p[0], (char *)p[1]);
  }
- igReport_Printf(DAT_004f95c8);
+ igReport_Printf(newline_2);
  igReport_Flush();
 }
 
@@ -94,22 +94,22 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
     int count = 0;
     bool ok = false;
     if (cur < lo || hi < cur) {
-        igReport_Printf(DAT_004fbf10, index, cur, lo, hi);
+        igReport_Printf(text_displayOutstandingAllocationsBlock_block_range, index, cur, lo, hi);
         igReport_Flush();
         return;
     }
     if (end < lo || hi < end) {
-        igReport_Printf(DAT_004fbf90, index, end, lo, hi);
+        igReport_Printf(text_displayOutstandingAllocationsBlock_block_end_range, index, end, lo, hi);
         igReport_Flush();
         return;
     }
     if (end < cur) {
-        igReport_Printf(DAT_004fc010, index, end, cur);
+        igReport_Printf(text_displayOutstandingAllocationsBlock_end_before_start, index, end, cur);
         igReport_Flush();
         return;
     }
     if (!((TaggedBlockHeader *)cur)->used) {
-        igReport_Printf(DAT_004fc090);
+        igReport_Printf(text_displayOutstandingAllocationsBlock_arena_corrupted);
         igReport_Flush();
         return;
     }
@@ -148,7 +148,7 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
         }
         if ((char *)n != end && n->used) {
             char *allocation = cur + (big == 0 ? 4 : 12);
-            igReport_Printf((const char *)DAT_004fc120, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
+            igReport_Printf((const char *)text_Outstanding_allocation_at_0x_percent_08x, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
             igReport_Flush();
         }
         cur = (char *)n;
@@ -156,7 +156,7 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
     }
     if (cur != end && !ok) {
 bad:
-        igReport_Printf(DAT_004fc150, cur, index, count, size);
+        igReport_Printf(text_displayOutstandingAllocationsBlock_chunk_size, cur, index, count, size);
         igReport_Flush();
         return;
     }

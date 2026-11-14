@@ -1,6 +1,6 @@
-void * igStringObjList_Create(int arg0) {
+void * igStringObjList_Create(int pool) {
     igStringObjList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858E8), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858E8), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igStringObjList_GetOrCreateMetaObject(void) {
@@ -22,7 +22,7 @@ int igStringObjList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&DAT_005332e0[0];
+    tmp[0] = (int)&g_igStringObjList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }

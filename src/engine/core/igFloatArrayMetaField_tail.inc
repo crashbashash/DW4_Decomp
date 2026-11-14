@@ -5,39 +5,39 @@ int igFloatArrayMetaField_GetSize(igFloatArrayMetaField *self) {
     return (self->_num * 4) & 0xFFFF;
 }
 
-void igFloatArrayMetaField_SwapBytes(igFloatArrayMetaField *arg0, int arg1, int arg2) {
-    void **temp_v0;
+void igFloatArrayMetaField_SwapBytes(igFloatArrayMetaField *self, int buffer, int count) {
+    void **elementField;
 
-    temp_v0 = (void **)(((void **)igFloatMetaField_GetDefaultDescriptor()));
-    ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
+    elementField = (void **)(((void **)igFloatMetaField_GetDefaultDescriptor()));
+    ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
-int igFloatMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igFloatMetaField_ValueFromString(int self, int value, int text) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &DAT_004f9a68[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(text, &text_f_n[0], value, &consumed);
+    return consumed;
 }
 
-void igFloatMetaField_ValueToString(int *arg0, int arg1, float *arg2) {
-    char sp20[1024];
-    int var_v0;
-    int var_v1;
+void igFloatMetaField_ValueToString(int *result, int self, float *value) {
+    char text[1024];
+    int pool;
+    int interned;
 
-    sprintf(sp20, &DAT_004f9a70[0], fptodp(*arg2));
-    if (sp20 == 0) {
-        var_v1 = 0;
+    sprintf(text, &percent_f[0], fptodp(*value));
+    if (text == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text);
     }
-    *arg0 = var_v1;
+    *result = interned;
 }
 

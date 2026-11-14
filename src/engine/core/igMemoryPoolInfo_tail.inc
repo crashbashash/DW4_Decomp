@@ -11,12 +11,12 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
         return g_resultFailure;
     }
     if (section == 0 || *section == 0) {
-        defaults = igRegistry_GetSectionIndex(ini, DAT_004c2228[0], 0);
+        defaults = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName[0], 0);
         if (defaults == -1) {
             return g_resultFailure;
         }
         if (igRegistry_GetValueStringObj((int)ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
-                         (const char *)DAT_004f7910, 0) == 0) {
+                         (const char *)emptyString_4, 0) == 0) {
             return g_resultFailure;
         }
         section = igStringObj_Text(value.p);
@@ -33,42 +33,42 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
     return g_resultFailure;
 }
 
-void igMemoryPoolInfo_UserRegistryLoad(int *arg0, int *arg1, int arg2, int arg3) {
+void igMemoryPoolInfo_UserRegistryLoad(int *result, int *info, int ini, int section) {
     
-    if (arg2 == 0) {
-        arg2 = ((struct { char pad[56]; int i56; } * *)g_objectSystem)[0]->i56;
+    if (ini == 0) {
+        ini = (int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry;
     }
-    if (arg2 == 0) {
-        *arg0 = g_resultFailure.v;
+    if (ini == 0) {
+        *result = g_resultFailure.v;
     } else {
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2230, (int **)(&arg1[2]), (char *)arg1[2], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2238, (int **)(&arg1[5]), (char *)arg1[5], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2240, (int **)(&arg1[6]), (char *)arg1[6], 0);
-        igRegistry_GetValueInt(arg2, arg3, DAT_004c2248, &arg1[7], arg1[7], 0);
-        igRegistry_GetValueInt(arg2, arg3, DAT_004c2250, &arg1[8], arg1[8], 0);
-        igRegistry_GetValueInt(arg2, arg3, DAT_004c2258, &arg1[9], arg1[9], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2260, (int **)(&arg1[10]), (char *)arg1[10], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2268, (int **)(&arg1[11]), (char *)arg1[11], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2270, (int **)(&arg1[12]), (char *)arg1[12], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2278, (int **)(&arg1[13]), (char *)arg1[13], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2280, (int **)(&arg1[14]), (char *)arg1[14], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2288, (int **)(&arg1[15]), (char *)arg1[15], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2290, (int **)(&arg1[16]), (char *)arg1[16], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c2298, (int **)(&arg1[17]), (char *)arg1[17], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c22a0, (int **)(&arg1[18]), (char *)arg1[18], 0);
-        igRegistry_GetValueString(arg2, arg3, DAT_004c22a8, (int **)(&arg1[19]), (char *)arg1[19], 0);
-        igRegistry_GetValueInt(arg2, arg3, DAT_004c22b0, &arg1[20], arg1[20], 0);
-        *arg0 = g_resultSuccess.v;
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoNameKey, (int **)(&info[2]), (char *)info[2], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoHandleKey, (int **)(&info[5]), (char *)info[5], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoAliasedToKey, (int **)(&info[6]), (char *)info[6], 0);
+        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoSizeKey, &info[7], info[7], 0);
+        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoMaxSizeKey, &info[8], info[8], 0);
+        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoAddressKey, &info[9], info[9], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoClassKey, (int **)(&info[10]), (char *)info[10], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoArenaTypeKey, (int **)(&info[11]), (char *)info[11], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoSourceKey, (int **)(&info[12]), (char *)info[12], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoScopeKey, (int **)(&info[13]), (char *)info[13], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugOptionsKey, (int **)(&info[14]), (char *)info[14], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseOptionsKey, (int **)(&info[15]), (char *)info[15], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugCheckingKey, (int **)(&info[16]), (char *)info[16], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseCheckingKey, (int **)(&info[17]), (char *)info[17], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoDebugMessagesKey, (int **)(&info[18]), (char *)info[18], 0);
+        igRegistry_GetValueString(ini, section, g_memoryPoolInfoReleaseMessagesKey, (int **)(&info[19]), (char *)info[19], 0);
+        igRegistry_GetValueInt(ini, section, g_memoryPoolInfoEventTrackerCapacityKey, &info[20], info[20], 0);
+        *result = g_resultSuccess.v;
     }
 }
 
-void igMemoryPoolInfo_TrimCapacity(igMemoryPoolInfo *arg0) {
-    igObject_TrimCapacity((int)arg0);
+void igMemoryPoolInfo_TrimCapacity(igMemoryPoolInfo *info) {
+    igObject_TrimCapacity((int)info);
     SETSTR(_handleName)
     SETSTR(_aliasedTo)
-    arg0->_size = 0;
-    arg0->_maxSize = 0;
-    arg0->_address = 0;
+    info->_size = 0;
+    info->_maxSize = 0;
+    info->_address = 0;
     SETSTR(_class)
     SETSTR(_arenaType)
     SETSTR(_source)
@@ -79,46 +79,46 @@ void igMemoryPoolInfo_TrimCapacity(igMemoryPoolInfo *arg0) {
     SETSTR(_releaseChecking)
     SETSTR(_debugMessages)
     SETSTR(_releaseMessages)
-    arg0->_eventTrackerCapacity = 0;
+    info->_eventTrackerCapacity = 0;
 }
 
 /* A string field as printed: an unset one prints as the empty text. */
-#define TEXT_OR_NONE(text) ((text) != 0 ? (text) : (const char *)DAT_004f7910)
+#define TEXT_OR_NONE(text) ((text) != 0 ? (text) : (const char *)emptyString_4)
 
 void igMemoryPoolInfo_Print(igMemoryPoolInfo *info) {
-    igReport_Printf((const char *)DAT_004facc0, TEXT_OR_NONE(info->_name != 0 ? (const char *)info->_name : (const char *)emptyString));
+    igReport_Printf((const char *)text_igMemoryPoolInfo_s, TEXT_OR_NONE(info->_name != 0 ? (const char *)info->_name : (const char *)emptyString));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004face0, TEXT_OR_NONE((const char *)info->_handleName));
+    igReport_Printf((const char *)text_handleName_s, TEXT_OR_NONE((const char *)info->_handleName));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fad00, TEXT_OR_NONE((const char *)info->_aliasedTo));
+    igReport_Printf((const char *)text_aliasedTo_s, TEXT_OR_NONE((const char *)info->_aliasedTo));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fad20, info->_size);
+    igReport_Printf((const char *)text_size_d, info->_size);
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fad40, info->_maxSize);
+    igReport_Printf((const char *)text_maxSize_d, info->_maxSize);
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fad60, info->_address);
+    igReport_Printf((const char *)text_address_0x_08x, info->_address);
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fad90, TEXT_OR_NONE((const char *)info->_class));
+    igReport_Printf((const char *)text_class_s, TEXT_OR_NONE((const char *)info->_class));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fadb0, TEXT_OR_NONE((const char *)info->_arenaType));
+    igReport_Printf((const char *)text_arenaType_s, TEXT_OR_NONE((const char *)info->_arenaType));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fadd0, TEXT_OR_NONE((const char *)info->_source));
+    igReport_Printf((const char *)text_source_s, TEXT_OR_NONE((const char *)info->_source));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fadf0, TEXT_OR_NONE((const char *)info->_scope));
+    igReport_Printf((const char *)text_scope_s, TEXT_OR_NONE((const char *)info->_scope));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fae10, TEXT_OR_NONE((const char *)info->_debugOptions));
+    igReport_Printf((const char *)text_debugOptions_s, TEXT_OR_NONE((const char *)info->_debugOptions));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fae30, TEXT_OR_NONE((const char *)info->_releaseOptions));
+    igReport_Printf((const char *)text_releaseOptions_s, TEXT_OR_NONE((const char *)info->_releaseOptions));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fae50, TEXT_OR_NONE((const char *)info->_debugChecking));
+    igReport_Printf((const char *)text_debugChecking_s, TEXT_OR_NONE((const char *)info->_debugChecking));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fae70, TEXT_OR_NONE((const char *)info->_releaseChecking));
+    igReport_Printf((const char *)text_releaseChecking_s, TEXT_OR_NONE((const char *)info->_releaseChecking));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004fae90, TEXT_OR_NONE((const char *)info->_debugMessages));
+    igReport_Printf((const char *)text_debugMessages_s, TEXT_OR_NONE((const char *)info->_debugMessages));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004faeb0, TEXT_OR_NONE((const char *)info->_releaseMessages));
+    igReport_Printf((const char *)text_releaseMessages_s, TEXT_OR_NONE((const char *)info->_releaseMessages));
     igReport_Flush();
-    igReport_Printf((const char *)DAT_004faed0, info->_eventTrackerCapacity);
+    igReport_Printf((const char *)text_eventTrackerCapacity_d, info->_eventTrackerCapacity);
     igReport_Flush();
 }
 #undef TEXT_OR_NONE

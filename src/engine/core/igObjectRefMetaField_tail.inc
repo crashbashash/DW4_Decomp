@@ -1,6 +1,6 @@
-void igObjectRefMetaField_ReleaseDefaults(int arg0) {
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)arg0, 0);
-    igObject_ReleaseDefaults(arg0);
+void igObjectRefMetaField_ReleaseDefaults(int self) {
+    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)self, 0);
+    igObject_ReleaseDefaults(self);
 }
 
 void igObjectRefMetaField_InitDefaults(void **self) {
@@ -17,28 +17,28 @@ void igObjectRefMetaField_Assign(igObjectRefMetaField *field,void *object,igObje
     *(igObject **)((char *)object+field->_offset)=value;
 }
 
-void igObjectRefMetaField_SetValue(int a0, int a1, int a2) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)a0, (void *)a1, (igObject *)*(int *)((char *)a2 + 0));
+void igObjectRefMetaField_SetValue(int self, int object, int value) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)value);
 }
 
 int igObjectRefMetaField_GetTypeSize(igObjectRefMetaField *) { return 4; }
 
-void igObjectRefMetaField_SetDefault(igObjectRefMetaField *arg0, igObject *arg1) {
-    igObject **temp_s0;
-    igObject *temp_a0;
+void igObjectRefMetaField_SetDefault(igObjectRefMetaField *self, igObject *value) {
+    igObject **slot;
+    igObject *old;
 
-    temp_s0 = (igObject **)(arg0->_default);
-    if (arg1 != 0) {
-        arg1->_refCount = (int)((int) (arg1->_refCount + 1));
+    slot = (igObject **)(self->_default);
+    if (value != 0) {
+        value->_refCount = (int)((int) (value->_refCount + 1));
     }
-    temp_a0 = (igObject *)(*temp_s0);
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = (int)((int) (temp_a0->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+    old = (igObject *)(*slot);
+    if (old != 0) {
+        old->_refCount = (int)((int) (old->_refCount - 1));
+        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(old);
         }
     }
-    *temp_s0 = arg1;
+    *slot = value;
 }
 
 int igObjectRefMetaField_ReadRawFieldMem(igObjectRefMetaField *self, igObject **valueSlot, int extra2, int extra3, int extra4) {
@@ -75,21 +75,21 @@ void igObjectRefMetaField_ClearValue(igObjectRefMetaField *field,void *object){
     igRefMetaField_ClearValue((igMetaField *)field,object);
 }
 
-void igObjectRefMetaField_SetToDefault(void *arg0, int arg1) {
-    int temp_a0;
+void igObjectRefMetaField_SetToDefault(void *self, int object) {
+    int child;
 
-    temp_a0 = *(int *)(arg1 + *(int *)((char *)arg0 + 8));
-    if (temp_a0 != 0) {
-        igObject_ResetFields((igObjectDispatchView *)temp_a0);
+    child = *(int *)(object + ((igObjectRefMetaField *)self)->_offset);
+    if (child != 0) {
+        igObject_ResetFields((igObjectDispatchView *)child);
     }
 }
 
-void igObjectRefMetaField_CopyDefaultToValue(char *arg0, int arg1) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)**(int **)(arg0 + 32));
+void igObjectRefMetaField_CopyDefaultToValue(char *self, int object) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)((igObjectRefMetaField *)self)->_default);
 }
 
-void igObjectRefMetaField_CopyReference(int arg0, int arg1, int arg2) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)*(int *)((char *)((arg2 + *(int *)((char *)(arg0) + 8))) + 0));
+void igObjectRefMetaField_CopyReference(int self, int object, int source) {
+    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)(source + ((igObjectRefMetaField *)self)->_offset));
 }
 
 void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *src) {
@@ -101,12 +101,12 @@ void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *
     from = *(igObjectDispatchView **)(src + self->_offset);
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
-            from->vfunc_16();
+            from->trimCapacity();
             igObject_DeepCopy(to, from);
             return;
         }
         if (to == 0) {
-            from->vfunc_16();
+            from->trimCapacity();
             copy = from->cloneViaMetadata(1);
             igObjectRefMetaField_Assign(self, dst, copy);
             if (self->_destruct == 0 && copy != 0) {
@@ -121,31 +121,31 @@ void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *
     }
 }
 
-void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *arg0, int arg1, int arg2) {
-    int temp_a0;
-    igObjectDispatchView *temp_a1;
-    igObject *temp_v0;
+void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *self, int dst, int src) {
+    int to;
+    igObjectDispatchView *from;
+    igObject *copy;
     int off;
 
-    off = arg0->_offset;
-    temp_a0 = *(int *)(arg1 + off);
-    temp_a1 = *(igObjectDispatchView **)(arg2 + off);
-    if ((temp_a0 != 0) || (temp_a1 != 0)) {
-        if ((temp_a0 != 0) && (temp_a1 != 0)) {
-            igObject_ShallowCopy((igObjectDispatchView *)temp_a0, (int)temp_a1);
+    off = self->_offset;
+    to = *(int *)(dst + off);
+    from = *(igObjectDispatchView **)(src + off);
+    if ((to != 0) || (from != 0)) {
+        if ((to != 0) && (from != 0)) {
+            igObject_ShallowCopy((igObjectDispatchView *)to, (int)from);
             return;
         }
-        if (temp_a0 == 0) {
-            temp_v0 = (igObject *)temp_a1->cloneViaMetadata(0);
-            igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)temp_v0);
-            if ((arg0->_destruct == 0) && (temp_v0 != 0)) {
-                temp_v0->_refCount = temp_v0->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)temp_v0->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_v0);
+        if (to == 0) {
+            copy = (igObject *)from->cloneViaMetadata(0);
+            igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)dst, (igObject *)copy);
+            if ((self->_destruct == 0) && (copy != 0)) {
+                copy->_refCount = copy->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)copy->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(copy);
                 }
             }
-        } else if (temp_a1 == 0) {
-            igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, 0);
+        } else if (from == 0) {
+            igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)dst, 0);
         }
     }
 }
@@ -162,7 +162,7 @@ void igObjectRefMetaField_ResetValue(igObjectRefMetaField *self, int instance) {
 /* Prints `<indent><field> = 0x<value>`, then the referenced object's own fields when `depth` asks
  * for them. */
 void igObjectRefMetaField_Print(igObjectRefMetaField *self, char *object, int depth, const char *indent) {
-    igReport_Printf(DAT_004faef0, indent, self->_fieldName, *(int *)(object + self->_offset));
+    igReport_Printf(text_s_s_0x_x, indent, self->_fieldName, *(int *)(object + self->_offset));
     igReport_Flush();
     if (depth != 0) {
         void **referenced = *(void ***)(object + self->_offset);
@@ -172,20 +172,20 @@ void igObjectRefMetaField_Print(igObjectRefMetaField *self, char *object, int de
     }
 }
 
-void igObjectRefMetaField_ReleaseElements(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3) {
-    int temp_a0;
+void igObjectRefMetaField_ReleaseElements(igObjectRefMetaField *self, int object, int visitor, int context) {
+    int child;
 
-    temp_a0 = *(int *)(arg1 + arg0->_offset);
-    if (temp_a0 != 0) {
-        igObject_VisitFields((igObjectDispatchView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
+    child = *(int *)(object + self->_offset);
+    if (child != 0) {
+        igObject_VisitFields((igObjectDispatchView *)child, (int (*)(void *, void *, void *))visitor, (void *)context);
     }
 }
 
-int igObjectRefMetaField_Compare(igObjectRefMetaField *arg0, int arg1, int arg2) {
-    int temp_v0;
+int igObjectRefMetaField_Compare(igObjectRefMetaField *self, int a, int b) {
+    int offset;
 
-    temp_v0 = arg0->_offset;
-    return *(int *)(arg1 + temp_v0) - *(int *)(arg2 + temp_v0);
+    offset = self->_offset;
+    return *(int *)(a + offset) - *(int *)(b + offset);
 }
 
 int igObjectRefMetaField_IsAlikeExactly(igObjectRefMetaField *self, int objectA, int objectB) {
@@ -258,13 +258,13 @@ void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
     return self;
 }
 
-void *igObjectRefMetaField_CopyConstruct(igObjectRefMetaField *arg0, void *arg1) {
-    igRefMetaField_CopyConstruct((igRefMetaField *)arg0, (igRefMetaField *)arg1);
-    *(int *)((char *)(arg0) + 0) = (int)(&g_igObjectRefMetaField_vtable[0]);
-    arg0->_poolName = 0;
-    arg0->_refCounted = (unsigned char) *(unsigned char *)((char *)(arg1) + 60);
-    arg0->_metaObject = (int)((int) *(int *)((char *)(arg1) + 56));
-    return arg0;
+void *igObjectRefMetaField_CopyConstruct(igObjectRefMetaField *self, void *source) {
+    igRefMetaField_CopyConstruct((igRefMetaField *)self, (igRefMetaField *)source);
+    self->_vtable = (int)(&g_igObjectRefMetaField_vtable[0]);
+    self->_poolName = 0;
+    self->_refCounted = (unsigned char) ((igObjectRefMetaField *)source)->_refCounted;
+    self->_metaObject = (int)((int) ((igObjectRefMetaField *)source)->_metaObject);
+    return self;
 }
 
 void igObjectRefMetaField_Destruct(igObjectRefMetaField *self) {
@@ -288,14 +288,14 @@ void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
     }
 }
 
-int igObjectStringMap_GetObject(void *arg0, int extra1) {
-    int temp_v0;
+int igObjectStringMap_GetObject(void *self, int name) {
+    int index;
 
-    temp_v0 = igObjectStringMap_GetIndexByName((igObjectStringMap *)arg0, extra1);
-    if (temp_v0 == -1) {
+    index = igObjectStringMap_GetIndexByName((igObjectStringMap *)self, name);
+    if (index == -1) {
         return 0;
     }
-    return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (temp_v0 * 4));
+    return ((int *)((igObjectList *)((igObjectStringMap *)self)->_data)->_data)[index];
 }
 
 int igObjectStringMap_GetIndexByName(igObjectStringMap *map, int name) {
@@ -307,25 +307,25 @@ int igObjectStringMap_GetIndexByName(igObjectStringMap *map, int name) {
     return fields->find(field);
 }
 
-int igObjectStringMap_GetCount(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
+int igObjectStringMap_GetCount(void *self) {
+    return ((igObjectList *)((igObjectStringMap *)self)->_names)->_count;
 }
 
-int igObjectStringMap_GetObjectAt(void *arg0, int arg1) {
-    return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (arg1 * 4));
+int igObjectStringMap_GetObjectAt(void *self, int index) {
+    return ((int *)((igObjectList *)((igObjectStringMap *)self)->_data)->_data)[index];
 }
 
-int *igObjectStringMap_GetNameAt(void *arg0, int arg1) {
-    int *temp_v0;
-    void *temp_v0_2;
+int *igObjectStringMap_GetNameAt(void *self, int index) {
+    int *name;
+    igNamedObject *entry;
 
-    temp_v0_2 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 16) + (arg1 * 4)));
-    if (temp_v0_2 == 0) {
+    entry = (igNamedObject *)((int *)((igObjectList *)((igObjectStringMap *)self)->_names)->_data)[index];
+    if (entry == 0) {
         return 0;
     }
-    temp_v0 = (int *)(*(int *)((char *)(temp_v0_2) + 8));
-    if (temp_v0 != 0) {
-        return temp_v0;
+    name = (int *)entry->_name;
+    if (name != 0) {
+        return name;
     }
     return &emptyString[0];
 }
@@ -356,7 +356,7 @@ void igObjectStringMap_Clear(igObjectStringMap *o) {
     l->_count = 0;
 }
 
-void igObjectStringMap_RemoveAt(igObjectStringMap *arg0, int arg1) {
+void igObjectStringMap_RemoveAt(igObjectStringMap *self, int index) {
     /*D*/
     igObject *o;
     igObjectList *l2;
@@ -373,36 +373,36 @@ void igObjectStringMap_RemoveAt(igObjectStringMap *arg0, int arg1) {
     igObjectList *l5;
     int a4;
     /*E*/
-    idx = igObjectStringMap_GetCount((void *)arg0);
-    l1 = (igObjectList *)arg0->_data;
+    idx = igObjectStringMap_GetCount((void *)self);
+    l1 = (igObjectList *)self->_data;
     s4 = 4 * idx;
     s6 = ((igObject **)((char *)l1->_data + s4 - 4))[0];
     if (s6) { s6->_refCount = 1 + (int)s6->_refCount; }
-    a4 = 4 * arg1;
+    a4 = 4 * index;
     o = ((igObject **)((char *)l1->_data + a4))[0];
     REL(o)
-    if (l1->_count && arg1 >= 0 && arg1 < l1->_count) { ((igObject **)((char *)l1->_data + a4))[0] = s6; }
-    l2 = (igObjectList *)arg0->_data;
+    if (l1->_count && index >= 0 && index < l1->_count) { ((igObject **)((char *)l1->_data + a4))[0] = s6; }
+    l2 = (igObjectList *)self->_data;
     o = ((igObject **)(s4 + (char *)l2->_data - 4))[0];
     REL(o)
     if (l2->_count && idx - 1 >= 0 && idx - 1 < l2->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l2->_data) - 4))[0] = 0; }
-    l3 = (igObjectList *)arg0->_data;
+    l3 = (igObjectList *)self->_data;
     c1 = l3->_count - 1;
     o = ((igObject **)(l3->_data + c1 * 4))[0];
     REL(o)
     List_RemoveWordAt((igDataList *)l3, c1);
     ((igObject **)(l3->_data + 4 * l3->_count))[0] = 0;
-    l4 = (igObjectList *)arg0->_names;
+    l4 = (igObjectList *)self->_names;
     s6b = ((igObject **)(s4 + (char *)l4->_data - 4))[0];
     if (s6b) { s6b->_refCount = 1 + (int)s6b->_refCount; }
     o = ((igObject **)((char *)l4->_data + a4))[0];
     REL(o)
-    if (l4->_count && arg1 >= 0 && arg1 < l4->_count) { ((igObject **)(a4 + (char *)l4->_data))[0] = s6b; }
-    l5 = (igObjectList *)arg0->_names;
+    if (l4->_count && index >= 0 && index < l4->_count) { ((igObject **)(a4 + (char *)l4->_data))[0] = s6b; }
+    l5 = (igObjectList *)self->_names;
     o = ((igObject **)((char *)l5->_data + s4 - 4))[0];
     REL(o)
     if (l5->_count && idx - 1 >= 0 && idx - 1 < l5->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l5->_data) - 4))[0] = 0; }
-    l6 = (igObjectList *)arg0->_names;
+    l6 = (igObjectList *)self->_names;
     c2 = l6->_count - 1;
     o = ((igObject **)(l6->_data + 4 * c2))[0];
     REL(o)
@@ -410,26 +410,26 @@ void igObjectStringMap_RemoveAt(igObjectStringMap *arg0, int arg1) {
     ((igObject **)(l6->_data + l6->_count * 4))[0] = 0;
 }
 
-void igReport_SetOutputFile(igPsx2FileView *arg0) {
+void igReport_SetOutputFile(igPsx2FileView *file) {
     igPsx2FileView *p;
 
-    p = DAT_005871b0[0];
+    p = g_reportOutputFile[0];
     if (p != 0) {
         p->_refCount -= 1;
         if ((p->_refCount & 0x7fffff) == 0) {
             igObject_Destroy(p);
         }
     }
-    if (arg0 != 0) {
-        arg0->_refCount += 1;
+    if (file != 0) {
+        file->_refCount += 1;
     }
-    DAT_005871b0[0] = arg0;
+    g_reportOutputFile[0] = file;
 }
 
-void igReport_SetErrorFile(igPsx2FileView *arg0) {
+void igReport_SetErrorFile(igPsx2FileView *file) {
     igPsx2FileView *p;
     int rc;
-    p = DAT_005871b8[0];
+    p = g_reportErrorFile[0];
     if (p != 0) {
         rc = p->_refCount - 1;
         p->_refCount = rc;
@@ -437,73 +437,73 @@ void igReport_SetErrorFile(igPsx2FileView *arg0) {
             igObject_Destroy(p);
         }
     }
-    if (arg0 != 0) {
-        arg0->_refCount = arg0->_refCount + 1;
+    if (file != 0) {
+        file->_refCount = file->_refCount + 1;
     }
-    DAT_005871b8[0] = arg0;
+    g_reportErrorFile[0] = file;
 }
 
-void igReport_Printf(const char *arg0, ...) {
+void igReport_Printf(const char *format, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    igReport_VPrintf(arg0, (int)((char*)__builtin_next_arg(arg0) - off));
+    igReport_VPrintf(format, (int)((char*)__builtin_next_arg(format) - off));
 }
 
-void igReport_VPrintf(const char *arg0, int arg1) {
-    char sp10[4096];
-    int var_v0;
+void igReport_VPrintf(const char *format, int args) {
+    char buffer[4096];
+    int length;
 
-    if ((DAT_005871b0[0] != 0) && (GPR_00554998 != 0)) {
-        var_v0 = vsnprintf(&sp10[0], 0x1000, arg0, arg1);
-        if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
-            sp10[4095] = 0;
-            var_v0 = 0x1000;
+    if ((g_reportOutputFile[0] != 0) && (g_reportOutputEnabled != 0)) {
+        length = vsnprintf(&buffer[0], 0x1000, format, args);
+        if ((length < 0) || (length >= 0x1000)) {
+            buffer[4095] = 0;
+            length = 0x1000;
         }
-        DAT_005871b0[0]->Write(&sp10[0], var_v0, 1);
-        if (GPR_0055499c != 0) {
-            printf(&DAT_004f95a0[0], &sp10[0]);
+        g_reportOutputFile[0]->Write(&buffer[0], length, 1);
+        if (g_reportEchoToStdout != 0) {
+            printf(&percent_s[0], &buffer[0]);
         }
-    } else if (GPR_0055499c != 0) {
-        vprintf(arg0, arg1);
+    } else if (g_reportEchoToStdout != 0) {
+        vprintf(format, args);
     }
 }
 
-int igReport_ErrorPrintf(int arg0, ...) { 
+int igReport_ErrorPrintf(int format, ...) { 
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    return igReport_VErrorPrintf(arg0, (int)((char*)__builtin_next_arg(arg0) - off)); }
+    return igReport_VErrorPrintf(format, (int)((char*)__builtin_next_arg(format) - off)); }
 
-int igReport_VErrorPrintf(int arg0, int arg1) {
+int igReport_VErrorPrintf(int format, int args) {
     char buf[4096];
-    int var_v0;
+    int length;
 
-    if ((DAT_005871b8[0] != 0) && (GPR_005549a4 != 0)) {
-        var_v0 = vsnprintf(buf, 0x1000, arg0, arg1);
-        if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
+    if ((g_reportErrorFile[0] != 0) && (g_reportErrorOutputEnabled != 0)) {
+        length = vsnprintf(buf, 0x1000, format, args);
+        if ((length < 0) || (length >= 0x1000)) {
             buf[4095] = 0;
-            var_v0 = 0x1000;
+            length = 0x1000;
         }
-        DAT_005871b8[0]->Write(buf, var_v0, 1);
-        if (GPR_005549a8 != 0) {
-            fprintf(_impure_ptr->_stderr, &DAT_004f95a0[0], buf);
+        g_reportErrorFile[0]->Write(buf, length, 1);
+        if (g_reportEchoToStderr != 0) {
+            fprintf(_impure_ptr->_stderr, &percent_s[0], buf);
         }
-    } else if (GPR_005549a8 != 0) {
-        vfprintf(_impure_ptr->_stderr, arg0, arg1);
+    } else if (g_reportEchoToStderr != 0) {
+        vfprintf(_impure_ptr->_stderr, format, args);
     }
 }
 
 void igReport_Flush(void) {
-    if (DAT_005871b0[0] != 0) {
-        DAT_005871b0[0]->vfunc_32();
+    if (g_reportOutputFile[0] != 0) {
+        g_reportOutputFile[0]->flush();
     }
     fflush(_impure_ptr->_stdout);
 }
 
 void igReport_FlushError(void) {
-    if (DAT_005871b8[0] != 0) {
-        DAT_005871b8[0]->vfunc_32();
+    if (g_reportErrorFile[0] != 0) {
+        g_reportErrorFile[0]->flush();
     }
     fflush(_impure_ptr->_stderr);
 }
@@ -557,14 +557,14 @@ static inline void setRepositoryLocation(const igSmartPointer<igPluginRepository
 /* Add a plugin repository, recording whether its path is under $(AlchemyRoot) (1),
  * $(ApplicationRoot) (2) or neither (0); a recognised root is stripped from the stored location. */
 void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, const char *path) {
-    static int alchemyRootLength = strlen(DAT_004c22c8[0]);
-    static int applicationRootLength = strlen(DAT_004c22d0[0]);
+    static int alchemyRootLength = strlen(g_alchemyRootToken[0]);
+    static int applicationRootLength = strlen(g_applicationRootToken[0]);
     igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((int)self)));
     igNamedObject_SetName((igNamedObject *)repository.get(), name);
-    if (strncmp(path, DAT_004c22c8[0], alchemyRootLength) == 0) {
+    if (strncmp(path, g_alchemyRootToken[0], alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);
         repository.get()->_locationType = 1;
-    } else if (strncmp(path, DAT_004c22d0[0], applicationRootLength) == 0) {
+    } else if (strncmp(path, g_applicationRootToken[0], applicationRootLength) == 0) {
         setRepositoryLocation(repository, path, applicationRootLength);
         repository.get()->_locationType = 2;
     } else {

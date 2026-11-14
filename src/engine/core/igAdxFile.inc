@@ -9,7 +9,7 @@ void ***FUN_002e2fb0(void) {
     void *nw;
     int *hdr;
     int c;
-    if (DAT_00586e18[0] == 0) {
+    if (g_searchFilePath[0] == 0) {
         al = (void **)Memory_GetCurrentAllocator();
         if (g_useOwnerAllocator != 0) {
             a = al;
@@ -18,8 +18,8 @@ void ***FUN_002e2fb0(void) {
         }
         cell = t = (void **)((igMemoryPoolView *)a)->Allocate(4);
         if (t != 0) { *t = 0; }
-        DAT_00586e18[0] = cell;
-        name = DAT_004c2128[0];
+        g_searchFilePath[0] = cell;
+        name = g_searchFilePathDefault[0];
         if (g_stringPool[0] == 0) {
             pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
@@ -39,47 +39,48 @@ void ***FUN_002e2fb0(void) {
         }
         *cell = nw;
     }
-    return &DAT_00586e18[0];
+    return &g_searchFilePath[0];
 }
 
-void igFile_SetFileName(int *arg0, const char *name) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    void *temp_a0;
-    void *temp_s0;
+void igFile_SetFileName(int *self, const char *name) {
+    int *header;
+    int refCount;
+    int pool;
+    void *previous;
+    void *interned;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], name)));
-    temp_a0 = (void *)arg0[3];
-    if (temp_a0 != 0) {
-        temp_a1 = (int *)((char *)temp_a0 - 8);
-        temp_v1 = *(int *)((char *)(temp_a0) - 4) - 1;
-        *(int *)((char *)(temp_a0) - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], name)));
+    previous = (void *)self[3];
+    if (previous != 0) {
+        header = (int *)((char *)previous - 8);
+        refCount = *(int *)((char *)(previous) - 4) - 1;
+        *(int *)((char *)(previous) - 4) = refCount;
+        if (refCount == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0[3] = (int)temp_s0;
+    self[3] = (int)interned;
 }
 
-void igFile_SkipToChar(igFileView *arg0, long long arg1) {
-    signed char want = (signed char)arg1;
+void igFile_SkipToChar(igFileView *self, long long character) {
+    signed char want = (signed char)character;
     signed char c;
     do {
-        c = (signed char)arg0->vfunc_33();
+        c = (signed char)self->getChar();
     } while (want != c && c != -1);
 }
 
-void igAdxFile_SetOpenMode(int a0, int a1)
+void igAdxFile_SetOpenMode(int object, int openMode)
 {
-    *(int *)((char *)a0 + 20) = a1;
+    igAdxFile *self = (igAdxFile *)object;
+    self->_openMode = openMode;
 }
 
 bool FilePath_IsAbsolute(const char *path) {
@@ -105,63 +106,63 @@ bool FilePath_HasDirectory(const char *path) {
     return 1;
 }
 
-void igAdxFile_SetBasePath(int arg0) {
-    int *temp_a1;
-    int *temp_a1_2;
-    int temp_v0;
-    int temp_v1_2;
-    int var_v0;
-    void **temp_s0;
-    void **temp_s1;
-    void *temp_a0;
-    void *temp_s0_2;
-    void *temp_v1;
+void igAdxFile_SetBasePath(int path) {
+    int *oldHeader;
+    int *header;
+    int oldRefCount;
+    int refCount;
+    int pool;
+    void **oldSlot;
+    void **slot;
+    void *previous;
+    void *interned;
+    void *oldText;
 
-    if (arg0 == 0) {
-        temp_s0 = (void **)(*FUN_002e2fb0());
-        if (temp_s0 != 0) {
-            if (temp_s0 != 0) {
-                temp_v1 = (void *)(*temp_s0);
-                if (temp_v1 != 0) {
-                    temp_a1 = (int *)((char *)temp_v1 - 8);
-                    temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-                    *(int *)((char *)(temp_v1) - 4) = temp_v0;
-                    if (temp_v0 == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    if (path == 0) {
+        oldSlot = (void **)(*FUN_002e2fb0());
+        if (oldSlot != 0) {
+            if (oldSlot != 0) {
+                oldText = (void *)(*oldSlot);
+                if (oldText != 0) {
+                    oldHeader = (int *)((char *)oldText - 8);
+                    oldRefCount = *(int *)((char *)(oldText) - 4) - 1;
+                    *(int *)((char *)(oldText) - 4) = oldRefCount;
+                    if (oldRefCount == 0) {
+                        StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (int)oldHeader);
                     }
                 }
             }
-            Memory_FreeBuffer(temp_s0);
+            Memory_FreeBuffer(oldSlot);
         }
     } else {
-        temp_s1 = (void **)(*FUN_002e2fb0());
+        slot = (void **)(*FUN_002e2fb0());
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        temp_s0_2 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg0)));
-        temp_a0 = (void *)(*temp_s1);
-        if (temp_a0 != 0) {
-            temp_a1_2 = (int *)((char *)temp_a0 - 8);
-            temp_v1_2 = *(int *)((char *)(temp_a0) - 4) - 1;
-            *(int *)((char *)(temp_a0) - 4) = temp_v1_2;
-            if (temp_v1_2 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (int)temp_a1_2);
+        interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path)));
+        previous = (void *)(*slot);
+        if (previous != 0) {
+            header = (int *)((char *)previous - 8);
+            refCount = *(int *)((char *)(previous) - 4) - 1;
+            *(int *)((char *)(previous) - 4) = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
-        *temp_s1 = temp_s0_2;
+        *slot = interned;
     }
 }
 
-void igFile_ReadAsync(igFileView *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
-    arg3(arg0->Read((void *)arg1, 1, arg2), arg4);
+void igFile_ReadAsync(igFileView *self, int buffer, int size, int (*callback)(int, int), int context) {
+    callback(self->Read((void *)buffer, 1, size), context);
 }
 
 void igAdxFile_LoadSearchFilePath(void) {
-    const char *searchPathKey = (const char *)DAT_004c2128[0];
+    const char *searchPathKey = (const char *)g_searchFilePathDefault[0];
     int registry = (int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry;
     igStringObj *text;
     int path;
@@ -181,48 +182,48 @@ int igAdxFile_GetSearchPaths(void) {
     return **((int **)FUN_002e2fb0());
 }
 
-int igAdxFile_GetNextSearchPath(char **arg0, char *arg1, int arg2) {
-    char *temp_s1;
-    char *temp_v0;
-    char temp_v1;
-    unsigned int var_s0;
+int igAdxFile_GetNextSearchPath(char **cursor, char *out, int outSize) {
+    char *start;
+    char *comma;
+    char last;
+    unsigned int length;
 
-    temp_s1 = *arg0;
-    *arg1 = 0;
-    if ((temp_s1 == 0) || (*temp_s1 == 0)) {
+    start = *cursor;
+    *out = 0;
+    if ((start == 0) || (*start == 0)) {
         return 0;
     }
-    temp_v0 = strchr(temp_s1, 0x2C);
-    if (temp_v0 == 0) {
-        var_s0 = ((unsigned int)strlen(temp_s1));
-        if ((unsigned int) (arg2 - 2) <= var_s0) {
+    comma = strchr(start, 0x2C);
+    if (comma == 0) {
+        length = ((unsigned int)strlen(start));
+        if ((unsigned int) (outSize - 2) <= length) {
             return 0;
         }
-        strcpy(arg1, temp_s1);
-        *arg0 = 0;
+        strcpy(out, start);
+        *cursor = 0;
     } else {
-        var_s0 = temp_v0 - temp_s1;
-        if ((unsigned int) (arg2 - 2) <= var_s0) {
+        length = comma - start;
+        if ((unsigned int) (outSize - 2) <= length) {
             return 0;
         }
-        strncpy(arg1, temp_s1, var_s0);
-        arg1[var_s0] = 0;
-        *arg0 = temp_v0 + 1;
+        strncpy(out, start, length);
+        out[length] = 0;
+        *cursor = comma + 1;
     }
-    if (strcmp(arg1, ((char *)DAT_004f9468)) == 0) {
-        *arg1 = 0;
+    if (strcmp(out, ((char *)text_dot)) == 0) {
+        *out = 0;
     } else {
-        temp_v1 = arg1[var_s0 - 1];
-        if (temp_v1 != 0x2F) {
-            if (temp_v1 != 0x5C) {
-                strcat(arg1, ((char *)DAT_004f9a48));
+        last = out[length - 1];
+        if (last != 0x2F) {
+            if (last != 0x5C) {
+                strcat(out, ((char *)text_slash));
             }
         }
     }
     return 1;
 }
 
-int igFile_SetCompleteFilename(igFileView *arg0, int arg1) {
+int igFile_SetCompleteFilename(igFileView *self, int path) {
     int s0;
     int *a0;
     int *hdr;
@@ -235,8 +236,8 @@ int igFile_SetCompleteFilename(igFileView *arg0, int arg1) {
         }
         g_stringPool[0] = obj;
     }
-    s0 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1);
-    a0 = (int *)arg0->_completeFilename;
+    s0 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    a0 = (int *)self->_completeFilename;
     if (a0 != 0) {
         hdr = a0 - 2;
         v = a0[-1] - 1;
@@ -245,7 +246,7 @@ int igFile_SetCompleteFilename(igFileView *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
         }
     }
-    arg0->_completeFilename = (char *)s0;
-    return arg1;
+    self->_completeFilename = (char *)s0;
+    return path;
 }
 

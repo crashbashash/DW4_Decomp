@@ -1,30 +1,30 @@
-void **igShortMetaField_Create(int arg0) {
-    void **var_s0;
+void **igShortMetaField_Create(int pool) {
+    void **instance;
 
     if (*g_objectSystem[0] != 0) {
         igShortMetaField_EnsureRegistered();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject[0], (igMemoryPoolView *)arg0)));
+        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject[0], (igMemoryPoolView *)pool)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)arg0)));
-        if (var_s0 != 0) {
-            var_s0 = (void **)(((void **)igShortMetaField_Construct((int **)var_s0, 1)));
+        instance = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)pool)));
+        if (instance != 0) {
+            instance = (void **)(((void **)igShortMetaField_Construct((int **)instance, 1)));
         }
-        ((igObjectDispatchView *)(var_s0))->vfunc_09();
-        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
+        ((igObjectDispatchView *)(instance))->initDefaults();
+        ((igObjectDispatchView *)(instance))->userConstruct((int)(0));
     }
-    return var_s0;
+    return instance;
 }
 
-int igShortMetaField_Clone(int arg0, int arg1) {
+int igShortMetaField_Clone(int source, int pool) {
     int p;
 
     if (*g_objectSystem[0] != 0) {
         igShortMetaField_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)arg0, arg1);
+        return igObject_CloneViaMetadata((void **)source, pool);
     }
     p = ((int)igObject_AllocateRawStorageDefault(0x34, 0));
     if (p != 0) {
-        p = ((int)igShortMetaField_CopyConstruct((int **)p, arg0));
+        p = ((int)igShortMetaField_CopyConstruct((int **)p, source));
     }
     return p;
 }
@@ -86,17 +86,17 @@ void igShortMetaField_GetMetaObjectFunction(void) {
 }
 
 void igShortMetaField_CreateDefaultDescriptor(void) {
-    void *temp_s0;
+    void *descriptor;
 
     if (g_igShortMetaField_descriptor[0] == 0) {
         g_igShortMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igShortMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        temp_s0 = (void *)(g_igShortMetaField_descriptor[0]);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+        descriptor = (void *)(g_igShortMetaField_descriptor[0]);
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
-                void *held = (void *)g_igShortMetaField_descriptor[0];
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
+                igObject *held = (igObject *)g_igShortMetaField_descriptor[0];
+                held->_refCount = held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }

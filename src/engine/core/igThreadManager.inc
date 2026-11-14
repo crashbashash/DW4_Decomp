@@ -1,6 +1,6 @@
-void * igThreadManager_Create(int arg0) {
+void * igThreadManager_Create(int allocator) {
     igThreadManager_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585790), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585790), (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igThreadManager_GetMetaObject(void)
@@ -38,22 +38,22 @@ void igThreadManager_GetMetaObjectFunction(void) {
 }
 
 void igThreadManager_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *semaField;
+    void *threadListField;
+    void *meta;
 
     ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_volatile = 1;
-    temp_s0 = (void *)(g_igThreadManager_metaObject[0]);
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igThreadManager_ctorTable[0], 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNonRefCountedThreadList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igThreadManager_fieldTable[0], (igMetaField ***)&DAT_004bf388[0], &DAT_004bf390[0], temp_s2);
+    meta = (void *)(g_igThreadManager_metaObject[0]);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igThreadManager_ctorTable[0], 2);
+    threadListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)threadListField)->_metaObject = (int)igNonRefCountedThreadList_GetOrCreateMetaObject();
+    ((igRefMetaField *)threadListField)->_construct = 1;
+    semaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)semaField)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igRefMetaField *)semaField)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igThreadManager_fieldTable[0], (igMetaField ***)&g_igThreadManager_fieldDescriptors[0], &g_igThreadManager_fieldOffsets[0], base);
     ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_abstractProxy = (int)igPsx2ThreadManager_GetMetaObjectFunction;
     igMetaObject_AddExitCallback((int)igThreadManager_ExitCallback);
 }

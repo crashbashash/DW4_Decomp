@@ -1,6 +1,6 @@
-void igFloatMetaField_Create(int arg0) {
+void igFloatMetaField_Create(int allocator) {
     igFloatMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586378), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586378), (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igFloatMetaField_GetMetaObject(void)
@@ -14,22 +14,22 @@ igMetaObject *igFloatMetaField_GetMetaObject(void)
 int igFloatMetaField_GetVTable(void) {
     igFloatMetaField o;
     int r;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_v1;
+    int *header;
+    int count;
+    void *text;
 
     igMetaField_Init((igMetaField *)&o);
-    o._vtable = (int)&DAT_0052ff50[0];
+    o._vtable = (int)&g_igFloatMetaField_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o._vtable = (int)&g_igMetaField_vtable[0];
     if (&o._fieldName != 0) {
-        temp_v1 = (char *)o._fieldName;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+        text = (char *)o._fieldName;
+        if (text != 0) {
+            header = (int *)((char *)text - 8);
+            count = *(int *)((char *)(text) - 4) - 1;
+            *(int *)((char *)(text) - 4) = count;
+            if (count == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
@@ -63,30 +63,30 @@ void igFloatMetaField_GetMetaObjectFunction(void) {
 }
 
 void igFloatMetaField_CreateDefaultDescriptor(void) {
-    void *temp_s0;
+    void *descriptor;
 
-    if (DAT_00586380[0] == 0) {
-        DAT_00586380[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        temp_s0 = (void *)(DAT_00586380[0]);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+    if (g_igFloatMetaField_descriptor[0] == 0) {
+        g_igFloatMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        descriptor = (void *)(g_igFloatMetaField_descriptor[0]);
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
-                void *held = (void *)DAT_00586380[0];
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
+                igObject *held = (igObject *)g_igFloatMetaField_descriptor[0];
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_00586380[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00586380[0]);
+            ((igMetaField *)g_igFloatMetaField_descriptor[0])->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igFloatMetaField_descriptor[0]);
         }
     }
 }
 
 int igFloatMetaField_GetDefaultDescriptor(void) {
-    if (((int *)DAT_00586380)[0] == 0) {
+    if (((int *)g_igFloatMetaField_descriptor)[0] == 0) {
         igFloatMetaField_EnsureRegistered();
     }
-    return ((int *)DAT_00586380)[0];
+    return ((int *)g_igFloatMetaField_descriptor)[0];
 }
 

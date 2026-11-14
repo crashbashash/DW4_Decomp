@@ -1,7 +1,7 @@
 static inline int threadID(const igPsx2ThreadView *self) { return self->_threadID; }
 
-int igPsx2Thread_IsEqual(void *arg0, void *arg1) {
-    return *(int *)((char *)(arg0) + 60) == *(int *)((char *)(arg1) + 60);
+int igPsx2Thread_IsEqual(void *self, void *other) {
+    return ((igPsx2ThreadView *)self)->_threadID == ((igPsx2ThreadView *)other)->_threadID;
 }
 
 void igPsx2Thread_InitDefaults(igPsx2ThreadView *self) {
@@ -19,7 +19,7 @@ void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self) {
     self->_stack = 0;
 }
 
-void igPsx2Thread_Join(int *arg0, void *arg1, igPsx2ThreadView *thread) {
+void igPsx2Thread_Join(int *result, void *self, igPsx2ThreadView *thread) {
     igResult waited;
     igResult signalled;
     waited = thread->_threadDoneSema->wait(1);
@@ -29,68 +29,68 @@ void igPsx2Thread_Join(int *arg0, void *arg1, igPsx2ThreadView *thread) {
             p2SleepMilliseconds(1);
         }
     }
-    *arg0 = g_resultSuccess.v;
+    *result = g_resultSuccess.v;
 }
 
-void igPsx2Thread_Sleep(int *arg0, int arg1, int arg2) {
-    if (GPR_00554ddc != 0) {
-        p2SleepMilliseconds((int)__udivdi3(arg2, 0xF4240));
-        *arg0 = g_resultSuccess.v;
+void igPsx2Thread_Sleep(int *result, int self, int nanoseconds) {
+    if (g_igPsx2LongTimer_initialized != 0) {
+        p2SleepMilliseconds((int)__udivdi3(nanoseconds, 0xF4240));
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
-void igPsx2Thread_Exit(void *arg0, int arg1) {
-    if (*(unsigned char *)((char *)(arg0) + 44) == 0) {
-        igPsx2Thread_Finish((igPsx2ThreadView *)arg0, arg1);
+void igPsx2Thread_Exit(void *self, int result) {
+    if (((igPsx2ThreadView *)self)->_isMaster == 0) {
+        igPsx2Thread_Finish((igPsx2ThreadView *)self, result);
     }
 }
 
-void igPsx2Thread_WaitForWakeup(int *arg0) {
+void igPsx2Thread_WaitForWakeup(int *result) {
     SleepThread();
-    *arg0 = *(int *)0x4FB410;
+    *result = *(int *)0x4FB410;
 }
 
-void igPsx2Thread_Terminate(int *arg0, igPsx2ThreadView *arg1) {
+void igPsx2Thread_Terminate(int *result, igPsx2ThreadView *self) {
     int s0, s1, s0b;
     igResult signalled;
-    if (arg1->_isMaster != 0) {
-        *arg0 = g_resultFailure.v;
+    if (self->_isMaster != 0) {
+        *result = g_resultFailure.v;
         return;
     }
-    if (arg1->_isDeferred != 0 && arg1->_atStoppingPoint == 0) {
-        arg1->_stopRequested = 1;
-        *arg0 = g_resultSuccess.v;
+    if (self->_isDeferred != 0 && self->_atStoppingPoint == 0) {
+        self->_stopRequested = 1;
+        *result = g_resultSuccess.v;
         return;
     }
-    s0 = arg1->_threadID;
+    s0 = self->_threadID;
     if (s0 == GetThreadId()) {
-        igPsx2Thread_Finish(arg1, 0);
+        igPsx2Thread_Finish(self, 0);
     }
-    g_threadManager[0]->removeThread(arg1);
-    s1 = arg1->_threadID;
-    s0b = TerminateThread(threadID(arg1));
-    arg1->_threadID = -1;
-    signalled = arg1->_threadDoneSema->signal();
-    arg1->_refCount--;
-    if (((unsigned long long)(long long)arg1->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy((igObject *)arg1);
+    g_threadManager[0]->removeThread(self);
+    s1 = self->_threadID;
+    s0b = TerminateThread(threadID(self));
+    self->_threadID = -1;
+    signalled = self->_threadDoneSema->signal();
+    self->_refCount--;
+    if (((unsigned long long)(long long)self->_refCount & 0x7fffffULL) == 0) {
+        igObject_Destroy((igObject *)self);
     }
     DeleteThread(s1);
     const int *p = (s0b < 0) ? &g_resultFailure.v : &g_resultSuccess.v;
-    *arg0 = *p;
+    *result = *p;
 }
 
-void igPsx2Thread_Wakeup(int *arg0, void *arg1) {
-    const int *var_v1;
+void igPsx2Thread_Wakeup(int *result, void *thread) {
+    const int *word;
 
-    if (WakeupThread(*(int *)((char *)arg1 + 60)) < 0) {
-        var_v1 = &g_resultFailure.v;
+    if (WakeupThread(((igPsx2ThreadView *)thread)->_threadID) < 0) {
+        word = &g_resultFailure.v;
     } else {
-        var_v1 = &g_resultSuccess.v;
+        word = &g_resultSuccess.v;
     }
-    *arg0 = *var_v1;
+    *result = *word;
 }
 
 void igPsx2Thread_Suspend(int *status, igPsx2Thread *self) {
@@ -155,15 +155,15 @@ igResult igPsx2Thread_ITerminate(igPsx2ThreadView *self) {
     return status < 0 ? g_resultFailure : g_resultSuccess;
 }
 
-void igPsx2Thread_IWakeup(int *arg0, void *arg1) {
-    const int *var_v1;
+void igPsx2Thread_IWakeup(int *result, void *thread) {
+    const int *word;
 
-    if (iWakeupThread(*(int *)((char *)arg1 + 60)) < 0) {
-        var_v1 = &g_resultFailure.v;
+    if (iWakeupThread(((igPsx2ThreadView *)thread)->_threadID) < 0) {
+        word = &g_resultFailure.v;
     } else {
-        var_v1 = &g_resultSuccess.v;
+        word = &g_resultSuccess.v;
     }
-    *arg0 = *var_v1;
+    *result = *word;
 }
 
 void igPsx2Thread_ISuspend(int *status, igPsx2Thread *thread) {
@@ -262,12 +262,12 @@ igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, int block, int *result) 
     return t;
 }
 
-void igPsx2Thread_SetDeferred(int *arg0, igPsx2Thread *self, int arg2) {
+void igPsx2Thread_SetDeferred(int *result, igPsx2Thread *self, int deferred) {
     if (self->_isMaster == 0) {
-        self->_isDeferred = (arg2 == 1);
-        *arg0 = g_resultSuccess.v;
+        self->_isDeferred = (deferred == 1);
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
@@ -277,15 +277,15 @@ void igPsx2Thread_TestStop(igPsx2ThreadView *self) {
     }
 }
 
-void igPsx2Thread_EnterStoppingPoint(void *arg0) {
-    if (*(unsigned char *)((char *)(arg0) + 57) != 0) {
-        igPsx2Thread_Finish((igPsx2ThreadView *)arg0, 0);
+void igPsx2Thread_EnterStoppingPoint(void *self) {
+    if (((igPsx2ThreadView *)self)->_stopRequested != 0) {
+        igPsx2Thread_Finish((igPsx2ThreadView *)self, 0);
     }
-    *(char *)((char *)(arg0) + 58) = 1;
+    ((igPsx2ThreadView *)self)->_atStoppingPoint = 1;
 }
 
-void igPsx2Thread_LeaveStoppingPoint(void *arg0) {
-    *(char *)((char *)arg0 + 58) = 0;
+void igPsx2Thread_LeaveStoppingPoint(void *self) {
+    ((igPsx2ThreadView *)self)->_atStoppingPoint = 0;
 }
 
 void igPsx2Thread_Finish(igPsx2ThreadView *thread, int result) {

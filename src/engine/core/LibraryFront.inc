@@ -1,6 +1,6 @@
 void CoreLibrary_MarkRegistered(void) {
-    if (DAT_00554bf4 == 0) {
-        DAT_00554bf4 = 1;
+    if (g_CoreLibrary_registered == 0) {
+        g_CoreLibrary_registered = 1;
         igThreadManager_EnsureRegistered();
         igThreadList_EnsureRegistered();
         igThread_EnsureRegistered();

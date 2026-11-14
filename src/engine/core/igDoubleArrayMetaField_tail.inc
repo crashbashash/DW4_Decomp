@@ -1,8 +1,8 @@
-void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *arg0, int arg1, int arg2) {
-    void **temp_v0;
+void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *self, int data, int count) {
+    void **element;
 
-    temp_v0 = (void **)(((void **)igDoubleMetaField_GetDefaultDescriptor()));
-    ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
+    element = (void **)(((void **)igDoubleMetaField_GetDefaultDescriptor()));
+    ((igMetaFieldView *)(element))->SwapBytes((void *)(data), (int)(count * self->_num));
 }
 
 /* Storage size in bytes of the field's array: `_num` elements of 8 bytes (double), truncated to

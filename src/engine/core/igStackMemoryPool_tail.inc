@@ -22,7 +22,7 @@ void igStackMemoryPool_Reset(igStackMemoryPool *s) {
 }
 
 void igStackMemoryPool_Deactivate(igStackMemoryPool *self) {
-    ((igMemoryPoolView *)self)->vfunc_31();
+    ((igMemoryPoolView *)self)->Reset();
     self->_isActive = 0;
 }
 
@@ -67,14 +67,14 @@ int igStackMemoryPool_GetElementSize(igStackMemoryPool *self) {
     return self->_elementSize;
 }
 
-void igStackMemoryPool_SetRawMemory(int *arg0, void *arg1, int arg2, long long arg3, char arg4) {
-    if (*(unsigned char *)((char *)(arg1) + 140) == 0) {
-        *(int *)((char *)(arg1) + 116) = arg2;
-        *(long long *)((char *)(arg1) + 120) = arg3;
-        *(char *)((char *)(arg1) + 141) = arg4;
-        *arg0 = g_resultSuccess.v;
+void igStackMemoryPool_SetRawMemory(int *result, igStackMemoryPool *self, int memory, long long size, char isAlchemyMemory) {
+    if (self->_isActive == 0) {
+        self->_rawMemory = memory;
+        self->_totalSize = size;
+        self->_isAlchemyMemory = isAlchemyMemory;
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
@@ -91,23 +91,23 @@ long long igStackMemoryPool_GetMaxSize(igStackMemoryPool *self) {
     return self->_totalSize;
 }
 
-long long Gap__Core__igStackMemoryPool__vfunc_46(igStackMemoryPool *arg0) {
-    long long r = (long long)arg0->_nextInt - (long long)arg0->_stackPtr;
+long long Gap__Core__igStackMemoryPool__vfunc_46(igStackMemoryPool *self) {
+    long long r = (long long)self->_nextInt - (long long)self->_stackPtr;
     if (r > 0) return r;
     return 0;
 }
 
-long long igStackMemoryPool_GetLocalNetAllocated(igStackMemoryPool *arg0) {
+long long igStackMemoryPool_GetLocalNetAllocated(igStackMemoryPool *self) {
     int cur;
     long long total = 0;
     StackBlockRecord *e;
     int raw;
-    if (arg0->_isActive == 0) {
+    if (self->_isActive == 0) {
         return 0;
     }
-    cur = arg0->_stackPtr;
-    e = (StackBlockRecord *)arg0->_nextInt + 1;
-    raw = arg0->_rawMemory;
+    cur = self->_stackPtr;
+    e = (StackBlockRecord *)self->_nextInt + 1;
+    raw = self->_rawMemory;
     while (cur != raw) {
         unsigned t = e->size;
         e++;
@@ -117,75 +117,75 @@ long long igStackMemoryPool_GetLocalNetAllocated(igStackMemoryPool *arg0) {
     return total;
 }
 
-long long igStackMemoryPool_GetLocalNetAllocatedWithOverhead(igStackMemoryPool *arg0) {
-    return arg0->_totalSize - ((igMemoryPoolView *)arg0)->vfunc_49();
+long long igStackMemoryPool_GetLocalNetAllocatedWithOverhead(igStackMemoryPool *self) {
+    return self->_totalSize - ((igMemoryPoolView *)self)->GetFreeSize();
 }
 
-long long igStackMemoryPool_GetFreeSize(igStackMemoryPool *arg0) {
-    long long r = (long long)arg0->_nextInt - (long long)arg0->_stackPtr;
+long long igStackMemoryPool_GetFreeSize(igStackMemoryPool *self) {
+    long long r = (long long)self->_nextInt - (long long)self->_stackPtr;
     if (r > 0) return r;
     return 0;
 }
 
-int igStackMemoryPool_AllocateElement(igStackMemoryPool *arg0) {
+int igStackMemoryPool_AllocateElement(igStackMemoryPool *self) {
     int total, pad, mask;
     int cur;
     unsigned short align;
     int size;
-    if (arg0->_isActive == 0) { return 0; }
-    size = arg0->_elementSize;
+    if (self->_isActive == 0) { return 0; }
+    size = self->_elementSize;
     if (size == 0) { return 0; }
     if (size == 0) { return 0; }
-    align = arg0->_alignment;
+    align = self->_alignment;
     mask = align - 1;
-    pad = (align - ((int)arg0->_stackPtr & mask)) & mask;
+    pad = (align - ((int)self->_stackPtr & mask)) & mask;
     total = size + pad;
-    if ((int)arg0->_nextInt - (int)arg0->_stackPtr < total) { return 0; }
-    cur = (int)arg0->_stackPtr + pad;
-    arg0->_stackPtr += total;
-    *(int *)arg0->_nextInt = total;
-    arg0->_nextInt -= 4;
+    if ((int)self->_nextInt - (int)self->_stackPtr < total) { return 0; }
+    cur = (int)self->_stackPtr + pad;
+    self->_stackPtr += total;
+    *(int *)self->_nextInt = total;
+    self->_nextInt -= 4;
     return cur;
 }
 
-int igStackMemoryPool_Allocate(igStackMemoryPool *arg0, int arg1) {
+int igStackMemoryPool_Allocate(igStackMemoryPool *self, int size) {
     int total, pad, mask;
     int cur;
     unsigned short align;
-    if (arg1 == 0) {
+    if (size == 0) {
         return 0;
     }
-    align = arg0->_alignment;
+    align = self->_alignment;
     mask = align - 1;
-    cur = arg0->_stackPtr;
+    cur = self->_stackPtr;
     pad = mask & (align - (cur & mask));
-    total = arg1 + pad;
-    if ((int)arg0->_nextInt - cur < total) {
+    total = size + pad;
+    if ((int)self->_nextInt - cur < total) {
         return 0;
     }
-    arg0->_stackPtr = cur + total;
-    *(int *)arg0->_nextInt = total;
-    arg0->_nextInt -= 4;
+    self->_stackPtr = cur + total;
+    *(int *)self->_nextInt = total;
+    self->_nextInt -= 4;
     return cur + pad;
 }
 
-int igStackMemoryPool_AllocateAligned(igStackMemoryPool *arg0, int size, unsigned short arg2) {
+int igStackMemoryPool_AllocateAligned(igStackMemoryPool *self, int size, unsigned short alignment) {
     int total, pad, mask, ret;
     unsigned short align;
     unsigned short pool;
     if (size == 0) { size = 1; }
-    pool = arg0->_alignment;
+    pool = self->_alignment;
     if (size == 0) { return 0; }
-    arg2 = (arg2 > pool) ? arg2 : pool;
-    align = arg2;
+    alignment = (alignment > pool) ? alignment : pool;
+    align = alignment;
     mask = align - 1;
-    pad = (align - ((int)arg0->_stackPtr & mask)) & mask;
+    pad = (align - ((int)self->_stackPtr & mask)) & mask;
     total = size + pad;
-    if ((int)arg0->_nextInt - (int)arg0->_stackPtr < total) { return 0; }
-    ret = (int)arg0->_stackPtr + pad;
-    arg0->_stackPtr += total;
-    *(int *)arg0->_nextInt = total;
-    arg0->_nextInt -= 4;
+    if ((int)self->_nextInt - (int)self->_stackPtr < total) { return 0; }
+    ret = (int)self->_stackPtr + pad;
+    self->_stackPtr += total;
+    *(int *)self->_nextInt = total;
+    self->_nextInt -= 4;
     return ret;
 }
 
@@ -241,50 +241,50 @@ void *igStackMemoryPool_CallocateAligned(igStackMemoryPool *s, int count, int si
     }
 }
 
-int igStackMemoryPool_Reallocate(void **arg0, int arg1, unsigned int arg2) {
-    int var_v0;
-    unsigned int temp_v0;
-    unsigned int temp_v0_2;
+int igStackMemoryPool_Reallocate(void **self, int memory, unsigned int size) {
+    int result;
+    unsigned int oldSize;
+    unsigned int copySize;
 
-    if (arg2 != 0) {
-        var_v0 = (int)((igMemoryPoolView *)arg0)->Allocate(arg2);
+    if (size != 0) {
+        result = (int)((igMemoryPoolView *)self)->Allocate(size);
     } else {
-        var_v0 = 0;
+        result = 0;
     }
-    if (arg1 != 0) {
-        if (var_v0 != 0) {
-            temp_v0 = ((igMemoryPoolView *)arg0)->GetAllocationSize((void *)arg1);
-            temp_v0_2 = (temp_v0 < arg2) ? temp_v0 : arg2;
-            if (var_v0 != 0) {
-                memcpy(var_v0, arg1, temp_v0_2);
+    if (memory != 0) {
+        if (result != 0) {
+            oldSize = ((igMemoryPoolView *)self)->GetAllocationSize((void *)memory);
+            copySize = (oldSize < size) ? oldSize : size;
+            if (result != 0) {
+                memcpy(result, memory, copySize);
             }
         }
-        ((igMemoryPoolView *)arg0)->Free((void *)arg1);
+        ((igMemoryPoolView *)self)->Free((void *)memory);
     }
-    return var_v0;
+    return result;
 }
 
-int igStackMemoryPool_ReallocateAligned(void **arg0, int arg1, unsigned int arg2, unsigned short arg3) {
-    int var_v0;
-    unsigned int temp_v0;
-    unsigned int temp_v0_2;
+int igStackMemoryPool_ReallocateAligned(void **self, int memory, unsigned int size, unsigned short alignment) {
+    int result;
+    unsigned int oldSize;
+    unsigned int copySize;
 
-    if (arg2 != 0) {
-        var_v0 = (int)((igMemoryPoolView *)arg0)->AllocateAligned(arg2, arg3);
+    if (size != 0) {
+        result = (int)((igMemoryPoolView *)self)->AllocateAligned(size, alignment);
     } else {
-        var_v0 = 0;
+        result = 0;
     }
-    if (arg1 != 0) {
-        if (var_v0 != 0) {
-            temp_v0 = ((igMemoryPoolView *)arg0)->GetAllocationSize((void *)arg1);
-            temp_v0_2 = (temp_v0 < arg2) ? temp_v0 : arg2;
-            if (var_v0 != 0) {
-                memcpy(var_v0, arg1, temp_v0_2);
+    if (memory != 0) {
+        if (result != 0) {
+            oldSize = ((igMemoryPoolView *)self)->GetAllocationSize((void *)memory);
+            copySize = (oldSize < size) ? oldSize : size;
+            if (result != 0) {
+                memcpy(result, memory, copySize);
             }
         }
-        ((igMemoryPoolView *)arg0)->Free((void *)arg1);
+        ((igMemoryPoolView *)self)->Free((void *)memory);
     }
-    return var_v0;
+    return result;
 }
 
 static inline unsigned short effectiveAlign(igStackMemoryPool *pool, unsigned short wanted) {
@@ -403,22 +403,22 @@ void igStackMemoryPool_GangAllocAligned(int *result, igStackMemoryPool *pool, un
     *result = g_resultFailure.v;
 }
 
-int igStackMemoryPool_GetAllocationSize(igStackMemoryPool *arg0, unsigned int arg1) {
-    StackBlockRecord *a1;
-    unsigned int a0;
-    unsigned int v1;
-    if (((igMemoryPoolView *)arg0)->OwnsAllocation((void *)arg1) == 0) {
+int igStackMemoryPool_GetAllocationSize(igStackMemoryPool *self, unsigned int memory) {
+    StackBlockRecord *record;
+    unsigned int start;
+    unsigned int blockSize;
+    if (((igMemoryPoolView *)self)->OwnsAllocation((void *)memory) == 0) {
         return 0;
     }
-    a1 = (StackBlockRecord *)arg0->_nextInt + 1;
-    v1 = a1->size;
-    a0 = arg0->_stackPtr - v1;
-    while (a0 > arg1) {
-        a1 += 1;
-        v1 = a1->size;
-        a0 -= v1;
+    record = (StackBlockRecord *)self->_nextInt + 1;
+    blockSize = record->size;
+    start = self->_stackPtr - blockSize;
+    while (start > memory) {
+        record += 1;
+        blockSize = record->size;
+        start -= blockSize;
     }
-    return v1 - (arg1 - a0);
+    return blockSize - (memory - start);
 }
 
 bool igStackMemoryPool_OwnsAllocation(igStackMemoryPool *s, unsigned a) {
@@ -496,19 +496,19 @@ void igStackMemoryPool_Free(igStackMemoryPool *self, unsigned block) {
     }
 }
 
-int igStackMemoryPool_GetEventTracker(void *arg0) {
-    return *(int *)((char *)(arg0) + 148);
+int igStackMemoryPool_GetEventTracker(igStackMemoryPool *self) {
+    return self->_eventTracker;
 }
 
-void igStackMemoryPool_SetEventTracker(igStackMemoryPool *arg0, igObject *arg1) {
-    igObject *temp_a0;
-    if ((arg1 == 0) || (((void *)igObject_GetAllocator((int)arg1)) != arg0)) {
-        if (arg1 != 0) {
-            arg1->_refCount = (int)((int) (arg1->_refCount + 1));
+void igStackMemoryPool_SetEventTracker(igStackMemoryPool *self, igObject *tracker) {
+    igObject *old;
+    if ((tracker == 0) || (((void *)igObject_GetAllocator((int)tracker)) != self)) {
+        if (tracker != 0) {
+            tracker->_refCount = (int)((int) (tracker->_refCount + 1));
         }
-        temp_a0 = (igObject *)arg0->_eventTracker;
-        IG_OBJECT_RELEASE(temp_a0);
-        arg0->_eventTracker = (int)arg1;
+        old = (igObject *)self->_eventTracker;
+        IG_OBJECT_RELEASE(old);
+        self->_eventTracker = (int)tracker;
     }
 }
 
@@ -516,12 +516,12 @@ void igStackMemoryPool_Dump(int *a, int a1, int a2, int a3, int a4) {
     Memory_DumpMemory((unsigned int)a1, (unsigned int)a2, (unsigned int)a3, (unsigned int)a[29], (long long)((unsigned int)(a[33] - a[29])), (const char *)a4);
 }
 
-int igStackMemoryPool_GetPoolIndex(void *arg0) {
-    return *(int *)((char *)(arg0) + 144);
+int igStackMemoryPool_GetPoolIndex(igStackMemoryPool *self) {
+    return self->_poolIndex;
 }
 
-void igStackMemoryPool_SetPoolIndex(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 144) = arg1;
+void igStackMemoryPool_SetPoolIndex(igStackMemoryPool *self, int index) {
+    self->_poolIndex = index;
 }
 
 void igStackMemoryPool_CollectMemoryRegions(igStackMemoryPool *self, igDataList *list) {

@@ -1,41 +1,41 @@
-int igDoubleMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igDoubleMetaField_ValueFromString(int self, int value, int text) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &text_lg_n[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(text, &text_lg_n[0], value, &consumed);
+    return consumed;
 }
 
-void igDoubleMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
-    int sp20[256];
-    int var_v0;
-    int var_v1;
+void igDoubleMetaField_ValueToString(int *out, int self, long long *value) {
+    int buffer[256];
+    int pool;
+    int interned;
 
-    sprintf(sp20, &DAT_004f9610[0], *arg2);
-    if (sp20 == 0) {
-        var_v1 = 0;
+    sprintf(buffer, &percent_g[0], *value);
+    if (buffer == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
     }
-    *arg0 = var_v1;
+    *out = interned;
 }
 
 int igDoubleMetaField_GetSize(void) {
     return 8;
 }
 
-void igDoubleMetaField_SetDefaultDouble(void **arg0, long long arg1) {
-    long long sp18;
+void igDoubleMetaField_SetDefaultDouble(void **field, long long value) {
+    long long defaultValue;
 
-    sp18 = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
+    defaultValue = value;
+    ((igMetaFieldView *)(field))->SetDefault(&defaultValue);
 }
 
 int igDoubleMetaField_GetAlignment(void) {

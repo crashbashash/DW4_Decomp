@@ -9,7 +9,7 @@ igMetaObject *igPsx2CallStackTracer_GetMetaObject(void)
 int igPsx2CallStackTracer_GetVTable(void) {
     int obj[8];
     igObject_InitHeader((igObject *)obj);
-    obj[0] = (int)&DAT_0052dcb0[0];
+    obj[0] = (int)&g_igPsx2CallStackTracer_vtable[0];
     return *(int *)((char *)obj + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
 }
 
@@ -29,7 +29,7 @@ void igPsx2CallStackTracer_Register(void) {
         igPsx2CallStackTracer_className,
         0x14,
         igPsx2CallStackTracer_GetVTable,
-        (igMetaObjectCallback)igPsx2CallStackTracer_InitFields_002d0530,
+        igPsx2CallStackTracer_SetWriteProxy,
         0,
         0
     );

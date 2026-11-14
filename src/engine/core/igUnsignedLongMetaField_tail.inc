@@ -1,55 +1,55 @@
-int igUnsignedLongMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igUnsignedLongMetaField_ValueFromString(int self, int value, int text) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &text_ld_n[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(text, &text_ld_n[0], value, &consumed);
+    return consumed;
 }
 
-void igUnsignedLongMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
-    struct { int w; int pad[255]; } sp20;
-    int var_v0;
-    int var_v1;
+void igUnsignedLongMetaField_ValueToString(int *out, int self, long long *value) {
+    struct { int w; int pad[255]; } text;
+    int pool;
+    int interned;
 
-    sprintf((int *)&sp20, &DAT_004f9bc0[0], *arg2);
-    if ((int *)&sp20 == 0) {
-        var_v1 = 0;
+    sprintf((int *)&text, &percent_ld[0], *value);
+    if ((int *)&text == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)((int *)&sp20));
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)((int *)&text));
     }
-    *arg0 = var_v1;
+    *out = interned;
 }
 
 int igUnsignedLongMetaField_GetSize(void) {
     return 8;
 }
 
-int **igUnsignedLongMetaField_Construct(int **arg0, int extra1) {
-    igMetaField_Construct((igMetaField *)arg0);
-    *arg0 = &DAT_00533530[0];
-    if (arg0 != 0) {
-        igUnsignedLongMetaField_Init(arg0);
+int **igUnsignedLongMetaField_Construct(int **self, int extra1) {
+    igMetaField_Construct((igMetaField *)self);
+    *self = &g_igUnsignedLongMetaField_vtable[0];
+    if (self != 0) {
+        igUnsignedLongMetaField_Init(self);
     }
-    return arg0;
+    return self;
 }
 
-int **igUnsignedLongMetaField_Init(int **arg0) {
-    igMetaField_Init((igMetaField *)arg0);
-    *arg0 = &DAT_00533530[0];
-    return arg0;
+int **igUnsignedLongMetaField_Init(int **self) {
+    igMetaField_Init((igMetaField *)self);
+    *self = &g_igUnsignedLongMetaField_vtable[0];
+    return self;
 }
 
-int **igUnsignedLongMetaField_CopyConstruct(int **arg0, int extra1) {
-    igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
-    *arg0 = &DAT_00533530[0];
-    return arg0;
+int **igUnsignedLongMetaField_CopyConstruct(int **self, int source) {
+    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
+    *self = &g_igUnsignedLongMetaField_vtable[0];
+    return self;
 }
 
 void igUnsignedLongMetaField_Destruct(int extra0) {

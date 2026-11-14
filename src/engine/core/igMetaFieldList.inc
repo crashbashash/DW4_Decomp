@@ -1,6 +1,6 @@
-void * igMetaFieldList_Create(int arg0) {
+void * igMetaFieldList_Create(int pool) {
     igMetaFieldList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5867C0), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5867C0), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMetaFieldList_GetOrCreateMetaObject(void) {
@@ -22,7 +22,7 @@ int igMetaFieldList_GetVTable(void) {
     igMetaFieldList obj;
 
     igObject_InitHeader((igObject *)&obj);
-    obj._vtable = (int)&DAT_005320a0[0];
+    obj._vtable = (int)&g_igMetaFieldList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

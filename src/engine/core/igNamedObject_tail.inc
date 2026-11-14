@@ -1,26 +1,26 @@
-void igNamedObject_SetName(igNamedObject *arg0, int arg1) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    char *temp_a0;
-    void *temp_s0;
+void igNamedObject_SetName(igNamedObject *self, int name) {
+    int *header;
+    int references;
+    int pool;
+    char *previous;
+    void *interned;
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
-    temp_a0 = (char *)arg0->_name;
-    if (temp_a0 != 0) {
-        temp_a1 = (int *)(temp_a0 - 8);
-        temp_v1 = *(int *)((char *)temp_a0 - 4) - 1;
-        *(int *)((char *)temp_a0 - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name)));
+    previous = (char *)self->_name;
+    if (previous != 0) {
+        header = (int *)(previous - 8);
+        references = *(int *)((char *)previous - 4) - 1;
+        *(int *)((char *)previous - 4) = references;
+        if (references == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0->_name = (int)temp_s0;
+    self->_name = (int)interned;
 }
 

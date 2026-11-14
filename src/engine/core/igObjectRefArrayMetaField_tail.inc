@@ -5,132 +5,132 @@ void igObjectRefArrayMetaField_SwapBytes(igObjectRefArrayMetaField *self, int pa
     ((igMetaFieldView *)(elementDescriptor))->SwapBytes((void *)(passThrough), (int)(perElement * self->_num));
 }
 
-void igObjectRefArrayMetaField_SetElement(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject *arg3) {
-    int temp_s0;
-    igObject *temp_a0;
+void igObjectRefArrayMetaField_SetElement(igObjectRefArrayMetaField *self, int object, int index, igObject *value) {
+    int byteOffset;
+    igObject *old;
 
-    temp_s0 = arg2 * 4;
-    temp_a0 = ((igObject **)(arg1 + arg0->_offset))[arg2];
-    if (arg0->_refCounted != 0) {
-        if (arg3 != 0) {
-            arg3->_refCount = arg3->_refCount + 1;
+    byteOffset = index * 4;
+    old = ((igObject **)(object + self->_offset))[index];
+    if (self->_refCounted != 0) {
+        if (value != 0) {
+            value->_refCount = value->_refCount + 1;
         }
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+        if (old != 0) {
+            old->_refCount = old->_refCount - 1;
+            if ((old->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(old);
             }
         }
     }
-    ((igObject **)(arg1 + arg0->_offset))[arg2] = arg3;
+    ((igObject **)(object + self->_offset))[index] = value;
 }
 
-int igObjectRefArrayMetaField_ReadRawFieldMem(void *arg0, int arg1, char *arg2, int arg3, int arg4) {
+int igObjectRefArrayMetaField_ReadRawFieldMem(igObjectRefArrayMetaField *self, int dst, char *src, int directory, int swapBytes) {
     int *p;
     int cur;
     int start;
     int i;
-    p = (int *)arg1;
-    cur = (int)arg2;
+    p = (int *)dst;
+    cur = (int)src;
     start = cur;
-    for (i = 0; i < *(int *)((char *)arg0 + 68); i++) {
-        cur += igObjectRefMetaField_ReadRawFieldMem((igObjectRefMetaField *)arg0, (igObject **)p, cur, arg3, arg4);
+    for (i = 0; i < self->_num; i++) {
+        cur += igObjectRefMetaField_ReadRawFieldMem((igObjectRefMetaField *)self, (igObject **)p, cur, directory, swapBytes);
         p++;
     }
     return cur - start;
 }
 
-void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *arg0, int arg1) {
-    igObject *temp_v0;
-    int var_s1;
-    int var_s0;
-    char *temp_a0;
+void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *self, int object) {
+    igObject *element;
+    int allocator;
+    int i;
+    char *poolName;
 
-    if (arg0->_construct != 0) {
-        temp_a0 = (char *)arg0->_poolName;
-        if ((temp_a0 != 0) && (*temp_a0 != 0)) {
-            var_s1 = ((int)Memory_GetAllocatorByName((int)temp_a0));
-            if (var_s1 == 0) {
-                var_s1 = ((int)igObject_GetAllocator(arg1));
+    if (self->_construct != 0) {
+        poolName = (char *)self->_poolName;
+        if ((poolName != 0) && (*poolName != 0)) {
+            allocator = ((int)Memory_GetAllocatorByName((int)poolName));
+            if (allocator == 0) {
+                allocator = ((int)igObject_GetAllocator(object));
             }
         } else {
-            var_s1 = ((int)igObject_GetAllocator(arg1));
+            allocator = ((int)igObject_GetAllocator(object));
         }
-        for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
-            temp_v0 = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)arg0->_metaObject, (igMemoryPoolView *)var_s1));
-            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)temp_v0);
-            if (arg0->_refCounted != 0) {
-                temp_v0->_refCount = temp_v0->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)temp_v0->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_v0);
+        for (i = 0; i < self->_num; i++) {
+            element = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)self->_metaObject, (igMemoryPoolView *)allocator));
+            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)element);
+            if (self->_refCounted != 0) {
+                element->_refCount = element->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)element->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(element);
                 }
             }
         }
     }
 }
 
-void igObjectRefArrayMetaField_DestructValue(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_DestructValue(igObjectRefArrayMetaField *self, int object) {
     int i;
-    igObject *temp_a0;
+    igObject *element;
 
-    if (arg0->_destruct != 0) {
-        for (i = 0; i < arg0->_num; i++) {
-            temp_a0 = *(igObject **)(arg1 + arg0->_offset + (i * 4));
-            if (temp_a0 != 0) {
-                temp_a0->_refCount = (int)((int) (temp_a0->_refCount - 1));
-                if (((unsigned long long) ((long long)(int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0);
+    if (self->_destruct != 0) {
+        for (i = 0; i < self->_num; i++) {
+            element = *(igObject **)(object + self->_offset + (i * 4));
+            if (element != 0) {
+                element->_refCount = (int)((int) (element->_refCount - 1));
+                if (((unsigned long long) ((long long)(int)element->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(element);
                 }
             }
         }
     }
 }
 
-void igObjectRefArrayMetaField_ClearValue(igObjectRefArrayMetaField *arg0, int arg1) {
-    int var_s0;
-    igObject *temp_a0;
+void igObjectRefArrayMetaField_ClearValue(igObjectRefArrayMetaField *self, int object) {
+    int i;
+    igObject *element;
 
-    if (arg0->_persistent != 0) {
-        if (arg0->_refCounted != 0) {
-            for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
-                temp_a0 = *(igObject **)(arg1 + arg0->_offset + (var_s0 * 4));
-                if (temp_a0 != 0) {
-                    temp_a0->_refCount = temp_a0->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(temp_a0);
+    if (self->_persistent != 0) {
+        if (self->_refCounted != 0) {
+            for (i = 0; i < self->_num; i++) {
+                element = *(igObject **)(object + self->_offset + (i * 4));
+                if (element != 0) {
+                    element->_refCount = element->_refCount - 1;
+                    if (((unsigned long long)((long long)(int)element->_refCount << 0x29) >> 0x29) == 0) {
+                        igObject_Destroy(element);
                     }
                 }
             }
         }
-        igRefMetaField_ClearValue((igMetaField *)arg0, (void *)arg1);
+        igRefMetaField_ClearValue((igMetaField *)self, (void *)object);
     }
 }
 
-void igObjectRefArrayMetaField_SetToDefault(void *arg0, int arg1) {
-    int temp_a0;
-    int var_s0;
+void igObjectRefArrayMetaField_SetToDefault(igObjectRefArrayMetaField *self, int object) {
+    int element;
+    int i;
 
-    for (var_s0 = 0; var_s0 < *(int *)((char *)(arg0) + 68); var_s0++) {
-        temp_a0 = *(int *)(arg1 + *(int *)((char *)(arg0) + 8) + (var_s0 * 4));
-        if (temp_a0 != 0) {
-            igObject_ResetFields((igObjectDispatchView *)temp_a0);
+    for (i = 0; i < self->_num; i++) {
+        element = *(int *)(object + self->_offset + (i * 4));
+        if (element != 0) {
+            igObject_ResetFields((igObjectDispatchView *)element);
         }
     }
 }
 
-void igObjectRefArrayMetaField_CopyDefaultToValue(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_CopyDefaultToValue(igObjectRefArrayMetaField *self, int object) {
     int i;
 
-    for (i = 0; i < arg0->_num; i++) {
-        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, i, (igObject *)((int *)arg0->_default)[i]);
+    for (i = 0; i < self->_num; i++) {
+        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)((int *)self->_default)[i]);
     }
 }
 
-void igObjectRefArrayMetaField_CopyReference(void *arg0, int arg1, int arg2) {
-    int var_s0;
+void igObjectRefArrayMetaField_CopyReference(igObjectRefArrayMetaField *self, int object, int source) {
+    int i;
 
-    for (var_s0 = 0; var_s0 < *(int *)((char *)(arg0) + 68); var_s0++) {
-        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(*(int *)(arg2 + *(int *)((char *)(arg0) + 8) + (var_s0 * 4))));
+    for (i = 0; i < self->_num; i++) {
+        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)(*(int *)(source + self->_offset + (i * 4))));
     }
 }
 
@@ -157,46 +157,46 @@ void igObjectRefArrayMetaField_DeepCopy(igObjectRefArrayMetaField *s, char *a1, 
     }
 }
 
-void igObjectRefArrayMetaField_ShallowCopy(int *arg0, int arg1, int arg2) {
-    int var_s0;
-    int v1;
-    int p1;
-    int p2;
-    int off;
-    igObject *a0;
-    igObjectDispatchView *a1;
+void igObjectRefArrayMetaField_ShallowCopy(igObjectRefArrayMetaField *self, int object, int source) {
+    int i;
+    int offset;
+    int objectBase;
+    int sourceBase;
+    int byteOffset;
+    igObject *element;
+    igObjectDispatchView *sourceElement;
 
-    var_s0 = 0;
-    while (var_s0 < arg0[17]) {
-        v1 = arg0[2];
-        off = var_s0 * 4;
-        p1 = arg1 + v1;
-        p2 = arg2 + v1;
-        a0 = *(igObject **)(p1 + off);
-        a1 = *(igObjectDispatchView **)(p2 + off);
-        if (a0 != 0 || a1 != 0) {
-            if (a0 != 0 && a1 != 0) {
-                igObject_ShallowCopy((igObjectDispatchView *)a0, (int)a1);
-            } else if (a0 == 0) {
-                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(a1->cloneViaMetadata(1)));
-            } else if (a1 == 0) {
-                a0->_refCount = a0->_refCount - 1;
-                if ((a0->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(a0);
+    i = 0;
+    while (i < self->_num) {
+        offset = self->_offset;
+        byteOffset = i * 4;
+        objectBase = object + offset;
+        sourceBase = source + offset;
+        element = *(igObject **)(objectBase + byteOffset);
+        sourceElement = *(igObjectDispatchView **)(sourceBase + byteOffset);
+        if (element != 0 || sourceElement != 0) {
+            if (element != 0 && sourceElement != 0) {
+                igObject_ShallowCopy((igObjectDispatchView *)element, (int)sourceElement);
+            } else if (element == 0) {
+                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)(sourceElement->cloneViaMetadata(1)));
+            } else if (sourceElement == 0) {
+                element->_refCount = element->_refCount - 1;
+                if ((element->_refCount & 0x7FFFFF) == 0) {
+                    igObject_Destroy(element);
                 }
-                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)0);
+                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)0);
             }
-            var_s0 += 1;
+            i += 1;
         } else {
             break;
         }
     }
 }
 
-void igObjectRefArrayMetaField_ResetValue(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_ResetValue(igObjectRefArrayMetaField *self, int object) {
     int i;
-    for (i = 0; i < arg0->_num; i++) {
-        int *p = (int *)(arg1 + arg0->_offset + (i * 4));
+    for (i = 0; i < self->_num; i++) {
+        int *p = (int *)(object + self->_offset + (i * 4));
         if (*p != 0) {
             igObject_ResetFields((igObjectDispatchView *)(*p));
         }
@@ -219,31 +219,31 @@ int igObjectRefArrayMetaField_WriteRawFieldMem(igObjectRefArrayMetaField *self, 
     return ((d - start) + 3) & ~3;
 }
 
-int igObjectRefArrayMetaField_GetSize(void *arg0) {
-    return (*(int *)((char *)(arg0) + 68) * 4) & 0xFFFF;
+int igObjectRefArrayMetaField_GetSize(igObjectRefArrayMetaField *self) {
+    return (self->_num * 4) & 0xFFFF;
 }
 
-void igObjectRefArrayMetaField_ReleaseElements(igObjectRefArrayMetaField *arg0, int arg1, int arg2, int arg3) {
-    int temp_a0;
-    int var_s0;
+void igObjectRefArrayMetaField_ReleaseElements(igObjectRefArrayMetaField *self, int object, int visitor, int context) {
+    int element;
+    int i;
 
-    for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
-        temp_a0 = *(int *)(arg1 + arg0->_offset + (var_s0 * 4));
-        if (temp_a0 != 0) {
-            igObject_VisitFields((igObjectDispatchView *)temp_a0, (int (*)(void *, void *, void *))arg2, (void *)arg3);
+    for (i = 0; i < self->_num; i++) {
+        element = *(int *)(object + self->_offset + (i * 4));
+        if (element != 0) {
+            igObject_VisitFields((igObjectDispatchView *)element, (int (*)(void *, void *, void *))visitor, (void *)context);
         }
     }
 }
 
-int igObjectRefArrayMetaField_IsAlikeExactly(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeExactly(igObjectRefArrayMetaField *self, int first, int second) {
     int i;
     int off;
     int a;
     int b;
-    for (i = 0; i < arg0->_num; i++) {
-        off = arg0->_offset;
-        a = *(int *)(arg1 + off + i * 4);
-        b = *(int *)(arg2 + off + i * 4);
+    for (i = 0; i < self->_num; i++) {
+        off = self->_offset;
+        a = *(int *)(first + off + i * 4);
+        b = *(int *)(second + off + i * 4);
         if (a != b) {
             if (a == 0 || b == 0) {
                 return 0;
@@ -256,11 +256,11 @@ int igObjectRefArrayMetaField_IsAlikeExactly(igObjectRefArrayMetaField *arg0, in
     return 1;
 }
 
-int igObjectRefArrayMetaField_IsAlikeDeep(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeDeep(igObjectRefArrayMetaField *self, int first, int second) {
     int i;
-    for (i = 0; i < arg0->_num; i++) {
-        int a = *(int *)(arg1 + arg0->_offset + i * 4);
-        int b = *(int *)(arg2 + arg0->_offset + i * 4);
+    for (i = 0; i < self->_num; i++) {
+        int a = *(int *)(first + self->_offset + i * 4);
+        int b = *(int *)(second + self->_offset + i * 4);
         if (a != b) {
             if (a == 0 || b == 0) {
                 return 0;
@@ -273,14 +273,14 @@ int igObjectRefArrayMetaField_IsAlikeDeep(igObjectRefArrayMetaField *arg0, int a
     return 1;
 }
 
-int igObjectRefArrayMetaField_IsAlikeShallow(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeShallow(igObjectRefArrayMetaField *self, int first, int second) {
     int i;
     int a;
     int b;
 
-    for (i = 0; i < arg0->_num; i++) {
-        a = *(int *)(arg1 + arg0->_offset + i * 4);
-        b = *(int *)(arg2 + arg0->_offset + i * 4);
+    for (i = 0; i < self->_num; i++) {
+        a = *(int *)(first + self->_offset + i * 4);
+        b = *(int *)(second + self->_offset + i * 4);
         if (a != b) {
             if ((a == 0) || (b == 0)) {
                 return 0;

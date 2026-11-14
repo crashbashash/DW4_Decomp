@@ -104,21 +104,21 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     return dest;
 }
 
-void igMetaField_Destruct(igMetaField *arg0) {
-    int temp_a1;
+void igMetaField_Destruct(igMetaField *self) {
+    int storage;
 
-    temp_a1 = arg0->_default;
-    if (temp_a1 != 0) {
-        igObject_FreeStorage((int)arg0, temp_a1);
+    storage = self->_default;
+    if (storage != 0) {
+        igObject_FreeStorage((int)self, storage);
     }
-    igObject_Destruct((int)arg0);
+    igObject_Destruct((int)self);
 }
 
 __internalObjectList *igMetaField_GetMetaFieldList(void) {
-    if (((int *)DAT_00587188)[0] == 0) {
-        ((int *)DAT_00587188)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    if (((int *)g_metaFieldList)[0] == 0) {
+        ((int *)g_metaFieldList)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     }
-    return ((__internalObjectList **)DAT_00587188)[0];
+    return ((__internalObjectList **)g_metaFieldList)[0];
 }
 
 /* igMetaField slot +0x6c: a constant leaf returning -1. The receiver is not touched,
@@ -219,12 +219,12 @@ void igMetaField_Reset(igMetaField *field,void *object){
     }
 }
 
-void igMetaField_SetToDefault(igMetaField *arg0, int arg1) {
-    memcpy(arg1 + arg0->_offset, arg0->_default, arg0->_size);
+void igMetaField_SetToDefault(igMetaField *self, int object) {
+    memcpy(object + self->_offset, self->_default, self->_size);
 }
 
-void igMetaField_CopyDefaultToValue(igMetaField *arg0, int arg1) {
-    memcpy(arg1 + arg0->_offset, arg0->_default, arg0->_size);
+void igMetaField_CopyDefaultToValue(igMetaField *self, int object) {
+    memcpy(object + self->_offset, self->_default, self->_size);
 }
 
 /* igMetaField reset hook, base implementation: an empty function, so a reset request leaves the
@@ -232,22 +232,22 @@ void igMetaField_CopyDefaultToValue(igMetaField *arg0, int arg1) {
 void igMetaField_IgnoreReset(void) {
 }
 
-short igMetaField_GetTypeIndex(igMetaFieldView *arg0) {
-    if (arg0->_typeIndex == -1) {
-        arg0->_typeIndex = arg0->vfunc_23()->_internalIndex;
+short igMetaField_GetTypeIndex(igMetaFieldView *self) {
+    if (self->_typeIndex == -1) {
+        self->_typeIndex = self->GetDescriptor()->_internalIndex;
     }
-    return arg0->_typeIndex;
+    return self->_typeIndex;
 }
 
 /* Class-handle getter: returns the cached metaobject pointer in the global, the same global the
  * field constructor reads for a field's `_typeIndex`. */
 int igMetaField_GetDescriptor(void) {
-    return g_igMetaFieldInfo_metaObject_00587190[0];
+    return g_igMetaField_descriptor[0];
 }
 
 void igMetaField_FinalizeDescriptor(igMetaField *field){
-    void *type=((igMetaFieldView *)field)->vfunc_23();
-    if(type!=0)field->_typeIndex=*(short *)((char *)type+18);
+    void *type=((igMetaFieldView *)field)->GetDescriptor();
+    if(type!=0)field->_typeIndex=((igMetaField *)type)->_internalIndex;
     else field->_typeIndex=-1;
     field->_size=(unsigned short)((igMetaFieldView *)field)->GetSize();
     ((igMetaFieldView *)field)->SetDefault(0);
@@ -259,7 +259,7 @@ void igMetaField_FinalizeDescriptor(igMetaField *field){
  * in v1. */
 int igMetaField_AlignSize(void *p, int size)
 {
-    int m = ((igMetaFieldView *)p)->vfunc_27() - 1;
+    int m = ((igMetaFieldView *)p)->GetAlignment() - 1;
     int s = size + m;
     m = ~m;
     return m & s;
@@ -279,45 +279,45 @@ int igMetaField_ReadRawFieldMemAligned(igMetaFieldView *field, void *object, cha
     return (field->ReadRawFieldMem((int)object + field->_offset, (int)data, (int)directory, swap) + 3) & ~3;
 }
 
-unsigned short igMetaField_ReadRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4) {
-    memcpy(arg1, arg2, arg0->_size);
-    if (arg4 != 0) {
-        arg0->SwapBytes((void *)arg1, 1);
+unsigned short igMetaField_ReadRawFieldMem(igMetaFieldView *self, int value, int buffer, int directory, int swapBytes) {
+    memcpy(value, buffer, self->_size);
+    if (swapBytes != 0) {
+        self->SwapBytes((void *)value, 1);
     }
-    return arg0->_size;
+    return self->_size;
 }
 
-unsigned short igMetaField_WriteRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4) {
-    memcpy(arg2, arg1, arg0->_size);
-    if (arg4 != 0) {
-        arg0->SwapBytes((void *)arg2, 1);
+unsigned short igMetaField_WriteRawFieldMem(igMetaFieldView *self, int value, int buffer, int directory, int swapBytes) {
+    memcpy(buffer, value, self->_size);
+    if (swapBytes != 0) {
+        self->SwapBytes((void *)buffer, 1);
     }
-    return arg0->_size;
+    return self->_size;
 }
 
-int igMetaField_GetRawFieldMemSize(igMetaField *arg0) {
-    if (arg0->_persistent == 0 || arg0->_isRunTime != 0) {
+int igMetaField_GetRawFieldMemSize(igMetaField *self) {
+    if (self->_persistent == 0 || self->_isRunTime != 0) {
         return 0;
     }
-    return (arg0->_size + 3) & ~3;
+    return (self->_size + 3) & ~3;
 }
 
-void igMetaField_CopyByTechnique(igMetaFieldView *arg0, int arg1, int arg2, int arg3) {
-    switch (arg3) {
+void igMetaField_CopyByTechnique(igMetaFieldView *self, int destination, int source, int technique) {
+    switch (technique) {
     case 0:
-        arg0->DeepCopy(arg1, arg2);
+        self->DeepCopy(destination, source);
         break;
     case 1:
-        arg0->vfunc_37(arg1, arg2);
+        self->CopyReference(destination, source);
         break;
     case 2:
-        arg0->ShallowCopy(arg1, arg2);
+        self->ShallowCopy(destination, source);
         break;
     case 3:
-        arg0->vfunc_39(arg1, arg2);
+        self->ResetValue(destination, source);
         break;
     case 4:
-        arg0->vfunc_40(arg1, arg2);
+        self->IgnoreCopy(destination, source);
         break;
     }
 }
@@ -334,16 +334,16 @@ void igMetaField_ConstructCopy(int a0, int a1, int a2) {
     igMetaField_CopyByTechnique((igMetaFieldView *)a0, a1, a2, ((igMetaFieldView *)a0)->_constructCopyMethod);
 }
 
-void igMetaField_DeepCopyValue(void *arg0, int arg1, int arg2) {
-    memcpy(arg1 + *(int *)((char *)(arg0) + 8), arg2 + *(int *)((char *)(arg0) + 8), *(unsigned short *)((char *)(arg0) + 20));
+void igMetaField_DeepCopyValue(void *field, int destination, int source) {
+    memcpy(destination + ((igMetaField *)field)->_offset, source + ((igMetaField *)field)->_offset, ((igMetaField *)field)->_size);
 }
 
-void igMetaField_ShallowCopyValue(igMetaField *arg0, int arg1, int arg2) {
-    memcpy(arg1 + arg0->_offset, arg2 + arg0->_offset, arg0->_size);
+void igMetaField_ShallowCopyValue(igMetaField *self, int destination, int source) {
+    memcpy(destination + self->_offset, source + self->_offset, self->_size);
 }
 
-void igMetaField_CopyReference(void *arg0, int arg1, int arg2) {
-    memcpy(arg1 + *(int *)((char *)(arg0) + 8), arg2 + *(int *)((char *)(arg0) + 8), *(unsigned short *)((char *)(arg0) + 20));
+void igMetaField_CopyReference(void *field, int destination, int source) {
+    memcpy(destination + ((igMetaField *)field)->_offset, source + ((igMetaField *)field)->_offset, ((igMetaField *)field)->_size);
 }
 
 void igMetaField_ResetValue(igMetaField *field, void *object) {
@@ -354,11 +354,11 @@ void igMetaField_IgnoreCopy(void) {
 
 }
 
-int igMetaField_GetElementSize(void **arg0) {
-    return ((igMetaFieldView *)(arg0))->GetSize() & 0xFFFF;
+int igMetaField_GetElementSize(void **self) {
+    return ((igMetaFieldView *)(self))->GetSize() & 0xFFFF;
 }
 
-igStringRef igMetaField_ArrayToString(igMetaFieldView *arg1, int arg2, int arg3, int arg4)
+igStringRef igMetaField_ArrayToString(igMetaFieldView *self, int value, int count, int directory)
 {
     int i;
     igStringRef *list;
@@ -367,123 +367,123 @@ igStringRef igMetaField_ArrayToString(igMetaFieldView *arg1, int arg2, int arg3,
     char *buf;
     char *p;
 
-    list = (igStringRef *)((char *)igObject_AllocateStorage((int)arg1, arg3 * 4));
+    list = (igStringRef *)((char *)igObject_AllocateStorage((int)self, count * 4));
     total = 0;
     cnt = 0;
-    for (i = 0; i < arg3; i++) {
-        igStringRef part = arg1->vfunc_57(arg2, arg4);
+    for (i = 0; i < count; i++) {
+        igStringRef part = self->ValueToString(value, directory);
         if (part.p != 0) {
             list[cnt++] = part;
             total += strlen(part.p);
-            arg2 += arg1->vfunc_26();
+            value += self->GetElementSize();
         }
     }
-    buf = ((char *)igObject_AllocateStorage((int)arg1, total + 1));
+    buf = ((char *)igObject_AllocateStorage((int)self, total + 1));
     p = buf;
     for (i = 0; i < cnt; i++) {
-        p += sprintf(p, DAT_004f95a0, list[i].p);
+        p += sprintf(p, percent_s, list[i].p);
     }
     *p = 0;
     igStringRef result(buf);
-    igObject_FreeMemory((int)arg1, (int)list);
-    igObject_FreeMemory((int)arg1, (int)buf);
+    igObject_FreeMemory((int)self, (int)list);
+    igObject_FreeMemory((int)self, (int)buf);
     return result;
 }
 
-int igMetaField_ArrayFromString(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4) {
-    int r;
-    int s2 = arg1;
-    int s1 = arg2;
+int igMetaField_ArrayFromString(igMetaFieldView *self, int text, int value, int count, int directory) {
+    int consumed;
+    int cursor = text;
+    int element = value;
     int i = 0;
-    for (; i < arg3; i++) {
-        r = arg0->vfunc_56(s1, s2, arg4);
-        if (r != 0) {
-            s2 = r + s2;
-            s1 += arg0->vfunc_26();
+    for (; i < count; i++) {
+        consumed = self->ValueFromString(element, cursor, directory);
+        if (consumed != 0) {
+            cursor = consumed + cursor;
+            element += self->GetElementSize();
         } else {
             return 0;
         }
     }
-    return s2 - arg1;
+    return cursor - text;
 }
 
 int igMetaField_FromString(igMetaFieldView *field, int object, int text, int directory) {
     int value = object + field->_offset;
-    if (value != 0) { return field->vfunc_56(value, text, directory); }
+    if (value != 0) { return field->ValueFromString(value, text, directory); }
     return 0;
 }
 
 igStringRef igMetaField_ToString(igMetaFieldView *self, char *object, int directory)
 {
-    return self->vfunc_57((int)(object + self->_offset), directory);
+    return self->ValueToString((int)(object + self->_offset), directory);
 }
 
-void igMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    strlen(arg2);
+void igMetaField_ValueFromString(int self, int value, int text) {
+    strlen(text);
 }
 
-void igMetaField_ValueToString(int *arg0, void *arg1) {
-    int temp_s0;
-    int var_v0;
-    int var_v1;
+void igMetaField_ValueToString(int *out, void *field) {
+    int name;
+    int pool;
+    int interned;
 
-    temp_s0 = *(int *)((char *)(arg1) + 12);
-    if (temp_s0 == 0) {
-        var_v1 = 0;
+    name = ((igMetaField *)field)->_fieldName;
+    if (name == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = (int)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)temp_s0);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
     }
-    *arg0 = var_v1;
+    *out = interned;
 }
 
-int igMetaField_Write(igMetaField *arg0) {
-    return -(arg0->_persistent == 0);
+int igMetaField_Write(igMetaField *self) {
+    return -(self->_persistent == 0);
 }
 
-int igMetaField_IsAlikeByTechnique(void **arg0, int arg1, int arg2, int arg3) {
-    switch (arg3) {
+int igMetaField_IsAlikeByTechnique(void **self, int left, int right, int technique) {
+    switch (technique) {
     case 0:
-        return ((igMetaFieldView *)arg0)->vfunc_45(arg1, arg2);
+        return ((igMetaFieldView *)self)->IsAlikeExactly(left, right);
     case 1:
-        return ((igMetaFieldView *)arg0)->IsAlikeDeep(arg1, arg2);
+        return ((igMetaFieldView *)self)->IsAlikeDeep(left, right);
     case 2:
-        return ((igMetaFieldView *)arg0)->IsAlikeShallow(arg1, arg2);
+        return ((igMetaFieldView *)self)->IsAlikeShallow(left, right);
     case 3:
-        return ((igMetaFieldView *)arg0)->vfunc_48(arg1, arg2);
+        return ((igMetaFieldView *)self)->IsAlikeIgnore(left, right);
     default:
         return 0;
     }
 }
 
-int igMetaField_IsAlikeExactly(int a0, int a1, int a2) {
-    return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 42));
+int igMetaField_IsAlikeExactly(int self, int left, int right) {
+    return igMetaField_IsAlikeByTechnique((void **)self, left, right, ((igMetaField *)self)->_isAlikeExactlyMethod);
 }
 
-int igMetaField_IsAlikeDeep(int a0, int a1, int a2) {
-    return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 43));
+int igMetaField_IsAlikeDeep(int self, int left, int right) {
+    return igMetaField_IsAlikeByTechnique((void **)self, left, right, ((igMetaField *)self)->_isAlikeDeepMethod);
 }
 
-int igMetaField_IsAlikeShallow(int a0, int a1, int a2) {
-    return igMetaField_IsAlikeByTechnique((void **)a0, a1, a2, *(char *)((char *)a0 + 44));
+int igMetaField_IsAlikeShallow(int self, int left, int right) {
+    return igMetaField_IsAlikeByTechnique((void **)self, left, right, ((igMetaField *)self)->_isAlikeShallowMethod);
 }
 
-int igMetaField_IsAlikeExactlyValue(igMetaField *arg0, unsigned char *arg1, unsigned char *arg2) {
+int igMetaField_IsAlikeExactlyValue(igMetaField *self, unsigned char *left, unsigned char *right) {
     unsigned char *p1;
     unsigned char *p2;
     int n;
     int i;
-    int b;
-    b = arg0->_offset;
-    n = arg0->_size;
-    p1 = arg1 + b;
-    p2 = arg2 + b;
+    int offset;
+    offset = self->_offset;
+    n = self->_size;
+    p1 = left + offset;
+    p2 = right + offset;
     for (i = 0; i < n; i++) {
         if (p1[i] != p2[i]) {
             return 0;
@@ -494,12 +494,12 @@ int igMetaField_IsAlikeExactlyValue(igMetaField *arg0, unsigned char *arg1, unsi
 
 int igMetaField_IsAlikeDeepValue(igMetaFieldView *self, const void *left, const void *right)
 {
-    return self->vfunc_45((int)left, (int)right);
+    return self->IsAlikeExactly((int)left, (int)right);
 }
 
 int igMetaField_IsAlikeShallowValue(igMetaFieldView *self, const void *left, const void *right)
 {
-    return self->vfunc_45((int)left, (int)right);
+    return self->IsAlikeExactly((int)left, (int)right);
 }
 
 int igMetaField_IsAlikeIgnore(void) {
@@ -533,24 +533,24 @@ void igMetaField_ZeroValue(void) {
 void igMetaField_ClearValue(void) {
 }
 
-void igMetaField_Print(void *arg0, int arg1, int arg2, const char *arg3) {
-    igStringRef s = ((igMetaFieldView *)arg0)->vfunc_57(arg1 + ((igMetaField *)arg0)->_offset, 0);
-    if (arg3 == 0) arg3 = &GPR_00554c28;
-    igReport_Printf(DAT_004faf00, arg3, ((igMetaField *)arg0)->_fieldName, s.p);
+void igMetaField_Print(void *self, int object, int unused, const char *indent) {
+    igStringRef text = ((igMetaFieldView *)self)->ValueToString(object + ((igMetaField *)self)->_offset, 0);
+    if (indent == 0) indent = &emptyIndent;
+    igReport_Printf(percent_s_percent_s_equals_percent_s_newline, indent, ((igMetaField *)self)->_fieldName, text.p);
     igReport_Flush();
 }
 
-void igMetaField_SetValue(igMetaField *arg0, int arg1, int arg2) {
-    memcpy(arg1 + arg0->_offset, arg2, arg0->_size);
+void igMetaField_SetValue(igMetaField *self, int object, int value) {
+    memcpy(object + self->_offset, value, self->_size);
 }
 
 void igMetaField_SetValueFromField(igMetaFieldView *self, void *object, igMetaFieldView *field, char *source)
 {
-    self->vfunc_24((int)object, (int)(source + field->_offset));
+    self->SetValue((int)object, (int)(source + field->_offset));
 }
 
-void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2) {
-    int size = arg0->_size;
+void igMetaField_SwapBytes(igMetaField *self, unsigned char *values, int count) {
+    int size = self->_size;
     int i;
     int j;
     int half;
@@ -560,12 +560,12 @@ void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2) {
     unsigned char *b;
     unsigned char t;
     if (size != 1) {
-        for (i = 0, half = size >> 1; i < arg2; i++) {
+        for (i = 0, half = size >> 1; i < count; i++) {
             lo = i * size;
             last = (i + 1) * size - 1;
             for (j = 0; j < half; j++) {
-                a = arg1 + (j + lo);
-                b = arg1 + (last - j);
+                a = values + (j + lo);
+                b = values + (last - j);
                 t = *a;
                 *a = *b;
                 *b = t;
@@ -579,9 +579,9 @@ void igMetaField_SwapValue(igMetaFieldView *self, char *object)
     self->SwapBytes(object + self->_offset, 1);
 }
 
-void igMetaField_UserPostRead(int arg0) {
+void igMetaField_UserPostRead(int self) {
     igObject_UserPostRead();
-    igMetaField_EnsureDefaultStorage((igMetaField *)arg0);
+    igMetaField_EnsureDefaultStorage((igMetaField *)self);
 }
 
 /* igMetaField slot +0xf0 (IsConstruct): whether the field's value is built by the field itself.
@@ -591,38 +591,38 @@ int igMetaField_IsConstruct(void) {
     return 0;
 }
 
-int igMetaField_GetMangledName(igMetaField *arg0, void **arg1) {
-    int temp_s0;
-    int temp_s2;
-    int temp_s2_2;
-    int temp_s2_3;
-    int temp_s3;
-    int var_s2;
-    int var_v0;
+int igMetaField_GetMangledName(igMetaField *self, void **pool) {
+    int fieldName;
+    int prefixLength;
+    int withField;
+    int withSeparator;
+    int className;
+    int mangled;
+    int result;
 
-    var_s2 = 0;
-    if (arg0 != 0) {
-        var_v0 = 0;
-        if (arg1 != 0) {
-            temp_s0 = arg0->_fieldName;
-            temp_s3 = *(int *)((char *)(arg0->_parentMetaObject) + 28);
-            temp_s2 = strlen(DAT_004c22b8[0]);
-            temp_s2_2 = temp_s2 + strlen(temp_s0);
-            temp_s2_3 = strlen(DAT_004c22c0[0]);
-            temp_s2_3 = temp_s2_3 + temp_s2_2;
-            var_s2 = strlen(temp_s3);
-            var_s2 = (int)((igMemoryPoolView *)(arg1))->Allocate(var_s2 + temp_s2_3 + 1);
-            strcpy(var_s2, DAT_004c22b8[0]);
-            strcat(var_s2, temp_s3);
-            strcat(var_s2, DAT_004c22c0[0]);
-            strcat(var_s2, temp_s0);
-            goto block_3;
+    mangled = 0;
+    if (self != 0) {
+        result = 0;
+        if (pool != 0) {
+            fieldName = self->_fieldName;
+            className = ((igMetaObject *)self->_parentMetaObject)->_name;
+            prefixLength = strlen(g_metaFieldNamePrefix[0]);
+            withField = prefixLength + strlen(fieldName);
+            withSeparator = strlen(g_metaFieldScopeSeparator[0]);
+            withSeparator = withSeparator + withField;
+            mangled = strlen(className);
+            mangled = (int)((igMemoryPoolView *)(pool))->Allocate(mangled + withSeparator + 1);
+            strcpy(mangled, g_metaFieldNamePrefix[0]);
+            strcat(mangled, className);
+            strcat(mangled, g_metaFieldScopeSeparator[0]);
+            strcat(mangled, fieldName);
+            goto done;
         }
     } else {
-block_3:
-        var_v0 = var_s2;
+done:
+        result = mangled;
     }
-    return var_v0;
+    return result;
 }
 
 static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject[0]) != 0) { return o; } return 0; }

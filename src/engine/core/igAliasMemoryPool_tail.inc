@@ -1,5 +1,5 @@
-int igAliasMemoryPool_GetAliasedMemoryPool(void *arg0) {
-    return *(int *)((char *)(arg0) + 180);
+int igAliasMemoryPool_GetAliasedMemoryPool(void *self) {
+    return (int)((igAliasMemoryPool *)self)->_aliasedMemoryPool;
 }
 
 /* Bind `alias` as the pool this one forwards to. The new alias is retained before the previous one
@@ -16,7 +16,7 @@ void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, igMemoryPoolView *al
             igObject_Destroy(old);
     }
     self->_aliasedMemoryPool = (int)alias;
-    if (alias) self->_isReassignable = alias->vfunc_94((igMemoryPoolView *)self);
+    if (alias) self->_isReassignable = alias->CanTransferTo((igMemoryPoolView *)self);
     else self->_isReassignable = 0;
 }
 
@@ -42,7 +42,7 @@ void igAliasMemoryPool_Reset(igAliasMemoryPool *self) {
 /* Disable the pool: run the receiver's virtual at vtable offset 124 (the reset callback), then
  * clear _isActive afterwards, even if the callback wrote it. */
 void igAliasMemoryPool_Deactivate(igAliasMemoryPool *self) {
-    ((igMemoryPoolView *)self)->vfunc_31();
+    ((igMemoryPoolView *)self)->Reset();
     self->_isActive = 0;
 }
 
@@ -159,8 +159,8 @@ igResult igAliasMemoryPool_Configure(igAliasMemoryPool *self, igMemoryPoolInfo *
     return result;
 }
 
-long long Gap__Core__igAliasMemoryPool__vfunc_46(igAliasMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_allocedBytes;
+long long Gap__Core__igAliasMemoryPool__vfunc_46(igAliasMemoryPool *self) {
+    return self->_maxSize - self->_allocedBytes;
 }
 
 /* Vtable slot 47: total bytes currently allocated from the pool (_allocedBytes). */
@@ -173,16 +173,16 @@ long long igAliasMemoryPool_GetLocalNetAllocatedWithOverhead(igAliasMemoryPool *
     return self->_allocedBytes;
 }
 
-long long Gap__Core__igAliasMemoryPool__vfunc_101(igAliasMemoryPool *arg0) {
-    return arg0->_allocedBytesHigh;
+long long Gap__Core__igAliasMemoryPool__vfunc_101(igAliasMemoryPool *self) {
+    return self->_allocedBytesHigh;
 }
 
-long long Gap__Core__igAliasMemoryPool__vfunc_102(igAliasMemoryPool *arg0) {
-    return arg0->_allocedBytesHigh;
+long long Gap__Core__igAliasMemoryPool__vfunc_102(igAliasMemoryPool *self) {
+    return self->_allocedBytesHigh;
 }
 
-long long igAliasMemoryPool_GetFreeSize(igAliasMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_allocedBytes;
+long long igAliasMemoryPool_GetFreeSize(igAliasMemoryPool *self) {
+    return self->_maxSize - self->_allocedBytes;
 }
 
 void *igAliasMemoryPool_AllocateElement(igAliasMemoryPool *self){return ((igMemoryPoolView *)self)->Allocate(self->_elementSize);}
@@ -231,50 +231,50 @@ void *igAliasMemoryPool_Allocate(igAliasMemoryPool *self,unsigned int size){retu
 
 void *igAliasMemoryPool_AllocateAligned(igAliasMemoryPool *self,unsigned int size,unsigned short alignment){return (void *)((igAliasMemoryPoolView *)self)->ManageAllocation(0,size,alignment);}
 
-int igAliasMemoryPool_Callocate(igAliasMemoryPool *arg0, int arg1, int arg2) {
-    int n;
-    int p;
-    n = arg1 * arg2;
-    p = ((igAliasMemoryPoolView *)arg0)->ManageAllocation(0, n, arg0->_alignment);
-    if (p != 0) {
-        if (n != 0) {
-            memset(p, 0, n);
+int igAliasMemoryPool_Callocate(igAliasMemoryPool *self, int count, int size) {
+    int total;
+    int block;
+    total = count * size;
+    block = ((igAliasMemoryPoolView *)self)->ManageAllocation(0, total, self->_alignment);
+    if (block != 0) {
+        if (total != 0) {
+            memset(block, 0, total);
         }
     }
-    return p;
+    return block;
 }
 
-int igAliasMemoryPool_CallocateAligned(igAliasMemoryPool *arg0, int arg1, int arg2, unsigned short alignment) {
-    int temp_s1;
-    int temp_v0;
+int igAliasMemoryPool_CallocateAligned(igAliasMemoryPool *self, int count, int size, unsigned short alignment) {
+    int total;
+    int block;
 
-    temp_s1 = arg1 * arg2;
-    temp_v0 = ((igAliasMemoryPoolView *)arg0)->ManageAllocation(0, temp_s1, alignment);
-    if (temp_v0 != 0) {
-        if (temp_s1 != 0) {
-            memset(temp_v0, 0, temp_s1);
+    total = count * size;
+    block = ((igAliasMemoryPoolView *)self)->ManageAllocation(0, total, alignment);
+    if (block != 0) {
+        if (total != 0) {
+            memset(block, 0, total);
         }
     }
-    return temp_v0;
+    return block;
 }
 
 void *igAliasMemoryPool_Reallocate(igAliasMemoryPool *self,void *old,unsigned int size){return (void *)((igAliasMemoryPoolView *)self)->ManageAllocation((int)old,size,self->_alignment);}
 
 void *igAliasMemoryPool_ReallocateAligned(igAliasMemoryPool *self,void *old,unsigned int size,unsigned short alignment){return (void *)((igAliasMemoryPoolView *)self)->ManageAllocation((int)old,size,alignment);}
 
-int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *arg0, int arg1) {
-    long long temp_s1;
-    int temp_s0;
-    long long temp_v1;
+int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *self, int block) {
+    long long allocatedBefore;
+    int result;
+    long long released;
 
-    if (arg0->_aliasedMemoryPool != 0) {
-        temp_s1 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_48();
-        temp_s0 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_65(arg1);
-        temp_v1 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_48() - temp_s1;
-        if (arg0->_updateStatistics != 0) {
-            ((igMemoryPoolView *)arg0)->vfunc_50(arg1, (int)temp_v1, 1);
+    if (self->_aliasedMemoryPool != 0) {
+        allocatedBefore = ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetLocalNetAllocatedWithOverhead();
+        result = ((igMemoryPoolView *)self->_aliasedMemoryPool)->vfunc_65(block);
+        released = ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetLocalNetAllocatedWithOverhead() - allocatedBefore;
+        if (self->_updateStatistics != 0) {
+            ((igMemoryPoolView *)self)->UpdateStatistics(block, (int)released, 1);
         }
-        return temp_s0;
+        return result;
     }
     return 0;
 }
@@ -329,37 +329,37 @@ int igAliasMemoryPool_OwnsAllocation(igAliasMemoryPool *self, int poolIndex) {
 
 unsigned int igAliasMemoryPool_GetAllocationSize(igAliasMemoryPool *self,void *old){return ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetAllocationSize(old);}
 
-void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *arg1) {
-    int s4;
-    long long s3;
-    int s2;
-    int s1;
-    int *s0;
-    long long s6;
-    long long s7;
-    long long s8;
-    __int128 spD0;
-    __int128 spC0;
-    if (arg1 != 0 && *arg1 != 0) {
-        igReport_Printf(DAT_004f90b0);
+void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *name) {
+    int netCountHigh;
+    long long netCount;
+    int freeCount;
+    int allocCount;
+    int *poolName;
+    long long allocated;
+    long long allocatedWithOverhead;
+    long long allocatedHigh;
+    __int128 allocatedWithOverheadHigh;
+    __int128 maxSize;
+    if (name != 0 && *name != 0) {
+        igReport_Printf(percent_s_colon_newline);
         igReport_Flush();
     }
     igAliasMemoryPool *pool = (igAliasMemoryPool *)self;
-    s2 = pool->_nFrees;
-    s1 = pool->_nAllocs;
-    s4 = pool->_netAllocsHigh;
-    s3 = s1 - s2;
-    if (self->vfunc_99() != 0) {
-        s0 = ((int *)Memory_GetPoolName(self->vfunc_99()));
+    freeCount = pool->_nFrees;
+    allocCount = pool->_nAllocs;
+    netCountHigh = pool->_netAllocsHigh;
+    netCount = allocCount - freeCount;
+    if (self->GetAliasedMemoryPool() != 0) {
+        poolName = ((int *)Memory_GetPoolName(self->GetAliasedMemoryPool()));
     } else {
-        s0 = text_null;
+        poolName = text_null;
     }
-    s6 = self->vfunc_47();
-    s7 = (int)self->vfunc_48();
-    s8 = self->vfunc_101();
-    spD0 = (long long)self->vfunc_102();
-    spC0 = (long long)self->vfunc_42();
-    igReport_Printf(DAT_004f90c0, s0, s6, s7, s8, spD0, (long long)s1, (long long)s2, (long long)(int)s3, (long long)s4, (long long)spC0, self->GetPoolIndex());
+    allocated = self->GetLocalNetAllocated();
+    allocatedWithOverhead = (int)self->GetLocalNetAllocatedWithOverhead();
+    allocatedHigh = self->vfunc_101();
+    allocatedWithOverheadHigh = (long long)self->vfunc_102();
+    maxSize = (long long)self->GetMaxSize();
+    igReport_Printf(text_Aliased_memory_pool_percent_s, poolName, allocated, allocatedWithOverhead, allocatedHigh, allocatedWithOverheadHigh, (long long)allocCount, (long long)freeCount, (long long)(int)netCount, (long long)netCountHigh, (long long)maxSize, self->GetPoolIndex());
     igReport_Flush();
 }
 
@@ -389,10 +389,10 @@ void igAliasMemoryPool_SetEventTracker(igAliasMemoryPool *self, igObject *tracke
 void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int t0) {
     int *g;
     igAliasMemoryPool_Lock(self);
-    g = &DAT_004f92b0[0];
+    g = &text_The_method_dump_has_no_meaning[0];
     if (t0 != 0) {
         igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (r.p->Open((const char *)t0, (const char *)&DAT_004f92f0[0]) == 0) {
+        if (r.p->Open((const char *)t0, (const char *)&text_w[0]) == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
         }
@@ -415,15 +415,15 @@ void igAliasMemoryPool_SetPoolIndex(igAliasMemoryPool *self, int poolIndex) {
 }
 
 int igAliasMemoryPool_ManageAllocation(igAliasMemoryPool *self, int block, int size, unsigned short alignment) {
-    int s1 = 0;
-    long long s0;
-    int v0;
+    int result = 0;
+    long long requested;
+    int netCount;
     igAliasMemoryPool_Lock(self);
     if ((alignment & 0xFFFF) < self->_alignment) alignment = self->_alignment;
-    s0 = size;
+    requested = size;
     for (;;) {
         if (size == -1) {
-            s1 = 0;
+            result = 0;
             if (block == 0) {
                 igAliasMemoryPool_Unlock(self);
                 return 0;
@@ -431,16 +431,16 @@ int igAliasMemoryPool_ManageAllocation(igAliasMemoryPool *self, int block, int s
             { int t = ((igMemoryPoolView *)self)->GetAllocationSize((void *)block); self->_allocedBytes = self->_allocedBytes - t; }
             self->_nFrees = self->_nFrees + 1;
             if (self->_isReassignable != 0) {
-                igResult sp8C = ((igMemoryPoolView *)self->_aliasedMemoryPool)->vfunc_93((char *)block, (igMemoryPoolView *)self->_aliasedMemoryPool);
+                igResult unregistered = ((igMemoryPoolView *)self->_aliasedMemoryPool)->TransferAllocation((char *)block, (igMemoryPoolView *)self->_aliasedMemoryPool);
             } else {
-                igResult sp88 = Memory_UnregisterAllocation(block, (igMemoryPoolView *)self);
+                igResult unregistered = Memory_UnregisterAllocation(block, (igMemoryPoolView *)self);
             }
             ((igMemoryPoolView *)self->_aliasedMemoryPool)->Free((void *)block);
             break;
         }
-        if (self->_allocedBytes + s0 > self->_maxSize) {
-            if (((igMemoryPoolView *)self)->vfunc_23(size, 1) == 0) {
-                s1 = 0;
+        if (self->_allocedBytes + requested > self->_maxSize) {
+            if (((igMemoryPoolView *)self)->HandleOutOfMemory(size, 1) == 0) {
+                result = 0;
                 break;
             }
             continue;
@@ -452,32 +452,32 @@ int igAliasMemoryPool_ManageAllocation(igAliasMemoryPool *self, int block, int s
                     self->_nFrees = self->_nFrees + 1;
                 }
                 if (self->_isReassignable != 0) {
-                    igResult sp84 = ((igMemoryPoolView *)self->_aliasedMemoryPool)->vfunc_93((char *)block, (igMemoryPoolView *)self->_aliasedMemoryPool);
+                    igResult unregistered = ((igMemoryPoolView *)self->_aliasedMemoryPool)->TransferAllocation((char *)block, (igMemoryPoolView *)self->_aliasedMemoryPool);
                 } else {
-                    igResult sp80 = Memory_UnregisterAllocation(block, (igMemoryPoolView *)self);
+                    igResult unregistered = Memory_UnregisterAllocation(block, (igMemoryPoolView *)self);
                 }
-                s1 = (int)((igMemoryPoolView *)self->_aliasedMemoryPool)->ReallocateAligned((void *)block, size, alignment);
+                result = (int)((igMemoryPoolView *)self->_aliasedMemoryPool)->ReallocateAligned((void *)block, size, alignment);
             }
         } else {
             if (self->_aliasedMemoryPool != 0) {
-                s1 = (int)((igMemoryPoolView *)self->_aliasedMemoryPool)->AllocateAligned(size, alignment);
+                result = (int)((igMemoryPoolView *)self->_aliasedMemoryPool)->AllocateAligned(size, alignment);
             }
         }
-        if (s1 != 0) {
+        if (result != 0) {
             self->_allocedBytes = self->_allocedBytes + size;
             if (self->_allocedBytesHigh < self->_allocedBytes) self->_allocedBytesHigh = self->_allocedBytes;
             self->_nAllocs = self->_nAllocs + 1;
-            v0 = self->_nAllocs - self->_nFrees;
-            if (self->_netAllocsHigh < v0) self->_netAllocsHigh = v0;
+            netCount = self->_nAllocs - self->_nFrees;
+            if (self->_netAllocsHigh < netCount) self->_netAllocsHigh = netCount;
             if (self->_isReassignable != 0) {
-                igResult sp7C = ((igMemoryPoolView *)self->_aliasedMemoryPool)->vfunc_93((char *)s1, (igMemoryPoolView *)self);
+                igResult registered = ((igMemoryPoolView *)self->_aliasedMemoryPool)->TransferAllocation((char *)result, (igMemoryPoolView *)self);
             } else {
-                igResult sp78 = Memory_RegisterAllocation(s1, (igMemoryPoolView *)self);
+                igResult registered = Memory_RegisterAllocation(result, (igMemoryPoolView *)self);
             }
         }
         break;
     }
-    return igAliasMemoryPool_UnlockAndReturn(self, s1);
+    return igAliasMemoryPool_UnlockAndReturn(self, result);
 }
 
 /* Initialization helper of the alias pool: runs the base-pool initialization
@@ -526,7 +526,7 @@ void *igAliasMemoryPool_CopyConstruct(igAliasMemoryPool *self, int extra1) {
 void igAliasMemoryPool_Destruct(igAliasMemoryPool *self){
     igObject *old=(igObject *)self->_aliasedMemoryPool;
     if(old){--old->_refCount;if(!(old->_refCount&0x7fffff))igObject_Destroy(old);}
-    ((igMemoryPoolView *)self)->vfunc_98();
+    ((igMemoryPoolView *)self)->Shutdown();
     igMemoryPool_Destruct((int)self);
 }
 
@@ -549,32 +549,32 @@ void FUN_002d1690(int extra0)
 {
 }
 
-void igObjectSystem_Acquire(int arg0) {
-    int *sp2C;
-    int var_v0;
+void igObjectSystem_Acquire(int headerVersion) {
+    int *probe;
+    int system;
 
-    if (DAT_00586dd8[0]++ == 0) {
+    if (g_objectSystemRefCount[0]++ == 0) {
         /* The first set-up writes the two status constants again, with the values the static initialiser
          * gives them. */
         const_cast<igResult &>(g_resultSuccess).v = 0;
         const_cast<igResult &>(g_resultFailure).v = 1;
         igPsx2_InitializeIop();
-        var_v0 = igObjectSystem_OperatorNew(0x3A0);
-        if (var_v0 != 0) {
-            var_v0 = ((int)igObjectSystem_Construct((void *)var_v0));
+        system = igObjectSystem_OperatorNew(0x3A0);
+        if (system != 0) {
+            system = ((int)igObjectSystem_Construct((ObjectSystemView *)system));
         }
-        ((int *)g_objectSystem)[0] = var_v0;
-        igObjectSystem_Startup((ObjectSystemView *)var_v0);
+        ((int *)g_objectSystem)[0] = system;
+        igObjectSystem_Startup((ObjectSystemView *)system);
         igStringObj_EnsureRegistered();
         igStringObjList_EnsureRegistered();
         igFile_EnsureRegistered();
         igRegistry_EnsureRegistered();
         igResource_EnsureRegistered();
-        sp2C = (int *)(&DAT_00530d80[0]);
-        FUN_002d1690((int)&sp2C);
+        probe = (int *)(&DAT_00530d80[0]);
+        FUN_002d1690((int)&probe);
         FUN_002d1e40(((int *)g_objectSystem)[0]);
     }
-    igObjectSystem_CheckHeaderVersion((void *)(((int *)g_objectSystem)[0]), arg0);
+    igObjectSystem_CheckHeaderVersion((void *)(((int *)g_objectSystem)[0]), headerVersion);
 }
 
 void igObjectSystem_Release(void) {
@@ -586,7 +586,7 @@ void igObjectSystem_Release(void) {
     if (((ObjectSystemView **)g_objectSystem)[0]->preExitDone == 0) {
         igObjectSystem_PreExit((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
     }
-    if (--DAT_00586dd8[0] == 0) {
+    if (--g_objectSystemRefCount[0] == 0) {
         FUN_002d2800(((void * *)g_objectSystem)[0]);
         igObjectSystem_Shutdown((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
         core = ((ObjectSystemView **)g_objectSystem)[0];
@@ -620,73 +620,73 @@ void igObjectSystem_Release(void) {
 }
 
 int igMetaEnum_GetEmpty(void) {
-    if (DAT_00586dc0[0] == 0) {
-        DAT_00586dc0[0] = ((int)igMetaEnum_Create((char *)(&DAT_004f7910[0]), (char **)0, (int *)0, 0));
+    if (g_emptyMetaEnum[0] == 0) {
+        g_emptyMetaEnum[0] = ((int)igMetaEnum_Create((char *)(&emptyString_4[0]), (char **)0, (int *)0, 0));
     }
-    return DAT_00586dc0[0];
+    return g_emptyMetaEnum[0];
 }
 
-void igObjectSystem_SetIniText(int arg0) {
-    *(int *)0x586DE0 = arg0;
+void igObjectSystem_SetIniText(int text) {
+    *(int *)0x586DE0 = text;
 }
 
-void igObjectSystem_CheckHeaderVersion(void *arg0, int arg1) {
-    int temp_v0;
+void igObjectSystem_CheckHeaderVersion(void *self, int headerVersion) {
+    int answer;
 
-    if ((arg1 != 0xC80) && (*(unsigned char *)((char *)(arg0) + 121) == 1) && (GPR_00554bf8 == 0)) {
-        temp_v0 = igReportError(DAT_004f9300, 0xC80, arg1);
-        if ((temp_v0 != 1) && (temp_v0 == 2)) {
-            GPR_00554bf8 = 1;
+    if ((headerVersion != 0xC80) && (((ObjectSystemView *)self)->reportHeaderVersionMismatch == 1) && (g_headerVersionWarned == 0)) {
+        answer = igReportError(text_The_headers_used_to_build_the_Alchemy_Core, 0xC80, headerVersion);
+        if ((answer != 1) && (answer == 2)) {
+            g_headerVersionWarned = 1;
         }
     }
 }
 
-void *igObjectSystem_Construct(void *arg0) {
-    *(int *)((char *)(arg0) + 920) = 0;
-    *(int *)((char *)(arg0) + 924) = 0;
-    *(char *)((char *)(arg0) + 20) = 0;
-    *(char *)((char *)(arg0) + 21) = 0;
-    *(char *)((char *)(arg0) + 22) = 0;
-    *(char *)((char *)(arg0) + 0) = 0;
-    *(int *)((char *)(arg0) + 24) = 0;
-    *(int *)((char *)(arg0) + 48) = 0;
-    *(int *)((char *)(arg0) + 32) = 0;
-    *(int *)((char *)(arg0) + 36) = 0;
-    *(int *)((char *)(arg0) + 40) = 0;
-    *(int *)((char *)(arg0) + 44) = 0;
-    *(int *)((char *)(arg0) + 56) = 0;
-    *(int *)((char *)(arg0) + 68) = 0;
-    *(int *)((char *)(arg0) + 72) = 0;
-    *(char *)((char *)(arg0) + 116) = 0;
-    *(char *)((char *)(arg0) + 117) = 0;
-    *(char *)((char *)(arg0) + 118) = 0;
-    *(char *)((char *)(arg0) + 119) = 0;
-    *(char *)((char *)(arg0) + 120) = 0;
-    *(char *)((char *)(arg0) + 121) = 0;
-    *(char *)((char *)(arg0) + 122) = 0;
-    *(int *)((char *)(arg0) + 124) = 0x80000;
-    *(int *)((char *)(arg0) + 128) = -1;
-    *(int *)((char *)(arg0) + 132) = -1;
-    *(int *)((char *)(arg0) + 136) = -1;
-    *(int *)((char *)(arg0) + 140) = -1;
-    *(char *)((char *)(arg0) + 144) = 0;
-    *(char *)((char *)(arg0) + 272) = 0;
-    *(char *)((char *)(arg0) + 400) = 0;
-    *(char *)((char *)(arg0) + 528) = 0;
-    *(char *)((char *)(arg0) + 784) = 0;
-    *(int *)((char *)(arg0) + 80) = 0;
-    *(int *)((char *)(arg0) + 84) = 0;
-    *(int *)((char *)(arg0) + 52) = 0;
-    *(char *)((char *)(arg0) + 92) = 0;
-    *(int *)((char *)(arg0) + 96) = 0;
-    *(int *)((char *)(arg0) + 88) = 0;
-    *(int *)((char *)(arg0) + 100) = 0;
-    *(int *)((char *)(arg0) + 104) = 0;
-    *(int *)((char *)(arg0) + 60) = 0;
-    *(int *)((char *)(arg0) + 916) = 0;
-    *(int *)((char *)(arg0) + 76) = 0;
-    *(int *)((char *)(arg0) + 108) = 0;
-    *(int *)((char *)(arg0) + 112) = 0;
-    return arg0;
+void *igObjectSystem_Construct(ObjectSystemView *self) {
+    self->rootPath.p = 0;
+    self->basePath.p = 0;
+    self->started = 0;
+    self->preExitDone = 0;
+    *(char *)((char *)(self) + 22) = 0;
+    self->active = 0;
+    self->metaRegistry = 0;
+    self->bootstrapPool = 0;
+    *(int *)((char *)(self) + 32) = 0;
+    self->metaEnumList = 0;
+    self->exitCallbacks = 0;
+    self->registrationCallbacks = 0;
+    self->configRegistry = 0;
+    *(int *)((char *)(self) + 68) = 0;
+    *(int *)((char *)(self) + 72) = 0;
+    self->useGlobalEventTracker = 0;
+    self->saveEventTrackerOnExit = 0;
+    self->showLeaksOnExit = 0;
+    self->showMemoryStatisticsOnExit = 0;
+    self->showObjectStatisticsOnExit = 0;
+    self->reportHeaderVersionMismatch = 0;
+    *(char *)((char *)(self) + 122) = 0;
+    self->eventTrackerInitialCapacity = (void *)0x80000;
+    self->eventTrackerEventTypeFilter = -1;
+    self->eventTrackerMarkerTypeFilter = -1;
+    self->eventTrackerNotificationTypeFilter = -1;
+    self->eventTrackerNotificationCodeFilter = -1;
+    self->memoryEventFormat[0] = 0;
+    self->markerEventFormat[0] = 0;
+    self->notificationEventFormat[0] = 0;
+    self->eventTrackerFileName[0] = 0;
+    self->symbolsFileName[0] = 0;
+    self->symbolTable = 0;
+    self->globalEventTracker = 0;
+    self->systemPool = 0;
+    *(char *)((char *)(self) + 92) = 0;
+    self->fastPool = 0;
+    self->driverDataPool = 0;
+    *(int *)((char *)(self) + 100) = 0;
+    *(int *)((char *)(self) + 104) = 0;
+    *(int *)((char *)(self) + 60) = 0;
+    self->vtableProbeOffset = 0;
+    *(int *)((char *)(self) + 76) = 0;
+    *(int *)((char *)(self) + 108) = 0;
+    self->retainedObject = 0;
+    return self;
 }
 

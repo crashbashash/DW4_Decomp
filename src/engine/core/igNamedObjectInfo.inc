@@ -8,21 +8,21 @@ igMetaObject *igNamedObjectInfo_GetMetaObject(void)
 
 int igNamedObjectInfo_GetVTable(void) {
     igNamedObjectInfo info;
-    int temp_s0;
+    int vtable;
     igObject *q0;
     int *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    int *text;
+    int *header;
+    int refCount;
 
     igObject_InitHeader((igObject *)&info);
     q1 = &info._name;
     *(int *)q1 = 0;
-    info._vtable = (int)&DAT_0052f150[0];
+    info._vtable = (int)&g_igNamedObjectInfo_vtable[0];
     q0 = (igObject *)&info._objects;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    info._vtable = (int)&DAT_0052f150[0];
+    vtable = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&g_igNamedObjectInfo_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
         if (q0 != 0) {
@@ -34,17 +34,17 @@ int igNamedObjectInfo_GetVTable(void) {
     }
     info._vtable = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+        text = *(int **)q1;
+        if (text != 0) {
+            header = text - 2;
+            refCount = text[-1] - 1;
+            text[-1] = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igNamedObjectInfo_EnsureRegistered(void)
@@ -74,16 +74,16 @@ void igNamedObjectInfo_GetMetaObjectFunction(void) {
 }
 
 void igNamedObjectInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *field;
+    void *meta;
 
-    temp_s0 = (void *)g_igNamedObjectInfo_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igNamedObjectInfo_ctorTable[0], 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igNamedObjectInfo_fieldTable[0], (igMetaField ***)&DAT_004bfbc0[0], &DAT_004bfbc8[0], temp_s2);
+    meta = (void *)g_igNamedObjectInfo_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igNamedObjectInfo_ctorTable[0], 1);
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igNamedObjectInfo_fieldTable[0], (igMetaField ***)&g_igNamedObjectInfo_fieldDescriptors[0], &g_igNamedObjectInfo_fieldOffsets[0], base);
 }
 

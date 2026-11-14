@@ -10,7 +10,7 @@ int igNonRefCountedObjectList_GetVTable(void) {
     igNonRefCountedObjectList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00524500[0];
+    list._vtable = (int)&g_igNonRefCountedObjectList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -30,7 +30,7 @@ void igNonRefCountedObjectList_Register(void) {
         igNonRefCountedObjectList_className,
         0x14,
         igNonRefCountedObjectList_GetVTable,
-        (igMetaObjectCallback)igNonRefCountedObjectList_InitFields_002bddc0,
+        igNonRefCountedObjectList_InitFields,
         0,
         0
     );
@@ -41,23 +41,23 @@ void igNonRefCountedObjectList_GetMetaObjectFunction(void) {
 }
 
 void igNonRefCountedObjectList_InitFields(void) {
-    int temp_s2;
-    void **temp_v0;
-    void *temp_s0;
-    void *temp_s1;
+    int index;
+    void **found;
+    igMemoryRefMetaField *field;
+    void *meta;
 
-    temp_s1 = (void *)(g_igNonRefCountedObjectList_metaObject[0]);
-    temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
-    temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
-    temp_s0 = (void *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
-    *(int *)((char *)(temp_s0) + 60) = igObjectRefMetaField_GetDefaultDescriptor();
-    *(int *)((char *)(temp_s0) + 56) = 0;
-    *(char *)((char *)(temp_s0) + 66) = 0;
-    *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_00585bb8[0]);
-    igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);
-    *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
-    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s0);
+    meta = (void *)(g_igNonRefCountedObjectList_metaObject[0]);
+    found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, data)));
+    index = ObjectPointerList_FindIndex((char *)((igMetaObject *)meta)->_metaFields, (int)found);
+    field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->cloneViaMetadata((int)(1)));
+    field->_memType = igObjectRefMetaField_GetDefaultDescriptor();
+    field->_memSize = 0;
+    field->_refCounted = 0;
+    field->_externalEnumStorage = (int)(&g_igNonRefCountedObjectList_dataStorage[0]);
+    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)field);
+    field->_refCount = (int)((int) (field->_refCount - 1));
+    if (((unsigned long long) ((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(field);
     }
 }
 

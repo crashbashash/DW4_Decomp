@@ -1,30 +1,30 @@
-int igIntMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igIntMetaField_ValueFromString(int self, int value, int text) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &DAT_004f9588[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(text, &percent_d_percent_n[0], value, &consumed);
+    return consumed;
 }
 
-void igIntMetaField_ValueToString(int *arg0, int arg1, int *arg2) {
-    int sp20[256];
-    int var_v0;
-    int var_v1;
+void igIntMetaField_ValueToString(int *result, int self, int *value) {
+    int buffer[256];
+    int pool;
+    int interned;
 
-    sprintf(&sp20[0], &DAT_004f95c0[0], *arg2);
-    if (&sp20[0] == 0) {
-        var_v1 = 0;
+    sprintf(&buffer[0], &percent_d_7[0], *value);
+    if (&buffer[0] == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&sp20[0]);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&buffer[0]);
     }
-    *arg0 = var_v1;
+    *result = interned;
 }
 
 int igIntMetaField_GetSize(void) {
@@ -46,21 +46,21 @@ void *igIntMetaField_Init(igMetaField *self) {
     return self;
 }
 
-int **igIntMetaField_CopyConstruct(int **arg0, int extra1) {
-    igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
-    *arg0 = &g_igIntMetaField_vtable[0];
-    return arg0;
+int **igIntMetaField_CopyConstruct(int **self, int source) {
+    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
+    *self = &g_igIntMetaField_vtable[0];
+    return self;
 }
 
 void igIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void igIntMetaField_SetDefault(void **arg0, int arg1) {
-    int sp1C;
+void igIntMetaField_SetDefault(void **self, int value) {
+    int defaultValue;
 
-    sp1C = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
+    defaultValue = value;
+    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
 }
 
 int igIntMetaField_GetAlignment(void) {

@@ -1,34 +1,34 @@
 int igThread_GetPriorityMetaEnum(void) {
-    if (DAT_005857a8[0] == 0) {
-        DAT_005857a8[0] = ((int)igMetaEnum_Create((char *)&text_Priority[0], (char **)&DAT_004bf3a0[0], &DAT_004bf3c0[0], 6));
+    if (g_igThread_priorityMetaEnum[0] == 0) {
+        g_igThread_priorityMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_Priority[0], (char **)&g_igThread_priorityNames[0], &g_igThread_priorityValues[0], 6));
     }
-    return DAT_005857a8[0];
+    return g_igThread_priorityMetaEnum[0];
 }
 
 int igThread_GetStateMetaEnum(void) {
-    if (DAT_005857b0[0] == 0) {
-        DAT_005857b0[0] = ((int)igMetaEnum_Create((char *)&text_State[0], (char **)&DAT_004bf3d8[0], &DAT_004bf3e0[0], 2));
+    if (g_igThread_stateMetaEnum[0] == 0) {
+        g_igThread_stateMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_State[0], (char **)&g_igThread_stateNames[0], &g_igThread_stateValues[0], 2));
     }
-    return DAT_005857b0[0];
+    return g_igThread_stateMetaEnum[0];
 }
 
 int igThread_GetScopeMetaEnum(void) {
-    if (DAT_005857b8[0] == 0) {
-        DAT_005857b8[0] = ((int)igMetaEnum_Create((char *)&text_Scope[0], (char **)&DAT_004bf3e8[0], &DAT_004bf3f8[0], 3));
+    if (g_igThread_scopeMetaEnum[0] == 0) {
+        g_igThread_scopeMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_Scope[0], (char **)&g_igThread_scopeNames[0], &g_igThread_scopeValues[0], 3));
     }
-    return DAT_005857b8[0];
+    return g_igThread_scopeMetaEnum[0];
 }
 
 int igThread_GetTypeMetaEnum(void) {
-    if (DAT_005857c0[0] == 0) {
-        DAT_005857c0[0] = ((int)igMetaEnum_Create((char *)&text_Type[0], (char **)&DAT_004bf408[0], &DAT_004bf410[0], 2));
+    if (g_igThread_typeMetaEnum[0] == 0) {
+        g_igThread_typeMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_Type[0], (char **)&g_igThread_typeNames[0], &g_igThread_typeValues[0], 2));
     }
-    return DAT_005857c0[0];
+    return g_igThread_typeMetaEnum[0];
 }
 
-void * igThread_Create(int arg0) {
+void * igThread_Create(int allocator) {
     igThread_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5857C8), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5857C8), (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igThread_GetOrCreateMetaObject(void) {
@@ -73,30 +73,30 @@ void igThread_GetMetaObjectFunction(void) {
 }
 
 void igThread_InitFields(void) {
-    int temp_s0;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
-    void *temp_v0_4;
-    void *temp_s1;
+    int base;
+    void *priority;
+    void *type;
+    void *scope;
+    void *state;
+    void *meta;
 
-    temp_s1 = (void *)(((void * *)g_igThread_metaObject)[0]);
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igThread_ctorTable[0], 0xA);
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)temp_v0, (const int *)&DAT_004bf4d8[0]);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(igThread_GetPriorityMetaEnum);
-    temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)temp_v0_2, (const int *)&DAT_004bf4e0[0]);
-    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&igThread_GetTypeMetaEnum);
-    temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)temp_v0_3, (const int *)&DAT_004bf4e8[0]);
-    ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(&igThread_GetScopeMetaEnum);
-    temp_v0_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)temp_v0_4, (const int *)&DAT_004bf4f0[0]);
-    ((igEnumMetaField *)temp_v0_4)->_getMetaEnumFunction = (int)(&igThread_GetStateMetaEnum);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6))), 0x1000);
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igThread_fieldTable[0], (igMetaField ***)&DAT_004bf480[0], &DAT_004bf4b0[0], temp_s0);
+    meta = (void *)(((void * *)g_igThread_metaObject)[0]);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igThread_ctorTable[0], 0xA);
+    priority = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)priority, (const int *)&g_igThread_defaultPriority[0]);
+    ((igEnumMetaField *)priority)->_getMetaEnumFunction = (int)(igThread_GetPriorityMetaEnum);
+    type = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)type, (const int *)&g_igThread_defaultType[0]);
+    ((igEnumMetaField *)type)->_getMetaEnumFunction = (int)(&igThread_GetTypeMetaEnum);
+    scope = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)scope, (const int *)&g_igThread_defaultScope[0]);
+    ((igEnumMetaField *)scope)->_getMetaEnumFunction = (int)(&igThread_GetScopeMetaEnum);
+    state = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)state, (const int *)&g_igThread_defaultState[0]);
+    ((igEnumMetaField *)state)->_getMetaEnumFunction = (int)(&igThread_GetStateMetaEnum);
+    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6))), 0x1000);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igThread_fieldTable[0], (igMetaField ***)&g_igThread_fieldDescriptors[0], &g_igThread_fieldOffsets[0], base);
     *(int *)((char *)(((void * *)g_igThread_metaObject)[0]) + 60) = (int)igPsx2Thread_GetMetaObjectFunction;
 }
 

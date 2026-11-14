@@ -4,7 +4,7 @@ void igResource_StartAsyncLoading(igResourceView *self) {
     self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize[0]);
     self->_loadThread->setPriority(255);
     self->_asyncLoadState = 1;
-    ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vfunc_34(1);
+    ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->EnableAllocationLock(1);
 }
 
 void igResource_StopAsyncLoading(igResourceView *self) {
@@ -185,12 +185,12 @@ igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileVie
     if (file == 0) return 0;
     r = 0;
     if (self->_relativeFilePath != 0 && strlen(self->_relativeFilePath) != 0) {
-        sprintf(buf, &DAT_004f9a78[0], self->_relativeFilePath, file->_name);
+        sprintf(buf, &percent_s_slash_percent_s[0], self->_relativeFilePath, file->_name);
         r = file->ReadFile(buf) > 0;
     }
     if (r == 0) {
         if (self->_absoluteFilePath != 0 && strlen(self->_absoluteFilePath) != 0) {
-            sprintf(buf, &DAT_004f9a78[0], self->_absoluteFilePath, file->_name);
+            sprintf(buf, &percent_s_slash_percent_s[0], self->_absoluteFilePath, file->_name);
             r = file->ReadFile(buf) > 0;
         }
     }

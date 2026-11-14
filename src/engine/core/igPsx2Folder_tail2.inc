@@ -15,12 +15,12 @@ igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
     return list;
 }
 
-void igPsx2Folder_TrimPath(igStringObj *arg0) {
+void igPsx2Folder_TrimPath(igStringObj *path) {
     int i;
     char *s;
     int c;
 
-    s = (char *)arg0->_buffer;
+    s = (char *)path->_buffer;
     if (s == 0) {
         s = g_stringObjEmptyText[0];
     }
@@ -57,14 +57,14 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         } else {
             key = text_intrinsicModulePath;
         }
-        if (igRegistry_GetValueStringObj(*(int *)(g_objectSystem[0] + 56), 2, key, (igStringObj **)&path, (const char *)DAT_004f7910, 0) != 0) {
+        if (igRegistry_GetValueStringObj(*(int *)(g_objectSystem[0] + 56), 2, key, (igStringObj **)&path, (const char *)emptyString_4, 0) != 0) {
             igPsx2Folder_TrimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText[0] : dir;
             igMemoryPoolView *allocator = currentAllocator();
             joined = (char *)allocator->Allocate(strlen(dir) + strlen(name) + 2);
-            sprintf(joined, (const char *)DAT_004f9a78, dir, name);
-        } else if (DAT_00587338[0] != 0) {
+            sprintf(joined, (const char *)percent_s_slash_percent_s, dir, name);
+        } else if (g_igPsx2_useCdrom[0] != 0) {
             igMemoryPoolView *allocator = currentAllocator();
             joined = (char *)allocator->Allocate(strlen(name) + 10);
             sprintf(joined, text_MODULES_s, name);
@@ -84,7 +84,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
             for (i = 0; i < 3; i++) {
                 if (dirs[i] != 0) {
                     int file;
-                    sprintf(candidate, (const char *)DAT_004f9a78, dirs[i], name);
+                    sprintf(candidate, (const char *)percent_s_slash_percent_s, dirs[i], name);
                     resolved = igPsx2File_MakeCompletePath(candidate);
                     file = sceOpen(resolved, 1);
                     if (file < 0) {
@@ -152,39 +152,39 @@ void FUN_0032d070(void)
 
 void igPsx2_RebootIop(void) {
     int n;
-    int v;
+    int device;
     sceDmaReset(1);
-    if (DAT_00587340[0] != 0) {
+    if (g_igPsx2_iopImagePath[0] != 0) {
         sceSifInitRpc(0);
-        if (DAT_00587338[0] != 0) {
+        if (g_igPsx2_useCdrom[0] != 0) {
             sceCdInit(0);
         }
-        if (DAT_00587348[0] != 0) {
-            while (sceSifLoadModule(DAT_00587348[0], 0, 0) < 0) {
+        if (g_igPsx2_loadFileModule[0] != 0) {
+            while (sceSifLoadModule(g_igPsx2_loadFileModule[0], 0, 0) < 0) {
             }
         }
-        while (((sceSifRebootIop(DAT_00587340[0]) != 0) ^ 1)) {
+        while (((sceSifRebootIop(g_igPsx2_iopImagePath[0]) != 0) ^ 1)) {
         }
         while (((sceSifSyncIop() != 0) ^ 1)) {
         }
-        DAT_005549b8 = 1;
+        g_igPsx2_resetIopServices = 1;
     }
-    if (DAT_005549b8 != 0) {
+    if (g_igPsx2_resetIopServices != 0) {
         sceSifInitRpc(0);
-        if (DAT_00587348[0] != 0) {
+        if (g_igPsx2_loadFileModule[0] != 0) {
             sceSifLoadFileReset();
         }
         sceFsReset();
-        v = DAT_00587338[0];
-        if (v == 1 || v == 0) {
+        device = g_igPsx2_useCdrom[0];
+        if (device == 1 || device == 0) {
             sceCdInit(0);
             sceCdMmode(1);
-        } else if (v == 2) {
+        } else if (device == 2) {
             sceCdInit(0);
             sceCdMmode(2);
         }
         sceSifInitCmd();
-        n = DAT_004c2628[0];
+        n = g_igPsx2_sifCmdBufferCount[0];
         sceSifSetCmdBuffer(((int)Memory_SystemAllocate(n * 12)), n);
     }
 }
@@ -231,38 +231,37 @@ void igPsx2_SetupOutputFiles(void) {
         igReport_SetErrorFile(0);
         igSmartPointer<igPsx2FileView> first((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
         igSmartPointer<igPsx2FileView> second((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
-        if (DAT_00587338[0] != 0) {
-            setName(first.p, DAT_00587358[0]);
-            setName(second.p, DAT_00587358[0]);
+        if (g_igPsx2_useCdrom[0] != 0) {
+            setName(first.p, g_igPsx2_atfilePrefix[0]);
+            setName(second.p, g_igPsx2_atfilePrefix[0]);
         }
-        if (first->Open(text_stdout_txt, (const char *)DAT_004f9c50) != 0) {
+        if (first->Open(text_stdout_txt, (const char *)text_wb) != 0) {
             igReport_SetOutputFile(first.p);
         }
-        if (second->Open(text_stderr_txt, (const char *)DAT_004f9c50) != 0) {
+        if (second->Open(text_stderr_txt, (const char *)text_wb) != 0) {
             igReport_SetErrorFile(second.p);
         }
     }
 }
 
-void igPsx2_SetAtfilePrefix(int *arg0, char *arg1) {
-    int temp_s1;
-    int var_v1;
-    char *var_a0;
+void igPsx2_SetAtfilePrefix(int *result, char *text) {
+    int length;
+    char *cursor;
 
-    if ((arg1 != 0) && (strncasecmp(arg1, &text_atfile[0], 7) == 0)) {
-        var_a0 = arg1 + 7;
+    if ((text != 0) && (strncasecmp(text, &text_atfile[0], 7) == 0)) {
+        cursor = text + 7;
         do {
-            var_a0 += 1;
-        } while (*var_a0 != 0x2C);
-        temp_s1 = (var_a0 - arg1) + 1;
-        DAT_00587358[0] = ((int)Memory_SystemAllocate(temp_s1 + 1));
-        strncpy(DAT_00587358[0], arg1, temp_s1);
-        *(char *)(DAT_00587358[0] + temp_s1) = 0;
-        DAT_00587330[0] = DAT_00587358[0];
-        igPsx2Media_SetDevicePrefix(DAT_00587358[0]);
-        *arg0 = g_resultSuccess.v;
+            cursor += 1;
+        } while (*cursor != 0x2C);
+        length = (cursor - text) + 1;
+        g_igPsx2_atfilePrefix[0] = ((int)Memory_SystemAllocate(length + 1));
+        strncpy(g_igPsx2_atfilePrefix[0], text, length);
+        *(char *)(g_igPsx2_atfilePrefix[0] + length) = 0;
+        g_igPsx2File_defaultPrefix[0] = g_igPsx2_atfilePrefix[0];
+        igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix[0]);
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 

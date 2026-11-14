@@ -28,25 +28,25 @@ igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *valu
     return g_resultFailure;
 }
 
-void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int arg2) {
+void igMetaEnum_GetNameByValue(int *out, const igMetaEnum *self, int value) {
     int i;
     int n;
-    int a4;
-    a4 = arg1->_names;
-    if (a4 != 0) {
-        n = ((igIntList *)arg1->_values)->_count;
+    int names;
+    names = self->_names;
+    if (names != 0) {
+        n = ((igIntList *)self->_values)->_count;
         i = 0;
         goto test;
 body:
-        if (arg2 == ((int *)((igIntList *)arg1->_values)->_data)[i]) {
-            StringList_CopyRetained(arg0, a4, i);
+        if (value == ((int *)((igIntList *)self->_values)->_data)[i]) {
+            StringList_CopyRetained(out, names, i);
             return;
         }
         i++;
 test:
         if (i < n) goto body;
     }
-    *arg0 = 0;
+    *out = 0;
 }
 
 /* Number of names in the enum: the `_count` of its `_names` list (a list with the igDataList
@@ -56,34 +56,34 @@ int igMetaEnum_GetNameCount(igMetaEnum *self) {
     return ((igDataList *)self->_names)->_count;
 }
 
-void igMetaEnum_GetNameAt(int *arg0, void *arg1, int arg2) {
-    void *temp_a1;
+void igMetaEnum_GetNameAt(int *out, void *self, int index) {
+    igTDataList<char *> *names;
 
-    temp_a1 = (void *)(*(int *)((char *)(arg1) + 12));
-    if ((temp_a1 != 0) && (arg2 >= 0) && (arg2 < *(int *)((char *)(temp_a1) + 8))) {
-        StringList_CopyRetained(arg0, temp_a1);
+    names = (igTDataList<char *> *)((igMetaEnum *)self)->_names;
+    if ((names != 0) && (index >= 0) && (index < names->_count)) {
+        StringList_CopyRetained(out, names);
         return;
     }
-    *arg0 = 0;
+    *out = 0;
 }
 
-int igMetaEnum_GetValueAt(void *arg0, int arg1)
+int igMetaEnum_GetValueAt(void *self, int index)
 {
-  int *new_var;
-  void *temp_a0;
-  temp_a0 = (void *) (*((int *) (((char *) arg0) + 16)));
-  if (temp_a0 != 0)
+  int *value;
+  igIntList *values;
+  values = (igIntList *) ((igMetaEnum *) self)->_values;
+  if (values != 0)
   {
-    if ((arg1 >= 0) && (arg1 < (*((int *) (((char *) temp_a0) + 8)))))
+    if ((index >= 0) && (index < values->_count))
     {
-      return *(new_var = (int *) ((*((int *) (((char *) temp_a0) + 16))) + (arg1 * 4)));
+      return *(value = (int *) (values->_data + (index * 4)));
     }
   }
   return 0;
   return 0;
 }
 
-static inline int pool_2fbc70(void) {
+static inline int enumStringPool(void) {
     if ((*(int *)g_stringPool) == 0) {
         int p = ((int)StringPool_Allocate(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((StringPool *)p)); }
@@ -92,7 +92,7 @@ static inline int pool_2fbc70(void) {
     return (*(int *)g_stringPool);
 }
 
-static inline void dropNames_2fbc70(igTDataList<char *> *o) {
+static inline void dropEnumNames(igTDataList<char *> *o) {
     IG_OBJECT_RELEASE(o);
 }
 
@@ -103,58 +103,58 @@ static inline void dropValues(igTDataList<int> *o) {
 static inline void setValue(igTDataList<int> *l, int i, int *v) { if (l->_count != 0 && i >= 0 && i < l->_count) { l->_data[i] = *v; } }
 
 MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count) {
-    MetaEnumView *e;
+    MetaEnumView *metaEnum;
     int i;
-    char *v;
+    char *interned;
     char *entry;
     char *held;
     char *old;
-    igTDataList<char *> *nl;
-    igTDataList<int> *vl;
-    int a;
+    igTDataList<char *> *nameList;
+    igTDataList<int> *valueList;
+    int pool;
     char **slot;
-    e = ((MetaEnumView *)igMetaEnum_CreateInstance(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
-    v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)name));
-    old = e->name;
+    metaEnum = ((MetaEnumView *)igMetaEnum_CreateInstance(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    interned = ((char *)StringPool_Intern((StringPool *)(enumStringPool()), (const char *)name));
+    old = metaEnum->name;
     releaseString(old);
-    e->name = v;
-    a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    dropNames_2fbc70(e->names);
-    e->names = ((igTDataList<char *> *)igStringRefList_Create(a));
-    StringList_Resize(e->names, count);
-    a = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    dropValues(e->values);
-    e->values = ((igTDataList<int> *)igIntList_Create(a));
-    vl = e->values;
+    metaEnum->name = interned;
+    pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    dropEnumNames(metaEnum->names);
+    metaEnum->names = ((igTDataList<char *> *)igStringRefList_Create(pool));
+    StringList_Resize(metaEnum->names, count);
+    pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    dropValues(metaEnum->values);
+    metaEnum->values = ((igTDataList<int> *)igIntList_Create(pool));
+    valueList = metaEnum->values;
     if (count >= 0) {
-        if (!(count > vl->_capacity)) {
-            vl->_count = count;
+        if (!(count > valueList->_capacity)) {
+            valueList->_count = count;
         } else {
-            List_Resize((void *)vl, count, 4);
+            List_Resize((void *)valueList, count, 4);
         }
     }
     for (i = 0; i < count; i++) {
         entry = names[i];
         if (entry == 0) {
-            v = 0;
+            interned = 0;
         } else {
-            v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)entry));
+            interned = ((char *)StringPool_Intern((StringPool *)(enumStringPool()), (const char *)entry));
         }
-        *(char **)&held = v;
-        nl = e->names;
-        if (nl->_count != 0 && i >= 0 && i < nl->_count) {
-            slot = &nl->_data[i];
+        *(char **)&held = interned;
+        nameList = metaEnum->names;
+        if (nameList->_count != 0 && i >= 0 && i < nameList->_count) {
+            slot = &nameList->_data[i];
             if (held != 0) { ((int *)held)[-1] = ((int *)held)[-1] + 1; }
             old = *slot;
             releaseString(old);
             *slot = held;
         }
         releaseString(held);
-        setValue(e->values, i, &values[i]);
+        setValue(metaEnum->values, i, &values[i]);
     }
-    igObjectSystem_AppendMetaEnum((int *)((*(int *)g_objectSystem)), (int)e);
-    e->_refCount = e->_refCount - 1;
-    if (((unsigned long long)((long long)e->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(e); }
-    return e;
+    igObjectSystem_AppendMetaEnum((int *)((*(int *)g_objectSystem)), (int)metaEnum);
+    metaEnum->_refCount = metaEnum->_refCount - 1;
+    if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(metaEnum); }
+    return metaEnum;
 }
 

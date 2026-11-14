@@ -29,7 +29,7 @@ void igMemoryDictionary_InitEntries(igMemoryDictionaryView *self) {
             List_Resize(l, b, 4);
         }
     }
-    self->vfunc_27();
+    self->resetEntries();
 }
 
 void igMemoryDictionary_Clear(igMemoryDictionaryView *self) {
@@ -64,7 +64,7 @@ void igMemoryDictionary_ResetEntries(igMemoryDictionaryView *self) {
     pp = t->_data;
     n = t->_count;
     for (i = 0; i < n; i++) {
-        ((int *)pp)[i] = DAT_004c2150[0];
+        ((int *)pp)[i] = g_igMemoryDictionary_resetFill[0];
     }
     self->_count = 0;
     self->_cachedIndex = 0;
@@ -93,7 +93,7 @@ void igMemoryDictionary_GetValue(igResult *result, igMemoryDictionaryView *self,
         result->v = g_resultSuccess.v;
         return;
     }
-    idx = self->vfunc_33(key);
+    idx = self->hashKey(key);
     s = self->_memoryEntries;
     n = s->_count / 2;
     res = g_resultFailure.v;
@@ -129,7 +129,7 @@ igResult igMemoryDictionary_Insert(igMemoryDictionaryView *self, int key, int va
     igTDataList<MemoryDictionaryEntry> *s;
     MemoryDictionaryEntry *e;
     if (cap != 0) {
-        idx = self->vfunc_33(key);
+        idx = self->hashKey(key);
         s = self->_memoryEntries;
         e = &s->_data[idx];
         do {
@@ -142,7 +142,7 @@ igResult igMemoryDictionary_Insert(igMemoryDictionaryView *self, int key, int va
                 e->value = val;
                 self->_count = self->_count + 1;
                 if (probes >= half) {
-                    return self->vfunc_34(cap * 2);
+                    return self->resize(cap * 2);
                 }
                 return igResult(g_resultSuccess.v);
             }
@@ -170,7 +170,7 @@ igResult igMemoryDictionary_Remove(igMemoryDictionaryView *self, int key) {
     i = 0;
     half = self->_memoryEntries->_count / 2;
     if (half != 0) {
-        idx = self->vfunc_33(key);
+        idx = self->hashKey(key);
         t = self->_memoryEntries;
         e = t->_data + idx;
         do {
@@ -255,34 +255,34 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     int size = table->_count;
     int *data = (int *)table->_data;
     for (int slot = 0; slot < size; slot++) {
-        data[slot] = *(int *)DAT_004c2158;
+        data[slot] = *(int *)g_igMemoryDictionary_resizeFill;
     }
     self->_count = 0;
     for (i = 0; i < count; i += 2, entry += 2) {
         if (entry[0] != 0) {
-            self->vfunc_31(entry[0], entry[1]);
+            self->insert(entry[0], entry[1]);
         }
     }
     result->v = g_resultSuccess.v;
     return 0;
 }
 
-void igMemoryDirEntry_SetMemType(igMemoryDirEntry *arg0, igObjectDispatchView *arg1) {
+void igMemoryDirEntry_SetMemType(igMemoryDirEntry *self, igObjectDispatchView *memType) {
     __internalObjectList *l;
     int i;
     int n;
     igObjectDispatchView *o;
     igMetaObject *r;
 
-    arg0->_memType = (int)arg1;
-    if (arg1 != 0) {
+    self->_memType = (int)memType;
+    if (memType != 0) {
         l = ((__internalObjectList *)igMetaField_GetMetaFieldList());
         n = l->_count;
         for (i = 0; i < n; i++) {
             o = ((igObjectDispatchView **)l->_data)[i];
             r = o->getMeta();
-            if (r == arg1->getMeta()) {
-                arg0->_memTypeIndex = i;
+            if (r == memType->getMeta()) {
+                self->_memTypeIndex = i;
                 return;
             }
         }

@@ -1,6 +1,6 @@
-void igObjectRefArrayMetaField_Create(int arg0) {
+void igObjectRefArrayMetaField_Create(int pool) {
     igObjectRefArrayMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B48), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B48), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igObjectRefArrayMetaField_GetMetaObject(void)
@@ -14,37 +14,37 @@ igMetaObject *igObjectRefArrayMetaField_GetMetaObject(void)
 int igObjectRefArrayMetaField_GetVTable(void) {
     igObjectRefArrayMetaField o;
     int r;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_v1;
-    int *temp_a1_2;
-    int temp_v0_2;
-    void *temp_v1_2;
+    int *header;
+    int refCount;
+    void *text;
+    int *nameHeader;
+    int nameRefCount;
+    void *nameText;
 
     igObjectRefMetaField_Init((igObjectRefMetaField *)&o);
-    o._vtable = (int)&DAT_0052ef40[0];
+    o._vtable = (int)&g_igObjectRefArrayMetaField_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o._vtable = (int)&g_igObjectRefMetaField_vtable[0];
     if (&o._poolName != 0) {
-        temp_v1 = (char *)o._poolName;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+        text = (char *)o._poolName;
+        if (text != 0) {
+            header = (int *)((char *)text - 8);
+            refCount = *(int *)((char *)(text) - 4) - 1;
+            *(int *)((char *)(text) - 4) = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
     o._vtable = (int)&g_igMetaField_vtable[0];
     if (&o._fieldName != 0) {
-        temp_v1_2 = (char *)o._fieldName;
-        if (temp_v1_2 != 0) {
-            temp_a1_2 = (int *)((char *)temp_v1_2 - 8);
-            temp_v0_2 = *(int *)((char *)(temp_v1_2) - 4) - 1;
-            *(int *)((char *)(temp_v1_2) - 4) = temp_v0_2;
-            if (temp_v0_2 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (int)temp_a1_2);
+        nameText = (char *)o._fieldName;
+        if (nameText != 0) {
+            nameHeader = (int *)((char *)nameText - 8);
+            nameRefCount = *(int *)((char *)(nameText) - 4) - 1;
+            *(int *)((char *)(nameText) - 4) = nameRefCount;
+            if (nameRefCount == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*nameHeader), (int)nameHeader);
             }
         }
     }
@@ -82,34 +82,34 @@ igMetaObject *igObjectRefMetaField_GetPublishedMetaObject(void) {
 }
 
 void igObjectRefArrayMetaField_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igObjectRefArrayMetaField_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igObjectRefArrayMetaField_ctorTable[0], 1);
-    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igObjectRefArrayMetaField_fieldTable[0], (igMetaField ***)&DAT_004bfb10[0], &DAT_004bfb18[0], temp_s1);
+    meta = (void *)g_igObjectRefArrayMetaField_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igObjectRefArrayMetaField_ctorTable[0], 1);
+    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)), 1);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igObjectRefArrayMetaField_fieldTable[0], (igMetaField ***)&g_igObjectRefArrayMetaField_fieldDescriptors[0], &g_igObjectRefArrayMetaField_fieldOffsets[0], base);
 }
 
 void igObjectRefArrayMetaField_CreateDefaultDescriptor(void) {
-    igObjectRefArrayMetaField *temp_s0;
+    igObjectRefArrayMetaField *descriptor;
     igObjectRefArrayMetaField *o;
     int t;
 
-    if (DAT_00585b50[0] == 0) {
-        DAT_00585b50[0] = ((igObjectRefArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igObjectRefArrayMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
-        temp_s0 = DAT_00585b50[0];
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
-            o = DAT_00585b50[0];
+    if (g_igObjectRefArrayMetaField_descriptor[0] == 0) {
+        g_igObjectRefArrayMetaField_descriptor[0] = ((igObjectRefArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igObjectRefArrayMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        descriptor = g_igObjectRefArrayMetaField_descriptor[0];
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            o = g_igObjectRefArrayMetaField_descriptor[0];
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(o);
             }
             t = igMetaField_GetMetaFieldList()->_count - 1;
-            DAT_00585b50[0]->_internalIndex = t;
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00585b50[0]);
+            g_igObjectRefArrayMetaField_descriptor[0]->_internalIndex = t;
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igObjectRefArrayMetaField_descriptor[0]);
         }
     }
 }

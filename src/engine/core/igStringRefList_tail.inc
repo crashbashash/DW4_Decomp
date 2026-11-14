@@ -1,4 +1,4 @@
-static inline int pool_30cd10(void) {
+static inline int getStringPool(void) {
     int p;
     if (g_stringPool[0] == 0) {
         p = ((int)StringPool_Allocate(0x10));
@@ -15,7 +15,7 @@ void igStringRefList_ReleaseDefaults(void *self0) {
     int n;
     int i;
     char **slot;
-    int *v;
+    int *interned;
     int *old;
     int *hd;
     int rc;
@@ -24,7 +24,7 @@ void igStringRefList_ReleaseDefaults(void *self0) {
     n = self->_count;
     for (i = 0; i < n; i++) {
         slot = &self->_data[i];
-        v = ((int *)StringPool_Intern((StringPool *)(pool_30cd10()), (const char *)0));
+        interned = ((int *)StringPool_Intern((StringPool *)(getStringPool()), (const char *)0));
         old = (int *)*slot;
         if (old != 0) {
             hd = old - 2;
@@ -34,35 +34,35 @@ void igStringRefList_ReleaseDefaults(void *self0) {
                 StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
             }
         }
-        *slot = (char *)v;
+        *slot = (char *)interned;
     }
     self->_count = 0;
     igObject_ReleaseDefaults((int)self);
 }
 
-void StringList_Resize(igTDataList<char *> *arg0, int arg1) {
+void StringList_Resize(igTDataList<char *> *list, int count) {
     int *a1;
     int n;
-    int pool_30cd10;
+    int pool;
     int i;
     char **slot;
     int *nw;
     int v1;
     int *old;
 
-    n = arg0->_count;
-    if (arg1 > n) {
+    n = list->_count;
+    if (count > n) {
         goto grow;
     }
     {
-        for (i = arg1; i < n; i++) {
-            slot = &arg0->_data[i];
+        for (i = count; i < n; i++) {
+            slot = &list->_data[i];
             if (g_stringPool[0] == 0) {
-                pool_30cd10 = ((int)StringPool_Allocate(0x10));
-                if (pool_30cd10 != 0) {
-                    pool_30cd10 = ((int)StringPool_Construct((StringPool *)pool_30cd10));
+                pool = ((int)StringPool_Allocate(0x10));
+                if (pool != 0) {
+                    pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool[0] = pool_30cd10;
+                g_stringPool[0] = pool;
             }
             nw = (int *)((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
             old = (int *)*slot;
@@ -76,17 +76,17 @@ void StringList_Resize(igTDataList<char *> *arg0, int arg1) {
             }
             *slot = (char *)nw;
         }
-        arg0->_count = arg1;
+        list->_count = count;
         return;
     }
 grow:
-    if (arg1 >= 0) {
-        if (arg1 <= arg0->_capacity) {
-            arg0->_count = arg1;
+    if (count >= 0) {
+        if (count <= list->_capacity) {
+            list->_count = count;
         } else {
-            List_Resize(arg0, arg1, 4);
+            List_Resize(list, count, 4);
         }
     }
-    memset(arg0->_data + n, 0, (arg1 - n) * 4);
+    memset(list->_data + n, 0, (count - n) * 4);
 }
 

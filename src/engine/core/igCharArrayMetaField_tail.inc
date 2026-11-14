@@ -13,8 +13,8 @@ unsigned short igCharArrayMetaField_GetSize(igCharArrayMetaField *self) {
     return self->_num;
 }
 
-void igCharArrayMetaField_SetDefaultElement(void *arg0, int arg1, char arg2) {
-    ((igMetaFieldView *)(((char *)(arg0) + 0)))->SetDefault(0);
-    *(char *)(*(int *)((char *)(arg0) + 32) + arg1) = arg2;
+void igCharArrayMetaField_SetDefaultElement(void *self, int index, char value) {
+    ((igMetaFieldView *)self)->SetDefault(0);
+    *(char *)(((igMetaField *)self)->_default + index) = value;
 }
 

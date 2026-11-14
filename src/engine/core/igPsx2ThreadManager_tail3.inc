@@ -1,13 +1,13 @@
-int igPsx2ThreadManager_GetCurrentThread(igPsx2ThreadManager *arg0) {
-    int temp_s2;
-    int temp_s1;
-    int temp_v0;
+int igPsx2ThreadManager_GetCurrentThread(igPsx2ThreadManager *self) {
+    int savedPriority;
+    int thread;
+    int threadId;
 
-    temp_v0 = GetThreadId();
-    temp_s2 = ChangeThreadPriority(temp_v0, 1);
-    temp_s1 = igObjectList_FindByIntField((igTDataList<int> *)arg0->_threadList, (igMetaField *)DAT_00586ca8[0], GetThreadId());
-    ChangeThreadPriority(temp_v0, temp_s2);
-    return temp_s1;
+    threadId = GetThreadId();
+    savedPriority = ChangeThreadPriority(threadId, 1);
+    thread = igObjectList_FindByIntField((igTDataList<int> *)self->_threadList, (igMetaField *)g_igPsx2Thread_threadIDField[0], GetThreadId());
+    ChangeThreadPriority(threadId, savedPriority);
+    return thread;
 }
 
 void igPsx2ThreadManager_FinishThread(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
@@ -63,25 +63,25 @@ int Memory_GetAllocatorOrDefault(int extra0) {
     return ((int)Memory_GetDefaultAllocator());
 }
 
-void Memory_AllocateAligned16(int arg0, int arg1) {
-    void **temp_v0;
+void Memory_AllocateAligned16(int size, int selector) {
+    void **allocator;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg1)));
-    ((igMemoryPoolView *)(temp_v0))->AllocateAligned(arg0, 0x10);
+    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
+    ((igMemoryPoolView *)(allocator))->AllocateAligned(size, 0x10);
 }
 
-void Memory_FreeToSelector(int arg0, int arg1) {
-    void **temp_v0;
+void Memory_FreeToSelector(int block, int selector) {
+    void **allocator;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg1)));
-    ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
+    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
+    ((igMemoryPoolView *)(allocator))->Free((void *)block);
 }
 
-void Memory_ReallocateAligned16(int arg0, int arg1, int arg2) {
-    void **temp_v0;
+void Memory_ReallocateAligned16(int block, int size, int selector) {
+    void **allocator;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg2)));
-    ((igMemoryPoolView *)(temp_v0))->ReallocateAligned((void *)arg0, arg1, 0x10);
+    allocator = (void **)(((void **)Memory_GetAllocatorOrDefault(selector)));
+    ((igMemoryPoolView *)(allocator))->ReallocateAligned((void *)block, size, 0x10);
 }
 
 int igPsx2ThreadManager_GetMeta(void) {

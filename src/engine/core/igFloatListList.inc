@@ -17,7 +17,7 @@ int igFloatListList_GetVTable(void) {
     igFloatListList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00531e80[0];
+    list._vtable = (int)&g_igFloatListList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

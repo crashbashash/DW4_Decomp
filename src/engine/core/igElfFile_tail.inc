@@ -1,17 +1,17 @@
-static void igElfFile_Swap16(unsigned char *arg0) {
+static void igElfFile_Swap16(unsigned char *p) {
     unsigned short x;
-    ((unsigned char *)&x)[0] = arg0[1];
-    ((unsigned char *)&x)[1] = arg0[0];
-    *(unsigned short *)arg0 = x;
+    ((unsigned char *)&x)[0] = p[1];
+    ((unsigned char *)&x)[1] = p[0];
+    *(unsigned short *)p = x;
 }
 
-static void igElfFile_Swap32(unsigned char *arg0) {
-    union { unsigned char b[4]; int w; } u;
-    u.b[0] = arg0[3];
-    u.b[1] = arg0[2];
-    u.b[2] = arg0[1];
-    u.b[3] = arg0[0];
-    *(int *)arg0 = u.w;
+static void igElfFile_Swap32(unsigned char *p) {
+    union { unsigned char b[4]; int w; } swapped;
+    swapped.b[0] = p[3];
+    swapped.b[1] = p[2];
+    swapped.b[2] = p[1];
+    swapped.b[3] = p[0];
+    *(int *)p = swapped.w;
 }
 
 void igElfFile_SwapHeader(unsigned char *p) {
@@ -30,9 +30,9 @@ void igElfFile_SwapHeader(unsigned char *p) {
     igElfFile_Swap16(p + 50);
 }
 
-void igElfFile_SwapSectionHeaders(unsigned char *arg0, int arg1) {
-    unsigned char *p = arg0;
-    int n = arg1;
+void igElfFile_SwapSectionHeaders(unsigned char *headers, int count) {
+    unsigned char *p = headers;
+    int n = count;
     for (; n > 0; n--) {
         igElfFile_Swap32(p);
         igElfFile_Swap32(p + 4);
@@ -48,9 +48,9 @@ void igElfFile_SwapSectionHeaders(unsigned char *arg0, int arg1) {
     }
 }
 
-void igElfFile_SwapSymbols(unsigned char *arg0, int arg1) {
-    unsigned char *p = arg0;
-    int n = arg1;
+void igElfFile_SwapSymbols(unsigned char *symbols, int count) {
+    unsigned char *p = symbols;
+    int n = count;
     for (; n > 0; n--) {
         igElfFile_Swap32(p);
         igElfFile_Swap32(p + 4);
@@ -60,17 +60,17 @@ void igElfFile_SwapSymbols(unsigned char *arg0, int arg1) {
     }
 }
 
-void igElfFile_Reset(igElfFile *arg0) {
-    igProgramFile_Reset((igProgramFile *)arg0);
-    memset(arg0->_header, 0, 0x34);
-    arg0->_sectionHeaderStringTableSize = 0;
-    arg0->_sectionHeaderStringTable = 0;
-    arg0->_sectionHeaderCount = 0;
-    arg0->_sectionHeaders = 0;
-    arg0->_symbolStringTableSize = 0;
-    arg0->_symbolStringTable = 0;
-    arg0->_symbolCount = 0;
-    arg0->_symbols = 0;
+void igElfFile_Reset(igElfFile *self) {
+    igProgramFile_Reset((igProgramFile *)self);
+    memset(self->_header, 0, 0x34);
+    self->_sectionHeaderStringTableSize = 0;
+    self->_sectionHeaderStringTable = 0;
+    self->_sectionHeaderCount = 0;
+    self->_sectionHeaders = 0;
+    self->_symbolStringTableSize = 0;
+    self->_symbolStringTable = 0;
+    self->_symbolCount = 0;
+    self->_symbols = 0;
 }
 
 void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
@@ -79,7 +79,7 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
         return;
     }
     if (self->stream->Read(self->magic, 0x34, 1) != 1) {
-        igReport_Printf(DAT_004fdda0, self->path);
+        igReport_Printf(text_Error_reading_percent_s, self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
@@ -87,14 +87,14 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
     }
     int hostEndian = 1;
     int fileEndian = self->endian;
-    if (GPR_005549b4 == 0x12) {
+    if (g_byteOrderProbe == 0x12) {
         hostEndian = 2;
     }
     if (fileEndian != hostEndian) {
         igElfFile_SwapHeader(self->magic);
     }
     if (self->magic[0] != 0x7F || self->magic[1] != 'E' || self->magic[2] != 'L' || self->magic[3] != 'F') {
-        igReport_Printf((const char *)DAT_004fddc0, self->path);
+        igReport_Printf((const char *)text_Invalid_file_signature_percent_s, self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
@@ -102,7 +102,7 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
     }
     int sectionOffset = self->sectionHeaderOffset;
     if (sectionOffset == 0) {
-        igReport_Printf((const char *)DAT_004fdde0, self->path, sectionOffset);
+        igReport_Printf((const char *)text_No_section_headers_in_percent_s, self->path, sectionOffset);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
@@ -112,7 +112,7 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
         *result = g_resultFailure.v;
         return;
     }
-    if (GPR_005549b4 == 0x12) {
+    if (g_byteOrderProbe == 0x12) {
         hostEndian = 2;
     } else {
         hostEndian = 1;
@@ -172,9 +172,9 @@ int igElfFile_FindSectionByType(ElfFileView *self, int type, int nth) {
     return -1;
 }
 
-int igElfFile_GetSymbol(void *arg0, int arg1) {
-    char *base = *(char **)((char *)arg0 + 96);
-    if (base != 0 && arg1 >= 0 && arg1 <= *(int *)((char *)arg0 + 92)) return (int)(base + arg1*16); return 0;
+int igElfFile_GetSymbol(void *self, int index) {
+    char *base = (char *)((ElfFileView *)self)->symbols;
+    if (base != 0 && index >= 0 && index <= ((ElfFileView *)self)->symbolCount) return (int)(base + index*16); return 0;
 }
 
 /* Loads the symbol table (the first SHT_SYMTAB section) and its string table, which is the SHT_STRTAB
@@ -222,7 +222,7 @@ igResult igElfFile_LoadSymbols(ElfFileView *self) {
     if (self->Load(symbols->offset, symbols->size, &self->symbols) == g_resultFailure) {
         return g_resultFailure;
     }
-    expected = (GPR_005549b4 == 18) ? 2 : 1;
+    expected = (g_byteOrderProbe == 18) ? 2 : 1;
     if (self->endian != expected) {
         igElfFile_SwapSymbols((unsigned char *)self->symbols, self->symbolCount);
     }
@@ -413,7 +413,7 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
     char *scan;
     int i;
     char *tail;
-    sep = strstr(*mangled != 0 ? mangled + 1 : mangled, DAT_004fdf80);
+    sep = strstr(*mangled != 0 ? mangled + 1 : mangled, text_double_underscore);
     start = out;
     if (sep != 0) {
         nameLength = sep - mangled;
@@ -490,7 +490,7 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
     }
     *out = 0;
     tail = out - 1;
-    if (strncmp(mangled, DAT_004fdf80, 2) == 0) {
+    if (strncmp(mangled, text_double_underscore, 2) == 0) {
         while (((start < tail) ^ 1) == 0 && *tail == ':') {
             tail--;
         }
@@ -504,7 +504,7 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
         if (*scan == ':') {
             scan++;
         }
-        if (strncmp(mangled, DAT_004fde68, nameLength) == 0) {
+        if (strncmp(mangled, text_ct, nameLength) == 0) {
             nameLength = tail - scan;
             if (nameLength > size - 1) {
                 nameLength = size - 1;
@@ -514,7 +514,7 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
             *result = g_resultSuccess.v;
             return;
         }
-        if (strncmp(mangled, DAT_004fde70, nameLength) == 0) {
+        if (strncmp(mangled, text_dt, nameLength) == 0) {
             nameLength = tail - scan;
             if (size > 0) {
                 *out = '~';
@@ -529,13 +529,13 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
             *result = g_resultSuccess.v;
             return;
         }
-        for (i = 0; DAT_004c2380[i].mangled != 0; i++) {
-            if (strncmp(DAT_004c2380[i].mangled, mangled, nameLength) == 0 && DAT_004c2380[i].name != 0) {
-                nameLength = strlen(DAT_004c2380[i].name);
+        for (i = 0; g_elfSpecialNames[i].mangled != 0; i++) {
+            if (strncmp(g_elfSpecialNames[i].mangled, mangled, nameLength) == 0 && g_elfSpecialNames[i].name != 0) {
+                nameLength = strlen(g_elfSpecialNames[i].name);
                 if (nameLength > size - 1) {
                     nameLength = size - 1;
                 }
-                strncpy(out, DAT_004c2380[i].name, nameLength);
+                strncpy(out, g_elfSpecialNames[i].name, nameLength);
                 out[nameLength] = 0;
                 *result = g_resultSuccess.v;
                 return;
@@ -550,172 +550,172 @@ void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int s
     *result = g_resultSuccess.v;
 }
 
-int *igElfFile_LookupValueName(int arg0, int *arg1) {
-    int *v;
-    while ((v = (int *)arg1[1]) != 0) {
-        if (arg1[0] == arg0) return v;
-        arg1 += 2;
+int *igElfFile_LookupValueName(int value, int *table) {
+    int *name;
+    while ((name = (int *)table[1]) != 0) {
+        if (table[0] == value) return name;
+        table += 2;
     }
-    return &DAT_004f7910[0];
+    return &emptyString_4[0];
 }
 
-char *igElfFile_FormatFlags(int arg0, int arg1, char *arg2) {
-    int a;
+char *igElfFile_FormatFlags(int flags, int names, char *out) {
+    int flag;
     int i;
-    char *s;
+    char *name;
     char *sep;
     i = 0;
-    *arg2 = 0;
+    *out = 0;
     do {
-        a = arg0 & (1 << i);
-        if (a != 0) {
-            s = ((char *)igElfFile_LookupValueName(a, (int *)arg1));
-            if (*s != 0) {
-                if (*arg2 != 0) {
-                    sep = ((char *)DAT_004f7910);
+        flag = flags & (1 << i);
+        if (flag != 0) {
+            name = ((char *)igElfFile_LookupValueName(flag, (int *)names));
+            if (*name != 0) {
+                if (*out != 0) {
+                    sep = ((char *)emptyString_4);
                 } else {
-                    sep = DAT_004fe080;
+                    sep = text_comma_space;
                 }
-                sprintf(&arg2[strlen(arg2)], DAT_004fe088, sep, s);
+                sprintf(&out[strlen(out)], percent_s_percent_s, sep, name);
             }
         }
         i++;
     } while (i < 32);
-    return arg2;
+    return out;
 }
 
 void igElfFile_PrintHeader(ElfFileView *o) {
-    igReport_Printf(DAT_004fe090);
+    igReport_Printf(text_ELF_header);
     igReport_Flush();
-    igReport_Printf(DAT_004fe0b0);
+    igReport_Printf(text_e_ident_EI_NIDENT);
     igReport_Flush();
-    igReport_Printf(DAT_004fe0d0, o->magic[0]);
+    igReport_Printf(text_EI_MAG0_0x_percent_2x, o->magic[0]);
     igReport_Flush();
-    igReport_Printf(DAT_004fe0f0, o->magic[1]);
+    igReport_Printf(text_EI_MAG1_percent_c, o->magic[1]);
     igReport_Flush();
-    igReport_Printf(DAT_004fe110, o->magic[2]);
+    igReport_Printf(text_EI_MAG2_percent_c, o->magic[2]);
     igReport_Flush();
-    igReport_Printf(DAT_004fe130, o->magic[3]);
+    igReport_Printf(text_EI_MAG3_percent_c, o->magic[3]);
     igReport_Flush();
-    igReport_Printf(DAT_004fe150, ((int)igElfFile_LookupValueName(o->elfClass, &DAT_004c23f0[0])));
+    igReport_Printf(text_EI_CLASS_percent_s, ((int)igElfFile_LookupValueName(o->elfClass, &g_elfClassNames[0])));
     igReport_Flush();
-    igReport_Printf(DAT_004fe170, ((int)igElfFile_LookupValueName(o->endian, &DAT_004c2410[0])));
+    igReport_Printf(text_EI_DATA_percent_s, ((int)igElfFile_LookupValueName(o->endian, &g_elfDataNames[0])));
     igReport_Flush();
-    igReport_Printf(DAT_004fe190, o->identVersion);
+    igReport_Printf(text_EI_VERSION_percent_d, o->identVersion);
     igReport_Flush();
-    igReport_Printf(DAT_004fe1b0);
+    igReport_Printf(EI_PAD);
     igReport_Flush();
-    igReport_Printf(DAT_004fe1d0, ((int)igElfFile_LookupValueName(o->type, &DAT_004c2430[0])));
+    igReport_Printf(text_e_type_percent_s, ((int)igElfFile_LookupValueName(o->type, &g_elfTypeNames[0])));
     igReport_Flush();
-    igReport_Printf(DAT_004fe1f0, ((int)igElfFile_LookupValueName(o->machine, &DAT_004c2470[0])));
+    igReport_Printf(text_e_machine_percent_s, ((int)igElfFile_LookupValueName(o->machine, &g_elfMachineNames[0])));
     igReport_Flush();
-    igReport_Printf(DAT_004fe210, o->version);
+    igReport_Printf(text_e_version_percent_d, o->version);
     igReport_Flush();
-    igReport_Printf(DAT_004fe230, o->entry);
+    igReport_Printf(text_e_entry_0x_percent_08x, o->entry);
     igReport_Flush();
-    igReport_Printf(DAT_004fe250, o->programHeaderOffset);
+    igReport_Printf(text_e_phoff_0x_percent_08x, o->programHeaderOffset);
     igReport_Flush();
-    igReport_Printf(DAT_004fe270, o->sectionHeaderOffset);
+    igReport_Printf(text_e_shoff_0x_percent_08x, o->sectionHeaderOffset);
     igReport_Flush();
-    igReport_Printf(DAT_004fe290, o->flags);
+    igReport_Printf(text_e_flags_0x_percent_08x, o->flags);
     igReport_Flush();
-    igReport_Printf(DAT_004fe2b0, o->headerSize);
+    igReport_Printf(text_e_ehsize_0x_percent_08x, o->headerSize);
     igReport_Flush();
-    igReport_Printf(DAT_004fe2d0, o->programHeaderEntrySize);
+    igReport_Printf(text_e_phentsize_0x_percent_08x, o->programHeaderEntrySize);
     igReport_Flush();
-    igReport_Printf(DAT_004fe2f0, o->programHeaderCount);
+    igReport_Printf(text_e_phnum_0x_percent_08x, o->programHeaderCount);
     igReport_Flush();
-    igReport_Printf(DAT_004fe310, o->sectionHeaderEntrySize);
+    igReport_Printf(text_e_shentsize_0x_percent_08x, o->sectionHeaderEntrySize);
     igReport_Flush();
-    igReport_Printf(DAT_004fe330, o->sectionHeaderCount);
+    igReport_Printf(text_e_shnum_0x_percent_08x, o->sectionHeaderCount);
     igReport_Flush();
-    igReport_Printf(DAT_004fe350, o->sectionNameIndex);
+    igReport_Printf(text_e_shstrndx_0x_percent_08x, o->sectionNameIndex);
     igReport_Flush();
-    igReport_Printf(DAT_004f95c8);
+    igReport_Printf(newline_2);
     igReport_Flush();
 }
 
-void igElfFile_PrintSectionHeaders(int *arg0) {
-    int temp_a1;
-    int var_s0;
-    temp_a1 = arg0[19];
-    igReport_Printf(DAT_004fe370, temp_a1, temp_a1);
+void igElfFile_PrintSectionHeaders(int *self) {
+    int count;
+    int i;
+    count = self[19];
+    igReport_Printf(text_Section_headers_percent_d_0x_percent_x, count, count);
     igReport_Flush();
-    for (var_s0 = 0; var_s0 < arg0[19]; var_s0++) {
-        igElfFile_PrintSectionHeader((ElfFileView *)arg0, var_s0, igElfFile_GetSectionHeader((ElfFileView *)arg0, var_s0));
+    for (i = 0; i < self[19]; i++) {
+        igElfFile_PrintSectionHeader((ElfFileView *)self, i, igElfFile_GetSectionHeader((ElfFileView *)self, i));
     }
 }
 
-void igElfFile_PrintSectionHeader(ElfFileView *arg0, int arg1, ElfSection *arg2) {
-    char sp30[128];
+void igElfFile_PrintSectionHeader(ElfFileView *self, int index, ElfSection *section) {
+    char flagText[128];
 
-    igReport_Printf(DAT_004fe4d0);
+    igReport_Printf(text_Section_header_percent_d);
     igReport_Flush();
-    igReport_Printf(DAT_004fe4f0, arg2->name, (int)arg0->sectionNames + arg2->name);
+    igReport_Printf(text_sh_name_0x_percent_x_percent_s, section->name, (int)self->sectionNames + section->name);
     igReport_Flush();
-    igReport_Printf(DAT_004fe520, ((int)igElfFile_LookupValueName(arg2->type, &DAT_004c24c0[0])));
+    igReport_Printf(text_sh_type_percent_s, ((int)igElfFile_LookupValueName(section->type, &g_elfSectionTypeNames[0])));
     igReport_Flush();
-    igReport_Printf(DAT_004fe540, arg2->flags, ((int)igElfFile_FormatFlags(arg2->flags, (int)&DAT_004c2550[0], (char *)sp30)));
+    igReport_Printf(text_sh_flags_0x_percent_08x_percent_s, section->flags, ((int)igElfFile_FormatFlags(section->flags, (int)&g_elfSectionFlagNames[0], (char *)flagText)));
     igReport_Flush();
-    igReport_Printf(DAT_004fe570, arg2->addr);
+    igReport_Printf(text_sh_addr_0x_percent_08x, section->addr);
     igReport_Flush();
-    igReport_Printf(DAT_004fe5a0, arg2->offset);
+    igReport_Printf(text_sh_offset_0x_percent_08x, section->offset);
     igReport_Flush();
-    igReport_Printf(DAT_004fe5d0, arg2->size);
+    igReport_Printf(text_sh_size_0x_percent_08x, section->size);
     igReport_Flush();
-    igReport_Printf(DAT_004fe600, arg2->link);
+    igReport_Printf(text_sh_link_0x_percent_08x, section->link);
     igReport_Flush();
-    igReport_Printf(DAT_004fe630, arg2->info);
+    igReport_Printf(text_sh_info_0x_percent_08x, section->info);
     igReport_Flush();
-    igReport_Printf(DAT_004fe660, arg2->addressAlign);
+    igReport_Printf(text_sh_addralign_0x_percent_08x, section->addressAlign);
     igReport_Flush();
-    igReport_Printf(DAT_004fe690, arg2->entrySize);
+    igReport_Printf(text_sh_entsize_0x_percent_08x, section->entrySize);
     igReport_Flush();
-    igReport_Printf(DAT_004f95c8);
+    igReport_Printf(newline_2);
     igReport_Flush();
 }
 
-void igElfFile_PrintSymbols(ElfFileView *arg0) {
-    int temp_a1;
+void igElfFile_PrintSymbols(ElfFileView *self) {
+    int count;
     int i;
 
-    temp_a1 = arg0->symbolCount;
-    igReport_Printf(DAT_004fe6c0, temp_a1, temp_a1);
+    count = self->symbolCount;
+    igReport_Printf(text_Symbols_percent_d_0x_percent_x, count, count);
     igReport_Flush();
-    for (i = 0; i < arg0->symbolCount; i++) {
-        igElfFile_PrintSymbol((igElfFile *)arg0, i, (unsigned char *)(igElfFile_GetSymbol(arg0, i)));
+    for (i = 0; i < self->symbolCount; i++) {
+        igElfFile_PrintSymbol((igElfFile *)self, i, (ElfSymbol *)(igElfFile_GetSymbol(self, i)));
     }
 }
 
-void igElfFile_PrintSymbol(igElfFile *arg0, int arg1, unsigned char *arg2) {
-    int *temp_v0;
-    char *var_s0;
+void igElfFile_PrintSymbol(igElfFile *self, int index, ElfSymbol *symbol) {
+    int *section;
+    char *sectionName;
 
-    temp_v0 = ((int *)igElfFile_GetSectionHeader((ElfFileView *)arg0, *(unsigned short *)(arg2 + 14)));
-    if (temp_v0 != 0) {
-        var_s0 = (char *)(arg0->_sectionHeaderStringTable + *temp_v0);
+    section = ((int *)igElfFile_GetSectionHeader((ElfFileView *)self, symbol->sectionIndex));
+    if (section != 0) {
+        sectionName = (char *)(self->_sectionHeaderStringTable + *section);
     } else {
-        var_s0 = ((char *)DAT_004f7910);
+        sectionName = ((char *)emptyString_4);
     }
-    igReport_Printf(DAT_004fe7a0, arg1);
+    igReport_Printf(text_Symbol_percent_d, index);
     igReport_Flush();
-    igReport_Printf(DAT_004fe7c0, *(int *)(arg2 + 0), arg0->_symbolStringTable + *(int *)(arg2 + 0));
+    igReport_Printf(text_st_name_0x_percent_x_percent_s, symbol->name, self->_symbolStringTable + symbol->name);
     igReport_Flush();
-    igReport_Printf(DAT_004fe7f0, *(int *)(arg2 + 4));
+    igReport_Printf(text_st_value_0x_percent_08x, symbol->value);
     igReport_Flush();
-    igReport_Printf(DAT_004fe820, *(int *)(arg2 + 8));
+    igReport_Printf(text_st_size_0x_percent_08x, symbol->size);
     igReport_Flush();
-    igReport_Printf(DAT_004fe850, arg2[12]);
+    igReport_Printf(text_st_info_0x_percent_08x, symbol->info);
     igReport_Flush();
-    igReport_Printf(DAT_004fe880, ((int)igElfFile_LookupValueName(arg2[12] >> 4, (int *)DAT_004c2580)));
+    igReport_Printf(text_bind_percent_s, ((int)igElfFile_LookupValueName(symbol->info >> 4, (int *)g_elfSymbolBindNames)));
     igReport_Flush();
-    igReport_Printf(DAT_004fe8b0, ((int)igElfFile_LookupValueName(arg2[12] & 0xF, (int *)DAT_004c25b0)));
+    igReport_Printf(text_type_percent_s, ((int)igElfFile_LookupValueName(symbol->info & 0xF, (int *)g_elfSymbolTypeNames)));
     igReport_Flush();
-    igReport_Printf(DAT_004fe8e0, arg2[13]);
+    igReport_Printf(text_st_other_0x_percent_08x, symbol->other);
     igReport_Flush();
-    igReport_Printf(DAT_004fe910, *(unsigned short *)(arg2 + 14), var_s0);
+    igReport_Printf(text_st_shndx_0x_percent_08x_percent_s, symbol->sectionIndex, sectionName);
     igReport_Flush();
-    igReport_Printf(DAT_004f95c8);
+    igReport_Printf(newline_2);
     igReport_Flush();
 }
 

@@ -1,9 +1,9 @@
-void igPsx2Semaphore_SetInitialCount(int *arg0, void *arg1, int arg2) {
-    if (*(int *)((char *)(arg1) + 12) == -1) {
-        *(int *)((char *)(arg1) + 16) = arg2;
-        *arg0 = g_resultSuccess.v;
+void igPsx2Semaphore_SetInitialCount(int *result, void *semaphore, int count) {
+    if (((igPsx2Semaphore *)semaphore)->_semaID == -1) {
+        ((igPsx2Semaphore *)semaphore)->_initCount = count;
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
@@ -14,12 +14,12 @@ int igPsx2Semaphore_GetInitialCount(igPsx2Semaphore *self) {
     return self->_initCount;
 }
 
-void igPsx2Semaphore_SetMaximumCount(int *arg0, igPsx2Semaphore *self, int arg2) {
+void igPsx2Semaphore_SetMaximumCount(int *result, igPsx2Semaphore *self, int count) {
     if (self->_semaID == -1) {
-        self->_maxCount = arg2;
-        *arg0 = g_resultSuccess.v;
+        self->_maxCount = count;
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
@@ -30,93 +30,93 @@ int igPsx2Semaphore_GetMaximumCount(igPsx2Semaphore *self) {
     return self->_maxCount;
 }
 
-int igPsx2Semaphore_GetCount(igPsx2Semaphore *arg0) {
-    int sp[8];
-    int temp_v0;
-    temp_v0 = arg0->_semaID;
-    if (temp_v0 < 0) {
-        return arg0->_initCount;
+int igPsx2Semaphore_GetCount(igPsx2Semaphore *self) {
+    int status[8];
+    int semaId;
+    semaId = self->_semaID;
+    if (semaId < 0) {
+        return self->_initCount;
     }
-    ReferSemaStatus(temp_v0, sp);
-    return sp[0];
+    ReferSemaStatus(semaId, status);
+    return status[0];
 }
 
-void igPsx2Semaphore_Create(int *arg0, igPsx2Semaphore *self) {
+void igPsx2Semaphore_Create(int *result, igPsx2Semaphore *self) {
     SemaParam param;
-    char *var_v1_2;
-    unsigned int var_v0;
+    char *cursor;
+    unsigned int remaining;
     if (self->_semaID != -1) {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     } else {
-        var_v1_2 = (char *)&param;
-        var_v0 = 0x18;
-        if (var_v1_2 != 0) {
+        cursor = (char *)&param;
+        remaining = 0x18;
+        if (cursor != 0) {
             do {
-                *var_v1_2 = 0;
-                var_v0 -= 1;
-                var_v1_2 += 1;
-            } while (var_v0 != 0);
+                *cursor = 0;
+                remaining -= 1;
+                cursor += 1;
+            } while (remaining != 0);
         }
         param.maxCount = self->_maxCount;
         param.initCount = self->_initCount;
         self->_semaID = CreateSema(&param);
         if (self->_semaID < 0) {
             self->_semaID = -1;
-            *arg0 = g_resultFailure.v;
+            *result = g_resultFailure.v;
         } else {
-            *arg0 = g_resultSuccess.v;
+            *result = g_resultSuccess.v;
         }
     }
 }
 
-void igPsx2Semaphore_Destroy(int *arg0, int *arg1) {
-    int id = arg1[3];
+void igPsx2Semaphore_Destroy(int *result, int *semaphore) {
+    int id = semaphore[3];  /* matching construct: the _semaID word read as semaphore[3]; the member spelling hoists &_semaID */
     const int *p;
     if (id == -1) {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
         return;
     }
     id = DeleteSema(id);
-    arg1[3] = -1;
+    semaphore[3] = -1;
     p = id >= 0 ? &g_resultSuccess.v : &g_resultFailure.v;
-    *arg0 = *p;
+    *result = *p;
 }
 
-void igPsx2Semaphore_ISignal(int *arg0, void *arg1) {
+void igPsx2Semaphore_ISignal(int *result, void *semaphore) {
     const int *p;
-    int temp_a0;
+    int semaId;
 
-    temp_a0 = *(int *)((char *)(arg1) + 12);
-    if (temp_a0 == -1) {
-        *arg0 = g_resultFailure.v;
+    semaId = ((igPsx2Semaphore *)semaphore)->_semaID;
+    if (semaId == -1) {
+        *result = g_resultFailure.v;
     } else {
-        if (iSignalSema(temp_a0) >= 0) {
+        if (iSignalSema(semaId) >= 0) {
             p = &g_resultSuccess.v;
         } else {
             p = &g_resultFailure.v;
         }
-        *arg0 = *p;
+        *result = *p;
     }
 }
 
-void igPsx2Semaphore_WaitBlocking(int *arg0, void *arg1) {
+void igPsx2Semaphore_WaitBlocking(int *result, void *semaphore) {
     const int *p;
-    int h = *(int *)((char *)(arg1) + 12);
+    int h = ((igPsx2Semaphore *)semaphore)->_semaID;
     if (h == -1) {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     } else {
         if (WaitSema(h) >= 0) {
             p = &g_resultSuccess.v;
         } else {
             p = &g_resultFailure.v;
         }
-        *arg0 = *p;
+        *result = *p;
     }
 }
 
-void igPsx2Semaphore_IPoll(int *arg0, igPsx2Semaphore *self) {
+void igPsx2Semaphore_IPoll(int *result, igPsx2Semaphore *self) {
     const int *p;
-    if (self->_semaID == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(self->_semaID) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
+    if (self->_semaID == -1) { *result = g_resultFailure.v; return; } p = (iPollSema(self->_semaID) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *result = *p;
 }
 
 SystemAllocator::SystemAllocator() {}
@@ -129,7 +129,7 @@ void SystemAllocator_Activate(void) {
 
 void SystemAllocator_Deactivate(void) {
     if (g_activeSystemAllocator[0] != 0) {
-        g_activeSystemAllocator[0]->vfunc_3();
+        g_activeSystemAllocator[0]->ReleasePageTables();
     }
 }
 
@@ -144,9 +144,9 @@ void SystemAllocator_GetStatistics(SystemAllocator *self, ThreadMemoryMap *map) 
     int size;
     unsigned regionSize;
     unsigned end;
-    end = (unsigned)DAT_0058d280;
+    end = (unsigned)_end;
     marker = end;
-    regionSize = (unsigned)DAT_00100000;
+    regionSize = (unsigned)_stack_size;
     top = (unsigned)&marker;
     top -= top % regionSize;
     bottom = top - regionSize;
@@ -217,8 +217,8 @@ void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *re
     insertRegion(regions, row, text_Section_Small_Data, text_Program);
 }
 
-int SystemAllocator_Sbrk(int arg0, int arg1) {
-    int s1 = sbrk(arg1);
+int SystemAllocator_Sbrk(int self, int size) {
+    int s1 = sbrk(size);
     int low;
     int pad;
     if (s1 != -1) {

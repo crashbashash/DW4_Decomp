@@ -1,15 +1,15 @@
-int igInfo_FindObjectReference(void **arg0, int arg1, int arg2) {
+int igInfo_FindObjectReference(void **self, int directory, int target) {
     int meta;
     int i;
-    int w;
-    igMetaField *f;
-    meta = (int)((igObjectDispatchView *)(arg0))->getMeta();
+    int value;
+    igMetaField *field;
+    meta = (int)((igObjectDispatchView *)(self))->getMeta();
     for (i = 0; i < igMetaObject_GetFieldCount((igMetaObject *)meta); i++) {
-        f = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
-        if (igObject_IsKindOf((void *)f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
-          w = *(int *)((char *)arg0 + f->_offset);
-          if (w == arg2) {
-            FUN_002e2d30((igDirectoryView *)arg1, (igInfoView *)arg0, (char *)f->_fieldName, (igObject *)arg2);
+        field = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
+        if (igObject_IsKindOf((void *)field, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
+          value = *(int *)((char *)self + field->_offset);
+          if (value == target) {
+            FUN_002e2d30((igDirectoryView *)directory, (igInfoView *)self, (char *)field->_fieldName, (igObject *)target);
             return 1;
         }
         }
@@ -17,16 +17,16 @@ int igInfo_FindObjectReference(void **arg0, int arg1, int arg2) {
     return 0;
 }
 
-int igObject_GetFieldValueByName(void **arg0, int arg1) {
-    void *temp_v0;
+int igObject_GetFieldValueByName(void **self, int name) {
+    igMetaField *field;
 
-    if (arg1 == 0) {
+    if (name == 0) {
         return 0;
     }
-    temp_v0 = (void *)(igMetaObject_FindFieldByName((igMetaObject *)(((igObjectDispatchView *)(arg0))->getMeta()), (const char *)arg1));
-    if (temp_v0 == 0) {
+    field = (igMetaField *)(igMetaObject_FindFieldByName((igMetaObject *)(((igObjectDispatchView *)(self))->getMeta()), (const char *)name));
+    if (field == 0) {
         return 0;
     }
-    return *(int *)((char *)arg0 + *(int *)((char *)(temp_v0) + 8));
+    return *(int *)((char *)self + field->_offset);
 }
 

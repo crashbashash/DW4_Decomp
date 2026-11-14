@@ -102,155 +102,155 @@ open:
     }
 }
 
-void igPsx2File_CloseHandle(igPsx2FileView *arg0) {
-    if (arg0->_fileHandle >= 0) {
-        arg0->vfunc_32();
-        sceClose(arg0->_fileHandle);
-        arg0->_fileHandle = -1;
-        if (arg0->_fBuf != 0) {
-            igObject_FreeMemory((int)arg0, (int)arg0->_fBuf);
+void igPsx2File_CloseHandle(igPsx2FileView *self) {
+    if (self->_fileHandle >= 0) {
+        self->flush();
+        sceClose(self->_fileHandle);
+        self->_fileHandle = -1;
+        if (self->_fBuf != 0) {
+            igObject_FreeMemory((int)self, (int)self->_fBuf);
         }
-        arg0->_fBuf = 0;
-        arg0->_bufSize = 0;
-        arg0->_bufPos = 0;
-        arg0->_isOpen = 0;
+        self->_fBuf = 0;
+        self->_bufSize = 0;
+        self->_bufPos = 0;
+        self->_isOpen = 0;
     }
 }
 
-void **igPsx2File_Open(void **arg0, const char *fileName, int arg2) {
-    igResult sp4C;
-    igResult sp48;
-    igResult sp44;
-    igResult sp40;
-    igResult sp3C;
-    igResult sp38;
-    igResult sp34;
-    igResult sp30;
-    int var_v1;
+void **igPsx2File_Open(void **self, const char *fileName, int modeText) {
+    igResult appendBinaryResult;
+    igResult appendResult;
+    igResult readWriteBinaryResult;
+    igResult readWriteResult;
+    igResult writeBinaryResult;
+    igResult writeResult;
+    igResult readBinaryResult;
+    igResult readResult;
+    int opened;
 
-    igFile_SetFileName((int *)arg0, fileName);
-    if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
-        sp4C = ((igFileView *)(arg0))->vfunc_23((int)(0));
-        var_v1 = sp4C.v;
+    igFile_SetFileName((int *)self, fileName);
+    if (strcmp(modeText, &text_r[0]) == 0) {
+        readResult = ((igFileView *)(self))->openWithMode((int)(0));
+        opened = readResult.v;
         goto block_21;
     }
-    if (strcmp(arg2, (int *)DAT_004f9c48) == 0) {
-        sp48 = ((igFileView *)(arg0))->vfunc_23((int)(4));
-        var_v1 = sp48.v;
+    if (strcmp(modeText, (int *)text_rb) == 0) {
+        readBinaryResult = ((igFileView *)(self))->openWithMode((int)(4));
+        opened = readBinaryResult.v;
         goto block_21;
     }
-    if (strcmp(arg2, (int *)((char *)DAT_004f92f0)) == 0) {
-        sp44 = ((igFileView *)(arg0))->vfunc_23((int)(1));
-        var_v1 = sp44.v;
+    if (strcmp(modeText, (int *)((char *)text_w)) == 0) {
+        writeResult = ((igFileView *)(self))->openWithMode((int)(1));
+        opened = writeResult.v;
         goto block_21;
     }
-    if (strcmp(arg2, (int *)((char *)DAT_004f9c50)) == 0) {
-        sp40 = ((igFileView *)(arg0))->vfunc_23((int)(5));
-        var_v1 = sp40.v;
+    if (strcmp(modeText, (int *)((char *)text_wb)) == 0) {
+        writeBinaryResult = ((igFileView *)(self))->openWithMode((int)(5));
+        opened = writeBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(arg2, (int *)DAT_004f9c58) == 0) || (strcmp(arg2, &DAT_004f9c60[0]) == 0)) {
-        sp3C = ((igFileView *)(arg0))->vfunc_23((int)(3));
-        var_v1 = sp3C.v;
+    if ((strcmp(modeText, (int *)text_r_plus) == 0) || (strcmp(modeText, &text_w_plus[0]) == 0)) {
+        readWriteResult = ((igFileView *)(self))->openWithMode((int)(3));
+        opened = readWriteResult.v;
         goto block_21;
     }
-    if ((strcmp(arg2, (int *)DAT_004f9c68) == 0) || (strcmp(arg2, &DAT_004f9c70[0]) == 0)) {
-        sp38 = ((igFileView *)(arg0))->vfunc_23((int)(7));
-        var_v1 = sp38.v;
+    if ((strcmp(modeText, (int *)text_r_plus_b) == 0) || (strcmp(modeText, &text_w_plus_b[0]) == 0)) {
+        readWriteBinaryResult = ((igFileView *)(self))->openWithMode((int)(7));
+        opened = readWriteBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(arg2, (int *)DAT_004f9c78) == 0) || (strcmp(arg2, &DAT_004f9c80[0]) == 0)) {
-        sp34 = ((igFileView *)(arg0))->vfunc_23((int)(2));
-        var_v1 = sp34.v;
+    if ((strcmp(modeText, (int *)text_a) == 0) || (strcmp(modeText, &text_a_plus[0]) == 0)) {
+        appendResult = ((igFileView *)(self))->openWithMode((int)(2));
+        opened = appendResult.v;
         goto block_21;
     }
-    if ((strcmp(arg2, (int *)DAT_004f9c88) == 0) || (strcmp(arg2, &DAT_004f9c90[0]) == 0)) {
-        sp30 = ((igFileView *)(arg0))->vfunc_23((int)(6));
-        var_v1 = sp30.v;
+    if ((strcmp(modeText, (int *)text_ab) == 0) || (strcmp(modeText, &text_a_plus_b[0]) == 0)) {
+        appendBinaryResult = ((igFileView *)(self))->openWithMode((int)(6));
+        opened = appendBinaryResult.v;
         goto block_21;
     }
     return 0;
 block_21:
-    return (var_v1 == g_resultFailure.v) ? (void **)0 : arg0;
+    return (opened == g_resultFailure.v) ? (void **)0 : self;
 }
 
 void igPsx2File_Close(igPsx2FileView *self)
 {
-    self->vfunc_24();
+    self->closeHandle();
 }
 
-void igPsx2File_GrowBuffer(igPsx2FileView *arg0, int arg1) {
+void igPsx2File_GrowBuffer(igPsx2FileView *self, int size) {
     int n;
-    if (arg0->_bufSize < arg1) {
-        if (arg1 > 0x100000) {
-            n = arg1 + 0x100000;
+    if (self->_bufSize < size) {
+        if (size > 0x100000) {
+            n = size + 0x100000;
         } else {
-            n = arg1 * 2;
+            n = size * 2;
         }
-        if (arg0->_fBuf != 0) {
-            arg0->_fBuf = (unsigned char *)igObject_Reallocate((int)arg0, (int)arg0->_fBuf, n);
+        if (self->_fBuf != 0) {
+            self->_fBuf = (unsigned char *)igObject_Reallocate((int)self, (int)self->_fBuf, n);
         } else {
-            arg0->_fBuf = (unsigned char *)igObject_AllocateStorage((int)arg0, n);
+            self->_fBuf = (unsigned char *)igObject_AllocateStorage((int)self, n);
         }
-        arg0->_bufSize = n;
+        self->_bufSize = n;
     }
-    arg0->_fileSize = arg1;
+    self->_fileSize = size;
 }
 
-int igPsx2File_Read(igPsx2FileView *arg0, int arg1, int arg2, int arg3) {
+int igPsx2File_Read(igPsx2FileView *self, int buffer, int size, int count) {
     int base;
     int r;
     int q;
     int bytes;
     int a1;
     int lim;
-    if (arg0->_fileHandle < 0) {
+    if (self->_fileHandle < 0) {
         return -1;
     }
-    base = arg0->vfunc_39();
-    if (arg0->_isBinary == 1) {
-        r = sceRead(arg0->_fileHandle, arg1, arg3 * arg2);
-        arg3 = r / arg2;
-        q = arg3 * arg2;
+    base = self->tell();
+    if (self->_isBinary == 1) {
+        r = sceRead(self->_fileHandle, buffer, count * size);
+        count = r / size;
+        q = count * size;
         if (r != q) {
-            sceLseek(arg0->_fileHandle, base + q, 0);
+            sceLseek(self->_fileHandle, base + q, 0);
         }
-        return arg3;
+        return count;
     }
-    a1 = arg0->_bufPos;
-    bytes = arg2 * arg3;
-    lim = arg0->_fileSize;
+    a1 = self->_bufPos;
+    bytes = size * count;
+    lim = self->_fileSize;
     if (lim < a1 + bytes) {
-        arg3 = (lim - a1) / arg2;
-        bytes = arg3 * arg2;
+        count = (lim - a1) / size;
+        bytes = count * size;
     }
-    memcpy(arg1, arg0->_fBuf + a1, bytes);
-    arg0->_bufPos = arg0->_bufPos + bytes;
-    return arg3;
+    memcpy(buffer, self->_fBuf + a1, bytes);
+    self->_bufPos = self->_bufPos + bytes;
+    return count;
 }
 
-int igPsx2File_Write(igPsx2FileView *arg0, int arg1, int arg2, int arg3) {
-    int s0;
-    if (arg0->_fileHandle < 0) return -1;
-    if (arg2 == 0) return 0;
-    if (arg0->_isBinary == 1) {
-        if (arg0->_openMode == 6) {
-            sceLseek(arg0->_fileHandle, 0, 2);
+int igPsx2File_Write(igPsx2FileView *self, int buffer, int size, int count) {
+    int bytes;
+    if (self->_fileHandle < 0) return -1;
+    if (size == 0) return 0;
+    if (self->_isBinary == 1) {
+        if (self->_openMode == 6) {
+            sceLseek(self->_fileHandle, 0, 2);
         }
-        return sceWrite(arg0->_fileHandle, arg1, arg3 * arg2) / arg2;
+        return sceWrite(self->_fileHandle, buffer, count * size) / size;
     }
-    s0 = arg2 * arg3;
-    if (arg0->_openMode == 2) {
-        arg0->_bufPos = arg0->_fileSize;
+    bytes = size * count;
+    if (self->_openMode == 2) {
+        self->_bufPos = self->_fileSize;
     }
-    igPsx2File_GrowBuffer(arg0, arg0->_bufPos + s0);
-    memcpy(arg0->_fBuf + arg0->_bufPos, arg1, s0);
-    arg0->_bufPos = arg0->_bufPos + s0;
-    return s0 / arg2;
+    igPsx2File_GrowBuffer(self, self->_bufPos + bytes);
+    memcpy(self->_fBuf + self->_bufPos, buffer, bytes);
+    self->_bufPos = self->_bufPos + bytes;
+    return bytes / size;
 }
 
-int igPsx2File_Flush(igPsx2FileView *arg0) {
-    if (arg0->_isBinary != 0) return 0; sceLseek(arg0->_fileHandle, 0, 0); sceWrite(arg0->_fileHandle, arg0->_fBuf, arg0->_fileSize); return 0;
+int igPsx2File_Flush(igPsx2FileView *self) {
+    if (self->_isBinary != 0) return 0; sceLseek(self->_fileHandle, 0, 0); sceWrite(self->_fileHandle, self->_fBuf, self->_fileSize); return 0;
 }
 
 int Gap__Core__igPsx2File__vfunc_30(igPsx2FileView *self, const char *format, ...) {
@@ -330,181 +330,181 @@ int Gap__Core__igPsx2File__vfunc_30(igPsx2FileView *self, const char *format, ..
     return count;
 }
 
-int igPsx2File_Print(igPsx2FileView *arg0, int arg1, ...) {
+int igPsx2File_Print(igPsx2FileView *self, int format, ...) {
     char buf[16384];
     int n;
     int off;
     int len;
     int cur;
-    if (arg0->_isBinary != 0) {
+    if (self->_isBinary != 0) {
         return -1;
     }
     n = __builtin_args_info(2);
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    len = vsprintf(buf, arg1, (char *)__builtin_next_arg(arg1) - off);
-    cur = arg0->_bufPos + len;
-    if (cur >= arg0->_fileSize) {
-        igPsx2File_GrowBuffer(arg0, cur);
+    len = vsprintf(buf, format, (char *)__builtin_next_arg(format) - off);
+    cur = self->_bufPos + len;
+    if (cur >= self->_fileSize) {
+        igPsx2File_GrowBuffer(self, cur);
     }
-    memcpy(arg0->_fBuf + arg0->_bufPos, buf, len);
-    arg0->_bufPos = arg0->_bufPos + len;
+    memcpy(self->_fBuf + self->_bufPos, buf, len);
+    self->_bufPos = self->_bufPos + len;
     return len;
 }
 
-int igPsx2File_GetChar(igPsx2FileView *arg0) {
-    int sp1C;
+int igPsx2File_GetChar(igPsx2FileView *self) {
+    int c;
     int i;
 
-    if (arg0->_isBinary != 0) {
-        sceRead(arg0->_fileHandle, &sp1C, 1);
-        return sp1C;
+    if (self->_isBinary != 0) {
+        sceRead(self->_fileHandle, &c, 1);
+        return c;
     }
-    i = arg0->_bufPos;
-    if (i >= arg0->_fileSize) {
+    i = self->_bufPos;
+    if (i >= self->_fileSize) {
         return -1;
     }
-    arg0->_bufPos = i + 1;
-    return arg0->_fBuf[arg0->_bufPos - 1];
+    self->_bufPos = i + 1;
+    return self->_fBuf[self->_bufPos - 1];
 }
 
-int igPsx2File_UngetChar(igPsx2FileView *arg0, int arg1) {
-    int temp_v0;
-    int var_a1;
+int igPsx2File_UngetChar(igPsx2FileView *self, int c) {
+    int pos;
+    int result;
 
-    var_a1 = arg1;
-    if (arg0->_isBinary != 0) {
+    result = c;
+    if (self->_isBinary != 0) {
         return -1;
     }
-    temp_v0 = arg0->_bufPos;
-    if (temp_v0 == 0) {
+    pos = self->_bufPos;
+    if (pos == 0) {
         return -1;
     }
-    arg0->_bufPos = temp_v0 - 1;
-    if ((var_a1 & 0xFF) != arg0->_fBuf[arg0->_bufPos]) {
-        var_a1 = -1;
+    self->_bufPos = pos - 1;
+    if ((result & 0xFF) != self->_fBuf[self->_bufPos]) {
+        result = -1;
     }
-    return var_a1;
+    return result;
 }
 
-int igPsx2File_PutChar(igPsx2FileView *arg0, unsigned char arg1) {
-    int temp_a1;
+int igPsx2File_PutChar(igPsx2FileView *self, unsigned char c) {
+    int end;
 
-    if (arg0->_isBinary != 0) {
+    if (self->_isBinary != 0) {
         return -1;
     }
-    temp_a1 = arg0->_bufPos + 1;
-    if (temp_a1 >= arg0->_fileSize) {
-        igPsx2File_GrowBuffer(arg0, temp_a1);
+    end = self->_bufPos + 1;
+    if (end >= self->_fileSize) {
+        igPsx2File_GrowBuffer(self, end);
     }
-    arg0->_fBuf[arg0->_bufPos] = arg1;
-    arg0->_bufPos = arg0->_bufPos + 1;
-    return arg1;
+    self->_fBuf[self->_bufPos] = c;
+    self->_bufPos = self->_bufPos + 1;
+    return c;
 }
 
-char *igPsx2File_GetString(igPsx2FileView *arg0, char *arg1, int arg2) {
-    if (arg1 == 0) {
+char *igPsx2File_GetString(igPsx2FileView *self, char *buffer, int size) {
+    if (buffer == 0) {
         return 0;
     }
-    if (arg0->_isBinary != 0) {
+    if (self->_isBinary != 0) {
         return 0;
     }
-    if (arg0->_bufPos >= arg0->_fileSize) {
+    if (self->_bufPos >= self->_fileSize) {
         return 0;
     }
     int i = 0;
-    arg2 = arg2 - 1;
-    if (arg2 + arg0->_bufPos >= arg0->_fileSize) {
-        arg2 = arg0->_fileSize - arg0->_bufPos;
+    size = size - 1;
+    if (size + self->_bufPos >= self->_fileSize) {
+        size = self->_fileSize - self->_bufPos;
     }
-    while (i < arg2) {
-        unsigned char c = arg0->_fBuf[arg0->_bufPos];
-        arg1[i] = c;
+    while (i < size) {
+        unsigned char c = self->_fBuf[self->_bufPos];
+        buffer[i] = c;
         i++;
-        arg0->_bufPos = arg0->_bufPos + 1;
+        self->_bufPos = self->_bufPos + 1;
         if (c == 10) {
             break;
         }
     }
-    arg1[i] = 0;
-    return arg1;
+    buffer[i] = 0;
+    return buffer;
 }
 
-int igPsx2File_PutString(igPsx2FileView *arg0, char *arg1) {
-    int temp_a1;
-    int temp_v0;
+int igPsx2File_PutString(igPsx2FileView *self, char *text) {
+    int end;
+    int length;
 
-    if (arg1 == 0) {
+    if (text == 0) {
         return -1;
     }
-    if (arg0->_isBinary != 0) {
+    if (self->_isBinary != 0) {
         return -1;
     }
-    temp_v0 = strlen(arg1);
-    temp_a1 = arg0->_bufPos + temp_v0;
-    if (temp_a1 >= arg0->_fileSize) {
-        igPsx2File_GrowBuffer(arg0, temp_a1);
+    length = strlen(text);
+    end = self->_bufPos + length;
+    if (end >= self->_fileSize) {
+        igPsx2File_GrowBuffer(self, end);
     }
-    memcpy(arg0->_fBuf + arg0->_bufPos, arg1, temp_v0);
-    arg0->_bufPos = arg0->_bufPos + temp_v0;
-    return temp_v0;
+    memcpy(self->_fBuf + self->_bufPos, text, length);
+    self->_bufPos = self->_bufPos + length;
+    return length;
 }
 
-int igPsx2File_Seek(igPsx2FileView *arg0, int arg1, int arg2) {
+int igPsx2File_Seek(igPsx2FileView *self, int offset, int whence) {
     int s;
-    if (arg0->_isBinary != 0) {
-        switch (arg2) {
+    if (self->_isBinary != 0) {
+        switch (whence) {
         case 0:
-            s = sceLseek(arg0->_fileHandle, arg1, 0);
-            return -(s != arg1);
+            s = sceLseek(self->_fileHandle, offset, 0);
+            return -(s != offset);
         case 1:
-            s = arg0->vfunc_39();
-            return -(arg1 != sceLseek(arg0->_fileHandle, arg1, 1) - s);
+            s = self->tell();
+            return -(offset != sceLseek(self->_fileHandle, offset, 1) - s);
         case 2:
-            sceLseek(arg0->_fileHandle, arg1, 2);
+            sceLseek(self->_fileHandle, offset, 2);
             return 0;
         default:
             return -1;
         }
     } else {
-        switch (arg2) {
+        switch (whence) {
         case 0:
-            arg0->_bufPos = arg1;
+            self->_bufPos = offset;
             break;
         case 1:
-            arg0->_bufPos = arg0->_bufPos + arg1;
+            self->_bufPos = self->_bufPos + offset;
             break;
         case 2:
-            arg0->_bufPos = arg0->_fileSize + arg1;
+            self->_bufPos = self->_fileSize + offset;
             break;
         default:
             return -1;
         }
-        {int v1 = arg0->_fileSize; int v0 = arg0->_bufPos;
-        if (v1 < v0) arg0->_bufPos = v1;
-        else if (v0 < 0) arg0->_bufPos = 0;}
+        {int v1 = self->_fileSize; int v0 = self->_bufPos;
+        if (v1 < v0) self->_bufPos = v1;
+        else if (v0 < 0) self->_bufPos = 0;}
         return 0;
     }
 }
 
-int igPsx2File_Tell(igPsx2File *arg0) {
-    if (arg0->_isBinary != 0) {
-        return sceLseek(arg0->_fileHandle, 0, 1);
+int igPsx2File_Tell(igPsx2File *self) {
+    if (self->_isBinary != 0) {
+        return sceLseek(self->_fileHandle, 0, 1);
     }
-    return arg0->_bufPos;
+    return self->_bufPos;
 }
 
 void igPsx2File_InitDefaultPrefix(void) {
-    if (DAT_00587338[0] == 0) {
-        if (((int * *)DAT_00587330)[0] == 0) {
-            ((int * *)DAT_00587330)[0] = (int *)(&text_host0[0]);
+    if (g_igPsx2_useCdrom[0] == 0) {
+        if (((int * *)g_igPsx2File_defaultPrefix)[0] == 0) {
+            ((int * *)g_igPsx2File_defaultPrefix)[0] = (int *)(&text_host0[0]);
         }
     } else {
-        ((int * *)DAT_00587330)[0] = (int *)text_cdrom0;
+        ((int * *)g_igPsx2File_defaultPrefix)[0] = (int *)text_cdrom0;
     }
 }
 
 char *igPsx2File_MakeCompletePath(char *path) {
-    igStringRef text = igPsx2File_JoinPrefix((char *)DAT_00587330[0], path);
+    igStringRef text = igPsx2File_JoinPrefix((char *)g_igPsx2File_defaultPrefix[0], path);
     return (char *)Memory_Reallocate(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
@@ -517,7 +517,7 @@ char *igPsx2File_MakeCompleteFilename(igPsx2FileView *self, char *path) {
     return name.p;
 }
 
-static inline void append_32c240(const igSmartPointer<igStringObj> &ref, char *chars) {
+static inline void appendText(const igSmartPointer<igStringObj> &ref, char *chars) {
     igStringObj *text = ref.p;
     int length = text->_length;
     igStringObj_Insert(text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
@@ -534,10 +534,10 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
         igStringObj_Set((int)(text.get()), (int)prefix);
         c = *path;
         if (c != 0x5C && c != 0x2F) {
-            append_32c240(text, DAT_004ffbe8);
+            appendText(text, text_backslash);
         }
-        append_32c240(text, path);
-        append_32c240(text, DAT_004ffbf0);
+        appendText(text, path);
+        appendText(text, text_semicolon_1);
         limit = strlen(path) + 8;
         for (i = 7; i < limit; i++) {
             chars = (char *)text.get()->_buffer + i;
@@ -549,7 +549,7 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
         }
     } else {
         igStringObj_Set((int)(text.get()), (int)prefix);
-        append_32c240(text, path);
+        appendText(text, path);
     }
     chars = (char *)text.get()->_buffer;
     if (chars == 0) {
@@ -572,7 +572,7 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p, DAT_004f9a78, self->_folderName, (char *)(&entry.stat + 1));
+        igStringObj_Format((igStringObj *)path.p, percent_s_slash_percent_s, self->_folderName, (char *)(&entry.stat + 1));
         char *full = (char *)((igStringObj *)path.p)->_buffer;
         full = (full == 0) ? g_stringObjEmptyText[0] : full;
         if (sceGetstat(full, &stat) != 0) {
@@ -601,7 +601,7 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p, DAT_004f9a78, self->_folderName, (char *)(&entry.stat + 1));
+        igStringObj_Format((igStringObj *)path.p, percent_s_slash_percent_s, self->_folderName, (char *)(&entry.stat + 1));
         char *full = (char *)((igStringObj *)path.p)->_buffer;
         full = (full == 0) ? g_stringObjEmptyText[0] : full;
         if (sceGetstat(full, &stat) != 0) {

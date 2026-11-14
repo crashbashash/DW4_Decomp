@@ -4,7 +4,6 @@ static inline void dropNames(igTDataList<igStringObj *> *o) {
 
 static inline int countOf(igTDataList<igStringObj *> *l) { if (l != 0) { return l->_count; } return 0; }
 
-static inline char *textOf_2fb280(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
 void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *name) {
     igTDataList<igStringObj *> *names;
@@ -20,7 +19,7 @@ void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *nam
     if (held != 0) { held->_refCount = (int)held->_refCount + 1; }
     n = countOf(names);
     for (i = 0; i < n; i++) {
-        if (strcmp(textOf_2fb280(names->_data[i]), name) == 0) {
+        if (strcmp(igStringObj_Text(names->_data[i]), name) == 0) {
             self->_alignmentType = i;
             dropNames(names);
             return;
@@ -53,26 +52,26 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
     return igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
 }
 
-int igMemoryRefMetaField_IsAlikeExactly(igMemoryRefMetaField *arg0, int arg1, int arg2) {
-    int temp_v0;
+int igMemoryRefMetaField_IsAlikeExactly(igMemoryRefMetaField *self, int a, int b) {
+    int offset;
 
-    temp_v0 = arg0->_offset;
-    return *(int *)(arg1 + temp_v0) == *(int *)(arg2 + temp_v0);
+    offset = self->_offset;
+    return *(int *)(a + offset) == *(int *)(b + offset);
 }
 
-int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *arg0, int arg1, int arg2) {
+int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *self, int objectA, int objectB) {
     int off;
     int n;
     int a;
     int b;
     int i;
 
-    if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
-        return ((igMetaFieldView *)arg0)->IsAlikeShallow(arg1, arg2);
+    if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
+        return ((igMetaFieldView *)self)->IsAlikeShallow(objectA, objectB);
     }
-    off = arg0->_offset;
-    a = *(int *)(arg1 + off);
-    b = *(int *)(arg2 + off);
+    off = self->_offset;
+    a = *(int *)(objectA + off);
+    b = *(int *)(objectB + off);
     if (a == b) {
         return 1;
     }
@@ -91,42 +90,42 @@ int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *arg0, int arg1, int a
     return 1;
 }
 
-int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *arg0, int a1, int *arg2, void *arg3, int arg4) {
-    struct { int w0; } v;
-    int *arg1 = (int *)a1;
-    int t;
-    igMemoryDirEntry *e;
+int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *self, int destination, int *source, void *directory, int swapBytes) {
+    struct { int w0; } index;
+    int *out = (int *)destination;
+    int raw;
+    igMemoryDirEntry *entry;
 
-    if (arg3 != 0 && (t = *arg2) != -1) {
-        v.w0 = t;
-        if (arg4 != 0) {
-            ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&v.w0, 1);
+    if (directory != 0 && (raw = *source) != -1) {
+        index.w0 = raw;
+        if (swapBytes != 0) {
+            ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&index.w0, 1);
         }
-        e = (igMemoryDirEntry *)igDirectory_GetEntry((int *)arg3, v.w0);
-        if (e != 0) {
-            *arg1 = e->_ref;
-            if (arg0->_memType == 0 && arg0 != ((void * *)DAT_00585d88)[0]) {
-                arg0->_memType = e->_memType;
+        entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)directory, index.w0);
+        if (entry != 0) {
+            *out = entry->_ref;
+            if (self->_memType == 0 && self != ((void * *)g_igMemoryRefMetaField_descriptor)[0]) {
+                self->_memType = entry->_memType;
             }
         } else {
-            *arg1 = 0;
+            *out = 0;
         }
     } else {
-        *arg1 = 0;
+        *out = 0;
     }
     return 4;
 }
 
-int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *arg0, int arg1, int arg2) {
+int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *self, int objectA, int objectB) {
     int off;
     int n;
     char *a;
     char *b;
     int i;
 
-    off = arg0->_offset;
-    a = *(char **)(arg1 + off);
-    b = *(char **)(arg2 + off);
+    off = self->_offset;
+    a = *(char **)(objectA + off);
+    b = *(char **)(objectB + off);
     if (a == b) {
         return 1;
     }
@@ -145,36 +144,36 @@ int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *arg0, int arg1, in
     return 1;
 }
 
-void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *arg0, int arg1) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    char *temp_a0;
-    char *temp_s0;
+void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
+    int *header;
+    int references;
+    int pool;
+    char *previous;
+    char *interned;
 
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s0 = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1));
-    temp_a0 = (char *)arg0->_poolName;
-    if (temp_a0 != 0) {
-        temp_a1 = (int *)(temp_a0 - 8);
-        temp_v1 = *(int *)(temp_a0 - 4) - 1;
-        *(int *)(temp_a0 - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
+    previous = (char *)self->_poolName;
+    if (previous != 0) {
+        header = (int *)(previous - 8);
+        references = *(int *)(previous - 4) - 1;
+        *(int *)(previous - 4) = references;
+        if (references == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0->_poolName = (int)temp_s0;
+    self->_poolName = (int)interned;
 }
 
-int igMemoryRefMetaField_GetPoolName(int *p)
+int igMemoryRefMetaField_GetPoolName(igMemoryRefMetaField *self)
 {
-    return *(int *)((char *)p + 76);
+    return self->_poolName;
 }
 
 /* Run the base-class constructor, point the descriptor at its own vtable and

@@ -5,13 +5,13 @@ void igPsx2IopRpcConnection_InitDefaults(igPsx2IopRpcConnectionView *self) {
     self->_sema = CreateSema(&param);
 }
 
-void igPsx2IopRpcConnection_ReleaseDefaults(igPsx2IopRpcConnectionView *arg0) {
-    if (arg0->_dataMemory != 0) {
-        WaitSema(arg0->_sema);
-        igObject_FreeMemory((int)arg0, (int)arg0->_dataMemory);
+void igPsx2IopRpcConnection_ReleaseDefaults(igPsx2IopRpcConnectionView *self) {
+    if (self->_dataMemory != 0) {
+        WaitSema(self->_sema);
+        igObject_FreeMemory((int)self, (int)self->_dataMemory);
     }
-    igObject_FreeMemory((int)arg0, (int)arg0->_sifData);
-    DeleteSema(arg0->_sema);
+    igObject_FreeMemory((int)self, (int)self->_sifData);
+    DeleteSema(self->_sema);
 }
 
 /* Binds the SIF client to RPC server `serverId`, polling until the server answers. */
@@ -67,14 +67,14 @@ igResult igPsx2IopRpcConnection_Call(igPsx2IopRpcConnectionView *self, int funct
 igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, int function, int data, int *reply, int noWait) {
     const igResult *result;
     int status;
-    char *p;
-    char *q;
+    char *send;
+    char *receive;
 
     WaitSema(self->_sema);
     *(int *)self->_dataMemory = data;
     if (reply == 0) {
-        p = self->_dataMemory;
-        SyncDCache(p, p + 0xF);
+        send = self->_dataMemory;
+        SyncDCache(send, send + 0xF);
         if (noWait != 0) {
             status = sceSifCallRpc(self->_sifData, function, 2, self->_dataMemory, 0x10, 0, 0, 0, 0);
             SignalSema(self->_sema);
@@ -82,10 +82,10 @@ igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, i
             status = sceSifCallRpc(self->_sifData, function, 3, self->_dataMemory, 0x10, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, self->_sema);
         }
     } else {
-        p = self->_dataMemory;
-        q = p + 0x10;
-        status = sceSifCallRpc(self->_sifData, function, 0, p, 0x10, q, 0x10, 0, 0);
-        *reply = *(int *)q;
+        send = self->_dataMemory;
+        receive = send + 0x10;
+        status = sceSifCallRpc(self->_sifData, function, 0, send, 0x10, receive, 0x10, 0, 0);
+        *reply = *(int *)receive;
         SignalSema(self->_sema);
     }
     if (status >= 0) {
@@ -96,23 +96,23 @@ igResult igPsx2IopRpcConnection_CallWithData(igPsx2IopRpcConnectionView *self, i
     return *result;
 }
 
-void igPsx2IopRpcConnection_CallNoData(int *arg0, igPsx2IopRpcConnectionView *arg1, int arg2, int arg3) {
-    const int *var_v1;
-    int var_s1;
+void igPsx2IopRpcConnection_CallNoData(int *result, igPsx2IopRpcConnectionView *self, int function, int blocking) {
+    const int *status;
+    int callResult;
 
-    WaitSema(arg1->_sema);
-    if (arg3 != 0) {
-        var_s1 = sceSifCallRpc(arg1->_sifData, arg2, 2, 0, 0, 0, 0, 0, 0);
-        SignalSema(arg1->_sema);
+    WaitSema(self->_sema);
+    if (blocking != 0) {
+        callResult = sceSifCallRpc(self->_sifData, function, 2, 0, 0, 0, 0, 0, 0);
+        SignalSema(self->_sema);
     } else {
-        var_s1 = sceSifCallRpc(arg1->_sifData, arg2, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, arg1->_sema);
+        callResult = sceSifCallRpc(self->_sifData, function, 3, 0, 0, 0, 0, igPsx2IopRpcConnection_RpcEndCallback, self->_sema);
     }
-    if (var_s1 >= 0) {
-        var_v1 = &g_resultSuccess.v;
+    if (callResult >= 0) {
+        status = &g_resultSuccess.v;
     } else {
-        var_v1 = &g_resultFailure.v;
+        status = &g_resultFailure.v;
     }
-    *arg0 = *var_v1;
+    *result = *status;
 }
 
 void igPsx2IopRpcConnection_RpcEndCallback(int sema) {

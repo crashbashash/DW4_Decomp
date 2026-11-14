@@ -17,7 +17,7 @@ int igCharListNoClean_GetVTable(void) {
     igCharListNoClean list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00531a50[0];
+    list._vtable = (int)&g_igCharListNoClean_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

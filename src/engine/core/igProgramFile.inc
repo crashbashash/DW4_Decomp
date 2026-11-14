@@ -13,11 +13,11 @@ int igProgramFile_GetVTable(void) {
     int v0;
     int t;
     igObject_InitHeader((igObject *)&obj);
-    *(int **)&obj._vtable = &DAT_0052e010[0];
+    *(int **)&obj._vtable = &g_igProgramFile_vtable[0];
     obj._fileName = 0;
     obj._file = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj._vtable = (int)&DAT_0052e010[0];
+    obj._vtable = (int)&g_igProgramFile_vtable[0];
     if (&obj._file != 0) {
         o = (char *)obj._file;
         if (o != 0) {
@@ -68,20 +68,20 @@ void igProgramFile_GetMetaObjectFunction(void) {
 }
 
 void igProgramFile_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *fileField;
+    void *meta;
 
     ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_persistent = 0;
-    temp_s0 = (void *)(g_igProgramFile_metaObject[0]);
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igProgramFile_ctorTable[0], 2);
-    ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))))->_persistent = 0;
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFile_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_construct = 0;
-    ((igObjectRefMetaField *)temp_s1)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igProgramFile_fieldTable[0], (igMetaField ***)&DAT_004c1b18[0], &DAT_004c1b20[0], temp_s2);
+    meta = (void *)(g_igProgramFile_metaObject[0]);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igProgramFile_ctorTable[0], 2);
+    ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))))->_persistent = 0;
+    fileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fileField)->_construct = 0;
+    ((igObjectRefMetaField *)fileField)->_persistent = 0;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igProgramFile_fieldTable[0], (igMetaField ***)&g_igProgramFile_fieldDescriptors[0], &g_igProgramFile_fieldOffsets[0], base);
     ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_abstractProxy = (int)igElfFile_GetMetaObjectFunction;
 }
 

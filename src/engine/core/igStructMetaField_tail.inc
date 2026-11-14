@@ -1,30 +1,30 @@
-unsigned short igStructMetaField_GetSize(void *arg0) {
-    return *(int *)((char *)(arg0) + 20);
+unsigned short igStructMetaField_GetSize(void *self) {
+    return ((igMetaField *)self)->_size;
 }
 
-void igStructMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    strlen(arg2);
+void igStructMetaField_ValueFromString(int self, int value, int text) {
+    strlen(text);
 }
 
-void igStructMetaField_ValueToString(int *arg0, void *arg1) {
-    int temp_s0;
-    int var_v0;
-    int var_v1;
+void igStructMetaField_ValueToString(int *result, void *self) {
+    int name;
+    int pool;
+    int interned;
 
-    temp_s0 = *(int *)((char *)(arg1) + 12);
-    if (temp_s0 == 0) {
-        var_v1 = 0;
+    name = ((igMetaField *)self)->_fieldName;
+    if (name == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)temp_s0);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
     }
-    *arg0 = var_v1;
+    *result = interned;
 }
 
 /* Accessor: returns the field's byte alignment (`_alignment`, igIntMetaField, +52). */
@@ -74,8 +74,8 @@ int igStructMetaField_IsConstruct(igStructMetaField *self) {
     return self->_cppConstructor != 0;
 }
 
-void igSymbolTable_SetCapacity(int a0, int a1)
+void igSymbolTable_SetCapacity(int table, int capacity)
 {
-    *(int *)((char *)a0 + 8) = a1;
+    ((igSymbolTable *)table)->_capacity = capacity;
 }
 

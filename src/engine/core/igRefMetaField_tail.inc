@@ -12,27 +12,27 @@ void igRefMetaField_ClearValue(igMetaField *field,void *object) {
     memset(destination,0,((igMetaFieldView *)field)->GetSize() & 0xffff);
 }
 
-int igRefMetaField_ReadRawFieldMem(void *arg0, int a1, int *arg2, int arg3, int arg4) {
-    int sp3C;
-    int *arg1 = (int *)a1;
-    int temp_v1;
-    void **temp_v0;
-    void *temp_v0_2;
+int igRefMetaField_ReadRawFieldMem(void *self, int destination, int *source, int directory, int swap) {
+    int index;
+    int *object = (int *)destination;
+    int stored;
+    void **indexField;
+    igDirEntry *entry;
 
-    if ((arg3 != 0) && (temp_v1 = *arg2, (temp_v1 != -1))) {
-        sp3C = temp_v1;
-        if (arg4 != 0) {
-            temp_v0 = (void **)(((void **)igIntMetaField_GetDefaultDescriptor()));
-            ((igMetaFieldView *)(temp_v0))->SwapBytes(&sp3C, 1);
+    if ((directory != 0) && (stored = *source, (stored != -1))) {
+        index = stored;
+        if (swap != 0) {
+            indexField = (void **)(((void **)igIntMetaField_GetDefaultDescriptor()));
+            ((igMetaFieldView *)(indexField))->SwapBytes(&index, 1);
         }
-        temp_v0_2 = (void *)(igDirectory_GetEntry((int *)arg3, sp3C));
-        if (temp_v0_2 != 0) {
-            *arg1 = *(int *)((char *)(temp_v0_2) + 24);
+        entry = (igDirEntry *)(igDirectory_GetEntry((int *)directory, index));
+        if (entry != 0) {
+            *object = entry->_ref;
         } else {
-            *arg1 = 0;
+            *object = 0;
         }
     } else {
-        *arg1 = 0;
+        *object = 0;
     }
     return 4;
 }
@@ -46,16 +46,16 @@ int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, vo
         entry = (igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)directory, *source);
         if (*source != 0 && entry == 0) {
             if (self->_parentMetaObject != 0) {
-                if (!GPR_00554c20) {
+                if (!g_igMemoryRefMetaField_unresolvedFieldRefWarned) {
                     igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
                     int answer = igReportError(text_s_s_s_writeRawFieldMem_0x_x_0_0x, ((igMetaObject *)self->_parentMetaObject)->_name, self->_fieldName, meta->_name, source, (unsigned int)*source);
-                    if (answer != 1 && answer == 2) GPR_00554c20 = 1;
+                    if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedFieldRefWarned = 1;
                 }
             } else {
-                if (!GPR_00554c24) {
+                if (!g_igMemoryRefMetaField_unresolvedRefWarned) {
                     igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
                     int answer = igReportError(text_s_writeRawFieldMem_0x_x_0_0x_x_Not, meta->_name, source, (unsigned int)*source);
-                    if (answer != 1 && answer == 2) GPR_00554c24 = 1;
+                    if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedRefWarned = 1;
                 }
             }
         }
@@ -85,36 +85,36 @@ char *igRefMetaField_SkipPastChar(char *s, char ch) {
     return r;
 }
 
-int igRefMetaField_ArrayToString(igStringRef *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6) {
-    char spC0[256];
-    char spA0[32];
+int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int count, int directory, char *prefix, int width) {
+    char item[256];
+    char itemFormat[32];
     igMemoryPoolView *a;
     char *buf;
     char *w;
     int i;
 
-    if (arg5 == 0) arg5 = &GPR_00554c2c;
-    if (arg6 == -1) arg6 = strlen(arg5) + 5;
-    sprintf(spA0, DAT_004fb0c8, arg6);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((int)arg1));
+    if (prefix == 0) prefix = &g_igRefMetaField_defaultArrayPrefix;
+    if (width == -1) width = strlen(prefix) + 5;
+    sprintf(itemFormat, percent_percent_minus_percent_ds, width);
+    a = ((igMemoryPoolView *)igObject_GetAllocator((int)owner));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
-    buf = (char *)a->Allocate(arg3 * (strlen(spA0) + 0x80));
+    buf = (char *)a->Allocate(count * (strlen(itemFormat) + 0x80));
     w = buf;
-    for (i = 0; i < arg3; i++) {
-        sprintf(spC0, spA0, arg5);
+    for (i = 0; i < count; i++) {
+        sprintf(item, itemFormat, prefix);
         if (i == 0) {
-            if (arg3 > 1) {
-                sprintf(w, DAT_004fb0d0, spC0);
+            if (count > 1) {
+                sprintf(w, percent_s_open_brace_open_brace_space, item);
             } else {
                 goto block12;
             }
         } else {
 block12:
-            sprintf(w, DAT_004fb0d8, spC0);
+            sprintf(w, percent_s_open_brace_space, item);
         }
         w = buf + strlen(buf);
-        if (arg4 != 0) {
-            igDirEntryView *r = ((igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)arg4, (unsigned)(*arg2)));
+        if (directory != 0) {
+            igDirEntryView *r = ((igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)directory, (unsigned)(*refs)));
             if (r != 0) {
                 sprintf(w, text_Reference_d, r->_index);
             } else {
@@ -124,13 +124,13 @@ block12:
             sprintf(w, text_Reference_1);
         }
     }
-    igStringRef sp1CC(buf);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((int)arg1));
+    igStringRef text(buf);
+    a = ((igMemoryPoolView *)igObject_GetAllocator((int)owner));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     a->Free(buf);
-    char *src = sp1CC.p;
-    arg0->p = src;
-    if (arg0->p != 0) *(int *)(arg0->p - 4) = *(int *)(arg0->p - 4) + 1;
+    char *src = text.p;
+    out->p = src;
+    if (out->p != 0) *(int *)(out->p - 4) = *(int *)(out->p - 4) + 1;
     return 0;
 }
 
@@ -144,7 +144,7 @@ int igRefMetaField_ArrayFromString(int self, int str, int *out, int n, igDirecto
         s = ((int)igRefMetaField_SkipPastChar((char *)s, (char)0x7b));
         if (list != 0) {
             s = ((int)igRefMetaField_SkipPastChar((char *)s, (char)0x5b));
-            if (sscanf(s, &DAT_004f95c0[0], &idx) == 0) idx = -1;
+            if (sscanf(s, &percent_d_7[0], &idx) == 0) idx = -1;
             if (idx >= 0 && idx < list->_count) {
                 e = ((igDirEntry *)igDirectory_GetEntry((int *)list, idx));
                 if (e != 0) o[i] = e->_ref;
@@ -155,11 +155,11 @@ int igRefMetaField_ArrayFromString(int self, int str, int *out, int n, igDirecto
     return s - str;
 }
 
-int igRefMetaField_Compare(igRefMetaField *arg0, int arg1, int arg2) {
-    int temp_v0;
+int igRefMetaField_Compare(igRefMetaField *self, int a, int b) {
+    int offset;
 
-    temp_v0 = arg0->_offset;
-    return *(int *)(arg1 + temp_v0) - *(int *)(arg2 + temp_v0);
+    offset = self->_offset;
+    return *(int *)(a + offset) - *(int *)(b + offset);
 }
 
 void *igRefMetaField_Construct(igRefMetaField *self) {

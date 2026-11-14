@@ -154,8 +154,8 @@ int igStandardQueue_GetMaxCapacity(igStandardQueue *self) {
     return self->_maxCapacity;
 }
 
-int **SystemAllocatorBase_Construct(int **arg0) {
-    *arg0 = &g_vtable[0];
-    return arg0;
+int **SystemAllocatorBase_Construct(int **self) {
+    *self = &g_vtable[0];
+    return self;
 }
 

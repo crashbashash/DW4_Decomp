@@ -13,13 +13,13 @@ int igEnumArrayMetaField_GetSize(igEnumArrayMetaField *self) {
     return (self->_num * 4) & 0xFFFF;
 }
 
-void igEnumArrayMetaField_SetDefault(void *arg0, int arg1) {
+void igEnumArrayMetaField_SetDefault(void *self, int value) {
     int *a;
     int i;
-    ((igMetaFieldView *)arg0)->SetDefault(0);
-    a = (int *)*(int *)((char *)arg0 + 32);
-    for (i = 0; i < *(int *)((char *)arg0 + 56); i++) {
-        a[i] = arg1;
+    ((igMetaFieldView *)self)->SetDefault(0);
+    a = (int *)((igEnumArrayMetaField *)self)->_default;
+    for (i = 0; i < ((igEnumArrayMetaField *)self)->_num; i++) {
+        a[i] = value;
     }
 }
 

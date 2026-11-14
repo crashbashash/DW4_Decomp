@@ -16,10 +16,10 @@ int igPsx2Folder_GetVTable(void) {
     igObject_InitHeader((igObject *)&folder);
     ps = (char *)&folder._folderName;
     *(int *)ps = 0;
-    folder._vtable = (int)&DAT_0052fee0[0];
-    folder._vtable = (int)&DAT_0052db90[0];
+    folder._vtable = (int)&g_igFolder_vtable[0];
+    folder._vtable = (int)&g_igPsx2Folder_vtable[0];
     s0 = *(int *)((char *)&folder + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    folder._vtable = (int)&DAT_0052fee0[0];
+    folder._vtable = (int)&g_igFolder_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

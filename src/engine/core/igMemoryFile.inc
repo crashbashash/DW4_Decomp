@@ -1,6 +1,6 @@
-void igMemoryFile_Create(int arg0) {
+void igMemoryFile_Create(int pool) {
     igMemoryFile_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igMemoryFile_GetMetaObject(void)
@@ -13,28 +13,28 @@ igMetaObject *igMemoryFile_GetMetaObject(void)
 
 int igMemoryFile_GetVTable(void) {
     igMemoryFile file;
-    int temp_s0;
+    int vtable;
 
     igObject_InitHeader((igObject *)&file);
     file._name = 0;
     file._fileName = 0;
     file._completeFilename = 0;
-    file._vtable = (int)(&DAT_0052f7b0[0]);
-    temp_s0 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    file._vtable = (int)(&DAT_0052f7b0[0]);
+    file._vtable = (int)(&g_igMemoryFile_vtable[0]);
+    vtable = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    file._vtable = (int)(&g_igMemoryFile_vtable[0]);
     igFile_Destroy((igFile *)&file, 0);
-    return temp_s0;
+    return vtable;
 }
 
-void *igFile_Destroy(igFile *arg0, short arg1) {
+void *igFile_Destroy(igFile *self, short deleteFlag) {
     void *p;
     int *h;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->_vtable = (int)&DAT_00530150[0];
-        if (&arg0->_completeFilename) {
-            p = (void *)arg0->_completeFilename;
+    if (self != 0) {
+        self->_vtable = (int)&g_igFile_vtable[0];
+        if (&self->_completeFilename) {
+            p = (void *)self->_completeFilename;
             if (p != 0) {
                 h = (int *)((char *)(p) - 8);
                 rc = *(int *)((char *)(p) - 4) - 1;
@@ -44,8 +44,8 @@ void *igFile_Destroy(igFile *arg0, short arg1) {
                 }
             }
         }
-        if (&arg0->_fileName) {
-            p = (void *)arg0->_fileName;
+        if (&self->_fileName) {
+            p = (void *)self->_fileName;
             if (p != 0) {
                 h = (int *)((char *)(p) - 8);
                 rc = *(int *)((char *)(p) - 4) - 1;
@@ -55,10 +55,10 @@ void *igFile_Destroy(igFile *arg0, short arg1) {
                 }
             }
         }
-        if (arg0 != 0) {
-            arg0->_vtable = (int)&g_igNamedObject_vtable[0];
-            if (&arg0->_name) {
-                p = (void *)arg0->_name;
+        if (self != 0) {
+            self->_vtable = (int)&g_igNamedObject_vtable[0];
+            if (&self->_name) {
+                p = (void *)self->_name;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;
@@ -69,11 +69,11 @@ void *igFile_Destroy(igFile *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) {
-            thunk_Memory_FreeBuffer((int)arg0);
+        if (deleteFlag > 0) {
+            thunk_Memory_FreeBuffer((int)self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void igMemoryFile_EnsureRegistered(void)
@@ -107,14 +107,14 @@ igMetaObject *igFile_GetPublishedMetaObject(void) {
 }
 
 void igMemoryFile_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int first;
+    void *meta;
 
-    temp_s0 = (void *)(g_igMemoryFile_metaObject[0]);
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryFile_ctorTable[0], 4);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryFile_fieldTable[0], (igMetaField ***)&DAT_004c02b0[0], &DAT_004c02c0[0], temp_s1);
-    *(int *)((char *)(g_igMemoryFile_metaObject[0]) + 64) = (int)(&igFile_GetMetaObjectFunction);
+    meta = (void *)(g_igMemoryFile_metaObject[0]);
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igMemoryFile_ctorTable[0], 4);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMemoryFile_fieldTable[0], (igMetaField ***)&g_igMemoryFile_fieldDescriptors[0], &g_igMemoryFile_fieldOffsets[0], first);
+    g_igMemoryFile_metaObject[0]->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
     igMetaObject_AddExitCallback((int)&igMemoryFile_ExitCallback);
 }
 

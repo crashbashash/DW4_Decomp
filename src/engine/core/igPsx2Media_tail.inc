@@ -1,6 +1,6 @@
-void igPsx2Media_Create(int arg0) {
+void igPsx2Media_Create(int pool) {
     igPsx2Media_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2Media_GetMetaObject(void)
@@ -13,54 +13,48 @@ igMetaObject *igPsx2Media_GetMetaObject(void)
 
 int igPsx2Media_GetVTable(void) {
     igPsx2Media media;
-    int temp_s2;
-    igObject * q1;
-    igObject * q0;
-    igObject * q2;
-
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
-
+    int result;
+    igObject * sema;
+    igObject * connection;
+    igObject * conversionString;
     igObject_InitHeader((igObject *)&media);
-    media._vtable = (int)(&DAT_0052da00[0]);
-    q0 = (igObject *)&media._connection;
-    *(int *)q0 = 0;
-    q1 = (igObject *)&media._sema;
-    *(int *)q1 = 0;
-    q2 = (igObject *)&media._conversionString;
-    *(int *)q2 = 0;
-    temp_s2 = *(int *)((char *)&media + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    media._vtable = (int)(&DAT_0052da00[0]);
-    if (q2 != 0) {
-        q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)((int) (q2->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
+    media._vtable = (int)(&g_igPsx2Media_vtable[0]);
+    connection = (igObject *)&media._connection;
+    *(int *)connection = 0;
+    sema = (igObject *)&media._sema;
+    *(int *)sema = 0;
+    conversionString = (igObject *)&media._conversionString;
+    *(int *)conversionString = 0;
+    result = *(int *)((char *)&media + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    media._vtable = (int)(&g_igPsx2Media_vtable[0]);
+    if (conversionString != 0) {
+        conversionString = *(igObject **)conversionString;
+        if (conversionString != 0) {
+            conversionString->_refCount = (int)((int) (conversionString->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) conversionString->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(conversionString);
             }
         }
     }
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)((int) (q1->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
+    if (sema != 0) {
+        sema = *(igObject **)sema;
+        if (sema != 0) {
+            sema->_refCount = (int)((int) (sema->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) sema->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(sema);
             }
         }
     }
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)((int) (q0->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+    if (connection != 0) {
+        connection = *(igObject **)connection;
+        if (connection != 0) {
+            connection->_refCount = (int)((int) (connection->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) connection->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(connection);
             }
         }
     }
-    return temp_s2;
+    return result;
 }
 
 void igPsx2Media_EnsureRegistered(void)
@@ -90,43 +84,43 @@ igMetaObject *igMedia_GetPublishedMetaObject(void) {
 }
 
 void igPsx2Media_InitFields(void) {
-    int temp_s1;
-    void *temp_s2;
-    igRawRefMetaField *t5;
-    void *temp_s0;
+    int base;
+    void *field;
+    igRawRefMetaField *handlePoolField;
+    void *meta;
 
-    temp_s0 = (void *)g_igPsx2Media_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2Media_ctorTable[0], 8);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
-    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igPsx2IopRpcConnection_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
-    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
-    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
-    ((igMemoryRefMetaField *)temp_s2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igMemoryRefMetaField *)temp_s2)->_resetMethod = 3;
-    ((igMemoryRefMetaField *)temp_s2)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s2)->_releaseOnReset = 1;
-    t5 = (igRawRefMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
-    t5->_resetMethod = 3;
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2Media_fieldTable[0], (igMetaField ***)&DAT_004c1d90[0], &DAT_004c1db0[0], temp_s1);
+    meta = (void *)g_igPsx2Media_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2Media_ctorTable[0], 8);
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igPsx2IopRpcConnection_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_construct = 1;
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_construct = 1;
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_resetMethod = 3;
+    ((igMemoryRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    handlePoolField = (igRawRefMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
+    handlePoolField->_resetMethod = 3;
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2Media_fieldTable[0], (igMetaField ***)&g_igPsx2Media_fieldDescriptors[0], &g_igPsx2Media_fieldOffsets[0], base);
 }
 

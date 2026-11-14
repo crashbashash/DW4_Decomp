@@ -1,23 +1,26 @@
-void igStringTable_SetCapacity(int a0, int a1)
+void igStringTable_SetCapacity(int object, int capacity)
 {
-    *(int *)((char *)a0 + 8) = a1;
+    igStringTable *self = (igStringTable *)object;
+    self->_capacity = capacity;
 }
 
-void igStringTable_SetHashCapacity(int a0, int a1)
+void igStringTable_SetHashCapacity(int object, int hashCapacity)
 {
-    *(int *)((char *)a0 + 12) = a1;
+    igStringTable *self = (igStringTable *)object;
+    self->_hashCapacity = hashCapacity;
 }
 
-void igStringTable_Reserve(void *arg0) {
-    int temp_a1;
-    void *temp_a0;
+void igStringTable_Reserve(void *object) {
+    igStringTable *self = (igStringTable *)object;
+    int capacity;
+    igDataList *strings;
 
-    temp_a1 = *(int *)((char *)(arg0) + 8);
-    temp_a0 = (void *)(*(int *)((char *)(arg0) + 16));
-    if (temp_a1 >= *(int *)((char *)(temp_a0) + 8)) {
-        List_Reserve((igDataList *)temp_a0, temp_a1, 1);
+    capacity = self->_capacity;
+    strings = (igDataList *)self->_strings;
+    if (capacity >= strings->_count) {
+        List_Reserve(strings, capacity, 1);
     }
-    ((igStringTableView *)(((char *)(arg0) + 0)))->setHashing((int)(*(int *)((char *)(arg0) + 12)));
+    ((igStringTableView *)self)->setHashing(self->_hashCapacity);
 }
 
 void igStringTable_Clear(igStringTableView *table) {
@@ -49,10 +52,10 @@ void igStringTable_Clear(igStringTableView *table) {
     }
 }
 
-void igStringTable_RemoveAll(int arg0) {
-    int sp1C;
+void igStringTable_RemoveAll(int self) {
+    int result;
 
-    igStringTable_Truncate(&sp1C, (igStringTableView *)arg0, 0);
+    igStringTable_Truncate(&result, (igStringTableView *)self, 0);
 }
 
 int igStringTable_GetCount(igStringTableView *table) {
@@ -118,15 +121,15 @@ void igStringTable_Truncate(int *result, igStringTableView *table, int count) {
     }
 }
 
-char *igStringTable_GetString(int *arg0, int arg1) {
+char *igStringTable_GetString(int *self, int index) {
     int *t;
     char *p;
     char *r;
-    if (arg1 < 0 || arg1 >= (t = (int *)arg0[4])[2] || (p = (char *)t[4]) == 0) {
+    if (index < 0 || index >= (t = (int *)self[4])[2] || (p = (char *)t[4]) == 0) {
         r = 0;
     } else {
-        r = p + arg1;
-        if (arg1 > 0 && r[-1] != 0) r = 0;
+        r = p + index;
+        if (index > 0 && r[-1] != 0) r = 0;
     }
     return r;
 }
@@ -153,13 +156,13 @@ int igStringTable_AppendString(igStringTableView *self, char *s) {
     return offset;
 }
 
-int igStringTable_FindOrAddString(int arg0, int arg1) {
-    int r = igStringTable_Find((igStringTableView *)arg0, arg1);
+int igStringTable_FindOrAddString(int self, int string) {
+    int r = igStringTable_Find((igStringTableView *)self, string);
     if (r != -1) return r;
-    return igStringTable_AppendString((igStringTableView *)arg0, (char *)arg1);
+    return igStringTable_AppendString((igStringTableView *)self, (char *)string);
 }
 
-int igStringTable_Find(igStringTableView *arg0, unsigned int arg1) {
+int igStringTable_Find(igStringTableView *self, unsigned int string) {
     igTDataList<int> *t;
     int idx;
     int off;
@@ -168,17 +171,17 @@ int igStringTable_Find(igStringTableView *arg0, unsigned int arg1) {
     char *s;
     char *end;
 
-    t = arg0->_hashIndex;
+    t = self->_hashIndex;
     if (t != 0 && t->_count != 0) {
-        idx = arg0->hash((char *)arg1);
+        idx = self->hash((char *)string);
         cnt = 0;
-        n = arg0->_hashIndex->_count;
+        n = self->_hashIndex->_count;
         for (;;) {
-            off = arg0->_hashIndex->_data[idx];
+            off = self->_hashIndex->_data[idx];
             if (off == -1) {
                 return -1;
             }
-            if (strcmp(arg0->_strings->_data + off, arg1) == 0) {
+            if (strcmp(self->_strings->_data + off, string) == 0) {
                 return off;
             }
             idx += 1;
@@ -191,11 +194,11 @@ int igStringTable_Find(igStringTableView *arg0, unsigned int arg1) {
             }
         }
     }
-    s = arg0->_strings->_data;
-    end = s + arg0->_strings->_count;
+    s = self->_strings->_data;
+    end = s + self->_strings->_count;
     while (s < end) {
-        if (strcmp(arg1, s) == 0) {
-            return s - arg0->_strings->_data;
+        if (strcmp(string, s) == 0) {
+            return s - self->_strings->_data;
         }
         s += strlen(s) + 1;
     }
@@ -258,7 +261,7 @@ done:
     return 1;
 }
 
-void igStringTable_SetHashing(igStringTableView *arg0, int arg1) {
+void igStringTable_SetHashing(igStringTableView *self, int enable) {
     igTDataList<int> *old;
     igTDataList<int> *l;
     int alloc;
@@ -268,50 +271,50 @@ void igStringTable_SetHashing(igStringTableView *arg0, int arg1) {
     char *base;
     char *end;
     char *p;
-    igStringTable_SetHashCapacity((int)arg0, arg1);
-    if (arg1 != 0) {
-        if (arg0->_hashIndex == 0) {
-            alloc = ((int)igObject_GetAllocator((int)arg0));
-            old = arg0->_hashIndex;
+    igStringTable_SetHashCapacity((int)self, enable);
+    if (enable != 0) {
+        if (self->_hashIndex == 0) {
+            alloc = ((int)igObject_GetAllocator((int)self));
+            old = self->_hashIndex;
             if (old != 0) {
                 --old->_refCount;
                 if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0) {
                     igObject_Destroy(old);
                 }
             }
-            arg0->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(alloc);
+            self->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(alloc);
         }
-        l = arg0->_hashIndex;
-        if (arg1 >= 0) {
-            if (arg1 <= l->_capacity) {
-                l->_count = arg1;
+        l = self->_hashIndex;
+        if (enable >= 0) {
+            if (enable <= l->_capacity) {
+                l->_count = enable;
             } else {
-                List_Resize(l, arg1, 4);
+                List_Resize(l, enable, 4);
             }
         }
-        l = arg0->_hashIndex;
-        if (arg1 >= l->_count) {
-            List_Reserve((igDataList *)l, arg1, 4);
+        l = self->_hashIndex;
+        if (enable >= l->_count) {
+            List_Reserve((igDataList *)l, enable, 4);
         }
-        l = arg0->_hashIndex;
+        l = self->_hashIndex;
         n = l->_count;
         data = l->_data;
         i = 0;
         while (i < n) {
-            data[i] = DAT_004c22f8[0];
+            data[i] = g_igStringTable_emptyHashSlot[0];
             i++;
         }
-        base = arg0->_strings->_data;
+        base = self->_strings->_data;
         p = base;
-        end = base + arg0->_strings->_count;
+        end = base + self->_strings->_count;
         while (p < end) {
-            if (arg0->insert(p, p - base) == 0) {
+            if (self->insert(p, p - base) == 0) {
                 return;
             }
             p += strlen(p) + 1;
         }
     } else {
-        old = arg0->_hashIndex;
+        old = self->_hashIndex;
         if (old != 0) {
             if (old != 0) {
                 --old->_refCount;
@@ -319,7 +322,7 @@ void igStringTable_SetHashing(igStringTableView *arg0, int arg1) {
                     igObject_Destroy(old);
                 }
             }
-            arg0->_hashIndex = 0;
+            self->_hashIndex = 0;
         }
     }
 }

@@ -16,11 +16,11 @@ int igPsx2Thread_GetVTable(void) {
     igObject_InitHeader((igObject *)&thread);
     p0 = (igObject *)&thread._name;
     *(int *)p0 = 0;
-    thread._vtable = (int)&DAT_0052d7c0[0];
+    thread._vtable = (int)&g_igPsx2Thread_vtable[0];
     p1 = (igObject *)&thread._threadDoneSema;
     *(int *)p1 = 0;
     t = *(int *)((char *)&thread + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    thread._vtable = (int)&DAT_0052d7c0[0];
+    thread._vtable = (int)&g_igPsx2Thread_vtable[0];
     if (p1 != 0) {
         p1 = *(igObject **)p1;
         if (p1 != 0) {
@@ -72,19 +72,19 @@ igMetaObject *igThread_GetPublishedMetaObject(void) {
 }
 
 void igPsx2Thread_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    igObjectRefMetaField *field;
+    void *meta;
 
-    temp_s0 = (void *)(g_igPsx2Thread_metaObject[0]);
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2Thread_ctorTable[0], 6);
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igSemaphore_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 52) = 1;
-    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3))), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2Thread_fieldTable[0], (igMetaField ***)&DAT_004c1cc0[0], &DAT_004c1ce0[0], temp_s2);
+    meta = (void *)(g_igPsx2Thread_metaObject[0]);
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2Thread_ctorTable[0], 6);
+    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))), -1);
+    field = (igObjectRefMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    field->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    field->_construct = 1;
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), 1);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2Thread_fieldTable[0], (igMetaField ***)&g_igPsx2Thread_fieldDescriptors[0], &g_igPsx2Thread_fieldOffsets[0], base);
     *(int *)((char *)(g_igPsx2Thread_metaObject[0]) + 64) = (int)(&igThread_GetMetaObjectFunction);
 }
 

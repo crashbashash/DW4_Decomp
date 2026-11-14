@@ -1,30 +1,30 @@
-int igUnsignedIntMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    int sp1C;
+int igUnsignedIntMetaField_ValueFromString(int self, int value, int text) {
+    int consumed;
 
-    sp1C = 0;
-    sscanf(arg2, &DAT_004fb440[0], arg1, &sp1C);
-    return sp1C;
+    consumed = 0;
+    sscanf(text, &text_u_n[0], value, &consumed);
+    return consumed;
 }
 
-void igUnsignedIntMetaField_ValueToString(int *arg0, void *arg1, int *arg2) {
-    int sp20[256];
-    int var_v0;
-    int var_v1;
+void igUnsignedIntMetaField_ValueToString(int *out, void *self, int *value) {
+    int buffer[256];
+    int pool;
+    int interned;
 
-    sprintf(sp20, &DAT_004fb448[0], *arg2);
-    if (sp20 == 0) {
-        var_v1 = 0;
+    sprintf(buffer, &percent_ud[0], *value);
+    if (buffer == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
     }
-    *arg0 = var_v1;
+    *out = interned;
 }
 
 /* Vtable slot 53 of igNonRefCountedThreadList: a constant leaf returning 4. The list's element
@@ -50,21 +50,21 @@ void *igUnsignedIntMetaField_Init(igMetaField *self) {
     return self;
 }
 
-int **igUnsignedIntMetaField_CopyConstruct(int **arg0, int extra1) {
-    igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
-    *arg0 = &g_igUnsignedIntMetaField_vtable[0];
-    return arg0;
+int **igUnsignedIntMetaField_CopyConstruct(int **self, int source) {
+    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
+    *self = &g_igUnsignedIntMetaField_vtable[0];
+    return self;
 }
 
 void igUnsignedIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void igUnsignedIntMetaField_SetDefaultValue(void **arg0, int arg1) {
-    int sp1C;
+void igUnsignedIntMetaField_SetDefaultValue(void **self, int value) {
+    int stored;
 
-    sp1C = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
+    stored = value;
+    ((igMetaFieldView *)(self))->SetDefault(&stored);
 }
 
 int igUnsignedIntMetaField_GetAlignment(void) {

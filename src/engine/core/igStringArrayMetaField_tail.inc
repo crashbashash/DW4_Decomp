@@ -5,66 +5,66 @@ void igStringArrayMetaField_SwapBytes(igStringArrayMetaField *self, int item, in
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
-int igStringArrayMetaField_ReadRawFieldMem(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
-    int arg1 = (int)parg1;
-    int arg2 = (int)parg2;
-    int start = arg2;
+int igStringArrayMetaField_ReadRawFieldMem(igStringArrayMetaField *self, void *values, void *buffer, int directory, int swapBytes) {
+    int value = (int)values;
+    int cursor = (int)buffer;
+    int start = cursor;
     int i;
-    for (i = 0; i < arg0->_num; i++) {
-        arg2 = arg2 + igStringMetaField_ReadRawValue((void *)arg0, (void *)arg1, (void *)arg2, arg3, arg4);
-        arg1 += 4;
+    for (i = 0; i < self->_num; i++) {
+        cursor = cursor + igStringMetaField_ReadRawValue((void *)self, (void *)value, (void *)cursor, directory, swapBytes);
+        value += 4;
     }
-    return arg2 - start;
+    return cursor - start;
 }
 
-int igStringArrayMetaField_WriteRawFieldMem(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
-    int arg1 = (int)parg1;
-    int arg2 = (int)parg2;
-    int start = arg2;
+int igStringArrayMetaField_WriteRawFieldMem(igStringArrayMetaField *self, void *values, void *buffer, int directory, int swapBytes) {
+    int value = (int)values;
+    int cursor = (int)buffer;
+    int start = cursor;
     int i;
-    for (i = 0; i < arg0->_num; i++) {
-        arg2 = arg2 + igStringMetaField_WriteRawValue((void *)arg0, (void *)arg1, (void *)arg2, arg3, arg4);
-        arg1 += 4;
+    for (i = 0; i < self->_num; i++) {
+        cursor = cursor + igStringMetaField_WriteRawValue((void *)self, (void *)value, (void *)cursor, directory, swapBytes);
+        value += 4;
     }
-    return ((arg2 - start) + 3) & ~3;
+    return ((cursor - start) + 3) & ~3;
 }
 
-void igStringArrayMetaField_DestructValue(igStringArrayMetaField *arg0, int arg1) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    int *var_s1;
-    int var_s0;
-    int temp_a0;
-    int temp_s3;
+void igStringArrayMetaField_DestructValue(igStringArrayMetaField *self, int object) {
+    int *header;
+    int references;
+    int pool;
+    int *slot;
+    int i;
+    int previous;
+    int empty;
 
-    if (arg0->_destruct != 0) {
-        var_s1 = (int *)(arg1 + arg0->_offset);
-        for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
+    if (self->_destruct != 0) {
+        slot = (int *)(object + self->_offset);
+        for (i = 0; i < self->_num; i++) {
             if (g_stringPool[0] == 0) {
-                var_v0 = ((int)StringPool_Allocate(0x10));
-                if (var_v0 != 0) {
-                    var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+                pool = ((int)StringPool_Allocate(0x10));
+                if (pool != 0) {
+                    pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool[0] = var_v0;
+                g_stringPool[0] = pool;
             }
-            temp_s3 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
-            temp_a0 = *var_s1;
-            if (temp_a0 != 0) {
-                temp_a1 = (int *)(temp_a0 - 8);
-                temp_v1 = *(int *)(temp_a0 - 4) - 1;
-                *(int *)(temp_a0 - 4) = temp_v1;
-                if (temp_v1 == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+            empty = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
+            previous = *slot;
+            if (previous != 0) {
+                header = (int *)(previous - 8);
+                references = *(int *)(previous - 4) - 1;
+                *(int *)(previous - 4) = references;
+                if (references == 0) {
+                    StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
                 }
             }
-            *var_s1 = temp_s3;
-            var_s1 += 1;
+            *slot = empty;
+            slot += 1;
         }
     }
 }
 
-int igStringArrayMetaField_GetSize(void *arg0) {
-    return (*(int *)((char *)(arg0) + 60) * 4) & 0xFFFF;
+int igStringArrayMetaField_GetSize(void *field) {
+    return (((igStringArrayMetaField *)field)->_num * 4) & 0xFFFF;
 }
 

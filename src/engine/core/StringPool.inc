@@ -67,22 +67,22 @@ int StringPool_Intern(StringPool *pool, const char *name)
     return copy;
 }
 
-void * StringPool_Allocate(int arg0) {
-    void **temp_v0;
+void * StringPool_Allocate(int size) {
+    void **allocator;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
-    return ((igMemoryPoolView *)temp_v0)->Allocate(arg0);
+    allocator = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
+    return ((igMemoryPoolView *)allocator)->Allocate(size);
 }
 
-void StringPool_OperatorDelete(int arg0) {
-    void **temp_v0;
+void StringPool_OperatorDelete(int pool) {
+    void **allocator;
 
-    temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
-    ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
+    allocator = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
+    ((igMemoryPoolView *)(allocator))->Free((void *)pool);
 }
 
-void StringPool_SetBlockSize(int a0, int a1)
+void StringPool_SetBlockSize(int pool, int chunkSize)
 {
-    *(int *)((char *)a0 + 8) = a1;
+    ((StringPool *)pool)->chunkSize = chunkSize;
 }
 

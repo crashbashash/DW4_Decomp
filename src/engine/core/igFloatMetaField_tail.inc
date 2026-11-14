@@ -2,11 +2,11 @@ int igFloatMetaField_GetSize(void) {
     return 4;
 }
 
-void igFloatMetaField_SetDefault(void **arg0, float fparg0) {
-    float sp1C;
+void igFloatMetaField_SetDefault(void **self, float value) {
+    float defaultValue;
 
-    sp1C = fparg0;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
+    defaultValue = value;
+    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
 }
 
 int igFloatMetaField_GetAlignment(void) {

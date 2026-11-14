@@ -10,7 +10,7 @@ int igPsx2ThreadManager_GetVTable(void) {
     igPsx2ThreadManager manager;
 
     igObject_InitHeader((igObject *)&manager);
-    manager._vtable = (int)&DAT_0052d750[0];
+    manager._vtable = (int)&g_igPsx2ThreadManager_vtable[0];
     return *(int *)((char *)&manager + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -30,7 +30,7 @@ void igPsx2ThreadManager_Register(void) {
         igPsx2ThreadManager_className,
         0x10,
         igPsx2ThreadManager_GetVTable,
-        (igMetaObjectCallback)igPsx2ThreadManager_InitFields_002cf3f0,
+        igPsx2ThreadManager_SetWriteProxy,
         0,
         0
     );

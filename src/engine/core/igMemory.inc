@@ -33,7 +33,7 @@ void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned short alig
 void *Memory_Callocate(unsigned int size, unsigned int alignment)
 {
     igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
-    return allocator->vfunc_56(size, alignment);
+    return allocator->Callocate(size, alignment);
 }
 
 void *Memory_ReallocateBuffer(void *buffer, unsigned int size)
@@ -120,7 +120,7 @@ void *Memory_DuplicateBuffer(void *source)
 
 int Memory_Reallocate(void *block, igMemoryPoolView *pool)
 {
-    return pool->vfunc_58(block);
+    return pool->StrDup(block);
 }
 
 void Memory_FreeBufferAliasB(void *buffer)
@@ -149,7 +149,7 @@ void Memory_FreeOwnedBufferUnchecked(void *buffer)
                 addr = addr + N; \
                 if ((unsigned long long)addr >= end) { more = 0; break; } \
             } \
-            EMIT(DAT_004f95c8); \
+            EMIT(newline_2); \
         } \
         break;
 void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int digits,
@@ -166,7 +166,7 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
         if (g_useOwnerAllocator) alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
         else alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         file = (igFileView *)igFile_Create(alloc);
-        if (0 == file->Open(name, (const char *)DAT_004f92f0)) goto done;
+        if (0 == file->Open(name, (const char *)text_w)) goto done;
     }
     {
         unsigned int mask;

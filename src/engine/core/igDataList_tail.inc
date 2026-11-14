@@ -3,20 +3,20 @@ int igDataList_GetElementSize(void) {
 }
 
 void List_Reserve(igDataList *list, int capacity, int elementSize) {
-    int sp7C;
+    int allocResult;
     if (capacity == 0) {
         igObject_FreeMemory((int)list, list->_data);
         list->_data = 0;
     } else {
-        int s1 = list->_data;
-        igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->getMeta(), DAT_005867a0[0]->_internalIndex);
-        unsigned s5 = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
-        igMetaField_AllocateArray(&sp7C, field, (void *)list, s5, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)list))));
-        if (s1 != 0) {
-            int v = list->_capacity;
-            int n = (v < capacity) ? v : capacity;
-            memcpy(list->_data, s1, n * elementSize);
-            igObject_FreeMemory((int)list, s1);
+        int oldData = list->_data;
+        igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->getMeta(), g_igDataList_dataField[0]->_internalIndex);
+        unsigned elementCount = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
+        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)list))));
+        if (oldData != 0) {
+            int oldCapacity = list->_capacity;
+            int copyCount = (oldCapacity < capacity) ? oldCapacity : capacity;
+            memcpy(list->_data, oldData, copyCount * elementSize);
+            igObject_FreeMemory((int)list, oldData);
         }
     }
     list->_capacity = capacity;
@@ -74,14 +74,14 @@ void List_RemoveAt(igDataList *l, int i, int sz) {
  if (n <= 0 || i < 0 || i >= n) return; if (i != n - 1) { d = l->_data + i * sz; memmove(d, d + sz, sz * (n - (i + 1)), n); } l->_count = l->_count - 1;
 }
 
-int List_BinarySearch(igDataList *arg0, int arg1, int (*arg2)(int, int), int arg3) {
+int List_BinarySearch(igDataList *list, int key, int (*compare)(int, int), int elementSize) {
     int lo = 0;
-    int hi = arg0->_count - 1;
+    int hi = list->_count - 1;
     int mid;
     int r;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        r = arg2(arg0->_data + arg3 * mid, arg1);
+        r = compare(list->_data + elementSize * mid, key);
         if (r < 0) {
             lo = mid + 1;
         } else if (r > 0) {
@@ -90,10 +90,10 @@ int List_BinarySearch(igDataList *arg0, int arg1, int (*arg2)(int, int), int arg
             return mid;
         }
     }
-    if (arg0->_count == 0) {
+    if (list->_count == 0) {
         return -1;
     }
-    if (arg2(arg0->_data + arg3 * lo, arg1) == 0) {
+    if (compare(list->_data + elementSize * lo, key) == 0) {
         return lo;
     }
     return -1;

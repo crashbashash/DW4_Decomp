@@ -1,6 +1,6 @@
-void * igSemaphore_Create(int arg0) {
+void * igSemaphore_Create(int pool) {
     igSemaphore_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585970), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585970), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igSemaphore_GetOrCreateMetaObject(void) {
@@ -34,7 +34,7 @@ void igSemaphore_Register(void) {
         igSemaphore_className,
         0xC,
         0,
-        (igMetaObjectCallback)igSemaphore_InitFields_002ba7c0,
+        igSemaphore_SetAbstractProxy,
         0,
         0
     );

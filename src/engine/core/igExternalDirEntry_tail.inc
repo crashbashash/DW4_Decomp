@@ -1,101 +1,101 @@
-void igExternalDirEntry_ReadFile(igExternalDirEntryView *arg0, void *arg1) {
-    int s2, v, old, r;
+void igExternalDirEntry_ReadFile(igExternalDirEntryView *self, void *file) {
+    int path, pool, old, answer;
     int *hd;
-    s2 = ((igIGBFile *)arg1)->_basePath;
+    path = ((igIGBFile *)file)->_basePath;
     if (g_stringPool[0] == 0) {
-        v = ((int)StringPool_Allocate(16));
-        if (v != 0) {
-            v = ((int)StringPool_Construct((StringPool *)v));
+        pool = ((int)StringPool_Allocate(16));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = v;
+        g_stringPool[0] = pool;
     }
-    s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)s2);
-    old = arg0->_externalFilePath;
+    path = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    old = self->_externalFilePath;
     if (old != 0) {
         hd = (int *)(old - 8);
-        v = *(int *)(old - 4) - 1;
-        *(int *)(old - 4) = v;
-        if (v == 0) {
+        pool = *(int *)(old - 4) - 1;
+        *(int *)(old - 4) = pool;
+        if (pool == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*hd), (int)hd);
         }
     }
-    arg0->_externalFilePath = s2;
-    arg0->vfunc_43(((igIGBFile *)arg1)->_userLoadFunction);
-    if (arg0->_ref == 0 && GPR_00554c00 == 0) {
-        r = igReport_Warning(DAT_004f99f0, arg0->_entryName, arg0->_externalFilePath);
-        if (r != 1 && r == 2) {
-            GPR_00554c00 = 1;
+    self->_externalFilePath = path;
+    self->resolveDirectory(((igIGBFile *)file)->_userLoadFunction);
+    if (self->_ref == 0 && g_igExternalDirEntry_loadFailureWarned == 0) {
+        answer = igReport_Warning(text_igIGBFile_readFile_External_Entr, self->_entryName, self->_externalFilePath);
+        if (answer != 1 && answer == 2) {
+            g_igExternalDirEntry_loadFailureWarned = 1;
         }
     }
-    igDirectory_SetEntryRef((igDirectoryView *)arg1, arg0->_index, arg0->_ref);
+    igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, self->_ref);
 }
 
-void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *arg0, int arg1) {
-    int *temp_a1;
-    int temp_v1;
-    int var_v0;
-    int *temp_a0;
-    int *temp_s0;
+void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *self, int name) {
+    int *header;
+    int refCount;
+    int pool;
+    int *old;
+    int *interned;
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s0 = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
-    temp_a0 = (int *)arg0->_directoryName;
-    if (temp_a0 != 0) {
-        temp_a1 = temp_a0 - 2;
-        temp_v1 = temp_a0[-1] - 1;
-        temp_a0[-1] = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name)));
+    old = (int *)self->_directoryName;
+    if (old != 0) {
+        header = old - 2;
+        refCount = old[-1] - 1;
+        old[-1] = refCount;
+        if (refCount == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0->_directoryName = (int)temp_s0;
+    self->_directoryName = (int)interned;
 }
 
-void igExternalDirEntry_SetRef(igDirEntry *arg0, igObject *arg1) {
-    igObject *temp_a0;
-    if (arg1 != 0) {
-        arg1->_refCount = (int)((int) (arg1->_refCount + 1));
+void igExternalDirEntry_SetRef(igDirEntry *self, igObject *ref) {
+    igObject *old;
+    if (ref != 0) {
+        ref->_refCount = (int)((int) (ref->_refCount + 1));
     }
-    temp_a0 = (igObject *)((void *)(arg0->_ref));
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = (int)((int) (temp_a0->_refCount - 1));
-        if (((unsigned long long) ((long long)(int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
+    old = (igObject *)((void *)(self->_ref));
+    if (old != 0) {
+        old->_refCount = (int)((int) (old->_refCount - 1));
+        if (((unsigned long long) ((long long)(int) old->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0->_ref = (int)(arg1);
+    self->_ref = (int)(ref);
 }
 
-int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *arg0, int arg1) {
-    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((int)arg0)))));
+int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFunction) {
+    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((int)self)))));
     char *s1;
     int len;
     int c;
     char *buf;
-    stream.get()->_userLoadFunction = arg1;
-    stream.get()->ReadFile((char *)arg0->_directoryName);
+    stream.get()->_userLoadFunction = loadFunction;
+    stream.get()->ReadFile((char *)self->_directoryName);
     if (stream.get()->_count == 0) {
-        s1 = (char *)arg0->_directoryName;
-        len = strlen(arg0->_externalFilePath);
+        s1 = (char *)self->_directoryName;
+        len = strlen(self->_externalFilePath);
         len = len + strlen(s1);
-        c = strlen(&DAT_004f9a48[0]);
-        buf = (char *)igObject_AllocateStorage((int)arg0, c + len + 1);
-        strcpy(buf, arg0->_externalFilePath);
-        strcat(buf, &DAT_004f9a48[0]);
-        strcat(buf, arg0->_directoryName);
+        c = strlen(&text_slash[0]);
+        buf = (char *)igObject_AllocateStorage((int)self, c + len + 1);
+        strcpy(buf, self->_externalFilePath);
+        strcat(buf, &text_slash[0]);
+        strcat(buf, self->_directoryName);
         stream.get()->ReadFile(buf);
-        igObject_FreeMemory((int)arg0, (int)buf);
+        igObject_FreeMemory((int)self, (int)buf);
     }
-    arg0->vfunc_23(igDirectory_GetRefByName((int)(stream.get()), arg0->_entryName));
-    if (arg0->_ref == 0) {
-        arg0->vfunc_23(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
+    self->setRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
+    if (self->_ref == 0) {
+        self->setRef(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
     }
-    return arg0->_ref != 0;
+    return self->_ref != 0;
 }
 
 /* Drops the reference the clone was created with; the smart pointer holding it keeps its own. */
@@ -121,14 +121,14 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
         igResource_AddDirectory((int *)resource, (int)directory.get());
     }
     ((igDirectoryDispatchView *)directory.get())->resolveExternalEntry(self);
-    if (self->_ref == 0) self->vfunc_44(loadFunction);
+    if (self->_ref == 0) self->loadExternalFile(loadFunction);
     if (self->_ref == 0 && loadFunction != 0) ((void (*)(igExternalDirEntryView *))loadFunction)(self);
     if (self->_ref != 0) {
         igSmartPointer<igDirEntryView> entry(self->cloneViaMetadata(1), kRetainReference);
         dropCreationReference(entry.get());
         igNamedObject_SetName((igNamedObject *)entry.get(), self->_entryName);
         entry->_refType = 0;
-        entry->vfunc_23(self->_ref);
+        entry->setRef(self->_ref);
         entry->_index = ((igDirectoryView *)directory.get())->_count;
         ObjectList_AppendRetained((igObjectList *)directory.get(), (igObject *)entry.get());
         return 1;
@@ -136,14 +136,14 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
     return 0;
 }
 
-void igExternalDirEntry_InitDefaults(igDirEntry *arg0) {
-    igDirEntry_InitDefaults((int)arg0);
-    arg0->_resolveMethod = 2;
-    arg0->_refType = 0;
+void igExternalDirEntry_InitDefaults(igDirEntry *self) {
+    igDirEntry_InitDefaults((int)self);
+    self->_resolveMethod = 2;
+    self->_refType = 0;
 }
 
-void igExternalDirEntry_ReleaseDefaults(void **arg0) {
-    ((igDirEntryView *)(arg0))->vfunc_23((int)(0));
-    igObject_ReleaseDefaults((int)arg0);
+void igExternalDirEntry_ReleaseDefaults(void **self) {
+    ((igDirEntryView *)(self))->setRef((int)(0));
+    igObject_ReleaseDefaults((int)self);
 }
 

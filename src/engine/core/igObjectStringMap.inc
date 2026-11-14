@@ -15,40 +15,40 @@ igMetaObject *igObjectStringMap_GetMetaObject(void)
 
 int igObjectStringMap_GetVTable(void) {
     igObjectStringMap map;
-    int t;
-    igObject *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
-    int *q8;
-    int *q12;
+    int vtable;
+    igObject *object;
+    int *text;
+    int *header;
+    int count;
+    int *namesSlot;
+    int *dataSlot;
     igObject_InitHeader((igObject *)&map);
-    map._vtable = (int)&DAT_00532d80[0];
-    q8 = &map._names;
-    *q8 = 0;
-    q12 = &map._data;
-    *q12 = 0;
-    t = *(int *)((char *)&map + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    map._vtable = (int)&DAT_00532d80[0];
-    if (q12 != 0) {
-        o = (igObject *)*q12;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    map._vtable = (int)&g_igObjectStringMap_vtable[0];
+    namesSlot = &map._names;
+    *namesSlot = 0;
+    dataSlot = &map._data;
+    *dataSlot = 0;
+    vtable = *(int *)((char *)&map + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    map._vtable = (int)&g_igObjectStringMap_vtable[0];
+    if (dataSlot != 0) {
+        object = (igObject *)*dataSlot;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
             }
         }
     }
-    if (q8 != 0) {
-        o = (igObject *)*q8;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    if (namesSlot != 0) {
+        object = (igObject *)*namesSlot;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
             }
         }
     }
-    return t;
+    return vtable;
 }
 
 void igObjectStringMap_EnsureRegistered(void)
@@ -78,20 +78,20 @@ void igObjectStringMap_GetMetaObjectFunction(void) {
 }
 
 void igObjectStringMap_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *dataField;
+    void *namesField;
+    void *meta;
 
-    temp_s0 = (void *)g_igObjectStringMap_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igObjectStringMap_ctorTable[0], 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igObjectStringMap_fieldTable[0], (igMetaField ***)&DAT_004bfa98[0], &DAT_004bfaa0[0], temp_s2);
+    meta = (void *)g_igObjectStringMap_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igObjectStringMap_ctorTable[0], 2);
+    namesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)namesField)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)namesField)->_construct = 1;
+    dataField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)dataField)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)dataField)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igObjectStringMap_fieldTable[0], (igMetaField ***)&g_igObjectStringMap_fieldDescriptors[0], &g_igObjectStringMap_fieldOffsets[0], base);
 }
 

@@ -1,6 +1,6 @@
-void igContextList_Create(int arg0) {
+void igContextList_Create(int pool) {
     igContextList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868F0), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868F0), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igContextList_GetMetaObject(void)
@@ -15,7 +15,7 @@ int igContextList_GetVTable(void) {
     igContextList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00531840[0];
+    list._vtable = (int)&g_igContextList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

@@ -1,22 +1,22 @@
-int *igCallStackTracer_CaptureCallStack(int *arg0) {
-    int t;
-    if (arg0[3] > 0) {
-        arg0[2] = 1;
+int *igCallStackTracer_CaptureCallStack(int *stack) {
+    int count;
+    if (stack[3] > 0) {
+        stack[2] = 1;
     } else {
-        List_Resize(arg0, 1, 4);
+        List_Resize(stack, 1, 4);
     }
-    t = arg0[2];
-    if (t != 0 && 0 < t) {
-        *(int *)arg0[4] = DAT_004c1ea0[0];
+    count = stack[2];
+    if (count != 0 && 0 < count) {
+        *(int *)stack[4] = g_callStackRootAddress[0];
     }
-    return (int *)arg0[4];
+    return (int *)stack[4];
 }
 
 int igCallStackTracer_HasSymbols(void) {
     igSymbolTableView *symbols;
     symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
     if (symbols != 0) {
-        if (symbols->vfunc_23() != 0) {
+        if (symbols->getSymbolCount() != 0) {
             return 1;
         }
     }
@@ -28,17 +28,17 @@ void igCallStackTracer_FormatAddress(igResult *result, igCallStackTracerView *se
     char name[256];
     int offset;
     int line;
-    igResult resolved = self->vfunc_27(addr, buf, 255, &offset, name, 255, &line);
+    igResult resolved = self->lookupAddress(addr, buf, 255, &offset, name, 255, &line);
     igResult formatted = self->vfunc_28(addr, buf, offset, name, line, format, output, outputSize);
     result->v = resolved.v;
 }
 
 igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
     igSymbolTableView *symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
-    if (symbols != 0 && symbols->vfunc_23() != 0) {
+    if (symbols != 0 && symbols->getSymbolCount() != 0) {
         int base = 0;
         int other = 0;
-        if (symbols->vfunc_27(addr, buf, size, &base, &other, name, nameSize, line) == g_resultSuccess) {
+        if (symbols->getSymbolAtAddress(addr, buf, size, &base, &other, name, nameSize, line) == g_resultSuccess) {
             *offset = addr - base;
             return g_resultSuccess;
         }

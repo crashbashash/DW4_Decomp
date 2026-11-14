@@ -1,6 +1,6 @@
-void igStringTable_Create(int arg0) {
+void igStringTable_Create(int pool) {
     igStringTable_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858B0), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858B0), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igStringTable_GetOrCreateMetaObject(void) {
@@ -25,34 +25,34 @@ int igStringTable_GetVTable(void) {
     int *hashIndex;
 
     igObject_InitHeader((igObject *)&table);
-    table._vtable = (int)&DAT_0052e8c0[0];
+    table._vtable = (int)&g_igStringTable_vtable[0];
     strings = &table._strings;
     *strings = 0;
     hashIndex = &table._hashIndex;
     *hashIndex = 0;
     r = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    table._vtable = (int)&DAT_0052e8c0[0];
+    table._vtable = (int)&g_igStringTable_vtable[0];
     ReleaseObjectField(hashIndex);
     ReleaseObjectField(strings);
     return r;
 }
 
-igObject **igSmartPointer_igCharListNoClean_Destruct(igObject **arg0, short arg1) {
-    igObject *temp_a0;
+igObject **igSmartPointer_igCharListNoClean_Destruct(igObject **self, short flags) {
+    igObject *object;
 
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->_refCount = temp_a0->_refCount - 1;
-            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
+    if (self != 0) {
+        object = *self;
+        if (object != 0) {
+            object->_refCount = object->_refCount - 1;
+            if ((object->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(object);
             }
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
+        if (flags > 0) {
+            __dl__FPv(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void igStringTable_EnsureRegistered(void)
@@ -82,19 +82,19 @@ void igStringTable_GetMetaObjectFunction(void) {
 }
 
 void igStringTable_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *field2;
+    void *field;
+    void *meta;
 
-    temp_s0 = (void *)g_igStringTable_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igStringTable_ctorTable[0], 4);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igCharListNoClean_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igStringTable_fieldTable[0], (igMetaField ***)&DAT_004bf650[0], &DAT_004bf660[0], temp_s2);
+    meta = (void *)g_igStringTable_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igStringTable_ctorTable[0], 4);
+    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igCharListNoClean_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    field2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igStringTable_fieldTable[0], (igMetaField ***)&g_igStringTable_fieldDescriptors[0], &g_igStringTable_fieldOffsets[0], base);
 }
 

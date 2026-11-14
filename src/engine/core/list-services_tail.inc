@@ -30,15 +30,15 @@ void ObjectList_AppendRetainedList(igTDataList<igObject *> *self, igTDataList<ig
     List_AppendWords((igDataList *)self, source->_count, (const int *)source->_data);
 }
 
-void ObjectList_ResizeRetained(igTDataList<igObject *> *arg0, int arg1) {
+void ObjectList_ResizeRetained(igTDataList<igObject *> *self, int count) {
     int n;
     int j;
     int k;
     igObject *t;
-    n = arg0->_count;
-    if (arg1 <= n) {
-        for (j = arg1; j < n; j++) {
-            t = arg0->_data[j];
+    n = self->_count;
+    if (count <= n) {
+        for (j = count; j < n; j++) {
+            t = self->_data[j];
             if (t != 0) {
                 t->_refCount = t->_refCount - 1;
                 if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
@@ -46,20 +46,20 @@ void ObjectList_ResizeRetained(igTDataList<igObject *> *arg0, int arg1) {
                 }
             }
         }
-        for (k = arg1; k < n; k++) {
-            arg0->_data[k] = 0;
+        for (k = count; k < n; k++) {
+            self->_data[k] = 0;
         }
-        arg0->_count = arg1;
+        self->_count = count;
         return;
     }
-    if (arg1 >= 0) {
-        if (arg1 <= arg0->_capacity) {
-            arg0->_count = arg1;
+    if (count >= 0) {
+        if (count <= self->_capacity) {
+            self->_count = count;
         } else {
-            List_Resize(arg0, arg1, 4);
+            List_Resize(self, count, 4);
         }
     }
-    memset((char *)arg0->_data + n * 4, 0, (arg1 - n) * 4);
+    memset((char *)self->_data + n * 4, 0, (count - n) * 4);
 }
 
 static inline int find(igTDataList<igObject *> *l, igObject **vp, int i) {
@@ -117,76 +117,82 @@ int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *obj
     return index;
 }
 
-int igProperty_FindByName(igObjectList *arg0, igMetaField *arg1, int arg2) {
-    int temp_a0;
-    int var_s2;
-    int temp_s1;
-    int temp_s0;
-    if ((arg1 == 0) || (arg2 == 0)) {
+int igProperty_FindByName(igObjectList *list, igMetaField *field, int name) {
+    int text;
+    int i;
+    int count;
+    int item;
+    if ((field == 0) || (name == 0)) {
         return 0;
     }
-    temp_s1 = arg0->_count;
-    for (var_s2 = 0; var_s2 < temp_s1; var_s2++) {
-        temp_s0 = ((int *)arg0->_data)[var_s2];
-        temp_a0 = *(int *)(temp_s0 + arg1->_offset);
-        if ((temp_a0 != 0) && (strcmp(temp_a0, arg2) == 0)) {
-            return temp_s0;
+    count = list->_count;
+    for (i = 0; i < count; i++) {
+        item = ((int *)list->_data)[i];
+        text = *(int *)(item + field->_offset);
+        if ((text != 0) && (strcmp(text, name) == 0)) {
+            return item;
         }
     }
     return 0;
 }
 
-int igProperty_FindByPointer(void *arg0, void *arg1, int arg2) {
-    int temp_v0;
+int igProperty_FindByPointer(void *listObject, void *fieldObject, int key) {
+    igObjectList *list = (igObjectList *)listObject;
+    igMetaField *field = (igMetaField *)fieldObject;
+    int item;
     int i;
     int n;
 
-    n = *(int *)((char *)(arg0) + 8);
-    if (arg1 == 0) {
+    n = list->_count;
+    if (field == 0) {
         return 0;
     }
     for (i = 0; i < n; i++) {
-        temp_v0 = *(int *)(*(int *)((char *)(arg0) + 16) + (i * 4));
-        if (temp_v0 != 0) {
-            int w = *(int *)(temp_v0 + *(int *)((char *)(arg1) + 8));
-            if (w == arg2) {
-                return temp_v0;
+        item = *(int *)(list->_data + (i * 4));
+        if (item != 0) {
+            int value = *(int *)(item + field->_offset);
+            if (value == key) {
+                return item;
             }
         }
     }
     return 0;
 }
 
-int igProperty_FindBySortedKey(void *arg0, void *arg1, int arg2) {
-    int idx;
-    int v;
-    int t;
-    if (arg1 == 0) {
+int igProperty_FindBySortedKey(void *listObject, void *fieldObject, int key) {
+    igObjectList *list = (igObjectList *)listObject;
+    igMetaField *field = (igMetaField *)fieldObject;
+    int index;
+    int item;
+    int value;
+    if (field == 0) {
         return 0;
     }
-    idx = igProperty_FindInsertionIndex((void *)arg0, (void *)arg1, (unsigned int)arg2);
-    if (idx >= *(int *)((char *)(arg0) + 8)) {
+    index = igProperty_FindInsertionIndex((void *)list, (void *)field, (unsigned int)key);
+    if (index >= list->_count) {
         return 0;
     }
-    v = *(int *)(*(int *)((char *)(arg0) + 16) + (idx * 4));
-    t = *(int *)(v + *(int *)((char *)(arg1) + 8));
-    if (t != arg2) {
+    item = *(int *)(list->_data + (index * 4));
+    value = *(int *)(item + field->_offset);
+    if (value != key) {
         return 0;
     }
-    return v;
+    return item;
 }
 
-int igProperty_FindInsertionIndex(void *arg0, void *arg1, unsigned int arg2) {
+int igProperty_FindInsertionIndex(void *listObject, void *fieldObject, unsigned int target) {
+    igObjectList *list = (igObjectList *)listObject;
+    igMetaField *field = (igMetaField *)fieldObject;
     int n;
     int lo;
     int hi;
     int mid;
     unsigned int key;
-    int e;
-    if (arg1 == 0) {
+    int item;
+    if (field == 0) {
         return -1;
     }
-    n = *(int *)((char *)(arg0) + 8);
+    n = list->_count;
     if (n <= 0) {
         return 0;
     }
@@ -194,30 +200,30 @@ int igProperty_FindInsertionIndex(void *arg0, void *arg1, unsigned int arg2) {
     lo = 0;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        e = *(int *)(*(int *)((char *)(arg0) + 16) + (mid * 4));
-        key = *(unsigned int *)(e + *(int *)((char *)(arg1) + 8));
-        if (key < arg2) {
+        item = *(int *)(list->_data + (mid * 4));
+        key = *(unsigned int *)(item + field->_offset);
+        if (key < target) {
             lo = mid + 1;
-        } else if (arg2 < key) {
+        } else if (target < key) {
             hi = mid - 1;
         } else {
             return mid;
         }
     }
-    e = *(int *)(*(int *)((char *)(arg0) + 16) + (lo * 4));
-    if (*(unsigned int *)(e + *(int *)((char *)(arg1) + 8)) < arg2) {
+    item = *(int *)(list->_data + (lo * 4));
+    if (*(unsigned int *)(item + field->_offset) < target) {
         return lo + 1;
     }
     return lo;
 }
 
-static inline void retain_302540(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
+static inline void sortRetain(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
 
-static inline void release_302540(igObject *o) {
+static inline void sortRelease(igObject *o) {
     IG_OBJECT_RELEASE(o);
 }
 
-static inline void setAt_302540(igTDataList<igObject *> *l, int i, igObject *v, int off) {
+static inline void sortSetAt(igTDataList<igObject *> *l, int i, igObject *v, int off) {
     int n = l->_count;
     if (n != 0 && i >= 0 && i < n) {
         *(igObject **)((char *)l->_data + off) = v;
@@ -250,11 +256,11 @@ int i; int n; igObject *a; igObject *b; int off; int swapped; unsigned int prev;
             cur = *(unsigned int *)((char *)b + field->_offset);
             if (cur < prev) {
                 a = p[-1];
-                retain_302540(a);
-                release_302540(*(igObject **)((char *)self->_data + off));
-                setAt_302540(self, i, a, off);
-                retain_302540(b);
-                release_302540(*(igObject **)((char *)self->_data + off - 4));
+                sortRetain(a);
+                sortRelease(*(igObject **)((char *)self->_data + off));
+                sortSetAt(self, i, a, off);
+                sortRetain(b);
+                sortRelease(*(igObject **)((char *)self->_data + off - 4));
                 setPrev(self, i - 1, b, off);
                 swapped = 1;
             } 

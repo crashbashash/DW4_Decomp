@@ -1,6 +1,6 @@
-void * igIGBFile_Create(int arg0) {
+void * igIGBFile_Create(int pool) {
     igIGBFile_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586140), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586140), (igMemoryPoolView *)pool));
 }
 
 int igIGBFile_GetOrCreateMetaObject(void) {
@@ -20,10 +20,10 @@ igMetaObject *igIGBFile_GetMetaObject(void)
 
 int igIGBFile_GetVTable(void) {
     igIGBFile file;
-    int temp_s5;
+    int vtable;
 
     igDirectory_Construct(&file);
-    file._vtable = (int)(&DAT_0052fe50[0]);
+    file._vtable = (int)(&g_igIGBFile_vtable[0]);
     igSmartPointer_igObjectList_Construct(&file._entryPool);
     igSmartPointer_igFile_Construct(&file._file);
     igSmartPointer_igMetaFieldList_Construct(&file._metaFieldListInFile);
@@ -36,8 +36,8 @@ int igIGBFile_GetVTable(void) {
     igSmartPointer_igMemoryPool_Construct(&file._dataMemoryPool);
     igSmartPointer_igMemoryPool_Construct(&file._objectMemoryPool);
     FUN_001510d0(&file._memoryPoolHandles);
-    temp_s5 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    file._vtable = (int)(&DAT_0052fe40[4]);
+    vtable = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    file._vtable = (int)(&g_igInfo_vtable[28]); /* matching construct: igIGBFile's vtable address (it follows igInfo's 28 words) spelled through another symbol, so it is rematerialised rather than reused */
     ObjectRef_Destruct_00150eb0(&file._memoryPoolHandles, -1);
     FUN_001509f0(&file._objectMemoryPool, -1);
     FUN_001509f0(&file._dataMemoryPool, -1);
@@ -51,7 +51,7 @@ int igIGBFile_GetVTable(void) {
     FUN_00150180(&file._file, -1);
     FUN_0014aa70(&file._entryPool, -1);
     igDirectory_Destroy((igDirectory *)&file, 0);
-    return temp_s5;
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_igShortListList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
@@ -69,7 +69,7 @@ igSmartPointer<igObject> *igSmartPointer_igShortListList_Destruct(igSmartPointer
 
 igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
     if (p) {
-        p->_vtable = (int)&DAT_00530890[0];
+        p->_vtable = (int)&g_igDirectory_vtable[0];
         ((igSmartPointer<igObject> *)&p->_loadingSemaphore)->~igSmartPointer();
         ((igSmartPointer<igObject> *)&p->_metaFieldPerObjectIndices)->~igSmartPointer();
         ((igSmartPointer<igObject> *)&p->_refList)->~igSmartPointer();
@@ -84,49 +84,49 @@ igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
 
 int *igSmartPointer_igMemoryPool_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
 int *igSmartPointer_igMetaField_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
 int *igSmartPointer_igMetaFieldList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
 int *igSmartPointer_igFile_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
 int *igSmartPointer_igObjectList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-void *igDirectory_Construct(igIGBFile *arg0) {
-    igObject_InitHeader((igObject *)arg0);
-    arg0->_vtable = (int)(&DAT_005309b0[0]);
-    arg0->_vtable = (int)(&DAT_00524a20[0]);
-    arg0->_vtable = (int)(&DAT_005249b0[0]);
-    arg0->_vtable = (int)(&DAT_00532590[0]);
-    arg0->_vtable = (int)(&DAT_00530890[0]);
-    arg0->_name = 0;
-    arg0->_externalDirectoryList = 0;
-    arg0->_infoList = 0;
-    arg0->_uniqueEntryList = 0;
-    arg0->_refList = 0;
-    arg0->_metaFieldPerObjectIndices = 0;
-    arg0->_loadingSemaphore = 0;
-    return arg0;
+void *igDirectory_Construct(igIGBFile *self) {
+    igObject_InitHeader((igObject *)self);
+    self->_vtable = (int)(&g_igDataList_vtable[0]);
+    self->_vtable = (int)(&g_igObjectListBase_vtable[0]);
+    self->_vtable = (int)(&g_igObjectList_vtable[0]);
+    self->_vtable = (int)(&g_igDirectoryBase_vtable[0]);
+    self->_vtable = (int)(&g_igDirectory_vtable[0]);
+    self->_name = 0;
+    self->_externalDirectoryList = 0;
+    self->_infoList = 0;
+    self->_uniqueEntryList = 0;
+    self->_refList = 0;
+    self->_metaFieldPerObjectIndices = 0;
+    self->_loadingSemaphore = 0;
+    return self;
 }
 
 void igIGBFile_EnsureRegistered(void)
@@ -170,21 +170,21 @@ void igIGBFile_InitFields(void) {
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)DAT_00586148;
+    clone->_externalEnumStorage = (int)g_igIGBFile_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_count));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)DAT_00586150;
+    clone->_externalEnumStorage = (int)g_igIGBFile_countDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_capacity));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)DAT_00586158;
+    clone->_externalEnumStorage = (int)g_igIGBFile_capacityDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
     igIntMetaField_SetDefault((void **)(((igMetaField *)igMetaObject_GetFieldAt(meta, base))), 0xFADA);
@@ -242,7 +242,7 @@ void igIGBFile_InitFields(void) {
     ((igMemoryRefMetaField *)field)->_memType = igCharMetaField_GetDefaultDescriptor();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x40));
     ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, (const char **)&g_igIGBFile_fieldTable[0], (igMetaField ***)&DAT_004c0880[0], &DAT_004c0990[0], base);
+    igMetaObject_NameFields(meta, (const char **)&g_igIGBFile_fieldTable[0], (igMetaField ***)&g_igIGBFile_fieldDescriptors[0], &g_igIGBFile_fieldOffsets[0], base);
 }
 
 void igIGBFile_StaticInitCallback(void) {

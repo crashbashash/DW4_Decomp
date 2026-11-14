@@ -1,6 +1,6 @@
 void *igPageMemoryPool_Initialize(igPageMemoryPool *arg0) {
     igMemoryPool_Initialize((int **)arg0);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_005311f0[0]);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igPageMemoryPool_vtable[0]);
     arg0->_allocationLock = 0;
     arg0->_eventTracker = 0;
     return arg0;
@@ -8,7 +8,7 @@ void *igPageMemoryPool_Initialize(igPageMemoryPool *arg0) {
 
 void *igPageMemoryPool_CopyConstruct(igPageMemoryPool *arg0, int extra1) {
     igMemoryPool_CopyConstruct((igMemoryPool *)arg0, (igMemoryPool *)extra1);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_005311f0[0]);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igPageMemoryPool_vtable[0]);
     arg0->_allocationLock = 0;
     arg0->_eventTracker = 0;
     return arg0;
@@ -94,10 +94,10 @@ igResult igPageMemoryPool_Configure(igPageMemoryPool *self, igMemoryPoolInfo *in
 
 void igPageMemoryPool_Activate(igPageMemoryPool *self) {
     if (self->_isActive == 0) {
-        ((igMemoryPoolView *)self)->vfunc_51();
+        ((igMemoryPoolView *)self)->ResetStatistics();
         self->_isActive = 1;
         if (self->_poolOptionFlags & 4) {
-            igResult r = ((igMemoryPoolView *)self)->vfunc_34(1);
+            igResult r = ((igMemoryPoolView *)self)->EnableAllocationLock(1);
         }
     }
 }
@@ -107,7 +107,7 @@ void igPageMemoryPool_Reset(void **arg0) {
     int i;
     int *q;
     int v;
-    ((igMemoryPoolView *)(arg0))->vfunc_51();
+    ((igMemoryPoolView *)(arg0))->ResetStatistics();
     alloc = (void **)(((void *)igObject_GetAllocator((int)arg0)));
     i = 0;
     do {
@@ -126,25 +126,25 @@ void igPageMemoryPool_Deactivate(igPageMemoryPool *self) {
     if (self->_isActive != 0) {
         if ((int)self->_localNetAllocated != 0) {
             if (self->_messageLevel >= 3 && GPR_00554dc0 == 0) {
-                r = igReportNotice(DAT_004ff240, self->_poolIndex, (int)self->_localNetAllocated);
+                r = igReportNotice(text_igPageMemoryPool_d_E84_being_res, self->_poolIndex, (int)self->_localNetAllocated);
                 if (r != 1 && r == 2) {
                     GPR_00554dc0 = 1;
                 }
             }
-            ((igMemoryPoolView *)self)->vfunc_88();
+            ((igMemoryPoolView *)self)->DisplayOutstandingAllocations();
         } else {
             if (self->_localNetAllocationCount != 0) {
                 if (self->_messageLevel >= 3 && GPR_00554dc4 == 0) {
-                    r = igReportNotice(DAT_004ff2a0, self->_poolIndex, (int)self->_localNetAllocationCount);
+                    r = igReportNotice(text_igPageMemoryPool_d_E85_being_res, self->_poolIndex, (int)self->_localNetAllocationCount);
                     if (r != 1 && r == 2) {
                         GPR_00554dc4 = 1;
                     }
                 }
-                ((igMemoryPoolView *)self)->vfunc_88();
+                ((igMemoryPoolView *)self)->DisplayOutstandingAllocations();
             }
         }
         self->_isActive = 0;
-        ((igMemoryPoolView *)self)->vfunc_31();
+        ((igMemoryPoolView *)self)->Reset();
     }
 }
 
@@ -374,7 +374,7 @@ void igPageMemoryPool_Free(igPageMemoryPoolView *self, void *block)
 
 unsigned int igPageMemoryPool_OwnsAllocation(igPageMemoryPoolView *self, void *block)
 {
-    return self->vfunc_103(block);
+    return self->IsPageAllocated(block);
 }
 
 int Gap__Core__igPageMemoryPool__vfunc_83(void) {
@@ -433,7 +433,7 @@ int igPageMemoryPool_AllocatePages(igPageMemoryPoolView *arg0, int arg1) {
         var_v0 = (int)g_activeSystemAllocator[0]->AllocateSized(arg1);
     }
     if (var_v0 != 0) {
-        arg0->vfunc_104(var_v0, arg1, 1);
+        arg0->MarkPages(var_v0, arg1, 1);
     }
     return var_v0;
 }
@@ -446,7 +446,7 @@ void igPageMemoryPool_FreePages(igPageMemoryPoolView *arg0, int arg1, int arg2) 
         g_activeSystemAllocator[0]->FreeSized((void *)arg1, arg2);
     }
     if (arg1 != 0) {
-        arg0->vfunc_104(arg1, arg2, 0);
+        arg0->MarkPages(arg1, arg2, 0);
     }
 }
 
@@ -456,7 +456,7 @@ int igPageMemoryPool_ReallocatePages(igPageMemoryPoolView *arg0, int arg1, int a
         return arg1;
     }
     if (arg1 != 0) {
-        arg0->vfunc_104(arg1, arg3, 0);
+        arg0->MarkPages(arg1, arg3, 0);
     }
     if (arg0->poolOptionFlags & 8) {
         r = (int)g_activeSystemAllocator[0]->ReallocateAligned((void *)arg1, arg2, arg3);
@@ -464,7 +464,7 @@ int igPageMemoryPool_ReallocatePages(igPageMemoryPoolView *arg0, int arg1, int a
         r = (int)g_activeSystemAllocator[0]->ReallocateSized((void *)arg1, arg2, arg3);
     }
     if (r != 0) {
-        arg0->vfunc_104(r, arg2, 1);
+        arg0->MarkPages(r, arg2, 1);
     }
     return r;
 }
@@ -478,7 +478,7 @@ int igPageMemoryPool_AllocatePagesAligned(igPageMemoryPoolView *arg0, int arg1, 
         v = (int)g_activeSystemAllocator[0]->AllocateSized(arg2);
     }
     if (v != 0) {
-        arg0->vfunc_104(v, arg2, 1);
+        arg0->MarkPages(v, arg2, 1);
     }
     return v;
 }
@@ -501,7 +501,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 1 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->vfunc_56(0x800, 4); self->pageTables[a >> 27] = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->Callocate(0x800, 4); self->pageTables[a >> 27] = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
     if (n > 0) n -= 1;
@@ -517,7 +517,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 2 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->vfunc_56(0x800, 4); *slot = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((int)self)))->Callocate(0x800, 4); *slot = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
 }
@@ -609,7 +609,7 @@ void igPageMemoryPool_DisplayOutstandingAllocations(igPageMemoryPoolView *self) 
                     do {
                         if (*bits & (1 << page)) {
                             address = (page << 12) + (tableBase + (word << 17));
-                            igReport_Printf((const char *)DAT_004fc120, address, self->GetBlockSize((void *)address));
+                            igReport_Printf((const char *)text_Outstanding_allocation_at_0x_percent_08x, address, self->GetBlockSize((void *)address));
                             igReport_Flush();
                         }
                         page++;

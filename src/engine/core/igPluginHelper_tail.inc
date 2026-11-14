@@ -7,7 +7,7 @@ static inline void dropKey(igStringObj *o) {
     }
 }
 
-static inline void dropValues_304b10(igTDataList<char *> *o) {
+static inline void dropValues(igTDataList<char *> *o) {
     IG_OBJECT_RELEASE(o);
 }
 
@@ -34,7 +34,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
                 *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
                 held = values;
                 if (igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
-                    dropValues_304b10(values);
+                    dropValues(values);
                     dropKey(key);
                 } else {
                     for (j = 0; j < (held = values)->_count; j++) {
@@ -43,7 +43,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
                         igPluginHelper_AddRepositoryFromConfig((igPluginHelper *)self, (int)(keyText(key)), (const char *)text);
                         releaseString(string);
                     }
-                    dropValues_304b10(held);
+                    dropValues(held);
                     dropKey(key);
                 }
             }
@@ -85,18 +85,18 @@ int igPluginHelper_ThreadLoop(Args *args) {
     return 0;
 }
 
-void **igQueue_StartServiceThread(void *arg0, int arg1, unsigned stackSize) {
-    void **a; void *b;
-    a = (void **)(((void **)igObject_GetAllocator((int)arg0)));
-    b = ((igMemoryPoolView *)a)->Allocate(8);
-    *(int *)((char *)(b) + 0) = arg1;
-    *(int *)((char *)(b) + 4) = (int)(arg0);
+void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize) {
+    void **a; Args *args;
+    a = (void **)(((void **)igObject_GetAllocator((int)queue)));
+    args = (Args *)((igMemoryPoolView *)a)->Allocate(8);
+    args->fn = (igResult (*)(int))function;
+    args->queue = (igStandardQueueView *)queue;
     a = (void **)(((void **)igThread_Create((int)a)));
     ((igPsx2ThreadView *)a)->setFunction((int (*)(...))igPluginHelper_ThreadLoop);
-    ((igPsx2ThreadView *)a)->setArg((int)b);
+    ((igPsx2ThreadView *)a)->setArg((int)args);
     ((igPsx2ThreadView *)a)->setStackSize(stackSize);
     if (((igPsx2ThreadView *)a)->start() == g_resultSuccess) {
-        ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)a);
+        ObjectList_AppendRetained((igObjectList *)((igStandardQueueView *)queue)->_serviceThreads, (igObject *)a);
     }
     return a;
 }

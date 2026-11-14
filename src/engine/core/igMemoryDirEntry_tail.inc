@@ -1,5 +1,5 @@
-void igMemoryDirEntry_IsRefMemory(int arg0) {
-    igObject_IsKindOf((void *)(*(int *)((char *)(arg0) + 36)), (igMetaObject *)((*(int *)g_igRefMetaField_metaObject)));
+void igMemoryDirEntry_IsRefMemory(int entry) {
+    igObject_IsKindOf((void *)(((igMemoryDirEntry *)entry)->_memType), (igMetaObject *)((*(int *)g_igRefMetaField_metaObject)));
 }
 
 void igMemoryDirEntry_AllocateMemory(igMemoryDirEntry *self, igIGBFile *file) {
@@ -13,7 +13,7 @@ void igMemoryDirEntry_AllocateMemory(igMemoryDirEntry *self, igIGBFile *file) {
     } else if (fields != 0) {
         if (0 <= self->_memTypeIndex) {
             self->_memType = ((int *)fields->_data)[self->_memTypeIndex];
-            align = ((igMetaFieldView *)self->_memType)->vfunc_27();
+            align = ((igMetaFieldView *)self->_memType)->GetAlignment();
         }
     }
     if ((self->_memoryPoolHandle == -1) || (self->_memoryPoolHandle == 1) || (self->_memoryPoolHandle == 2)) {
@@ -31,23 +31,23 @@ void igMemoryDirEntry_AllocateMemory(igMemoryDirEntry *self, igIGBFile *file) {
     }
 }
 
-void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
-    int s4 = arg1->_chunkSize;
-    int s3 = arg1->_memoryBufferPlace;
-    int s6 = arg1->_memoryBytesCopied;
-    int s2 = arg1->_bytesRemainingInChunk;
-    int s8 = arg1->_chunk;
-    int cnt = arg0->_memSize;
-    igMetaFieldView *s1 = (igMetaFieldView *)arg0->_memType;
+void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
+    int s4 = file->_chunkSize;
+    int s3 = file->_memoryBufferPlace;
+    int s6 = file->_memoryBytesCopied;
+    int s2 = file->_bytesRemainingInChunk;
+    int s8 = file->_chunk;
+    int cnt = self->_memSize;
+    igMetaFieldView *s1 = (igMetaFieldView *)self->_memType;
     int esz = ((igMetaField *)s1)->_size;
     int per = cnt / esz;
     int s0, s7, i, src, j, dst, t0, t1, t2;
-    if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && arg1->_endianSwap != 0) {
-        s1->SwapBytes((void *)arg0->_ref, per);
+    if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && file->_endianSwap != 0) {
+        s1->SwapBytes((void *)self->_ref, per);
     }
     s7 = 0;
     i = 0;
-    src = arg0->_ref;
+    src = self->_ref;
     while (i < cnt) {
         t0 = cnt - i;
         s0 = (t0 < s2) ? t0 : s2;
@@ -57,7 +57,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
             s7 = (t1 < q) ? t1 : q;
             dst = s8 + s3;
             for (j = 0; j < s7; j++) {
-                s1->WriteRawFieldMem(src + j * esz, dst + j * esz, (int)arg1, arg1->_endianSwap);
+                s1->WriteRawFieldMem(src + j * esz, dst + j * esz, (int)file, file->_endianSwap);
             }
         } else {
             memcpy(s8 + s3, src, s0);
@@ -67,8 +67,8 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
         s2 -= s0;
         i += s0;
         if (s2 == 0) {
-            s6 += s4 * ((igFileView *)arg1->_file)->Write((void *)s8, s4, 1);
-            t2 = arg1->_memoryRefBufferSize - s6;
+            s6 += s4 * ((igFileView *)file->_file)->Write((void *)s8, s4, 1);
+            t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
         }
@@ -77,18 +77,18 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
         s0 = ((s3 + 3) & ~3) % s4;
         s2 = s2 - (s0 - s3);
         if (s0 < s3) {
-            s6 += s4 * ((igFileView *)arg1->_file)->Write((void *)s8, s4, 1);
-            t2 = arg1->_memoryRefBufferSize - s6;
+            s6 += s4 * ((igFileView *)file->_file)->Write((void *)s8, s4, 1);
+            t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
         }
-        if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && arg1->_endianSwap != 0) {
-            s1->SwapBytes((void *)arg0->_ref, per);
+        if (((igObject_IsKindOf((void *)s1, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && file->_endianSwap != 0) {
+            s1->SwapBytes((void *)self->_ref, per);
         }
-        arg1->_memoryBytesCopied = s6;
-        arg1->_bytesRemainingInChunk = s2;
-        arg1->_memoryBufferPlace = s0;
-        arg1->_chunkSize = s4;
+        file->_memoryBytesCopied = s6;
+        file->_bytesRemainingInChunk = s2;
+        file->_memoryBufferPlace = s0;
+        file->_chunkSize = s4;
     }
 }
 
@@ -142,7 +142,7 @@ int igMemoryDirEntry_GetMeta(void) {
     return ((int *)g_igMemoryDirEntry_metaObject)[0];
 }
 
-void igMemoryDirEntry_ReadMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
+void igMemoryDirEntry_ReadMemory(igMemoryDirEntry *self, igIGBFile *file) {
     int s6;
     int s8;
     char *s7;
@@ -154,20 +154,20 @@ void igMemoryDirEntry_ReadMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
     int s0;
     int t;
     s6 = 0;
-    s8 = arg0->_memSize;
-    s7 = (char *)arg0->_ref;
-    s4 = arg1->_chunkSize;
-    s3 = arg1->_memoryBufferPlace;
-    s2 = arg1->_memoryBytesCopied;
-    s1 = arg1->_bytesRemainingInChunk;
-    base = arg1->_chunk;
+    s8 = self->_memSize;
+    s7 = (char *)self->_ref;
+    s4 = file->_chunkSize;
+    s3 = file->_memoryBufferPlace;
+    s2 = file->_memoryBytesCopied;
+    s1 = file->_bytesRemainingInChunk;
+    base = file->_chunk;
     while (s6 < s8) {
         if (s1 == 0) {
-            t = arg1->_memoryRefBufferSize;
+            t = file->_memoryRefBufferSize;
             if (t < s4 + s2) {
                 s4 = t - s2;
             }
-            s2 += s4 * ((igFileView *)arg1->_file)->Read((void *)base, s4, 1);
+            s2 += s4 * ((igFileView *)file->_file)->Read((void *)base, s4, 1);
             s1 = s4;
         }
         s0 = s8 - s6;
@@ -184,10 +184,10 @@ void igMemoryDirEntry_ReadMemory(igMemoryDirEntry *arg0, igIGBFile *arg1) {
     }
     s1 = s1 - (s3 - t);
     if (s3 < t) s1 = 0;
-    arg1->_chunkSize = s4;
-    arg1->_memoryBufferPlace = s3;
-    arg1->_memoryBytesCopied = s2;
-    arg1->_bytesRemainingInChunk = s1;
+    file->_chunkSize = s4;
+    file->_memoryBufferPlace = s3;
+    file->_memoryBytesCopied = s2;
+    file->_bytesRemainingInChunk = s1;
 }
 
 void igMemoryDirEntry_RegisterRef(void) {
@@ -195,7 +195,7 @@ void igMemoryDirEntry_RegisterRef(void) {
 
 void igMemoryDirEntry_ResolveRefOld(igMemoryDirEntryView *self, igIGBFileView *file)
 {
-    self->vfunc_34(file);
+    self->resolveRef(file);
 }
 
 void igMemoryDirEntry_ResolveMemory(igMemoryDirEntryView *self, igIGBFileView *r) {
@@ -245,11 +245,11 @@ void igMemoryFile_CreateEntryList(void) {
 void igMemoryFile_ReleaseEntryList(void) {
     int *o;
 
-    o = DAT_00586f48[0];
+    o = g_memoryFileEntries[0];
     o[1] = o[1] - 1;
     if ((o[1] & 0x7FFFFF) == 0) {
         igObject_Destroy(o);
     }
-    DAT_00586f48[0] = 0;
+    g_memoryFileEntries[0] = 0;
 }
 

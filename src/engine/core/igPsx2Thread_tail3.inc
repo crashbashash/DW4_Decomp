@@ -14,13 +14,13 @@ int Gap__Core__igPsx2Thread__vfunc_43(void) {
     return 0x10;
 }
 
-void igPsx2Thread_ReleaseDefaults(void *arg0) {
-    int temp_a1;
+void igPsx2Thread_ReleaseDefaults(igPsx2Thread *self) {
+    int stack;
 
-    if (*(unsigned char *)((char *)(arg0) + 45) == 0) {
-        temp_a1 = *(int *)((char *)(arg0) + 32);
-        if (temp_a1 != 0) {
-            igObject_FreeMemory((int)arg0, temp_a1);
+    if (self->_userStack == 0) {
+        stack = self->_stack;
+        if (stack != 0) {
+            igObject_FreeMemory((int)self, stack);
         }
     }
 }

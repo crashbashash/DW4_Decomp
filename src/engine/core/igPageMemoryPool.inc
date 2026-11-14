@@ -1,15 +1,15 @@
-int igPageMemoryPool_Clone(int arg0, int arg1) {
-    int temp_v0;
+int igPageMemoryPool_Clone(int source, int copyMode) {
+    int clone;
 
     if (*g_objectSystem[0] != 0) {
         igPageMemoryPool_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)arg0, arg1);
+        return igObject_CloneViaMetadata((void **)source, copyMode);
     }
-    temp_v0 = ((int)igObject_OperatorNew(0x110, 0, ((int)Memory_GetDefaultAllocator())));
-    if (temp_v0 != 0) {
-        temp_v0 = ((int)igPageMemoryPool_CopyConstruct((igPageMemoryPool *)temp_v0, arg0));
+    clone = ((int)igObject_OperatorNew(0x110, 0, ((int)Memory_GetDefaultAllocator())));
+    if (clone != 0) {
+        clone = ((int)igPageMemoryPool_CopyConstruct((igPageMemoryPool *)clone, source));
     }
-    return temp_v0;
+    return clone;
 }
 
 igMetaObject *igPageMemoryPool_GetMetaObject(void)
@@ -26,12 +26,12 @@ done:
 
 int igPageMemoryPool_GetVTable(void) {
     igPageMemoryPool pool;
-    int temp_s0;
+    int result;
     igObject *q0;
     igObject *q1;
     igPageMemoryPool_Initialize(&pool);
-    temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    pool._vtable = (int)&DAT_005311f0[0];
+    result = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&g_igPageMemoryPool_vtable[0];
     q0 = (igObject *)&pool._eventTracker;
     if (q0 != 0) {
         q0 = *(igObject **)q0;
@@ -53,7 +53,7 @@ int igPageMemoryPool_GetVTable(void) {
         }
     }
 
-    return temp_s0;
+    return result;
 }
 
 void igPageMemoryPool_EnsureRegistered(void)
@@ -96,32 +96,32 @@ void igPageMemoryPool_InitFields(void) {
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
-    defaultMessageLevel = DAT_004c2600[0];
+    defaultMessageLevel = g_igPageMemoryPool_defaultMessageLevel[0];
     igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, &defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igPageMemoryPool_GetMessageLevelMetaEnum;
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 6), g_igPageMemoryPool_defaultPoolOptionFlags[0]);
-    igMetaObject_NameFields(meta, (const char **)g_igPageMemoryPool_fieldTable, (igMetaField ***)DAT_004c1720, DAT_004c1740, base);
+    igMetaObject_NameFields(meta, (const char **)g_igPageMemoryPool_fieldTable, (igMetaField ***)g_igPageMemoryPool_fieldDescriptors, g_igPageMemoryPool_fieldOffsets, base);
     g_igPageMemoryPool_metaObject[0]->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }
 
 int igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum(void) {
-    if (DAT_00586a70[0] == 0) {
-        DAT_00586a70[0] = ((int)igMetaEnum_Create((char *)&text_ArenaMemoryPoolFlags[0], (char **)&DAT_004c1760[0], &DAT_004c1790[0], 0xA));
+    if (g_arenaMemoryPoolFlagsMetaEnum[0] == 0) {
+        g_arenaMemoryPoolFlagsMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_ArenaMemoryPoolFlags[0], (char **)&g_arenaMemoryPoolFlagsNames[0], &g_arenaMemoryPoolFlagsValues[0], 0xA));
     }
-    return DAT_00586a70[0];
+    return g_arenaMemoryPoolFlagsMetaEnum[0];
 }
 
 int igArenaMemoryPool_GetMessageLevelMetaEnum(void) {
-    if (DAT_00586a78[0] == 0) {
-        DAT_00586a78[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&DAT_004c17c0[0], &DAT_004c17d0[0], 4));
+    if (g_messageLevelMetaEnum[0] == 0) {
+        g_messageLevelMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&g_messageLevelNames[0], &g_messageLevelValues[0], 4));
     }
-    return DAT_00586a78[0];
+    return g_messageLevelMetaEnum[0];
 }
 
 int igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum(void) {
-    if (DAT_00586a80[0] == 0) {
-        DAT_00586a80[0] = ((int)igMetaEnum_Create((char *)&text_HeapIntegrityCheckLevel[0], (char **)&DAT_004c17e0[0], &DAT_004c17f0[0], 4));
+    if (g_heapIntegrityCheckLevelMetaEnum[0] == 0) {
+        g_heapIntegrityCheckLevelMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_HeapIntegrityCheckLevel[0], (char **)&g_heapIntegrityCheckLevelNames[0], &g_heapIntegrityCheckLevelValues[0], 4));
     }
-    return DAT_00586a80[0];
+    return g_heapIntegrityCheckLevelMetaEnum[0];
 }
 

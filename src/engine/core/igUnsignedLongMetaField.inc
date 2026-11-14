@@ -1,32 +1,32 @@
-void **igUnsignedLongMetaField_Create(int arg0) {
-    void **var_s0;
+void **igUnsignedLongMetaField_Create(int allocator) {
+    void **field;
 
     if (*g_objectSystem[0] != 0) {
         igUnsignedLongMetaField_EnsureRegistered();
-        var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedLongMetaField_metaObject[0], (igMemoryPoolView *)arg0)));
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedLongMetaField_metaObject[0], (igMemoryPoolView *)allocator)));
     } else {
-        var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)arg0)));
-        if (var_s0 != 0) {
-            var_s0 = (void **)(((void **)igUnsignedLongMetaField_Construct((int **)var_s0, 1)));
+        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)allocator)));
+        if (field != 0) {
+            field = (void **)(((void **)igUnsignedLongMetaField_Construct((int **)field, 1)));
         }
-        ((igObjectDispatchView *)(var_s0))->vfunc_09();
-        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
+        ((igObjectDispatchView *)(field))->initDefaults();
+        ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
-    return var_s0;
+    return field;
 }
 
-int igUnsignedLongMetaField_Clone(int arg0, int arg1) {
-    int temp_v0;
+int igUnsignedLongMetaField_Clone(int source, int flags) {
+    int copy;
 
     if (*g_objectSystem[0] != 0) {
         igUnsignedLongMetaField_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)arg0, arg1);
+        return igObject_CloneViaMetadata((void **)source, flags);
     }
-    temp_v0 = ((int)igObject_AllocateRawStorageDefault(0x34, 0));
-    if (temp_v0 != 0) {
-        temp_v0 = ((int)igUnsignedLongMetaField_CopyConstruct((int **)temp_v0, arg0));
+    copy = ((int)igObject_AllocateRawStorageDefault(0x34, 0));
+    if (copy != 0) {
+        copy = ((int)igUnsignedLongMetaField_CopyConstruct((int **)copy, source));
     }
-    return temp_v0;
+    return copy;
 }
 
 igMetaObject *igUnsignedLongMetaField_GetMetaObject(void)
@@ -38,29 +38,29 @@ igMetaObject *igUnsignedLongMetaField_GetMetaObject(void)
 }
 
 int igUnsignedLongMetaField_GetVTable(void) {
-    igUnsignedLongMetaField u;
-    int temp_s0;
-    char *ps;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    igUnsignedLongMetaField field;
+    int vtable;
+    char *nameSlot;
+    int *text;
+    int *header;
+    int count;
 
-    igUnsignedLongMetaField_Init((int **)&u);
-    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    u._vtable = (int)&g_igMetaField_vtable[0];
-    ps = (char *)&u._fieldName;
-    if (ps != 0) {
-        temp_v1 = *(int **)ps;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    igUnsignedLongMetaField_Init((int **)&field);
+    vtable = *(int *)((char *)&field + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    field._vtable = (int)&g_igMetaField_vtable[0];
+    nameSlot = (char *)&field._fieldName;
+    if (nameSlot != 0) {
+        text = *(int **)nameSlot;
+        if (text != 0) {
+            header = text - 2;
+            count = text[-1] - 1;
+            text[-1] = count;
+            if (count == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igUnsignedLongMetaField_EnsureRegistered(void)
@@ -89,30 +89,30 @@ void igUnsignedLongMetaField_GetMetaObjectFunction(void) {
 }
 
 void igUnsignedLongMetaField_CreateDefaultDescriptor(void) {
-    void *temp_s0;
+    void *descriptor;
 
-    if (DAT_00585718[0] == 0) {
-        DAT_00585718[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedLongMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        temp_s0 = (void *)(DAT_00585718[0]);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+    if (g_igUnsignedLongMetaField_descriptor[0] == 0) {
+        g_igUnsignedLongMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedLongMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        descriptor = (void *)(g_igUnsignedLongMetaField_descriptor[0]);
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
-                void *held = (void *)DAT_00585718[0];
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
+                igObject *held = (igObject *)g_igUnsignedLongMetaField_descriptor[0];
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_00585718[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)DAT_00585718[0]);
+            ((igMetaField *)g_igUnsignedLongMetaField_descriptor[0])->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedLongMetaField_descriptor[0]);
         }
     }
 }
 
 int igUnsignedLongMetaField_GetDefaultDescriptor(void) {
-    if (((int *)DAT_00585718)[0] == 0) {
+    if (((int *)g_igUnsignedLongMetaField_descriptor)[0] == 0) {
         igUnsignedLongMetaField_EnsureRegistered();
     }
-    return ((int *)DAT_00585718)[0];
+    return ((int *)g_igUnsignedLongMetaField_descriptor)[0];
 }
 

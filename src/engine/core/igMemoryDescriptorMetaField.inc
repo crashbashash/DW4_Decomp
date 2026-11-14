@@ -7,44 +7,44 @@ igMetaObject *igMemoryDescriptorMetaField_GetMetaObject(void)
 }
 
 int igMemoryDescriptorMetaField_GetVTable(void) {
-    igMemoryDescriptorMetaField u;
-    int temp_s0;
-    igObject *q0;
-    char *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    igMemoryDescriptorMetaField field;
+    int result;
+    igObject *fieldList;
+    char *fieldName;
+    int *name;
+    int *header;
+    int refs;
 
-    igMetaField_Init((igMetaField *)&u);
-    u._vtable = (int)&DAT_00531740[0];
-    q0 = (igObject *)&u._fieldList;
-    *(int *)q0 = 0;
-    u._vtable = (int)&DAT_00530d90[0];
-    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    u._vtable = (int)&DAT_00531740[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)((int) (q0->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
+    igMetaField_Init((igMetaField *)&field);
+    field._vtable = (int)&g_igCompoundMetaField_vtable[0];
+    fieldList = (igObject *)&field._fieldList;
+    *(int *)fieldList = 0;
+    field._vtable = (int)&g_igMemoryDescriptorMetaField_vtable[0];
+    result = *(int *)((char *)&field + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    field._vtable = (int)&g_igCompoundMetaField_vtable[0];
+    if (fieldList != 0) {
+        fieldList = *(igObject **)fieldList;
+        if (fieldList != 0) {
+            fieldList->_refCount = (int)((int) (fieldList->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) fieldList->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(fieldList);
             }
         }
     }
-    q1 = (char *)&u._fieldName;
-    u._vtable = (int)&g_igMetaField_vtable[0];
-    if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    fieldName = (char *)&field._fieldName;
+    field._vtable = (int)&g_igMetaField_vtable[0];
+    if (fieldName != 0) {
+        name = *(int **)fieldName;
+        if (name != 0) {
+            header = name - 2;
+            refs = name[-1] - 1;
+            name[-1] = refs;
+            if (refs == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
-    return temp_s0;
+    return result;
 }
 
 void igMemoryDescriptorMetaField_EnsureRegistered(void)
@@ -74,21 +74,21 @@ void igMemoryDescriptorMetaField_GetMetaObjectFunction(void) {
 }
 
 void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
-    void *temp_s0;
+    void *descriptor;
 
     if (g_igMemoryDescriptorMetaField_descriptor[0] == 0) {
         g_igMemoryDescriptorMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igMemoryDescriptorMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        temp_s0 = (void *)(g_igMemoryDescriptorMetaField_descriptor[0]);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+        descriptor = (void *)(g_igMemoryDescriptorMetaField_descriptor[0]);
+        if (descriptor != 0) {
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igMemoryDescriptorMetaField_descriptor[0];
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
+                ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
+                if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(g_igMemoryDescriptorMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
+            ((igMetaField *)g_igMemoryDescriptorMetaField_descriptor[0])->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
             igMetaField_FinalizeDescriptor((igMetaField *)g_igMemoryDescriptorMetaField_descriptor[0]);
         }
     }
@@ -102,47 +102,47 @@ int igMemoryDescriptorMetaField_GetSize(void) {
     return 4;
 }
 
-void igMemoryDescriptorMetaField_InitDefaults(void *arg0) {
-    igMemoryDescriptorMetaField_AddSubFields(*(int *)((char *)arg0 + 52));
+void igMemoryDescriptorMetaField_InitDefaults(void *self) {
+    igMemoryDescriptorMetaField_AddSubFields(((igCompoundMetaField *)self)->_fieldList);
 }
 
-void igMemoryDescriptorMetaField_AddSubFields(int arg0) {
-    void *sp3C;
-    int *temp_a1;
-    int temp_v0;
-    int var_v0_2;
-    void *temp_s0;
-    void *var_v0;
+void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
+    void *fieldName;
+    int *header;
+    int refs;
+    int pool;
+    void *field;
+    void *name;
 
-    temp_s0 = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    field = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
     if (&text_sizeAndStatus[0] == 0) {
-        var_v0 = (void *)(0);
+        name = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = ((int)StringPool_Allocate(0x10));
-            if (var_v0_2 != 0) {
-                var_v0_2 = ((int)StringPool_Construct((StringPool *)var_v0_2));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0_2;
+            g_stringPool[0] = pool;
         }
-        var_v0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_sizeAndStatus[0])));
+        name = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text_sizeAndStatus[0])));
     }
-    sp3C = (void *)(var_v0);
-    igMetaField_SetFieldName((igMetaField *)temp_s0, &sp3C);
-    if (sp3C != 0) {
-        temp_a1 = (int *)((char *)sp3C - 8);
-        temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;
-        *(int *)((char *)(sp3C) - 4) = temp_v0;
-        if (temp_v0 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    fieldName = (void *)(name);
+    igMetaField_SetFieldName((igMetaField *)field, &fieldName);
+    if (fieldName != 0) {
+        header = (int *)((char *)fieldName - 8);
+        refs = *(int *)((char *)(fieldName) - 4) - 1;
+        *(int *)((char *)(fieldName) - 4) = refs;
+        if (refs == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    *(int *)((char *)(temp_s0) + 8) = 0;
-    igMetaField_FinalizeDescriptor((igMetaField *)temp_s0);
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0);
-    *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
-    if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_s0);
+    ((igMetaField *)field)->_offset = 0;
+    igMetaField_FinalizeDescriptor((igMetaField *)field);
+    ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)field);
+    ((igObject *)field)->_refCount = (int)((int) (((igObject *)field)->_refCount - 1));
+    if (((unsigned long long) ((long long) (int) ((igObject *)field)->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(field);
     }
 }
 

@@ -17,7 +17,7 @@ int igObjectListList_GetVTable(void) {
     int tmp[8];
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&DAT_00532180[0];
+    tmp[0] = (int)&g_igObjectListList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
     return *(int *)((char *)tmp + off);
 }

@@ -1,25 +1,25 @@
 igMetaObject *igMetaFieldInfo_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMetaFieldInfo_metaObject_00585cb8[0];
+    igMetaObject *g = g_igMetaFieldInfo_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
         igMetaFieldInfo_EnsureRegistered();
-    return g_igMetaFieldInfo_metaObject_00585cb8[0];
+    return g_igMetaFieldInfo_metaObject[0];
 }
 
 int igMetaFieldInfo_GetVTable(void) {
-    igMetaFieldInfo u;
+    igMetaFieldInfo info;
     int s0;
     char *ps;
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((igObject *)&u);
-    ps = (char *)&u._name;
+    igObject_InitHeader((igObject *)&info);
+    ps = (char *)&info._name;
     *(int *)ps = 0;
-    u._vtable = (int)&g_igNamedObject_vtable[0];
-    u._vtable = (int)&DAT_0052f1c0[0];
-    s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    u._vtable = (int)&g_igNamedObject_vtable[0];
+    info._vtable = (int)&g_igNamedObject_vtable[0];
+    info._vtable = (int)&g_igMetaFieldInfo_vtable[0];
+    s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {
@@ -43,7 +43,7 @@ void igMetaFieldInfo_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igMetaFieldInfo_metaObject_00585cb8,
+        g_igMetaFieldInfo_metaObject,
         (igMetaObjectRegisterFunction)igInfo_Register,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMetaFieldInfo_GetMetaObjectFunction,
@@ -61,9 +61,9 @@ void igMetaFieldInfo_GetMetaObjectFunction(void) {
 }
 
 int igMetaField_GetResetTypeMetaEnum(void) {
-    if (DAT_00585cc0[0] == 0) {
-        DAT_00585cc0[0] = ((int)igMetaEnum_Create((char *)&text_ResetType[0], (char **)&DAT_004bfdd0[0], &DAT_004bfde0[0], 4));
+    if (g_igMetaField_resetTypeMetaEnum[0] == 0) {
+        g_igMetaField_resetTypeMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_ResetType[0], (char **)&g_igMetaField_resetTypeNames[0], &g_igMetaField_resetTypeValues[0], 4));
     }
-    return DAT_00585cc0[0];
+    return g_igMetaField_resetTypeMetaEnum[0];
 }
 

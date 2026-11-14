@@ -2,9 +2,9 @@ igMetaObject *igIntList_GetPublishedMetaObject(void) {
     return g_igIntList_metaObject[0];
 }
 
-void * igIntList_Create(int arg0) {
+void * igIntList_Create(int allocator) {
     igIntList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586880), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586880), (igMemoryPoolView *)allocator));
 }
 
 /* Created with allocation only when missing. */
@@ -27,7 +27,7 @@ int igIntList_GetVTable(void) {
     igIntList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00531b70[0];
+    list._vtable = (int)&g_igIntList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -57,7 +57,7 @@ void igIntList_GetMetaObjectFunction(void) {
     igIntList_GetMetaObject();
 }
 
-static inline void releaseField_2cac20(igMemoryRefMetaField *f) {
+static inline void releaseDataField(igMemoryRefMetaField *f) {
     f->_refCount = (int)f->_refCount - 1;
     if (((unsigned long long)((long long)(int)f->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(f);
@@ -73,6 +73,6 @@ void igIntList_InitFields(void) {
     field->_memSize = 0;
     field->_externalEnumStorage = (int)g_igIntList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    releaseField_2cac20(field);
+    releaseDataField(field);
 }
 

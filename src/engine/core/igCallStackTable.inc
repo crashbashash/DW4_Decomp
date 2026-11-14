@@ -15,18 +15,18 @@ igMetaObject *igCallStackTable_GetMetaObject(void)
 
 int igCallStackTable_GetVTable(void) {
     igCallStackTable table;
-    int temp_s0;
+    int vtable;
     igObject *q0;
     igObject *q1;
 
     igObject_InitHeader((igObject *)&table);
-    table._vtable = (int)&DAT_00530c00[0];
+    table._vtable = (int)&g_igCallStackTable_vtable[0];
     q1 = (igObject *)&table._callStacks;
     *(int *)q1 = 0;
     q0 = (igObject *)&table._hashIndex;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    table._vtable = (int)&DAT_00530c00[0];
+    vtable = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    table._vtable = (int)&g_igCallStackTable_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
         if (q0 != 0) {
@@ -45,7 +45,7 @@ int igCallStackTable_GetVTable(void) {
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igCallStackTable_EnsureRegistered(void)
@@ -75,19 +75,19 @@ void igCallStackTable_GetMetaObjectFunction(void) {
 }
 
 void igCallStackTable_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *hashIndex;
+    void *callStacks;
+    void *meta;
 
-    temp_s0 = (void *)g_igCallStackTable_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igCallStackTable_ctorTable[0], 4);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igCallStackTable_fieldTable[0], (igMetaField ***)&DAT_004c1550[0], &DAT_004c1560[0], temp_s2);
+    meta = (void *)g_igCallStackTable_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igCallStackTable_ctorTable[0], 4);
+    callStacks = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)callStacks)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
+    ((igRefMetaField *)callStacks)->_construct = 1;
+    hashIndex = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igCallStackTable_fieldTable[0], (igMetaField ***)&g_igCallStackTable_fieldDescriptors[0], &g_igCallStackTable_fieldOffsets[0], base);
 }
 

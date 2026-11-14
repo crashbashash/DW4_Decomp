@@ -1,36 +1,36 @@
-void igMemoryFile_AddMemoryFileEntry(int arg0, int arg1, int arg2) {
+void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
     igMemoryFile_EnsureRegistered();
-    if (arg1 != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0]))));
-        igNamedObject_SetName((igNamedObject *)entry.p, arg0);
-        entry->_size = arg2;
-        entry->_buffer = arg1;
-        ObjectList_AppendRetained((igObjectList *)(((int *)DAT_00586f48)[0]), (igObject *)entry.p);
+    if (buffer != 0) {
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator(((int *)g_memoryFileEntries)[0]))));
+        igNamedObject_SetName((igNamedObject *)entry.p, name);
+        entry->_size = size;
+        entry->_buffer = buffer;
+        ObjectList_AppendRetained((igObjectList *)(((int *)g_memoryFileEntries)[0]), (igObject *)entry.p);
     }
 }
 
-void igMemoryFile_LookupMemoryBuffer(int arg0, int *arg1, int *arg2) {
-    int temp_a0;
-    void *temp_v0;
+void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
+    int entries;
+    igMemoryFileEntry *entry;
 
-    *arg1 = 0;
-    *arg2 = 0;
-    temp_a0 = *(int *)0x586F48;
-    if (temp_a0 != 0) {
-        temp_v0 = ((void *)igProperty_FindByName((igObjectList *)temp_a0, (igMetaField *)(*(int *)0x585BE0), arg0));
-        if (temp_v0 != 0) {
-            *arg1 = *(int *)((char *)temp_v0 + 12);
-            *arg2 = *(int *)((char *)temp_v0 + 16);
+    *buffer = 0;
+    *size = 0;
+    entries = ((int *)g_memoryFileEntries)[0];
+    if (entries != 0) {
+        entry = ((igMemoryFileEntry *)igProperty_FindByName((igObjectList *)entries, (igMetaField *)g_propertyNameField[0], name));
+        if (entry != 0) {
+            *buffer = entry->_buffer;
+            *size = entry->_size;
         }
     }
 }
 
-void igMemoryFile_Open(int *arg0, igMemoryFileView *self, unsigned int mode) {
+void igMemoryFile_Open(int *result, igMemoryFileView *self, unsigned int mode) {
     int buffer;
     int size;
 
     if (self->_bIsOpen != 0) {
-        *arg0 = g_resultSuccess.v;
+        *result = g_resultSuccess.v;
         return;
     }
     if (mode == 8) {
@@ -42,16 +42,16 @@ void igMemoryFile_Open(int *arg0, igMemoryFileView *self, unsigned int mode) {
     case 3:
     case 5:
     case 6:
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
         return;
     default:
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
         return;
     case 0:
     case 4:
         igMemoryFile_LookupMemoryBuffer((int)self->_fileName, &buffer, &size);
         if (buffer == 0) {
-            *arg0 = g_resultFailure.v;
+            *result = g_resultFailure.v;
             return;
         }
         self->_iSeekPosition = 0;
@@ -59,7 +59,7 @@ void igMemoryFile_Open(int *arg0, igMemoryFileView *self, unsigned int mode) {
         self->_iBufferSize = size;
         self->_bIsOpen = 1;
         self->_fileHandle = buffer;
-        *arg0 = g_resultSuccess.v;
+        *result = g_resultSuccess.v;
         return;
     }
 }
@@ -68,22 +68,22 @@ void igMemoryFile_Close(igMemoryFileView *self) {
     self->_bIsOpen = 0;
 }
 
-igFileView *igMemoryFile_OpenFile(igFileView *arg0, const char *fileName, int arg2) {
+igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mode) {
     int ok;
-    igFile_SetFileName((int *)arg0, fileName);
-    if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
-        ok = arg0->vfunc_23(0) == g_resultSuccess;
-    } else if (strcmp(arg2, &((int *)DAT_004f9c48)[0]) == 0) {
-        ok = arg0->vfunc_23(4) == g_resultSuccess;
+    igFile_SetFileName((int *)self, fileName);
+    if (strcmp(mode, &text_r[0]) == 0) {
+        ok = self->openWithMode(0) == g_resultSuccess;
+    } else if (strcmp(mode, &((int *)text_rb)[0]) == 0) {
+        ok = self->openWithMode(4) == g_resultSuccess;
     } else {
         return 0;
     }
-    return ok ? arg0 : 0;
+    return ok ? self : 0;
 }
 
 void igMemoryFile_CloseFile(igMemoryFileView *self)
 {
-    self->vfunc_24();
+    self->closeHandle();
 }
 
 int igMemoryFile_Read(igMemoryFileView *self, void *buffer, int size, int count) {
@@ -115,7 +115,7 @@ int igMemoryFile_Write(void) {
     return -1;
 }
 
-int igMemoryFile_Scanf(void *arg0, int arg1, ...) {
+int igMemoryFile_Scanf(void *self, int format, ...) {
     return -1;
 }
 
@@ -130,18 +130,18 @@ int igMemoryFile_Flush(void) {
 }
 
 char igMemoryFile_GetChar(igMemoryFileView *self) {
-    int temp_a1;
+    int position;
     char r;
 
     if (self->_bIsOpen == 0) {
         return -1;
     }
-    temp_a1 = self->_iSeekPosition;
-    if ((self->_iBufferSize - temp_a1) <= 0) {
+    position = self->_iSeekPosition;
+    if ((self->_iBufferSize - position) <= 0) {
         return -1;
     }
-    r = *(char *)(temp_a1 + (int)self->_buffer);
-    self->_iSeekPosition = temp_a1 + 1;
+    r = *(char *)(position + (int)self->_buffer);
+    self->_iSeekPosition = position + 1;
     return r;
 }
 

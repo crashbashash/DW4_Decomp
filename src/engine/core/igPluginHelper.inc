@@ -1,6 +1,6 @@
-void igPluginHelper_Create(int arg0) {
+void igPluginHelper_Create(int pool) {
     igPluginHelper_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPluginHelper_GetMetaObject(void)
@@ -13,56 +13,56 @@ igMetaObject *igPluginHelper_GetMetaObject(void)
 
 int igPluginHelper_GetVTable(void) {
     igPluginHelper helper;
-    int t;
+    int vtable;
     igObject_InitHeader((igObject *)&helper);
-    helper._vtable = (int)&DAT_0052eee0[0];
+    helper._vtable = (int)&g_igPluginHelper_vtable[0];
     helper._pluginExtension = 0;
     helper._repositoryList = 0;
     helper._libraryLoader = 0;
     helper._loadedPlugins = 0;
-    t = *(int *)((char *)&helper + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    helper._vtable = (int)&DAT_0052eee0[0];
+    vtable = *(int *)((char *)&helper + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    helper._vtable = (int)&g_igPluginHelper_vtable[0];
     igSmartPointer_igLibraryList_Destruct((igSmartPointer<igObject> *)(&helper._loadedPlugins), -1);
     igSmartPointer_igLibraryLoader_Destruct((void **)(&helper._libraryLoader), (short)(-1));
     igSmartPointer_igPluginRepositoryList_Destruct((void **)(&helper._repositoryList), (long long)(-1));
     StringRef_Destruct_00130720(&helper._pluginExtension, -1);
-    return t;
+    return vtable;
 }
 
-void **igSmartPointer_igPluginRepositoryList_Destruct(void **arg0, long long arg1) {
-    char *o;
+void **igSmartPointer_igPluginRepositoryList_Destruct(void **pointer, long long flags) {
+    igObject *list;
 
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    if (pointer != 0) {
+        list = (igObject *)*pointer;
+        if (list != 0) {
+            list->_refCount = list->_refCount - 1;
+            if ((list->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(list);
             }
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+        if ((short)flags > 0) {
+            __dl__FPv(pointer);
         }
     }
-    return arg0;
+    return pointer;
 }
 
-void **igSmartPointer_igLibraryLoader_Destruct(void **arg0, short arg1) {
+void **igSmartPointer_igLibraryLoader_Destruct(void **pointer, short flags) {
     igLibraryLoaderView *loader;
 
-    if (arg0 != 0) {
-        loader = (igLibraryLoaderView *)*arg0;
+    if (pointer != 0) {
+        loader = (igLibraryLoaderView *)*pointer;
         if (loader != 0) {
             loader->_refCount = loader->_refCount - 1;
             if ((loader->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(loader);
             }
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
+        if (flags > 0) {
+            __dl__FPv(pointer);
         }
     }
-    return arg0;
+    return pointer;
 }
 
 igSmartPointer<igObject> *igSmartPointer_igLibraryList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
@@ -105,25 +105,25 @@ void igPluginHelper_GetMetaObjectFunction(void) {
 }
 
 void igPluginHelper_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int first;
+    void *pluginsField;
+    void *loaderField;
+    void *repositoryField;
+    void *meta;
 
-    temp_s0 = (void *)g_igPluginHelper_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPluginHelper_ctorTable[0], 4);
-    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), (int)&DAT_004f6340[0]);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPluginRepositoryList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igLibraryLoader_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igLibraryList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPluginHelper_fieldTable[0], (igMetaField ***)&DAT_004bfa10[0], &DAT_004bfa20[0], temp_s2);
+    meta = (void *)g_igPluginHelper_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPluginHelper_ctorTable[0], 4);
+    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))), (int)&text_dot_so[0]);
+    repositoryField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
+    ((igObjectRefMetaField *)repositoryField)->_metaObject = (int)igPluginRepositoryList_GetOrCreateMetaObject();
+    ((igRefMetaField *)repositoryField)->_construct = 1;
+    loaderField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
+    ((igObjectRefMetaField *)loaderField)->_metaObject = (int)igLibraryLoader_GetOrCreateMetaObject();
+    ((igRefMetaField *)loaderField)->_construct = 1;
+    pluginsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3)));
+    ((igObjectRefMetaField *)pluginsField)->_metaObject = (int)igLibraryList_GetOrCreateMetaObject();
+    ((igRefMetaField *)pluginsField)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPluginHelper_fieldTable[0], (igMetaField ***)&g_igPluginHelper_fieldDescriptors[0], &g_igPluginHelper_fieldOffsets[0], first);
 }
 

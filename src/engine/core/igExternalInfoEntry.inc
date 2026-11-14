@@ -1,6 +1,6 @@
-void *igExternalInfoEntry_Create(int arg0) {
+void *igExternalInfoEntry_Create(int pool) {
     igExternalInfoEntry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5863F8), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5863F8), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igExternalInfoEntry_GetMetaObject(void)
@@ -13,23 +13,23 @@ igMetaObject *igExternalInfoEntry_GetMetaObject(void)
 
 int igExternalInfoEntry_GetVTable(void) {
     igExternalInfoEntry entry;
-    int temp_s0;
+    int vtable;
     int *p;
     int *q;
 
     igObject_InitHeader((igObject *)&entry);
     entry._name = 0;
-    entry._vtable = (int)&DAT_00530200[0];
+    entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
     p = &entry._key;
     q = &entry._infoName;
     *p = 0;
     *q = 0;
-    temp_s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    entry._vtable = (int)&DAT_00530200[0];
+    vtable = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
     FUN_00130720(q, -1);
     FUN_00130720(p, -1);
     FUN_0014f4e0(&entry, 0);
-    return temp_s0;
+    return vtable;
 }
 
 void igExternalInfoEntry_EnsureRegistered(void)
@@ -59,15 +59,15 @@ void igExternalInfoEntry_GetMetaObjectFunction(void) {
 }
 
 void igExternalInfoEntry_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int first;
+    void *meta;
 
-    temp_s0 = (void *)g_igExternalInfoEntry_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igExternalInfoEntry_ctorTable[0], 3);
-    igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), 0);
-    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), -1);
-    igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 0);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igExternalInfoEntry_fieldTable[0], (igMetaField ***)&DAT_004c0c20[0], &DAT_004c0c30[0], temp_s1);
+    meta = (void *)g_igExternalInfoEntry_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igExternalInfoEntry_ctorTable[0], 3);
+    igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)), 0);
+    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)), -1);
+    igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)), 0);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igExternalInfoEntry_fieldTable[0], (igMetaField ***)&g_igExternalInfoEntry_fieldDescriptors[0], &g_igExternalInfoEntry_fieldOffsets[0], first);
 }
 

@@ -25,23 +25,23 @@ void igMallocMemoryPool_Activate(igMallocMemoryPool *self) {
     self->_isActive = 1;
 }
 
-igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *arg1, unsigned char arg2) {
-    igResult a;
-    igResult b;
-    igResult c;
-    if (arg2 == 0) {
-        igSmartPointer<igSemaphoreView> held(arg1->_allocationLock);
-        arg1->_allocationLock.clear();
+igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *self, unsigned char enable) {
+    igResult waited;
+    igResult destroyed;
+    igResult created;
+    if (enable == 0) {
+        igSmartPointer<igSemaphoreView> held(self->_allocationLock);
+        self->_allocationLock.clear();
         if (held.p != 0) {
-            a = held.p->wait(1);
-            b = held.p->destroy();
+            waited = held.p->wait(1);
+            destroyed = held.p->destroy();
         }
-        arg1->_allocationLock.clear();
-    } else if (arg2 == 1) {
-        if (arg1->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)arg1)))));
-        c = created.p->create();
-        arg1->_allocationLock = created;
+        self->_allocationLock.clear();
+    } else if (enable == 1) {
+        if (self->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
+        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        created = semaphore.p->create();
+        self->_allocationLock = semaphore;
     }
     return igResult(g_resultSuccess.v);
 }
@@ -85,8 +85,8 @@ int igMallocMemoryPool_GetElementSize(igMallocMemoryPool *self) {
     return self->_elementSize;
 }
 
-long long Gap__Core__igMallocMemoryPool__vfunc_46(igMallocMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+long long Gap__Core__igMallocMemoryPool__vfunc_46(igMallocMemoryPool *self) {
+    return self->_maxSize - self->_localNetAllocatedWithOverhead;
 }
 
 /* Slot 47 getter: returns the pool's _localNetAllocated field (bytes currently allocated from this
@@ -101,16 +101,16 @@ long long igMallocMemoryPool_GetLocalNetAllocatedWithOverhead(igMallocMemoryPool
     return self->_localNetAllocatedWithOverhead;
 }
 
-long long igMallocMemoryPool_GetLocalNetAllocatedHigh(void *arg0) {
-    return *(long long *)((char *)arg0 + 32);
+long long igMallocMemoryPool_GetLocalNetAllocatedHigh(void *pool) {
+    return ((igMallocMemoryPool *)pool)->_localNetAllocatedHigh;
 }
 
-long long igMallocMemoryPool_GetLocalNetAllocatedWithOverheadHigh(void *arg0) {
-    return *(long long *)((char *)arg0 + 64);
+long long igMallocMemoryPool_GetLocalNetAllocatedWithOverheadHigh(void *pool) {
+    return ((igMallocMemoryPool *)pool)->_localNetAllocatedWithOverheadHigh;
 }
 
-long long igMallocMemoryPool_GetFreeSize(igMallocMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+long long igMallocMemoryPool_GetFreeSize(igMallocMemoryPool *self) {
+    return self->_maxSize - self->_localNetAllocatedWithOverhead;
 }
 
 void *igMallocMemoryPool_AllocateElement(igMallocMemoryPoolView *self)
@@ -118,35 +118,35 @@ void *igMallocMemoryPool_AllocateElement(igMallocMemoryPoolView *self)
     return self->Allocate(self->_elementSize);
 }
 
-void igMallocMemoryPool_Lock(void *arg0) {
-    igResult sp1C;
-    void **temp_a1;
+void igMallocMemoryPool_Lock(void *pool) {
+    igResult result;
+    void **lock;
 
-    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
+    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    if (lock != 0) {
+        result = ((igSemaphoreView *)(lock))->wait(1);
     }
 }
 
-void igMallocMemoryPool_Unlock(void *arg0) {
-    igResult sp1C;
-    void **temp_a1;
+void igMallocMemoryPool_Unlock(void *pool) {
+    igResult result;
+    void **lock;
 
-    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp1C = ((igSemaphoreView *)(temp_a1))->signal();
+    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    if (lock != 0) {
+        result = ((igSemaphoreView *)(lock))->signal();
     }
 }
 
-int igMallocMemoryPool_UnlockAndReturn(void *arg0, int arg1) {
-    igResult sp2C;
-    void **temp_a1;
+int igMallocMemoryPool_UnlockAndReturn(void *pool, int value) {
+    igResult result;
+    void **lock;
 
-    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
+    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    if (lock != 0) {
+        result = ((igSemaphoreView *)(lock))->signal();
     }
-    return arg1;
+    return value;
 }
 
 void *igMallocMemoryPool_Allocate(igMallocMemoryPoolView *self, unsigned int size)
@@ -172,22 +172,22 @@ void *igMallocMemoryPool_Callocate(igMallocMemoryPool *self, int count, int size
     return p;
 }
 
-int igMallocMemoryPool_CallocateAligned(igMallocMemoryPool *arg0, int arg1, int arg2) {
-    int temp_s1;
-    void *temp_v0;
-    int temp_v1;
+int igMallocMemoryPool_CallocateAligned(igMallocMemoryPool *self, int count, int size) {
+    int bytes;
+    void *block;
+    int options;
 
-    temp_s1 = arg1 * arg2;
-    temp_v0 = ((igMallocMemoryPoolView *)arg0)->vfunc_101(0, temp_s1);
-    if (temp_v0 != 0) {
-        if (temp_s1 != 0) {
-            temp_v1 = arg0->_poolOptionFlags;
-            if (hasPoolOption(temp_v1, 2) || !hasPoolOption(temp_v1, 4)) {
-                memset(temp_v0, 0, temp_s1);
+    bytes = count * size;
+    block = ((igMallocMemoryPoolView *)self)->vfunc_101(0, bytes);
+    if (block != 0) {
+        if (bytes != 0) {
+            options = self->_poolOptionFlags;
+            if (hasPoolOption(options, 2) || !hasPoolOption(options, 4)) {
+                memset(block, 0, bytes);
             }
         }
     }
-    return (int)temp_v0;
+    return (int)block;
 }
 
 void *igMallocMemoryPool_Reallocate(igMallocMemoryPoolView *self, void *block, unsigned int size)
@@ -291,7 +291,7 @@ igResult Gap__Core__igMallocMemoryPool__vfunc_62(igMallocMemoryPoolView *self, i
             }
             break;
         }
-        if (self->vfunc_23(total, 1) == 0) {
+        if (self->HandleOutOfMemory(total, 1) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
                 if (self->_messageLevel > 0) {
                     if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
@@ -313,8 +313,8 @@ igResult Gap__Core__igMallocMemoryPool__vfunc_62(igMallocMemoryPoolView *self, i
     return g_resultSuccess;
 }
 
-void igMallocMemoryPool_GangAllocAligned(int *arg0) {
-    *arg0 = g_resultFailure.v;
+void igMallocMemoryPool_GangAllocAligned(int *result) {
+    *result = g_resultFailure.v;
 }
 
 void igMallocMemoryPool_GangFree(igMallocMemoryPoolView *self, unsigned int size, char **block) {
@@ -326,16 +326,16 @@ void igMallocMemoryPool_GangFree(igMallocMemoryPoolView *self, unsigned int size
 
 void Gap__Core__igMallocMemoryPool__resetFields(igMallocMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    self->_poolOptionFlags = (int) g_poolOptionFlagsDefault_004c25f8[0];
+    self->_poolOptionFlags = (int) g_igMallocMemoryPool_defaultPoolOptionFlags[0];
 }
 
 void igMallocMemoryPool_SetDefaults(igMallocMemoryPool *self) {
     igObject *r;
     self->_refCount = 0;
     ((igRefCountWord *)&self->_refCount)->bits.count = 1;
-    *((char *)self + 7) = 0;
+    ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = 0;
     self->_poolIndex = 0;
-    ((igMemoryPoolView *)self)->vfunc_51();
+    ((igMemoryPoolView *)self)->ResetStatistics();
     self->_elementSize = 0;
     self->_maxSize = (long long)(unsigned __int128)(unsigned long long)-1LL;
     self->_size = 0;
@@ -347,7 +347,7 @@ void igMallocMemoryPool_SetDefaults(igMallocMemoryPool *self) {
     }
     self->_eventTracker = 0;
     self->_isActive = 0;
-    GPR_00554dbc += 1;
+    g_igMallocMemoryPool_instanceCount += 1;
     r = (igObject *)self->_allocationLock;
     if (r != 0) {
         r->_refCount = r->_refCount - 1;
@@ -358,24 +358,24 @@ void igMallocMemoryPool_SetDefaults(igMallocMemoryPool *self) {
     self->_poolOptionFlags = 12;
 }
 
-void *igMallocMemoryPool_Initialize(igMallocMemoryPool *arg0) {
-    igMemoryPool_Initialize((int **)arg0);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00530e90[0]);
-    arg0->_allocationLock = 0;
-    arg0->_eventTracker = 0;
-    return arg0;
+void *igMallocMemoryPool_Initialize(igMallocMemoryPool *self) {
+    igMemoryPool_Initialize((int **)self);
+    *(int *)self = (int)(&g_igMallocMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    return self;
 }
 
-void *igMallocMemoryPool_CopyConstruct(igMallocMemoryPool *arg0, int extra1) {
-    igMemoryPool_CopyConstruct((igMemoryPool *)arg0, (igMemoryPool *)extra1);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00530e90[0]);
-    arg0->_allocationLock = 0;
-    arg0->_eventTracker = 0;
-    return arg0;
+void *igMallocMemoryPool_CopyConstruct(igMallocMemoryPool *self, int source) {
+    igMemoryPool_CopyConstruct((igMemoryPool *)self, (igMemoryPool *)source);
+    *(int *)self = (int)(&g_igMallocMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    return self;
 }
 
 void igMallocMemoryPool_Destruct(igMallocMemoryPool *self) {
-    ((igMemoryPoolView *)self)->vfunc_98();
+    ((igMemoryPoolView *)self)->Shutdown();
     igMemoryPool_Destruct((int)self);
 }
 
@@ -384,39 +384,39 @@ void igMallocMemoryPool_Free(igMallocMemoryPoolView *self, void *block)
     self->vfunc_101(block, -1, self->_alignment);
 }
 
-int igMallocMemoryPool_OwnsAllocation(int arg0, char *arg1) {
+int igMallocMemoryPool_OwnsAllocation(int pool, char *memory) {
     TaggedBlockHeader *h;
-    int v;
-    int r;
-    int a;
+    int index;
+    int owner;
+    int self;
 
-    a = arg0;
-    h = (TaggedBlockHeader *)(arg1 - 4);
-    if (((TaggedTailByte *)(arg1 - 1))->extended == 1) {
-        h = (TaggedBlockHeader *)(arg1 - 12);
+    self = pool;
+    h = (TaggedBlockHeader *)(memory - 4);
+    if (((TaggedTailByte *)(memory - 1))->extended == 1) {
+        h = (TaggedBlockHeader *)(memory - 12);
     }
     if (h == 0) {
         return 0;
     }
     if (h->big == 0) {
-        v = h->poolLow * 2;
+        index = h->poolLow * 2;
     } else {
-        v = (h->poolLow + (h->poolHigh << 5)) * 2;
+        index = (h->poolLow + (h->poolHigh << 5)) * 2;
     }
-    r = (int)igAllocator_ResolveEncodedIndex(v);
-    return r == a;
+    owner = (int)igAllocator_ResolveEncodedIndex(index);
+    return owner == self;
 }
 
 int Gap__Core__igMallocMemoryPool__vfunc_83(void) {
     return 1;
 }
 
-unsigned int igMallocMemoryPool_GetAllocationSize(int arg0, char *arg1) {
+unsigned int igMallocMemoryPool_GetAllocationSize(int pool, char *memory) {
     TaggedBlockHeader *hdr;
 
-    hdr = (TaggedBlockHeader *)(arg1 - 4);
+    hdr = (TaggedBlockHeader *)(memory - 4);
     if (hdr->big == 1) {
-        hdr = (TaggedBlockHeader *)(arg1 - 0xC);
+        hdr = (TaggedBlockHeader *)(memory - 0xC);
     }
     if (hdr == 0) {
         return 0;
@@ -431,13 +431,13 @@ void igMallocMemoryPool_PrintStatistics(igMallocMemoryPool *self, char *title) {
     char buf[64];
     char *name;
     if (title != 0 && title[0] != 0) {
-        igReport_Printf(DAT_004f90b0);
+        igReport_Printf(percent_s_colon_newline);
         igReport_Flush();
     }
     if (((struct Ctx { char p[36]; int on; } * *)g_objectSystem)[0]->on != 0) {
-        name = FUN_00312140(buf, 64, self->_messageLevel, igMallocMemoryPool_GetMessageLevelMetaEnum());
+        name = igMetaEnum_GetValueName(buf, 64, self->_messageLevel, igMallocMemoryPool_GetMessageLevelMetaEnum());
     } else {
-        name = ((char *)DAT_004f7910);
+        name = ((char *)emptyString_4);
     }
     {
         long long netCountHigh = self->_localNetAllocationCountHigh;
@@ -452,13 +452,13 @@ void igMallocMemoryPool_PrintStatistics(igMallocMemoryPool *self, char *title) {
         long long netAllocated = self->_localNetAllocated;
         long long freed = self->_localFreed;
         long long allocated = self->_localAllocated;
-        igReport_Printf(DAT_004fef30, (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (int)allocatedWithOverhead, (int)freedWithOverhead, (int)netWithOverhead, (int)netWithOverheadHigh, (int)allocationCount, (int)freeCount, (int)netCount, (int)netCountHigh, (int)((igMemoryPoolView *)self)->vfunc_36(), name);
+        igReport_Printf(malloc_pool_statistics_format, (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (int)allocatedWithOverhead, (int)freedWithOverhead, (int)netWithOverhead, (int)netWithOverheadHigh, (int)allocationCount, (int)freeCount, (int)netCount, (int)netCountHigh, (int)((igMemoryPoolView *)self)->GetSize(), name);
     }
     igReport_Flush();
 }
 
-int igMallocMemoryPool_GetEventTracker(void *arg0) {
-    return *(int *)((char *)(arg0) + 148);
+int igMallocMemoryPool_GetEventTracker(void *pool) {
+    return ((igMallocMemoryPool *)pool)->_eventTracker;
 }
 
 void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *tracker) {
@@ -478,84 +478,84 @@ void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *trac
     }
 }
 
-void igMallocMemoryPool_Dump(void *self, int a1, int a2, int a3, int t0) {
-    int *g;
+void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, int fileName) {
+    int *message;
     igMallocMemoryPool_Lock(self);
-    g = &DAT_004ff1b0[0];
-    if (t0 != 0) {
-        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (r.p->Open((const char *)t0, (const char *)&DAT_004f92f0[0]) == 0) {
+    message = &text_dump_has_no_meaning_for_igMallocMemoryPool[0];
+    if (fileName != 0) {
+        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        if (file.p->Open((const char *)fileName, (const char *)&text_w[0]) == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
-                igReport_Warning(DAT_004ff1f0, t0);
+                igReport_Warning(text_igMallocMemoryPool_dump_Could_not_open_file, fileName);
             }
             igMallocMemoryPool_Unlock(self);
             return;
         }
-        r.p->Print((const char *)g);
-        r.p->Close();
+        file.p->Print((const char *)message);
+        file.p->Close();
     } else {
-        printf(g);
+        printf(message);
     }
     igMallocMemoryPool_Unlock(self);
 }
 
-int igMallocMemoryPool_GetPoolIndex(void *arg0) {
-    return *(int *)((char *)(arg0) + 120);
+int igMallocMemoryPool_GetPoolIndex(void *pool) {
+    return ((igMallocMemoryPool *)pool)->_poolIndex;
 }
 
-void igMallocMemoryPool_SetPoolIndex(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 120) = arg1;
+void igMallocMemoryPool_SetPoolIndex(void *pool, int index) {
+    ((igMallocMemoryPool *)pool)->_poolIndex = index;
 }
 
 static inline int poolIndexAccepts(igMallocMemoryPool *p, int y) { if (p->_poolIndex < 64 && y >= 64) return 0; return 1; }
 
-void igMallocMemoryPool_TransferAllocation(int *arg0, igMallocMemoryPool *arg1, char *arg2, igMemoryPoolView *arg3) {
-    int v = arg3->GetPoolIndex();
+void igMallocMemoryPool_TransferAllocation(int *result, igMallocMemoryPool *self, char *memory, igMemoryPoolView *target) {
+    int targetIndex = target->GetPoolIndex();
     int ok;
     TaggedBlockHeader *h;
-    int a;
-    ok = poolIndexAccepts(arg1, v);
+    int index;
+    ok = poolIndexAccepts(self, targetIndex);
     if (ok != 0) {
-        h = (TaggedBlockHeader *)(arg2 - 4);
-        if (((TaggedTailByte *)(arg2 - 1))->extended == 1) {
-            h = (TaggedBlockHeader *)(arg2 - 12);
+        h = (TaggedBlockHeader *)(memory - 4);
+        if (((TaggedTailByte *)(memory - 1))->extended == 1) {
+            h = (TaggedBlockHeader *)(memory - 12);
         }
-        a = arg3->GetPoolIndex() >> 1;
-        h->poolLow = a;
+        index = target->GetPoolIndex() >> 1;
+        h->poolLow = index;
         if (h->big == 1) {
-            h->poolHigh = a >> 5;
+            h->poolHigh = index >> 5;
         }
-        *arg0 = g_resultSuccess.v;
+        *result = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *result = g_resultFailure.v;
     }
 }
 
-int igMallocMemoryPool_CanTransferTo(void *arg0, void **arg1) {
-    int temp_v0;
-    int var_v0;
+int igMallocMemoryPool_CanTransferTo(void *pool, void **target) {
+    int targetIndex;
+    int allowed;
 
-    temp_v0 = ((igMemoryPoolView *)(arg1))->GetPoolIndex();
-    if ((*(int *)((char *)(arg0) + 120) < 0x40) && (temp_v0 >= 0x40)) {
-        var_v0 = 0;
+    targetIndex = ((igMemoryPoolView *)(target))->GetPoolIndex();
+    if ((((igMallocMemoryPool *)pool)->_poolIndex < 0x40) && (targetIndex >= 0x40)) {
+        allowed = 0;
     } else {
-        var_v0 = 1;
+        allowed = 1;
     }
-    if (var_v0 != 0) {
+    if (allowed != 0) {
         return 1;
     }
     return 0;
 }
 
-int igMallocMemoryPool_GetAllocationPoolIndex(int arg0, char *arg1) {
+int igMallocMemoryPool_GetAllocationPoolIndex(int pool, char *memory) {
     TaggedBlockHeader *h;
 
-    if (arg1 == 0) {
+    if (memory == 0) {
         return -1;
     }
-    h = (TaggedBlockHeader *)(arg1 - 4);
-    if (((TaggedTailByte *)(arg1 - 1))->extended == 1) {
-        h = (TaggedBlockHeader *)(arg1 - 12);
+    h = (TaggedBlockHeader *)(memory - 4);
+    if (((TaggedTailByte *)(memory - 1))->extended == 1) {
+        h = (TaggedBlockHeader *)(memory - 12);
     }
     if (h == 0) {
         return -1;
@@ -599,7 +599,7 @@ void *igMallocMemoryPool_AllocateBlock(igMallocMemoryPoolView *self, unsigned si
         block = (*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total + 4);
     }
     if (block != 0) {
-    h = (TaggedBlockHeader *)((char *)block + 4);
+    h = (TaggedBlockHeader *)&((int *)block)[1];
     id = self->GetPoolIndex() >> 1;
     h->poolLow = id;
     h->relocated = 0;
@@ -754,9 +754,7 @@ void *igMallocMemoryPool_ReallocateBlock(igMallocMemoryPoolView *self, char *p, 
     return (char *)fresh + (fresh->big == 0 ? 4 : 12);
 }
 
-static inline int usesAligned_3254a0(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x20) != 0; }
 
-static inline int usesSized_3254a0(igMallocMemoryPoolView *p) { return (p->_poolOptionFlags & 0x10) != 0; }
 
 void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsigned alignment, unsigned size) {
     unsigned overhead;
@@ -781,9 +779,9 @@ void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsi
         overhead = 4;
     }
     total += overhead;
-    if (usesAligned_3254a0(self)) {
+    if (usesAligned(self)) {
         block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateAligned(total);
-    } else if (usesSized_3254a0(self)) {
+    } else if (usesSized(self)) {
         block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateSized(total);
     } else {
         block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total);

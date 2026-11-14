@@ -4,14 +4,14 @@ void List_RemoveWordAt(igDataList *l, int i) {
     if (i != n - 1) { d = l->_data + i * 4; memmove(d, d + 4, 4 * (n - (i + 1))); }
     l->_count = l->_count - 1; }
 
-int List_BinarySearchWords(igDataList *arg0, int arg1, int (*arg2)(int, int)) {
+int List_BinarySearchWords(igDataList *list, int key, int (*compare)(int, int)) {
     int lo = 0;
-    int hi = arg0->_count - 1;
+    int hi = list->_count - 1;
     int mid;
     int r;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        r = arg2(arg0->_data + mid * 4, arg1);
+        r = compare(list->_data + mid * 4, key);
         if (r < 0) {
             lo = mid + 1;
         } else if (r > 0) {
@@ -20,10 +20,10 @@ int List_BinarySearchWords(igDataList *arg0, int arg1, int (*arg2)(int, int)) {
             return mid;
         }
     }
-    if (arg0->_count == 0) {
+    if (list->_count == 0) {
         return -1;
     }
-    if (arg2(arg0->_data + lo * 4, arg1) == 0) {
+    if (compare(list->_data + lo * 4, key) == 0) {
         return lo;
     }
     return -1;
@@ -97,20 +97,20 @@ static inline int count_of(const igTDataList<DependencyPair> *list) { return lis
 /* Index of the dependency (k1, k2), or -1. */
 static inline int findDependency(igTDataList<DependencyPair> *list, int k1, int k2) { int i; for (i = 0; i < list->_count; i++) { DependencyPair *p = &list->_data[i]; int v = (k1 == p->a); if (v) { v = (k2 == p->b); } if (v) { return i; } } return -1; }
 
-void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *arg0, int arg1, int arg2) {
-    int n; igTDataList<DependencyPair> *q; DependencyPair *it;
-    q = arg0->_dependencies;
-    n = q->_count;
-    if (n < q->_capacity) {
-        q->_count = count_of(q) + 1;
+void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *self, int dependent, int dependency) {
+    int n; igTDataList<DependencyPair> *pairs; DependencyPair *pair;
+    pairs = self->_dependencies;
+    n = pairs->_count;
+    if (n < pairs->_capacity) {
+        pairs->_count = count_of(pairs) + 1;
     } else {
-        List_Resize(q, n + 1, 8);
+        List_Resize(pairs, n + 1, 8);
     }
-    it = (DependencyPair *)((char *)q->_data + n * 8);
-    it->a = arg1;
-    it->b = arg2;
-    FUN_002d7280(arg0);
-    igDependencyOrderedList_Rebuild(arg0);
+    pair = (DependencyPair *)((char *)pairs->_data + n * 8);
+    pair->a = dependent;
+    pair->b = dependency;
+    FUN_002d7280(self);
+    igDependencyOrderedList_Rebuild(self);
 }
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
@@ -139,98 +139,98 @@ void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
     }
 }
 
-void igRendererOrderedList_Clear(char *arg0) {
-    igTDataList<igObject *> *l;
+void igRendererOrderedList_Clear(char *self) {
+    igTDataList<igObject *> *list;
     int n;
     int i;
-    igObject *t;
-    l = *(igTDataList<igObject *> **)(arg0 + 8);
-    n = l->_count;
+    igObject *object;
+    list = *(igTDataList<igObject *> **)(self + 8);
+    n = list->_count;
     for (i = 0; i < n; i++) {
-        t = l->_data[i];
-        if (t != 0) {
-            t->_refCount = (int)((int) (t->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) t->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
+        object = list->_data[i];
+        if (object != 0) {
+            object->_refCount = (int)((int) (object->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) object->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(object);
             }
         }
     }
-    n = l->_count;
+    n = list->_count;
     for (i = 0; i < n; i++) {
-        l->_data[i] = 0;
+        list->_data[i] = 0;
     }
-    l->_count = 0;
+    list->_count = 0;
 }
 
 igResult igObjectList_RemoveRetained(igDependencyOrderedListView *list, igObject *object) {
     return ObjectList_RemoveFirstRetained(list->_objectList, object, 0);
 }
 
-void igDependencyOrderedList_RemoveDependency(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {
-    igTDataList<DependencyPair> *temp_a0 = arg1->_dependencies;
-    int idx = findDependency(temp_a0, arg2, arg3);
-    int var_s2;
+void igDependencyOrderedList_RemoveDependency(int *result, igDependencyOrderedListView *self, int dependent, int dependency) {
+    igTDataList<DependencyPair> *pairs = self->_dependencies;
+    int idx = findDependency(pairs, dependent, dependency);
+    int status;
     if (idx >= 0) {
-        List_RemoveAt((igDataList *)temp_a0, idx, 8);
-        var_s2 = g_resultSuccess.v;
+        List_RemoveAt((igDataList *)pairs, idx, 8);
+        status = g_resultSuccess.v;
     } else {
-        var_s2 = g_resultFailure.v;
+        status = g_resultFailure.v;
     }
-    if (arg1->_hasCircularDependencies != 0) {
-        FUN_002d7280(arg1);
-        igDependencyOrderedList_Rebuild(arg1);
+    if (self->_hasCircularDependencies != 0) {
+        FUN_002d7280(self);
+        igDependencyOrderedList_Rebuild(self);
     }
-    *arg0 = var_s2;
+    *result = status;
 }
 
-void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *arg0, int arg1) {
-    int var_s0;
-    igTDataList<DependencyPair> *temp_a0;
-    int *temp_v1;
+void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *self, int object) {
+    int i;
+    igTDataList<DependencyPair> *pairs;
+    int *pair;
     int a, b;
 
-    for (var_s0 = arg0->_dependencies->_count - 1; var_s0 >= 0; var_s0--) {
-        temp_a0 = arg0->_dependencies;
-        temp_v1 = (int *)&temp_a0->_data[var_s0];
-        b = temp_v1[1];
-        a = temp_v1[0];
-        if ((a == arg1) || (b == arg1)) {
-            List_RemoveAt((igDataList *)temp_a0, var_s0, 8);
+    for (i = self->_dependencies->_count - 1; i >= 0; i--) {
+        pairs = self->_dependencies;
+        pair = (int *)&pairs->_data[i];
+        b = pair[1];
+        a = pair[0];
+        if ((a == object) || (b == object)) {
+            List_RemoveAt((igDataList *)pairs, i, 8);
         }
     }
-    if (arg0->_hasCircularDependencies != 0) {
-        FUN_002d7280(arg0);
-        igDependencyOrderedList_Rebuild(arg0);
+    if (self->_hasCircularDependencies != 0) {
+        FUN_002d7280(self);
+        igDependencyOrderedList_Rebuild(self);
     }
 }
 
-void igDependencyOrderedList_AddCheckPoint(void *arg0, int arg1) {
-    void *sp3C;
-    int *temp_a1;
-    int temp_v1;
-    int var_v0_2;
-    void *var_v0;
+void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
+    void *checkPoint;
+    int *header;
+    int references;
+    int pool;
+    void *interned;
 
-    if (arg1 == 0) {
-        var_v0 = (void *)(0);
+    if (name == 0) {
+        interned = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0_2 = ((int)StringPool_Allocate(0x10));
-            if (var_v0_2 != 0) {
-                var_v0_2 = ((int)StringPool_Construct((StringPool *)var_v0_2));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0_2;
+            g_stringPool[0] = pool;
         }
-        var_v0 = (void *)(StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1));
+        interned = (void *)(StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
     }
-    sp3C = (void *)(var_v0);
-    StringList_AppendRetained(*(int *)((char *)(arg0) + 20), &sp3C);
-    if (sp3C != 0) {
-        temp_a1 = (int *)((char *)sp3C - 8);
-        temp_v1 = *(int *)((char *)(sp3C) - 4) - 1;
-        *(int *)((char *)(sp3C) - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    checkPoint = (void *)(interned);
+    StringList_AppendRetained(((igDependencyOrderedListView *)self)->_checkPoints, &checkPoint);
+    if (checkPoint != 0) {
+        header = (int *)((char *)checkPoint - 8);
+        references = *(int *)((char *)(checkPoint) - 4) - 1;
+        *(int *)((char *)(checkPoint) - 4) = references;
+        if (references == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
 }

@@ -11,32 +11,32 @@ int igPsx2File_GetMeta(void) {
     return ((int *)g_igPsx2File_metaObject)[0];
 }
 
-void igPsx2File_InitDefaults(igPsx2File *arg0) {
-    int *temp_a1;
-    int temp_s0;
-    int temp_v1;
-    int var_v0;
-    int *temp_a0;
-    int *temp_s0_2;
-    temp_s0 = DAT_00587330[0];
+void igPsx2File_InitDefaults(igPsx2File *self) {
+    int *header;
+    int prefix;
+    int count;
+    int pool;
+    int *old;
+    int *interned;
+    prefix = g_igPsx2File_defaultPrefix[0];
     if (g_stringPool[0] == 0) {
-        var_v0 = ((int)StringPool_Allocate(0x10));
-        if (var_v0 != 0) {
-            var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+        pool = ((int)StringPool_Allocate(0x10));
+        if (pool != 0) {
+            pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = var_v0;
+        g_stringPool[0] = pool;
     }
-    temp_s0_2 = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)temp_s0)));
-    temp_a0 = (int *)arg0->_prefix;
-    if (temp_a0 != 0) {
-        temp_a1 = temp_a0 - 2;
-        temp_v1 = temp_a0[-1] - 1;
-        temp_a0[-1] = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)prefix)));
+    old = (int *)self->_prefix;
+    if (old != 0) {
+        header = old - 2;
+        count = old[-1] - 1;
+        old[-1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
         }
     }
-    arg0->_prefix = (int)temp_s0_2;
+    self->_prefix = (int)interned;
 }
 
 int igPsx2CallStackTracer_GetMeta(void)
@@ -56,8 +56,8 @@ igMetaObject *igStackMemoryPool_GetMeta(void) {
     return g_igStackMemoryPool_metaObject[0];
 }
 
-unsigned char igStackMemoryPool_IsAlchemyMemory(void *arg0) {
-    return *(int *)((char *)(arg0) + 141);
+unsigned char igStackMemoryPool_IsAlchemyMemory(igStackMemoryPool *self) {
+    return self->_isAlchemyMemory;
 }
 
 /* igStackMemoryPool vtable slot 29 (+0x74): constant leaf returning 1. The igArenaMemoryPool and
@@ -88,7 +88,7 @@ igMetaObject *igVirtualCFuncMetaField_GetMeta(void) {
 }
 
 int igVirtualCFuncMetaField_GetDescriptor(void) {
-    return ((int *)DAT_005856e0)[0];
+    return ((int *)g_igVirtualCFuncMetaField_descriptor)[0];
 }
 
 int igUnsignedShortArrayMetaField_GetMeta(void) {
@@ -140,7 +140,7 @@ int igStructMetaField_GetMeta(void) {
 }
 
 int igStructMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585888)[0];
+    return ((int *)g_igStructMetaField_descriptor)[0];
 }
 
 int igStringTable_GetMeta(void) {
@@ -153,7 +153,7 @@ igMetaObject *igStringRefList_GetMeta(void) {
 
 void igStringRefList_UserPreWrite(igObjectDispatchView *self)
 {
-    self->vfunc_16();
+    self->trimCapacity();
 }
 
 void igStringRefList_TrimCapacity(igStringRefList *l) {
@@ -168,7 +168,7 @@ igMetaObject *igStringArrayMetaField_GetMeta(void) {
 }
 
 int igStringArrayMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585938)[0];
+    return ((int *)g_igStringArrayMetaField_descriptor)[0];
 }
 
 int igShortArrayMetaField_GetMeta(void) {
@@ -212,7 +212,7 @@ igMetaObject *igObjectRefArrayMetaField_GetMeta(void) {
 }
 
 int igObjectRefArrayMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585b50)[0];
+    return ((int *)g_igObjectRefArrayMetaField_descriptor)[0];
 }
 
 int igNamedObjectInfo_GetMeta(void) {
@@ -220,15 +220,15 @@ int igNamedObjectInfo_GetMeta(void) {
 }
 
 igMetaObject *igMetaFieldInfo_GetMeta(void) {
-    return g_igMetaFieldInfo_metaObject_00585cb8[0];
+    return g_igMetaFieldInfo_metaObject[0];
 }
 
 int igMemoryRefArrayMetaField_GetMeta(void) {
-    return ((int *)g_igMemoryRefArrayMetaField_metaObject_00585de0)[0];
+    return ((int *)g_igMemoryRefArrayMetaField_metaObject)[0];
 }
 
 int igMemoryRefArrayMetaField_GetDescriptor(void) {
-    return g_igMemoryRefArrayMetaField_metaObject_00585de8[0];
+    return (int)g_igMemoryRefArrayMetaField_descriptor[0];
 }
 
 int igMemoryPoolInfo_GetMeta(void) {
@@ -236,7 +236,7 @@ int igMemoryPoolInfo_GetMeta(void) {
 }
 
 igMetaObject *igMemoryPoolContextInfo_GetMeta(void) {
-    return g_igMemoryPoolContextInfo_metaObject_00585e88[0];
+    return g_igMemoryPoolContextInfo_metaObject[0];
 }
 
 int FUN_00331250(void) {
@@ -280,7 +280,7 @@ igMetaObject *igIntArrayMetaField_GetMeta(void) {
 }
 
 int igIntArrayMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586110)[0];
+    return ((int *)g_igIntArrayMetaField_descriptor)[0];
 }
 
 int igIGBFile_GetMeta(void) {
@@ -296,7 +296,7 @@ igMetaObject *igFloatMetaField_GetMeta(void) {
 }
 
 int igFloatMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586380)[0];
+    return ((int *)g_igFloatMetaField_descriptor)[0];
 }
 
 int igFloatArrayMetaField_GetMeta(void) {
@@ -344,7 +344,7 @@ igMetaObject *igDoubleMetaField_GetMeta(void) {
 }
 
 int igDoubleMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586640)[0];
+    return ((int *)g_igDoubleMetaField_descriptor)[0];
 }
 
 int igDoubleArrayMetaField_GetMeta(void) {
@@ -380,7 +380,7 @@ igMetaObject *igBoolArrayMetaField_GetMeta(void) {
 }
 
 int igBoolArrayMetaField_GetDescriptor(void) {
-    return ((int *)DAT_005869a0)[0];
+    return ((int *)g_igBoolArrayMetaField_descriptor)[0];
 }
 
 int igMemoryDescriptorMetaField_GetMeta(void) {
@@ -396,7 +396,7 @@ int igMallocMemoryPool_GetMeta(void) {
 }
 
 void igMallocMemoryPool_ReleaseDefaults(igMemoryPoolView *self) {
-    GPR_00554dbc = (GPR_00554dbc + -1);
+    g_igMallocMemoryPool_instanceCount = (g_igMallocMemoryPool_instanceCount + -1);
     igMemoryPool_ReleaseDefaults(self);
 }
 
@@ -446,7 +446,7 @@ igMetaObject *igBoolMetaField_GetMeta(void) {
 }
 
 int igBoolMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586990)[0];
+    return ((int *)g_igBoolMetaField_descriptor)[0];
 }
 
 igMetaObject *igCharMetaField_GetMeta(void) {
@@ -454,7 +454,7 @@ igMetaObject *igCharMetaField_GetMeta(void) {
 }
 
 int igCharMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586938)[0];
+    return ((int *)g_igCharMetaField_descriptor)[0];
 }
 
 igMetaObject *igCompoundMetaField_GetMeta(void) {
@@ -574,7 +574,7 @@ igMetaObject *igDependencyMetaField_GetMeta(void) {
 }
 
 int igDependencyMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00586780)[0];
+    return ((int *)g_igDependencyMetaField_descriptor)[0];
 }
 
 int igDependencyList_GetMeta(void) {
@@ -642,7 +642,7 @@ int igMemoryRefMetaField_GetMeta(void) {
 }
 
 int igMemoryRefMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585d88)[0];
+    return ((int *)g_igMemoryRefMetaField_descriptor)[0];
 }
 
 int igMetaEnum_GetMeta(void) {
@@ -702,7 +702,7 @@ igMetaObject *igStringMetaField_GetMeta(void) {
 }
 
 int igStringMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585910)[0];
+    return ((int *)g_igStringMetaField_descriptor)[0];
 }
 
 int igStringObj_GetMeta(void) {
@@ -734,7 +734,7 @@ igMetaObject *igUnsignedLongMetaField_GetMeta(void) {
 }
 
 int igUnsignedLongMetaField_GetDescriptor(void) {
-    return ((int *)DAT_00585718)[0];
+    return ((int *)g_igUnsignedLongMetaField_descriptor)[0];
 }
 
 igMetaObject *igUnsignedShortMetaField_GetMeta(void) {
@@ -742,7 +742,7 @@ igMetaObject *igUnsignedShortMetaField_GetMeta(void) {
 }
 
 int igUnsignedShortMetaField_GetDescriptor(void) {
-    return ((int *)DAT_005856f0)[0];
+    return ((int *)g_igUnsignedShortMetaField_descriptor)[0];
 }
 
 int igContextList_GetElementMeta(void) {
@@ -764,30 +764,30 @@ int igPointerList_GetElementSize(void) {
     return 4;
 }
 
-int FUN_00331a70(igTDataList<unsigned int> *arg0, unsigned int *arg1) {
-    unsigned int v;
+int FUN_00331a70(igTDataList<unsigned int> *list, unsigned int *key) {
+    unsigned int value;
     int lo;
     int hi;
     int mid;
     unsigned int k;
     int n;
     lo = 0;
-    n = arg0->_count;
+    n = list->_count;
     hi = n - 1;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        k = *arg1;
-        v = arg0->_data[mid];
-        if (v < k) {
+        k = *key;
+        value = list->_data[mid];
+        if (value < k) {
             lo = 1 + mid;
-        } else if (k < v) {
+        } else if (k < value) {
             hi = mid - 1;
         } else {
             return mid;
         }
     }
     if (!n) return 0;
-    lo = (arg0->_data[lo] < *arg1) ? lo + 1 : lo;
+    lo = (list->_data[lo] < *key) ? lo + 1 : lo;
     return lo;
 }
 
@@ -916,21 +916,21 @@ igMetaObject *igShortListList_GetElementMeta(void) {
     return g_igShortList_metaObject[0];
 }
 
-void igBoolList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igBoolList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 1);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 1);
     }
 }
 
-void igCharList_TrimCapacity(igCharList *arg0) {
-    int temp_a1;
+void igCharList_TrimCapacity(igCharList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 1);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 1);
     }
 }
 
@@ -943,48 +943,48 @@ void igIntList_TrimCapacity(igIntList *self) {
     }
 }
 
-void igUnsignedShortList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igUnsignedShortList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 2);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 2);
     }
 }
 
-void igShortList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igShortList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 2);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 2);
     }
 }
 
-void igUnsignedCharList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igUnsignedCharList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 1);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 1);
     }
 }
 
-void igFloatList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igFloatList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 4);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 4);
     }
 }
 
-void igPointerList_TrimCapacity(igDataList *arg0) {
-    int temp_a1;
+void igPointerList_TrimCapacity(igDataList *list) {
+    int count;
 
-    temp_a1 = arg0->_count;
-    if (temp_a1 < arg0->_capacity) {
-        List_Reserve((igDataList *)arg0, temp_a1, 4);
+    count = list->_count;
+    if (count < list->_capacity) {
+        List_Reserve((igDataList *)list, count, 4);
     }
 }
 

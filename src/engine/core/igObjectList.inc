@@ -1,6 +1,6 @@
-void * igObjectList_Create(int arg0) {
+void * igObjectList_Create(int pool) {
     igObjectList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B60), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B60), (igMemoryPoolView *)pool));
 }
 
 /* Created with allocation only, no field registration, when missing. */
@@ -23,7 +23,7 @@ int igObjectList_GetVTable(void) {
     igObjectList obj;
 
     igObject_InitHeader((igObject *)&obj);
-    obj._vtable = (int)&DAT_005249b0[0];
+    obj._vtable = (int)&g_igObjectList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
@@ -53,12 +53,6 @@ void igObjectList_GetMetaObjectFunction(void) {
     igObjectList_GetMetaObject();
 }
 
-static inline void releaseField_2bd830(igMemoryRefMetaField *f) {
-    f->_refCount = (int)f->_refCount - 1;
-    if (((unsigned long long)((long long)(int)f->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(f);
-    }
-}
 
 void igObjectList_InitFields(void) {
     igMetaObject *meta = g_igObjectList_metaObject[0];
@@ -69,6 +63,9 @@ void igObjectList_InitFields(void) {
     field->_memSize = 0;
     field->_externalEnumStorage = (int)g_igObjectList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    releaseField_2bd830(field);
+    field->_refCount = (int)field->_refCount - 1;
+    if (((unsigned long long)((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(field);
+    }
 }
 

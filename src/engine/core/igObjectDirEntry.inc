@@ -1,6 +1,6 @@
-int igObjectDirEntry_Create(int arg0) {
+int igObjectDirEntry_Create(int allocator) {
     igObjectDirEntry_EnsureRegistered();
-    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B70), (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B70), (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igObjectDirEntry_GetMetaObject(void)
@@ -17,11 +17,11 @@ int igObjectDirEntry_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&o);
     o._name = 0;
-    o._vtable = (int)&DAT_0052f040[0];
+    o._vtable = (int)&g_igObjectDirEntry_vtable[0];
     o._typeMeta = 0;
     o._typeMetaName = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o._vtable = (int)&DAT_0052f040[0];
+    o._vtable = (int)&g_igObjectDirEntry_vtable[0];
     StringRef_Destruct_00130720(&o._typeMetaName, -1);
     FUN_0019c840(&o._typeMeta, -1);
     FUN_0014f4e0(&o, 0);
@@ -79,15 +79,15 @@ void igObjectDirEntry_InitFields(void) {
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    igMetaField_Configure(field, (const char *)text_ref, DAT_00585b98, 0x18, meta);
+    igMetaField_Configure(field, (const char *)text_ref, g_igObjectDirEntry_refField, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject[0];
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)field, 0);
     field->_persistent = 0;
-    field->_externalEnumStorage = (int)DAT_00585b98;
+    field->_externalEnumStorage = (int)g_igObjectDirEntry_refField;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 5), -1);
-    igMetaObject_NameFields(meta, (const char **)g_igObjectDirEntry_fieldTable, (igMetaField ***)DAT_004bfb70, DAT_004bfb90, base);
+    igMetaObject_NameFields(meta, (const char **)g_igObjectDirEntry_fieldTable, (igMetaField ***)g_igObjectDirEntry_fieldDescriptors, g_igObjectDirEntry_fieldOffsets, base);
 }
 

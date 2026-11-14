@@ -20,100 +20,100 @@ void *StringTable_Destroy(StringTable *self, long long delete_flag) {
     return self;
 }
 
-void StringTable_SetSynchronization(int arg0) {
-    int var_v0;
-    igSemaphoreView *o;
-    igObject *p;
-    if (arg0 != 0) {
-        if (DAT_005871c8[0] == 0) {
-            var_v0 = ((int)Memory_GetCurrentAllocator());
-var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-            o = (igSemaphoreView *)igSemaphore_Create(var_v0);
-            o->create();
-            DAT_005871c8[0] = o;
+void StringTable_SetSynchronization(int enable) {
+    int pool;
+    igSemaphoreView *semaphore;
+    igObject *held;
+    if (enable != 0) {
+        if (g_stringTableSemaphore[0] == 0) {
+            pool = ((int)Memory_GetCurrentAllocator());
+pool = g_useOwnerAllocator != 0 ? pool : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+            semaphore = (igSemaphoreView *)igSemaphore_Create(pool);
+            semaphore->create();
+            g_stringTableSemaphore[0] = semaphore;
         }
     } else {
-        p = (igObject *)DAT_005871c8[0];
-        if (p != 0) {
-            DAT_005871c8[0] = 0;
-            p->_refCount = (int)p->_refCount - 1;
-            if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(p);
+        held = (igObject *)g_stringTableSemaphore[0];
+        if (held != 0) {
+            g_stringTableSemaphore[0] = 0;
+            held->_refCount = (int)held->_refCount - 1;
+            if (((unsigned long long)(long long)(int)held->_refCount & 0x7fffffULL) == 0) {
+                igObject_Destroy(held);
             }
         }
     }
 }
 
-int StringTable_Find(StringTable *arg0, int arg1) {
-    int sp3C;
-    int sp38;
-    igResult sp34;
-    igResult sp30;
+int StringTable_Find(StringTable *table, int string) {
+    int index;
+    int found;
+    igResult waitResult;
+    igResult signalResult;
 
-    sp3C = 0;
-    sp38 = 0;
-    if (DAT_005871c8[0] != 0) {
-        sp34 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
+    index = 0;
+    found = 0;
+    if (g_stringTableSemaphore[0] != 0) {
+        waitResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->wait(1);
     }
-    StringTable_SearchRetained(arg0, arg1, &sp38, (unsigned int *)&sp3C);
-    if (DAT_005871c8[0] != 0) {
-        sp30 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
+    StringTable_SearchRetained(table, string, &found, (unsigned int *)&index);
+    if (g_stringTableSemaphore[0] != 0) {
+        signalResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->signal();
     }
-    return sp38;
+    return found;
 }
 
-StringTokenHeader *StringTable_Register(StringTable *arg0, StringTokenHeader *arg1, StringChunk *arg2, int arg3) {
-    int sp5C;
-    int sp58;
-    igResult sp54;
-    igResult sp50;
+StringTokenHeader *StringTable_Register(StringTable *table, StringTokenHeader *header, StringChunk *chunk, int string) {
+    int index;
+    int found;
+    igResult waitResult;
+    igResult signalResult;
 
-    if (DAT_005871c8[0] != 0) {
-        sp54 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
+    if (g_stringTableSemaphore[0] != 0) {
+        waitResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->wait(1);
     }
-    arg1->owner = (int)arg2;
-    arg1->refCount = 1;
-    sp5C = 0;
-    sp58 = 0;
-    StringTable_SearchRetained(arg0, arg3, &sp58, (unsigned int *)&sp5C);
-    StringTable_InsertAt(arg0, (int)arg1, sp5C);
-    if (DAT_005871c8[0] != 0) {
-        sp50 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
+    header->owner = (int)chunk;
+    header->refCount = 1;
+    index = 0;
+    found = 0;
+    StringTable_SearchRetained(table, string, &found, (unsigned int *)&index);
+    StringTable_InsertAt(table, (int)header, index);
+    if (g_stringTableSemaphore[0] != 0) {
+        signalResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->signal();
     }
-    return arg1;
+    return header;
 }
 
-void StringTable_RemoveHeader(StringTable *arg0, int arg1) {
-    int sp3C;
-    int sp38;
-    igResult sp34;
-    igResult sp30;
+void StringTable_RemoveHeader(StringTable *table, int header) {
+    int index;
+    int found;
+    igResult waitResult;
+    igResult signalResult;
 
-    if (DAT_005871c8[0] != 0) {
-        sp34 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
+    if (g_stringTableSemaphore[0] != 0) {
+        waitResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->wait(1);
     }
-    sp3C = 0;
-    sp38 = 0;
-    StringTable_SearchRetained(arg0, arg1 + 8, &sp38, (unsigned int *)&sp3C);
-    StringTable_EraseAt(arg0, sp3C);
-    if (DAT_005871c8[0] != 0) {
-        sp30 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
+    index = 0;
+    found = 0;
+    StringTable_SearchRetained(table, header + 8, &found, (unsigned int *)&index);
+    StringTable_EraseAt(table, index);
+    if (g_stringTableSemaphore[0] != 0) {
+        signalResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->signal();
     }
 }
 
 /* An emptied chunk is unlinked from the pool's chain and destroyed once an empty chunk has already
  * been seen; the first one is only counted and kept. */
 void StringTable_NotifyEmptyChunk(StringTable *table, StringChunk *chunk) {
-    igResult sp3C;
-    igResult sp38;
+    igResult waitResult;
+    igResult signalResult;
     int seen;
     StringChunk **chain;
     StringChunk *head;
     StringChunk *next;
     StringChunk *previous;
 
-    if (DAT_005871c8[0] != 0) {
-        sp3C = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
+    if (g_stringTableSemaphore[0] != 0) {
+        waitResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->wait(1);
     }
     seen = table->emptyChunks;
     if (seen > 0) {
@@ -133,12 +133,12 @@ void StringTable_NotifyEmptyChunk(StringTable *table, StringChunk *chunk) {
     } else {
         table->emptyChunks = seen + 1;
     }
-    if (DAT_005871c8[0] != 0) {
-        sp38 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
+    if (g_stringTableSemaphore[0] != 0) {
+        signalResult = ((igSemaphoreView *)(g_stringTableSemaphore[0]))->signal();
     }
 }
 
-int StringTable_SearchRetained(StringTable *arg0, int arg1, int *arg2, unsigned int *arg3) {
+int StringTable_SearchRetained(StringTable *table, int string, int *outString, unsigned int *outIndex) {
     unsigned int lo;
     unsigned int n;
     unsigned int mid;
@@ -146,16 +146,16 @@ int StringTable_SearchRetained(StringTable *arg0, int arg1, int *arg2, unsigned 
     int s;
     int r;
     lo = 0;
-    for (n = arg0->step; n != 0; n >>= 1) {
+    for (n = table->step; n != 0; n >>= 1) {
         mid = lo + n;
-        if (arg0->count >= mid) {
-            e = arg0->entries[mid - 1];
+        if (table->count >= mid) {
+            e = table->entries[mid - 1];
             s = (int)e + 8;
-            r = strcmp(arg1, s);
+            r = strcmp(string, s);
             if (r == 0) {
                 e->refCount = e->refCount + 1;
-                *arg2 = s;
-                *arg3 = mid - 1;
+                *outString = s;
+                *outIndex = mid - 1;
                 return 1;
             }
             if (r > 0) {
@@ -163,7 +163,7 @@ int StringTable_SearchRetained(StringTable *arg0, int arg1, int *arg2, unsigned 
             }
         }
     }
-    *arg3 = lo;
+    *outIndex = lo;
     return 0;
 }
 

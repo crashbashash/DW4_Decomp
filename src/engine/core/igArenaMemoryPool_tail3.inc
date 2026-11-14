@@ -9,11 +9,11 @@ void igArenaMemoryPool_PrintStatistics(igArenaMemoryPoolView *self, char *title)
     char *flags;
     int named;
     igMemoryPool_PrintStatistics((igMemoryPool *)self, title);
-    named = ((ObjectSystemView *)g_objectSystem[0])->auxObjectList != 0;
-    messageLevel = named ? FUN_00312140(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)DAT_004f7910;
-    heapCheck = named ? FUN_00312140(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)DAT_004f7910;
-    flags = named ? FUN_00312020(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)DAT_004f7910;
-    igReport_Printf(DAT_004fc1e0, self->vfunc_44(), (int)self->vfunc_36(), self->vfunc_26(), self->getLowestAddress(), self->getHighestAddress(),
+    named = ((ObjectSystemView *)g_objectSystem[0])->metaEnumList != 0;
+    messageLevel = named ? FUN_00312140(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)emptyString_4;
+    heapCheck = named ? FUN_00312140(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)emptyString_4;
+    flags = named ? FUN_00312020(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)emptyString_4;
+    igReport_Printf(g_igArenaMemoryPool_statisticsFormat, self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->getLowestAddress(), self->getHighestAddress(),
                  igArenaMemoryPool_GetArenaCount(self), igArenaMemoryPool_GetArenaHighCount(self), self->GetPoolIndex(), flags, heapCheck, messageLevel);
     igReport_Flush();
 }
@@ -33,7 +33,7 @@ void igArenaMemoryPool_CollectMemoryRegions(igArenaMemoryPoolView *self, igDataL
         if (arena->blockCount) {
             while (i < arena->blockCount) {
                 poolName = (const char *)Memory_GetPoolName((int)self);
-                sprintf(annotation, text_Pool_d_of_d_tot_0x_06x, i / 2 + 1, arena->blockCount / 2, (long long)(int)self->vfunc_36());
+                sprintf(annotation, text_Pool_d_of_d_tot_0x_06x, i / 2 + 1, arena->blockCount / 2, (long long)(int)self->GetSize());
                 created = DumpRegion_Allocate(sizeof(DumpRegion));
                 if (created != 0) {
                     created = DumpRegion_Init(created);
@@ -51,11 +51,11 @@ void igArenaMemoryPool_CollectMemoryRegions(igArenaMemoryPoolView *self, igDataL
     }
 }
 
-void igArenaMemoryPool_CheckHeapLocked(int *arg0, igArenaMemoryPoolView *arg1) {
-    igArenaMemoryPool_Lock(arg1);
-    igResult r = arg1->vfunc_103();
-    igArenaMemoryPool_Unlock(arg1);
-    *arg0 = r.v;
+void igArenaMemoryPool_CheckHeapLocked(int *status, igArenaMemoryPoolView *self) {
+    igArenaMemoryPool_Lock(self);
+    igResult result = self->VerifyHeap();
+    igArenaMemoryPool_Unlock(self);
+    *status = result.v;
 }
 
 void igArenaMemoryPool_VerifyHeap(int *status, igArenaMemoryPoolView *self) {
@@ -77,20 +77,20 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     if (arena->blocks == 0 || arena->blockCapacity == 0) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554cec == 0) {
+            if (g_igArenaMemoryPool_ignoreE69Notice == 0) {
                 r = igReportNotice(text_igArenaMemoryPool_checkHeap_E69);
                 if (r != 1 && r == 2) {
-                    GPR_00554cec = 1;
+                    g_igArenaMemoryPool_ignoreE69Notice = 1;
                 }
             }
         }
         result = g_resultFailure;
     }
     if (arena->blockCount < 0 || arena->blockCapacity < 0 || arena->blockCount > arena->blockCapacity) {
-        if (self->_messageLevel >= 3 && GPR_00554cf0 == 0) {
+        if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE70Notice == 0) {
             r = igReportNotice(text_igArenaMemoryPool_checkHeap_E70);
             if (r != 1 && r == 2) {
-                GPR_00554cf0 = 1;
+                g_igArenaMemoryPool_ignoreE70Notice = 1;
             }
         }
         return g_resultFailure;
@@ -117,10 +117,10 @@ igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *e
     if (cur < lo || hi < cur) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554cf4 == 0) {
-                int r = igReportNotice(DAT_004fc490, index, cur, lo, hi);
+            if (g_igArenaMemoryPool_ignoreE71Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E71, index, cur, lo, hi);
                 if (r != 1 && r == 2) {
-                    GPR_00554cf4 = 1;
+                    g_igArenaMemoryPool_ignoreE71Notice = 1;
                 }
             }
         }
@@ -129,10 +129,10 @@ igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *e
     if (end < lo || hi < end) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554cf8 == 0) {
-                int r = igReportNotice(DAT_004fc500, index, end, lo, hi);
+            if (g_igArenaMemoryPool_ignoreE72Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E72, index, end, lo, hi);
                 if (r != 1 && r == 2) {
-                    GPR_00554cf8 = 1;
+                    g_igArenaMemoryPool_ignoreE72Notice = 1;
                 }
             }
         }
@@ -141,10 +141,10 @@ igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *e
     if (end < cur) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554cfc == 0) {
-                int r = igReportNotice(DAT_004fc570, index, end, cur);
+            if (g_igArenaMemoryPool_ignoreE73Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E73, index, end, cur);
                 if (r != 1 && r == 2) {
-                    GPR_00554cfc = 1;
+                    g_igArenaMemoryPool_ignoreE73Notice = 1;
                 }
             }
         }
@@ -153,10 +153,10 @@ igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *e
     if (!((TaggedBlockHeader *)cur)->used) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d00 == 0) {
-                int r = igReportNotice(DAT_004fc5e0);
+            if (g_igArenaMemoryPool_ignoreE74Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E74);
                 if (r != 1 && r == 2) {
-                    GPR_00554d00 = 1;
+                    g_igArenaMemoryPool_ignoreE74Notice = 1;
                 }
             }
         }
@@ -201,10 +201,10 @@ igResult FUN_00312790(igArenaMemoryPoolView *self, int index, char *cur, char *e
 bad:
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d04 == 0) {
-                int r = igReportNotice(DAT_004fc660, cur, index, count, size);
+            if (g_igArenaMemoryPool_ignoreE75Notice == 0) {
+                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E75, cur, index, count, size);
                 if (r != 1 && r == 2) {
-                    GPR_00554d04 = 1;
+                    g_igArenaMemoryPool_ignoreE75Notice = 1;
                 }
             }
         }
@@ -256,7 +256,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
         } else if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, oldTop) && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_arenaNoticeE66Silenced == 0) {
-                r = igReportNotice(DAT_004fbc00, text_igArenaSystemMalloc_E66, oldTop);
+                r = igReportNotice(text_igArenaMemoryPool_s_Possibly_cor, text_igArenaSystemMalloc_E66, oldTop);
                 if (r != 1 && r == 2) {
                     g_arenaNoticeE66Silenced = 1;
                 }
@@ -288,12 +288,12 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
                 self->_poolPreSized = 2;
             }
         }
-        brk = self->vfunc_105((int)oldEnd, size);
+        brk = self->SystemAllocate((int)oldEnd, size);
         if (brk != (unsigned int)-1) {
             state->top = (TaggedBlockHeader *)newTop;
             initChunkHeader(self, state->top, (unsigned int)-1, newEnd - newTop, 0);
             state->top->used = 1;
-            self->vfunc_111(oldEnd, size);
+            self->UpdateBlockList(oldEnd, size);
             initChunkHeader(self, oldTop, bytes, nb, 0);
             oldTop->used = 1;
             if (self->_heapIntegrityCheckLevel > 0) {
@@ -323,7 +323,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
                 self->_poolPreSized = 2;
             }
         }
-        brk = self->vfunc_105(0, size);
+        brk = self->SystemAllocate(0, size);
         if (brk != (unsigned int)-1) {
             newEnd = (char *)brk + size;
             p = (TaggedBlockHeader *)brk;
@@ -334,7 +334,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
             state->top = (TaggedBlockHeader *)newTop;
             initChunkHeader(self, state->top, (unsigned int)-1, newEnd - newTop, 0);
             state->top->used = 1;
-            self->vfunc_111((char *)p, newEnd - (char *)p);
+            self->UpdateBlockList((char *)p, newEnd - (char *)p);
             initChunkHeader(self, p, bytes, nb, 0);
             p->used = 1;
             if (self->_heapIntegrityCheckLevel > 0) {
@@ -372,7 +372,7 @@ void *FUN_00312ba0(igArenaMemoryPoolView *self, unsigned int nb, unsigned int by
                 continue;
             }
         }
-        if (self->vfunc_23(bytes, 3) != 0) {
+        if (self->HandleOutOfMemory(bytes, 3) != 0) {
             continue;
         }
         if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
@@ -425,11 +425,11 @@ int FUN_00314510(igArenaMemoryPoolView *self, unsigned int pad, int force) {
         }
         if (extra > 0) {
             released = (char *)state->top + topSize - extra;
-            self->vfunc_106(released, extra);
-            state->f2044 -= extra;
+            self->SystemFree(released, extra);
+            state->sbrkedMem -= extra;
             initChunkHeader(self, state->top, (unsigned int)-1, topSize - extra, 0);
             state->top->used = 1;
-            self->vfunc_111(released, -extra);
+            self->UpdateBlockList(released, -extra);
             if (self->_heapIntegrityCheckLevel >= 2) {
                 FUN_00310c00(self);
             }
@@ -454,10 +454,10 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     count = a->blockCount;
     if (count < 0 || (cap = a->blockCapacity) < 0 || count > cap) {
         if (self->_messageLevel >= 3) {
-            if (GPR_00554d1c == 0) {
+            if (g_igArenaMemoryPool_ignoreE76Notice == 0) {
                 int r = igReportNotice(text_igArenaMemoryPool_trim_E76_Arena);
                 if (r != 1 && r == 2) {
-                    GPR_00554d1c = 1;
+                    g_igArenaMemoryPool_ignoreE76Notice = 1;
                 }
             }
         }
@@ -474,7 +474,7 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
             a->blockCount = a->blockCount - 2;
         }
     }
-    FUN_00314510(self, a->f1992, pad);
+    FUN_00314510(self, a->topPad, pad);
     return trimmed;
 }
 
@@ -599,33 +599,33 @@ bad:
     }
     if (inUse == 0) {
         igResult removed;
-        igArenaMemoryPool_RemoveFreeChunksInRange((int *)&removed, (igArenaMemoryPool *)self, (unsigned int)cur, (unsigned int)end);
+        igArenaMemoryPool_RemoveFreeChunksInRange((int *)&removed, self, (unsigned int)cur, (unsigned int)end);
 reset:
         if (top >= cur && top < end) {
             ArenaState *state = self->_arenaState;
             state->top = &state->bins[1].header;
         }
-        unsigned int pageMask = g_activeSystemAllocator[0]->vfunc_21() - 1;
+        unsigned int pageMask = g_activeSystemAllocator[0]->GetPageSize() - 1;
         cur = (char *)((unsigned int)cur & ~pageMask);
         end = (char *)(~pageMask & (unsigned int)(end + pageMask));
-        self->vfunc_106(cur, end - cur);
+        self->SystemFree(cur, end - cur);
         return g_resultSuccess;
     }
     return g_resultFailure;
 }
 
-void igArenaMemoryPool_RemoveFreeChunksInRange(int *arg0, igArenaMemoryPool *arg1, unsigned int arg2, unsigned int arg3) {
-    char *base;
+void igArenaMemoryPool_RemoveFreeChunksInRange(int *status, igArenaMemoryPoolView *self, unsigned int start, unsigned int end) {
+    ArenaState *state;
     int i;
     char *head;
     unsigned int cur;
     int prev;
-    base = (char *)arg1->_arenaState;
-    head = base + 72;
+    state = self->_arenaState;
+    head = (char *)&state->bins[1];
     for (i = 1; i < 96; i++, head += 20) {
         cur = NEXT(head);
         while (cur != (unsigned)head) {
-            if (cur >= arg2 && cur < arg3) {
+            if (cur >= start && cur < end) {
                 prev = PREV(cur);
                 cur = NEXT(cur);
                 NEXT(prev) = cur;
@@ -635,11 +635,11 @@ void igArenaMemoryPool_RemoveFreeChunksInRange(int *arg0, igArenaMemoryPool *arg
             }
         }
     }
-    cur = *(unsigned *)(base + 48);
-    if (cur != 0 && cur >= arg2 && cur < arg3) {
-        *(int *)(base + 48) = 0;
+    cur = (unsigned int)state->lastRemainder;
+    if (cur != 0 && cur >= start && cur < end) {
+        state->lastRemainder = 0;
     }
-    *arg0 = g_resultSuccess.v;
+    *status = g_resultSuccess.v;
 }
 
 /* dlmalloc's mALLOc: a fast bin or small bin of the exact size, then the unsorted list (binning what
@@ -672,7 +672,7 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
     attempt = 1;
     nb = 0;
     if (bytes >= (unsigned int)-32) {
-        if (self->vfunc_23(bytes, attempt) == 0) {
+        if (self->HandleOutOfMemory(bytes, attempt) == 0) {
             return 0;
         }
     } else {
@@ -835,7 +835,7 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(bit != 0) && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
                     if (g_arenaNoticeE59Silenced == 0) {
-                        r = igReportNotice(DAT_004fbb00, text_E59_CorruptedControlStructure);
+                        r = igReportNotice(text_igArenaMemoryPool_s, text_E59_CorruptedControlStructure);
                         if (r != 1 && r == 2) {
                             g_arenaNoticeE59Silenced = 1;
                         }
@@ -897,7 +897,7 @@ void *FUN_00315170(igArenaMemoryPoolView *self, unsigned int bytes) {
             if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, state->top) && self->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_arenaNoticeE67Silenced == 0) {
-                    r = igReportNotice(DAT_004fbc00, text_igArena_malloc_E67, state->top);
+                    r = igReportNotice(text_igArenaMemoryPool_s_Possibly_cor, text_igArena_malloc_E67, state->top);
                     if (r != 1 && r == 2) {
                         g_arenaNoticeE67Silenced = 1;
                     }
@@ -1012,7 +1012,7 @@ void FUN_00318110(igArenaMemoryPoolView *self, char *mem) {
                     TaggedBlockHeader *top = state->top;
                     unsigned int payload = alignedPayloadSize(top);
                     if (payload + (top->words + 1) * 4 >= state->trimThreshold) {
-                        FUN_00314510(self, state->f1992, 0);
+                        FUN_00314510(self, state->topPad, 0);
                     }
                 }
             }
@@ -1138,7 +1138,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
         return FUN_00315170(self, bytes);
     }
     if (bytes >= (unsigned int)-32) {
-        if (self->vfunc_23(bytes, 1) == 0) {
+        if (self->HandleOutOfMemory(bytes, 1) == 0) {
             return 0;
         }
     } else {
@@ -1304,7 +1304,7 @@ void *FUN_003194c0(igArenaMemoryPoolView *self, char *oldmem, unsigned int bytes
         if (self->_heapIntegrityCheckLevel >= 2) {
             FUN_00310c00(self);
         }
-        if (self->vfunc_23(bytes, 3) == 0) {
+        if (self->HandleOutOfMemory(bytes, 3) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
                 SystemMemoryStatistics stats;
                 g_activeSystemAllocator[0]->GetStatistics(&stats);
@@ -1363,7 +1363,7 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
         alignment = a;
     }
     if (bytes >= (unsigned int)-32) {
-        if (self->vfunc_23(bytes, 1) == 0) {
+        if (self->HandleOutOfMemory(bytes, 1) == 0) {
             return 0;
         }
     } else {
@@ -1419,16 +1419,16 @@ void *FUN_0031b5d0(igArenaMemoryPoolView *self, unsigned int alignment, unsigned
         if (remainderSize != 0) {
             FUN_00318110(self, chunkMemory(remainder));
         } else {
-            igReport_Printf(DAT_004fd2c0);
+            igReport_Printf(text_remainder_was_empty);
             igReport_Flush();
         }
         p = newp;
         if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(newsize >= nb && (unsigned int)chunkMemory(p) % alignment == 0) && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
-            if (GPR_00554d4c == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, DAT_004fd2e0);
+            if (g_igArenaMemoryPool_ignoreE64Notice == 0) {
+                r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, text_E64_Corrupted_block);
                 if (r != 1 && r == 2) {
-                    GPR_00554d4c = 1;
+                    g_igArenaMemoryPool_ignoreE64Notice = 1;
                 }
             }
         }
@@ -1501,18 +1501,18 @@ igResult igArenaMemoryPool_Configure(igArenaMemoryPool *pool, igMemoryPoolInfo *
     return result;
 }
 
-void igArenaMemoryPool_Activate(igArenaMemoryPoolView *arg0) {
-    igResult sp2C;
-    if (arg0->_isActive == 0) {
-        arg0->vfunc_51();
-        arg0->_systemAllocated = 0;
-        arg0->_isActive = 1;
-        arg0->_poolPreSized = 0;
-        if (arg0->_poolOptionFlags & 8) {
-            sp2C = arg0->vfunc_34(1);
+void igArenaMemoryPool_Activate(igArenaMemoryPoolView *self) {
+    igResult lockResult;
+    if (self->_isActive == 0) {
+        self->ResetStatistics();
+        self->_systemAllocated = 0;
+        self->_isActive = 1;
+        self->_poolPreSized = 0;
+        if (self->_poolOptionFlags & 8) {
+            lockResult = self->EnableAllocationLock(1);
         }
-        if (arg0->_preSize != 0) {
-            arg0->Free(arg0->Allocate(0x10));
+        if (self->_preSize != 0) {
+            self->Free(self->Allocate(0x10));
         }
     }
 }
@@ -1521,7 +1521,7 @@ void igArenaMemoryPool_Reset(igArenaMemoryPool *self) {
     int arenaState;
 
     if (self->_size != 0) {
-        ((igMemoryPoolView *)self)->vfunc_51();
+        ((igMemoryPoolView *)self)->ResetStatistics();
         self->_systemAllocated = 0;
         arenaState = self->_arenaState;
         if (arenaState != 0) {
@@ -1535,7 +1535,7 @@ void igArenaMemoryPool_Reset(igArenaMemoryPool *self) {
 void igArenaMemoryPool_Deactivate(igArenaMemoryPoolView *p) {
     if (p->_isActive != 0) {
         p->_isActive = 0;
-        p->vfunc_31();
+        p->Reset();
     }
 }
 
@@ -1557,10 +1557,10 @@ void igArenaMemoryPool_SetRawMemory(int *out, igArenaMemoryPoolView *p, int rawM
         unsigned long long usable = size & 0xFFFFFFFFFFFFFFFCULL;
         p->_size = usable;
         p->_isAlchemyMemory = isAlchemyMemory;
-        p->_arenaState->f2044 = (int)usable;
-        p->_arenaState->f2048 = (int)usable;
+        p->_arenaState->sbrkedMem = (int)usable;
+        p->_arenaState->maxSbrkedMem = (int)usable;
         p->_arenaState->systemBytes = (int)usable;
-        p->vfunc_51();
+        p->ResetStatistics();
         p->_systemAllocated = 0;
         p->_updateGlobalStatistics = isAlchemyMemory;
         *out = g_resultSuccess.v;
@@ -1626,25 +1626,25 @@ void igArenaMemoryPool_SetSize(int *statusOut) {
     *statusOut = g_resultFailure.v;
 }
 
-long long igArenaMemoryPool_GetSize(igArenaMemoryPool *arg0) {
-    long long temp_v0;
+long long igArenaMemoryPool_GetSize(igArenaMemoryPool *self) {
+    long long size;
 
-    temp_v0 = arg0->_size;
-    if (temp_v0 != 0) {
-        return temp_v0;
+    size = self->_size;
+    if (size != 0) {
+        return size;
     }
-    return arg0->_systemAllocated;
+    return self->_systemAllocated;
 }
 
-/* The comparison is written `arg2 <= lim`, not `lim >= arg2`, and the store is repeated in both
+/* The comparison is written `maxSize <= size`, not `size >= maxSize`, and the store is repeated in both
  * arms. */
-void igArenaMemoryPool_SetMaxSize(int *arg0, char *arg1, unsigned long long arg2) {
-    unsigned long long lim = *(unsigned long long *)(arg1 + 160);
-    if (lim == 0 || arg2 <= lim) {
-        *(unsigned long long *)(arg1 + 152) = arg2;
-        *arg0 = g_resultSuccess.v;
+void igArenaMemoryPool_SetMaxSize(int *status, igArenaMemoryPool *self, unsigned long long maxSize) {
+    unsigned long long size = self->_size;
+    if (size == 0 || maxSize <= size) {
+        self->_maxSize = maxSize;
+        *status = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *status = g_resultFailure.v;
     }
 }
 
@@ -1653,13 +1653,13 @@ long long igArenaMemoryPool_GetMaxSize(igArenaMemoryPool *self) {
     return self->_maxSize;
 }
 
-void igArenaMemoryPool_SetPreSize(int *arg0, void *arg1, int arg2) {
-    *(int *)((char *)(arg1) + 168) = arg2;
-    *(int *)((char *)(arg1) + 196) = 0;
-    if (((igMemoryPoolView *)arg1)->isActive() != 0) {
-        ((igMemoryPoolView *)arg1)->Free(((igMemoryPoolView *)arg1)->Allocate(0x10));
+void igArenaMemoryPool_SetPreSize(int *status, igArenaMemoryPoolView *self, int preSize) {
+    self->_preSize = preSize;
+    self->_poolPreSized = 0;
+    if (self->isActive() != 0) {
+        self->Free(self->Allocate(0x10));
     }
-    *arg0 = g_resultSuccess.v;
+    *status = g_resultSuccess.v;
 }
 
 /* IgArenaMemoryPool virtual getter 44. Returns the reflected `_preSize` field
@@ -1695,8 +1695,8 @@ int igArenaMemoryPool_GetElementSize(igArenaMemoryPool *self) {
     return self->_elementSize;
 }
 
-long long Gap__Core__igArenaMemoryPool__vfunc_46(igArenaMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+long long Gap__Core__igArenaMemoryPool__vfunc_46(igArenaMemoryPool *self) {
+    return self->_maxSize - self->_localNetAllocatedWithOverhead;
 }
 
 /* Accessor: the arena's reflected _localNetAllocated statistic (igLongMetaField, +24). */
@@ -1709,42 +1709,42 @@ long long igArenaMemoryPool_GetLocalNetAllocatedWithOverhead(igArenaMemoryPool *
     return self->_localNetAllocatedWithOverhead;
 }
 
-long long igArenaMemoryPool_GetLocalNetAllocatedHigh(void *arg0) {
-    return *(long long *)((char *)arg0 + 32);
+long long igArenaMemoryPool_GetLocalNetAllocatedHigh(igArenaMemoryPool *self) {
+    return self->_localNetAllocatedHigh;
 }
 
-long long igArenaMemoryPool_GetLocalNetAllocatedWithOverheadHigh(void *arg0) {
-    return *(long long *)((char *)arg0 + 64);
+long long igArenaMemoryPool_GetLocalNetAllocatedWithOverheadHigh(igArenaMemoryPool *self) {
+    return self->_localNetAllocatedWithOverheadHigh;
 }
 
-int igArenaMemoryPool_GetArenaCount(void *arg0) {
-    int temp_v1;
-    int var_v0;
+int igArenaMemoryPool_GetArenaCount(igArenaMemoryPoolView *self) {
+    int blockCount;
+    int arenaCount;
 
-    temp_v1 = *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2028);
-    var_v0 = temp_v1 >> 1;
-    if (temp_v1 < 0) {
-        var_v0 = (int) (temp_v1 + 1) >> 1;
+    blockCount = self->_arenaState->blockCount;
+    arenaCount = blockCount >> 1;
+    if (blockCount < 0) {
+        arenaCount = (int) (blockCount + 1) >> 1;
     }
-    return var_v0;
+    return arenaCount;
 }
 
-int igArenaMemoryPool_GetArenaHighCount(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2032);
+int igArenaMemoryPool_GetArenaHighCount(igArenaMemoryPoolView *self) {
+    return self->_arenaState->maxBlockPairs;
 }
 
-long long Gap__Core__igArenaMemoryPool__vfunc_101(void *arg0) {
-    long long temp_v0;
+long long Gap__Core__igArenaMemoryPool__vfunc_101(igArenaMemoryPool *self) {
+    long long size;
 
-    temp_v0 = *(long long *)((char *)(arg0) + 160);
-    if (temp_v0 != 0) {
-        return temp_v0;
+    size = self->_size;
+    if (size != 0) {
+        return size;
     }
-    return *(long long *)((char *)(arg0) + 136);
+    return self->_systemAllocated;
 }
 
-long long igArenaMemoryPool_GetFreeSize(igArenaMemoryPool *arg0) {
-    return arg0->_maxSize - arg0->_localNetAllocatedWithOverhead;
+long long igArenaMemoryPool_GetFreeSize(igArenaMemoryPool *self) {
+    return self->_maxSize - self->_localNetAllocatedWithOverhead;
 }
 
 void *igArenaMemoryPool_AllocateElement(igArenaMemoryPoolView *self)
@@ -1752,35 +1752,35 @@ void *igArenaMemoryPool_AllocateElement(igArenaMemoryPoolView *self)
     return self->Allocate(self->_elementSize);
 }
 
-void igArenaMemoryPool_Lock(void *arg0) {
-    igResult sp1C;
-    void **temp_a1;
+void igArenaMemoryPool_Lock(igArenaMemoryPoolView *self) {
+    igResult lockResult;
+    void **lock;
 
-    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
+    lock = (void **)self->_allocationLock;
+    if (lock != 0) {
+        lockResult = ((igSemaphoreView *)(lock))->wait(1);
     }
 }
 
-void igArenaMemoryPool_Unlock(void *arg0) {
-    igResult sp1C;
-    void **temp_a1;
+void igArenaMemoryPool_Unlock(igArenaMemoryPoolView *self) {
+    igResult lockResult;
+    void **lock;
 
-    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp1C = ((igSemaphoreView *)(temp_a1))->signal();
+    lock = (void **)self->_allocationLock;
+    if (lock != 0) {
+        lockResult = ((igSemaphoreView *)(lock))->signal();
     }
 }
 
-int igArenaMemoryPool_UnlockAndReturn(void *arg0, int arg1) {
-    igResult sp2C;
-    void **temp_a1;
+int igArenaMemoryPool_UnlockAndReturn(igArenaMemoryPoolView *self, int value) {
+    igResult lockResult;
+    void **lock;
 
-    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
-    if (temp_a1 != 0) {
-        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
+    lock = (void **)self->_allocationLock;
+    if (lock != 0) {
+        lockResult = ((igSemaphoreView *)(lock))->signal();
     }
-    return arg1;
+    return value;
 }
 
 void *igArenaMemoryPool_Allocate(igArenaMemoryPoolView *self, unsigned int size)
@@ -1925,7 +1925,7 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_62(igArenaMemoryPoolView *self, int
             }
             break;
         }
-        if (self->vfunc_23(total, 1) == 0) {
+        if (self->HandleOutOfMemory(total, 1) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x20)) {
                 if (self->_heapIntegrityCheckLevel > 0) {
                     if (self->_messageLevel > 0) {
@@ -1958,8 +1958,8 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_62(igArenaMemoryPoolView *self, int
     return g_resultSuccess;
 }
 
-void igArenaMemoryPool_GangAllocAligned(int *arg0) {
-    *arg0 = g_resultFailure.v;
+void igArenaMemoryPool_GangAllocAligned(int *status) {
+    *status = g_resultFailure.v;
 }
 
 static inline char *blockHeader(char *p) {
@@ -1999,7 +1999,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size
             if (h != 0) {
                 initBlockHeader(self, h, total, 0, false, true);
                 if (self->_size == 0 && self->_updateStatistics != 0) {
-                    self->vfunc_50(size, chunkBytes(h), 1);
+                    self->UpdateStatistics(size, chunkBytes(h), 1);
                 }
                 result = (char *)h + (h->big == 0 ? 4 : 12);
                 if (flag2(self)) {
@@ -2021,7 +2021,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_65(igArenaMemoryPoolView *self, int size
             }
             break;
         }
-        if (self->vfunc_23(size, 1) == 0) {
+        if (self->HandleOutOfMemory(size, 1) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x20)) {
                 if (self->_heapIntegrityCheckLevel > 0) {
                     if (self->_messageLevel > 0) {
@@ -2055,18 +2055,18 @@ void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     ((igRefCountWord *)&self->_refCount)->bits.count = 1;
     ((char *)self)[7] = 0;
     self->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
-    if (self->_arenaState == 0 && GPR_00554d64 == 0) {
+    if (self->_arenaState == 0 && g_igArenaMemoryPool_ignoreStateAllocError == 0) {
         v = igReportError(text_Unable_to_allocate_memory_for_ar);
         if (v != 1) {
             if (v == 2)
-                GPR_00554d64 = 1;
+                g_igArenaMemoryPool_ignoreStateAllocError = 1;
         }
     }
     memset(self->_arenaState, 0, 0x814);
     self->_rawMemory = 0;
     self->_isAlchemyMemory = 0;
     self->_systemAllocated = 0;
-    self->vfunc_51();
+    self->ResetStatistics();
     self->_maxSize = 0xFFFFFFFFFFFFFFFFULL;
     self->_size = 0;
     self->_preSize = 0;
@@ -2074,22 +2074,22 @@ void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     releaseRefObject(self->_eventTracker);
     self->_eventTracker = 0;
     self->_isActive = 0;
-    DAT_00587200[0] = DAT_00587200[0] + 1;
+    g_igArenaMemoryPool_liveCount[0] = g_igArenaMemoryPool_liveCount[0] + 1;
     releaseRefObject(self->_allocationLock);
     self->_allocationLock = 0;
     self->_poolIndex = 0;
     self->_heapIntegrityCheckLevel = 0;
     self->_messageLevel = 1;
-    self->_poolOptionFlags = DAT_004c2370[0] & ~8;
+    self->_poolOptionFlags = g_igArenaMemoryPool_defaultPoolOptionFlags[0] & ~8;
     self->_poolPreSized = 0;
     self->_smallestChunkSize = 16;
     if (self->_arenaState->blocks == 0) {
         self->_arenaState->blocks = (int *)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
-        if (self->_arenaState->blocks == 0 && GPR_00554d68 == 0) {
+        if (self->_arenaState->blocks == 0 && g_igArenaMemoryPool_ignoreBlockListAllocError == 0) {
             v = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (v != 1) {
                 if (v == 2)
-                    GPR_00554d68 = 1;
+                    g_igArenaMemoryPool_ignoreBlockListAllocError = 1;
             }
         }
         self->_arenaState->blockCapacity = 0x200;
@@ -2100,100 +2100,100 @@ void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     }
 }
 
-void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *arg0) {
+void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
     int *name;
     int r;
     ArenaState *state;
     int *blocks;
 
-    if (arg0->_size == 0) {
-        FUN_00318b40(arg0);
+    if (self->_size == 0) {
+        FUN_00318b40(self);
     }
-    if ((int)arg0->_localNetAllocated != 0) {
-        name = ((int *)Memory_GetPoolName((int)arg0));
-        arg0->vfunc_102();
-        if ((arg0->_messageLevel >= 3) && (GPR_00554d6c == 0)) {
-            long long netAllocated = arg0->_localNetAllocated;
-            name = name ? name : &DAT_004f7910[0];
-            r = igReportNotice(DAT_004fd670, name, arg0->_poolIndex, (int)netAllocated);
+    if ((int)self->_localNetAllocated != 0) {
+        name = ((int *)Memory_GetPoolName((int)self));
+        self->CheckHeapLocked();
+        if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE84Notice == 0)) {
+            long long netAllocated = self->_localNetAllocated;
+            name = name ? name : &emptyString_4[0];
+            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E84, name, self->_poolIndex, (int)netAllocated);
             if ((r != 1) && (r == 2)) {
-                GPR_00554d6c = 1;
+                g_igArenaMemoryPool_ignoreE84Notice = 1;
             }
         }
-        arg0->vfunc_88();
-    } else if (arg0->_localNetAllocationCount != 0) {
-        name = ((int *)Memory_GetPoolName((int)arg0));
-        if ((arg0->_messageLevel >= 3) && (GPR_00554d70 == 0)) {
-            long long netAllocationCount = arg0->_localNetAllocationCount;
-            name = name ? name : &DAT_004f7910[0];
-            r = igReportNotice(DAT_004fd6d0, name, arg0->_poolIndex, (int)netAllocationCount);
+        self->DisplayOutstandingAllocations();
+    } else if (self->_localNetAllocationCount != 0) {
+        name = ((int *)Memory_GetPoolName((int)self));
+        if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE85Notice == 0)) {
+            long long netAllocationCount = self->_localNetAllocationCount;
+            name = name ? name : &emptyString_4[0];
+            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E85, name, self->_poolIndex, (int)netAllocationCount);
             if ((r != 1) && (r == 2)) {
-                GPR_00554d70 = 1;
+                g_igArenaMemoryPool_ignoreE85Notice = 1;
             }
         }
-        arg0->vfunc_88();
+        self->DisplayOutstandingAllocations();
     }
-    int t = (arg0->_poolOptionFlags & 0x200) != 0;
-    if (!t && igArenaMemoryPool_GetArenaHighCount(arg0) > 1U) {
-        name = ((int *)Memory_GetPoolName((int)arg0));
-        if ((arg0->_messageLevel >= 3) && (GPR_00554d74 == 0)) {
-            name = name ? name : &DAT_004f7910[0];
-            r = igReportNotice(DAT_004fd730, name, arg0->_poolIndex, igArenaMemoryPool_GetArenaHighCount(arg0));
+    int t = (self->_poolOptionFlags & 0x200) != 0;
+    if (!t && igArenaMemoryPool_GetArenaHighCount(self) > 1U) {
+        name = ((int *)Memory_GetPoolName((int)self));
+        if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE115Notice == 0)) {
+            name = name ? name : &emptyString_4[0];
+            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E115, name, self->_poolIndex, igArenaMemoryPool_GetArenaHighCount(self));
             if ((r != 1) && (r == 2)) {
-                GPR_00554d74 = 1;
+                g_igArenaMemoryPool_ignoreE115Notice = 1;
             }
         }
     }
-    DAT_00587208[0] += (int)arg0->_localNetAllocated;
-    DAT_00587210[0] += (int)arg0->_localNetAllocatedWithOverhead;
-    if (arg0->_size == 0) {
-        arg0->Trim(0);
+    g_igArenaMemoryPool_shutdownNetAllocated[0] += (int)self->_localNetAllocated;
+    g_igArenaMemoryPool_shutdownNetAllocatedWithOverhead[0] += (int)self->_localNetAllocatedWithOverhead;
+    if (self->_size == 0) {
+        self->Trim(0);
     }
-    state = arg0->_arenaState;
+    state = self->_arenaState;
     if (state != 0) {
         blocks = state->blocks;
         if (blocks != 0) {
             g_activeSystemAllocator[0]->Free(blocks);
-            arg0->_arenaState->blockCapacity = 0;
-            arg0->_arenaState->blockCount = 0;
-            arg0->_arenaState->maxBlockPairs = 0;
+            self->_arenaState->blockCapacity = 0;
+            self->_arenaState->blockCount = 0;
+            self->_arenaState->maxBlockPairs = 0;
         }
-        g_activeSystemAllocator[0]->Free((void *)arg0->_arenaState);
-        arg0->_arenaState = 0;
+        g_activeSystemAllocator[0]->Free((void *)self->_arenaState);
+        self->_arenaState = 0;
     }
-    arg0->_arenaState = 0;
-    DAT_00587200[0] -= 1;
+    self->_arenaState = 0;
+    g_igArenaMemoryPool_liveCount[0] -= 1;
 }
 
-void *igArenaMemoryPool_Initialize(igArenaMemoryPool *arg0) {
-    igMemoryPool_Initialize((int **)arg0);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
-    arg0->_allocationLock = 0;
-    arg0->_eventTracker = 0;
-    return arg0;
+void *igArenaMemoryPool_Initialize(igArenaMemoryPool *self) {
+    igMemoryPool_Initialize((int **)self);
+    self->_vtable = (int)(&g_igArenaMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    return self;
 }
 
-void *igArenaMemoryPool_Construct(igArenaMemoryPool *arg0, int extra1) {
-    igMemoryPool_Construct((int **)arg0);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
-    arg0->_allocationLock = 0;
-    arg0->_eventTracker = 0;
-    if (arg0 != 0) {
-        igArenaMemoryPool_Initialize(arg0);
+void *igArenaMemoryPool_Construct(igArenaMemoryPool *self, int extra1) {
+    igMemoryPool_Construct((int **)self);
+    self->_vtable = (int)(&g_igArenaMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    if (self != 0) {
+        igArenaMemoryPool_Initialize(self);
     }
-    return arg0;
+    return self;
 }
 
-void *igArenaMemoryPool_CopyConstruct(igArenaMemoryPool *arg0, int extra1) {
-    igMemoryPool_CopyConstruct((igMemoryPool *)arg0, (igMemoryPool *)extra1);
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_00531030[0]);
-    arg0->_allocationLock = 0;
-    arg0->_eventTracker = 0;
-    return arg0;
+void *igArenaMemoryPool_CopyConstruct(igArenaMemoryPool *self, int source) {
+    igMemoryPool_CopyConstruct((igMemoryPool *)self, (igMemoryPool *)source);
+    self->_vtable = (int)(&g_igArenaMemoryPool_vtable[0]);
+    self->_allocationLock = 0;
+    self->_eventTracker = 0;
+    return self;
 }
 
 void igArenaMemoryPool_Destruct(void **self) {
-    ((igMemoryPoolView *)(self))->vfunc_98();
+    ((igMemoryPoolView *)(self))->Shutdown();
     igMemoryPool_Destruct((int)self);
 }
 
@@ -2236,7 +2236,7 @@ int Gap__Core__igArenaMemoryPool__vfunc_83(void) {
     return 1;
 }
 
-int igArenaMemoryPool_GetAllocationSize(int arg0, unsigned char *p) {
+int igArenaMemoryPool_GetAllocationSize(int self, unsigned char *p) {
     unsigned int off;
     unsigned int v;
     TaggedBlockHeader *h;
@@ -2276,9 +2276,9 @@ void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
         if (((igMemoryPoolView *)p)->isActive() != 0) {
             if (p->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, p);
-                if (GPR_00554d78 == 0) {
-                    r = igReportNotice(DAT_004fd7a0);
-                    if (r != 1) { if (r == 2) { GPR_00554d78 = 1; } }
+                if (g_igArenaMemoryPool_ignoreE111Notice == 0) {
+                    r = igReportNotice(text_igArenaMemoryPool_setPoolOptionFlags_E111);
+                    if (r != 1) { if (r == 2) { g_igArenaMemoryPool_ignoreE111Notice = 1; } }
                 }
             }
             return;
@@ -2287,24 +2287,24 @@ void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
     p->_poolOptionFlags = f;
 }
 
-int igArenaMemoryPool_GetEventTracker(void *arg0) {
-    return *(int *)((char *)(arg0) + 176);
+int igArenaMemoryPool_GetEventTracker(igArenaMemoryPool *self) {
+    return self->_eventTracker;
 }
 
-void igArenaMemoryPool_SetEventTracker(int *arg0, igObject *arg1) {
-    igObject *o;
-    if (arg1 == 0 || (int *)((void *)igObject_GetAllocator((int)arg1)) != arg0) {
-        if (arg1 != 0) {
-            arg1->_refCount++;
+void igArenaMemoryPool_SetEventTracker(igArenaMemoryPool *self, igObject *tracker) {
+    igObject *previous;
+    if (tracker == 0 || (igArenaMemoryPool *)((void *)igObject_GetAllocator((int)tracker)) != self) {
+        if (tracker != 0) {
+            tracker->_refCount++;
         }
-        o = (igObject *)arg0[44];
-        if (o != 0) {
-            --o->_refCount;
-            if ((o->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(o);
+        previous = (igObject *)self->_eventTracker;
+        if (previous != 0) {
+            --previous->_refCount;
+            if ((previous->_refCount & 0x7fffff) == 0) {
+                igObject_Destroy(previous);
             }
         }
-        arg0[44] = (int)arg1;
+        self->_eventTracker = (int)tracker;
     }
 }
 
@@ -2312,16 +2312,16 @@ void igArenaMemoryPool_Dump(void) {
 
 }
 
-int igArenaMemoryPool_GetPoolIndex(void *arg0) {
-    return *(int *)((char *)(arg0) + 180);
+int igArenaMemoryPool_GetPoolIndex(igArenaMemoryPool *self) {
+    return self->_poolIndex;
 }
 
-void igArenaMemoryPool_SetPoolIndex(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 180) = arg1;
-    if (*(int *)((char *)(arg0) + 180) >= 0x40) {
-        *(int *)((char *)(arg0) + 200) = 0x18;
+void igArenaMemoryPool_SetPoolIndex(igArenaMemoryPool *self, int index) {
+    self->_poolIndex = index;
+    if (self->_poolIndex >= 0x40) {
+        self->_smallestChunkSize = 0x18;
     } else {
-        *(int *)((char *)(arg0) + 200) = 0x10;
+        self->_smallestChunkSize = 0x10;
     }
 }
 
@@ -2330,54 +2330,54 @@ static inline int acceptsPoolIndex(igArenaMemoryPoolView *pool, int index) {
     return 1;
 }
 
-void igArenaMemoryPool_TransferAllocation(int *arg0, igArenaMemoryPoolView *arg1, char *arg2, igMemoryPoolView *arg3) {
-    int v = arg3->GetPoolIndex();
-    int ok;
+void igArenaMemoryPool_TransferAllocation(int *status, igArenaMemoryPoolView *self, char *block, igMemoryPoolView *target) {
+    int targetIndex = target->GetPoolIndex();
+    int accepted;
     TaggedBlockHeader *h;
-    int a;
-    ok = acceptsPoolIndex(arg1, v);
-    if (ok != 0) {
-        if (*(unsigned int *)(arg2 - 4) == 0xAAAAAAAF) {
-            unsigned int off = *(unsigned int *)(arg2 - 8);
+    int poolIndex;
+    accepted = acceptsPoolIndex(self, targetIndex);
+    if (accepted != 0) {
+        if (*(unsigned int *)(block - 4) == 0xAAAAAAAF) {
+            unsigned int off = *(unsigned int *)(block - 8);
             if (off < 0x100011) {
-                arg2 = arg2 - off;
+                block = block - off;
             } else {
-                *arg0 = g_resultFailure.v;
+                *status = g_resultFailure.v;
                 return;
             }
         }
-        h = (TaggedBlockHeader *)(arg2 - 4);
-        if (((TaggedTailByte *)(arg2 - 1))->extended == 1) {
-            h = (TaggedBlockHeader *)(arg2 - 12);
+        h = (TaggedBlockHeader *)(block - 4);
+        if (((TaggedTailByte *)(block - 1))->extended == 1) {
+            h = (TaggedBlockHeader *)(block - 12);
         }
-        a = arg3->GetPoolIndex() >> 1;
-        h->poolLow = a;
+        poolIndex = target->GetPoolIndex() >> 1;
+        h->poolLow = poolIndex;
         if (h->big == 1) {
-            h->poolHigh = a >> 5;
+            h->poolHigh = poolIndex >> 5;
         }
-        *arg0 = g_resultSuccess.v;
+        *status = g_resultSuccess.v;
     } else {
-        *arg0 = g_resultFailure.v;
+        *status = g_resultFailure.v;
     }
 }
 
-int igArenaMemoryPool_CanTransferTo(void *arg0, void **arg1) {
-    int temp_v0;
-    int var_v0;
+int igArenaMemoryPool_CanTransferTo(igArenaMemoryPool *self, igMemoryPoolView *target) {
+    int targetIndex;
+    int accepted;
 
-    temp_v0 = ((igMemoryPoolView *)(arg1))->GetPoolIndex();
-    if ((*(int *)((char *)(arg0) + 180) < 0x40) && (temp_v0 >= 0x40)) {
-        var_v0 = 0;
+    targetIndex = target->GetPoolIndex();
+    if ((self->_poolIndex < 0x40) && (targetIndex >= 0x40)) {
+        accepted = 0;
     } else {
-        var_v0 = 1;
+        accepted = 1;
     }
-    if (var_v0 != 0) {
+    if (accepted != 0) {
         return 1;
     }
     return 0;
 }
 
-int igArenaMemoryPool_GetAllocationPoolIndex(int arg0, unsigned char *p) {
+int igArenaMemoryPool_GetAllocationPoolIndex(int self, unsigned char *p) {
     TaggedBlockHeader *a0; unsigned int off, v;
     if (p == 0) return -1;
     if (*(unsigned int *)(p - 4) == 0xAAAAAAAF) {
@@ -2391,77 +2391,79 @@ int igArenaMemoryPool_GetAllocationPoolIndex(int arg0, unsigned char *p) {
     return v * 2;
 }
 
-void Gap__Core__igArenaMemoryPool__constructFields(igArenaMemoryPoolView *arg0, int arg1) {
+void Gap__Core__igArenaMemoryPool__constructFields(igArenaMemoryPoolView *self, int flags) {
     int t;
-    arg0->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
-    memset(arg0->_arenaState, 0, 0x814);
-    if (arg0->_arenaState->blocks == 0) {
-        arg0->_arenaState->blocks = (int *)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
-        if (arg0->_arenaState->blocks == 0 && GPR_00554d7c == 0) {
+    self->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
+    memset(self->_arenaState, 0, 0x814);
+    if (self->_arenaState->blocks == 0) {
+        self->_arenaState->blocks = (int *)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
+        if (self->_arenaState->blocks == 0 && g_igArenaMemoryPool_ignoreFieldsBlockListAllocError == 0) {
             t = igReportError(text_Unable_to_allocate_memory_for_ar);
             if (t != 1 && t == 2) {
-                GPR_00554d7c = 1;
+                g_igArenaMemoryPool_ignoreFieldsBlockListAllocError = 1;
             }
         }
-        arg0->_arenaState->blockCapacity = 0x200;
-        arg0->_arenaState->blockCount = 0;
-        arg0->_arenaState->maxBlockPairs = 0;
-        arg0->_arenaState->lowestAddress = -1;
-        arg0->_arenaState->highestAddress = 0;
+        self->_arenaState->blockCapacity = 0x200;
+        self->_arenaState->blockCount = 0;
+        self->_arenaState->maxBlockPairs = 0;
+        self->_arenaState->lowestAddress = -1;
+        self->_arenaState->highestAddress = 0;
     }
-    DAT_00587200[0] += 1;
-    Gap__Core__igObject__constructFields((int)arg0, arg1);
+    g_igArenaMemoryPool_liveCount[0] += 1;
+    Gap__Core__igObject__constructFields((int)self, flags);
 }
 
 void Gap__Core__igArenaMemoryPool__destructFields(igArenaMemoryPool *self) {
-    ((igMemoryPoolView *)self)->vfunc_98();
+    ((igMemoryPoolView *)self)->Shutdown();
     Gap__Core__igObject__destructFields((int)self);
 }
 
 void Gap__Core__igArenaMemoryPool__resetFields(igArenaMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    self->_poolOptionFlags = (int) g_poolOptionFlagsDefault_004c2370[0];
+    self->_poolOptionFlags = (int) g_igArenaMemoryPool_defaultPoolOptionFlags[0];
 }
 
-unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *arg0, int arg1, int arg2) {
-    unsigned int temp_a1;
-    unsigned int temp_v0;
-    void *temp_v1;
-    void *temp_v1_2;
+unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *self, int address, int size) {
+    unsigned int blockEnd;
+    unsigned int block;
+    void *state;
+    void *stateAgain;
 
-    if (arg0->_size != 0) {
+    if (self->_size != 0) {
         return -1U;
     }
-    temp_v0 = g_activeSystemAllocator[0]->vfunc_17(arg1, arg2);
-    if (temp_v0 != -1U) {
-        arg0->_systemAllocated = arg0->_systemAllocated + arg2;
-        temp_v1 = (void *)(arg0->_arenaState);
-        if (temp_v0 < (unsigned int) *(int *)((char *)(temp_v1) + 2060)) {
-            *(int *)((char *)(temp_v1) + 2060) = temp_v0;
+    block = g_activeSystemAllocator[0]->AllocateRange(address, size);
+    if (block != -1U) {
+        self->_systemAllocated = self->_systemAllocated + size;
+        /* matching construct: hand — the address bounds are written through untyped offsets (lowestAddress,
+         * highestAddress); typed ArenaState stores let the compiler skip the second _arenaState load retail makes. */
+        state = (void *)(self->_arenaState);
+        if (block < (unsigned int) *(int *)((char *)(state) + 2060)) {
+            *(int *)((char *)(state) + 2060) = block;
         }
-        temp_v1_2 = (void *)(arg0->_arenaState);
-        temp_a1 = temp_v0 + arg2;
-        if ((unsigned int) *(int *)((char *)(temp_v1_2) + 2064) < temp_a1) {
-            *(int *)((char *)(temp_v1_2) + 2064) = temp_a1;
+        stateAgain = (void *)(self->_arenaState);
+        blockEnd = block + size;
+        if ((unsigned int) *(int *)((char *)(stateAgain) + 2064) < blockEnd) {
+            *(int *)((char *)(stateAgain) + 2064) = blockEnd;
         }
     }
-    return temp_v0;
+    return block;
 }
 
-igResult igArenaMemoryPool_SystemFree(void *arg1, int arg2, long long arg3) {
-    igArenaMemoryPool *f = (igArenaMemoryPool *)arg1;
-    if (f->_size != 0) {
-        igResult r;
-        r.v = g_resultFailure.v;
-        return r;
+igResult igArenaMemoryPool_SystemFree(void *self, int address, long long size) {
+    igArenaMemoryPool *pool = (igArenaMemoryPool *)self;
+    if (pool->_size != 0) {
+        igResult result;
+        result.v = g_resultFailure.v;
+        return result;
     }
-    long long d = (long long)(int)arg3;
-    if ((unsigned long long)d < f->_systemAllocated) {
-        f->_systemAllocated = f->_systemAllocated - d;
+    long long released = (long long)(int)size;
+    if ((unsigned long long)released < pool->_systemAllocated) {
+        pool->_systemAllocated = pool->_systemAllocated - released;
     } else {
-        f->_systemAllocated = 0;
+        pool->_systemAllocated = 0;
     }
-    return g_activeSystemAllocator[0]->vfunc_18(arg2, arg3);
+    return g_activeSystemAllocator[0]->FreeRange(address, size);
 }
 
 void igArenaMemoryPool_GetStackSize(igArenaMemoryPoolView *self)
@@ -2473,23 +2475,23 @@ void Gap__Core__igArenaMemoryPool__vfunc_108(void) {
 
 }
 
-int igArenaMemoryPool_GetLowestAddress(void *arg0) {
-    int temp_v0;
+int igArenaMemoryPool_GetLowestAddress(igArenaMemoryPoolView *self) {
+    int rawMemory;
 
-    temp_v0 = *(int *)((char *)(arg0) + 124);
-    if (temp_v0 != 0) {
-        return temp_v0;
+    rawMemory = self->_rawMemory;
+    if (rawMemory != 0) {
+        return rawMemory;
     }
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2060);
+    return self->_arenaState->lowestAddress;
 }
 
-int igArenaMemoryPool_GetHighestAddress(void *arg0) {
-    int temp_v1;
+int igArenaMemoryPool_GetHighestAddress(igArenaMemoryPoolView *self) {
+    int rawMemory;
 
-    temp_v1 = *(int *)((char *)(arg0) + 124);
-    if (temp_v1 != 0) {
-        return temp_v1 + *(int *)((char *)(arg0) + 160);
+    rawMemory = self->_rawMemory;
+    if (rawMemory != 0) {
+        return rawMemory + *(int *)&self->_size;
     }
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 112)) + 2064);
+    return self->_arenaState->highestAddress;
 }
 

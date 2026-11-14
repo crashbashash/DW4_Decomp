@@ -15,40 +15,40 @@ igSmartPointer<igObject> *igSmartPointer_igCallStackTracer_Destruct(igSmartPoint
     return self;
 }
 
-void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1) {
-    int *o;
+void **igSmartPointer_igLocationTable_Destruct(void **pointer, int flags) {
+    int *table;
 
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    if (pointer != 0) {
+        table = (int *)(*pointer);
+        if (table != 0) {
+            table[1] = table[1] - 1;
+            if ((table[1] & 0x7FFFFF) == 0) {
+                igObject_Destroy(table);
             }
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
+        if ((short)flags > 0) {
+            __dl__FPv(pointer);
         }
     }
-    return arg0;
+    return pointer;
 }
 
-void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1) {
-    int *o;
+void **igSmartPointer_igCallStackTable_Destruct(void **pointer, short flags) {
+    int *table;
 
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    if (pointer != 0) {
+        table = (int *)*pointer;
+        if (table != 0) {
+            table[1] = table[1] - 1;
+            if ((table[1] & 0x7FFFFF) == 0) {
+                igObject_Destroy(table);
             }
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
+        if (flags > 0) {
+            __dl__FPv(pointer);
         }
     }
-    return arg0;
+    return pointer;
 }
 
 void **igSmartPointer_igSemaphore_Destruct(igObject **self, short flag) {

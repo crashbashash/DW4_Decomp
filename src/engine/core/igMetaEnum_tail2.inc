@@ -1,54 +1,54 @@
-char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3) {
-    int *sp9C;
+char *igMetaEnum_GetNamesByMask(char *buffer, int size, int mask, int metaEnum) {
+    int *name;
     int *hdr;
-    int cnt;
+    int count;
     int i;
-    int n;
-    int len;
-    int v;
-    n = 0;
-    cnt = igMetaEnum_GetNameCount((igMetaEnum *)arg3);
-    *arg0 = 0;
+    int written;
+    int room;
+    int refs;
+    written = 0;
+    count = igMetaEnum_GetNameCount((igMetaEnum *)metaEnum);
+    *buffer = 0;
     i = 0;
-    len = arg1 - 1;
-    for (; i < cnt; i++) {
-        if (arg2 & igMetaEnum_GetValueAt((void *)arg3, i)) {
-            if (n != 0) {
-                strncat(arg0, (const char *)DAT_004f9950, len);
+    room = size - 1;
+    for (; i < count; i++) {
+        if (mask & igMetaEnum_GetValueAt((void *)metaEnum, i)) {
+            if (written != 0) {
+                strncat(buffer, (const char *)text_space, room);
             }
-            igMetaEnum_GetNameAt((int *)&sp9C, (void *)arg3, i);
-            strncat(arg0, (const char *)sp9C, len);
-            if (sp9C != 0) {
-                hdr = sp9C - 2;
-                v = sp9C[-1] - 1;
-                sp9C[-1] = v;
-                if (v == 0) {
+            igMetaEnum_GetNameAt((int *)&name, (void *)metaEnum, i);
+            strncat(buffer, (const char *)name, room);
+            if (name != 0) {
+                hdr = name - 2;
+                refs = name[-1] - 1;
+                name[-1] = refs;
+                if (refs == 0) {
                     StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
                 }
             }
-            n++;
+            written++;
         }
     }
-    arg0[arg1 - 1] = 0;
-    return arg0;
+    buffer[size - 1] = 0;
+    return buffer;
 }
 
-char *igMetaEnum_GetValueName(char *arg0, int arg1, int arg2, int arg3) {
-    int *s;
-    int *h;
-    int c;
+char *igMetaEnum_GetValueName(char *buffer, int size, int value, int metaEnum) {
+    int *name;
+    int *hdr;
+    int refs;
 
-    igMetaEnum_GetNameByValue((int *)&s, (const igMetaEnum *)arg3, arg2);
-    strncpy(arg0, s, arg1 - 1);
-    *(arg0 + arg1 - 1) = 0;
-    if (s != 0) {
-        h = s - 2;
-        c = s[-1] - 1;
-        s[-1] = c;
-        if (c == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*h), (int)h);
+    igMetaEnum_GetNameByValue((int *)&name, (const igMetaEnum *)metaEnum, value);
+    strncpy(buffer, name, size - 1);
+    *(buffer + size - 1) = 0;
+    if (name != 0) {
+        hdr = name - 2;
+        refs = name[-1] - 1;
+        name[-1] = refs;
+        if (refs == 0) {
+            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (int)hdr);
         }
     }
-    return arg0;
+    return buffer;
 }
 

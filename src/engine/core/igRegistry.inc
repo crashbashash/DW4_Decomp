@@ -1,6 +1,6 @@
-void * igRegistry_Create(int arg0) {
+void * igRegistry_Create(int pool) {
     igRegistry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585A08), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585A08), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igRegistry_GetOrCreateMetaObject(void) {
@@ -20,21 +20,21 @@ igMetaObject *igRegistry_GetMetaObject(void)
 
 int igRegistry_GetVTable(void) {
     igRegistry registry;
-    int temp_s0;
+    int vtable;
     igObject *q0;
     igObject *q1;
     igObject *q2;
 
     igObject_InitHeader((igObject *)&registry);
-    registry._vtable = (int)&DAT_0052ebf0[0];
+    registry._vtable = (int)&g_igRegistry_vtable[0];
     q2 = (igObject *)&registry._valueTable;
     *(int *)q2 = 0;
     q1 = (igObject *)&registry._registryFile;
     *(int *)q1 = 0;
     q0 = (igObject *)&registry._additionalSectionNames;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)((char *)&registry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    registry._vtable = (int)&DAT_0052ebf0[0];
+    vtable = *(int *)((char *)&registry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    registry._vtable = (int)&g_igRegistry_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
         if (q0 != 0) {
@@ -62,7 +62,7 @@ int igRegistry_GetVTable(void) {
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igRegistry_EnsureRegistered(void)
@@ -92,25 +92,25 @@ void igRegistry_GetMetaObjectFunction(void) {
 }
 
 void igRegistry_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s1;
+    int first;
+    void *valueTableField;
+    void *registryFileField;
+    void *sectionNamesField;
+    void *meta;
 
-    temp_s1 = (void *)g_igRegistry_metaObject[0];
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igRegistry_ctorTable[0], 5);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igRegistryValueList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igFile_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4))), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igRegistry_fieldTable[0], (igMetaField ***)&DAT_004bf8d0[0], &DAT_004bf8f0[0], temp_s0);
+    meta = (void *)g_igRegistry_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igRegistry_ctorTable[0], 5);
+    valueTableField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
+    ((igObjectRefMetaField *)valueTableField)->_metaObject = (int)igRegistryValueList_GetOrCreateMetaObject();
+    ((igRefMetaField *)valueTableField)->_construct = 1;
+    registryFileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
+    ((igObjectRefMetaField *)registryFileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igRefMetaField *)registryFileField)->_construct = 1;
+    sectionNamesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
+    ((igObjectRefMetaField *)sectionNamesField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
+    ((igRefMetaField *)sectionNamesField)->_construct = 1;
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4))), 1);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igRegistry_fieldTable[0], (igMetaField ***)&g_igRegistry_fieldDescriptors[0], &g_igRegistry_fieldOffsets[0], first);
 }
 

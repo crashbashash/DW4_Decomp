@@ -5,17 +5,17 @@ void igBoolArrayMetaField_SwapBytes(igBoolArrayMetaField *self, int buffer, int 
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
-unsigned short igBoolArrayMetaField_GetSize(void *arg0) {
-    return *(int *)((char *)(arg0) + 52);
+unsigned short igBoolArrayMetaField_GetSize(void *self) {
+    return ((igBoolArrayMetaField *)self)->_num;
 }
 
-void igBoolArrayMetaField_SetDefaultAll(igBoolArrayMetaField *arg0, int arg1) {
+void igBoolArrayMetaField_SetDefaultAll(igBoolArrayMetaField *self, int value) {
     char *base;
     int i;
-    ((igMetaFieldView *)arg0)->SetDefault(0);
-    base = (char *)arg0->_default;
-    for (i = 0; i < arg0->_num; i++) {
-        base[i] = arg1;
+    ((igMetaFieldView *)self)->SetDefault(0);
+    base = (char *)self->_default;
+    for (i = 0; i < self->_num; i++) {
+        base[i] = value;
     }
 }
 

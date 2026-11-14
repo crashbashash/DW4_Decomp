@@ -41,18 +41,18 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**6,767** of the 19,979 matched functions are readable: **1,190,504** code bytes, **34.3 %** of the code.
+**8,184** of the 19,979 matched functions are readable: **1,437,444** code bytes, **41.4 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 8,464 | 949,532 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,602 | 1,507,588 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 2,064 | 561,472 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 9,040 | 1,371,240 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,845 | 505,504 |
 | it sits in its class or module file, not `src/unmatched/` | 111 | 24,668 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 5,981 | 1,169,076 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 4,389 | 815,168 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,336 | 490,508 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 1,099 | 387,748 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 5,466 | 1,037,904 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 3,385 | 660,720 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,091 | 458,220 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 825 | 276,252 |
 
 ## Debt
 
@@ -87,7 +87,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.b` | 0 | 0 | 0 | struct-report groups: receiver view disagrees with the reflected class |
 | `struct.c` | 66 | 33 | -33 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 193 | 99 | -94 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 379 | 457 | **+78** | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `raw_casts.reflected` | 379 | 327 | -52 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
 | `fun_dat_refs` | 9,743 | 5,508 | -4235 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
@@ -178,7 +178,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 28,706 of 65,826 (43.61 %) |
+| field accesses using a **recovered** type (not an offset cast) | 29,148 of 65,881 (44.24 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced

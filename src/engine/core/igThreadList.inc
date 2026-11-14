@@ -17,7 +17,7 @@ int igThreadList_GetVTable(void) {
     igThreadList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00533350[0];
+    list._vtable = (int)&g_igThreadList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

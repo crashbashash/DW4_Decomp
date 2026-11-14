@@ -1,6 +1,6 @@
-void * igIntListNoClean_Create(int arg0) {
+void * igIntListNoClean_Create(int allocator) {
     igIntListNoClean_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586878), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586878), (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igIntListNoClean_GetOrCreateMetaObject(void) {
@@ -22,7 +22,7 @@ int igIntListNoClean_GetVTable(void) {
     igIntListNoClean list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00531b10[0];
+    list._vtable = (int)&g_igIntListNoClean_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

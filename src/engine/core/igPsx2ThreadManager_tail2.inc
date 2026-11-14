@@ -15,14 +15,14 @@ void igPsx2ThreadManager_CreateGlobal(void) {
 }
 
 void igPsx2ThreadManager_DestroyGlobal(void) {
-    igObject *temp_v0;
+    igObject *manager;
     igObject *o;
 
-    temp_v0 = (igObject *)g_threadManager[0]->getCurrentThread();
-    g_threadManager[0]->removeThread((igPsx2ThreadView *)temp_v0);
-    temp_v0->_refCount = (int)((int) temp_v0->_refCount - 1);
-    if (((unsigned long long) ((long long) (int) temp_v0->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(temp_v0);
+    manager = (igObject *)g_threadManager[0]->getCurrentThread();
+    g_threadManager[0]->removeThread((igPsx2ThreadView *)manager);
+    manager->_refCount = (int)((int) manager->_refCount - 1);
+    if (((unsigned long long) ((long long) (int) manager->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(manager);
     }
     o = (igObject *)((void * *)g_threadManager)[0];
     o->_refCount = (int) o->_refCount - 1;

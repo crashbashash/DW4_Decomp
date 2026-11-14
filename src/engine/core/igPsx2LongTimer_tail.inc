@@ -10,7 +10,7 @@ int igPsx2LongTimer_GetVTable(void) {
     igPsx2LongTimer timer;
 
     igObject_InitHeader((igObject *)&timer);
-    timer._vtable = (int)&DAT_0052da90[0];
+    timer._vtable = (int)&g_igPsx2LongTimer_vtable[0];
     return *(int *)((char *)&timer + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

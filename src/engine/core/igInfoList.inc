@@ -1,6 +1,6 @@
-void igInfoList_Create(int arg0) {
+void igInfoList_Create(int allocator) {
     igInfoList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586120), (igMemoryPoolView *)arg0);
+    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586120), (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igInfoList_GetOrCreateMetaObject(void) {
@@ -22,7 +22,7 @@ int igInfoList_GetVTable(void) {
     igInfoList list;
 
     igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&DAT_00532600[0];
+    list._vtable = (int)&g_igInfoList_vtable[0];
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 

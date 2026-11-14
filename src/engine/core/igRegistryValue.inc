@@ -1,6 +1,6 @@
-void * igRegistryValue_Create(int arg0) {
+void * igRegistryValue_Create(int allocator) {
     igRegistryValue_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585A40), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585A40), (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igRegistryValue_GetMetaObject(void)
@@ -18,13 +18,13 @@ int igRegistryValue_GetVTable(void) {
     int *valueName;
 
     igObject_InitHeader((igObject *)&value);
-    value._vtable = (int)&DAT_00532fb0[0];
+    value._vtable = (int)&g_igRegistryValue_vtable[0];
     valueRef = &value._value;
     *valueRef = 0;
     valueName = &value._valueName;
     *valueName = 0;
     r = *(int *)((char *)&value + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    value._vtable = (int)&DAT_00532fb0[0];
+    value._vtable = (int)&g_igRegistryValue_vtable[0];
     ReleaseObjectField(valueName);
     ReleaseObjectField(valueRef);
     return r;
@@ -57,21 +57,21 @@ void igRegistryValue_GetMetaObjectFunction(void) {
 }
 
 void igRegistryValue_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *valueName;
+    void *value;
+    void *meta;
 
-    temp_s0 = (void *)g_igRegistryValue_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igRegistryValue_ctorTable[0], 3);
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igRegistryValue_fieldTable[0], (igMetaField ***)&DAT_004bf938[0], &DAT_004bf948[0], temp_s2);
+    meta = (void *)g_igRegistryValue_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igRegistryValue_ctorTable[0], 3);
+    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))), -1);
+    value = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)value)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+    ((igRefMetaField *)value)->_construct = 1;
+    valueName = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)valueName)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+    ((igRefMetaField *)valueName)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igRegistryValue_fieldTable[0], (igMetaField ***)&g_igRegistryValue_fieldDescriptors[0], &g_igRegistryValue_fieldOffsets[0], base);
 }
 

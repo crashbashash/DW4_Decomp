@@ -1,12 +1,12 @@
-int igMetaFieldInfo_FindObjectReference(igMetaFieldInfoView *arg0, int arg1, void *arg2) {
+int igMetaFieldInfo_FindObjectReference(igMetaFieldInfoView *self, int directory, void *target) {
     int result = 0;
-    igSmartPointer<igMetaField> held((igMetaField *)arg2, kRetainReference);
+    igSmartPointer<igMetaField> held((igMetaField *)target, kRetainReference);
     igMetaField *field = cast0(held.get());
     igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     if (field != 0) {
         int name = igMetaField_GetMangledName(field, (void **)allocator);
-        if (ObjectPointerList_FindIndex((char *)(((ObjectSystemView **)g_objectSystem)[0]->metaRegistry), field->_parentMetaObject) != -1 || arg0->FindByName(name) != 0) {
-            result = FUN_002e2d30((igDirectoryView *)arg1, (igInfoView *)arg0, (char *)name, (igObject *)arg2) & 0xFF;
+        if (ObjectPointerList_FindIndex((char *)(((ObjectSystemView **)g_objectSystem)[0]->metaRegistry), field->_parentMetaObject) != -1 || self->FindByName(name) != 0) {
+            result = FUN_002e2d30((igDirectoryView *)directory, (igInfoView *)self, (char *)name, (igObject *)target) & 0xFF;
         }
         allocator->Free((void *)name);
     }

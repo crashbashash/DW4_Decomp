@@ -33,19 +33,19 @@ void igContext_GetMetaObjectFunction(void) {
 }
 
 void igContext_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *extInstances;
+    void *extList;
+    void *meta;
 
-    temp_s0 = (void *)g_igContext_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igContext_ctorTable[0], 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igContextExtInfoList_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igContextExtList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igContext_fieldTable[0], (igMetaField ***)&DAT_004c1498[0], &DAT_004c14a8[0], temp_s2);
+    meta = (void *)g_igContext_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igContext_ctorTable[0], 3);
+    extList = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)extList)->_metaObject = (int)igContextExtInfoList_GetOrCreateMetaObject();
+    extInstances = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)extInstances)->_metaObject = (int)igContextExtList_GetOrCreateMetaObject();
+    ((igRefMetaField *)extInstances)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igContext_fieldTable[0], (igMetaField ***)&g_igContext_fieldDescriptors[0], &g_igContext_fieldOffsets[0], base);
 }
 

@@ -1,10 +1,10 @@
-void igFolder_ListFiles(void **arg0) {
-    void *temp_a0;
+void igFolder_ListFiles(void **result) {
+    void *list;
 
-    *arg0 = 0;
-    temp_a0 = *arg0;
-    if (temp_a0 != 0) {
-        *(int *)((char *)(temp_a0) + 4) = (int) (*(int *)((char *)(temp_a0) + 4) + 1);
+    *result = 0;
+    list = *result;
+    if (list != 0) {
+        ((igObject *)list)->_refCount = (int) (((igObject *)list)->_refCount + 1);
     }
 }
 

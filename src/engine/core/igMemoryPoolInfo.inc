@@ -1,6 +1,6 @@
-void * igMemoryPoolInfo_Create(int arg0) {
+void * igMemoryPoolInfo_Create(int pool) {
     igMemoryPoolInfo_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585E00), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585E00), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMemoryPoolInfo_GetMetaObject(void)
@@ -16,7 +16,7 @@ int igMemoryPoolInfo_GetVTable(void) {
     int t;
     igObject_InitHeader((igObject *)&info);
     info._name = 0;
-    info._vtable = (int)&DAT_0052f430[0];
+    info._vtable = (int)&g_igMemoryPoolInfo_vtable[0];
     info._handleName = 0;
     info._aliasedTo = 0;
     info._class = 0;
@@ -30,7 +30,7 @@ int igMemoryPoolInfo_GetVTable(void) {
     info._debugMessages = 0;
     info._releaseMessages = 0;
     t = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    info._vtable = (int)&DAT_0052f430[0];
+    info._vtable = (int)&g_igMemoryPoolInfo_vtable[0];
     StringRef_Destruct_00130720(&info._releaseMessages, -1);
     StringRef_Destruct_00130720(&info._debugMessages, -1);
     StringRef_Destruct_00130720(&info._releaseChecking, -1);
@@ -74,12 +74,12 @@ void igMemoryPoolInfo_GetMetaObjectFunction(void) {
 }
 
 void igMemoryPoolInfo_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igMemoryPoolInfo_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryPoolInfo_ctorTable[0], 0x10);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryPoolInfo_fieldTable[0], (igMetaField ***)&DAT_004c00e0[0], &DAT_004c0120[0], temp_s1);
+    meta = (void *)g_igMemoryPoolInfo_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igMemoryPoolInfo_ctorTable[0], 0x10);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMemoryPoolInfo_fieldTable[0], (igMetaField ***)&g_igMemoryPoolInfo_fieldDescriptors[0], &g_igMemoryPoolInfo_fieldOffsets[0], base);
 }
 

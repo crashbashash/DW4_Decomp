@@ -1,16 +1,15 @@
-/* Drop the entry's object reference: virtual slot 92 (vfunc_23) is the setter of _ref (+24) that
- * retains the new value and releases the old one, so calling it with 0 releases the held object;
- * the igObject default of this slot (an empty stub) then runs. */
+/* Drop the entry's object reference: the _ref setter retains the new value and releases the old one,
+ * so calling it with 0 releases the held object; the igObject default then runs. */
 void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self) {
-    ((igDirEntryView *)self)->vfunc_23(0);
+    ((igDirEntryView *)self)->setRef(0);
     igObject_ReleaseDefaults((int)self);
 }
 
-static inline const char *nameOf_3010f0(const igObjectDirEntry *entry) {
+static inline const char *entryNameOf(const igObjectDirEntry *entry) {
     return entry->_name != 0 ? (const char *)entry->_name : ((char *)emptyString);
 }
 
-static inline igObjectList *asEntryList_3010f0(igObject *object) {
+static inline igObjectList *asObjectEntryList(igObject *object) {
     if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (igObjectList *)object;
     return 0;
 }
@@ -23,7 +22,7 @@ igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBF
         ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
         objectListSetRetained(index, 0, lists.p);
     }
-    igSmartPointer<igObjectList> entries(asEntryList_3010f0(((igObject **)lists->_data)[index]), kRetainReference);
+    igSmartPointer<igObjectList> entries(asObjectEntryList(((igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
         int pool = file->_temporaryMemoryPool;
         entries.release();
@@ -39,7 +38,7 @@ igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBF
     list = entries.p;
     for (i = 0; i < count; i++) {
         entry = ((igObjectDirEntry **)list->_data)[i];
-        if (entry->_typeMeta == self->_typeMeta && nameOf_3010f0(entry) == nameOf_3010f0(self) &&
+        if (entry->_typeMeta == self->_typeMeta && entryNameOf(entry) == entryNameOf(self) &&
             entry->_memoryPoolHandle == self->_memoryPoolHandle) {
             return objectDirEntryAt(list, i);
         }
@@ -70,20 +69,20 @@ void igObjectDirEntry_ReleaseSharedRef(igObjectDirEntry *self, igObject *object)
     }
 }
 
-void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *arg0, igMetaObject *arg1) {
-    char *s0;
-    (igSmartPointer<igMetaObject> &)arg0->_typeMeta = arg1;
-    if (arg1) {
-        char *name = (char *)arg1->_name;
+void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *self, igMetaObject *meta) {
+    char *interned;
+    (igSmartPointer<igMetaObject> &)self->_typeMeta = meta;
+    if (meta) {
+        char *name = (char *)meta->_name;
         StringPool *pool = InternedStrings::get();
-        s0 = ((char *)StringPool_Intern(pool, (const char *)name));
-        releaseString((const char *)arg0->_typeMetaName);
-        arg0->_typeMetaName = (int)s0;
+        interned = ((char *)StringPool_Intern(pool, (const char *)name));
+        releaseString((const char *)self->_typeMetaName);
+        self->_typeMetaName = (int)interned;
     } else {
         StringPool *pool = InternedStrings::get();
-        s0 = ((char *)StringPool_Intern(pool, (const char *)text_NoMeta));
-        releaseString((const char *)arg0->_typeMetaName);
-        arg0->_typeMetaName = (int)s0;
+        interned = ((char *)StringPool_Intern(pool, (const char *)text_NoMeta));
+        releaseString((const char *)self->_typeMetaName);
+        self->_typeMetaName = (int)interned;
     }
 }
 
@@ -112,51 +111,51 @@ void igObjectDirEntry_WriteObject(igObjectDirEntry *self, igIGBFileView *file) {
                                                                   (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
 }
 
-void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *arg0) {
-    igObjectDispatchView *a = (igObjectDispatchView *)arg0->_ref;
-    if (a != 0) {
-        int (*f)() = (int (*)())a->getMeta()->_writeProxy;
-        if (f != 0) {
-            igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)arg0, (igMetaObject *)f());
+void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *self) {
+    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+    if (object != 0) {
+        int (*writeProxy)() = (int (*)())object->getMeta()->_writeProxy;
+        if (writeProxy != 0) {
+            igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)self, (igMetaObject *)writeProxy());
         }
     }
 }
 
-void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *arg0, igIGBFile *arg1) {
-    int temp_s0_2;
-    void *(*temp_v1)();
-    igObjectDispatchView *temp_s0;
-    void *var_v0;
+void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *self, igIGBFile *file) {
+    int bufferSize;
+    void *(*writeProxy)();
+    igObjectDispatchView *object;
+    void *meta;
 
-    temp_s0 = (igObjectDispatchView *)arg0->_ref;
-    igMetaObject *r = temp_s0->getMeta();
-    var_v0 = r;
-    temp_v1 = (void *(*)())r->_writeProxy;
-    if (temp_v1 != 0) {
-        var_v0 = temp_v1();
+    object = (igObjectDispatchView *)self->_ref;
+    igMetaObject *objectMeta = object->getMeta();
+    meta = objectMeta;
+    writeProxy = (void *(*)())objectMeta->_writeProxy;
+    if (writeProxy != 0) {
+        meta = writeProxy();
     }
-    arg0->_typeMetaIndex = igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)arg1->_metaObjectListInFile, (igMetaObject *)var_v0);
-    temp_s0_2 = arg1->_objectBufferSize;
-    arg1->_objectBufferSize = temp_s0_2 + igObject_GetSerializedSize((igObjectDispatchView *)temp_s0);
-    arg1->_objectCount = arg1->_objectCount + 1;
+    self->_typeMetaIndex = igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)file->_metaObjectListInFile, (igMetaObject *)meta);
+    bufferSize = file->_objectBufferSize;
+    file->_objectBufferSize = bufferSize + igObject_GetSerializedSize((igObjectDispatchView *)object);
+    file->_objectCount = file->_objectCount + 1;
 }
 
-void igObjectDirEntry_RegisterRef(igObjectDirEntry *arg0, int arg1) {
-    int temp_a0;
+void igObjectDirEntry_RegisterRef(igObjectDirEntry *self, int withMeta) {
+    int ref;
 
-    temp_a0 = arg0->_ref;
-    if (temp_a0 != 0) {
-        if (arg1 != 0) {
-            igObject_RegisterInstance((void **)temp_a0, (void *)arg0->_typeMeta);
+    ref = self->_ref;
+    if (ref != 0) {
+        if (withMeta != 0) {
+            igObject_RegisterInstance((void **)ref, (void *)self->_typeMeta);
             return;
         }
-        igObject_RegisterInstance((void **)temp_a0, (void *)0);
+        igObject_RegisterInstance((void **)ref, (void *)0);
     }
 }
 
 void igObjectDirEntry_PostProcess(igObjectDirEntryView *self)
 {
-    ((igObjectDispatchView *)self->_ref)->vfunc_15();
+    ((igObjectDispatchView *)self->_ref)->userPostLoad();
 }
 
 /* Read the referenced object's fields from the file's object cursor and move past them. */
@@ -256,7 +255,7 @@ int igObjectDirEntry_GetMemoryPoolHandle(igObjectDirEntry *self) {
     return self->_memoryPoolHandle;
 }
 
-void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1) {
+void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object) {
     int n;
     int i;
     int j;
@@ -264,14 +263,14 @@ void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1) {
     igObject **data;
     int k;
     igObject *t;
-    n = arg0->_count;
-    if (arg1 != 0) {
+    n = list->_count;
+    if (object != 0) {
         for (i = 0; i < n; i++) {
-            arg1->_refCount = arg1->_refCount + 1;
+            object->_refCount = object->_refCount + 1;
         }
     }
     for (j = 0; j < n; j++) {
-        t = arg0->_data[j];
+        t = list->_data[j];
         if (t != 0) {
             t->_refCount = t->_refCount - 1;
             if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
@@ -279,21 +278,21 @@ void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1) {
             }
         }
     }
-    cnt = arg0->_count;
-    data = arg0->_data;
+    cnt = list->_count;
+    data = list->_data;
     for (k = 0; k < cnt; k++) {
-        data[k] = arg1;
+        data[k] = object;
     }
 }
 
-void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *arg0, int extra1) {
+void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *list, int unused) {
     int n;
     int i;
     igObject *o;
 
-    n = arg0->_count;
+    n = list->_count;
     for (i = 0; i < n; i++) {
-        o = arg0->_data[i];
+        o = list->_data[i];
         if (o != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {
@@ -301,8 +300,8 @@ void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *arg0, int ex
             }
         }
     }
-    if (arg0->_count != 0) {
-        memset(arg0->_data, 0, arg0->_count * 4);
+    if (list->_count != 0) {
+        memset(list->_data, 0, list->_count * 4);
     }
 }
 

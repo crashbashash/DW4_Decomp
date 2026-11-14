@@ -1,71 +1,71 @@
-int igBoolMetaField_ValueFromString(void *arg0, char *arg1, int arg2) {
-    int sp3C;
-    int sp38;
+int igBoolMetaField_ValueFromString(void *self, char *value, int text) {
+    int consumed;
+    int number;
 
-    sp3C = 0;
-    sp38 = 0;
-    sscanf(arg2, &DAT_004f9588[0], &sp38, &sp3C);
-    if (sp3C > 0) {
-        *arg1 = sp38 != 0;
-        return sp3C;
+    consumed = 0;
+    number = 0;
+    sscanf(text, &percent_d_percent_n[0], &number, &consumed);
+    if (consumed > 0) {
+        *value = number != 0;
+        return consumed;
     }
-    if (strncasecmp(&text_true_2[0], arg2, 4) == 0) {
-        *arg1 = 1;
+    if (strncasecmp(&text_true_2[0], text, 4) == 0) {
+        *value = 1;
         return 4;
     }
-    if (strncasecmp(&text_false_2[0], arg2, 5) == 0) {
-        *arg1 = 0;
+    if (strncasecmp(&text_false_2[0], text, 5) == 0) {
+        *value = 0;
         return 5;
     }
     return 0;
 }
 
-void igBoolMetaField_ValueToString(int *arg0, void *arg1, unsigned char *arg2) {
-    int sp20[256];
-    int *var_a2;
-    int var_v0;
-    int var_v1;
+void igBoolMetaField_ValueToString(int *result, void *self, unsigned char *value) {
+    int buffer[256];
+    int *text;
+    int pool;
+    int interned;
 
-    if (*arg2 != 0) {
-        var_a2 = (int *)(&text_true_2[0]);
+    if (*value != 0) {
+        text = (int *)(&text_true_2[0]);
     } else {
-        var_a2 = (int *)(&text_false_2[0]);
+        text = (int *)(&text_false_2[0]);
     }
-    sprintf(sp20, &DAT_004f95a0[0], var_a2);
-    if (sp20 == 0) {
-        var_v1 = 0;
+    sprintf(buffer, &percent_s[0], text);
+    if (buffer == 0) {
+        interned = 0;
     } else {
         if (g_stringPool[0] == 0) {
-            var_v0 = ((int)StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = ((int)StringPool_Construct((StringPool *)var_v0));
+            pool = ((int)StringPool_Allocate(0x10));
+            if (pool != 0) {
+                pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = var_v0;
+            g_stringPool[0] = pool;
         }
-        var_v1 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)sp20);
+        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
     }
-    *arg0 = var_v1;
+    *result = interned;
 }
 
-int **igBoolMetaField_Construct(int **arg0, int extra1) {
-    igMetaField_Construct((igMetaField *)arg0);
-    *arg0 = &DAT_00531540[0];
-    if (arg0 != 0) {
-        igBoolMetaField_Init(arg0);
+int **igBoolMetaField_Construct(int **self, int unused) {
+    igMetaField_Construct((igMetaField *)self);
+    *self = &g_igBoolMetaField_vtable[0];
+    if (self != 0) {
+        igBoolMetaField_Init(self);
     }
-    return arg0;
+    return self;
 }
 
-int **igBoolMetaField_Init(int **arg0) {
-    igMetaField_Init((igMetaField *)arg0);
-    *arg0 = &DAT_00531540[0];
-    return arg0;
+int **igBoolMetaField_Init(int **self) {
+    igMetaField_Init((igMetaField *)self);
+    *self = &g_igBoolMetaField_vtable[0];
+    return self;
 }
 
-int **igBoolMetaField_CopyConstruct(int **arg0, int extra1) {
-    igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
-    *arg0 = &DAT_00531540[0];
-    return arg0;
+int **igBoolMetaField_CopyConstruct(int **self, int source) {
+    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
+    *self = &g_igBoolMetaField_vtable[0];
+    return self;
 }
 
 void igBoolMetaField_Destruct(int extra0) {
@@ -76,19 +76,19 @@ int igBoolMetaField_GetSize(void) {
     return 1;
 }
 
-void igBoolMetaField_SetDefaultValue(void **arg0, char arg1) {
-    char sp1F;
+void igBoolMetaField_SetDefaultValue(void **self, char value) {
+    char defaultValue;
 
-    sp1F = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
+    defaultValue = value;
+    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
 }
 
 int igBoolMetaField_GetAlignment(void) {
     return 1;
 }
 
-void igCallStackTable_SetCapacity(int a0, int a1)
+void igCallStackTable_SetCapacity(int table, int capacity)
 {
-    *(int *)((char *)a0 + 8) = a1;
+    ((igCallStackTable *)table)->_capacity = capacity;
 }
 

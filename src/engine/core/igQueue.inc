@@ -1,6 +1,6 @@
-void * igQueue_Create(int arg0) {
+void * igQueue_Create(int pool) {
     igQueue_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AA8), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AA8), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igQueue_GetOrCreateMetaObject(void) {
@@ -45,17 +45,17 @@ void igQueue_GetMetaObjectFunction(void) {
 }
 
 void igQueue_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    igObjectRefMetaField *threads;
+    igMetaObject *meta;
 
-    temp_s0 = (void *)(((void * *)g_igQueue_metaObject)[0]);
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igQueue_ctorTable[0], 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igThreadList_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 52) = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igQueue_fieldTable[0], (igMetaField ***)&DAT_004bf9c8[0], &DAT_004bf9d0[0], temp_s2);
-    *(int *)((char *)(((void * *)g_igQueue_metaObject)[0]) + 60) = (int)igStandardQueue_GetMetaObjectFunction;
+    meta = g_igQueue_metaObject[0];
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, (igMetaField * (**)(void *))&g_igQueue_ctorTable[0], 1);
+    threads = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base);
+    threads->_metaObject = (int)igThreadList_GetOrCreateMetaObject();
+    threads->_construct = 1;
+    igMetaObject_NameFields(meta, (const char **)&g_igQueue_fieldTable[0], (igMetaField ***)&g_igQueue_fieldDescriptors[0], &g_igQueue_fieldOffsets[0], base);
+    g_igQueue_metaObject[0]->_abstractProxy = (int)igStandardQueue_GetMetaObjectFunction;
 }
 

@@ -1,6 +1,6 @@
-void * igMemoryFileEntry_Create(int arg0) {
+void * igMemoryFileEntry_Create(int pool) {
     igMemoryFileEntry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F48), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F48), (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMemoryFileEntry_GetMetaObject(void)
@@ -22,7 +22,7 @@ int igMemoryFileEntry_GetVTable(void) {
     ps = (char *)&entry._name;
     *(int *)ps = 0;
     entry._vtable = (int)&g_igNamedObject_vtable[0];
-    entry._vtable = (int)&DAT_00532910[0];
+    entry._vtable = (int)&g_igMemoryFileEntry_vtable[0];
     s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     entry._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
@@ -66,12 +66,12 @@ void igMemoryFileEntry_GetMetaObjectFunction(void) {
 }
 
 void igMemoryFileEntry_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int first;
+    void *meta;
 
-    temp_s0 = (void *)g_igMemoryFileEntry_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryFileEntry_ctorTable[0], 2);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryFileEntry_fieldTable[0], (igMetaField ***)&DAT_004c02e8[0], &DAT_004c02f0[0], temp_s1);
+    meta = (void *)g_igMemoryFileEntry_metaObject[0];
+    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igMemoryFileEntry_ctorTable[0], 2);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMemoryFileEntry_fieldTable[0], (igMetaField ***)&g_igMemoryFileEntry_fieldDescriptors[0], &g_igMemoryFileEntry_fieldOffsets[0], first);
 }
 

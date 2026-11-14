@@ -1,6 +1,6 @@
-void * igContextExtInfo_Create(int arg0) {
+void * igContextExtInfo_Create(int allocator) {
     igContextExtInfo_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C8), (igMemoryPoolView *)arg0));
+    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C8), (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igContextExtInfo_GetMetaObject(void)
@@ -13,42 +13,42 @@ igMetaObject *igContextExtInfo_GetMetaObject(void)
 
 int igContextExtInfo_GetVTable(void) {
     igContextExtInfo info;
-    int temp_s0;
-    int *q0;
-    igObject *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    int vtable;
+    int *nameSlot;
+    igObject *metaSlot;
+    int *text;
+    int *header;
+    int count;
 
     igObject_InitHeader((igObject *)&info);
-    info._vtable = (int)&DAT_005318b0[0];
-    q1 = (igObject *)&info._pMeta;
-    *(int *)q1 = 0;
-    q0 = &info._pName;
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    info._vtable = (int)&DAT_005318b0[0];
-    if (q0 != 0) {
-        temp_v1 = *(int **)q0;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (int)temp_a1);
+    info._vtable = (int)&g_igContextExtInfo_vtable[0];
+    metaSlot = (igObject *)&info._pMeta;
+    *(int *)metaSlot = 0;
+    nameSlot = &info._pName;
+    *(int *)nameSlot = 0;
+    vtable = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&g_igContextExtInfo_vtable[0];
+    if (nameSlot != 0) {
+        text = *(int **)nameSlot;
+        if (text != 0) {
+            header = text - 2;
+            count = text[-1] - 1;
+            text[-1] = count;
+            if (count == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)(*header), (int)header);
             }
         }
     }
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)((int) (q1->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
+    if (metaSlot != 0) {
+        metaSlot = *(igObject **)metaSlot;
+        if (metaSlot != 0) {
+            metaSlot->_refCount = (int)((int) (metaSlot->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) metaSlot->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(metaSlot);
             }
         }
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igContextExtInfo_EnsureRegistered(void)
@@ -78,22 +78,22 @@ void igContextExtInfo_GetMetaObjectFunction(void) {
 }
 
 void igContextExtInfo_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *nameField;
+    void *vendorNameField;
+    void *metaField;
+    void *meta;
 
-    temp_s0 = (void *)g_igContextExtInfo_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igContextExtInfo_ctorTable[0], 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igMetaObject_GetOrCreateMetaObject();
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    igStringMetaField_SetDefaultText((int *)temp_v0, 0);
-    *(char *)((char *)(temp_v0) + 53) = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igContextExtInfo_fieldTable[0], (igMetaField ***)&DAT_004c1440[0], &DAT_004c1450[0], temp_s2);
+    meta = (void *)g_igContextExtInfo_metaObject[0];
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igContextExtInfo_ctorTable[0], 3);
+    metaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)metaField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+    nameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    igStringMetaField_SetDefaultText((int *)nameField, 0);
+    ((igStringMetaField *)nameField)->_destruct = 1;
+    vendorNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igMemoryRefMetaField *)vendorNameField)->_memType = igCharMetaField_GetDefaultDescriptor();
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igContextExtInfo_fieldTable[0], (igMetaField ***)&g_igContextExtInfo_fieldDescriptors[0], &g_igContextExtInfo_fieldOffsets[0], base);
 }
 
