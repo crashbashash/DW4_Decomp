@@ -13,7 +13,7 @@ CopyHeader *igObject_CopyConstructHeader(CopyHeader *arg0, CopyHeader *arg1) {
     }
     arg0->hi = arg1->hi;
     if (*g_objectSystem[0] != 0) {
-        arg0->b7 = ((char)igAllocator_EncodeIndex((AllocatorLookupView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0))))));
+        arg0->b7 = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(arg0))))));
     }
     return arg0;
 }

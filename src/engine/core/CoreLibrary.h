@@ -1531,12 +1531,12 @@ extern "C" int vsprintf(...);
 extern "C" int Gap__Core__igMediaFile__vfunc_34(igMediaFileView *a, int c);
 extern "C" int free(...);
 extern "C" void *Memory_AllocateDefaultBuffer(unsigned int size);
-extern "C" void *FUN_002ed260(unsigned int size, unsigned int alignment);
+extern "C" void *FUN_002ed260(unsigned int size, unsigned short alignment);
 extern "C" void *FUN_002ed2e0(unsigned int size, unsigned int alignment);
 extern "C" void *Memory_ReallocateBuffer(void *buffer, unsigned int size);
-extern "C" void *FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment);
+extern "C" void *FUN_002ed3b0(void *buffer, unsigned int size, unsigned short alignment);
 extern "C" void *thunk_Memory_ReallocateBuffer(void *buffer, unsigned int size);
-extern "C" void *thunk_FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment);
+extern "C" void *thunk_FUN_002ed3b0(void *buffer, unsigned int size, unsigned short alignment);
 extern "C" int Memory_FreeBuffer(void *buffer);
 extern "C" int Memory_FreeBufferAliasA(void *buffer);
 extern "C" unsigned int Memory_GetBufferSize(void *buffer);
@@ -1597,7 +1597,7 @@ extern "C" void FUN_002f0b30(void);
 extern "C" int FUN_002f0b40(void);
 extern "C" bool FUN_002f0b50(int arg0, int arg1);
 extern "C" int FUN_002f0c90(void **arg0, int arg1);
-extern "C" int FUN_002f0cf0(void **arg0, int arg1, int arg2);
+extern "C" int FUN_002f0cf0(void **arg0, int arg1, unsigned short arg2);
 extern "C" int FUN_002f0d60(void);
 extern "C" void FUN_002f0db0(int arg0);
 extern "C" void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3);
@@ -2047,7 +2047,7 @@ extern "C" igResult Gap__Core__igStackMemoryPool__vfunc_45(igStackMemoryPool *se
 extern "C" void Gap__Core__igStackMemoryPool__vfunc_35(int *status_out);
 extern "C" void Gap__Core__igStackMemoryPool__vfunc_24(int *arg0, void *arg1, int arg2, long long arg3, char arg4);
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_58(void **arg0, int arg1, unsigned int arg2);
-extern "C" int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int arg2, int arg3);
+extern "C" int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int arg2, unsigned short arg3);
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_89(void *arg0);
 extern "C" void Gap__Core__igStackMemoryPool__vfunc_86(int *a, int a1, int a2, int a3, int a4);
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_91(void *arg0);
@@ -3780,8 +3780,6 @@ extern "C" long long Gap__Core__igAliasMemoryPool__vfunc_48(igAliasMemoryPool *s
 extern "C" long long Gap__Core__igAliasMemoryPool__vfunc_101(igAliasMemoryPool *arg0);
 extern "C" long long Gap__Core__igAliasMemoryPool__vfunc_102(igAliasMemoryPool *arg0);
 extern "C" long long Gap__Core__igAliasMemoryPool__vfunc_49(igAliasMemoryPool *arg0);
-/* PoolView is an ABI projection (vtable slots), never instantiated. */
-class PoolView {public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void *AllocateDefault(long long); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual long long Size(void *); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void Close(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void *Backend(void *,long long,unsigned short); };
 extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_53(igAliasMemoryPool *self);
 /* The lock calls return a 4-byte struct by value; MWCC passes it through a hidden return buffer,
  * which the stack slot in each caller reproduces. */
@@ -3792,18 +3790,18 @@ class AllocationLockVtable { public: virtual void d0(); virtual void d1(); virtu
 extern "C" void igAliasMemoryPool_Lock(igAliasMemoryPool *self);
 extern "C" void igAliasMemoryPool_Unlock(igAliasMemoryPool *self);
 extern "C" int igAliasMemoryPool_UnlockAndReturn(igAliasMemoryPool *self, int result);
-extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_54(igAliasMemoryPool *self,long long size);
-extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_55(igAliasMemoryPool *self,long long size,unsigned short alignment);
+extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_54(igAliasMemoryPool *self,unsigned int size);
+extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_55(igAliasMemoryPool *self,unsigned int size,unsigned short alignment);
 extern "C" int Gap__Core__igAliasMemoryPool__vfunc_56(igAliasMemoryPool *arg0, int arg1, int arg2);
-extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_58(igAliasMemoryPool *self,void *old,long long size);
-extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_59(igAliasMemoryPool *self,void *old,long long size,unsigned short alignment);
+extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_58(igAliasMemoryPool *self,void *old,unsigned int size);
+extern "C" void *Gap__Core__igAliasMemoryPool__vfunc_59(igAliasMemoryPool *self,void *old,unsigned int size,unsigned short alignment);
 extern "C" int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *arg0, int arg1);
 extern "C" igResult Gap__Core__igAliasMemoryPool__vfunc_62(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks);
 extern "C" igResult Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *self, int count, unsigned int *sizes, void **blocks, unsigned short *alignments);
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *self, int count, void **blocks);
 extern "C" void *igAliasMemoryPool_Free(igAliasMemoryPool *self,void *old);
 struct OwnsStatus { int v; OwnsStatus(int x) { v = x; } int get() { return v; } };
-extern "C" long long igAliasMemoryPool_GetAllocationSize(igAliasMemoryPool *self,void *old);
+extern "C" unsigned int igAliasMemoryPool_GetAllocationSize(igAliasMemoryPool *self,void *old);
 /* Dummy-virtual pool class (100 slots); the first call is variadic-declared so it passes only the
  * format. */
 struct StatsPool {
@@ -3948,204 +3946,7 @@ class igFileView : public igVirtualObject { public:
 extern "C" void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int t0);
 extern "C" int igAliasMemoryPool_GetPoolIndex(igAliasMemoryPool *self);
 extern "C" void igAliasMemoryPool_SetPoolIndex(igAliasMemoryPool *self, int poolIndex);
-struct ManageStatus { int v; ManageStatus() {} };
-class Tk {
-public:
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual void d22();
-    virtual void d23();
-    virtual void d24();
-    virtual void d25();
-    virtual void d26();
-    virtual void d27();
-    virtual void d28();
-    virtual void d29();
-    virtual void d30();
-    virtual void d31();
-    virtual void d32();
-    virtual void d33();
-    virtual void d34();
-    virtual void d35();
-    virtual void d36();
-    virtual void d37();
-    virtual void d38();
-    virtual void d39();
-    virtual void d40();
-    virtual void d41();
-    virtual void d42();
-    virtual void d43();
-    virtual void d44();
-    virtual void d45();
-    virtual void d46();
-    virtual void d47();
-    virtual void d48();
-    virtual void d49();
-    virtual void d50();
-    virtual void d51();
-    virtual void d52();
-    virtual int v220(long long, unsigned short);
-    virtual void d54();
-    virtual void d55();
-    virtual void d56();
-    virtual int v236(int, long long, unsigned short);
-    virtual void d58();
-    virtual void d59();
-    virtual void d60();
-    virtual void d61();
-    virtual void d62();
-    virtual void d63();
-    virtual int v264(int);
-    virtual void d65();
-    virtual void d66();
-    virtual void d67();
-    virtual void d68();
-    virtual void d69();
-    virtual void d70();
-    virtual void d71();
-    virtual void d72();
-    virtual void d73();
-    virtual void d74();
-    virtual void d75();
-    virtual void d76();
-    virtual void d77();
-    virtual void d78();
-    virtual void d79();
-    virtual void d80();
-    virtual void d81();
-    virtual void d82();
-    virtual void d83();
-    virtual void d84();
-    virtual void d85();
-    virtual void d86();
-    virtual void d87();
-    virtual void d88();
-    virtual void d89();
-    virtual void d90();
-    virtual ManageStatus v372(int, void *);
-};
-class ManagedPool {
-public:
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual int v92(long long, int);
-    virtual void d22();
-    virtual void d23();
-    virtual void d24();
-    virtual void d25();
-    virtual void d26();
-    virtual void d27();
-    virtual void d28();
-    virtual void d29();
-    virtual void d30();
-    virtual void d31();
-    virtual void d32();
-    virtual void d33();
-    virtual void d34();
-    virtual void d35();
-    virtual void d36();
-    virtual void d37();
-    virtual void d38();
-    virtual void d39();
-    virtual void d40();
-    virtual void d41();
-    virtual void d42();
-    virtual void d43();
-    virtual void d44();
-    virtual void d45();
-    virtual void d46();
-    virtual void d47();
-    virtual void d48();
-    virtual void d49();
-    virtual void d50();
-    virtual void d51();
-    virtual void d52();
-    virtual void d53();
-    virtual void d54();
-    virtual void d55();
-    virtual void d56();
-    virtual void d57();
-    virtual void d58();
-    virtual void d59();
-    virtual void d60();
-    virtual void d61();
-    virtual void d62();
-    virtual void d63();
-    virtual void d64();
-    virtual void d65();
-    virtual void d66();
-    virtual void d67();
-    virtual void d68();
-    virtual void d69();
-    virtual void d70();
-    virtual void d71();
-    virtual void d72();
-    virtual void d73();
-    virtual void d74();
-    virtual void d75();
-    virtual void d76();
-    virtual void d77();
-    virtual void d78();
-    virtual void d79();
-    virtual void d80();
-    virtual void d81();
-    virtual int v336(int);
-    int pad4;
-    char pad8[105];
-    unsigned char f113;
-    char pad114[14];
-    unsigned long long f128;
-    int f136;
-    int f140;
-    unsigned long long f144;
-    char pad152[8];
-    unsigned long long f160;
-    int f168;
-    char pad172[4];
-    unsigned short f176;
-    char pad178[2];
-    Tk *f180;
-};
-extern "C" int igAliasMemoryPool_ManageAllocation(ManagedPool *arg0, int arg1, long long arg2, unsigned short arg3);
+extern "C" int igAliasMemoryPool_ManageAllocation(igAliasMemoryPool *self, int block, int size, unsigned short alignment);
 extern "C" void *igAliasMemoryPool_Initialize(igAliasMemoryPool *self);
 extern "C" void *igAliasMemoryPool_Construct(igAliasMemoryPool *self, int extra1);
 extern "C" void *igAliasMemoryPool_CopyConstruct(igAliasMemoryPool *self, int extra1);
@@ -4262,18 +4063,25 @@ typedef struct ObjectSystemView {
     void *auxObjectList;
     void *startupCallbacks;
     void *registrationCallbacks;
-    void *bootstrapPool;          /* the allocator of record 0 (Bootstrap) */
-    void *systemPool;             /* the allocator of record 4 (System) */
+    igMemoryPoolView *bootstrapPool; /* the allocator of record 0 (Bootstrap) */
+    igMemoryPoolView *systemPool;    /* the allocator of record 4 (System) */
     igRegistry *configRegistry;
-    char unknown60[24];
-    igEventTrackerView *exitMarkerSink; /* receives the "exitPre" and "exitIn" markers */
+    char unknown60[20];
+    igSymbolTable *symbolTable;   /* loaded from symbolsFileName at memory set-up */
+    igEventTrackerView *globalEventTracker; /* useGlobalEventTracker's tracker; receives the "exitPre" and "exitIn" markers */
     char unknown88[24];
     igObject *retainedObject;     /* released at shut-down */
-    char unknown116[1];
-    unsigned char dumpEventTrackersAtExit; /* MemoryContext::vfunc_56 runs at exit */
-    char unknown118[6];
+    unsigned char useGlobalEventTracker;
+    unsigned char saveEventTrackerOnExit;     /* MemoryContext::vfunc_56 runs at exit */
+    unsigned char showLeaksOnExit;
+    unsigned char showMemoryStatisticsOnExit;
+    unsigned char showObjectStatisticsOnExit;
+    char unknown121[3];
     void *eventTrackerInitialCapacity;
-    char unknown128[16];
+    int eventTrackerEventTypeFilter;
+    int eventTrackerMarkerTypeFilter;
+    int eventTrackerNotificationTypeFilter;
+    int eventTrackerNotificationCodeFilter;
     char memoryEventFormat[128];
     char markerEventFormat[128];
     char notificationEventFormat[128];
@@ -4281,6 +4089,9 @@ typedef struct ObjectSystemView {
     int vtableProbeOffset;        /* zero: the EnsureRegistered probes read the vtable word through it */
     igString rootPath;            /* IG_ROOT from the environment */
     igString basePath;
+    /* FUN_002f69b0 reads these two through calls: as plain member reads their locals take other saved registers. */
+    igMemoryPoolView *getSystemPool() { return systemPool; }
+    int getConfigRegistry() { return (int)configRegistry; }
 } ObjectSystemView;
 extern "C" igMetaField *g_igMetaObjectNameField[4];
 extern "C" int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className);
@@ -4902,17 +4713,22 @@ public:
     virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
     virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual void vfunc_23();                                                    /* slot 21, byte 92 */
-    virtual void d22(); virtual void d23();
+    virtual void vfunc_24();                                                    /* slot 22, byte 96: closes what vfunc_23 began */
+    virtual void d23();
     virtual void vfunc_26(EventRecordInfo *info, int mode);
     virtual EventReadResult vfunc_27(int offset, EventRecord *record);
     virtual void d26();
     virtual igResult vfunc_29(int offset, int *value);
-    virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
+    virtual void d28(); virtual void d29();
+    virtual void vfunc_32(int, int, int *total, int *counts, int *, int *, int *, int *, int *, int *, int *, int, int, int *, int, int); /* slot 30, byte 128: leak summary */
+    virtual void vfunc_33(int, int, int name, int *, int *, int *, int *);    /* slot 31, byte 132: per-name sizes */
     virtual int vfunc_34(int offset);
-    virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37();
+    virtual int vfunc_35();                                                     /* slot 33, byte 140 */
+    virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37();
     virtual igResult vfunc_40(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
     virtual void vfunc_41(int offset);
-    virtual void d40(); virtual void d41();
+    virtual void d40();
+    virtual void vfunc_43();                                                    /* slot 41, byte 172 */
     virtual igResult vfunc_44(char *name);                                      /* slot 42, byte 176 */
     virtual void vfunc_45();
     virtual int vfunc_46();                                                     /* slot 44, byte 184 */
@@ -5467,7 +5283,11 @@ public:
     virtual unsigned int vfunc_29(int size);                                             /* +116 */
     virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();
     virtual void vfunc_36();                                                             /* +144 */
-    virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d35();
+    virtual void vfunc_38(igPointerList *regions);                                       /* +152 */
+    virtual void CollectProgramRegions(igPointerList *regions);                          /* +156 */
+    virtual void CollectHeapRegions(igPointerList *regions);                             /* +160 */
+    virtual void vfunc_41(igPointerList *regions);                                       /* +164 */
     virtual int vfunc_42(int delta);                                                     /* +168 */
     virtual igResult vfunc_43(int address, int size);                                    /* +172 */
     virtual void *vfunc_44(unsigned int size);                                           /* +176 */
@@ -5490,7 +5310,7 @@ extern "C" SystemAllocator *g_activeSystemAllocator[4];
 extern "C" void *Memory_AllocateBufferViaSharedTail(unsigned int size, igMemoryPoolView *pool);
 extern "C" void *FUN_002ed1e0(int, unsigned int size, igMemoryPoolView *pool);
 extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPoolView *pool);
-extern "C" void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool);
+extern "C" void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned short alignment, igMemoryPoolView *pool);
 extern "C" void Memory_FreeBufferWithAllocator(void *block, igMemoryPoolView *pool);
 extern "C" igMemoryPoolView *Memory_FindBufferOwner(void *buffer);
 extern "C" int FUN_002ed5a0(void *block, igMemoryPoolView *pool);
@@ -5611,108 +5431,13 @@ extern "C" igResult FUN_002f0320(int arg1, igMemoryPoolView *pool);
 extern "C" char DAT_00580000[];
 /* Allocator registry index lookup and encoded-index publication. An allocator is identified in
  * saved data by "registry index << 1 | which-registry": the primary list gives an even code, the
- * secondary list an odd one. The class below is an observed ABI view that projects the original
- * virtual slots by number (a0.. are unnamed padding); it must not be instantiated. */
-class AllocatorLookupView {public:
-virtual void a0();
-virtual void a1();
-virtual void a2();
-virtual void a3();
-virtual void a4();
-virtual void a5();
-virtual void a6();
-virtual void a7();
-virtual void a8();
-virtual void a9();
-virtual void a10();
-virtual void a11();
-virtual void a12();
-virtual void a13();
-virtual void a14();
-virtual void a15();
-virtual void a16();
-virtual void a17();
-virtual void a18();
-virtual void a19();
-virtual void a20();
-virtual void a21();
-virtual void a22();
-virtual void a23();
-virtual void a24();
-virtual void a25();
-virtual void a26();
-virtual int Kind();
-virtual void a120();virtual void a124();virtual void a128();virtual int Available();
-virtual void b0();
-virtual void b1();
-virtual void b2();
-virtual void b3();
-virtual void b4();
-virtual void b5();
-virtual void b6();
-virtual igResult vfunc_41(long long maxSize);
-virtual void b8();
-virtual void b9();
-virtual void b10();
-virtual void b11();
-virtual void b12();
-virtual void b13();
-virtual void b14();
-virtual void b15();
-virtual void b16();
-virtual void b17();
-virtual void b18();
-virtual void b19();
-virtual void b20();
-virtual void b21();
-virtual void b22();
-virtual void b23();
-virtual void b24();
-virtual void b25();
-virtual void b26();
-virtual void b27();
-virtual void b28();
-virtual void b29();
-virtual void b30();
-virtual void b31();
-virtual void b32();
-virtual void b33();
-virtual void b34();
-virtual void b35();
-virtual void b36();
-virtual void b37();
-virtual void b38();
-virtual void b39();
-virtual void b40();
-virtual void b41();
-virtual void b42();
-virtual void b43();
-virtual void b44();
-virtual void b45();
-virtual void b46();
-virtual void b47();
-virtual void b48();
-virtual void b49();
-virtual void b50();
-virtual int Owns(void *);
-virtual void a84();
-virtual void a85();
-virtual void a86();
-virtual void a87();
-virtual void a88();
-virtual void a89();
-virtual void a90();
-virtual void a91();
-virtual void a92();
-virtual void a93();
-virtual void vfunc_96(int list);
-};
+ * secondary list an odd one. */
 /* Growable pointer list of allocators: data, signed count, capacity (same layout as igMemoryPoolInfoList). */
-struct AllocatorRegistry {AllocatorLookupView **data;int count;int capacity;};
+struct AllocatorRegistry {igMemoryPoolView **data;int count;int capacity;};
 extern "C" AllocatorRegistry *g_primaryAllocatorList[4];
 extern "C" AllocatorRegistry *g_secondaryAllocatorList[4];
-extern "C" int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,AllocatorLookupView *allocator);
-extern "C" int igAllocator_EncodeIndex(AllocatorLookupView *allocator);
+extern "C" int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,igMemoryPoolView *allocator);
+extern "C" int igAllocator_EncodeIndex(igMemoryPoolView *allocator);
 extern "C" char DAT_004f9d60[];
 extern "C" void FUN_002f08d0(igMemoryPool *arg0, char *arg1);
 extern "C" char DAT_004f9fe0[];
@@ -5750,7 +5475,7 @@ extern "C" char text_UseEventTracker[];
 struct ContextRecord {
     void *allocator;       /* retained by the slot setter */
     char name[128];        /* 127 characters copied in plus an explicit terminator */
-    void *descriptor;
+    igMemoryPoolInfo *descriptor;
     unsigned storageFlags, flags;
 };
 /* igMemoryPoolContextInfo (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
@@ -5925,10 +5650,7 @@ extern "C" int DAT_00586fd8[4];
 extern "C" int DAT_00586fe0[4];
 extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
-class PoolObjectBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void finish(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual igResult setName(int); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual void p87(); virtual void p88(); virtual void p89(); virtual void p90(); virtual void p91(); virtual void p92(); virtual void p93(); virtual void p94(); virtual void prepare(); };
-class PoolObject : public PoolObjectBase { public: int rc; };
-struct PoolSlotTable { char p0[20]; PoolObject *first; };
-extern "C" void FUN_002f43a0(PoolSlotTable *self);
+extern "C" void FUN_002f43a0(MemoryContext *self);
 extern "C" int D_00587010[4];
 /* The 46 records follow the 20-byte object header.  Retail steps one pointer
  * by whole records from the context base, so that pointer sits 20 bytes before
@@ -5988,22 +5710,6 @@ extern "C" void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryCo
 typedef igObject Obj6;
 struct RefCount { union { int w; struct { unsigned cnt : 23; unsigned f : 9; } b; } u; };
 struct StringHeader { int chunk; int refs; };
-class EventTracker { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void start();
-    RefCount rc; char q8[36]; int users; };
-class PoolLoader { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual igResult load(char *); virtual igResult finish(); virtual void p24(); virtual void p25(); virtual igResult attach(void *, int); virtual void p27(); virtual void p28(); virtual void optionA(); virtual void optionB();
-    RefCount rc; };
-struct LoadedObject { int vt; RefCount rc; };
-class TrackedPool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual int hasTracker(); virtual void setTracker(EventTracker *); };
-class PoolSetupBase { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void setFlags(int); };
-class PoolSetup : public PoolSetupBase { public: char q4[8]; int flags; char q16[4]; PoolDescSlot slots[46]; };
-struct MemoryContextState {
-    char p0[48]; TrackedPool *main; TrackedPool *second; int config; char p60[20];
-    LoadedObject *loaded; EventTracker *tracker; char p88[28];
-    unsigned char trackEvents; unsigned char flag117; unsigned char flag118; unsigned char flag119; unsigned char flag120; char p121[3];
-    int value124; int value128; int value132; int value136; int value140;
-    TrackedPool *getSecond() { return second; }
-    int getConfig() { return config; }
-};
 extern "C" int DAT_004c1eb0;
 extern "C" char text_useGlobalEventTracker[];
 extern "C" char text_useSeparateEventTrackers[];
@@ -6026,70 +5732,22 @@ extern "C" char text_systemPoolEventTrackerFileName[];
 extern "C" char text_symbolsFileName[];
 extern "C" char text_showSectionHeaders[];
 extern "C" char text_showSymbols[];
-extern "C" void FUN_002f69b0(PoolSetup *self);
+extern "C" void FUN_002f69b0(MemoryContext *self);
 extern "C" char DAT_004fa930[];
 extern "C" int DAT_004fa988[4];
 extern "C" char DAT_004fa990[];
 extern "C" char DAT_004fa9b0[];
 extern "C" char DAT_004fa9d0[];
 enum LeakKind { LeakKindFirst = 0, LeakKindCount = 32 };
-class LeakReportTracker { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void summary(int, int, int *, int *, int *, int *, int *, int *, int *, int *, int *, int, int, int *, int, int); virtual void describe(int, int, int, int *, int *, int *, int *);
-  int rc; char q8[48]; int names; };
-struct LeakReportContext { char p0[84]; LeakReportTracker *tracker; char p88[30]; unsigned char dumpLeaks; unsigned char dumpSummary; unsigned char dumpNames; };
-class LeakReportOwner { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void flush(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual int count(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void dump(); };
-class LeakReportPool { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41(); virtual void p42(); virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50(); virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58(); virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66(); virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74(); virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82(); virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual LeakReportOwner *owner(); virtual void release(int); };
-struct LeakReportSlot { char p0[20]; LeakReportPool *pool; char p24[120]; };
-extern "C" void FUN_002f7420(LeakReportSlot *self);
+extern "C" void FUN_002f7420(ContextRecordStride *self);
 extern "C" char text_s_igm[];
 extern "C" void FUN_002f78b0(MemoryContext *arg0);
-class SlotOwnerObject { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
- virtual void vDrop();
-};
-class SlotPool { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48();
- virtual igResult vRelease(int, int);
- virtual void e51();
- virtual void vFree(int);
-};
-struct PoolSlotEntry { SlotOwnerObject *owner; char pad[136]; unsigned int flags; };
-extern "C" igResult FUN_002f7a70(SlotPool *self, unsigned int kind, int free);
+extern "C" igResult FUN_002f7a70(MemoryContext *self, unsigned int kind, int free);
 extern "C" void FUN_002f7bc0(ContextRecordStride *arg0, int arg1);
 extern "C" void FUN_002f7cc0(ContextView *self, int arg1, int *out, int n);
 extern "C" void FUN_002f7e00(ContextView *self, int *paths, int n);
 extern "C" void FUN_002f8020(ContextRecordStride *slots, int arg1, int *out, int n);
 extern "C" void FUN_002f8160(ContextRecordStride *arg0, int *arg1, int arg2);
-struct Res {
-    virtual void r0();
-    virtual void r1();
-    virtual void r2();
-    virtual void r3();
-    virtual void r4();
-    virtual void r5();
-    virtual void r6();
-    virtual void r7();
-    virtual void r8();
-    virtual void r9();
-    virtual void r10();
-    virtual void r11();
-    virtual void r12();
-    virtual void r13();
-    virtual void r14();
-    virtual void r15();
-    virtual void r16();
-    virtual void r17();
-    virtual void r18();
-    virtual void r19();
-    virtual void r20();
-    virtual void r21();
-    virtual void r22();
-    virtual void r23();
-    virtual void v24(int *, int);
-    int p[3];
-    int flags;
-    int p2;
-    int mask;
-};
 extern "C" void FUN_002f8280(ContextRecordStride *arg0, int arg1, int arg2, int arg3);
 extern "C" char text_Pool_statistics[];
 extern "C" char DAT_004fab20[];
@@ -7949,6 +7607,11 @@ public:
     virtual igResult Open(const char *path);
     virtual igResult Close();
     virtual igResult Load(int offset, int size, void **dest);
+    virtual void d25();
+    virtual igResult vfunc_28(igSymbolTable *table, int flags);  /* slot 26, byte 112: fills a symbol table */
+    virtual void d27(); virtual void d28();
+    virtual void PrintSectionHeaders();                         /* slot 29, byte 124 */
+    virtual void PrintSymbols();                                /* slot 30, byte 128 */
     unsigned int refCount; const char *path; igFileView *stream;
 };
 /* One section header of the ELF file (Elf32_Shdr): type 3 is a string table. */
@@ -8144,7 +7807,6 @@ struct TaggedBlockHeader {
 class TaggedPool { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual int GetPoolIndex(); char pad4[116]; unsigned index; char pad124[32]; unsigned flags; };
 extern "C" void *FUN_00324be0(TaggedPool *self, unsigned size);
 extern "C" void FUN_00324ec0(TaggedPool *self, unsigned char *p);
-class TaggedReallocHeap { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void *Reallocate(void *block, unsigned size, unsigned old); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void *ReallocateSized(void *block, unsigned size, unsigned old); virtual void d11(); virtual void d12(); virtual void *ReallocateAligned(void *block, unsigned size, unsigned old); };
 struct TaggedTailByte { unsigned char low : 7; unsigned char extended : 1; };
 extern "C" void *FUN_00325060(TaggedPool *self, char *p, unsigned size);
 class TaggedAlignedPool { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual int GetPoolIndex(); char pad4[116]; unsigned index; char pad124[20]; unsigned short minAlignment; char pad146[10]; unsigned flags; };
@@ -8417,7 +8079,6 @@ struct DumpRegion { unsigned start; unsigned size; char annotation[80]; char poo
 /* igEventTracker (reflected.h) with the virtual functions the memory map dump calls. */
 class EventTrackerDump : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void Begin(); virtual void End(); virtual void d23(); virtual void Add(void *entry, int flags); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual DumpResult Write(char *path);
     int _lock; int _flags; unsigned int _eventTypeFilterFlags; unsigned int _memoryFieldFilterFlags; };
-class DumpOwner { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void Describe(char *text); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void CollectA(igPointerList *list); virtual void CollectB(igPointerList *list); virtual void CollectC(igPointerList *list); virtual void CollectD(igPointerList *list); };
 extern "C" void FUN_002d6680(igPointerList *, int, int);
 extern "C" int g_vtable[4];
 extern "C" int DAT_00587220[64];
@@ -8488,7 +8149,7 @@ extern "C" void FUN_00329b60(SystemAllocator *self);
 extern "C" void FUN_00329e70(SystemAllocator *self);
 extern "C" DumpRegion *FUN_0032a100(DumpRegion *row);
 extern "C" DumpRegion *FUN_0032a1e0(int size);
-extern "C" void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c, int d);
+extern "C" void FUN_0032a280(SystemAllocator *self, char *title, char *path, int a, int b, int c, int d);
 extern "C" void FUN_0032a600(SystemAllocator *self, int arg1);
 extern "C" void FUN_0032a900(SystemAllocator *self, int arg1);
 extern "C" void *FUN_0032ac40(SystemAllocator *self, unsigned int size);
@@ -8575,7 +8236,6 @@ extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_25(FolderSelf
 struct FolderEntryWide { char bytes[328]; };
 extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self);
 extern "C" void FUN_0032cac0(igStringObj *arg0);
-class FolderAllocator { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual char *Allocate(int); };
 struct FolderSearchList;
 extern "C" char text_sonyModulePath[];
 extern "C" char text_intrinsicModulePath[];

@@ -623,10 +623,10 @@
  "typed": {
   "error": null,
   "offset_casts": 5162,
-  "pct": 41.29,
-  "recovered": 26927,
-  "synthetic": 6478,
-  "total": 65210,
+  "pct": 41.35,
+  "recovered": 26970,
+  "synthetic": 6468,
+  "total": 65217,
   "typeable": 362,
   "typeable_pct": 0.56
  }

@@ -19,13 +19,13 @@ void *Memory_AllocateBufferDirect(unsigned int size, igMemoryPoolView *pool)
     return pool->Allocate(size);
 }
 
-void *FUN_002ed260(unsigned int size, unsigned int alignment)
+void *FUN_002ed260(unsigned int size, unsigned short alignment)
 {
     igMemoryPoolView *allocator = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     return allocator->AllocateAligned(size, alignment);
 }
 
-void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned int alignment, igMemoryPoolView *pool)
+void *Memory_AllocateAlignedWithAllocator(unsigned int size, unsigned short alignment, igMemoryPoolView *pool)
 {
     return pool->AllocateAligned(size, alignment);
 }
@@ -50,7 +50,7 @@ void *Memory_ReallocateBuffer(void *buffer, unsigned int size)
     return 0;
 }
 
-void *FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment)
+void *FUN_002ed3b0(void *buffer, unsigned int size, unsigned short alignment)
 {
     igMemoryPoolView *owner;
 
@@ -69,7 +69,7 @@ void *thunk_Memory_ReallocateBuffer(void *buffer, unsigned int size)
     return Memory_ReallocateBuffer(buffer, size);
 }
 
-void *thunk_FUN_002ed3b0(void *buffer, unsigned int size, unsigned int alignment)
+void *thunk_FUN_002ed3b0(void *buffer, unsigned int size, unsigned short alignment)
 {
     return FUN_002ed3b0(buffer, size, alignment);
 }

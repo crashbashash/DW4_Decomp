@@ -83,19 +83,19 @@ void FUN_002d27a0(ObjectSystemView *arg0) {
     igEventTrackerView *temp_a0;
 
     arg0->preExitDone = 1;
-    temp_a0 = arg0->exitMarkerSink;
+    temp_a0 = arg0->globalEventTracker;
     if (temp_a0 != 0) {
         temp_a0->vfunc_46();
-        FUN_002dcc60((igEventTrackerView *)arg0->exitMarkerSink, (int)&text_exitPre[0]);
+        FUN_002dcc60((igEventTrackerView *)arg0->globalEventTracker, (int)&text_exitPre[0]);
     }
 }
 
 void FUN_002d2de0(ObjectSystemView *arg0) {
-    if (arg0->exitMarkerSink != 0) {
-        arg0->exitMarkerSink->vfunc_47();
-        FUN_002dcc60((igEventTrackerView *)arg0->exitMarkerSink, (int)(&text_exitIn[0]));
+    if (arg0->globalEventTracker != 0) {
+        arg0->globalEventTracker->vfunc_47();
+        FUN_002dcc60((igEventTrackerView *)arg0->globalEventTracker, (int)(&text_exitIn[0]));
     }
-    if (arg0->dumpEventTrackersAtExit != 0 && ((MemoryContext * *)DAT_00586fd0)[0] != 0) {
+    if (arg0->saveEventTrackerOnExit != 0 && ((MemoryContext * *)DAT_00586fd0)[0] != 0) {
         ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_56();
     }
 }

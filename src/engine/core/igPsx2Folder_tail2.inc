@@ -50,18 +50,18 @@ void FUN_0032cac0(igStringObj *arg0) {
     s[i] = 0;
 }
 
-static inline FolderAllocator *currentAllocator(void) {
+static inline igMemoryPoolView *currentAllocator(void) {
     if (g_useOwnerAllocator != 0) {
-        return ((FolderAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
+        return ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
     }
-    return ((FolderAllocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
+    return ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
 }
 
 char *FUN_0032cb50(char *name, int kind) {
     char *joined = 0;
     char *resolved = 0;
     if (kind == 0) {
-        joined = (char *)FUN_002ed5a0(name, (igMemoryPoolView *)currentAllocator());
+        joined = (char *)FUN_002ed5a0(name, currentAllocator());
     } else {
         char *dirs[3];
         const char *key;
@@ -75,16 +75,16 @@ char *FUN_0032cb50(char *name, int kind) {
             FUN_0032cac0((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText[0] : dir;
-            FolderAllocator *allocator = currentAllocator();
-            joined = allocator->Allocate(strlen(dir) + strlen(name) + 2);
+            igMemoryPoolView *allocator = currentAllocator();
+            joined = (char *)allocator->Allocate(strlen(dir) + strlen(name) + 2);
             sprintf(joined, (const char *)DAT_004f9a78, dir, name);
         } else if (DAT_00587338[0] != 0) {
-            FolderAllocator *allocator = currentAllocator();
-            joined = allocator->Allocate(strlen(name) + 10);
+            igMemoryPoolView *allocator = currentAllocator();
+            joined = (char *)allocator->Allocate(strlen(name) + 10);
             sprintf(joined, text_MODULES_s, name);
         } else {
-            FolderAllocator *allocator = currentAllocator();
-            char *candidate = allocator->Allocate(strlen(name) + 40);
+            igMemoryPoolView *allocator = currentAllocator();
+            char *candidate = (char *)allocator->Allocate(strlen(name) + 40);
             int i;
             if (kind == 1) {
                 dirs[0] = text_usr_local_sce_iop_modules;

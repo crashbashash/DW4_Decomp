@@ -264,7 +264,7 @@ int Gap__Core__igStackMemoryPool__vfunc_58(void **arg0, int arg1, unsigned int a
     return var_v0;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int arg2, int arg3) {
+int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int arg2, unsigned short arg3) {
     int var_v0;
     unsigned int temp_v0;
     unsigned int temp_v0_2;

@@ -552,29 +552,29 @@ int FUN_0032a260(DumpRegion **a, DumpRegion **b) {
     return (*a)->start - (*b)->start;
 }
 
-void FUN_0032a280(DumpOwner *self, char *title, char *path, int a, int b, int c, int d) {
-    char text[84];
+void FUN_0032a280(SystemAllocator *self, char *title, char *path, int a, int b, int c, int d) {
+    SystemMemoryStatistics stats;
     char region[160];
     int i;
     int count;
     FUN_00304430(DAT_004ffa00, title == 0 ? text_Memory_Map : title);
     FUN_00304680();
-    self->Describe(text);
+    self->GetStatistics(&stats);
     igSmartPointer<igPointerList> list((igPointerList *)FUN_002c9130((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
     if (list->_count <= 1024) {
         FUN_002d6680(list, 1024, 4);
     }
     if (a != 0) {
-        self->CollectA(list);
+        self->vfunc_38(list);
     }
     if (b != 0) {
-        self->CollectB(list);
+        self->CollectProgramRegions(list);
     }
     if (c != 0) {
-        self->CollectC(list);
+        self->CollectHeapRegions(list);
     }
     if (d != 0) {
-        self->CollectD(list);
+        self->vfunc_41(list);
     }
     count = list->_count;
     if (path != 0 && count != 0) {

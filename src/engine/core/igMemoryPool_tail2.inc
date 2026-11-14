@@ -81,7 +81,7 @@ int FUN_002f0c90(void **arg0, int arg1) {
     return temp_v0;
 }
 
-int FUN_002f0cf0(void **arg0, int arg1, int arg2) {
+int FUN_002f0cf0(void **arg0, int arg1, unsigned short arg2) {
     int temp_v0;
 
     temp_v0 = (int)((igMemoryPoolView *)arg0)->AllocateAligned(strlen(arg1) + 1, arg2);

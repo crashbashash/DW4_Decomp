@@ -78,7 +78,7 @@ igResult FUN_002f0220(int arg1, igMemoryPoolView *arg2) {
     int dictionarySize;
     if (DAT_00586f68[0] == 0) {
         dictionarySize = 0x1000;
-        FUN_003065f0(((MemoryContextState *)g_objectSystem[0])->config, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
+        FUN_003065f0((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
         DAT_00586f68[0] = (igMemoryDictionaryView *)FUN_002c1070((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
         DAT_00586f68[0]->vfunc_24(dictionarySize);
         DAT_00586f68[0]->vfunc_25();
@@ -112,12 +112,12 @@ void FUN_002f0370(void **arg0) {
     if (idx < 0x1F) {
         igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
     } else {
-        idx = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)list, (AllocatorLookupView *)0);
+        idx = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)list, (igMemoryPoolView *)0);
         if (idx == -1) {
             idx = list->count;
             igMemoryPoolInfoList_Append((RegistryList *)list, (void *)arg0);
         } else {
-            list->data[idx] = (AllocatorLookupView *)arg0;
+            list->data[idx] = (igMemoryPoolView *)arg0;
         }
     }
     flag = flag + (idx * 2);
@@ -128,12 +128,12 @@ void FUN_002f0460(void **arg0) {
     int temp_v0;
 
     if (((igMemoryPoolView *)arg0)->vfunc_29() == 0) {
-        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (AllocatorLookupView *)arg0);
+        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (igMemoryPoolView *)arg0);
         if (temp_v0 >= 0) {
             *(int *)(*((int * *)g_primaryAllocatorList)[0] + (temp_v0 * 4)) = 0;
         }
     } else {
-        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_secondaryAllocatorList)[0]), (AllocatorLookupView *)arg0);
+        temp_v0 = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_secondaryAllocatorList)[0]), (igMemoryPoolView *)arg0);
         if (temp_v0 >= 0) {
             *(int *)(*((int * *)g_secondaryAllocatorList)[0] + (temp_v0 * 4)) = 0;
         }

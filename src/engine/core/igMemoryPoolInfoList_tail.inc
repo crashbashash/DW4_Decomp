@@ -16,7 +16,7 @@ RegistryList *igMemoryPoolInfoList_Release(RegistryList *list,int deleteFlag){
 }
 
 /* Index of `allocator` in the list, or -1 when absent. */
-int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,AllocatorLookupView *allocator){
+int igMemoryPoolInfoList_IndexOf(AllocatorRegistry *list,igMemoryPoolView *allocator){
     int count=list->count;
     for(int i=0;i<count;++i)if(list->data[i]==allocator)return i;
     return -1;

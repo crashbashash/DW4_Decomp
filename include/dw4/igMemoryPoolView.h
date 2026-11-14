@@ -14,7 +14,7 @@ public:
     virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
     virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
     virtual igMetaObject *getMeta();                                             /* slot 20, byte 88 */
-    virtual void d21();
+    virtual int vfunc_23(unsigned int size, int attempt);                        /* slot 21, byte 92: out-of-memory hook */
 #ifndef long
     virtual igResult vfunc_24(int buffer, long long size, int owned);            /* slot 22, byte 96 */
 #else
@@ -34,7 +34,12 @@ public:
     virtual int vfunc_36();                                                      /* slot 34, byte 144 */
     virtual void d35();
     virtual unsigned short vfunc_38();                                           /* slot 36, byte 152 */
-    virtual void d37(); virtual void d38(); virtual void d39();
+    virtual void d37(); virtual void d38();
+#ifndef long
+    virtual igResult vfunc_41(long long maxSize);                                /* slot 39, byte 164 */
+#else
+    virtual void vfunc_41();
+#endif
     virtual int vfunc_42();                                                      /* slot 40, byte 168 */
     virtual igResult vfunc_43(int size);                                         /* slot 41, byte 172 */
     virtual void d42();
@@ -52,11 +57,11 @@ public:
     virtual void vfunc_51();                                                     /* slot 49, byte 204 */
     virtual void d50(); virtual void d51();
     virtual void *Allocate(unsigned int size);                                   /* slot 52, byte 216 */
-    virtual void *AllocateAligned(unsigned int size, unsigned int alignment);    /* slot 53, byte 220 */
+    virtual void *AllocateAligned(unsigned int size, unsigned short alignment);  /* slot 53, byte 220 */
     virtual void *vfunc_56(int count, int size);                                 /* slot 54, byte 224 */
     virtual void d55();
     virtual void *Reallocate(void *block, unsigned int size);                    /* slot 56, byte 232 */
-    virtual void *ReallocateAligned(void *block, unsigned int size, unsigned int alignment); /* slot 57, byte 236 */
+    virtual void *ReallocateAligned(void *block, unsigned int size, unsigned short alignment); /* slot 57, byte 236 */
     virtual int vfunc_58(void *block);
     virtual void d59();
     virtual igResult gangAlloc(int count, unsigned int *sizes, void **blocks);                                  /* slot 60, byte 248 */
@@ -77,7 +82,10 @@ public:
     virtual void vfunc_90(void *tracker);                                        /* slot 88, byte 360 */
     virtual int GetPoolIndex();                                                  /* slot 89, byte 364 */
     virtual void SetPoolIndex(int index);                                        /* slot 90, byte 368 */
-    virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95();
+    virtual igResult vfunc_93(char *block, igMemoryPoolView *pool);              /* slot 91, byte 372 */
+    virtual void d92(); virtual void d93();
+    virtual void vfunc_96(int list);                                             /* slot 94, byte 384 */
+    virtual void vfunc_97();                                                     /* slot 95, byte 388: prepares a new pool before activate */
     virtual void vfunc_98();                                                     /* slot 96, byte 392 */
 };
 #endif

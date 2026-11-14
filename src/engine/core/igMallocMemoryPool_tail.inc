@@ -605,11 +605,11 @@ void *FUN_00325060(TaggedPool *self, char *p, unsigned size) {
         return moved;
     }
     if (usesAligned(self)) {
-        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->ReallocateAligned(base, newSize, total + 4);
+        block = (char *)g_activeSystemAllocator[0]->ReallocateAligned(base, newSize, total + 4);
     } else if (usesSized(self)) {
-        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->ReallocateSized(base, newSize, total + 4);
+        block = (char *)g_activeSystemAllocator[0]->ReallocateSized(base, newSize, total + 4);
     } else {
-        block = (char *)(*(TaggedReallocHeap * *)g_activeSystemAllocator)->Reallocate(base, newSize, total);
+        block = (char *)g_activeSystemAllocator[0]->Reallocate(base, newSize);
     }
     if (block == 0) {
         return 0;

@@ -178,7 +178,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 26,927 of 65,210 (41.29 %) |
+| field accesses using a **recovered** type (not an offset cast) | 26,970 of 65,217 (41.35 %) |
 | functions in the retail split (`asm/`, generated) | 20,575 |
 
 ## How these numbers are produced
