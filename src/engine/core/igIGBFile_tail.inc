@@ -586,9 +586,9 @@ igResult FUN_002e56f0(igIGBFileView *arg1) {
     int s7 = arg1->_file->Write(arg1->_indexBuffer, arg1->_indexBufferSize, 1);
     if (arg1->_infoListPlace > -1) {
         if (arg1->_endianSwap != 0) {
-            arg1->imf->SwapBytes((char *)arg1 + DAT_00586280[0]->f8, 1);
+            arg1->imf->SwapBytes((char *)arg1 + DAT_00586280[0]->_offset, 1);
         }
-        arg1->_file->Write((char *)arg1 + DAT_00586280[0]->f8, 4, 1);
+        arg1->_file->Write((char *)arg1 + DAT_00586280[0]->_offset, 4, 1);
     }
     int s8 = arg1->_file->Write(arg1->_objBuf, arg1->_objectBufferSize, 1);
     int v = arg1->vfunc_34();
@@ -634,14 +634,14 @@ igResult FUN_002e5ac0(void *arg1) {
 
 int Gap__Core__igIGBFile__vfunc_28(igIGBFileView *arg0, const char *fileName) {
     int *pp; igObject *t; igObject *t2; igObject *a; igObject *b;
-    FUN_00306e50(((LogContext * *)g_objectSystem)[0]->f56, 2, (const char *)text_forceWriteMemoryPoolInfoFromMeta, (char *)&arg0->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
+    FUN_00306e50((int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry, 2, (const char *)text_forceWriteMemoryPoolInfoFromMeta, (char *)&arg0->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
     igResult sp7C = FUN_002e3e30(arg0, fileName);
     pp = (int *)((int)&sp7C + 0);
     if (*pp == g_resultFailure.v) return 0;
     igResult sp78 = FUN_002e5ac0(arg0);
     pp = (int *)((int)&sp78 + 0);
     if (*pp == g_resultFailure.v) return 0;
-    FUN_00302540((igTDataList<igObject *> *)arg0, (Field *)DAT_00586730[0]);
+    FUN_00302540((igTDataList<igObject *> *)arg0, (igMetaField *)DAT_00586730[0]);
     a = (igObject *)igIntMetaField_GetDefaultDescriptor();
     if (a != 0) a->_refCount = a->_refCount + 1;
     t = (igObject *)arg0->imf;
@@ -841,7 +841,7 @@ igResult FUN_002e6f50(igIGBFileView *arg1) {
 }
 
 void FUN_002e7000(void) {
-    FUN_00306e50(*(int *)((char *)(((LogContext * *)g_objectSystem)[0]) + 56), 2, (const char *)text_blindObjects, (char *)&GPR_00554c04, 0, 0);
+    FUN_00306e50((int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry, 2, (const char *)text_blindObjects, (char *)&GPR_00554c04, 0, 0);
 }
 
 igResult FUN_002e7030(igIGBFileView *arg1) {
@@ -1362,11 +1362,11 @@ igResult FUN_002e8d40(igIGBFileView *arg1) {
     igObject *t;
 
     if (arg1->_hasInfo != 0) {
-        if (arg1->_file->Read((char *)arg1 + DAT_00586280[0]->f8, 4, 1) != 1) {
+        if (arg1->_file->Read((char *)arg1 + DAT_00586280[0]->_offset, 4, 1) != 1) {
             return g_resultFailure;
         }
         if (arg1->_endianSwap != 0) {
-            arg1->imf->SwapBytes((char *)arg1 + DAT_00586280[0]->f8, 1);
+            arg1->imf->SwapBytes((char *)arg1 + DAT_00586280[0]->_offset, 1);
         }
         temp_s0 = (igObject *)((igDirEntryView *)FUN_002d7e90((int *)arg1, arg1->_infoListPlace))->_ref;
         if (temp_s0 != 0) {
@@ -1392,10 +1392,10 @@ static inline void setPooled(char **dst, char *src) {
     char *v = ((char *)StringPool_Intern((StringPool *)(stringPool()), src));
     char *old = *dst;
     if (old != 0) {
-        PooledStringHead *h = (PooledStringHead *)(old - 8);
-        int n = h->refs - 1;
-        h->refs = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->chunk, (int)h); }
+        StringTokenHeader *h = (StringTokenHeader *)(old - 8);
+        int n = h->refCount - 1;
+        h->refCount = n;
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
     }
     *dst = v;
 }

@@ -708,11 +708,11 @@ void Gap__Core__igEventTracker__vfunc_13(igEventTrackerView *self) {
     self->_eventTag[255] = 0;
     self->_eventClassName[0] = 0;
     self->_eventClassName[255] = 0;
-    if (((Cfg * *)g_objectSystem)[0] != 0) {
-        self->_eventTypeFilterFlags = ((Cfg * *)g_objectSystem)[0]->a;
-        self->_markerTypeFilterFlags = ((Cfg * *)g_objectSystem)[0]->b;
-        self->_notificationTypeFilterFlags = ((Cfg * *)g_objectSystem)[0]->c;
-        self->_notificationCodeFilterFlags = ((Cfg * *)g_objectSystem)[0]->d;
+    if (((ObjectSystemView **)g_objectSystem)[0] != 0) {
+        self->_eventTypeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerEventTypeFilter;
+        self->_markerTypeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerMarkerTypeFilter;
+        self->_notificationTypeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerNotificationTypeFilter;
+        self->_notificationCodeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerNotificationCodeFilter;
     }
     FUN_0030cf20(self->_names, 0x1000);
     FUN_0030cf30(self->_names, 0x100);

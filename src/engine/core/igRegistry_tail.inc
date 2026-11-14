@@ -35,9 +35,9 @@ static inline void dropPath(IniPathObject *o) {
 
 static inline char *pathText(IniPathObject *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
-static inline int tryPath(IniReaderView *self, IniPathObject *base, char *name) {
+static inline int tryPath(igRegistry *self, IniPathObject *base, char *name) {
     IniPathHandle joined = base->Join(name);
-    IniSourceFile *file = self->file;
+    igFileView *file = (igFileView *)self->_registryFile;
     int found = file->Open(pathText(joined.p), ((char *)DAT_004f96a8));
     IniPathObject *held = joined.p;
     if (held != 0) {
@@ -48,7 +48,7 @@ static inline int tryPath(IniReaderView *self, IniPathObject *base, char *name) 
     return found;
 }
 
-bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
+bool FUN_00305d30(igRegistry *self, char *name, char *dir) {
     char *held;
     char *interned;
     int found;
@@ -64,7 +64,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
     if (held == 0 || strlen(held) == 0) {
         assign_305d30(&held, text_alchemy_ini);
     }
-    found = self->file->Open(held, ((char *)DAT_004f96a8));
+    found = ((igFileView *)self->_registryFile)->Open(held, ((char *)DAT_004f96a8));
     if (found == 0) {
         if (dir == 0 || strlen(dir) == 0) {
             dir = ((char *)FUN_002d1c20((int *)((*(void * *)g_objectSystem))));
@@ -87,43 +87,41 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
         dropString(held);
         return false;
     }
-    FUN_003077a0((igRegistry *)self);
-    FUN_00307870((Ini *)self, (int)self->file, 1);
-    self->file->Close();
+    FUN_003077a0(self);
+    FUN_00307870(self, self->_registryFile, 1);
+    ((igFileView *)self->_registryFile)->Close();
     dropString(held);
     return true;
 }
 
-static inline char *textOf_3061c0(IniPairText *s) { char *t = s->text; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
+static inline char *textOf_3061c0(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 int FUN_003061c0(void *self, igRegistry *inc, int overwrite) {
     int i = 0;
-    igSmartPointer<IniPairEntry> cur;
-    for (; i < ((igTDataList<IniPairEntry *> *)inc->_valueTable)->_count; i++) {
-        cur = ((igTDataList<IniPairEntry *> *)inc->_valueTable)->_data[i];
+    igSmartPointer<igRegistryValue> cur;
+    for (; i < ((igTDataList<igRegistryValue *> *)inc->_valueTable)->_count; i++) {
+        cur = ((igTDataList<igRegistryValue *> *)inc->_valueTable)->_data[i];
         if (cur.p != 0) {
-            int section = FUN_00306360((igRegistry *)self, (char *)(FUN_00307f80(inc, cur.p->section)), 1);
-            if (overwrite == 0 && ((int)FUN_00307c10((igRegistry *)self, section, textOf_3061c0(cur.p->key), 0)) != 0) {
+            int section = FUN_00306360((igRegistry *)self, (char *)(FUN_00307f80(inc, cur.p->_section)), 1);
+            if (overwrite == 0 && ((int)FUN_00307c10((igRegistry *)self, section, textOf_3061c0((igStringObj *)cur.p->_valueName), 0)) != 0) {
                 continue;
             }
-            IniPairText *value = cur.p->value;
-            IniPairText *key = cur.p->key;
+            igStringObj *value = (igStringObj *)cur.p->_value;
+            igStringObj *key = (igStringObj *)cur.p->_valueName;
             FUN_00307700(self, section, textOf_3061c0(key), (int)(textOf_3061c0(value)));
         }
     }
     return 1;
 }
 
-static inline char *text_306360(IniNameText *s) { char *t = s->text_306360; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
-
-typedef igSmartPointer<igTDataList<IniPairEntry *> > IniPairListRef;
+typedef igSmartPointer<igTDataList<igRegistryValue *> > IniPairListRef;
 
 /* The number of keys a section holds. */
 int FUN_003064b0(int registry, int section) {
     int keys = 0;
     for (int i = 0; i < ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->count(); i++) {
-        IniPairEntry *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
-        if (entry != 0 && entry->section == section) {
+        igRegistryValue *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
+        if (entry != 0 && entry->_section == section) {
             keys++;
         }
     }
@@ -131,15 +129,15 @@ int FUN_003064b0(int registry, int section) {
 }
 
 /* Copies the index-th key of a section to *key, retained; false when the section has fewer keys. */
-bool igRegistry_GetKeyName(int registry, int section, int index, IniKeyText **key) {
+bool igRegistry_GetKeyName(int registry, int section, int index, igStringObj **key) {
     int i;
     int seen = 0;
     bool found = false;
     for (i = 0; i < ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->count(); i++) {
-        IniPairEntry *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
-        if (entry != 0 && entry->section == section) {
+        igRegistryValue *entry = ((IniPairListRef &)((igRegistry *)registry)->_valueTable)->get(i);
+        if (entry != 0 && entry->_section == section) {
             if (seen == index) {
-                *(igSmartPointer<IniKeyText> *)key = (IniKeyText *)entry->key;
+                *(igSmartPointer<igStringObj> *)key = (igStringObj *)entry->_valueName;
                 found = true;
                 break;
             }
@@ -186,13 +184,13 @@ bool FUN_003066b0(int arg0, int arg1, const char *arg2, float *arg3, int arg4, f
 }
 
 int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const char *arg4, int arg5) {
-    Node *node;
+    igRegistryValue *node;
     igStringObj *t;
     igStringObj *old;
     StringObjHolder h;
-    node = ((Node *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0));
+    node = FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0);
     if (node != 0) {
-        t = node->f12;
+        t = (igStringObj *)node->_value;
         if (t) {
             ++t->_refCount;
         }
@@ -237,7 +235,7 @@ static inline int pool_306910(void) {
     return g_stringPool[0];
 }
 
-static inline char *text_306910(ShortStr *s) { char *t = s->text_306910; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
+static inline char *text_306910(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 static inline void assign_306910(int **slot, char *s) {
     int *v = ((int *)StringPool_Intern((StringPool *)(pool_306910()), (const char *)s));
@@ -256,11 +254,11 @@ static inline void assign_306910(int **slot, char *s) {
 }
 
 int FUN_00306910(int arg0, int arg1, const char *arg2, int **out, char *def, int create) {
-    Pair *p;
+    igRegistryValue *p;
 
-    p = (Pair *)(((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0)));
+    p = FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0);
     if (p != 0) {
-        assign_306910(out, text_306910(p->value));
+        assign_306910(out, text_306910((igStringObj *)p->_value));
     } else {
         assign_306910(out, def);
         if (create != 0) {
@@ -282,7 +280,7 @@ static inline int pool_306aa0(void) {
     return g_stringPool[0];
 }
 
-static inline char *text_306aa0(Str *s) { char *t = s->text_306aa0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
+static inline char *text_306aa0(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
 static inline int *intern(char *s) {
     if (s == 0) {
@@ -317,28 +315,26 @@ static inline void setAt_306aa0(igStringRefList *l, int i, int **v) {
     }
 }
 
-static inline void append_306aa0(Str *c, char *s) { int at = c->length; igStringObj_Insert((igStringObj *)c, s, at, strlen(s)); }
-
 int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list, int create) {
-    Str *a;
-    Str *b;
+    igStringObj *a;
+    igStringObj *b;
     int *r1;
     int *tmp;
     int *r2;
     int *r3;
     const char *saved;
-    int i; igRegistryValue *p; int n; int j; Str *c; char *s2; Str *held; Str *c2; int at; int at2;
+    int i; igRegistryValue *p; int n; int j; igStringObj *c; char *s2; igStringObj *held; igStringObj *c2; int at; int at2;
 
     saved = key;
     p = FUN_00307c10((igRegistry *)self, section, key, 0);
     if (p != 0) {
-        FUN_0030bce0((SrcStr *)p->_value, 0x2C, (igTDataList<char *> *)list);
-        *(Str **)&a = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+        FUN_0030bce0((igStringObj *)p->_value, 0x2C, (igTDataList<char *> *)list);
+        *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         for (i = 0; i < list->_count; i++) {
             StringList_CopyRetained(&r1, list, i);
             igStringObj_Set((int)a, (int)r1);
             releaseRef(r1);
-            FUN_0030bee0((igStringObj *)a);
+            FUN_0030bee0(a);
             *(int **)&tmp = intern(text_306aa0(a));
             setAt_306aa0(list, i, &tmp);
             releaseRef(tmp);
@@ -346,12 +342,12 @@ int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list
         held = a;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
-            if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
+            if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(held);
             }
         }
     } else if (create != 0) {
-        *(Str **)&b = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+        *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         n = list->_count;
         if (n != 0) {
             StringList_CopyRetained(&r2, list, 0);
@@ -359,17 +355,17 @@ int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list
             releaseRef(r2);
         }
         for (j = 1; j < n; j++) {
-            c = b; at = c->length;
-            igStringObj_Insert((igStringObj *)c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
+            c = b; at = c->_length;
+            igStringObj_Insert(c, (char *)DAT_004fb190, at, strlen(DAT_004fb190));
             StringList_CopyRetained(&r3, list, j);
-            c2 = b; s2 = (char *)r3; at2 = c2->length; igStringObj_Insert((igStringObj *)c2, s2, at2, strlen(s2));
+            c2 = b; s2 = (char *)r3; at2 = c2->_length; igStringObj_Insert(c2, s2, at2, strlen(s2));
             releaseRef(r3);
         }
         FUN_00307700(self, section, saved, (int)(text_306aa0(b)));
         held = b;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
-            if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
+            if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(held);
             }
         }
@@ -602,14 +598,6 @@ int FUN_00307f80(void *arg0, int arg1) {
     }
     var_v0 = *(int *)((char *)(*(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4))) - 44)) + 8);
     if (var_v0 == 0) return ((int *)g_stringObjEmptyText)[0]; return var_v0;
-}
-
-static inline char *text_307fd0(IniIncludeText *s) {
-    char *t = s->text_307fd0;
-    if (t == 0) {
-        return (*(char * *)g_stringObjEmptyText);
-    }
-    return t;
 }
 
 int igReportNotice(const char *arg0, ...) {

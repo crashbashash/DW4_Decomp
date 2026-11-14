@@ -11,7 +11,7 @@ void List_Reserve(igDataList *list, int capacity, int elementSize) {
         int s1 = list->_data;
         igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->getMeta(), DAT_005867a0[0]->_internalIndex);
         unsigned s5 = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
-        igMetaField_AllocateArray(&sp7C, field, (void *)list, s5, (AlignedAllocatorView *)(((int)igObject_GetAllocator((int)list))));
+        igMetaField_AllocateArray(&sp7C, field, (void *)list, s5, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)list))));
         if (s1 != 0) {
             int v = list->_capacity;
             int n = (v < capacity) ? v : capacity;

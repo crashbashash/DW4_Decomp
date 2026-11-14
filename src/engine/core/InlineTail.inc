@@ -151,7 +151,7 @@ igMetaObject *Gap__Core__igStringRefList__vfunc_22(void) {
     return g_igStringRefList_metaObject[0];
 }
 
-void Gap__Core__igStringRefList__vfunc_14(igStringRefListView *self)
+void Gap__Core__igStringRefList__vfunc_14(igObjectDispatchView *self)
 {
     self->vfunc_16();
 }

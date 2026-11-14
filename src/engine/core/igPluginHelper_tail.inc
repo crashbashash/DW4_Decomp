@@ -1,9 +1,9 @@
-static inline char *keyText(IniKeyText *s) { char *t = s->text; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
+static inline char *keyText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
-static inline void dropKey(IniKeyText *o) {
+static inline void dropKey(igStringObj *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
+        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
     }
 }
 
@@ -17,7 +17,7 @@ void FUN_00304b10(void *self) {
     unsigned int n;
     unsigned int i;
     int j;
-    IniKeyText *key;
+    igStringObj *key;
     igTDataList<char *> *values;
     char *string;
     char *text;
@@ -74,13 +74,13 @@ void Gap__Core__igPluginHelper__vfunc_10(igPluginHelper *self) {
 
 int FUN_00304e60(Args *args) {
     int key;
-    Iter *it;
+    igStandardQueueView *queue;
     igResult (*fn)(int);
 
-    it = args->it;
+    queue = args->queue;
     fn = args->fn;
     Memory_FreeBuffer((void *)args);
-    for (it->vNext(&key, 1); fn(key) == g_resultSuccess; it->vNext(&key, 1)) {
+    for (queue->remove(&key, 1); fn(key) == g_resultSuccess; queue->remove(&key, 1)) {
     }
     return 0;
 }

@@ -13,10 +13,10 @@ int *Gap__Core__igCallStackTracer__vfunc_24(int *arg0) {
 }
 
 int Gap__Core__igCallStackTracer__vfunc_25(void) {
-    Resolver *resolver;
-    resolver = (Resolver *)(*(int *)((char *)(((void * *)g_objectSystem)[0]) + 80));
-    if (resolver != 0) {
-        if (resolver->IsReady() != 0) {
+    igSymbolTableView *symbols;
+    symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
+    if (symbols != 0) {
+        if (symbols->vfunc_23() != 0) {
             return 1;
         }
     }
@@ -34,11 +34,11 @@ void Gap__Core__igCallStackTracer__vfunc_26(igResult *result, igCallStackTracerV
 }
 
 igResult Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
-    Resolver *r = *(Resolver **)(((char * *)g_objectSystem)[0] + 80);
-    if (r != 0 && r->IsReady() != 0) {
+    igSymbolTableView *symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
+    if (symbols != 0 && symbols->vfunc_23() != 0) {
         int base = 0;
         int other = 0;
-        if (r->Lookup(addr, buf, size, &base, &other, name, nameSize, line) == g_resultSuccess) {
+        if (symbols->vfunc_27(addr, buf, size, &base, &other, name, nameSize, line) == g_resultSuccess) {
             *offset = addr - base;
             return g_resultSuccess;
         }

@@ -3569,11 +3569,10 @@ extern "C" int DAT_004c1598[4];
 extern "C" igBoolArrayMetaField *DAT_005869a0[4];
 /* Class factory of igAliasMemoryPool. Once the object system is running it registers the class and
  * creates the pool through its metaobject on `allocator`. During bootstrap, before the object
- * system exists, it allocates the 184-byte pool by hand, constructs it, and then runs virtual slot
- * 44 and slot 36 (with 0) on it. Those calls are not guarded against a failed allocation.
- * FactoryPoolView is an ABI dispatch view of slots 36 and 44 and must not be instantiated. */
-class FactoryPoolView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void Set(int); virtual void d8(); virtual void Init(); };
-extern "C" FactoryPoolView *igAliasMemoryPool_Create(void *allocator);
+ * system exists, it allocates the 184-byte pool by hand, constructs it, and then runs vfunc_09 and
+ * userConstruct(0) on it. Those calls are not guarded against a failed allocation. */
+class igAliasMemoryPoolView;
+extern "C" igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator);
 extern "C" igMetaObject *g_igAliasMemoryPool_metaObject[4];
 extern "C" igMetaObject *igAliasMemoryPool_GetMetaObject(void);
 extern "C" int g_igAliasMemoryPool_vtable[4];
@@ -3756,19 +3755,17 @@ extern "C" int text_null[4];
 extern "C" char DAT_004f90c0[];
 extern "C" int DAT_004f92b0[4];
 extern "C" int DAT_004f92f0[4];
-/* Retail ABI views, not original class definitions. Virtual tables include
- * an eight-byte header; Object projects slot376. Never instantiate these views. */
-class Object { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual unsigned char Check(void *); unsigned refs; };
-extern "C" void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, Object *alias);
+extern "C" void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, igMemoryPoolView *alias);
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_30(igAliasMemoryPool *self);
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_31(igAliasMemoryPool *self);
 /* igAliasMemoryPool's virtuals: the igMemoryPool table, then the alias pool's own slots 97-101
  * (vfunc_99 to vfunc_103). */
 class igAliasMemoryPoolView : public igMemoryPoolView {
 public:
-    virtual void d97();
+    virtual int vfunc_99();                                                      /* slot 97, byte 396: the aliased pool */
     virtual void vfunc_100(igMemoryPool *aliased);                               /* slot 98, byte 400 */
-    virtual void d99(); virtual void d100();
+    virtual int vfunc_101();                                                     /* slot 99, byte 404 */
+    virtual int vfunc_102();                                                     /* slot 100, byte 408 */
     virtual int ManageAllocation(int block, int size, unsigned short alignment); /* slot 101, byte 412 */
 };
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_32(igAliasMemoryPool *self);
@@ -3802,112 +3799,8 @@ extern "C" igResult Gap__Core__igAliasMemoryPool__vfunc_63(igAliasMemoryPool *se
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_64(igAliasMemoryPool *self, int count, void **blocks);
 extern "C" void *igAliasMemoryPool_Free(igAliasMemoryPool *self,void *old);
 extern "C" unsigned int igAliasMemoryPool_GetAllocationSize(igAliasMemoryPool *self,void *old);
-/* Dummy-virtual pool class (100 slots); the first call is variadic-declared so it passes only the
- * format. */
-struct StatsPool {
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual void d22();
-    virtual void d23();
-    virtual void d24();
-    virtual void d25();
-    virtual void d26();
-    virtual void d27();
-    virtual void d28();
-    virtual void d29();
-    virtual void d30();
-    virtual void d31();
-    virtual void d32();
-    virtual void d33();
-    virtual void d34();
-    virtual void d35();
-    virtual void d36();
-    virtual void d37();
-    virtual void d38();
-    virtual void d39();
-    virtual int f40();
-    virtual void d41();
-    virtual void d42();
-    virtual void d43();
-    virtual void d44();
-    virtual int f45();
-    virtual int f46();
-    virtual void d47();
-    virtual void d48();
-    virtual void d49();
-    virtual void d50();
-    virtual void d51();
-    virtual void d52();
-    virtual void d53();
-    virtual void d54();
-    virtual void d55();
-    virtual void d56();
-    virtual void d57();
-    virtual void d58();
-    virtual void d59();
-    virtual void d60();
-    virtual void d61();
-    virtual void d62();
-    virtual void d63();
-    virtual void d64();
-    virtual void d65();
-    virtual void d66();
-    virtual void d67();
-    virtual void d68();
-    virtual void d69();
-    virtual void d70();
-    virtual void d71();
-    virtual void d72();
-    virtual void d73();
-    virtual void d74();
-    virtual void d75();
-    virtual void d76();
-    virtual void d77();
-    virtual void d78();
-    virtual void d79();
-    virtual void d80();
-    virtual void d81();
-    virtual void d82();
-    virtual void d83();
-    virtual void d84();
-    virtual void d85();
-    virtual void d86();
-    virtual void d87();
-    virtual void d88();
-    virtual int f89();
-    virtual void d90();
-    virtual void d91();
-    virtual void d92();
-    virtual void d93();
-    virtual void d94();
-    virtual void d95();
-    virtual void d96();
-    virtual int f97();
-    virtual void d98();
-    virtual int f99();
-    virtual int f100();
-};
-extern "C" void igAliasMemoryPool_PrintStatistics(StatsPool *arg0, char *arg1);
+/* FUN_00304430 is declared variadic, so the first call passes only the format. */
+extern "C" void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *arg1);
 extern "C" int igAliasMemoryPool_GetEventTracker(igAliasMemoryPool *self);
 extern "C" void igAliasMemoryPool_SetEventTracker(igAliasMemoryPool *self, igObject *tracker);
 /* igFile's virtuals (vfunc_N at vtable byte 4 * N; the slot symbols are unnamed) and fields; the
@@ -3953,13 +3846,6 @@ extern "C" void *igAliasMemoryPool_CopyConstruct(igAliasMemoryPool *self, int ex
 extern "C" void Gap__Core__igAliasMemoryPool__vfunc_02(igAliasMemoryPool *self);
 extern "C" int DAT_00530d80[4];
 extern "C" long long DAT_00586dd8[4];
-struct Core {
-    char pad[21];
-    unsigned char f21;
-    char pad2[920 - 22];
-    void *f920;
-    void *f924;
-};
 extern "C" int DAT_00586dc0[4];
 extern "C" char DAT_004f9300[];
 extern "C" unsigned char GPR_00554bf8;
@@ -4209,34 +4095,6 @@ extern "C" void Gap__Core__igCallStackTracer__vfunc_26(igResult *result, igCallS
 extern "C" const igResult g_resultSuccess;
 extern "C" const igResult g_resultFailure;
 extern "C" igResult FUN_0030e430(igPsx2Thread *self, int priority);
-class Resolver { public:
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-    virtual void s16();
-    virtual void s17();
-    virtual void s18();
-    virtual void s19();
-    virtual void s20();
-    virtual int IsReady();
-    virtual void s22();
-    virtual void s23();
-    virtual void s24();
-    virtual igResult Lookup(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line);
-};
 extern "C" igResult Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
 extern "C" void Gap__Core__igCharArrayMetaField__vfunc_52(igCharArrayMetaField *self, int buffer, int count);
 extern "C" unsigned short Gap__Core__igCharArrayMetaField__vfunc_25(igCharArrayMetaField *self);
@@ -4467,8 +4325,9 @@ struct PropertyRef {
 extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *database);
 extern "C" int FUN_001cafc0(igObject *, int *, int);
 extern "C" int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2);
-struct ConfigPlatformText : public igObject { char *text; };
-class ConfigPlatformSource {
+/* igVisualContext (an igPsx2VisualContext at run time): slot 25 is vfunc_27, which records the
+ * platform names in a driver database. */
+class igVisualContextView {
 public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
@@ -4478,7 +4337,7 @@ public:
     virtual void Describe(void *target);
 };
 extern "C" char *g_stringObjEmptyText[4];
-extern "C" void FUN_002da010(void *self, igTDataList<ConfigPlatformSource *> *list);
+extern "C" void FUN_002da010(void *self, igTDataList<igVisualContextView *> *list);
 extern "C" int text_drivers_ini[4];
 extern "C" int DAT_004f96a8[4];
 static inline void release_2da1c0(igObject *object) {
@@ -4510,9 +4369,11 @@ struct StringRef {
 };
 struct igFolderView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual Mem vfunc_23(const char *name); };
 extern "C" int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2);
-class TrackedEntry { public: int f0; virtual void Delete(int flags); };
-extern "C" igTDataList<TrackedEntry *> *FUN_002da780(igDriverDatabase *s);
-extern "C" void FUN_002da850(void *self, igTDataList<TrackedEntry *> *list);
+/* A node of the parsed driver database (vtable DAT_00530618); section and settings nodes extend it.
+ * Slot 0 is the deleting destructor. */
+class ConfigNode { public: int kind; virtual void Delete(int flags); };
+extern "C" igTDataList<ConfigNode *> *FUN_002da780(igDriverDatabase *s);
+extern "C" void FUN_002da850(void *self, igTDataList<ConfigNode *> *list);
 extern "C" int DAT_00530618[4];
 extern "C" int FUN_002da990(igDriverDatabase *arg0, int arg1, int arg2, int arg3);
 /* The character variable is an int; a char would add a sign extension. */
@@ -4520,16 +4381,14 @@ extern "C" void FUN_002daac0(igDriverDatabase *arg0, int arg1);
 extern "C" int text_psx2_2[4];
 extern "C" int text_mips[4];
 extern "C" bool FUN_002dacc0(void *a0, igFileView *s, char *buf, int n);
-struct ConfigValueToken { int vt; unsigned int _refCount; char *text; int kind; };
 struct ConfigValueResolver { char pad[20]; void *table; void *scope; int mode; };
-extern "C" int FUN_002db2f0(ConfigValueResolver *self, ConfigValueToken *token, int key, int fallback);
+extern "C" int FUN_002db2f0(ConfigValueResolver *self, igStringObj *token, int key, int fallback);
 extern "C" char _ctype_[];
 extern "C" int text_abcdefghijklmnopqrstuvwxyzABCDEF[4];
 extern "C" bool FUN_002db540(igDriverDatabase *arg0, int *arg1);
 extern "C" int DAT_004f9718[4];
 extern "C" int DAT_004f9670[4];
 extern "C" int DAT_004f9728[4];
-struct ConfigToken { int vt; unsigned int _refCount; char *text; int kind; };
 extern "C" int FUN_002dba50(igDriverDatabase *self, struct ConfigSectionNode *out);
 extern "C" int FUN_002dbc10(igDriverDatabase *parser, int arg1);
 extern "C" int DAT_004f9730[4];
@@ -4543,7 +4402,7 @@ struct ConfigSettingsNode { int kind; int vtable; igTDataList<ConfigPair *> *ent
 extern "C" int FUN_002db750(igDriverDatabase *self, ConfigSettingsNode *out);
 extern "C" void *FUN_002dc340(ConfigSettingsNode *arg0, long long arg1);
 extern "C" int DAT_005305e8[4];
-struct ConfigSectionNode { int kind; int vtable; int id; igStringObj *name; igTDataList<TrackedEntry *> *children; int attributes; igObject *selector; };
+struct ConfigSectionNode { int kind; int vtable; int id; igStringObj *name; igTDataList<ConfigNode *> *children; int attributes; igObject *selector; };
 extern "C" void *FUN_002dc530(ConfigSectionNode *arg0, long long arg1);
 extern "C" void Gap__Core__igEnumArrayMetaField__vfunc_52(igEnumArrayMetaField *self, int buffer, int count);
 extern "C" int Gap__Core__igEnumArrayMetaField__vfunc_25(igEnumArrayMetaField *self);
@@ -4671,7 +4530,6 @@ extern "C" igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *self
 extern "C" void Gap__Core__igEventTracker__vfunc_45(igEventTrackerView *self);
 extern "C" void Gap__Core__igEventTracker__vfunc_46(igEventTrackerView *self);
 extern "C" void Gap__Core__igEventTracker__vfunc_47(igEventTrackerView *self);
-typedef struct Cfg { char pad[128]; int a; int b; int c; int d; } Cfg;
 extern "C" int DAT_004c1ee0[32];
 extern "C" int DAT_004c1f60[32];
 extern "C" int DAT_004c1fe0[16];
@@ -4806,8 +4664,6 @@ public:
   virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15(); virtual void c16(); virtual void c17(); virtual void c18(); virtual void c19(); virtual void c20(); virtual void c21(); virtual void c22();
   virtual int now();
 };
-struct LogContext { char pad[56]; int f56; };
-struct FieldOffsetInfo { char pad[8]; int f8; };
 struct ReflectedNameObject { int vt; int rc; char *name; };
 struct ReflectedRegistry { char p0[44]; igTDataList<ReflectedNameObject *> *names; igTDataList<int> *values; };
 extern "C" int DAT_004c2130[4];
@@ -4818,7 +4674,7 @@ extern "C" char text_blindObjects[];
 extern "C" int text_readFile_s[4];
 extern "C" char DAT_004f9af0[];
 extern "C" char text_Total_Time_to_load_s_f_seconds[];
-extern "C" FieldOffsetInfo *DAT_00586280[4];
+extern "C" igMetaField *DAT_00586280[4];
 extern "C" ReflectedRegistry *g_globalContext;
 extern "C" char DAT_00586e20[64];
 extern "C" Clock *DAT_005871d8[4];
@@ -4918,7 +4774,6 @@ extern "C" igResult FUN_002e8880(igIGBFileView *arg1);
 extern "C" void FUN_002e8a40(igIGBFileView *a);
 extern "C" void Gap__Core__igIGBFile__vfunc_04(igIGBFileView *arg0);
 extern "C" igResult FUN_002e8d40(igIGBFileView *arg1);
-struct PooledStringHead { int chunk; int refs; };
 extern "C" igResult FUN_002e8e50(igIGBFileView *self);
 struct NameHeader { int size; int count; };
 extern "C" igResult FUN_002e91e0(igIGBFileView *self);
@@ -5192,8 +5047,7 @@ class igMemoryDirEntryView : public igDirEntryView { public:
     unsigned char _refCounted;
 };
 extern "C" void Gap__Core__igMemoryDirEntry__vfunc_33(igMemoryDirEntryView *self, igIGBFileView *file);
-struct MemoryDirEntryView { char p0[24]; int base; int size; char p32[4]; igMetaFieldView *field; int fieldIndex; char p44[8]; unsigned char swapFlag; };
-extern "C" void Gap__Core__igMemoryDirEntry__vfunc_34(MemoryDirEntryView *self, igIGBFileView *r);
+extern "C" void Gap__Core__igMemoryDirEntry__vfunc_34(igMemoryDirEntryView *self, igIGBFileView *r);
 extern "C" void Gap__Core__igMemoryDirEntry__vfunc_29(igMemoryDirEntry *self, int memoryPoolHandle);
 extern "C" int Gap__Core__igMemoryDirEntry__vfunc_30(igMemoryDirEntry *self);
 extern "C" int *DAT_00586f48[4];
@@ -5248,8 +5102,6 @@ extern "C" int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3
 extern "C" void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10);
 extern "C" void FUN_002f1b70(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18);
 extern "C" void Memory_InitializeAllocatorRegistries(igObject *rootAllocator);
-/* The root allocator's vtable: 96 unnamed padding slots, then the call at offset 392. */
-class RootAllocatorVtable { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual int afterRegistriesCleared(); };
 extern "C" void FUN_002f2280(igMemoryPool *arg0, int arg1, int arg2, int arg3);
 extern "C" void FUN_002f22f0(igMemoryPool *arg0);
 extern "C" void FUN_002f2340(igMemoryPool *arg0, int arg1, int arg2, int arg3);
@@ -5347,28 +5199,6 @@ extern "C" igResult FUN_002f2f40(MemoryContext *self, int file);
 extern "C" igResult FUN_002f3060(MemoryContext *self, int file, int arg);
 typedef void StringToken;
 /* a token points at the interned text; its header precedes it */
-/* The descriptor's attached object: only the four virtuals this function calls are named; the others
- * are placeholders that keep the vtable byte offsets (8 + 4 * slot) right. */
-class SizedObject {
-public:
-    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7();
-    virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15();
-    virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23();
-    virtual void p24(); virtual void p25(); virtual void p26();
-    virtual unsigned int hasLimitOrSize();/* byte 116 */
-    virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31(); virtual void p32(); virtual void p33();
-    virtual long long limit();/* byte 144 */
-    virtual void p35(); virtual void p36(); virtual void p37(); virtual void p38(); virtual void p39(); virtual void p40(); virtual void p41();
-    virtual unsigned int count();/* byte 176 */
-    virtual void p43(); virtual void p44(); virtual void p45(); virtual void p46(); virtual void p47(); virtual void p48(); virtual void p49(); virtual void p50();
-    virtual void p51(); virtual void p52(); virtual void p53(); virtual void p54(); virtual void p55(); virtual void p56(); virtual void p57(); virtual void p58();
-    virtual void p59(); virtual void p60(); virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64(); virtual void p65(); virtual void p66();
-    virtual void p67(); virtual void p68(); virtual void p69(); virtual void p70(); virtual void p71(); virtual void p72(); virtual void p73(); virtual void p74();
-    virtual void p75(); virtual void p76(); virtual void p77(); virtual void p78(); virtual void p79(); virtual void p80(); virtual void p81(); virtual void p82();
-    virtual void p83(); virtual void p84(); virtual void p85(); virtual void p86(); virtual void p87(); virtual void p88(); virtual void p89(); virtual void p90();
-    virtual void p91(); virtual void p92(); virtual void p93(); virtual void p94(); virtual void p95(); virtual void p96(); virtual void p97();
-    virtual unsigned long long total();/* byte 400 */
-};
 /* Pool descriptor defaults (entry +0x84): interned-string sources and integer limits. */
 struct PoolDefaults {
     char pad0[0x18];
@@ -5389,7 +5219,7 @@ struct PoolDefaults {
     int field50;             /* +0x50 */
 };
 struct PoolEntry {
-    SizedObject *object;     /* +0x00 */
+    igMemoryPoolView *object; /* +0x00 */
     char name[0x80];         /* +0x04 */
     PoolDefaults *defaults;  /* +0x84 */
     char pad88[8];
@@ -5420,7 +5250,6 @@ struct PoolHandle {
 };
 extern "C" char text_kIGMemoryPoolHandle_s[];
 extern "C" void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle);
-struct PoolDescString { int chunk; int refs; };
 extern "C" igResult FUN_002f3910(MemoryContext *self, int index, igMemoryPoolInfo *desc, int build);
 extern "C" void FUN_002f4110(MemoryContext *arg0);
 extern "C" char *DAT_00586de8;
@@ -5478,7 +5307,6 @@ extern "C" char text_Custom[];
 extern "C" void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int idx, int flag);
 extern "C" void MemoryContext_BuildAndAttachEventTracker(igResult *out, MemoryContext *self, int idx);
 typedef igObject Obj6;
-struct StringHeader { int chunk; int refs; };
 extern "C" int DAT_004c1eb0;
 extern "C" char text_useGlobalEventTracker[];
 extern "C" char text_useSeparateEventTrackers[];
@@ -5576,74 +5404,7 @@ extern "C" int DAT_004faeb0[4];
 extern "C" int DAT_004faed0[4];
 /* The growable pointer list shared by the allocator registries (igMemoryPoolInfoList): data,
  * signed count, capacity. Initial capacity 64 entries, growing four at a time. The allocator used
- * for the storage is the one the object system keeps at +48 (g_objectSystem). The classes are
- * observed ABI projections of the allocator's virtual slots (a0.. are padding). */
-class RegistryAllocatorView {public:
-virtual void a0();
-virtual void a1();
-virtual void a2();
-virtual void a3();
-virtual void a4();
-virtual void a5();
-virtual void a6();
-virtual void a7();
-virtual void a8();
-virtual void a9();
-virtual void a10();
-virtual void a11();
-virtual void a12();
-virtual void a13();
-virtual void a14();
-virtual void a15();
-virtual void a16();
-virtual void a17();
-virtual void a18();
-virtual void a19();
-virtual void a20();
-virtual void a21();
-virtual void a22();
-virtual void a23();
-virtual void a24();
-virtual void a25();
-virtual void a26();
-virtual void a27();
-virtual void a28();
-virtual void a29();
-virtual void a30();
-virtual void a31();
-virtual void a32();
-virtual void a33();
-virtual void a34();
-virtual void a35();
-virtual void a36();
-virtual void a37();
-virtual void a38();
-virtual void a39();
-virtual void a40();
-virtual void a41();
-virtual void a42();
-virtual void a43();
-virtual void a44();
-virtual void a45();
-virtual void a46();
-virtual void a47();
-virtual void a48();
-virtual void a49();
-virtual void a50();
-virtual void a51();
-virtual void *Allocate(unsigned);
-virtual void a220();virtual void a224();virtual void a228();
-virtual void *Reallocate(void *,unsigned);
-virtual void b0();
-virtual void b1();
-virtual void b2();
-virtual void b3();
-virtual void b4();
-virtual void b5();
-virtual void b6();
-virtual void Free(void *);};
-/* Object system as seen from here: only its allocator reference (+48) is used. */
-struct BootstrapSystem {char prefix[48];RegistryAllocatorView *allocator;};
+ * for the storage is the object system's bootstrap pool. */
 extern "C" AllocatorRegistry *igMemoryPoolInfoList_Init(AllocatorRegistry *list);
 extern "C" AllocatorRegistry *igMemoryPoolInfoList_Release(AllocatorRegistry *list,int deleteFlag);
 extern "C" void igMemoryPoolInfoList_Append(AllocatorRegistry *list,igMemoryPoolView *entry);
@@ -5663,67 +5424,9 @@ extern "C" void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *arg0,
 /* Allocates the backing array of a memory-reference field. The element descriptor (_memType)
  * supplies the element size and alignment through its virtual methods; the allocator is asked for
  * count * size bytes at that alignment and the pointer is published into the owning object at the
- * field's _offset. AlignedAllocatorView projects only the allocator slot this routine calls;
- * do not instantiate it. */
-
-class AlignedAllocatorView {public:
-virtual void a0();
-virtual void a1();
-virtual void a2();
-virtual void a3();
-virtual void a4();
-virtual void a5();
-virtual void a6();
-virtual void a7();
-virtual void a8();
-virtual void a9();
-virtual void a10();
-virtual void a11();
-virtual void a12();
-virtual void a13();
-virtual void a14();
-virtual void a15();
-virtual void a16();
-virtual void a17();
-virtual void a18();
-virtual void a19();
-virtual void a20();
-virtual void a21();
-virtual void a22();
-virtual void a23();
-virtual void a24();
-virtual void a25();
-virtual void a26();
-virtual void a27();
-virtual void a28();
-virtual void a29();
-virtual void a30();
-virtual void a31();
-virtual void a32();
-virtual void a33();
-virtual void a34();
-virtual void a35();
-virtual void a36();
-virtual void a37();
-virtual void a38();
-virtual void a39();
-virtual void a40();
-virtual void a41();
-virtual void a42();
-virtual void a43();
-virtual void a44();
-virtual void a45();
-virtual void a46();
-virtual void a47();
-virtual void a48();
-virtual void a49();
-virtual void a50();
-virtual void a51();
-virtual void a52();
-virtual void *Allocate(int,int);};
-extern "C" void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *object,int count,AlignedAllocatorView *allocator);
-typedef struct AlignmentFieldView { char pad[68]; int alignmentType; } AlignmentFieldView;
-extern "C" void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name);
+ * field's _offset. */
+extern "C" void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *object,int count,igMemoryPoolView *allocator);
+extern "C" void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *name);
 extern "C" int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2);
 extern "C" int Gap__Core__igMemoryRefMetaField__vfunc_45(igMemoryRefMetaField *arg0, int arg1, int arg2);
 extern "C" int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *arg0, int arg1, int arg2);
@@ -5743,8 +5446,6 @@ extern "C" void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int
 extern "C" int igMetaEnum_GetNameCount(igMetaEnum *self);
 typedef struct MetaEnumView { char pad[4]; int _refCount; char *name; igTDataList<char *> *names; igTDataList<int> *values; } MetaEnumView;
 extern "C" MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count);
-struct FieldNameView { char pad12[12]; char *f12; };
-struct MetaObjectNameView { char pad28[28]; char *f28; };
 extern "C" int g_igMetaField_vtable[4];
 extern "C" int g_stringPool[4];
 extern "C" int g_igMetaFieldInfo_metaObject_00587190[4];
@@ -5796,7 +5497,6 @@ extern "C" void FUN_002fd130(igMetaField *arg0, int arg1, int arg2);
 extern "C" void FUN_002fd150(igMetaFieldView *self, void *object, igMetaFieldView *field, char *source);
 extern "C" void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2);
 extern "C" void igMetaField_SwapValue(igMetaFieldView *self, char *object);
-class MangledNameAllocatorView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int vX(int); };
 extern "C" int igMetaField_GetMangledName(igMetaField *arg0, void **arg1);
 /* igMetaFieldInfo's own virtual functions past igObject's (slot n at vtable byte offset 4 * n);
  * slot 24 is igMetaField_FindByName (config names/ObjectModel.tsv). ABI view only. */
@@ -5809,7 +5509,7 @@ public:
     virtual int FindByName(int name);                                           /* +96 */
 };
 extern "C" int Gap__Core__igMetaFieldInfo__vfunc_23(igMetaFieldInfoView *arg0, int arg1, void *arg2);
-extern "C" FieldNameView *igMetaField_FindByName(int arg0, char *arg1);
+extern "C" igMetaField *igMetaField_FindByName(int arg0, char *arg1);
 struct Instance : public igObject { };
 
 typedef igMetaField *(*FieldFactory)(void *);
@@ -5955,8 +5655,7 @@ extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self
 extern "C" int ObjectList_RemoveAllRetained(igTDataList<igObject *> *list, igObject *object, int start);
 extern "C" int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *object);
 extern "C" int igProperty_FindByName(igObjectList *arg0, igMetaField *arg1, int arg2);
-typedef struct Field { char pad[8]; int _offset; } Field;
-extern "C" void FUN_00302540(igTDataList<igObject *> *self, Field *field);
+extern "C" void FUN_00302540(igTDataList<igObject *> *self, igMetaField *field);
 extern "C" void Gap__Core__igObjectRefArrayMetaField__vfunc_52(igObjectRefArrayMetaField *self, int passThrough, int perElement);
 extern "C" void FUN_00302780(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject *arg3);
 extern "C" void Gap__Core__igObjectRefArrayMetaField__vfunc_31(igObjectRefArrayMetaField *arg0, int arg1);
@@ -6013,9 +5712,8 @@ extern "C" int DAT_004fafc0[4];
 extern "C" char GPR_00554c18;
 extern "C" char GPR_00554c1c;
 extern "C" void FUN_00304840(igPluginHelper *self, int name, int path);
-typedef struct IniKeyText { char pad[4]; int _refCount; char *text; } IniKeyText;
 extern "C" char PLUGINS[];
-extern "C" bool igRegistry_GetKeyName(int registry, int section, int index, IniKeyText **key);
+extern "C" bool igRegistry_GetKeyName(int registry, int section, int index, igStringObj **key);
 /* igPluginHelper::_libraryLoader; slot 22 (vfunc_24) receives each loaded igLibrary in turn. */
 class igLibraryLoaderView : public igVirtualObject {
 public:
@@ -6025,8 +5723,7 @@ public:
     virtual int vfunc_24(igLibrary **library);
 };
 extern "C" void Gap__Core__igPluginHelper__vfunc_10(igPluginHelper *self);
-class Iter { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual igResult vNext(int *, int); };
-struct Args { igResult (*fn)(int); Iter *it; };
+struct Args { igResult (*fn)(int); igStandardQueueView *queue; };
 extern "C" int FUN_00304e60(Args *args);
 extern "C" int FUN_00305000(igStandardQueueView *queue);
 extern "C" void Gap__Core__igRawRefArrayMetaField__vfunc_52(igRawRefArrayMetaField *self, int item, int count);
@@ -6065,21 +5762,11 @@ class IniPathObject { public:
  virtual IniPathHandle Join(char *);
  int _refCount; char *text;
 };
-class IniSourceFile { public:
- virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); 
- virtual int Open(char *, char *);
- virtual void Close();
-};
-struct IniReaderView { char pad[12]; IniSourceFile *file; };
 extern "C" char text_alchemy_ini[];
-extern "C" bool FUN_00305d30(IniReaderView *self, char *name, char *dir);
-typedef struct IniPairText { char pad[8]; char *text; } IniPairText;
-typedef struct IniPairEntry : public igObject { int section; IniPairText *value; IniPairText *key; } IniPairEntry;
+extern "C" bool FUN_00305d30(igRegistry *self, char *name, char *dir);
 extern "C" int FUN_003061c0(void *self, igRegistry *inc, int overwrite);
 extern "C" char *DAT_004fb160[];
-typedef struct IniNameText { char pad[4]; int _refCount; char *text_306360; } IniNameText;
 extern "C" int FUN_00306360(igRegistry *self, char *name, int create);
-struct Node { char p[12]; igStringObj *f12; };
 /* Holds the igStringObj a registry string lookup creates for its default text. */
 struct StringObjHolder {
     igStringObj *ref;
@@ -6096,10 +5783,7 @@ struct StringObjHolder {
     }
 };
 extern "C" int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const char *arg4, int arg5);
-typedef struct ShortStr { char pad[8]; char *text_306910; } ShortStr;
-typedef struct Pair { char pad[12]; ShortStr *value; } Pair;
 extern "C" char DAT_004fb190[];
-typedef struct Str { char pad[4]; int _refCount; char *text_306aa0; int length; } Str;
 extern "C" int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list, int create);
 extern "C" char DAT_004d3d11[16];
 extern "C" char DAT_004fb198[16];
@@ -6109,8 +5793,7 @@ extern "C" char DAT_004fb1a8[];
 extern "C" char text_abcdefghijklmnopqrstuvwxyzABCDEF_2[];
 extern "C" char DAT_004fb200[];
 extern "C" char text_showRegistryQueries[];
-typedef struct Ini { char pad[20]; unsigned char flag; } Ini;
-extern "C" void FUN_00307870(Ini *self, int file, int overwrite);
+extern "C" void FUN_00307870(igRegistry *self, int file, int overwrite);
 extern "C" bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines);
 /* Arena handles (4-byte refs) of the reflected int fields are followed through casts. */
 struct RegistryValueRef {
@@ -6126,7 +5809,6 @@ struct RegistryValueRef {
 extern "C" igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3);
 extern "C" char DAT_004fb280[];
 extern "C" int DAT_005871c0;
-typedef struct IniIncludeText { char pad[4]; int _refCount; char *text_307fd0; int length; } IniIncludeText;
 typedef struct IniIncludeFile { char pad[12]; char *dir; } IniIncludeFile;
 extern "C" void FUN_00307fd0(void *self, IniIncludeFile *file, char *line, int lineNo, int overwrite);
 extern "C" int UNKNOWN[4];
@@ -6166,23 +5848,11 @@ struct MemberRef {
 extern "C" void FUN_00308860(igResource *self, int name, int value);
 extern "C" igDirectory *FUN_00308a90(igResource *self);
 extern "C" int g_resourceLoaderStackSize[4];
-/* The igQueue an igResource loads through (an igStandardQueue at run time): slot 21 is
- * igStandardQueue::vfunc_23, AllocateStorage() (allocates _data for _capacity elements); slot 24
- * is vfunc_26, Insert(value, block). */
-class ResourceLoadQueue { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void AllocateStorage(); virtual void d22(); virtual void d23(); virtual igResult Insert(int value, int block); };
-/* The thread FUN_00304f00 starts to service the load queue (an igPsx2Thread): slot 48 is
- * igPsx2Thread::vfunc_50, SetPriority(priority). */
-class ResourceLoadThread { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual igResult SetPriority(int priority); };
-/* igResource (reflected.h) with its asynchronous-loading fields held as smart pointers. */
-struct ResourceAsyncView { char pad[28]; unsigned char _asyncLoadState; char pad29[3]; igSmartPointer<igObject> _loadQueue; igSmartPointer<igObject> _loadThread; };
+/* igResource (reflected.h) with its asynchronous-loading fields: the queue the loader thread
+ * serves and the thread. */
+struct ResourceAsyncView { char pad[28]; unsigned char _asyncLoadState; char pad29[3]; igSmartPointer<igStandardQueueView> _loadQueue; igSmartPointer<igPsx2ThreadView> _loadThread; };
 extern "C" void igResource_StartAsyncLoading(ResourceAsyncView *self);
-struct PairCallStatus { int w; };
-class PairQueryTarget { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual PairCallStatus m96(igObject *); };
-class PairQueryHost { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual PairQueryTarget *m92(); };
-/* The same igResource fields as ResourceAsyncView, as raw pointers: StopAsyncLoading releases them
- * by hand. */
-class ResourceAsyncRawView { public: char pad[28]; unsigned char _asyncLoadState; char p29[3]; ResourceLoadQueue *_loadQueue; igObject *_loadThread; };
-extern "C" void igResource_StopAsyncLoading(ResourceAsyncRawView *self);
+extern "C" void igResource_StopAsyncLoading(ResourceAsyncView *self);
 extern "C" void Gap__Core__igResource__vfunc_12(igResource *self);
 extern "C" void *FUN_00308fb0(igResource *arg0, int arg1);
 /* Holds the igIGBFile a directory load creates. */
@@ -6241,8 +5911,7 @@ extern "C" void igStringObj_KeepExtension(igStringObj *o);
 extern "C" void FUN_0030b980(igStringObj *p);
 extern "C" int DAT_004C22F0[4];
 extern "C" int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len);
-struct SrcStr { char p0[8]; int f8; int f12; };
-extern "C" void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list);
+extern "C" void FUN_0030bce0(igStringObj *src, long long delim, igTDataList<char *> *list);
 extern "C" void FUN_0030bee0(igStringObj *self);
 extern "C" int FUN_0030bfa0(igStringObjList *self, int key, int (*cmp)(char *, int));
 /* 24-byte target ABI view. Field labels do not assert the original C++ member spelling. */
@@ -6253,7 +5922,6 @@ typedef struct {
     int cleanup;
 } StringTableLayout;
 typedef char StringTableLayoutSize[(sizeof(StringTableLayout) == 24) ? 1 : -1];
-struct StringTableEntry { int pad4; int rc; };
 struct StringTableSearchView { int pad[1]; unsigned int cnt; unsigned int n; int pad12; int *tab; };
 struct StringTableInsertView { char pad[4]; unsigned cnt; unsigned f8; int f12; char *f16; };
 struct StringTableChunkList { int first; int pad[4]; int cnt; };
@@ -6337,11 +6005,14 @@ extern "C" void Gap__Core__igStructMetaField__vfunc_30(igMetaFieldView *self, vo
 extern "C" int Gap__Core__igStructMetaField__vfunc_60(igStructMetaField *self);
 struct SymbolRecord { int name; int address; unsigned int size; int path; };
 class igSymbolTableView { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
+    virtual int vfunc_23();                                     /* slot 21: the number of symbols */
+    virtual void d22();
     virtual igResult vfunc_25(int, int, int, int, int, int, int);
     virtual int vfunc_26(unsigned int address);
-    virtual void d25(); virtual void d26();
-    virtual void vfunc_29(int, int, int, int);
+    virtual igResult vfunc_27(int addr, char *buf, int size, int *base, int *other, char *name, int nameSize, int *line); /* slot 25: the symbol at addr */
+    virtual void d26();
+    virtual void vfunc_29(int name, int address, int size, int flags);
     virtual int vfunc_30(int address);
     virtual int vfunc_31(int address, int size, int index);
     virtual void vfunc_32(int capacity);
@@ -6478,7 +6149,6 @@ static inline const char *igMemoryPoolInfo_source(const igMemoryPoolInfo *info) 
 static inline const char *igMemoryPoolInfo_options(const igMemoryPoolInfo *info) { return (const char *)info->_releaseOptions; }
 static inline const char *igMemoryPoolInfo_checking(const igMemoryPoolInfo *info) { return (const char *)info->_releaseChecking; }
 static inline const char *igMemoryPoolInfo_messages(const igMemoryPoolInfo *info) { return (const char *)info->_releaseMessages; }
-struct CoreGlobals { char pad0[48]; igArenaMemoryPool *defaultPool; };
 extern "C" char text_Sentinels[];
 extern "C" char text_Contiguous[];
 extern "C" char text_PreSizeReached[];
@@ -6504,7 +6174,9 @@ struct ArenaState {
 /* igArenaMemoryPool's own slots (97 on) after the shared igMemoryPool table. */
 class igArenaMemoryPoolView : public igMemoryPoolView {
 public:
-    virtual void d97(); virtual void d98(); virtual void d99();
+    virtual void d97();
+    virtual unsigned long long vfunc_100();                                      /* slot 98, byte 400 */
+    virtual void d99();
     virtual igResult vfunc_102();                                                /* slot 100, byte 408 */
     virtual igResult vfunc_103();                                                /* slot 101, byte 412 */
     virtual void *MemoryOperation(void *block, int size, unsigned int alignment); /* slot 102, byte 416 */
@@ -6629,9 +6301,10 @@ public:
     virtual igResult Open(const char *path);
     virtual igResult Close();
     virtual igResult Load(int offset, int size, void **dest);
-    virtual void d25();
+    virtual igResult LoadSymbols();                            /* slot 25, byte 108 */
     virtual igResult vfunc_28(igSymbolTable *table, int flags);  /* slot 26, byte 112: fills a symbol table */
-    virtual void d27(); virtual void d28();
+    virtual igResult Demangle(char *mangled, char *out, int size); /* slot 27, byte 116 */
+    virtual void d28();
     virtual void PrintSectionHeaders();                         /* slot 29, byte 124 */
     virtual void PrintSymbols();                                /* slot 30, byte 128 */
     unsigned int refCount; const char *path; igFileView *stream;
@@ -6652,15 +6325,11 @@ public:
 extern "C" void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *path);
 extern "C" ElfSection *FUN_00320ea0(ElfFileView *self, int index);
 extern "C" int FUN_00320ee0(ElfFileView *self, int type, int nth);
-struct ElfResult { int w; ElfResult() {} ElfResult(const ElfResult &o) : w(o.w) {} bool operator==(const ElfResult &o) const { return w == o.w; } };
 extern "C" char DAT_004fde00[];
 extern "C" char DAT_004fde20[];
-extern "C" ElfResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self);
-class ElfSymbolSink { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void Add(const char *name, void *value, unsigned size, int flags); };
-class ElfSymbolFileView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual ElfResult Close(); virtual ElfResult Load(int offset, int size, void *dest); virtual ElfResult LoadSymbols(); virtual void d26(); virtual ElfResult ReadString(int offset, char *text, int limit, int flags);
-    char pad0[4]; int path; char pad12[76]; char *strings; int symbolCount; };
+extern "C" igResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self);
 extern "C" char text_No_symbols_in_s[];
-extern "C" ElfResult Gap__Core__igElfFile__vfunc_28(ElfSymbolFileView *self, ElfSymbolSink *sink, int functionsOnly);
+extern "C" igResult Gap__Core__igElfFile__vfunc_28(ElfFileView *self, igSymbolTableView *table, int functionsOnly);
 typedef struct ElfOperatorName { const char *mangled; const char *name; } ElfOperatorName;
 extern "C" ElfOperatorName DAT_004c2380[];
 extern "C" char DAT_004fdf80[];
@@ -6989,7 +6658,7 @@ public:
 };
 /* igPsx2Thread with the virtuals its callers use: slot 22 waits for another thread to finish, 23
  * sleeps for a number of nanoseconds, 30 tells whether the thread is running, 40 gives the stack
- * alignment and 42 terminates the thread. */
+ * alignment, 42 terminates the thread and 48 sets its priority. */
 class igPsx2ThreadView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -7011,7 +6680,9 @@ public:
     virtual int getStackAlignment();
     virtual void d41();
     virtual igResult terminate();
-    virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50();
+    virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
+    virtual igResult setPriority(int priority);
+    virtual void d49(); virtual void d50();
     virtual void d51(); virtual void d52();
     virtual void adoptCurrentThread();
     int _name;
@@ -7035,7 +6706,8 @@ public:
     int _threadID;
 };
 /* igStandardQueue with the virtuals its callers use: slots 21 to 23 create, destroy and test the
- * element storage, 26 counts the queued elements and 27 tells whether the queue is full. */
+ * element storage, 24 and 25 insert and remove an element, 26 counts the queued elements and 27
+ * tells whether the queue is full. */
 class igStandardQueueView : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
@@ -7045,7 +6717,7 @@ public:
     virtual void destroy();
     virtual int isCreated();
     virtual igResult insert(int value, int block);
-    virtual void d25();
+    virtual igResult remove(int *value, int block);
     virtual unsigned int getCount();
     virtual int isFull();
     int _serviceThreads;
@@ -7223,13 +6895,12 @@ struct InternedString {
     }
 };
 extern "C" InternedString FUN_0032c240(char *prefix, char *path);
-struct FolderSelf { int vt; int refCount; int path; };
 struct FolderFileStat { int mode; char rest[60]; };
 extern "C" int sceGetstat(const char *, FolderFileStat *);
-extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_24(FolderSelf *self);
-extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self);
+extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_24(igPsx2Folder *self);
+extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_25(igPsx2Folder *self);
 struct FolderEntryWide { char bytes[328]; };
-extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self);
+extern "C" igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(igPsx2Folder *self);
 extern "C" void FUN_0032cac0(igStringObj *arg0);
 struct FolderSearchList;
 extern "C" char text_sonyModulePath[];
@@ -7419,13 +7090,7 @@ extern "C" double Gap__Core__igPsx2LongTimer__vfunc_34(igLongTimerView *self);
 extern "C" unsigned char Gap__Core__igPsx2LongTimer__vfunc_36(igPsx2LongTimer *self);
 extern "C" void Gap__Core__igPsx2File__vfunc_11(igPsx2File *arg0);
 extern "C" int Gap__Core__igStackMemoryPool__vfunc_29(igStackMemoryPool *self);
-class igStringRefListView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void vfunc_16();
-};
-extern "C" void Gap__Core__igStringRefList__vfunc_14(igStringRefListView *self);
+extern "C" void Gap__Core__igStringRefList__vfunc_14(igObjectDispatchView *self);
 extern "C" void Gap__Core__igStringRefList__vfunc_18(igStringRefList *l);
 extern "C" int g_igMemoryRefArrayMetaField_metaObject_00585de8[4];
 extern "C" int g_igMemoryPoolContextInfo_metaObject_00585e98[4];

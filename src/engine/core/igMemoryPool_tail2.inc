@@ -230,7 +230,7 @@ void Memory_ShutdownAllocatorRegistries(void **rootAllocator) {
     igMemoryPoolInfoList_Release(g_secondaryAllocatorList[0], 1);
     ((int *)g_primaryAllocatorList)[0] = 0;
     ((int *)g_secondaryAllocatorList)[0] = 0;
-    ((RootAllocatorVtable *)(rootAllocator))->afterRegistriesCleared();
+    ((igMemoryPoolView *)(rootAllocator))->vfunc_98();
 }
 
 void FUN_002f2260(void *arg0) {

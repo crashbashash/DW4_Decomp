@@ -237,7 +237,7 @@ igResult Gap__Core__igArenaMemoryPool__vfunc_45(igArenaMemoryPool *pool, igMemor
         if (strstr(options, ((char *)text_SystemMemoryExhausted))) flags |= 0x80;
         if (strstr(options, text_PreSizeReached)) flags |= 0x40;
         if (strstr(options, ((char *)text_MaxSizeReached))) flags |= 0x20;
-        if (pool == ((struct CoreGlobals * *)g_objectSystem)[0]->defaultPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
+        if (pool == (igArenaMemoryPool *)((ObjectSystemView **)g_objectSystem)[0]->bootstrapPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
             flags ^= 1;
         }
         igArenaMemoryPool_SetPoolOptionFlags(pool, flags);

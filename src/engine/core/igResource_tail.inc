@@ -1,36 +1,36 @@
 void igResource_StartAsyncLoading(ResourceAsyncView *self) {
-    self->_loadQueue = igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
-    ((ResourceLoadQueue *)self->_loadQueue.get())->AllocateStorage();
-    self->_loadThread = (igObject *)FUN_00304f00(self->_loadQueue.get(), (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
-    ((ResourceLoadThread *)self->_loadThread.get())->SetPriority(255);
+    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
+    self->_loadQueue->create();
+    self->_loadThread = (igPsx2ThreadView *)FUN_00304f00(self->_loadQueue, (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
+    self->_loadThread->setPriority(255);
     self->_asyncLoadState = 1;
     ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vfunc_34(1);
 }
 
-void igResource_StopAsyncLoading(ResourceAsyncRawView *self) {
-    PairCallStatus sp38;
-    igObject *q;
-    ResourceLoadQueue *x;
+void igResource_StopAsyncLoading(ResourceAsyncView *self) {
+    igResult joined;
+    igPsx2ThreadView *thread;
+    igStandardQueueView *queue;
     if (self->_asyncLoadState != 0) {
         self->_asyncLoadState = 0;
-        self->_loadQueue->Insert(0, 1);
-        PairQueryTarget *z;
-        q = self->_loadThread;
-        z = ((PairQueryHost * *)g_threadManager)[0]->m92();
-        sp38 = z->m96(q);
-        FUN_00305000((igStandardQueueView *)self->_loadQueue);
-        x = self->_loadQueue;
-        if (x != 0) {
-            ((igObject *)x)->_refCount = (int)((igObject *)x)->_refCount - 1;
-            if (((unsigned long long) ((long long)(int) ((igObject *)x)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(x);
+        self->_loadQueue->insert(0, 1);
+        igPsx2ThreadView *current;
+        thread = self->_loadThread;
+        current = ((igPsx2ThreadManagerView **)g_threadManager)[0]->getCurrentThread();
+        joined = current->join(thread);
+        FUN_00305000(self->_loadQueue);
+        queue = self->_loadQueue;
+        if (queue != 0) {
+            queue->_refCount = (int)queue->_refCount - 1;
+            if (((unsigned long long) ((long long)(int) queue->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(queue);
         }
-        self->_loadQueue = 0;
-        q = self->_loadThread;
-        if (q != 0) {
-            q->_refCount = (int)q->_refCount - 1;
-            if (((unsigned long long) ((long long)(int) q->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(q);
+        self->_loadQueue.p = 0;
+        thread = self->_loadThread;
+        if (thread != 0) {
+            thread->_refCount = (int)thread->_refCount - 1;
+            if (((unsigned long long) ((long long)(int) thread->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(thread);
         }
-        self->_loadThread = 0;
+        self->_loadThread.p = 0;
     }
 }
 
@@ -39,7 +39,7 @@ void Gap__Core__igResource__vfunc_12(igResource *self) {
     S_ref *temp_a0_2;
 
     if (self->_asyncLoadState == 1) {
-        igResource_StopAsyncLoading((ResourceAsyncRawView *)self);
+        igResource_StopAsyncLoading((ResourceAsyncView *)self);
     }
     temp_a0 = (S_ref *)self->_alignmentStrings;
     if (temp_a0 != 0) {

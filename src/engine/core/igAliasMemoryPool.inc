@@ -1,13 +1,13 @@
-FactoryPoolView *igAliasMemoryPool_Create(void *allocator) {
-    FactoryPoolView *pool;
+igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator) {
+    igAliasMemoryPoolView *pool;
     if (*g_objectSystem[0]) {
         igAliasMemoryPool_EnsureRegistered();
-        pool=((FactoryPoolView *)igMetaObject_CreateInstance((igMetaObject *)(((void * *)g_igAliasMemoryPool_metaObject)[0]), (igMemoryPoolView *)allocator));
+        pool=((igAliasMemoryPoolView *)igMetaObject_CreateInstance((igMetaObject *)(((void * *)g_igAliasMemoryPool_metaObject)[0]), (igMemoryPoolView *)allocator));
     } else {
-        pool=((FactoryPoolView *)FUN_002f0040(184, 0, (int)allocator));
-        if(pool)pool=((FactoryPoolView *)igAliasMemoryPool_Construct((igAliasMemoryPool *)pool, 1));
-        pool->Init();
-        pool->Set(0);
+        pool=((igAliasMemoryPoolView *)FUN_002f0040(184, 0, (int)allocator));
+        if(pool)pool=((igAliasMemoryPoolView *)igAliasMemoryPool_Construct((igAliasMemoryPool *)pool, 1));
+        pool->vfunc_09();
+        pool->userConstruct(0);
     }
     return pool;
 }

@@ -6,13 +6,13 @@ static inline int countOf(igTDataList<ReflectedNameObject *> *l) { if (l != 0) {
 
 static inline char *textOf_2fb280(ReflectedNameObject *s) { char *t = s->name; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
 
-void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name) {
+void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, char *name) {
     igTDataList<ReflectedNameObject *> *names;
     igTDataList<ReflectedNameObject *> *held;
     int n;
     int i;
     if (name == 0) {
-        self->alignmentType = -1;
+        self->_alignmentType = -1;
         return;
     }
     *(igTDataList<ReflectedNameObject *> **)&names = g_globalContext->names;
@@ -21,7 +21,7 @@ void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name)
     n = countOf(names);
     for (i = 0; i < n; i++) {
         if (strcmp(textOf_2fb280(names->_data[i]), name) == 0) {
-            self->alignmentType = i;
+            self->_alignmentType = i;
             dropNames(names);
             return;
         }

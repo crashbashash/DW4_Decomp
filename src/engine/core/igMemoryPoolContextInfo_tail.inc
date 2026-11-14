@@ -298,7 +298,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
 {
     StringToken *old;
     const char *text;
-    SizedObject *object;
+    igMemoryPoolView *object;
     StringTokenHeader *header;
     PoolEntry *entry;
     char nameBuf[128];
@@ -316,15 +316,15 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
             object = table->entries[index].object;
             if (object != 0) {
                 if (igObject_IsKindOf(object, (igMetaObject *)g_igArenaMemoryPool_metaObject[0]) != 0) {
-                    if (object->count() != 0) {
-                        if (object->total() > object->count()) {
-                            entry->defaults->limit = (int)object->total();
+                    if (object->vfunc_44() != 0) {
+                        if (((igArenaMemoryPoolView *)object)->vfunc_100() > object->vfunc_44()) {
+                            entry->defaults->limit = (int)((igArenaMemoryPoolView *)object)->vfunc_100();
                         }
-                    } else if (object->hasLimitOrSize() != 0) {
-                        entry->defaults->limit = (int)object->limit();
+                    } else if (object->vfunc_29() != 0) {
+                        entry->defaults->limit = (int)object->vfunc_36();
                     }
-                } else if (object->limit() != 0) {
-                    entry->defaults->limit = (int)object->limit();
+                } else if (object->vfunc_36() != 0) {
+                    entry->defaults->limit = (int)object->vfunc_36();
                 }
             }
             handle->limit = entry->defaults->limit;
@@ -364,10 +364,10 @@ static inline void setDescString(int *dst, char *src) {
     char *v = ((char *)StringPool_Intern((StringPool *)(descPool()), src));
     char *old = (char *)*dst;
     if (old != 0) {
-        PoolDescString *h = (PoolDescString *)(old - 8);
-        int n = h->refs - 1;
-        h->refs = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->chunk, (int)h); }
+        StringTokenHeader *h = (StringTokenHeader *)(old - 8);
+        int n = h->refCount - 1;
+        h->refCount = n;
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
     }
     *dst = (int)v;
 }
@@ -1347,10 +1347,10 @@ void FUN_002f69b0(MemoryContext *self) {
 
 static inline void releaseString_2f25d0(char *p) {
     if (p != 0) {
-        StringHeader *h = (StringHeader *)(p - 8);
-        int n = h->refs - 1;
-        h->refs = n;
-        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->chunk, (int)h); }
+        StringTokenHeader *h = (StringTokenHeader *)(p - 8);
+        int n = h->refCount - 1;
+        h->refCount = n;
+        if (n == 0) { StringChunk_ReleaseHeader((StringChunkOwnerView *)h->owner, (int)h); }
     }
 }
 

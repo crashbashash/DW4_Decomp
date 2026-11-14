@@ -623,7 +623,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     return 1;
 }
 
-void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list) {
+void FUN_0030bce0(igStringObj *src, long long delim, igTDataList<char *> *list) {
     int n = list->_count;
     for (int i = 0; i < n; i++) {
         void **slot = (void **)((char *)list->_data + i * 4);
@@ -637,13 +637,13 @@ void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list) {
         *slot = ni;
     }
     list->_count = 0;
-    if (src->f8 != 0) {
-        char *buf = ((char *)igObject_DuplicateString((int)src, src->f8));
-        for (unsigned i = 0; i < (unsigned)src->f12; i++) {
+    if (src->_buffer != 0) {
+        char *buf = ((char *)igObject_DuplicateString((int)src, src->_buffer));
+        for (unsigned i = 0; i < src->_length; i++) {
             if ((char)delim == buf[i]) buf[i] = 0;
         }
         char *p = buf;
-        while (p < buf + src->f12) {
+        while (p < buf + src->_length) {
             void *s;
             if (p == 0) s = 0;
             else {

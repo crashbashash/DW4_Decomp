@@ -177,11 +177,11 @@ int FUN_00320f70(void *arg0, int arg1) {
     if (base != 0 && arg1 >= 0 && arg1 <= *(int *)((char *)arg0 + 92)) return (int)(base + arg1*16); return 0;
 }
 
-static inline void prepareSink(ElfSymbolSink *sink, int count, unsigned low, unsigned top) {
-    FUN_0030da00((int)sink, count);
-    FUN_0030da10((int)sink, count * 4);
-    FUN_0030da20((igSymbolTableView *)sink, low & ~1023, top);
-    FUN_0030daa0((igSymbolTableView *)sink);
+static inline void prepareSink(igSymbolTableView *table, int count, unsigned low, unsigned top) {
+    FUN_0030da00((int)table, count);
+    FUN_0030da10((int)table, count * 4);
+    FUN_0030da20(table, low & ~1023, top);
+    FUN_0030daa0(table);
 }
 
 void FUN_00321530(const char *in, char *out, int size) {

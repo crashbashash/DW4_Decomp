@@ -198,22 +198,22 @@ void Gap__Core__igMemoryDirEntry__vfunc_33(igMemoryDirEntryView *self, igIGBFile
     self->vfunc_34(file);
 }
 
-void Gap__Core__igMemoryDirEntry__vfunc_34(MemoryDirEntryView *self, igIGBFileView *r) {
-    igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[self->fieldIndex];
-    self->field = f;
+void Gap__Core__igMemoryDirEntry__vfunc_34(igMemoryDirEntryView *self, igIGBFileView *r) {
+    igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[self->_memTypeIndex];
+    self->_memType = (int)f;
     if (((igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) ^ 1) && r->_endianSwap != 0) {
-        f->SwapBytes((void *)self->base, self->size / f->_size);
+        f->SwapBytes((void *)self->_ref, self->_memSize / f->_size);
     }
     if (igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
         int esize = f->_size;
-        int count = self->size / esize;
-        int base = self->base;
+        int count = self->_memSize / esize;
+        int base = self->_ref;
         unsigned char saved = 0;
         int isSwap = igObject_IsKindOf(f, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) & 0xff;
         int i;
         if (isSwap != 0) {
             saved = ((igObjectRefMetaField *)f)->_refCounted;
-            ((igObjectRefMetaField *)f)->_refCounted = self->swapFlag;
+            ((igObjectRefMetaField *)f)->_refCounted = self->_refCounted;
         }
         for (i = 0; i < count; i++) {
             int p = base + i * esize;

@@ -1,5 +1,5 @@
-FieldNameView *igMetaField_FindByName(int arg0, char *arg1) {
-    FieldNameView *found; char *q; char *s8; int n; int i; int j; int fc; MetaObjectNameView *o; __internalObjectList *list; char *nm; FieldNameView *f;
+igMetaField *igMetaField_FindByName(int arg0, char *arg1) {
+    igMetaField *found; char *q; char *s8; int n; int i; int j; int fc; igMetaObject *o; __internalObjectList *list; char *nm; igMetaField *f;
     found = 0;
     if (strncmp(arg1, DAT_004c22b8[0], strlen(DAT_004c22b8[0])) == 0) {
         arg1 = arg1 + strlen(DAT_004c22b8[0]);
@@ -12,15 +12,15 @@ FieldNameView *igMetaField_FindByName(int arg0, char *arg1) {
             goto test;
 body:
             o = 0;
-            if (i < list->_count) { o = ((MetaObjectNameView **)list->_data)[i]; }
-            nm = o->f28;
+            if (i < list->_count) { o = ((igMetaObject **)list->_data)[i]; }
+            nm = (char *)o->_name;
             if (strncmp(nm, arg1, strlen(nm)) == 0) {
                 fc = igMetaObject_GetFieldCount((igMetaObject *)o);
                 j = 0;
                 goto t2;
 b2:
-                f = ((FieldNameView *)igMetaObject_GetFieldAt((igMetaObject *)o, j));
-                if (strcmp(f->f12, s8) == 0) {
+                f = ((igMetaField *)igMetaObject_GetFieldAt(o, j));
+                if (strcmp((char *)f->_fieldName, s8) == 0) {
                     found = f;
                     goto next;
                 }

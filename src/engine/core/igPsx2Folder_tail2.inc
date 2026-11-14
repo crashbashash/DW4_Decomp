@@ -1,6 +1,6 @@
-igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(FolderSelf *self) {
+igSmartPointer<igObject> Gap__Core__igPsx2Folder__vfunc_26(igPsx2Folder *self) {
     FolderEntryWide entry;
-    int handle = sceDopen(self->path);
+    int handle = sceDopen(self->_folderName);
     if (handle < 0) {
         /* The empty result is built with the retaining constructor: retail stores the 0 into the
          * result and re-reads it for the reference-count test. */

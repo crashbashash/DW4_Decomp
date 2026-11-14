@@ -140,18 +140,18 @@ int StringTable_SearchRetained(struct StringTableSearchView *arg0, int arg1, int
     unsigned int lo;
     unsigned int n;
     unsigned int mid;
-    struct StringTableEntry *e;
+    StringTokenHeader *e;
     int s;
     int r;
     lo = 0;
     for (n = arg0->n; n != 0; n >>= 1) {
         mid = lo + n;
         if (arg0->cnt >= mid) {
-            e = (struct StringTableEntry *)arg0->tab[mid - 1];
+            e = (StringTokenHeader *)arg0->tab[mid - 1];
             s = (int)e + 8;
             r = strcmp(arg1, s);
             if (r == 0) {
-                e->rc = e->rc + 1;
+                e->refCount = e->refCount + 1;
                 *arg2 = s;
                 *arg3 = mid - 1;
                 return 1;

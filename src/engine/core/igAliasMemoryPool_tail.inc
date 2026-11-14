@@ -4,19 +4,19 @@ int Gap__Core__igAliasMemoryPool__vfunc_99(void *arg0) {
 
 /* Bind `alias` as the pool this one forwards to. The new alias is retained before the previous one
  * is released (so assigning the same object is safe); the previous alias is destroyed when its
- * reference count drops to zero. The alias is then asked (virtual slot 376) whether it accepts
- * this pool and the low byte of the answer becomes _isReassignable; a null alias clears it. */
-void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, Object *alias) {
-    Object *old;
-    if (alias) alias->refs++;
-    old = (Object *)self->_aliasedMemoryPool;
+ * reference count drops to zero. The alias is then asked (vfunc_94) whether this pool may alias it
+ * and the answer becomes _isReassignable; a null alias clears it. */
+void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, igMemoryPoolView *alias) {
+    igMemoryPoolView *old;
+    if (alias) ((igObject *)alias)->_refCount++;
+    old = (igMemoryPoolView *)self->_aliasedMemoryPool;
     if (old) {
-        old->refs--;
-        if ((old->refs & 0x7fffff) == 0)
+        ((igObject *)old)->_refCount--;
+        if ((((igObject *)old)->_refCount & 0x7fffff) == 0)
             igObject_Destroy(old);
     }
     self->_aliasedMemoryPool = (int)alias;
-    if (alias) self->_isReassignable = alias->Check(self);
+    if (alias) self->_isReassignable = alias->vfunc_94((igMemoryPoolView *)self);
     else self->_isReassignable = 0;
 }
 
@@ -329,7 +329,7 @@ int igAliasMemoryPool_OwnsAllocation(igAliasMemoryPool *self, int poolIndex) {
 
 unsigned int igAliasMemoryPool_GetAllocationSize(igAliasMemoryPool *self,void *old){return ((igMemoryPoolView *)self->_aliasedMemoryPool)->GetAllocationSize(old);}
 
-void igAliasMemoryPool_PrintStatistics(StatsPool *arg0, char *arg1) {
+void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *arg1) {
     int s4;
     long long s3;
     int s2;
@@ -344,22 +344,22 @@ void igAliasMemoryPool_PrintStatistics(StatsPool *arg0, char *arg1) {
         FUN_00304430(DAT_004f90b0);
         FUN_00304680();
     }
-    igAliasMemoryPool *pool = (igAliasMemoryPool *)arg0;
+    igAliasMemoryPool *pool = (igAliasMemoryPool *)self;
     s2 = pool->_nFrees;
     s1 = pool->_nAllocs;
     s4 = pool->_netAllocsHigh;
     s3 = s1 - s2;
-    if (arg0->f97() != 0) {
-        s0 = ((int *)FUN_002f89a0(arg0->f97()));
+    if (self->vfunc_99() != 0) {
+        s0 = ((int *)FUN_002f89a0(self->vfunc_99()));
     } else {
         s0 = text_null;
     }
-    s6 = arg0->f45();
-    s7 = arg0->f46();
-    s8 = arg0->f99();
-    spD0 = (long long)arg0->f100();
-    spC0 = (long long)arg0->f40();
-    FUN_00304430(DAT_004f90c0, s0, s6, s7, s8, spD0, (long long)s1, (long long)s2, (long long)(int)s3, (long long)s4, (long long)spC0, arg0->f89());
+    s6 = self->vfunc_47();
+    s7 = (int)self->vfunc_48();
+    s8 = self->vfunc_101();
+    spD0 = (long long)self->vfunc_102();
+    spC0 = (long long)self->vfunc_42();
+    FUN_00304430(DAT_004f90c0, s0, s6, s7, s8, spD0, (long long)s1, (long long)s2, (long long)(int)s3, (long long)s4, (long long)spC0, self->GetPoolIndex());
     FUN_00304680();
 }
 
@@ -578,21 +578,21 @@ void FUN_002d16a0(int arg0) {
 }
 
 void FUN_002d1770(void) {
-    struct Core *core;
+    ObjectSystemView *core;
     void *p;
     int *h;
     int rc;
 
-    if (((struct Core *)((void * *)g_objectSystem)[0])->f21 == 0) {
+    if (((ObjectSystemView **)g_objectSystem)[0]->preExitDone == 0) {
         FUN_002d27a0((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
     }
     if (--DAT_00586dd8[0] == 0) {
         FUN_002d2800(((void * *)g_objectSystem)[0]);
         FUN_002d2e60((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
-        core = (struct Core *)((void * *)g_objectSystem)[0];
+        core = ((ObjectSystemView **)g_objectSystem)[0];
         if (core != 0) {
-            if (&core->f924) {
-                p = core->f924;
+            if (&core->basePath.p) {
+                p = core->basePath.p;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;
@@ -602,8 +602,8 @@ void FUN_002d1770(void) {
                     }
                 }
             }
-            if (&core->f920) {
-                p = core->f920;
+            if (&core->rootPath.p) {
+                p = core->rootPath.p;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;

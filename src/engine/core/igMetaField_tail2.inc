@@ -611,7 +611,7 @@ int igMetaField_GetMangledName(igMetaField *arg0, void **arg1) {
             temp_s2_3 = strlen(DAT_004c22c0[0]);
             temp_s2_3 = temp_s2_3 + temp_s2_2;
             var_s2 = strlen(temp_s3);
-            var_s2 = ((MangledNameAllocatorView *)(arg1))->vX((int)(var_s2 + temp_s2_3 + 1));
+            var_s2 = (int)((igMemoryPoolView *)(arg1))->Allocate(var_s2 + temp_s2_3 + 1);
             strcpy(var_s2, DAT_004c22b8[0]);
             strcat(var_s2, temp_s3);
             strcat(var_s2, DAT_004c22c0[0]);

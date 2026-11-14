@@ -34,7 +34,7 @@ void igMemoryRefMetaField_ConstructValue(igMemoryRefMetaField *self, int object)
         } else {
             allocator = ((int)igObject_GetAllocator(object));
         }
-        igMetaField_AllocateArray(&status, self, (void *)object, elementCount, (AlignedAllocatorView *)allocator);
+        igMetaField_AllocateArray(&status, self, (void *)object, elementCount, (igMemoryPoolView *)allocator);
     }
 }
 

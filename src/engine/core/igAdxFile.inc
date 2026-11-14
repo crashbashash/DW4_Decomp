@@ -162,7 +162,7 @@ void Gap__igAdxFile__vfunc_26(igFileView *arg0, int arg1, int arg2, int (*arg3)(
 
 void FUN_002e33d0(void) {
     const char *searchPathKey = (const char *)DAT_004c2128[0];
-    int registry = ((LogContext **)g_objectSystem)[0]->f56;
+    int registry = (int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry;
     igStringObj *text;
     int path;
     if (registry != 0) {
