@@ -1,6 +1,6 @@
-void igPluginHelper_Create(int pool) {
+void *igPluginHelper_Create(int pool) {
     igPluginHelper_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPluginHelper_GetMetaObject(void)

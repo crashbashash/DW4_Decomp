@@ -288,7 +288,7 @@ extern "C" void igUnsignedCharArrayMetaField_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igUnsignedCharMetaField_GetPublishedMetaObject(void);
 extern "C" void igUnsignedCharArrayMetaField_InitFields(void);
 extern "C" void igUnsignedCharArrayMetaField_CreateDefaultDescriptor(void);
-extern "C" void igTimer_Create(int arg0);
+extern "C" void *igTimer_Create(int pool);
 extern "C" igMetaObject *igTimer_GetOrCreateMetaObject(void);
 extern "C" void igTimer_EnsureRegistered(void);
 extern "C" void igTimer_Register(void);
@@ -339,7 +339,7 @@ extern "C" void igStructMetaField_Register(void);
 extern "C" void igStructMetaField_GetMetaObjectFunction(void);
 extern "C" void igStructMetaField_InitFields(void);
 extern "C" void igStructMetaField_CreateDefaultDescriptor(void);
-extern "C" void igStringTable_Create(int arg0);
+extern "C" void *igStringTable_Create(int pool);
 extern "C" igMetaObject *igStringTable_GetOrCreateMetaObject(void);
 /* The destructor of an object-reference field, inlined through the field's address. */
 static inline void ReleaseObjectField(int *slot) {
@@ -422,7 +422,7 @@ extern "C" void igSemaphore_SetAbstractProxy(void);
 extern "C" void igPsx2Semaphore_GetMetaObjectFunction(void);
 extern "C" void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1);
 extern "C" void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1);
-extern "C" void igResource_Create(int arg0);
+extern "C" void *igResource_Create(int pool);
 extern "C" igMetaObject *igResource_GetOrCreateMetaObject(void);
 extern "C" int FUN_001432d0(...);
 extern "C" int FUN_001509f0(...);
@@ -482,7 +482,7 @@ extern "C" void igQueue_Register(void);
 extern "C" void igQueue_GetMetaObjectFunction(void);
 extern "C" void igQueue_InitFields(void);
 extern "C" void igStandardQueue_GetMetaObjectFunction(void);
-extern "C" void igPluginHelper_Create(int arg0);
+extern "C" void *igPluginHelper_Create(int pool);
 extern "C" int igPluginHelper_GetVTable(void);
 extern "C" void **igSmartPointer_igPluginRepositoryList_Destruct(void **arg0, long long arg1);
 extern "C" void **igSmartPointer_igLibraryLoader_Destruct(void **arg0, short arg1);
@@ -568,7 +568,7 @@ extern "C" void igMetaObject_EnsureRegistered(void);
 extern "C" void igMetaObject_Register(void);
 extern "C" void igMetaObject_GetMetaObjectFunction(void);
 extern "C" void igMetaObject_InitFields(void);
-extern "C" void igMetaFieldInfo_Create(int arg0);
+extern "C" void *igMetaFieldInfo_Create(int pool);
 extern "C" int igMetaFieldInfo_GetVTable(void);
 extern "C" void igMetaFieldInfo_EnsureRegistered(void);
 extern "C" void igMetaFieldInfo_Register(void);
@@ -625,7 +625,7 @@ extern "C" void igMemoryPool_Register(void);
 extern "C" void igMemoryPool_GetMetaObjectFunction(void);
 extern "C" void igMemoryPool_InitFields(void);
 extern "C" void igArenaMemoryPool_GetMetaObjectFunction(void);
-extern "C" void igMemoryFile_Create(int arg0);
+extern "C" void *igMemoryFile_Create(int pool);
 extern "C" int igMemoryFile_GetVTable(void);
 extern "C" void igMemoryFile_EnsureRegistered(void);
 extern "C" void igMemoryFile_Register(void);
@@ -861,7 +861,7 @@ extern "C" igMetaObject *igEnumMetaField_GetPublishedMetaObject(void);
 extern "C" void igEnumArrayMetaField_InitFields(void);
 extern "C" void igEnumArrayMetaField_CreateDefaultDescriptor(void);
 extern "C" int igDriverDatabase_GetSectionOverrideModeMetaEnum(void);
-extern "C" void igDriverDatabase_Create(int arg0);
+extern "C" void *igDriverDatabase_Create(int pool);
 extern "C" int FUN_001489a0(...);
 extern "C" int FUN_0019eeb0(...);
 extern "C" int FUN_00227e70(...);
@@ -1183,7 +1183,7 @@ extern "C" int igArenaMemoryPool_GetVTable(void);
 extern "C" void igArenaMemoryPool_EnsureRegistered(void);
 extern "C" void igArenaMemoryPool_Register(void);
 extern "C" void igArenaMemoryPool_InitFields(void);
-extern "C" void igStackMemoryPool_Create(int arg0);
+extern "C" void *igStackMemoryPool_Create(int pool);
 extern "C" int igStackMemoryPool_GetVTable(void);
 extern "C" void igStackMemoryPool_EnsureRegistered(void);
 extern "C" void igStackMemoryPool_Register(void);
@@ -1237,7 +1237,7 @@ extern "C" void igPsx2Semaphore_EnsureRegistered(void);
 extern "C" void igPsx2Semaphore_Register(void);
 extern "C" igMetaObject *igSemaphore_GetPublishedMetaObject(void);
 extern "C" void igPsx2Semaphore_InitFields(void);
-extern "C" void igPsx2Media_Create(int arg0);
+extern "C" void *igPsx2Media_Create(int pool);
 extern "C" int igPsx2Media_GetVTable(void);
 extern "C" void igPsx2Media_EnsureRegistered(void);
 extern "C" void igPsx2Media_Register(void);
@@ -1287,9 +1287,9 @@ extern "C" int __do_global_ctors();
 extern "C" int __do_global_dtors();
 extern "C" void FUN_002d1660(void);
 extern "C" void FUN_002d1690(int extra0);
-extern "C" int FUN_002d1e40(...);
+extern "C" void igObjectSystem_Initialize(struct ObjectSystemView *self);
 extern "C" void igObjectSystem_Acquire(int arg0);
-extern "C" int FUN_002d2800(...);
+extern "C" void igObjectSystem_Terminate(struct ObjectSystemView *self);
 extern "C" void igObjectSystem_Release(void);
 extern "C" int igMetaEnum_GetEmpty(void);
 extern "C" void igObjectSystem_SetIniText(int arg0);
@@ -3872,11 +3872,12 @@ typedef struct ObjectSystemView {
     char unknown1[3];
     int bootMetaObjectCount;      /* metaRegistry count when the boot registration finished */
     int bootMetaFieldCount;       /* meta-field registry count at the same point */
-    int metaObjectCount;
-    char unknown16[4];
+    int metaObjectCount;          /* metaRegistry count when igObjectSystem_Initialize finished */
+    int metaFieldCount;           /* meta-field registry count at the same point */
     unsigned char started;        /* set first at start-up, cleared last at shut-down */
     unsigned char preExitDone;    /* the "exitPre" marker has been sent */
-    char unknown22[2];
+    unsigned char exitDone;       /* set once igObjectSystem_Exit has run, before the exit callbacks */
+    char unknown23[1];
     void *metaRegistry;
     char unknown28[8];
     void *metaEnumList;           /* igMetaEnum objects registered through igObjectSystem_AppendMetaEnum */
@@ -3885,15 +3886,19 @@ typedef struct ObjectSystemView {
     igMemoryPoolView *bootstrapPool; /* the allocator of record 0 (Bootstrap) */
     igMemoryPoolView *systemPool;    /* the allocator of record 4 (System) */
     igRegistry *configRegistry;
-    char unknown60[4];
+    igDriverDatabase *driverDatabase;
     igResource *resource;         /* the resource manager: named directories and objects */
-    char unknown68[12];
+    igMemoryPoolView *resourceTempPool;   /* the resource manager's temporary pool over a raw buffer */
+    unsigned int resourceTempPoolSize;    /* "resourceTempMemoryPoolSize": no temporary pool when zero */
+    igPluginHelper *pluginHelper;
     igSymbolTable *symbolTable;   /* loaded from symbolsFileName at memory set-up */
     igEventTrackerView *globalEventTracker; /* useGlobalEventTracker's tracker; receives the "exitPre" and "exitIn" markers */
     igMemoryPoolView *driverDataPool; /* the allocator of record 20 (DriverData) when it is its own pool */
     char unknown92[4];
     igMemoryPoolView *fastPool;       /* the allocator of record 7 (Fast) when it is its own pool */
-    char unknown100[12];
+    int copyVTables;              /* copy the vtables of the classes listed in CLASSES_TO_VTABLE_CACHE into fastPool */
+    igStringTableView *vtableClassNames; /* the class names of that section */
+    char unknown108[4];
     igObject *retainedObject;     /* released at shut-down */
     unsigned char useGlobalEventTracker;
     unsigned char saveEventTrackerOnExit;     /* MemoryContext::vfunc_56 runs at exit */
@@ -3901,7 +3906,8 @@ typedef struct ObjectSystemView {
     unsigned char showMemoryStatisticsOnExit;
     unsigned char showObjectStatisticsOnExit;
     unsigned char reportHeaderVersionMismatch; /* igObjectSystem_CheckHeaderVersion reports a mismatch only when 1 */
-    char unknown122[2];
+    unsigned char warnOnDllDateMismatch;
+    char unknown123[1];
     void *eventTrackerInitialCapacity;
     int eventTrackerEventTypeFilter;
     int eventTrackerMarkerTypeFilter;
@@ -3913,7 +3919,7 @@ typedef struct ObjectSystemView {
     char eventTrackerFileName[128];
     char systemPoolEventTrackerFileName[128];
     char symbolsFileName[128];
-    char unknown912[4];
+    int stringPoolStatisticsLevel;
     int vtableProbeOffset;        /* zero: the EnsureRegistered probes read the vtable word through it */
     igStringRef rootPath;         /* IG_ROOT from the environment */
     igStringRef basePath;
@@ -3921,6 +3927,21 @@ typedef struct ObjectSystemView {
     igMemoryPoolView *getSystemPool() { return systemPool; }
     int getConfigRegistry() { return (int)configRegistry; }
 } ObjectSystemView;
+extern "C" unsigned char g_loadAlchemyIni;      /* read alchemy.ini at set-up; set by default */
+extern "C" char *g_alchemyIniPath;              /* the ini file to read, when one is given */
+extern "C" char *g_alchemyIniText;              /* otherwise the ini text igObjectSystem_SetIniText hands over */
+extern "C" char *g_alchemyVersionString;
+extern "C" char text_useFileIO[];
+extern "C" char text_Alchemy[];
+extern "C" char text_plugins[];
+extern "C" char text_metafield_info[];
+extern "C" char text_failOnDllVersionMismatch[];
+extern "C" char text_warnOnDllDateMismatch[];
+extern "C" char text_resourceTempMemoryPoolSize[];
+extern "C" char text_stringPoolStatisticsLevel[];
+extern "C" char newline_percent_s_newline_newline[];
+extern "C" char text_CLASSES_TO_VTABLE_CACHE[];
+extern "C" char text_system[];
 extern "C" igMetaField *g_igMetaObjectNameField[4];
 extern "C" int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className);
 extern "C" void igObjectSystem_AddRegistrationCallback(ObjectSystemView *arg0, int (*arg1)(int));
@@ -4546,7 +4567,7 @@ class igInfoView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual int findObjectReference(int directory, int object);
     virtual int GetFieldValueByName(int name);
-    virtual igResult vfunc_25(igRegistry *ini, char *section);
+    virtual igResult ReadFromRegistry(igRegistry *ini, char *section);
     virtual igResult vfunc_26(igRegistry *ini, int index);
     virtual void print();                                                       /* vfunc_27 */
     unsigned int _refCount; int _name; int _directory; unsigned char _resolveState;
@@ -4586,6 +4607,7 @@ struct igResourceView : public igObject {
     unsigned char _autoCompatibility; char _pad41[3];
     igTDataList<igStringObj *> *_alignmentStrings;
     igTDataList<int> *_alignmentValues;
+    int addDirectory(igObject *directory);
 };
 extern "C" igResourceView *g_globalContext;
 extern "C" char g_igIGBFile_readFileLabel[64];
@@ -5056,7 +5078,7 @@ public:
     virtual void vfunc_43();
     virtual int Shutdown();
     virtual void InitializeRecordNames();
-    virtual void d44();
+    virtual igResult Initialize();
     virtual int RemoveAllAllocators();
     virtual igResult CreateDefaultContextInfo(int config, char *name);
     virtual int ReleaseContextInfo();
@@ -5200,6 +5222,7 @@ extern "C" char text_Handle[];
 extern "C" igMemoryPoolInfo *igMemoryPoolContextInfo_FindMemoryPoolInfoByHandle(igMemoryPoolContextInfo *arg0, char *arg1);
 extern "C" char *g_memoryPoolsSectionName[4];
 extern "C" igResult igMemoryPoolContextInfo_ReadFromRegistry(igMemoryPoolContextInfoView *self, igRegistry *ini, char *section);
+extern "C" igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo *self, igRegistry *ini, int index);
 extern "C" char text_igMemoryPoolContextInfo_percent_s[];
 extern "C" void igMemoryPoolContextInfo_Print(igMemoryPoolContextInfoView *self);
 extern "C" igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, char *section);
@@ -5373,7 +5396,7 @@ extern "C" void igMetaObject_AddField(igMetaObject *self, void *object);
 extern "C" void igMetaObject_AddFieldAndFinalize(igMetaObject *arg0, void *arg1);
 extern "C" int igMetaObject_AddToMetaObjectList(igTDataList<igMetaObject *> *list, igMetaObject *object);
 extern "C" void igMetaObject_AssignTypeId(igMetaObject *meta);
-extern "C" void igMetaObject_CopyVTable(int *out, igMetaObject *s, igMemoryPoolView *a);
+extern "C" igResult igMetaObject_CopyVTable(igMetaObject *meta, igMemoryPoolView *pool);
 extern "C" void igMetaObject_RunStaticInit(StaticInitCallbacks *(*initialize)());
 extern "C" void igNamedObject_SetName(igNamedObject *arg0, int arg1);
 /* Name-or-default is a ?: expression, not an if with an empty then-arm. */
@@ -7228,7 +7251,7 @@ public:
     virtual long long getResolution();
     virtual double getElapsedSeconds();
     virtual long long getElapsedTime();
-    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
+    virtual void start(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30();
     virtual void setResetTime(long long nanoseconds);
     virtual void d32();
     virtual long long getResetTime();

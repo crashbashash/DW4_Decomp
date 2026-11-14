@@ -1,6 +1,6 @@
-void igTimer_Create(int pool) {
+void *igTimer_Create(int pool) {
     igTimer_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585788), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585788), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igTimer_GetOrCreateMetaObject(void) {

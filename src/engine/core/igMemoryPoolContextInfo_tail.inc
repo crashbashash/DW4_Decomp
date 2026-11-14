@@ -2047,6 +2047,76 @@ igResult igMemoryPoolContextInfo_ReadFromRegistry(igMemoryPoolContextInfoView *s
     return g_resultFailure;
 }
 
+static inline const char *poolInfoName(igMemoryPoolInfo *info) {
+    return info->_name != 0 ? (const char *)info->_name : (const char *)emptyString;
+}
+
+/* Read every key of section `index` of `ini` (the memory pools section by default) as a memory pool info:
+ * the key names the info and its value names the section the info reads its settings from. An info the
+ * context already holds is reset first; a new one is added once it has read. An info that takes over
+ * another info's handle replaces it. */
+igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo *self, igRegistry *ini, int index) {
+    if (ini == 0) {
+        ini = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+    }
+    if (ini == 0) {
+        return g_resultFailure;
+    }
+    if (index == -1) {
+        index = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName[0], 0);
+        if (index == -1) {
+            return g_resultFailure;
+        }
+    }
+    unsigned int count = igRegistry_GetNumValuesInSection((int)ini, index);
+    igSmartPointer<igStringObj> key;
+    igSmartPointer<igStringObj> infoSection;
+    igSmartPointer<igMemoryPoolInfo> poolInfo;
+    for (unsigned int i = 0; i < count; i++) {
+        if (!igRegistry_GetKeyName((int)ini, index, i, &key.p)) {
+            break;
+        }
+        if (igRegistry_GetValueStringObj((int)ini, index, igStringObj_Text(key), &infoSection.p, (const char *)emptyString_4, 0)
+            && infoSection.p != 0 && infoSection->_length != 0) {
+            bool created;
+            poolInfo = igMemoryPoolContextInfo_FindMemoryPoolInfoByName(self, (int)igStringObj_Text(key));
+            if (poolInfo.p == 0) {
+                igMemoryPoolView *pool = igObject_GetAllocator((int)self);
+                poolInfo.release();
+                poolInfo.p = (igMemoryPoolInfo *)igMemoryPoolInfo_Create((int)pool);
+                created = true;
+            } else {
+                { igMemoryPoolInfo *info = poolInfo; SETSTR(_aliasedTo) }
+                poolInfo->_size = 0;
+                poolInfo->_maxSize = 0;
+                poolInfo->_address = 0;
+                { igMemoryPoolInfo *info = poolInfo; SETSTR(_class) }
+                { igMemoryPoolInfo *info = poolInfo; SETSTR(_arenaType) }
+                { igMemoryPoolInfo *info = poolInfo; SETSTR(_source) }
+                { igMemoryPoolInfo *info = poolInfo; SETSTR(_scope) }
+                created = false;
+            }
+            igInfoView *loader = (igInfoView *)poolInfo.p;
+            if (loader->ReadFromRegistry(ini, igStringObj_Text(infoSection)) == g_resultSuccess) {
+                if (poolInfoName(poolInfo) == 0 || *poolInfoName(poolInfo) == 0) {
+                    igNamedObject_SetName((igNamedObject *)poolInfo.p, (int)igStringObj_Text(key));
+                }
+                char *handle = (char *)poolInfo->_handleName;
+                if (handle != 0 && *handle != 0) {
+                    igMemoryPoolInfo *previous = igMemoryPoolContextInfo_FindMemoryPoolInfoByHandle(self, handle);
+                    if (previous != poolInfo.p) {
+                        igMemoryPoolContextInfo_RemoveMemoryPoolInfo(self, previous);
+                    }
+                }
+            }
+            if (created) {
+                igMemoryPoolContextInfo_AddMemoryPoolInfo(self, (int)poolInfo.p);
+            }
+        }
+    }
+    return g_resultSuccess;
+}
+
 /* Print the context's name, then each of its memory pool infos after a blank line. */
 void igMemoryPoolContextInfo_Print(igMemoryPoolContextInfoView *self) {
     int count = igMemoryPoolContextInfo_GetMemoryPoolInfoCount(self);

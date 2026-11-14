@@ -5,9 +5,9 @@ int igDriverDatabase_GetSectionOverrideModeMetaEnum(void) {
     return g_sectionOverrideModeMetaEnum[0];
 }
 
-void igDriverDatabase_Create(int pool) {
+void *igDriverDatabase_Create(int pool) {
     igDriverDatabase_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igDriverDatabase_GetMetaObject(void)

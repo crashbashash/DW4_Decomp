@@ -177,8 +177,8 @@ void igMetaObject_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMetaObject_fieldTable[0], (igMetaField ***)&g_igMetaObject_fieldDescriptors[0], &g_igMetaObject_fieldOffsets[0], base);
 }
 
-void igMetaFieldInfo_Create(int pool) {
+void *igMetaFieldInfo_Create(int pool) {
     igMetaFieldInfo_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585CB8), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585CB8), (igMemoryPoolView *)pool);
 }
 

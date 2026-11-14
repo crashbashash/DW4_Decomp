@@ -572,7 +572,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         igResource_EnsureRegistered();
         probe = (int *)(&DAT_00530d80[0]);
         FUN_002d1690((int)&probe);
-        FUN_002d1e40(((int *)g_objectSystem)[0]);
+        igObjectSystem_Initialize(((ObjectSystemView **)g_objectSystem)[0]);
     }
     igObjectSystem_CheckHeaderVersion((void *)(((int *)g_objectSystem)[0]), headerVersion);
 }
@@ -587,7 +587,7 @@ void igObjectSystem_Release(void) {
         igObjectSystem_PreExit((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
     }
     if (--g_objectSystemRefCount[0] == 0) {
-        FUN_002d2800(((void * *)g_objectSystem)[0]);
+        igObjectSystem_Terminate(((ObjectSystemView **)g_objectSystem)[0]);
         igObjectSystem_Shutdown((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
         core = ((ObjectSystemView **)g_objectSystem)[0];
         if (core != 0) {

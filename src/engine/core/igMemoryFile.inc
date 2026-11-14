@@ -1,6 +1,6 @@
-void igMemoryFile_Create(int pool) {
+void *igMemoryFile_Create(int pool) {
     igMemoryFile_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igMemoryFile_GetMetaObject(void)

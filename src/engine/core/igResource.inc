@@ -1,6 +1,6 @@
-void igResource_Create(int pool) {
+void *igResource_Create(int pool) {
     igResource_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585978), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585978), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igResource_GetOrCreateMetaObject(void) {

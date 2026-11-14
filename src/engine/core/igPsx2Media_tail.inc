@@ -1,6 +1,6 @@
-void igPsx2Media_Create(int pool) {
+void *igPsx2Media_Create(int pool) {
     igPsx2Media_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2Media_GetMetaObject(void)

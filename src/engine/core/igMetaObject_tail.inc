@@ -496,9 +496,9 @@ void igMetaObject_AssignTypeId(igMetaObject *meta){
     }
 }
 
-void igMetaObject_CopyVTable(int *out, igMetaObject *s, igMemoryPoolView *a) {
-    if (s->_vTablePointer == 0) { *out = g_resultFailure.v; return; }
-    if (s->_abstractState != 0) { *out = g_resultFailure.v; return; }
+igResult igMetaObject_CopyVTable(igMetaObject *s, igMemoryPoolView *a) {
+    if (s->_vTablePointer == 0) return g_resultFailure;
+    if (s->_abstractState != 0) return g_resultFailure;
     if (a == 0) a = ((igMemoryPoolView *)Memory_GetDefaultAllocator());
     int *p; int *base = (int *)s->_vTablePointer;
     p = base;
@@ -506,10 +506,10 @@ void igMetaObject_CopyVTable(int *out, igMetaObject *s, igMemoryPoolView *a) {
     while (*p != 0) p++;
     int n = (char *)p - (char *)base;
     int *nb = (int *)a->Allocate(n);
-    if (nb == 0) { *out = g_resultFailure.v; return; }
+    if (nb == 0) return g_resultFailure;
     memcpy(nb, (int *)s->_vTablePointer, n);
     s->_vTablePointer = (int)nb;
-    *out = g_resultSuccess.v;
+    return g_resultSuccess;
 }
 
 int igMetaObject_GetPoolName(int *object)

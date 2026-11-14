@@ -1,6 +1,6 @@
-void igStringTable_Create(int pool) {
+void *igStringTable_Create(int pool) {
     igStringTable_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858B0), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858B0), (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igStringTable_GetOrCreateMetaObject(void) {

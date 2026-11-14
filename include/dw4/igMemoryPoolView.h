@@ -33,7 +33,7 @@ public:
     virtual int Deactivate();                                                      /* slot 30, byte 128 */
     virtual int isActive();                                                      /* slot 31, byte 132 */
     virtual igResult EnableAllocationLock(int);                                              /* slot 32, byte 136 */
-    virtual void d33();
+    virtual igResult SetSize(int size);                                            /* slot 33, byte 140 */
 #ifndef long
     virtual long long GetSize();                                                /* slot 34, byte 144 */
 #else

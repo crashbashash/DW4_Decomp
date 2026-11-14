@@ -71,6 +71,153 @@ void igObjectSystem_InitPaths(ObjectSystemView *self) {
     self->basePath = (char *)text_dot_dot;
 }
 
+/* The current allocator when objects follow their owner's, otherwise the system pool. */
+static inline igMemoryPoolView *ownerOrSystemPool() {
+    igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator();
+    return g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
+}
+
+/* Give the file an empty prefix. */
+static inline void clearPrefix(const igSmartPointer<igObject> &holder) {
+    char *interned;
+    /* matching construct: register-allocator tracer — the file pointer, numbered after the token, takes s1 */
+    igPsx2File *file = (igPsx2File *)holder.p;
+    interned = (char *)StringPool_Intern(InternedStrings::get(), (char *)0);
+    releaseString((char *)file->_prefix);
+    file->_prefix = (int)interned;
+}
+
+static inline void setName(igDirectory *directory, char *name) {
+    char *interned = (char *)StringPool_Intern(InternedStrings::get(), name);
+    releaseString((char *)directory->_name);
+    directory->_name = (int)interned;
+}
+
+static inline void setRegistryFile(igRegistry *registry, const igSmartPointer<igObject> &value) {
+    igObject *file = value.p;
+    if (file != 0) file->_refCount = file->_refCount + 1;
+    igRelease((igObject *)registry->_registryFile);
+    registry->_registryFile = (int)file;
+}
+
+static inline void setTemporaryMemoryPool(igResource *resource, igObject *pool) {
+    if (pool != 0) pool->_refCount = pool->_refCount + 1;
+    igRelease((igObject *)resource->_temporaryMemoryPool);
+    resource->_temporaryMemoryPool = (int)pool;
+}
+
+/* Set the object system up after its classes are registered: read alchemy.ini (from a file, or from the
+ * text the game embeds), open the media, create the driver database, the plugin helper and the resource
+ * manager with its "system" directory, read the core settings, and cache the vtables the ini lists. */
+void igObjectSystem_Initialize(ObjectSystemView *self) {
+    igObjectSystem_InitPaths(self);
+    self->configRegistry = (igRegistry *)igRegistry_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    if (g_loadAlchemyIni && FUN_00305cf0()) {
+        if (g_alchemyIniPath != 0) {
+            igSmartPointer<igObject> file((igObject *)igPsx2File_Create((int)ownerOrSystemPool()));
+            clearPrefix(file);
+            setRegistryFile(self->configRegistry, file);
+            igRegistry_Load(self->configRegistry, g_alchemyIniPath, (char *)emptyString_4);
+        } else {
+            if (g_alchemyIniText != 0) {
+                igSmartPointer<igObject> file((igObject *)igMemoryFile_Create((int)ownerOrSystemPool()));
+                igMemoryFile_AddMemoryFileEntry((int)text_alchemy_ini, (int)g_alchemyIniText, strlen(g_alchemyIniText));
+                setRegistryFile(self->configRegistry, file);
+            }
+            igRegistry_Load(self->configRegistry, (char *)emptyString_4, (char *)emptyString_4);
+        }
+    }
+    bool useFileIO = true;
+    igRegistry_GetValueBool((int)self->configRegistry, 2, text_useFileIO, (char *)&useFileIO, 1, 0);
+    if (useFileIO) {
+        igSmartPointer<igObject> media((igObject *)igPsx2Media_Create((int)ownerOrSystemPool()));
+        if (((igPsx2Media *)media.p)->_initialized == 1) {
+            igMedia_AddMedia((int)media.p);
+            igMedia_SetDefaultMedia((int)media.p);
+            igMediaFile_EnsureRegistered();
+            g_igFile_metaObject[0]->_abstractProxy = (int)igMediaFile_GetPublishedMetaObject;
+        }
+    } else {
+        igPsx2_LoadIopModule((char *)text_libsd_irx, 1, 0, 0);
+    }
+    if (g_igPsx2_atfilePrefix[0] != 0) {
+        igPsx2_SetupOutputFiles();
+    }
+    self->driverDatabase = (igDriverDatabase *)igDriverDatabase_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    igDriverDatabase_GatherProperties(self->driverDatabase, 0);
+    igIGBFile_EnsureRegistered();
+    self->pluginHelper = (igPluginHelper *)igPluginHelper_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    igPluginHelper_LoadPluginsFromRegistry(self->pluginHelper);
+    igPluginHelper_AddRepository(self->pluginHelper, (int)text_Alchemy, (int)text_plugins, 1);
+    self->metaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
+    self->metaFieldCount = g_metaFieldList[0]->_count;
+    igReport_ReadSettings();
+    self->resource = (igResource *)igResource_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    g_globalContext = (igResourceView *)self->resource;
+    igSmartPointer<igObject> directory((igObject *)igDirectory_Create((int)ownerOrSystemPool()));
+    setName((igDirectory *)directory.p, (char *)text_system);
+    ((igResourceView *)self->resource)->addDirectory(directory);
+    igDirectory_AddLoadedRef((igDirectoryView *)directory.p);
+    igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, (int)text_metafield_info);
+    igDirectory_AddInfo(directory.p, metaFieldInfo.p);
+    igRegistry_GetValueBool((int)self->configRegistry, 2, text_failOnDllVersionMismatch, (char *)&self->reportHeaderVersionMismatch, 1, 0);
+    igRegistry_GetValueBool((int)self->configRegistry, 2, text_warnOnDllDateMismatch, (char *)&self->warnOnDllDateMismatch, 1, 0);
+    igRegistry_GetValueInt((int)self->configRegistry, 2, text_resourceTempMemoryPoolSize, (int *)&self->resourceTempPoolSize, 0, 0);
+    if (g_currentMemoryContext[0] != 0) {
+        g_currentMemoryContext[0]->Initialize();
+    }
+    if (self->resourceTempPoolSize != 0) {
+        self->resourceTempPool = (igMemoryPoolView *)igStackMemoryPool_Create(0);
+        int memory = (int)Memory_AllocateDefaultBuffer(self->resourceTempPoolSize);
+        memset(memory, 0, self->resourceTempPoolSize);
+        self->resourceTempPool->SetRawMemory(memory, self->resourceTempPoolSize, 1);
+        self->resourceTempPool->SetSize(self->resourceTempPool->GetMaxSize());
+        if (self->useGlobalEventTracker && self->saveEventTrackerOnExit) {
+            igEventTrackerView *tracker = (igEventTrackerView *)igEventTracker_Create(Memory_GetNonTrackedAllocator());
+            igEventTracker_SetCapacity((int)tracker, 0x4000);
+            tracker->Initialize();
+            self->resourceTempPool->SetEventTracker(tracker);
+        }
+        self->resourceTempPool->activate();
+        setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
+    }
+    igRegistry_GetValueInt((int)self->configRegistry, 2, text_stringPoolStatisticsLevel, &self->stringPoolStatisticsLevel, 0, 0);
+    igAdxFile_LoadSearchFilePath();
+    g_igIGBFile_loadTimer[0] = (igLongTimerView *)igTimer_Create((int)self->systemPool);
+    g_igIGBFile_loadTimer[0]->start();
+    igReport_Printf(newline_percent_s_newline_newline, g_alchemyVersionString);
+    igReport_Flush();
+    if (self->copyVTables != 0) {
+        int section = igRegistry_GetSectionIndex(self->configRegistry, text_CLASSES_TO_VTABLE_CACHE, 1);
+        if (section != -1) {
+            int count = igRegistry_GetValueCount(self->configRegistry);
+            int i;
+            self->vtableClassNames = (igStringTableView *)igStringTable_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+            igStringTable_SetCapacity((int)self->vtableClassNames, 512);
+            igStringTable_SetHashCapacity((int)self->vtableClassNames, 16);
+            igStringTable_Reserve(self->vtableClassNames);
+            for (i = 0; i < count; i++) {
+                igRegistryValue *entry = (igRegistryValue *)igRegistry_GetValueEntry(self->configRegistry, i);
+                if (entry != 0 && entry->_section == section) {
+                    igStringObj *value = (igStringObj *)entry->_value;
+                    if (value == 0 || igStringObj_Text(value) == 0 || *igStringObj_Text(value) != '0') {
+                        char *className = igStringObj_Text((igStringObj *)entry->_valueName);
+                        igStringTable_AppendString(self->vtableClassNames, className);
+                        if (self->fastPool != 0) {
+                            igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByName(self, className);
+                            if (meta != 0) {
+                                igMetaObject_CopyVTable(meta, self->fastPool);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    StringTable_SetSynchronization(1);
+}
+
 igMetaObject *igMediaFile_GetPublishedMetaObject(void) {
     return g_igMediaFile_metaObject[0];
 }
@@ -84,6 +231,106 @@ void igObjectSystem_PreExit(ObjectSystemView *self) {
         tracker->vfunc_46();
         igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)&text_exitPre[0]);
     }
+}
+
+/* Release one reference the object system holds, without testing for none. */
+static inline void releaseObject(igObject *object) {
+    object->_refCount = object->_refCount - 1;
+    if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object);
+}
+
+/* Undo igObjectSystem_Initialize: stop the resource manager, run the exit callbacks, drop the classes
+ * registered since the set-up, and release the configuration registry, the resource manager and the
+ * other managers the set-up created. */
+void igObjectSystem_Terminate(ObjectSystemView *self) {
+    igResource *resource;
+    igMemoryPoolView *pool;
+    igEventTrackerView *tracker;
+    int count;
+    int i;
+    igResource_RemoveIGBFiles(self->resource);
+    if (self->resource->_asyncLoadState) {
+        igResource_StopAsyncLoading((igResourceView *)self->resource);
+    }
+    resource = self->resource;
+    igRelease((igObject *)resource->_temporaryMemoryPool);
+    resource->_temporaryMemoryPool = 0;
+    resource = self->resource;
+    igRelease((igObject *)resource->_objectMemoryPool);
+    resource->_objectMemoryPool = 0;
+    resource = self->resource;
+    igRelease((igObject *)resource->_dataMemoryPool);
+    resource->_dataMemoryPool = 0;
+    StringTable_SetSynchronization(0);
+    count = g_secondaryAllocatorList[0]->count;
+    for (i = 0; i < count; i++) {
+        pool = g_secondaryAllocatorList[0]->data[i];
+        if (pool != 0) {
+            pool->EnableAllocationLock(0);
+            tracker = (igEventTrackerView *)pool->getEventTracker();
+            if (tracker != 0) {
+                igEventTracker_SetThreadSafe(tracker, 0);
+            }
+        }
+    }
+    count = g_primaryAllocatorList[0]->count;
+    for (i = 0; i < count; i++) {
+        pool = g_primaryAllocatorList[0]->data[i];
+        if (pool != 0) {
+            pool->EnableAllocationLock(0);
+            tracker = (igEventTrackerView *)pool->getEventTracker();
+            if (tracker != 0) {
+                igEventTracker_SetThreadSafe(tracker, 0);
+            }
+        }
+    }
+    if (g_currentMemoryContext[0] != 0) {
+        g_currentMemoryContext[0]->ReleaseContextInfo();
+    }
+    igObjectSystem_Exit(self);
+    self->exitDone = 1;
+    for (i = ((CallbackArray *)self->exitCallbacks)->count; --i >= 0;) {
+        ((void (*)())((CallbackArray *)self->exitCallbacks)->data[i])();
+    }
+    igArray_Destruct((CallbackArray *)self->exitCallbacks, 1);
+    self->exitCallbacks = 0;
+    igResource_ClearDirectories(self->resource);
+    releaseObject((igObject *)self->driverDatabase);
+    releaseObject((igObject *)g_igIGBFile_loadTimer[0]);
+    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList[0], self->metaFieldCount);
+    for (i = ((__internalObjectList *)self->metaRegistry)->_count - 1; i >= self->metaObjectCount; i--) {
+        InternalObjectList_SetAtRetained((__internalObjectList *)self->metaRegistry, i, (igObject *)0);
+    }
+    releaseObject((igObject *)self->pluginHelper);
+    self->pluginHelper = 0;
+    if (self->resourceTempPool != 0) {
+        self->resourceTempPool->Deactivate();
+        int memory = self->resourceTempPool->GetRawMemory();
+        if (memory != 0) {
+            self->resourceTempPool->SetRawMemory(0, 0, 0);
+            Memory_FreeBuffer((void *)memory);
+        }
+        resource = self->resource;
+        igRelease((igObject *)resource->_temporaryMemoryPool);
+        resource->_temporaryMemoryPool = 0;
+        releaseObject((igObject *)self->resourceTempPool);
+        self->resourceTempPool = 0;
+    }
+    if (self->vtableClassNames != 0) {
+        releaseObject((igObject *)self->vtableClassNames);
+        self->vtableClassNames = 0;
+    }
+    if (self->symbolTable != 0) {
+        releaseObject((igObject *)self->symbolTable);
+        self->symbolTable = 0;
+    }
+    releaseObject((igObject *)self->configRegistry);
+    releaseObject((igObject *)self->resource);
+    igReport_RestoreDefaults();
+    igReport_SetOutputFile(0);
+    igReport_SetErrorFile(0);
+    self->rootPath = (char *)0;
+    self->basePath = (char *)0;
 }
 
 void igObjectSystem_Exit(ObjectSystemView *self) {

@@ -1378,6 +1378,30 @@ Units are named by their source file.
 - **A compare written toward the larger side branches through `at`.** `total + used <= max` gives retail's
   `sltu at,max,sum; bnez at` and puts the refused path out of line; `max >= sum` makes a register of the
   compare. `alignment > 8` likewise for `slti at,v0,9`. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x322a70).
+- **A member call loads its argument before its object.**
+  - *Symptom:* `lw a1,124(sp); jal; lw a0,64(s0)` where the candidate has `lw a0,64(s0); jal; lw a1,124(sp)`:
+    the same two loads, the object's issued first. Casts, `get()` and an inline member wrapper change nothing.
+  - *Cause (not traced):* MWCC writes a member function's arguments before its `this`; the plain call wrote the
+    object pointer first here. An inline wrapper is expanded and its call is plain again.
+  - *Spelling:* declare the out-of-line member on the class view (`int addDirectory(igObject *directory);`) and
+    map its mangled name to the retail address in the unit's `externals`.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d1e40).
+- **A virtual call's object read in its own statement is loaded ahead of a conditional argument.** Retail
+  loads the object into `a1` in the slot of the branch that picks the text argument (`bnez a3,L; lw a1,148(sp)`);
+  written in the call, the object is loaded at the join after the conditional expression. A local
+  (`igInfoView *loader = (igInfoView *)poolInfo.p;`) before the call gives retail's order. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2f8ff0).
+- **Discarded `igResult` temporaries take frame slots in the order they are made.** The first made has the
+  highest slot. Calls written in an inline helper make their temporaries when the helper is expanded, after the
+  caller's own, so two allocator loops moved into a helper gave their results the two lowest slots where retail
+  has them above the one the function body makes later. Written in place, the loops give retail's slots. A
+  named result local (`int copied; f(&copied, ...)`) takes a slot ahead of every temporary; the call returning
+  `igResult` makes a temporary where it is. *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d2800, 0x2d1e40).
+- **An inline's parameter is numbered before its locals.** A string setter inline that takes the object as a
+  parameter gives the interned token the first saved register and the object the second; retail has them the
+  other way in one of two call sites. The tracer asks for the object's id after the token's; taking the holder
+  by reference and reading the object into a local declared after the token gives it. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x2d1e40).
 
 ### `asm` and `volatile`
 
