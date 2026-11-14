@@ -40,7 +40,7 @@ void FUN_00304b10(void *self) {
                     for (j = 0; j < (held = values)->_count; j++) {
                         StringList_CopyRetained(&string, values, j);
                         text = string;
-                        FUN_00304840((igPluginHelper *)self, (int)(keyText(key)), (int)text);
+                        FUN_00304840((igPluginHelper *)self, (int)(keyText(key)), (const char *)text);
                         releaseString(string);
                     }
                     dropValues_304b10(held);

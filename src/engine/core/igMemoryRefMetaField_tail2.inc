@@ -226,7 +226,7 @@ igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *s
     return self;
 }
 
-void igMemoryRefMetaField_Destruct(void) {
-    igRefMetaField_Destruct();
+void igMemoryRefMetaField_Destruct(igMemoryRefMetaField *self) {
+    igRefMetaField_Destruct((igRefMetaField *)self);
 }
 

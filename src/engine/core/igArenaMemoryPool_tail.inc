@@ -93,3 +93,39 @@ void igArenaMemoryPool_Register(void) {
     );
 }
 
+void igArenaMemoryPool_InitFields(void) {
+    int base;
+    igMetaObject *meta = g_igArenaMemoryPool_metaObject[0];
+    int defaultHeapCheck;
+    int defaultMessageLevel;
+    igRawRefMetaField *arenaState;
+    igObjectRefMetaField *eventTracker;
+    igObjectRefMetaField *allocationLock;
+    igEnumMetaField *heapIntegrityCheckLevel;
+    igEnumMetaField *messageLevel;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igArenaMemoryPool_ctorTable, 18);
+    arenaState = (igRawRefMetaField *)igMetaObject_GetFieldAt(meta, base);
+    arenaState->_resetMethod = 3;
+    arenaState->_persistent = 0;
+    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base + 5), 0xFFFFFFFFFFFFFFFFULL);
+    FUN_0030eda0((void **)igMetaObject_GetFieldAt(meta, base + 8), 8);
+    eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 9);
+    eventTracker->_metaObject = (int)FUN_002c57c0();
+    allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 11);
+    allocationLock->_metaObject = (int)FUN_002ba690();
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 12), -1);
+    heapIntegrityCheckLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
+    defaultHeapCheck = DAT_005871f8[0];
+    FUN_002dc7a0((igMetaFieldView *)heapIntegrityCheckLevel, &defaultHeapCheck);
+    heapIntegrityCheckLevel->_getMetaEnumFunction = (int)FUN_002cda50;
+    messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 14);
+    defaultMessageLevel = DAT_004c2368[0];
+    FUN_002dc7a0((igMetaFieldView *)messageLevel, &defaultMessageLevel);
+    messageLevel->_getMetaEnumFunction = (int)FUN_002cd9f0;
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 15), DAT_004c2370[0]);
+    FUN_0030e9b0((void **)igMetaObject_GetFieldAt(meta, base + 17), 16);
+    igMetaObject_NameFields(meta, (const char **)g_igArenaMemoryPool_fieldTable, (igMetaField ***)DAT_004c18b0, DAT_004c1900, base);
+    g_igArenaMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+}
+

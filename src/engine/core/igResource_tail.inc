@@ -147,6 +147,10 @@ igIGBFileView *FUN_00309640(igResource *self, igIGBFileView *file) {
  * member itself, an unmarked read the early return's release shares; the shared class's accessors
  * are `const`, and a read through one is not shared with the destructor's (the original accessor
  * left an unmarked read, as a non-const one does). */
+bool igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory) {
+    return !directory->_loadPendingState;
+}
+
 void igResource_UnloadDirectory(igResource *self, int name) {
     igSmartPointer<igObject> found = FUN_003087a0(self, name);
     igIGBFile *entry = (igIGBFile *)found.p;

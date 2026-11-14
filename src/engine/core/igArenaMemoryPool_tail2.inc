@@ -77,9 +77,88 @@ void Gap__Core__igArenaMemoryPool__vfunc_88(void *self0) {
  if (arena->blockCount < 0 || arena->blockCapacity < 0 || arena->blockCount > arena->blockCapacity) { return; }
  for (i = 0; i < arena->blockCount; i += 2) {
    int *p = &arena->blocks[i];
-   igArenaMemoryPool_DisplayOutstandingAllocationsBlock(s, i, p[0], p[1]);
+   igArenaMemoryPool_DisplayOutstandingAllocationsBlock(s, i, (char *)p[0], (char *)p[1]);
  }
  FUN_00304430(DAT_004f95c8);
  FUN_00304680();
+}
+
+/* Walks the chunks of system block `index` from `cur` to `end` and prints each chunk still in use
+ * (its successor's previous-in-use bit is set); a bad block bound or chunk size stops the walk with a
+ * message. */
+void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
+    char *hi = self->getHighestAddress();
+    char *lo = self->getLowestAddress();
+    TaggedBlockHeader *n;
+    unsigned int size = 0;
+    int count = 0;
+    bool ok = false;
+    if (cur < lo || hi < cur) {
+        FUN_00304430(DAT_004fbf10, index, cur, lo, hi);
+        FUN_00304680();
+        return;
+    }
+    if (end < lo || hi < end) {
+        FUN_00304430(DAT_004fbf90, index, end, lo, hi);
+        FUN_00304680();
+        return;
+    }
+    if (end < cur) {
+        FUN_00304430(DAT_004fc010, index, end, cur);
+        FUN_00304680();
+        return;
+    }
+    if (!((TaggedBlockHeader *)cur)->used) {
+        FUN_00304430(DAT_004fc090);
+        FUN_00304680();
+        return;
+    }
+    while (cur < end) {
+        TaggedBlockHeader *h = (TaggedBlockHeader *)cur;
+        unsigned int sz = h->size;
+        int big = h->big;
+        if (big == 1) {
+            sz += h->sizeHigh << 19;
+        }
+        sz = (sz + 3) & ~3;
+        size = sz + (h->words + 1) * 4;
+        int min = self->_smallestChunkSize;
+        n = (TaggedBlockHeader *)(cur + size);
+        if (size < min) {
+            if (end - cur <= min) {
+                ok = true;
+                break;
+            }
+            unsigned int nsz;
+            if (n->big == 0) {
+                nsz = n->size;
+            } else {
+                nsz = n->size + (n->sizeHigh << 19);
+            }
+            if (nsz < min) {
+                if (end - (char *)n <= min * 2) {
+                    ok = true;
+                    break;
+                }
+            }
+            goto bad;
+        }
+        if ((char *)n > end || (char *)n < cur) {
+            goto bad;
+        }
+        if ((char *)n != end && n->used) {
+            char *allocation = cur + (big == 0 ? 4 : 12);
+            FUN_00304430((const char *)DAT_004fc120, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
+            FUN_00304680();
+        }
+        cur = (char *)n;
+        count++;
+    }
+    if (cur != end && !ok) {
+bad:
+        FUN_00304430(DAT_004fc150, cur, index, count, size);
+        FUN_00304680();
+        return;
+    }
 }
 

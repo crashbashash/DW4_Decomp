@@ -31,7 +31,7 @@ int Gap__Core__igRawRefArrayMetaField__vfunc_50(igRawRefArrayMetaField *self, in
     d = (int)dst;
     start = d;
     for (i = 0; i < self->_num; i++) {
-        d += igMemoryRefMetaField_WriteRawFieldMem(self, s, d, a3, a4);
+        d += igMemoryRefMetaField_WriteRawFieldMem((igMetaFieldView *)self, (int *)s, (void *)d, a3, a4);
         s += 4;
     }
     return ((d - start) + 3) & ~3;

@@ -15,6 +15,21 @@ int ObjectList_AppendRetained(igObjectList *list, igObject *object) {
     return List_AppendWord((igDataList *)list, (int)object);
 }
 
+/* Append every object of `source`, taking a reference on each. */
+void ObjectList_AppendRetainedList(igTDataList<igObject *> *self, igTDataList<igObject *> *source) {
+    igObject **data = source->_data;
+    int count = source->_count;
+    int i;
+    igObject *object;
+    for (i = 0; i < count; i++) {
+        object = data[i];
+        if (object != 0) {
+            object->_refCount = object->_refCount + 1;
+        }
+    }
+    List_AppendWords((igDataList *)self, source->_count, (const int *)source->_data);
+}
+
 void ObjectList_ResizeRetained(igTDataList<igObject *> *arg0, int arg1) {
     int n;
     int j;
@@ -58,7 +73,7 @@ static inline int find(igTDataList<igObject *> *l, igObject **vp, int i) {
     return -1;
 }
 
-igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start, int extra3) {
+igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start) {
     igObject *v;
     int i;
     *(igObject **)&v = value;

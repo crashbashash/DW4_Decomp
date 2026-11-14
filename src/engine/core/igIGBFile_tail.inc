@@ -422,6 +422,24 @@ igResult FUN_002e4e60(igIGBFile *file) {
     return g_resultSuccess;
 }
 
+igResult FUN_002e4f60(igIGBFileView *self) {
+    int count = self->_count;
+    int i;
+    self->_indexBufferSize = count * 2 + 8;
+    self->_indexBuffer = self->_temporaryMemoryPool->AllocateAligned(self->_indexBufferSize, 16);
+    ((int *)self->_indexBuffer)[0] = self->_indexBufferSize;
+    ((int *)self->_indexBuffer)[1] = count;
+    for (i = 0; i < count; i++) {
+        igTDataList<igDirEntryView *> *unique = (igTDataList<igDirEntryView *> *)self->_uniqueEntryList;
+        ((short *)((char *)self->_indexBuffer + 8))[i] = unique->sortedFind(&self->_data[i]);
+    }
+    if (self->_endianSwap != 0) {
+        self->imf->SwapBytes(self->_indexBuffer, 2);
+        self->smf->SwapBytes((char *)self->_indexBuffer + 8, count);
+    }
+    return g_resultSuccess;
+}
+
 igResult FUN_002e5110(igIGBFileView *self) {
     int n;
     int i;

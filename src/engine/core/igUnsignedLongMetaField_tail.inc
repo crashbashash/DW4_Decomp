@@ -56,11 +56,9 @@ void Gap__Core__igUnsignedLongMetaField__vfunc_02(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void FUN_0030ec10(void **arg0, long long arg1) {
-    long long sp18;
-
-    sp18 = arg1;
-    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
+void FUN_0030ec10(void **field, unsigned long long value) {
+    unsigned long long defaultValue = value;
+    ((igMetaFieldView *)field)->SetDefault(&defaultValue);
 }
 
 /* igUnsignedLongArrayMetaField vtable slot 27 (+0x6c): constant leaf returning 8, the byte size of

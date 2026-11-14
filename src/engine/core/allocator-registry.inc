@@ -17,6 +17,14 @@ int igAllocator_EncodeIndex(igMemoryPoolView *allocator){
     return result;
 }
 
+/* Decode igAllocator_EncodeIndex: the low bit picks the registry, the rest is the index into it. */
+igMemoryPoolView *igAllocator_ResolveEncodedIndex(int index) {
+    if (index & 1) {
+        return g_secondaryAllocatorList[0]->data[index >> 1];
+    }
+    return g_primaryAllocatorList[0]->data[index >> 1];
+}
+
 void FUN_002f0750(void) {
 
 }

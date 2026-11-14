@@ -555,6 +555,36 @@ Units are named by their source file.
   `own_thread_p` and `mark_target_live_regs` print each decision and the live set behind it. *Unit:*
   `src/cri/sfh.c`.
 
+### Delay slots (b52)
+
+- **A deleted jump to the next block stops fall-through filling for the whole function.**
+  - *Symptom:* most conditional branches keep a `nop` where another spelling fills the slot from the following
+    instruction (`beq v0,a0,L; nop; li v1,2` where siblings have `beq v0,a0,L; li v1,2`). Copies from a branch target
+    still fill slots, and the copied original stays in place as dead code (`bnez s4,L+4; slti at,…` with the same
+    `slti` still at `L`). Every slot in the function changes together, whether the cause comes before or after it in
+    the source. Small test files reproduce it.
+  - *Cause:* when the code generator deletes an unconditional jump whose target is the next block, the scheduler stops
+    filling slots from the fall-through for the whole function. The front end has already removed its own redundant
+    jumps, so only jumps made later count. Three constructs produce one:
+    - a `return;` closing the last `if` block of a function that returns `void`, or `igResult`, which comes back
+      through a hidden pointer (`if (bad) { report(); return; }` as the final statement);
+    - a conditional expression whose condition ends in a logical not as the last operand of `&&` or `||`
+      (`f(x == -1 && !p ? a : b)`; the same condition in an `if` does not count, and neither does `p == 0`);
+    - a `switch` with `default:` written before its cases.
+  - *Reading it:* when retail has the `nop` slots, look for which of these the function used. One that also changes
+    the branch it sits in (`!p` turns `beqz p,T; b F` into `bnez p,F`) is the wrong one. An `int` or pointer return
+    has no `return;` form; there the trigger has to be one of the other two.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp`: the arena pool's block walks (0x311d10, a trailing `return;` after the
+    bad-chunk report) and the arena block check (0x312790, `igResult`). The page pool's memory operation (0x326410)
+    shows the effect but has not been matched.
+- **A commutative add takes the plain variable as its first operand.** The front end orders the operands of `+` so
+  that a leaf comes first. An inline call counts as complex until it is expanded, and a conditional expression is
+  always complex. To get retail's `addu v1,a0,v1` with the payload in `a0`, the payload has to be a variable. When
+  the value is only computed after the guards of a check, that means splitting the `&&` chain into nested `if`s and
+  assigning the variable between them: `if (level > 0 && ml > 0) { size = …; if (((Chunk *)((char *)h + (size +
+  header)))->used && ml > 0) … }` compiles to the same branches as the flat chain. *Unit:*
+  `src/engine/core/CoreLibrary.cpp` (0x30fa90).
+
 ### Declaration order and evaluation order
 
 - **Declaration order, getters and helper argument order decide ids.**

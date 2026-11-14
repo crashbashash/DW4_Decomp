@@ -24,7 +24,7 @@ public:
     virtual void vfunc_24();
 #endif
     virtual void d23();
-    virtual int vfunc_26(int);                                                   /* slot 24, byte 104 */
+    virtual int vfunc_26();                                                      /* slot 24, byte 104: the raw memory block */
     virtual int Trim(int);                                                       /* slot 25, byte 108 */
     virtual void d26();
     virtual int vfunc_29();                                                      /* slot 27, byte 116 */
@@ -62,15 +62,16 @@ public:
 #endif
     virtual void vfunc_50(int, int, int);                                        /* slot 48, byte 200 */
     virtual void vfunc_51();                                                     /* slot 49, byte 204 */
-    virtual void d50(); virtual void d51();
+    virtual void vfunc_52(long long, long long, int);                                        /* slot 50, byte 208: global statistics update */
+    virtual void *vfunc_53();                                                    /* slot 51, byte 212: allocate one element */
     virtual void *Allocate(unsigned int size);                                   /* slot 52, byte 216 */
     virtual void *AllocateAligned(unsigned int size, unsigned short alignment);  /* slot 53, byte 220 */
     virtual void *vfunc_56(int count, int size);                                 /* slot 54, byte 224 */
-    virtual void d55();
+    virtual void *vfunc_57(int count, int size, unsigned short alignment);       /* slot 55, byte 228 */
     virtual void *Reallocate(void *block, unsigned int size);                    /* slot 56, byte 232 */
     virtual void *ReallocateAligned(void *block, unsigned int size, unsigned short alignment); /* slot 57, byte 236 */
     virtual int vfunc_58(void *block);
-    virtual void d59();
+    virtual void *vfunc_61(const char *string, unsigned short alignment);        /* slot 59, byte 244: aligned string copy */
     virtual igResult gangAlloc(int count, unsigned int *sizes, void **blocks);                                  /* slot 60, byte 248 */
     virtual igResult gangAllocAligned(int count, unsigned int *sizes, void **blocks, unsigned short *alignments); /* slot 61, byte 252 */
     virtual void gangFree(int count, void **blocks);                                                            /* slot 62, byte 256 */

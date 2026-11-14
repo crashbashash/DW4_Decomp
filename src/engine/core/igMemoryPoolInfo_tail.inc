@@ -1,3 +1,38 @@
+/* Read the pool info from its section of `ini` (the configuration registry by default). Without a
+ * section, the defaults section names it under the info's own name. */
+igResult Gap__Core__igMemoryPoolInfo__vfunc_25(igInfoView *self, igRegistry *ini, char *section) {
+    igSmartPointer<igStringObj> value;
+    int index = -1;
+    int defaults;
+    if (ini == 0) {
+        ini = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+    }
+    if (ini == 0) {
+        return g_resultFailure;
+    }
+    if (section == 0 || *section == 0) {
+        defaults = FUN_00306360(ini, DAT_004c2228[0], 0);
+        if (defaults == -1) {
+            return g_resultFailure;
+        }
+        if (FUN_00306770((int)ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
+                         (const char *)DAT_004f7910, 0) == 0) {
+            return g_resultFailure;
+        }
+        section = igStringObj_Text(value.p);
+    }
+    if (section != 0 && *section != 0) {
+        index = FUN_00306360(ini, section, 0);
+        if (index == -1) {
+            return g_resultFailure;
+        }
+    }
+    if (self->vfunc_26(ini, index) == g_resultSuccess) {
+        return g_resultSuccess;
+    }
+    return g_resultFailure;
+}
+
 void Gap__Core__igMemoryPoolInfo__vfunc_26(int *arg0, int *arg1, int arg2, int arg3) {
     
     if (arg2 == 0) {
@@ -46,4 +81,45 @@ void Gap__Core__igMemoryPoolInfo__vfunc_18(igMemoryPoolInfo *arg0) {
     SETSTR(_releaseMessages)
     arg0->_eventTrackerCapacity = 0;
 }
+
+/* A string field as printed: an unset one prints as the empty text. */
+#define TEXT_OR_NONE(text) ((text) != 0 ? (text) : (const char *)DAT_004f7910)
+
+void igMemoryPoolInfo_Print(igMemoryPoolInfo *info) {
+    FUN_00304430((const char *)DAT_004facc0, TEXT_OR_NONE(info->_name != 0 ? (const char *)info->_name : (const char *)emptyString));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004face0, TEXT_OR_NONE((const char *)info->_handleName));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fad00, TEXT_OR_NONE((const char *)info->_aliasedTo));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fad20, info->_size);
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fad40, info->_maxSize);
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fad60, info->_address);
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fad90, TEXT_OR_NONE((const char *)info->_class));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fadb0, TEXT_OR_NONE((const char *)info->_arenaType));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fadd0, TEXT_OR_NONE((const char *)info->_source));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fadf0, TEXT_OR_NONE((const char *)info->_scope));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fae10, TEXT_OR_NONE((const char *)info->_debugOptions));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fae30, TEXT_OR_NONE((const char *)info->_releaseOptions));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fae50, TEXT_OR_NONE((const char *)info->_debugChecking));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fae70, TEXT_OR_NONE((const char *)info->_releaseChecking));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004fae90, TEXT_OR_NONE((const char *)info->_debugMessages));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004faeb0, TEXT_OR_NONE((const char *)info->_releaseMessages));
+    FUN_00304680();
+    FUN_00304430((const char *)DAT_004faed0, info->_eventTrackerCapacity);
+    FUN_00304680();
+}
+#undef TEXT_OR_NONE
 

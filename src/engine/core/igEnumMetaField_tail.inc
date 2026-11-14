@@ -1,14 +1,12 @@
 int Gap__Core__igEnumMetaField__vfunc_56(void *arg0, int *arg1, int arg2) {
     int sp4C;
     int sp48;
-    int sp44;
     int temp_v0;
 
     sp4C = 0;
     temp_v0 = sscanf(arg2, &DAT_004f9588[0], arg1, &sp4C);
     if (((temp_v0 == 0) || (temp_v0 == -1)) && (arg2 != 0)) {
-        igMetaEnum_GetValueByName(&sp44, (igMetaEnum *)(((int (*)())*(int *)((char *)(arg0) + 52))()), (const char *)arg2, &sp48);
-        if (g_resultSuccess.v == sp44) {
+        if (g_resultSuccess == igMetaEnum_GetValueByName((igMetaEnum *)(((int (*)())*(int *)((char *)(arg0) + 52))()), (const char *)arg2, &sp48)) {
             *arg1 = sp48;
             sp4C = strlen(arg2);
         }

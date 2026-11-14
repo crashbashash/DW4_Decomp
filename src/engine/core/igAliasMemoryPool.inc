@@ -109,6 +109,29 @@ igMetaObject *FUN_002cd480(void) {
     return g_igMemoryPool_metaObject[0];
 }
 
+void igAliasMemoryPool_InitFields(void) {
+    igObjectRefMetaField *eventTracker;
+    igObjectRefMetaField *allocationLock;
+    int base;
+    igObjectRefMetaField *aliasedPool;
+    igMetaObject *meta = g_igAliasMemoryPool_metaObject[0];
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igAliasMemoryPool_ctorTable, 14);
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base), -1);
+    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base + 4), 0xFFFFFFFFFFFFFFFFULL);
+    eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
+    eventTracker->_metaObject = (int)FUN_002c57c0();
+    allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 10);
+    allocationLock->_metaObject = (int)FUN_002ba690();
+    FUN_0030eda0((void **)igMetaObject_GetFieldAt(meta, base + 12), 8);
+    aliasedPool = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
+    aliasedPool->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
+    aliasedPool->_construct = 0;
+    aliasedPool->_destruct = 0;
+    igMetaObject_NameFields(meta, (const char **)g_igAliasMemoryPool_fieldTable, (igMetaField ***)DAT_004c1630, DAT_004c1670, base);
+    g_igAliasMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+}
+
 int FUN_002cd5c0(void) {
     if (DAT_00586a28[0] == 0) {
         DAT_00586a28[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&DAT_004c16b0[0], &DAT_004c16c0[0], 4));

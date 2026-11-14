@@ -173,9 +173,9 @@ int FUN_002f2bc0(int arg0, char *arg1) {
     int i;
     char *s = arg1;
     if (s != 0 && *s != 0) {
-        if (strncmp(s, &text_kIGMemoryPoolHandle[0], 0x13) == 0) {
+        if (strncmp(s, (const char *)text_kIGMemoryPoolHandle, 0x13) == 0) {
             s += 0x13;
-        } else if (strncmp(s, &text_kIGMemoryPool[0], 0xD) == 0) {
+        } else if (strncmp(s, (const char *)text_kIGMemoryPool, 0xD) == 0) {
             s += 0xD;
         }
         for (i = 0; i < 0x2E; i++) {
@@ -1149,7 +1149,7 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
                     if (fl & 1) {
                         int a;
                         slot->storageFlags = fl & ~1;
-                        a = ((igMemoryPoolView *)o)->vfunc_26(fl);
+                        a = ((igMemoryPoolView *)o)->vfunc_26();
                         if (a != 0) {
                             void *own;
                             sp6C = ((igMemoryPoolView *)o)->vfunc_24(0, 0, 0);
@@ -1164,7 +1164,7 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
                     } else if (fl & 2) {
                         int a;
                         slot->storageFlags = fl & ~2;
-                        a = ((igMemoryPoolView *)o)->vfunc_26(fl);
+                        a = ((igMemoryPoolView *)o)->vfunc_26();
                         if (a != 0) {
                             long long b = (int)((igMemoryPoolView *)o)->vfunc_36();
                             sp68 = ((igMemoryPoolView *)o)->vfunc_24(0, 0, 0);
@@ -1938,6 +1938,10 @@ int FUN_002f8ae0(int *p, int extra1)
     return ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)p + 20)), (igObject *)extra1);
 }
 
+void FUN_002f8af0(igMemoryPoolContextInfo *info, igMemoryPoolInfo *poolInfo) {
+    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)info->_memoryPoolInfos, (igObject *)poolInfo, 0);
+}
+
 void FUN_002f8b20(void *arg0) {
     int *s2 = (int *)*(int *)((char *)arg0 + 20);
     int n = s2[2];
@@ -2041,4 +2045,20 @@ igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(igMemoryPoolContextInfoVie
         return g_resultSuccess;
     }
     return g_resultFailure;
+}
+
+/* Print the context's name, then each of its memory pool infos after a blank line. */
+void Gap__Core__igMemoryPoolContextInfo__vfunc_27(igMemoryPoolContextInfoView *self) {
+    int count = FUN_002f8a50(self);
+    int i;
+    igInfoView *info;
+    FUN_00304430(DAT_004fabc0, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString);
+    FUN_00304680();
+    for (i = 0; i < count; i++) {
+        if ((info = (igInfoView *)FUN_002f8a60(self, i)) != 0) {
+            FUN_00304430(DAT_004f95c8);
+            FUN_00304680();
+            info->print();
+        }
+    }
 }

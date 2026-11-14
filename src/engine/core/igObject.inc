@@ -9,7 +9,7 @@ int FUN_002ea0d0(void **arg0, int arg1, int arg2) {
         if (igObject_IsKindOf((void *)f, (igMetaObject *)g_igRefMetaField_metaObject[0]) != 0) {
           w = *(int *)((char *)arg0 + f->_offset);
           if (w == arg2) {
-            FUN_002e2d30(arg1, arg0, f->_fieldName, arg2);
+            FUN_002e2d30((igDirectoryView *)arg1, (igInfoView *)arg0, (char *)f->_fieldName, (igObject *)arg2);
             return 1;
         }
         }

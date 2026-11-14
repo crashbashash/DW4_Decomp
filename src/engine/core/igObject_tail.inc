@@ -1,9 +1,3 @@
-int **FUN_002effb0(int **arg0) {
-    igObject_ConstructHeader((igObject *)arg0);
-    *arg0 = &DAT_0052f620[0];
-    return arg0;
-}
-
 int Gap__Core__igObject__vfunc_00(int extra0)
 {
     return Gap__Core__igObject__vfunc_00__002ff0a0(extra0);
@@ -28,6 +22,10 @@ int FUN_002f0060(int arg0, int arg1, int arg2) {
 void FUN_002f00a0(void *arg0) {
     *(unsigned char *)((char *)arg0 + 104) = (unsigned char) GPR_00554994;
     FUN_002f0370((void **)arg0);
+}
+
+void thunk_FUN_002f0460(igMemoryPoolView *pool) {
+    FUN_002f0460((void **)pool);
 }
 
 void FUN_002f00c0(void) {
@@ -64,7 +62,7 @@ igResult FUN_002f0180(int arg1, int *arg2) {
     igMemoryDictionaryView *o = DAT_00586f68[0];
     if (o != 0) {
         int x = o->vfunc_30(arg1, &sp3C).get(); if (x == g_resultSuccess.v) {
-            *arg2 = igAllocator_ResolveEncodedIndex(sp3C);
+            *arg2 = (int)igAllocator_ResolveEncodedIndex(sp3C);
             if (*arg2 != 0) {
                 return igResult(g_resultSuccess.v);
             }

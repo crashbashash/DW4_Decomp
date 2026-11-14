@@ -159,6 +159,19 @@ void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int i
     }
 }
 
+/* Prints `<indent><field> = 0x<value>`, then the referenced object's own fields when `depth` asks
+ * for them. */
+void Gap__Core__igObjectRefMetaField__vfunc_41(igObjectRefMetaField *self, char *object, int depth, const char *indent) {
+    FUN_00304430(DAT_004faef0, indent, self->_fieldName, *(int *)(object + self->_offset));
+    FUN_00304680();
+    if (depth != 0) {
+        void **referenced = *(void ***)(object + self->_offset);
+        if (referenced != 0) {
+            FUN_00300490(referenced, depth, (int)indent);
+        }
+    }
+}
+
 void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3) {
     int temp_a0;
 
@@ -254,8 +267,8 @@ void *FUN_00303c60(igObjectRefMetaField *arg0, void *arg1) {
     return arg0;
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_02(void) {
-    igRefMetaField_Destruct();
+void Gap__Core__igObjectRefMetaField__vfunc_02(igObjectRefMetaField *self) {
+    igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
 void FUN_00303cd0(igObjectStringMap *self, int name, void *object) {
@@ -523,6 +536,42 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
     target->_location = (int)text;
     repository.p->_locationType = locationType;
     ObjectList_AppendRetained((igObjectList *)helper->_repositoryList, (igObject *)repository.p);
+}
+
+/* Store an interned copy of `location` as the repository's location, releasing the one it held. */
+static inline void setRepositoryLocation(const igSmartPointer<igPluginRepository> &repository, const char *location) {
+    igPluginRepository *target = repository.p;
+    char *text = (char *)StringPool_Intern(InternedStrings::get(), location);
+    releaseString((const char *)target->_location);
+    target->_location = (int)text;
+}
+
+/* The same for the part of `path` past a root prefix of `rootLength` characters. */
+static inline void setRepositoryLocation(const igSmartPointer<igPluginRepository> &repository, const char *path, const int &rootLength) {
+    igPluginRepository *target = repository.p;
+    char *text = (char *)StringPool_Intern(InternedStrings::get(), path + rootLength);
+    releaseString((const char *)target->_location);
+    target->_location = (int)text;
+}
+
+/* Add a plugin repository, recording whether its path is under $(AlchemyRoot) (1),
+ * $(ApplicationRoot) (2) or neither (0); a recognised root is stripped from the stored location. */
+void FUN_00304840(igPluginHelper *self, int name, const char *path) {
+    static int alchemyRootLength = strlen(DAT_004c22c8[0]);
+    static int applicationRootLength = strlen(DAT_004c22d0[0]);
+    igSmartPointer<igPluginRepository> repository((igPluginRepository *)FUN_002bc930((int)igObject_GetAllocator((int)self)));
+    igNamedObject_SetName((igNamedObject *)repository.get(), name);
+    if (strncmp(path, DAT_004c22c8[0], alchemyRootLength) == 0) {
+        setRepositoryLocation(repository, path, alchemyRootLength);
+        repository.get()->_locationType = 1;
+    } else if (strncmp(path, DAT_004c22d0[0], applicationRootLength) == 0) {
+        setRepositoryLocation(repository, path, applicationRootLength);
+        repository.get()->_locationType = 2;
+    } else {
+        setRepositoryLocation(repository, path);
+        repository.get()->_locationType = 0;
+    }
+    ObjectList_AppendRetained((igObjectList *)self->_repositoryList, (igObject *)repository.get());
 }
 
 static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, int path, const int &skip) {

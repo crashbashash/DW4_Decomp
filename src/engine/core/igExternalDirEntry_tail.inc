@@ -98,6 +98,44 @@ int Gap__Core__igExternalDirEntry__vfunc_44(igExternalDirEntryView *arg0, int ar
     return arg0->_ref != 0;
 }
 
+/* Drops the reference the clone was created with; the smart pointer holding it keeps its own. */
+static inline void dropCreationReference(igVirtualObject *object) {
+    object->_refCount = object->_refCount - 1;
+    if ((object->_refCount & 0x7FFFFF) == 0) {
+        igObject_Destroy(object);
+    }
+}
+
+/* Resolve the entry through the resource manager's directory of its name, creating and registering
+ * that directory if it is missing. When the directory cannot resolve it, the entry loads its file and
+ * then calls `loadFunction`; a resolved entry is cloned into the directory so later lookups find it. */
+int Gap__Core__igExternalDirEntry__vfunc_43(igExternalDirEntryView *self, int loadFunction) {
+    igMemoryPoolView *pool;
+    igResource *resource = ((ObjectSystemView *)g_objectSystem[0])->resource;
+    igSmartPointer<igObject> directory = FUN_003087a0(resource, self->_directoryName);
+    if (directory.get() == 0) {
+        pool = igObject_GetAllocator((int)self);
+        directory.release();
+        directory.p = (igObject *)FUN_002c72c0((int)pool);
+        FUN_002d8fe0((igDirectoryView *)directory.get(), self->_directoryName);
+        FUN_00308850((int *)resource, (int)directory.get());
+    }
+    ((igDirectoryDispatchView *)directory.get())->resolveExternalEntry(self);
+    if (self->_ref == 0) self->vfunc_44(loadFunction);
+    if (self->_ref == 0 && loadFunction != 0) ((void (*)(igExternalDirEntryView *))loadFunction)(self);
+    if (self->_ref != 0) {
+        igSmartPointer<igDirEntryView> entry(self->cloneViaMetadata(1), kRetainReference);
+        dropCreationReference(entry.get());
+        igNamedObject_SetName((igNamedObject *)entry.get(), self->_entryName);
+        entry->_refType = 0;
+        entry->vfunc_23(self->_ref);
+        entry->_index = ((igDirectoryView *)directory.get())->_count;
+        ObjectList_AppendRetained((igObjectList *)directory.get(), (igObject *)entry.get());
+        return 1;
+    }
+    return 0;
+}
+
 void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0) {
     Gap__Core__igDirEntry__vfunc_11((int)arg0);
     arg0->_resolveMethod = 2;

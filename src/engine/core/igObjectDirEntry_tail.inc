@@ -105,6 +105,13 @@ void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *obj
     self->_ref = (int)object;
 }
 
+/* Write the referenced object's persistent fields at the file's object cursor and move past them. */
+void Gap__Core__igObjectDirEntry__vfunc_40(igObjectDirEntry *self, igIGBFileView *file) {
+    int cursor = file->objectCursor();
+    file->setObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)self->_ref, (int *)cursor, (igIGBFile *)file,
+                                                                  (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
+}
+
 void Gap__Core__igObjectDirEntry__vfunc_38(igObjectDirEntryView *arg0) {
     igObjectDispatchView *a = (igObjectDispatchView *)arg0->_ref;
     if (a != 0) {
@@ -150,6 +157,24 @@ void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1) {
 void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self)
 {
     ((igObjectDispatchView *)self->_ref)->vfunc_15();
+}
+
+/* Read the referenced object's fields from the file's object cursor and move past them. */
+void Gap__Core__igObjectDirEntry__vfunc_33(igObjectDirEntry *self, igIGBFileView *file) {
+    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+    int read = FUN_002fff90(object, (FieldRecordHead *)file->objectCursor(), (igIGBFile *)file,
+                            (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+    int cursor = file->objectCursor();
+    file->setObjectCursor(cursor + read);
+}
+
+/* Resolve the referenced object's references to other entries the same way, from the object cursor. */
+void Gap__Core__igObjectDirEntry__vfunc_34(igObjectDirEntry *self, igIGBFileView *file) {
+    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+    int read = FUN_00300250(object, (FieldRecordHead *)file->objectCursor(), (igDirectoryView *)file,
+                            (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+    int cursor = file->objectCursor();
+    file->setObjectCursor(cursor + read);
 }
 
 static inline void addRef(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }

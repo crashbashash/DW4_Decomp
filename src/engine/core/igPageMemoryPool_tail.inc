@@ -7,7 +7,7 @@ void *FUN_003257d0(igPageMemoryPool *arg0) {
 }
 
 void *FUN_00325810(igPageMemoryPool *arg0, int extra1) {
-    igMemoryPool_CopyConstruct((int **)arg0);
+    igMemoryPool_CopyConstruct((igMemoryPool *)arg0, (igMemoryPool *)extra1);
     *(int *)((char *)(arg0) + 0) = (int)(&DAT_005311f0[0]);
     arg0->_allocationLock = 0;
     arg0->_eventTracker = 0;

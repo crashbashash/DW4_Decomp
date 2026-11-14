@@ -25,7 +25,7 @@ int igMemoryRefArrayMetaField_WriteRawFieldMem(void *arg0, void *arg1, void *arg
     int i;
     src = (void **)arg1; off = (char *)arg2; start = off;
     for (i = 0; i < *(int *)((char *)(arg0) + 80); i++) {
-        off += igMemoryRefMetaField_WriteRawFieldMem(arg0, src, off, arg3, arg4);
+        off += igMemoryRefMetaField_WriteRawFieldMem((igMetaFieldView *)arg0, (int *)src, off, arg3, arg4);
         src++;
     }
     return ((off - start) + 3) & ~3;

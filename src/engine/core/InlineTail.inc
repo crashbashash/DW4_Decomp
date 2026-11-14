@@ -395,9 +395,9 @@ int Gap__Core__igMallocMemoryPool__vfunc_22(void) {
     return ((int *)g_igMallocMemoryPool_metaObject)[0];
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_12(void) {
+void Gap__Core__igMallocMemoryPool__vfunc_12(igMemoryPoolView *self) {
     GPR_00554dbc = (GPR_00554dbc + -1);
-    thunk_FUN_002f0460();
+    thunk_FUN_002f0460(self);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_31(void) {

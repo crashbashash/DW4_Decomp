@@ -81,6 +81,29 @@ void thunk_igPageMemoryPool_GetMetaObject(void) {
     igPageMemoryPool_GetMetaObject();
 }
 
+void igPageMemoryPool_InitFields(void) {
+    igMetaObject *meta = g_igPageMemoryPool_metaObject[0];
+    int base = igMetaObject_GetFieldCount(meta);
+    int defaultMessageLevel;
+    igObjectRefMetaField *eventTracker;
+    igObjectRefMetaField *allocationLock;
+    igEnumMetaField *messageLevel;
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igPageMemoryPool_ctorTable, 7);
+    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base), 0xFFFFFFFFFFFFFFFFULL);
+    eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
+    eventTracker->_metaObject = (int)FUN_002c57c0();
+    allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
+    allocationLock->_metaObject = (int)FUN_002ba690();
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
+    messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
+    defaultMessageLevel = DAT_004c2600[0];
+    FUN_002dc7a0((igMetaFieldView *)messageLevel, &defaultMessageLevel);
+    messageLevel->_getMetaEnumFunction = (int)FUN_002cd5c0;
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 6), g_igPageMemoryPool_defaultPoolOptionFlags[0]);
+    igMetaObject_NameFields(meta, (const char **)g_igPageMemoryPool_fieldTable, (igMetaField ***)DAT_004c1720, DAT_004c1740, base);
+    g_igPageMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+}
+
 int FUN_002cd990(void) {
     if (DAT_00586a70[0] == 0) {
         DAT_00586a70[0] = ((int)igMetaEnum_Create((char *)&text_ArenaMemoryPoolFlags[0], (char **)&DAT_004c1760[0], &DAT_004c1790[0], 0xA));

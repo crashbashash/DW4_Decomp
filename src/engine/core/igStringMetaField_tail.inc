@@ -337,8 +337,8 @@ void *FUN_0030b2c0(void *arg0, void *arg1) {
     return arg0;
 }
 
-void Gap__Core__igStringMetaField__vfunc_02(void) {
-    igRefMetaField_Destruct();
+void Gap__Core__igStringMetaField__vfunc_02(igStringMetaField *self) {
+    igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
 void FUN_0030b320(igStringObj *arg0, int arg1, int arg2) {
@@ -450,6 +450,10 @@ bool FUN_0030b670(igStringObj *o, char *out) {
 
 void FUN_0030b720(int arg0, int arg1, int arg2) {
     FUN_0030b7e0(arg0, arg2, arg1);
+}
+
+void FUN_0030b730(int string, void *format, float value) {
+    FUN_0030b7e0(string, (int)format, value);
 }
 
 void FUN_0030b770(int arg0, int arg1, int arg2) {
@@ -667,7 +671,6 @@ int thunk_strcasecmp(const char *s1, const char *s2)
 {
     return strcasecmp(s1, s2);
 }
-
 
 int FUN_0030bfa0(igStringObjList *self, int key, int (*cmp)(char *, int)) {
     int lo;

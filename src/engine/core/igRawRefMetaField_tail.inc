@@ -32,8 +32,8 @@ int **FUN_00305480(int **arg0, int extra1) {
     return arg0;
 }
 
-void Gap__Core__igRawRefMetaField__vfunc_02(void) {
-    igRefMetaField_Destruct();
+void Gap__Core__igRawRefMetaField__vfunc_02(igRawRefMetaField *self) {
+    igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
 int FUN_003054d0(void) {

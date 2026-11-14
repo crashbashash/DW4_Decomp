@@ -256,7 +256,7 @@ void *FUN_003235c0(igMallocMemoryPool *arg0) {
 }
 
 void *FUN_00323600(igMallocMemoryPool *arg0, int extra1) {
-    igMemoryPool_CopyConstruct((int **)arg0);
+    igMemoryPool_CopyConstruct((igMemoryPool *)arg0, (igMemoryPool *)extra1);
     *(int *)((char *)(arg0) + 0) = (int)(&DAT_00530e90[0]);
     arg0->_allocationLock = 0;
     arg0->_eventTracker = 0;
@@ -292,7 +292,7 @@ int Gap__Core__igMallocMemoryPool__vfunc_85(int arg0, char *arg1) {
     } else {
         v = (h->poolLow + (h->poolHigh << 5)) * 2;
     }
-    r = igAllocator_ResolveEncodedIndex(v);
+    r = (int)igAllocator_ResolveEncodedIndex(v);
     return r == a;
 }
 

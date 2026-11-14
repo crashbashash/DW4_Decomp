@@ -1,6 +1,6 @@
 /* not-found status */
 
-int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, int *value)
+igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value)
 {
     int index;
     int match;
@@ -21,12 +21,11 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
             }
             if (match) {
                 *value = ((igTDataList<int> *)meta->_values)->_data[index];
-                *status = g_resultSuccess.v;
-                return;
+                return g_resultSuccess;
             }
         }
     }
-    *status = g_resultFailure.v;
+    return g_resultFailure;
 }
 
 void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int arg2) {

@@ -6,7 +6,7 @@ int Gap__Core__igMetaFieldInfo__vfunc_23(igMetaFieldInfoView *arg0, int arg1, vo
     if (field != 0) {
         int name = igMetaField_GetMangledName(field, (void **)allocator);
         if (ObjectPointerList_FindIndex((char *)(((ObjectSystemView **)g_objectSystem)[0]->metaRegistry), field->_parentMetaObject) != -1 || arg0->FindByName(name) != 0) {
-            result = FUN_002e2d30(arg1, arg0, name, arg2) & 0xFF;
+            result = FUN_002e2d30((igDirectoryView *)arg1, (igInfoView *)arg0, (char *)name, (igObject *)arg2) & 0xFF;
         }
         allocator->Free((void *)name);
     }

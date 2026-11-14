@@ -64,7 +64,7 @@ void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
 
 void FUN_002d7130(igDependencyOrderedListView *owner) {
     igSmartPointer<igObjectList> copy(((igObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
-    ObjectList_AppendRetainedList((int)copy.p, owner->_objectList);
+    ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;
     int i;
@@ -109,6 +109,10 @@ void igRendererOrderedList_Clear(char *arg0) {
         l->_data[i] = 0;
     }
     l->_count = 0;
+}
+
+igResult FUN_002d7750(igDependencyOrderedListView *list, igObject *object) {
+    return ObjectList_RemoveFirstRetained(list->_objectList, object, 0);
 }
 
 void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {

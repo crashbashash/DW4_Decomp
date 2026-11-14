@@ -37,6 +37,42 @@ int igRefMetaField_ReadRawFieldMem(void *arg0, int a1, int *arg2, int arg3, int 
     return 4;
 }
 
+/* Writes the directory index of the referenced object, or -1 for none. A reference to an object
+ * the directory does not hold is reported once per kind of field. */
+int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, void *dest, int directory, int swap) {
+    int *index = (int *)dest;
+    igDirEntryView *entry;
+    if (directory != 0 && *source != 0) {
+        entry = (igDirEntryView *)FUN_002d7c50((igDirectoryView *)directory, *source);
+        if (*source != 0 && entry == 0) {
+            if (self->_parentMetaObject != 0) {
+                if (!GPR_00554c20) {
+                    igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
+                    int answer = igReportError(text_s_s_s_writeRawFieldMem_0x_x_0_0x, ((igMetaObject *)self->_parentMetaObject)->_name, self->_fieldName, meta->_name, source, (unsigned int)*source);
+                    if (answer != 1 && answer == 2) GPR_00554c20 = 1;
+                }
+            } else {
+                if (!GPR_00554c24) {
+                    igMetaObject *meta = ((igObjectDispatchView *)self)->getMeta();
+                    int answer = igReportError(text_s_writeRawFieldMem_0x_x_0_0x_x_Not, meta->_name, source, (unsigned int)*source);
+                    if (answer != 1 && answer == 2) GPR_00554c24 = 1;
+                }
+            }
+        }
+        if (entry != 0) {
+            *index = entry->_index;
+        } else {
+            *index = -1;
+        }
+    } else {
+        *index = -1;
+    }
+    if (swap != 0) {
+        self->SwapBytes(index, 1);
+    }
+    return 4;
+}
+
 int FUN_003057a0(void) {
     return ((int *)g_igRefMetaField_metaObject)[0];
 }
@@ -151,6 +187,11 @@ igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *self, igRefMetaFiel
     self->_construct = source->_construct;
     self->_destruct = source->_destruct;
     return self;
+}
+
+/* The reference field adds no teardown of its own to the igMetaField base. */
+void igRefMetaField_Destruct(igRefMetaField *self) {
+    igMetaField_Destruct((igMetaField *)self);
 }
 
 unsigned char igRefMetaField_IsConstruct(igRefMetaField *field) { return field->_construct; }

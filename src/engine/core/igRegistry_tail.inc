@@ -36,7 +36,7 @@ bool FUN_00305d30(igRegistry *self, char *name, char *dir) {
         return false;
     }
     FUN_003077a0(self);
-    FUN_00307870(self, self->_registryFile, 1);
+    FUN_00307870(self, (igFileView *)self->_registryFile, 1);
     ((igFileView *)self->_registryFile)->Close();
     return true;
 }
@@ -55,10 +55,38 @@ int FUN_003061c0(void *self, igRegistry *inc, int overwrite) {
             }
             igStringObj *value = (igStringObj *)cur.p->_value;
             igStringObj *key = (igStringObj *)cur.p->_valueName;
-            FUN_00307700(self, section, textOf_3061c0(key), (int)(textOf_3061c0(value)));
+            FUN_00307700(self, section, textOf_3061c0(key), (const char *)(textOf_3061c0(value)));
         }
     }
     return 1;
+}
+
+/* The index of section `name`: the standard sections first, then the registry's own, added at the
+ * end when `create` is set; -1 when it is missing. */
+int FUN_00306360(igRegistry *self, char *name, int create) {
+    int n;
+    int i;
+    int result;
+    igStringObj *created;
+    igObjectList *sections;
+    for (i = 0; i < 11; i++) {
+        if (thunk_strcasecmp(name, DAT_004fb160[i]) == 0) {
+            return i;
+        }
+    }
+    n = ((igObjectList *)self->_additionalSectionNames)->_count;
+    for (i = 0; i < n; i++) {
+        if (thunk_strcasecmp(name, igStringObj_Text(((igStringObj **)((igObjectList *)self->_additionalSectionNames)->_data)[i])) == 0) {
+            return i + 11;
+        }
+    }
+    if (create != 0) {
+        igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((int)self)));
+        igStringObj_Set((int)section.get(), (int)name);
+        ObjectList_AppendRetained((igObjectList *)self->_additionalSectionNames, section.get());
+        return n + 11;
+    }
+    return -1;
 }
 
 typedef igSmartPointer<igTDataList<igRegistryValue *> > IniPairListRef;
@@ -162,7 +190,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, igStringObj **arg3, const
         }
         *arg3 = t;
         if (arg5 != 0) {
-            FUN_00307700((void *)arg0, arg1, arg2, (int)arg4);
+            FUN_00307700((void *)arg0, arg1, arg2, (const char *)arg4);
         }
     }
     return node != 0;
@@ -207,7 +235,7 @@ int FUN_00306910(int arg0, int arg1, const char *arg2, int **out, char *def, int
     } else {
         assign_306910(out, def);
         if (create != 0) {
-            FUN_00307700((void *)arg0, arg1, arg2, (int)def);
+            FUN_00307700((void *)arg0, arg1, arg2, (const char *)def);
         }
     }
     return p != 0;
@@ -306,7 +334,7 @@ int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list
             c2 = b; s2 = (char *)r3; at2 = c2->_length; igStringObj_Insert(c2, s2, at2, strlen(s2));
             releaseRef(r3);
         }
-        FUN_00307700(self, section, saved, (int)(text_306aa0(b)));
+        FUN_00307700(self, section, saved, (const char *)(text_306aa0(b)));
         held = b;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
@@ -318,9 +346,146 @@ int FUN_00306aa0(void *self, int section, const char *key, igStringRefList *list
     return p != 0;
 }
 
-static inline bool sameChar(int a, int b) { return (char)a == (char)b; }
+/* Read a boolean value; when it is missing or unreadable, `defaultValue` is returned through `value`
+ * and, with `create`, written into the registry. */
+unsigned char FUN_00306e50(int registry, int section, const char *name, char *value, int defaultValue, int create) {
+    unsigned char found = 0;
+    igRegistryValue *entry = FUN_00307c10((igRegistry *)registry, section, name, 0);
+    if (entry != 0 && FUN_0030b670((igStringObj *)entry->_value, value)) {
+        found = 1;
+    }
+    if (!found) {
+        *value = defaultValue;
+        if (create != 0) {
+            FUN_00307750(registry, section, name, defaultValue);
+        }
+    }
+    return found;
+}
 
+/* Parse a flags value: a number (decimal or 0x hex), or names of the enum's values separated by spaces
+ * and or-ed together. Leading text that matches `format` up to its `%s` is skipped, and the rest of
+ * `format` ends the value. False when part of it is not understood. */
+bool FUN_00306f10(char *text, int *value, int metaEnum, char *format) {
+    char *s;
+    char *end;
+    bool ok;
+    char *found;
+    char *token;
+    int length;
+    char name[256];
+    int flag;
+    s = text;
+    end = text + strlen(text);
+    *value = 0;
+    ok = true;
+    while (*s && (_ctype_[*s + 1] & 8)) s++;
+    while (*s && *format && *s == *format) {
+        s++;
+        format++;
+    }
+    if (*format == '%') {
+        format++;
+        if (*format == 's') format++;
+    }
+    if (*format != 0) {
+        found = strstr(s, format);
+        if (found != 0) end = found;
+        else ok = false;
+    }
+    if (DAT_004d3d11[*s] & 4) {
+        if (strncmp(text, DAT_004fb198, 2) == 0) {
+            if (sscanf(text, text_0x_x, value) == 1) return 1;
+        } else {
+            if (sscanf(text, DAT_004f95c0, value) == 1) return 1;
+        }
+    } else {
+        while (*s && s < end) {
+            while (*s && (_ctype_[*s + 1] & 8)) s++;
+            token = s;
+            while (*s && !(_ctype_[*s + 1] & 8) && s < end) s++;
+            length = s - token;
+            if (*token != 0) {
+                if (length > 255) length = 255;
+                strncpy(name, token, length);
+                name[length] = 0;
+                flag = 0;
+                if (igMetaEnum_GetValueByName((igMetaEnum *)metaEnum, name, &flag) == g_resultSuccess) {
+                    *value |= (unsigned int)flag;
+                } else {
+                    ok = false;
+                }
+            }
+        }
+    }
+    return ok;
+}
+
+static inline bool sameChar(int a, int b) { return (char)a == (char)b; }
 static inline int isSpaceChar(char c) { return _ctype_[c + 1] & 8; }
+
+/* Parse a single enum value the same way: a number, or one value name. */
+int FUN_00307200(char *text, int *value, igMetaEnum *metaEnum, char *format) {
+    char name[260];
+    char *end;
+    int length;
+    char *token;
+    char *f;
+    char *s;
+    f = format;
+    s = text;
+    end = text + strlen(text);
+    while (!(!*s) && isSpaceChar(*s)) {
+        s++;
+    }
+    while (!(!*s) && *f != 0 && sameChar(*s, *f)) {
+        s++;
+        f++;
+    }
+    if (*f == '%') {
+        f++;
+        if (*f == 's') {
+            f++;
+        }
+    }
+    if (*f != 0) {
+        char *found = strstr(s, f);
+        if (found != 0) {
+            end = found;
+        } else {
+            return 0;
+        }
+    }
+    if (DAT_004d3d11[*s] & 4) {
+        if (strncmp(text, DAT_004fb198, 2) == 0) {
+            if (sscanf(text, text_0x_x, value) == 1) {
+                return 1;
+            }
+        } else if (sscanf(text, DAT_004f95c0, value) == 1) {
+            return 1;
+        }
+    } else {
+        token = s;
+        while (!(!*s) && !isSpaceChar(*s) && s < end) {
+            s++;
+        }
+        if (*token != 0) {
+            length = s - token;
+            if (length > 255) {
+                length = 255;
+            }
+            strncpy(name, token, length);
+            name[length] = 0;
+            if (igMetaEnum_GetValueByName(metaEnum, name, value) == g_resultSuccess) {
+                return 1;
+            }
+            return 0;
+        }
+    }
+    return 0;
+}
+
+
 
 static inline int pool_307470(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return ((int *)g_stringObjEmptyText)[0]; } return a; }
 
@@ -328,7 +493,7 @@ int FUN_00307470(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int 
     void *temp_v0;
     temp_v0 = (void *)(((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0)));
     if (temp_v0 != 0) {
-        FUN_00307200((char *)(pool_307470(temp_v0)), (int)arg4, (void *)arg3, (char *)&DAT_004f95a0[0]);
+        FUN_00307200((char *)(pool_307470(temp_v0)), arg4, (igMetaEnum *)arg3, (char *)&DAT_004f95a0[0]);
     } else {
         *arg4 = arg5;
         if (arg6 != 0) {
@@ -379,11 +544,10 @@ int FUN_003076b0(int a0, int a1, const char *a2, float x) {
     return 1;
 }
 
-int FUN_00307700(void *arg0, int arg1, const char *arg2, int arg3) {
-    void *temp_v0;
-    temp_v0 = (void *)((void *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 1));
-    if (temp_v0 == 0) return 0;
-    igStringObj_Set(*(int *)((char *)(temp_v0) + 12), arg3);
+int FUN_00307700(void *registry, int section, const char *key, const char *value) {
+    igRegistryValue *entry = FUN_00307c10((igRegistry *)registry, section, key, 1);
+    if (entry == 0) return 0;
+    igStringObj_Set(entry->_value, (int)value);
     return 1;
 }
 
@@ -423,6 +587,57 @@ void FUN_003077a0(igRegistry *self) {
     }
     l->_count = 0;
     ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_valueTable, n2);
+}
+
+/* Read registry text: `[section]` lines open a section, `key = value` lines set values (only new ones
+ * unless `overwrite`), and `#` lines are directives. */
+void FUN_00307870(igRegistry *self, igFileView *file, int overwrite) {
+    char equals;
+    unsigned char showQueries;
+    int lineNumber;
+    char line[4096];
+    char key[4096];
+    char value[4096];
+    int fields;
+    int section;
+    igRegistry *config;
+
+    lineNumber = 0;
+    section = -1;
+    while (FUN_00307a50(self, file, line, &lineNumber)) {
+        if (sscanf(line, DAT_004fb1a8, value) <= 0) {
+            continue;
+        }
+        if (value[0] == '#') {
+            FUN_00307fd0(self, file, line, lineNumber, overwrite);
+            continue;
+        }
+        if (sscanf(line, text_abcdefghijklmnopqrstuvwxyzABCDEF_2, value) == 1) {
+            section = FUN_00306360(self, value, 1);
+            continue;
+        }
+        fields = sscanf(line, DAT_004fb200, key, &equals, value);
+        if (fields <= 0 || fields == 1) {
+            continue;
+        }
+        if (fields > 1 && equals != '=') {
+            continue;
+        }
+        if (fields == 2) {
+            value[0] = 0;
+        }
+        if (overwrite == 0 && FUN_00307c10(self, section, key, 0) != 0) {
+            continue;
+        }
+        FUN_00307700(self, section, key, value);
+    }
+    config = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+    showQueries = self->_showQueries;
+    FUN_00306e50((int)config, 2, text_showRegistryQueries, (char *)&showQueries, showQueries, 0);
+    self->_showQueries = showQueries;
+    if (self->_showQueries != 0 && config == self) {
+        FUN_00306e50((int)config, 2, text_showRegistryQueries, (char *)&showQueries, showQueries, 0);
+    }
 }
 
 bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines) {
@@ -537,6 +752,37 @@ int FUN_00307f80(void *arg0, int arg1) {
     }
     var_v0 = *(int *)((char *)(*(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4))) - 44)) + 8);
     if (var_v0 == 0) return ((int *)g_stringObjEmptyText)[0]; return var_v0;
+}
+
+/* An `#include "file"` or `#include <file>` directive: read the named file, relative to this file's
+ * directory first, into the registry. Includes nest at most 12 deep. */
+void FUN_00307fd0(igRegistry *self, igFileView *file, char *line, int lineNumber, int overwrite) {
+    char open;
+    char close;
+    char path[4096];
+    int found;
+
+    if (sscanf(line, DAT_004fb280, &open, path, &close) != 3) {
+        return;
+    }
+    if (open != '"' && open != '<') return;
+    if ((open == '"' && close != '"') || (open == '<' && close != '>')) return;
+    if (DAT_005871c0 < 12) {
+        DAT_005871c0 += 1;
+        igSmartPointer<igRegistry> include((igRegistry *)FUN_002baff0((int)igObject_GetAllocator((int)self)));
+        found = 0;
+        igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((int)self)));
+        igStringObj_Set((int)directory.get(), (int)file->_fileName);
+        FUN_0030b980(directory.get());
+        if (directory.get()->_length != 0) {
+            igRegistry *target = include.get();
+            found = FUN_00305d30(target, path, igStringObj_Text(directory.get())) & 0xFF;
+        }
+        if (found != 0 || FUN_00305d30(include.get(), path, (char *)DAT_004f7910)) {
+            FUN_003061c0(self, include.get(), overwrite);
+        }
+        DAT_005871c0 -= 1;
+    }
 }
 
 int igReportNotice(const char *arg0, ...) {

@@ -319,6 +319,103 @@ void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char
     }
 }
 
+/* Walks the events from `first` to `last` totalling memory: bytes allocated and freed, the net
+ * amount and its peak, the largest allocation, and the net amount at the chosen occurrence of two
+ * markers (-1: the last one); then counts the allocations in that range still outstanding. */
+void Gap__Core__igEventTracker__vfunc_32(igEventTrackerView *self, int first, int last, int *eventCount, int *typeCounts,
+                                         int *outstandingCount, unsigned int *allocatedBytes, unsigned int *freedBytes,
+                                         unsigned int *netBytes, unsigned int *peakNetBytes, unsigned int *largestAllocation,
+                                         unsigned int *netAtMarkerA, int markerA, int markerAOccurrence,
+                                         unsigned int *netAtMarkerB, int markerB, int markerBOccurrence) {
+    int i = 0;
+    int offset = 0;
+    EventRecord record;
+    int markerASeen;
+    int markerBSeen;
+    int count;
+    int type;
+    FUN_002e2130((int)&record);
+    markerASeen = -1;
+    markerBSeen = -1;
+    count = self->_hashIndex->_count;
+    if (last == -1) {
+        last = self->_count - 1;
+    }
+    *eventCount = 0;
+    if (typeCounts != 0) {
+        memset(typeCounts, 0, 128);
+    }
+    *outstandingCount = 0;
+    *allocatedBytes = 0;
+    *freedBytes = 0;
+    *netBytes = 0;
+    *peakNetBytes = 0;
+    *largestAllocation = 0;
+    *netAtMarkerA = 0;
+    *netAtMarkerB = 0;
+    for (; i < first; i++) {
+        offset = self->vfunc_34(offset);
+    }
+    do {
+        if (self->vfunc_27(offset, &record) != g_resultSuccess) break;
+        type = record.type;
+        (*eventCount)++;
+        if (typeCounts != 0 && type >= 0 && type < 32) {
+            typeCounts[type]++;
+        }
+        switch (type) {
+        case kMemoryAllocation:
+            *allocatedBytes += record.val;
+            *netBytes = *allocatedBytes - *freedBytes;
+            if (*peakNetBytes < *netBytes) *peakNetBytes = *netBytes;
+            if (*largestAllocation < (unsigned int)record.val) *largestAllocation = record.val;
+            break;
+        case kMemoryDeallocation:
+            *freedBytes += record.val;
+            *netBytes = *allocatedBytes - *freedBytes;
+            break;
+        case kMarker:
+            if (markerA == record.markerType) {
+                markerASeen++;
+                if (markerASeen == markerAOccurrence || markerAOccurrence == -1) *netAtMarkerA = *netBytes;
+            }
+            if (markerB == record.markerType) {
+                markerBSeen++;
+                if (markerBSeen == markerBOccurrence || markerBOccurrence == -1) *netAtMarkerB = *netBytes;
+            }
+            break;
+        case kEventTypeAny:
+        case kMemoryDetach:
+        case kMemoryRead:
+        case kMemoryWrite:
+        case kObjectAllocation:
+        case kObjectDetach:
+        case kObjectDeallocation:
+        case kObjectRead:
+        case kObjectWrite:
+        case kMemberRead:
+        case kMemberWrite:
+        case kNotification:
+        case kCustom:
+            break;
+        }
+        offset = self->vfunc_34(offset);
+        i++;
+    } while (i < last && offset != -1);
+    for (i = 0; i < count; i++) {
+        offset = self->_hashIndex->_data[i];
+        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+            if (record.index >= first && record.index <= last) {
+                int type = record.type;
+                if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
+                    (*outstandingCount)++;
+                }
+            }
+        }
+    }
+    FUN_002e2300(&record, (long long)(-1));
+}
+
 void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
 {
     int var_s1;
@@ -417,8 +514,91 @@ int Gap__Core__igEventTracker__vfunc_34(igEventTrackerView *self, int arg1) {
     return arg1;
 }
 
+/* Mark as freed every allocation still recorded whose call stack, below `main`, passes through a
+ * function whose name contains `wanted`. */
+void Gap__Core__igEventTracker__vfunc_37(igEventTrackerView *self, char *wanted) {
+    ScopedLock guard(self->_lock);
+    int i;
+    int n = self->_hashIndex->_count;
+    EventRecord record;
+    char name[256];
+    int offset;
+    int line;
+    FUN_002e2130((int)&record);
+    if (self->_callStackTracer->vfunc_25() == 0) {
+        FUN_002e2300(&record, -1);
+        return;
+    }
+    for (i = 0; i < n; i++) {
+        int at = self->_hashIndex->_data[i];
+        if (at != -1 && self->vfunc_27(at, &record) != g_resultFailure && record.type != 3) {
+            int **frame = &record.callStack;
+            if (*frame == 0) {
+                continue;
+            }
+            while (**frame != 0) {
+                self->vfunc_40(**frame, name, 255, &offset, 0, 0, &line);
+                if (strcmp(name, text_main) == 0) {
+                    break;
+                }
+                if (strstr(name, wanted) != 0) {
+                    record.type = 3;
+                    record.f68 = 0;
+                    record.f72 = 0;
+                    self->vfunc_26(&record, -1);
+                }
+                *frame = *frame + 1;
+            }
+        }
+    }
+    FUN_002e2300(&record, -1);
+}
+
 /* Map a hash value to a bucket of the tracker's hash index: the value modulo the count stored at
  * +8 of the `_hashIndex` object, or 0 while that count is 0. */
+
+int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self) {
+    ScopedLock guard(self->_lock);
+    int i;
+    int count = self->_hashIndex->_count;
+    int offset;
+    EventRecord record;
+    int outstanding;
+    FUN_002e2130((int)&record);
+    outstanding = 0;
+    for (i = 0; i < count; i++) {
+        offset = self->_hashIndex->_data[i];
+        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+            int type = record.type;
+            if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
+                outstanding++;
+            }
+        }
+    }
+    FUN_002e2300(&record, (long long)(-1));
+    return outstanding;
+}
+
+int Gap__Core__igEventTracker__vfunc_36(igEventTrackerView *self, int *cursor) {
+    ScopedLock guard(self->_lock);
+    int offset;
+    int count = self->_hashIndex->_count;
+    EventRecord record;
+    FUN_002e2130((int)&record);
+    for (; *cursor < count; (*cursor)++) {
+        offset = self->_hashIndex->_data[*cursor];
+        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+            int type = record.type;
+            if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
+                (*cursor)++;
+                FUN_002e2300(&record, (long long)(-1));
+                return offset;
+            }
+        }
+    }
+    FUN_002e2300(&record, (long long)(-1));
+    return -1;
+}
 
 unsigned int Gap__Core__igEventTracker__vfunc_48(igEventTracker *self, unsigned int hash) {
     unsigned int bucketCount;
@@ -604,12 +784,114 @@ join:
     return igResult(s0);
 }
 
+/* Print the record at `offset` through the tracker's format buffer, 128 characters at a time. */
+void Gap__Core__igEventTracker__vfunc_41(igEventTrackerView *self, int offset) {
+    EventRecord record;
+    FUN_002e2130((int)&record);
+    if (self->vfunc_27(offset, &record) != g_resultSuccess) {
+        FUN_002e2300(&record, -1);
+        return;
+    }
+    self->vfunc_38(&record, self->_formatBuffer, 0x2003);
+    {
+        ScopedLock guard(self->_lock);
+        int length = strlen(self->_formatBuffer);
+        int i;
+        for (i = 0; i < length; i += 128) {
+            char saved;
+            char *end = self->_formatBuffer + 128 + i;
+            saved = *end;
+            *end = 0;
+            FUN_00304430(self->_formatBuffer + i);
+            FUN_00304680();
+            *end = saved;
+        }
+    }
+    FUN_002e2300(&record, -1);
+}
+
 void Gap__Core__igEventTracker__vfunc_42(igEventTrackerView *self) {
     int s = 0;
     while (s != -1) {
         self->vfunc_41(s);
         s = self->vfunc_34(s);
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Gap__Core__igEventTracker__vfunc_43(igEventTrackerView *self) {
+    int i;
+    int count = self->_hashIndex->_count;
+    int offset;
+    EventRecord record;
+    FUN_002e2130((int)&record);
+    for (i = 0; i < count; i++) {
+        offset = self->_hashIndex->_data[i];
+        if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
+            int type = record.type;
+            if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
+                self->vfunc_41(offset);
+            }
+        }
+    }
+    FUN_002e2300(&record, (long long)(-1));
 }
 
 static inline bool hasFlag(const igEventTrackerView *tracker, unsigned mask) { return (tracker->_flags & mask) != 0; }

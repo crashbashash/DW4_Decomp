@@ -92,3 +92,27 @@ void thunk_igMallocMemoryPool_GetMetaObject(void) {
     igMallocMemoryPool_GetMetaObject();
 }
 
+void igMallocMemoryPool_InitFields(void) {
+    igMetaObject *meta = g_igMallocMemoryPool_metaObject[0];
+    int base = igMetaObject_GetFieldCount(meta);
+    igObjectRefMetaField *eventTracker;
+    igObjectRefMetaField *allocationLock;
+    igEnumMetaField *messageLevel;
+    int defaultMessageLevel;
+    igMetaObject_CreateFields(meta, (FieldFactory *)g_igMallocMemoryPool_ctorTable, 10);
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base), -1);
+    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base + 2), 0xFFFFFFFFFFFFFFFFULL);
+    FUN_0030eda0((void **)igMetaObject_GetFieldAt(meta, base + 4), 4);
+    eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
+    eventTracker->_metaObject = (int)FUN_002c57c0();
+    allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 7);
+    allocationLock->_metaObject = (int)FUN_002ba690();
+    messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
+    defaultMessageLevel = DAT_004c25f0[0];
+    FUN_002dc7a0((igMetaFieldView *)messageLevel, &defaultMessageLevel);
+    messageLevel->_getMetaEnumFunction = (int)FUN_002ce1b0;
+    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 9), DAT_004c25f8[0]);
+    igMetaObject_NameFields(meta, (const char **)g_igMallocMemoryPool_fieldTable, (igMetaField ***)DAT_004c1aa0, DAT_004c1ad0, base);
+    g_igMallocMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+}
+

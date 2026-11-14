@@ -513,7 +513,7 @@ void *igAliasMemoryPool_Construct(igAliasMemoryPool *self, int extra1) {
  * the igAliasMemoryPool vtable and clears the allocation lock, event tracker and aliased-pool
  * references. Returns `self`. */
 void *igAliasMemoryPool_CopyConstruct(igAliasMemoryPool *self, int extra1) {
-    igMemoryPool_CopyConstruct((int **)self);
+    igMemoryPool_CopyConstruct((igMemoryPool *)self, (igMemoryPool *)extra1);
     self->_vtable = (int)(&g_igAliasMemoryPool_vtable[0]);
     self->_allocationLock = 0;
     self->_eventTracker = 0;

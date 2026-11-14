@@ -803,7 +803,7 @@ extern "C" void FUN_002c4d80(void);
 extern "C" void igFile_Register(void);
 extern "C" void igFile_InitFields(void);
 extern "C" void thunk_igPsx2File_GetMetaObject(void);
-extern "C" void FUN_002c4f80(int arg0);
+extern "C" void *FUN_002c4f80(int arg0);
 extern "C" int FUN_00130720(...);
 extern "C" int igExternalInfoEntry_GetVTable(void);
 extern "C" void FUN_002c50a0(void);
@@ -1430,26 +1430,24 @@ extern "C" int FUN_002d9710(void *arg0, int arg1);
 extern "C" int StringList_CopyRetained(...);
 extern "C" int FUN_002da710(void *arg0, int arg1, int arg2);
 extern "C" int FUN_002da770(int *p);
-extern "C" int FUN_002dae40(...);
 extern "C" void *FUN_002da940(void *arg0, long long arg1);
 extern "C" int FUN_002daab0(void);
 extern "C" void FUN_002dab80(void *arg0, int arg1);
 extern "C" int FUN_002dac30(void *arg0);
 extern "C" int FUN_002dac60(void *arg0);
 extern "C" int FUN_002dac90(void *arg0);
-extern "C" int FUN_002dada0(void *self, char **cursor, char *out, int size);
+extern "C" bool FUN_002dada0(igDriverDatabase *self, char **cursor, char *out, int size);
 extern "C" int FUN_0012a78c(void *);
-extern "C" void FUN_002db040(void *self, int entry, void *a, void *b);
 extern "C" void FUN_002db480(int *arg0);
 extern "C" void FUN_002db4e0(int arg0, char *arg1);
 extern "C" bool FUN_002db5e0(char *arg0, int *arg1);
 extern "C" bool FUN_002db690(char *arg0, int *arg1);
 extern "C" int FUN_002dbca0(int arg0, int arg1);
-extern "C" unsigned char FUN_002dbd10(int arg0, int arg1, int arg2, int arg3, int arg4);
+extern "C" unsigned char FUN_002dbd10(igDriverDatabase *self, int valueType, char *actual, int compareMode, char *expected);
 extern "C" int strcasecmp(...);
 extern "C" int FUN_002dbfb0(int dummy0, int arg1, int arg2, int arg3);
 extern "C" int FUN_002dc050(int dummy0, int arg1, int arg2, int arg3);
-extern "C" int FUN_002dc0a0(int arg0, int arg1, float fparg0, float fparg1);
+extern "C" bool FUN_002dc0a0(int unused, int mode, float a, float b);
 extern "C" int FUN_002dc120(int p, unsigned char a, int m, unsigned char b);
 extern "C" void *FUN_002dc180(void *arg0);
 extern "C" void *FUN_002dc2a0(void *arg0);
@@ -1519,7 +1517,9 @@ extern "C" int Gap__Core__igIGBFile__vfunc_27(igIGBFileView *arg0);
 extern "C" void FUN_002e8a10(igIGBFileView *arg0);
 extern "C" int FUN_002e9470(igIGBFileView *arg0);
 extern "C" void Gap__Core__igIGBFile__vfunc_32(int *arg0, void *arg1);
-extern "C" int FUN_002e2d30(...);
+class igInfoView;
+struct igDirectoryView;
+extern "C" bool FUN_002e2d30(igDirectoryView *directory, igInfoView *info, char *key, igObject *object);
 extern "C" int FUN_002ea0d0(void **arg0, int arg1, int arg2);
 extern "C" int igObject_GetFieldValueByName(void **arg0, int arg1);
 extern "C" int Gap__Core__igIntArrayMetaField__vfunc_25(void *arg0);
@@ -1591,7 +1591,7 @@ extern "C" int Gap__Core__igMemoryFile__vfunc_38(igMemoryFileView *self, int off
 extern "C" int Gap__Core__igMemoryFile__vfunc_34(void);
 extern "C" int **igMemoryPool_Initialize(int **arg0);
 extern "C" int **FUN_002effb0(int **arg0);
-extern "C" int **igMemoryPool_CopyConstruct(int **arg0);
+extern "C" igMemoryPool *igMemoryPool_CopyConstruct(igMemoryPool *self, igMemoryPool *source);
 extern "C" int Gap__Core__igObject__vfunc_00(int extra0);
 extern "C" int malloc(...);
 extern "C" void * FUN_002f0040(int a0, int a1, int extra2);
@@ -1599,7 +1599,7 @@ extern "C" int thunk_free_2(int extra0);
 extern "C" int (*DAT_00586f50)();
 extern "C" int FUN_002f0060(int arg0, int arg1, int arg2);
 extern "C" void FUN_002f00a0(void *arg0);
-extern "C" void thunk_FUN_002f0460(void);
+extern "C" void thunk_FUN_002f0460(igMemoryPoolView *pool);
 extern "C" void FUN_002f00c0(void);
 extern "C" void * Memory_GetDefaultAllocator(void);
 extern "C" int FUN_002f00e0(void);
@@ -1612,7 +1612,7 @@ extern "C" int FUN_002f0630(void);
 extern "C" int FUN_002f0640(void);
 extern "C" void igAllocator_EncodeIndexAlias(int extra0);
 extern "C" void FUN_002f0660(void);
-extern "C" int igAllocator_ResolveEncodedIndex(int arg0);
+extern "C" igMemoryPoolView *igAllocator_ResolveEncodedIndex(int index);
 extern "C" void FUN_002f0750(void);
 extern "C" void FUN_002f0760(int arg0, int extra1);
 extern "C" void FUN_002f0860(int *arg0);
@@ -1627,18 +1627,18 @@ extern "C" int FUN_002f0cf0(void **arg0, int arg1, unsigned short arg2);
 extern "C" int FUN_002f0d60(void);
 extern "C" void FUN_002f0db0(int arg0);
 extern "C" void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3);
-extern "C" int FUN_002f0e40(void *arg0, int arg1, int arg2, long long arg3, long long arg4, long long arg5, int arg6);
-extern "C" int FUN_002f0f70(void *arg0, int arg1, int arg2, int arg3, long long arg4, long long arg5, long long arg6, int arg7);
-extern "C" int FUN_002f10a0(void **arg0, int arg1, int arg2, int arg3, int arg4, long long arg5, long long arg6, long long arg7, int arg_sp0);
-extern "C" int FUN_002f11c0(void *arg0, int arg1, int arg2, int arg3, int arg4, long long arg5, long long arg6, long long arg7, int arg8);
-extern "C" int FUN_002f12f0(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long long arg6, long long arg7, int arg_sp0, int arg_sp8);
-extern "C" int FUN_002f15e0(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5, long long arg6, long long arg7, int arg_sp0, int arg_sp8);
-extern "C" int FUN_002f17a0(void **arg0, int arg1, int arg2, int arg3, long long arg4, long long arg5, long long arg6, int arg7);
-extern "C" int FUN_002f18d0(void **arg0, int arg1, int arg2, int arg3, int arg4, long long arg5, long long arg6, long long arg7, int arg_sp0);
+extern "C" int FUN_002f0e40(igMemoryPoolView *pool, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f0f70(igMemoryPoolView *pool, unsigned int size, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f10a0(igMemoryPoolView *pool, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f11c0(igMemoryPoolView *pool, int count, int size, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f12f0(igMemoryPoolView *pool, int count, int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f15e0(igMemoryPoolView *pool, void *block, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f17a0(igMemoryPoolView *pool, const char *string, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" int FUN_002f18d0(igMemoryPoolView *pool, const char *string, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth);
 extern "C" void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0);
-extern "C" int FUN_002f1e30(void *arg0, int arg1, int arg2, int arg3, long long arg4, long long arg5, long long arg6, int arg7);
-extern "C" void FUN_002f1f60(void **arg0, int arg1, int arg2, int arg3, long long arg4, long long arg5, long long arg6, int arg7);
-extern "C" void FUN_002f2070(void **arg0, int arg1, int arg2, int arg3, long long arg4, long long arg5, long long arg6, int arg7);
+extern "C" int FUN_002f1e30(igMemoryPoolView *pool, int size, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" void FUN_002f1f60(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth);
+extern "C" void FUN_002f2070(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth);
 extern "C" void Memory_ShutdownAllocatorRegistries(void **rootAllocator);
 extern "C" void FUN_002f2260(void *arg0);
 extern "C" void FUN_002f2270(void);
@@ -1648,7 +1648,7 @@ extern "C" char * strstr(...);
 extern "C" int FUN_002f2990(int arg0, int arg1);
 extern "C" void FUN_002f2ab0(int self, int recordIndex, int name);
 extern "C" int FUN_002f2b30(int arg0, char *arg1);
-extern "C" int strncmp(...);
+extern "C" int strncmp(const char *a, const char *b, unsigned int n);
 extern "C" int FUN_002f2bc0(int arg0, char *arg1);
 extern "C" int FUN_002f2cd0(int arg0, int arg1);
 extern "C" void FUN_002f4060(void *arg0, int arg1);
@@ -1682,16 +1682,21 @@ extern "C" void FUN_002f8a80(void *arg0, void *arg1);
 extern "C" int FUN_002f8ae0(int *p, int extra1);
 extern "C" void FUN_002f8b20(void *arg0);
 extern "C" void Gap__Core__igMemoryPoolInfo__vfunc_26(int *arg0, int *arg1, int arg2, int arg3);
-extern "C" void igMemoryPoolInfo_Print(int *arg0);
+extern "C" void igMemoryPoolInfo_Print(igMemoryPoolInfo *info);
 extern "C" void *igMemoryPoolInfoList_Allocate(unsigned int size);
 extern "C" void igMemoryPoolInfoList_Delete(void *block);
 extern "C" int igMemoryRefArrayMetaField_ReadRawFieldMem(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
-extern "C" int igMemoryRefMetaField_WriteRawFieldMem(...);
+class igMetaFieldView;
+extern "C" int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, void *dest, int directory, int swap);
+extern "C" unsigned char GPR_00554c20;
+extern "C" unsigned char GPR_00554c24;
+extern "C" char text_s_s_s_writeRawFieldMem_0x_x_0_0x[];
+extern "C" char text_s_writeRawFieldMem_0x_x_0_0x_x_Not[];
 extern "C" int igMemoryRefArrayMetaField_WriteRawFieldMem(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
 extern "C" int igMemoryRefMetaField_GetSize(void);
 extern "C" void igMemoryRefMetaField_SetDefaultWord(void **self, int defaultWord);
 extern "C" int igMemoryRefMetaField_GetPoolName(int *p);
-extern "C" void igMemoryRefMetaField_Destruct(void);
+extern "C" void igMemoryRefMetaField_Destruct(igMemoryRefMetaField *self);
 extern "C" void igMetaEnum_GetNameAt(int *arg0, void *arg1, int arg2);
 extern "C" int igMetaEnum_GetValueAt(void *arg0, int arg1);
 extern "C" __internalObjectList *FUN_002fc250(void);
@@ -1806,7 +1811,7 @@ extern "C" void Gap__Core__igObjectRefMetaField__vfunc_24(int a0, int a1, int a2
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_28(void *arg0, int arg1);
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_30(char *arg0, int arg1);
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_37(int arg0, int arg1, int arg2);
-extern "C" void Gap__Core__igObjectRefMetaField__vfunc_02(void);
+extern "C" void Gap__Core__igObjectRefMetaField__vfunc_02(igObjectRefMetaField *self);
 extern "C" int FUN_00303d70(void *arg0, int extra1);
 extern "C" int FUN_00303e50(void *arg0);
 extern "C" int FUN_00303e60(void *arg0, int arg1);
@@ -1829,14 +1834,14 @@ extern "C" int thunk_FUN_00305000(int extra0);
 extern "C" int **FUN_00305400(int **arg0, int extra1);
 extern "C" int **FUN_00305440(int **arg0);
 extern "C" int **FUN_00305480(int **arg0, int extra1);
-extern "C" void Gap__Core__igRawRefMetaField__vfunc_02(void);
+extern "C" void Gap__Core__igRawRefMetaField__vfunc_02(igRawRefMetaField *self);
 extern "C" int FUN_003054d0(void);
 extern "C" void FUN_003054e0(int *arg0);
 extern "C" int igRefMetaField_GetSize(void);
 extern "C" int igRefMetaField_ReadRawFieldMem(void *arg0, int a1, int *arg2, int arg3, int arg4);
 extern "C" int FUN_003057a0(void);
 extern "C" char *FUN_003057b0(char *s, char ch);
-extern "C" void igRefMetaField_Destruct(void);
+extern "C" void igRefMetaField_Destruct(igRefMetaField *self);
 extern "C" int FUN_00305ce0(void);
 extern "C" int FUN_00305cf0(void);
 extern "C" void Gap__Core__igRegistry__vfunc_11(void *arg0);
@@ -1845,16 +1850,16 @@ extern "C" bool FUN_003065f0(int arg0, int arg1, const char *arg2, int *arg3, in
 extern "C" bool FUN_003066b0(int arg0, int arg1, const char *arg2, float *arg3, int arg4, float fparg0);
 extern "C" int FUN_00306910(int arg0, int arg1, const char *arg2, int **out, char *def, int create);
 extern "C" unsigned char FUN_00306e50(int arg0, int arg1, const char *arg2, char *arg3, int arg4, int arg5);
-extern "C" bool FUN_00306f10(char *arg0, int *arg1, int arg2, char *arg3);
-extern "C" int FUN_00307200(char *text, int value, void *meta, char *format);
+extern "C" bool FUN_00306f10(char *text, int *value, int metaEnum, char *format);
+extern "C" int FUN_00307200(char *text, int *value, igMetaEnum *metaEnum, char *format);
 extern "C" int FUN_00307470(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int arg5, int arg6);
 extern "C" int FUN_00307550(int arg0, int arg1, const char *arg2, int arg3, int *arg4, int arg5, int arg6);
 extern "C" int FUN_00307630(void *arg0, int arg1);
 extern "C" int FUN_00307650(void *arg0);
 extern "C" int FUN_00307660(void *arg0, int arg1, const char *arg2, int arg3);
-extern "C" int FUN_0030b730(int, void *, float);
+extern "C" void FUN_0030b730(int string, void *format, float value);
 extern "C" int FUN_003076b0(int a0, int a1, const char *a2, float x);
-extern "C" int FUN_00307700(void *arg0, int arg1, const char *arg2, int arg3);
+extern "C" int FUN_00307700(void *registry, int section, const char *key, const char *value);
 extern "C" int FUN_00307750(int arg0, int arg1, const char *arg2, int arg3);
 extern "C" int FUN_00307f80(void *arg0, int arg1);
 extern "C" int igReportNotice(const char *arg0, ...);
@@ -1868,7 +1873,7 @@ extern "C" void FUN_003085c0(void);
 extern "C" void FUN_00308770(void);
 extern "C" int FUN_00308850(int *p, int extra1);
 extern "C" void FUN_00308c00(int *arg0, void *arg1);
-extern "C" int igResource_IsDirectoryLoaded(int arg0, void *arg1);
+extern "C" bool igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory);
 extern "C" int FUN_00309a50(void);
 extern "C" int FUN_00309a60(int directory, int name, int metaName, int wanted);
 extern "C" void FUN_00309fe0(int arg0);
@@ -1895,7 +1900,7 @@ extern "C" void **FUN_002c3090(...);
 extern "C" int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, int swap);
 extern "C" void igStringMetaField_ResetValue(int *arg0, int arg1);
 extern "C" void *FUN_0030b2c0(void *arg0, void *arg1);
-extern "C" void Gap__Core__igStringMetaField__vfunc_02(void);
+extern "C" void Gap__Core__igStringMetaField__vfunc_02(igStringMetaField *self);
 extern "C" void igStringObj_Set(int arg0, int arg1);
 extern "C" int strlwr(int);
 extern "C" void igStringObj_ToLower(void *arg0);
@@ -1955,7 +1960,7 @@ extern "C" int **FUN_0030eb40(int **arg0, int extra1);
 extern "C" int **FUN_0030eb80(int **arg0);
 extern "C" int **FUN_0030ebc0(int **arg0, int extra1);
 extern "C" void Gap__Core__igUnsignedLongMetaField__vfunc_02(int extra0);
-extern "C" void FUN_0030ec10(void **arg0, long long arg1);
+extern "C" void FUN_0030ec10(void **field, unsigned long long value);
 extern "C" int Gap__Core__igUnsignedShortMetaField__vfunc_56(int arg0, int arg1, int arg2);
 extern "C" void Gap__Core__igUnsignedShortMetaField__vfunc_57(int *arg0, int arg1, unsigned short *arg2);
 extern "C" int FUN_0030ed90(void);
@@ -1971,17 +1976,20 @@ extern "C" void igVirtualCFuncMetaField_SetToDefault(void *arg0, int arg1);
 extern "C" void Gap__Core__igVirtualCFuncMetaField__vfunc_30(int *arg0, int arg1);
 extern "C" int Gap__Core__igVirtualCFuncMetaField__vfunc_27(void);
 extern "C" void FUN_00310b60(void *arg0, unsigned char *arg1, int extra2);
-extern "C" int igArenaMemoryPool_DisplayOutstandingAllocationsBlock(...);
+class igArenaMemoryPoolView;
+extern "C" char DAT_004fbf10[];
+extern "C" char DAT_004fbf90[];
+extern "C" char DAT_004fc010[];
+extern "C" char DAT_004fc090[];
+extern "C" char DAT_004fc150[];
+extern "C" void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end);
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_88(void *self0);
 extern "C" int strncat(char *, int *, int);
 extern "C" char *igMetaEnum_GetNamesByMask(char *arg0, int arg1, int arg2, int arg3);
 extern "C" char *igMetaEnum_GetValueName(char *arg0, int arg1, int arg2, int arg3);
 extern "C" char *FUN_00312140(char *, int, int, int);
 extern "C" char *FUN_00312020(char *, int, int, int);
-extern "C" void Gap__Core__igArenaMemoryPool__vfunc_87(void *arg0, int extra1);
 extern "C" void List_InsertWords(igDataList *list, int index, int count, const void *src);
-extern "C" int FUN_00310c00(int);
-extern "C" void Gap__Core__igArenaMemoryPool__vfunc_103(int *arg0, int arg1);
 extern "C" int FUN_00318b40(...);
 extern "C" void FUN_00314510(void *, int, int);
 class igArenaMemoryPoolView;
@@ -2163,7 +2171,6 @@ extern "C" void FUN_0032d080(void);
 extern "C" void FUN_0032d1f0(void);
 extern "C" void FUN_0032d220(void);
 extern "C" void FUN_0032d4b0(int *arg0, char *arg1);
-extern "C" void Gap__Core__igPsx2IopRpcConnection__vfunc_11(int *arg0);
 extern "C" int sceSifBindRpc(...);
 extern "C" int sceSifCallRpc(...);
 extern "C" int SyncDCache(...);
@@ -2325,7 +2332,7 @@ extern "C" int Gap__Core__igBoolArrayMetaField__vfunc_23(void);
 extern "C" int Gap__Core__igMemoryDescriptorMetaField__vfunc_22(void);
 extern "C" int Gap__Core__igMemoryDescriptorMetaField__vfunc_23(void);
 extern "C" int Gap__Core__igMallocMemoryPool__vfunc_22(void);
-extern "C" void Gap__Core__igMallocMemoryPool__vfunc_12(void);
+extern "C" void Gap__Core__igMallocMemoryPool__vfunc_12(igMemoryPoolView *self);
 extern "C" void Gap__Core__igMallocMemoryPool__vfunc_31(void);
 extern "C" void Gap__Core__igMallocMemoryPool__vfunc_24(int *statusOut);
 extern "C" int Gap__Core__igMallocMemoryPool__vfunc_25(void);
@@ -3924,7 +3931,9 @@ typedef struct ObjectSystemView {
     igMemoryPoolView *bootstrapPool; /* the allocator of record 0 (Bootstrap) */
     igMemoryPoolView *systemPool;    /* the allocator of record 4 (System) */
     igRegistry *configRegistry;
-    char unknown60[20];
+    char unknown60[4];
+    igResource *resource;         /* the resource manager: named directories and objects */
+    char unknown68[12];
     igSymbolTable *symbolTable;   /* loaded from symbolsFileName at memory set-up */
     igEventTrackerView *globalEventTracker; /* useGlobalEventTracker's tracker; receives the "exitPre" and "exitIn" markers */
     igMemoryPoolView *driverDataPool; /* the allocator of record 20 (DriverData) when it is its own pool */
@@ -4140,7 +4149,7 @@ struct igDependencyOrderedListView {
 extern "C" void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2);
 extern "C" int igRendererOrderedList_Append(igDependencyOrderedListView *, igObject *, int);
 extern "C" void FUN_002d7130(igDependencyOrderedListView *owner);
-extern "C" void FUN_002d7750(igResult *result, igDependencyOrderedListView *list, igObject *object);
+extern "C" igResult FUN_002d7750(igDependencyOrderedListView *list, igObject *object);
 extern "C" void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3);
 extern "C" void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1);
 class igSemaphoreView;
@@ -4161,7 +4170,9 @@ struct igDirectoryView : public igVirtualObject {
 class igIGBFileView;
 class igDirEntryView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
+    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18();
+    virtual igDirEntryView *cloneViaMetadata(int copyMode);                     /* vfunc_21 */
+    virtual void d20();
     virtual void vfunc_23(int ref);
     virtual void vfunc_24(int ref);
     virtual void d25();
@@ -4182,11 +4193,25 @@ class igDirEntryView : public igVirtualObject { public:
     virtual void vfunc_40(igIGBFileView *file);
     virtual int vfunc_41(igIGBFileView *file);
     virtual void d42();
-    virtual void vfunc_43(int index);
+    virtual int vfunc_43(int loadFunction);
     int _name; int _index; int _resolveMethod; int _refType; int _ref;
 };
 class igExternalDirEntryView : public igDirEntryView { public:
+    virtual int vfunc_44(int loadFunction);
     int _directoryName; int _entryName; int _entryIndex; int _externalFilePath;
+};
+/* igDirectory's own virtual slots. ABI view only: never instantiated. */
+class igDirectoryDispatchView : public igDirectoryView { public:
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
+    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
+    virtual void d21(); virtual void d22();
+    virtual int resolveExternalEntry(igExternalDirEntryView *entry);            /* vfunc_25 */
+};
+class igExternalInfoEntryView : public igDirEntryView { public:
+    char *_key; int _directoryIndex; char *_infoName;
+    void setDirectoryIndex(int index) { _directoryIndex = index; }
+    void setKey(char *key) { char *interned = (char *)StringPool_Intern(InternedStrings::get(), key); releaseString(_key); _key = interned; }
+    void setInfoName(char *name) { char *interned = (char *)StringPool_Intern(InternedStrings::get(), name); releaseString(_infoName); _infoName = interned; }
 };
 /* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
  * are the class header). The reflected igObject is the same object seen as data. Named slots carry
@@ -4259,7 +4284,7 @@ extern "C" void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *arg0, i
 extern "C" int igDoubleArrayMetaField_GetSize(igDoubleArrayMetaField *self);
 extern "C" int text_lg_n[4];
 extern "C" int DAT_004f9610[4];
-extern "C" int text_driverDatabaseVerbose[4];
+extern "C" char text_driverDatabaseVerbose[];
 extern "C" void Gap__Core__igDriverDatabase__vfunc_11(igDriverDatabase *database);
 extern "C" int FUN_001cafc0(igObject *, int *, int);
 extern "C" int FUN_002d9cf0(igDriverDatabase *arg0, int arg1, int arg2);
@@ -4292,17 +4317,21 @@ extern "C" int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char
 /* A node of the parsed driver database (vtable DAT_00530618); section and settings nodes extend it.
  * Slot 0 is the deleting destructor. */
 class ConfigNode { public: int kind; virtual void Delete(int flags); };
+extern "C" void FUN_002db040(igDriverDatabase *self, ConfigNode *node, igRegistry *registry, int section);
 extern "C" igTDataList<ConfigNode *> *FUN_002da780(igDriverDatabase *s);
 extern "C" void FUN_002da850(void *self, igTDataList<ConfigNode *> *list);
 extern "C" int DAT_00530618[4];
 extern "C" int FUN_002da990(igDriverDatabase *arg0, int arg1, int arg2, int arg3);
 /* The character variable is an int; a char would add a sign extension. */
-extern "C" void FUN_002daac0(igDriverDatabase *arg0, int arg1);
+extern "C" void FUN_002daac0(igDriverDatabase *self, igFileView *file);
 extern "C" int text_psx2_2[4];
 extern "C" int text_mips[4];
 extern "C" bool FUN_002dacc0(void *a0, igFileView *s, char *buf, int n);
-struct ConfigValueResolver { char pad[20]; void *table; void *scope; int mode; };
-extern "C" int FUN_002db2f0(ConfigValueResolver *self, igStringObj *token, int key, int fallback);
+class ConfigNode;
+extern "C" ConfigNode *FUN_002dae40(igDriverDatabase *self);
+extern "C" char text_SETTINGS[];
+extern "C" char *g_driverDatabaseKeywords[13];
+extern "C" int FUN_002db2f0(igDriverDatabase *self, igStringObj *sectionName, igRegistry *registry, int fallback);
 extern "C" char _ctype_[];
 extern "C" int text_abcdefghijklmnopqrstuvwxyzABCDEF[4];
 extern "C" bool FUN_002db540(igDriverDatabase *arg0, int *arg1);
@@ -4310,7 +4339,7 @@ extern "C" int DAT_004f9718[4];
 extern "C" int DAT_004f9670[4];
 extern "C" int DAT_004f9728[4];
 extern "C" int FUN_002dba50(igDriverDatabase *self, struct ConfigSectionNode *out);
-extern "C" int FUN_002dbc10(igDriverDatabase *parser, int arg1);
+extern "C" int FUN_002dbc10(igDriverDatabase *parser, int *out);
 extern "C" int DAT_004f9730[4];
 extern "C" int DAT_004f9738[4];
 extern "C" int DAT_00530608[4];
@@ -4320,9 +4349,10 @@ extern "C" int DAT_005305f8[4];
 extern "C" unsigned char g_useOwnerAllocator;
 struct ConfigSettingsNode { int kind; int vtable; igTDataList<ConfigPair *> *entries; igStringObj *name; };
 extern "C" int FUN_002db750(igDriverDatabase *self, ConfigSettingsNode *out);
+extern "C" void FUN_002db1d0(igDriverDatabase *self, igTDataList<ConfigPair *> *entries, igRegistry *registry, int section);
 extern "C" void *FUN_002dc340(ConfigSettingsNode *arg0, long long arg1);
 extern "C" int DAT_005305e8[4];
-struct ConfigSectionNode { int kind; int vtable; int id; igStringObj *name; igTDataList<ConfigNode *> *children; int attributes; igObject *selector; };
+struct ConfigSectionNode { int kind; int vtable; int id; igStringObj *name; igTDataList<ConfigNode *> *children; int compareMode; igStringObj *selector; };
 extern "C" void *FUN_002dc530(ConfigSectionNode *arg0, long long arg1);
 extern "C" void Gap__Core__igEnumArrayMetaField__vfunc_52(igEnumArrayMetaField *self, int buffer, int count);
 extern "C" int Gap__Core__igEnumArrayMetaField__vfunc_25(igEnumArrayMetaField *self);
@@ -4352,7 +4382,11 @@ class igLocationTableView : public igVirtualObject { public:
 /* One igEventTracker event (148 bytes): cleared by FUN_002e2350, built by FUN_002e2190/FUN_002e2250,
  * stored by vfunc_26 and decoded back by vfunc_27. slotStates holds a 2-bit state for each of the
  * 16 words in slots (FUN_002e2360..FUN_002e2520). */
-struct EventRecord { int type; int pad4[2]; int val; int pad16[8]; char *str; int pad52[7]; unsigned int slotStates; int slots[16]; int getVal() const { return val; } };
+enum igEventType {
+    kEventTypeAny, kMemoryAllocation, kMemoryDetach, kMemoryDeallocation, kMemoryRead, kMemoryWrite, kObjectAllocation,
+    kObjectDetach, kObjectDeallocation, kObjectRead, kObjectWrite, kMemberRead, kMemberWrite, kMarker, kNotification, kCustom
+};
+struct EventRecord { int type; int index; int pad8; int val; int pad16; int markerType; int pad24[6]; char *str; int pad52[4]; int f68; int f72; int *callStack; unsigned int slotStates; int slots[16]; int getType() const { return type; } int getVal() const { return val; } };
 /* igEventTracker (reflected layout in dw4/reflected.h) with the virtuals its callers use. */
 class igEventTrackerView : public igVirtualObject {
 public:
@@ -4371,7 +4405,9 @@ public:
     virtual void vfunc_33(int, int, int name, int *, int *, int *, int *);    /* slot 31, byte 132: per-name sizes */
     virtual int vfunc_34(int offset);
     virtual int vfunc_35();                                                     /* slot 33, byte 140 */
-    virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37();
+    virtual void d34(); virtual void d35();
+    virtual void vfunc_38(EventRecord *record, char *buffer, int size);         /* slot 36, byte 152: formats a record */
+    virtual void d37();
     virtual igResult vfunc_40(int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
     virtual void vfunc_41(int offset);
     virtual void d40();
@@ -4424,6 +4460,7 @@ extern "C" void Gap__Core__igEventTracker__vfunc_23(igEventTrackerView *self);
 extern "C" void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *self);
 extern "C" void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *self);
 extern "C" int DAT_004c1ea8[4];
+extern "C" void Gap__Core__igEventTracker__vfunc_32(igEventTrackerView *self, int first, int last, int *eventCount, int *typeCounts, int *outstandingCount, unsigned int *allocatedBytes, unsigned int *freedBytes, unsigned int *netBytes, unsigned int *peakNetBytes, unsigned int *largestAllocation, unsigned int *netAtMarkerA, int markerA, int markerAOccurrence, unsigned int *netAtMarkerB, int markerB, int markerBOccurrence);
 extern "C" void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7);
 extern "C" int Gap__Core__igEventTracker__vfunc_31(igEventTrackerView *self, int value);
 extern "C" char text_main[];
@@ -4441,7 +4478,10 @@ extern "C" int DAT_00586e10[4];
 /* The result type has a constructor, so the return writes straight through the saved hidden
  * pointer. */
 extern "C" igResult Gap__Core__igEventTracker__vfunc_40(igEventTrackerView *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
-extern "C" void Gap__Core__igEventTracker__vfunc_41(igEventTrackerView *self, int arg);
+extern "C" int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self);
+extern "C" int Gap__Core__igEventTracker__vfunc_36(igEventTrackerView *self, int *cursor);
+extern "C" void Gap__Core__igEventTracker__vfunc_43(igEventTrackerView *self);
+extern "C" void Gap__Core__igEventTracker__vfunc_41(igEventTrackerView *self, int offset);
 extern "C" void Gap__Core__igEventTracker__vfunc_42(igEventTrackerView *self);
 extern "C" int DAT_004c1ed8[4];
 extern "C" igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *self, int arg2);
@@ -4462,7 +4502,9 @@ extern "C" void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObje
 extern "C" int DAT_004f9a48[4];
 extern "C" int text_root[4];
 class igIGBFileView : public igDirectoryView { public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void setObjectCursor(int at);                                       /* vfunc_26 */
+    virtual int objectCursor();                                                 /* vfunc_27 */
     virtual int vfunc_28(int);
     virtual int ReadFile(const char *path);
     virtual igResult vfunc_30();
@@ -4529,12 +4571,16 @@ class igIGBFileView : public igDirectoryView { public:
     }
 };
 extern "C" int Gap__Core__igExternalDirEntry__vfunc_44(igExternalDirEntryView *arg0, int arg1);
+extern "C" int Gap__Core__igExternalDirEntry__vfunc_43(igExternalDirEntryView *self, int loadFunction);
 extern "C" void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0);
 extern "C" void Gap__Core__igExternalIndexedEntry__vfunc_32(igExternalIndexedEntry *arg0, void *arg1);
 class igInfoView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
     virtual int vfunc_23(int directory, int object);
     virtual int GetFieldValueByName(int name);
+    virtual igResult vfunc_25(igRegistry *ini, char *section);
+    virtual igResult vfunc_26(igRegistry *ini, int index);
+    virtual void print();                                                       /* vfunc_27 */
     unsigned int _refCount; int _name; int _directory; unsigned char _resolveState;
 };
 extern "C" void Gap__Core__igExternalInfoEntry__vfunc_31(igExternalInfoEntry *self, igDirectory *directory);
@@ -4580,7 +4626,7 @@ extern "C" char GPR_00554c04;
 extern "C" unsigned char GPR_00554c08;
 extern "C" unsigned char GPR_00554c0c;
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" igResult FUN_002e4f60(void *);
+extern "C" igResult FUN_002e4f60(igIGBFileView *self);
 extern "C" igResult FUN_002e63e0(void *);
 extern "C" igResult FUN_002e3a60(igIGBFileView *self, const char *fileName, int mode);
 extern "C" void FUN_002e3cb0(igIGBFileView *self);
@@ -4979,7 +5025,7 @@ extern "C" int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3
 extern "C" void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10);
 extern "C" void FUN_002f1b70(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18);
 extern "C" void Memory_InitializeAllocatorRegistries(igObject *rootAllocator);
-extern "C" void FUN_002f2280(igMemoryPool *arg0, int arg1, int arg2, int arg3);
+extern "C" void FUN_002f2280(igMemoryPool *pool, long long arg1, long long arg2, int arg3);
 extern "C" void FUN_002f22f0(igMemoryPool *arg0);
 extern "C" void FUN_002f2340(igMemoryPool *arg0, int arg1, int arg2, int arg3);
 extern "C" long long DAT_00586f80[4];
@@ -5174,16 +5220,16 @@ extern "C" void FUN_002f8580(MemoryContext *arg0, int *arg1);
 extern "C" int DAT_00586ffc[4];
 extern "C" igResult FUN_002f86e0(void *arg1);
 extern "C" igObject *FUN_002f8760(void);
-extern "C" void FUN_002f8af0(igMemoryPoolContextInfo *info, int arg1);
+extern "C" void FUN_002f8af0(igMemoryPoolContextInfo *info, igMemoryPoolInfo *poolInfo);
 extern "C" int emptyString[4];
 extern "C" igMemoryPoolInfo *FUN_002f8be0(igMemoryPoolContextInfo *arg0, int arg1);
 extern "C" char text_Handle[];
 extern "C" igMemoryPoolInfo *FUN_002f8ca0(igMemoryPoolContextInfo *arg0, char *arg1);
 extern "C" char *DAT_004c2228[4];
 extern "C" igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(igMemoryPoolContextInfoView *self, igRegistry *ini, char *section);
-extern "C" int DAT_004fabc0[4];
-extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_27(igInfo *arg0);
-extern "C" int Gap__Core__igMemoryPoolInfo__vfunc_25(int *arg0, igMemoryPoolInfo *self, int arg2, char *arg3);
+extern "C" char DAT_004fabc0[];
+extern "C" void Gap__Core__igMemoryPoolContextInfo__vfunc_27(igMemoryPoolContextInfoView *self);
+extern "C" igResult Gap__Core__igMemoryPoolInfo__vfunc_25(igInfoView *self, igRegistry *ini, char *section);
 extern "C" char *DAT_004c2230;
 extern "C" char *DAT_004c2238;
 extern "C" char *DAT_004c2240;
@@ -5256,7 +5302,7 @@ extern "C" igMemoryRefMetaField *igMemoryRefMetaField_Init(igMemoryRefMetaField 
 extern "C" int g_igRefMetaField_vtable[4];
 extern "C" igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *self, igMemoryRefMetaField *source);
 extern "C" igRefMetaField *igRefMetaField_CopyConstruct(igRefMetaField *self, igRefMetaField *source);
-extern "C" int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, int *value);
+extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 /* The parameter is const so the list pointer is reloaded per iteration, the loop is tested at the
  * bottom via goto, and the locals are declared in the order a4, n, i. */
 extern "C" void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int arg2);
@@ -5359,6 +5405,7 @@ extern "C" void igMetaObject_RunStaticInit(StaticInitCallbacks *(*initialize)())
 extern "C" void igNamedObject_SetName(igNamedObject *arg0, int arg1);
 /* Name-or-default is a ?: expression, not an if with an empty then-arm. */
 extern "C" void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, igNamedObject *object);
+extern "C" igNamedObject *Gap__Core__igNamedObjectInfo__vfunc_24(igNamedObjectInfo *self, const char *name);
 extern "C" int FUN_002feeb0(igTDataList<int> *list, igMetaField *field, int value);
 extern "C" int g_igObject_vtable[4];
 extern "C" char igObject_className[];
@@ -5408,7 +5455,7 @@ extern "C" void Gap__Core__igObjectDirEntry__vfunc_27(igObjectDirEntry *self, ig
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_28(igObjectDirEntry *self, igObject *object);
 extern "C" void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *object);
-extern "C" void Gap__Core__igObjectDirEntry__vfunc_40(igObjectDirEntry *arg0, void *arg1);
+extern "C" void Gap__Core__igObjectDirEntry__vfunc_40(igObjectDirEntry *self, igIGBFileView *file);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1);
 /* igObjectDirEntry: a directory entry holding one object (_ref) of meta-object _typeMeta; the IGB
  * file stores the type as _typeMetaIndex into its meta-object list, or by _typeMetaName. */
@@ -5422,8 +5469,8 @@ class igObjectDirEntryView : public igDirEntryView { public:
 };
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile *arg1);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self);
-extern "C" void Gap__Core__igObjectDirEntry__vfunc_33(igObjectDirEntry *arg0, void *arg1);
-extern "C" void Gap__Core__igObjectDirEntry__vfunc_34(igObjectDirEntry *arg0, void *arg1);
+extern "C" void Gap__Core__igObjectDirEntry__vfunc_33(igObjectDirEntry *self, igIGBFileView *file);
+extern "C" void Gap__Core__igObjectDirEntry__vfunc_34(igObjectDirEntry *self, igIGBFileView *file);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_31(igObjectDirEntryView *self, igIGBFileView *file);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_24(igObjectDirEntry *self, igObject *object);
 extern "C" void Gap__Core__igObjectDirEntry__vfunc_25(igObjectDirEntry *self, igObject *object);
@@ -5431,9 +5478,9 @@ extern "C" void Gap__Core__igObjectDirEntry__vfunc_29(igObjectDirEntry *self, in
 extern "C" int Gap__Core__igObjectDirEntry__vfunc_30(igObjectDirEntry *self);
 extern "C" void ObjectList_FillRetained(igTDataList<igObject *> *arg0, igObject *arg1);
 extern "C" void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *arg0, int extra1);
-extern "C" void ObjectList_AppendRetainedList(int arg0, igTDataList<igObject *> *arg1);
+extern "C" void ObjectList_AppendRetainedList(igTDataList<igObject *> *self, igTDataList<igObject *> *source);
 extern "C" void ObjectList_ResizeRetained(igTDataList<igObject *> *arg0, int arg1);
-extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start, int extra3);
+extern "C" igResult ObjectList_RemoveFirstRetained(igTDataList<igObject *> *self, igObject *value, int start);
 extern "C" int ObjectList_RemoveAllRetained(igTDataList<igObject *> *list, igObject *object, int start);
 extern "C" int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *object);
 extern "C" int igProperty_FindByName(igObjectList *arg0, igMetaField *arg1, int arg2);
@@ -5462,7 +5509,7 @@ extern "C" void Gap__Core__igObjectRefMetaField__vfunc_34(igObjectRefMetaField *
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char *dst, char *src);
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int arg1, int arg2);
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int instance);
-extern "C" void Gap__Core__igObjectRefMetaField__vfunc_41(igObjectRefMetaField *self, int arg1, int arg2, int arg3);
+extern "C" void Gap__Core__igObjectRefMetaField__vfunc_41(igObjectRefMetaField *self, char *object, int depth, const char *indent);
 extern "C" void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3);
 extern "C" int Gap__Core__igObjectRefMetaField__vfunc_44(igObjectRefMetaField *arg0, int arg1, int arg2);
 extern "C" int Gap__Core__igObjectRefMetaField__vfunc_45(igObjectRefMetaField *self, int objectA, int objectB);
@@ -5486,13 +5533,9 @@ extern "C" unsigned char GPR_0055499c;
 extern "C" unsigned char GPR_005549a4;
 extern "C" unsigned char GPR_005549a8;
 extern "C" void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType);
-extern "C" int DAT_004c22c8[4];
-extern "C" int DAT_004c22d0[4];
-extern "C" int DAT_004fafb8[4];
-extern "C" int DAT_004fafc0[4];
-extern "C" char GPR_00554c18;
-extern "C" char GPR_00554c1c;
-extern "C" void FUN_00304840(igPluginHelper *self, int name, int path);
+extern "C" const char *DAT_004c22c8[];
+extern "C" const char *DAT_004c22d0[];
+extern "C" void FUN_00304840(igPluginHelper *self, int name, const char *path);
 extern "C" char PLUGINS[];
 extern "C" bool igRegistry_GetKeyName(int registry, int section, int index, igStringObj **key);
 /* igPluginHelper::_libraryLoader; slot 22 (vfunc_24) receives each loaded igLibrary in turn. */
@@ -5551,12 +5594,12 @@ extern "C" char DAT_004fb1a8[];
 extern "C" char text_abcdefghijklmnopqrstuvwxyzABCDEF_2[];
 extern "C" char DAT_004fb200[];
 extern "C" char text_showRegistryQueries[];
-extern "C" void FUN_00307870(igRegistry *self, int file, int overwrite);
+extern "C" void FUN_00307870(igRegistry *self, igFileView *file, int overwrite);
 extern "C" bool FUN_00307a50(void *unused, igFileView *s, char *buf, int *lines);
 extern "C" igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3);
 extern "C" char DAT_004fb280[];
 extern "C" int DAT_005871c0;
-extern "C" void FUN_00307fd0(void *self, igFileView *file, char *line, int lineNo, int overwrite);
+extern "C" void FUN_00307fd0(igRegistry *self, igFileView *file, char *line, int lineNo, int overwrite);
 extern "C" int UNKNOWN[4];
 extern "C" int INTERNAL_ERROR[4];
 extern "C" int ERROR[4];
@@ -5806,6 +5849,26 @@ extern "C" unsigned char g_igArenaMemoryPool_ignoreE21Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE22Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE23Notice;
 extern "C" unsigned char g_igArenaMemoryPool_ignoreE24Notice;
+extern "C" char DAT_004fb6a0[];
+extern "C" char DAT_004fb6e0[];
+extern "C" char DAT_004fb700[];
+extern "C" char DAT_004fb720[];
+extern "C" char DAT_004fb750[];
+extern "C" char DAT_004fb790[];
+extern "C" char DAT_004fb7d0[];
+extern "C" char DAT_004fb810[];
+extern "C" char DAT_004fb840[];
+extern "C" char DAT_004fb870[];
+extern "C" unsigned char GPR_00554c54;
+extern "C" unsigned char GPR_00554c58;
+extern "C" unsigned char GPR_00554c5c;
+extern "C" unsigned char GPR_00554c60;
+extern "C" unsigned char GPR_00554c64;
+extern "C" unsigned char GPR_00554c68;
+extern "C" unsigned char GPR_00554c6c;
+extern "C" unsigned char GPR_00554c70;
+extern "C" unsigned char GPR_00554c74;
+extern "C" unsigned char GPR_00554c78;
 extern "C" void igArenaMemoryPool_CheckFreeChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h);
 extern "C" void igArenaMemoryPool_CheckInUseChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h);
 extern "C" char text_E25_Below_used_address_range[];
@@ -5836,8 +5899,7 @@ extern "C" unsigned char GPR_00554ce8;
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int lo, int len);
 extern "C" int DAT_004f9950[];
 extern "C" char DAT_004fc1e0[];
-extern "C" int text_Pool_d_of_d_tot_0x_06x[4];
-extern "C" void Gap__Core__igArenaMemoryPool__vfunc_96(igArenaMemoryPool *arg0, int arg1);
+extern "C" char text_Pool_d_of_d_tot_0x_06x[];
 extern "C" void Gap__Core__igArenaMemoryPool__vfunc_102(int *arg0, igArenaMemoryPoolView *arg1);
 extern "C" char text_Unable_to_allocate_memory_for_ar[];
 extern "C" int DAT_00587200[4];
@@ -5846,6 +5908,10 @@ extern "C" char text_igArenaMemoryPool_checkHeap_E70[];
 extern "C" unsigned char GPR_00554cec;
 extern "C" unsigned char GPR_00554cf0;
 extern "C" igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self);
+extern "C" void FUN_00310c00(igArenaMemoryPoolView *self);
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_87(igArenaMemoryPoolView *self, char *title);
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_96(igArenaMemoryPoolView *self, igDataList *list);
+extern "C" void Gap__Core__igArenaMemoryPool__vfunc_103(int *status, igArenaMemoryPoolView *self);
 extern "C" char DAT_004fc490[];
 extern "C" char DAT_004fc500[];
 extern "C" char DAT_004fc570[];
@@ -6210,6 +6276,15 @@ struct TaggedBlockHeader {
     unsigned char extraTag : 5;
     unsigned char extraBig : 1;
 };
+/* A free chunk's list links follow its header: after one word in the short form, after three in the
+ * 12-byte form. */
+struct ChunkLinks {
+    TaggedBlockHeader *forward;
+    TaggedBlockHeader *back;
+};
+static inline ChunkLinks *chunkLinks(TaggedBlockHeader *h) {
+    return (ChunkLinks *)((char *)h + (h->big == 0 ? 4 : 12));
+}
 extern "C" void *FUN_00324be0(igMallocMemoryPoolView *self, unsigned size);
 extern "C" void FUN_00324ec0(igMallocMemoryPoolView *self, unsigned char *p);
 struct TaggedTailByte { unsigned char low : 7; unsigned char extended : 1; };
@@ -6610,6 +6685,7 @@ struct SifClientData { void *paddr; unsigned int pid; int tid; unsigned int mode
 /* igPsx2IopRpcConnection: a bound SIF RPC client, its transfer memory and the semaphore that
  * serialises calls. */
 struct igPsx2IopRpcConnectionView : public igObject { SifClientData *_sifData; char *_dataMemory; int _sema; };
+extern "C" void Gap__Core__igPsx2IopRpcConnection__vfunc_11(igPsx2IopRpcConnectionView *self);
 extern "C" void Gap__Core__igPsx2IopRpcConnection__vfunc_12(igPsx2IopRpcConnectionView *arg0);
 extern "C" void FUN_0032d640(int *arg0, igPsx2IopRpcConnectionView *arg1, int arg2);
 extern "C" int FUN_0032d6d0(int *arg0, igPsx2IopRpcConnectionView *arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7);

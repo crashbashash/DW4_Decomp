@@ -1,3 +1,10 @@
+/* Allocate the SIF client block and create the connection's semaphore, initially free. */
+void Gap__Core__igPsx2IopRpcConnection__vfunc_11(igPsx2IopRpcConnectionView *self) {
+    self->_sifData = (SifClientData *)igObject_AllocateStorage((int)self, sizeof(SifClientData));
+    SemaParam param = {0, 1, 1, 0, 0, 0};
+    self->_sema = CreateSema(&param);
+}
+
 void Gap__Core__igPsx2IopRpcConnection__vfunc_12(igPsx2IopRpcConnectionView *arg0) {
     if (arg0->_dataMemory != 0) {
         WaitSema(arg0->_sema);

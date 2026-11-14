@@ -112,6 +112,63 @@ void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3) {
     }
 }
 
+int FUN_002f0e40(igMemoryPoolView *pool, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    int size;
+    void *block = pool->vfunc_53();
+    if (block != 0) {
+        size = Memory_GetBufferSize(block);
+        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+int FUN_002f0f70(igMemoryPoolView *pool, unsigned int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *block = pool->Allocate(size);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+int FUN_002f10a0(igMemoryPoolView *pool, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *block = pool->AllocateAligned(size, alignment);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+int FUN_002f11c0(igMemoryPoolView *pool, int count, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *block = pool->vfunc_56(count, size);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, count * size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+int FUN_002f12f0(igMemoryPoolView *pool, int count, int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *block = pool->vfunc_57(count, size, alignment);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, count * size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
 int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
     char sp170[160];
     char spD0[160];
@@ -136,6 +193,53 @@ int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4,
         FUN_002e2300(spD0, -1);
     }
     return arg1;
+}
+
+int FUN_002f15e0(igMemoryPoolView *pool, void *block, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord freed;
+    EventRecord record;
+    if (block != 0) {
+        FUN_002e2190(&freed, 3, block, Memory_GetBufferSize(block), 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&freed, filter, depth + 1);
+        FUN_002e2300(&freed, -1);
+    }
+    block = pool->ReallocateAligned(block, size, alignment);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+int FUN_002f17a0(igMemoryPoolView *pool, const char *string, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *copy;
+    int size;
+    int alignment;
+    copy = (void *)pool->vfunc_58((void *)string);
+    if (copy != 0) {
+        size = strlen(string) + 1;
+        alignment = pool->vfunc_38() & 0xFFFF;
+        FUN_002e2190(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)copy;
+}
+
+int FUN_002f18d0(igMemoryPoolView *pool, const char *string, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *copy;
+    int size;
+    copy = pool->vfunc_61(string, alignment);
+    if (copy != 0) {
+        size = strlen(string) + 1;
+        FUN_002e2190(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)copy;
 }
 
 void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10) {
@@ -207,6 +311,37 @@ void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4,
     }
 }
 
+int FUN_002f1e30(igMemoryPoolView *pool, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    void *block = (void *)pool->vfunc_65(size);
+    if (block != 0) {
+        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    return (int)block;
+}
+
+void FUN_002f1f60(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    if (block != 0) {
+        FUN_002e2190(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    pool->Free(block);
+}
+
+void FUN_002f2070(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
+    EventRecord record;
+    if (block != 0) {
+        FUN_002e2190(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        pool->vfunc_67(&record, filter, depth + 1);
+        FUN_002e2300(&record, -1);
+    }
+    pool->Free(block);
+}
+
 void Memory_InitializeAllocatorRegistries(igObject *rootAllocator) {
     int secondaryList;
     int primaryList;
@@ -239,6 +374,13 @@ void FUN_002f2260(void *arg0) {
 
 void FUN_002f2270(void) {
 
+}
+
+void FUN_002f2280(igMemoryPool *pool, long long arg1, long long arg2, int arg3) {
+    ((igMemoryPoolView *)pool)->vfunc_52(arg1, arg2, arg3);
+    if (pool->_updateGlobalStatistics != 0) {
+        FUN_002f2450(arg1, arg2, arg3);
+    }
 }
 
 void FUN_002f22f0(igMemoryPool *arg0) {
