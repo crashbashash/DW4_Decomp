@@ -455,8 +455,8 @@
   "bytes": 1546580,
   "failing": {
    "addresses": {
-    "bytes": 1036364,
-    "functions": 7069
+    "bytes": 1036876,
+    "functions": 7070
    },
    "fields": {
     "bytes": 172448,
@@ -475,8 +475,8 @@
     "functions": 175
    },
    "references": {
-    "bytes": 344364,
-    "functions": 1265
+    "bytes": 344876,
+    "functions": 1266
    },
    "types": {
     "bytes": 166428,
@@ -622,10 +622,10 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 5248,
-  "pct": 38.72,
-  "recovered": 25224,
-  "synthetic": 7886,
+  "offset_casts": 5245,
+  "pct": 38.73,
+  "recovered": 25232,
+  "synthetic": 7883,
   "total": 65146,
   "typeable": 376,
   "typeable_pct": 0.58

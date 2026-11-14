@@ -262,17 +262,17 @@ int igMetaField_AlignSize(void *p, int size)
     return m & s;
 }
 
-int igMetaField_WritePersistentValue(igMetaField *field,void *object,void *output,void *context,int swap){
+int igMetaField_WritePersistentValue(igMetaField *field,void *object,void *output,void *context,unsigned char swap){
     if(field->_persistent==0)return 0;
     return (((FieldWriteDispatchView *)field)->Write((char *)object+field->_offset,output,context,swap)+3)&~3;
 }
 
-int FUN_002fc740(PersistentSizeView *p, int a1, int a2, int extra3, int extra4) {
-    int r = p->v49(a1 + p->f, a2 + 4) + 4;
-    return (r + 3) & -4;
+int FUN_002fc740(PersistentSizeView *field, char *object, char *data, igIGBFile *file, unsigned char endianSwap) {
+    int size = field->v49((int)object + field->f, (int)data + 4) + 4;
+    return (size + 3) & -4;
 }
 
-int FUN_002fc780(void *field, void *object, char *data, void *directory, int swap) {
+int FUN_002fc780(void *field, void *object, char *data, void *directory, unsigned char swap) {
     return (((ReadSizeView *)field)->vX((int)object + *(int *)((char *)field + 8)) + 3) & ~3;
 }
 

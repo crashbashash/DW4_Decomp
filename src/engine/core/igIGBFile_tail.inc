@@ -458,8 +458,7 @@ igResult FUN_002e4e60(igIGBFile *file) {
     file->_dirBuf = (int)((igMemoryPool_2ed1c0 *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
     cursor = (char *)file->_dirBuf;
     for (i = 0; i < file->_entryCount; i++) {
-        /* matching construct: hand search — the int step before the pointer cast loads the list ahead of _endianSwap */
-        cursor += igObject_WritePersistentFields((O_2fef20 *)thunk_FUN_002d7e90((int *)file->_uniqueEntryList, i), (int *)cursor, 0, (igTDataList<ChainMeta *> *)(int)file->_metaObjectListInFile, file->_endianSwap);
+        cursor += igObject_WritePersistentFields((O_2fef20 *)thunk_FUN_002d7e90((int *)file->_uniqueEntryList, i), (int *)cursor, 0, (igTDataList<ChainMeta *> *)file->_metaObjectListInFile, file->_endianSwap);
     }
     return g_resultSuccess;
 }
@@ -535,8 +534,7 @@ igResult FUN_002e53f0(igIGBFile *file) {
     file->_dirBuf = (int)((igMemoryPool_2ed1c0 *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
     cursor = (char *)file->_dirBuf;
     for (i = 0; i < file->_entryCount; i++) {
-        /* matching construct: hand search — the int step before the pointer cast loads the list ahead of _endianSwap */
-        cursor += igObject_WritePersistentFields(((O_2fef20 **)file->_data)[i], (int *)cursor, 0, (igTDataList<ChainMeta *> *)(int)file->_metaObjectListInFile, file->_endianSwap);
+        cursor += igObject_WritePersistentFields(((O_2fef20 **)file->_data)[i], (int *)cursor, 0, (igTDataList<ChainMeta *> *)file->_metaObjectListInFile, file->_endianSwap);
     }
     return g_resultSuccess;
 }
@@ -911,11 +909,9 @@ SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
     igObject_RegisterInstance((void **)object.p, 0);
     int read;
     if (file->_magicVersion < 4) {
-        /* matching construct: hand search — the int steps before the pointer casts load the object and the list ahead of _endianSwap */
-        read = FUN_002fff90((ReadObject *)(int)object.p, (Dat_2fef20 *)record, file, (igTDataList<ChainMeta *> *)(int)file->_metaObjectListInFile, file->_endianSwap);
+        read = FUN_002fff90((ReadObject *)object.p, (Dat_2fef20 *)record, file, (igTDataList<ChainMeta *> *)file->_metaObjectListInFile, file->_endianSwap);
     } else {
-        /* matching construct: hand search — as above */
-        read = FUN_00300250((FieldObjectView *)(int)object.p, (FieldRecordHead *)record, (FieldDirView *)file, (igTDataList<ChainMeta *> *)(int)file->_metaObjectListInFile, file->_endianSwap);
+        read = FUN_00300250((FieldObjectView *)object.p, (FieldRecordHead *)record, (FieldDirView *)file, (igTDataList<ChainMeta *> *)file->_metaObjectListInFile, file->_endianSwap);
     }
     file->_chunkPlace = file->_chunkPlace + read;
     file->_bufferPlace = file->_bufferPlace + read;

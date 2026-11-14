@@ -199,7 +199,11 @@ extern "C" int beMeterCtrlNode_TraversalFunction(igCommonTraversal *traversal, v
 extern "C" int DAT_00562640[4];
 
 /* three floats as the retail code copies them: a plain aggregate, without igVec3f's constructors */
-struct Vec3 { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    /* a component by index, returned by value */
+    float operator[](int i) const { return ((const float *)this)[i]; }
+};
 extern "C" igAABox * igAABox_CreateInstance(...);
 extern "C" void FUN_0018b990(igAABox *, float *);
 extern "C" int g_propertyNameField[4];
@@ -1280,12 +1284,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
         if (objects[0]->_isRun != 0 || objects[1]->_isRun != 0 || objects[2]->_isRun != 0) {
             if (ram->_dataList == 0) {
                 allocator = igObject_GetAllocator(ram);
-                if (g_useOwnerAllocator != 0) {
-                    /* matching construct: self-assignment keeps the retail select of the allocator */
-                    allocator = (int)allocator;
-                } else {
-                    allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                }
+                allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 {
                     igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
                     created = ref.p;
@@ -2345,19 +2344,11 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
     return index;
 }
 
-/* Euler rotation given in degrees, applied to a matrix.
- * matching construct: hand search — reading x into a local first swaps the float registers of the
- * x angle and the degrees-to-radians constant */
-static inline void SetEulerDegrees(float *matrix, const Vec3 &degrees) {
-    float x = degrees.x;
-    FUN_001910c0(matrix, 0.017453292f * x, 0.017453292f * degrees.y, 0.017453292f * degrees.z);
-}
-
 /* Install the optional placement carried by the generate message: a position (with an optional
  * Euler rotation in degrees) or a full matrix, applied to the model node's matrix. */
 void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
-    float rotation[3];
-    float position[4];
+    Vec3 rotation;
+    Vec3 position;
     float matrix[16];
     float given[16];
     beModelCtrlInfoRamData *ramData;
@@ -2366,12 +2357,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
     igObject *old;
     if (ram->_dataList == 0) {
         allocator = igObject_GetAllocator(ram);
-        if (g_useOwnerAllocator != 0) {
-            /* matching construct: self-assignment keeps the retail select of the allocator */
-            allocator = (int)allocator;
-        } else {
-            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        }
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         {
             igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
             created = ref.p;
@@ -2391,11 +2377,11 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
     ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_3);
     if (beMessenger_GetVec3Count(self->_messenger) != 0) {
         igMatrix44f_Copy(matrix, (char *)ramData->_node + 0x20);
-        beMessenger_GetVec3((Vec3 *)position, self->_messenger, 0);
-        igMatrix44f_SetTranslation(matrix, position);
+        beMessenger_GetVec3(&position, self->_messenger, 0);
+        igMatrix44f_SetTranslation(matrix, &position);
         if (beMessenger_GetVec3Count(self->_messenger) == 2) {
-            beMessenger_GetVec3((Vec3 *)rotation, self->_messenger, 1);
-            SetEulerDegrees(matrix, *(Vec3 *)rotation);
+            beMessenger_GetVec3(&rotation, self->_messenger, 1);
+            FUN_001910c0(matrix, 0.017453292f * rotation[0], 0.017453292f * rotation[1], 0.017453292f * rotation[2]);
         }
         ((beModelCtrlNode2Slots *)ramData->_node)->vfunc_35(matrix);
         return;

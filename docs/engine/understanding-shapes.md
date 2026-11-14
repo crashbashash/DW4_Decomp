@@ -242,10 +242,26 @@ Units are named by their source file.
 - **An inlined getter's result is a value of its own.** `owned->_kazu = DiskCount(owned) + self->_kazu` gives
   retail's `addu` operand order where every plain spelling flips it; a getter for the selected row does the same
   for an index sum. *Unit:* `src/game/beNDMWShopCtrl00.cpp`.
-- **A conversion on an operand makes it evaluate first.** A float compare whose limit operand carries any conversion
-  (a `const` getter's implicit `T *` to `const T *`) loads that operand later, into the later FP register.
-  *Spelling:* `static inline float fadeLimit(const Work *w) { return w->_fadeLimit; }`. *Unit:*
-  `src/game/beAction2.cpp`.
+- **A conversion on an operand makes it evaluate first.**
+  - A float compare whose limit operand carries any conversion (a `const` getter's implicit `T *` to `const T *`)
+    loads that operand later, into the later FP register.
+    *Spelling:* `static inline float fadeLimit(const Work *w) { return w->_fadeLimit; }`. *Unit:*
+    `src/game/beAction2.cpp`.
+  - *Symptom, in a product:* three components of a local vector each times one float constant; retail has the first
+    component in `$f3` and the constant in `$f2`, every plain spelling has them exchanged.
+  - *Cause:* the optimizer puts the constant on the left of each product and the code generator makes the
+    constant's temporary first, so it has the lowest allocator id and colours last (constant 32, x 33, traced).
+    A component whose load carries two conversion nodes is evaluated before the constant (x 32, constant 33): a
+    value conversion over the load, which a `const float` copied by value leaves behind when the copy is
+    propagated into the product, and a pointer conversion under it, between the local's address and the load.
+    Either one alone changes nothing: `const` and by value but indexed as `(&x)[i]` or `v[i]`, or the pointer cast
+    with a reference return or without `const`, all give the exchanged registers.
+  - *Spelling:* the vector's `const` element accessor returning by value,
+    `float operator[](int i) const { return ((const float *)this)[i]; }`, and the call written out:
+    `MakeEuler(matrix, 0.017453292f * rotation[0], 0.017453292f * rotation[1], 0.017453292f * rotation[2])`.
+    An inline that copies only `x` into a local from a `const Vec3 &` bound to a `float[3]` gave the same bytes
+    by making the same two nodes on one component; one is enough because the constant is shared.
+  - *Unit:* `src/game/beModelCtrl.cpp`.
 - **A `const` reference getter reloads.** `const int &getCount() const { return _count; }` loads through the
   returned reference, so a later `_count + 1` reads memory again, and the value lands in the caller's declared
   variable with its early id. It replaced a `volatile` count. The getter is `igTDataList<T>::getCount` in
@@ -340,6 +356,11 @@ Units are named by their source file.
 - **A constant on the left keeps `slt`.** `if (capacity >= list->_count)` with `capacity` 0 gives `slt zero,count`
   and `bnez`, where `count <= 0` folds to `blez`; a `bool` local compared `== false` keeps the materialised test.
   *Units:* `src/game/beDemoManager.cpp`, `src/game/beSound.cpp`.
+- **A conditional expression keeps both arms; an `if`/`else` that assigns a variable to itself loses one.**
+  `beqz flag; b; move a0,v0` around a second call whose result is also moved to `a0` is
+  `pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(...)`. Written as
+  `if (flag) pool = pool; else pool = ...;` the self-assignment is deleted and the function is 8 bytes short;
+  `pool = (int)pool;` kept it only because the cast hides the self-assignment. *Unit:* `src/game/beModelCtrl.cpp`.
 
 ### Types and values
 
@@ -441,15 +462,36 @@ Units are named by their source file.
     with the row pointer in the third's register (`lw a3,4(a2); lw a2,0(a2)`); the plain spelling loads them in
     order with the row in `a3`. A `(long long)` cast on the fourth argument gives retail's order although the
     parameter is 32-bit.
-  - *Cause:* the two spellings differ in the IR by one conversion node on that argument. Any integer conversion
-    does it, an implicit one between `int` and `unsigned` included; a cast between an integer and a pointer does
-    not. Of the four combinations (conversion on the third, the fourth, both, neither) the fourth is loaded first
-    exactly when it carries one, and the row pointer takes the register of the argument loaded last.
+  - *Cause:* the two spellings differ in the IR by one conversion node on that argument. Any conversion to an
+    integer type does it: an implicit one between `int` and `unsigned`, a byte field widened to an `int` or
+    `unsigned` parameter, `(int)` written on an `int` or on a pointer. A cast to a pointer type does not (it is a
+    node too, but it does not count). Of the four combinations (conversion on the third, the fourth, both,
+    neither) the fourth is loaded first exactly when it carries one, and the row pointer takes the register of the
+    argument loaded last. Where the base pointer is not in an argument register, two arguments that both carry a
+    conversion, or neither, are loaded in order.
   - *Spelling:* the field and the parameter in their own types, which differ in sign: `unsigned size` in the row,
     `int size` in the callee, the argument passed plain. An `int` field with an `unsigned` parameter gives the same
     bytes, here and in the callee's other callers; the row's size is printed as `0x%08x` beside its addresses, so
     the field is the unsigned one.
+  - *The reverse case:* retail loads a list handle before the byte flag passed after it
+    (`lw a3,192(s1); lbu t0,168(s1)`), and with the flag parameter declared `unsigned int` the flag is loaded
+    first, because the widening is a conversion; `(List *)(int)file->_list` then repairs the order by giving the
+    list one too. The parameter has the field's type, `unsigned char endianSwap`, so neither argument carries a
+    conversion. In the callees the flag is tested plain, `if (endianSwap)`: `endianSwap != 0` promotes the byte,
+    and the promotion the tests share becomes an `andi` into a register of its own (4 bytes more).
   - *Unit:* `src/engine/core/CoreLibrary.cpp`.
+- **An `int` copy of a parameter at the top of a function stands for something else.**
+  - *A reassigned variable.* `m = m->_writeProxy ? proxy() : m` makes a second web of `m`, numbered after every
+    declared local, so it colours before the count declared after it and takes its register (`s3`/`s4`
+    exchanged; traced: list 35, `m` 37, count 39, second web of `m` 42). Copies of the list and flag parameters
+    into `int` locals moved their ids instead. The source has two variables, each declared where it is first set:
+    `meta`, `index`, `writeMeta`, `count`, `i`; of the declaration orders only those with `index` before
+    `writeMeta` before `count` before `i` match.
+  - *A cast at a call inside a loop.* `(int)file` on a pointer parameter passed to a callee declared with an `int`
+    is a loop-invariant expression: `IRO_MoveInvariantExpressions` computes it into a temporary before the loop,
+    and when that value is spilled the frame has one more 4-byte slot (192 bytes against 176). The callee takes
+    the pointer type and the parameter is passed plain.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ffe10, 0x2fff90).
 - **m2c offset variables steal saved registers.** A user `offset += 4` with `data + offset` is a source variable
   coloured before the slot pointer; an index loop over `&data[i]` lets the compiler make the offset itself, with
   retail's registers. Rewrite m2c's strength-reduced loops as index loops first. *Unit:*

@@ -482,90 +482,81 @@ int igObject_GetSerializedSize(SizeObject *arg0) {
     return size;
 }
 
-int igObject_WritePersistentFields(O_2fef20 *object, int *buffer, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned int endianSwap) {
-    int listThenCount = (int)metaObjectList;
-    int swap = (int)endianSwap;
-    WriteMeta *m;
-    int id;
-    int i;
-    FI *f;
-
-    m = object->v88();
-    if (m->persistent == 0) {
+int igObject_WritePersistentFields(O_2fef20 *object, int *buffer, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
+    igMetaObject *meta = object->v88();
+    if (meta->_persistent == 0) {
         return 0;
     }
     object->v56();
-    id = 0;
-    m = (m->getter != 0) ? (WriteMeta *)m->getter() : m;
-    if (listThenCount != 0) {
-        id = FUN_002fe600((igTDataList<ChainMeta *> *)listThenCount, (ChainMeta *)m);
+    int index = 0;
+    igMetaObject *writeMeta = (meta->_writeProxy != 0) ? ((igMetaObject *(*)())meta->_writeProxy)() : meta;
+    if (metaObjectList != 0) {
+        index = FUN_002fe600(metaObjectList, (ChainMeta *)writeMeta);
     }
-    listThenCount = igMetaObject_GetFieldCount((igMetaObject *)m);
-    i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
-    buffer[0] = id;
-    id = i;
+    int count = igMetaObject_GetFieldCount(writeMeta);
+    int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
+    buffer[0] = index;
     buffer[1] = igObject_GetSerializedSize((SizeObject *)object);
-    if (swap != 0) {
+    if (endianSwap) {
         ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(buffer, 2);
     }
     buffer += 2;
-    for (; id < listThenCount; id++) {
-        f = (FI *)igMetaObject_GetFieldAt((igMetaObject *)m, id);
-        if (f->f38 == 1 && f->f37 == 0) {
-            buffer = (int *)((char *)buffer + igMetaField_WritePersistentValue((igMetaField *)f, (void *)object, (void *)buffer, (void *)file, swap));
+    for (; i < count; i++) {
+        igMetaField *field = (igMetaField *)igMetaObject_GetFieldAt(writeMeta, i);
+        if (field->_persistent == 1 && field->_isRunTime == 0) {
+            buffer = (int *)((char *)buffer + igMetaField_WritePersistentValue(field, object, buffer, file, endianSwap));
         }
     }
     return igObject_GetSerializedSize((SizeObject *)object);
 }
 
-int FUN_002fff90(ReadObject *arg0, Dat_2fef20 *arg1, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned int endianSwap) {
-    int fileAddress = (int)file;
-    igMetaObject *m;
-    char *s2;
-    int s1;
-    int cnt;
-    int s6, s7;
-    igMetaField *f;
-    m = arg0->v20();
-    if (m->_persistent == 0) return 0;
-    if (endianSwap != 0) {
-        ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(arg1, 3);
+int FUN_002fff90(ReadObject *object, Dat_2fef20 *head, igIGBFile *file, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
+    igMetaObject *meta;
+    char *data;
+    int i;
+    int count;
+    int runTimeFields, readFields;
+    igMetaField *field;
+    meta = object->v20();
+    if (meta->_persistent == 0) return 0;
+    if (endianSwap) {
+        ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(head, 3);
     }
-    s2 = (char *)arg1 + 12;
-    s1 = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
-    cnt = igMetaObject_GetFieldCount((igMetaObject *)m);
-    s6 = 0;
-    s7 = 0;
-    for (; s1 < cnt; s1++) {
-        f = (igMetaField *)igMetaObject_GetFieldAt(m, s1);
-        if (f->_isRunTime != 0) {
-            s6 += 1;
-            ((ReadField *)f)->v29(arg0);
-            if (igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || *(unsigned char *)((char *)f + 52) == 0) igMetaField_Reset(f, arg0);
-        } else if (s7 >= arg1->f8) {
-            ((ReadField *)f)->v29(arg0);
-            if (igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || *(unsigned char *)((char *)f + 52) == 0) igMetaField_Reset(f, arg0);
+    data = (char *)head + 12;
+    i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
+    count = igMetaObject_GetFieldCount(meta);
+    runTimeFields = 0;
+    readFields = 0;
+    for (; i < count; i++) {
+        field = (igMetaField *)igMetaObject_GetFieldAt(meta, i);
+        if (field->_isRunTime != 0) {
+            runTimeFields += 1;
+            ((ReadField *)field)->v29(object);
+            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
+        } else if (readFields >= head->f8) {
+            ((ReadField *)field)->v29(object);
+            if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
         } else {
-            if (endianSwap != 0) ((SwapDescriptor *)igShortMetaField_GetDefaultDescriptor())->Swap(s2, 2);
-            if (s1 < *(short *)s2 + s6) {
-                ((ReadField *)f)->v29(arg0);
-                if (igObject_IsKindOf(f, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || *(unsigned char *)((char *)f + 52) == 0) igMetaField_Reset(f, arg0);
-                if (endianSwap != 0) ((SwapDescriptor *)igShortMetaField_GetDefaultDescriptor())->Swap(s2, 2);
+            if (endianSwap) ((SwapDescriptor *)igShortMetaField_GetDefaultDescriptor())->Swap(data, 2);
+            if (i < *(short *)data + runTimeFields) {
+                ((ReadField *)field)->v29(object);
+                if (igObject_IsKindOf(field, (igMetaObject *)g_igRefMetaField_metaObject[0]) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
+                if (endianSwap) ((SwapDescriptor *)igShortMetaField_GetDefaultDescriptor())->Swap(data, 2);
             } else {
-                s7 += 1;
-                s2 += FUN_002fc740((PersistentSizeView *)f, (int)arg0, (int)s2, fileAddress, endianSwap);
+                readFields += 1;
+                data += FUN_002fc740((PersistentSizeView *)field, (char *)object, data, file, endianSwap);
             }
         }
     }
     {
-        int r = arg1->f4;
-        if (endianSwap != 0) ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(arg1, 3);
-        arg0->v14();
-        return r;
+        int size = head->f4;
+        if (endianSwap) ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(head, 3);
+        object->v14();
+        return size;
     }
 }
 
-int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *dir, igTDataList<ChainMeta *> *metaObjectList, unsigned int swap) {
+int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *dir, igTDataList<ChainMeta *> *metaObjectList, unsigned char endianSwap) {
     FieldMetaView *meta;
     FieldListTable *lists;
     FieldOffsetList *offsets;
@@ -583,7 +574,7 @@ int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *d
         return 0;
     }
     lists = dir->lists;
-    if (swap != 0) {
+    if (endianSwap) {
         ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(head, 2);
     }
     offsets = lists->data[head->kind];
@@ -606,7 +597,7 @@ int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *d
             }
         } else {
             done++;
-            data += FUN_002fc780(field, object, data, dir, swap);
+            data += FUN_002fc780(field, object, data, dir, endianSwap);
             if (done == offsets->count) {
                 limit = count;
             } else {
@@ -615,7 +606,7 @@ int FUN_00300250(FieldObjectView *object, FieldRecordHead *head, FieldDirView *d
         }
     }
     size = head->size;
-    if (swap != 0) {
+    if (endianSwap) {
         ((SwapDescriptor *)igIntMetaField_GetDefaultDescriptor())->Swap(head, 2);
     }
     object->Finish();
