@@ -1,12 +1,12 @@
-void thunk_igPsx2Media_GetMetaObject(void) {
+void igPsx2Media_GetMetaObjectFunction(void) {
     igPsx2Media_GetMetaObject();
 }
 
-void thunk_FUN_002ebcf0(void) {
-    FUN_002ebcf0();
+void igMedia_StaticInitCallback(void) {
+    igMedia_CreateMediaList();
 }
 
-void thunk_FUN_002ebd70(void) {
-    FUN_002ebd70();
+void igMedia_ExitCallback(void) {
+    igMedia_ReleaseMediaList();
 }
 

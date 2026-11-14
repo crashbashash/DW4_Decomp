@@ -32,7 +32,7 @@ void ThreadLocal_SetForThread(void *thread, int slot, void *value) {
 /* Takes the next slot, giving it `value` on the calling thread. */
 int ThreadLocal_NewSlot(void *value) {
     if (g_threadLocalSemaphore == 0) {
-        LuaSemaphoreView *semaphore = FUN_002ba650(0);
+        LuaSemaphoreView *semaphore = igSemaphore_Create(0);
         g_threadLocalSemaphore = semaphore;
         semaphore->initialize();
     } else {

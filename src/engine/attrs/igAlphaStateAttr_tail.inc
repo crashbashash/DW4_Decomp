@@ -20,7 +20,7 @@ void FUN_0013b810(int a0, int a1)
 }
 
 void FUN_0013b820(void *a) {
-    Gap__Core__igObject__vfunc_15(a);
+    igObject_UserPostLoad(a);
     ((short *)a)[5] = 0;
     ((short *)a)[4] = (((VC *)a)->vX())[2];
 }
@@ -35,7 +35,7 @@ void FUN_0013b860(void *p)
 void FUN_0013b8a0(void *arg0) {
     short temp_a0;
 
-    if ((FUN_002fe290(arg0, igAttr_GetMetaObject()) != 0) && (*(unsigned char *)((char *)(arg0) + 26) == 0)) {
+    if ((igMetaObject_IsOfType(arg0, igAttr_GetMetaObject()) != 0) && (*(unsigned char *)((char *)(arg0) + 26) == 0)) {
         temp_a0 = GPR_00554b04;
         GPR_00554b04 = temp_a0 + 1;
         *(int *)((char *)(arg0) + 8) = (int)((int) temp_a0);

@@ -103,7 +103,7 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     temp_s1 = (void *)g_beModelCtrlInfoHitBody_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoHitBody_ctorTable[0], 7);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0), 1);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0018a4f0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;

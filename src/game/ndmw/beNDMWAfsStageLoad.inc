@@ -78,7 +78,7 @@ void beNDMWAfsStageLoad_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00232840();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002be2b0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igNamedObject_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &g_beNDMWAfsStageLoad_fieldTable[0], &DAT_004cc618[0], &DAT_004cc620[0], temp_s2);
 }

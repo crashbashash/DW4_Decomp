@@ -34,7 +34,7 @@ int beFileListInfoManager_GetVTable(void) {
     obj.vt = &DAT_0053a4e0[0];
     FUN_001d35d0(&obj.w13, -1);
     FUN_001d35d0(&obj.w12, -1);
-    FUN_002bac40(&obj.w11, -1);
+    igSmartPointer_igDirectoryList_Destruct(&obj.w11, -1);
     FUN_001d35d0(&obj.w10, -1);
     ObjectRef_Destruct_001c6460(&obj.w9, -1);
     FUN_00231030(&obj, 0);
@@ -92,21 +92,21 @@ void beFileListInfoManager_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00459380();
     ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), -1);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002c7150();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igDirectoryList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &g_beFileListInfoManager_fieldTable[0], &DAT_004c6ef0[0], &DAT_004c6f20[0], temp_s0);
 }

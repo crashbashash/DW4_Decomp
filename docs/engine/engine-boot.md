@@ -49,9 +49,9 @@ viewer setup (`0x463560`) built around a new window, reference holders, an `igFo
 and a loading-file message; `0x259f90` then stores two of the app's references into it, and `0x25a330`
 is its destructor.
 
-### The engine core init (`FUN_002d16a0`)
+### The engine core init (`igObjectSystem_Acquire`)
 
-`FUN_002d16a0` (`0x2d16a0`, called with `0xc80`) is the engine core init/acquire, refcounted on the
+`igObjectSystem_Acquire` (`0x2d16a0`, called with `0xc80`) is the engine core init/acquire, refcounted on the
 64-bit global `0x586dd8`.  On the first call it sets `0x4fb410 = 0` and `0x4fb418 = 1`, calls
 `0x32d1f0`, allocates a 928-byte object, runs `0x2d1930` on it, stores it at `0x586dc8`, passes it to
 `0x2d1a00`, then runs the init chain `0x2b9620`/`0x2b9470`/`0x2c4d80`/`0x2bb200`/`0x2bad40` and

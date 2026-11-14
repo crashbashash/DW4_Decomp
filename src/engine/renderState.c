@@ -136,8 +136,8 @@ extern int DAT_0056b604[4];
 extern int DAT_0056b4f8[4];
 extern int DAT_0056b530[4];
 extern int DAT_0056b568[4];
-int FUN_00330770();
-void *FUN_00330730();
+int Memory_FreeToSelector();
+void *Memory_AllocateAligned16();
 double sqrt(double);
 
 void FUN_001ff3b0(int arg0) {
@@ -1144,7 +1144,7 @@ void *FUN_00203000(int index) {
         prev = total;
         total *= counts[i];
     }
-    p = FUN_00330730(total * 4 + 0x28, 0x14);
+    p = Memory_AllocateAligned16(total * 4 + 0x28, 0x14);
     if (p != 0) {
         p->next = 0;
         p->m0 = *(long long *)((char *)p2VuPrograms + (index << 6));
@@ -1169,7 +1169,7 @@ void FUN_00203500(void) {
         p = DAT_0056b460[i];
         while (p != 0) {
             next = *(void **)((char *)p + 20);
-            FUN_00330770(p, 0x14);
+            Memory_FreeToSelector(p, 0x14);
             p = next;
         }
         DAT_0056b460[i] = 0;

@@ -34,16 +34,16 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
         strcat(buf, (char *)&DAT_004de6c8[0]);
         strcat(buf, arg0->f32);
         if (arg1->vX(buf) == 0) {
-            FUN_00300f50(arg0, buf);
+            igObject_FreeMemory(arg0, buf);
             return 0;
         }
-        FUN_00300f50(arg0, buf);
+        igObject_FreeMemory(arg0, buf);
     }
     return 1;
 }
 
 void Gap__Gfx__igExternalImageEntry__vfunc_11(int arg0) {
-    Gap__Core__igExternalDirEntry__vfunc_11();
-    FUN_002e26b0(arg0, &text_igImageDirectory[0]);
+    igExternalDirEntry_InitDefaults();
+    igExternalDirEntry_SetDirectoryName(arg0, &text_igImageDirectory[0]);
 }
 

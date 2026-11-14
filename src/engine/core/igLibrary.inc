@@ -2,23 +2,23 @@ igMetaObject *igLibrary_GetMetaObject(void)
 {
     igMetaObject *g = g_igLibrary_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c2570();
+        igLibrary_EnsureRegistered();
     return g_igLibrary_metaObject[0];
 }
 
-void FUN_002c2570(void)
+void igLibrary_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLibrary_Register);
 }
 
 void igLibrary_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igLibrary_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igLibrary_GetMetaObject,
+        igLibrary_GetMetaObjectFunction,
         igLibrary_className,
         0xC, /* instance size */
         0,
@@ -28,7 +28,7 @@ void igLibrary_Register(void) {
     );
 }
 
-void thunk_igLibrary_GetMetaObject(void) {
+void igLibrary_GetMetaObjectFunction(void) {
     igLibrary_GetMetaObject();
 }
 

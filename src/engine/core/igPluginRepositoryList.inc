@@ -1,4 +1,4 @@
-igMetaObject *FUN_002bc760(void) {
+igMetaObject *igPluginRepositoryList_GetOrCreateMetaObject(void) {
     if (g_igPluginRepositoryList_metaObject[0] == 0) {
         g_igPluginRepositoryList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igPluginRepositoryList_GetMetaObject(void)
 {
     igMetaObject *g = g_igPluginRepositoryList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bc840();
+        igPluginRepositoryList_EnsureRegistered();
     return g_igPluginRepositoryList_metaObject[0];
 }
 
@@ -21,19 +21,19 @@ int igPluginRepositoryList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002bc840(void)
+void igPluginRepositoryList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPluginRepositoryList_Register);
 }
 
 void igPluginRepositoryList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igPluginRepositoryList_metaObject),
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igPluginRepositoryList_GetMetaObject,
+        igPluginRepositoryList_GetMetaObjectFunction,
         igPluginRepositoryList_className,
         0x14, /* instance size */
         igPluginRepositoryList_GetVTable,
@@ -43,7 +43,7 @@ void igPluginRepositoryList_Register(void) {
     );
 }
 
-void thunk_igPluginRepositoryList_GetMetaObject(void) {
+void igPluginRepositoryList_GetMetaObjectFunction(void) {
     igPluginRepositoryList_GetMetaObject();
 }
 

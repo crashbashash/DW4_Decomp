@@ -1,4 +1,4 @@
-igMetaObject *FUN_002c7150(void) {
+igMetaObject *igDirectoryList_GetOrCreateMetaObject(void) {
     if (g_igDirectoryList_metaObject[0] == 0) {
         g_igDirectoryList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igDirectoryList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDirectoryList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c7230();
+        igDirectoryList_EnsureRegistered();
     return g_igDirectoryList_metaObject[0];
 }
 
@@ -20,19 +20,19 @@ int igDirectoryList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002c7230(void)
+void igDirectoryList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDirectoryList_Register);
 }
 
 void igDirectoryList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igDirectoryList_metaObject),
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igDirectoryList_GetMetaObject,
+        igDirectoryList_GetMetaObjectFunction,
         igDirectoryList_className,
         0x14, /* instance size */
         igDirectoryList_GetVTable,
@@ -42,7 +42,7 @@ void igDirectoryList_Register(void) {
     );
 }
 
-void thunk_igDirectoryList_GetMetaObject(void) {
+void igDirectoryList_GetMetaObjectFunction(void) {
     igDirectoryList_GetMetaObject();
 }
 

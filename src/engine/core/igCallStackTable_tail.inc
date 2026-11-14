@@ -1,9 +1,9 @@
-void FUN_002d38e0(igCallStackTableView *table, int hashCapacity)
+void igCallStackTable_SetHashCapacity(igCallStackTableView *table, int hashCapacity)
 {
     table->_hashCapacity = hashCapacity;
 }
 
-void FUN_002d38f0(igCallStackTableView *table) {
+void igCallStackTable_ApplyCapacity(igCallStackTableView *table) {
     int capacity;
     igTDataList<unsigned int> *callStacks;
 
@@ -15,7 +15,7 @@ void FUN_002d38f0(igCallStackTableView *table) {
     table->vfunc_31(table->_hashCapacity);
 }
 
-void FUN_002d3950(igCallStackTableView *table) {
+void igCallStackTable_Clear(igCallStackTableView *table) {
     igTDataList<unsigned int> *callStacks;
     igTDataList<unsigned int> *callStacks2;
     igTDataList<int> *hashIndex;
@@ -51,13 +51,13 @@ void FUN_002d3950(igCallStackTableView *table) {
     }
 }
 
-void FUN_002d3a20(igCallStackTableView *table) {
+void igCallStackTable_RemoveAllCallStacks(igCallStackTableView *table) {
     igResult discarded;
 
     discarded = table->vfunc_24(0);
 }
 
-int Gap__Core__igCallStackTable__vfunc_23(igCallStackTableView *table) {
+int igCallStackTable_GetCallStackCount(igCallStackTableView *table) {
     igTDataList<unsigned int> *callStacks;
     unsigned int *p;
     int n;
@@ -77,7 +77,7 @@ int Gap__Core__igCallStackTable__vfunc_23(igCallStackTableView *table) {
     return cnt;
 }
 
-void Gap__Core__igCallStackTable__vfunc_24(igResult *result, igCallStackTableView *table, int count) {
+void igCallStackTable_TruncateCallStacks(igResult *result, igCallStackTableView *table, int count) {
     igTDataList<unsigned int> *l;
     int i;
     int cnt;
@@ -109,7 +109,7 @@ void Gap__Core__igCallStackTable__vfunc_24(igResult *result, igCallStackTableVie
     result->v = g_resultFailure.v;
 }
 
-unsigned int *Gap__Core__igCallStackTable__vfunc_25(igCallStackTableView *table, int offset) {
+unsigned int *igCallStackTable_GetCallStack(igCallStackTableView *table, int offset) {
 unsigned int *r; if (offset < 0 || offset >= table->_callStacks->_count || table->_callStacks->_data == 0) { r = 0; } else { r = table->_callStacks->_data + offset; if (offset > 0 && r[-1] != 0) r = 0; } return r;
 }
 
@@ -143,7 +143,7 @@ extern "C" int Gap__Core__igCallStackTable__addCallStack(igCallStackTableView *s
     return offset;
 }
 
-void Gap__Core__igCallStackTable__vfunc_27(igCallStackTableView *table, int *stack) {
+void igCallStackTable_InsertCallStack(igCallStackTableView *table, int *stack) {
     switch (table->findCallStack((unsigned int *)stack)) {
     case -1: table->addCallStack(stack); break;
     default: break;
@@ -215,7 +215,7 @@ extern "C" int Gap__Core__igCallStackTable__findCallStack(igCallStackTableView *
     return -1;
 }
 
-unsigned int Gap__Core__igCallStackTable__vfunc_29(igCallStackTableView *self, unsigned int *stack) {
+unsigned int igCallStackTable_HashCallStack(igCallStackTableView *self, unsigned int *stack) {
     igTDataList<int> *t = self->_hashIndex;
     unsigned int sum = 0;
     unsigned int n;
@@ -235,7 +235,7 @@ unsigned int Gap__Core__igCallStackTable__vfunc_29(igCallStackTableView *self, u
     return r;
 }
 
-int Gap__Core__igCallStackTable__vfunc_30(igCallStackTableView *self, unsigned int *stack, int offset) {
+int igCallStackTable_InsertHashEntry(igCallStackTableView *self, unsigned int *stack, int offset) {
     int tries = 0;
     int n = self->_hashIndex->_count;
     int half = n / 2;
@@ -262,7 +262,7 @@ ok:
     return 1;
 }
 
-void Gap__Core__igCallStackTable__vfunc_31(igCallStackTableView *self, int arg1)
+void igCallStackTable_RebuildHashIndex(igCallStackTableView *self, int arg1)
 {
     igObject *r;
     int cnt;
@@ -277,7 +277,7 @@ void Gap__Core__igCallStackTable__vfunc_31(igCallStackTableView *self, int arg1)
     unsigned *var_s0;
     int temp_s1;
 
-    FUN_002d38e0(self, arg1);
+    igCallStackTable_SetHashCapacity(self, arg1);
     if (arg1 != 0) {
         if (self->_hashIndex == 0) {
             temp_s1 = ((int)igObject_GetAllocator((int)self));
@@ -286,7 +286,7 @@ void Gap__Core__igCallStackTable__vfunc_31(igCallStackTableView *self, int arg1)
                 ((igRefCountWord *)&r->_refCount)->word = ((igRefCountWord *)&r->_refCount)->word - 1;
                 if (((igRefCountWord *)&r->_refCount)->bits.count == 0) igObject_Destroy(r);
             }
-            self->_hashIndex = (igTDataList<int> *)FUN_002ca8b0(temp_s1);
+            self->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(temp_s1);
         }
         l = self->_hashIndex;
         if (arg1 >= l->_count) List_Reserve((igDataList *)l, arg1, 4);

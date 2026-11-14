@@ -48,8 +48,8 @@ void igBlendEquationExt_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igBlendEquationExt_ctorTable[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_00489138[0]);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_002d1870);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00489138[0]);
+    *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     igMetaObject_NameFields(temp_s0, &g_igBlendEquationExt_fieldTable[0], &DAT_00489128[0], &DAT_00489130[0], temp_s2);
     *(int *)((char *)(g_igBlendEquationExt_metaObject[0]) + 60) = (int)(&thunk_igPsx2BlendEquationExt_GetMetaObject);
 }

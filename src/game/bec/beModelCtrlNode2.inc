@@ -61,7 +61,7 @@ void beModelCtrlNode2_InitFields(void) {
     temp_s0 = (void *)g_beModelCtrlNode2_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beModelCtrlNode2_ctorTable[0], 4);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     *(int *)((char *)(temp_s1) + 56) = FUN_0013af00();
     *(char *)((char *)(temp_s1) + 52) = 1;

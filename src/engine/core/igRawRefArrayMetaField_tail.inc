@@ -1,11 +1,11 @@
-void Gap__Core__igRawRefArrayMetaField__vfunc_52(igRawRefArrayMetaField *self, int item, int count) {
+void igRawRefArrayMetaField_SwapBytes(igRawRefArrayMetaField *self, int item, int count) {
     void **descriptor;
 
     descriptor = (void **)(((void **)igRawRefMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
-int Gap__Core__igRawRefArrayMetaField__vfunc_51(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
+int igRawRefArrayMetaField_ReadRawFieldMem(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
     int s;
     int d;
     int start;
@@ -21,7 +21,7 @@ int Gap__Core__igRawRefArrayMetaField__vfunc_51(igRawRefArrayMetaField *self, in
     return d - start;
 }
 
-int Gap__Core__igRawRefArrayMetaField__vfunc_50(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
+int igRawRefArrayMetaField_WriteRawFieldMem(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
     int s;
     int d;
     int start;
@@ -40,13 +40,13 @@ int Gap__Core__igRawRefArrayMetaField__vfunc_50(igRawRefArrayMetaField *self, in
 /* Storage size in bytes of an array field of _num raw references (4 bytes each), truncated to 16
  * bits. Vtable slot 25 is the element-size query. */
 
-int Gap__Core__igRawRefArrayMetaField__vfunc_25(igRawRefArrayMetaField *self) {
+int igRawRefArrayMetaField_GetSize(igRawRefArrayMetaField *self) {
     return (self->_num * sizeof(int)) & 0xFFFF;
 }
 
 /* IgPluginRepositoryList slot 53, a constant-returning override that returns 4. */
 
-int FUN_00305370(igPluginRepositoryList *self) {
+int igRawRefMetaField_GetSize(igPluginRepositoryList *self) {
     return 4;
 }
 

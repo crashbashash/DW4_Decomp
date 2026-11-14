@@ -1,4 +1,4 @@
-igMetaObject *Gap__Core__igDirEntry__vfunc_22(void) {
+igMetaObject *igDirEntry_GetMeta(void) {
     return g_igDirEntry_metaObject[0];
 }
 

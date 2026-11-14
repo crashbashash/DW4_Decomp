@@ -1,4 +1,4 @@
-void Gap__Core__igArenaMemoryPool__vfunc_111(igArenaMemoryPool *o, unsigned int lo, int len) {
+void igArenaMemoryPool_UpdateBlockList(igArenaMemoryPool *o, unsigned int lo, int len) {
     ArenaState *r;
     int i;
     bool found;
@@ -69,7 +69,7 @@ if (r->blockCount >= cap) {
     }
 }
 
-void Gap__Core__igArenaMemoryPool__vfunc_88(void *self0) {
+void igArenaMemoryPool_DisplayOutstandingAllocations(void *self0) {
  igArenaMemoryPoolView *s; ArenaState *arena; int i;
  s = (igArenaMemoryPoolView *)self0;
  arena = s->_arenaState;
@@ -79,8 +79,8 @@ void Gap__Core__igArenaMemoryPool__vfunc_88(void *self0) {
    int *p = &arena->blocks[i];
    igArenaMemoryPool_DisplayOutstandingAllocationsBlock(s, i, (char *)p[0], (char *)p[1]);
  }
- FUN_00304430(DAT_004f95c8);
- FUN_00304680();
+ igReport_Printf(DAT_004f95c8);
+ igReport_Flush();
 }
 
 /* Walks the chunks of system block `index` from `cur` to `end` and prints each chunk still in use
@@ -94,23 +94,23 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
     int count = 0;
     bool ok = false;
     if (cur < lo || hi < cur) {
-        FUN_00304430(DAT_004fbf10, index, cur, lo, hi);
-        FUN_00304680();
+        igReport_Printf(DAT_004fbf10, index, cur, lo, hi);
+        igReport_Flush();
         return;
     }
     if (end < lo || hi < end) {
-        FUN_00304430(DAT_004fbf90, index, end, lo, hi);
-        FUN_00304680();
+        igReport_Printf(DAT_004fbf90, index, end, lo, hi);
+        igReport_Flush();
         return;
     }
     if (end < cur) {
-        FUN_00304430(DAT_004fc010, index, end, cur);
-        FUN_00304680();
+        igReport_Printf(DAT_004fc010, index, end, cur);
+        igReport_Flush();
         return;
     }
     if (!((TaggedBlockHeader *)cur)->used) {
-        FUN_00304430(DAT_004fc090);
-        FUN_00304680();
+        igReport_Printf(DAT_004fc090);
+        igReport_Flush();
         return;
     }
     while (cur < end) {
@@ -148,16 +148,16 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
         }
         if ((char *)n != end && n->used) {
             char *allocation = cur + (big == 0 ? 4 : 12);
-            FUN_00304430((const char *)DAT_004fc120, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
-            FUN_00304680();
+            igReport_Printf((const char *)DAT_004fc120, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
+            igReport_Flush();
         }
         cur = (char *)n;
         count++;
     }
     if (cur != end && !ok) {
 bad:
-        FUN_00304430(DAT_004fc150, cur, index, count, size);
-        FUN_00304680();
+        igReport_Printf(DAT_004fc150, cur, index, count, size);
+        igReport_Flush();
         return;
     }
 }

@@ -1,5 +1,5 @@
-void * FUN_002c43b0(int arg0) {
-    FUN_002c44c0();
+void * igFolder_Create(int arg0) {
+    igFolder_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586368), (igMemoryPoolView *)arg0));
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igFolder_GetMetaObject(void)
 {
     igMetaObject *g = g_igFolder_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c44c0();
+        igFolder_EnsureRegistered();
     return g_igFolder_metaObject[0];
 }
 
@@ -39,19 +39,19 @@ int igFolder_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002c44c0(void)
+void igFolder_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFolder_Register);
 }
 
 void igFolder_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igFolder_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igFolder_GetMetaObject,
+        igFolder_GetMetaObjectFunction,
         igFolder_className,
         0xC, /* instance size */
         igFolder_GetVTable,
@@ -61,7 +61,7 @@ void igFolder_Register(void) {
     );
 }
 
-void thunk_igFolder_GetMetaObject(void) {
+void igFolder_GetMetaObjectFunction(void) {
     igFolder_GetMetaObject();
 }
 
@@ -73,6 +73,6 @@ void igFolder_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igFolder_ctorTable[0], 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igFolder_fieldTable[0], (igMetaField ***)&DAT_004c0aa8[0], &DAT_004c0ab0[0], temp_s1);
-    *(int *)((char *)(((void * *)g_igFolder_metaObject)[0]) + 60) = (int)(&thunk_igPsx2Folder_GetMetaObject);
+    *(int *)((char *)(((void * *)g_igFolder_metaObject)[0]) + 60) = (int)(&igPsx2Folder_GetMetaObjectFunction);
 }
 

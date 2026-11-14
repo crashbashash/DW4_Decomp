@@ -231,7 +231,7 @@ static inline void setPrev(igTDataList<igObject *> *l, int i, igObject *v, int o
     }
 }
 
-void FUN_00302540(igTDataList<igObject *> *self, igMetaField *field) {
+void igObjectList_SortByField(igTDataList<igObject *> *self, igMetaField *field) {
 int i; int n; igObject *a; igObject *b; int off; int swapped; unsigned int prev; unsigned int cur; igObject **p;
 
     if (field == 0) {

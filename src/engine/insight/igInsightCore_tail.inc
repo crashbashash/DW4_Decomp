@@ -73,12 +73,12 @@ void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0) {
     StringRef_237300 first(&text_Clear_done[0]);
     StringRef_237300 second(&text_Scenes_done[0]);
     StringRef_237300 third(&text_Overlays_done[0]);
-    FUN_002d78e0(arg0->f28, first.p);
-    FUN_002d78e0(arg0->f28, second.p);
-    FUN_002d78e0(arg0->f28, third.p);
-    FUN_002d7090(arg0->f28, first.p, second.p);
-    FUN_002d7090(arg0->f28, second.p, third.p);
-    FUN_002d7090(arg0->f28, arg0->f44, first.p);
+    igDependencyOrderedList_AddCheckPoint(arg0->f28, first.p);
+    igDependencyOrderedList_AddCheckPoint(arg0->f28, second.p);
+    igDependencyOrderedList_AddCheckPoint(arg0->f28, third.p);
+    igDependencyOrderedList_AddDependency(arg0->f28, first.p, second.p);
+    igDependencyOrderedList_AddDependency(arg0->f28, second.p, third.p);
+    igDependencyOrderedList_AddDependency(arg0->f28, arg0->f44, first.p);
     igRendererOrderedList_Append(arg0->f28, arg0->f44, 0);
     arg0->f72 = 0x40000;
     *(struct A_237300 **)(arg0->f36 + 8) = arg0;

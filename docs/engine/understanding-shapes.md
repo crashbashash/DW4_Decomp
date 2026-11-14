@@ -108,6 +108,25 @@ makes them runs. So registers follow the order values come into existence, and a
 the caller's declared variable, not an inline's local. A whole-file unit with code outside the function is refused;
 copy the function into a test file.
 
+### MWCC with its scheduler off
+
+**When:** the instructions are right and a few sit in another order inside one block, or a branch delay slot holds
+another instruction. `#pragma schedule off` at the top of a scratch copy (never in the unit) compiles the same code
+without the scheduler, so the listing is in the order the code generator wrote it:
+
+```sh
+(echo '#pragma schedule off'; cat t.cpp) > t_natural.cpp
+```
+
+That order follows the source: statements in sequence, an inline's arguments from the last to the first, a bit-field
+store as load, value, mask, merge, store. The scheduled listing hoists every constant and load that depends on
+nothing ahead of the chain of stores, and puts off the user of a load until nothing else is ready. The compiler runs
+the scheduler twice, before and after register allocation (its debug strings name "schedule before" and "schedule
+after"), so the first run decides which temporaries overlap and with that their registers. The result is sensitive to
+position: one more instruction at the head of a block exchanges a pair further down. Two spellings with the same
+unscheduled listing and different scheduled ones differ in something the listing does not show, such as a register
+copy that coalescing removes.
+
 ### EE GCC's scheduler trace
 
 **When:** the instructions are right and only their order differs (a store or load issued earlier or later, a
@@ -394,6 +413,24 @@ Units are named by their source file.
   - *Units:* `src/engine/igViewerGuiFactory.cpp`; the reverse case in
     `src/engine/gfx/igVisualContextCapabilityManager_tail.inc`. The measurements are in
     [build profiles](build-profiles.md).
+
+- **A scoped object with a constructor and a destructor keeps its member in memory.**
+  - *Symptom:* a pointer the function already holds in a saved register is stored to the stack and loaded back
+    before each of two calls (`sw s1,172(sp); lw a1,172(sp)`), and nothing else uses the slot.
+  - *Cause:* a local of a class with a destructor is not scalarized; its inline constructor and destructor read
+    the member through the object.
+  - *Spelling:* the original's scoped helper: a struct holding the pointer whose constructor and destructor make
+    the call, declared in the guarded block. Its out-of-line destructor copy is a `stripped` row.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator's entry points).
+- **A check that cannot fail still shares its loads.**
+  - *Symptom:* a field is loaded ahead of a guard and first used after it, with no reload, while every later use
+    reloads it.
+  - *Cause:* the source tests the field in a check whose condition is constant, ahead of the guard. Common
+    subexpression elimination gives the dead check and the live one a shared temporary before the dead one is
+    removed, and the temporary's load stays where the dead check stood. Two dead checks before the guard number
+    the temporary differently from one.
+  - *Spelling:* keep the original's constant checks, in place.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator's state checker).
 
 ### Control flow
 
@@ -728,6 +765,27 @@ Units are named by their source file.
   - An index declared at the head of the function (`int i; int seen = 0; bool found = false;`) is numbered
     before the counters zeroed beside it and takes the higher temporary register. *Unit:*
     `src/engine/core/CoreLibrary.cpp` (0x306510).
+- **The front end orders the operands of a commutative operator.**
+  - *Symptom:* `addu v1,v1,a0` where retail has `addu v1,a0,v1`, and exchanging the operands in the source changes
+    nothing.
+  - *Cause:* MWCC rewrites `a + b` before the optimizer runs; the first phase of the IR dump already shows the new
+    order. A plain variable goes ahead of an expression, and the shorter of two expressions first. A call of an
+    inline function is an expression at that point, even one that expands to a single temporary, so
+    `size(p) + (p->words + 1) * 4` becomes `(p->words + 1) * 4 + @temp`.
+  - *Spelling:* give the term retail adds first a local of its own (`payload = size(p); total = payload + ...`), or
+    put the whole sum in the inline, where the left term is the inline's own local.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator).
+- **An inline's return value replaces the variable it is assigned to.**
+  - *Symptom:* two saved registers exchanged, and no declaration order of the locals moves them.
+  - *Cause:* in `total = sum(p)` copy propagation replaces `total` with the inline's return temporary, which takes
+    its allocator id after every declared local. A local assigned an expression that only contains the inline's
+    result (`total = payload + ...`) keeps the id of its declaration.
+  - *Spelling:* as above; the destination then colours by where it is declared.
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator).
+- **A value read through an accessor inline is numbered with the inline's values.** A saved flag
+  (`used = usedBit(p)`), a link store whose value is loaded (`setForward(p, *bin)`) and a size kept in a named local
+  rather than updated in place each gave retail's temporaries where the written-out expression exchanged two of
+  them. *Unit:* `src/engine/core/CoreLibrary.cpp` (the arena allocator).
 - **m2c offset variables steal saved registers.** A user `offset += 4` with `data + offset` is a source variable
   coloured before the slot pointer; an index loop over `&data[i]` lets the compiler make the offset itself, with
   retail's registers. Rewrite m2c's strength-reduced loops as index loops first. *Unit:*

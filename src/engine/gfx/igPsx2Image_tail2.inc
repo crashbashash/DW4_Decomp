@@ -16,7 +16,7 @@ void Gap__Gfx__igPsx2Image__vfunc_20(void *arg0) {
 }
 
 void Gap__Gfx__igPsx2Image__vfunc_11(void) {
-    Gap__Core__igObject__vfunc_09();
+    igObject_InitDefaults();
 }
 
 void thunk_FUN_001592c0__0016e390(LongListStorageView *self) {
@@ -179,7 +179,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
     p->f84 = 0;
     s->Read(&b, 4, 1);
     s->Read(&b, 4, 1);
-    p->f52 = FUN_00300db0(p, p->f48, 0x80);
+    p->f52 = igObject_MallocAligned(p, p->f48, 0x80);
     p->f60 = 1;
     s->Read((void *)p->f52, 1, p->f48);
     s->d24();
@@ -230,7 +230,7 @@ int Gap__Gfx__igPsx2Image__vfunc_44(Img_16ece0 *arg0, Strm_16ece0 *arg1) {
     arg1->v25((char *)arg0 + 8, 4, 1);
     arg1->v25((char *)arg0 + 12, 4, 1);
     arg0->f20 = 1;
-    arg0->f52 = FUN_00300db0(arg0, arg0->f48, 0x80);
+    arg0->f52 = igObject_MallocAligned(arg0, arg0->f48, 0x80);
     arg0->f60 = 1;
     arg1->v25((void *)arg0->f52, 1, arg0->f48);
     arg1->v24();

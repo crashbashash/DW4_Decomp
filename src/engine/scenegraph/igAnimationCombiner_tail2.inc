@@ -3,7 +3,7 @@ void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
     int result2;
     int bones;
     int i;
-    Gap__Core__igObject__vfunc_15(c);
+    igObject_UserPostLoad(c);
     bones = c->_animHierarchy->getBoneCount();
     for (i = 0; i < bones; i++) {
         BoneInfoRow *row = c->_boneInfoListList->_data[i];

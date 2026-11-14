@@ -1,9 +1,9 @@
-void * FUN_002cb4b0(int arg0) {
-    FUN_002cb5d0();
+void * igContextExtInfoList_Create(int arg0) {
+    igContextExtInfoList_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868C0), (igMemoryPoolView *)arg0));
 }
 
-igMetaObject *FUN_002cb4f0(void) {
+igMetaObject *igContextExtInfoList_GetOrCreateMetaObject(void) {
     if (g_igContextExtInfoList_metaObject[0] == 0) {
         g_igContextExtInfoList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igContextExtInfoList_GetMetaObject(void)
 {
     igMetaObject *g = g_igContextExtInfoList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002cb5d0();
+        igContextExtInfoList_EnsureRegistered();
     return g_igContextExtInfoList_metaObject[0];
 }
 
@@ -27,19 +27,19 @@ int igContextExtInfoList_GetVTable(void) {
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_002cb5d0(void)
+void igContextExtInfoList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExtInfoList_Register);
 }
 
 void igContextExtInfoList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igContextExtInfoList_metaObject),
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igContextExtInfoList_GetMetaObject,
+        igContextExtInfoList_GetMetaObjectFunction,
         igContextExtInfoList_className,
         0x14, /* instance size */
         igContextExtInfoList_GetVTable,
@@ -49,7 +49,7 @@ void igContextExtInfoList_Register(void) {
     );
 }
 
-void thunk_igContextExtInfoList_GetMetaObject(void) {
+void igContextExtInfoList_GetMetaObjectFunction(void) {
     igContextExtInfoList_GetMetaObject();
 }
 

@@ -68,7 +68,7 @@ void beNDMWShopCtrlDeviceSell_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlDeviceSell_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlDeviceSell_fieldTable[0], &DAT_004c9a50[0], &DAT_004c9a58[0], temp_s2);
 }

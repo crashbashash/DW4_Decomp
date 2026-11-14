@@ -87,9 +87,9 @@ void igSearchSceneGraph_InitFields(void) {
     *(unsigned char *)((char *)firstRef + 52) = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), &DAT_004e9da0[0]);
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
-    *(int *)((char *)secondRef + 56) = FUN_002be610();
+    *(int *)((char *)secondRef + 56) = igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
-    FUN_002dc7a0(enumField, &DAT_004982e0[0]);
+    igEnumMetaField_SetDefaultValue(enumField, &DAT_004982e0[0]);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
     igMetaObject_NameFields(meta, &g_igSearchSceneGraph_fieldTable[0], &DAT_004982c0[0], &DAT_004982d0[0], first);
 }

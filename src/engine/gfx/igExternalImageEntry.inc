@@ -47,7 +47,7 @@ void *FUN_0014f4e0(struct S *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -68,7 +68,7 @@ W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
             }
         }
         if (flag > 0) {
-            thunk_FUN_002ed460__002ff810(t);
+            thunk_Memory_FreeBuffer(t);
         }
     }
     return t;

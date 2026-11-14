@@ -1,4 +1,4 @@
-void * FUN_002bd680(int arg0) {
+void * igObjectList_Create(int arg0) {
     igObjectList_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B60), (igMemoryPoolView *)arg0));
 }
@@ -33,13 +33,13 @@ void igObjectList_EnsureRegistered(void)
 }
 
 void *igObjectList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     return ((void *)igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igObjectList_metaObject),
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igObjectList_GetMetaObject,
+        igObjectList_GetMetaObjectFunction,
         igObjectList_className,
         0x14, /* instance size */
         igObjectList_GetVTable,
@@ -49,7 +49,7 @@ void *igObjectList_Register(void) {
     ));
 }
 
-void thunk_igObjectList_GetMetaObject(void) {
+void igObjectList_GetMetaObjectFunction(void) {
     igObjectList_GetMetaObject();
 }
 

@@ -1,9 +1,9 @@
-void FUN_002eb0a0(int a0, int a1)
+void igLocationTable_SetHashCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 12) = a1;
 }
 
-void FUN_002eb0b0(igLocationTableView *arg0) {
+void igLocationTable_Allocate(igLocationTableView *arg0) {
     igTDataList<unsigned int> *temp_a0;
     int temp_a1;
     temp_a1 = arg0->_capacity * 5;
@@ -12,15 +12,15 @@ void FUN_002eb0b0(igLocationTableView *arg0) {
         List_Reserve((igDataList *)temp_a0, temp_a1, 4);
     }
     arg0->vfunc_32(arg0->_hashCapacity);
-    FUN_0030cf20(arg0->_symbolNames, arg0->_capacity * 4);
-    FUN_0030cf30(arg0->_symbolNames, arg0->_capacity);
-    FUN_0030cf40((void *)arg0->_symbolNames);
-    FUN_0030cf20(arg0->_sourceFileNames, 0x1000);
-    FUN_0030cf30(arg0->_sourceFileNames, 0x100);
-    FUN_0030cf40((void *)arg0->_sourceFileNames);
+    igStringTable_SetCapacity(arg0->_symbolNames, arg0->_capacity * 4);
+    igStringTable_SetHashCapacity(arg0->_symbolNames, arg0->_capacity);
+    igStringTable_Reserve((void *)arg0->_symbolNames);
+    igStringTable_SetCapacity(arg0->_sourceFileNames, 0x1000);
+    igStringTable_SetHashCapacity(arg0->_sourceFileNames, 0x100);
+    igStringTable_Reserve((void *)arg0->_sourceFileNames);
 }
 
-void FUN_002eb150(igLocationTableView *table) {
+void igLocationTable_Clear(igLocationTableView *table) {
     igTDataList<unsigned int> *locations;
     igTDataList<int> *hashIndex;
     locations = table->_locations;
@@ -45,22 +45,22 @@ void FUN_002eb150(igLocationTableView *table) {
             List_Reserve((igDataList *)hashIndex, 0, 4);
         }
     }
-    FUN_0030cfa0((igStringTableView *)table->_symbolNames);
-    FUN_0030cfa0((igStringTableView *)table->_sourceFileNames);
+    igStringTable_Clear((igStringTableView *)table->_symbolNames);
+    igStringTable_Clear((igStringTableView *)table->_sourceFileNames);
 }
 
-int FUN_002eb210(void *arg0) {
+int igLocationTable_IsInitialized(void *arg0) {
     return *(int *)((char *)arg0 + 8) != 0;
 }
 
 /* Number of locations in the table. The locations list stores five ints per location, so the count
  * is the list length divided by five (the resize sibling vfunc_24 sets the length to count * 5). */
 
-int Gap__Core__igLocationTable__vfunc_23(igLocationTable *self) {
+int igLocationTable_GetCount(igLocationTable *self) {
     return ((igDataList *)(self->_locations))->_count / 5;
 }
 
-void Gap__Core__igLocationTable__vfunc_24(int *arg0, void *arg1, int arg2)
+void igLocationTable_Resize(int *arg0, void *arg1, int arg2)
 {
   int temp_a1;
   void *temp_a0;
@@ -80,7 +80,7 @@ void Gap__Core__igLocationTable__vfunc_24(int *arg0, void *arg1, int arg2)
   *arg0 = g_resultSuccess.v;
 }
 
-void Gap__Core__igLocationTable__vfunc_25(int *arg0, igLocationTableView *arg1, int arg2, int *arg3, char *arg4, int arg5, int *arg6, char *arg7, int arg8, int *arg9) {
+void igLocationTable_GetLocationByIndex(int *arg0, igLocationTableView *arg1, int arg2, int *arg3, char *arg4, int arg5, int *arg6, char *arg7, int arg8, int *arg9) {
     int rc;
     igTDataList<unsigned int> *t;
     LocationRecord *e;
@@ -92,7 +92,7 @@ void Gap__Core__igLocationTable__vfunc_25(int *arg0, igLocationTableView *arg1, 
             e = (LocationRecord *)((char *)t->_data + arg2 * 0x14);
             *arg3 = e->address;
             if (arg4 != 0) {
-                if ((r = ((int)FUN_0030d1d0((int *)arg1->_symbolNames, e->name))) != 0) {
+                if ((r = ((int)igStringTable_GetString((int *)arg1->_symbolNames, e->name))) != 0) {
                     strncpy(arg4, r, arg5);
                 } else {
                     *arg4 = 0;
@@ -100,7 +100,7 @@ void Gap__Core__igLocationTable__vfunc_25(int *arg0, igLocationTableView *arg1, 
             }
             *arg6 = e->offset;
             if (arg7 != 0) {
-                if ((r = ((int)FUN_0030d1d0((int *)arg1->_sourceFileNames, e->file))) != 0) {
+                if ((r = ((int)igStringTable_GetString((int *)arg1->_sourceFileNames, e->file))) != 0) {
                     strncpy(arg7, r, arg8);
                 } else {
                     *arg7 = 0;
@@ -113,7 +113,7 @@ void Gap__Core__igLocationTable__vfunc_25(int *arg0, igLocationTableView *arg1, 
     *arg0 = rc;
 }
 
-int Gap__Core__igLocationTable__vfunc_26(igLocationTableView *o, int key) {
+int igLocationTable_FindLocationIndex(igLocationTableView *o, int key) {
 int i = o->vfunc_30(key);
 igTDataList<int> *l = o->_hashIndex;
 int e;
@@ -122,7 +122,7 @@ int j = 0;
 int r = -1;
 for (;;) { e = l->_data[i]; if (e == -1) { return r; } { int kk = ((LocationRecord *)o->_locations->_data)[e].address; if (kk == key) { r = e; break; } } i++; if (i >= n) i = 0; j++; if (!(j < n)) break; } return r;}
 
-void Gap__Core__igLocationTable__vfunc_27(int *arg0, igLocationTableView *arg1, int arg2, char *arg3, int arg4, int *arg5, char *arg6, int arg7, int *arg_sp0) {
+void igLocationTable_GetLocation(int *arg0, igLocationTableView *arg1, int arg2, char *arg3, int arg4, int *arg5, char *arg6, int arg7, int *arg_sp0) {
     int h; 
     int n; 
     int i; 
@@ -147,7 +147,7 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, igLocationTableView *arg1, 
         e = &((LocationRecord *)arg1->_locations->_data)[idx[h]];
         if (e->address == arg2) {
             if (arg3 != 0) {
-                if ((s = FUN_0030d1d0((int *)arg1->_symbolNames, e->name)) != 0) {
+                if ((s = igStringTable_GetString((int *)arg1->_symbolNames, e->name)) != 0) {
                     strncpy(arg3, s, arg4);
                 } else {
                     *arg3 = 0;
@@ -155,7 +155,7 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, igLocationTableView *arg1, 
             }
             *arg5 = e->offset;
             if (arg6 != 0) {
-                if ((s2 = FUN_0030d1d0((int *)arg1->_sourceFileNames, e->file)) != 0) {
+                if ((s2 = igStringTable_GetString((int *)arg1->_sourceFileNames, e->file)) != 0) {
                     strncpy(arg6, s2, arg7);
                 } else {
                     *arg6 = 0;
@@ -174,14 +174,14 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, igLocationTableView *arg1, 
     *arg0 = res;
 }
 
-void Gap__Core__igLocationTable__vfunc_28(igLocationTableView *o, int a1, char *a2, int a3, char *a4, int a5) {
+void igLocationTable_AddLocationIfMissing(igLocationTableView *o, int a1, char *a2, int a3, char *a4, int a5) {
     switch (o->vfunc_26(a1)) { case -1: o->vfunc_29(a1,a2,a3,a4,a5); break; default: break; }
 }
 
 /* Hash-bucket index for `key`: key modulo the hash-table size (`_hashCapacity`), or 0 when there
  * is none. */
 
-unsigned int Gap__Core__igLocationTable__vfunc_30(igLocationTable *self, unsigned int key) {
+unsigned int igLocationTable_Hash(igLocationTable *self, unsigned int key) {
     unsigned int hash_capacity;
 
     hash_capacity = self->_hashCapacity;
@@ -191,7 +191,7 @@ unsigned int Gap__Core__igLocationTable__vfunc_30(igLocationTable *self, unsigne
     return 0U;
 }
 
-int Gap__Core__igLocationTable__vfunc_31(igLocationTableView *self, int address, int index) {
+int igLocationTable_InsertHash(igLocationTableView *self, int address, int index) {
     int probes = 0;
     int size = self->_hashIndex->_count;
     int limit = size / 2;
@@ -219,9 +219,9 @@ done:
     return 1;
 }
 
-void Gap__Core__igLocationTable__vfunc_32(igLocationTableView *arg0, int arg1) {
+void igLocationTable_Rehash(igLocationTableView *arg0, int arg1) {
     igTDataList<int> *l; int n; int *a; int i; LocationRecord *s1; LocationRecord *s0; LocationRecord *s3;
-    FUN_002eb0a0((int)arg0, arg1);
+    igLocationTable_SetHashCapacity((int)arg0, arg1);
     l = arg0->_hashIndex;
     if (!(arg1 < l->_count)) List_Reserve((igDataList *)l, arg1, 4);
     l = arg0->_hashIndex;

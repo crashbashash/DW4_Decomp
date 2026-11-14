@@ -1,4 +1,4 @@
-void thunk_igPsx2Thread_GetMetaObject(void) {
+void igPsx2Thread_GetMetaObjectFunction(void) {
     igPsx2Thread_GetMetaObject();
 }
 

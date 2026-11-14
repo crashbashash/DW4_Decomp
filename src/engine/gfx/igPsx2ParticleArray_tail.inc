@@ -58,7 +58,7 @@ void igPsx2ParticleArray_InitFields(void) {
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1)) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)) + 38) = 0;
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)) + 38) = 0;
     igMetaObject_NameFields(temp_s0, &g_igPsx2ParticleArray_fieldTable[0], &DAT_00489ef0[0], &DAT_00489f10[0], temp_s1);
     *(int *)((char *)(g_igPsx2ParticleArray_metaObject[0]) + 64) = (int)(&thunk_igParticleArray_GetMetaObject);

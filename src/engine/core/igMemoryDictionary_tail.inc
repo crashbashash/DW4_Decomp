@@ -1,16 +1,16 @@
 /* Accessor: number of entry slots allocated (`_capacity`, +8). */
 
-int Gap__Core__igMemoryDictionary__vfunc_23(igMemoryDictionary *self) {
+int igMemoryDictionary_GetCapacity(igMemoryDictionary *self) {
     return self->_capacity;
 }
 
 /* Setter for the dictionary capacity (`_capacity`, +8). */
 
-void Gap__Core__igMemoryDictionary__vfunc_24(igMemoryDictionary *self, int capacity) {
+void igMemoryDictionary_SetCapacity(igMemoryDictionary *self, int capacity) {
     self->_capacity = capacity;
 }
 
-void Gap__Core__igMemoryDictionary__vfunc_25(igMemoryDictionaryView *self) {
+void igMemoryDictionary_InitEntries(igMemoryDictionaryView *self) {
     int a;
     int b;
     igTDataList<MemoryDictionaryEntry> *l;
@@ -32,7 +32,7 @@ void Gap__Core__igMemoryDictionary__vfunc_25(igMemoryDictionaryView *self) {
     self->vfunc_27();
 }
 
-void Gap__Core__igMemoryDictionary__vfunc_26(igMemoryDictionaryView *self) {
+void igMemoryDictionary_Clear(igMemoryDictionaryView *self) {
     igTDataList<MemoryDictionaryEntry> *entries;
     igTDataList<MemoryDictionaryEntry> *entries2;
 
@@ -53,11 +53,11 @@ void Gap__Core__igMemoryDictionary__vfunc_26(igMemoryDictionaryView *self) {
 /* Predicate: true once the dictionary has storage allocated, i.e. its `_capacity` (+8) is non-
  * zero. */
 
-int Gap__Core__igMemoryDictionary__vfunc_28(igMemoryDictionary *self) {
+int igMemoryDictionary_IsEnabled(igMemoryDictionary *self) {
     return self->_capacity != 0;
 }
 
-void Gap__Core__igMemoryDictionary__vfunc_27(igMemoryDictionaryView *self) {
+void igMemoryDictionary_ResetEntries(igMemoryDictionaryView *self) {
     igTDataList<MemoryDictionaryEntry> *t; int half; int j; MemoryDictionaryEntry *pp; int n; int i;
     t = self->_memoryEntries;
     half = *(int *)&t->_count / 2;
@@ -76,11 +76,11 @@ void Gap__Core__igMemoryDictionary__vfunc_27(igMemoryDictionaryView *self) {
 
 /* Accessor: number of entries in use (`_count`, +12). */
 
-int Gap__Core__igMemoryDictionary__vfunc_29(igMemoryDictionary *self) {
+int igMemoryDictionary_GetCount(igMemoryDictionary *self) {
     return self->_count;
 }
 
-void Gap__Core__igMemoryDictionary__vfunc_30(igResult *result, igMemoryDictionaryView *self, int key, int *value) {
+void igMemoryDictionary_GetValue(igResult *result, igMemoryDictionaryView *self, int key, int *value) {
     MemoryDictionaryEntry *e;
     int idx;
     int n;
@@ -121,7 +121,7 @@ void Gap__Core__igMemoryDictionary__vfunc_30(igResult *result, igMemoryDictionar
     result->v = res;
 }
 
-igResult Gap__Core__igMemoryDictionary__vfunc_31(igMemoryDictionaryView *self, int key, int val) {
+igResult igMemoryDictionary_Insert(igMemoryDictionaryView *self, int key, int val) {
     int probes = 0;
     int cap = self->_memoryEntries->_count / 2;
     int half = cap / 2;
@@ -159,7 +159,7 @@ igResult Gap__Core__igMemoryDictionary__vfunc_31(igMemoryDictionaryView *self, i
     return igResult(g_resultFailure.v);
 }
 
-igResult Gap__Core__igMemoryDictionary__vfunc_32(igMemoryDictionaryView *self, int key) {
+igResult igMemoryDictionary_Remove(igMemoryDictionaryView *self, int key) {
     int i;
     int half;
     int idx;
@@ -205,7 +205,7 @@ ok:
 /* Hash-bucket index for `key`: key modulo the table capacity (`_capacity`), or 0 for an empty
  * table. */
 
-unsigned int Gap__Core__igMemoryDictionary__vfunc_33(igMemoryDictionary *self, unsigned int key) {
+unsigned int igMemoryDictionary_HashKey(igMemoryDictionary *self, unsigned int key) {
     unsigned int capacity;
 
     capacity = self->_capacity;
@@ -215,7 +215,7 @@ unsigned int Gap__Core__igMemoryDictionary__vfunc_33(igMemoryDictionary *self, u
     return 0U;
 }
 
-int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionaryView *self, int capacity) {
+int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, int capacity) {
     igSmartPointer<igIntList> previous((igIntList *)self->_memoryEntries, kRetainReference);
     int count = previous.get()->_count;
     int *entry = (int *)previous.get()->_data;
@@ -233,7 +233,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionary
             igObject_Destroy(table);
         }
     }
-    self->_memoryEntries = (igTDataList<MemoryDictionaryEntry> *)FUN_002ca260(allocator);
+    self->_memoryEntries = (igTDataList<MemoryDictionaryEntry> *)igUnsignedIntListNoClean_Create(allocator);
     words = self->_capacity * 2;
     if (words >= self->_memoryEntries->_count) {
         List_Reserve((igDataList *)self->_memoryEntries, words, 4);
@@ -267,7 +267,7 @@ int Gap__Core__igMemoryDictionary__vfunc_34(igResult *result, igMemoryDictionary
     return 0;
 }
 
-void FUN_002eed00(igMemoryDirEntry *arg0, igObjectDispatchView *arg1) {
+void igMemoryDirEntry_SetMemType(igMemoryDirEntry *arg0, igObjectDispatchView *arg1) {
     __internalObjectList *l;
     int i;
     int n;
@@ -276,7 +276,7 @@ void FUN_002eed00(igMemoryDirEntry *arg0, igObjectDispatchView *arg1) {
 
     arg0->_memType = (int)arg1;
     if (arg1 != 0) {
-        l = ((__internalObjectList *)FUN_002fc250());
+        l = ((__internalObjectList *)igMetaField_GetMetaFieldList());
         n = l->_count;
         for (i = 0; i < n; i++) {
             o = ((igObjectDispatchView **)l->_data)[i];

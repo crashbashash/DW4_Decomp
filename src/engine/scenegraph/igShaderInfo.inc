@@ -92,7 +92,7 @@ void igShaderInfo_InitFields(void) {
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00198fa0();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields(temp_s0, &g_igShaderInfo_fieldTable[0], &DAT_0048b630[0], &DAT_0048b638[0], temp_s2);
-    FUN_002fe480((int)thunk_FUN_001d8b90);
+    igMetaObject_AddExitCallback((int)thunk_FUN_001d8b90);
 }
 
 void thunk_FUN_001d8ab0(void) {

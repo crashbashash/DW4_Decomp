@@ -1,4 +1,4 @@
-int Gap__Core__igMetaFieldInfo__vfunc_23(igMetaFieldInfoView *arg0, int arg1, void *arg2) {
+int igMetaFieldInfo_FindObjectReference(igMetaFieldInfoView *arg0, int arg1, void *arg2) {
     int result = 0;
     igSmartPointer<igMetaField> held((igMetaField *)arg2, kRetainReference);
     igMetaField *field = cast0(held.get());

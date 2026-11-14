@@ -87,16 +87,16 @@ void igPsx2Window_InitFields(void) {
     temp_s0 = (void *)(g_igPsx2Window_metaObject[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPsx2Window_ctorTable[0], 0xC);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0x280);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0x1C0);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0x280);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0x1C0);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     *(int *)((char *)(temp_s1) + 56) = FUN_0014a040();
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 0);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7), -1);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), 0x18);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), 8);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 0x20);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), 0x18);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), 8);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 0x20);
     igMetaObject_NameFields(temp_s0, &g_igPsx2Window_fieldTable[0], &DAT_004874b0[0], &DAT_004874e0[0], temp_s2);
     *(int *)((char *)(g_igPsx2Window_metaObject[0]) + 64) = (int)thunk_igWindow_GetMetaObject;
 }

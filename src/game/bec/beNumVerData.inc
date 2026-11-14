@@ -63,7 +63,7 @@ void beNumVerData_InitFields(void) {
     temp_s0 = (void *)g_beNumVerData_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beNumVerData_ctorTable[0], 2);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034dcd0();
     ((igRefMetaField *)temp_s1)->_construct = 1;

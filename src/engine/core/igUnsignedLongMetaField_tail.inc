@@ -1,4 +1,4 @@
-int Gap__Core__igUnsignedLongMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igUnsignedLongMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igUnsignedLongMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igUnsignedLongMetaField__vfunc_57(int *arg0, int arg1, long long *arg2) {
+void igUnsignedLongMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
     struct { int w; int pad[255]; } sp20;
     int var_v0;
     int var_v1;
@@ -27,36 +27,36 @@ void Gap__Core__igUnsignedLongMetaField__vfunc_57(int *arg0, int arg1, long long
     *arg0 = var_v1;
 }
 
-int FUN_0030eb30(void) {
+int igUnsignedLongMetaField_GetSize(void) {
     return 8;
 }
 
-int **FUN_0030eb40(int **arg0, int extra1) {
+int **igUnsignedLongMetaField_Construct(int **arg0, int extra1) {
     igMetaField_Construct((igMetaField *)arg0);
     *arg0 = &DAT_00533530[0];
     if (arg0 != 0) {
-        FUN_0030eb80(arg0);
+        igUnsignedLongMetaField_Init(arg0);
     }
     return arg0;
 }
 
-int **FUN_0030eb80(int **arg0) {
+int **igUnsignedLongMetaField_Init(int **arg0) {
     igMetaField_Init((igMetaField *)arg0);
     *arg0 = &DAT_00533530[0];
     return arg0;
 }
 
-int **FUN_0030ebc0(int **arg0, int extra1) {
+int **igUnsignedLongMetaField_CopyConstruct(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
     *arg0 = &DAT_00533530[0];
     return arg0;
 }
 
-void Gap__Core__igUnsignedLongMetaField__vfunc_02(int extra0) {
+void igUnsignedLongMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void FUN_0030ec10(void **field, unsigned long long value) {
+void igUnsignedLongMetaField_SetDefaultValue(void **field, unsigned long long value) {
     unsigned long long defaultValue = value;
     ((igMetaFieldView *)field)->SetDefault(&defaultValue);
 }
@@ -64,7 +64,7 @@ void FUN_0030ec10(void **field, unsigned long long value) {
 /* igUnsignedLongArrayMetaField vtable slot 27 (+0x6c): constant leaf returning 8, the byte size of
  * one unsigned long element (a 64-bit value on this target). The same igMetaField slot is the
  * base's `return -1` and igStructMetaField's `_alignment` accessor. */
-int Gap__Core__igUnsignedLongMetaField__vfunc_27(igUnsignedLongArrayMetaField *self) {
+int igUnsignedLongMetaField_GetAlignment(igUnsignedLongArrayMetaField *self) {
     return 8;
 }
 

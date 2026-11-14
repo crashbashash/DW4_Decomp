@@ -23,7 +23,7 @@ void Gap__Attrs__igSetRenderDestinationAttr__vfunc_26(Attr *self, int value) {
 
 void Gap__Attrs__igSetRenderDestinationAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void Gap__Attrs__igSetRenderDestinationAttr__vfunc_28(igSetRenderDestinationAttr *self) {

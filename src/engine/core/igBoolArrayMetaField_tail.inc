@@ -1,15 +1,15 @@
-void Gap__Core__igBoolArrayMetaField__vfunc_52(igBoolArrayMetaField *self, int buffer, int count) {
+void igBoolArrayMetaField_SwapBytes(igBoolArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
-    elementField = (void **)(((void **)FUN_002cce00()));
+    elementField = (void **)(((void **)igBoolMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
-unsigned short Gap__Core__igBoolArrayMetaField__vfunc_25(void *arg0) {
+unsigned short igBoolArrayMetaField_GetSize(void *arg0) {
     return *(int *)((char *)(arg0) + 52);
 }
 
-void FUN_002d35d0(igBoolArrayMetaField *arg0, int arg1) {
+void igBoolArrayMetaField_SetDefaultAll(igBoolArrayMetaField *arg0, int arg1) {
     char *base;
     int i;
     ((igMetaFieldView *)arg0)->SetDefault(0);

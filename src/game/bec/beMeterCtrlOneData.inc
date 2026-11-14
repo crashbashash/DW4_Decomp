@@ -82,8 +82,8 @@ void beMeterCtrlOneData_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, &g_beMeterCtrlOneData_ctorTable[0], 0xE);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00356cc0();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0.0f);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_00365550();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));

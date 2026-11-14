@@ -45,7 +45,7 @@ void *FUN_0033e920(S *arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

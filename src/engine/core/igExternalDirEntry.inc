@@ -2,7 +2,7 @@ igMetaObject *igExternalDirEntry_GetMetaObject(void)
 {
     igMetaObject *g = g_igExternalDirEntry_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c5550();
+        igExternalDirEntry_EnsureRegistered();
     return g_igExternalDirEntry_metaObject[0];
 }
 
@@ -28,19 +28,19 @@ int igExternalDirEntry_GetVTable(void) {
     return t;
 }
 
-void FUN_002c5550(void)
+void igExternalDirEntry_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igExternalDirEntry_Register);
 }
 
 void igExternalDirEntry_Register(void) {
-    FUN_002b5d50();  /* Set-once guard that first runs the sibling registrars it chains to. */
+    CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igExternalDirEntry_metaObject),
         igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
-        thunk_igExternalDirEntry_GetMetaObject,
+        igExternalDirEntry_GetMetaObjectFunction,
         igExternalDirEntry_className,
         0x2C, /* instance size */
         igExternalDirEntry_GetVTable,
@@ -50,7 +50,7 @@ void igExternalDirEntry_Register(void) {
     );
 }
 
-void thunk_igExternalDirEntry_GetMetaObject(void) {
+void igExternalDirEntry_GetMetaObjectFunction(void) {
     igExternalDirEntry_GetMetaObject();
 }
 

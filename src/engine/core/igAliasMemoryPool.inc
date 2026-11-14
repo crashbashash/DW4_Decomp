@@ -4,7 +4,7 @@ igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator) {
         igAliasMemoryPool_EnsureRegistered();
         pool=((igAliasMemoryPoolView *)igMetaObject_CreateInstance((igMetaObject *)(((void * *)g_igAliasMemoryPool_metaObject)[0]), (igMemoryPoolView *)allocator));
     } else {
-        pool=((igAliasMemoryPoolView *)FUN_002f0040(184, 0, (int)allocator));
+        pool=((igAliasMemoryPoolView *)igObject_OperatorNew(184, 0, (int)allocator));
         if(pool)pool=((igAliasMemoryPoolView *)igAliasMemoryPool_Construct((igAliasMemoryPool *)pool, 1));
         pool->vfunc_09();
         pool->userConstruct(0);
@@ -12,13 +12,13 @@ igAliasMemoryPoolView *igAliasMemoryPool_Create(void *allocator) {
     return pool;
 }
 
-void *Gap__Core__igAliasMemoryPool__vfunc_21(int arg0, int arg1) {
+void *igAliasMemoryPool_Clone(int arg0, int arg1) {
     void *p;
     if (*g_objectSystem[0] != 0) {
         igAliasMemoryPool_EnsureRegistered();
         return (void *)igObject_CloneViaMetadata((void **)arg0, arg1);
     }
-    p = FUN_002f0040(0xB8, 0, (int)(Memory_GetDefaultAllocator()));
+    p = igObject_OperatorNew(0xB8, 0, (int)(Memory_GetDefaultAllocator()));
     if (p != 0) {
         p = igAliasMemoryPool_CopyConstruct((igAliasMemoryPool *)p, arg0);
     }
@@ -91,7 +91,7 @@ void igAliasMemoryPool_Register(void) {
         ((char *)g_igAliasMemoryPool_metaObject),
         igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
-        thunk_igAliasMemoryPool_GetMetaObject,
+        igAliasMemoryPool_GetMetaObjectFunction,
         igAliasMemoryPool_className,
         0xB8, /* instance size */
         igAliasMemoryPool_GetVTable,
@@ -101,11 +101,11 @@ void igAliasMemoryPool_Register(void) {
     );
 }
 
-void thunk_igAliasMemoryPool_GetMetaObject(void) {
+void igAliasMemoryPool_GetMetaObjectFunction(void) {
     igAliasMemoryPool_GetMetaObject();
 }
 
-igMetaObject *FUN_002cd480(void) {
+igMetaObject *igMemoryPool_GetPublishedMetaObject(void) {
     return g_igMemoryPool_metaObject[0];
 }
 
@@ -117,22 +117,22 @@ void igAliasMemoryPool_InitFields(void) {
     igMetaObject *meta = g_igAliasMemoryPool_metaObject[0];
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igAliasMemoryPool_ctorTable, 14);
-    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base), -1);
-    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base + 4), 0xFFFFFFFFFFFFFFFFULL);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base), -1);
+    igUnsignedLongMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 4), 0xFFFFFFFFFFFFFFFFULL);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
-    eventTracker->_metaObject = (int)FUN_002c57c0();
+    eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 10);
-    allocationLock->_metaObject = (int)FUN_002ba690();
-    FUN_0030eda0((void **)igMetaObject_GetFieldAt(meta, base + 12), 8);
+    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    igUnsignedShortMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 12), 8);
     aliasedPool = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     aliasedPool->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     aliasedPool->_construct = 0;
     aliasedPool->_destruct = 0;
     igMetaObject_NameFields(meta, (const char **)g_igAliasMemoryPool_fieldTable, (igMetaField ***)DAT_004c1630, DAT_004c1670, base);
-    g_igAliasMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+    g_igAliasMemoryPool_metaObject[0]->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }
 
-int FUN_002cd5c0(void) {
+int igPageMemoryPool_GetMessageLevelMetaEnum(void) {
     if (DAT_00586a28[0] == 0) {
         DAT_00586a28[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&DAT_004c16b0[0], &DAT_004c16c0[0], 4));
     }

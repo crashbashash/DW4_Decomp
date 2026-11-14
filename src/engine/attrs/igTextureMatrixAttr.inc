@@ -88,7 +88,7 @@ void igTextureMatrixAttr_InitFields(void) {
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_00141520;
-    FUN_0030a520(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
+    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
     igMetaObject_NameFields(temp_s0, &g_igTextureMatrixAttr_fieldTable[0], &DAT_00485b40[0], &DAT_00485b50[0], temp_s2);
 }
 
@@ -132,7 +132,7 @@ void *FUN_00131b20(struct S *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -157,7 +157,7 @@ void *FUN_00131bc0(struct S_131bc0 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

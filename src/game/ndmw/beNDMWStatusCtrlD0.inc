@@ -76,9 +76,9 @@ void beNDMWStatusCtrlD0_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &g_beNDMWStatusCtrlD0_fieldTable[0], &DAT_004c9fd0[0], &DAT_004c9ff0[0], temp_s2);
 }

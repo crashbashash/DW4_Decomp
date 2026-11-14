@@ -12,7 +12,7 @@
 
 extern "C" unsigned char g_InsightLibrary_registered;
 extern "C" void InsightLibrary_MarkRegistered(void);
-extern "C" int thunk_FUN_002ed460__002ff810(...);
+extern "C" int thunk_Memory_FreeBuffer(...);
 extern "C" int DAT_0052d060[4];
 struct S {
     void *f0;
@@ -155,7 +155,7 @@ extern "C" char g_igMessageFilter_callbackList[];
 extern "C" char igMessageFilter_className[];
 extern "C" void igMessageFilter_Register(void);
 extern "C" void thunk_igMessageFilter_GetMetaObject(void);
-extern "C" int FUN_002be610(...);
+extern "C" int igMetaObject_GetOrCreateMetaObject(...);
 extern "C" int g_igMessageFilter_ctorTable[4];
 extern "C" int g_igMessageFilter_fieldTable[4];
 extern "C" int DAT_00498008[4];
@@ -262,8 +262,8 @@ extern "C" void igInsightCore_Register(void);
 extern "C" void thunk_igInsightCore_GetMetaObject(void);
 extern "C" int FUN_00145d40(...);
 extern "C" int FUN_0014a040(...);
-extern "C" int FUN_002b7a10(...);
-extern "C" int FUN_002c3440(...);
+extern "C" int igTimer_GetOrCreateMetaObject(...);
+extern "C" int igInfoList_GetOrCreateMetaObject(...);
 extern "C" int FUN_0044c250(...);
 extern "C" int FUN_0044c4d0(...);
 extern "C" int FUN_004513b0(...);
@@ -875,9 +875,9 @@ public:
 };
 extern "C" void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self);
 struct NamedObject : public igObject { int name; };
-extern "C" NamedObject *FUN_002c43b0(...);
-extern "C" int FUN_002e3850(...);
-extern "C" int FUN_00304720(...);
+extern "C" NamedObject *igFolder_Create(...);
+extern "C" int igFolder_SetFolderName(...);
+extern "C" int igPluginHelper_AddRepository(...);
 extern "C" int text_plugins[4];
 extern "C" int text_insight[4];
 extern "C" int text_Insight[4];
@@ -887,7 +887,7 @@ extern "C" void FUN_00236140(void);
 struct TextValue : public igObject { char *text; };
 extern "C" TextValue *igStringObj_Create(int allocator);
 extern "C" void igStringObj_Set(TextValue *value, const char *text);
-extern "C" void FUN_0030b720(TextValue *value, int number, const char *format);
+extern "C" void igStringObj_SetInt(TextValue *value, int number, const char *format);
 extern "C" int kIGMemoryPoolHandleString[4];
 extern "C" char *g_stringObjEmptyText[4];
 extern "C" char text_Requested_format[];
@@ -910,7 +910,7 @@ extern "C" int FUN_00236b70(...);
 extern "C" int igRendererOrderedList_Append(...);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
 extern "C" void igInsightCore_AddManager(void *arg0, void *arg1);
-extern "C" int FUN_002d7750(...);
+extern "C" int igObjectList_RemoveRetained(...);
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 extern "C" void igInsightCore_RemoveManager(void *arg0, void *arg1);
 struct S12 { char pad[12]; void *f12; };
@@ -923,8 +923,8 @@ struct S236 { int a, b, c; void *p; };
 extern "C" void igInsightCore_RemoveFromScheduler(S236 *arg0, int arg1);
 struct Instance : public igObject { };
 extern "C" int igMetaObject_CountTree(int);
-extern "C" int FUN_002fe300(int, int);
-extern "C" igSmartPointer<Instance> FUN_002fd6e0(int, int);
+extern "C" int igMetaObject_GetTreeNode(int, int);
+extern "C" igSmartPointer<Instance> igMetaObject_CreateInstanceRef(int, int);
 extern "C" void FUN_00236ca0(int self);
 extern "C" int ObjectList_AppendRetained(...);
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
@@ -964,8 +964,8 @@ class A_237280 { public: virtual void d0(); virtual void d1(); virtual void d2()
 class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); };
 struct Q { int p0; int p1; int count; int p3; B **data; };
 extern "C" void FUN_00237280(int *arg0);
-extern "C" int FUN_002d7090(...);
-extern "C" int FUN_002d78e0(...);
+extern "C" int igDependencyOrderedList_AddDependency(...);
+extern "C" int igDependencyOrderedList_AddCheckPoint(...);
 extern "C" int igEventDispatcher_AddReceiver(...);
 extern "C" int Gap__Core__igObject__resetFields(...);
 extern "C" int text_Clear_done[4];
@@ -1107,9 +1107,9 @@ typedef struct Obj_238020 { char pad[8]; int f8; } Obj_238020;
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_27(int a0);
 typedef struct S0 { char pad8[8]; int f8; } S0;
-extern "C" int FUN_002d7760(...);
+extern "C" int igDependencyOrderedList_RemoveDependency(...);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, int arg1, int arg2);
-extern "C" int FUN_002d7840(...);
+extern "C" int igDependencyOrderedList_RemoveDependencies(...);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_29(int a0);
 extern "C" float DAT_004e105c[4];
 extern "C" float DAT_004e1060[4];
@@ -1121,8 +1121,8 @@ extern "C" void *ViewerOptions_Construct(void *arg0);
  * up in the property set held by the global (+56), falling back to 'Viewer', and each option is
  * written under its string name. Every write is guarded by its name pointer (the original option
  * table can drop a name); the guards are kept because the compiler does not fold them. Callee
- * names come from their roles: StoreString (thunk_FUN_00306910), StoreByte (thunk_FUN_00306e50),
- * StoreFloat (thunk_FUN_003066b0), StoreInt (thunk_FUN_003065f0), StoreVec4 (FUN_001e71f0),
+ * names come from their roles: StoreString (thunk_igRegistry_GetValueString), StoreByte (thunk_igRegistry_GetValueBool),
+ * StoreFloat (thunk_igRegistry_GetValueFloat), StoreInt (thunk_igRegistry_GetValueInt), StoreVec4 (FUN_001e71f0),
  * StoreVec3 (FUN_001e70a0). */
 typedef struct PropertySet { char pad[56]; int props; } PropertySet;
 extern "C" char INSIGHT[];
@@ -1176,11 +1176,11 @@ extern "C" char text_benchmarkSkipFrames[];
 extern "C" char text_benchmarkFrames[];
 extern "C" char text_columnStatistics[];
 extern "C" char text_allocateVisualContextInScratchPa[];
-extern "C" int FUN_00306360(int, char *, int);
-extern "C" int thunk_FUN_00306910(int, int, char *, char **, char *, int);
-extern "C" int thunk_FUN_00306e50(int, int, char *, unsigned char *, int, int);
-extern "C" int thunk_FUN_003066b0(int, int, char *, float *, int, float);
-extern "C" int thunk_FUN_003065f0(int, int, char *, int *, int, int);
+extern "C" int igRegistry_GetSectionIndex(int, char *, int);
+extern "C" int thunk_igRegistry_GetValueString(int, int, char *, char **, char *, int);
+extern "C" int thunk_igRegistry_GetValueBool(int, int, char *, unsigned char *, int, int);
+extern "C" int thunk_igRegistry_GetValueFloat(int, int, char *, float *, int, float);
+extern "C" int thunk_igRegistry_GetValueInt(int, int, char *, int *, int, int);
 extern "C" int FUN_001e71f0(int, int, char *, Vec4 *, Vec4 *, int);
 extern "C" int FUN_001e70a0(int, int, char *, Vec3 *, Vec3 *, int);
 extern "C" void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int);

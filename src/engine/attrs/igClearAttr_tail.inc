@@ -21,7 +21,7 @@ void Gap__Attrs__igClearAttr__vfunc_26(void *arg0, void **arg1) {
 }
 
 void Gap__Attrs__igClearAttr__vfunc_11(void *arg0) {
-    Gap__Core__igObject__vfunc_09();
+    igObject_InitDefaults();
     *(int *)((char *)(arg0) + 60) = FUN_001931b0((char *)arg0 + 0x10, 1);
     *(float *)((char *)(arg0) + 64) = dptofp(*(long long *)((char *)(arg0) + 48));
 }

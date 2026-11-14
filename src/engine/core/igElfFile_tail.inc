@@ -1,11 +1,11 @@
-static void FUN_00320930(unsigned char *arg0) {
+static void igElfFile_Swap16(unsigned char *arg0) {
     unsigned short x;
     ((unsigned char *)&x)[0] = arg0[1];
     ((unsigned char *)&x)[1] = arg0[0];
     *(unsigned short *)arg0 = x;
 }
 
-static void FUN_00320960(unsigned char *arg0) {
+static void igElfFile_Swap32(unsigned char *arg0) {
     union { unsigned char b[4]; int w; } u;
     u.b[0] = arg0[3];
     u.b[1] = arg0[2];
@@ -14,54 +14,54 @@ static void FUN_00320960(unsigned char *arg0) {
     *(int *)arg0 = u.w;
 }
 
-void FUN_003209a0(unsigned char *p) {
-    FUN_00320930(p + 16);
-    FUN_00320930(p + 18);
-    FUN_00320960(p + 20);
-    FUN_00320960(p + 24);
-    FUN_00320960(p + 28);
-    FUN_00320960(p + 32);
-    FUN_00320960(p + 36);
-    FUN_00320930(p + 40);
-    FUN_00320930(p + 42);
-    FUN_00320930(p + 44);
-    FUN_00320930(p + 46);
-    FUN_00320930(p + 48);
-    FUN_00320930(p + 50);
+void igElfFile_SwapHeader(unsigned char *p) {
+    igElfFile_Swap16(p + 16);
+    igElfFile_Swap16(p + 18);
+    igElfFile_Swap32(p + 20);
+    igElfFile_Swap32(p + 24);
+    igElfFile_Swap32(p + 28);
+    igElfFile_Swap32(p + 32);
+    igElfFile_Swap32(p + 36);
+    igElfFile_Swap16(p + 40);
+    igElfFile_Swap16(p + 42);
+    igElfFile_Swap16(p + 44);
+    igElfFile_Swap16(p + 46);
+    igElfFile_Swap16(p + 48);
+    igElfFile_Swap16(p + 50);
 }
 
-void FUN_00320a20(unsigned char *arg0, int arg1) {
+void igElfFile_SwapSectionHeaders(unsigned char *arg0, int arg1) {
     unsigned char *p = arg0;
     int n = arg1;
     for (; n > 0; n--) {
-        FUN_00320960(p);
-        FUN_00320960(p + 4);
-        FUN_00320960(p + 8);
-        FUN_00320960(p + 12);
-        FUN_00320960(p + 16);
-        FUN_00320960(p + 20);
-        FUN_00320960(p + 24);
-        FUN_00320960(p + 28);
-        FUN_00320960(p + 32);
-        FUN_00320960(p + 36);
+        igElfFile_Swap32(p);
+        igElfFile_Swap32(p + 4);
+        igElfFile_Swap32(p + 8);
+        igElfFile_Swap32(p + 12);
+        igElfFile_Swap32(p + 16);
+        igElfFile_Swap32(p + 20);
+        igElfFile_Swap32(p + 24);
+        igElfFile_Swap32(p + 28);
+        igElfFile_Swap32(p + 32);
+        igElfFile_Swap32(p + 36);
         p += 40;
     }
 }
 
-void FUN_00320aa0(unsigned char *arg0, int arg1) {
+void igElfFile_SwapSymbols(unsigned char *arg0, int arg1) {
     unsigned char *p = arg0;
     int n = arg1;
     for (; n > 0; n--) {
-        FUN_00320960(p);
-        FUN_00320960(p + 4);
-        FUN_00320960(p + 8);
-        FUN_00320930(p + 14);
+        igElfFile_Swap32(p);
+        igElfFile_Swap32(p + 4);
+        igElfFile_Swap32(p + 8);
+        igElfFile_Swap16(p + 14);
         p += 16;
     }
 }
 
-void Gap__Core__igElfFile__vfunc_23(igElfFile *arg0) {
-    Gap__Core__igProgramFile__vfunc_23((igProgramFile *)arg0);
+void igElfFile_Reset(igElfFile *arg0) {
+    igProgramFile_Reset((igProgramFile *)arg0);
     memset(arg0->_header, 0, 0x34);
     arg0->_sectionHeaderStringTableSize = 0;
     arg0->_sectionHeaderStringTable = 0;
@@ -73,14 +73,14 @@ void Gap__Core__igElfFile__vfunc_23(igElfFile *arg0) {
     arg0->_symbols = 0;
 }
 
-void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *path) {
-    if (Gap__Core__igProgramFile__vfunc_24((igProgramFile *)self, path) == g_resultFailure) {
+void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
+    if (igProgramFile_Open((igProgramFile *)self, path) == g_resultFailure) {
         *result = g_resultFailure.v;
         return;
     }
     if (self->stream->Read(self->magic, 0x34, 1) != 1) {
-        FUN_00304430(DAT_004fdda0, self->path);
-        FUN_00304680();
+        igReport_Printf(DAT_004fdda0, self->path);
+        igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
         return;
@@ -91,19 +91,19 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
         hostEndian = 2;
     }
     if (fileEndian != hostEndian) {
-        FUN_003209a0(self->magic);
+        igElfFile_SwapHeader(self->magic);
     }
     if (self->magic[0] != 0x7F || self->magic[1] != 'E' || self->magic[2] != 'L' || self->magic[3] != 'F') {
-        FUN_00304430((const char *)DAT_004fddc0, self->path);
-        FUN_00304680();
+        igReport_Printf((const char *)DAT_004fddc0, self->path);
+        igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
         return;
     }
     int sectionOffset = self->sectionHeaderOffset;
     if (sectionOffset == 0) {
-        FUN_00304430((const char *)DAT_004fdde0, self->path, sectionOffset);
-        FUN_00304680();
+        igReport_Printf((const char *)DAT_004fdde0, self->path, sectionOffset);
+        igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
         return;
@@ -118,11 +118,11 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
         hostEndian = 1;
     }
     if (self->endian != hostEndian) {
-        FUN_00320a20((unsigned char *)self->sectionHeaders, self->sectionHeaderCount);
+        igElfFile_SwapSectionHeaders((unsigned char *)self->sectionHeaders, self->sectionHeaderCount);
     }
     self->sectionCount = self->sectionHeaderCount;
     if (self->sectionNameIndex != 0) {
-        ElfSection *section = FUN_00320ea0(self, self->sectionNameIndex);
+        ElfSection *section = igElfFile_GetSectionHeader(self, self->sectionNameIndex);
         if (section != 0 && section->type == 3) {
             self->sectionNamesSize = section->size;
             if (self->Load(section->offset, section->size, &self->sectionNames) == g_resultFailure) {
@@ -134,23 +134,23 @@ void Gap__Core__igElfFile__vfunc_24(int *result, ElfFileView *self, const char *
     *result = g_resultSuccess.v;
 }
 
-void Gap__Core__igElfFile__vfunc_25(int *result, ElfFileView *self) {
+void igElfFile_Close(int *result, ElfFileView *self) {
     if (self->sectionHeaders != 0) {
-        FUN_00300f50((int)self, (int)self->sectionHeaders);
+        igObject_FreeMemory((int)self, (int)self->sectionHeaders);
     }
     if (self->sectionNames != 0) {
-        FUN_00300f50((int)self, (int)self->sectionNames);
+        igObject_FreeMemory((int)self, (int)self->sectionNames);
     }
     if (self->strings != 0) {
-        FUN_00300f50((int)self, (int)self->strings);
+        igObject_FreeMemory((int)self, (int)self->strings);
     }
     if (self->symbols != 0) {
-        FUN_00300f50((int)self, (int)self->symbols);
+        igObject_FreeMemory((int)self, (int)self->symbols);
     }
-    Gap__Core__igProgramFile__vfunc_25(result, self);
+    igProgramFile_Close(result, self);
 }
 
-ElfSection *FUN_00320ea0(ElfFileView *self, int index) {
+ElfSection *igElfFile_GetSectionHeader(ElfFileView *self, int index) {
     char *base = (char *)self->sectionHeaders;
     if (base != 0 && index >= 0 && index <= self->sectionCount) {
         return (ElfSection *)(base + index * self->sectionHeaderEntrySize);
@@ -158,11 +158,11 @@ ElfSection *FUN_00320ea0(ElfFileView *self, int index) {
     return 0;
 }
 
-int FUN_00320ee0(ElfFileView *self, int type, int nth) {
+int igElfFile_FindSectionByType(ElfFileView *self, int type, int nth) {
     int i;
     int t;
     for (i = 0; i < self->sectionCount; i++) {
-        t = FUN_00320ea0(self, i)->type;
+        t = igElfFile_GetSectionHeader(self, i)->type;
         if (t == type) {
             if (nth-- == 0) {
                 return i;
@@ -172,19 +172,19 @@ int FUN_00320ee0(ElfFileView *self, int type, int nth) {
     return -1;
 }
 
-int FUN_00320f70(void *arg0, int arg1) {
+int igElfFile_GetSymbol(void *arg0, int arg1) {
     char *base = *(char **)((char *)arg0 + 96);
     if (base != 0 && arg1 >= 0 && arg1 <= *(int *)((char *)arg0 + 92)) return (int)(base + arg1*16); return 0;
 }
 
 static inline void prepareSink(igSymbolTableView *table, int count, unsigned low, unsigned top) {
-    FUN_0030da00((int)table, count);
-    FUN_0030da10((int)table, count * 4);
-    FUN_0030da20(table, low & ~1023, top);
-    FUN_0030daa0(table);
+    igSymbolTable_SetCapacity((int)table, count);
+    igSymbolTable_SetHashCapacity((int)table, count * 4);
+    igSymbolTable_SetAddressRange(table, low & ~1023, top);
+    igSymbolTable_ReserveStorage(table);
 }
 
-void FUN_00321530(const char *in, char *out, int size) {
+void igElfFile_DemangleName(const char *in, char *out, int size) {
     char *cursor = (char *)in;
     char inner[256];
     int pointers = 0;
@@ -232,7 +232,7 @@ void FUN_00321530(const char *in, char *out, int size) {
                         out += advance;
                         size -= advance;
                         *out = 0;
-                        FUN_00321530(inner, out, size);
+                        igElfFile_DemangleName(inner, out, size);
                         advance = strlen(out);
                         size -= advance;
                         out += advance;
@@ -274,7 +274,7 @@ void FUN_00321530(const char *in, char *out, int size) {
     *out = 0;
 }
 
-void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char *out, int size) {
+void igElfFile_Demangle(int *result, void *self, char *mangled, char *out, int size) {
     char inner[256];
     char *start;
     char *sep;
@@ -336,7 +336,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
                     out += advance;
                     size -= advance;
                     *out = 0;
-                    FUN_00321530(inner, out, size);
+                    igElfFile_DemangleName(inner, out, size);
                     advance = strlen(out);
                     size -= advance;
                     out += advance;
@@ -426,7 +426,7 @@ void Gap__Core__igElfFile__vfunc_29(int *result, void *self, char *mangled, char
     *result = g_resultSuccess.v;
 }
 
-int *FUN_00321c10(int arg0, int *arg1) {
+int *igElfFile_LookupValueName(int arg0, int *arg1) {
     int *v;
     while ((v = (int *)arg1[1]) != 0) {
         if (arg1[0] == arg0) return v;
@@ -435,7 +435,7 @@ int *FUN_00321c10(int arg0, int *arg1) {
     return &DAT_004f7910[0];
 }
 
-char *FUN_00321c50(int arg0, int arg1, char *arg2) {
+char *igElfFile_FormatFlags(int arg0, int arg1, char *arg2) {
     int a;
     int i;
     char *s;
@@ -445,7 +445,7 @@ char *FUN_00321c50(int arg0, int arg1, char *arg2) {
     do {
         a = arg0 & (1 << i);
         if (a != 0) {
-            s = ((char *)FUN_00321c10(a, (int *)arg1));
+            s = ((char *)igElfFile_LookupValueName(a, (int *)arg1));
             if (*s != 0) {
                 if (*arg2 != 0) {
                     sep = ((char *)DAT_004f7910);
@@ -460,138 +460,138 @@ char *FUN_00321c50(int arg0, int arg1, char *arg2) {
     return arg2;
 }
 
-void Gap__Core__igElfFile__vfunc_30(ElfFileView *o) {
-    FUN_00304430(DAT_004fe090);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe0b0);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe0d0, o->magic[0]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe0f0, o->magic[1]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe110, o->magic[2]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe130, o->magic[3]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe150, ((int)FUN_00321c10(o->elfClass, &DAT_004c23f0[0])));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe170, ((int)FUN_00321c10(o->endian, &DAT_004c2410[0])));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe190, o->identVersion);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe1b0);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe1d0, ((int)FUN_00321c10(o->type, &DAT_004c2430[0])));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe1f0, ((int)FUN_00321c10(o->machine, &DAT_004c2470[0])));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe210, o->version);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe230, o->entry);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe250, o->programHeaderOffset);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe270, o->sectionHeaderOffset);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe290, o->flags);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe2b0, o->headerSize);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe2d0, o->programHeaderEntrySize);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe2f0, o->programHeaderCount);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe310, o->sectionHeaderEntrySize);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe330, o->sectionHeaderCount);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe350, o->sectionNameIndex);
-    FUN_00304680();
-    FUN_00304430(DAT_004f95c8);
-    FUN_00304680();
+void igElfFile_PrintHeader(ElfFileView *o) {
+    igReport_Printf(DAT_004fe090);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe0b0);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe0d0, o->magic[0]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe0f0, o->magic[1]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe110, o->magic[2]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe130, o->magic[3]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe150, ((int)igElfFile_LookupValueName(o->elfClass, &DAT_004c23f0[0])));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe170, ((int)igElfFile_LookupValueName(o->endian, &DAT_004c2410[0])));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe190, o->identVersion);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe1b0);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe1d0, ((int)igElfFile_LookupValueName(o->type, &DAT_004c2430[0])));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe1f0, ((int)igElfFile_LookupValueName(o->machine, &DAT_004c2470[0])));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe210, o->version);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe230, o->entry);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe250, o->programHeaderOffset);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe270, o->sectionHeaderOffset);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe290, o->flags);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe2b0, o->headerSize);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe2d0, o->programHeaderEntrySize);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe2f0, o->programHeaderCount);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe310, o->sectionHeaderEntrySize);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe330, o->sectionHeaderCount);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe350, o->sectionNameIndex);
+    igReport_Flush();
+    igReport_Printf(DAT_004f95c8);
+    igReport_Flush();
 }
 
-void Gap__Core__igElfFile__vfunc_31(int *arg0) {
+void igElfFile_PrintSectionHeaders(int *arg0) {
     int temp_a1;
     int var_s0;
     temp_a1 = arg0[19];
-    FUN_00304430(DAT_004fe370, temp_a1, temp_a1);
-    FUN_00304680();
+    igReport_Printf(DAT_004fe370, temp_a1, temp_a1);
+    igReport_Flush();
     for (var_s0 = 0; var_s0 < arg0[19]; var_s0++) {
-        FUN_00322040((ElfFileView *)arg0, var_s0, FUN_00320ea0((ElfFileView *)arg0, var_s0));
+        igElfFile_PrintSectionHeader((ElfFileView *)arg0, var_s0, igElfFile_GetSectionHeader((ElfFileView *)arg0, var_s0));
     }
 }
 
-void FUN_00322040(ElfFileView *arg0, int arg1, ElfSection *arg2) {
+void igElfFile_PrintSectionHeader(ElfFileView *arg0, int arg1, ElfSection *arg2) {
     char sp30[128];
 
-    FUN_00304430(DAT_004fe4d0);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe4f0, arg2->name, (int)arg0->sectionNames + arg2->name);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe520, ((int)FUN_00321c10(arg2->type, &DAT_004c24c0[0])));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe540, arg2->flags, ((int)FUN_00321c50(arg2->flags, (int)&DAT_004c2550[0], (char *)sp30)));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe570, arg2->addr);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe5a0, arg2->offset);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe5d0, arg2->size);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe600, arg2->link);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe630, arg2->info);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe660, arg2->addressAlign);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe690, arg2->entrySize);
-    FUN_00304680();
-    FUN_00304430(DAT_004f95c8);
-    FUN_00304680();
+    igReport_Printf(DAT_004fe4d0);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe4f0, arg2->name, (int)arg0->sectionNames + arg2->name);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe520, ((int)igElfFile_LookupValueName(arg2->type, &DAT_004c24c0[0])));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe540, arg2->flags, ((int)igElfFile_FormatFlags(arg2->flags, (int)&DAT_004c2550[0], (char *)sp30)));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe570, arg2->addr);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe5a0, arg2->offset);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe5d0, arg2->size);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe600, arg2->link);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe630, arg2->info);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe660, arg2->addressAlign);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe690, arg2->entrySize);
+    igReport_Flush();
+    igReport_Printf(DAT_004f95c8);
+    igReport_Flush();
 }
 
-void Gap__Core__igElfFile__vfunc_32(ElfFileView *arg0) {
+void igElfFile_PrintSymbols(ElfFileView *arg0) {
     int temp_a1;
     int i;
 
     temp_a1 = arg0->symbolCount;
-    FUN_00304430(DAT_004fe6c0, temp_a1, temp_a1);
-    FUN_00304680();
+    igReport_Printf(DAT_004fe6c0, temp_a1, temp_a1);
+    igReport_Flush();
     for (i = 0; i < arg0->symbolCount; i++) {
-        FUN_00322240((igElfFile *)arg0, i, (unsigned char *)(FUN_00320f70(arg0, i)));
+        igElfFile_PrintSymbol((igElfFile *)arg0, i, (unsigned char *)(igElfFile_GetSymbol(arg0, i)));
     }
 }
 
-void FUN_00322240(igElfFile *arg0, int arg1, unsigned char *arg2) {
+void igElfFile_PrintSymbol(igElfFile *arg0, int arg1, unsigned char *arg2) {
     int *temp_v0;
     char *var_s0;
 
-    temp_v0 = ((int *)FUN_00320ea0((ElfFileView *)arg0, *(unsigned short *)(arg2 + 14)));
+    temp_v0 = ((int *)igElfFile_GetSectionHeader((ElfFileView *)arg0, *(unsigned short *)(arg2 + 14)));
     if (temp_v0 != 0) {
         var_s0 = (char *)(arg0->_sectionHeaderStringTable + *temp_v0);
     } else {
         var_s0 = ((char *)DAT_004f7910);
     }
-    FUN_00304430(DAT_004fe7a0, arg1);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe7c0, *(int *)(arg2 + 0), arg0->_symbolStringTable + *(int *)(arg2 + 0));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe7f0, *(int *)(arg2 + 4));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe820, *(int *)(arg2 + 8));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe850, arg2[12]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe880, ((int)FUN_00321c10(arg2[12] >> 4, (int *)DAT_004c2580)));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe8b0, ((int)FUN_00321c10(arg2[12] & 0xF, (int *)DAT_004c25b0)));
-    FUN_00304680();
-    FUN_00304430(DAT_004fe8e0, arg2[13]);
-    FUN_00304680();
-    FUN_00304430(DAT_004fe910, *(unsigned short *)(arg2 + 14), var_s0);
-    FUN_00304680();
-    FUN_00304430(DAT_004f95c8);
-    FUN_00304680();
+    igReport_Printf(DAT_004fe7a0, arg1);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe7c0, *(int *)(arg2 + 0), arg0->_symbolStringTable + *(int *)(arg2 + 0));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe7f0, *(int *)(arg2 + 4));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe820, *(int *)(arg2 + 8));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe850, arg2[12]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe880, ((int)igElfFile_LookupValueName(arg2[12] >> 4, (int *)DAT_004c2580)));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe8b0, ((int)igElfFile_LookupValueName(arg2[12] & 0xF, (int *)DAT_004c25b0)));
+    igReport_Flush();
+    igReport_Printf(DAT_004fe8e0, arg2[13]);
+    igReport_Flush();
+    igReport_Printf(DAT_004fe910, *(unsigned short *)(arg2 + 14), var_s0);
+    igReport_Flush();
+    igReport_Printf(DAT_004f95c8);
+    igReport_Flush();
 }
 

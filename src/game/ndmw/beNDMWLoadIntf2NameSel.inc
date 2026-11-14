@@ -109,7 +109,7 @@ void beNDMWLoadIntf2NameSel_InitFields(void) {
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s0_4)->_metaObject = (int)FUN_003c7700();
     ((igObjectRefMetaField *)temp_s0_4)->_refCounted = 0;
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xE), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xE), -1);
     igMetaObject_NameFields(temp_s1, &g_beNDMWLoadIntf2NameSel_fieldTable[0], &DAT_004cae20[0], &DAT_004cae90[0], temp_s2);
 }
 

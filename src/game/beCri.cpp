@@ -35,12 +35,12 @@ int List_RemoveWordAt(igObjectList *list, int index);
 int Memory_FreeBuffer(...);
 int igMetaObject_FindFieldByName(int meta, const char *name);
 int igMemoryRefMetaField_SetAlignmentType(int field, const char *name);
-int FUN_00308860(int context, const char *name, int alignment);
+int igResource_AddAlignment(int context, const char *name, int alignment);
 void igInsightCore_AddToScheduler(int insight, beCri *component);
 int igInsightCore_RemoveFromScheduler(...);
 int igInsightCore_FindManager(int insight, int meta);
-int FUN_00306360(int registry, const char *section, int create);
-int FUN_00306770(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
+int igRegistry_GetSectionIndex(int registry, const char *section, int create);
+int igRegistry_GetValueStringObj(int registry, int section, const char *key, igSmartPointer<igStringObj> *value, const char *fallback, int flags);
 igStringObj *igStringObj_Create(void *allocator);
 void igStringObj_Set(...);
 int igStringObj_StripDirectory(igNamedObject *);
@@ -408,12 +408,12 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     igInsightCore_AddToScheduler(self->_insight, self);
     registry = g_objectSystem[0]->registry;
     if (registry == 0) return;
-    section = FUN_00306360(registry, BECRUNTIME, 0);
+    section = igRegistry_GetSectionIndex(registry, BECRUNTIME, 0);
     if (section == -1) return;
     void *allocator = igObject_GetAllocator(self);
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     igSmartPointer<igStringObj> path(igStringObj_Create(allocator));
-    if (FUN_00306770(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
+    if (igRegistry_GetValueStringObj(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
         if (strcmp(text_9_31s281, text_9_18) == 0)
             igStringObj_Set((igStringObj *)path, C_cri_ps2_iop_modules);
         else
@@ -1217,7 +1217,7 @@ static inline int AsMemoryRefField(int field) {
 void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
-    FUN_00308860(g_globalContext[0], sndfBuffer, 0x20);
+    igResource_AddAlignment(g_globalContext[0], sndfBuffer, 0x20);
     field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject[0], _dataBuffer);
     field = AsMemoryRefField(field);
     igMemoryRefMetaField_SetAlignmentType(field, sndfBuffer);

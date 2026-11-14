@@ -1,4 +1,4 @@
-void FUN_002dca90(void)
+void igEventTracker_CodeReference(void)
 {
 }
 
@@ -17,10 +17,10 @@ static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
     self->_lock = pool;
 }
 
-void FUN_002dcaa0(igEventTrackerView *self, int open) {
+void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
     if (open != 0) {
         if (self->_lock == 0) {
-            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)FUN_002ba650(((int)igObject_GetAllocator((int)self)))));
+            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)igObject_GetAllocator((int)self)))));
             created.get()->create();
             setLock(self, created.get());
         }
@@ -36,17 +36,17 @@ void FUN_002dcaa0(igEventTrackerView *self, int open) {
     }
 }
 
-void FUN_002dcc40(int a0, int a1)
+void igEventTracker_SetCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 36) = a1;
 }
 
-int FUN_002dcc50(int *p)
+int igEventTracker_GetCount(int *p)
 {
     return *(int *)((char *)p + 40);
 }
 
-void FUN_002dcc60(igEventTrackerView *tracker, int tag) {
+void igEventTracker_SetEventTag(igEventTrackerView *tracker, int tag) {
     ScopedLock guard(tracker->_lock);
     if (tracker->isBusy() != false) {
         return;
@@ -58,14 +58,14 @@ void FUN_002dcc60(igEventTrackerView *tracker, int tag) {
         tracker->_eventTag[0] = 0;
     }
     if (tracker->_eventTag[0] != 0) {
-        tracker->_eventTagOffset = FUN_0030d300(tracker->_groups, (int)tracker->_eventTag);
+        tracker->_eventTagOffset = igStringTable_FindOrAddString(tracker->_groups, (int)tracker->_eventTag);
     } else {
         tracker->_eventTagOffset = -1;
     }
     tracker->_flags = tracker->_flags & ~2;
 }
 
-void FUN_002dcd70(igEventTrackerView *tracker, int className) {
+void igEventTracker_SetEventClassName(igEventTrackerView *tracker, int className) {
     ScopedLock guard(tracker->_lock);
     if (tracker->isBusy() != false) {
         return;
@@ -77,60 +77,60 @@ void FUN_002dcd70(igEventTrackerView *tracker, int className) {
         tracker->_eventClassName[0] = 0;
     }
     if (tracker->_eventClassName[0] != 0) {
-        tracker->_eventClassNameOffset = FUN_0030d300(tracker->_classNames, (int)tracker->_eventClassName);
+        tracker->_eventClassNameOffset = igStringTable_FindOrAddString(tracker->_classNames, (int)tracker->_eventClassName);
     } else {
         tracker->_eventClassNameOffset = -1;
     }
     tracker->_flags = tracker->_flags & ~2;
 }
 
-void Gap__Core__igEventTracker__vfunc_23(igEventTrackerView *arg0) {
+void igEventTracker_Initialize(igEventTrackerView *arg0) {
     int n;
-    FUN_0030cf20(arg0->_groups, 0x100);
-    FUN_0030cf30(arg0->_groups, 0x20);
-    FUN_0030cf40((void *)arg0->_groups);
-    FUN_0030cf20(arg0->_classNames, 0x1000);
-    FUN_0030cf30(arg0->_classNames, 0x100);
-    FUN_0030cf40((void *)arg0->_classNames);
-    FUN_0030cf20(arg0->_sourceFileNames, 0x200);
-    FUN_0030cf30(arg0->_sourceFileNames, 0x20);
-    FUN_0030cf40((void *)arg0->_sourceFileNames);
-    FUN_0030cf20(arg0->_annotations, 0x10000);
-    FUN_0030cf30(arg0->_annotations, 0x1000);
-    FUN_0030cf40((void *)arg0->_annotations);
-    FUN_0030cf20(arg0->_sourceFileNames, 0x2000);
-    FUN_0030cf30(arg0->_sourceFileNames, 0x100);
-    FUN_0030cf40((void *)arg0->_sourceFileNames);
-    FUN_002d38d0(arg0->_callStacks, 0x10000);
-    FUN_002d38e0((igCallStackTableView *)arg0->_callStacks, 0x1000);
-    FUN_002d38f0((igCallStackTableView *)arg0->_callStacks);
+    igStringTable_SetCapacity(arg0->_groups, 0x100);
+    igStringTable_SetHashCapacity(arg0->_groups, 0x20);
+    igStringTable_Reserve((void *)arg0->_groups);
+    igStringTable_SetCapacity(arg0->_classNames, 0x1000);
+    igStringTable_SetHashCapacity(arg0->_classNames, 0x100);
+    igStringTable_Reserve((void *)arg0->_classNames);
+    igStringTable_SetCapacity(arg0->_sourceFileNames, 0x200);
+    igStringTable_SetHashCapacity(arg0->_sourceFileNames, 0x20);
+    igStringTable_Reserve((void *)arg0->_sourceFileNames);
+    igStringTable_SetCapacity(arg0->_annotations, 0x10000);
+    igStringTable_SetHashCapacity(arg0->_annotations, 0x1000);
+    igStringTable_Reserve((void *)arg0->_annotations);
+    igStringTable_SetCapacity(arg0->_sourceFileNames, 0x2000);
+    igStringTable_SetHashCapacity(arg0->_sourceFileNames, 0x100);
+    igStringTable_Reserve((void *)arg0->_sourceFileNames);
+    igCallStackTable_SetCapacity(arg0->_callStacks, 0x10000);
+    igCallStackTable_SetHashCapacity((igCallStackTableView *)arg0->_callStacks, 0x1000);
+    igCallStackTable_ApplyCapacity((igCallStackTableView *)arg0->_callStacks);
     if (arg0->_callStackTracer->vfunc_25() != 0) {
-        FUN_002eb090((int)arg0->_locations, 0x4000);
-        FUN_002eb0a0((int)arg0->_locations, 0x4000);
-        FUN_002eb0b0(arg0->_locations);
+        StringPool_SetBlockSize((int)arg0->_locations, 0x4000);
+        igLocationTable_SetHashCapacity((int)arg0->_locations, 0x4000);
+        igLocationTable_Allocate(arg0->_locations);
     }
     n = arg0->_capacity * 0x14;
     if (n >= arg0->_eventRecords->_count) {
         List_Reserve((igDataList *)arg0->_eventRecords, n, 1);
     }
     arg0->vfunc_50(arg0->_capacity * 2);
-    FUN_002dca90();
-    arg0->_codeReferenceAddress = (int)FUN_002dca90;
-    FUN_002dcaa0(arg0, 1);
+    igEventTracker_CodeReference();
+    arg0->_codeReferenceAddress = (int)igEventTracker_CodeReference;
+    igEventTracker_SetThreadSafe(arg0, 1);
 }
 
-void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
+void igEventTracker_Shutdown(igEventTrackerView *arg0) {
     int busy = (arg0->getFlags() & 2) != 0;
     if (!busy) {
         arg0->_flags = arg0->_flags | 2;
-        FUN_0030cfa0((igStringTableView *)arg0->_groups);
-        FUN_0030cfa0((igStringTableView *)arg0->_classNames);
-        FUN_0030cfa0((igStringTableView *)arg0->_sourceFileNames);
-        FUN_0030cfa0((igStringTableView *)arg0->_annotations);
-        FUN_0030cfa0((igStringTableView *)arg0->_sourceFileNames);
-        FUN_002d3950((igCallStackTableView *)arg0->_callStacks);
+        igStringTable_Clear((igStringTableView *)arg0->_groups);
+        igStringTable_Clear((igStringTableView *)arg0->_classNames);
+        igStringTable_Clear((igStringTableView *)arg0->_sourceFileNames);
+        igStringTable_Clear((igStringTableView *)arg0->_annotations);
+        igStringTable_Clear((igStringTableView *)arg0->_sourceFileNames);
+        igCallStackTable_Clear((igCallStackTableView *)arg0->_callStacks);
         if (arg0->_callStackTracer->vfunc_25() != 0) {
-            FUN_002eb150(arg0->_locations);
+            igLocationTable_Clear(arg0->_locations);
         }
         if (0 <= arg0->_eventRecords->_capacity) {
             arg0->_eventRecords->_count = 0;
@@ -140,20 +140,20 @@ void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
         if (!(0 < arg0->_eventRecords->_count)) {
             List_Reserve((igDataList *)arg0->_eventRecords, 0, 1);
         }
-        FUN_002dcaa0(arg0, 0);
+        igEventTracker_SetThreadSafe(arg0, 0);
         arg0->_flags = arg0->_flags & ~2;
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *arg0) {
+void igEventTracker_Reset(igEventTrackerView *arg0) {
     ScopedLock guard(arg0->_lock);
     arg0->_count = 0;
-    FUN_0030d050(arg0->_groups);
-    FUN_0030d050(arg0->_classNames);
-    FUN_0030d050(arg0->_sourceFileNames);
-    FUN_0030d050(arg0->_annotations);
-    FUN_0030d050(arg0->_sourceFileNames);
-    FUN_002d3a20((igCallStackTableView *)arg0->_callStacks);
+    igStringTable_RemoveAll(arg0->_groups);
+    igStringTable_RemoveAll(arg0->_classNames);
+    igStringTable_RemoveAll(arg0->_sourceFileNames);
+    igStringTable_RemoveAll(arg0->_annotations);
+    igStringTable_RemoveAll(arg0->_sourceFileNames);
+    igCallStackTable_RemoveAllCallStacks((igCallStackTableView *)arg0->_callStacks);
     igTDataList<signed char> *l = arg0->_eventRecords;
     if (0 <= l->_capacity) {
         l->_count = 0;
@@ -163,7 +163,7 @@ void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *arg0) {
     arg0->vfunc_50(arg0->_hashIndex->_capacity);
 }
 
-void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int *arg3) {
+void igEventTracker_ReadEventType(int *arg0, char *arg1, char *arg2, int *arg3) {
     int acc;
     int c;
     int sh;
@@ -189,7 +189,7 @@ void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int 
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_29(int *arg0, char *arg1, char *arg2, int *arg3) {
+void igEventTracker_ReadEventKey(int *arg0, char *arg1, char *arg2, int *arg3) {
     int acc2;
     int acc;
     int c;
@@ -262,7 +262,7 @@ static inline void readVarint(const char *p, int *out) {
 /* The varint that follows the word slot 29 reads: the record starts with its type (a varint below
  * 32), a version byte no newer than the tracker's and a flags varint whose bit 0 says the two
  * values are present. The word itself is read and dropped. */
-void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char *record, int *value) {
+void igEventTracker_ReadEventValue(int *result, igEventTracker *self, char *record, int *value) {
     int flags;
     int type;
     int byte;
@@ -334,7 +334,7 @@ void Gap__Core__igEventTracker__vfunc_32(igEventTrackerView *self, int first, in
     int markerBSeen;
     int count;
     int type;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     markerASeen = -1;
     markerBSeen = -1;
     count = self->_hashIndex->_count;
@@ -413,10 +413,10 @@ void Gap__Core__igEventTracker__vfunc_32(igEventTrackerView *self, int first, in
             }
         }
     }
-    FUN_002e2300(&record, (long long)(-1));
+    igEventTracker_DestructEvent(&record, (long long)(-1));
 }
 
-void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
+void igEventTracker_GetStatisticsByName(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
 {
     int var_s1;
     int var_s0;
@@ -424,7 +424,7 @@ void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int
     int key = arg3;
     var_s1 = 0;
     var_s0 = 0;
-    FUN_002e2130((int)&ev);
+    igEventTracker_InitEvent((int)&ev);
     if (arg2 == -1) {
         arg2 = arg0->_count - 1;
     }
@@ -455,10 +455,10 @@ void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int
         var_s1 += 1;
         if (var_s1 >= arg2 || var_s0 == -1) break;
     }
-    FUN_002e2300(&ev, (long long)(-1));
+    igEventTracker_DestructEvent(&ev, (long long)(-1));
 }
 
-int Gap__Core__igEventTracker__vfunc_31(igEventTrackerView *arg0, int arg1) {
+int igEventTracker_FindIndex(igEventTrackerView *arg0, int arg1) {
     int out;
     int k;
     int idx;
@@ -488,7 +488,7 @@ int Gap__Core__igEventTracker__vfunc_31(igEventTrackerView *arg0, int arg1) {
     }
 }
 
-int Gap__Core__igEventTracker__vfunc_34(igEventTrackerView *self, int arg1) {
+int igEventTracker_GetNextEventOffset(igEventTrackerView *self, int arg1) {
     igTDataList<signed char> *q;
     signed char *p;
     int n;
@@ -516,7 +516,7 @@ int Gap__Core__igEventTracker__vfunc_34(igEventTrackerView *self, int arg1) {
 
 /* Mark as freed every allocation still recorded whose call stack, below `main`, passes through a
  * function whose name contains `wanted`. */
-void Gap__Core__igEventTracker__vfunc_37(igEventTrackerView *self, char *wanted) {
+void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wanted) {
     ScopedLock guard(self->_lock);
     int i;
     int n = self->_hashIndex->_count;
@@ -524,9 +524,9 @@ void Gap__Core__igEventTracker__vfunc_37(igEventTrackerView *self, char *wanted)
     char name[256];
     int offset;
     int line;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     if (self->_callStackTracer->vfunc_25() == 0) {
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
         return;
     }
     for (i = 0; i < n; i++) {
@@ -551,7 +551,7 @@ void Gap__Core__igEventTracker__vfunc_37(igEventTrackerView *self, char *wanted)
             }
         }
     }
-    FUN_002e2300(&record, -1);
+    igEventTracker_DestructEvent(&record, -1);
 }
 
 /* Map a hash value to a bucket of the tracker's hash index: the value modulo the count stored at
@@ -564,7 +564,7 @@ int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self) {
     int offset;
     EventRecord record;
     int outstanding;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     outstanding = 0;
     for (i = 0; i < count; i++) {
         offset = self->_hashIndex->_data[i];
@@ -575,7 +575,7 @@ int Gap__Core__igEventTracker__vfunc_35(igEventTrackerView *self) {
             }
         }
     }
-    FUN_002e2300(&record, (long long)(-1));
+    igEventTracker_DestructEvent(&record, (long long)(-1));
     return outstanding;
 }
 
@@ -584,23 +584,23 @@ int Gap__Core__igEventTracker__vfunc_36(igEventTrackerView *self, int *cursor) {
     int offset;
     int count = self->_hashIndex->_count;
     EventRecord record;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     for (; *cursor < count; (*cursor)++) {
         offset = self->_hashIndex->_data[*cursor];
         if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
             int type = record.type;
             if (record.getType() != kMemoryDeallocation && type != kObjectDeallocation && type != kMemoryDetach && type != kObjectDetach) {
                 (*cursor)++;
-                FUN_002e2300(&record, (long long)(-1));
+                igEventTracker_DestructEvent(&record, (long long)(-1));
                 return offset;
             }
         }
     }
-    FUN_002e2300(&record, (long long)(-1));
+    igEventTracker_DestructEvent(&record, (long long)(-1));
     return -1;
 }
 
-unsigned int Gap__Core__igEventTracker__vfunc_48(igEventTracker *self, unsigned int hash) {
+unsigned int igEventTracker_GetHashBucketIndex(igEventTracker *self, unsigned int hash) {
     unsigned int bucketCount;
 
     bucketCount = *(int *)((char *)(self->_hashIndex) + 8);
@@ -610,7 +610,7 @@ unsigned int Gap__Core__igEventTracker__vfunc_48(igEventTracker *self, unsigned 
     return 0U;
 }
 
-void Gap__Core__igEventTracker__vfunc_49(igEventTrackerView *self, int arg1, int arg2) {
+void igEventTracker_InsertHashIndex(igEventTrackerView *self, int arg1, int arg2) {
     int sp9C;
     int idx, tried, n, half, cnt;
     igTDataList<int> *tb;
@@ -663,14 +663,14 @@ static inline void setCount(igTDataList<int> *l, int n) {
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_50(igEventTrackerView *self, int n) {
+void igEventTracker_RebuildHashIndex(igEventTrackerView *self, int n) {
     char *base;
     int value;
     char *end;
     char *p;
     int len;
     int offset;
-    FUN_002dcc40((int)self, n);
+    igEventTracker_SetCapacity((int)self, n);
     if (n >= self->_hashIndex->_count) {
         List_Reserve((igDataList *)self->_hashIndex, n, 4);
     }
@@ -697,7 +697,7 @@ void Gap__Core__igEventTracker__vfunc_50(igEventTrackerView *self, int n) {
     }
 }
 
-int FUN_002e14b0(void *arg0, int arg1) {
+int igEventTracker_GetEventFormat(void *arg0, int arg1) {
     int temp_a1;
     int idx;
 
@@ -705,13 +705,13 @@ int FUN_002e14b0(void *arg0, int arg1) {
         idx = arg1 * 4;
         temp_a1 = *(int *)((char *)(idx + (int)arg0) + 96);
         if (temp_a1 != -1) {
-            return ((int)FUN_0030d1d0((int *)(*(int *)((char *)(arg0) + 48)), temp_a1));
+            return ((int)igStringTable_GetString((int *)(*(int *)((char *)(arg0) + 48)), temp_a1));
         }
     }
     return 0;
 }
 
-int FUN_002e1500(void *arg0, int arg1) {
+int igEventTracker_GetEventTypeName(void *arg0, int arg1) {
     int off;
     int temp_a1;
 
@@ -719,40 +719,40 @@ int FUN_002e1500(void *arg0, int arg1) {
         off = arg1 * 4;
         temp_a1 = *(int *)((char *)(off + (int)arg0) + 228);
         if (temp_a1 != -1) {
-            return ((int)FUN_0030d1d0((int *)(*(int *)((char *)(arg0) + 48)), temp_a1));
+            return ((int)igStringTable_GetString((int *)(*(int *)((char *)(arg0) + 48)), temp_a1));
         }
     }
     return 0;
 }
 
-int FUN_002e1550(igEventTrackerView *tracker, int type) {
+int igEventTracker_GetMarkerTypeName(igEventTrackerView *tracker, int type) {
     int t;
     if (type >= 0 && type < 32) {
         t = tracker->_markerTypeNameOffsets[type];
         if (t != -1) {
-            return ((int)FUN_0030d1d0((int *)tracker->_names, t));
+            return ((int)igStringTable_GetString((int *)tracker->_names, t));
         }
     }
     return 0;
 }
 
-int FUN_002e15a0(igEventTrackerView *tracker, int type) {
+int igEventTracker_GetNotificationTypeName(igEventTrackerView *tracker, int type) {
     int offset;
 
     if (type >= 0 && type < 16) {
         offset = tracker->_notificationTypeNameOffsets[type];
         if (offset != -1) {
-            return ((int)FUN_0030d1d0((int *)tracker->_names, offset));
+            return ((int)igStringTable_GetString((int *)tracker->_names, offset));
         }
     }
     return 0;
 }
 
-int FUN_002e15f0(void *arg0, int arg1) {
-    int t; if (arg1 >= 0 && arg1 < 0x40) { t = *(int *)((arg1 << 2) + (int)arg0 + 548); if (t != -1) return ((int)FUN_0030d1d0((int *)(*(int *)((char *)arg0 + 48)), t)); } return 0;
+int igEventTracker_GetNotificationCodeName(void *arg0, int arg1) {
+    int t; if (arg1 >= 0 && arg1 < 0x40) { t = *(int *)((arg1 << 2) + (int)arg0 + 548); if (t != -1) return ((int)igStringTable_GetString((int *)(*(int *)((char *)arg0 + 48)), t)); } return 0;
 }
 
-igResult Gap__Core__igEventTracker__vfunc_39(igEventTrackerView *self, int addr, int format, long long output, long long outputSize) {
+igResult igEventTracker_FormatAddress(igEventTrackerView *self, int addr, int format, long long output, long long outputSize) {
     char buf[256];
     char name[256];
     int offset;
@@ -762,9 +762,9 @@ igResult Gap__Core__igEventTracker__vfunc_39(igEventTrackerView *self, int addr,
     return r;
 }
 
-igResult Gap__Core__igEventTracker__vfunc_40(igEventTrackerView *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
+igResult igEventTracker_ResolveAddress(igEventTrackerView *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
     int s0;
-    if (FUN_002eb210((void *)self->_locations) != 0) {
+    if (igLocationTable_IsInitialized((void *)self->_locations) != 0) {
         s0 = self->_locations->vfunc_27(addr, buf, size, offset, name, nameSize, line).v;
         if (s0 == g_resultFailure.v) {
             if (self->_callStackTracer->vfunc_25() != 0) {
@@ -785,11 +785,11 @@ join:
 }
 
 /* Print the record at `offset` through the tracker's format buffer, 128 characters at a time. */
-void Gap__Core__igEventTracker__vfunc_41(igEventTrackerView *self, int offset) {
+void igEventTracker_PrintEvent(igEventTrackerView *self, int offset) {
     EventRecord record;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     if (self->vfunc_27(offset, &record) != g_resultSuccess) {
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
         return;
     }
     self->vfunc_38(&record, self->_formatBuffer, 0x2003);
@@ -802,15 +802,15 @@ void Gap__Core__igEventTracker__vfunc_41(igEventTrackerView *self, int offset) {
             char *end = self->_formatBuffer + 128 + i;
             saved = *end;
             *end = 0;
-            FUN_00304430(self->_formatBuffer + i);
-            FUN_00304680();
+            igReport_Printf(self->_formatBuffer + i);
+            igReport_Flush();
             *end = saved;
         }
     }
-    FUN_002e2300(&record, -1);
+    igEventTracker_DestructEvent(&record, -1);
 }
 
-void Gap__Core__igEventTracker__vfunc_42(igEventTrackerView *self) {
+void igEventTracker_PrintAllEvents(igEventTrackerView *self) {
     int s = 0;
     while (s != -1) {
         self->vfunc_41(s);
@@ -881,7 +881,7 @@ void Gap__Core__igEventTracker__vfunc_43(igEventTrackerView *self) {
     int count = self->_hashIndex->_count;
     int offset;
     EventRecord record;
-    FUN_002e2130((int)&record);
+    igEventTracker_InitEvent((int)&record);
     for (i = 0; i < count; i++) {
         offset = self->_hashIndex->_data[i];
         if (offset != -1 && self->vfunc_27(offset, &record) != g_resultFailure) {
@@ -891,12 +891,12 @@ void Gap__Core__igEventTracker__vfunc_43(igEventTrackerView *self) {
             }
         }
     }
-    FUN_002e2300(&record, (long long)(-1));
+    igEventTracker_DestructEvent(&record, (long long)(-1));
 }
 
 static inline bool hasFlag(const igEventTrackerView *tracker, unsigned mask) { return (tracker->_flags & mask) != 0; }
 
-igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *arg1, int arg2) {
+igResult igEventTracker_WriteFile(igEventTrackerView *arg1, int arg2) {
     bool had;
     bool trk;
     int r;
@@ -910,7 +910,7 @@ igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *arg1, int arg2)
         arg1->vfunc_45();
     }
     {
-    igSmartPointer<igIGBFileView> sp7C(((igIGBFileView *)FUN_002c37e0((int)(((igObject *)igObject_GetAllocator((int)arg1))))));
+    igSmartPointer<igIGBFileView> sp7C(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)igObject_GetAllocator((int)arg1))))));
     a = ((igObject *)igObject_GetAllocator((int)arg1));
     o = sp7C.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
@@ -939,14 +939,14 @@ igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *arg1, int arg2)
     }
     o->_dataMemoryPool = (igMemoryPoolView *)a;
     sp7C.p->_useMemoryPoolAssignmentsState = 1;
-    FUN_002d8620((int)sp7C.p, (int)arg1, DAT_004c1ed8[0], 0);
+    igDirectory_AddObjectRecursive((int)sp7C.p, (int)arg1, DAT_004c1ed8[0], 0);
     r = sp7C.p->vfunc_28(arg2);
     }
     arg1->_flags = had ? (arg1->_flags | 2) : (arg1->_flags & ~2);
     return igResult(r);
 }
 
-void Gap__Core__igEventTracker__vfunc_45(igEventTrackerView *self) {
+void igEventTracker_ResolveAllCallStackSymbols(igEventTrackerView *self) {
     int a;
     int b;
     char bufA[256];
@@ -984,7 +984,7 @@ void Gap__Core__igEventTracker__vfunc_47(igEventTrackerView *self)
     self->_callStackTracer->vfunc_30();
 }
 
-void Gap__Core__igEventTracker__vfunc_13(igEventTrackerView *self) {
+void Gap__Core__igEventTracker__resetFields(igEventTrackerView *self) {
     int i;
     self->_eventTag[0] = 0;
     self->_eventTag[255] = 0;
@@ -996,40 +996,40 @@ void Gap__Core__igEventTracker__vfunc_13(igEventTrackerView *self) {
         self->_notificationTypeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerNotificationTypeFilter;
         self->_notificationCodeFilterFlags = ((ObjectSystemView **)g_objectSystem)[0]->eventTrackerNotificationCodeFilter;
     }
-    FUN_0030cf20(self->_names, 0x1000);
-    FUN_0030cf30(self->_names, 0x100);
-    FUN_0030cf40((void *)self->_names);
+    igStringTable_SetCapacity(self->_names, 0x1000);
+    igStringTable_SetHashCapacity(self->_names, 0x100);
+    igStringTable_Reserve((void *)self->_names);
     memset(self->_eventFormatOffsets, 0xFF, 0x80);
     memset(self->_eventTypeNameOffsets, 0xFF, 0x80);
     memset(self->_markerTypeNameOffsets, 0xFF, 0x80);
     memset(self->_notificationTypeNameOffsets, 0xFF, 0x40);
     memset(self->_notificationCodeNameOffsets, 0xFF, 0x100);
     for (i = 0; i < 32; i++) {
-        self->_eventTypeNameOffsets[i] = FUN_0030d300(self->_names, DAT_004c1ee0[i]);
+        self->_eventTypeNameOffsets[i] = igStringTable_FindOrAddString(self->_names, DAT_004c1ee0[i]);
     }
     for (i = 0; i < 32; i++) {
-        self->_markerTypeNameOffsets[i] = FUN_0030d300(self->_names, DAT_004c1f60[i]);
+        self->_markerTypeNameOffsets[i] = igStringTable_FindOrAddString(self->_names, DAT_004c1f60[i]);
     }
     for (i = 0; i < 16; i++) {
-        self->_notificationTypeNameOffsets[i] = FUN_0030d300(self->_names, DAT_004c1fe0[i]);
+        self->_notificationTypeNameOffsets[i] = igStringTable_FindOrAddString(self->_names, DAT_004c1fe0[i]);
     }
     for (i = 0; i < 64; i++) {
-        self->_notificationCodeNameOffsets[i] = FUN_0030d300(self->_names, DAT_004c2020[i]);
+        self->_notificationCodeNameOffsets[i] = igStringTable_FindOrAddString(self->_names, DAT_004c2020[i]);
     }
 }
 
-int FUN_002e2130(int arg0) {
-    FUN_002e2350(arg0);
+int igEventTracker_InitEvent(int arg0) {
+    igEventTracker_ClearEvent(arg0);
     return arg0;
 }
 
-int FUN_002e2160(int arg0, int arg1) {
+int igEventTracker_CopyEvent(int arg0, int arg1) {
     memcpy(arg0, arg1, 0x94);
     return arg0;
 }
 
-void *FUN_002e2190(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
-    FUN_002e2350((int)arg0);
+void *igEventTracker_InitMemoryEvent(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
+    igEventTracker_ClearEvent((int)arg0);
     *(int *)((char *)arg0 + 0) = arg1;
     *(void **)((char *)arg0 + 8) = arg2;
     *(int *)((char *)arg0 + 12) = arg3;
@@ -1044,8 +1044,8 @@ void *FUN_002e2190(void *arg0, int arg1, void *arg2, int arg3, int arg4, int arg
     return arg0;
 }
 
-void *FUN_002e2250(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8) {
-    FUN_002e2350((int)arg0);
+void *igEventTracker_InitMarkerEvent(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8) {
+    igEventTracker_ClearEvent((int)arg0);
     *(int *)((char *)arg0 + 0) = 0xD;
     *(int *)((char *)arg0 + 20) = arg1;
     *(int *)((char *)arg0 + 24) = arg2;
@@ -1059,7 +1059,7 @@ void *FUN_002e2250(void *arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
     return arg0;
 }
 
-void *FUN_002e2300(void *arg0, long long arg1) {
+void *igEventTracker_DestructEvent(void *arg0, long long arg1) {
     if (arg0 != 0) {
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasB(arg0);
@@ -1068,11 +1068,11 @@ void *FUN_002e2300(void *arg0, long long arg1) {
     return arg0;
 }
 
-void FUN_002e2350(int arg0) {
+void igEventTracker_ClearEvent(int arg0) {
     memset(arg0, 0, 148);
 }
 
-int FUN_002e2360(void *arg0) {
+int igEventTracker_FindFreeEventDataSlot(void *arg0) {
     int i;
     for (i = 0; i < 0x10; i++) {
         if (!(*(int *)((char *)(arg0) + 80) & (3 << (i * 2)))) {
@@ -1082,7 +1082,7 @@ int FUN_002e2360(void *arg0) {
     return 0;
 }
 
-int FUN_002e23b0(EventRecord *record, int slot)
+int igEventTracker_GetEventDataType(EventRecord *record, int slot)
 {
   if (slot < 0x10)
   {
@@ -1091,14 +1091,14 @@ int FUN_002e23b0(EventRecord *record, int slot)
   return 0;
 }
 
-int FUN_002e23e0(int arg0, int arg1) {
+int igEventTracker_GetEventDataInt(int arg0, int arg1) {
     if (arg1 < 0x10) {
         return *(int *)((char *)(((arg1 << 2) + arg0)) + 84);
     }
     return -1;
 }
 
-void FUN_002e2400(void *arg0, int arg1, int arg2) {
+void igEventTracker_SetEventDataInt(void *arg0, int arg1, int arg2) {
     int t, idx;
     char *p;
     if (arg1 < 0x10) {
@@ -1108,7 +1108,7 @@ void FUN_002e2400(void *arg0, int arg1, int arg2) {
     }
 }
 
-int FUN_002e2450(int arg0, int arg1) {
+int igEventTracker_GetEventDataUnsigned(int arg0, int arg1) {
     int var_v0;
 
     var_v0 = -1;
@@ -1118,7 +1118,7 @@ int FUN_002e2450(int arg0, int arg1) {
     return var_v0;
 }
 
-void FUN_002e2470(void *arg0, int arg1, int arg2) {
+void igEventTracker_SetEventDataUnsigned(void *arg0, int arg1, int arg2) {
     int temp_a5;
 
     if (arg1 < 0x10) {
@@ -1128,11 +1128,11 @@ void FUN_002e2470(void *arg0, int arg1, int arg2) {
     }
 }
 
-int FUN_002e24c0(int arg0, int arg1) {
+int igEventTracker_GetEventDataString(int arg0, int arg1) {
     int r = 0; if (arg1 < 0x10) { r = arg1 * 4; r += arg0; r = *(int *)((char *)r + 84); } return r;
 }
 
-void FUN_002e24e0(void *arg0, int arg1, int arg2) {
+void igEventTracker_SetEventDataString(void *arg0, int arg1, int arg2) {
     int temp_a4;
     int idx;
     char *p;
@@ -1145,11 +1145,11 @@ void FUN_002e24e0(void *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_002e2520(int arg0, int arg1, void *arg2) {
+void igEventTracker_GetEventDataUnsigned3(int arg0, int arg1, void *arg2) {
     if ((arg2 != 0) && (arg1 < 0x10)) {
-        *(int *)((char *)arg2 + 0) = FUN_002e2450(arg0, arg1);
-        *(int *)((char *)arg2 + 4) = FUN_002e2450(arg0, arg1 + 1);
-        *(int *)((char *)arg2 + 8) = FUN_002e2450(arg0, arg1 + 2);
+        *(int *)((char *)arg2 + 0) = igEventTracker_GetEventDataUnsigned(arg0, arg1);
+        *(int *)((char *)arg2 + 4) = igEventTracker_GetEventDataUnsigned(arg0, arg1 + 1);
+        *(int *)((char *)arg2 + 8) = igEventTracker_GetEventDataUnsigned(arg0, arg1 + 2);
     }
 }
 

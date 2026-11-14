@@ -65,7 +65,7 @@ O_19e150 *FUN_0019e150(O_19e150 *arg0, short arg1) {
                 if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
             }
         }
-        if (arg1 > 0) thunk_FUN_002ed460__002ff810(arg0);
+        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
     }
     return arg0;
 }
@@ -157,7 +157,7 @@ void igIntersectTraversal_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019e6c0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 5);
+    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 5);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, 4 + temp_s0))))->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00186c40();
@@ -167,12 +167,12 @@ void igIntersectTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
     igMetaObject_NameFields(temp_s1, &g_igIntersectTraversal_fieldTable[0], &DAT_0048be40[0], &DAT_0048be60[0], temp_s0);
-    FUN_002fe480(&thunk_FUN_001ce740);
+    igMetaObject_AddExitCallback(&thunk_FUN_001ce740);
 }
 
 void FUN_0019e640(void) {
     FUN_001ce710();
-    FUN_002fe490(FUN_001ce660);
+    igMetaObject_AddRegistrationCallback(FUN_001ce660);
 }
 
 void thunk_FUN_001ce740(void) {

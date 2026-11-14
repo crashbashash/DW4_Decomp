@@ -94,9 +94,9 @@ void beSelectCtrlInfoWork_InitFields(void) {
     temp_s0 = (void *)g_beSelectCtrlInfoWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beSelectCtrlInfoWork_ctorTable[0], 5);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_beSelectCtrlInfoWork_fieldTable[0], &DAT_004c3b00[0], &DAT_004c3b20[0], temp_s2);
 }
 

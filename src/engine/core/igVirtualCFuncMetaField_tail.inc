@@ -1,4 +1,4 @@
-int Gap__Core__igVirtualCFuncMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igVirtualCFuncMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igVirtualCFuncMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igVirtualCFuncMetaField__vfunc_57(int *arg0, int arg1, int *arg2) {
+void igVirtualCFuncMetaField_ValueToString(int *arg0, int arg1, int *arg2) {
     char sp20[1024];
     int var_v0;
     int var_v1;
@@ -27,7 +27,7 @@ void Gap__Core__igVirtualCFuncMetaField__vfunc_57(int *arg0, int arg1, int *arg2
     *arg0 = var_v1;
 }
 
-int Gap__Core__igVirtualCFuncMetaField__vfunc_25(void) {
+int igVirtualCFuncMetaField_GetSize(void) {
     return 4;
 }
 
@@ -39,7 +39,7 @@ int a = **(int **)((char *)(arg0) + 32);
 }
 }
 
-void Gap__Core__igVirtualCFuncMetaField__vfunc_30(int *arg0, int arg1) {
+void igVirtualCFuncMetaField_CopyDefaultToValue(int *arg0, int arg1) {
     if (arg1 != 0) {
         int *c = (int *)arg0[8];
         int u = *(int *)(arg1 + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
@@ -49,11 +49,65 @@ void Gap__Core__igVirtualCFuncMetaField__vfunc_30(int *arg0, int arg1) {
 
 /* igVirtualCFuncMetaField override of the igMetaField slot at vtable +0x6c (slot 27): returns 4.
  * Base igMetaField returns -1 and the ref fields also return 4. The receiver is not read. */
-int Gap__Core__igVirtualCFuncMetaField__vfunc_27(void) {
+int igVirtualCFuncMetaField_GetAlignment(void) {
     return 4;
 }
 
 static inline int isFreeChunk(TaggedBlockHeader *h) { if (h->big == 1) { return h->extraUsed; } return 0; }
+
+/* dlmalloc's malloc_init_state: empties the bins, sets the tuning defaults and, when the pool was
+ * given raw memory, makes all of it the top chunk. */
+void FUN_0030f220(igArenaMemoryPoolView *self) {
+    ArenaState *state = self->_arenaState;
+    unsigned long long size = self->_size;
+    int i;
+    int r;
+    char *base;
+    SystemAllocator_EnsureCreated();
+    for (i = 1; i < 96; i++) {
+        TaggedBlockHeader *bin = (TaggedBlockHeader *)state->bins[i];
+        chunkLinks(bin)->forward = bin;
+        chunkLinks(bin)->back = bin;
+    }
+    state->f1992 = 0;
+    state->mmapLimit = 0;
+    state->mmapThreshold = 0x40000;
+    state->trimThreshold = 0x40000;
+    state->flags |= 1;
+    state->maxFast = (75 < self->_smallestChunkSize ? self->_smallestChunkSize : 72) | (state->maxFast & 3);
+    if (size != 0) {
+        base = (char *)self->vfunc_26();
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && base == 0 && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554c38 == 0) {
+                r = igReportNotice(DAT_004fb4d0);
+                if (r != 1 && r == 2) {
+                    GPR_00554c38 = 1;
+                }
+            }
+        }
+        if (((unsigned int)base & 7) != 4) {
+            char *unaligned = base;
+            base = (char *)((((unsigned int)base + 7) & ~7) + 4);
+            size -= base - unaligned;
+        }
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && size <= self->_smallestChunkSize && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554c3c == 0) {
+                r = igReportNotice(DAT_004fb510, self->_smallestChunkSize);
+                if (r != 1 && r == 2) {
+                    GPR_00554c3c = 1;
+                }
+            }
+        }
+        state->top = base;
+        initChunkHeader((TaggedBlockHeader *)state->top, (unsigned int)-1, (int)size, (unsigned int)self->_poolIndex >> 1, 0);
+        ((TaggedBlockHeader *)state->top)->used = 1;
+    } else {
+        state->top = state->bins[1];
+    }
+    state->pageSize = g_activeSystemAllocator[0]->vfunc_21();
+}
 
 void igArenaMemoryPool_CheckChunk(igArenaMemoryPoolView *self, TaggedBlockHeader *h) {
     ArenaState *state;
@@ -122,17 +176,6 @@ void igArenaMemoryPool_CheckChunk(igArenaMemoryPoolView *self, TaggedBlockHeader
             }
         }
     }
-}
-
-/* Chunk size in bytes: the 19-bit size (12 more bits in the third word when `big`), rounded to a word, plus the
- * header words. */
-static inline unsigned int chunkBytes(TaggedBlockHeader *h) {
-    unsigned int size = h->size;
-    if (h->big == 1) {
-        size += h->sizeHigh << 19;
-    }
-    size = (size + 3) & ~3;
-    return size + (h->words + 1) * 4;
 }
 
 /* dlmalloc's do_check_free_chunk: a free chunk is not in use, its footer repeats its size, its
@@ -312,7 +355,7 @@ void igArenaMemoryPool_CheckInUseChunk(igArenaMemoryPoolView *self, TaggedBlockH
 
 static inline int isFreeChunk2(TaggedBlockHeader *h) { if (((TaggedBlockHeader *)h)->big == 1) { return h->extraUsed; } return 0; }
 
-void FUN_003105c0(igArenaMemoryPoolView *self, TaggedBlockHeader *h, int requested) {
+void igArenaMemoryPool_CheckBlock(igArenaMemoryPoolView *self, TaggedBlockHeader *h, int requested) {
     ArenaState *state;
     unsigned int size;
     int r;
@@ -417,11 +460,11 @@ void FUN_003105c0(igArenaMemoryPoolView *self, TaggedBlockHeader *h, int request
     }
 }
 
-void FUN_00310b60(void *arg0, unsigned char *arg1, int extra2) {
+void igArenaMemoryPool_CheckInUseBlock(void *arg0, unsigned char *arg1, int extra2) {
     int temp_a0;
     int temp_v0;
 
-    FUN_003105c0((igArenaMemoryPoolView *)arg0, (TaggedBlockHeader *)arg1, extra2);
+    igArenaMemoryPool_CheckBlock((igArenaMemoryPoolView *)arg0, (TaggedBlockHeader *)arg1, extra2);
     if (*(int *)((char *)arg0 + 184) > 0) {
         temp_a0 = *(int *)((char *)arg0 + 188);
         if ((temp_a0 > 0) && !(*arg1 & 1) && (temp_a0 > 0)) {
@@ -436,3 +479,185 @@ void FUN_00310b60(void *arg0, unsigned char *arg1, int extra2) {
     }
 }
 
+
+/* dlmalloc's do_check_malloc_state: walks every fast bin and every bin, checking each chunk, that
+ * it sits in the right bin, and that the bin map and the fast-chunk flag agree with what is there. */
+void FUN_00310c00(igArenaMemoryPoolView *self) {
+    unsigned int i;
+    TaggedBlockHeader *p;
+    TaggedBlockHeader *q;
+    unsigned int idx;
+    TaggedBlockHeader *b;
+    unsigned int binbit;
+    unsigned int size;
+    unsigned int maxFastBin;
+    ArenaState *state = self->_arenaState;
+    int empty;
+    int r;
+    unsigned int total = 0;
+    /* dlmalloc's two compile-time asserts, on the size type and on the alignment being a power of
+     * two: neither can fail, but the integrity level they test is still read here. */
+    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(sizeof(unsigned int) <= sizeof(char *)) && self->_messageLevel > 0) {
+        Memory_PrintPoolStatistics(0, self);
+    }
+    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !((8 & (8 - 1)) == 0) && self->_messageLevel > 0) {
+        Memory_PrintPoolStatistics(0, self);
+    }
+    if (state->top == 0 || state->top == state->bins[1]) {
+        return;
+    }
+    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (state->pageSize & (state->pageSize - 1)) != 0 && self->_messageLevel > 0) {
+        Memory_PrintPoolStatistics(0, self);
+        if (GPR_00554cb4 == 0) {
+            r = igReportNotice(DAT_004fbb00, DAT_004fbb20);
+            if (r != 1 && r == 2) {
+                GPR_00554cb4 = 1;
+            }
+        }
+    }
+    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !((state->maxFast & ~3) <= (91 < self->_smallestChunkSize ? self->_smallestChunkSize : 88)) && self->_messageLevel > 0) {
+        Memory_PrintPoolStatistics(0, self);
+        if (GPR_00554cb8 == 0) {
+            r = igReportNotice(DAT_004fbb00, DAT_004fbb60);
+            if (r != 1 && r == 2) {
+                GPR_00554cb8 = 1;
+            }
+        }
+    }
+    maxFastBin = (state->maxFast >> 3) - 2;
+    for (i = 0; i < 10; ++i) {
+        p = state->fastBins[i];
+        if (i > maxFastBin) {
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && p != 0 && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (GPR_00554cbc == 0) {
+                    r = igReportNotice(DAT_004fbb00, DAT_004fbba0);
+                    if (r != 1 && r == 2) {
+                        GPR_00554cbc = 1;
+                    }
+                }
+            }
+        }
+        if (p != 0) {
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, p) && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (GPR_00554cc0 == 0) {
+                    r = igReportNotice(DAT_004fbc00, DAT_004fbc40, p);
+                    if (r != 1 && r == 2) {
+                        GPR_00554cc0 = 1;
+                    }
+                }
+            }
+        }
+        while (p != 0) {
+            TaggedBlockHeader *next;
+            igArenaMemoryPool_CheckInUseChunk(self, p);
+            total += chunkBytes(p);
+            if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && (chunkBytes(p) >> 3) - 2 != i && self->_messageLevel > 0) {
+                Memory_PrintPoolStatistics(0, self);
+                if (GPR_00554cc4 == 0) {
+                    r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, DAT_004fbc60);
+                    if (r != 1 && r == 2) {
+                        GPR_00554cc4 = 1;
+                    }
+                }
+            }
+            next = chunkLinks(p)->forward;
+            if (next != 0) {
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, next) && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (GPR_00554cc8 == 0) {
+                        r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, DAT_004fbcb0);
+                        if (r != 1 && r == 2) {
+                            GPR_00554cc8 = 1;
+                        }
+                    }
+                }
+            }
+            p = next;
+        }
+    }
+    if (total != 0) {
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(state->maxFast & 2) && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554ccc == 0) {
+                r = igReportNotice(DAT_004fbb00, DAT_004fbce0);
+                if (r != 1 && r == 2) {
+                    GPR_00554ccc = 1;
+                }
+            }
+        }
+    } else if (!(state->maxFast & 2)) {
+        if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && total != 0 && self->_messageLevel > 0) {
+            Memory_PrintPoolStatistics(0, self);
+            if (GPR_00554cd0 == 0) {
+                r = igReportNotice(DAT_004fbb00, DAT_004fbd20);
+                if (r != 1 && r == 2) {
+                    GPR_00554cd0 = 1;
+                }
+            }
+        }
+    }
+    for (i = 1; i < 96; ++i) {
+        b = (TaggedBlockHeader *)state->bins[i];
+        if (i >= 2) {
+            binbit = state->binMap[i >> 5] & (1 << (i & 0x1f));
+            empty = chunkLinks(b)->back == b;
+            if (!binbit) {
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !empty && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (GPR_00554cd4 == 0) {
+                        r = igReportNotice(DAT_004fbb00, DAT_004fbd70);
+                        if (r != 1 && r == 2) {
+                            GPR_00554cd4 = 1;
+                        }
+                    }
+                }
+            } else if (!empty) {
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !binbit && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (GPR_00554cd8 == 0) {
+                        r = igReportNotice(DAT_004fbb00, DAT_004fbdb0);
+                        if (r != 1 && r == 2) {
+                            GPR_00554cd8 = 1;
+                        }
+                    }
+                }
+            }
+        }
+        for (p = chunkLinks(b)->back; p != b; p = chunkLinks(p)->back) {
+            igArenaMemoryPool_CheckFreeChunk(self, p);
+            size = chunkBytes(p);
+            total += size;
+            if (i >= 2) {
+                idx = size < 256 ? size >> 3 : largeBinIndex(size);
+                if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && idx != i && self->_messageLevel > 0) {
+                    Memory_PrintPoolStatistics(0, self);
+                    if (GPR_00554cdc == 0) {
+                        r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, DAT_004fbe00);
+                        if (r != 1 && r == 2) {
+                            GPR_00554cdc = 1;
+                        }
+                    }
+                }
+                if (size >= 256) {
+                    if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(chunkLinks(p)->back == b || chunkBytes(chunkLinks(p)->back) >= chunkBytes(p)) && self->_messageLevel > 0) {
+                        Memory_PrintPoolStatistics(0, self);
+                        if (GPR_00554ce0 == 0) {
+                            r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, DAT_004fbe50);
+                            if (r != 1 && r == 2) {
+                                GPR_00554ce0 = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            for (q = (TaggedBlockHeader *)((char *)p + chunkBytes(p)); (char *)q != state->top && ((TaggedBlockHeader *)((char *)q + chunkBytes(q)))->used && chunkBytes(q) >= ((self->_smallestChunkSize + 7) & ~7); q = (TaggedBlockHeader *)((char *)q + chunkBytes(q))) {
+                igArenaMemoryPool_CheckInUseChunk(self, q);
+            }
+        }
+    }
+    if (self->_heapIntegrityCheckLevel > 0) {
+        igArenaMemoryPool_CheckChunk(self, (TaggedBlockHeader *)state->top);
+    }
+}

@@ -130,10 +130,10 @@ void beFont_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002c9780();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002b9540();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &g_beFont_fieldTable[0], &DAT_004c6dc0[0], &DAT_004c6df0[0], temp_s0);
 }

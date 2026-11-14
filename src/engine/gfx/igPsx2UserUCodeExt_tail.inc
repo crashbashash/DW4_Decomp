@@ -56,7 +56,7 @@ void *FUN_00152b10(struct S_152b10 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -132,9 +132,9 @@ void igPsx2UserUCodeExt_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002c2e10();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntMetaField_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_002bbb20();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igRawRefMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_igPsx2UserUCodeExt_fieldTable[0], &DAT_00489de0[0], &DAT_00489df0[0], temp_s2);
 }
 

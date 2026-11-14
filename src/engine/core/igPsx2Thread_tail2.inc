@@ -1,25 +1,25 @@
 static inline int threadID(const igPsx2ThreadView *self) { return self->_threadID; }
 
-int Gap__Core__igPsx2Thread__vfunc_23(void *arg0, void *arg1) {
+int igPsx2Thread_IsEqual(void *arg0, void *arg1) {
     return *(int *)((char *)(arg0) + 60) == *(int *)((char *)(arg1) + 60);
 }
 
-void Gap__Core__igPsx2Thread__vfunc_11(igPsx2ThreadView *self) {
+void igPsx2Thread_InitDefaults(igPsx2ThreadView *self) {
     igResult result;
     igSemaphoreView *done;
 
-    self->_stack = FUN_00300db0((int)self, self->_stackSize, self->getStackAlignment() & 0xFFFF);
+    self->_stack = igObject_MallocAligned((int)self, self->_stackSize, self->getStackAlignment() & 0xFFFF);
     done = self->_threadDoneSema;
     result = done->setInitialCount(0);
 }
 
-void Gap__Core__igPsx2Thread__vfunc_55(igPsx2Thread *self) {
+void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self) {
     self->_threadID = GetThreadId();
-    FUN_00300f50((int)self, self->_stack);
+    igObject_FreeMemory((int)self, self->_stack);
     self->_stack = 0;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_24(int *arg0, void *arg1, igPsx2ThreadView *thread) {
+void igPsx2Thread_Join(int *arg0, void *arg1, igPsx2ThreadView *thread) {
     igResult waited;
     igResult signalled;
     waited = thread->_threadDoneSema->wait(1);
@@ -32,7 +32,7 @@ void Gap__Core__igPsx2Thread__vfunc_24(int *arg0, void *arg1, igPsx2ThreadView *
     *arg0 = g_resultSuccess.v;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_25(int *arg0, int arg1, int arg2) {
+void igPsx2Thread_Sleep(int *arg0, int arg1, int arg2) {
     if (GPR_00554ddc != 0) {
         p2SleepMilliseconds((int)__udivdi3(arg2, 0xF4240));
         *arg0 = g_resultSuccess.v;
@@ -41,18 +41,18 @@ void Gap__Core__igPsx2Thread__vfunc_25(int *arg0, int arg1, int arg2) {
     }
 }
 
-void Gap__Core__igPsx2Thread__vfunc_26(void *arg0, int arg1) {
+void igPsx2Thread_Exit(void *arg0, int arg1) {
     if (*(unsigned char *)((char *)(arg0) + 44) == 0) {
-        FUN_00330440((igPsx2ThreadView *)arg0, arg1);
+        igPsx2Thread_Finish((igPsx2ThreadView *)arg0, arg1);
     }
 }
 
-void Gap__Core__igPsx2Thread__vfunc_29(int *arg0) {
+void igPsx2Thread_WaitForWakeup(int *arg0) {
     SleepThread();
     *arg0 = *(int *)0x4FB410;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_44(int *arg0, igPsx2ThreadView *arg1) {
+void igPsx2Thread_Terminate(int *arg0, igPsx2ThreadView *arg1) {
     int s0, s1, s0b;
     igResult signalled;
     if (arg1->_isMaster != 0) {
@@ -66,7 +66,7 @@ void Gap__Core__igPsx2Thread__vfunc_44(int *arg0, igPsx2ThreadView *arg1) {
     }
     s0 = arg1->_threadID;
     if (s0 == GetThreadId()) {
-        FUN_00330440(arg1, 0);
+        igPsx2Thread_Finish(arg1, 0);
     }
     g_threadManager[0]->removeThread(arg1);
     s1 = arg1->_threadID;
@@ -82,7 +82,7 @@ void Gap__Core__igPsx2Thread__vfunc_44(int *arg0, igPsx2ThreadView *arg1) {
     *arg0 = *p;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_27(int *arg0, void *arg1) {
+void igPsx2Thread_Wakeup(int *arg0, void *arg1) {
     const int *var_v1;
 
     if (WakeupThread(*(int *)((char *)arg1 + 60)) < 0) {
@@ -93,7 +93,7 @@ void Gap__Core__igPsx2Thread__vfunc_27(int *arg0, void *arg1) {
     *arg0 = *var_v1;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_46(int *status, igPsx2Thread *self) {
+void igPsx2Thread_Suspend(int *status, igPsx2Thread *self) {
     const int *word;
 
     if (SuspendThread(self->_threadID) < 0) {
@@ -104,7 +104,7 @@ void Gap__Core__igPsx2Thread__vfunc_46(int *status, igPsx2Thread *self) {
     *status = *word;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_48(int *status, igPsx2Thread *self) {
+void igPsx2Thread_Resume(int *status, igPsx2Thread *self) {
     const int *word;
 
     if (ResumeThread(self->_threadID) < 0) {
@@ -115,8 +115,8 @@ void Gap__Core__igPsx2Thread__vfunc_48(int *status, igPsx2Thread *self) {
     *status = *word;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_50(int *status, igPsx2Thread *self, int priority) {
-    if (FUN_0030e430(self, priority) != g_resultSuccess) {
+void igPsx2Thread_SetPriority(int *status, igPsx2Thread *self, int priority) {
+    if (igThread_SetPriority(self, priority) != g_resultSuccess) {
         *status = g_resultFailure.v;
         return;
     }
@@ -131,7 +131,7 @@ void Gap__Core__igPsx2Thread__vfunc_50(int *status, igPsx2Thread *self, int prio
 /* The thread's const id getter. A read through it is a `const int` read, which is not merged with
  * a plain read of the field: terminate() loads the id once for its saved copy and once for the call. */
 static inline int igPsx2Thread_getThreadID(const igPsx2ThreadView *thread) { return thread->_threadID; }
-igResult Gap__Core__igPsx2Thread__vfunc_45(igPsx2ThreadView *self) {
+igResult igPsx2Thread_ITerminate(igPsx2ThreadView *self) {
     if (self->_isMaster != 0) {
         return g_resultFailure;
     }
@@ -140,7 +140,7 @@ igResult Gap__Core__igPsx2Thread__vfunc_45(igPsx2ThreadView *self) {
         return g_resultSuccess;
     }
     if (self->_threadID == GetThreadId()) {
-        FUN_00330440(self, 0);
+        igPsx2Thread_Finish(self, 0);
     }
     g_threadManager[0]->removeThread(self);
     int id = self->_threadID;
@@ -155,7 +155,7 @@ igResult Gap__Core__igPsx2Thread__vfunc_45(igPsx2ThreadView *self) {
     return status < 0 ? g_resultFailure : g_resultSuccess;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_28(int *arg0, void *arg1) {
+void igPsx2Thread_IWakeup(int *arg0, void *arg1) {
     const int *var_v1;
 
     if (iWakeupThread(*(int *)((char *)arg1 + 60)) < 0) {
@@ -166,7 +166,7 @@ void Gap__Core__igPsx2Thread__vfunc_28(int *arg0, void *arg1) {
     *arg0 = *var_v1;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_47(int *status, igPsx2Thread *thread) {
+void igPsx2Thread_ISuspend(int *status, igPsx2Thread *thread) {
     const int *word;
 
     if (iSuspendThread(thread->_threadID) < 0) {
@@ -177,7 +177,7 @@ void Gap__Core__igPsx2Thread__vfunc_47(int *status, igPsx2Thread *thread) {
     *status = *word;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_49(int *status, igPsx2Thread *self) {
+void igPsx2Thread_IResume(int *status, igPsx2Thread *self) {
     const int *word;
 
     if (iResumeThread(self->_threadID) < 0) {
@@ -188,8 +188,8 @@ void Gap__Core__igPsx2Thread__vfunc_49(int *status, igPsx2Thread *self) {
     *status = *word;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_51(int *status, igPsx2Thread *self, int priority) {
-    if (FUN_0030e430(self, priority) != g_resultSuccess) {
+void igPsx2Thread_ISetPriority(int *status, igPsx2Thread *self, int priority) {
+    if (igThread_SetPriority(self, priority) != g_resultSuccess) {
         *status = g_resultFailure.v;
         return;
     }
@@ -201,7 +201,7 @@ void Gap__Core__igPsx2Thread__vfunc_51(int *status, igPsx2Thread *self, int prio
     *status = g_resultSuccess.v;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_30(int *out, igPsx2ThreadView *thread) {
+void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
     ThreadParam param;
     igResult t1, t2, t3;
     if (thread->_function == 0) {
@@ -237,20 +237,20 @@ void Gap__Core__igPsx2Thread__vfunc_30(int *out, igPsx2ThreadView *thread) {
     { *out = g_resultSuccess.v; return; }
 }
 
-unsigned char Gap__Core__igPsx2Thread__vfunc_32(igPsx2Thread *self) {
+unsigned char igPsx2Thread_IsRunning(igPsx2Thread *self) {
     int a; unsigned char r;
     a = self->_threadID; r = 0; if (a != -1) { int s = ReferThreadStatus(a, 0); if (s & 0xF) r = 1; }
     return r;
 }
 
-igResult Gap__Core__igPsx2Thread__vfunc_31(igPsx2ThreadView *self) {
+igResult igPsx2Thread_Stop(igPsx2ThreadView *self) {
     if (self->_isMaster == 0 && self->isRunning() != 0) {
         return self->terminate();
     }
     return igResult(g_resultFailure.v);
 }
 
-igResult Gap__Core__igPsx2Thread__vfunc_41(igPsx2ThreadView *self, int block, int *result) {
+igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, int block, int *result) {
     if (self->_threadDoneSema->isCreated() == 0) {
         return igResult(g_resultFailure.v);
     }
@@ -262,7 +262,7 @@ igResult Gap__Core__igPsx2Thread__vfunc_41(igPsx2ThreadView *self, int block, in
     return t;
 }
 
-void Gap__Core__igPsx2Thread__vfunc_56(int *arg0, igPsx2Thread *self, int arg2) {
+void igPsx2Thread_SetDeferred(int *arg0, igPsx2Thread *self, int arg2) {
     if (self->_isMaster == 0) {
         self->_isDeferred = (arg2 == 1);
         *arg0 = g_resultSuccess.v;
@@ -271,25 +271,25 @@ void Gap__Core__igPsx2Thread__vfunc_56(int *arg0, igPsx2Thread *self, int arg2) 
     }
 }
 
-void Gap__Core__igPsx2Thread__vfunc_57(igPsx2ThreadView *self) {
+void igPsx2Thread_TestStop(igPsx2ThreadView *self) {
     if (self->_stopRequested != 0) {
-        FUN_00330440(self, 0);
+        igPsx2Thread_Finish(self, 0);
     }
 }
 
-void FUN_003303f0(void *arg0) {
+void igPsx2Thread_EnterStoppingPoint(void *arg0) {
     if (*(unsigned char *)((char *)(arg0) + 57) != 0) {
-        FUN_00330440((igPsx2ThreadView *)arg0, 0);
+        igPsx2Thread_Finish((igPsx2ThreadView *)arg0, 0);
     }
     *(char *)((char *)(arg0) + 58) = 1;
 }
 
-void FUN_00330430(void *arg0) {
+void igPsx2Thread_LeaveStoppingPoint(void *arg0) {
     *(char *)((char *)arg0 + 58) = 0;
 }
 
-void FUN_00330440(igPsx2ThreadView *thread, int result) {
+void igPsx2Thread_Finish(igPsx2ThreadView *thread, int result) {
     thread->_result = result;
-    FUN_003304e0(g_threadManager[0], thread);
+    igPsx2ThreadManager_FinishThread(g_threadManager[0], thread);
 }
 

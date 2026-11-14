@@ -92,7 +92,7 @@ void igListenerInterface_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00226fd0();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c8e50();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00226fd0();

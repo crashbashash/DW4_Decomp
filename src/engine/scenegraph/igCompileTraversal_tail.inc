@@ -55,67 +55,67 @@ void Gap__Sg__igCompileTraversal__vfunc_10(void **self) {
 
 void FUN_001bb550(int arg0, int arg1) {
     FUN_001b68c0((void *)arg0, (void *)arg1);
-    if (FUN_002fe290(arg1, g_igProjectiveShadowShader_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igProjectiveShadowShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd80);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561bd8[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561bd8[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcd90);
         return;
     }
-    if (FUN_002fe290(arg1, g_igEnvironmentMapShader2_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igEnvironmentMapShader2_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdf0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561860[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561860[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcda0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561e98[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561e98[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdb0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561ee8[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561ee8[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdc0);
         return;
     }
-    if (FUN_002fe290(arg1, g_igPlanarShadowShader_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igPlanarShadowShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcdd0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561578[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561578[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcde0);
         return;
     }
-    if (FUN_002fe290(arg1, g_igGeometry_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igGeometry_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bc1e0);
         return;
     }
-    if (FUN_002fe290(arg1, g_unlinkedTransformClass_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_unlinkedTransformClass_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)igCompileTraversal_TraverseJointTransform);
         return;
     }
-    if (FUN_002fe290(arg1, g_igTransform_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igTransform_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bbae0);
         return;
     }
-    if (FUN_002fe290(arg1, DAT_00561ca0[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, DAT_00561ca0[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd0e0);
         return;
     }
-    if (FUN_002fe290(arg1, g_igModelViewMatrixBoneSelect_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igModelViewMatrixBoneSelect_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bce40);
         return;
     }
-    if (FUN_002fe290(arg1, g_igBlendMatrixSelect_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igBlendMatrixSelect_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bcf70);
         return;
     }
-    if (FUN_002fe290(arg1, g_igActor_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igActor_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd150);
         return;
     }
-    if (FUN_002fe290(arg1, g_igSegment_metaObject[0]) != 0) {
+    if (igMetaObject_IsOfType(arg1, g_igSegment_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)FUN_001bd160);
     }
 }
@@ -287,8 +287,8 @@ int FUN_001bcf70(A_1bcf70 *arg0, B_1bcf70 *arg1) {
     if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy((void *)o);
     unsigned int n = arg1->f40->count;
     if (o->f24 < n) {
-        if (o->f12 != 0) FUN_00300f50(o, o->f12);
-        if (o->f16 != 0) FUN_00300f50(o, o->f16);
+        if (o->f12 != 0) igObject_FreeMemory(o, o->f12);
+        if (o->f16 != 0) igObject_FreeMemory(o, o->f16);
         o->f16 = ((int *)igObject_AllocateStorage(o, n * 4));
         o->f24 = n;
     }

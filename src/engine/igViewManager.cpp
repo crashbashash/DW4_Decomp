@@ -102,7 +102,7 @@ typedef struct ViewModelEvent {
 } ViewModelEvent;
 extern int DAT_0058cd40;
 extern int g_igViewManager_metaObject[4];
-int FUN_003082b0(...);
+int igReport_Info(...);
 void igMatrix44f_SetIdentity(float *);
 int igMatrix44f_Invert(int *, float *, float *);
 extern unsigned char GPR_00554e7c;
@@ -456,7 +456,7 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
 
     m = ((igViewModel *)self->_viewModel)->_viewMatrix;
     if (GPR_00554e7c == 0) {
-        r = FUN_003082b0("current view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",
+        r = igReport_Info("current view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",
                          m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7],
                          m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]);
         if (r != 1 && r == 2) GPR_00554e7c = 1;
@@ -465,7 +465,7 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
     igMatrix44f_Invert(&status, inverse, ((igViewModel *)self->_viewModel)->_viewMatrix);
     m = inverse;
     if (GPR_00554e80 == 0) {
-        r = FUN_003082b0("current inverse view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",
+        r = igReport_Info("current inverse view matrix :\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f,\n%.8f,\t%.8f,\t%.8f,\t%.8f\n",
                          m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7],
                          m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]);
         if (r != 1 && r == 2) GPR_00554e80 = 1;

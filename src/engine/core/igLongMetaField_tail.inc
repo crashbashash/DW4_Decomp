@@ -1,4 +1,4 @@
-int Gap__Core__igLongMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igLongMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igLongMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igLongMetaField__vfunc_57(int *arg0, int arg1, long long *arg2) {
+void igLongMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
     int sp20[256];
     int var_v0;
     int var_v1;
@@ -33,18 +33,18 @@ int igLongMetaField_GetSize(void) {
     return 8;
 }
 
-void FUN_002ebc00(void **arg0, long long arg1) {
+void igLongMetaField_SetDefault(void **arg0, long long arg1) {
     long long sp18;
 
     sp18 = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
 }
 
-int Gap__Core__igLongMetaField__vfunc_27(void) {
+int igLongMetaField_GetAlignment(void) {
     return 8;
 }
 
-igMediaView *FUN_002ebc40(int arg0) {
+igMediaView *igMediaFile_FindDeviceForPath(int arg0) {
     int temp_v0;
     int len;
     int var_s0;
@@ -63,7 +63,7 @@ igMediaView *FUN_002ebc40(int arg0) {
     return DAT_00586f28[0];
 }
 
-void FUN_002ebcf0(void) {
+void igMedia_CreateMediaList(void) {
     int temp_s0;
     char *o;
 
@@ -75,14 +75,14 @@ void FUN_002ebcf0(void) {
             igObject_Destroy(o);
         }
     }
-    g_fileDeviceList.p = (igObjectList *)(FUN_002c1580(temp_s0));
+    g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(temp_s0));
 }
 
-void FUN_002ebd60(int arg0) {
+void igMedia_AddMedia(int arg0) {
     ObjectList_AppendRetained(g_fileDeviceList.p, (igObject *)arg0);
 }
 
-void FUN_002ebd70(void) {
+void igMedia_ReleaseMediaList(void) {
     int *o;
 
     ((int *)DAT_00586f28)[0] = 0;
@@ -96,7 +96,7 @@ void FUN_002ebd70(void) {
     g_fileDeviceList.p = 0;
 }
 
-void FUN_002ebdd0(int arg0) {
+void igMedia_SetDefaultMedia(int arg0) {
     *(int *)0x586F28 = arg0;
 }
 

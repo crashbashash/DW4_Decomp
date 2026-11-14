@@ -58,7 +58,7 @@ void *FUN_001a8620(struct S_1a8620 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -169,11 +169,11 @@ void igAnimationCombiner_InitFields(void) {
     temp_s2_7->f53 = 1;
     temp_s2_7->f64 = 1;
     temp_s2_7->f65 = 1;
-    FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
-    FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x05F5E100);
-    FUN_002ebc00(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFED260);
+    igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
+    igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x05F5E100);
+    igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFED260);
     igMetaObject_NameFields(temp_s0, &g_igAnimationCombiner_fieldTable[0], &DAT_0048d3e0[0], &DAT_0048d420[0], temp_s1);
-    FUN_002fe480(&thunk_FUN_001abdf0);
+    igMetaObject_AddExitCallback(&thunk_FUN_001abdf0);
 }
 
 void thunk_FUN_001abca0(void) {

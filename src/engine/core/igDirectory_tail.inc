@@ -29,7 +29,7 @@ int List_BinarySearchWords(igDataList *arg0, int arg1, int (*arg2)(int, int)) {
     return -1;
 }
 
-int FUN_002d6e60(igDataList *l, void *key, Cmp cmp) {
+int List_LowerBound(igDataList *l, void *key, Cmp cmp) {
     int lo = 0; int hi = l->_count - 1; int mid; int r;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
@@ -46,7 +46,7 @@ static inline int count_of(const igTDataList<DependencyPair> *list) { return lis
 /* Index of the dependency (k1, k2), or -1. */
 static inline int findDependency(igTDataList<DependencyPair> *list, int k1, int k2) { int i; for (i = 0; i < list->_count; i++) { DependencyPair *p = &list->_data[i]; int v = (k1 == p->a); if (v) { v = (k2 == p->b); } if (v) { return i; } } return -1; }
 
-void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
+void igDependencyOrderedList_AddDependency(igDependencyOrderedListView *arg0, int arg1, int arg2) {
     int n; igTDataList<DependencyPair> *q; DependencyPair *it;
     q = arg0->_dependencies;
     n = q->_count;
@@ -59,11 +59,11 @@ void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
     it->a = arg1;
     it->b = arg2;
     FUN_002d7280(arg0);
-    FUN_002d7130(arg0);
+    igDependencyOrderedList_Rebuild(arg0);
 }
 
-void FUN_002d7130(igDependencyOrderedListView *owner) {
-    igSmartPointer<igObjectList> copy(((igObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
+void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
+    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)igObject_GetAllocator((int)owner)))));
     ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;
@@ -111,11 +111,11 @@ void igRendererOrderedList_Clear(char *arg0) {
     l->_count = 0;
 }
 
-igResult FUN_002d7750(igDependencyOrderedListView *list, igObject *object) {
+igResult igObjectList_RemoveRetained(igDependencyOrderedListView *list, igObject *object) {
     return ObjectList_RemoveFirstRetained(list->_objectList, object, 0);
 }
 
-void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {
+void igDependencyOrderedList_RemoveDependency(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {
     igTDataList<DependencyPair> *temp_a0 = arg1->_dependencies;
     int idx = findDependency(temp_a0, arg2, arg3);
     int var_s2;
@@ -127,12 +127,12 @@ void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int ar
     }
     if (arg1->_hasCircularDependencies != 0) {
         FUN_002d7280(arg1);
-        FUN_002d7130(arg1);
+        igDependencyOrderedList_Rebuild(arg1);
     }
     *arg0 = var_s2;
 }
 
-void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1) {
+void igDependencyOrderedList_RemoveDependencies(igDependencyOrderedListView *arg0, int arg1) {
     int var_s0;
     igTDataList<DependencyPair> *temp_a0;
     int *temp_v1;
@@ -149,11 +149,11 @@ void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1) {
     }
     if (arg0->_hasCircularDependencies != 0) {
         FUN_002d7280(arg0);
-        FUN_002d7130(arg0);
+        igDependencyOrderedList_Rebuild(arg0);
     }
 }
 
-void FUN_002d78e0(void *arg0, int arg1) {
+void igDependencyOrderedList_AddCheckPoint(void *arg0, int arg1) {
     void *sp3C;
     int *temp_a1;
     int temp_v1;

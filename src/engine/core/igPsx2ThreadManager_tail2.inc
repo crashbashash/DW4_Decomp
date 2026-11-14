@@ -1,4 +1,4 @@
-void Gap__Core__igPsx2ThreadManager__vfunc_11(igPsx2ThreadManagerView *self) {
+void igPsx2ThreadManager_InitDefaults(igPsx2ThreadManagerView *self) {
     igResult created;
     igSemaphoreView *semaphore;
 
@@ -6,15 +6,15 @@ void Gap__Core__igPsx2ThreadManager__vfunc_11(igPsx2ThreadManagerView *self) {
     created = semaphore->create();
 }
 
-void FUN_0030e480(void) {
-    ((void * *)g_threadManager)[0] = FUN_002b7b70(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
-    igSmartPointer<igPsx2ThreadView> added(((igPsx2ThreadView *)FUN_002b7f40(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)))));
+void igPsx2ThreadManager_CreateGlobal(void) {
+    ((void * *)g_threadManager)[0] = igThreadManager_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+    igSmartPointer<igPsx2ThreadView> added(((igPsx2ThreadView *)igThread_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)))));
     added.get()->_isMaster = 1;
     added.get()->adoptCurrentThread();
     g_threadManager[0]->addThread(added.get());
 }
 
-void FUN_0030e540(void) {
+void igPsx2ThreadManager_DestroyGlobal(void) {
     igObject *temp_v0;
     igObject *o;
 

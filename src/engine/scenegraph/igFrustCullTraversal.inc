@@ -352,7 +352,7 @@ Obj_19fde0 *FUN_001a0910(Obj_19fde0 *arg0, short arg1) {
             arg0->rel(&arg0->m28);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -493,18 +493,18 @@ void igFrustCullTraversal_InitFields(void) {
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00139170();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)), 1.0f);
-    FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)), 2.0f);
+    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)), 1.0f);
+    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)), 2.0f);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0018a6a0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &g_igFrustCullTraversal_fieldTable[0], &DAT_0048c0d0[0], &DAT_0048c0f0[0], temp_s0);
-    FUN_002fe480(&thunk_FUN_001c45d0);
+    igMetaObject_AddExitCallback(&thunk_FUN_001c45d0);
 }
 
 void FUN_001a13a0(void) {
     FUN_001c45a0();
-    FUN_002fe490((int *)FUN_001c4590);
+    igMetaObject_AddRegistrationCallback((int *)FUN_001c4590);
 }
 
 void thunk_FUN_001c45d0(void) {

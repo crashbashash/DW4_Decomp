@@ -81,7 +81,7 @@ void beSvReadMediaApi_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034aeb0();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x10);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x10);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0034aeb0();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));

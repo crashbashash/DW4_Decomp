@@ -2,8 +2,8 @@ int Gap__Attrs__igGenericAttrDefaultManager__vfunc_24(T **arg0, int arg1, int ar
     T *sp3C;
     T *temp_v1;
 
-    FUN_002fe290(arg2, g_igAttr_metaObject[0]);
-    FUN_002fd610(&sp3C, arg2);
+    igMetaObject_IsOfType(arg2, g_igAttr_metaObject[0]);
+    igMetaObject_CreateInstanceDefaultRef(&sp3C, arg2);
     *arg0 = sp3C;
     temp_v1 = *arg0;
     if (temp_v1 != 0) {

@@ -12,11 +12,11 @@ struct VC {
 struct W { int f0; int f4; int f8; int fc; int f10; };
 struct T { int p0; int p4; int p8; char *rows; };
 extern "C" {
-R FUN_0032d6d0(int, int, W *, int, int *, int, int);
-int Gap__Core__igPsx2Media__vfunc_31(igPsx2Media *arg0, int arg1);
+R igPsx2IopRpcConnection_Call(int, int, W *, int, int *, int, int);
+int igPsx2Media_Tell(igPsx2Media *arg0, int arg1);
 }
 /* matching construct: _sema/_commandBuffer/_handlePool are 4-byte reference fields; the casts give the typed views (no layout effect) */
-int Gap__Core__igPsx2Media__vfunc_31(igPsx2Media *arg0, int arg1) {
+int igPsx2Media_Tell(igPsx2Media *arg0, int arg1) {
     W *w;
     R r1 = ((VC *)arg0->_sema)->vX(1);
     w = (W *)arg0->_commandBuffer;
@@ -24,7 +24,7 @@ int Gap__Core__igPsx2Media__vfunc_31(igPsx2Media *arg0, int arg1) {
     w->f4 = 0;
     w->f8 = 1;
     arg1 = (int)&w->f10;
-    R r2 = FUN_0032d6d0(arg0->_connection, 4, w, 16, (int *)arg1, 16, 1);
+    R r2 = igPsx2IopRpcConnection_Call(arg0->_connection, 4, w, 16, (int *)arg1, 16, 1);
     arg1 = *(int *)arg1;
     R r3 = ((VC *)arg0->_sema)->vY();
     return arg1;

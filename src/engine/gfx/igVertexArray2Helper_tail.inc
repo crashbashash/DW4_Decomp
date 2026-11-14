@@ -70,7 +70,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         RP list;
         int alloc;
         int total;
-        list.p = (RC *)FUN_002c9740(igObject_GetAllocator(arg0));
+        list.p = (RC *)igFloatList_Create(igObject_GetAllocator(arg0));
         total = arg2 * ((*arg1 & 0xF0) >> 4 & 0xFF);
         SIZE_LIST((DataList *)list.p, total, 4)
         alloc = igObject_GetAllocator(arg0);
@@ -86,7 +86,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         RP list;
         int alloc;
         int total;
-        list.p = (RC *)FUN_002c99b0(igObject_GetAllocator(arg0));
+        list.p = (RC *)igUnsignedCharList_Create(igObject_GetAllocator(arg0));
         total = arg2 * ((*arg1 & 0xF00) >> 8 & 0xFF);
         SIZE_LIST((DataList *)list.p, total, 1)
         alloc = igObject_GetAllocator(arg0);
@@ -109,7 +109,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
             ((StreamRec *)record.p)->kind = 9;
             if (modeInt == 1) {
                 RP list;
-                list.p = (RC *)FUN_002c9740(igObject_GetAllocator(arg0));
+                list.p = (RC *)igFloatList_Create(igObject_GetAllocator(arg0));
                 SIZE_LIST((DataList *)list.p, arg2, 4)
                 ATTACH((StreamRec *)record.p, list.p)
                 REL_15ff10(list.p)

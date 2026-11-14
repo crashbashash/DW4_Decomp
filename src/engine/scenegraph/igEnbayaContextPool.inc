@@ -95,15 +95,15 @@ void igEnbayaContextPool_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igEnbayaContextPool_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002c8fc0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igPointerListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_persistent = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002ca450();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igUnsignedIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_002ca450();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igUnsignedIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &g_igEnbayaContextPool_fieldTable[0], &DAT_0048c320[0], &DAT_0048c330[0], temp_s2);

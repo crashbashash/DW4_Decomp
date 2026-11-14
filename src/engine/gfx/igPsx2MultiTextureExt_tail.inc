@@ -81,21 +81,21 @@ void igPsx2MultiTextureExt_InitFields(void) {
     ((igObjectRefMetaField *)f)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)f)->_refCounted = 0;
     f = igMetaObject_GetFieldAt(m, base + 1);
-    FUN_002dc7a0(f, &DAT_0048a060[0]);
+    igEnumMetaField_SetDefaultValue(f, &DAT_0048a060[0]);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153690);
     f = igMetaObject_GetFieldAt(m, base + 3);
-    FUN_002dc7a0(f, &DAT_0048a068[0]);
+    igEnumMetaField_SetDefaultValue(f, &DAT_0048a068[0]);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153630);
     f = igMetaObject_GetFieldAt(m, base + 4);
-    FUN_002dc7a0(f, &DAT_0048a070[0]);
+    igEnumMetaField_SetDefaultValue(f, &DAT_0048a070[0]);
     *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
     f = igMetaObject_GetFieldAt(m, base + 5);
-    FUN_002dc7a0(f, &DAT_0048a078[0]);
+    igEnumMetaField_SetDefaultValue(f, &DAT_0048a078[0]);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_001535d0);
     f = igMetaObject_GetFieldAt(m, base + 6);
-    FUN_002dc7a0(f, &DAT_0048a080[0]);
+    igEnumMetaField_SetDefaultValue(f, &DAT_0048a080[0]);
     *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
-    FUN_0030e750(igMetaObject_GetFieldAt(m, base + 7), 0x80);
+    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(m, base + 7), 0x80);
     igMetaObject_NameFields(m, &g_igPsx2MultiTextureExt_fieldTable[0], &DAT_0048a020[0], &DAT_0048a040[0], base);
 }
 

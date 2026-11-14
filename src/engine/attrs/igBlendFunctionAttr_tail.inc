@@ -2,7 +2,7 @@ void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void **arg0) {
     if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
         DAT_0055f4c0[0] = 0;
     }
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 igMetaObject *Gap__Attrs__igBlendFunctionAttr__vfunc_22(void) {

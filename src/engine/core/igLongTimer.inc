@@ -1,22 +1,22 @@
-igMetaObject *FUN_002c1860(void)
+igMetaObject *igLongTimer_GetMetaObject(void)
 {
     unsigned char ready;
     if (g_igLongTimer_metaObject[0] != 0) {
         ready = (g_igLongTimer_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_002c18b0();
+    igLongTimer_EnsureRegistered();
 done:
     return g_igLongTimer_metaObject[0];
 }
 
-void FUN_002c18b0(void)
+void igLongTimer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLongTimer_Register);
 }
 
 void igLongTimer_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         g_igLongTimer_metaObject,
@@ -32,7 +32,7 @@ void igLongTimer_Register(void) {
     );
 }
 
-igMetaObject *FUN_002c1930(void) {
+igMetaObject *igTimer_GetPublishedMetaObject(void) {
     return g_igTimer_metaObject[0];
 }
 
@@ -42,8 +42,8 @@ void igLongTimer_InitFields(void) {
     temp_s0 = (void *)(((void * *)g_igLongTimer_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igLongTimer_ctorTable[0], 4);
-    FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)), 1);
+    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igLongTimer_fieldTable[0], (igMetaField ***)&DAT_004c04c0[0], &DAT_004c04d0[0], temp_s1);
-    *(int *)((char *)(((void * *)g_igLongTimer_metaObject)[0]) + 60) = (int)thunk_igPsx2LongTimer_GetMetaObject;
+    *(int *)((char *)(((void * *)g_igLongTimer_metaObject)[0]) + 60) = (int)igPsx2LongTimer_GetMetaObjectFunction;
 }
 

@@ -13,4 +13,3 @@
 0x002ed5d0	Memory_FreeOwnedBufferUnchecked	engine
 0x00300b00	igObject_VisitFields	engine
 0x002ed330	Memory_ReallocateBuffer	engine
-0x002ed440	thunk_Memory_ReallocateBuffer	engine

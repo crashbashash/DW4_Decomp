@@ -66,7 +66,7 @@ void beSvEndApi_InitFields(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_orderType[0]));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    FUN_002ea4b0(temp_v0_2, 0xB);
+    igIntMetaField_SetDefault(temp_v0_2, 0xB);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_005881e8[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_v0_2);
     ((SR *)temp_v0_2)->f4 = ((SR *)temp_v0_2)->f4 - 1;

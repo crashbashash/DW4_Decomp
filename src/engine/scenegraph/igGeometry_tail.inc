@@ -13,7 +13,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         HitMetaView *m = bound->getMeta();
         HitBoundList *cache = self->cache;
         bound = cache->data[m->index];
-        FUN_00300c00(bound, previous, 1);
+        igObject_Copy(bound, previous, 1);
         FUN_001901b0(bound, topMatrix(self));
     }
     if (self->flags & 1) {
@@ -90,7 +90,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 aux = self->query->aux->data[s];
                 unsigned int a;
                 if (self->matrices->count > 1) {
-                    FUN_00300c00(self->scratch, volume, 1);
+                    igObject_Copy(self->scratch, volume, 1);
                     igRay_Transform(self->scratch, &inverse);
                     volume = self->scratch;
                 }

@@ -73,9 +73,9 @@ void igPsx2ControllerManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPsx2ControllerManager_ctorTable[0], 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_00487570[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00487570[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00146d90);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
     igMetaObject_NameFields(temp_s0, &g_igPsx2ControllerManager_fieldTable[0], &DAT_00487550[0], &DAT_00487560[0], temp_s2);
 }
 

@@ -70,10 +70,10 @@ void beMatCtrlInfoWork_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beMatCtrlInfoWork_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002c8980();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &g_beMatCtrlInfoWork_fieldTable[0], &DAT_004c5fe8[0], &DAT_004c5ff0[0], temp_s2);
 }

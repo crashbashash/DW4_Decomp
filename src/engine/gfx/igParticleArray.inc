@@ -97,7 +97,7 @@ void *FUN_0014caf0(igParticleArray *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -175,10 +175,10 @@ void igParticleArray_InitFields(void) {
     igMetaObject_CreateFields(temp_s1, &g_igParticleArray_ctorTable[0], 0x16);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014d0b0();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1.0f);
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5))->_persistent = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igMemoryRefMetaField *)temp_s2_2)->_memType = FUN_002c4870();
+    ((igMemoryRefMetaField *)temp_s2_2)->_memType = igFloatMetaField_GetDefaultDescriptor();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0014b980();
     ((igMetaField *)temp_s2_3)->_persistent = 0;
@@ -194,7 +194,7 @@ void igParticleArray_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x11))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x12))->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x13));
-    FUN_002dc7a0(temp_v0, &DAT_00488b78[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00488b78[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014c920);
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15))->_persistent = 0;
     igMetaObject_NameFields(temp_s1, &g_igParticleArray_fieldTable[0], &DAT_00488ac0[0], &DAT_00488b20[0], temp_s0);

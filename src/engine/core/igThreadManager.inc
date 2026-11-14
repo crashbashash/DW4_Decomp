@@ -1,5 +1,5 @@
-void * FUN_002b7b70(int arg0) {
-    FUN_002b7c00();
+void * igThreadManager_Create(int arg0) {
+    igThreadManager_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585790), (igMemoryPoolView *)arg0));
 }
 
@@ -7,33 +7,33 @@ igMetaObject *igThreadManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igThreadManager_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002b7c00();
+        igThreadManager_EnsureRegistered();
     return g_igThreadManager_metaObject[0];
 }
 
-void FUN_002b7c00(void)
+void igThreadManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igThreadManager_Register);
 }
 
 void igThreadManager_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igThreadManager_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igThreadManager_GetMetaObject,
+        igThreadManager_GetMetaObjectFunction,
         igThreadManager_className,
         0x10, /* instance size */
         0,
         &igThreadManager_InitFields,
-        thunk_FUN_0030e480, /* extra callback item */
+        igThreadManager_StaticInitCallback, /* extra callback item */
         g_igThreadManager_callbackList /* callback list */
     );
 }
 
-void thunk_igThreadManager_GetMetaObject(void) {
+void igThreadManager_GetMetaObjectFunction(void) {
     igThreadManager_GetMetaObject();
 }
 
@@ -48,13 +48,13 @@ void igThreadManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igThreadManager_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002b8220();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNonRefCountedThreadList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_002ba690();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igThreadManager_fieldTable[0], (igMetaField ***)&DAT_004bf388[0], &DAT_004bf390[0], temp_s2);
-    ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_abstractProxy = (int)thunk_igPsx2ThreadManager_GetMetaObject;
-    FUN_002fe480((int)thunk_FUN_0030e540);
+    ((igMetaObject *)(g_igThreadManager_metaObject[0]))->_abstractProxy = (int)igPsx2ThreadManager_GetMetaObjectFunction;
+    igMetaObject_AddExitCallback((int)igThreadManager_ExitCallback);
 }
 

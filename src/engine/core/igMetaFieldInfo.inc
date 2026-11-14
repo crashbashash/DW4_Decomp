@@ -2,7 +2,7 @@ igMetaObject *igMetaFieldInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igMetaFieldInfo_metaObject_00585cb8[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bebb0();
+        igMetaFieldInfo_EnsureRegistered();
     return g_igMetaFieldInfo_metaObject_00585cb8[0];
 }
 
@@ -34,19 +34,19 @@ int igMetaFieldInfo_GetVTable(void) {
     return s0;
 }
 
-void FUN_002bebb0(void)
+void igMetaFieldInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaFieldInfo_Register);
 }
 
 void igMetaFieldInfo_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igMetaFieldInfo_metaObject_00585cb8),
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
-        thunk_igMetaFieldInfo_GetMetaObject,
+        igMetaFieldInfo_GetMetaObjectFunction,
         igMetaFieldInfo_className,
         0x14, /* instance size */
         igMetaFieldInfo_GetVTable,
@@ -56,11 +56,11 @@ void igMetaFieldInfo_Register(void) {
     );
 }
 
-void thunk_igMetaFieldInfo_GetMetaObject(void) {
+void igMetaFieldInfo_GetMetaObjectFunction(void) {
     igMetaFieldInfo_GetMetaObject();
 }
 
-int FUN_002bec40(void) {
+int igMetaField_GetResetTypeMetaEnum(void) {
     if (DAT_00585cc0[0] == 0) {
         DAT_00585cc0[0] = ((int)igMetaEnum_Create((char *)&text_ResetType[0], (char **)&DAT_004bfdd0[0], &DAT_004bfde0[0], 4));
     }

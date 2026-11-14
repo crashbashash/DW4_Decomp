@@ -146,12 +146,12 @@ void igCompileTraversal_InitFields(void) {
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)))->_persistent = 0;
     igMetaObject_NameFields(temp_s0, &g_igCompileTraversal_fieldTable[0], &DAT_0048c660[0], &DAT_0048c690[0], temp_s1);
-    FUN_002fe480(&thunk_FUN_001bb230);
+    igMetaObject_AddExitCallback(&thunk_FUN_001bb230);
 }
 
 void FUN_001a33e0(void) {
     FUN_001bb200();
-    FUN_002fe490(FUN_001bb1f0);
+    igMetaObject_AddRegistrationCallback(FUN_001bb1f0);
 }
 
 void thunk_FUN_001bb230(void) {

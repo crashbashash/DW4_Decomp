@@ -1,5 +1,5 @@
 void Gap__Attrs__igColorAttr__vfunc_11(void *arg0) {
-    Gap__Core__igObject__vfunc_09();
+    igObject_InitDefaults();
     *(int *)((char *)(arg0) + 28) = FUN_001931b0((char *)arg0 + 0xC, 1);
 }
 

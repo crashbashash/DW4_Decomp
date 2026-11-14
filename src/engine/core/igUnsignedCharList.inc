@@ -1,5 +1,5 @@
-void FUN_002c99b0(int arg0) {
-    FUN_002c9a80();
+void igUnsignedCharList_Create(int arg0) {
+    igUnsignedCharList_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586818), (igMemoryPoolView *)arg0);
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igUnsignedCharList_GetMetaObject(void)
 {
     igMetaObject *g = g_igUnsignedCharList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c9a80();
+        igUnsignedCharList_EnsureRegistered();
     return g_igUnsignedCharList_metaObject[0];
 }
 
@@ -19,19 +19,19 @@ int igUnsignedCharList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002c9a80(void)
+void igUnsignedCharList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igUnsignedCharList_Register);
 }
 
 void igUnsignedCharList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igUnsignedCharList_metaObject),
         igDataList_Register,                        /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igUnsignedCharList_GetMetaObject,
+        igUnsignedCharList_GetMetaObjectFunction,
         igUnsignedCharList_className,
         0x14, /* instance size */
         igUnsignedCharList_GetVTable,
@@ -41,11 +41,11 @@ void igUnsignedCharList_Register(void) {
     );
 }
 
-void thunk_igUnsignedCharList_GetMetaObject(void) {
+void igUnsignedCharList_GetMetaObjectFunction(void) {
     igUnsignedCharList_GetMetaObject();
 }
 
-void FUN_002c9b10(void) {
+void igUnsignedCharList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;

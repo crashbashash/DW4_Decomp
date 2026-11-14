@@ -1,5 +1,5 @@
-void FUN_002c0690(int arg0) {
-    FUN_002c0890();
+void igMemoryFile_Create(int arg0) {
+    igMemoryFile_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585F18), (igMemoryPoolView *)arg0);
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igMemoryFile_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryFile_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c0890();
+        igMemoryFile_EnsureRegistered();
     return g_igMemoryFile_metaObject[0];
 }
 
@@ -22,11 +22,11 @@ int igMemoryFile_GetVTable(void) {
     file._vtable = (int)(&DAT_0052f7b0[0]);
     temp_s0 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     file._vtable = (int)(&DAT_0052f7b0[0]);
-    FUN_002c0790((igFile *)&file, 0);
+    igFile_Destroy((igFile *)&file, 0);
     return temp_s0;
 }
 
-void *FUN_002c0790(igFile *arg0, short arg1) {
+void *igFile_Destroy(igFile *arg0, short arg1) {
     void *p;
     int *h;
     int rc;
@@ -70,39 +70,39 @@ void *FUN_002c0790(igFile *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810((int)arg0);
+            thunk_Memory_FreeBuffer((int)arg0);
         }
     }
     return arg0;
 }
 
-void FUN_002c0890(void)
+void igMemoryFile_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryFile_Register);
 }
 
 void igMemoryFile_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igMemoryFile_metaObject),
         igFile_Register,
         igFile_GetPublishedMetaObject,
-        thunk_igMemoryFile_GetMetaObject,
+        igMemoryFile_GetMetaObjectFunction,
         igMemoryFile_className,
         0x3C, /* instance size */
         igMemoryFile_GetVTable,
         &igMemoryFile_InitFields,
-        thunk_FUN_002ef9a0, /* extra callback item */
+        igMemoryFile_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
 
-void thunk_igMemoryFile_GetMetaObject(void) {
+void igMemoryFile_GetMetaObjectFunction(void) {
     igMemoryFile_GetMetaObject();
 }
 
-igMetaObject *FUN_002c0930(void) {
+igMetaObject *igFile_GetPublishedMetaObject(void) {
     return g_igFile_metaObject[0];
 }
 
@@ -114,7 +114,7 @@ void igMemoryFile_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryFile_ctorTable[0], 4);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryFile_fieldTable[0], (igMetaField ***)&DAT_004c02b0[0], &DAT_004c02c0[0], temp_s1);
-    *(int *)((char *)(g_igMemoryFile_metaObject[0]) + 64) = (int)(&thunk_igFile_GetMetaObject);
-    FUN_002fe480((int)&thunk_FUN_002ef9d0);
+    *(int *)((char *)(g_igMemoryFile_metaObject[0]) + 64) = (int)(&igFile_GetMetaObjectFunction);
+    igMetaObject_AddExitCallback((int)&igMemoryFile_ExitCallback);
 }
 

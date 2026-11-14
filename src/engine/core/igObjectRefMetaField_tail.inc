@@ -1,10 +1,10 @@
-void Gap__Core__igObjectRefMetaField__vfunc_12(int arg0) {
-    FUN_00303460((igObjectRefMetaField *)arg0, 0);
-    Gap__Core__igObject__vfunc_10(arg0);
+void igObjectRefMetaField_ReleaseDefaults(int arg0) {
+    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)arg0, 0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void igObjectRefMetaField_InitDefaults(void **self) {
-    Gap__Core__igObject__vfunc_09((int)self);
+    igObject_InitDefaults((int)self);
     ((igMetaFieldView *)self)->SetDefault(0);
 }
 
@@ -17,13 +17,13 @@ void igObjectRefMetaField_Assign(igObjectRefMetaField *field,void *object,igObje
     *(igObject **)((char *)object+field->_offset)=value;
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_24(int a0, int a1, int a2) {
+void igObjectRefMetaField_SetValue(int a0, int a1, int a2) {
     igObjectRefMetaField_Assign((igObjectRefMetaField *)a0, (void *)a1, (igObject *)*(int *)((char *)a2 + 0));
 }
 
 int igObjectRefMetaField_GetTypeSize(igObjectRefMetaField *) { return 4; }
 
-void FUN_00303460(igObjectRefMetaField *arg0, igObject *arg1) {
+void igObjectRefMetaField_SetDefault(igObjectRefMetaField *arg0, igObject *arg1) {
     igObject **temp_s0;
     igObject *temp_a0;
 
@@ -41,7 +41,7 @@ void FUN_00303460(igObjectRefMetaField *arg0, igObject *arg1) {
     *temp_s0 = arg1;
 }
 
-int Gap__Core__igObjectRefMetaField__vfunc_51(igObjectRefMetaField *self, igObject **valueSlot, int extra2, int extra3, int extra4) {
+int igObjectRefMetaField_ReadRawFieldMem(igObjectRefMetaField *self, igObject **valueSlot, int extra2, int extra3, int extra4) {
     igObject *object;
 
     igRefMetaField_ReadRawFieldMem((void *)self, (int)valueSlot, (int *)extra2, extra3, extra4);
@@ -69,13 +69,13 @@ void igObjectRefMetaField_DestructValue(igObjectRefMetaField *field,void *object
         if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_34(igObjectRefMetaField *field,void *object){
+void igObjectRefMetaField_ClearValue(igObjectRefMetaField *field,void *object){
     if(field->_refCounted){igObject *child=*(igObject **)((char *)object+field->_offset);
         if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
     igRefMetaField_ClearValue((igMetaField *)field,object);
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_28(void *arg0, int arg1) {
+void igObjectRefMetaField_SetToDefault(void *arg0, int arg1) {
     int temp_a0;
 
     temp_a0 = *(int *)(arg1 + *(int *)((char *)arg0 + 8));
@@ -84,15 +84,15 @@ void Gap__Core__igObjectRefMetaField__vfunc_28(void *arg0, int arg1) {
     }
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_30(char *arg0, int arg1) {
+void igObjectRefMetaField_CopyDefaultToValue(char *arg0, int arg1) {
     igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)**(int **)(arg0 + 32));
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_37(int arg0, int arg1, int arg2) {
+void igObjectRefMetaField_CopyReference(int arg0, int arg1, int arg2) {
     igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)*(int *)((char *)((arg2 + *(int *)((char *)(arg0) + 8))) + 0));
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char *dst, char *src) {
+void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *src) {
     igObjectDispatchView *to;
     igObjectDispatchView *from;
     igObject *copy;
@@ -102,7 +102,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char 
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
             from->vfunc_16();
-            FUN_003006a0(to, from);
+            igObject_DeepCopy(to, from);
             return;
         }
         if (to == 0) {
@@ -121,7 +121,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char 
     }
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int arg1, int arg2) {
+void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *arg0, int arg1, int arg2) {
     int temp_a0;
     igObjectDispatchView *temp_a1;
     igObject *temp_v0;
@@ -132,7 +132,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int a
     temp_a1 = *(igObjectDispatchView **)(arg2 + off);
     if ((temp_a0 != 0) || (temp_a1 != 0)) {
         if ((temp_a0 != 0) && (temp_a1 != 0)) {
-            FUN_00300770((igObjectDispatchView *)temp_a0, (int)temp_a1);
+            igObject_ShallowCopy((igObjectDispatchView *)temp_a0, (int)temp_a1);
             return;
         }
         if (temp_a0 == 0) {
@@ -150,7 +150,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int a
     }
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int instance) {
+void igObjectRefMetaField_ResetValue(igObjectRefMetaField *self, int instance) {
     int object;
 
     object = *(int *)(instance + self->_offset);
@@ -161,18 +161,18 @@ void Gap__Core__igObjectRefMetaField__vfunc_39(igObjectRefMetaField *self, int i
 
 /* Prints `<indent><field> = 0x<value>`, then the referenced object's own fields when `depth` asks
  * for them. */
-void Gap__Core__igObjectRefMetaField__vfunc_41(igObjectRefMetaField *self, char *object, int depth, const char *indent) {
-    FUN_00304430(DAT_004faef0, indent, self->_fieldName, *(int *)(object + self->_offset));
-    FUN_00304680();
+void igObjectRefMetaField_Print(igObjectRefMetaField *self, char *object, int depth, const char *indent) {
+    igReport_Printf(DAT_004faef0, indent, self->_fieldName, *(int *)(object + self->_offset));
+    igReport_Flush();
     if (depth != 0) {
         void **referenced = *(void ***)(object + self->_offset);
         if (referenced != 0) {
-            FUN_00300490(referenced, depth, (int)indent);
+            igObject_Print(referenced, depth, (int)indent);
         }
     }
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3) {
+void igObjectRefMetaField_ReleaseElements(igObjectRefMetaField *arg0, int arg1, int arg2, int arg3) {
     int temp_a0;
 
     temp_a0 = *(int *)(arg1 + arg0->_offset);
@@ -181,14 +181,14 @@ void Gap__Core__igObjectRefMetaField__vfunc_42(igObjectRefMetaField *arg0, int a
     }
 }
 
-int Gap__Core__igObjectRefMetaField__vfunc_44(igObjectRefMetaField *arg0, int arg1, int arg2) {
+int igObjectRefMetaField_Compare(igObjectRefMetaField *arg0, int arg1, int arg2) {
     int temp_v0;
 
     temp_v0 = arg0->_offset;
     return *(int *)(arg1 + temp_v0) - *(int *)(arg2 + temp_v0);
 }
 
-int Gap__Core__igObjectRefMetaField__vfunc_45(igObjectRefMetaField *self, int objectA, int objectB) {
+int igObjectRefMetaField_IsAlikeExactly(igObjectRefMetaField *self, int objectA, int objectB) {
     int refA;
     int refB;
     int fieldOffset;
@@ -205,7 +205,7 @@ int Gap__Core__igObjectRefMetaField__vfunc_45(igObjectRefMetaField *self, int ob
     return igObject_IsAlikeExactly((void *)refA, (void *)refB);
 }
 
-int Gap__Core__igObjectRefMetaField__vfunc_46(igObjectRefMetaField *self, int objectA, int objectB) {
+int igObjectRefMetaField_IsAlikeDeep(igObjectRefMetaField *self, int objectA, int objectB) {
     int refA;
     int refB;
     int fieldOffset;
@@ -222,7 +222,7 @@ int Gap__Core__igObjectRefMetaField__vfunc_46(igObjectRefMetaField *self, int ob
     return igObject_IsAlikeDeep((igObjectDispatchView *)refA, (igObjectDispatchView *)refB);
 }
 
-int Gap__Core__igObjectRefMetaField__vfunc_47(igObjectRefMetaField *self, int objectA, int objectB) {
+int igObjectRefMetaField_IsAlikeShallow(igObjectRefMetaField *self, int objectA, int objectB) {
     int refA;
     int refB;
     int fieldOffset;
@@ -258,7 +258,7 @@ void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
     return self;
 }
 
-void *FUN_00303c60(igObjectRefMetaField *arg0, void *arg1) {
+void *igObjectRefMetaField_CopyConstruct(igObjectRefMetaField *arg0, void *arg1) {
     igRefMetaField_CopyConstruct((igRefMetaField *)arg0, (igRefMetaField *)arg1);
     *(int *)((char *)(arg0) + 0) = (int)(&g_igObjectRefMetaField_vtable[0]);
     arg0->_poolName = 0;
@@ -267,15 +267,15 @@ void *FUN_00303c60(igObjectRefMetaField *arg0, void *arg1) {
     return arg0;
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_02(igObjectRefMetaField *self) {
+void igObjectRefMetaField_Destruct(igObjectRefMetaField *self) {
     igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
-void FUN_00303cd0(igObjectStringMap *self, int name, void *object) {
+void igObjectStringMap_Add(igObjectStringMap *self, int name, void *object) {
     igObject *entry;
     igObject *held;
 
-    *(igObject **)&entry = (igObject *)(FUN_002be270(((int)igObject_GetAllocator((int)self))));
+    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((int)self))));
     igNamedObject_SetName((igNamedObject *)entry, name);
     ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
     ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
@@ -288,17 +288,17 @@ void FUN_00303cd0(igObjectStringMap *self, int name, void *object) {
     }
 }
 
-int FUN_00303d70(void *arg0, int extra1) {
+int igObjectStringMap_GetObject(void *arg0, int extra1) {
     int temp_v0;
 
-    temp_v0 = FUN_00303dc0((igObjectStringMap *)arg0, extra1);
+    temp_v0 = igObjectStringMap_GetIndexByName((igObjectStringMap *)arg0, extra1);
     if (temp_v0 == -1) {
         return 0;
     }
     return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (temp_v0 * 4));
 }
 
-int FUN_00303dc0(igObjectStringMap *map, int name) {
+int igObjectStringMap_GetIndexByName(igObjectStringMap *map, int name) {
     igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField[0], name));
     if (field == 0) {
         return -1;
@@ -307,15 +307,15 @@ int FUN_00303dc0(igObjectStringMap *map, int name) {
     return fields->find(field);
 }
 
-int FUN_00303e50(void *arg0) {
+int igObjectStringMap_GetCount(void *arg0) {
     return *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
 }
 
-int FUN_00303e60(void *arg0, int arg1) {
+int igObjectStringMap_GetObjectAt(void *arg0, int arg1) {
     return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 16) + (arg1 * 4));
 }
 
-int *FUN_00303e80(void *arg0, int arg1) {
+int *igObjectStringMap_GetNameAt(void *arg0, int arg1) {
     int *temp_v0;
     void *temp_v0_2;
 
@@ -330,7 +330,7 @@ int *FUN_00303e80(void *arg0, int arg1) {
     return &emptyString[0];
 }
 
-void FUN_00303ed0(igObjectStringMap *o) {
+void igObjectStringMap_Clear(igObjectStringMap *o) {
     igObjectList *l = (igObjectList *)o->_names;
     int n = l->_count;
     int i;
@@ -356,7 +356,7 @@ void FUN_00303ed0(igObjectStringMap *o) {
     l->_count = 0;
 }
 
-void FUN_00304030(igObjectStringMap *arg0, int arg1) {
+void igObjectStringMap_RemoveAt(igObjectStringMap *arg0, int arg1) {
     /*D*/
     igObject *o;
     igObjectList *l2;
@@ -373,7 +373,7 @@ void FUN_00304030(igObjectStringMap *arg0, int arg1) {
     igObjectList *l5;
     int a4;
     /*E*/
-    idx = FUN_00303e50((void *)arg0);
+    idx = igObjectStringMap_GetCount((void *)arg0);
     l1 = (igObjectList *)arg0->_data;
     s4 = 4 * idx;
     s6 = ((igObject **)((char *)l1->_data + s4 - 4))[0];
@@ -410,7 +410,7 @@ void FUN_00304030(igObjectStringMap *arg0, int arg1) {
     ((igObject **)(l6->_data + l6->_count * 4))[0] = 0;
 }
 
-void FUN_00304350(igPsx2FileView *arg0) {
+void igReport_SetOutputFile(igPsx2FileView *arg0) {
     igPsx2FileView *p;
 
     p = DAT_005871b0[0];
@@ -426,7 +426,7 @@ void FUN_00304350(igPsx2FileView *arg0) {
     DAT_005871b0[0] = arg0;
 }
 
-void FUN_003043c0(igPsx2FileView *arg0) {
+void igReport_SetErrorFile(igPsx2FileView *arg0) {
     igPsx2FileView *p;
     int rc;
     p = DAT_005871b8[0];
@@ -443,14 +443,14 @@ void FUN_003043c0(igPsx2FileView *arg0) {
     DAT_005871b8[0] = arg0;
 }
 
-void FUN_00304430(const char *arg0, ...) {
+void igReport_Printf(const char *arg0, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    FUN_003044a0(arg0, (int)((char*)__builtin_next_arg(arg0) - off));
+    igReport_VPrintf(arg0, (int)((char*)__builtin_next_arg(arg0) - off));
 }
 
-void FUN_003044a0(const char *arg0, int arg1) {
+void igReport_VPrintf(const char *arg0, int arg1) {
     char sp10[4096];
     int var_v0;
 
@@ -469,13 +469,13 @@ void FUN_003044a0(const char *arg0, int arg1) {
     }
 }
 
-int FUN_00304550(int arg0, ...) { 
+int igReport_ErrorPrintf(int arg0, ...) { 
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    return FUN_003045c0(arg0, (int)((char*)__builtin_next_arg(arg0) - off)); }
+    return igReport_VErrorPrintf(arg0, (int)((char*)__builtin_next_arg(arg0) - off)); }
 
-int FUN_003045c0(int arg0, int arg1) {
+int igReport_VErrorPrintf(int arg0, int arg1) {
     char buf[4096];
     int var_v0;
 
@@ -494,26 +494,26 @@ int FUN_003045c0(int arg0, int arg1) {
     }
 }
 
-void FUN_00304680(void) {
+void igReport_Flush(void) {
     if (DAT_005871b0[0] != 0) {
         DAT_005871b0[0]->vfunc_32();
     }
     fflush(_impure_ptr->_stdout);
 }
 
-void FUN_003046d0(void) {
+void igReport_FlushError(void) {
     if (DAT_005871b8[0] != 0) {
         DAT_005871b8[0]->vfunc_32();
     }
     fflush(_impure_ptr->_stderr);
 }
 
-void FUN_00304720(igPluginHelper *helper, int name, int location, int locationType) {
+void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location, int locationType) {
     int pool;
     char *text;
     igPluginRepository *target;
     char *old;
-    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)FUN_002bc930(((int)igObject_GetAllocator((int)helper)))));
+    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)igObject_GetAllocator((int)helper)))));
     igNamedObject_SetName((igNamedObject *)repository.p, name);
     target = repository.p;
     if (g_stringPool[0] == 0) {
@@ -556,10 +556,10 @@ static inline void setRepositoryLocation(const igSmartPointer<igPluginRepository
 
 /* Add a plugin repository, recording whether its path is under $(AlchemyRoot) (1),
  * $(ApplicationRoot) (2) or neither (0); a recognised root is stripped from the stored location. */
-void FUN_00304840(igPluginHelper *self, int name, const char *path) {
+void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, const char *path) {
     static int alchemyRootLength = strlen(DAT_004c22c8[0]);
     static int applicationRootLength = strlen(DAT_004c22d0[0]);
-    igSmartPointer<igPluginRepository> repository((igPluginRepository *)FUN_002bc930((int)igObject_GetAllocator((int)self)));
+    igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((int)self)));
     igNamedObject_SetName((igNamedObject *)repository.get(), name);
     if (strncmp(path, DAT_004c22c8[0], alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);

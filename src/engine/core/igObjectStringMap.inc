@@ -1,4 +1,4 @@
-igMetaObject *FUN_002bcbb0(void) {
+igMetaObject *igObjectStringMap_GetOrCreateMetaObject(void) {
     if (g_igObjectStringMap_metaObject[0] == 0) {
         g_igObjectStringMap_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igObjectStringMap_GetMetaObject(void)
 {
     igMetaObject *g = g_igObjectStringMap_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bcd30();
+        igObjectStringMap_EnsureRegistered();
     return g_igObjectStringMap_metaObject[0];
 }
 
@@ -51,19 +51,19 @@ int igObjectStringMap_GetVTable(void) {
     return t;
 }
 
-void FUN_002bcd30(void)
+void igObjectStringMap_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igObjectStringMap_Register);
 }
 
 void igObjectStringMap_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igObjectStringMap_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igObjectStringMap_GetMetaObject,
+        igObjectStringMap_GetMetaObjectFunction,
         igObjectStringMap_className,
         0x10, /* instance size */
         igObjectStringMap_GetVTable,
@@ -73,7 +73,7 @@ void igObjectStringMap_Register(void) {
     );
 }
 
-void thunk_igObjectStringMap_GetMetaObject(void) {
+void igObjectStringMap_GetMetaObjectFunction(void) {
     igObjectStringMap_GetMetaObject();
 }
 
@@ -87,7 +87,7 @@ void igObjectStringMap_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igObjectStringMap_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002be100();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectList_GetOrCreateMetaObject();

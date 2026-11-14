@@ -37,7 +37,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
     int result;
 
     if (context->_connection != 0) {
-        FUN_0032d9b0(&result, (igObject *)context->_connection, 0x30000, 1);
+        igPsx2IopRpcConnection_CallNoData(&result, (igObject *)context->_connection, 0x30000, 1);
         connection = (igObject *)context->_connection;
         if (connection != 0) {
             connection->_refCount = connection->_refCount - 1;
@@ -48,7 +48,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
         context->_connection = 0;
     }
     if (context->_batchMemory != 0) {
-        FUN_00300f50(context, context->_batchMemory);
+        igObject_FreeMemory(context, context->_batchMemory);
         context->_batchMemory = 0;
     }
 }
@@ -56,20 +56,20 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
 void Gap__igPsx2AudioContext__vfunc_12(void **arg0) {
     ((DW4VC_100_0 *)(arg0))->vX();
     g_audioTableOwner.clear();
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 }
 
 extern "C" {
 static inline RpcStatus SendRpc(InitRef *conn, int command, int send, int sendSize, int reply, int replySize, int callback) {
     RpcStatus status;
-    FUN_0032d6d0(&status, conn, command, send, sendSize, reply, replySize, callback);
+    igPsx2IopRpcConnection_Call(&status, conn, command, send, sendSize, reply, replySize, callback);
     return status;
 }
 
 static inline RpcStatus CallRpc(InitRef *conn, int command, unsigned int value, int a, int b) {
     RpcStatus status;
-    FUN_0032d850(&status, conn, command, value, a, b);
+    igPsx2IopRpcConnection_CallWithData(&status, conn, command, value, a, b);
     return status;
 }
 
@@ -89,9 +89,9 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
         if (((unsigned long long)((long long)o->rc << 41) >> 41) == 0)
             igObject_Destroy(o);
     }
-    arg1->conn = (struct InitRef *)FUN_002cfe10(s0);
-    FUN_0032d640(arg1->conn, 0x12111);
-    s0 = (int)FUN_00300db0(arg1, 0x10, 0x10);
+    arg1->conn = (struct InitRef *)igPsx2IopRpcConnection_Create(s0);
+    igPsx2IopRpcConnection_Bind(arg1->conn, 0x12111);
+    s0 = (int)igObject_MallocAligned(arg1, 0x10, 0x10);
     buf = (int *)s0;
     buf[0] = arg1->f24;
     buf[1] = arg1->f32;
@@ -107,10 +107,10 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     n = ((struct VoiceList *)g_audioTableOwner.p)->count;
     if (n != 0) memset((void *)((struct VoiceList *)g_audioTableOwner.p)->data, 0, n * 0x24);
     SendRpc(arg1->conn, 0x20000, s0, 0x10, 0, 0, 0);
-    FUN_00300f50(arg1, s0);
+    igObject_FreeMemory(arg1, s0);
     CallRpc(arg1->conn, 0x40000, 0x3FFF3FFFu, 0, 0);
     CallRpc(arg1->conn, 0x40001, 0x3FFF3FFF, 0, 0);
-    arg1->f40 = (int)FUN_00300db0(arg1, 0x2000, 0x10);
+    arg1->f40 = (int)igObject_MallocAligned(arg1, 0x2000, 0x10);
     DIntr();
     sceSifAddCmdHandler(3, FUN_00143800, 0);
     EIntr();
@@ -165,7 +165,7 @@ void Gap__igPsx2AudioContext__vfunc_29(int *arg0, void *arg1, int arg2) {
     if (temp_a3 >= 0) {
         *(int *)((char *)((temp_a0 + (temp_a3 * 0x24))) + 32) = -1;
     }
-    FUN_0032d9b0(&sp3C, *(int *)((char *)(arg1) + 12), arg2 | 0x90000, 0);
+    igPsx2IopRpcConnection_CallNoData(&sp3C, *(int *)((char *)(arg1) + 12), arg2 | 0x90000, 0);
     ((VoiceUsedFlag *)temp_s0)->b0 = 0;
     *arg0 = g_resultSuccess[0];
 }
@@ -231,8 +231,8 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
         *arg0 = g_resultFailure[0];
         return;
     }
-    p = FUN_00300db0(arg1, 16, 16);
-    q = FUN_00300db0(arg1, 16, 16);
+    p = igObject_MallocAligned(arg1, 16, 16);
+    q = igObject_MallocAligned(arg1, 16, 16);
     if (e->b2) {
         k = 4;
     } else if (e->b3) {
@@ -249,31 +249,31 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
     p[3] = arg3 & 0xDFFFFFFF;
     SyncDCache(arg3, arg3 + arg5);
     if (s3) {
-        FUN_0032d6d0(&spAC, arg1->h, arg2 | 0x70000, p, 16, 0, 0, 0);
+        igPsx2IopRpcConnection_Call(&spAC, arg1->h, arg2 | 0x70000, p, 16, 0, 0, 0);
         if (arg8 != 0) {
             *q = 2;
         } else {
             *q = 1;
         }
     } else {
-        FUN_0032d6d0(&spA8, arg1->h, arg2 | 0x70000, p, 16, q, 16, 0);
+        igPsx2IopRpcConnection_Call(&spA8, arg1->h, arg2 | 0x70000, p, 16, q, 16, 0);
     }
-    FUN_00300f50(arg1, p);
+    igObject_FreeMemory(arg1, p);
     e->c4 = 1;
     v = *q;
     if (v != -1) {
         if (v == 2) {
             e->b2 = 1;
             if (e->f0 != 0) {
-                FUN_0032d850(&spA4, arg1->h, arg2 | 0x240000, e->f0, 0, 0);
+                igPsx2IopRpcConnection_CallWithData(&spA4, arg1->h, arg2 | 0x240000, e->f0, 0, 0);
             }
         } else {
             e->b3 = 1;
         }
-        FUN_00300f50(arg1, q);
+        igObject_FreeMemory(arg1, q);
         *arg0 = g_resultSuccess[0];
     } else {
-        FUN_00300f50(arg1, q);
+        igObject_FreeMemory(arg1, q);
         *arg0 = g_resultFailure[0];
     }
 }
@@ -283,7 +283,7 @@ void Gap__igPsx2AudioContext__vfunc_48(int *arg0, void *arg1, int arg2, int arg3
     int sp2C;
     int sp28;
 
-    FUN_0032d850(&sp28, *(int *)((char *)(arg1) + 12), arg2 | 0x80000, arg3, &sp2C, 1);
+    igPsx2IopRpcConnection_CallWithData(&sp28, *(int *)((char *)(arg1) + 12), arg2 | 0x80000, arg3, &sp2C, 1);
     if (sp2C == 2) {
         *arg0 = g_resultSuccess[0];
     } else {
@@ -298,14 +298,14 @@ int Gap__igPsx2AudioContext__vfunc_51(igPsx2AudioContext *self) {
 
     allocator = (void **)(igObject_GetAllocator());
     replyBuffer = ((AllocatorAllocateSlot *)(allocator))->Allocate((int)(0x20), (int)(0x10));
-    FUN_0032d6d0(&rpcStatus, self->_connection, 0x10000, 0, 0, replyBuffer, 0x20, 0);
+    igPsx2IopRpcConnection_Call(&rpcStatus, self->_connection, 0x10000, 0, 0, replyBuffer, 0x20, 0);
     return replyBuffer;
 }
 
 void Gap__igPsx2AudioContext__vfunc_52(igPsx2AudioContext *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
     int a[4];
     int r;
-    FUN_0032d6d0(&r, arg0->_connection, 0xE0000, 0, 0, a, 0x20, 0);
+    igPsx2IopRpcConnection_Call(&r, arg0->_connection, 0xE0000, 0, 0, a, 0x20, 0);
     if (arg1 != 0) {
         *arg1 = a[0];
     }
@@ -331,7 +331,7 @@ void Gap__igPsx2AudioContext__vfunc_34(int *arg0, void *arg1, int arg2, float fp
     *(float *)((char *)(temp_a2) + 24) = fparg0;
     if (*(unsigned char *)((char *)(arg1) + 8) != 0) {
         temp_s2 = *(int *)((char *)(arg1) + 12);
-        FUN_0032d850(&sp4C, temp_s2, arg2 | 0x270000, FUN_00145960(arg1, temp_a2), 0, 0);
+        igPsx2IopRpcConnection_CallWithData(&sp4C, temp_s2, arg2 | 0x270000, FUN_00145960(arg1, temp_a2), 0, 0);
     } else {
         ((B11 *)temp_a2)->f = 1;
     }
@@ -358,7 +358,7 @@ PanResult Gap__igPsx2AudioContext__vfunc_35(char *arg1, int arg2, float fparg0) 
     }
     if (*(unsigned char *)(arg1 + 8) != 0) {
         s2 = *(int *)(arg1 + 12);
-        FUN_0032d850(&status, s2, arg2 | 0x270000, FUN_00145960(arg1, e), 0, 0);
+        igPsx2IopRpcConnection_CallWithData(&status, s2, arg2 | 0x270000, FUN_00145960(arg1, e), 0, 0);
     } else {
         e->b0 = 1;
     }
@@ -383,7 +383,7 @@ void Gap__igPsx2AudioContext__vfunc_36(int *arg0, ContextView *arg1, int arg2, f
     packed = (whole << 16) | (int)((double)0xffff * arg3);
     e->f12 = packed;
     if (arg1->f8 != 0) {
-        FUN_0032d850(&sp8C, arg1->f12, arg2 | 0x250000, packed, 0, 0);
+        igPsx2IopRpcConnection_CallWithData(&sp8C, arg1->f12, arg2 | 0x250000, packed, 0, 0);
     } else {
         e->c1 = 1;
     }
@@ -403,7 +403,7 @@ void Gap__igPsx2AudioContext__vfunc_49(igPsx2AudioContext *arg0, int arg1, int a
     int sp1C;
     *(int *)((char *)((*(int *)((char *)(g_audioTableOwner.p) + 16) + (arg1 * 0x24))) + 32) = arg2;
     *(int *)((char *)((*(int *)((char *)(g_audioTableOwner.p) + 16) + (arg2 * 0x24))) + 32) = arg1;
-    FUN_0032d850(&sp1C, arg0->_connection, arg1 | 0x2B0000, arg2, 0, 1);
+    igPsx2IopRpcConnection_CallWithData(&sp1C, arg0->_connection, arg1 | 0x2B0000, arg2, 0, 1);
 }
 
 void Gap__igPsx2AudioContext__vfunc_41(ContextView *arg0, int arg1) {
@@ -417,7 +417,7 @@ void Gap__igPsx2AudioContext__vfunc_41(ContextView *arg0, int arg1) {
         return;
     }
     temp_s2 = arg0->f12;
-    FUN_0032d850(&sp4C, temp_s2, arg1 | 0xD0000, FUN_00145a10(arg0, temp_s0), 0, 1);
+    igPsx2IopRpcConnection_CallWithData(&sp4C, temp_s2, arg1 | 0xD0000, FUN_00145a10(arg0, temp_s0), 0, 1);
     temp_s0->f9 = 0 & 1;
 }
 
@@ -447,11 +447,11 @@ void Gap__igPsx2AudioContext__vfunc_40(ContextView *arg0, int arg1) {
         sp40[1] = e->f12;
         if (e->b4 != 0) {
             sp40[2] = FUN_00145a10(arg0, e);
-            FUN_0032d6d0(&sp5C, arg0->f12, arg1 | 0x200000, sp40, 0x10, 0, 0, 0);
+            igPsx2IopRpcConnection_Call(&sp5C, arg0->f12, arg1 | 0x200000, sp40, 0x10, 0, 0, 0);
             e->b4 = 0 & 1;
             return;
         }
-        FUN_0032d6d0(&sp58, arg0->f12, arg1 | 0x2a0000, sp40, 0x10, 0, 0, 0);
+        igPsx2IopRpcConnection_Call(&sp58, arg0->f12, arg1 | 0x2a0000, sp40, 0x10, 0, 0, 0);
     }
 }
 
@@ -469,7 +469,7 @@ void Gap__igPsx2AudioContext__vfunc_43(ContextView *arg0, int arg1) {
         e2->f8 = 0 & 1;
     }
     if (arg0->f8 != 0) {
-        FUN_0032d9b0(&sp1C, arg0->f12, arg1 | 0x210000, 0);
+        igPsx2IopRpcConnection_CallNoData(&sp1C, arg0->f12, arg1 | 0x210000, 0);
         return;
     }
     e->f11 = 1;
@@ -493,7 +493,7 @@ void Gap__igPsx2AudioContext__vfunc_50(ContextView *arg0, int arg1) {
         e2->b6 = 1;
     }
     if (arg0->f8 != 0) {
-        FUN_0032d9b0(&sp1C, arg0->f12, arg1 | 0x2d0000, 0);
+        igPsx2IopRpcConnection_CallNoData(&sp1C, arg0->f12, arg1 | 0x2d0000, 0);
     } else {
         e->c5 = 1;
     }
@@ -510,11 +510,11 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
     ThreadRef *a0;
     AudioThread *p;
     if (arg0->_streamingThread == 0) {
-        p = (AudioThread *)FUN_002ba650(0);
+        p = (AudioThread *)igSemaphore_Create(0);
         DAT_0055f5b8[0] = p;
         p->a92();
         DAT_0055f5b8[0]->a132((void *)1);
-        s0 = FUN_002b7f40(0);
+        s0 = igThread_Create(0);
         if (s0 != 0) {
             s0->references = s0->references + 1;
         }

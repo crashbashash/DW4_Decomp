@@ -1,5 +1,5 @@
-int FUN_002bd8f0(int arg0) {
-    FUN_002bda10();
+int igObjectDirEntry_Create(int arg0) {
+    igObjectDirEntry_EnsureRegistered();
     return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585B70), (igMemoryPoolView *)arg0);
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igObjectDirEntry_GetMetaObject(void)
 {
     igMetaObject *g = g_igObjectDirEntry_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bda10();
+        igObjectDirEntry_EnsureRegistered();
     return g_igObjectDirEntry_metaObject[0];
 }
 
@@ -28,19 +28,19 @@ int igObjectDirEntry_GetVTable(void) {
     return r;
 }
 
-void FUN_002bda10(void)
+void igObjectDirEntry_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igObjectDirEntry_Register);
 }
 
 void igObjectDirEntry_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igObjectDirEntry_metaObject),
         igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
-        thunk_igObjectDirEntry_GetMetaObject,
+        igObjectDirEntry_GetMetaObjectFunction,
         igObjectDirEntry_className,
         0x34, /* instance size */
         igObjectDirEntry_GetVTable,
@@ -50,11 +50,11 @@ void igObjectDirEntry_Register(void) {
     );
 }
 
-void thunk_igObjectDirEntry_GetMetaObject(void) {
+void igObjectDirEntry_GetMetaObjectFunction(void) {
     igObjectDirEntry_GetMetaObject();
 }
 
-igMetaObject *FUN_002bdab0(void) {
+igMetaObject *igDirEntry_GetPublishedMetaObject(void) {
     return g_igDirEntry_metaObject[0];
 }
 
@@ -68,7 +68,7 @@ void igObjectDirEntry_InitFields(void) {
     int index;
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igObjectDirEntry_ctorTable, 6);
     ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base);
-    ref->_metaObject = (int)FUN_002be610();
+    ref->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     ((igMetaField *)ref)->_persistent = 0;
     text = (igStringMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
     igStringMetaField_SetDefaultText((int *)text, (int)text_NoMeta);
@@ -81,13 +81,13 @@ void igObjectDirEntry_InitFields(void) {
     field = (igMetaField *)igObjectRefMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_ref, DAT_00585b98, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject[0];
-    FUN_00303460((igObjectRefMetaField *)field, 0);
+    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)field, 0);
     field->_persistent = 0;
     field->_externalEnumStorage = (int)DAT_00585b98;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
-    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 5), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 5), -1);
     igMetaObject_NameFields(meta, (const char **)g_igObjectDirEntry_fieldTable, (igMetaField ***)DAT_004bfb70, DAT_004bfb90, base);
 }
 

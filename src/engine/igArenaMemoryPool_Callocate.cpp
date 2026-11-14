@@ -3,7 +3,7 @@ class Pool { public: virtual void d0(); virtual void d1(); virtual void d2(); vi
 struct ArenaPoolFlags { void *vt; char pad[168]; unsigned short align; char pad2[18]; unsigned flags; };
 static inline int flag2(ArenaPoolFlags *p) { return (p->flags & 2) != 0; }
 static inline int flag4(ArenaPoolFlags *p) { return (p->flags & 4) != 0; }
-extern "C" void *Gap__Core__igArenaMemoryPool__vfunc_56(Pool *self, int count, int size) {
+extern "C" void *igArenaMemoryPool_Callocate(Pool *self, int count, int size) {
     int total = count * size;
     void *p = self->Alloc(0, total, ((ArenaPoolFlags *)self)->align);
     if (p != 0) {

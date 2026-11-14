@@ -15,7 +15,7 @@ void **InternalObjectList_Create(int allocator) {
     return list;
 }
 
-int FUN_002c2710(int arg0, int arg1) {
+int __internalObjectList_Clone(int arg0, int arg1) {
     int temp_v0;
 
     if (*g_objectSystem[0] != 0) {
@@ -29,7 +29,7 @@ int FUN_002c2710(int arg0, int arg1) {
     return temp_v0;
 }
 
-igMetaObject *FUN_002c2790(void) {
+igMetaObject *__internalObjectList_GetOrCreateMetaObject(void) {
     if (g___internalObjectList_metaObject[0] == 0) {
         g___internalObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -61,7 +61,7 @@ void __internalObjectList_Register(void) {
         ((char *)g___internalObjectList_metaObject),
         __internalNonRefCountedObjectList_Register,
         __internalNonRefCountedObjectList_GetPublishedMetaObject_002c28f0,
-        thunk___internalObjectList_GetMetaObject,
+        __internalObjectList_GetMetaObjectFunction,
         __internalObjectList_className,
         0x10, /* instance size */
         __internalObjectList_GetVTable,
@@ -71,11 +71,11 @@ void __internalObjectList_Register(void) {
     );
 }
 
-void thunk___internalObjectList_GetMetaObject(void) {
+void __internalObjectList_GetMetaObjectFunction(void) {
     __internalObjectList_GetMetaObject();
 }
 
-igMetaObject *FUN_002c28f0(void) {
+igMetaObject *__internalNonRefCountedObjectList_GetPublishedMetaObject(void) {
     return g___internalNonRefCountedObjectList_metaObject[0];
 }
 

@@ -112,7 +112,7 @@ void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -172,13 +172,13 @@ void igShaderFactory_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igShaderFactory_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = FUN_002be100();
+    *(int *)((char *)(temp_s1) + 56) = igNamedObjectList_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1) + 52) = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1_2) + 56) = FUN_002be100();
+    *(int *)((char *)(temp_s1_2) + 56) = igNamedObjectList_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1_2) + 52) = 1;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
-    FUN_002dc7a0(temp_v0, &DAT_0048b6b8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048b6b8[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00199110);
     igMetaObject_NameFields(temp_s0, &g_igShaderFactory_fieldTable[0], &DAT_0048b698[0], &DAT_0048b6a8[0], temp_s2);
 }

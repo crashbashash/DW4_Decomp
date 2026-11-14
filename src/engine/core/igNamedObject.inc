@@ -1,9 +1,9 @@
-void * FUN_002be270(int arg0) {
-    FUN_002be3d0();
+void * igNamedObject_Create(int arg0) {
+    igNamedObject_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585BD8), (igMemoryPoolView *)arg0));
 }
 
-igMetaObject *FUN_002be2b0(void) {
+igMetaObject *igNamedObject_GetOrCreateMetaObject(void) {
     if (g_igNamedObject_metaObject[0] == 0) {
         g_igNamedObject_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igNamedObject_GetMetaObject(void)
 {
     igMetaObject *g = g_igNamedObject_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002be3d0();
+        igNamedObject_EnsureRegistered();
     return g_igNamedObject_metaObject[0];
 }
 
@@ -46,19 +46,19 @@ int igNamedObject_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002be3d0(void)
+void igNamedObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igNamedObject_Register);
 }
 
 void igNamedObject_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igNamedObject_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igNamedObject_GetMetaObject,
+        igNamedObject_GetMetaObjectFunction,
         igNamedObject_className,
         0xC, /* instance size */
         igNamedObject_GetVTable,
@@ -68,7 +68,7 @@ void igNamedObject_Register(void) {
     );
 }
 
-void thunk_igNamedObject_GetMetaObject(void) {
+void igNamedObject_GetMetaObjectFunction(void) {
     igNamedObject_GetMetaObject();
 }
 

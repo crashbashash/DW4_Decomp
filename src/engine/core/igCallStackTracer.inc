@@ -1,4 +1,4 @@
-igMetaObject *FUN_002cc630(void) {
+igMetaObject *igCallStackTracer_GetOrCreateMetaObject(void) {
     if (g_igCallStackTracer_metaObject[0] == 0) {
         g_igCallStackTracer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igCallStackTracer_GetMetaObject(void)
 {
     igMetaObject *g = g_igCallStackTracer_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002cc710();
+        igCallStackTracer_EnsureRegistered();
     return g_igCallStackTracer_metaObject[0];
 }
 
@@ -22,37 +22,37 @@ int igCallStackTracer_GetVTable(void) {
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_002cc710(void)
+void igCallStackTracer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igCallStackTracer_Register);
 }
 
 void igCallStackTracer_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igCallStackTracer_metaObject),
         igUnsignedIntListNoClean_Register,
         igUnsignedIntListNoClean_GetPublishedMetaObject,
-        thunk_igCallStackTracer_GetMetaObject,
+        igCallStackTracer_GetMetaObjectFunction,
         igCallStackTracer_className,
         0x14, /* instance size */
         igCallStackTracer_GetVTable,
-        FUN_002cc7b0,
+        igCallStackTracer_SetAbstractProxy,
         0, /* extra callback item */
         0 /* callback list */
     );
 }
 
-void thunk_igCallStackTracer_GetMetaObject(void) {
+void igCallStackTracer_GetMetaObjectFunction(void) {
     igCallStackTracer_GetMetaObject();
 }
 
-igMetaObject *FUN_002cc7a0(void) {
+igMetaObject *igUnsignedIntListNoClean_GetPublishedMetaObject(void) {
     return g_igUnsignedIntListNoClean_metaObject[0];
 }
 
-void FUN_002cc7b0(void) {
-    *(int *)((char *)(((void * *)g_igCallStackTracer_metaObject)[0]) + 60) = (int)(&thunk_igPsx2CallStackTracer_GetMetaObject);
+void igCallStackTracer_SetAbstractProxy(void) {
+    *(int *)((char *)(((void * *)g_igCallStackTracer_metaObject)[0]) + 60) = (int)(&igPsx2CallStackTracer_GetMetaObjectFunction);
 }
 

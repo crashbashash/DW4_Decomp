@@ -2,7 +2,7 @@ void igAllocator_EncodeIndexAlias(int extra0) {
     igAllocator_EncodeIndex((igMemoryPoolView *)extra0);
 }
 
-void FUN_002f0660(void) {
+void igMemoryPool_SetPoolIndex(void) {
 
 }
 
@@ -25,11 +25,11 @@ igMemoryPoolView *igAllocator_ResolveEncodedIndex(int index) {
     return g_primaryAllocatorList[0]->data[index >> 1];
 }
 
-void FUN_002f0750(void) {
+void igMemoryPool_CollectMemoryRegions(void) {
 
 }
 
-void FUN_002f0760(int arg0, int extra1) {
+void igMemoryPool_CollectAllMemoryRegions(int arg0, int extra1) {
     int var_s2;
     igMemoryPoolView *temp_s1;
     igMemoryPoolView *temp_s2;
@@ -53,15 +53,15 @@ void FUN_002f0760(int arg0, int extra1) {
     }
 }
 
-void FUN_002f0860(int *arg0) {
+void igMemoryPool_SetPreSize(int *arg0) {
     *arg0 = g_resultFailure.v;
 }
 
-int FUN_002f0870(void) {
+int igMemoryPool_GetPreSize(void) {
     return 0;
 }
 
-igResult FUN_002f0880(void **pool, void *info) {
+igResult igMemoryPool_Configure(void **pool, void *info) {
     igResult discarded;
     int temp_v1;
 

@@ -1,4 +1,4 @@
-int Gap__Core__igBoolMetaField__vfunc_56(void *arg0, char *arg1, int arg2) {
+int igBoolMetaField_ValueFromString(void *arg0, char *arg1, int arg2) {
     int sp3C;
     int sp38;
 
@@ -20,7 +20,7 @@ int Gap__Core__igBoolMetaField__vfunc_56(void *arg0, char *arg1, int arg2) {
     return 0;
 }
 
-void Gap__Core__igBoolMetaField__vfunc_57(int *arg0, void *arg1, unsigned char *arg2) {
+void igBoolMetaField_ValueToString(int *arg0, void *arg1, unsigned char *arg2) {
     int sp20[256];
     int *var_a2;
     int var_v0;
@@ -47,47 +47,47 @@ void Gap__Core__igBoolMetaField__vfunc_57(int *arg0, void *arg1, unsigned char *
     *arg0 = var_v1;
 }
 
-int **FUN_002d37b0(int **arg0, int extra1) {
+int **igBoolMetaField_Construct(int **arg0, int extra1) {
     igMetaField_Construct((igMetaField *)arg0);
     *arg0 = &DAT_00531540[0];
     if (arg0 != 0) {
-        FUN_002d37f0(arg0);
+        igBoolMetaField_Init(arg0);
     }
     return arg0;
 }
 
-int **FUN_002d37f0(int **arg0) {
+int **igBoolMetaField_Init(int **arg0) {
     igMetaField_Init((igMetaField *)arg0);
     *arg0 = &DAT_00531540[0];
     return arg0;
 }
 
-int **FUN_002d3830(int **arg0, int extra1) {
+int **igBoolMetaField_CopyConstruct(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
     *arg0 = &DAT_00531540[0];
     return arg0;
 }
 
-void Gap__Core__igBoolMetaField__vfunc_02(int extra0) {
+void igBoolMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-int FUN_002d3880(void) {
+int igBoolMetaField_GetSize(void) {
     return 1;
 }
 
-void FUN_002d3890(void **arg0, char arg1) {
+void igBoolMetaField_SetDefaultValue(void **arg0, char arg1) {
     char sp1F;
 
     sp1F = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
 }
 
-int Gap__Core__igBoolMetaField__vfunc_27(void) {
+int igBoolMetaField_GetAlignment(void) {
     return 1;
 }
 
-void FUN_002d38d0(int a0, int a1)
+void igCallStackTable_SetCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 8) = a1;
 }

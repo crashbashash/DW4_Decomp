@@ -163,11 +163,11 @@ void igAttrStackManager_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnReset = 1;
     igMetaObject_NameFields(temp_s0, &g_igAttrStackManager_fieldTable[0], &DAT_0048cce0[0], &DAT_0048cd30[0], temp_s1);
-    FUN_002fe480(&thunk_FUN_001afb00);
+    igMetaObject_AddExitCallback(&thunk_FUN_001afb00);
 }
 
 void FUN_001a58e0(void) {
-    FUN_002fe490(&FUN_001afb60);
+    igMetaObject_AddRegistrationCallback(&FUN_001afb60);
 }
 
 void thunk_FUN_001afb00(void) {

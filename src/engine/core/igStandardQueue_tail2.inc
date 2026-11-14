@@ -1,4 +1,4 @@
-void Gap__Core__igStandardQueue__vfunc_11(igStandardQueueView *self) {
+void igStandardQueue_InitDefaults(igStandardQueueView *self) {
     self->_insertLock->create();
     self->_removeLock->create();
     self->_queueSema->setInitialCount(0);
@@ -6,29 +6,29 @@ void Gap__Core__igStandardQueue__vfunc_11(igStandardQueueView *self) {
     self->_queueSema->create();
 }
 
-void Gap__Core__igStandardQueue__vfunc_12(igStandardQueueView *self) {
+void igStandardQueue_ReleaseDefaults(igStandardQueueView *self) {
     if (self->isCreated() != 0) {
         self->destroy();
     }
-    thunk_FUN_00305000((int)self);
+    thunk_igStandardQueue_StopServiceThreads((int)self);
 }
 
-void Gap__Core__igStandardQueue__vfunc_23(igStandardQueue *self) {
+void igStandardQueue_Create(igStandardQueue *self) {
     self->_data = igObject_AllocateStorage((int)self, self->_capacity * 4);
 }
 
-void Gap__Core__igStandardQueue__vfunc_24(igStandardQueue *self) {
-    FUN_00300f50((int)self, self->_data);
+void igStandardQueue_Destroy(igStandardQueue *self) {
+    igObject_FreeMemory((int)self, self->_data);
     self->_data = 0;
 }
 
 /* Predicate: true once the queue's element storage (`_data`, igMemoryRefMetaField, +36) has been
  * allocated. */
-int Gap__Core__igStandardQueue__vfunc_25(igStandardQueue *self) {
+int igStandardQueue_IsCreated(igStandardQueue *self) {
     return self->_data != 0;
 }
 
-igResult Gap__Core__igStandardQueue__vfunc_26(igStandardQueueView *self, int val, int block)
+igResult igStandardQueue_Insert(igStandardQueueView *self, int val, int block)
 {
     unsigned a;
     unsigned b;
@@ -48,7 +48,7 @@ igResult Gap__Core__igStandardQueue__vfunc_26(igStandardQueueView *self, int val
         if (self->isFull() != 0) {
             a = self->_maxCapacity;
             b = self->_capacity * 2;
-            FUN_00328ab0(self, (int)((a < b) ? a : b));
+            igStandardQueue_Resize(self, (int)((a < b) ? a : b));
         }
         self->_removeLock->signal();
     }
@@ -59,11 +59,11 @@ igResult Gap__Core__igStandardQueue__vfunc_26(igStandardQueueView *self, int val
     return igResult(g_resultSuccess.v);
 }
 
-int Gap__Core__igStandardQueue__vfunc_29(igStandardQueueView *self) {
+int igStandardQueue_IsFull(igStandardQueueView *self) {
     return self->_capacity == self->_queueSema->getCount();
 }
 
-igResult Gap__Core__igStandardQueue__vfunc_27(igStandardQueueView *self, int *out, int block)
+igResult igStandardQueue_Remove(igStandardQueueView *self, int *out, int block)
 {
     if (self->_queueSema->wait(block) != g_resultSuccess) {
         return igResult(g_resultFailure.v);
@@ -77,12 +77,12 @@ igResult Gap__Core__igStandardQueue__vfunc_27(igStandardQueueView *self, int *ou
     return igResult(g_resultSuccess.v);
 }
 
-int Gap__Core__igStandardQueue__vfunc_28(igStandardQueueView *self)
+int igStandardQueue_GetCount(igStandardQueueView *self)
 {
     return self->_queueSema->getCount();
 }
 
-void FUN_00328ab0(igStandardQueueView *queue, int capacity) {
+void igStandardQueue_Resize(igStandardQueueView *queue, int capacity) {
     int s0;
     int s3;
     unsigned a2;
@@ -98,7 +98,7 @@ void FUN_00328ab0(igStandardQueueView *queue, int capacity) {
             memmove(s0, (int)(queue->_data + a2), s3);
             memmove(s0 + s3, (int)queue->_data, queue->_insertElement * 4);
         }
-        FUN_00300f50((int)queue, (int)queue->_data);
+        igObject_FreeMemory((int)queue, (int)queue->_data);
         queue->_data = (int *)s0;
         queue->_insertElement = queue->getCount();
         queue->_removeElement = 0;
@@ -106,7 +106,7 @@ void FUN_00328ab0(igStandardQueueView *queue, int capacity) {
     }
 }
 
-igResult Gap__Core__igStandardQueue__vfunc_30(igStandardQueueView *self, unsigned n)
+igResult igStandardQueue_SetCapacity(igStandardQueueView *self, unsigned n)
 {
     if (n > self->_maxCapacity || n < self->getCount()) {
         return igResult(g_resultFailure.v);
@@ -116,7 +116,7 @@ igResult Gap__Core__igStandardQueue__vfunc_30(igStandardQueueView *self, unsigne
     } else {
         self->_removeLock->wait(1);
         self->_insertLock->wait(1);
-        FUN_00328ab0(self, (int)n);
+        igStandardQueue_Resize(self, (int)n);
         self->_insertLock->signal();
         self->_removeLock->signal();
     }
@@ -124,11 +124,11 @@ igResult Gap__Core__igStandardQueue__vfunc_30(igStandardQueueView *self, unsigne
 }
 
 /* Accessor: returns the queue's current `_capacity` (igUnsignedIntMetaField, +24). */
-int Gap__Core__igStandardQueue__vfunc_31(igStandardQueue *self) {
+int igStandardQueue_GetCapacity(igStandardQueue *self) {
     return self->_capacity;
 }
 
-void Gap__Core__igStandardQueue__vfunc_32(int *out, igStandardQueueView *self, unsigned a) {
+void igStandardQueue_SetMaxCapacity(int *out, igStandardQueueView *self, unsigned a) {
     igResult t[5];
     if (a >= self->_capacity || self->_data == 0) {
         self->_maxCapacity = a;
@@ -140,7 +140,7 @@ void Gap__Core__igStandardQueue__vfunc_32(int *out, igStandardQueueView *self, u
             *out = g_resultFailure.v;
         } else {
             t[2] = self->_removeLock->wait(1);
-            FUN_00328ab0(self, a);
+            igStandardQueue_Resize(self, a);
             self->_maxCapacity = self->_capacity;
             t[1] = self->_insertLock->signal();
             t[0] = self->_removeLock->signal();
@@ -150,11 +150,11 @@ void Gap__Core__igStandardQueue__vfunc_32(int *out, igStandardQueueView *self, u
 }
 
 /* Accessor: returns the queue's `_maxCapacity` (igUnsignedIntMetaField, +40). */
-int Gap__Core__igStandardQueue__vfunc_33(igStandardQueue *self) {
+int igStandardQueue_GetMaxCapacity(igStandardQueue *self) {
     return self->_maxCapacity;
 }
 
-int **FUN_00328de0(int **arg0) {
+int **SystemAllocatorBase_Construct(int **arg0) {
     *arg0 = &g_vtable[0];
     return arg0;
 }

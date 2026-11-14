@@ -81,16 +81,16 @@ void beMessengerArgData_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beMessengerArgData_ctorTable[0], 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c9780();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002ca680();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igLongList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0018a0a0();
@@ -102,7 +102,7 @@ void beMessengerArgData_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     igMetaObject_NameFields(temp_s0, &g_beMessengerArgData_fieldTable[0], &DAT_004c5ee0[0], &DAT_004c5f10[0], temp_s1);
 }

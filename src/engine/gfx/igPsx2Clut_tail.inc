@@ -48,7 +48,7 @@ void igPsx2Clut_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPsx2Clut_ctorTable[0], 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002ea4b0(temp_v0, -1);
+    igIntMetaField_SetDefault(temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)) + 38) = 0;
     igMetaObject_NameFields(temp_s0, &g_igPsx2Clut_fieldTable[0], &DAT_0048a0e8[0], &DAT_0048a0f0[0], temp_s2);

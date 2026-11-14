@@ -108,10 +108,10 @@ void igActorManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0045e6f0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002c9170();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igPointerList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002c8e50();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00130440();

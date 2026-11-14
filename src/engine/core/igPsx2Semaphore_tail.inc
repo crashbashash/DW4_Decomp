@@ -2,7 +2,7 @@ igMetaObject *igPsx2Semaphore_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2Semaphore_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002cf7a0();
+        igPsx2Semaphore_EnsureRegistered();
     return g_igPsx2Semaphore_metaObject[0];
 }
 
@@ -35,19 +35,19 @@ int igPsx2Semaphore_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002cf7a0(void)
+void igPsx2Semaphore_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Semaphore_Register);
 }
 
 void igPsx2Semaphore_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igPsx2Semaphore_metaObject),
         igSemaphore_Register,
         igSemaphore_GetPublishedMetaObject,
-        thunk_igPsx2Semaphore_GetMetaObject,
+        igPsx2Semaphore_GetMetaObjectFunction,
         igPsx2Semaphore_className,
         0x18, /* instance size */
         igPsx2Semaphore_GetVTable,
@@ -57,7 +57,7 @@ void igPsx2Semaphore_Register(void) {
     );
 }
 
-igMetaObject *FUN_002cf820(void) {
+igMetaObject *igSemaphore_GetPublishedMetaObject(void) {
     return g_igSemaphore_metaObject[0];
 }
 
@@ -68,10 +68,10 @@ void igPsx2Semaphore_InitFields(void) {
     temp_s0 = (void *)(g_igPsx2Semaphore_metaObject[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igPsx2Semaphore_ctorTable[0], 3);
-    FUN_002ea4b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), -1);
-    FUN_0030e9b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), 1);
-    FUN_0030e9b0((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 1);
+    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)), -1);
+    igUnsignedIntMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)), 1);
+    igUnsignedIntMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igPsx2Semaphore_fieldTable[0], (igMetaField ***)&DAT_004c1d18[0], &DAT_004c1d28[0], temp_s1);
-    *(int *)((char *)(g_igPsx2Semaphore_metaObject[0]) + 64) = (int)(&thunk_igSemaphore_GetMetaObject);
+    *(int *)((char *)(g_igPsx2Semaphore_metaObject[0]) + 64) = (int)(&igSemaphore_GetMetaObjectFunction);
 }
 

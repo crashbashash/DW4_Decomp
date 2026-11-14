@@ -76,10 +76,10 @@ int igMetaObject_RegisterClass(...);
 
 extern int igVolume_InitFields_00186bb0[4];
 
-int FUN_002fe480(...);
+int igMetaObject_AddExitCallback(...);
 void thunk_FUN_0018f4a0(void);
 void FUN_0018ec40(void);
-int FUN_002fe490(...);
+int igMetaObject_AddRegistrationCallback(...);
 void FUN_0018edb0(int meta);
 void FUN_0018f4a0(void);
 void FUN_00186d20(void);
@@ -156,7 +156,7 @@ extern char igVec4ucMetaField_className[];
 
 extern int g_igMetaField_metaObject[4];
 
-R *FUN_002fc250(...);
+R *igMetaField_GetMetaFieldList(...);
 int MetaRefList_AppendRetained(...);
 int igMetaField_FinalizeDescriptor(...);
 void igObject_Destroy(void *);
@@ -194,7 +194,7 @@ extern char g_igVec4fArrayMetaField_callbackList[];
 extern char igVec4fArrayMetaField_className[];
 
 void igVec4fArrayMetaField_InitFields(void);
-int FUN_002ea4b0(...);
+int igIntMetaField_SetDefault(...);
 int igMetaObject_CreateFields(...);
 int igMetaObject_GetFieldAt(...);
 int igMetaObject_GetFieldCount(...);
@@ -258,7 +258,7 @@ extern char igSphere_className[];
 void igSphere_InitFields(void);
 void FUN_0018e470(igVec3fMetaFieldView *self, const float *value);
 
-int FUN_002e3810(int, float);
+int igFloatMetaField_SetDefault(int, float);
 extern int g_igSphere_ctorTable[4];
 extern int g_igSphere_fieldTable[4];
 extern int DAT_0048adb0[4];
@@ -679,7 +679,7 @@ static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * 
 static inline float dot3(float ax, float ay, float az, float bx, float by, float bz) { return ax * bx + ay * by + az * bz; }
 static inline float lerp(float o, float t, float d) { float m = t * d; return o + m; }
 
-void **FUN_002c4870(...);
+void **igFloatMetaField_GetDefaultDescriptor(...);
 
 void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int arg2);
 
@@ -898,7 +898,7 @@ extern OpTable *DAT_00561158;
 extern OpTable *DAT_00561160;
 extern OpTable *DAT_00561168;
 extern OpTable *DAT_00561170;
-igSmartPointer<InstanceNode> FUN_002fd6e0(int, int);
+igSmartPointer<InstanceNode> igMetaObject_CreateInstanceRef(int, int);
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
 struct InstanceListRef {
     NodeList *p;
@@ -963,7 +963,7 @@ static inline void setElement(const InstanceListRef &list, int index, const igSm
     }
 }
 #define REL(g) { OpTable *o=g; if(o){ --o->references; if(((unsigned long long)(long long)o->references & 0x7fffffULL)==0) igObject_Destroy(o);} }
-int FUN_002fe290(int, int);
+int igMetaObject_IsOfType(int, int);
 
 int FUN_0018f3e0(void);
 void FUN_0018f3f0(void);

@@ -95,7 +95,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
     }
     igSmartPointer<AnimDbObject> held(obj, kRetainReference);
     igSmartPointer<AnimDbObject> skel(castSkeleton(held.p), kRetainReference);
-    if (skel.p != 0 && FUN_002d86b0(db->_directory, DAT_00586730, obj) < db->_directory->_count) {
+    if (skel.p != 0 && igDirectory_FindSortedInsertIndex(db->_directory, DAT_00586730, obj) < db->_directory->_count) {
         int i;
         int n;
         if (DAT_00562568 == 0) {

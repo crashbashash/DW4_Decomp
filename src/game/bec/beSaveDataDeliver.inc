@@ -60,7 +60,7 @@ void beSaveDataDeliver_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beSaveDataDeliver_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_002cc2c0();
+    ((igMemoryRefMetaField *)temp_s1)->_memType = igCharMetaField_GetDefaultDescriptor();
     igMetaObject_NameFields(temp_s0, &g_beSaveDataDeliver_fieldTable[0], &DAT_004c4398[0], &DAT_004c43a0[0], temp_s2);
 }
 

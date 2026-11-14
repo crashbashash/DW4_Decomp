@@ -1,5 +1,5 @@
 int Gap__igPsx2AudioContext__vfunc_55(void **self, int value) {
-    return (int)FUN_00300db0(self, value, ((DW4VC_132_0 *)(self))->vX()) | 0x20000000;
+    return (int)igObject_MallocAligned(self, value, ((DW4VC_132_0 *)(self))->vX()) | 0x20000000;
 }
 
 int Gap__igPsx2AudioContext__vfunc_33(igPsx2AudioContext *self) {
@@ -7,7 +7,7 @@ int Gap__igPsx2AudioContext__vfunc_33(igPsx2AudioContext *self) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_56(int arg0, int arg1) {
-    FUN_00300f50(arg0, (arg1 & 0xDFFFFFFF));
+    igObject_FreeMemory(arg0, (arg1 & 0xDFFFFFFF));
 }
 
 void Gap__igPsx2AudioContext__vfunc_57(int arg0, int arg1) {
@@ -45,7 +45,7 @@ void Gap__igPsx2AudioContext__vfunc_37(int *arg0, void *arg1, int arg2, int arg3
         return;
     }
     if (*(unsigned char *)((char *)arg1 + 8) != 0) {
-        FUN_0032d850(&sp, *(int *)((char *)(arg1) + 12), arg2 | 0x260000, arg3, 0, 0);
+        igPsx2IopRpcConnection_CallWithData(&sp, *(int *)((char *)(arg1) + 12), arg2 | 0x260000, arg3, 0, 0);
     } else {
         *(int *)((char *)p + 28) = arg3;
         p->c2 = 1;
@@ -65,7 +65,7 @@ int Gap__igPsx2AudioContext__vfunc_38(igPsx2AudioContext *arg0, int arg1) {
     int sp1C;
     int sp18;
 
-    FUN_0032d850(&sp18, arg0->_connection, arg1 | 0xB0000, 0, &sp1C, 0);
+    igPsx2IopRpcConnection_CallWithData(&sp18, arg0->_connection, arg1 | 0xB0000, 0, &sp1C, 0);
     return sp1C;
 }
 

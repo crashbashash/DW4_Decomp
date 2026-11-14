@@ -200,9 +200,9 @@ int FUN_00208200();
 int p2ShutdownTimer();
 int p2OpenVu1Symbols();
 int p2CloseVu1Symbols();
-int FUN_00330730();
-int FUN_00330770();
-char *FUN_003307b0(unsigned int data, int size, int heap);
+int Memory_AllocateAligned16();
+int Memory_FreeToSelector();
+char *Memory_ReallocateAligned16(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
 void FUN_001fcb00(void);
 void p2SendGsRegister(int reg);
@@ -1169,7 +1169,7 @@ int p2AddVuProgram(unsigned int flags, unsigned int start, unsigned int end) {
 void p2SetVuProgramName(int program, const char *name) {
     char *copy;
 
-    p2VuPrograms[program].name = (char *)FUN_00330730(strlen(name) + 1, P2_HEAP_VU);
+    p2VuPrograms[program].name = (char *)Memory_AllocateAligned16(strlen(name) + 1, P2_HEAP_VU);
     copy = p2VuPrograms[program].name;
     if (copy != 0) {
         strcpy(copy, name);
@@ -1253,7 +1253,7 @@ void p2FreeVuProgramNames(void) {
     for (i = 0; i <= p2VuProgramLast; i++) {
         name = &p2VuPrograms[i].name;
         if (*name != 0) {
-            FUN_00330770(*name, P2_HEAP_VU);
+            Memory_FreeToSelector(*name, P2_HEAP_VU);
             *name = 0;
         }
     }
@@ -1586,7 +1586,7 @@ p2DisplayList *p2BeginDisplayList(int mode) {
     list->vertexCount = p2VertexCount;
     list->primitiveCount = p2PrimitiveCount;
     memset(&p2DisplayListPacket, 0, sizeof(p2DmaPacket));
-    p2DisplayListPacket.chain = FUN_00330730(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
+    p2DisplayListPacket.chain = Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
     p2DisplayListPacket.cursor = p2DisplayListPacket.chain;
     p2DisplayListPacket.end = p2DisplayListPacket.chain + P2_DISPLAY_LIST_BLOCK_SIZE - 16;
     p2SavedVif1Packet = p2DmaCurrentPacket[P2_DMA_VIF1];
@@ -1633,7 +1633,7 @@ void p2EndDisplayList(void) {
         p2DisplayListMode = 0;
         p2DmaCurrentPacket[P2_DMA_VIF1] = p2SavedVif1Packet;
         size = block->end - block->data;
-        data = FUN_003307b0(block->data, size, P2_HEAP_DISPLAY_LIST);
+        data = Memory_ReallocateAligned16(block->data, size, P2_HEAP_DISPLAY_LIST);
         if ((unsigned int)data != block->data && block->previous) {
             ((p2DmaChainTag *)(block->previous->end - 16))->field.addr = (unsigned int)data;
         }
@@ -1658,7 +1658,7 @@ void p2GrowDisplayList(void) {
     previous->next = block;
     p = (unsigned int *)p2DisplayListPacket.cursor;
     memset(&p2DisplayListPacket, 0, sizeof(p2DmaPacket));
-    p2DisplayListPacket.chain = FUN_00330730(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
+    p2DisplayListPacket.chain = Memory_AllocateAligned16(P2_DISPLAY_LIST_BLOCK_SIZE, P2_HEAP_DISPLAY_LIST);
     p2DisplayListPacket.cursor = p2DisplayListPacket.chain;
     p2DisplayListPacket.end = p2DisplayListPacket.chain + P2_DISPLAY_LIST_BLOCK_SIZE - 16;
     p2DisplayListPacket.limit = p2DisplayListPacket.end - P2_DISPLAY_LIST_RESERVE;
@@ -1722,7 +1722,7 @@ void p2FreeDisplayList(p2DisplayList *list) {
     if (next != 0) {
         p2FreeDisplayList(next);
     }
-    FUN_00330770(list->data, P2_HEAP_DISPLAY_LIST);
+    Memory_FreeToSelector(list->data, P2_HEAP_DISPLAY_LIST);
     p2FreeDisplayListBlock(list);
 }
 
@@ -1774,7 +1774,7 @@ int p2CopyDisplayListData(p2DisplayList *list, char *dest) {
 p2DisplayList *p2CopyDisplayList(p2DisplayList *list) {
     p2DisplayList *copy;
 
-    copy = (p2DisplayList *)FUN_00330730(sizeof(p2DisplayList), P2_HEAP_DISPLAY_LIST);
+    copy = (p2DisplayList *)Memory_AllocateAligned16(sizeof(p2DisplayList), P2_HEAP_DISPLAY_LIST);
     memcpy(copy, list, sizeof(p2DisplayList));
     return copy;
 }

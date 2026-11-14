@@ -1,4 +1,4 @@
-void Gap__Core__igPsx2Semaphore__vfunc_26(int *arg0, void *arg1, int arg2) {
+void igPsx2Semaphore_SetInitialCount(int *arg0, void *arg1, int arg2) {
     if (*(int *)((char *)(arg1) + 12) == -1) {
         *(int *)((char *)(arg1) + 16) = arg2;
         *arg0 = g_resultSuccess.v;
@@ -10,11 +10,11 @@ void Gap__Core__igPsx2Semaphore__vfunc_26(int *arg0, void *arg1, int arg2) {
 /* IgPsx2Semaphore vtable slot 27, a plain getter that returns the reflected field _initCount (the
  * initial count the semaphore was created with, +16). */
 
-int Gap__Core__igPsx2Semaphore__vfunc_27(igPsx2Semaphore *self) {
+int igPsx2Semaphore_GetInitialCount(igPsx2Semaphore *self) {
     return self->_initCount;
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_28(int *arg0, igPsx2Semaphore *self, int arg2) {
+void igPsx2Semaphore_SetMaximumCount(int *arg0, igPsx2Semaphore *self, int arg2) {
     if (self->_semaID == -1) {
         self->_maxCount = arg2;
         *arg0 = g_resultSuccess.v;
@@ -26,11 +26,11 @@ void Gap__Core__igPsx2Semaphore__vfunc_28(int *arg0, igPsx2Semaphore *self, int 
 /* IgPsx2Semaphore vtable slot 29, a plain getter that returns the reflected field _maxCount (the
  * maximum count the semaphore was created with, +20). */
 
-int Gap__Core__igPsx2Semaphore__vfunc_29(igPsx2Semaphore *self) {
+int igPsx2Semaphore_GetMaximumCount(igPsx2Semaphore *self) {
     return self->_maxCount;
 }
 
-int Gap__Core__igPsx2Semaphore__vfunc_30(igPsx2Semaphore *arg0) {
+int igPsx2Semaphore_GetCount(igPsx2Semaphore *arg0) {
     int sp[8];
     int temp_v0;
     temp_v0 = arg0->_semaID;
@@ -41,7 +41,7 @@ int Gap__Core__igPsx2Semaphore__vfunc_30(igPsx2Semaphore *arg0) {
     return sp[0];
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, igPsx2Semaphore *self) {
+void igPsx2Semaphore_Create(int *arg0, igPsx2Semaphore *self) {
     SemaParam param;
     char *var_v1_2;
     unsigned int var_v0;
@@ -69,7 +69,7 @@ void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, igPsx2Semaphore *self) {
     }
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_24(int *arg0, int *arg1) {
+void igPsx2Semaphore_Destroy(int *arg0, int *arg1) {
     int id = arg1[3];
     const int *p;
     if (id == -1) {
@@ -82,7 +82,7 @@ void Gap__Core__igPsx2Semaphore__vfunc_24(int *arg0, int *arg1) {
     *arg0 = *p;
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_32(int *arg0, void *arg1) {
+void igPsx2Semaphore_ISignal(int *arg0, void *arg1) {
     const int *p;
     int temp_a0;
 
@@ -99,7 +99,7 @@ void Gap__Core__igPsx2Semaphore__vfunc_32(int *arg0, void *arg1) {
     }
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_35(int *arg0, void *arg1) {
+void igPsx2Semaphore_WaitBlocking(int *arg0, void *arg1) {
     const int *p;
     int h = *(int *)((char *)(arg1) + 12);
     if (h == -1) {
@@ -114,20 +114,20 @@ void Gap__Core__igPsx2Semaphore__vfunc_35(int *arg0, void *arg1) {
     }
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, igPsx2Semaphore *self) {
+void igPsx2Semaphore_IPoll(int *arg0, igPsx2Semaphore *self) {
     const int *p;
     if (self->_semaID == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(self->_semaID) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
 }
 
 SystemAllocator::SystemAllocator() {}
 
-void FUN_0032f300(void) {
+void SystemAllocator_Activate(void) {
     if (g_activeSystemAllocator[0] == 0) {
         g_activeSystemAllocator[0] = &g_systemAllocator;
     }
 }
 
-void FUN_0032f330(void) {
+void SystemAllocator_Deactivate(void) {
     if (g_activeSystemAllocator[0] != 0) {
         g_activeSystemAllocator[0]->vfunc_3();
     }
@@ -137,7 +137,7 @@ int FUN_0032f370(void) {
     return 6;
 }
 
-void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map) {
+void SystemAllocator_GetStatistics(SystemAllocator *self, ThreadMemoryMap *map) {
     unsigned top;
     unsigned marker;
     unsigned bottom;
@@ -154,7 +154,7 @@ void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map) {
     if (size == -1) {
         size = g_rangeEnd[0];
     }
-    FUN_003295d0(self, (int *)map);
+    SystemAllocatorBase_GetStatistics(self, (int *)map);
     map->stackTop = top;
     map->stackBottom = bottom - size;
     map->stackSize = size;
@@ -173,7 +173,7 @@ void FUN_0032f380(SystemAllocator *self, ThreadMemoryMap *map) {
     map->reserved = 0;
 }
 
-int FUN_0032f780(int arg0, int arg1) {
+int SystemAllocator_Sbrk(int arg0, int arg1) {
     int s1 = sbrk(arg1);
     int low;
     int pad;

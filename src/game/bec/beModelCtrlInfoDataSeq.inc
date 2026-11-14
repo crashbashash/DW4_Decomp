@@ -100,7 +100,7 @@ void beModelCtrlInfoDataSeq_InitFields(void) {
         igObject_Destroy(temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = FUN_002be100();
+    *(int *)((char *)(temp_s0) + 56) = igNamedObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0) + 52) = 1;
     igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoDataSeq_fieldTable[0], &DAT_004c54e0[0], &DAT_004c54e8[0], temp_s2);
 }

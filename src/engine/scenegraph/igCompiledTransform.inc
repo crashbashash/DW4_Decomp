@@ -90,15 +90,15 @@ void igCompiledTransform_InitFields(void) {
     temp_s1->f56 = (int)FUN_00194dd0();
     temp_s1->f38 = 0;
     temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    FUN_002ea4b0(temp_v0, -1);
+    igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3))->f38 = 0;
     temp_s1_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    temp_s1_2->f56 = FUN_002b9540();
+    temp_s1_2->f56 = igStringObj_GetOrCreateMetaObject();
     temp_s1_2->f52 = 1;
     temp_s1_2->f38 = 0;
     temp_v0_2 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
-    FUN_002d3890(temp_v0_2, 1);
+    igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
     temp_v0_2->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6))->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7))->f38 = 0;

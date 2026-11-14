@@ -52,10 +52,10 @@ void igColorMaskAttr_InitFields(void) {
     temp_s0 = (void *)g_igColorMaskAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igColorMaskAttr_ctorTable[0], 5);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
     igMetaObject_NameFields(temp_s0, &g_igColorMaskAttr_fieldTable[0], &DAT_004868e0[0], &DAT_00486900[0], temp_s1);
 }
 

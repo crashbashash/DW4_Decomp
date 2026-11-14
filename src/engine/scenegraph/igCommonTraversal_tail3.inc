@@ -259,7 +259,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     if (index < 0) {
         names = self->_segmentOverrideNames;
         insertKey.set(str);
-        pos = FUN_002d6e60(names, &insertKey, FUN_001b7740);
+        pos = List_LowerBound(names, &insertKey, FUN_001b7740);
         List_InsertWords(names, pos, 1, &insertKey);
         stack = ((igObject *)FUN_0019cba0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         newStackRef.p = stack;
@@ -285,7 +285,7 @@ igObject *FUN_001b7920(igCommonTraversal *self, int name) {
     int last;
     SegmentStackList *stack;
     igObject *top;
-    index = FUN_0030bfa0((SegmentStackList *)self->_segmentOverrideNames, name, strcasecmp);
+    index = igStringObjList_BinarySearch((SegmentStackList *)self->_segmentOverrideNames, name, strcasecmp);
     if (index < 0) {
         return 0;
     }
@@ -310,7 +310,7 @@ int FUN_001b7af0(void *arg0, int arg1) {
     if ((arg1 == 0) || (strlen(arg1) == 0)) {
         return 0;
     }
-    temp_v0_2 = FUN_0030bfa0(*(int *)((char *)(arg0) + 260), arg1, &strcasecmp);
+    temp_v0_2 = igStringObjList_BinarySearch(*(int *)((char *)(arg0) + 260), arg1, &strcasecmp);
     if (temp_v0_2 < 0) {
         return 0;
     }

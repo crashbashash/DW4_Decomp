@@ -49,7 +49,7 @@ void *FUN_001524c0(struct S_1524c0 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -112,16 +112,16 @@ void igPsx2VertexArray1_1_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPsx2VertexArray1_1_ctorTable[0], 7);
     f1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)f1)->_metaObject = FUN_002c9170();
+    ((igObjectRefMetaField *)f1)->_metaObject = igPointerList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f1)->_persistent = 0;
     f2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)f2)->_metaObject = FUN_002c9170();
+    ((igObjectRefMetaField *)f2)->_metaObject = igPointerList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f2)->_persistent = 0;
     f3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)f3)->_metaObject = FUN_00152800();
     ((igObjectRefMetaField *)f3)->_persistent = 0;
     f4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    FUN_002ea4b0(f4, -1);
+    igIntMetaField_SetDefault(f4, -1);
     ((igIntMetaField *)f4)->_persistent = 0;
     ((igLongMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)))->_persistent = 0;
     f5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));

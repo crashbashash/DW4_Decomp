@@ -31,7 +31,7 @@ StringPool *StringPool_Destroy(StringPool *self, long long delete_flag) {
         StringPool_DestroyChunks(self);
         StringTable_Destroy(self->table, 1);
         if ((short)delete_flag > 0) {
-            FUN_002eb050((int)self);
+            StringPool_OperatorDelete((int)self);
         }
     }
     return self;
@@ -74,14 +74,14 @@ void * StringPool_Allocate(int arg0) {
     return ((igMemoryPoolView *)temp_v0)->Allocate(arg0);
 }
 
-void FUN_002eb050(int arg0) {
+void StringPool_OperatorDelete(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
 }
 
-void FUN_002eb090(int a0, int a1)
+void StringPool_SetBlockSize(int a0, int a1)
 {
     *(int *)((char *)a0 + 8) = a1;
 }

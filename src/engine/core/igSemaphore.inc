@@ -1,9 +1,9 @@
-void * FUN_002ba650(int arg0) {
-    FUN_002ba730();
+void * igSemaphore_Create(int arg0) {
+    igSemaphore_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585970), (igMemoryPoolView *)arg0));
 }
 
-igMetaObject *FUN_002ba690(void) {
+igMetaObject *igSemaphore_GetOrCreateMetaObject(void) {
     if (g_igSemaphore_metaObject[0] == 0) {
         g_igSemaphore_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,23 +14,23 @@ igMetaObject *igSemaphore_GetMetaObject(void)
 {
     igMetaObject *g = g_igSemaphore_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002ba730();
+        igSemaphore_EnsureRegistered();
     return g_igSemaphore_metaObject[0];
 }
 
-void FUN_002ba730(void)
+void igSemaphore_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igSemaphore_Register);
 }
 
 void igSemaphore_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igSemaphore_metaObject),
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igSemaphore_GetMetaObject,
+        igSemaphore_GetMetaObjectFunction,
         igSemaphore_className,
         0xC, /* instance size */
         0,
@@ -40,11 +40,11 @@ void igSemaphore_Register(void) {
     );
 }
 
-void thunk_igSemaphore_GetMetaObject(void) {
+void igSemaphore_GetMetaObjectFunction(void) {
     igSemaphore_GetMetaObject();
 }
 
-void FUN_002ba7c0(void) {
-    *(int *)((char *)(((void * *)g_igSemaphore_metaObject)[0]) + 60) = (int)(&thunk_igPsx2Semaphore_GetMetaObject);
+void igSemaphore_SetAbstractProxy(void) {
+    *(int *)((char *)(((void * *)g_igSemaphore_metaObject)[0]) + 60) = (int)(&igPsx2Semaphore_GetMetaObjectFunction);
 }
 

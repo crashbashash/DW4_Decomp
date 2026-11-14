@@ -86,7 +86,7 @@ void igGuiSystemModel_InitFields(void) {
     sp40[0] = 0;
     sp40[1] = 0;
     FUN_0018e2f0(temp_a0_2, sp40);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));

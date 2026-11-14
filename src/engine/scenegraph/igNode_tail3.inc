@@ -32,7 +32,7 @@ void FUN_001d3550(void *arg0) {
 }
 
 void Gap__Sg__igNode__vfunc_17(void *arg0) {
-    Gap__Core__igObject__vfunc_15();
+    igObject_UserPostLoad();
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 

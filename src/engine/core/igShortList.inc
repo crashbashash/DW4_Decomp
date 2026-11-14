@@ -1,9 +1,9 @@
-void FUN_002c9d80(int arg0) {
-    FUN_002c9ea0();
+void igShortList_Create(int arg0) {
+    igShortList_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586830), (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_002c9dc0(void) {
+igMetaObject *igShortList_GetOrCreateMetaObject(void) {
     if (g_igShortList_metaObject[0] == 0) {
         g_igShortList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igShortList_GetMetaObject(void)
 {
     igMetaObject *g = g_igShortList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c9ea0();
+        igShortList_EnsureRegistered();
     return g_igShortList_metaObject[0];
 }
 
@@ -26,19 +26,19 @@ int igShortList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002c9ea0(void)
+void igShortList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igShortList_Register);
 }
 
 void igShortList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igShortList_metaObject),
         igDataList_Register,                 /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igShortList_GetMetaObject,
+        igShortList_GetMetaObjectFunction,
         igShortList_className,
         0x14, /* instance size */
         igShortList_GetVTable,
@@ -48,11 +48,11 @@ void igShortList_Register(void) {
     );
 }
 
-void thunk_igShortList_GetMetaObject(void) {
+void igShortList_GetMetaObjectFunction(void) {
     igShortList_GetMetaObject();
 }
 
-void FUN_002c9f30(void) {
+void igShortList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;

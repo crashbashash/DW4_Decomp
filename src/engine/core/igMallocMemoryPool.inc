@@ -1,24 +1,24 @@
-int FUN_002ce1b0(void) {
+int igMallocMemoryPool_GetMessageLevelMetaEnum(void) {
     if (DAT_00586b78[0] == 0) {
         DAT_00586b78[0] = ((int)igMetaEnum_Create((char *)&text_MessageLevel[0], (char **)&DAT_004c1a10[0], &DAT_004c1a20[0], 4));
     }
     return DAT_00586b78[0];
 }
 
-void Gap__Core__igMallocMemoryPool__vfunc_11(int extra0) {
+void igMallocMemoryPool_InitDefaults(int extra0) {
     GPR_00554dbc = (GPR_00554dbc + 1);
-    FUN_002f00a0((void *)extra0);
+    igMemoryPool_InitDefaults((void *)extra0);
 }
 
-void *Gap__Core__igMallocMemoryPool__vfunc_21(void *self, void *src) {
+void *igMallocMemoryPool_Clone(void *self, void *src) {
     void *o;
     if (*g_objectSystem[0] != 0) {
-        FUN_002ce3c0();
+        igMallocMemoryPool_EnsureRegistered();
         return ((void *)igObject_CloneViaMetadata((void **)self, (int)src));
     }
-    o = FUN_002f0040(0xA0, 0, (int)(Memory_GetDefaultAllocator()));
+    o = igObject_OperatorNew(0xA0, 0, (int)(Memory_GetDefaultAllocator()));
     if (o != 0) {
-        o = FUN_00323600((igMallocMemoryPool *)o, (int)self);
+        o = igMallocMemoryPool_CopyConstruct((igMallocMemoryPool *)o, (int)self);
     }
     return o;
 }
@@ -30,7 +30,7 @@ igMetaObject *igMallocMemoryPool_GetMetaObject(void)
         ready = (g_igMallocMemoryPool_metaObject[0]->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_002ce3c0();
+    igMallocMemoryPool_EnsureRegistered();
 done:
     return g_igMallocMemoryPool_metaObject[0];
 }
@@ -40,7 +40,7 @@ int igMallocMemoryPool_GetVTable(void) {
     int temp_s0;
     igObject *q0;
     igObject *q1;
-    FUN_003235c0(&pool);
+    igMallocMemoryPool_Initialize(&pool);
     temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     pool._vtable = (int)&DAT_00530e90[0];
     q0 = (igObject *)&pool._eventTracker;
@@ -67,7 +67,7 @@ int igMallocMemoryPool_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002ce3c0(void)
+void igMallocMemoryPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMallocMemoryPool_Register);
 }
@@ -78,7 +78,7 @@ void igMallocMemoryPool_Register(void) {
         ((char *)g_igMallocMemoryPool_metaObject),
         igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
-        thunk_igMallocMemoryPool_GetMetaObject,
+        igMallocMemoryPool_GetMetaObjectFunction,
         igMallocMemoryPool_className,
         0xA0, /* instance size */
         igMallocMemoryPool_GetVTable,
@@ -88,7 +88,7 @@ void igMallocMemoryPool_Register(void) {
     );
 }
 
-void thunk_igMallocMemoryPool_GetMetaObject(void) {
+void igMallocMemoryPool_GetMetaObjectFunction(void) {
     igMallocMemoryPool_GetMetaObject();
 }
 
@@ -100,19 +100,19 @@ void igMallocMemoryPool_InitFields(void) {
     igEnumMetaField *messageLevel;
     int defaultMessageLevel;
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igMallocMemoryPool_ctorTable, 10);
-    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base), -1);
-    FUN_0030ec10((void **)igMetaObject_GetFieldAt(meta, base + 2), 0xFFFFFFFFFFFFFFFFULL);
-    FUN_0030eda0((void **)igMetaObject_GetFieldAt(meta, base + 4), 4);
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base), -1);
+    igUnsignedLongMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 2), 0xFFFFFFFFFFFFFFFFULL);
+    igUnsignedShortMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 4), 4);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
-    eventTracker->_metaObject = (int)FUN_002c57c0();
+    eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 7);
-    allocationLock->_metaObject = (int)FUN_002ba690();
+    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
     defaultMessageLevel = DAT_004c25f0[0];
-    FUN_002dc7a0((igMetaFieldView *)messageLevel, &defaultMessageLevel);
-    messageLevel->_getMetaEnumFunction = (int)FUN_002ce1b0;
-    FUN_002ea4b0((void **)igMetaObject_GetFieldAt(meta, base + 9), DAT_004c25f8[0]);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, &defaultMessageLevel);
+    messageLevel->_getMetaEnumFunction = (int)igMallocMemoryPool_GetMessageLevelMetaEnum;
+    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 9), DAT_004c25f8[0]);
     igMetaObject_NameFields(meta, (const char **)g_igMallocMemoryPool_fieldTable, (igMetaField ***)DAT_004c1aa0, DAT_004c1ad0, base);
-    g_igMallocMemoryPool_metaObject[0]->_writeProxy = (int)thunk_igMemoryPool_GetMetaObject;
+    g_igMallocMemoryPool_metaObject[0]->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }
 

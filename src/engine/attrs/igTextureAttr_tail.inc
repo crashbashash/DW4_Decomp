@@ -140,7 +140,7 @@ int FUN_00140c00(void *arg0, int arg1) {
 
 void Gap__Attrs__igTextureAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void Gap__Attrs__igTextureAttr__vfunc_28(S_140c70 *arg0) {

@@ -79,8 +79,8 @@ void beNDMWLogo_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_003c5200();
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), -1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9), -1);
     igMetaObject_NameFields(temp_s0, &g_beNDMWLogo_fieldTable[0], &DAT_004cacc0[0], &DAT_004cacf0[0], temp_s2);
 }
 

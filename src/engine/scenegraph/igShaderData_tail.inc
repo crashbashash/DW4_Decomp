@@ -185,7 +185,7 @@ void Gap__Sg__igShaderData__vfunc_17(S0_1d8930 *arg0) {
     int temp_a1;
     void *temp_a0;
 
-    Gap__Core__igObject__vfunc_15();
+    igObject_UserPostLoad();
     temp_a0 = (void *)(arg0->f14);
     temp_a1 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
     if (temp_a1 != *(int *)((char *)(temp_a0) + 8)) {

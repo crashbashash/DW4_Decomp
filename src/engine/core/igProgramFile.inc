@@ -2,7 +2,7 @@ igMetaObject *igProgramFile_GetMetaObject(void)
 {
     igMetaObject *g = g_igProgramFile_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002cea80();
+        igProgramFile_EnsureRegistered();
     return g_igProgramFile_metaObject[0];
 }
 
@@ -41,19 +41,19 @@ int igProgramFile_GetVTable(void) {
     return t;
 }
 
-void FUN_002cea80(void)
+void igProgramFile_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igProgramFile_Register);
 }
 
 void igProgramFile_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igProgramFile_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igProgramFile_GetMetaObject,
+        igProgramFile_GetMetaObjectFunction,
         igProgramFile_className,
         0x10, /* instance size */
         igProgramFile_GetVTable,
@@ -63,7 +63,7 @@ void igProgramFile_Register(void) {
     );
 }
 
-void thunk_igProgramFile_GetMetaObject(void) {
+void igProgramFile_GetMetaObjectFunction(void) {
     igProgramFile_GetMetaObject();
 }
 
@@ -78,10 +78,10 @@ void igProgramFile_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igProgramFile_ctorTable[0], 2);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))))->_persistent = 0;
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002c4ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFile_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_construct = 0;
     ((igObjectRefMetaField *)temp_s1)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igProgramFile_fieldTable[0], (igMetaField ***)&DAT_004c1b18[0], &DAT_004c1b20[0], temp_s2);
-    ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_abstractProxy = (int)thunk_igElfFile_GetMetaObject;
+    ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_abstractProxy = (int)igElfFile_GetMetaObjectFunction;
 }
 

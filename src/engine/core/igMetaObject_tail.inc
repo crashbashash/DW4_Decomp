@@ -4,7 +4,7 @@ static inline void retain(Instance *object) {
     }
 }
 
-int FUN_002fd610(Instance **out, int meta) {
+int igMetaObject_CreateInstanceDefaultRef(Instance **out, int meta) {
     igSmartPointer<Instance> created((Instance *)igMetaObject_CreateInstanceDefault((void *)meta), kRetainReference);
     igRelease(created.p);
     *out = created.p;
@@ -13,7 +13,7 @@ int FUN_002fd610(Instance **out, int meta) {
 }
 
 /* The new instance arrives with one reference; the pointer takes its own and drops that one. */
-igSmartPointer<igObject> FUN_002fd6e0(int meta, int pool) {
+igSmartPointer<igObject> igMetaObject_CreateInstanceRef(int meta, int pool) {
     igSmartPointer<igObject> created((igObject *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)pool), kRetainReference);
     igRelease(created.get());
     return created;
@@ -186,7 +186,7 @@ block_10:
 
 void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *parent){
     if(parent!=0){
-        if(parent->_children==0)parent->_children=(int)FUN_002c29c0((int)(Memory_GetAllocatorBySelector(*(int *)0x587040)));
+        if(parent->_children==0)parent->_children=(int)__internalNonRefCountedObjectList_Create((int)(Memory_GetAllocatorBySelector(*(int *)0x587040)));
         ObjectPointerList_Append((__internalNonRefCountedObjectList *)((void *)parent->_children), (int)meta);
         meta->_parent=(int)parent;
         meta->_vTablePointer=parent->_vTablePointer;
@@ -338,10 +338,10 @@ void igMetaObject_FinalizeFieldLayout(igMetaObject *arg0) {
     arg0->_requiredAlignment = maxAlign;
     if (arg0->_sizeofSize != -1) arg0->_runTimeSize = -(off & ~(minAlign - 1));
     arg0->_validity |= 4;
-    FUN_002d3150((int *)(((void * *)g_objectSystem)[0]), (int)arg0);
+    igObjectSystem_RunRegistrationCallbacks((int *)(((void * *)g_objectSystem)[0]), (int)arg0);
 }
 
-int FUN_002fe290(igMetaObject *arg0, igMetaObject *arg1) {
+int igMetaObject_IsOfType(igMetaObject *arg0, igMetaObject *arg1) {
     while (arg0 != 0) {
         if (arg1 == arg0) {
             return 1;
@@ -366,7 +366,7 @@ int igMetaObject_GetChildAt(igMetaObject *self, int index) {
     return *(int *)(*(int *)((char *)(self->_children) + 8) + (index * 4));
 }
 
-void *FUN_002fe300(igMetaObject *arg0, int arg1) {
+void *igMetaObject_GetTreeNode(igMetaObject *arg0, int arg1) {
     int cnt;
     int acc;
     int i;
@@ -385,7 +385,7 @@ void *FUN_002fe300(igMetaObject *arg0, int arg1) {
         v = igMetaObject_CountTree((igMetaObject *)k);
         v += acc;
         if (arg1 < v) {
-            return FUN_002fe300(k, arg1 - acc);
+            return igMetaObject_GetTreeNode(k, arg1 - acc);
         }
         acc = v;
     }
@@ -413,12 +413,12 @@ int igMetaObject_GetFieldCount(igMetaObject *self) {
     return ((igMetaFieldList *)self->_metaFields)->_capacity;
 }
 
-void FUN_002fe480(int arg0) {
-    FUN_002d30c0((int *)(((void * *)g_objectSystem)[0]), arg0);
+void igMetaObject_AddExitCallback(int arg0) {
+    igObjectSystem_AddExitCallback((int *)(((void * *)g_objectSystem)[0]), arg0);
 }
 
-void FUN_002fe490(int arg0) {
-    FUN_002d30d0((ObjectSystemView *)(((void * *)g_objectSystem)[0]), (int (*)(int))arg0);
+void igMetaObject_AddRegistrationCallback(int arg0) {
+    igObjectSystem_AddRegistrationCallback((ObjectSystemView *)(((void * *)g_objectSystem)[0]), (int (*)(int))arg0);
 }
 
 void igMetaObject_AddField(igMetaObject *arg0, void *arg1) {
@@ -436,27 +436,27 @@ void igMetaObject_AddField(igMetaObject *arg0, void *arg1) {
     idx = MetaRefList_AppendRetained((__internalObjectList *)((void *)arg0->_metaFields), (igObject *)arg1);
     n = igMetaObject_CountTree((igMetaObject *)arg0);
     for (i = 1; i < n; i++) {
-        m = (char *)FUN_002fe300(arg0, i);
+        m = (char *)igMetaObject_GetTreeNode(arg0, i);
         *(int *)(m + 36) = *(int *)(m + 36) & ~4;
         InternalObjectList_InsertRetained((__internalObjectList *)(*(int *)(m + 40)), idx, (igObject *)arg1);
     }
 }
 
-void FUN_002fe570(igMetaObject *arg0, void *arg1) {
+void igMetaObject_AddFieldAndFinalize(igMetaObject *arg0, void *arg1) {
     igMetaObject_AddField(arg0, arg1);
-    FUN_002fe5a0((int)arg0);
+    igMetaObject_FinalizeFieldLayoutTree((int)arg0);
 }
 
-void FUN_002fe5a0(int arg0) {
+void igMetaObject_FinalizeFieldLayoutTree(int arg0) {
     int temp_s1;
     int var_s0;
     temp_s1 = igMetaObject_CountTree((igMetaObject *)arg0);
     for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-        igMetaObject_FinalizeFieldLayout((igMetaObject *)FUN_002fe300((igMetaObject *)arg0, var_s0));
+        igMetaObject_FinalizeFieldLayout((igMetaObject *)igMetaObject_GetTreeNode((igMetaObject *)arg0, var_s0));
     }
 }
 
-int FUN_002fe600(igTDataList<igMetaObject *> *list, igMetaObject *object) {
+int igMetaObject_AddToMetaObjectList(igTDataList<igMetaObject *> *list, igMetaObject *object) {
     int i = list->find(object);
     if (i != -1) {
         return i;
@@ -473,7 +473,7 @@ int FUN_002fe600(igTDataList<igMetaObject *> *list, igMetaObject *object) {
     return list->_count - 1;
 }
 
-int FUN_002fe730(int arg0) {
+int igMetaObject_GetPersistentFieldCount(int arg0) {
     int n = 0;
     int i;
 
@@ -495,7 +495,7 @@ void igMetaObject_AssignTypeId(igMetaObject *meta){
     }
 }
 
-void FUN_002fe810(int *out, igMetaObject *s, igMemoryPoolView *a) {
+void igMetaObject_CopyVTable(int *out, igMetaObject *s, igMemoryPoolView *a) {
     if (s->_vTablePointer == 0) { *out = g_resultFailure.v; return; }
     if (s->_abstractState != 0) { *out = g_resultFailure.v; return; }
     if (a == 0) a = ((igMemoryPoolView *)Memory_GetDefaultAllocator());

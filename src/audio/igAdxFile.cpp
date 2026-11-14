@@ -44,10 +44,10 @@ void *igObject_GetAllocator(igObject *self);
 int igMetaObject_CountInstances(int meta, int recursive);
 char *Memory_AllocateAlignedWithAllocator(int size, int align, void *allocator); /* aligned allocation */
 int Memory_FreeBufferWithAllocator(int buffer, int allocator);
-void FUN_002e30b0(igObject *file, const char *fileName); /* sets igFile::_fileName */
-int FUN_003082b0(const char *format, ...);  /* reports a warning */
-int FUN_00304430(const char *format, ...);  /* prints */
-int FUN_00304680(...);
+void igFile_SetFileName(igObject *file, const char *fileName); /* sets igFile::_fileName */
+int igReport_Info(const char *format, ...);  /* reports a warning */
+int igReport_Printf(const char *format, ...);  /* prints */
+int igReport_Flush(...);
 int igAdx_FindAfsFile(int fileName);  /* the file's index in the AFS file list, or -1 */
 void igAdx_ExecVsync(void);
 void igAdx_ExecServer(int);
@@ -194,7 +194,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
     switch (mode) {
     case kRead:
         if (!g_igAdxFile_ignoreReadModeWarning) {
-            answer = FUN_003082b0("Only binary read mode is supported for an igAdxFile file (\"%s\")",
+            answer = igReport_Info("Only binary read mode is supported for an igAdxFile file (\"%s\")",
                                  self->_fileName);
             if (answer == kReportContinue) {
             } else if (answer == kReportIgnoreAlways) {
@@ -208,7 +208,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
     case kWriteBinary:
     case kAppendBinary:
         if (!g_igAdxFile_ignoreWriteWarning) {
-            answer = FUN_003082b0("Only file reading is supported for an igAdxFile file (\"%s\")",
+            answer = igReport_Info("Only file reading is supported for an igAdxFile file (\"%s\")",
                                  self->_fileName);
             if (answer == kReportContinue) {
             } else if (answer == kReportIgnoreAlways) {
@@ -219,7 +219,7 @@ void Gap__igAdxFile__vfunc_21(igResult *result, igAdxFile *self, OpenMode mode)
         return;
     default:
         if (!g_igAdxFile_ignoreOpenModeWarning) {
-            answer = FUN_003082b0("Unrecognized file open mode");
+            answer = igReport_Info("Unrecognized file open mode");
             if (answer == kReportContinue) {
             } else if (answer == kReportIgnoreAlways) {
                 g_igAdxFile_ignoreOpenModeWarning = 1;
@@ -260,7 +260,7 @@ igAdxFile *Gap__igAdxFile__vfunc_23(igAdxFile *self, const char *fileName, const
 {
     bool opened;
 
-    FUN_002e30b0(self, fileName);
+    igFile_SetFileName(self, fileName);
     if (strcmp(mode, DAT_00500060) == 0) {
         opened = ((igAdxFileVirtuals *)self)->vfunc_21(kReadBinary).succeeded();
     } else if (strcmp(mode, DAT_00500068) == 0) {
@@ -348,8 +348,8 @@ int Gap__igAdxFile__vfunc_25(igAdxFile *self, char *dest, int size, int count)
                 }
                 ADXF_ReadNw(self->_adxf, sectors, (char *)self->_pTmpBuffer);
             } else {
-                FUN_00304430("igAdxFile::3 read cancel\n");
-                FUN_00304680();
+                igReport_Printf("igAdxFile::3 read cancel\n");
+                igReport_Flush();
             }
             if (self->_bUseAsync == 0 || self->_bUseAlchemyAsync != 0) {
                 igAdxFile_WaitForReadEnd(self);

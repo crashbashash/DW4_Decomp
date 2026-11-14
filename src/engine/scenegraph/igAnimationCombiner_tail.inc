@@ -32,7 +32,7 @@ void FUN_001abca0(void) {
     allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]);
     g_igAnimation_instance.release();
     g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
-    FUN_00306e50(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, &text_cleanCombinerStates[0], &GPR_00554b84, 0, 0);
+    igRegistry_GetValueBool(*(int *)((char *)(((int * *)g_objectSystem)[0]) + 56), 7, &text_cleanCombinerStates[0], &GPR_00554b84, 0, 0);
 }
 
 void FUN_001abdf0(void) {

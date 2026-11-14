@@ -9,10 +9,10 @@ struct W {
     Obj *f56; Obj *f60; Obj *f64; unsigned char f68; char p4[3]; int f72;
 };
 extern "C" {
-int FUN_002d9130(void *);
-void *FUN_002c37e0(void *);
-int FUN_00308850(W *, void *);
-void *FUN_00309640(W *, void *);
+int igDirectory_AddLoadedRef(void *);
+void *igIGBFile_Create(void *);
+int igResource_AddDirectory(W *, void *);
+void *igResource_ReadFileWithSearchPaths(W *, void *);
 void *igObject_GetAllocator(W *);
 int StringPool_Allocate(int);
 int StringPool_Construct(int);
@@ -21,20 +21,20 @@ int StringChunk_ReleaseHeader(int, int *);
 extern int DAT_00586f20[4];
 }
 
-extern "C" igSmartPointer<Obj> FUN_003087a0(W *, int);
-extern "C" void *FUN_00308fb0(W *arg0, int arg1) {
+extern "C" igSmartPointer<Obj> igResource_GetDirectory(W *, int);
+extern "C" void *igResource_GetOrLoadDirectory(W *arg0, int arg1) {
     Res *r;
     Obj *a;
     int *old;
     int pool;
     void *res;
 
-    r = (Res *)FUN_003087a0(arg0, arg1).p;
+    r = (Res *)igResource_GetDirectory(arg0, arg1).p;
     if (r != 0) {
-        FUN_002d9130(r);
+        igDirectory_AddLoadedRef(r);
         return r;
     }
-    igSmartPointer<Res> created((Res *)FUN_002c37e0(arg0->f56 != 0 ? (void *)arg0->f56 : igObject_GetAllocator(arg0)));
+    igSmartPointer<Res> created((Res *)igIGBFile_Create(arg0->f56 != 0 ? (void *)arg0->f56 : igObject_GetAllocator(arg0)));
     created.get()->f36 = arg0->f68;
     created.get()->f164 = arg0->f72;
     created.get()->f65 = arg0->f8;
@@ -92,7 +92,7 @@ extern "C" void *FUN_00308fb0(W *arg0, int arg1) {
     }
     r->f20 = (int *)pool;
     created.get()->f32 = arg0;
-    FUN_002d9130(created.get());
-    FUN_00308850(arg0, created.get());
-    return FUN_00309640(arg0, created.get());
+    igDirectory_AddLoadedRef(created.get());
+    igResource_AddDirectory(arg0, created.get());
+    return igResource_ReadFileWithSearchPaths(arg0, created.get());
 }

@@ -54,7 +54,7 @@ void igClippingStateAttr_InitFields(void) {
     temp_s0 = (void *)g_igClippingStateAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igClippingStateAttr_ctorTable[0], 1);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
     igMetaObject_NameFields(temp_s0, &g_igClippingStateAttr_fieldTable[0], &DAT_00486948[0], &DAT_00486950[0], temp_s1);
 }
 

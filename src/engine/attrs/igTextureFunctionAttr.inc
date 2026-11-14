@@ -65,8 +65,8 @@ void igTextureFunctionAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &g_igTextureFunctionAttr_ctorTable[0], 7);
     temp_v0 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0);
-    FUN_002dc7a0(temp_v0, &DAT_00485be0[0]);
-    temp_v0->f52 = FUN_002d1870;
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485be0[0]);
+    temp_v0->f52 = igMetaEnum_GetEmpty;
     t1 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1);
     t1->f48 = (void (*)())FUN_00141250;
     t2 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2);
@@ -75,9 +75,9 @@ void igTextureFunctionAttr_InitFields(void) {
     t3->f52 = FUN_0014d450;
     t4 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4);
     t4->f52 = FUN_0014d4b0;
-    FUN_0030e750(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5), 2);
+    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5), 2);
     temp_v0_2 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6);
-    FUN_002dc7a0(temp_v0_2, &DAT_00485be8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_00485be8[0]);
     temp_v0_2->f52 = FUN_0014d510;
     igMetaObject_NameFields(temp_s1, &g_igTextureFunctionAttr_fieldTable[0], &DAT_00485ba0[0], &DAT_00485bc0[0], temp_s0);
 }

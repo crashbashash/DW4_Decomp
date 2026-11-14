@@ -23,7 +23,7 @@ void FUN_001479b0(igPsx2Controller *arg0) {
 }
 
 void Gap__igPsx2Controller__vfunc_11(int arg0) {
-    Gap__Core__igObject__vfunc_09();
+    igObject_InitDefaults();
     FUN_001479b0((igPsx2Controller *)arg0);
 }
 
@@ -35,7 +35,7 @@ void Gap__igPsx2Controller__vfunc_12(void *arg0) {
     if (temp_a0 != 0) {
         Memory_FreeBuffer(temp_a0);
     }
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3) {

@@ -1,9 +1,9 @@
-void FUN_002ca410(int arg0) {
-    FUN_002ca530();
+void igUnsignedIntList_Create(int arg0) {
+    igUnsignedIntList_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586858), (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_002ca450(void) {
+igMetaObject *igUnsignedIntList_GetOrCreateMetaObject(void) {
     if (g_igUnsignedIntList_metaObject[0] == 0) {
         g_igUnsignedIntList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igUnsignedIntList_GetMetaObject(void)
 {
     igMetaObject *g = g_igUnsignedIntList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002ca530();
+        igUnsignedIntList_EnsureRegistered();
     return g_igUnsignedIntList_metaObject[0];
 }
 
@@ -26,19 +26,19 @@ int igUnsignedIntList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002ca530(void)
+void igUnsignedIntList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igUnsignedIntList_Register);
 }
 
 void igUnsignedIntList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igUnsignedIntList_metaObject),
         igDataList_Register,                       /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igUnsignedIntList_GetMetaObject,
+        igUnsignedIntList_GetMetaObjectFunction,
         igUnsignedIntList_className,
         0x14, /* instance size */
         igUnsignedIntList_GetVTable,
@@ -48,11 +48,11 @@ void igUnsignedIntList_Register(void) {
     );
 }
 
-void thunk_igUnsignedIntList_GetMetaObject(void) {
+void igUnsignedIntList_GetMetaObjectFunction(void) {
     igUnsignedIntList_GetMetaObject();
 }
 
-void FUN_002ca5c0(void) {
+void igUnsignedIntList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;

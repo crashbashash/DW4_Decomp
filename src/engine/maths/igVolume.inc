@@ -53,12 +53,12 @@ void thunk_igVolume_GetMetaObject(void) {
 }
 
 void FUN_00186bb0(void) {
-    FUN_002fe480(&thunk_FUN_0018f4a0);
+    igMetaObject_AddExitCallback(&thunk_FUN_0018f4a0);
 }
 
 void FUN_00186bc0(void) {
     FUN_0018ec40();
-    FUN_002fe490(&FUN_0018edb0);
+    igMetaObject_AddRegistrationCallback(&FUN_0018edb0);
 }
 
 void thunk_FUN_0018f4a0(void) {

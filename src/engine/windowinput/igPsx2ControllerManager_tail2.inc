@@ -25,7 +25,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             al = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
         }
         sp8C = (PropertyText *)igStringObj_Create(al);
-        if (FUN_00306770(g_objectSystem[0]->f56, 3, &text_supportMultitap[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
+        if (igRegistry_GetValueStringObj(g_objectSystem[0]->f56, 3, &text_supportMultitap[0], &sp8C, &DAT_004d7050[0], 0) != 0) {
             s0 = sp8C->chars;
             s0 = (s0 == 0) ? g_stringObjEmptyText[0] : s0;
             if (strcmp(s0, &ALL_5[0]) == 0) {

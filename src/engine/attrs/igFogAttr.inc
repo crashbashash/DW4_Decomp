@@ -50,9 +50,9 @@ void igFogAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igFogAttr_ctorTable[0], 5);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_004866f8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004866f8[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_00149560);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1000.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1000.0f);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     sp[0] = 0.0f;
     sp[3] = 1.0f;

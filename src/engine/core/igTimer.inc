@@ -1,9 +1,9 @@
-void FUN_002b79d0(int arg0) {
-    FUN_002b7ab0();
+void igTimer_Create(int arg0) {
+    igTimer_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585788), (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_002b7a10(void) {
+igMetaObject *igTimer_GetOrCreateMetaObject(void) {
     if (g_igTimer_metaObject[0] == 0) {
         g_igTimer_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,41 +14,41 @@ igMetaObject *igTimer_GetMetaObject(void)
 {
     igMetaObject *g = g_igTimer_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002b7ab0();
+        igTimer_EnsureRegistered();
     return g_igTimer_metaObject[0];
 }
 
-void FUN_002b7ab0(void)
+void igTimer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igTimer_Register);
 }
 
 void igTimer_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igTimer_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igTimer_GetMetaObject,
+        igTimer_GetMetaObjectFunction,
         igTimer_className,
         8, /* instance size */
         0,
-        FUN_002b7b40,
+        igTimer_SetAbstractProxy,
         0, /* extra callback item */
         0 /* callback list */
     );
 }
 
-void thunk_igTimer_GetMetaObject(void) {
+void igTimer_GetMetaObjectFunction(void) {
     igTimer_GetMetaObject();
 }
 
-void FUN_002b7b40(void) {
-    *(int *)((char *)(((void * *)g_igTimer_metaObject)[0]) + 60) = (int)(&thunk_FUN_002c1860);
+void igTimer_SetAbstractProxy(void) {
+    *(int *)((char *)(((void * *)g_igTimer_metaObject)[0]) + 60) = (int)(&thunk_igLongTimer_GetMetaObject);
 }
 
-void thunk_FUN_002c1860(void) {
-    FUN_002c1860();
+void thunk_igLongTimer_GetMetaObject(void) {
+    igLongTimer_GetMetaObject();
 }
 

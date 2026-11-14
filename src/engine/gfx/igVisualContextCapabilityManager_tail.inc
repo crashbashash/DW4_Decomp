@@ -115,7 +115,7 @@ void FUN_00164f50(igVisualContextCapabilityManager_164f50 *self)
         }
     }
 
-    self->capabilities56 = FUN_002b79d0(FUN_00165ce0((int *)self));
+    self->capabilities56 = igTimer_Create(FUN_00165ce0((int *)self));
     self->capabilities56->vfunc_29();
 
     arg = FUN_00165d10((int *)self);
@@ -149,8 +149,8 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     properties = ((PropertyRoot *)g_objectSystem[0])->properties;
     showFrameRate = self->showFrameRate;
     commandLineFrame = self->commandLineFrame;
-    thunk_FUN_00306e50(properties, 4, text_showFrameRate, &showFrameRate, showFrameRate, 1);
-    thunk_FUN_00306e50(properties, 4, text_commandLineFrameRate, &commandLineFrame, commandLineFrame, 1);
+    thunk_igRegistry_GetValueBool(properties, 4, text_showFrameRate, &showFrameRate, showFrameRate, 1);
+    thunk_igRegistry_GetValueBool(properties, 4, text_commandLineFrameRate, &commandLineFrame, commandLineFrame, 1);
     self->showFrameRate = showFrameRate;
     self->commandLineFrame = commandLineFrame;
 }
@@ -177,7 +177,7 @@ void FUN_00165bb0(char *arg0) {
         }
         DAT_00560758 = 0;
     }
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void FUN_00165cb0(void *arg0)
@@ -394,7 +394,7 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_249(1000.0f);
     }
     if (flags & 0x20) {
-        thunk_FUN_003065f0(settings, 4, text_shadingMode, &shadingMode, 1, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, text_shadingMode, &shadingMode, 1, 1);
         hot = -1;
         ctx->vfunc_67(&hot);
         colour.x = 0.0f; colour.y = 0.0f; colour.z = 0.0f; colour.w = 1.0f;
@@ -407,9 +407,9 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_225(shadingMode);
     }
     if (flags & 0x40) {
-        thunk_FUN_00306e50(settings, 4, text_cullEnable, &cullEnable, 0, 1);
-        thunk_FUN_003065f0(settings, 4, text_cullMode, &cullMode, 0, 1);
-        thunk_FUN_003065f0(settings, 4, text_fillMode, &fillMode, 0, 1);
+        thunk_igRegistry_GetValueBool(settings, 4, text_cullEnable, &cullEnable, 0, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, text_cullMode, &cullMode, 0, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, text_fillMode, &fillMode, 0, 1);
         ctx->vfunc_215(0);
         ctx->vfunc_217(6);
         ctx->vfunc_219(0.0f);
@@ -461,8 +461,8 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
     }
     if (arg0->f61 != 0) {
         if (DAT_005607b0[0] == 0) {
-            FUN_00304430(&DAT_004df130[0], (char *)g_gsEventCount);
-            FUN_00304680();
+            igReport_Printf(&DAT_004df130[0], (char *)g_gsEventCount);
+            igReport_Flush();
         }
     } else {
         arg0->vX(0, 0, (int *)g_gsEventCount);
@@ -513,10 +513,10 @@ void FUN_00166de0(int value)
     int count;
     void *registry = ((ShaderSetup *)g_objectSystem[0])->registry;
     void *builder = ((ShaderSetup *)g_objectSystem[0])->builder;
-    igSmartPointer<igIntList> list(FUN_002cba00((void *)(FUN_00165ce0((int *)value))));
+    igSmartPointer<igIntList> list(igContextList_Create((void *)(FUN_00165ce0((int *)value))));
     bool found = false;
 
-    FUN_00306e50(registry, 4, text_ignoreDriverDatabase, &found, 0, 1);
+    igRegistry_GetValueBool(registry, 4, text_ignoreDriverDatabase, &found, 0, 1);
     if (found) return;
     igIntList *l = list;
     count = l->_count;
@@ -526,9 +526,9 @@ void FUN_00166de0(int value)
         List_Resize(l, count + 1, 4);
     }
     ((int *)l->_data)[count] = value;
-    FUN_002da010(builder, list);
+    igDriverDatabase_GatherProperties(builder, list);
     if (FUN_00305cf0() != 0) {
-        if (FUN_002da1c0(builder, (const char *)DAT_004dc870, (const char *)DAT_004dc870) != 0) FUN_002da990(builder, registry, 4, 0);
+        if (igDriverDatabase_Load(builder, (const char *)DAT_004dc870, (const char *)DAT_004dc870) != 0) igDriverDatabase_ApplyToRegistry(builder, registry, 4, 0);
     }
     FUN_002daab0(builder, registry, 4, 0);
 }

@@ -5,7 +5,7 @@ int igStringObj_Set(struct S *, char *);
 int Memory_FreeBuffer(char *);
 char *igObject_DuplicateString(struct S *, int);
 extern char _ctype_[260];
-void FUN_0030bee0(struct S *arg0) {
+void igStringObj_Trim(struct S *arg0) {
     int n;
     char *s;
     char *p;

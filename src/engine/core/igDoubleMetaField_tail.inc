@@ -1,4 +1,4 @@
-int Gap__Core__igDoubleMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igDoubleMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igDoubleMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igDoubleMetaField__vfunc_57(int *arg0, int arg1, long long *arg2) {
+void igDoubleMetaField_ValueToString(int *arg0, int arg1, long long *arg2) {
     int sp20[256];
     int var_v0;
     int var_v1;
@@ -27,18 +27,18 @@ void Gap__Core__igDoubleMetaField__vfunc_57(int *arg0, int arg1, long long *arg2
     *arg0 = var_v1;
 }
 
-int Gap__Core__igDoubleMetaField__vfunc_25(void) {
+int igDoubleMetaField_GetSize(void) {
     return 8;
 }
 
-void FUN_002d9500(void **arg0, long long arg1) {
+void igDoubleMetaField_SetDefaultDouble(void **arg0, long long arg1) {
     long long sp18;
 
     sp18 = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
 }
 
-int Gap__Core__igDoubleMetaField__vfunc_27(void) {
+int igDoubleMetaField_GetAlignment(void) {
     return 8;
 }
 

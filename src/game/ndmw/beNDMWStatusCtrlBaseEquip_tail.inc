@@ -50,7 +50,7 @@ void beNDMWStatusCtrlBaseEquip_InitFields(void) {
     temp_s1 = (void *)g_beNDMWStatusCtrlBaseEquip_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, &g_beNDMWStatusCtrlBaseEquip_ctorTable[0], 0xA);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), 1);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00364090();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));

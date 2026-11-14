@@ -1,14 +1,14 @@
-void FUN_0030cf20(int a0, int a1)
+void igStringTable_SetCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 8) = a1;
 }
 
-void FUN_0030cf30(int a0, int a1)
+void igStringTable_SetHashCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 12) = a1;
 }
 
-void FUN_0030cf40(void *arg0) {
+void igStringTable_Reserve(void *arg0) {
     int temp_a1;
     void *temp_a0;
 
@@ -20,7 +20,7 @@ void FUN_0030cf40(void *arg0) {
     ((igStringTableView *)(((char *)(arg0) + 0)))->setHashing((int)(*(int *)((char *)(arg0) + 12)));
 }
 
-void FUN_0030cfa0(igStringTableView *table) {
+void igStringTable_Clear(igStringTableView *table) {
     igTDataList<char> *strings;
     igTDataList<char> *strings2;
     igTDataList<int> *hashIndex;
@@ -49,13 +49,13 @@ void FUN_0030cfa0(igStringTableView *table) {
     }
 }
 
-void FUN_0030d050(int arg0) {
+void igStringTable_RemoveAll(int arg0) {
     int sp1C;
 
-    FUN_0030d0d0(&sp1C, (igStringTableView *)arg0, 0);
+    igStringTable_Truncate(&sp1C, (igStringTableView *)arg0, 0);
 }
 
-int FUN_0030d080(igStringTableView *table) {
+int igStringTable_GetCount(igStringTableView *table) {
     igTDataList<char> *strings;
     char *p;
     int n;
@@ -89,7 +89,7 @@ static inline void setStringBytes(igTDataList<char> *strings, int n) {
     }
 }
 
-void FUN_0030d0d0(int *result, igStringTableView *table, int count) {
+void igStringTable_Truncate(int *result, igStringTableView *table, int count) {
     int i;
     int hits;
     char *data;
@@ -118,7 +118,7 @@ void FUN_0030d0d0(int *result, igStringTableView *table, int count) {
     }
 }
 
-char *FUN_0030d1d0(int *arg0, int arg1) {
+char *igStringTable_GetString(int *arg0, int arg1) {
     int *t;
     char *p;
     char *r;
@@ -141,7 +141,7 @@ static inline void reserveStringBytes(const igTDataList<char> *strings, int n) {
     }
 }
 
-int FUN_0030d230(igStringTableView *self, char *s) {
+int igStringTable_AppendString(igStringTableView *self, char *s) {
     int length;
     int offset;
     length = strlen(s) + 1;
@@ -153,13 +153,13 @@ int FUN_0030d230(igStringTableView *self, char *s) {
     return offset;
 }
 
-int FUN_0030d300(int arg0, int arg1) {
-    int r = FUN_0030d350((igStringTableView *)arg0, arg1);
+int igStringTable_FindOrAddString(int arg0, int arg1) {
+    int r = igStringTable_Find((igStringTableView *)arg0, arg1);
     if (r != -1) return r;
-    return FUN_0030d230((igStringTableView *)arg0, (char *)arg1);
+    return igStringTable_AppendString((igStringTableView *)arg0, (char *)arg1);
 }
 
-int FUN_0030d350(igStringTableView *arg0, unsigned int arg1) {
+int igStringTable_Find(igStringTableView *arg0, unsigned int arg1) {
     igTDataList<int> *t;
     int idx;
     int off;
@@ -202,7 +202,7 @@ int FUN_0030d350(igStringTableView *arg0, unsigned int arg1) {
     return -1;
 }
 
-int FUN_0030d4a0(igStringTableView *table, int i) {
+int igStringTable_GetNextStringIndex(igStringTableView *table, int i) {
     igTDataList<char> *s = table->_strings;
     char *p = s->_data + i;
     int n = s->_count;
@@ -220,7 +220,7 @@ bad:
     return -1;
 }
 
-unsigned int Gap__Core__igStringTable__vfunc_23(igStringTableView *self, char *s) {
+unsigned int igStringTable_Hash(igStringTableView *self, char *s) {
     unsigned int h = 0; unsigned int n;
     if (self->_hashIndex != 0) { n = self->_hashIndex->_count; } else { n = 0; }
     if (s != 0 && n != 0) {
@@ -230,7 +230,7 @@ unsigned int Gap__Core__igStringTable__vfunc_23(igStringTableView *self, char *s
     return h;
 }
 
-int Gap__Core__igStringTable__vfunc_24(igStringTableView *self, char *s, int offset) {
+int igStringTable_InsertHash(igStringTableView *self, char *s, int offset) {
     int probes = 0;
     int size = self->_hashIndex->_count;
     int half = size / 2;
@@ -258,7 +258,7 @@ done:
     return 1;
 }
 
-void Gap__Core__igStringTable__vfunc_25(igStringTableView *arg0, int arg1) {
+void igStringTable_SetHashing(igStringTableView *arg0, int arg1) {
     igTDataList<int> *old;
     igTDataList<int> *l;
     int alloc;
@@ -268,7 +268,7 @@ void Gap__Core__igStringTable__vfunc_25(igStringTableView *arg0, int arg1) {
     char *base;
     char *end;
     char *p;
-    FUN_0030cf30((int)arg0, arg1);
+    igStringTable_SetHashCapacity((int)arg0, arg1);
     if (arg1 != 0) {
         if (arg0->_hashIndex == 0) {
             alloc = ((int)igObject_GetAllocator((int)arg0));
@@ -279,7 +279,7 @@ void Gap__Core__igStringTable__vfunc_25(igStringTableView *arg0, int arg1) {
                     igObject_Destroy(old);
                 }
             }
-            arg0->_hashIndex = (igTDataList<int> *)FUN_002ca8b0(alloc);
+            arg0->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(alloc);
         }
         l = arg0->_hashIndex;
         if (arg1 >= 0) {

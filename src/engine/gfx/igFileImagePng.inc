@@ -62,7 +62,7 @@ void *FUN_00150490(struct S_150490 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -107,7 +107,7 @@ void igFileImagePng_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igFileImagePng_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002c4ce0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igFile_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_igFileImagePng_fieldTable[0], &DAT_00489220[0], &DAT_00489228[0], temp_s2);
 }
 

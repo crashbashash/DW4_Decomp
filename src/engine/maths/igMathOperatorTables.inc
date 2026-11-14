@@ -18,7 +18,7 @@ void FUN_0018edb0(int meta) {
     unsigned n;
     unsigned i;
     unsigned j;
-    if (FUN_002fe290(meta, root) == 0) {
+    if (igMetaObject_IsOfType(meta, root) == 0) {
         return;
     }
     if (root == meta) {
@@ -95,7 +95,7 @@ InstanceListRef FUN_0018f760(int allocator) {
     InstanceListRef list((NodeList *)FUN_00186c00(allocator));
     FUN_00301ee0(list.p, count);
     for (i = 0; i < count; i++) {
-        igSmartPointer<InstanceNode> element(FUN_002fd6e0(FUN_002fe2e0(meta, i), allocator).get(), kRetainReference);
+        igSmartPointer<InstanceNode> element(igMetaObject_CreateInstanceRef(FUN_002fe2e0(meta, i), allocator).get(), kRetainReference);
         setElement(list, i, element);
     }
     return list;

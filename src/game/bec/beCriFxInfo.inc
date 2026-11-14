@@ -84,8 +84,8 @@ void beCriFxInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beCriFxInfo_ctorTable[0], 4);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), -1);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00366fa0();
     igMetaObject_NameFields(temp_s0, &g_beCriFxInfo_fieldTable[0], &DAT_004c74d0[0], &DAT_004c74e0[0], temp_s2);

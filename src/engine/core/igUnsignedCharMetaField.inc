@@ -1,4 +1,4 @@
-void FUN_002b73e0(int arg0) {
+void igUnsignedCharMetaField_Create(int arg0) {
     igUnsignedCharMetaField_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585760), (igMemoryPoolView *)arg0);
 }
@@ -41,13 +41,13 @@ void igUnsignedCharMetaField_EnsureRegistered(void)
 }
 
 void igUnsignedCharMetaField_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igUnsignedCharMetaField_metaObject),
         igMetaField_Register,
         igMetaField_GetPublishedMetaObject,
-        thunk_igUnsignedCharMetaField_GetMetaObject,
+        igUnsignedCharMetaField_GetMetaObjectFunction,
         igUnsignedCharMetaField_className,
         0x34, /* instance size */
         igUnsignedCharMetaField_GetVTable,
@@ -57,18 +57,18 @@ void igUnsignedCharMetaField_Register(void) {
     );
 }
 
-void thunk_igUnsignedCharMetaField_GetMetaObject(void) {
+void igUnsignedCharMetaField_GetMetaObjectFunction(void) {
     igUnsignedCharMetaField_GetMetaObject();
 }
 
-void FUN_002b7590(void) {
+void igUnsignedCharMetaField_CreateDefaultDescriptor(void) {
     void *temp_s0;
 
     if (g_igUnsignedCharMetaField_descriptor[0] == 0) {
         g_igUnsignedCharMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedCharMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igUnsignedCharMetaField_descriptor[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igUnsignedCharMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
@@ -76,7 +76,7 @@ void FUN_002b7590(void) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(g_igUnsignedCharMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)FUN_002fc250())) + 12) - 1);
+            *(short *)((char *)(g_igUnsignedCharMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
             igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedCharMetaField_descriptor[0]);
         }
     }

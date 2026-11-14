@@ -841,7 +841,7 @@ static inline int internedPool(void) {
 }
 
 void FUN_00236140(void) {
-    igSmartPointer<NamedObject> r(FUN_002c43b0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+    igSmartPointer<NamedObject> r(igFolder_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
     NamedObject *s0 = r.get();
     int *s1 = (int *)StringPool_Intern(internedPool(), &text_plugins[0]);
     int *old = (int *)s0->name;
@@ -854,15 +854,15 @@ void FUN_00236140(void) {
         }
     }
     s0->name = (int)s1;
-    FUN_002e3850(r.get(), &text_insight[0]);
-    FUN_00304720(((G *)g_objectSystem[0])->f76, &text_Insight[0], r->name, 1);
+    igFolder_SetFolderName(r.get(), &text_insight[0]);
+    igPluginHelper_AddRepository(((G *)g_objectSystem[0])->f76, &text_Insight[0], r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
     if (value < 0) {
         igStringObj_Set(text.p, text_default);
     } else {
-        FUN_0030b720(text.p, value, DAT_004e9780);
+        igStringObj_SetInt(text.p, value, DAT_004e9780);
     }
 }
 

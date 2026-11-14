@@ -87,7 +87,7 @@ void igGraphPath_InitFields(void) {
     z.b = 0;
     z.c = 0;
     FUN_0018e470(temp_a0, &z);
-    FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1.0f);
+    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1.0f);
     igMetaObject_NameFields(temp_s0, &g_igGraphPath_fieldTable[0], &DAT_0048c030[0], &DAT_0048c040[0], temp_s2);
 }
 

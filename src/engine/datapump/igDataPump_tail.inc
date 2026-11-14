@@ -90,7 +90,7 @@ void FUN_001e6410(S0 *arg0, void **arg1) {
 int FUN_001e6490(ValueBinding *binding, int selection) {
     igSmartPointer<Value> value(binding->source->value(), kRetainReference);
     int sinkType = binding->sink->type();
-    if (((FUN_002fe290(value->type(), sinkType) != 0) ^ 1) != 0) {
+    if (((igMetaObject_IsOfType(value->type(), sinkType) != 0) ^ 1) != 0) {
         return 0;
     }
     binding->source->select(selection);

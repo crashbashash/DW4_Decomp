@@ -63,10 +63,10 @@ void ParticleArray_InitFields(void) {
     temp_s0 = (void *)g_ParticleArray_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_ParticleArray_ctorTable[0], 0xB);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1.0f);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0.0f);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014b980();
     ((igMetaField *)temp_s1)->_persistent = 0;

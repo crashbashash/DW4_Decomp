@@ -131,7 +131,7 @@ void igAppearance_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019d280();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002b9390();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringObjList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019cbe0();

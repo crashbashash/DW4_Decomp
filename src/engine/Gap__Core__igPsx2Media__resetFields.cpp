@@ -7,12 +7,12 @@ struct Media { void *vt; int f4; int f8; int f12; Sub *f16; char p20[16]; char f
 extern "C" {
 void Gap__Core__igObject__resetFields(Media *);
 R igPsx2_LoadIopModule(void *, int, int, int);
-R FUN_0032d640(int, int);
-R FUN_0032d850(int, int, int, int, int);
+R igPsx2IopRpcConnection_Bind(int, int);
+R igPsx2IopRpcConnection_CallWithData(int, int, int, int, int);
 void DIntr(void);
 void EIntr(void);
 void sceSifAddCmdHandler(int, void *, int);
-void FUN_0032db00(void);
+void igPsx2Media_RpcCompletionHandler(void);
 extern R DAT_004fb410;
 extern int DAT_004f9498[4];
 extern int DAT_004ffd30[4];
@@ -23,7 +23,7 @@ extern Media *DAT_00587360;
 extern int *DAT_00587368;
 extern char GPR_00554de0;
 }
-extern "C" void Gap__Core__igPsx2Media__vfunc_13(Media *self) {
+extern "C" void Gap__Core__igPsx2Media__resetFields(Media *self) {
     Gap__Core__igObject__resetFields(self);
     if (igPsx2_LoadIopModule(DAT_004f9498, 1, 0, 0) != DAT_004fb410) {
         return;
@@ -32,10 +32,10 @@ extern "C" void Gap__Core__igPsx2Media__vfunc_13(Media *self) {
         return;
     }
     self->f36 = 1;
-    FUN_0032d640(self->f12, 0x12114);
-    FUN_0032d850(self->f12, 19, (int)(unsigned)self->f8, (char)0, (char)0);
+    igPsx2IopRpcConnection_Bind(self->f12, 0x12114);
+    igPsx2IopRpcConnection_CallWithData(self->f12, 19, (int)(unsigned)self->f8, (char)0, (char)0);
     DIntr();
-    sceSifAddCmdHandler(4, (void *)FUN_0032db00, 0);
+    sceSifAddCmdHandler(4, (void *)igPsx2Media_RpcCompletionHandler, 0);
     EIntr();
     DAT_00587360 = self;
     self->f16->v92();

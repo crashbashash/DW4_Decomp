@@ -1,7 +1,7 @@
 void igResource_StartAsyncLoading(igResourceView *self) {
-    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)FUN_002bc0d0((int)igObject_GetAllocator((int)self))).get();
+    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((int)self))).get();
     self->_loadQueue->create();
-    self->_loadThread = (igPsx2ThreadView *)FUN_00304f00(self->_loadQueue, (int)&FUN_00308c00, g_resourceLoaderStackSize[0]);
+    self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize[0]);
     self->_loadThread->setPriority(255);
     self->_asyncLoadState = 1;
     ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->vfunc_34(1);
@@ -18,7 +18,7 @@ void igResource_StopAsyncLoading(igResourceView *self) {
         thread = self->_loadThread;
         current = ((igPsx2ThreadManagerView **)g_threadManager)[0]->getCurrentThread();
         joined = current->join(thread);
-        FUN_00305000(self->_loadQueue);
+        igStandardQueue_StopServiceThreads(self->_loadQueue);
         queue = self->_loadQueue;
         if (queue != 0) {
             queue->_refCount = (int)queue->_refCount - 1;
@@ -34,7 +34,7 @@ void igResource_StopAsyncLoading(igResourceView *self) {
     }
 }
 
-void Gap__Core__igResource__vfunc_12(igResource *self) {
+void igResource_ReleaseDefaults(igResource *self) {
     igObject *temp_a0;
     igObject *temp_a0_2;
 
@@ -57,7 +57,7 @@ void Gap__Core__igResource__vfunc_12(igResource *self) {
         }
     }
     self->_alignmentValues = 0;
-    Gap__Core__igObject__vfunc_10((int)self);
+    igObject_ReleaseDefaults((int)self);
 }
 
 void *igResource_LoadDirectory(igResource *self, int path) {
@@ -71,12 +71,12 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     igIGBFile *o;
     void *res;
     igObject *t;
-    r = (igObject *)FUN_003087a0(self, path).p;
+    r = (igObject *)igResource_GetDirectory(self, path).p;
     if (r != 0) {
-        FUN_002d9130((igDirectoryView *)r);
+        igDirectory_AddLoadedRef((igDirectoryView *)r);
         return r;
     }
-    igSmartPointer<igIGBFile> file((igIGBFile *)FUN_002c37e0(self->_temporaryMemoryPool));
+    igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create(self->_temporaryMemoryPool));
     file.p->_sharingState = self->_IGBSharingState;
     file.p->_forceChunkSize = self->_IGBChunkSize;
     file.p->_useMemoryPoolAssignmentsState = self->_useMemoryPoolAssignmentsState;
@@ -88,7 +88,7 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     if (pool != 0) { ASSIGN_O(o, _objectMemoryPool, pool) }
     if (self->_asyncLoadState == 1) {
         file.p->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
-        FUN_002d9330((igDirectoryView *)file.p);
+        igDirectory_CreateLoadingSemaphore((igDirectoryView *)file.p);
     }
     file.p->_validState = 0;
     file.p->_loadPendingState = 1;
@@ -108,18 +108,18 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     }
     o->_name = v;
     file.p->_managingResource = (int)self;
-    FUN_002d9130((igDirectoryView *)file.p);
-    FUN_00308850((int *)self, (int)file.p);
+    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
+    igResource_AddDirectory((int *)self, (int)file.p);
     if (self->_asyncLoadState == 0) {
-        return FUN_00309640(self, (igIGBFileView *)file.p);
+        return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
     }
-    FUN_002d9130((igDirectoryView *)file.p);
+    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
     queued = ((igStandardQueueView *)self->_loadQueue)->insert((int)file.p, 1);
     res = file.p;
     return res;
 }
 
-igIGBFileView *FUN_00309640(igResource *self, igIGBFileView *file) {
+igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileView *file) {
     char buf[2048];
     int r;
     if (file == 0) return 0;
@@ -152,7 +152,7 @@ bool igResource_IsDirectoryLoaded(igResource *self, igDirectoryView *directory) 
 }
 
 void igResource_UnloadDirectory(igResource *self, int name) {
-    igSmartPointer<igObject> found = FUN_003087a0(self, name);
+    igSmartPointer<igObject> found = igResource_GetDirectory(self, name);
     igIGBFile *entry = (igIGBFile *)found.p;
     if (entry == 0) {
         return;
@@ -164,14 +164,14 @@ void igResource_UnloadDirectory(igResource *self, int name) {
     if (entry->_managingResource == 0) {
         entry->_managingResource = (int)self;
     }
-    int remaining = FUN_002d91c0((igDirectoryView *)found.get());
+    int remaining = igDirectory_UnrefLoaded((igDirectoryView *)found.get());
     if (current && remaining <= 0) {
         igRelease((igObject *)self->_imageDirectory);
         self->_imageDirectory = 0;
     }
 }
 
-void FUN_00309870(igResource *self) {
+void igResource_ClearDirectories(igResource *self) {
     int m;
     int j;
     igTDataList<igObject *> *l;
@@ -206,7 +206,7 @@ void FUN_00309870(igResource *self) {
     self->_imageDirectory = 0;
 }
 
-void FUN_00309970(igResource *self) {
+void igResource_RemoveIGBFiles(igResource *self) {
     int i;
     igTDataList<igObject *> *l;
     int off;
@@ -228,18 +228,18 @@ void FUN_00309970(igResource *self) {
     }
 }
 
-int FUN_00309a50(void) {
+int igResource_GetDefaultResource(void) {
     return *(int *)((char *)((*(void **)0x586DC8)) + 64);
 }
 
-void FUN_00309fe0(int arg0) {
+void igResource_WrapRootInSceneInfo(int arg0) {
     int s0m, s1m;
     void *s1;
     igObject *sp5C;
     if (arg0 != 0) {
         s0m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igNode[0]);
         if (s0m != 0) {
-            s1 = ((void *)FUN_002d8eb0(arg0, (int)&text_root[0]));
+            s1 = ((void *)igDirectory_GetObjectByName(arg0, (int)&text_root[0]));
             if (s1 != 0 && igObject_IsKindOf(s1, (igMetaObject *)s0m) != 0) {
                 s1m = igObjectSystem_FindMetaByNameDefault((const char *)&text_igSceneInfo[0]);
                 if (s1m != 0) {
@@ -261,7 +261,7 @@ void FUN_00309fe0(int arg0) {
                     l = AsObjectList(*(void **)((char *)sp5C + f3->_offset));
                     if (l != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)l, (igObject *)s1);
                     igObjectRefMetaField_Assign(f2, (void *)sp5C, (igObject *)0);
-                    FUN_002d8310((void *)arg0, (void *)sp5C);
+                    igDirectory_AddInfo((void *)arg0, (void *)sp5C);
                     {
                         igObject *u = sp5C;
                         if (u != 0) {

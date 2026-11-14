@@ -12,7 +12,7 @@ extern "C" void * igMetaObject_RegisterClass(...);
 extern "C" void *igObject_Register(void);
 extern "C" void *igAdx_Register(void);
 extern "C" void igAdx_GetMetaObject(void);
-extern "C" void FUN_002fe480(...);
+extern "C" void igMetaObject_AddExitCallback(...);
 extern "C" void igAdx_InitFields(void);
 extern "C" void igAdx_CreateScratchString(void);
 extern "C" void FUN_003345d0(void);
@@ -50,7 +50,7 @@ extern "C" void FUN_00334c70(void);
 extern "C" void *igNamedObject_Register(void);
 extern "C" void *igFileName_Register(void);
 extern "C" void igFileName_GetMetaObject(void);
-extern "C" int FUN_002be100(void);
+extern "C" int igNamedObjectList_GetOrCreateMetaObject(void);
 extern "C" void * igMetaObject_GetFieldAt(...);
 extern "C" void igFileName_InitFields(void);
 extern "C" int igMetaObject_CreateInstance(int, int);
@@ -61,10 +61,10 @@ extern "C" void FUN_00334ec0(void);
 extern "C" void *igFile_Register(void);
 extern "C" void *igAdxFile_Register(void);
 extern "C" void igAdxFile_GetMetaObject(void);
-extern "C" int FUN_002d3890(int, int);
-extern "C" int FUN_002ea4b0(...);
-extern "C" int FUN_0030ec10(int, int);
-extern "C" int thunk_igFile_GetMetaObject(void);
+extern "C" int igBoolMetaField_SetDefaultValue(int, int);
+extern "C" int igIntMetaField_SetDefault(...);
+extern "C" int igUnsignedLongMetaField_SetDefaultValue(int, int);
+extern "C" int igFile_GetMetaObjectFunction(void);
 extern "C" void igAdxFile_InitFields(void);
 extern "C" void igAdxFile_StaticInitialize(void);
 extern "C" void FUN_003350b0(void);
@@ -140,7 +140,7 @@ extern "C" void igMovieInfo_GetMetaObject(void);
 extern "C" int FUN_0013a360(void);
 extern "C" int FUN_0014dfb0(void);
 extern "C" int FUN_0019aee0(void);
-extern "C" int FUN_002dc7a0(void *, int *);
+extern "C" int igEnumMetaField_SetDefaultValue(void *, int *);
 extern "C" void FUN_00149980(void);
 extern "C" void FUN_001499e0(void);
 extern "C" void igMovieInfo_InitFields(void);
@@ -233,7 +233,7 @@ extern "C" int DAT_004c26b0[4];
 extern "C" int DAT_004c26b8[4];
 extern "C" igMetaObject *g_igAdxFile_metaObject[4];
 struct Obj_334e50 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
-extern "C" int FUN_002c0790(struct Obj_334e50 *, int);
+extern "C" int igFile_Destroy(struct Obj_334e50 *, int);
 extern "C" int DAT_005337f0[4];
 struct igMetaObject_334ee0;
 extern "C" igMetaObject_334ee0 *igFile_GetPublishedMetaObject(void);
@@ -257,7 +257,7 @@ extern "C" char g_igMovieCodecList_callbackList[];
 extern "C" igMetaObject *g_igMovieCodec_metaObject[4];
 union U_335670 { int vt; char b[16]; };
 extern "C" int DAT_00533d60[4];
-extern "C" int thunk_FUN_002ed460__002ff810(struct O *);
+extern "C" int thunk_Memory_FreeBuffer(struct O *);
 typedef struct O { int vt; int pad; int f8; } O;
 extern "C" O *FUN_00335700(O *arg0, long long arg1);
 extern "C" const char igMovieCodec_className[];
@@ -463,7 +463,7 @@ void igAdx_GetMetaObject(void)
 
 void igAdx_InitFields(void)
 {
-    FUN_002fe480(FUN_003345f0);
+    igMetaObject_AddExitCallback(FUN_003345f0);
 }
 
 void FUN_003345d0(void)
@@ -750,7 +750,7 @@ void igFileName_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igFileName_ctorTable[0], 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002be100();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_igFileName_fieldTable[0], &DAT_004c26b0[0], &DAT_004c26b8[0], temp_s2);
 }
 
@@ -778,7 +778,7 @@ int igAdxFile_GetVTable(void) {
     obj.vt = &DAT_005337f0[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &DAT_005337f0[0];
-    FUN_002c0790(&obj, 0);
+    igFile_Destroy(&obj, 0);
     return t;
 }
 
@@ -816,15 +816,15 @@ void igAdxFile_InitFields(void) {
     temp_s0 = (void *)(((void * *)g_igAdxFile_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igAdxFile_ctorTable[0], 0xE);
-    FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), 1);
-    FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 1);
-    FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 1);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0x20000);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x800);
-    FUN_0030ec10(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFE502A);
+    igBoolMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), 1);
+    igBoolMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 1);
+    igBoolMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0x20000);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x800);
+    igUnsignedLongMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFE502A);
     igMetaObject_NameFields(temp_s0, &g_igAdxFile_fieldTable[0], &DAT_004c2740[0], &DAT_004c2780[0], temp_s1);
-    *(int *)((char *)(((void * *)g_igAdxFile_metaObject)[0]) + 64) = (int)(&thunk_igFile_GetMetaObject);
-    FUN_002fe480(&FUN_003350d0);
+    *(int *)((char *)(((void * *)g_igAdxFile_metaObject)[0]) + 64) = (int)(&igFile_GetMetaObjectFunction);
+    igMetaObject_AddExitCallback(&FUN_003350d0);
 }
 
 void FUN_003350b0(void)
@@ -905,10 +905,10 @@ void igAdxAudio_InitFields(void) {
     temp_s0 = (void *)g_igAdxAudio_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igAdxAudio_ctorTable[0], 9);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 4);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 2);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 4);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 0xBB80);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 4);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 2);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), 4);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), 0xBB80);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)), 0);
     igMetaObject_NameFields(temp_s0, &g_igAdxAudio_fieldTable[0], &DAT_004c2820[0], &DAT_004c2850[0], temp_s1);
 }
@@ -1036,7 +1036,7 @@ O *FUN_00335700(O *arg0, long long arg1) {
             }
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -1486,28 +1486,28 @@ void igMovieInfo_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, &g_igMovieInfo_ctorTable[0], 0x15);
     igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
     temp_v0 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
-    FUN_002dc7a0(temp_v0, &DAT_004c2b38[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004c2b38[0]);
     temp_v0->f52 = (int)FUN_003361a0;
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), -1);
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), -1);
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), -1);
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)), -1);
     temp_s2 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)));
     temp_s2->f56 = (int)FUN_00335fb0();
     temp_v0_2 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)));
-    FUN_002dc7a0(temp_v0_2, &DAT_004c2b40[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_004c2b40[0]);
     *(void (**)(void))&temp_v0_2->f52 = FUN_00149980;
     temp_v0_3 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)));
-    FUN_002dc7a0(temp_v0_3, &DAT_004c2b48[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_004c2b48[0]);
     *(void (**)(void))&temp_v0_3->f52 = FUN_00149980;
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)), -1);
     igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0);
     temp_s2_2 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)));
     temp_s2_2->f56 = (int)FUN_003355d0();
     temp_s2_2->f38 = 0;
     temp_v0_4 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE)));
-    FUN_002dc7a0(temp_v0_4, &DAT_004c2b50[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_4, &DAT_004c2b50[0]);
     temp_v0_4->f52 = (int)FUN_00336140;
     temp_s2_3 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF)));
     temp_s2_3->f56 = FUN_0019aee0();
@@ -1519,13 +1519,13 @@ void igMovieInfo_InitFields(void) {
     temp_s2_5->f56 = FUN_0013a360();
     temp_s2_5->f38 = 0;
     temp_v0_5 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12)));
-    FUN_002dc7a0(temp_v0_5, &DAT_004c2b58[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_5, &DAT_004c2b58[0]);
     temp_v0_5->f38 = 0;
     temp_v0_5->f52 = (int)FUN_001499e0;
     temp_v0_6 = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13)));
     temp_v0_6->f56 = (int)((int) g_igObject_metaObject[0]);
     temp_v0_6->f38 = 0;
-    FUN_002ea4b0(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14)), -1);
+    igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14)), -1);
     igMetaObject_NameFields(temp_s0, &g_igMovieInfo_fieldTable[0], &DAT_004c2a80[0], &DAT_004c2ae0[0], temp_s1);
 }
 

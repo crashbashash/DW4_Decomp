@@ -56,7 +56,7 @@ void beModelCtrlInfoRideOn3_InitFields(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_modelRamNo[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_3519c0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    FUN_002ea4b0(temp_v0_2, 0x67);
+    igIntMetaField_SetDefault(temp_v0_2, 0x67);
     temp_v0_2->f1c = &DAT_00588a60[0];
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->refs = temp_v0_2->refs - 1;

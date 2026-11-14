@@ -1,15 +1,15 @@
-void Gap__Core__igStringMetaField__vfunc_12(int arg0) {
+void igStringMetaField_ReleaseDefaults(int arg0) {
     igStringMetaField_SetDefaultText((int *)arg0, 0);
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 /* Post-construction defaults; same two steps. */
 void igStringMetaField_InitDefaults(void **self) {
-    Gap__Core__igObject__vfunc_09((int)self);
+    igObject_InitDefaults((int)self);
     ((igMetaFieldView *)self)->SetDefault(0);
 }
 
-void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
+void igStringMetaField_ValueFromString(int arg0, int a1, int arg2) {
     int *temp_a1;
     int temp_v0;
     int var_v0;
@@ -76,7 +76,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
 }
 
 /* Output-first retained copy: *output = *sourceCell, taking one more reference on the token. */
-void Gap__Core__igStringMetaField__vfunc_57(void **output, void *field, void **sourceCell) {
+void igStringMetaField_ValueToString(void **output, void *field, void **sourceCell) {
     void *token;
     StringTokenHeader *header;
 
@@ -122,7 +122,7 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
     *temp_s1 = temp_s0;
 }
 
-int Gap__Core__igStringMetaField__vfunc_49(igStringMetaField *arg0, int arg1) {
+int igStringMetaField_GetRawFieldMemSize(igStringMetaField *arg0, int arg1) {
     int temp_a0;
     int var_s0;
     int len;
@@ -168,7 +168,7 @@ void igStringMetaField_SwapValue(void) {
 }
 
 /* no-op value hook. */
-void Gap__Core__igStringMetaField__vfunc_53(void) {
+void igStringArrayMetaField_SwapValue(void) {
 
 }
 
@@ -223,7 +223,7 @@ void igStringMetaField_CopyValue(igStringMetaField *arg0, int arg1, int arg2) {
     }
 }
 
-void Gap__Core__igStringMetaField__vfunc_38(igStringArrayMetaField *arg0, int arg1, int arg2) {
+void igStringMetaField_ShallowCopy(igStringArrayMetaField *arg0, int arg1, int arg2) {
     void *sp1C;
     int *temp_a1;
     int temp_v1;
@@ -244,7 +244,7 @@ void Gap__Core__igStringMetaField__vfunc_38(igStringArrayMetaField *arg0, int ar
 
 /* Null-aware lexical comparison: two nulls compare equal, null sorts before non-null, otherwise
  * strcmp. */
-int Gap__Core__igStringMetaField__vfunc_44(igStringArrayMetaField *self, int objectA, int objectB) {
+int igStringMetaField_Compare(igStringArrayMetaField *self, int objectA, int objectB) {
     int tokenA;
     int tokenB;
     int offset;
@@ -285,7 +285,7 @@ void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
     }
 }
 
-bool Gap__Core__igStringMetaField__vfunc_45(igStringMetaField *field,const void *one,const void *two){
+bool igStringMetaField_IsAlikeExactly(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);
@@ -294,7 +294,7 @@ bool Gap__Core__igStringMetaField__vfunc_45(igStringMetaField *field,const void 
     return !bool(strcmp(left,right));
 }
 
-bool Gap__Core__igStringMetaField__vfunc_46(igStringMetaField *field,const void *one,const void *two){
+bool igStringMetaField_IsAlikeDeep(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);
@@ -303,7 +303,7 @@ bool Gap__Core__igStringMetaField__vfunc_46(igStringMetaField *field,const void 
     return !bool(strcmp(left,right));
 }
 
-bool Gap__Core__igStringMetaField__vfunc_47(igStringMetaField *field,const void *one,const void *two){
+bool igStringMetaField_IsAlikeShallow(igStringMetaField *field,const void *one,const void *two){
     int offset=field->_offset;
     const char *left=*(const char **)((const char *)one+offset);
     const char *right=*(const char **)((const char *)two+offset);
@@ -330,18 +330,18 @@ void *igStringMetaField_Init(igStringMetaField *self) {
     return self;
 }
 
-void *FUN_0030b2c0(void *arg0, void *arg1) {
+void *igStringMetaField_CopyConstruct(void *arg0, void *arg1) {
     igRefMetaField_CopyConstruct((igRefMetaField *)arg0, (igRefMetaField *)arg1);
     *(int *)((char *)(arg0) + 0) = (int)(&g_igStringMetaField_vtable[0]);
     *(unsigned char *)((char *)(arg0) + 56) = (unsigned char) *(unsigned char *)((char *)(arg1) + 56);
     return arg0;
 }
 
-void Gap__Core__igStringMetaField__vfunc_02(igStringMetaField *self) {
+void igStringMetaField_Destruct(igStringMetaField *self) {
     igRefMetaField_Destruct((igRefMetaField *)self);
 }
 
-void FUN_0030b320(igStringObj *arg0, int arg1, int arg2) {
+void igStringObj_SetN(igStringObj *arg0, int arg1, int arg2) {
     char *temp_s0;
 
     temp_s0 = (char *)arg0->_buffer;
@@ -355,13 +355,13 @@ void FUN_0030b320(igStringObj *arg0, int arg1, int arg2) {
         arg0->_length = arg2;
     }
     if (temp_s0 != 0) {
-        FUN_00300f50((int)arg0, (int)temp_s0);
+        igObject_FreeMemory((int)arg0, (int)temp_s0);
     }
 }
 
 void igStringObj_Set(int arg0, int arg1) {
     if (arg1 != 0) {
-        FUN_0030b320((igStringObj *)arg0, arg1, strlen(arg1));
+        igStringObj_SetN((igStringObj *)arg0, arg1, strlen(arg1));
         return;
     }
     igStringObj_Clear((igStringObj *)arg0);
@@ -372,7 +372,7 @@ int igStringObj_Clear(igStringObj *arg0) {
 
     temp_a1 = arg0->_buffer;
     if (temp_a1 != 0) {
-        FUN_00300f50((int)arg0, temp_a1);
+        igObject_FreeMemory((int)arg0, temp_a1);
     }
     arg0->_buffer = 0;
     arg0->_length = 0;
@@ -383,7 +383,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
     char *buf;
     if (n == 0 || insert == 0) { return; }
     if (self->_length == 0) {
-        FUN_0030b320(self, (int)insert, (int)n);
+        igStringObj_SetN(self, (int)insert, (int)n);
     } else {
     total = n + self->_length;
     buf = FUN_00300d70(self, total + 1);
@@ -400,7 +400,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         memcpy(buf + (at + n), (char *)self->_buffer + at, (self->_length - at) + 1);
     }
     if (self->_buffer != 0) {
-        FUN_00300f50((int)self, self->_buffer);
+        igObject_FreeMemory((int)self, self->_buffer);
     }
     self->_buffer = (int)buf;
     self->_length = total;
@@ -436,7 +436,7 @@ int igStringObj_ToFloat(void *arg0, int arg1) {
     return sscanf(var_a0, &DAT_004f9738[0], arg1) == 1;
 }
 
-bool FUN_0030b670(igStringObj *o, char *out) {
+bool igStringObj_ParseBool(igStringObj *o, char *out) {
     bool r = false;
     if (*igStringObj_Text(o) == 't' || *igStringObj_Text(o) == 'T') {
         *out = 1;
@@ -448,15 +448,15 @@ bool FUN_0030b670(igStringObj *o, char *out) {
     return r;
 }
 
-void FUN_0030b720(int arg0, int arg1, int arg2) {
-    FUN_0030b7e0(arg0, arg2, arg1);
+void igStringObj_SetInt(int arg0, int arg1, int arg2) {
+    igStringObj_Format(arg0, arg2, arg1);
 }
 
-void FUN_0030b730(int string, void *format, float value) {
-    FUN_0030b7e0(string, (int)format, value);
+void igStringObj_SetFloat(int string, void *format, float value) {
+    igStringObj_Format(string, (int)format, value);
 }
 
-void FUN_0030b770(int arg0, int arg1, int arg2) {
+void igStringObj_SetBool(int arg0, int arg1, int arg2) {
     int *var_a1;
     int *var_a1_2;
 
@@ -477,14 +477,14 @@ void FUN_0030b770(int arg0, int arg1, int arg2) {
     igStringObj_Set(arg0, (int)var_a1_2);
 }
 
-int FUN_0030b7e0(int arg0, int arg1, ...) {
+int igStringObj_Format(int arg0, int arg1, ...) {
     int n = __builtin_args_info(2);
     int off;
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    return FUN_0030b840(arg0, arg1, (int)((char*)__builtin_next_arg(arg1) - off));
+    return igStringObj_VFormat(arg0, arg1, (int)((char*)__builtin_next_arg(arg1) - off));
 }
 
-int FUN_0030b840(int arg0, int extra1, int extra2) {
+int igStringObj_VFormat(int arg0, int extra1, int extra2) {
     int buf[512];
     int var_s0;
 
@@ -492,7 +492,7 @@ int FUN_0030b840(int arg0, int extra1, int extra2) {
     if (var_s0 > 0x7FF) {
         var_s0 = -1;
     } else {
-        FUN_0030b320((igStringObj *)arg0, (int)buf, var_s0);
+        igStringObj_SetN((igStringObj *)arg0, (int)buf, var_s0);
     }
     return var_s0;
 }
@@ -521,7 +521,7 @@ void igStringObj_KeepExtension(igStringObj *o) {
     }
 }
 
-void FUN_0030b980(igStringObj *p) {
+void igStringObj_RemovePathFilename(igStringObj *p) {
     char *base = (char *)p->_buffer;
     char *q;
     if (base != 0) {
@@ -555,7 +555,7 @@ void igStringObj_StripDirectory(int *arg0) {
     }
 }
 
-int FUN_0030ba90(void *arg0, char *arg1) {
+int igStringObj_HasFileExtension(void *arg0, char *arg1) {
     int temp_a0;
     int temp_v0;
     int var_a1;
@@ -583,7 +583,7 @@ int FUN_0030ba90(void *arg0, char *arg1) {
     return temp_v0 == 0;
 }
 
-int FUN_0030bb40(char *arg0, char *arg1) {
+int igStringObj_HasFileExtensionText(char *arg0, char *arg1) {
     unsigned int len = ((unsigned int)strlen(arg0));
     unsigned int slen = ((unsigned int)strlen(arg1));
     int dot = 1;
@@ -627,7 +627,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     return 1;
 }
 
-void FUN_0030bce0(igStringObj *src, long long delim, igTDataList<char *> *list) {
+void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *list) {
     int n = list->_count;
     for (int i = 0; i < n; i++) {
         void **slot = (void **)((char *)list->_data + i * 4);
@@ -667,12 +667,12 @@ void FUN_0030bce0(igStringObj *src, long long delim, igTDataList<char *> *list) 
     }
 }
 
-int thunk_strcasecmp(const char *s1, const char *s2)
+int igStrcasecmp(const char *s1, const char *s2)
 {
     return strcasecmp(s1, s2);
 }
 
-int FUN_0030bfa0(igStringObjList *self, int key, int (*cmp)(char *, int)) {
+int igStringObjList_BinarySearch(igStringObjList *self, int key, int (*cmp)(char *, int)) {
     int lo;
     int hi;
     int mid;

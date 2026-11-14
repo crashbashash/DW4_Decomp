@@ -26,9 +26,9 @@ void StringTable_SetSynchronization(int arg0) {
     igObject *p;
     if (arg0 != 0) {
         if (DAT_005871c8[0] == 0) {
-            var_v0 = ((int)FUN_002f8a20());
+            var_v0 = ((int)Memory_GetCurrentAllocator());
 var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-            o = (igSemaphoreView *)FUN_002ba650(var_v0);
+            o = (igSemaphoreView *)igSemaphore_Create(var_v0);
             o->create();
             DAT_005871c8[0] = o;
         }

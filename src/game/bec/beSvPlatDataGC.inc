@@ -90,7 +90,7 @@ void beSvPlatDataGC_InitFields(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_connectMax[0]));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_348000 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    FUN_002ea4b0(temp_v0_2, 2);
+    igIntMetaField_SetDefault(temp_v0_2, 2);
     temp_v0_2->f1c = &DAT_00588168[0];
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->refs = temp_v0_2->refs - 1;
@@ -100,9 +100,9 @@ void beSvPlatDataGC_InitFields(void) {
     tg = (G_348000 *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2);
     tg->w52 = 2;
     temp_s0 = (H *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 9));
-    temp_s0->f60 = FUN_002cc2c0();
+    temp_s0->f60 = igCharMetaField_GetDefaultDescriptor();
     temp_s0_2 = (H *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xB));
-    temp_s0_2->f60 = FUN_002cc2c0();
+    temp_s0_2->f60 = igCharMetaField_GetDefaultDescriptor();
     tg = (G_348000 *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0xC);
     tg->w52 = 0x40;
     igMetaObject_NameFields(temp_s1, &g_beSvPlatDataGC_fieldTable[0], &DAT_004c3fb0[0], &DAT_004c3ff0[0], temp_s2);

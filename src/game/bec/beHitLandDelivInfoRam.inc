@@ -85,9 +85,9 @@ void beHitLandDelivInfoRam_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, &g_beHitLandDelivInfoRam_ctorTable[0], 9);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 3.0f);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, 3 + temp_s2), 4.0f);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, 4 + temp_s2), 4.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 3.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, 3 + temp_s2), 4.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, 4 + temp_s2), 4.0f);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     va[0] = 0;
     va[1] = 0;

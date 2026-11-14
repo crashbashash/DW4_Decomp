@@ -1,11 +1,11 @@
-void FUN_002b5d50(void) {
+void CoreLibrary_MarkRegistered(void) {
     if (DAT_00554bf4 == 0) {
         DAT_00554bf4 = 1;
-        FUN_002b7c00();
-        FUN_002b8470();
-        FUN_002b8020();
-        FUN_002c5ee0();
-        FUN_002cb980();
+        igThreadManager_EnsureRegistered();
+        igThreadList_EnsureRegistered();
+        igThread_EnsureRegistered();
+        igErrorHandler_EnsureRegistered();
+        igContextExt_EnsureRegistered();
     }
 }
 

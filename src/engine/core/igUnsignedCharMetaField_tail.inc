@@ -1,4 +1,4 @@
-int Gap__Core__igUnsignedCharMetaField__vfunc_56(void *arg0, char *arg1, int arg2) {
+int igUnsignedCharMetaField_ValueFromString(void *arg0, char *arg1, int arg2) {
     int sp2C;
     int sp28;
 
@@ -9,7 +9,7 @@ int Gap__Core__igUnsignedCharMetaField__vfunc_56(void *arg0, char *arg1, int arg
     return sp2C;
 }
 
-void Gap__Core__igUnsignedCharMetaField__vfunc_57(int *arg0, int arg1, unsigned char *arg2) {
+void igUnsignedCharMetaField_ValueToString(int *arg0, int arg1, unsigned char *arg2) {
     int sp20[256];
     int var_v0;
     int var_v1;
@@ -35,14 +35,14 @@ int igUnsignedCharMetaField_GetSize(void) {
     return 1;
 }
 
-void FUN_0030e750(void **arg0, char arg1) {
+void igUnsignedCharMetaField_SetDefaultValue(void **arg0, char arg1) {
     char sp1F;
 
     sp1F = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
 }
 
-int Gap__Core__igUnsignedCharMetaField__vfunc_27(void) {
+int igUnsignedCharMetaField_GetAlignment(void) {
     return 1;
 }
 

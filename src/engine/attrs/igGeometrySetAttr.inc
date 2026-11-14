@@ -110,7 +110,7 @@ void igGeometrySetAttr_InitFields(void) {
     temp_s2->f39 = 1;
     temp_s2->f44 = 3;
     temp_v0 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    FUN_002ea4b0(temp_v0, -1);
+    igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->f38 = 0;
     temp_v0->f40 = 4;
     temp_v0->f39 = 4;
@@ -118,10 +118,10 @@ void igGeometrySetAttr_InitFields(void) {
     temp_s2_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     temp_s2_2->f56 = (int)FUN_0013a4d0();
     temp_v0_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    FUN_002dc7a0(temp_v0_2, &DAT_00486528[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_00486528[0]);
     temp_v0_2->f38 = 0;
     temp_v0_2->f52 = (int)(&FUN_00136c80);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
     igMetaObject_NameFields(temp_s1, &g_igGeometrySetAttr_fieldTable[0], &DAT_004864f0[0], &DAT_00486510[0], temp_s0);
 }
 

@@ -77,8 +77,8 @@ void beSvDeliver_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
-    FUN_002d4e40(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), -1);
-    FUN_002d4e40(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8), 0);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), -1);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8), 0);
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;

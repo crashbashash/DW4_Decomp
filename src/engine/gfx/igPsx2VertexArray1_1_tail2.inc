@@ -4,12 +4,12 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_12(igPsx2VertexArray1_1 *self) {
     }
     if (self->_vdata != 0) {
         FUN_0015e7b0((VertexBufferOwner *)self);
-        FUN_00300f50(self, self->_vdata);
+        igObject_FreeMemory(self, self->_vdata);
         self->_vdata = 0;
         self->_numVerts = 0;
     }
     FUN_0017d2b0((O_17d2b0 *)self);
-    Gap__Core__igObject__vfunc_10(self);
+    igObject_ReleaseDefaults(self);
 }
 
 void Gap__Gfx__igPsx2VertexArray1_1__vfunc_59(void) {
@@ -59,7 +59,7 @@ void FUN_0017d170(V_17d170 *arg0) {
                 igObject_Destroy(o);
             }
         }
-        arg0->f48 = FUN_002c9130(a);
+        arg0->f48 = igPointerList_Create(a);
         if (*flags & 2) {
             a = igObject_GetAllocator(arg0);
             o = arg0->f52;
@@ -69,7 +69,7 @@ void FUN_0017d170(V_17d170 *arg0) {
                     igObject_Destroy(o);
                 }
             }
-            arg0->f52 = FUN_002c9130(a);
+            arg0->f52 = igPointerList_Create(a);
         }
     }
 }

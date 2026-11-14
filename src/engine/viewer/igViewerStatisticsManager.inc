@@ -99,13 +99,13 @@ void igViewerStatisticsManager_InitFields(void) {
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00452340();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_002b9540();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_002c8e50();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igMetaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_002c8b30();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igMetaFieldList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     igMetaObject_NameFields(temp_s1, &g_igViewerStatisticsManager_fieldTable[0], &DAT_004d0940[0], &DAT_004d0980[0], temp_s0);
 }

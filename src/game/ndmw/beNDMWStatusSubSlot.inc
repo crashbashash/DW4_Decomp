@@ -116,7 +116,7 @@ void *FUN_003ba3d0(S_arg0 *arg0, long long arg1) {
             FUN_003b2d10((beNDMWWindowCtrl *)arg0, (short)0);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

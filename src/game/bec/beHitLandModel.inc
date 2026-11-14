@@ -102,7 +102,7 @@ void beHitLandModel_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0035dc10();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0019e6c0();
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
     igMetaObject_NameFields(temp_s0, &g_beHitLandModel_fieldTable[0], &DAT_004c6630[0], &DAT_004c6650[0], temp_s2);
 }
 

@@ -41,7 +41,7 @@ igObject *igObject_ConstructHeader(igObject *self) {
 /* Shared default virtual slots that almost every class inherits, so most are empty or return a
  * constant. The slot number is the only name evidence, so the bodies are documented by what they
  * do. The `__<addr>` names are distinct bodies resolved to the same slot. */
-int Gap__Core__igObject__vfunc_00__002ff0a0(int extra0)
+int igObject_Destruct(int extra0)
 {
 }
 
@@ -56,7 +56,7 @@ void Gap__Core__igObject__destructFields(int extra0)
 }
 
 /* Slot 3 default: empty. */
-void Gap__Core__igObject__vfunc_03(void)
+void igObject_UserDeepCopy(void)
 {
 }
 
@@ -70,18 +70,18 @@ void Gap__Core__igObject__userDestruct(void)
 }
 
 /* Slot 4 default: empty. */
-void Gap__Core__igObject__vfunc_04(void)
+void igObject_UserShallowCopy(void)
 {
 }
 
 /* Slot 5 default: always 1. */
-int Gap__Core__igObject__vfunc_05(void)
+int igObject_UserIsAlikeDeep(void)
 {
     return 1;
 }
 
 /* Slot 6 default: always 1. */
-int Gap__Core__igObject__vfunc_06(void)
+int igObject_UserIsAlikeShallow(void)
 {
     return 1;
 }
@@ -92,47 +92,47 @@ void Gap__Core__igObject__resetFields(int extra0, int extra1)
 }
 
 /* Slot 9 default: empty. */
-void Gap__Core__igObject__vfunc_09(int extra0)
+void igObject_InitDefaults(int extra0)
 {
 }
 
 /* Slot 10 default: empty. */
-void Gap__Core__igObject__vfunc_10(int extra0)
+void igObject_ReleaseDefaults(int extra0)
 {
 }
 
 /* Slot 12 default: empty. */
-void Gap__Core__igObject__vfunc_12(void)
+void igObject_UserPreWrite(void)
 {
 }
 
 /* Slot 13 default: empty. */
-void Gap__Core__igObject__vfunc_13(void)
+void igObject_UserWriteFilePreProcess(void)
 {
 }
 
 /* Slot 15 default: empty. */
-void Gap__Core__igObject__vfunc_15(void)
+void igObject_UserPostLoad(void)
 {
 }
 
 /* Slot 14 default: empty. */
-void Gap__Core__igObject__vfunc_14(void)
+void igObject_UserPostRead(void)
 {
 }
 
 /* Slot 16 default: empty. */
-void Gap__Core__igObject__vfunc_16(int extra0)
+void igObject_TrimCapacity(int extra0)
 {
 }
 
 /* Slot 17 default: empty. */
-void Gap__Core__igObject__vfunc_17(void)
+void igObject_UserApplyWriteProxy(void)
 {
 }
 
 /* Slot 18 default: empty. */
-void Gap__Core__igObject__vfunc_18(void)
+void igObject_UserMakeConcrete(void)
 {
 }
 
@@ -338,7 +338,7 @@ char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *r
 
 void *igObject_AllocateRawStorageDefault(int size,int prefix){return igObject_AllocateRawStorage(size,prefix,0);}
 
-int thunk_FUN_002ed460__002ff810(int extra0)
+int thunk_Memory_FreeBuffer(int extra0)
 {
     return Memory_FreeBuffer((void *)extra0);
 }
@@ -464,7 +464,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     int index = 0;
     igMetaObject *writeMeta = (meta->_writeProxy != 0) ? ((igMetaObject *(*)())meta->_writeProxy)() : meta;
     if (metaObjectList != 0) {
-        index = FUN_002fe600(metaObjectList, writeMeta);
+        index = igMetaObject_AddToMetaObjectList(metaObjectList, writeMeta);
     }
     int count = igMetaObject_GetFieldCount(writeMeta);
     int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]);
@@ -483,7 +483,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     return igObject_GetSerializedSize(object);
 }
 
-int FUN_002fff90(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
     igMetaObject *meta;
     char *data;
     int i;
@@ -517,7 +517,7 @@ int FUN_002fff90(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile 
                 if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
             } else {
                 readFields += 1;
-                data += FUN_002fc740((igMetaFieldView *)field, (char *)object, data, file, endianSwap);
+                data += igMetaField_ReadFieldMem((igMetaFieldView *)field, (char *)object, data, file, endianSwap);
             }
         }
     }
@@ -529,7 +529,7 @@ int FUN_002fff90(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile 
     }
 }
 
-int FUN_00300250(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
     igMetaObject *meta;
     igTDataList<igTDataList<short> *> *lists;
     igTDataList<short> *offsets;
@@ -570,7 +570,7 @@ int FUN_00300250(igObjectDispatchView *object, FieldRecordHead *head, igDirector
             }
         } else {
             done++;
-            data += FUN_002fc780(field, object, data, dir, endianSwap);
+            data += igMetaField_ReadRawFieldMemAligned(field, object, data, dir, endianSwap);
             if (done == offsets->_count) {
                 limit = count;
             } else {
@@ -586,7 +586,7 @@ int FUN_00300250(igObjectDispatchView *object, FieldRecordHead *head, igDirector
     return size;
 }
 
-void FUN_00300490(void **arg0, int arg1, int arg2) {
+void igObject_Print(void **arg0, int arg1, int arg2) {
     void **temp_a0;
     void *temp_s3;
     int temp_v0;
@@ -594,28 +594,28 @@ void FUN_00300490(void **arg0, int arg1, int arg2) {
     unsigned int var_s0;
 
     temp_s3 = (void *)(((igObjectDispatchView *)arg0)->getMeta()->_metaFields);
-    FUN_00304430(DAT_004faf60, arg2, arg0, ((igObjectDispatchView *)arg0)->getMeta()->_name);
-    FUN_00304680();
+    igReport_Printf(DAT_004faf60, arg2, arg0, ((igObjectDispatchView *)arg0)->getMeta()->_name);
+    igReport_Flush();
     if (arg1 != 0) {
         temp_v0 = igObject_AllocateStorage((int)arg0, (strlen(arg2) + 2) * 4);
         sprintf(temp_v0, &DAT_004faf78[0], arg2);
         ((igObjectDispatchView *)arg0)->vfunc_16();
         temp_s1 = *(int *)((char *)(temp_s3) + 12);
         var_s0 = *(int *)((char *)(g_igObject_metaObject[0]->_metaFields) + 12);
-        FUN_00304430(DAT_004faf80, arg2);
-        FUN_00304680();
+        igReport_Printf(DAT_004faf80, arg2);
+        igReport_Flush();
         for (; var_s0 < temp_s1; var_s0++) {
             int *base = *(int **)((char *)(temp_s3) + 8);
             temp_a0 = (void **)base[var_s0];
             { int d = arg1 - 1; ((igMetaFieldView *)temp_a0)->Print((int)arg0, d, (int)temp_v0); }
         }
-        FUN_00304430(DAT_004faf88, arg2);
-        FUN_00304680();
-        FUN_00300f50((int)arg0, temp_v0);
+        igReport_Printf(DAT_004faf88, arg2);
+        igReport_Flush();
+        igObject_FreeMemory((int)arg0, temp_v0);
     }
 }
 
-void FUN_00300600(igObjectDispatchView *self, int source) {
+void igObject_CopyFields(igObjectDispatchView *self, int source) {
     __internalObjectList *meta = (__internalObjectList *)self->getMeta()->_metaFields;
     int n = meta->_count;
     for (int i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < n; i++) {
@@ -623,7 +623,7 @@ void FUN_00300600(igObjectDispatchView *self, int source) {
     }
 }
 
-void FUN_003006a0(igObjectDispatchView *self, igObjectDispatchView *source) {
+void igObject_DeepCopy(igObjectDispatchView *self, igObjectDispatchView *source) {
     igMetaObject *holder;
     __internalObjectList *meta;
     int n;
@@ -640,7 +640,7 @@ void FUN_003006a0(igObjectDispatchView *self, igObjectDispatchView *source) {
     self->vfunc_03(source);
 }
 
-void FUN_00300770(igObjectDispatchView *self, int source) {
+void igObject_ShallowCopy(igObjectDispatchView *self, int source) {
     __internalObjectList *m = (__internalObjectList *)self->getMeta()->_metaFields;
     int n = m->_count;
     int i;
@@ -718,16 +718,16 @@ void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *co
     }
 }
 
-void FUN_00300c00(int arg0, int arg1, int arg2) {
+void igObject_Copy(int arg0, int arg1, int arg2) {
     switch (arg2) {
     case 1:
-        FUN_003006a0((igObjectDispatchView *)arg0, (igObjectDispatchView *)arg1);
+        igObject_DeepCopy((igObjectDispatchView *)arg0, (igObjectDispatchView *)arg1);
         break;
     case 0:
-        FUN_00300770((igObjectDispatchView *)arg0, arg1);
+        igObject_ShallowCopy((igObjectDispatchView *)arg0, arg1);
         break;
     case 2:
-        FUN_00300600((igObjectDispatchView *)arg0, arg1);
+        igObject_CopyFields((igObjectDispatchView *)arg0, arg1);
         break;
     }
 }
@@ -742,7 +742,7 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
 
     metaObject = (int)((igObjectDispatchView *)(source))->getMeta();
     copy = igMetaObject_CreateInstance((igMetaObject *)metaObject, (igMemoryPoolView *)(igObject_GetAllocator((int)source)));
-    FUN_00300c00(copy, (int)source, copyMode);
+    igObject_Copy(copy, (int)source, copyMode);
     return copy;
 }
 
@@ -767,22 +767,22 @@ int igObject_AllocateStorage(int object, int size) {
     return (int)allocator->Allocate(size);
 }
 
-int FUN_00300db0(int object, int size, unsigned short alignment) {
+int igObject_MallocAligned(int object, int size, unsigned short alignment) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
     return (int)allocator->AllocateAligned(size, alignment);
 }
 
-int FUN_00300e00(int object, int size, int option) {
+int igObject_Callocate(int object, int size, int option) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
     return (int)allocator->vfunc_56(size, option);
 }
 
-int FUN_00300e50(int object, int storage, int size) {
+int igObject_Reallocate(int object, int storage, int size) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
     return (int)allocator->Reallocate((void *)storage, size);
 }
 
-int FUN_00300ea0(int object, int storage, int size, unsigned short alignment) {
+int igObject_ReallocateAligned(int object, int storage, int size, unsigned short alignment) {
     igMemoryPoolView *allocator = igObject_GetAllocator(object);
     return (int)allocator->ReallocateAligned((void *)storage, size, alignment);
 }
@@ -796,7 +796,7 @@ void igObject_FreeStorage(int object, int storage) {
 }
 
 /* Same instruction body as igObject_FreeStorage. */
-void FUN_00300f50(int object, int storage) {
+void igObject_FreeMemory(int object, int storage) {
     if (storage != 0) {
         igMemoryPoolView *allocator = igObject_GetAllocator(object);
         allocator->Free((void *)storage);
@@ -818,7 +818,7 @@ igMemoryPoolView *igObject_GetAllocator(int a0) {
     return ((igMemoryPoolView *)igAllocator_ResolveEncodedIndex(*(unsigned char *)((char *)a0 + 7)));
 }
 
-igSmartPointer<igObject> FUN_00301010(igObjectDispatchView *arg1, int arg2) {
+igSmartPointer<igObject> igObject_Clone(igObjectDispatchView *arg1, int arg2) {
     igSmartPointer<igObject> created(arg1->cloneViaMetadata(arg2), kRetainReference);
     created.release();
     return created;

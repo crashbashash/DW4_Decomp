@@ -44,7 +44,7 @@ void ObjectPointerList_Destruct(__internalNonRefCountedObjectList *self) {
         allocator = (void **)(((void **)igObject_GetAllocator((int)self)));
         ((igMemoryPoolView *)allocator)->Free((void *)buffer);
     }
-    Gap__Core__igObject__vfunc_00__002ff0a0((int)self);
+    igObject_Destruct((int)self);
 }
 
 static inline unsigned int pointerListCapacity(__internalNonRefCountedObjectList *list) {
@@ -61,7 +61,7 @@ void ObjectPointerList_EnsureIndex(__internalNonRefCountedObjectList *list, int 
         while (!(index < (int)n)) {
             if ((int)n < 512) n *= 2; else n += 512;
         }
-        list->_data = FUN_00300e50((int)list, list->_data, n * 4);
+        list->_data = igObject_Reallocate((int)list, list->_data, n * 4);
         char *p = (char *)list->_data;
         p += old * 4;
         memset(p, 0, (n - old) * 4);

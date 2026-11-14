@@ -1,4 +1,4 @@
-void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void *arg1) {
+void igExternalDirEntry_ReadFile(igExternalDirEntryView *arg0, void *arg1) {
     int s2, v, old, r;
     int *hd;
     s2 = ((igIGBFile *)arg1)->_basePath;
@@ -22,15 +22,15 @@ void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void 
     arg0->_externalFilePath = s2;
     arg0->vfunc_43(((igIGBFile *)arg1)->_userLoadFunction);
     if (arg0->_ref == 0 && GPR_00554c00 == 0) {
-        r = FUN_00308390(DAT_004f99f0, arg0->_entryName, arg0->_externalFilePath);
+        r = igReport_Warning(DAT_004f99f0, arg0->_entryName, arg0->_externalFilePath);
         if (r != 1 && r == 2) {
             GPR_00554c00 = 1;
         }
     }
-    FUN_002d7da0((igDirectoryView *)arg1, arg0->_index, arg0->_ref);
+    igDirectory_SetEntryRef((igDirectoryView *)arg1, arg0->_index, arg0->_ref);
 }
 
-void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {
+void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -56,7 +56,7 @@ void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {
     arg0->_directoryName = (int)temp_s0;
 }
 
-void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObject *arg1) {
+void igExternalDirEntry_SetRef(igDirEntry *arg0, igObject *arg1) {
     igObject *temp_a0;
     if (arg1 != 0) {
         arg1->_refCount = (int)((int) (arg1->_refCount + 1));
@@ -71,8 +71,8 @@ void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObject *arg1) {
     arg0->_ref = (int)(arg1);
 }
 
-int Gap__Core__igExternalDirEntry__vfunc_44(igExternalDirEntryView *arg0, int arg1) {
-    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)FUN_002c37e0(((int)igObject_GetAllocator((int)arg0)))));
+int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *arg0, int arg1) {
+    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((int)arg0)))));
     char *s1;
     int len;
     int c;
@@ -89,11 +89,11 @@ int Gap__Core__igExternalDirEntry__vfunc_44(igExternalDirEntryView *arg0, int ar
         strcat(buf, &DAT_004f9a48[0]);
         strcat(buf, arg0->_directoryName);
         stream.get()->ReadFile(buf);
-        FUN_00300f50((int)arg0, (int)buf);
+        igObject_FreeMemory((int)arg0, (int)buf);
     }
-    arg0->vfunc_23(FUN_002d8e70((int)(stream.get()), arg0->_entryName));
+    arg0->vfunc_23(igDirectory_GetRefByName((int)(stream.get()), arg0->_entryName));
     if (arg0->_ref == 0) {
-        arg0->vfunc_23(FUN_002d8e70((int)(stream.get()), (int)&text_root[0]));
+        arg0->vfunc_23(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
     }
     return arg0->_ref != 0;
 }
@@ -109,16 +109,16 @@ static inline void dropCreationReference(igVirtualObject *object) {
 /* Resolve the entry through the resource manager's directory of its name, creating and registering
  * that directory if it is missing. When the directory cannot resolve it, the entry loads its file and
  * then calls `loadFunction`; a resolved entry is cloned into the directory so later lookups find it. */
-int Gap__Core__igExternalDirEntry__vfunc_43(igExternalDirEntryView *self, int loadFunction) {
+int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFunction) {
     igMemoryPoolView *pool;
     igResource *resource = ((ObjectSystemView *)g_objectSystem[0])->resource;
-    igSmartPointer<igObject> directory = FUN_003087a0(resource, self->_directoryName);
+    igSmartPointer<igObject> directory = igResource_GetDirectory(resource, self->_directoryName);
     if (directory.get() == 0) {
         pool = igObject_GetAllocator((int)self);
         directory.release();
-        directory.p = (igObject *)FUN_002c72c0((int)pool);
-        FUN_002d8fe0((igDirectoryView *)directory.get(), self->_directoryName);
-        FUN_00308850((int *)resource, (int)directory.get());
+        directory.p = (igObject *)igDirectory_Create((int)pool);
+        igDirectory_SetName((igDirectoryView *)directory.get(), self->_directoryName);
+        igResource_AddDirectory((int *)resource, (int)directory.get());
     }
     ((igDirectoryDispatchView *)directory.get())->resolveExternalEntry(self);
     if (self->_ref == 0) self->vfunc_44(loadFunction);
@@ -136,14 +136,14 @@ int Gap__Core__igExternalDirEntry__vfunc_43(igExternalDirEntryView *self, int lo
     return 0;
 }
 
-void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0) {
-    Gap__Core__igDirEntry__vfunc_11((int)arg0);
+void igExternalDirEntry_InitDefaults(igDirEntry *arg0) {
+    igDirEntry_InitDefaults((int)arg0);
     arg0->_resolveMethod = 2;
     arg0->_refType = 0;
 }
 
-void Gap__Core__igExternalDirEntry__vfunc_12(void **arg0) {
+void igExternalDirEntry_ReleaseDefaults(void **arg0) {
     ((igDirEntryView *)(arg0))->vfunc_23((int)(0));
-    Gap__Core__igObject__vfunc_10((int)arg0);
+    igObject_ReleaseDefaults((int)arg0);
 }
 

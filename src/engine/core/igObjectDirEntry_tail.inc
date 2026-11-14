@@ -1,9 +1,9 @@
 /* Drop the entry's object reference: virtual slot 92 (vfunc_23) is the setter of _ref (+24) that
  * retains the new value and releases the old one, so calling it with 0 releases the held object;
  * the igObject default of this slot (an empty stub) then runs. */
-void Gap__Core__igObjectDirEntry__vfunc_12(igObjectDirEntry *self) {
+void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self) {
     ((igDirEntryView *)self)->vfunc_23(0);
-    Gap__Core__igObject__vfunc_10((int)self);
+    igObject_ReleaseDefaults((int)self);
 }
 
 static inline const char *nameOf_3010f0(const igObjectDirEntry *entry) {
@@ -15,7 +15,7 @@ static inline igObjectList *asEntryList_3010f0(igObject *object) {
     return 0;
 }
 
-igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, igIGBFile *file) {
+igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBFile *file) {
     igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
     if (lists.p == 0) return self;
     int index = ((igObjectDispatchView *)self)->getMeta()->_index;
@@ -27,7 +27,7 @@ igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, 
     if (entries.p == 0) {
         int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((igObjectList *)FUN_002bd680(pool));
+        entries.p = ((igObjectList *)igObjectList_Create(pool));
         objectListSetRetained(index, entries.p, lists.p);
     }
     int i;
@@ -48,12 +48,12 @@ igObjectDirEntry *Gap__Core__igObjectDirEntry__vfunc_26(igObjectDirEntry *self, 
     return self;
 }
 
-int Gap__Core__igObjectDirEntry__vfunc_22(void) {
+int igObjectDirEntry_GetMeta(void) {
     return ((int *)g_igObjectDirEntry_metaObject)[0];
 }
 
 /* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
-void Gap__Core__igObjectDirEntry__vfunc_27(igObjectDirEntry *self, igObject *object) {
+void igObjectDirEntry_RetainSharedRef(igObjectDirEntry *self, igObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount + 1;
     }
@@ -61,7 +61,7 @@ void Gap__Core__igObjectDirEntry__vfunc_27(igObjectDirEntry *self, igObject *obj
 
 /* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
  * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
-void Gap__Core__igObjectDirEntry__vfunc_28(igObjectDirEntry *self, igObject *object) {
+void igObjectDirEntry_ReleaseSharedRef(igObjectDirEntry *self, igObject *object) {
     if (object != 0) {
         object->_refCount = (int)object->_refCount - 1;
         if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0) {
@@ -70,7 +70,7 @@ void Gap__Core__igObjectDirEntry__vfunc_28(igObjectDirEntry *self, igObject *obj
     }
 }
 
-void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1) {
+void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *arg0, igMetaObject *arg1) {
     char *s0;
     (igSmartPointer<igMetaObject> &)arg0->_typeMeta = arg1;
     if (arg1) {
@@ -90,7 +90,7 @@ void FUN_00301590(igObjectDirEntry *arg0, igMetaObject *arg1) {
 /* slot 23 of igObjectDirEntry: set the _ref reference (+24; reflected as a raw ref, but the code
  * treats it as a counted igObject). Reference-counted assignment: retain the new object, release
  * the old one (destroying it when its 23-bit count reaches zero), then store the new one. */
-void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *object) {
+void igObjectDirEntry_SetRef(igObjectDirEntry *self, igObject *object) {
     igObject *previousObject;
     if (object != 0) {
         object->_refCount = object->_refCount + 1;
@@ -106,23 +106,23 @@ void Gap__Core__igObjectDirEntry__vfunc_23(igObjectDirEntry *self, igObject *obj
 }
 
 /* Write the referenced object's persistent fields at the file's object cursor and move past them. */
-void Gap__Core__igObjectDirEntry__vfunc_40(igObjectDirEntry *self, igIGBFileView *file) {
+void igObjectDirEntry_WriteObject(igObjectDirEntry *self, igIGBFileView *file) {
     int cursor = file->objectCursor();
     file->setObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)self->_ref, (int *)cursor, (igIGBFile *)file,
                                                                   (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_38(igObjectDirEntryView *arg0) {
+void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *arg0) {
     igObjectDispatchView *a = (igObjectDispatchView *)arg0->_ref;
     if (a != 0) {
         int (*f)() = (int (*)())a->getMeta()->_writeProxy;
         if (f != 0) {
-            FUN_00301590((igObjectDirEntry *)arg0, (igMetaObject *)f());
+            igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)arg0, (igMetaObject *)f());
         }
     }
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile *arg1) {
+void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *arg0, igIGBFile *arg1) {
     int temp_s0_2;
     void *(*temp_v1)();
     igObjectDispatchView *temp_s0;
@@ -135,13 +135,13 @@ void Gap__Core__igObjectDirEntry__vfunc_39(igObjectDirEntryView *arg0, igIGBFile
     if (temp_v1 != 0) {
         var_v0 = temp_v1();
     }
-    arg0->_typeMetaIndex = FUN_002fe600((igTDataList<igMetaObject *> *)arg1->_metaObjectListInFile, (igMetaObject *)var_v0);
+    arg0->_typeMetaIndex = igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)arg1->_metaObjectListInFile, (igMetaObject *)var_v0);
     temp_s0_2 = arg1->_objectBufferSize;
     arg1->_objectBufferSize = temp_s0_2 + igObject_GetSerializedSize((igObjectDispatchView *)temp_s0);
     arg1->_objectCount = arg1->_objectCount + 1;
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1) {
+void igObjectDirEntry_RegisterRef(igObjectDirEntry *arg0, int arg1) {
     int temp_a0;
 
     temp_a0 = arg0->_ref;
@@ -154,24 +154,24 @@ void Gap__Core__igObjectDirEntry__vfunc_36(igObjectDirEntry *arg0, int arg1) {
     }
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_37(igObjectDirEntryView *self)
+void igObjectDirEntry_PostProcess(igObjectDirEntryView *self)
 {
     ((igObjectDispatchView *)self->_ref)->vfunc_15();
 }
 
 /* Read the referenced object's fields from the file's object cursor and move past them. */
-void Gap__Core__igObjectDirEntry__vfunc_33(igObjectDirEntry *self, igIGBFileView *file) {
+void igObjectDirEntry_ResolveRefOld(igObjectDirEntry *self, igIGBFileView *file) {
     igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
-    int read = FUN_002fff90(object, (FieldRecordHead *)file->objectCursor(), (igIGBFile *)file,
+    int read = igObject_ReadFields(object, (FieldRecordHead *)file->objectCursor(), (igIGBFile *)file,
                             (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     int cursor = file->objectCursor();
     file->setObjectCursor(cursor + read);
 }
 
 /* Resolve the referenced object's references to other entries the same way, from the object cursor. */
-void Gap__Core__igObjectDirEntry__vfunc_34(igObjectDirEntry *self, igIGBFileView *file) {
+void igObjectDirEntry_ResolveRef(igObjectDirEntry *self, igIGBFileView *file) {
     igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
-    int read = FUN_00300250(object, (FieldRecordHead *)file->objectCursor(), (igDirectoryView *)file,
+    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->objectCursor(), (igDirectoryView *)file,
                             (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     int cursor = file->objectCursor();
     file->setObjectCursor(cursor + read);
@@ -192,7 +192,7 @@ static inline void setMeta(igObjectDirEntryView *self, igMetaObject *m) {
     self->_typeMeta = m;
 }
 
-void Gap__Core__igObjectDirEntry__vfunc_31(igObjectDirEntryView *self, igIGBFileView *file) {
+void igObjectDirEntry_CreateObject(igObjectDirEntryView *self, igIGBFileView *file) {
     int index;
     igObject *obj;
     int pool;
@@ -216,18 +216,18 @@ void Gap__Core__igObjectDirEntry__vfunc_31(igObjectDirEntryView *self, igIGBFile
         obj = ((igObject *)igMetaObject_CreateInstanceWithPool(self->_typeMeta, (igMemoryPoolView *)pool));
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
-            FUN_002d7da0((igDirectoryView *)file, self->_index, (int)0);
+            igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)0);
             return;
         }
-        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)obj);
+        igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)obj);
         dropRef(obj);
     } else {
-        FUN_002d7da0((igDirectoryView *)file, self->_index, (int)0);
+        igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)0);
     }
 }
 
 /* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
-void Gap__Core__igObjectDirEntry__vfunc_24(igObjectDirEntry *self, igObject *object) {
+void igObjectDirEntry_RetainRef(igObjectDirEntry *self, igObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount + 1;
     }
@@ -235,7 +235,7 @@ void Gap__Core__igObjectDirEntry__vfunc_24(igObjectDirEntry *self, igObject *obj
 
 /* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
  * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
-void Gap__Core__igObjectDirEntry__vfunc_25(igObjectDirEntry *self, igObject *object) {
+void igObjectDirEntry_ReleaseRef(igObjectDirEntry *self, igObject *object) {
     if (object != 0) {
         object->_refCount = (int)object->_refCount - 1;
         if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0) {
@@ -246,13 +246,13 @@ void Gap__Core__igObjectDirEntry__vfunc_25(igObjectDirEntry *self, igObject *obj
 
 /* igObjectDirEntry vtable slot 29: setter for `_memoryPoolHandle` (+44), the pool handle field of
  * the directory entry. Slot 30 is the matching getter; igMemoryDirEntry has the same pair. */
-void Gap__Core__igObjectDirEntry__vfunc_29(igObjectDirEntry *self, int memoryPoolHandle) {
+void igObjectDirEntry_SetMemoryPoolHandle(igObjectDirEntry *self, int memoryPoolHandle) {
     self->_memoryPoolHandle = memoryPoolHandle;
 }
 
 /* IgObjectDirEntry vtable slot 30, a plain getter that returns the reflected field
  * _memoryPoolHandle (+44). */
-int Gap__Core__igObjectDirEntry__vfunc_30(igObjectDirEntry *self) {
+int igObjectDirEntry_GetMemoryPoolHandle(igObjectDirEntry *self) {
     return self->_memoryPoolHandle;
 }
 

@@ -943,7 +943,7 @@ public:
     virtual igResult wait(int block);                           /* slot 31 */
     unsigned int _refCount;
 };
-extern "C" LuaSemaphoreView *FUN_002ba650(igObject *pool);
+extern "C" LuaSemaphoreView *igSemaphore_Create(igObject *pool);
 
 /* Holds the semaphore for its lifetime. */
 struct LuaSemaphoreLock {

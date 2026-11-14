@@ -1,7 +1,7 @@
 void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(FUN_002c4870());
+    temp_v0 = (void **)(igFloatMetaField_GetDefaultDescriptor());
     ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * (int)((unsigned int) arg0->_size >> 2)));
 }
 

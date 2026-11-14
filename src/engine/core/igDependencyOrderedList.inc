@@ -2,7 +2,7 @@ igMetaObject *igDependencyOrderedList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDependencyOrderedList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c7ba0();
+        igDependencyOrderedList_EnsureRegistered();
     return g_igDependencyOrderedList_metaObject[0];
 }
 
@@ -24,19 +24,19 @@ int igDependencyOrderedList_GetVTable(void) {
     return t;
 }
 
-void FUN_002c7ba0(void)
+void igDependencyOrderedList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDependencyOrderedList_Register);
 }
 
 void igDependencyOrderedList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igDependencyOrderedList_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igDependencyOrderedList_GetMetaObject,
+        igDependencyOrderedList_GetMetaObjectFunction,
         igDependencyOrderedList_className,
         0x1C, /* instance size */
         igDependencyOrderedList_GetVTable,
@@ -46,7 +46,7 @@ void igDependencyOrderedList_Register(void) {
     );
 }
 
-void thunk_igDependencyOrderedList_GetMetaObject(void) {
+void igDependencyOrderedList_GetMetaObjectFunction(void) {
     igDependencyOrderedList_GetMetaObject();
 }
 
@@ -65,13 +65,13 @@ void igDependencyOrderedList_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_002c7d40();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igDependencyList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_002c9170();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igDependencyOrderedList_fieldTable[0], (igMetaField ***)&DAT_004c1340[0], &DAT_004c1360[0], temp_s0);
 }

@@ -95,7 +95,7 @@ void igPickMode_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00188260();
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), 0.0f);
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));

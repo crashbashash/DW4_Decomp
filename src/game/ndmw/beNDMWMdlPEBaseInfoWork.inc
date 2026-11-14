@@ -65,7 +65,7 @@ void beNDMWMdlPEBaseInfoWork_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002cb110();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igBoolList_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igIntList_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));

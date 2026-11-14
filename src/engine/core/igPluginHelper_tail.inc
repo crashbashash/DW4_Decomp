@@ -11,7 +11,7 @@ static inline void dropValues_304b10(igTDataList<char *> *o) {
     IG_OBJECT_RELEASE(o);
 }
 
-void FUN_00304b10(void *self) {
+void igPluginHelper_LoadPluginsFromRegistry(void *self) {
     void *ini;
     int section;
     unsigned int n;
@@ -23,9 +23,9 @@ void FUN_00304b10(void *self) {
     char *text;
     igTDataList<char *> *held;
     ini = (*(ObjectSystemView **)g_objectSystem)->configRegistry;
-    section = FUN_00306360((igRegistry *)ini, PLUGINS, 1);
+    section = igRegistry_GetSectionIndex((igRegistry *)ini, PLUGINS, 1);
     if (section >= 0) {
-        n = ((unsigned int)FUN_003064b0((int)ini, section));
+        n = ((unsigned int)igRegistry_GetNumValuesInSection((int)ini, section));
         for (i = 0; i < n; i++) {
             key = 0;
             if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
@@ -33,14 +33,14 @@ void FUN_00304b10(void *self) {
             } else {
                 *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((int)self))));
                 held = values;
-                if (FUN_00306aa0(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
+                if (igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0) == 0) {
                     dropValues_304b10(values);
                     dropKey(key);
                 } else {
                     for (j = 0; j < (held = values)->_count; j++) {
                         StringList_CopyRetained(&string, values, j);
                         text = string;
-                        FUN_00304840((igPluginHelper *)self, (int)(keyText(key)), (const char *)text);
+                        igPluginHelper_AddRepositoryFromConfig((igPluginHelper *)self, (int)(keyText(key)), (const char *)text);
                         releaseString(string);
                     }
                     dropValues_304b10(held);
@@ -51,7 +51,7 @@ void FUN_00304b10(void *self) {
     }
 }
 
-void Gap__Core__igPluginHelper__vfunc_10(igPluginHelper *self) {
+void Gap__Core__igPluginHelper__userDestruct(igPluginHelper *self) {
     int count;
     int i;
     igLibrary *library;
@@ -72,7 +72,7 @@ void Gap__Core__igPluginHelper__vfunc_10(igPluginHelper *self) {
     }
 }
 
-int FUN_00304e60(Args *args) {
+int igPluginHelper_ThreadLoop(Args *args) {
     int key;
     igStandardQueueView *queue;
     igResult (*fn)(int);
@@ -85,14 +85,14 @@ int FUN_00304e60(Args *args) {
     return 0;
 }
 
-void **FUN_00304f00(void *arg0, int arg1, unsigned stackSize) {
+void **igQueue_StartServiceThread(void *arg0, int arg1, unsigned stackSize) {
     void **a; void *b;
     a = (void **)(((void **)igObject_GetAllocator((int)arg0)));
     b = ((igMemoryPoolView *)a)->Allocate(8);
     *(int *)((char *)(b) + 0) = arg1;
     *(int *)((char *)(b) + 4) = (int)(arg0);
-    a = (void **)(((void **)FUN_002b7f40((int)a)));
-    ((igPsx2ThreadView *)a)->setFunction((int (*)(...))FUN_00304e60);
+    a = (void **)(((void **)igThread_Create((int)a)));
+    ((igPsx2ThreadView *)a)->setFunction((int (*)(...))igPluginHelper_ThreadLoop);
     ((igPsx2ThreadView *)a)->setArg((int)b);
     ((igPsx2ThreadView *)a)->setStackSize(stackSize);
     if (((igPsx2ThreadView *)a)->start() == g_resultSuccess) {
@@ -101,7 +101,7 @@ void **FUN_00304f00(void *arg0, int arg1, unsigned stackSize) {
     return a;
 }
 
-int FUN_00305000(igStandardQueueView *queue) {
+int igStandardQueue_StopServiceThreads(igStandardQueueView *queue) {
     igResult terminated, joined;
     int n;
     igPsx2ThreadView *p;
@@ -147,8 +147,8 @@ int FUN_00305000(igStandardQueueView *queue) {
     }
 }
 
-int thunk_FUN_00305000(int extra0)
+int thunk_igStandardQueue_StopServiceThreads(int extra0)
 {
-    return FUN_00305000((igStandardQueueView *)extra0);
+    return igStandardQueue_StopServiceThreads((igStandardQueueView *)extra0);
 }
 

@@ -80,7 +80,7 @@ void igPsx2DecalExt_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     igMetaObject_NameFields(temp_s0, &g_igPsx2DecalExt_fieldTable[0], &DAT_0048a0c8[0], &DAT_0048a0d0[0], temp_s2);
 }
 

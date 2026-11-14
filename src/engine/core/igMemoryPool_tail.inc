@@ -4,7 +4,7 @@ int **igMemoryPool_Initialize(int **arg0) {
     return arg0;
 }
 
-int **FUN_002effb0(int **arg0) {
+int **igMemoryPool_Construct(int **arg0) {
     igObject_ConstructHeader((igObject *)arg0);
     *arg0 = &DAT_0052f620[0];
     return arg0;

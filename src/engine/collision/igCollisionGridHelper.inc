@@ -82,8 +82,8 @@ void igCollisionGridHelper_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0023a080();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002be610();
-    FUN_00303460(temp_s1_2, igCollisionGroup_GetMetaObject());
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igMetaObject_GetOrCreateMetaObject();
+    igObjectRefMetaField_SetDefault(temp_s1_2, igCollisionGroup_GetMetaObject());
     igMetaObject_NameFields(temp_s0, &g_igCollisionGridHelper_fieldTable[0], &DAT_00498460[0], &DAT_00498468[0], temp_s2);
 }
 

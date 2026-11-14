@@ -2,11 +2,11 @@ igMetaObject *igRefMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igRefMetaField_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bb830();
+        igRefMetaField_EnsureRegistered();
     return g_igRefMetaField_metaObject[0];
 }
 
-void FUN_002bb830(void)
+void igRefMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igRefMetaField_Register);
 }
@@ -17,7 +17,7 @@ void igRefMetaField_Register(void) {
         ((char *)g_igRefMetaField_metaObject),
         igMetaField_Register,
         igMetaField_GetPublishedMetaObject,
-        thunk_igRefMetaField_GetMetaObject,
+        igRefMetaField_GetMetaObjectFunction,
         igRefMetaField_className,
         0x38, /* instance size */
         0,
@@ -27,7 +27,7 @@ void igRefMetaField_Register(void) {
     );
 }
 
-void thunk_igRefMetaField_GetMetaObject(void) {
+void igRefMetaField_GetMetaObjectFunction(void) {
     igRefMetaField_GetMetaObject();
 }
 
@@ -41,7 +41,7 @@ void igRefMetaField_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igRefMetaField_fieldTable[0], (igMetaField ***)&DAT_004bf970[0], &DAT_004bf978[0], temp_s1);
 }
 
-void FUN_002bb930(void) {
+void igRefMetaField_CreateDefaultDescriptor(void) {
     void *temp_s0;
     igRefMetaField *o;
     int t;
@@ -50,13 +50,13 @@ void FUN_002bb930(void) {
         g_igRefMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igRefMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igRefMetaField_descriptor[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             o = (igRefMetaField *)g_igRefMetaField_descriptor[0];
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(o);
             }
-            t = ((__internalObjectList *)FUN_002fc250())->_count - 1;
+            t = ((__internalObjectList *)igMetaField_GetMetaFieldList())->_count - 1;
             ((igRefMetaField *)g_igRefMetaField_descriptor[0])->_internalIndex = (short) t;
             igMetaField_FinalizeDescriptor((igMetaField *)g_igRefMetaField_descriptor[0]);
         }

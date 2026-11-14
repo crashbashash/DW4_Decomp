@@ -105,7 +105,7 @@ O_137530 *FUN_00137530(O_137530 *arg0, short arg1) {
             S1 *t = arg0->m12;
             if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
         }
-        if (arg1 > 0) thunk_FUN_002ed460__002ff810(arg0);
+        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
     }
     return arg0;
 }

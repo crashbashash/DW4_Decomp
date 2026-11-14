@@ -2,7 +2,7 @@ igMetaObject *igPsx2CallStackTracer_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2CallStackTracer_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002d04a0();
+        igPsx2CallStackTracer_EnsureRegistered();
     return g_igPsx2CallStackTracer_metaObject[0];
 }
 
@@ -13,19 +13,19 @@ int igPsx2CallStackTracer_GetVTable(void) {
     return *(int *)((char *)obj + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
 }
 
-void FUN_002d04a0(void)
+void igPsx2CallStackTracer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2CallStackTracer_Register);
 }
 
 void igPsx2CallStackTracer_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igPsx2CallStackTracer_metaObject),
         igCallStackTracer_Register,
         igCallStackTracer_GetPublishedMetaObject,
-        thunk_igPsx2CallStackTracer_GetMetaObject,
+        igPsx2CallStackTracer_GetMetaObjectFunction,
         igPsx2CallStackTracer_className,
         0x14, /* instance size */
         igPsx2CallStackTracer_GetVTable,
@@ -35,11 +35,11 @@ void igPsx2CallStackTracer_Register(void) {
     );
 }
 
-igMetaObject *FUN_002d0520(void) {
+igMetaObject *igCallStackTracer_GetPublishedMetaObject(void) {
     return g_igCallStackTracer_metaObject[0];
 }
 
-void FUN_002d0530(void) {
-    *(int *)((char *)(g_igPsx2CallStackTracer_metaObject[0]) + 64) = (int)(&thunk_igCallStackTracer_GetMetaObject);
+void igPsx2CallStackTracer_SetWriteProxy(void) {
+    *(int *)((char *)(g_igPsx2CallStackTracer_metaObject[0]) + 64) = (int)(&igCallStackTracer_GetMetaObjectFunction);
 }
 

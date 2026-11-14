@@ -5,7 +5,7 @@
 extern "C" {
 int SyncDCache(int, int);
 int memcpy(int, int, int);
-int FUN_00300db0(void *, int, int);
+int igObject_MallocAligned(void *, int, int);
 }
 struct R { int code; inline int Code() { return code; } };
 class Q { public:
@@ -16,8 +16,8 @@ class Q { public:
 };
 struct Rec { int w0; int w4; int w8; int w12; int len; };
 struct Tab { int pad[3]; char *base; };
-extern "C" R FUN_0032d6d0(int, int, void *, int, void *, int, int);
-extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int arg2, int arg3)
+extern "C" R igPsx2IopRpcConnection_Call(int, int, void *, int, void *, int, int);
+extern "C" int igPsx2Media_Write(igPsx2Media *arg0, int arg1, int arg2, int arg3)
 {
     int temp_v0;
     int var_s4;
@@ -33,7 +33,7 @@ extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int
     temp_s2 = &temp_s3->len;
     if (var_s4 & 0x3F) {
         if (arg0->_writeBuffer == 0) {
-            arg0->_writeBuffer = FUN_00300db0(arg0, 0x8000, 0x40);
+            arg0->_writeBuffer = igObject_MallocAligned(arg0, 0x8000, 0x40);
         }
         idx = arg1 * 3 * 4;
         var_s1 = arg3;
@@ -48,7 +48,7 @@ extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int
             temp_s3->w8 = var_s0;
             temp_s3->w12 = 0;
             SyncDCache(arg0->_writeBuffer, arg0->_writeBuffer + var_s0);
-            FUN_0032d6d0(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
+            igPsx2IopRpcConnection_Call(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
             temp_v0 = *temp_s2;
             if (temp_v0 != var_s0) {
                 if (temp_v0 < 0) {
@@ -69,7 +69,7 @@ extern "C" int Gap__Core__igPsx2Media__vfunc_27(igPsx2Media *arg0, int arg1, int
     temp_s3->w8 = arg3;
     temp_s3->w12 = 0;
     SyncDCache(var_s4, var_s4 + arg3);
-    FUN_0032d6d0(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
+    igPsx2IopRpcConnection_Call(arg0->_connection, 7, temp_s3, 0x10, temp_s2, 0x10, 1).Code();
     temp_s0 = *temp_s2;
     ((Q *)arg0->_sema)->v29().Code();
     return temp_s0;

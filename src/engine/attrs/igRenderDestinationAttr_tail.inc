@@ -117,7 +117,7 @@ void Gap__Attrs__igRenderDestinationAttr__vfunc_26(OO *arg0, void **arg1) {
 
 void Gap__Attrs__igRenderDestinationAttr__vfunc_12(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 void Gap__Attrs__igRenderDestinationAttr__vfunc_28(X_13fea0 *arg0) {

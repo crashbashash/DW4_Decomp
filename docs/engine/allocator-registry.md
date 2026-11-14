@@ -7,7 +7,7 @@ encoder, the 72-byte index search, the 56-byte default
 allocation wrapper, which uses an explicit allocator ABI view, and
 the 292-byte owner lookup in `src/engine/core/igObject_tail.inc`.
 The shared-tail wrapper `Memory_AllocateBufferViaSharedTail` opens the memory API's run of the Core library unit,
-[igMemory.inc](../../src/engine/core/igMemory.inc). Its shared tail is `FUN_002ed1e0`;
+[igMemory.inc](../../src/engine/core/igMemory.inc). Its shared tail is `Memory_AllocateFromPool`;
 the 28-byte direct tail is `Memory_AllocateBufferDirect` (`2ed240`).
 
 Seven names in `config/SLUS-20836/names/AllocatorRegistry.tsv` describe observed operations.
@@ -70,7 +70,7 @@ twelve additional bytes are classified as code. `tools/test_function_extents.py`
 complete wrapper alongside the four other reviewed spans. Retail objdump confirms the
 shared tail. The layout keeps it as two
 symbols: `extent-overrides.tsv` cuts the wrapper to `2ed1c0..2ed1d4`, and the shared tail is
-`FUN_002ed1e0` at `2ed1e0..2ed1f4`.
+`Memory_AllocateFromPool` at `2ed1e0..2ed1f4`.
 
 ## Boundaries
 

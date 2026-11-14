@@ -1,11 +1,11 @@
 /* Configures the pool from its info record: the base class's step only. The result is a local
  * copied out, as in the pools that go on to read the info's strings. */
-igResult Gap__Core__igStackMemoryPool__vfunc_45(igStackMemoryPool *self, igMemoryPoolInfo *info) {
-    igResult result = FUN_002f0880((void **)self, (void *)info);
+igResult igStackMemoryPool_Configure(igStackMemoryPool *self, igMemoryPoolInfo *info) {
+    igResult result = igMemoryPool_Configure((void **)self, (void *)info);
     return result;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_30(igStackMemoryPool *p) {
+void igStackMemoryPool_Activate(igStackMemoryPool *p) {
     unsigned v = p->_rawMemory;
     if (v != 0) {
         p->_stackPtr = v;
@@ -15,59 +15,59 @@ void Gap__Core__igStackMemoryPool__vfunc_30(igStackMemoryPool *p) {
     }
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_31(igStackMemoryPool *s) {
+void igStackMemoryPool_Reset(igStackMemoryPool *s) {
     s->_stackPtr = s->_rawMemory;
     s->_nextInt = (int)(s->_stackPtr + s->_totalSize + (long long)(unsigned __int128)(unsigned long long)-4LL);
     s->_nextInt = s->_nextInt - (s->_nextInt & 3);
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_32(igStackMemoryPool *self) {
+void igStackMemoryPool_Deactivate(igStackMemoryPool *self) {
     ((igMemoryPoolView *)self)->vfunc_31();
     self->_isActive = 0;
 }
 
 /* Reports whether the pool is active: returns _isActive (+140), same slot as
  * igAliasMemoryPool::vfunc_33. */
-unsigned char Gap__Core__igStackMemoryPool__vfunc_33(igStackMemoryPool *self) {
+unsigned char igStackMemoryPool_IsActive(igStackMemoryPool *self) {
     return self->_isActive;
 }
 
 /* IgStackMemoryPool vtable slot 35: status leaf. Ignores the object and writes the engine's
  * current failure-status word (the one an allocation failure publishes) through the output-first
  * argument. */
-void Gap__Core__igStackMemoryPool__vfunc_35(int *status_out) {
+void igStackMemoryPool_SetSize(int *status_out) {
     *status_out = g_resultFailure.v;
 }
 
 /* Slot 36 getter: returns the pool's _totalSize field (an int widened to 64 bits). */
-long long Gap__Core__igStackMemoryPool__vfunc_36(igStackMemoryPool *self) {
+long long igStackMemoryPool_GetSize(igStackMemoryPool *self) {
     return self->_totalSize;
 }
 
 /* Set the pool's alignment (`_alignment`, +112) and report success through the status word.
  * vfunc_38 is the matching getter. */
-void Gap__Core__igStackMemoryPool__vfunc_37(int *status, igStackMemoryPool *self, short alignment) {
+void igStackMemoryPool_SetAlignment(int *status, igStackMemoryPool *self, short alignment) {
     self->_alignment = alignment;
     *status = g_resultSuccess.v;
 }
 
 /* IgStackMemoryPool slot 38, returns the reflected _alignment (+112, unsigned short). */
-unsigned short Gap__Core__igStackMemoryPool__vfunc_38(igStackMemoryPool *self) {
+unsigned short igStackMemoryPool_GetAlignment(igStackMemoryPool *self) {
     return self->_alignment;
 }
 
 /* Set the pool's element size (`_elementSize`, +128) and report success through the status word. */
-void Gap__Core__igStackMemoryPool__vfunc_39(int *status, igStackMemoryPool *self, int elementSize) {
+void igStackMemoryPool_SetElementSize(int *status, igStackMemoryPool *self, int elementSize) {
     self->_elementSize = elementSize;
     *status = g_resultSuccess.v;
 }
 
 /* Getter: the pool's _elementSize (+128, reflected as igUnsignedIntMetaField). */
-int Gap__Core__igStackMemoryPool__vfunc_40(igStackMemoryPool *self) {
+int igStackMemoryPool_GetElementSize(igStackMemoryPool *self) {
     return self->_elementSize;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_24(int *arg0, void *arg1, int arg2, long long arg3, char arg4) {
+void igStackMemoryPool_SetRawMemory(int *arg0, void *arg1, int arg2, long long arg3, char arg4) {
     if (*(unsigned char *)((char *)(arg1) + 140) == 0) {
         *(int *)((char *)(arg1) + 116) = arg2;
         *(long long *)((char *)(arg1) + 120) = arg3;
@@ -80,14 +80,14 @@ void Gap__Core__igStackMemoryPool__vfunc_24(int *arg0, void *arg1, int arg2, lon
 
 /* Getter: the pool's _rawMemory reference (+116, reflected as igRawRefMetaField), the backing
  * block the stack pointer walks through. */
-int Gap__Core__igStackMemoryPool__vfunc_26(igStackMemoryPool *self) {
+int igStackMemoryPool_GetRawMemory(igStackMemoryPool *self) {
     return self->_rawMemory;
 }
 
 /* IgStackMemoryPool vtable slot 42: getter for the reflected _totalSize (+120,
  * igUnsignedLongMetaField). Returned as a 64-bit value, like igArenaMemoryPool slot 42 for its
  * _maxSize. */
-long long Gap__Core__igStackMemoryPool__vfunc_42(igStackMemoryPool *self) {
+long long igStackMemoryPool_GetMaxSize(igStackMemoryPool *self) {
     return self->_totalSize;
 }
 
@@ -97,7 +97,7 @@ long long Gap__Core__igStackMemoryPool__vfunc_46(igStackMemoryPool *arg0) {
     return 0;
 }
 
-long long Gap__Core__igStackMemoryPool__vfunc_47(igStackMemoryPool *arg0) {
+long long igStackMemoryPool_GetLocalNetAllocated(igStackMemoryPool *arg0) {
     int cur;
     long long total = 0;
     StackBlockRecord *e;
@@ -117,17 +117,17 @@ long long Gap__Core__igStackMemoryPool__vfunc_47(igStackMemoryPool *arg0) {
     return total;
 }
 
-long long Gap__Core__igStackMemoryPool__vfunc_48(igStackMemoryPool *arg0) {
+long long igStackMemoryPool_GetLocalNetAllocatedWithOverhead(igStackMemoryPool *arg0) {
     return arg0->_totalSize - ((igMemoryPoolView *)arg0)->vfunc_49();
 }
 
-long long Gap__Core__igStackMemoryPool__vfunc_49(igStackMemoryPool *arg0) {
+long long igStackMemoryPool_GetFreeSize(igStackMemoryPool *arg0) {
     long long r = (long long)arg0->_nextInt - (long long)arg0->_stackPtr;
     if (r > 0) return r;
     return 0;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_53(igStackMemoryPool *arg0) {
+int igStackMemoryPool_AllocateElement(igStackMemoryPool *arg0) {
     int total, pad, mask;
     int cur;
     unsigned short align;
@@ -148,7 +148,7 @@ int Gap__Core__igStackMemoryPool__vfunc_53(igStackMemoryPool *arg0) {
     return cur;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_54(igStackMemoryPool *arg0, int arg1) {
+int igStackMemoryPool_Allocate(igStackMemoryPool *arg0, int arg1) {
     int total, pad, mask;
     int cur;
     unsigned short align;
@@ -169,7 +169,7 @@ int Gap__Core__igStackMemoryPool__vfunc_54(igStackMemoryPool *arg0, int arg1) {
     return cur + pad;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_55(igStackMemoryPool *arg0, int size, unsigned short arg2) {
+int igStackMemoryPool_AllocateAligned(igStackMemoryPool *arg0, int size, unsigned short arg2) {
     int total, pad, mask, ret;
     unsigned short align;
     unsigned short pool;
@@ -189,7 +189,7 @@ int Gap__Core__igStackMemoryPool__vfunc_55(igStackMemoryPool *arg0, int size, un
     return ret;
 }
 
-void *Gap__Core__igStackMemoryPool__vfunc_56(igStackMemoryPool *s, int count, int size) {
+void *igStackMemoryPool_Callocate(igStackMemoryPool *s, int count, int size) {
     int total = count * size;
     if (total == 0) { total = 1; }
     if (total == 0) {
@@ -213,7 +213,7 @@ void *Gap__Core__igStackMemoryPool__vfunc_56(igStackMemoryPool *s, int count, in
     }
 }
 
-void *Gap__Core__igStackMemoryPool__vfunc_57(igStackMemoryPool *s, int count, int size, unsigned short a) {
+void *igStackMemoryPool_CallocateAligned(igStackMemoryPool *s, int count, int size, unsigned short a) {
     int total = count * size;
     unsigned short pool;
     if (total == 0) { total = 1; }
@@ -241,7 +241,7 @@ void *Gap__Core__igStackMemoryPool__vfunc_57(igStackMemoryPool *s, int count, in
     }
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_58(void **arg0, int arg1, unsigned int arg2) {
+int igStackMemoryPool_Reallocate(void **arg0, int arg1, unsigned int arg2) {
     int var_v0;
     unsigned int temp_v0;
     unsigned int temp_v0_2;
@@ -264,7 +264,7 @@ int Gap__Core__igStackMemoryPool__vfunc_58(void **arg0, int arg1, unsigned int a
     return var_v0;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int arg2, unsigned short arg3) {
+int igStackMemoryPool_ReallocateAligned(void **arg0, int arg1, unsigned int arg2, unsigned short arg3) {
     int var_v0;
     unsigned int temp_v0;
     unsigned int temp_v0_2;
@@ -297,7 +297,7 @@ static inline unsigned short effectiveAlign(igStackMemoryPool *pool, unsigned sh
  * them fit; otherwise every result is cleared. One index serves all four loops (its later uses
  * are numbered after every other local), and the pool's top is read from the pool where it is
  * used: the second attempt reads the unmoved top for each block, as retail does. */
-void Gap__Core__igStackMemoryPool__vfunc_62(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out) {
+void igStackMemoryPool_GangAlloc(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out) {
     unsigned i;
     unsigned total = 0;
     for (i = 0; i < count; i++) {
@@ -347,7 +347,7 @@ void Gap__Core__igStackMemoryPool__vfunc_62(int *result, igStackMemoryPool *pool
     *result = g_resultFailure.v;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_63(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out, unsigned short *aligns) {
+void igStackMemoryPool_GangAllocAligned(int *result, igStackMemoryPool *pool, unsigned short count, unsigned *sizes, unsigned *out, unsigned short *aligns) {
     unsigned i;
     unsigned total = 0;
     unsigned padding = 0;
@@ -403,7 +403,7 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, igStackMemoryPool *pool
     *result = g_resultFailure.v;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_84(igStackMemoryPool *arg0, unsigned int arg1) {
+int igStackMemoryPool_GetAllocationSize(igStackMemoryPool *arg0, unsigned int arg1) {
     StackBlockRecord *a1;
     unsigned int a0;
     unsigned int v1;
@@ -421,7 +421,7 @@ int Gap__Core__igStackMemoryPool__vfunc_84(igStackMemoryPool *arg0, unsigned int
     return v1 - (arg1 - a0);
 }
 
-bool Gap__Core__igStackMemoryPool__vfunc_85(igStackMemoryPool *s, unsigned a) {
+bool igStackMemoryPool_OwnsAllocation(igStackMemoryPool *s, unsigned a) {
     bool r = false;
     if (a >= (unsigned)s->_rawMemory) {
         if ((unsigned long long)a < (unsigned long long)(unsigned)s->_rawMemory + s->_totalSize) r = true;
@@ -429,7 +429,7 @@ bool Gap__Core__igStackMemoryPool__vfunc_85(igStackMemoryPool *s, unsigned a) {
     return r;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_64(igStackMemoryPool *self, unsigned count, unsigned *ptrs) {
+void igStackMemoryPool_GangFree(igStackMemoryPool *self, unsigned count, unsigned *ptrs) {
     unsigned last;
     unsigned *end;
     unsigned top;
@@ -466,7 +466,7 @@ void Gap__Core__igStackMemoryPool__vfunc_64(igStackMemoryPool *self, unsigned co
     }
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_66(igStackMemoryPool *self, unsigned block) {
+void igStackMemoryPool_Free(igStackMemoryPool *self, unsigned block) {
     unsigned *e;
     unsigned avail;
     unsigned top;
@@ -496,11 +496,11 @@ void Gap__Core__igStackMemoryPool__vfunc_66(igStackMemoryPool *self, unsigned bl
     }
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_89(void *arg0) {
+int igStackMemoryPool_GetEventTracker(void *arg0) {
     return *(int *)((char *)(arg0) + 148);
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_90(igStackMemoryPool *arg0, igObject *arg1) {
+void igStackMemoryPool_SetEventTracker(igStackMemoryPool *arg0, igObject *arg1) {
     igObject *temp_a0;
     if ((arg1 == 0) || (((void *)igObject_GetAllocator((int)arg1)) != arg0)) {
         if (arg1 != 0) {
@@ -512,32 +512,32 @@ void Gap__Core__igStackMemoryPool__vfunc_90(igStackMemoryPool *arg0, igObject *a
     }
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_86(int *a, int a1, int a2, int a3, int a4) {
-    FUN_002ed610((unsigned int)a1, (unsigned int)a2, (unsigned int)a3, (unsigned int)a[29], (long long)((unsigned int)(a[33] - a[29])), (const char *)a4);
+void igStackMemoryPool_Dump(int *a, int a1, int a2, int a3, int a4) {
+    Memory_DumpMemory((unsigned int)a1, (unsigned int)a2, (unsigned int)a3, (unsigned int)a[29], (long long)((unsigned int)(a[33] - a[29])), (const char *)a4);
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_91(void *arg0) {
+int igStackMemoryPool_GetPoolIndex(void *arg0) {
     return *(int *)((char *)(arg0) + 144);
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_92(void *arg0, int arg1) {
+void igStackMemoryPool_SetPoolIndex(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 144) = arg1;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_96(igStackMemoryPool *self, igDataList *list) {
+void igStackMemoryPool_CollectMemoryRegions(igStackMemoryPool *self, igDataList *list) {
     DumpRegion *entry;
     DumpRegion *created;
 
     if (((igMemoryPoolView *)self)->isActive() != 0) {
-        created = FUN_0032a1e0(sizeof(DumpRegion));
+        created = DumpRegion_Allocate(sizeof(DumpRegion));
         if (created != 0) {
-            created = FUN_0032a100(created);
+            created = DumpRegion_Init(created);
         }
         entry = created;
         created->start = self->_rawMemory;
         entry->size = self->_totalSize;
-        FUN_0032a180(entry, text_Pool_igStackMemoryPool);
-        FUN_0032a1b0(entry, (const char *)FUN_002f89a0((int)self));
-        List_InsertWords(list, FUN_002d6e60(list, &entry, (Cmp)FUN_0032a260), 1, &entry);
+        DumpRegion_SetAnnotation(entry, text_Pool_igStackMemoryPool);
+        DumpRegion_SetPoolName(entry, (const char *)Memory_GetPoolName((int)self));
+        List_InsertWords(list, List_LowerBound(list, &entry, (Cmp)DumpRegion_CompareStart), 1, &entry);
     }
 }

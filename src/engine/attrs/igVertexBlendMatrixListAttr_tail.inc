@@ -32,7 +32,7 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S_141e10 *arg0, in
         FUN_001419f0((TransformPairView *)arg0, (float *)((char *)arg0 + 0x1C), (void *)((char *)arg0 + 0x5C));
     }
     if (arg0->f16 == 0 && n > 0) {
-        arg0->f16 = FUN_00300db0(arg0, n << 6, 0x10);
+        arg0->f16 = igObject_MallocAligned(arg0, n << 6, 0x10);
         arg0->f20 = n;
     }
     if (arg0->f12 == 0) {
@@ -54,7 +54,7 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_26(void) {
 }
 
 void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_12(void *arg0) {
-    FUN_00300f50(arg0, *(int *)((char *)arg0 + 16));
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_FreeMemory(arg0, *(int *)((char *)arg0 + 16));
+    igObject_ReleaseDefaults(arg0);
 }
 

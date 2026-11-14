@@ -1,4 +1,4 @@
-int *Gap__Core__igCallStackTracer__vfunc_24(int *arg0) {
+int *igCallStackTracer_CaptureCallStack(int *arg0) {
     int t;
     if (arg0[3] > 0) {
         arg0[2] = 1;
@@ -12,7 +12,7 @@ int *Gap__Core__igCallStackTracer__vfunc_24(int *arg0) {
     return (int *)arg0[4];
 }
 
-int Gap__Core__igCallStackTracer__vfunc_25(void) {
+int igCallStackTracer_HasSymbols(void) {
     igSymbolTableView *symbols;
     symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
     if (symbols != 0) {
@@ -23,7 +23,7 @@ int Gap__Core__igCallStackTracer__vfunc_25(void) {
     return 0;
 }
 
-void Gap__Core__igCallStackTracer__vfunc_26(igResult *result, igCallStackTracerView *self, int addr, int format, long long output, long long outputSize) {
+void igCallStackTracer_FormatAddress(igResult *result, igCallStackTracerView *self, int addr, int format, long long output, long long outputSize) {
     char buf[256];
     char name[256];
     int offset;
@@ -33,7 +33,7 @@ void Gap__Core__igCallStackTracer__vfunc_26(igResult *result, igCallStackTracerV
     result->v = resolved.v;
 }
 
-igResult Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
+igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
     igSymbolTableView *symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
     if (symbols != 0 && symbols->vfunc_23() != 0) {
         int base = 0;

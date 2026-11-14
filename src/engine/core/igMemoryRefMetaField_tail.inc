@@ -143,8 +143,8 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *arg0, int arg1, int arg2, 
     int base;
     int i;
     base = *(int *)(arg1 + arg0->_offset);
-    FUN_00304430(DAT_004faef0, arg3, arg0->_fieldName, base);
-    FUN_00304680();
+    igReport_Printf(DAT_004faef0, arg3, arg0->_fieldName, base);
+    igReport_Flush();
     if (arg2 != 0 && base != 0) {
         sz = ((igMetaFieldView *)arg0->_memType)->vfunc_26();
         n = Memory_GetBufferSize((void *)base) / sz;
@@ -152,7 +152,7 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *arg0, int arg1, int arg2, 
             for (i = 0; i < (int)n; i++) {
                 int e = *(int *)(base + i * 4);
                 if (e != 0) {
-                    FUN_00300490((void **)e, arg2, arg3);
+                    igObject_Print((void **)e, arg2, arg3);
                 }
             }
         }

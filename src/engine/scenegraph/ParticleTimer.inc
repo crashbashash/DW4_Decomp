@@ -18,7 +18,7 @@ void FUN_001c51d0(void) {
         field.p->_flag52 = 1;
         field.p->_flag38 = 0;
         field.p->_metaObject = igGeometrySetAttr_GetMetaObject();
-        FUN_002fe570(g_igGeometry_metaObject[0], field.p);
+        igMetaObject_AddFieldAndFinalize(g_igGeometry_metaObject[0], field.p);
         held = field.p;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
@@ -186,7 +186,7 @@ int FUN_001c5730(int *p, int)
 
 void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
     ((DW4VC_72_0 *)(arg1->f))->vX();
-    FUN_00300c00(arg0->f, arg1->f, 0);
+    igObject_Copy(arg0->f, arg1->f, 0);
 }
 
 void igGraphPath_SetNodes(Obj_1c5790 *arg0, int arg1) {
@@ -262,12 +262,12 @@ void FUN_001c59f0(OO *arg0, int arg1, int arg2, int arg3) {
     igMatrix44f_SetIdentity(arg2);
     for (i = 0; i < arg1; i++) {
         e = (EE *)arg0->list->items[i];
-        if (FUN_002fe290(((DW4VC_88_0 *)(e))->vX(), g_igTransform_metaObject[0]) != 0) {
+        if (igMetaObject_IsOfType(((DW4VC_88_0 *)(e))->vX(), g_igTransform_metaObject[0]) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_1 *)(e))->vX(arg3);
                 FUN_001906d0(arg2, (char *)e + 0x20);
             }
-        } else if (FUN_002fe290(((DW4VC_88_0 *)(e))->vX(), DAT_005612d8[0]) != 0) {
+        } else if (igMetaObject_IsOfType(((DW4VC_88_0 *)(e))->vX(), DAT_005612d8[0]) != 0) {
             arg3 = ((DW4VC_164_1 *)(e))->vX(arg3);
         }
     }

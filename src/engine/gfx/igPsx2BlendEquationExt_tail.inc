@@ -80,7 +80,7 @@ void igPsx2BlendEquationExt_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    FUN_002d4e40(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), -0x80);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), -0x80);
     igMetaObject_NameFields(temp_s0, &g_igPsx2BlendEquationExt_fieldTable[0], &DAT_0048a140[0], &DAT_0048a160[0], temp_s2);
 }
 

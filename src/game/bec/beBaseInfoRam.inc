@@ -81,7 +81,7 @@ void beBaseInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0036a8d0();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     ((igMetaField *)temp_s1_2)->_persistent = 0;
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0036aec0();
     igMetaObject_NameFields(temp_s0, &g_beBaseInfoRam_fieldTable[0], &DAT_004c7c10[0], &DAT_004c7c40[0], temp_s2);

@@ -137,9 +137,9 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     n = node->_boneIndices->_count;
     if (frame->_capacity < n) {
         if (frame->_matrices != 0) {
-            FUN_00300f50(frame, frame->_matrices);
+            igObject_FreeMemory(frame, frame->_matrices);
         }
-        frame->_matrices = FUN_00300db0(frame, n << 6, 16);
+        frame->_matrices = igObject_MallocAligned(frame, n << 6, 16);
         frame->_capacity = n;
     }
     frame->_count = n;

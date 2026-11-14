@@ -107,7 +107,7 @@ void beNumberCtrlInfoRam_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, &g_beNumberCtrlInfoRam_ctorTable[0], 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = FUN_0019fae0();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0.09375f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 0.09375f);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_0034d8f0();
     *(char *)((char *)(temp_s1_2) + 52) = 1;

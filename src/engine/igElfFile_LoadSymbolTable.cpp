@@ -7,22 +7,22 @@ extern "C" {
 extern ElfResult DAT_004fb410;
 extern ElfResult DAT_004fb418;
 extern char DAT_004fde50[];
-void FUN_00304430(char *, int);
-void FUN_00304680(void);
-ElfSymbolEntry *FUN_00320f70(ElfSymbolFileView *, int);
-void FUN_0030da00(ElfSymbolSink *, int);
-void FUN_0030da10(ElfSymbolSink *, int);
-void FUN_0030da20(ElfSymbolSink *, unsigned, unsigned);
-void FUN_0030daa0(ElfSymbolSink *);
-ElfResult Gap__Core__igElfFile__vfunc_28(ElfSymbolFileView *self, ElfSymbolSink *sink, int functionsOnly);
+void igReport_Printf(char *, int);
+void igReport_Flush(void);
+ElfSymbolEntry *igElfFile_GetSymbol(ElfSymbolFileView *, int);
+void igSymbolTable_SetCapacity(ElfSymbolSink *, int);
+void igSymbolTable_SetHashCapacity(ElfSymbolSink *, int);
+void igSymbolTable_SetAddressRange(ElfSymbolSink *, unsigned, unsigned);
+void igSymbolTable_ReserveStorage(ElfSymbolSink *);
+ElfResult igElfFile_LoadSymbolTable(ElfSymbolFileView *self, ElfSymbolSink *sink, int functionsOnly);
 }
 static inline void prepareSink(ElfSymbolSink *sink, int count, unsigned low, unsigned top) {
-    FUN_0030da00(sink, count);
-    FUN_0030da10(sink, count * 4);
-    FUN_0030da20(sink, low & ~1023, top);
-    FUN_0030daa0(sink);
+    igSymbolTable_SetCapacity(sink, count);
+    igSymbolTable_SetHashCapacity(sink, count * 4);
+    igSymbolTable_SetAddressRange(sink, low & ~1023, top);
+    igSymbolTable_ReserveStorage(sink);
 }
-ElfResult Gap__Core__igElfFile__vfunc_28(ElfSymbolFileView *self, ElfSymbolSink *sink, int functionsOnly) {
+ElfResult igElfFile_LoadSymbolTable(ElfSymbolFileView *self, ElfSymbolSink *sink, int functionsOnly) {
     char text[264];
     unsigned low;
     int j;
@@ -39,15 +39,15 @@ ElfResult Gap__Core__igElfFile__vfunc_28(ElfSymbolFileView *self, ElfSymbolSink 
         }
     }
     if (self->symbolCount == 0) {
-        FUN_00304430(DAT_004fde50, self->path);
-        FUN_00304680();
+        igReport_Printf(DAT_004fde50, self->path);
+        igReport_Flush();
         return DAT_004fb418;
     }
     if (functionsOnly == 0) {
         count = self->symbolCount;
     }
     for (i = 0; i < self->symbolCount; i++) {
-        ElfSymbolEntry *sym = FUN_00320f70(self, i);
+        ElfSymbolEntry *sym = igElfFile_GetSymbol(self, i);
         unsigned value = sym->value;
         if (value == 0 || value == -1U) {
             continue;
@@ -73,7 +73,7 @@ ElfResult Gap__Core__igElfFile__vfunc_28(ElfSymbolFileView *self, ElfSymbolSink 
     high = (high & ~1023) + 1024;
     prepareSink(sink, count, low, high);
     for (j = 0; j < self->symbolCount; j++) {
-        entry = FUN_00320f70(self, j);
+        entry = igElfFile_GetSymbol(self, j);
         if (functionsOnly != 0) {
             int info = entry->info;
             int bind = info >> 4;

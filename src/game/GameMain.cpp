@@ -141,54 +141,54 @@ extern "C" int FUN_001a9e70(...);
 extern "C" int FUN_001aa030(...);
 extern "C" int FUN_001aa6a0(...);
 extern "C" int FUN_001aaa50(...);
-extern "C" int FUN_002b5e80(...);
-extern "C" int FUN_002b6490(...);
-extern "C" int FUN_002b6b10(...);
-extern "C" int FUN_002b71d0(...);
-extern "C" int FUN_002b77c0(...);
-extern "C" int FUN_002b9d80(...);
-extern "C" int FUN_002ba440(...);
-extern "C" int FUN_002bbec0(...);
-extern "C" int FUN_002bcd30(...);
-extern "C" int FUN_002bd470(...);
-extern "C" int FUN_002bdfc0(...);
-extern "C" int FUN_002be1e0(...);
-extern "C" int FUN_002bfb50(...);
-extern "C" int FUN_002c0ad0(...);
-extern "C" int FUN_002c1d90(...);
-extern "C" int FUN_002c49d0(...);
-extern "C" int FUN_002c64e0(...);
-extern "C" int FUN_002c6cc0(...);
-extern "C" int FUN_002c6f40(...);
-extern "C" int FUN_002c8090(...);
-extern "C" int FUN_002c90a0(...);
-extern "C" int FUN_002c96b0(...);
-extern "C" int FUN_002c9860(...);
-extern "C" int FUN_002ca110(...);
-extern "C" int FUN_002ca760(...);
-extern "C" int FUN_002cb1f0(...);
-extern "C" int FUN_002ccf60(...);
-extern "C" int FUN_002ce6d0(...);
+extern "C" int igVirtualCFuncMetaField_EnsureRegistered(...);
+extern "C" int igUnsignedShortArrayMetaField_EnsureRegistered(...);
+extern "C" int igUnsignedLongArrayMetaField_EnsureRegistered(...);
+extern "C" int igUnsignedIntArrayMetaField_EnsureRegistered(...);
+extern "C" int igUnsignedCharArrayMetaField_EnsureRegistered(...);
+extern "C" int igStringArrayMetaField_EnsureRegistered(...);
+extern "C" int igShortArrayMetaField_EnsureRegistered(...);
+extern "C" int igRawRefArrayMetaField_EnsureRegistered(...);
+extern "C" int igObjectStringMap_EnsureRegistered(...);
+extern "C" int igObjectRefArrayMetaField_EnsureRegistered(...);
+extern "C" int igNamedObjectInfo_EnsureRegistered(...);
+extern "C" int igNamedObjectList_EnsureRegistered(...);
+extern "C" int igMemoryRefArrayMetaField_EnsureRegistered(...);
+extern "C" int igMemoryFileEntryList_EnsureRegistered(...);
+extern "C" int igLongArrayMetaField_EnsureRegistered(...);
+extern "C" int igFloatArrayMetaField_EnsureRegistered(...);
+extern "C" int igEnumArrayMetaField_EnsureRegistered(...);
+extern "C" int igDoubleMetaField_EnsureRegistered(...);
+extern "C" int igDoubleArrayMetaField_EnsureRegistered(...);
+extern "C" int igDependencyMetaField_EnsureRegistered(...);
+extern "C" int igPointerListList_EnsureRegistered(...);
+extern "C" int igFloatListList_EnsureRegistered(...);
+extern "C" int igFloatList_EnsureRegistered(...);
+extern "C" int igUnsignedShortList_EnsureRegistered(...);
+extern "C" int igLongList_EnsureRegistered(...);
+extern "C" int igBoolList_EnsureRegistered(...);
+extern "C" int igBoolArrayMetaField_EnsureRegistered(...);
+extern "C" int igMemoryDescriptorMetaField_EnsureRegistered(...);
 extern "C" void FUN_002590c0(void);
 extern "C" int __dl__FPv(...);
 extern "C" int FUN_00165d20(int);
-extern "C" int FUN_002d16a0(int);
-extern "C" int FUN_002d1770(...);
+extern "C" int igObjectSystem_Acquire(int);
+extern "C" int igObjectSystem_Release(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int main(int arg0, int *arg1);
 extern "C" int *FUN_00259a10(void);
-extern "C" int FUN_002d18c0(int);
+extern "C" int igObjectSystem_SetIniText(int);
 extern "C" void FUN_00259a20(void);
 extern "C" int sceOpen(int *, int);
 extern "C" int sceClose(int);
 extern "C" int sceRead(int, void *, int);
 extern "C" int sceWrite(int, int *, int);
-extern "C" char *FUN_002ee430(int);
+extern "C" char *Memory_SystemAllocate(int);
 extern "C" void FUN_00259a60(void);
-extern "C" void **FUN_002b7f40(...);
+extern "C" void **igThread_Create(...);
 extern "C" void FUN_00259b60(void);
-extern "C" int FUN_00300db0(...);
-extern "C" int FUN_00300f50(...);
+extern "C" int igObject_MallocAligned(...);
+extern "C" int igObject_FreeMemory(...);
 extern "C" bool FUN_00259cd0(const char *path);
 extern "C" void FUN_00259d10(void);
 extern "C" int StringPool_Allocate(...);
@@ -209,12 +209,12 @@ extern "C" int FUN_00463bb0(...);
 extern "C" int FUN_00463bc0(...);
 extern "C" float __floatdisf(int);
 extern "C" int fptodp(float);
-extern "C" int FUN_003082b0(...);
+extern "C" int igReport_Info(...);
 extern "C" int igModel_NotifyViews(...);
 extern "C" int thunk_FUN_00238ed0(...);
 extern "C" int strcpy(...);
 extern "C" int strlen(...);
-extern "C" int FUN_0030bb40(...);
+extern "C" int igStringObj_HasFileExtensionText(...);
 extern "C" int List_RemoveWordAt(...);
 extern "C" void Gap__Core__igFolder__vfunc_26(void **arg0);
 extern "C" int igObject_IsKindOf(...);
@@ -244,7 +244,7 @@ extern "C" char GPR_0055499c;
 extern "C" char GPR_005549a0;
 extern "C" char GPR_005549b8;
 extern "C" unsigned char g_useOwnerAllocator;
-struct Guard { ~Guard() { FUN_002d1770(); } };
+struct Guard { ~Guard() { igObjectSystem_Release(); } };
 struct U {
     static inline int alloc(int fallback) {
         if (g_useOwnerAllocator) return fallback;
@@ -290,7 +290,7 @@ public:
     igResult(const igResult &o) : v(o.v) {}
     bool operator==(const igResult &o) const { return v == o.v; }
 };
-extern "C" igResult FUN_0032d4b0(const char *path);
+extern "C" igResult igPsx2_SetAtfilePrefix(const char *path);
 extern "C" bool GPR_00554bec;
 extern "C" void * g_threadManager[4];
 extern "C" unsigned char GPR_00554990;
@@ -371,7 +371,7 @@ struct Tm {
     int rc;
 };
 struct App_25a8c0 { int f0; igViewerSceneInfoManager *f4; char pad[16]; int f24; };
-extern "C" Tm *FUN_002b79d0(...);
+extern "C" Tm *igTimer_Create(...);
 extern "C" int text_average_frame_rate_over_d_frames[4];
 extern "C" int DAT_0058cab8[4];
 extern "C" int DAT_0058cac0[4];
@@ -394,7 +394,7 @@ struct Ref {
 extern "C" void FUN_0025a8c0(App_25a8c0 *arg0);
 struct R_25ac60 { int w0; int refs; int f8; int w12; int *f16; };
 extern "C" igSmartPointer<igPsx2Window> Viewer_CreateDisplay(int);
-extern "C" igFolder *FUN_002c43b0(int);
+extern "C" igFolder *igFolder_Create(int);
 extern "C" igViewerLoadingFileMessage *FUN_0045a680(int);
 struct Blk {
     ViewerSetup viewer;
@@ -528,7 +528,7 @@ public:
     virtual void v140();
 };
 struct Holder { igInsightCore *p; };
-extern "C" Pool * FUN_002f8a20(...);
+extern "C" Pool * Memory_GetCurrentAllocator(...);
 extern igSmartPointer<igAnimationStatePool> g_igAnimationStatePool_instance;
 extern igSmartPointer<igEnbayaContextPool> g_igEnbayaContextPool_instance;
 extern "C" int kIGMemoryPoolHandleUser1[4];
@@ -539,29 +539,29 @@ extern "C" void FUN_0025afe0(Holder *arg0);
 
 void FUN_002590c0(void) {
     FUN_0014f6d0();
-    FUN_002b5e80();
-    FUN_002b6490();
-    FUN_002b6b10();
-    FUN_002b71d0();
-    FUN_002b77c0();
-    FUN_002b9d80();
-    FUN_002ba440();
-    FUN_002bbec0();
-    FUN_002bcd30();
-    FUN_002be1e0();
-    FUN_002bd470();
-    FUN_002bdfc0();
-    FUN_002bfb50();
-    FUN_002c0ad0();
-    FUN_002c1d90();
-    FUN_002c49d0();
-    FUN_002c64e0();
-    FUN_002c6cc0();
-    FUN_002c6f40();
-    FUN_002c8090();
-    FUN_002c90a0();
-    FUN_002ccf60();
-    FUN_002ce6d0();
+    igVirtualCFuncMetaField_EnsureRegistered();
+    igUnsignedShortArrayMetaField_EnsureRegistered();
+    igUnsignedLongArrayMetaField_EnsureRegistered();
+    igUnsignedIntArrayMetaField_EnsureRegistered();
+    igUnsignedCharArrayMetaField_EnsureRegistered();
+    igStringArrayMetaField_EnsureRegistered();
+    igShortArrayMetaField_EnsureRegistered();
+    igRawRefArrayMetaField_EnsureRegistered();
+    igObjectStringMap_EnsureRegistered();
+    igNamedObjectList_EnsureRegistered();
+    igObjectRefArrayMetaField_EnsureRegistered();
+    igNamedObjectInfo_EnsureRegistered();
+    igMemoryRefArrayMetaField_EnsureRegistered();
+    igMemoryFileEntryList_EnsureRegistered();
+    igLongArrayMetaField_EnsureRegistered();
+    igFloatArrayMetaField_EnsureRegistered();
+    igEnumArrayMetaField_EnsureRegistered();
+    igDoubleMetaField_EnsureRegistered();
+    igDoubleArrayMetaField_EnsureRegistered();
+    igDependencyMetaField_EnsureRegistered();
+    igPointerListList_EnsureRegistered();
+    igBoolArrayMetaField_EnsureRegistered();
+    igMemoryDescriptorMetaField_EnsureRegistered();
     FUN_001894f0();
     FUN_00189390();
     FUN_00189230();
@@ -629,8 +629,8 @@ void FUN_002590c0(void) {
     FUN_001964d0();
     FUN_0014be70();
     FUN_0014d890();
-    FUN_002cb1f0();
-    FUN_002c9860();
+    igBoolList_EnsureRegistered();
+    igFloatList_EnsureRegistered();
     FUN_00130830();
     FUN_00198290();
     FUN_00197f40();
@@ -661,7 +661,7 @@ void FUN_002590c0(void) {
     FUN_001357e0();
     FUN_00137ca0();
     FUN_00138570();
-    FUN_002ca760();
+    igLongList_EnsureRegistered();
     FUN_0018a180();
     FUN_0019f330();
     FUN_00195290();
@@ -692,10 +692,10 @@ void FUN_002590c0(void) {
     FUN_0019f7a0();
     FUN_0019fa10();
     FUN_001a4670();
-    FUN_002ca110();
+    igUnsignedShortList_EnsureRegistered();
     FUN_001a2940();
     FUN_0019d4f0();
-    FUN_002c96b0();
+    igFloatListList_EnsureRegistered();
     FUN_00195c00();
     FUN_0019d710();
     FUN_001a3dd0();
@@ -715,24 +715,24 @@ int main(int arg0, int *arg1) {
     DAT_00586fe0[0] = 0x4000;
     DAT_00586fe8[0] = 0xA0000;
     DAT_00586ff0[0] = 0x69000;
-    FUN_002d16a0(0xC80);
+    igObjectSystem_Acquire(0xC80);
     Guard guard;
     FUN_00259d10();
     FUN_002590c0();
     App sp70;
     FUN_00234d70(&sp70, arg0, arg1);
-    a = U::alloc(((int)FUN_002f8a20()));
+    a = U::alloc(((int)Memory_GetCurrentAllocator()));
     FUN_00165d20(a);
     U::relg((Obj **)&g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
-    a = U::alloc(((int)FUN_002f8a20()));
+    a = U::alloc(((int)Memory_GetCurrentAllocator()));
     U::relg((Obj **)&g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(a);
-    a = U::alloc(((int)FUN_002f8a20()));
+    a = U::alloc(((int)Memory_GetCurrentAllocator()));
     U::relg((Obj **)&g_igAnimationCombinerBoneInfoPool_instance.p);
     g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(a);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
-    a = U::alloc(((int)FUN_002f8a20()));
+    a = U::alloc(((int)Memory_GetCurrentAllocator()));
     U::relg((Obj **)&g_igAnimationStatePool_instance.p);
     g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(a);
     Blk sp30;
@@ -770,7 +770,7 @@ void FUN_00259a20(void) {
 
     temp_v0 = ((int)FUN_00259a10());
     if (temp_v0 != 0) {
-        FUN_002d18c0(temp_v0);
+        igObjectSystem_SetIniText(temp_v0);
     }
 }
 
@@ -779,7 +779,7 @@ void FUN_00259a60(void) {
     char *buf;
     int h;
 
-    buf = FUN_002ee430(0x200);
+    buf = Memory_SystemAllocate(0x200);
     while (1) {
         h = sceOpen(&text_atstream_5150[0], 3);
         if (sceRead(h, &hdr, 8) < 0) {
@@ -812,7 +812,7 @@ void FUN_00259b60(void) {
     DW4SR4 sp20;
     void **temp_v0;
 
-    temp_v0 = (void **)(FUN_002b7f40(0));
+    temp_v0 = (void **)(igThread_Create(0));
     sp2C = ((DW4VCSR_156_1 *)(temp_v0))->vX((int)(0x2000));
     sp28 = ((DW4VCSR_132_1 *)(temp_v0))->vX(&FUN_00259a60);
     sp24 = ((DW4VCSR_200_1 *)(temp_v0))->vX((int)(0xFF));
@@ -828,18 +828,18 @@ R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
         if (arg1->f45 == 0) {
             int a1 = arg1->f32;
             if (a1 != 0) {
-                FUN_00300f50(arg1, a1);
+                igObject_FreeMemory(arg1, a1);
             }
         }
         arg1->f45 = 0;
-        arg1->f32 = FUN_00300db0(arg1, arg1->f36, arg1->v40() & 0xFFFF);
+        arg1->f32 = igObject_MallocAligned(arg1, arg1->f36, arg1->v40() & 0xFFFF);
         return R(g_resultSuccess[0]);
     }
     return R(g_resultFailure[0]);
 }
 
 bool FUN_00259cd0(const char *path) {
-    return GPR_00554bec = FUN_0032d4b0(path) == (*(igResult *)g_resultSuccess);
+    return GPR_00554bec = igPsx2_SetAtfilePrefix(path) == (*(igResult *)g_resultSuccess);
 }
 
 void FUN_00259d10(void) {
@@ -968,7 +968,7 @@ static inline void setFolderName(igFolder *folder, const char *name) {
 
 Blk::Blk()
     : viewer(Viewer_CreateDisplay(0)), f28(0, kRetainReference), f32(0, kRetainReference), f36(0, kRetainReference),
-      f40(0, kRetainReference), f44(false), f48(0, kRetainReference), folder(FUN_002c43b0(0), AdoptReference()),
+      f40(0, kRetainReference), f44(false), f48(0, kRetainReference), folder(igFolder_Create(0), AdoptReference()),
       loadingMessage(FUN_0045a680(0), AdoptReference()) {
     setFolderName(folder, "cdrom0:");
     FUN_0025ac60((S *)this);
@@ -1102,7 +1102,7 @@ void FUN_0025a580(A0 *arg0) {
     }
 }
 
-static inline Tm *createTimer(TimerType) { return FUN_002b79d0(0); }
+static inline Tm *createTimer(TimerType) { return igTimer_Create(0); }
 
 void FUN_0025a8c0(App_25a8c0 *arg0) {
     Ev e0;
@@ -1198,7 +1198,7 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         sp.p->vB();
         temp_f12 = (1e9f * (float)s1) / __floatdisf(sp.p->vA());
         if (GPR_00554bf0 == 0) {
-            r = FUN_003082b0(&text_average_frame_rate_over_d_frames[0], s1, fptodp(temp_f12));
+            r = igReport_Info(&text_average_frame_rate_over_d_frames[0], s1, fptodp(temp_f12));
             if (r != 1 && r == 2) GPR_00554bf0 = 1;
         }
         FUN_00463b70(arg0);
@@ -1258,7 +1258,7 @@ void FUN_0025ac60(S *arg0) {
                 do {
                     {
                     StringRef s344 = StringList_CopyRetained(arg0->f48, s2);
-                    if (FUN_0030bb40(s344.p, &text_igb[0]) == 0) {
+                    if (igStringObj_HasFileExtensionText(s344.p, &text_igb[0]) == 0) {
                         l3 = arg0->f48;
                         StringRef::Release(StringList_CopyRetained(l3, s2).p);
                         List_RemoveWordAt(l3, s2);
@@ -1292,17 +1292,17 @@ void FUN_0025afe0(Holder *arg0) {
     ((Sub *)arg0->p->_visualContext)->v140();
     REL_25afe0(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
+    { Pool *a_ = Memory_GetCurrentAllocator(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(var_v0);
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
+    { Pool *a_ = Memory_GetCurrentAllocator(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igAnimationCombinerBoneInfoPool_instance.p);
     g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(var_v0);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
-    { Pool *a_ = FUN_002f8a20(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
+    { Pool *a_ = Memory_GetCurrentAllocator(); var_v0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]); }
     REL_25afe0(g_igAnimationStatePool_instance.p);
     g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(var_v0);
-    { Pool *a_ = FUN_002f8a20(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+    { Pool *a_ = Memory_GetCurrentAllocator(); var_a0 = g_useOwnerAllocator != 0 ? a_ : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
     if (var_a0 != 0) {
         var_a0->v108(0);
     }

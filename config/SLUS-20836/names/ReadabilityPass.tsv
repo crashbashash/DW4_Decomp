@@ -269,13 +269,10 @@
 0x002c6380	igEnumMetaField_GetDefaultDescriptor	engine
 0x002cb0d0	igBoolList_Create	engine
 0x002cd3f0	igAliasMemoryPool_EnsureRegistered	engine
-0x002d3540	thunk_malloc	engine
-0x002d3550	thunk_free	engine
 0x002d8350	igDirectory_FindInfoByName	engine
 0x002ea1b0	igObject_GetFieldValueByName	engine
 0x002eff70	igMemoryPool_Initialize	engine
 0x002efff0	igMemoryPool_CopyConstruct	engine
-0x002f0050	thunk_free_2	engine
 0x00300820	igObject_IsAlikeDeep	engine
 0x00300920	igObject_IsAlikeShallow	engine
 0x00300a20	igObject_IsAlikeExactly	engine
@@ -285,7 +282,6 @@
 0x003092f0	igResource_LoadDirectory	engine
 0x00309740	igResource_IsDirectoryLoaded	engine
 0x00309750	igResource_UnloadDirectory	engine
-0x0030bed0	thunk_strcasecmp	engine
 0x00331fb0	igAdxAudio_Initialize	audio
 0x003320d0	igAdxAudio_CreateHandle	audio
 0x00332160	igAdxAudio_StartMemory	audio

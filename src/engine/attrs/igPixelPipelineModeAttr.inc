@@ -54,7 +54,7 @@ void igPixelPipelineModeAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPixelPipelineModeAttr_ctorTable[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_00486148[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00486148[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149800);
     igMetaObject_NameFields(temp_s0, &g_igPixelPipelineModeAttr_fieldTable[0], &DAT_00486138[0], &DAT_00486140[0], temp_s2);
 }

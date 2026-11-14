@@ -1,12 +1,12 @@
-void thunk_igFile_GetMetaObject(void) {
+void igFile_GetMetaObjectFunction(void) {
     igFile_GetMetaObject();
 }
 
-void thunk_FUN_002ef9a0(void) {
-    FUN_002ef9a0();
+void igMemoryFile_StaticInitCallback(void) {
+    igMemoryFile_CreateEntryList();
 }
 
-void thunk_FUN_002ef9d0(void) {
-    FUN_002ef9d0();
+void igMemoryFile_ExitCallback(void) {
+    igMemoryFile_ReleaseEntryList();
 }
 

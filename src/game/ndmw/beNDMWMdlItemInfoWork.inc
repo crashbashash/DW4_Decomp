@@ -80,7 +80,7 @@ void beNDMWMdlItemInfoWork_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlItemInfoWork_ctorTable[0], 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c92c0();
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), -1);
     igMetaObject_NameFields(temp_s0, &g_beNDMWMdlItemInfoWork_fieldTable[0], &DAT_004cabc0[0], &DAT_004cabe0[0], temp_s2);
 }
 

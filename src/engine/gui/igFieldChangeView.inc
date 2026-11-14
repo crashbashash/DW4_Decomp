@@ -71,7 +71,7 @@ void igFieldChangeView_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00450a00();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002beca0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_igFieldChangeView_fieldTable[0], &DAT_004d0710[0], &DAT_004d0718[0], temp_s2);
 }
 

@@ -25,7 +25,7 @@ The field vtables are 0x100 bytes: +0x08..+0x54 is the embedded `igObject` inter
 | Slot | Role |
 | --- | --- |
 | +0x64 | The field's byte size. `igMetaField_FinalizeDescriptor` (`0x2fc630`) stores its result in `_size` (+0x14) and `igMetaField_AllocateArray` divides an allocation by the same slot on `_memType`. The base returns 0, `igRefMetaField` and `igMemoryRefMetaField` return 4, and `igMemoryRefArrayMetaField` returns `(_num*4) & 0xffff` |
-| +0x6c | Not an alignment: base `0x2fc2a0` returns -1, refs return 4, and a caller at `0x2f0bc0` uses the result as a predicate |
+| +0x6c | GetAlignment: `igMetaField_AllocateArray` passes the result to `AllocateAligned` as the alignment, `igStructMetaField` returns `_alignment` and `igCompoundMetaField` the largest of its members'. The base `0x2fc2a0` returns -1 (no requirement) and refs return 4 |
 | +0x70, +0x74, +0x78 | The reset techniques. `igMetaField_Reset` maps `_resetMethod` 0, 3, 2 to them; the base +0x74 is a no-op |
 | +0x7c, +0x80 | Construct and destruct the value in place |
 | +0x84, +0x88 | Zero the value |

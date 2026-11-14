@@ -72,8 +72,8 @@ void igSceneInfo_CollectCameras(O_1d65e0 *self) {
 }
 
 void igSceneInfo_ComputeAnimationRange(ChildOwner *self) {
-    igSmartPointer<ChildObject> created(FUN_002c72c0(igObject_GetAllocator(self)));
-    FUN_002d8620(created.get(), self->f20, 0, 0);
+    igSmartPointer<ChildObject> created(igDirectory_Create(igObject_GetAllocator(self)));
+    igDirectory_AddObjectRecursive(created.get(), self->f20, 0, 0);
     FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
 }
 
@@ -91,7 +91,7 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     temp_s3 = arg1->n;
     var_s2 = 0;
     while (var_s2 < temp_s3) {
-        temp_v0 = FUN_002d7e90(arg1, var_s2);
+        temp_v0 = igDirectory_GetEntry(arg1, var_s2);
         if (0 != igObject_IsKindOf(temp_v0, g_igObjectDirEntry_metaObject[0])) {
             temp_s6 = temp_v0->f24;
             if (igObject_IsKindOf(temp_s6, g_igTransformSource_metaObject[0]) != 0) {
@@ -125,7 +125,7 @@ int FUN_001d68f0(void) {
 
 int FUN_001d6900(Primitive **out) {
     float v[18];
-    igSmartPointer<Primitive> quad(igGeometryAttr_Create(FUN_002f8a20()));
+    igSmartPointer<Primitive> quad(igGeometryAttr_Create(Memory_GetCurrentAllocator()));
     VertexFormat format;
     int i;
     format.flags = 0;
@@ -383,8 +383,8 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    FUN_00300c00(((void *)DAT_005628e0[0]), ((void *)DAT_00562640[0]), 1);
-    FUN_00300c00(((void *)DAT_005628e8[0]), ((void *)DAT_00562640[0]), 1);
+    igObject_Copy(((void *)DAT_005628e0[0]), ((void *)DAT_00562640[0]), 1);
+    igObject_Copy(((void *)DAT_005628e8[0]), ((void *)DAT_00562640[0]), 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject[0]);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject[0]);
@@ -397,7 +397,7 @@ void FUN_001d7910(void) {
         m = &metas[i];
         count = igMetaObject_CountTree(*m);
         for (child = 0; child < count; child++) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e0[0]), (struct X_1e06c0 *)(FUN_002fe300(*m, child)), igTraversal_TraverseChildren);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e0[0]), (struct X_1e06c0 *)(igMetaObject_GetTreeNode(*m, child)), igTraversal_TraverseChildren);
         }
     }
     pairs = DAT_0048dac0;
@@ -409,7 +409,7 @@ void FUN_001d7910(void) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree(p->_meta);
         for (j = 0; j < n; j++) {
-            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e8[0]), (struct X_1e06c0 *)(FUN_002fe300(p->_meta, j)), p->_function);
+            igTraversal_RegisterFunction((struct L_1e06c0 *)((void *)DAT_005628e8[0]), (struct X_1e06c0 *)(igMetaObject_GetTreeNode(p->_meta, j)), p->_function);
         }
     }
 }
@@ -573,8 +573,8 @@ int FUN_001d81e0(void) {
 
     if (DAT_0048dae0[0] == -1) {
         temp_s0 = *(int *)((char *)g_objectSystem[0] + 56);
-        FUN_003065f0(temp_s0, 7, &text_maxLightStateCount[0], &DAT_0048dae0[0], 0x100, 1);
-        FUN_00306e50(temp_s0, 7, &text_disableBumpDotProduct[0], &GPR_00554b9c, 0, 1);
+        igRegistry_GetValueInt(temp_s0, 7, &text_maxLightStateCount[0], &DAT_0048dae0[0], 0x100, 1);
+        igRegistry_GetValueBool(temp_s0, 7, &text_disableBumpDotProduct[0], &GPR_00554b9c, 0, 1);
     }
     return DAT_0048dae0[0];
 }

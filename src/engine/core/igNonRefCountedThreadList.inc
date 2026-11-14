@@ -1,4 +1,4 @@
-igMetaObject *FUN_002b8220(void) {
+igMetaObject *igNonRefCountedThreadList_GetOrCreateMetaObject(void) {
     if (g_igNonRefCountedThreadList_metaObject[0] == 0) {
         g_igNonRefCountedThreadList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igNonRefCountedThreadList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedThreadList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002b8300();
+        igNonRefCountedThreadList_EnsureRegistered();
     return g_igNonRefCountedThreadList_metaObject[0];
 }
 
@@ -20,19 +20,19 @@ int igNonRefCountedThreadList_GetVTable(void) {
     return *(int *)((char *)obj + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
 }
 
-void FUN_002b8300(void)
+void igNonRefCountedThreadList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igNonRefCountedThreadList_Register);
 }
 
 void igNonRefCountedThreadList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igNonRefCountedThreadList_metaObject),
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedThreadList_GetMetaObject,
+        igNonRefCountedThreadList_GetMetaObjectFunction,
         igNonRefCountedThreadList_className,
         0x14, /* instance size */
         igNonRefCountedThreadList_GetVTable,
@@ -42,7 +42,7 @@ void igNonRefCountedThreadList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedThreadList_GetMetaObject(void) {
+void igNonRefCountedThreadList_GetMetaObjectFunction(void) {
     igNonRefCountedThreadList_GetMetaObject();
 }
 

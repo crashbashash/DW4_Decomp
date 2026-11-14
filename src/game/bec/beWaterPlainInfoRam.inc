@@ -102,13 +102,13 @@ void beWaterPlainInfoRam_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b980();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_002c9780();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xC));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x15));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_002c95d0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igFloatListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x1A));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_00340490();

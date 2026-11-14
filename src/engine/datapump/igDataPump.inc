@@ -71,7 +71,7 @@ void igDataPump_InitFields(void) {
     *(int *)((char *)(temp_v0) + 56) = (int)((int) g_igObject_metaObject[0]);
     *(char *)((char *)(temp_v0) + 52) = 1;
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    *(int *)((char *)(temp_s1) + 56) = FUN_002beca0();
+    *(int *)((char *)(temp_s1) + 56) = igMetaField_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 38) = 0;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0);

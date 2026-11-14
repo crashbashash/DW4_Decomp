@@ -1,12 +1,12 @@
-void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
+void igMemoryPool_PrintStatistics(igMemoryPool *arg0, char *arg1) {
     long long s4, s3, s2, s1, s0, s6, s7, s8;
     long long sp120, sp110, sp100, spF0;
     __int128 spE0;
     igMemoryPoolView *o = (igMemoryPoolView *)arg0;
 
     if (arg1 != 0 && *arg1 != 0) {
-        FUN_00304430(DAT_004f90b0);
-        FUN_00304680();
+        igReport_Printf(DAT_004f90b0);
+        igReport_Flush();
     }
     s4 = arg0->_localNetAllocationCountHigh;
     s3 = arg0->_localNetAllocationCount;
@@ -21,28 +21,28 @@ void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
     sp100 = arg0->_localFreed;
     spF0 = arg0->_localAllocated;
     spE0 = (int)o->vfunc_36();
-    FUN_00304430(DAT_004f9d60, (int)spF0, (int)sp100, (int)sp110, (int)sp120, (long long)(int)s8, (long long)(int)s7, (long long)(int)s6, (long long)(int)s0, (long long)(int)s1, (long long)(int)s2, (long long)(int)s3, (long long)(int)s4, (long long)spE0, (long long)o->vfunc_42());
-    FUN_00304680();
+    igReport_Printf(DAT_004f9d60, (int)spF0, (int)sp100, (int)sp110, (int)sp120, (long long)(int)s8, (long long)(int)s7, (long long)(int)s6, (long long)(int)s0, (long long)(int)s1, (long long)(int)s2, (long long)(int)s3, (long long)(int)s4, (long long)spE0, (long long)o->vfunc_42());
+    igReport_Flush();
 }
 
-void FUN_002f0a60(char *arg0) {
+void igMemoryPool_PrintGlobalStatistics(char *arg0) {
     if ((arg0 != 0) && (*arg0 != 0)) {
-        FUN_00304430(DAT_004f90b0, arg0);
-        FUN_00304680();
+        igReport_Printf(DAT_004f90b0, arg0);
+        igReport_Flush();
     }
-    FUN_00304430(DAT_004f9fe0, DAT_00586f70[0], DAT_00586f78[0], ((int *)DAT_00586f80)[0], ((int *)DAT_00586f88)[0], DAT_00586f90[0], DAT_00586f98[0], ((int *)DAT_00586fa0)[0], (long long) ((int *)DAT_00586fa8)[0], (long long) DAT_00586fb0[0], (long long) DAT_00586fb8[0], (long long) ((int *)DAT_00586fc0)[0], (long long) ((int *)DAT_00586fc8)[0]);
-    FUN_00304680();
+    igReport_Printf(DAT_004f9fe0, DAT_00586f70[0], DAT_00586f78[0], ((int *)DAT_00586f80)[0], ((int *)DAT_00586f88)[0], DAT_00586f90[0], DAT_00586f98[0], ((int *)DAT_00586fa0)[0], (long long) ((int *)DAT_00586fa8)[0], (long long) DAT_00586fb0[0], (long long) DAT_00586fb8[0], (long long) ((int *)DAT_00586fc0)[0], (long long) ((int *)DAT_00586fc8)[0]);
+    igReport_Flush();
 }
 
-void FUN_002f0b30(void) {
+void igMemoryPool_DisplayOutstandingAllocations(void) {
 
 }
 
-int FUN_002f0b40(void) {
+int igMemoryPool_Trim(void) {
     return 0;
 }
 
-bool FUN_002f0b50(int arg0, int arg1) {
+bool igMemoryPool_TrimAllPools(int arg0, int arg1) {
     int s2;
     igMemoryPoolView *o;
     int s1;
@@ -73,7 +73,7 @@ void *FUN_002f0c80(igMemoryPoolView *self, unsigned int size)
     return self->Allocate(size);
 }
 
-int FUN_002f0c90(void **arg0, int arg1) {
+int igMemoryPool_StrDup(void **arg0, int arg1) {
     int temp_v0;
 
     temp_v0 = (int)((igMemoryPoolView *)arg0)->Allocate(strlen(arg1) + 1);
@@ -81,7 +81,7 @@ int FUN_002f0c90(void **arg0, int arg1) {
     return temp_v0;
 }
 
-int FUN_002f0cf0(void **arg0, int arg1, unsigned short arg2) {
+int igMemoryPool_StrDupAligned(void **arg0, int arg1, unsigned short arg2) {
     int temp_v0;
 
     temp_v0 = (int)((igMemoryPoolView *)arg0)->AllocateAligned(strlen(arg1) + 1, arg2);
@@ -89,19 +89,19 @@ int FUN_002f0cf0(void **arg0, int arg1, unsigned short arg2) {
     return temp_v0;
 }
 
-int FUN_002f0d60(void) {
+int igMemoryPool_GetEventTracker(void) {
     return 0;
 }
 
-void FUN_002f0d70(int dummy0, igObject *arg1) {
+void igMemoryPool_SetEventTracker(int dummy0, igObject *arg1) {
     IG_OBJECT_RELEASE(arg1);
 }
 
-void FUN_002f0db0(int arg0) {
+void igMemoryPool_SetScopeFlags(int arg0) {
     *(int *)0x4C2160 = arg0;
 }
 
-void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3) {
+void igMemoryPool_TrackEvent(void **arg0, int arg1, int arg2, int arg3) {
     void **temp_v0;
 
     if ((arg2 == 0) || (arg2 & DAT_004c2160[0])) {
@@ -112,64 +112,64 @@ void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-int FUN_002f0e40(igMemoryPoolView *pool, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_AllocateElementTracked(igMemoryPoolView *pool, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     int size;
     void *block = pool->vfunc_53();
     if (block != 0) {
         size = Memory_GetBufferSize(block);
-        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f0f70(igMemoryPoolView *pool, unsigned int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_AllocateTracked(igMemoryPoolView *pool, unsigned int size, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *block = pool->Allocate(size);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f10a0(igMemoryPoolView *pool, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_AllocateAlignedTracked(igMemoryPoolView *pool, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *block = pool->AllocateAligned(size, alignment);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f11c0(igMemoryPoolView *pool, int count, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_CallocateTracked(igMemoryPoolView *pool, int count, int size, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *block = pool->vfunc_56(count, size);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, count * size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, count * size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f12f0(igMemoryPoolView *pool, int count, int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_CallocateAlignedTracked(igMemoryPoolView *pool, int count, int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *block = pool->vfunc_57(count, size, alignment);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, count * size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, count * size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
+int igMemoryPool_ReallocateTracked(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
     char sp170[160];
     char spD0[160];
     int size;
@@ -180,39 +180,39 @@ int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4,
 
     if (arg1 != 0) {
         size = ((int)Memory_GetBufferSize((void *)arg1));
-        FUN_002e2190(sp170, 3, (void *)arg1, size, arg0->vfunc_38(), arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)((void *)Memory_GetCurrentContextAlias()))->vfunc_27(arg0));
+        igEventTracker_InitMemoryEvent(sp170, 3, (void *)arg1, size, arg0->vfunc_38(), arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)((void *)Memory_GetCurrentContextAlias()))->vfunc_27(arg0));
         arg0->vfunc_67(sp170, arg3, arg_sp0 + 1);
-        FUN_002e2300(sp170, -1);
+        igEventTracker_DestructEvent(sp170, -1);
     }
     arg1 = (int)arg0->Reallocate((void *)arg1, arg2);
     if (arg1 != 0) {
         flags2 = arg0->vfunc_38() & 0xFFFF;
         ctx2 = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spD0, 1, (void *)arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->vfunc_27(arg0));
+        igEventTracker_InitMemoryEvent(spD0, 1, (void *)arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->vfunc_27(arg0));
         arg0->vfunc_67(spD0, arg3, arg_sp0 + 1);
-        FUN_002e2300(spD0, -1);
+        igEventTracker_DestructEvent(spD0, -1);
     }
     return arg1;
 }
 
-int FUN_002f15e0(igMemoryPoolView *pool, void *block, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_ReallocateAlignedTracked(igMemoryPoolView *pool, void *block, unsigned int size, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord freed;
     EventRecord record;
     if (block != 0) {
-        FUN_002e2190(&freed, 3, block, Memory_GetBufferSize(block), 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&freed, 3, block, Memory_GetBufferSize(block), 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&freed, filter, depth + 1);
-        FUN_002e2300(&freed, -1);
+        igEventTracker_DestructEvent(&freed, -1);
     }
     block = pool->ReallocateAligned(block, size, alignment);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-int FUN_002f17a0(igMemoryPoolView *pool, const char *string, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_StrDupTracked(igMemoryPoolView *pool, const char *string, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *copy;
     int size;
@@ -221,28 +221,28 @@ int FUN_002f17a0(igMemoryPoolView *pool, const char *string, int filter, int tag
     if (copy != 0) {
         size = strlen(string) + 1;
         alignment = pool->vfunc_38() & 0xFFFF;
-        FUN_002e2190(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)copy;
 }
 
-int FUN_002f18d0(igMemoryPoolView *pool, const char *string, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
+int igMemoryPool_StrDupAlignedTracked(igMemoryPoolView *pool, const char *string, unsigned short alignment, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     void *copy;
     int size;
     copy = pool->vfunc_61(string, alignment);
     if (copy != 0) {
         size = strlen(string) + 1;
-        FUN_002e2190(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)copy, size, alignment, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)copy;
 }
 
-void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10) {
+void igMemoryPool_GangAllocTracked(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10) {
     char spB0[156];
     int first;
     int total;
@@ -259,14 +259,14 @@ void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, i
         }
         flags = arg1->vfunc_38() & 0xFFFF;
         ctx = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spB0, 1, (void *)first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->vfunc_27(arg1));
+        igEventTracker_InitMemoryEvent(spB0, 1, (void *)first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->vfunc_27(arg1));
         arg1->vfunc_67(spB0, arg5, arg_sp10 + 1);
-        FUN_002e2300(spB0, -1);
+        igEventTracker_DestructEvent(spB0, -1);
     }
     *arg0 = res;
 }
 
-void FUN_002f1b70(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
+void igMemoryPool_GangAllocAlignedTracked(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
     char spA0[156];
     int first;
     int total;
@@ -281,14 +281,14 @@ void FUN_002f1b70(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, i
             total += arg3[i];
         }
         ctx = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spA0, 1, (void *)first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->vfunc_27(arg1));
+        igEventTracker_InitMemoryEvent(spA0, 1, (void *)first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->vfunc_27(arg1));
         arg1->vfunc_67(spA0, arg6, arg_sp18 + 1);
-        FUN_002e2300(spA0, -1);
+        igEventTracker_DestructEvent(spA0, -1);
     }
     *arg0 = res;
 }
 
-void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
+void igMemoryPool_GangFreeTracked(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
     char spE0[160];
     int first;
     int total;
@@ -305,9 +305,9 @@ void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4,
             }
         }
         ctx = (void **)(((void **)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spE0, 3, (void *)first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)(ctx))->vfunc_27(arg0));
+        igEventTracker_InitMemoryEvent(spE0, 3, (void *)first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)(ctx))->vfunc_27(arg0));
         ((igMemoryPoolView *)(arg0))->vfunc_67(spE0, (int)(arg3), (int)(arg_sp0 + 1));
-        FUN_002e2300(spE0, -1);
+        igEventTracker_DestructEvent(spE0, -1);
     }
 }
 
@@ -315,19 +315,19 @@ int FUN_002f1e30(igMemoryPoolView *pool, int size, int filter, int tag, int info
     EventRecord record;
     void *block = (void *)pool->vfunc_65(size);
     if (block != 0) {
-        FUN_002e2190(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 1, (void *)block, size, (unsigned short)pool->vfunc_38(), tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     return (int)block;
 }
 
-void FUN_002f1f60(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
+void igMemoryPool_FreeTracked(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     if (block != 0) {
-        FUN_002e2190(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     pool->Free(block);
 }
@@ -335,9 +335,9 @@ void FUN_002f1f60(igMemoryPoolView *pool, void *block, int filter, int tag, int 
 void FUN_002f2070(igMemoryPoolView *pool, void *block, int filter, int tag, int info0, int info1, int info2, int depth) {
     EventRecord record;
     if (block != 0) {
-        FUN_002e2190(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
+        igEventTracker_InitMemoryEvent(&record, 3, (void *)block, 0, 0, tag, 0, 0, info0, info1, info2, ((MemoryContext *)Memory_GetCurrentContextAlias())->vfunc_27(pool));
         pool->vfunc_67(&record, filter, depth + 1);
-        FUN_002e2300(&record, -1);
+        igEventTracker_DestructEvent(&record, -1);
     }
     pool->Free(block);
 }
@@ -368,22 +368,22 @@ void Memory_ShutdownAllocatorRegistries(void **rootAllocator) {
     ((igMemoryPoolView *)(rootAllocator))->vfunc_98();
 }
 
-void FUN_002f2260(void *arg0) {
+void igMemoryPool_SetDefaults(void *arg0) {
     *(unsigned char *)((char *)arg0 + 104) = (unsigned char) GPR_00554994;
 }
 
-void FUN_002f2270(void) {
+void igMemoryPool_Shutdown(void) {
 
 }
 
-void FUN_002f2280(igMemoryPool *pool, long long arg1, long long arg2, int arg3) {
+void igMemoryPool_UpdateStatistics(igMemoryPool *pool, long long arg1, long long arg2, int arg3) {
     ((igMemoryPoolView *)pool)->vfunc_52(arg1, arg2, arg3);
     if (pool->_updateGlobalStatistics != 0) {
-        FUN_002f2450(arg1, arg2, arg3);
+        igMemoryPool_UpdateGlobalStatistics(arg1, arg2, arg3);
     }
 }
 
-void FUN_002f22f0(igMemoryPool *arg0) {
+void igMemoryPool_ResetStatistics(igMemoryPool *arg0) {
     arg0->_localAllocated = 0;
     arg0->_localNetAllocated = 0;
     arg0->_localNetAllocatedHigh = 0;
@@ -403,7 +403,7 @@ void FUN_002f22f0(igMemoryPool *arg0) {
     arg0->_updateStatistics = (unsigned char) GPR_00554994;
 }
 
-void FUN_002f2340(igMemoryPool *arg0, int arg1, int arg2, int arg3) {
+void igMemoryPool_UpdateLocalStatistics(igMemoryPool *arg0, int arg1, int arg2, int arg3) {
     long long a;
     long long b;
 
@@ -437,7 +437,7 @@ void FUN_002f2340(igMemoryPool *arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-void FUN_002f2450(long long arg0, long long arg1, int arg2) {
+void igMemoryPool_UpdateGlobalStatistics(long long arg0, long long arg1, int arg2) {
     long long t;
     if (arg2 != 0) {
         t = (int)arg0;
@@ -468,7 +468,7 @@ void FUN_002f2450(long long arg0, long long arg1, int arg2) {
     }
 }
 
-void Gap__Core__igMemoryPool__vfunc_34(int *status_out) {
+void igMemoryPool_EnableAllocationLock(int *status_out) {
     *status_out = g_resultFailure.v;
 }
 

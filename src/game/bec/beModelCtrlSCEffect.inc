@@ -86,7 +86,7 @@ void beModelCtrlSCEffect_InitFields(void) {
     temp_s0 = (void *)g_beModelCtrlSCEffect_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beModelCtrlSCEffect_ctorTable[0], 7);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
     igMetaObject_NameFields(temp_s0, &g_beModelCtrlSCEffect_fieldTable[0], &DAT_004c4cc0[0], &DAT_004c4ce0[0], temp_s1);
 }
 

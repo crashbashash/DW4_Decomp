@@ -1,7 +1,7 @@
-void FUN_002efa20(int arg0, int arg1, int arg2) {
-    FUN_002c0890();
+void igMemoryFile_AddMemoryFileEntry(int arg0, int arg1, int arg2) {
+    igMemoryFile_EnsureRegistered();
     if (arg1 != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)FUN_002c0b60(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0]))));
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0]))));
         igNamedObject_SetName((igNamedObject *)entry.p, arg0);
         entry->_size = arg2;
         entry->_buffer = arg1;
@@ -9,7 +9,7 @@ void FUN_002efa20(int arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_002efae0(int arg0, int *arg1, int *arg2) {
+void igMemoryFile_LookupMemoryBuffer(int arg0, int *arg1, int *arg2) {
     int temp_a0;
     void *temp_v0;
 
@@ -25,7 +25,7 @@ void FUN_002efae0(int arg0, int *arg1, int *arg2) {
     }
 }
 
-void Gap__Core__igMemoryFile__vfunc_23(int *arg0, igMemoryFileView *self, unsigned int mode) {
+void igMemoryFile_Open(int *arg0, igMemoryFileView *self, unsigned int mode) {
     int buffer;
     int size;
 
@@ -49,7 +49,7 @@ void Gap__Core__igMemoryFile__vfunc_23(int *arg0, igMemoryFileView *self, unsign
         return;
     case 0:
     case 4:
-        FUN_002efae0((int)self->_fileName, &buffer, &size);
+        igMemoryFile_LookupMemoryBuffer((int)self->_fileName, &buffer, &size);
         if (buffer == 0) {
             *arg0 = g_resultFailure.v;
             return;
@@ -64,13 +64,13 @@ void Gap__Core__igMemoryFile__vfunc_23(int *arg0, igMemoryFileView *self, unsign
     }
 }
 
-void Gap__Core__igMemoryFile__vfunc_24(igMemoryFileView *self) {
+void igMemoryFile_Close(igMemoryFileView *self) {
     self->_bIsOpen = 0;
 }
 
-igFileView *Gap__Core__igMemoryFile__vfunc_25(igFileView *arg0, const char *fileName, int arg2) {
+igFileView *igMemoryFile_OpenFile(igFileView *arg0, const char *fileName, int arg2) {
     int ok;
-    FUN_002e30b0((int *)arg0, fileName);
+    igFile_SetFileName((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
         ok = arg0->vfunc_23(0) == g_resultSuccess;
     } else if (strcmp(arg2, &((int *)DAT_004f9c48)[0]) == 0) {
@@ -81,12 +81,12 @@ igFileView *Gap__Core__igMemoryFile__vfunc_25(igFileView *arg0, const char *file
     return ok ? arg0 : 0;
 }
 
-void Gap__Core__igMemoryFile__vfunc_26(igMemoryFileView *self)
+void igMemoryFile_CloseFile(igMemoryFileView *self)
 {
     self->vfunc_24();
 }
 
-int Gap__Core__igMemoryFile__vfunc_27(igMemoryFileView *self, void *buffer, int size, int count) {
+int igMemoryFile_Read(igMemoryFileView *self, void *buffer, int size, int count) {
     int n;
     int pos;
     int left;
@@ -111,25 +111,25 @@ int Gap__Core__igMemoryFile__vfunc_27(igMemoryFileView *self, void *buffer, int 
 /* Vtable slot 29 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int Gap__Core__igMemoryFile__vfunc_29(void) {
+int igMemoryFile_Write(void) {
     return -1;
 }
 
-int Gap__Core__igMemoryFile__vfunc_30(void *arg0, int arg1, ...) {
+int igMemoryFile_Scanf(void *arg0, int arg1, ...) {
     return -1;
 }
 
-int Gap__Core__igMemoryFile__vfunc_31(int a, int b, ...) {
+int igMemoryFile_Printf(int a, int b, ...) {
     return -1;
 }
 
 /* Vtable slot 32 of igMemoryFile: a stub returning 0 (success, nothing to do) for an operation a
  * buffer-backed file does not need. The receiver is not touched, hence no parameters. */
-int Gap__Core__igMemoryFile__vfunc_32(void) {
+int igMemoryFile_Flush(void) {
     return 0;
 }
 
-char Gap__Core__igMemoryFile__vfunc_33(igMemoryFileView *self) {
+char igMemoryFile_GetChar(igMemoryFileView *self) {
     int temp_a1;
     char r;
 
@@ -148,24 +148,24 @@ char Gap__Core__igMemoryFile__vfunc_33(igMemoryFileView *self) {
 /* Vtable slot 35 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int Gap__Core__igMemoryFile__vfunc_35(void) {
+int igMemoryFile_PutChar(void) {
     return -1;
 }
 
 /* Vtable slot 36 of igMemoryFile: a stub returning 0 (success, nothing to do) for an operation a
  * buffer-backed file does not need. The receiver is not touched, hence no parameters. */
-int Gap__Core__igMemoryFile__vfunc_36(void) {
+int igMemoryFile_GetString(void) {
     return 0;
 }
 
 /* Vtable slot 37 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int Gap__Core__igMemoryFile__vfunc_37(void) {
+int igMemoryFile_PutString(void) {
     return -1;
 }
 
-int Gap__Core__igMemoryFile__vfunc_38(igMemoryFileView *self, int offset, int whence) {
+int igMemoryFile_Seek(igMemoryFileView *self, int offset, int whence) {
     int t;
     switch (whence) {
     case 0:
@@ -185,14 +185,14 @@ int Gap__Core__igMemoryFile__vfunc_38(igMemoryFileView *self, int offset, int wh
 
 /* Accessor: the current read/seek offset into the file's memory buffer (`_iSeekPosition`, +56). */
 
-int Gap__Core__igMemoryFile__vfunc_39(igMemoryFileView *self) {
+int igMemoryFile_Tell(igMemoryFileView *self) {
     return self->_iSeekPosition;
 }
 
 /* Vtable slot 34 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int Gap__Core__igMemoryFile__vfunc_34(void) {
+int igMemoryFile_UngetChar(void) {
     return -1;
 }
 

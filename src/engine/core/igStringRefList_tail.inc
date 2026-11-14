@@ -10,7 +10,7 @@ static inline int pool_30cd10(void) {
     return g_stringPool[0];
 }
 
-void Gap__Core__igStringRefList__vfunc_12(void *self0) {
+void igStringRefList_ReleaseDefaults(void *self0) {
     igTDataList<char *> *self;
     int n;
     int i;
@@ -37,7 +37,7 @@ void Gap__Core__igStringRefList__vfunc_12(void *self0) {
         *slot = (char *)v;
     }
     self->_count = 0;
-    Gap__Core__igObject__vfunc_10((int)self);
+    igObject_ReleaseDefaults((int)self);
 }
 
 void StringList_Resize(igTDataList<char *> *arg0, int arg1) {

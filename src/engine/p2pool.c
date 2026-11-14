@@ -20,8 +20,8 @@ typedef struct p2TextureRecord {
     void *memory;
 } p2TextureRecord;
 
-void *FUN_00330730(int size, int pool);
-void FUN_00330770(void *memory, int pool);
+void *Memory_AllocateAligned16(int size, int pool);
+void Memory_FreeToSelector(void *memory, int pool);
 
 extern int p2DmaPacketCount[P2_DMA_CHANNEL_COUNT];
 extern int p2DmaPacketSizeVif0;
@@ -186,7 +186,7 @@ void p2FreePool(unsigned int type) {
         p2StateCacheEntry *free;
         int i;
 
-        blocks = FUN_00330730(p2StateCacheRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2StateCacheRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             bucket = 0;
@@ -200,7 +200,7 @@ void p2FreePool(unsigned int type) {
                     }
                     data = entry->packet;
                     if (data != 0 && entry->ownsPacket != 0) {
-                        FUN_00330770(data, P2_HEAP_DRIVER);
+                        Memory_FreeToSelector(data, P2_HEAP_DRIVER);
                         entry->packet = 0;
                     }
                     entry = entry->next;
@@ -218,9 +218,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_DISPLAY_LIST: {
@@ -230,7 +230,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         list = p2DisplayListPool;
-        blocks = FUN_00330730(p2DisplayListRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2DisplayListRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (list != 0) {
@@ -242,9 +242,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_IMAGE: {
@@ -254,7 +254,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         image = p2ImagePool;
-        blocks = FUN_00330730(p2ImageRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2ImageRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (image != 0) {
@@ -266,9 +266,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_TEXTURE: {
@@ -278,7 +278,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         texture = p2FreeTextures;
-        blocks = FUN_00330730(p2TextureRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2TextureRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (texture != 0) {
@@ -290,9 +290,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_FINISH: {
@@ -302,7 +302,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         finish = p2FreeFinishFuncs;
-        blocks = FUN_00330730(p2FinishRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2FinishRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (finish != 0) {
@@ -314,9 +314,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_DMA_PREDICATE: {
@@ -326,7 +326,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         predicate = p2DmaPredicatePool;
-        blocks = FUN_00330730(p2DmaPredicateRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2DmaPredicateRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (predicate != 0) {
@@ -338,9 +338,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_DMA_COMPLETION: {
@@ -350,7 +350,7 @@ void p2FreePool(unsigned int type) {
         int i;
 
         completion = p2DmaCompletionPool;
-        blocks = FUN_00330730(p2DmaCompletionRecords * 4, P2_HEAP_TEMPORARY);
+        blocks = Memory_AllocateAligned16(p2DmaCompletionRecords * 4, P2_HEAP_TEMPORARY);
         count = 0;
         if (blocks != 0) {
             while (completion != 0) {
@@ -362,9 +362,9 @@ void p2FreePool(unsigned int type) {
             }
         }
         for (i = 0; i < count; i++) {
-            FUN_00330770(blocks[i], P2_HEAP_DRIVER);
+            Memory_FreeToSelector(blocks[i], P2_HEAP_DRIVER);
         }
-        FUN_00330770(blocks, P2_HEAP_TEMPORARY);
+        Memory_FreeToSelector(blocks, P2_HEAP_TEMPORARY);
         return;
     }
     case P2_POOL_DMA_BUFFER_VIF0:

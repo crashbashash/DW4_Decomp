@@ -48,7 +48,7 @@ Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1) {
             arg0->relS(&arg0->m8);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

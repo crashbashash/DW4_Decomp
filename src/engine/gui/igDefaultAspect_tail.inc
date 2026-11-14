@@ -126,17 +126,17 @@ void igEventDispatcher_AddReceiver(void *arg0, int arg1) {
 
 void igEventDispatcher_RemoveReceiver(Obj_4542a0 *arg0, int arg1) {
     int sp1C;
-    FUN_002d7750(&sp1C, arg0->f12, arg1);
+    igObjectList_RemoveRetained(&sp1C, arg0->f12, arg1);
 }
 
 int igEventDispatcher_AddReceiverOrder(int *p)
 {
-    return FUN_002d7090(*(int *)((char *)p + 12));
+    return igDependencyOrderedList_AddDependency(*(int *)((char *)p + 12));
 }
 
 void FUN_004542e0(S0 *arg0, int arg1, int arg2) {
     int sp1C;
 
-    FUN_002d7760(&sp1C, arg0->fC, arg1, arg2);
+    igDependencyOrderedList_RemoveDependency(&sp1C, arg0->fC, arg1, arg2);
 }
 

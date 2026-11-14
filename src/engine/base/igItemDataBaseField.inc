@@ -80,7 +80,7 @@ void FUN_002284a0(void) {
         DAT_0056d9e0[0] = (int)(igMetaObject_CreateInstance(g_igItemDataBaseField_metaObject[0], Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
         temp_s0 = (void *)(DAT_0056d9e0[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
             {
                 void *held = (void *)DAT_0056d9e0[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
@@ -88,7 +88,7 @@ void FUN_002284a0(void) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_0056d9e0[0]) + 18) = (short) (*(int *)((char *)(FUN_002fc250()) + 12) - 1);
+            *(short *)((char *)(DAT_0056d9e0[0]) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
             igMetaField_FinalizeDescriptor(DAT_0056d9e0[0]);
         }
     }
@@ -153,7 +153,7 @@ void FUN_002285d0(int arg0) {
         }
     }
     *(int *)((char *)(temp_s0) + 8) = 0;
-    *(int *)((char *)(temp_s0) + 56) = FUN_002be610();
+    *(int *)((char *)(temp_s0) + 56) = igMetaObject_GetOrCreateMetaObject();
     igMetaField_FinalizeDescriptor(temp_s0);
     ObjectList_AppendRetained(arg0, temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
@@ -184,7 +184,7 @@ void FUN_002285d0(int arg0) {
         }
     }
     *(int *)((char *)(temp_s0_2) + 8) = 4;
-    *(int *)((char *)(temp_s0_2) + 56) = FUN_002c8e50();
+    *(int *)((char *)(temp_s0_2) + 56) = igMetaObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
     igMetaField_FinalizeDescriptor(temp_s0_2);
     ObjectList_AppendRetained(arg0, temp_s0_2);
@@ -216,7 +216,7 @@ void FUN_002285d0(int arg0) {
         }
     }
     *(int *)((char *)(temp_s0_3) + 8) = 8;
-    *(int *)((char *)(temp_s0_3) + 56) = FUN_002b9120();
+    *(int *)((char *)(temp_s0_3) + 56) = igStringRefList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
     igMetaField_FinalizeDescriptor(temp_s0_3);
     ObjectList_AppendRetained(arg0, temp_s0_3);
@@ -225,7 +225,7 @@ void FUN_002285d0(int arg0) {
         igObject_Destroy(temp_s0_3);
     }
     igMetaObject_EnsureRegistered();
-    FUN_002c8f30();
-    FUN_002b9200();
+    igMetaObjectList_EnsureRegistered();
+    igStringRefList_EnsureRegistered();
 }
 

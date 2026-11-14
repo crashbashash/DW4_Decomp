@@ -8,11 +8,11 @@ int igFloatArrayMetaField_GetSize(igFloatArrayMetaField *self) {
 void igFloatArrayMetaField_SwapBytes(igFloatArrayMetaField *arg0, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)FUN_002c4870()));
+    temp_v0 = (void **)(((void **)igFloatMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
 }
 
-int Gap__Core__igFloatArrayMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igFloatMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -20,7 +20,7 @@ int Gap__Core__igFloatArrayMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igFloatArrayMetaField__vfunc_57(int *arg0, int arg1, float *arg2) {
+void igFloatMetaField_ValueToString(int *arg0, int arg1, float *arg2) {
     char sp20[1024];
     int var_v0;
     int var_v1;

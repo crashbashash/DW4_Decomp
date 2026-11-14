@@ -1,4 +1,4 @@
-int Gap__Core__igUnsignedIntMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igUnsignedIntMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igUnsignedIntMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igUnsignedIntMetaField__vfunc_57(int *arg0, void *arg1, int *arg2) {
+void igUnsignedIntMetaField_ValueToString(int *arg0, void *arg1, int *arg2) {
     int sp20[256];
     int var_v0;
     int var_v1;
@@ -31,7 +31,7 @@ void Gap__Core__igUnsignedIntMetaField__vfunc_57(int *arg0, void *arg1, int *arg
  * type is igUnsignedIntMetaField (slots 50 and 51 hand out that class's metaobject and
  * descriptor), so 4 is read as the element size in bytes. The receiver is not touched, hence no
  * parameters. */
-int FUN_0030e8d0(void) {
+int igUnsignedIntMetaField_GetSize(void) {
     return 4;
 }
 
@@ -50,24 +50,24 @@ void *igUnsignedIntMetaField_Init(igMetaField *self) {
     return self;
 }
 
-int **FUN_0030e960(int **arg0, int extra1) {
+int **igUnsignedIntMetaField_CopyConstruct(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
     *arg0 = &g_igUnsignedIntMetaField_vtable[0];
     return arg0;
 }
 
-void Gap__Core__igUnsignedIntMetaField__vfunc_02(int extra0) {
+void igUnsignedIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void FUN_0030e9b0(void **arg0, int arg1) {
+void igUnsignedIntMetaField_SetDefaultValue(void **arg0, int arg1) {
     int sp1C;
 
     sp1C = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
 }
 
-int Gap__Core__igUnsignedIntMetaField__vfunc_27(void) {
+int igUnsignedIntMetaField_GetAlignment(void) {
     return 4;
 }
 

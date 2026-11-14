@@ -85,7 +85,7 @@ void igModelViewMatrixAttr_InitFields(void) {
     FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     igMetaObject_NameFields(temp_s0, &g_igModelViewMatrixAttr_fieldTable[0], &DAT_00486238[0], &DAT_00486240[0], temp_s2);
-    FUN_002fe480(&thunk_FUN_0013f730);
+    igMetaObject_AddExitCallback(&thunk_FUN_0013f730);
 }
 
 void FUN_00135980(void) {

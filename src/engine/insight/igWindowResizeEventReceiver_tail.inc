@@ -28,7 +28,7 @@ void igInsightCore_RemoveManager(void *arg0, void *arg1) {
     if (FUN_00236b70() != 0) {
         ((DW4VC_96_0 *)(((char *)(arg1) + 0)))->vX();
         *(int *)((char *)(arg1) + 12) = 0;
-        FUN_002d7750(&sp3C, *(int *)((char *)(arg0) + 8), arg1);
+        igObjectList_RemoveRetained(&sp3C, *(int *)((char *)(arg0) + 8), arg1);
     }
 }
 
@@ -50,8 +50,8 @@ void FUN_00236ca0(int self) {
     int i;
     count = igMetaObject_CountTree(meta = (int)igInsightPlugin_GetMetaObject());
     for (i = 0; i < count; i++) {
-        int type = FUN_002fe300(meta, i);
-        igSmartPointer<Instance> plugin(FUN_002fd6e0(type, igObject_GetAllocator(self)).get(), kRetainReference);
+        int type = igMetaObject_GetTreeNode(meta, i);
+        igSmartPointer<Instance> plugin(igMetaObject_CreateInstanceRef(type, igObject_GetAllocator(self)).get(), kRetainReference);
         if (plugin.get()) {
             FUN_00236dd0((void *)self, (void **)plugin.get());
         }
@@ -85,7 +85,7 @@ void igInsightCore_AddRenderer(void *arg0, int arg1) {
 
 void igInsightCore_RemoveRenderer(Obj_236f30 *arg0, int arg1) {
     int sp2C;
-    FUN_002d7750(&sp2C, arg0->f28, arg1);
+    igObjectList_RemoveRetained(&sp2C, arg0->f28, arg1);
     if (sp2C == g_resultSuccess[0]) {
         FUN_00457ca0(arg1, 0);
     }
@@ -106,6 +106,6 @@ int FUN_00237010(void) {
 
 int igInsightCore_AddRendererOrder(int *p)
 {
-    return FUN_002d7090(*(int *)((char *)p + 28));
+    return igDependencyOrderedList_AddDependency(*(int *)((char *)p + 28));
 }
 

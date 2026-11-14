@@ -1,11 +1,11 @@
-void Gap__Core__igObjectRefArrayMetaField__vfunc_52(igObjectRefArrayMetaField *self, int passThrough, int perElement) {
+void igObjectRefArrayMetaField_SwapBytes(igObjectRefArrayMetaField *self, int passThrough, int perElement) {
     void **elementDescriptor;
 
     elementDescriptor = (void **)(((void **)igObjectRefMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(elementDescriptor))->SwapBytes((void *)(passThrough), (int)(perElement * self->_num));
 }
 
-void FUN_00302780(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject *arg3) {
+void igObjectRefArrayMetaField_SetElement(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject *arg3) {
     int temp_s0;
     igObject *temp_a0;
 
@@ -25,7 +25,7 @@ void FUN_00302780(igObjectRefArrayMetaField *arg0, int arg1, int arg2, igObject 
     ((igObject **)(arg1 + arg0->_offset))[arg2] = arg3;
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_51(void *arg0, int arg1, char *arg2, int arg3, int arg4) {
+int igObjectRefArrayMetaField_ReadRawFieldMem(void *arg0, int arg1, char *arg2, int arg3, int arg4) {
     int *p;
     int cur;
     int start;
@@ -34,13 +34,13 @@ int Gap__Core__igObjectRefArrayMetaField__vfunc_51(void *arg0, int arg1, char *a
     cur = (int)arg2;
     start = cur;
     for (i = 0; i < *(int *)((char *)arg0 + 68); i++) {
-        cur += Gap__Core__igObjectRefMetaField__vfunc_51((igObjectRefMetaField *)arg0, (igObject **)p, cur, arg3, arg4);
+        cur += igObjectRefMetaField_ReadRawFieldMem((igObjectRefMetaField *)arg0, (igObject **)p, cur, arg3, arg4);
         p++;
     }
     return cur - start;
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_31(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *arg0, int arg1) {
     igObject *temp_v0;
     int var_s1;
     int var_s0;
@@ -58,7 +58,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_31(igObjectRefArrayMetaField *a
         }
         for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
             temp_v0 = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)arg0->_metaObject, (igMemoryPoolView *)var_s1));
-            FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)temp_v0);
+            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)temp_v0);
             if (arg0->_refCounted != 0) {
                 temp_v0->_refCount = temp_v0->_refCount - 1;
                 if (((unsigned long long) ((long long)(int)temp_v0->_refCount << 0x29) >> 0x29) == 0) {
@@ -69,7 +69,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_31(igObjectRefArrayMetaField *a
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_32(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_DestructValue(igObjectRefArrayMetaField *arg0, int arg1) {
     int i;
     igObject *temp_a0;
 
@@ -86,7 +86,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_32(igObjectRefArrayMetaField *a
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_34(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_ClearValue(igObjectRefArrayMetaField *arg0, int arg1) {
     int var_s0;
     igObject *temp_a0;
 
@@ -106,7 +106,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_34(igObjectRefArrayMetaField *a
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_28(void *arg0, int arg1) {
+void igObjectRefArrayMetaField_SetToDefault(void *arg0, int arg1) {
     int temp_a0;
     int var_s0;
 
@@ -118,23 +118,23 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_28(void *arg0, int arg1) {
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_30(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_CopyDefaultToValue(igObjectRefArrayMetaField *arg0, int arg1) {
     int i;
 
     for (i = 0; i < arg0->_num; i++) {
-        FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, i, (igObject *)((int *)arg0->_default)[i]);
+        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, i, (igObject *)((int *)arg0->_default)[i]);
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_37(void *arg0, int arg1, int arg2) {
+void igObjectRefArrayMetaField_CopyReference(void *arg0, int arg1, int arg2) {
     int var_s0;
 
     for (var_s0 = 0; var_s0 < *(int *)((char *)(arg0) + 68); var_s0++) {
-        FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(*(int *)(arg2 + *(int *)((char *)(arg0) + 8) + (var_s0 * 4))));
+        igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(*(int *)(arg2 + *(int *)((char *)(arg0) + 8) + (var_s0 * 4))));
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_36(igObjectRefArrayMetaField *s, char *a1, char *a2) {
+void igObjectRefArrayMetaField_DeepCopy(igObjectRefArrayMetaField *s, char *a1, char *a2) {
     int i = 0;
     while (i < s->_num) {
         int base = s->_offset;
@@ -143,21 +143,21 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_36(igObjectRefArrayMetaField *s
         igObjectDispatchView *y = *(igObjectDispatchView **)(a2 + base + off);
         if (x == 0 && y == 0) break;
         if (x != 0 && y != 0) {
-            FUN_003006a0((igObjectDispatchView *)x, (igObjectDispatchView *)y);
+            igObject_DeepCopy((igObjectDispatchView *)x, (igObjectDispatchView *)y);
         } else if (x == 0) {
-            FUN_00302780((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->cloneViaMetadata(1)));
+            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->cloneViaMetadata(1)));
         } else if (y == 0) {
             x->_refCount = x->_refCount - 1;
             if (((unsigned long long)((long long)(int)x->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(x);
             }
-            FUN_00302780((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)0);
+            igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)0);
         }
         i++;
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_38(int *arg0, int arg1, int arg2) {
+void igObjectRefArrayMetaField_ShallowCopy(int *arg0, int arg1, int arg2) {
     int var_s0;
     int v1;
     int p1;
@@ -176,15 +176,15 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_38(int *arg0, int arg1, int arg
         a1 = *(igObjectDispatchView **)(p2 + off);
         if (a0 != 0 || a1 != 0) {
             if (a0 != 0 && a1 != 0) {
-                FUN_00300770((igObjectDispatchView *)a0, (int)a1);
+                igObject_ShallowCopy((igObjectDispatchView *)a0, (int)a1);
             } else if (a0 == 0) {
-                FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(a1->cloneViaMetadata(1)));
+                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)(a1->cloneViaMetadata(1)));
             } else if (a1 == 0) {
                 a0->_refCount = a0->_refCount - 1;
                 if ((a0->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(a0);
                 }
-                FUN_00302780((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)0);
+                igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)arg0, arg1, var_s0, (igObject *)0);
             }
             var_s0 += 1;
         } else {
@@ -193,7 +193,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_38(int *arg0, int arg1, int arg
     }
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_39(igObjectRefArrayMetaField *arg0, int arg1) {
+void igObjectRefArrayMetaField_ResetValue(igObjectRefArrayMetaField *arg0, int arg1) {
     int i;
     for (i = 0; i < arg0->_num; i++) {
         int *p = (int *)(arg1 + arg0->_offset + (i * 4));
@@ -203,7 +203,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_39(igObjectRefArrayMetaField *a
     }
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_50(igObjectRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
+int igObjectRefArrayMetaField_WriteRawFieldMem(igObjectRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
     int s;
     int d;
     int start;
@@ -219,11 +219,11 @@ int Gap__Core__igObjectRefArrayMetaField__vfunc_50(igObjectRefArrayMetaField *se
     return ((d - start) + 3) & ~3;
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_25(void *arg0) {
+int igObjectRefArrayMetaField_GetSize(void *arg0) {
     return (*(int *)((char *)(arg0) + 68) * 4) & 0xFFFF;
 }
 
-void Gap__Core__igObjectRefArrayMetaField__vfunc_42(igObjectRefArrayMetaField *arg0, int arg1, int arg2, int arg3) {
+void igObjectRefArrayMetaField_ReleaseElements(igObjectRefArrayMetaField *arg0, int arg1, int arg2, int arg3) {
     int temp_a0;
     int var_s0;
 
@@ -235,7 +235,7 @@ void Gap__Core__igObjectRefArrayMetaField__vfunc_42(igObjectRefArrayMetaField *a
     }
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_45(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeExactly(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
     int i;
     int off;
     int a;
@@ -256,7 +256,7 @@ int Gap__Core__igObjectRefArrayMetaField__vfunc_45(igObjectRefArrayMetaField *ar
     return 1;
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_46(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeDeep(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
     int i;
     for (i = 0; i < arg0->_num; i++) {
         int a = *(int *)(arg1 + arg0->_offset + i * 4);
@@ -273,7 +273,7 @@ int Gap__Core__igObjectRefArrayMetaField__vfunc_46(igObjectRefArrayMetaField *ar
     return 1;
 }
 
-int Gap__Core__igObjectRefArrayMetaField__vfunc_47(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
+int igObjectRefArrayMetaField_IsAlikeShallow(igObjectRefArrayMetaField *arg0, int arg1, int arg2) {
     int i;
     int a;
     int b;

@@ -1,4 +1,4 @@
-void Gap__Core__igFolder__vfunc_24(void **arg0) {
+void igFolder_ListFiles(void **arg0) {
     void *temp_a0;
 
     *arg0 = 0;

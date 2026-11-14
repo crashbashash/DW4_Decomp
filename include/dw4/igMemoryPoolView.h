@@ -24,7 +24,7 @@ public:
     virtual void vfunc_24();
 #endif
     virtual void d23();
-    virtual int vfunc_26();                                                      /* slot 24, byte 104: the raw memory block */
+    virtual int vfunc_26(...);                                                   /* slot 24, byte 104: the raw memory block; callers pass a stray argument or none */
     virtual int Trim(int);                                                       /* slot 25, byte 108 */
     virtual void d26();
     virtual int vfunc_29();                                                      /* slot 27, byte 116 */

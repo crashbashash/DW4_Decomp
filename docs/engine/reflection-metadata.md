@@ -413,7 +413,7 @@ Where a row carries an override its unit profile makes unnecessary the verifier 
 Two bodies need more than the unit profile:
 
 * `igTransformSequence_InitFields` (0x195620, unit default `-O3`, exceptions off): the
-  `FUN_002d9500(field, -1.0)` call passes the double as a 128-bit value (`dsll32 v0; … pcpyld
+  `igDoubleMetaField_SetDefaultDouble(field, -1.0)` call passes the double as a 128-bit value (`dsll32 v0; … pcpyld
   a1,zero,v0`), which the 2003 beta emits and the default build does not (it writes `dsll32 a1,v0,0`
   after the call); the body matches only under its combat override. Either the unit's profile or
   the default compiler's double-passing is the open question: a `tools/unitprofiles` review item,

@@ -37,7 +37,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
         l->data[idx] = (int)arg0;
         z = ((struct Z * *)g_objectSystem)[0]->f56;
         sp4F = arg0[60];
-        FUN_00306e50(z, 7, &text_simpleLightManagementState[0], &sp4F, 0, 0);
+        igRegistry_GetValueBool(z, 7, &text_simpleLightManagementState[0], &sp4F, 0, 0);
         arg0[60] = sp4F;
     }
 }
@@ -79,9 +79,9 @@ void FUN_001afb60(char *arg0) {
     int n;
     int i;
     int idx;
-    if (FUN_002fe290(arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
+    if (igMetaObject_IsOfType(arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
         if (((RefObj * *)DAT_00562578)[0] == 0) {
-            ((RefObj * *)DAT_00562578)[0] = FUN_002c8e10(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
+            ((RefObj * *)DAT_00562578)[0] = igMetaObjectList_Create(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
         }
         K key(arg0);
         idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);
@@ -107,7 +107,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
         id = meta->_id;
         if (id >= m->_attrStackIndexTableSize) {
             m->_attrStackIndexTableSize = id + 4;
-            m->_attrStackIndexTable = FUN_00300e50(m, m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
+            m->_attrStackIndexTable = igObject_Reallocate(m, m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
         }
         units = FUN_001d8270((int)(meta));
         if (units <= 0) {

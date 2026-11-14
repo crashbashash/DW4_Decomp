@@ -1,4 +1,4 @@
-void thunk_igPsx2Folder_GetMetaObject(void) {
+void igPsx2Folder_GetMetaObjectFunction(void) {
     igPsx2Folder_GetMetaObject();
 }
 

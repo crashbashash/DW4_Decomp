@@ -37,7 +37,7 @@ int **FUN_00194790(int **arg0, long long arg1) {
             FUN_0013a800((char *)arg0 + 8, -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -82,7 +82,7 @@ Obj_194930 *FUN_00194930(Obj_194930 *arg0, short arg1) {
         arg0->rel(&arg0->m12);
         arg0->rel(&arg0->m8);
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -153,7 +153,7 @@ void igTransientShaderData_InitFields(void) {
     temp_s2 = ObjectPointerList_FindIndex(temp_s1->f40, temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = FUN_001e5690();
-    FUN_00303460(temp_s0, 0);
+    igObjectRefMetaField_SetDefault(temp_s0, 0);
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&DAT_005611c0[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);

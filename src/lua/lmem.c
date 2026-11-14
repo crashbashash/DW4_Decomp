@@ -13,7 +13,7 @@
 
 extern "C" {
 void *Memory_AllocateDefaultBuffer(size_t size);
-void *thunk_Memory_ReallocateBuffer(void *block, size_t size);
+void *Memory_ReallocateBufferAlias(void *block, size_t size);
 void Memory_FreeBufferAliasA(void *block);
 }
 
@@ -59,6 +59,6 @@ void *luaM_realloc (lua_State *L, void *block, lint32 size) {
     return NULL;
   }
   if (block != NULL)
-    return thunk_Memory_ReallocateBuffer(block, size);
+    return Memory_ReallocateBufferAlias(block, size);
   return Memory_AllocateDefaultBuffer(size);
 }

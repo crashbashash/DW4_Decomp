@@ -161,7 +161,7 @@ void beNDMWPanelWazaInfoWork_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_003bfcc0();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igIntList_GetOrCreateMetaObject();

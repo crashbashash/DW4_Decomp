@@ -76,7 +76,7 @@ void igGuiComponentModel_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0044ff40();
     *(char *)(60 + (char *)(temp_s1)) = 0;
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     z.a = 0;
     z.b = 0;

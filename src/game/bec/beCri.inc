@@ -123,7 +123,7 @@ void beCri_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00366780();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igObjectList_GetOrCreateMetaObject();

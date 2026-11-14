@@ -2,7 +2,7 @@ typedef igSmartPointer<igTDataList<igNamedObject *> > igNamedObjectListRef;
 
 /* Writes the directory entry for `object`: under its own name when the info lists it, else through
  * the base class, which looks for the object among the info's reference fields. */
-void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, igNamedObject *object) {
+void igNamedObjectInfo_FindObjectReference(igNamedObjectInfo *self, int file, igNamedObject *object) {
     for (int i = 0; i < ((igNamedObjectListRef &)self->_objects)->count(); i++) {
         igNamedObject *named = ((igNamedObjectListRef &)self->_objects)->get(i);
         if (named == object) {
@@ -10,11 +10,11 @@ void Gap__Core__igNamedObjectInfo__vfunc_23(igNamedObjectInfo *self, int file, i
             return;
         }
     }
-    FUN_002ea0d0((void **)self, file, (int)object);
+    igInfo_FindObjectReference((void **)self, file, (int)object);
 }
 
 /* The listed object of the given name, else the base class's lookup among the reference fields. */
-igNamedObject *Gap__Core__igNamedObjectInfo__vfunc_24(igNamedObjectInfo *self, const char *name) {
+igNamedObject *igNamedObjectInfo_GetFieldValueByName(igNamedObjectInfo *self, const char *name) {
     int i;
     if (name == 0) {
         return 0;
@@ -28,7 +28,7 @@ igNamedObject *Gap__Core__igNamedObjectInfo__vfunc_24(igNamedObjectInfo *self, c
     return (igNamedObject *)igObject_GetFieldValueByName((void **)self, (int)name);
 }
 
-int FUN_002feeb0(igTDataList<int> *list, igMetaField *field, int value) {
+int igObjectList_FindByIntField(igTDataList<int> *list, igMetaField *field, int value) {
     int i;
     int v;
     if (field == 0) {

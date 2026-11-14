@@ -8,30 +8,30 @@ extern ElfResult DAT_004fb418;
 extern char DAT_004fde00[];
 extern char DAT_004fde20[];
 extern signed char GPR_005549b4;
-int FUN_00320ee0(ElfFileView *, int, int);
-ElfSection *FUN_00320ea0(ElfFileView *, int);
-void FUN_00304430(char *, int);
-void FUN_00304680(void);
-void FUN_00320aa0(void *, int);
-ElfResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self);
+int igElfFile_FindSectionByType(ElfFileView *, int, int);
+ElfSection *igElfFile_GetSectionHeader(ElfFileView *, int);
+void igReport_Printf(char *, int);
+void igReport_Flush(void);
+void igElfFile_SwapSymbols(void *, int);
+ElfResult igElfFile_LoadSymbols(ElfFileView *self);
 }
-ElfResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self) {
-    int index = FUN_00320ee0(self, 2, 0);
+ElfResult igElfFile_LoadSymbols(ElfFileView *self) {
+    int index = igElfFile_FindSectionByType(self, 2, 0);
     ElfSection *symbols;
     ElfSection *before;
     ElfSection *after;
     ElfSection *next;
     int expected;
     if (index == -1) {
-        FUN_00304430(DAT_004fde00, self->path);
-        FUN_00304680();
+        igReport_Printf(DAT_004fde00, self->path);
+        igReport_Flush();
         self->Close();
         return DAT_004fb418;
     }
-    symbols = FUN_00320ea0(self, index);
-    before = FUN_00320ea0(self, index - 1);
-    after = FUN_00320ea0(self, index + 1);
-    next = FUN_00320ea0(self, index + 2);
+    symbols = igElfFile_GetSectionHeader(self, index);
+    before = igElfFile_GetSectionHeader(self, index - 1);
+    after = igElfFile_GetSectionHeader(self, index + 1);
+    next = igElfFile_GetSectionHeader(self, index + 2);
     if (after != 0 && after->type == 3 && after->size != self->stringOffset) {
         self->stringsSize = after->size;
         if (self->Load(after->offset, after->size, &self->strings) == DAT_004fb418) {
@@ -48,8 +48,8 @@ ElfResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self) {
             return DAT_004fb418;
         }
     } else {
-        FUN_00304430(DAT_004fde20, self->path);
-        FUN_00304680();
+        igReport_Printf(DAT_004fde20, self->path);
+        igReport_Flush();
         self->Close();
         return DAT_004fb418;
     }
@@ -59,7 +59,7 @@ ElfResult Gap__Core__igElfFile__vfunc_27(ElfFileView *self) {
     }
     expected = (GPR_005549b4 == 18) ? 2 : 1;
     if (self->endian != expected) {
-        FUN_00320aa0(self->symbols, self->symbolCount);
+        igElfFile_SwapSymbols(self->symbols, self->symbolCount);
     }
     return DAT_004fb410;
 }

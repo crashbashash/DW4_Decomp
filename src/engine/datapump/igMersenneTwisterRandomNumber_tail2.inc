@@ -54,7 +54,7 @@ int FUN_001e6de0(int *result, Vector3f *value, int *format) {
     igSmartPointer<FormattedObject> formatted((FormattedObject *)igStringObj_Create(0), AdoptReference());
     int x = fptodp(value->x);
     int y = fptodp(value->y);
-    FUN_0030b7e0(formatted.p, format, x, y, fptodp(value->z));
+    igStringObj_Format(formatted.p, format, x, y, fptodp(value->z));
     name = formatted.p->f8;
     if (name == 0) {
         name = g_stringObjEmptyText[0];
@@ -85,7 +85,7 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
     s3 = fptodp(quad->x);
     s2 = fptodp(quad->y);
     s1 = fptodp(quad->z);
-    FUN_0030b7e0(named.p, kind, s3, s2, s1, fptodp(quad->w));
+    igStringObj_Format(named.p, kind, s3, s2, s1, fptodp(quad->w));
     name = named.get()->name;
     if (name == 0) {
         name = g_stringObjEmptyText[0];
@@ -106,29 +106,29 @@ int FUN_001e6f10(int *result, Quad *quad, int *kind) {
     return 0;
 }
 
-int thunk_FUN_003065f0()
+int thunk_igRegistry_GetValueInt()
 {
-    return FUN_003065f0();
+    return igRegistry_GetValueInt();
 }
 
-int thunk_FUN_003066b0()
+int thunk_igRegistry_GetValueFloat()
 {
-    return FUN_003066b0();
+    return igRegistry_GetValueFloat();
 }
 
-int thunk_FUN_00306770()
+int thunk_igRegistry_GetValueStringObj()
 {
-    return FUN_00306770();
+    return igRegistry_GetValueStringObj();
 }
 
-int thunk_FUN_00306910()
+int thunk_igRegistry_GetValueString()
 {
-    return FUN_00306910();
+    return igRegistry_GetValueString();
 }
 
-int thunk_FUN_00306e50()
+int thunk_igRegistry_GetValueBool()
 {
-    return FUN_00306e50();
+    return igRegistry_GetValueBool();
 }
 
 int FUN_001e70a0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
@@ -146,7 +146,7 @@ int FUN_001e70a0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
 
     sp6C = (void *)(0);
     FUN_001e6de0((int *)&sp68, (Vector3f *)arg4, &text_f_f_f_2[0]);
-    if (FUN_00306910(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
+    if (igRegistry_GetValueString(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
         temp_s0 = Vec3f_FromString((int)sp6C, (int *)arg3, (int)&DAT_004e4ad0[0]) & 0xFF;
         if (sp68 != 0) {
             temp_a1 = (int *)((char *)sp68 - 8);
@@ -200,7 +200,7 @@ int FUN_001e71f0(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
 
     sp6C = (void *)(0);
     FUN_001e6f10((int *)&sp68, (Quad *)arg4, &text_f_f_f_f_2[0]);
-    if (FUN_00306910(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
+    if (igRegistry_GetValueString(arg0, arg1, arg2, &sp6C, sp68, arg5) != 0) {
         temp_s0 = FUN_001e6d80((int)sp6C, (int *)arg3, (int)&DAT_004e4b00[0]) & 0xFF;
         if (sp68 != 0) {
             temp_a1 = (int *)((char *)sp68 - 8);

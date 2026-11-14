@@ -1,4 +1,4 @@
-igMetaObject *FUN_002c2290(void) {
+igMetaObject *igLibraryLoader_GetOrCreateMetaObject(void) {
     if (g_igLibraryLoader_metaObject[0] == 0) {
         g_igLibraryLoader_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,23 +9,23 @@ igMetaObject *igLibraryLoader_GetMetaObject(void)
 {
     igMetaObject *g = g_igLibraryLoader_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c2330();
+        igLibraryLoader_EnsureRegistered();
     return g_igLibraryLoader_metaObject[0];
 }
 
-void FUN_002c2330(void)
+void igLibraryLoader_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLibraryLoader_Register);
 }
 
 void igLibraryLoader_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igLibraryLoader_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igLibraryLoader_GetMetaObject,
+        igLibraryLoader_GetMetaObjectFunction,
         igLibraryLoader_className,
         8, /* instance size */
         0,
@@ -35,7 +35,7 @@ void igLibraryLoader_Register(void) {
     );
 }
 
-void thunk_igLibraryLoader_GetMetaObject(void) {
+void igLibraryLoader_GetMetaObjectFunction(void) {
     igLibraryLoader_GetMetaObject();
 }
 

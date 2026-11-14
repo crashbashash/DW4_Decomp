@@ -1,4 +1,4 @@
-void FUN_002d7b00(void) {
+void igDirectory_RegisterDependentMetaObjects(void) {
     igDirEntry_GetMetaObject();
     igObjectDirEntry_GetMetaObject();
     igMemoryDirEntry_GetMetaObject();
@@ -9,7 +9,7 @@ void FUN_002d7b00(void) {
     igResource_GetMetaObject();
 }
 
-void Gap__Core__igDirectory__vfunc_12(igDirectoryView *arg0) {
+void igDirectory_ReleaseDefaults(igDirectoryView *arg0) {
     igResult sp4C;
     int temp_s2;
     int i;
@@ -20,20 +20,20 @@ void Gap__Core__igDirectory__vfunc_12(igDirectoryView *arg0) {
             igResource_UnloadDirectory(arg0->_managingResource, arg0->_externalDirectoryList->_data[i]->_name);
         }
     }
-    temp_s2 = FUN_002d9120(arg0);
+    temp_s2 = igDirectory_GetInfoCount(arg0);
     for (i = 0; i < temp_s2; i++) {
-        temp_v0 = (int *)FUN_002d8370(arg0, i);
+        temp_v0 = (int *)igDirectory_GetInfo(arg0, i);
         if (temp_v0[3] == (int)arg0) {
             temp_v0[3] = 0;
         }
     }
-    Gap__Core__igObject__vfunc_10((int)arg0);
+    igObject_ReleaseDefaults((int)arg0);
     if (arg0->_loadingSemaphore != 0 && arg0->_loadingSemaphore->isCreated() != 0) {
         sp4C = arg0->_loadingSemaphore->destroy();
     }
 }
 
-int FUN_002d7c50(igDirectoryView *arg0, unsigned key) {
+int igDirectory_GetEntryByRef(igDirectoryView *arg0, unsigned key) {
     igTDataList<int> *l = arg0->_refList;
     int lo, hi, mid, idx, n;
     unsigned v;
@@ -67,19 +67,19 @@ int FUN_002d7c50(igDirectoryView *arg0, unsigned key) {
 found:
         v = l->_data[idx];
         if (v == key) {
-            return (int)FUN_002d7e90((int *)arg0, idx);
+            return (int)igDirectory_GetEntry((int *)arg0, idx);
         }
         return 0;
     }
     return igProperty_FindBySortedKey((void *)arg0, (void *)DAT_00586730[0], (int)key);
 }
 
-void *thunk_FUN_002d7e90(int *arg0, int arg1)
+void *thunk_igDirectory_GetEntry(int *arg0, int arg1)
 {
-    return FUN_002d7e90(arg0, arg1);
+    return igDirectory_GetEntry(arg0, arg1);
 }
 
-int FUN_002d7d60(void *arg0, int arg1) {
+int igDirectory_GetObject(void *arg0, int arg1) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 44));
@@ -89,7 +89,7 @@ int FUN_002d7d60(void *arg0, int arg1) {
     return *(int *)((char *)((*(int *)(*(int *)((char *)(arg0) + 16) + (arg1 * 4)))) + 24);
 }
 
-void FUN_002d7da0(igDirectoryView *a, int i, int x) {
+void igDirectory_SetEntryRef(igDirectoryView *a, int i, int x) {
     if (a->_refList != 0 && a->_uniqueEntryList != 0) {
         igDirEntryView *o = a->_data[i];
         o->vfunc_23(x);
@@ -103,10 +103,10 @@ void FUN_002d7da0(igDirectoryView *a, int i, int x) {
     }
 }
 
-void *FUN_002d7e90(int *arg0, int arg1) {
+void *igDirectory_GetEntry(int *arg0, int arg1) {
     if (arg0[11] != 0) {
         igDirEntryView *t = (igDirEntryView *)((int *)arg0[4])[arg1];
-        t->vfunc_23(FUN_002d7d60(arg0, arg1));
+        t->vfunc_23(igDirectory_GetObject(arg0, arg1));
         t->_index = arg1;
         return t;
     }
@@ -142,7 +142,7 @@ static inline void setSlot(igTDataList<int> *l, int i, igObjectDispatchView *v) 
     }
 }
 
-int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDispatchView **value) {
+int igDirectory_ReplaceReference(igDirectoryView *self, igObjectDispatchView **field, igObjectDispatchView **value) {
     int changed = 0;
     int i;
     int j;
@@ -151,7 +151,7 @@ int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDi
     igObjectDirEntry *item;
     for (i = 0; i < self->_count; i++) {
         current = *field;
-        if ((igObjectDispatchView *)FUN_002d7d60(self, i) == (igObjectDispatchView *)current) {
+        if ((igObjectDispatchView *)igDirectory_GetObject(self, i) == (igObjectDispatchView *)current) {
             if (self->_refList != 0) {
                 releaseBound(*field);
                 if (*value != 0) {
@@ -163,7 +163,7 @@ int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDi
             }
             changed++;
         }
-        item = castBinding((igObjectDirEntry *)FUN_002d7e90((int *)self, i));
+        item = castBinding((igObjectDirEntry *)igDirectory_GetEntry((int *)self, i));
         if (item != 0) {
             igSmartPointer<igVirtualObject> source((igVirtualObject *)item->_ref, kRetainReference);
             if (source.get() == 0) {
@@ -185,11 +185,11 @@ int FUN_002d7f10(igDirectoryView *self, igObjectDispatchView **field, igObjectDi
     return changed;
 }
 
-void FUN_002d81f0(void *arg0, int arg1) {
-    FUN_002d8230((igDirectoryView *)arg0, (igObject *)((void *)igProperty_FindByName((igObjectList *)(*(int *)((char *)arg0 + 28)), (igMetaField *)(*(int *)0x585BE0), arg1)));
+void igDirectory_RemoveInfoByName(void *arg0, int arg1) {
+    igDirectory_RemoveInfo((igDirectoryView *)arg0, (igObject *)((void *)igProperty_FindByName((igObjectList *)(*(int *)((char *)arg0 + 28)), (igMetaField *)(*(int *)0x585BE0), arg1)));
 }
 
-void FUN_002d8230(igDirectoryView *h, igObject *object) {
+void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object) {
     int idx;
     igTDataList<igObject *> *f;
     f = (igTDataList<igObject *> *)h->_infoList;
@@ -199,7 +199,7 @@ void FUN_002d8230(igDirectoryView *h, igObject *object) {
     }
 }
 
-void FUN_002d8310(void *arg0, void *arg1) {
+void igDirectory_AddInfo(void *arg0, void *arg1) {
     ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 28)), (igObject *)arg1);
     *(int *)((char *)(arg1) + 12) = (int)(arg0);
 }
@@ -209,7 +209,7 @@ void * igDirectory_FindInfoByName(int *arg0, int arg1) {
 }
 
 /* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */
-int FUN_002d8370(void *arg0, int arg1) {
+int igDirectory_GetInfo(void *arg0, int arg1) {
     void *temp_a0;
     if (!(arg1 <= -1)) {
         temp_a0 = (void *)(*(int *)((char *)(arg0) + 28));
@@ -220,7 +220,7 @@ int FUN_002d8370(void *arg0, int arg1) {
     return 0;
 }
 
-int FUN_002d83b0(igDirectoryView *arg0, int arg1, int arg2) {
+int igDirectory_FindObjectReferenceInInfos(igDirectoryView *arg0, int arg1, int arg2) {
     int i;
     igInfoView *o;
 
@@ -233,15 +233,15 @@ int FUN_002d83b0(igDirectoryView *arg0, int arg1, int arg2) {
     return 0;
 }
 
-int FUN_002d8460(void *dir, unsigned key) {
-    igSmartPointer<igDirEntry> h((igDirEntry *)FUN_002d7c50((igDirectoryView *)dir, key), kRetainReference);
+int igDirectory_HasEntry(void *dir, unsigned key) {
+    igSmartPointer<igDirEntry> h((igDirEntry *)igDirectory_GetEntryByRef((igDirectoryView *)dir, key), kRetainReference);
     if (h.get() != 0) {
         return 1;
     }
     return 0;
 }
 
-int FUN_002d8520(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2) {
+int igDirectory_AddObjectCallback(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2) {
     int i;
     int n;
     if (arg0 == 0) {
@@ -250,32 +250,32 @@ int FUN_002d8520(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2) {
     if (arg1 != 0) {
         return arg1->Write(arg0, (int)arg2) == -1;
     }
-    if ((FUN_002d8460(arg2, arg0) & 0xFF) == 1) {
+    if ((igDirectory_HasEntry(arg2, arg0) & 0xFF) == 1) {
         return 1;
     }
     n = arg2->_externalDirectoryList->_count;
     for (i = 0; i < n; i++) {
-        if ((FUN_002d83b0(arg2->_externalDirectoryList->_data[i], (int)arg2, arg0) & 0xFF) == 1) {
+        if ((igDirectory_FindObjectReferenceInInfos(arg2->_externalDirectoryList->_data[i], (int)arg2, arg0) & 0xFF) == 1) {
             return 1;
         }
     }
-    FUN_002d87b0(arg2, (igObjectDispatchView *)arg0, 0, 0);
+    igDirectory_InsertObject(arg2, (igObjectDispatchView *)arg0, 0, 0);
     return 0;
 }
 
-int FUN_002d8620(int arg0, int arg1, int arg2, int extra3) {
+int igDirectory_AddObjectRecursive(int arg0, int arg1, int arg2, int extra3) {
     int temp_v0;
 
     if (arg1 != 0) {
-        igObject_VisitFields((igObjectDispatchView *)arg1, (int (*)(void *, void *, void *))&FUN_002d8520, (void *)arg0);
-        temp_v0 = FUN_002d86b0((igDirectoryView *)arg0, (igMetaField *)DAT_00586730[0], arg1);
-        igNamedObject_SetName((igNamedObject *)(FUN_002d7e90((int *)arg0, temp_v0)), arg2);
+        igObject_VisitFields((igObjectDispatchView *)arg1, (int (*)(void *, void *, void *))&igDirectory_AddObjectCallback, (void *)arg0);
+        temp_v0 = igDirectory_FindSortedInsertIndex((igDirectoryView *)arg0, (igMetaField *)DAT_00586730[0], arg1);
+        igNamedObject_SetName((igNamedObject *)(igDirectory_GetEntry((int *)arg0, temp_v0)), arg2);
         return temp_v0;
     }
     return -1;
 }
 
-int FUN_002d86b0(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2) {
+int igDirectory_FindSortedInsertIndex(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2) {
     int n;
     int lo;
     int hi;
@@ -288,7 +288,7 @@ int FUN_002d86b0(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2) {
     lo = 0;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        v = *(unsigned *)((char *)FUN_002d7e90((int *)arg0, mid) + arg1->_offset);
+        v = *(unsigned *)((char *)igDirectory_GetEntry((int *)arg0, mid) + arg1->_offset);
         if (v < arg2) {
             lo = mid + 1;
         } else if (arg2 < v) {
@@ -297,12 +297,12 @@ int FUN_002d86b0(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2) {
             return mid;
         }
     }
-    v = *(unsigned *)((char *)FUN_002d7e90((int *)arg0, lo) + arg1->_offset);
+    v = *(unsigned *)((char *)igDirectory_GetEntry((int *)arg0, lo) + arg1->_offset);
     if (v < arg2) lo++;
     return lo;
 }
 
-int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod) {
+int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod) {
     int index = 0;
     igMetaObject *info;
     void *pool;
@@ -311,8 +311,8 @@ int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, i
         return -1;
     }
     if (self->_count > 0) {
-        index = FUN_002d86b0(self, (igMetaField *)DAT_00586730[0], (unsigned)obj);
-        if (self->_count > index && (igObjectDispatchView *)FUN_002d7d60(self, index) == obj) {
+        index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)DAT_00586730[0], (unsigned)obj);
+        if (self->_count > index && (igObjectDispatchView *)igDirectory_GetObject(self, index) == obj) {
             return -1;
         }
     }
@@ -332,7 +332,7 @@ int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, i
             }
         }
     }
-    igSmartPointer<igDirEntryView> record(((igDirEntryView *)FUN_002bd8f0((int)(((void *)igObject_GetAllocator((int)self))))));
+    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name != 0) {
@@ -359,29 +359,29 @@ int FUN_002d87b0(igDirectoryView *self, igObjectDispatchView *obj, char *name, i
         }
     }
     if (obj != 0) {
-        FUN_00301590((igObjectDirEntry *)(record.get()), obj->getMeta());
+        igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)(record.get()), obj->getMeta());
     }
     return index;
 }
 
-int FUN_002d8a80(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, unsigned char arg7) {
+int igDirectory_AddMemoryRef(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, unsigned char arg7) {
     int s0;
     int s0b;
     int v;
     if (arg2 == 0) return -1;
     s0 = 0;
     if (arg0->_count > 0) {
-        s0 = FUN_002d86b0(arg0, (igMetaField *)DAT_00586730[0], arg2);
-        if (s0 < arg0->_count) { int r = FUN_002d7d60(arg0, s0); if (r == arg2) return -1; }
+        s0 = igDirectory_FindSortedInsertIndex(arg0, (igMetaField *)DAT_00586730[0], arg2);
+        if (s0 < arg0->_count) { int r = igDirectory_GetObject(arg0, s0); if (r == arg2) return -1; }
     }
-    if (arg3 == 0) arg3 = FUN_002cc2c0();
-    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)FUN_002c0d80(FUN_00301000(arg0))));
+    if (arg3 == 0) arg3 = igCharMetaField_GetDefaultDescriptor();
+    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create(FUN_00301000(arg0))));
     record.get()->_index = s0;
     insertObject((igDataList *)arg0, s0, record.get());
     if (arg5) igNamedObject_SetName((igNamedObject *)(record.get()), arg5);
     record.get()->_resolveMethod = arg6;
     record.get()->_refType = 1;
-    FUN_002eed00((igMemoryDirEntry *)(record.get()), (igObjectDispatchView *)arg3);
+    igMemoryDirEntry_SetMemType((igMemoryDirEntry *)(record.get()), (igObjectDispatchView *)arg3);
     int size = ((int)Memory_GetBufferSize((void *)arg2));
     record.get()->_memSize = size;
     record.get()->_alignmentTypeIndex = arg4;
@@ -400,20 +400,20 @@ int FUN_002d8a80(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, 
     return record.get()->_index;
 }
 
-int FUN_002d8d00(igDirectoryView *list, int key, int name, int val) {
+int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val) {
     int idx, cnt;
     if (key == 0) {
         return -1;
     }
-    idx = FUN_002d86b0(list, (igMetaField *)DAT_00586730[0], key);
+    idx = igDirectory_FindSortedInsertIndex(list, (igMetaField *)DAT_00586730[0], key);
     cnt = list->_count;
     if (cnt > 0) {
         if (idx < cnt) {
-            int f = FUN_002d7d60(list, idx);
+            int f = igDirectory_GetObject(list, idx);
             if (f == key) return -1;
         }
     }
-    igSmartPointer<igDirEntryView> entry((igDirEntryView *)FUN_002c77e0((int)(((void *)igObject_GetAllocator((int)list)))));
+    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)igObject_GetAllocator((int)list)))));
     igNamedObject_SetName((igNamedObject *)(entry.get()), name);
     entry.get()->_resolveMethod = val;
     entry.get()->_refType = 2;

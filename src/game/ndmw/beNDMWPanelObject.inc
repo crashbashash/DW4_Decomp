@@ -52,11 +52,11 @@ void beNDMWPanelObject_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00357910();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 2);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 2);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_00364090();
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igStringRefList_GetOrCreateMetaObject();
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xD));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = igIntList_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_beNDMWPanelObject_fieldTable[0], &DAT_004ca6b0[0], &DAT_004ca6f0[0], temp_s2);

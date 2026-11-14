@@ -62,10 +62,10 @@ void igGeometryAttr_InitFields(void) {
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0014d7f0();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    FUN_002dc7a0(temp_v0, &DAT_00486658[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00486658[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149aa0);
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002ca450();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igUnsignedIntList_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a0a0();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));

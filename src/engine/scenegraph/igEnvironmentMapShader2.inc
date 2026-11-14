@@ -57,7 +57,7 @@ void igEnvironmentMapShader2_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00131fe0();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00132850();
-    FUN_002e3810(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 1.0f);
+    igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)), 1.0f);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00132ba0();
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7))))->_persistent = 0;

@@ -1,12 +1,12 @@
-void thunk_igPsx2ThreadManager_GetMetaObject(void) {
+void igPsx2ThreadManager_GetMetaObjectFunction(void) {
     igPsx2ThreadManager_GetMetaObject();
 }
 
-void thunk_FUN_0030e480(void) {
-    FUN_0030e480();
+void igThreadManager_StaticInitCallback(void) {
+    igPsx2ThreadManager_CreateGlobal();
 }
 
-void thunk_FUN_0030e540(void) {
-    FUN_0030e540();
+void igThreadManager_ExitCallback(void) {
+    igPsx2ThreadManager_DestroyGlobal();
 }
 

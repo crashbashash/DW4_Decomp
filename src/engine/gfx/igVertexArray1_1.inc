@@ -55,7 +55,7 @@ void igVertexArray1_1_InitFields(void) {
     temp_s2 = (struct F *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f20 = 4;
     temp_s2 = (struct F *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    temp_s2->f60 = FUN_002c4870();
+    temp_s2->f60 = igFloatMetaField_GetDefaultDescriptor();
     temp_s2->f53 = 1;
     temp_s2->f64 = 1;
     temp_s2->f65 = 1;
@@ -66,7 +66,7 @@ void igVertexArray1_1_InitFields(void) {
     temp_s2_2->f65 = 1;
     *(char *)((char *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)) + 38) = 0;
     temp_s2_3 = (struct F *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    temp_s2_3->f60 = FUN_002c4870();
+    temp_s2_3->f60 = igFloatMetaField_GetDefaultDescriptor();
     temp_s2_3->f53 = 1;
     temp_s2_3->f64 = 1;
     temp_s2_3->f65 = 1;

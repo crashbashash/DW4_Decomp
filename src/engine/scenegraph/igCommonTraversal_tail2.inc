@@ -231,7 +231,7 @@ void FUN_001b42c0(TravFlattenView *self, int root) {
     int n = igMetaObject_CountTree(meta);
     int i;
     for (i = 0; i < n; i++) {
-        TravObject *m = ((TravObject *)FUN_002fe300(meta, i));
+        TravObject *m = ((TravObject *)igMetaObject_GetTreeNode(meta, i));
         saved[i] = table->_data[m->_id];
         igTraversal_RegisterFunction((struct L_1e06c0 *)table, (struct X_1e06c0 *)m, (void *)((void *)FUN_001b3ad0));
     }
@@ -240,7 +240,7 @@ void FUN_001b42c0(TravFlattenView *self, int root) {
     clearRetained(self->_b);
     igTraversal_TraverseChildren(root, (S_1e07a0 *)self);
     for (i = 0; i < n; i++) {
-        igTraversal_RegisterFunction((struct L_1e06c0 *)table, (struct X_1e06c0 *)(((TravObject *)FUN_002fe300(meta, i))), (void *)((void *)saved[i]));
+        igTraversal_RegisterFunction((struct L_1e06c0 *)table, (struct X_1e06c0 *)(((TravObject *)igMetaObject_GetTreeNode(meta, i))), (void *)((void *)saved[i]));
     }
 }
 
@@ -274,7 +274,7 @@ void FUN_001b68b0(int arg0) {
 
 void FUN_001b68c0(void *self, void *meta) {
     FUN_001e02f0((int)(self), (int)(meta));
-    if (FUN_002fe290(meta, ((int)igNode_GetMetaObject())) != 0) {
+    if (igMetaObject_IsOfType(meta, ((int)igNode_GetMetaObject())) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
         t.e[0].meta = (int)g_igActor_metaObject[0];
@@ -313,7 +313,7 @@ void FUN_001b68c0(void *self, void *meta) {
         t.e[33].meta = DAT_005612e0;
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];
-            if (e->meta != 0 && FUN_002fe290(meta, e->meta) != 0) {
+            if (e->meta != 0 && igMetaObject_IsOfType(meta, e->meta) != 0) {
                 igTraversal_RegisterFunction((struct L_1e06c0 *)self, (struct X_1e06c0 *)meta, (void *)e->proc);
                 return;
             }

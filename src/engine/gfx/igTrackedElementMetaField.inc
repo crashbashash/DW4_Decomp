@@ -98,13 +98,13 @@ void FUN_0014e540(void) {
         DAT_0055fe40[0] = (Q *)igMetaObject_CreateInstance(g_igTrackedElementMetaField_metaObject[0], Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
         temp_s0 = DAT_0055fe40[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(FUN_002fc250(), temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
             p = DAT_0055fe40[0];
             p->f4 -= 1;
             if ((p->f4 & 0x7fffff) == 0) {
                 igObject_Destroy(p);
             }
-            DAT_0055fe40[0]->f18 = FUN_002fc250()->f12 - 1;
+            DAT_0055fe40[0]->f18 = igMetaField_GetMetaFieldList()->f12 - 1;
             igMetaField_FinalizeDescriptor(DAT_0055fe40[0]);
         }
     }
@@ -138,7 +138,7 @@ void FUN_0014e630(int arg0) {
     void *var_v0_3;
     void *var_v0_5;
 
-    temp_s0 = (void *)(FUN_002c5fb0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
+    temp_s0 = (void *)(igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
     if (&text_which[0] == 0) {
         var_v0 = (void *)(0);
     } else {

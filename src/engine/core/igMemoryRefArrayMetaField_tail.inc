@@ -1,7 +1,7 @@
-void Gap__Core__igMemoryRefArrayMetaField__vfunc_52(igMemoryRefArrayMetaField *self, int buffer, int count) {
+void igMemoryRefArrayMetaField_SwapBytes(igMemoryRefArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
-    elementField = (void **)(((void **)FUN_002bfa60()));
+    elementField = (void **)(((void **)igMemoryRefMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 

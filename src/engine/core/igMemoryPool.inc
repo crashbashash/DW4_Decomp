@@ -9,11 +9,11 @@ igMetaObject *igMemoryPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryPool_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c0540();
+        igMemoryPool_EnsureRegistered();
     return g_igMemoryPool_metaObject[0];
 }
 
-void FUN_002c0540(void)
+void igMemoryPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryPool_Register);
 }
@@ -24,7 +24,7 @@ void igMemoryPool_Register(void) {
         ((char *)g_igMemoryPool_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMemoryPool_GetMetaObject,
+        igMemoryPool_GetMetaObjectFunction,
         igMemoryPool_className,
         0x70, /* instance size */
         0,
@@ -34,7 +34,7 @@ void igMemoryPool_Register(void) {
     );
 }
 
-void thunk_igMemoryPool_GetMetaObject(void) {
+void igMemoryPool_GetMetaObjectFunction(void) {
     igMemoryPool_GetMetaObject();
 }
 
@@ -45,9 +45,9 @@ void igMemoryPool_InitFields(void) {
     temp_s0 = (void *)(((void * *)g_igMemoryPool_metaObject)[0]);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMemoryPool_ctorTable[0], 0xE);
-    FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)), 1);
-    FUN_002d3890((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)), 1);
+    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)), 1);
+    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMemoryPool_fieldTable[0], (igMetaField ***)&DAT_004c0210[0], &DAT_004c0250[0], temp_s1);
-    *(int *)((char *)(((void * *)g_igMemoryPool_metaObject)[0]) + 60) = (int)thunk_igArenaMemoryPool_GetMetaObject;
+    *(int *)((char *)(((void * *)g_igMemoryPool_metaObject)[0]) + 60) = (int)igArenaMemoryPool_GetMetaObjectFunction;
 }
 

@@ -1,11 +1,11 @@
-void Gap__Core__igStringArrayMetaField__vfunc_52(igStringArrayMetaField *self, int item, int count) {
+void igStringArrayMetaField_SwapBytes(igStringArrayMetaField *self, int item, int count) {
     void **descriptor;
 
-    descriptor = (void **)(((void **)FUN_002b9c60()));
+    descriptor = (void **)(((void **)igStringMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
-int Gap__Core__igStringArrayMetaField__vfunc_51(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
+int igStringArrayMetaField_ReadRawFieldMem(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
     int arg1 = (int)parg1;
     int arg2 = (int)parg2;
     int start = arg2;
@@ -17,7 +17,7 @@ int Gap__Core__igStringArrayMetaField__vfunc_51(igStringArrayMetaField *arg0, vo
     return arg2 - start;
 }
 
-int Gap__Core__igStringArrayMetaField__vfunc_50(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
+int igStringArrayMetaField_WriteRawFieldMem(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
     int arg1 = (int)parg1;
     int arg2 = (int)parg2;
     int start = arg2;
@@ -29,7 +29,7 @@ int Gap__Core__igStringArrayMetaField__vfunc_50(igStringArrayMetaField *arg0, vo
     return ((arg2 - start) + 3) & ~3;
 }
 
-void Gap__Core__igStringArrayMetaField__vfunc_32(igStringArrayMetaField *arg0, int arg1) {
+void igStringArrayMetaField_DestructValue(igStringArrayMetaField *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -64,7 +64,7 @@ void Gap__Core__igStringArrayMetaField__vfunc_32(igStringArrayMetaField *arg0, i
     }
 }
 
-int Gap__Core__igStringArrayMetaField__vfunc_25(void *arg0) {
+int igStringArrayMetaField_GetSize(void *arg0) {
     return (*(int *)((char *)(arg0) + 60) * 4) & 0xFFFF;
 }
 

@@ -1,4 +1,4 @@
-int FUN_002ea0d0(void **arg0, int arg1, int arg2) {
+int igInfo_FindObjectReference(void **arg0, int arg1, int arg2) {
     int meta;
     int i;
     int w;

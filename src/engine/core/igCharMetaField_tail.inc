@@ -1,4 +1,4 @@
-int Gap__Core__igCharMetaField__vfunc_56(void *arg0, char *arg1, int arg2) {
+int igCharMetaField_ValueFromString(void *arg0, char *arg1, int arg2) {
     int sp2C;
     int sp28;
     int t;
@@ -10,7 +10,7 @@ int Gap__Core__igCharMetaField__vfunc_56(void *arg0, char *arg1, int arg2) {
     return sp2C;
 }
 
-void Gap__Core__igCharMetaField__vfunc_57(int *arg0, int arg1, char *arg2) {
+void igCharMetaField_ValueToString(int *arg0, int arg1, char *arg2) {
     char sp20[1024];
     int var_v0;
     int var_v1;
@@ -31,36 +31,36 @@ void Gap__Core__igCharMetaField__vfunc_57(int *arg0, int arg1, char *arg2) {
     *arg0 = var_v1;
 }
 
-int **FUN_002d4d60(int **arg0, int extra1) {
+int **igCharMetaField_Construct(int **arg0, int extra1) {
     igMetaField_Construct((igMetaField *)arg0);
     *arg0 = &DAT_00531640[0];
     if (arg0 != 0) {
-        FUN_002d4da0(arg0);
+        igCharMetaField_Init(arg0);
     }
     return arg0;
 }
 
-int **FUN_002d4da0(int **arg0) {
+int **igCharMetaField_Init(int **arg0) {
     igMetaField_Init((igMetaField *)arg0);
     *arg0 = &DAT_00531640[0];
     return arg0;
 }
 
-int **FUN_002d4de0(int **arg0, int extra1) {
+int **igCharMetaField_CopyConstruct(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
     *arg0 = &DAT_00531640[0];
     return arg0;
 }
 
-void Gap__Core__igCharMetaField__vfunc_02(int extra0) {
+void igCharMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-int FUN_002d4e30(void) {
+int igCharMetaField_GetSize(void) {
     return 1;
 }
 
-void FUN_002d4e40(void **arg0, char arg1) {
+void igCharMetaField_SetDefaultValue(void **arg0, char arg1) {
     char sp1F;
 
     sp1F = arg1;
@@ -69,15 +69,15 @@ void FUN_002d4e40(void **arg0, char arg1) {
 
 /* igMetaField slot 27 (+0x6c) for a char array: returns 1, the alignment of a single char element.
  * The receiver is not read. */
-int Gap__Core__igCharMetaField__vfunc_27(void) {
+int igCharMetaField_GetAlignment(void) {
     return 1;
 }
 
-unsigned short FUN_002d4e80(void *arg0) {
+unsigned short igCompoundMetaField_GetElementSize(void *arg0) {
     return *(int *)((char *)(arg0) + 20);
 }
 
-int FUN_002d4e90(igCompoundMetaField *arg0) {
+int igCompoundMetaField_GetAlignment(igCompoundMetaField *arg0) {
     int mx = 0;
     int i = 0;
     while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
@@ -88,7 +88,7 @@ int FUN_002d4e90(igCompoundMetaField *arg0) {
     return mx;
 }
 
-void FUN_002d4f20(void *arg0, int arg1) {
+void igCompoundMetaField_SetToDefault(void *arg0, int arg1) {
     int var_s0;
     int *temp_a0;
     void *temp_a0_2;
@@ -99,7 +99,7 @@ void FUN_002d4f20(void *arg0, int arg1) {
     }
 }
 
-void FUN_002d4fa0(void *arg0, int arg1) {
+void igCompoundMetaField_CopyDefaultToValue(void *arg0, int arg1) {
     int i;
     int lst;
     for (i = 0; lst = *(int *)((char *)arg0 + 52), i < *(int *)(lst + 8); i++) {
@@ -107,7 +107,7 @@ void FUN_002d4fa0(void *arg0, int arg1) {
     }
 }
 
-void FUN_002d5020(igCompoundMetaField *arg0, int arg1) {
+void igCompoundMetaField_ConstructValue(igCompoundMetaField *arg0, int arg1) {
     int i;
     igMetaFieldList *l;
     i = 0;
@@ -117,7 +117,7 @@ void FUN_002d5020(igCompoundMetaField *arg0, int arg1) {
     }
 }
 
-void FUN_002d50a0(igCompoundMetaField *arg0, int arg1) {
+void igCompoundMetaField_DestructValue(igCompoundMetaField *arg0, int arg1) {
     int i;
     igMetaFieldView *o;
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
@@ -126,14 +126,14 @@ void FUN_002d50a0(igCompoundMetaField *arg0, int arg1) {
     }
 }
 
-void FUN_002d5120(igCompoundMetaField *a, int x) {
+void igCompoundMetaField_ZeroValue(igCompoundMetaField *a, int x) {
     int i;
     for (i = 0; i < ((igMetaFieldList *)a->_fieldList)->_count; i++) {
         ((igMetaFieldView **)((igMetaFieldList *)a->_fieldList)->_data)[i]->ZeroValue(x);
     }
 }
 
-void FUN_002d51a0(igCompoundMetaField *arg0, int arg1) {
+void igCompoundMetaField_ClearValue(igCompoundMetaField *arg0, int arg1) {
     int i = 0;
     while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
         ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->ClearValue(arg1);
@@ -141,14 +141,14 @@ void FUN_002d51a0(igCompoundMetaField *arg0, int arg1) {
     }
 }
 
-void FUN_002d5220(void *arg0, int arg1, int arg2) {
+void igCompoundMetaField_DeepCopy(void *arg0, int arg1, int arg2) {
     int i;
     for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_count; i++) {
         ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_data)[i]->DeepCopy(arg1, arg2);
     }
 }
 
-void FUN_002d52b0(void *arg0, int arg1, int arg2) {
+void igCompoundMetaField_CopyReference(void *arg0, int arg1, int arg2) {
     int i;
     for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_count; i++) {
         igMetaFieldView *o = ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_data)[i];
@@ -156,7 +156,7 @@ void FUN_002d52b0(void *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_002d5340(igCompoundMetaField *arg0, int arg1, int arg2) {
+void igCompoundMetaField_ResetValue(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
     igMetaFieldView *o;
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
@@ -165,7 +165,7 @@ void FUN_002d5340(igCompoundMetaField *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_002d53d0(igCompoundMetaField *arg0, int arg1, int arg2) {
+void igCompoundMetaField_IgnoreCopy(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i = 0;
     while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
         ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_40(arg1, arg2);
@@ -173,7 +173,7 @@ void FUN_002d53d0(igCompoundMetaField *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_002d5460(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
+void igCompoundMetaField_Print(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     unsigned int temp_s1;
     unsigned int i;
 
@@ -183,7 +183,7 @@ void FUN_002d5460(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-void FUN_002d5500(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
+void igCompoundMetaField_ReleaseElements(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     int i;
 
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
@@ -191,7 +191,7 @@ void FUN_002d5500(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     }
 }
 
-int FUN_002d55a0(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_Write(igCompoundMetaField *arg0, int arg1, int arg2) {
     int sum = 0;
     int i;
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
@@ -200,7 +200,7 @@ int FUN_002d55a0(igCompoundMetaField *arg0, int arg1, int arg2) {
     return sum;
 }
 
-int FUN_002d5640(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_Compare(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
     igMetaFieldView *o;
 
@@ -213,7 +213,7 @@ int FUN_002d5640(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 0;
 }
 
-int FUN_002d56e0(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_IsAlikeExactly(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
         if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_45(arg1, arg2) == 0) {
@@ -223,7 +223,7 @@ int FUN_002d56e0(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int FUN_002d5780(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_IsAlikeDeep(igCompoundMetaField *arg0, int arg1, int arg2) {
     int var_s0;
 
     for (var_s0 = 0; var_s0 < ((igMetaFieldList *)arg0->_fieldList)->_count; var_s0++) {
@@ -234,7 +234,7 @@ int FUN_002d5780(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int FUN_002d5820(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_IsAlikeShallow(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
 
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
@@ -245,7 +245,7 @@ int FUN_002d5820(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int FUN_002d58c0(igCompoundMetaField *arg0, int arg1, int arg2) {
+int igCompoundMetaField_IsAlikeIgnore(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
     for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
         if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_48(arg1, arg2) == 0) {
@@ -255,7 +255,7 @@ int FUN_002d58c0(igCompoundMetaField *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
+int igCompoundMetaField_WriteRawFieldMem(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
     int sum = 0;
     int n;
     int base;
@@ -270,7 +270,7 @@ int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsign
     return sum;
 }
 
-int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
+int igCompoundMetaField_ReadRawFieldMem(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsigned char arg4) {
     igMetaFieldView *temp_a0;
     int var_s7;
     int temp_v0;
@@ -290,7 +290,7 @@ int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, unsign
     return var_s7;
 }
 
-void FUN_002d5bb0(igMetaFieldView *arg0, int arg1, int arg2) {
+void igCompoundMetaField_SwapBytes(igMetaFieldView *arg0, int arg1, int arg2) {
     int var_s3;
     igMetaFieldList *temp_s2;
     igMetaFieldView *temp_a0;
@@ -308,11 +308,11 @@ void FUN_002d5bb0(igMetaFieldView *arg0, int arg1, int arg2) {
     }
 }
 
-int FUN_002d5c80(void) {
+int igCompoundMetaField_GetDescriptor(void) {
     return ((int *)DAT_00586920)[0];
 }
 
-void FUN_002d5c90(void *arg0, int arg1) {
+void igCompoundMetaField_SwapValue(void *arg0, int arg1) {
     int i;
     int *t;
     igMetaFieldView *o;
@@ -324,7 +324,7 @@ void FUN_002d5c90(void *arg0, int arg1) {
     }
 }
 
-int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3) {
+int igCompoundMetaField_ValueFromString(int *arg0, int arg1, int arg2, int arg3) {
     int b;
     int a;
     igMetaFieldList *q;
@@ -341,12 +341,12 @@ int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3) {
     return a + b;
 }
 
-int FUN_002d5df0(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
+int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
     char *sepA = (char *)&DAT_004f95f8[0];
     char *sepB = (char *)&DAT_004f9600[0];
     igMetaFieldList *list = (igMetaFieldList *)ctx->vfunc_23()->_fieldList;
     int n = list->_count;
-    igStringRef *arr = (igStringRef *)((void *)FUN_00300e00((int)ctx, n, 4));
+    igStringRef *arr = (igStringRef *)((void *)igObject_Callocate((int)ctx, n, 4));
     int total = 9;
     int i;
     for (i = 0; i < n; i++) {
@@ -367,7 +367,7 @@ int FUN_002d5df0(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
     }
     strcpy(p, sepB);
     igStringRef res(buf);
-    FUN_00300f50((int)ctx, (int)buf);
+    igObject_FreeMemory((int)ctx, (int)buf);
     out->p = res.p;
     if (out->p != 0) *(int *)(out->p - 4) = *(int *)(out->p - 4) + 1;
     return 0;
@@ -381,12 +381,12 @@ int FUN_002d60a0(void) {
     return 1;
 }
 
-void FUN_002d60b0(igContext *arg0) {
+void igContext_BuildExtensionInfoList(igContext *arg0) {
     if (arg0->_pExtList == 0) {
         igContextExtInfoList *l;
         int meta;
         int i;
-        l = ((igContextExtInfoList *)FUN_002cb4b0(((int)igObject_GetAllocator((int)arg0))));
+        l = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)igObject_GetAllocator((int)arg0))));
         if (l != 0) ++l->_refCount;
         igRelease((igObject *)arg0->_pExtList);
         arg0->_pExtList = (int)l;
@@ -405,8 +405,8 @@ void FUN_002d60b0(igContext *arg0) {
             igMetaObject *nd;
             igContextExtInfo *it;
             igContextExtInfoList *lst;
-            nd = ((igMetaObject *)FUN_002fe300((igMetaObject *)meta, i + 1));
-            it = ((igContextExtInfo *)FUN_002cb660(((int)igObject_GetAllocator((int)arg0))));
+            nd = ((igMetaObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i + 1));
+            it = ((igContextExtInfo *)igContextExtInfo_Create(((int)igObject_GetAllocator((int)arg0))));
             if (nd != 0) ++nd->_refCount;
             igRelease((igObject *)it->_pMeta);
             it->_pMeta = (int)nd;
@@ -442,9 +442,9 @@ int FUN_002d6380(void) {
     return ((int *)g_igContext_metaObject)[0];
 }
 
-int FUN_002d6390(igContext *arg0) {
+int igContext_GetExtensionInfoList(igContext *arg0) {
     if (arg0->_pExtList == 0) {
-        FUN_002d60b0(arg0);
+        igContext_BuildExtensionInfoList(arg0);
     }
     if (arg0->_iNumExts <= 0) {
         return 0;
@@ -452,14 +452,14 @@ int FUN_002d6390(igContext *arg0) {
     return arg0->_pExtList;
 }
 
-int FUN_002d63e0(igContext *arg0, int arg1) {
+int igContext_FindExtensionMeta(igContext *arg0, int arg1) {
     int i;
     bool found;
     igContextExtInfo *e;
 
     e = 0;
     if (arg0->_pExtList == 0) {
-        FUN_002d60b0(arg0);
+        igContext_BuildExtensionInfoList(arg0);
     }
     i = 0;
     if (arg0->_iNumExts <= 0) {
@@ -480,15 +480,15 @@ int FUN_002d63e0(igContext *arg0, int arg1) {
     return e->_pMeta;
 }
 
-void *FUN_002d64c0(igVisualContext *arg0, int extra1) {
+void *igContext_GetExtension(igVisualContext *arg0, int extra1) {
     int temp_v0;
     igObject *var_s0;
 
-    temp_v0 = FUN_002d63e0((igContext *)arg0, extra1);
+    temp_v0 = igContext_FindExtensionMeta((igContext *)arg0, extra1);
     if (temp_v0 == 0) {
         return 0;
     }
-    var_s0 = (igObject *)(((void *)FUN_002d65e0((igContext *)arg0, temp_v0)));
+    var_s0 = (igObject *)(((void *)igContext_FindExtensionInstance((igContext *)arg0, temp_v0)));
     if (var_s0 == 0) {
         var_s0 = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)temp_v0, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)arg0))))));
         if (var_s0 != 0) {
@@ -511,7 +511,7 @@ void *FUN_002d64c0(igVisualContext *arg0, int extra1) {
     return var_s0;
 }
 
-int FUN_002d65e0(igContext *arg0, int arg1) {
+int igContext_FindExtensionInstance(igContext *arg0, int arg1) {
     int i;
     for (i = 0; i < ((igObjectList *)arg0->_pExtInstances)->_count; i++) {
         if (igObject_IsKindOf((void *)((int *)((igObjectList *)arg0->_pExtInstances)->_data)[i], (igMetaObject *)arg1) != 0) {

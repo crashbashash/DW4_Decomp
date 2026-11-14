@@ -96,7 +96,7 @@ unsigned short Gap__Gfx__igPsx2VisualContext__vfunc_77(Obj_170750 *arg0, int arg
     int v;
     p = arg0->f1336;
     if (p->f4 <= 0) {
-        p->f16 = (char *)thunk_FUN_002ed3b0(p->f16, (p->f0 + 4) * 0xA0, 0x10);
+        p->f16 = (char *)thunk_Memory_ReallocateAligned(p->f16, (p->f0 + 4) * 0xA0, 0x10);
         memset(p->f16 + p->f0 * 0xA0, 0, 0x280);
         if (p->f2 < 4) {
             O_170750 *o = (O_170750 *)Memory_FindBufferOwner(p);

@@ -1,12 +1,12 @@
-unsigned short Gap__Core__igStructMetaField__vfunc_25(void *arg0) {
+unsigned short igStructMetaField_GetSize(void *arg0) {
     return *(int *)((char *)(arg0) + 20);
 }
 
-void Gap__Core__igStructMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+void igStructMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     strlen(arg2);
 }
 
-void Gap__Core__igStructMetaField__vfunc_57(int *arg0, void *arg1) {
+void igStructMetaField_ValueToString(int *arg0, void *arg1) {
     int temp_s0;
     int var_v0;
     int var_v1;
@@ -28,11 +28,11 @@ void Gap__Core__igStructMetaField__vfunc_57(int *arg0, void *arg1) {
 }
 
 /* Accessor: returns the field's byte alignment (`_alignment`, igIntMetaField, +52). */
-int Gap__Core__igStructMetaField__vfunc_27(igStructMetaField *self) {
+int igStructMetaField_GetAlignment(igStructMetaField *self) {
     return self->_alignment;
 }
 
-void Gap__Core__igStructMetaField__vfunc_31(igStructMetaField *self, int instance) {
+void igStructMetaField_ConstructValue(igStructMetaField *self, int instance) {
     int (*constructor)(int);
 
     constructor = (int (*)(int))(self->_cppConstructor);
@@ -43,7 +43,7 @@ void Gap__Core__igStructMetaField__vfunc_31(igStructMetaField *self, int instanc
     igMetaField_ConstructValue();
 }
 
-void Gap__Core__igStructMetaField__vfunc_32(igStructMetaField *self, int instance) {
+void igStructMetaField_DestructValue(igStructMetaField *self, int instance) {
     int (*destructor)(int);
 
     destructor = (int (*)(int))(self->_cppDestructor);
@@ -54,7 +54,7 @@ void Gap__Core__igStructMetaField__vfunc_32(igStructMetaField *self, int instanc
     igMetaField_DestructValue();
 }
 
-void Gap__Core__igStructMetaField__vfunc_28(igStructMetaField *self, int instance) {
+void igStructMetaField_SetToDefault(igStructMetaField *self, int instance) {
     if (self->_cppConstructor != 0) {
         ((int (*)(...))self->_cppDestructor)(instance + self->_offset);
         ((int (*)(...))self->_cppConstructor)(instance + self->_offset);
@@ -63,18 +63,18 @@ void Gap__Core__igStructMetaField__vfunc_28(igStructMetaField *self, int instanc
     igMetaField_SetToDefault((igMetaField *)self, instance);
 }
 
-void Gap__Core__igStructMetaField__vfunc_30(igMetaFieldView *self, void *object)
+void igStructMetaField_CopyDefaultToValue(igMetaFieldView *self, void *object)
 {
     self->SetToDefault((int)object);
 }
 
 /* Predicate: true when the struct field metadata has a C++ constructor hook (`_cppConstructor`,
  * igRawRefMetaField, +56) set. */
-int Gap__Core__igStructMetaField__vfunc_60(igStructMetaField *self) {
+int igStructMetaField_IsConstruct(igStructMetaField *self) {
     return self->_cppConstructor != 0;
 }
 
-void FUN_0030da00(int a0, int a1)
+void igSymbolTable_SetCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 8) = a1;
 }

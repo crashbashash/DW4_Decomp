@@ -17,7 +17,7 @@ void FUN_001412a0(void) {
 }
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_11(void *arg0) {
-    Gap__Core__igObject__vfunc_09();
+    igObject_InitDefaults();
     *(int *)((char *)arg0 + 20) = 3;
     *(int *)((char *)arg0 + 24) = 0;
     *(int *)((char *)arg0 + 28) = 2;
@@ -28,7 +28,7 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_12(void **arg0) {
     if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
         DAT_0055f520[0] = 0;
     }
-    Gap__Core__igObject__vfunc_10(arg0);
+    igObject_ReleaseDefaults(arg0);
 }
 
 igMetaObject *Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {

@@ -21,7 +21,7 @@ void **FUN_00229460(void **arg0, short arg1) {
 }
 
 void Gap__igOptConfiguration__vfunc_23(void) {
-    FUN_002f00c0();
+    Memory_GetDefaultHandleAllocator();
 }
 
 int igDataList_GetCount(int *p)
@@ -75,7 +75,7 @@ extern "C" void igInterface_BindInterfaceFields(igMetaTyped *self, igMetaTyped *
         field = cast0_6(field);
         if (field == 0) continue;
         void *type = *(void **)((char *)field + 56);
-        if (type != 0 && FUN_002fe290(type, g_igInterface_metaObject[0]) != 0
+        if (type != 0 && igMetaObject_IsOfType(type, g_igInterface_metaObject[0]) != 0
             && FUN_002fdef0(other->getMetaObject(), field) != 0) {
             int result;
             FUN_0022bc10(&result, (int)field, (int)self, (int)field, (int)other);
@@ -235,7 +235,7 @@ extern "C" igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self
     if (key == 0) {
         return igSmartPointer<InterfaceItem>((InterfaceItem *)0, kRetainReference);
     }
-    igSmartPointer<InterfaceItem> item(FUN_002fd610(key));
+    igSmartPointer<InterfaceItem> item(igMetaObject_CreateInstanceDefaultRef(key));
     if (item.get() != 0) {
         igInterface_BindInterfaceFields((igMetaTyped *)self, (igMetaTyped *)item.get());
     }
@@ -289,7 +289,7 @@ int FUN_0022a950(struct S22 *arg0) {
     if ((temp_s0 >= igMetaObject_CountTree(arg0->b)) || (temp_s0 < 0)) {
         return 0;
     }
-    return FUN_002fe300(arg0->b, temp_s0);
+    return igMetaObject_GetTreeNode(arg0->b, temp_s0);
 }
 
 int FUN_0022a9b0(struct S22a9d0 *arg0) {
@@ -442,7 +442,7 @@ int Gap__igLockInterface__vfunc_27(int self, int mode) {
         }
         FUN_0022a9d0((S22a9d0 *)iterator.p);
         LockRef lock;
-        lock.attach((Lock *)FUN_002fd610((int)found).get());
+        lock.attach((Lock *)igMetaObject_CreateInstanceDefaultRef((int)found).get());
         if (lock.get() == 0) {
             continue;
         }
@@ -536,7 +536,7 @@ public:
 };
 
 static inline Rc *createObjectList(Tag) {
-    return (Rc *)FUN_002c3400(0);
+    return (Rc *)igInfoList_Create(0);
 }
 
 /* Run the pass over a snapshot of the context's objects, skipping the excluded ones;
@@ -618,8 +618,8 @@ bool FUN_0022bac0(void *arg0, void *arg1) {
     return 0;
 }
 
-void thunk_Gap__Core__igObject__vfunc_09__0022bbc0(void) {
-    Gap__Core__igObject__vfunc_09();
+void thunk_igObject_InitDefaults__0022bbc0(void) {
+    igObject_InitDefaults();
 }
 
 void Gap__igOptInterface__vfunc_13(void *arg0) {
@@ -742,7 +742,7 @@ void Gap__igOptInterface__vfunc_32(int *arg0) {
 }
 
 void Gap__igOptInterface__vfunc_12(void) {
-    Gap__Core__igObject__vfunc_10();
+    igObject_ReleaseDefaults();
 }
 
 igMetaObject *FUN_0022ca10(void) {
@@ -1361,11 +1361,11 @@ void Gap__igItemDataBaseList__vfunc_18(S_5 *arg0) {
     temp_s0 = arg0->f8;
     if (temp_s0 < arg0->fC) {
         if (temp_s0 != 0) {
-            arg0->f10 = FUN_00300e50(arg0, arg0->f10, temp_s0 * 0xC);
+            arg0->f10 = igObject_Reallocate(arg0, arg0->f10, temp_s0 * 0xC);
             arg0->fC = temp_s0;
             return;
         }
-        FUN_00300f50(arg0, arg0->f10);
+        igObject_FreeMemory(arg0, arg0->f10);
         arg0->f10 = 0;
         arg0->fC = arg0->f8;
     }
@@ -1396,7 +1396,7 @@ void Gap__igItemDataBaseList__vfunc_04(S_6 *arg0) {
             }
             cap = (q != 0) ? c + ((q + 1) << 0xA) : c * 2;
         }
-        arg0->f10 = FUN_00300e50(arg0, arg0->f10, cap * 0xC);
+        arg0->f10 = igObject_Reallocate(arg0, arg0->f10, cap * 0xC);
         arg0->fC = cap;
         arg0->f8 = 0;
     }

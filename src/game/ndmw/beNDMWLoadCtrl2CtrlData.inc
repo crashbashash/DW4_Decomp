@@ -87,7 +87,7 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
     if (((unsigned long long)(long long)((RT *)temp_v0_2)->references & 0x7fffffULL) == 0) {
         igObject_Destroy(temp_v0_2);
     }
-    FUN_002d3890(((int)igMetaObject_GetFieldAt(temp_s1, temp_s2)), 1);
+    igBoolMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(temp_s1, temp_s2)), 1);
     igMetaObject_NameFields(temp_s1, &g_beNDMWLoadCtrl2CtrlData_fieldTable[0], &DAT_004cbfe0[0], &DAT_004cc000[0], temp_s2);
 }
 

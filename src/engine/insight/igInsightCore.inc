@@ -205,7 +205,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00232470();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00145d40();
@@ -227,7 +227,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_0044c250();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = FUN_002b7a10();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igTimer_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002325c0();

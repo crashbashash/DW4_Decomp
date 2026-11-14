@@ -86,8 +86,8 @@ void beCameraCtrl_InitFields(void) {
     *(char *)((char *)(temp_s1_2) + 60) = 0;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00368a30();
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
     igMetaObject_NameFields(temp_s0, &g_beCameraCtrl_fieldTable[0], &DAT_004c7ae0[0], &DAT_004c7b20[0], temp_s2);
 }
 

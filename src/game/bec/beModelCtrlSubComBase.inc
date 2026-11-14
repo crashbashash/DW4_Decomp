@@ -40,7 +40,7 @@ void beModelCtrlSubComBase_InitFields(void) {
     temp_s0 = (void *)g_beModelCtrlSubComBase_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beModelCtrlSubComBase_ctorTable[0], 3);
-    FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
     igMetaObject_NameFields(temp_s0, &g_beModelCtrlSubComBase_fieldTable[0], &DAT_004c4d20[0], &DAT_004c4d30[0], temp_s1);
 }
 

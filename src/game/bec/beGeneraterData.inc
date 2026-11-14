@@ -83,7 +83,7 @@ void beGeneraterData_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a0a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_002c9780();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xA), 0);

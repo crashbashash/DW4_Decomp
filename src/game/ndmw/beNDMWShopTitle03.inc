@@ -107,7 +107,7 @@ void *FUN_003b2d10(beNDMWWindowCtrl *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -163,7 +163,7 @@ int **FUN_003b3030(int **arg0, long long arg1) {
             FUN_003b2fb0((void **)((int **)((char *)arg0 + 0x34)), (short)(-1));
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

@@ -34,7 +34,7 @@ void FUN_0015df80(S0_15df80 *arg0) {
 }
 
 void FUN_0015e010(void) {
-    FUN_00308860(g_globalContext[0], &text_VertexArrayData[0], 0x10);
+    igResource_AddAlignment(g_globalContext[0], &text_VertexArrayData[0], 0x10);
     igMemoryRefMetaField_SetAlignmentType(DAT_0055faa0[0], &text_VertexArrayData[0]);
 }
 
@@ -50,7 +50,7 @@ void FUN_0015e050(struct S_arg0_15e050 *arg0) {
         temp_v0 = Memory_GetBufferSize(temp_a0);
         temp_s0 = 0x50 - temp_v0;
         if (temp_s0 > 0) {
-            arg0->f8 = FUN_00300e50(arg0, arg0->f8, 0x50);
+            arg0->f8 = igObject_Reallocate(arg0, arg0->f8, 0x50);
             memset(arg0->f8 + temp_v0, 0, temp_s0);
         }
     }

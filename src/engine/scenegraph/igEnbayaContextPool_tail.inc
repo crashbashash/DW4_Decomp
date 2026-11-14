@@ -14,14 +14,14 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0) {
     var_v0 = igObject_GetAllocator(arg0);
     var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary[0]);
     sp5C = (void *)(igStringObj_Create(var_v0));
-    temp_s0 = FUN_003064b0(temp_s2, 7);
+    temp_s0 = igRegistry_GetNumValuesInSection(temp_s2, 7);
     var_s1 = 0;
     while (var_s1 < temp_s0) {
         if (igRegistry_GetKeyName(temp_s2, 7, var_s1, &sp5C) != 0) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
             var_a2 = (var_a2 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a2;
-            if (FUN_003065f0(temp_s2, 7, var_a2, &sp58, 0, 0) != 0) {
+            if (igRegistry_GetValueInt(temp_s2, 7, var_a2, &sp58, 0, 0) != 0) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
                 var_a0 = (var_a0 == 0) ? ((int *)g_stringObjEmptyText)[0] : var_a0;
@@ -111,7 +111,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     n0 = l0->_count;
     if (findIndex(l0, n0, boneCount, i) == -1) {
         PoolListHolder list;
-        list.p = FUN_002c9130(igObject_GetAllocator(o));
+        list.p = igPointerList_Create(igObject_GetAllocator(o));
         ObjectList_AppendRetained(o->_poolList, list.p);
         l1 = o->_boneCountList;
         n1 = l1->_count;

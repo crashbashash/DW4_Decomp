@@ -1,11 +1,11 @@
-int Gap__Core__igDataList__vfunc_23(void) {
+int igDataList_GetElementSize(void) {
     return -1;
 }
 
 void List_Reserve(igDataList *list, int capacity, int elementSize) {
     int sp7C;
     if (capacity == 0) {
-        FUN_00300f50((int)list, list->_data);
+        igObject_FreeMemory((int)list, list->_data);
         list->_data = 0;
     } else {
         int s1 = list->_data;
@@ -16,7 +16,7 @@ void List_Reserve(igDataList *list, int capacity, int elementSize) {
             int v = list->_capacity;
             int n = (v < capacity) ? v : capacity;
             memcpy(list->_data, s1, n * elementSize);
-            FUN_00300f50((int)list, s1);
+            igObject_FreeMemory((int)list, s1);
         }
     }
     list->_capacity = capacity;

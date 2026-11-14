@@ -57,7 +57,7 @@ void igPrimLengthArray_InitFields(void) {
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    FUN_0030e9b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x20);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x20);
     igMetaObject_NameFields(temp_s0, &g_igPrimLengthArray_fieldTable[0], &DAT_00488830[0], &DAT_00488840[0], temp_s2);
     *(int *)((char *)(g_igPrimLengthArray_metaObject[0]) + 60) = (int)(thunk_FUN_0014bde0);
 }

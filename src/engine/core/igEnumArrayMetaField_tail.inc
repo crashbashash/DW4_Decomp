@@ -1,4 +1,4 @@
-void Gap__Core__igEnumArrayMetaField__vfunc_52(igEnumArrayMetaField *self, int buffer, int count) {
+void igEnumArrayMetaField_SwapBytes(igEnumArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
     elementField = (void **)(((void **)igEnumMetaField_GetDefaultDescriptor()));
@@ -9,11 +9,11 @@ void Gap__Core__igEnumArrayMetaField__vfunc_52(igEnumArrayMetaField *self, int b
  * 16 bits: `_num` elements of 4 bytes each (the enum values are ints). The 16-bit result matches
  * the reflected `_size` field (unsigned short, +20) that the metafield base class carries. */
 
-int Gap__Core__igEnumArrayMetaField__vfunc_25(igEnumArrayMetaField *self) {
+int igEnumArrayMetaField_GetSize(igEnumArrayMetaField *self) {
     return (self->_num * 4) & 0xFFFF;
 }
 
-void FUN_002dc730(void *arg0, int arg1) {
+void igEnumArrayMetaField_SetDefault(void *arg0, int arg1) {
     int *a;
     int i;
     ((igMetaFieldView *)arg0)->SetDefault(0);
@@ -23,7 +23,7 @@ void FUN_002dc730(void *arg0, int arg1) {
     }
 }
 
-void FUN_002dc7a0(igMetaFieldView *self, const int *value)
+void igEnumMetaField_SetDefaultValue(igMetaFieldView *self, const int *value)
 {
     self->SetDefault(value);
 }

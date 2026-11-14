@@ -2,7 +2,7 @@
 #include "dw4/igMemoryPoolView.h"
 extern "C" {
 extern int DAT_004c2368[4];
-int FUN_002dcc50(...);
+int igEventTracker_GetCount(...);
 int igReportNotice(...);
 extern int DAT_004c2310[4];
 extern int DAT_004c2330[4];
@@ -39,7 +39,7 @@ extern "C" void FUN_0030f040(igArenaMemoryPool *arg0, int arg1, int arg2, int ar
         if (DAT_004c2358[0] != -1) {
             temp_v0 = (int)((igMemoryPoolView *)arg0)->getEventTracker();
             if (temp_v0 != 0) {
-                var_s0 = FUN_002dcc50(temp_v0);
+                var_s0 = igEventTracker_GetCount(temp_v0);
                 if (var_s0 == DAT_004c2358[0]) {
                     var_s1 |= 0x10;
                 }

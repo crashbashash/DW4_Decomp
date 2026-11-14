@@ -72,7 +72,7 @@ void igIterateField_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igIterateField_ctorTable[0], 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_002be610();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObject_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s0, &g_igIterateField_fieldTable[0], &DAT_00497d98[0], &DAT_00497da0[0], temp_s2);
 }
 

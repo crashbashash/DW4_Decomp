@@ -71,7 +71,7 @@ void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
             FUN_003b2fb0((void **)&arg0->f52, (short)(-1));
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

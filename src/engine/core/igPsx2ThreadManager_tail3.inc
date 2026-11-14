@@ -1,16 +1,16 @@
-int Gap__Core__igPsx2ThreadManager__vfunc_23(igPsx2ThreadManager *arg0) {
+int igPsx2ThreadManager_GetCurrentThread(igPsx2ThreadManager *arg0) {
     int temp_s2;
     int temp_s1;
     int temp_v0;
 
     temp_v0 = GetThreadId();
     temp_s2 = ChangeThreadPriority(temp_v0, 1);
-    temp_s1 = FUN_002feeb0((igTDataList<int> *)arg0->_threadList, (igMetaField *)DAT_00586ca8[0], GetThreadId());
+    temp_s1 = igObjectList_FindByIntField((igTDataList<int> *)arg0->_threadList, (igMetaField *)DAT_00586ca8[0], GetThreadId());
     ChangeThreadPriority(temp_v0, temp_s2);
     return temp_s1;
 }
 
-void FUN_003304e0(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
+void igPsx2ThreadManager_FinishThread(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
     igResult signalled;
     igSemaphoreView *done;
 
@@ -27,7 +27,7 @@ void FUN_003304e0(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
     ExitDeleteThread();
 }
 
-void Gap__Core__igPsx2ThreadManager__vfunc_24(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
+void igPsx2ThreadManager_AddThread(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
     int prio; igTDataList<igPsx2ThreadView *> *lst; int n; int id;
     thread->_refCount = thread->_refCount + 1;
     id = GetThreadId();
@@ -43,7 +43,7 @@ void Gap__Core__igPsx2ThreadManager__vfunc_24(igPsx2ThreadManagerView *self, igP
     ChangeThreadPriority(id, prio);
 }
 
-void Gap__Core__igPsx2ThreadManager__vfunc_25(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
+void igPsx2ThreadManager_RemoveThread(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
     int i;
     int old;
     igTDataList<igPsx2ThreadView *> *list;
@@ -57,34 +57,34 @@ void Gap__Core__igPsx2ThreadManager__vfunc_25(igPsx2ThreadManagerView *self, igP
     ChangeThreadPriority(tid, old);
 }
 
-int FUN_003306f0(int extra0) {
+int Memory_GetAllocatorOrDefault(int extra0) {
     int r = ((int)Memory_GetAllocatorBySelector(extra0));
     if (r != 0) return r;
     return ((int)Memory_GetDefaultAllocator());
 }
 
-void FUN_00330730(int arg0, int arg1) {
+void Memory_AllocateAligned16(int arg0, int arg1) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)FUN_003306f0(arg1)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg1)));
     ((igMemoryPoolView *)(temp_v0))->AllocateAligned(arg0, 0x10);
 }
 
-void FUN_00330770(int arg0, int arg1) {
+void Memory_FreeToSelector(int arg0, int arg1) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)FUN_003306f0(arg1)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg1)));
     ((igMemoryPoolView *)(temp_v0))->Free((void *)arg0);
 }
 
-void FUN_003307b0(int arg0, int arg1, int arg2) {
+void Memory_ReallocateAligned16(int arg0, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)FUN_003306f0(arg2)));
+    temp_v0 = (void **)(((void **)Memory_GetAllocatorOrDefault(arg2)));
     ((igMemoryPoolView *)(temp_v0))->ReallocateAligned((void *)arg0, arg1, 0x10);
 }
 
-int Gap__Core__igPsx2ThreadManager__vfunc_22(void) {
+int igPsx2ThreadManager_GetMeta(void) {
     return ((int *)g_igPsx2ThreadManager_metaObject)[0];
 }
 

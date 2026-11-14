@@ -39,7 +39,7 @@ Obj_195030 *FUN_00195030(Obj_195030 *arg0, short arg1) {
         arg0->rel(&arg0->m12);
         arg0->rel(&arg0->m8);
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

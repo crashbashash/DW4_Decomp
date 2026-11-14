@@ -28,10 +28,10 @@ int FUN_00167410(Owner_167410 *arg0, int arg1, int arg2, int arg3, void *arg4, v
     sp58 = arg2;
     sp5C = arg3;
     if (arg4 != 0) {
-        FUN_00300f50(arg0, arg4);
+        igObject_FreeMemory(arg0, arg4);
     }
     if (arg5 != 0) {
-        FUN_00300f50(arg0, arg5);
+        igObject_FreeMemory(arg0, arg5);
     }
     if (sp54 != 0) {
         if (arg7 != 0) {

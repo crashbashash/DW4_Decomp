@@ -2,7 +2,7 @@ igMetaObject *igMemoryDescriptorMetaField_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryDescriptorMetaField_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002ce6d0();
+        igMemoryDescriptorMetaField_EnsureRegistered();
     return g_igMemoryDescriptorMetaField_metaObject[0];
 }
 
@@ -47,19 +47,19 @@ int igMemoryDescriptorMetaField_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002ce6d0(void)
+void igMemoryDescriptorMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryDescriptorMetaField_Register);
 }
 
 void igMemoryDescriptorMetaField_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igMemoryDescriptorMetaField_metaObject),
         igCompoundMetaField_Register,
         igCompoundMetaField_GetPublishedMetaObject,
-        thunk_igMemoryDescriptorMetaField_GetMetaObject,
+        igMemoryDescriptorMetaField_GetMetaObjectFunction,
         igMemoryDescriptorMetaField_className,
         0x38, /* instance size */
         igMemoryDescriptorMetaField_GetVTable,
@@ -69,18 +69,18 @@ void igMemoryDescriptorMetaField_Register(void) {
     );
 }
 
-void thunk_igMemoryDescriptorMetaField_GetMetaObject(void) {
+void igMemoryDescriptorMetaField_GetMetaObjectFunction(void) {
     igMemoryDescriptorMetaField_GetMetaObject();
 }
 
-void FUN_002ce760(void) {
+void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
     void *temp_s0;
 
     if (g_igMemoryDescriptorMetaField_descriptor[0] == 0) {
         g_igMemoryDescriptorMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igMemoryDescriptorMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = (void *)(g_igMemoryDescriptorMetaField_descriptor[0]);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(FUN_002fc250(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igMemoryDescriptorMetaField_descriptor[0];
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
@@ -88,7 +88,7 @@ void FUN_002ce760(void) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(g_igMemoryDescriptorMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)FUN_002fc250())) + 12) - 1);
+            *(short *)((char *)(g_igMemoryDescriptorMetaField_descriptor[0]) + 18) = (short) (*(int *)((char *)(((void *)igMetaField_GetMetaFieldList())) + 12) - 1);
             igMetaField_FinalizeDescriptor((igMetaField *)g_igMemoryDescriptorMetaField_descriptor[0]);
         }
     }
@@ -98,15 +98,15 @@ void FUN_002ce760(void) {
  * metafields return `_num * element size` from this slot (truncated to the reflected 16-bit
  * `_size`); a memory descriptor stores a single 32-bit reference, so it returns 4. The receiver is
  * not touched, hence no parameters. */
-int Gap__Core__igMemoryDescriptorMetaField__vfunc_25(void) {
+int igMemoryDescriptorMetaField_GetSize(void) {
     return 4;
 }
 
-void Gap__Core__igMemoryDescriptorMetaField__vfunc_11(void *arg0) {
-    FUN_002ce850(*(int *)((char *)arg0 + 52));
+void igMemoryDescriptorMetaField_InitDefaults(void *arg0) {
+    igMemoryDescriptorMetaField_AddSubFields(*(int *)((char *)arg0 + 52));
 }
 
-void FUN_002ce850(int arg0) {
+void igMemoryDescriptorMetaField_AddSubFields(int arg0) {
     void *sp3C;
     int *temp_a1;
     int temp_v0;

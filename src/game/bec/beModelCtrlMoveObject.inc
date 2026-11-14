@@ -53,10 +53,10 @@ void beModelCtrlMoveObject_InitFields(void) {
     temp_s0 = (void *)g_beModelCtrlMoveObject_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beModelCtrlMoveObject_ctorTable[0], 9);
-    FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
-    FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3))), 0.0f);
-    FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4))), 0.0f);
-    FUN_002e3810((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4))), 0.0f);
+    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5))), 0.0f);
     igMetaObject_NameFields(temp_s0, &g_beModelCtrlMoveObject_fieldTable[0], &DAT_004c53f0[0], &DAT_004c5420[0], temp_s1);
 }
 

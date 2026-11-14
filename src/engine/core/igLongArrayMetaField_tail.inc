@@ -1,7 +1,7 @@
 void igLongArrayMetaField_SwapBytes(igLongArrayMetaField *arg0, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(((void **)FUN_002c1c70()));
+    temp_v0 = (void **)(((void **)igLongMetaField_GetDefaultDescriptor()));
     ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
 }
 

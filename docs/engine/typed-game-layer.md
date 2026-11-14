@@ -74,10 +74,10 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beCri._hdSEs` | `igObjectList` (hypothesis) | (retained list: ObjectList_AppendRetained/RemoveFirstRetained); elements beCriHandle (hypothesis) |
 | `beCriHandle._audio` | `beCriAudio` (hypothesis) | (hypothesis, name only; not applied) |
 | `beDBManager._messenger` | `beMessenger` | same call (Gap__Bec__beDBManager__vfunc_29) |
-| `beDataObjBoolList._data` | `igBoolList` | field metaobject getter FUN_002cb110 loads handle 0x5868a8 |
+| `beDataObjBoolList._data` | `igBoolList` | field metaobject getter igBoolList_GetOrCreateMetaObject loads handle 0x5868a8 |
 | `beDataObjIntList._data` | `igIntList` | beDataObjIntList_InitFields uses igIntList_GetOrCreateMetaObject |
 | `beDataObjObjectList._data` | `igObjectList` | beDataObjObjectList_InitFields uses igObjectList_GetOrCreateMetaObject |
-| `beDataObjStringList._data` | `igStringRefList` | field metaobject getter FUN_002b9120 loads handle 0x5858d8 |
+| `beDataObjStringList._data` | `igStringRefList` | field metaobject getter igStringRefList_GetOrCreateMetaObject loads handle 0x5858d8 |
 | `beDemoManager._lua` | `beLua` | handle 0x589208 in beDemoManager_Start |
 | `beDemoManager._messenger` | `beMessenger` | handle 0x588f38 in beDemoManager_Start |
 | `beFileListInfoManager._messenger` | `beMessenger` | class handle DAT_00588f38 (data/reflection.json) passed to igInsightCore_FindManager (vfunc_23) |
@@ -95,7 +95,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beMatCtrl._wkMatOnList` | `igDataList` (hypothesis) | of unsigned words (indexed by _wkChkMat; hypothesis for exact class) |
 | `beMessenger._argData` | `beMessengerArgData` | _objectList(+40)/_longList(+28) match the ClearObjects/AppendLong names; beMessengerArgData_Clear callee |
 | `beMessenger._workStack` | `beMessengerWorkList` | (elements beMessengerWork): field offsets in beMessenger_DispatchSelected |
-| `beMessengerArgData._boolList` | `igBoolList` | (FUN_002cb110); _intList -> igIntList; _floatList -> igFloatList (FUN_002c9780); _longList -> igLongList (FUN_002ca680); _vec3fList -> igVec3fList (FUN_0018a0a0 |
+| `beMessengerArgData._boolList` | `igBoolList` | (igBoolList_GetOrCreateMetaObject); _intList -> igIntList; _floatList -> igFloatList (igFloatList_GetOrCreateMetaObject); _longList -> igLongList (igLongList_GetOrCreateMetaObject); _vec3fList -> igVec3fList (FUN_0018a0a0 |
 | `beMessengerArgData._floatList` | `igFloatList` | field name plus element size 4 |
 | `beMessengerArgData._intList` | `igIntList` | field name plus element size 4 |
 | `beMessengerArgData._longList` | `igLongList` | field name plus element size 8 |
@@ -134,7 +134,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWMdlPEBaseInfoWork._dispPosNoList` | `igIntList` | InitFields field 2 igIntList_GetOrCreateMetaObject |
 | `beNDMWMdlPEBaseInfoWork._dispRamNoList` | `igIntList` | beNDMWMdlPEBaseInfoWork_InitFields field 1 metaobject igIntList_GetOrCreateMetaObject |
 | `beNDMWMdlPEBaseInfoWork._downDataList` | `igIntList` | InitFields field 7 igIntList_GetOrCreateMetaObject |
-| `beNDMWMdlPEBaseInfoWork._isFirstList` | `igBoolList` | InitFields field 4 metaobject getter FUN_002cb110 reads class handle 0x5868a8 (igBoolList) |
+| `beNDMWMdlPEBaseInfoWork._isFirstList` | `igBoolList` | InitFields field 4 metaobject getter igBoolList_GetOrCreateMetaObject reads class handle 0x5868a8 (igBoolList) |
 | `beNDMWMdlPEBaseInfoWork._messenger` | `beMessenger` | InitFields field 9 metaobject getter FUN_00357910 reads class handle 0x588f38 (beMessenger) |
 | `beNDMWMdlPEBaseInfoWork._timerList` | `igIntList` | InitFields field 3 igIntList_GetOrCreateMetaObject |
 | `beNDMWMdlPEBaseInfoWork._upDataList` | `igIntList` | InitFields field 8 igIntList_GetOrCreateMetaObject |
@@ -157,7 +157,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWStatusCtrlBaseEquip._powerSocket` | `beNDMWItemBaseList` | InitFields field 4 getter FUN_003c9130 reads handle 0x58bf88 |
 | `beNDMWStatusCtrlBaseEquip._subSlot` | `beNDMWItemBaseList` | beNDMWStatusCtrlBaseEquip_InitFields field 6 metaobject getter FUN_003c9130 reads class handle 0x58bf88 (beNDMWItemBaseList) |
 | `beNDMWStatusCtrlBaseEquip._wpuPocket` | `beNDMWItemBaseList` | InitFields metaobject getter FUN_003c9130 (handle 0x58bf88) |
-| `beNDMWStatusCtrlD0._decideList` | `igBoolList` | InitFields field 7 getter FUN_002cb110 (handle 0x5868a8) |
+| `beNDMWStatusCtrlD0._decideList` | `igBoolList` | InitFields field 7 getter igBoolList_GetOrCreateMetaObject (handle 0x5868a8) |
 | `beNDMWStatusCtrlD0._kindList` | `igIntList` | beNDMWStatusCtrlD0_InitFields _metaObject = igIntList_GetOrCreateMetaObject |
 | `beNDMWStatusCtrlFlag._impItems` | `igIntList` | beNDMWStatusCtrlFlag_InitFields _metaObject = igIntList_GetOrCreateMetaObject |
 | `beNDMWStatusMainSlot._messenger` | `beMessenger` | beMessenger_* callees in vfunc_26 |
@@ -165,15 +165,15 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beNDMWTitle2._messenger` | `beMessenger` | passed to beMessenger_ResolveEnumValue |
 | `beNDMWWindow._insight` | `igInsightCore` | beNDMWWindow_InitFields field 0 getter FUN_00232840 (handle 0x56db60) |
 | `beNDMWWindow._messenger` | `beMessenger` | beNDMWWindow_InitFields field 1 getter FUN_00357910 (handle 0x588f38) |
-| `beNDMWWindow._modelCloseInfoNameList` | `igStringRefList` | InitFields field 15 getter FUN_002b9120 |
+| `beNDMWWindow._modelCloseInfoNameList` | `igStringRefList` | InitFields field 15 getter igStringRefList_GetOrCreateMetaObject |
 | `beNDMWWindow._modelCloseRamNoList` | `igIntList` | InitFields field 16 igIntList_GetOrCreateMetaObject |
-| `beNDMWWindow._modelCloseSeqNameList` | `igStringRefList` | InitFields field 17 getter FUN_002b9120 |
+| `beNDMWWindow._modelCloseSeqNameList` | `igStringRefList` | InitFields field 17 getter igStringRefList_GetOrCreateMetaObject |
 | `beNDMWWindow._mother` | `beNDMWWindow` | metaObject FUN_003b1dd0 (handle beNDMWWindow) |
 | `beNDMWWindow._padManager` | `bePadManager` | handle 0x588518 passed to igInsightCore_FindManager in beNDMWWindow_BindContext |
 | `beNDMWWindow._subWindow` | `beNDMWWindowList` | beNDMWWindow_InitFields field 11 metaObject FUN_003b1be0 returns handle 0x58a9a8 (beNDMWWindowList) |
-| `beNDMWWindow._textCloseNameList` | `igStringRefList` | beNDMWWindow_InitFields field 14 getter FUN_002b9120 |
-| `beNDMWWindow._textCloseTypeList` | `igStringRefList` | beNDMWWindow_InitFields field 13 metaobject getter FUN_002b9120 reads class handle 0x5858d8 (igStringRefList) |
-| `beNDMWWindowSelect._decideList` | `igBoolList` | beNDMWWindowSelect_InitFields field 5 getter FUN_002cb110 (handle 0x5868a8) |
+| `beNDMWWindow._textCloseNameList` | `igStringRefList` | beNDMWWindow_InitFields field 14 getter igStringRefList_GetOrCreateMetaObject |
+| `beNDMWWindow._textCloseTypeList` | `igStringRefList` | beNDMWWindow_InitFields field 13 metaobject getter igStringRefList_GetOrCreateMetaObject reads class handle 0x5858d8 (igStringRefList) |
+| `beNDMWWindowSelect._decideList` | `igBoolList` | beNDMWWindowSelect_InitFields field 5 getter igBoolList_GetOrCreateMetaObject (handle 0x5868a8) |
 | `beNDMWWindowSelect._messenger` | `beMessenger` | passed as the first argument of every beMessenger_* call (recovered signatures) |
 | `beNDMWWindowSelect._mother` | `beNDMWWindow` (hypothesis) | (hypothesis): docs/engine/shop-selectors.md 'Mother56 receives the selected return value in its word48', beNDMWWindow._retCode is +48 |
 | `beNumVerData._verDataList` | `beNumVerDataList` | name pairing, class derives igObjectList, destructor releases the elements |
@@ -221,7 +221,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 * beBaseInfoRam._dataList (context +40) -> container of RamData records searched by name (e.g. beSelectCtrlInfoRamData): hypothesis, from selectctrl.md and the shared igProperty_FindByName(DAT_00585be0) key
 * window object built by beNDMWStatusCtrlD0_Create in beNDMWStatusSubSlot vfunc_29 is a beNDMWWindow subclass: callees beNDMWWindow_BindContext/RunMessageScript; fields _textCloseTypeList/_textCloseNameList at +60/+64
 * beNDMWStatusPowerSocket._messenger / beActionStarter._messenger / beCameraCtrl._messenger / beMeterCtrl._messenger / beSwitchCtrl._messenger / beNDMWMdlPlayer2._messenger / beNumberCtrl._messenger -> beMessenger: passed 
-* beNDMWWindow._textCloseTypeList/_textCloseNameList/_modelCloseInfoNameList/_modelCloseSeqNameList -> igStringRefList: metaObject FUN_002b9120 (handle 0x5858d8)
+* beNDMWWindow._textCloseTypeList/_textCloseNameList/_modelCloseInfoNameList/_modelCloseSeqNameList -> igStringRefList: metaObject igStringRefList_GetOrCreateMetaObject (handle 0x5858d8)
 * beMatCtrl._wkMatOnList/_wkMatOldOnList -> igIntList; _lua (+36) -> beLua (FUN_0035b770): beMatCtrl_InitFields
 * beNDMWStatusPowerSocket._mother, beNDMWStatusMainSlot._mother, beNDMWWindow._mother -> beNDMWWindow: docs/engine/window-tree-and-shop-root.md (retained parent window)
 * beNDMWWindow._modelCloseInfoNameList / _modelCloseSeqNameList -> igStringList-style string lists; _modelCloseRamNoList -> int list (igDataList layout used): PresentModel appends a string/int/string; element class not cla

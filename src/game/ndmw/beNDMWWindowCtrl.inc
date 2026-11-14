@@ -11,7 +11,7 @@ beNDMWWindowCtrl *beNDMWWindowCtrl_Destroy(beNDMWWindowCtrl *self, long long fla
             FUN_003b2f30((void **)&self->_mother, -1);
             FUN_003b2fb0((void **)&self->_subWindow, (short)(-1));
         }
-        if ((short)flags > 0) thunk_FUN_002ed460__002ff810(self);
+        if ((short)flags > 0) thunk_Memory_FreeBuffer(self);
     }
     return self;
 }

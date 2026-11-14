@@ -2,7 +2,7 @@ igMetaObject *igInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igInfo_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c3690();
+        igInfo_EnsureRegistered();
     return g_igInfo_metaObject[0];
 }
 
@@ -34,19 +34,19 @@ int igInfo_GetVTable(void) {
     return s0;
 }
 
-void FUN_002c3690(void)
+void igInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igInfo_Register);
 }
 
 void igInfo_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igInfo_metaObject),
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igInfo_GetMetaObject,
+        igInfo_GetMetaObjectFunction,
         igInfo_className,
         0x14, /* instance size */
         igInfo_GetVTable,
@@ -56,7 +56,7 @@ void igInfo_Register(void) {
     );
 }
 
-void thunk_igInfo_GetMetaObject(void) {
+void igInfo_GetMetaObjectFunction(void) {
     igInfo_GetMetaObject();
 }
 
@@ -69,10 +69,10 @@ void igInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igInfo_ctorTable[0], 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002c7300();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     ((igMetaField *)temp_s1)->_persistent = 0;
-    FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1))), 1);
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1))), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igInfo_fieldTable[0], (igMetaField ***)&DAT_004c0630[0], &DAT_004c0638[0], temp_s2);
 }
 

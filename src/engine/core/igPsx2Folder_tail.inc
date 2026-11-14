@@ -2,7 +2,7 @@ igMetaObject *igPsx2Folder_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2Folder_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002d0110();
+        igPsx2Folder_EnsureRegistered();
     return g_igPsx2Folder_metaObject[0];
 }
 
@@ -34,19 +34,19 @@ int igPsx2Folder_GetVTable(void) {
     return s0;
 }
 
-void FUN_002d0110(void)
+void igPsx2Folder_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Folder_Register);
 }
 
 void igPsx2Folder_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igPsx2Folder_metaObject),
         igFolder_Register,
         igFolder_GetPublishedMetaObject,
-        thunk_igPsx2Folder_GetMetaObject,
+        igPsx2Folder_GetMetaObjectFunction,
         igPsx2Folder_className,
         0xC, /* instance size */
         igPsx2Folder_GetVTable,
@@ -56,7 +56,7 @@ void igPsx2Folder_Register(void) {
     );
 }
 
-igMetaObject *FUN_002d0190(void) {
+igMetaObject *igFolder_GetPublishedMetaObject(void) {
     return g_igFolder_metaObject[0];
 }
 

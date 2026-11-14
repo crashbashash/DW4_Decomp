@@ -1,9 +1,9 @@
-void * FUN_002c72c0(int arg0) {
-    FUN_002c74b0();
+void * igDirectory_Create(int arg0) {
+    igDirectory_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586668), (igMemoryPoolView *)arg0));
 }
 
-igMetaObject *FUN_002c7300(void) {
+igMetaObject *igDirectory_GetOrCreateMetaObject(void) {
     if (g_igDirectory_metaObject[0] == 0) {
         g_igDirectory_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igDirectory_GetMetaObject(void)
 {
     igMetaObject *g = g_igDirectory_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c74b0();
+        igDirectory_EnsureRegistered();
     return g_igDirectory_metaObject[0];
 }
 
@@ -44,39 +44,39 @@ int igDirectory_GetVTable(void) {
     dir._loadingSemaphore = 0;
     temp_s = *(int *)((char *)&dir + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     dir._vtable = (int)&DAT_00530890[0];
-    FUN_002ba970((igObject **)&dir._loadingSemaphore, -1);
-    FUN_002c3a80((igSmartPointer<igObject> *)p188, -1);
+    igSmartPointer_igSemaphore_Destruct((igObject **)&dir._loadingSemaphore, -1);
+    igSmartPointer_igShortListList_Destruct((igSmartPointer<igObject> *)p188, -1);
     FUN_00135430(p172, -1);
     FUN_001d36d0(p168, -1);
     FUN_001d35d0(p156, -1);
-    FUN_002bac40((void **)p152, -1);
+    igSmartPointer_igDirectoryList_Destruct((void **)p152, -1);
     StringRef_Destruct_00130720(p148, -1);
     return temp_s;
 }
 
-void FUN_002c74b0(void)
+void igDirectory_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDirectory_Register);
 }
 
 void igDirectory_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igDirectory_metaObject),
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igDirectory_GetMetaObject,
+        igDirectory_GetMetaObjectFunction,
         igDirectory_className,
         0x48, /* instance size */
         igDirectory_GetVTable,
         &igDirectory_InitFields,
-        thunk_FUN_002d7b00, /* extra callback item */
+        igDirectory_StaticInitCallback, /* extra callback item */
         g_igDirectory_callbackList /* callback list */
     );
 }
 
-void thunk_igDirectory_GetMetaObject(void) {
+void igDirectory_GetMetaObjectFunction(void) {
     igDirectory_GetMetaObject();
 }
 
@@ -99,31 +99,31 @@ void igDirectory_InitFields(void) {
     igStringMetaField_SetDefaultText((int *)temp_v0, 0);
     ((igStringMetaField *)temp_v0)->_destruct = 1;
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002c7150();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_002c3440();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_002baa30();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igResource_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
-    FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5))), 1);
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5))), 1);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002c9c10();
-    FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA))), 1);
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igShortListList_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA))), 1);
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xC)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_002c7300();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xD)));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_002c9170();
-    FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xE))), 1);
-    FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xF))), 1);
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xE))), 1);
+    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xF))), 1);
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x11)));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_002ba690();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_7)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igDirectory_fieldTable[0], (igMetaField ***)&DAT_004c11b0[0], &DAT_004c1200[0], temp_s0);
 }
 
-void thunk_FUN_002d7b00(void) {
-    FUN_002d7b00();
+void igDirectory_StaticInitCallback(void) {
+    igDirectory_RegisterDependentMetaObjects();
 }
 

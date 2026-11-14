@@ -76,7 +76,7 @@ void FUN_0019fca0(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_trigger[0])));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    FUN_002d3890(temp_v0_2, 1);
+    igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_00561a40[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));

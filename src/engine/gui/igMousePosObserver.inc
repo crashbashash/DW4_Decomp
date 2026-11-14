@@ -109,7 +109,7 @@ void igMousePosObserver_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00188260();
     ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
-    FUN_002e3810((int)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0.0f);
+    igFloatMetaField_SetDefault((int)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0.0f);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019f670();
     igMetaObject_NameFields(temp_s1, &g_igMousePosObserver_fieldTable[0], &DAT_004d0370[0], &DAT_004d0390[0], temp_s0);

@@ -170,7 +170,7 @@ Not established:
   below. Which stage transitions or pause commands invoke them remains unverified.
 - **Skipped/doubled updates.** None seen at 100 % speed; the stored delta would absorb a skipped
   frame (the step simply grows).
-- **Other `+0x50` read-modify-write units** (`FUN_002f2340`, `Gap__Core__igMallocMemoryPool__vfunc_64`,
+- **Other `+0x50` read-modify-write units** (`igMemoryPool_UpdateLocalStatistics`, `igMallocMemoryPool_GangFree`,
   `igArenaMemoryPool_MemoryOperation`) were not examined. Over 361 of 361 live updates the clock
   equalled the last sample exactly, consistent with this writer. Equality does not rule out additional writers. The offset-only
   scan does not establish that the other functions operate on the same object.

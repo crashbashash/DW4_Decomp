@@ -102,7 +102,7 @@ void beNDMWDegiData_InitFields(void) {
     temp_v0 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5);
     *(int *)((char *)(temp_v0) + 52) = 0xA;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC));
-    *(int *)((char *)(temp_s1_2) + 60) = FUN_002cc2c0();
+    *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
     igMetaObject_NameFields(temp_s0, &g_beNDMWDegiData_fieldTable[0], &DAT_004cbd00[0], &DAT_004cbd40[0], temp_s2);
 }
 

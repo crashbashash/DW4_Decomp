@@ -1,8 +1,8 @@
-void **FUN_002c29c0(int arg0) {
+void **__internalNonRefCountedObjectList_Create(int arg0) {
     void **var_s0;
 
     if (*g_objectSystem[0] != 0) {
-        FUN_002c2bb0();
+        __internalNonRefCountedObjectList_EnsureRegistered();
         var_s0 = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g___internalNonRefCountedObjectList_metaObject[0], (igMemoryPoolView *)arg0)));
     } else {
         var_s0 = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)arg0)));
@@ -15,11 +15,11 @@ void **FUN_002c29c0(int arg0) {
     return var_s0;
 }
 
-int FUN_002c2a60(int arg0, int arg1) {
+int __internalNonRefCountedObjectList_Clone(int arg0, int arg1) {
     int temp_v0;
 
     if (*g_objectSystem[0] != 0) {
-        FUN_002c2bb0();
+        __internalNonRefCountedObjectList_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)arg0, arg1);
     }
     temp_v0 = ((int)igObject_AllocateRawStorageDefault(0x10, 0));
@@ -29,7 +29,7 @@ int FUN_002c2a60(int arg0, int arg1) {
     return temp_v0;
 }
 
-igMetaObject *FUN_002c2ae0(void) {
+igMetaObject *__internalNonRefCountedObjectList_GetOrCreateMetaObject(void) {
     if (g___internalNonRefCountedObjectList_metaObject[0] == 0) {
         g___internalNonRefCountedObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -40,7 +40,7 @@ igMetaObject *__internalNonRefCountedObjectList_GetMetaObject(void)
 {
     igMetaObject *g = g___internalNonRefCountedObjectList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c2bb0();
+        __internalNonRefCountedObjectList_EnsureRegistered();
     return g___internalNonRefCountedObjectList_metaObject[0];
 }
 
@@ -51,7 +51,7 @@ int __internalNonRefCountedObjectList_GetVTable(void) {
     return *(int *)((char *)o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002c2bb0(void)
+void __internalNonRefCountedObjectList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())__internalNonRefCountedObjectList_Register);
 }
@@ -62,7 +62,7 @@ void __internalNonRefCountedObjectList_Register(void) {
         ((char *)g___internalNonRefCountedObjectList_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk___internalNonRefCountedObjectList_GetMetaObject,
+        __internalNonRefCountedObjectList_GetMetaObjectFunction,
         __internalNonRefCountedObjectList_className,
         0x10, /* instance size */
         __internalNonRefCountedObjectList_GetVTable,
@@ -72,7 +72,7 @@ void __internalNonRefCountedObjectList_Register(void) {
     );
 }
 
-void thunk___internalNonRefCountedObjectList_GetMetaObject(void) {
+void __internalNonRefCountedObjectList_GetMetaObjectFunction(void) {
     __internalNonRefCountedObjectList_GetMetaObject();
 }
 

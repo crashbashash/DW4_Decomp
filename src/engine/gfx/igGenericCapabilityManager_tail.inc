@@ -233,7 +233,7 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 }
 
 void FUN_00156300(void) {
-    FUN_00308860(g_globalContext[0], &text_ImageData[0], 0x10);
+    igResource_AddAlignment(g_globalContext[0], &text_ImageData[0], 0x10);
     igMemoryRefMetaField_SetAlignmentType(DAT_0055fde0[0], &text_ImageData[0]);
 }
 
@@ -628,7 +628,7 @@ void FUN_001592c0(LongListStorageView *self) {
 
     storage = self->storage;
     if (storage != 0) {
-        FUN_00300f50(self, storage);
+        igObject_FreeMemory(self, storage);
     }
     buffer = self->buffer;
     if ((buffer != 0) && (self->ownsBuffer != 0)) {
@@ -688,7 +688,7 @@ void FUN_0015a030(struct A_15a030 *arg0) {
     int *s0;
     int tmp;
 
-    Gap__Core__igObject__vfunc_15(arg0);
+    igObject_UserPostLoad(arg0);
     tmp = arg0->f56;
     if (tmp != 0) {
         if (g_stringPool[0] == 0) {
@@ -709,14 +709,14 @@ void FUN_0015a030(struct A_15a030 *arg0) {
             }
         }
         arg0->f88 = s0;
-        FUN_00300f50(arg0, arg0->f56);
+        igObject_FreeMemory(arg0, arg0->f56);
         arg0->f56 = 0;
     }
     FUN_0015a100((S_15a100 *)arg0);
 }
 
 void FUN_0015a0f0(void) {
-    Gap__Core__igObject__vfunc_14();
+    igObject_UserPostRead();
 }
 
 void FUN_0015a100(S_15a100 *arg0) {

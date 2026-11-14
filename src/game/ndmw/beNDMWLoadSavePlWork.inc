@@ -54,8 +54,8 @@ void beNDMWLoadSavePlWork_InitFields(void) {
     temp_s0 = (void *)g_beNDMWLoadSavePlWork_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beNDMWLoadSavePlWork_ctorTable[0], 0xE);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    FUN_002d3890(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c63a0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;

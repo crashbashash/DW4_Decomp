@@ -69,10 +69,10 @@ void igHotKeyBinding_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igHotKeyBinding_ctorTable[0], 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_004d0178[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004d0178[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_00145eb0);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    FUN_002dc7a0(temp_v0_2, &DAT_004d0180[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_004d0180[0]);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(FUN_00146850);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00453250();

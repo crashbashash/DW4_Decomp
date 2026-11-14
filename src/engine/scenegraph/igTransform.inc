@@ -71,7 +71,7 @@ void *FUN_001962d0(struct S_1962d0 *arg0, short arg1) {
             FUN_00195970((struct T_195970 *)arg0, 0);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -167,7 +167,7 @@ void igTransform_InitFields(void) {
     o2.w = 0;
     FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
-    FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), 0);
+    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), 0);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     *(int *)((char *)(temp_s1_2) + 56) = FUN_00130310();
     *(char *)((char *)(temp_s1_2) + 38) = 0;

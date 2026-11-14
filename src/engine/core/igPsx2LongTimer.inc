@@ -1,4 +1,4 @@
-void thunk_igPsx2LongTimer_GetMetaObject(void) {
+void igPsx2LongTimer_GetMetaObjectFunction(void) {
     igPsx2LongTimer_GetMetaObject();
 }
 

@@ -1,13 +1,13 @@
-void FUN_002d1a00(ObjectSystemView *self) {
+void igObjectSystem_Startup(ObjectSystemView *self) {
     void *m;
     __internalObjectList *l;
     unsigned int n;
     int b;
     self->started = 1;
-    FUN_0032ae70();
+    SystemAllocator_EnsureCreated();
     self->vtableProbeOffset = 0;
     if (((MemoryContext * *)DAT_00586fd0)[0] == 0) {
-        m = FUN_002f87f0(0x19F4);
+        m = igMemoryPoolContextInfo_Allocate(0x19F4);
         if (m != 0) m = igMemoryPoolContextInfo_Construct((MemoryContext *)m);
         ((MemoryContext * *)DAT_00586fd0)[0] = (MemoryContext *)m;
     }
@@ -27,43 +27,43 @@ void FUN_002d1a00(ObjectSystemView *self) {
     self->active = 1;
     self->bootMetaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
     self->bootMetaFieldCount = DAT_00587188[0]->_count;
-    FUN_002bf190();
-    FUN_002ce3c0();
-    FUN_002cdcf0();
+    igMetaEnum_EnsureRegistered();
+    igMallocMemoryPool_EnsureRegistered();
+    igArenaMemoryPool_EnsureRegistered();
     igAliasMemoryPool_EnsureRegistered();
-    FUN_002cd7c0();
-    FUN_002c1190();
-    FUN_002caf80();
-    FUN_002cadc0();
+    igPageMemoryPool_EnsureRegistered();
+    igMemoryDictionary_EnsureRegistered();
+    igCharList_EnsureRegistered();
+    igCharListNoClean_EnsureRegistered();
     igIntList_EnsureRegistered();
-    FUN_002ca9d0();
-    FUN_002ca530();
-    FUN_002ca380();
-    FUN_002b8f90();
-    FUN_002b87c0();
-    FUN_002cc960();
-    FUN_002cc710();
-    FUN_002d04a0();
-    FUN_002c20f0();
-    FUN_002c59e0();
-    FUN_002c4710();
-    FUN_002c1b10();
+    igIntListNoClean_EnsureRegistered();
+    igUnsignedIntList_EnsureRegistered();
+    igUnsignedIntListNoClean_EnsureRegistered();
+    igStringTable_EnsureRegistered();
+    igSymbolTable_EnsureRegistered();
+    igCallStackTable_EnsureRegistered();
+    igCallStackTracer_EnsureRegistered();
+    igPsx2CallStackTracer_EnsureRegistered();
+    igLocationTable_EnsureRegistered();
+    igEventTracker_EnsureRegistered();
+    igFloatMetaField_EnsureRegistered();
+    igLongMetaField_EnsureRegistered();
     igUnsignedCharMetaField_EnsureRegistered();
     ((int *)g_igRefMetaField_descriptor)[0] = igRawRefMetaField_GetDefaultDescriptor();
     ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_43();
 }
 
-int FUN_002d1c20(int *p)
+int igObjectSystem_GetRootPath(int *p)
 {
     return *(int *)((char *)p + 920);
 }
 
-int FUN_002d1c30(int *p)
+int igObjectSystem_GetBasePath(int *p)
 {
     return *(int *)((char *)p + 924);
 }
 
-void FUN_002d1c40(ObjectSystemView *arg0) {
+void igObjectSystem_InitPaths(ObjectSystemView *arg0) {
     igStringRef env;
     env = (char *)getenv(IG_ROOT);
     arg0->rootPath = env;
@@ -71,32 +71,32 @@ void FUN_002d1c40(ObjectSystemView *arg0) {
     arg0->basePath = (char *)DAT_004f9470;
 }
 
-igMetaObject *FUN_002d2790(void) {
+igMetaObject *igMediaFile_GetPublishedMetaObject(void) {
     return g_igMediaFile_metaObject[0];
 }
 
-void FUN_002d27a0(ObjectSystemView *arg0) {
+void igObjectSystem_PreExit(ObjectSystemView *arg0) {
     igEventTrackerView *temp_a0;
 
     arg0->preExitDone = 1;
     temp_a0 = arg0->globalEventTracker;
     if (temp_a0 != 0) {
         temp_a0->vfunc_46();
-        FUN_002dcc60((igEventTrackerView *)arg0->globalEventTracker, (int)&text_exitPre[0]);
+        igEventTracker_SetEventTag((igEventTrackerView *)arg0->globalEventTracker, (int)&text_exitPre[0]);
     }
 }
 
-void FUN_002d2de0(ObjectSystemView *arg0) {
+void igObjectSystem_Exit(ObjectSystemView *arg0) {
     if (arg0->globalEventTracker != 0) {
         arg0->globalEventTracker->vfunc_47();
-        FUN_002dcc60((igEventTrackerView *)arg0->globalEventTracker, (int)(&text_exitIn[0]));
+        igEventTracker_SetEventTag((igEventTrackerView *)arg0->globalEventTracker, (int)(&text_exitIn[0]));
     }
     if (arg0->saveEventTrackerOnExit != 0 && ((MemoryContext * *)DAT_00586fd0)[0] != 0) {
         ((MemoryContext * *)DAT_00586fd0)[0]->vfunc_56();
     }
 }
 
-void FUN_002d2e60(ObjectSystemView *arg0) {
+void igObjectSystem_Shutdown(ObjectSystemView *arg0) {
     int i;
     int v;
     igObject *o;
@@ -104,7 +104,7 @@ void FUN_002d2e60(ObjectSystemView *arg0) {
     o->_refCount = o->_refCount - 1;
     if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
     arg0->auxObjectList = 0;
-    FUN_002e3280(0);
+    igAdxFile_SetBasePath(0);
     igArray_Destruct((CallbackArray *)arg0->registrationCallbacks, 1);
     if (DAT_00586fd0[0] != 0) {
         DAT_00586fd0[0]->vfunc_47();
@@ -139,7 +139,7 @@ void FUN_002d2e60(ObjectSystemView *arg0) {
         }
         DAT_00586fd0[0] = 0;
     }
-    FUN_0032aea0();
+    SystemAllocator_EnsureDestroyed();
 }
 
 /* Register a metaobject in the object system's registry, retaining it. */
@@ -154,17 +154,17 @@ int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *cl
     return 0;
 }
 
-int FUN_002d30b0(int *p, int extra1)
+int igObjectSystem_AppendMetaEnum(int *p, int extra1)
 {
     return MetaRefList_AppendRetained((__internalObjectList *)(*(int *)((char *)p + 36)), (igObject *)extra1);
 }
 
-int FUN_002d30c0(int *p, int extra1)
+int igObjectSystem_AddExitCallback(int *p, int extra1)
 {
     return igArray_Append((CallbackArray *)(*(int *)((char *)p + 40)), extra1);
 }
 
-void FUN_002d30d0(ObjectSystemView *arg0, int (*arg1)(int)) {
+void igObjectSystem_AddRegistrationCallback(ObjectSystemView *arg0, int (*arg1)(int)) {
     int i;
 
     for (i = 0; i < ((__internalObjectList *)arg0->metaRegistry)->_count; i++) {
@@ -173,7 +173,7 @@ void FUN_002d30d0(ObjectSystemView *arg0, int (*arg1)(int)) {
     igArray_Append((CallbackArray *)arg0->registrationCallbacks, (int)arg1);
 }
 
-void FUN_002d3150(int *arg0, int arg1) {
+void igObjectSystem_RunRegistrationCallbacks(int *arg0, int arg1) {
     int n = *(int *)(arg0[11] + 4);
     int i = 0;
     while (i < n) {
@@ -182,7 +182,7 @@ void FUN_002d3150(int *arg0, int arg1) {
     }
 }
 
-void FUN_002d31d0(ObjectSystemView *objectSystem, char *format) {
+void igObjectSystem_SetMemoryEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
         strncpy(objectSystem->memoryEventFormat, format, 0x7F);
         objectSystem->memoryEventFormat[127] = 0;
@@ -194,7 +194,7 @@ void FUN_002d31d0(ObjectSystemView *objectSystem, char *format) {
     }
 }
 
-void FUN_002d3240(ObjectSystemView *objectSystem, char *format) {
+void igObjectSystem_SetMarkerEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
         strncpy(objectSystem->markerEventFormat, format, 0x7F);
         objectSystem->markerEventFormat[127] = 0;
@@ -206,7 +206,7 @@ void FUN_002d3240(ObjectSystemView *objectSystem, char *format) {
     }
 }
 
-void FUN_002d32b0(ObjectSystemView *objectSystem, char *format) {
+void igObjectSystem_SetNotificationEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
         strncpy(objectSystem->notificationEventFormat, format, 0x7F);
         objectSystem->notificationEventFormat[127] = 0;
@@ -218,7 +218,7 @@ void FUN_002d32b0(ObjectSystemView *objectSystem, char *format) {
     }
 }
 
-void FUN_002d3320(char *arg0, char *arg1) {
+void igObjectSystem_SetEventTrackerFileName(char *arg0, char *arg1) {
     if ((arg1 != 0) && (*arg1 != 0)) {
         strncpy(arg0 + 528, arg1, 0x7F);
         arg0[655] = 0;
@@ -227,7 +227,7 @@ void FUN_002d3320(char *arg0, char *arg1) {
     arg0[528] = 0;
 }
 
-void FUN_002d3370(char *a, char *b) {
+void igObjectSystem_SetSystemPoolEventTrackerFileName(char *a, char *b) {
     if (b != 0 && *b != 0) {
         strncpy(a + 656, b, 127);
         a[783] = 0;
@@ -236,7 +236,7 @@ void FUN_002d3370(char *a, char *b) {
     a[656] = 0;
 }
 
-void FUN_002d33c0(void *arg0, int arg1) {
+void igObjectSystem_SetSymbolsFileName(void *arg0, int arg1) {
     if (arg1 != 0) {
         strncpy((char *)arg0 + 0x310, arg1, 0x7F);
         *((char *)arg0 + 911) = 0;
@@ -265,12 +265,12 @@ int igArray_Append(CallbackArray *array,int item){
     array->data[array->count++]=item;
 }
 
-int thunk_malloc(int extra0)
+int igObjectSystem_OperatorNew(int extra0)
 {
     return malloc();
 }
 
-int thunk_free(int extra0)
+int igObjectSystem_OperatorDelete(int extra0)
 {
     return free();
 }

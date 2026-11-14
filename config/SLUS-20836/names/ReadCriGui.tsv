@@ -8,7 +8,6 @@
 0x002ff0b0	Gap__Core__igObject__constructFields	engine
 0x002ff0c0	Gap__Core__igObject__destructFields	engine
 0x002ff130	Gap__Core__igObject__resetFields	engine
-0x00325860	thunk_Gap__Core__igObject__constructFields	engine
 0x00308320	igReportError	engine
 0x00337920	igCriMovieCodec_InitializeDrawing	movie
 0x00337a50	igCriMovieCodec_ReleaseDrawing	movie

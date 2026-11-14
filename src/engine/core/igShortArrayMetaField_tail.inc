@@ -1,4 +1,4 @@
-void Gap__Core__igShortArrayMetaField__vfunc_52(igShortArrayMetaField *self, int item, int count) {
+void igShortArrayMetaField_SwapBytes(igShortArrayMetaField *self, int item, int count) {
     void **descriptor;
 
     descriptor = (void **)(((void **)igShortMetaField_GetDefaultDescriptor()));
@@ -9,7 +9,7 @@ void Gap__Core__igShortArrayMetaField__vfunc_52(igShortArrayMetaField *self, int
  * the element-size query that the aligned array allocation calls through slot 100 and truncates
  * the same way. */
 
-int Gap__Core__igShortArrayMetaField__vfunc_25(igShortArrayMetaField *self) {
+int igShortArrayMetaField_GetSize(igShortArrayMetaField *self) {
     return (self->_num * sizeof(short)) & 0xFFFF;
 }
 

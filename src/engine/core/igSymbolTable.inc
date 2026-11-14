@@ -1,5 +1,5 @@
-void * FUN_002b8500(int arg0) {
-    FUN_002b87c0();
+void * igSymbolTable_Create(int arg0) {
+    igSymbolTable_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585830), (igMemoryPoolView *)arg0));
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igSymbolTable_GetMetaObject(void)
 {
     igMetaObject *g = g_igSymbolTable_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002b87c0();
+        igSymbolTable_EnsureRegistered();
     return g_igSymbolTable_metaObject[0];
 }
 
@@ -24,14 +24,14 @@ int igSymbolTable_GetVTable(void) {
     table._sourceFileNames = 0;
     temp_s3 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     table._vtable = (int)(&DAT_0052e730[0]);
-    FUN_002b8740((igSmartPointer<igObject> *)&table._sourceFileNames, -1);
-    FUN_002b8740((igSmartPointer<igObject> *)&table._symbolNames, -1);
-    FUN_002b86c0((void **)&table._hashIndex, -1);
-    FUN_002b8640((igSmartPointer<igObject> *)&table._symbols, -1);
+    igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._sourceFileNames, -1);
+    igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._symbolNames, -1);
+    igSmartPointer_igIntListNoClean_Destruct((void **)&table._hashIndex, -1);
+    igSmartPointer_igUnsignedIntListNoClean_Destruct((igSmartPointer<igObject> *)&table._symbols, -1);
     return temp_s3;
 }
 
-igSmartPointer<igObject> *FUN_002b8640(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igUnsignedIntListNoClean_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
         igObject *object=self->p;
         if(object) {
@@ -44,7 +44,7 @@ igSmartPointer<igObject> *FUN_002b8640(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-void **FUN_002b86c0(void **arg0, short arg1) {
+void **igSmartPointer_igIntListNoClean_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;
@@ -61,7 +61,7 @@ void **FUN_002b86c0(void **arg0, short arg1) {
     return arg0;
 }
 
-igSmartPointer<igObject> *FUN_002b8740(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igStringTable_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
         igObject *object=self->p;
         if(object) {
@@ -74,19 +74,19 @@ igSmartPointer<igObject> *FUN_002b8740(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-void FUN_002b87c0(void)
+void igSymbolTable_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igSymbolTable_Register);
 }
 
 void igSymbolTable_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igSymbolTable_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igSymbolTable_GetMetaObject,
+        igSymbolTable_GetMetaObjectFunction,
         igSymbolTable_className,
         0x2C, /* instance size */
         igSymbolTable_GetVTable,
@@ -96,7 +96,7 @@ void igSymbolTable_Register(void) {
     );
 }
 
-void thunk_igSymbolTable_GetMetaObject(void) {
+void igSymbolTable_GetMetaObjectFunction(void) {
     igSymbolTable_GetMetaObject();
 }
 
@@ -111,19 +111,19 @@ void igSymbolTable_InitFields(void) {
     temp_s1 = (void *)g_igSymbolTable_metaObject[0];
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igSymbolTable_ctorTable[0], 9);
-    FUN_0030e9b0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3))), -1);
-    FUN_0030e9b0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4))), 1);
+    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3))), -1);
+    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4))), 1);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002ca2a0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_002ca8f0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igSymbolTable_fieldTable[0], (igMetaField ***)&DAT_004bf580[0], &DAT_004bf5b0[0], temp_s0);
 }

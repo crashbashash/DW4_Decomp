@@ -1,4 +1,4 @@
-igMetaObject *FUN_002c7d40(void) {
+igMetaObject *igDependencyList_GetOrCreateMetaObject(void) {
     if (g_igDependencyList_metaObject[0] == 0) {
         g_igDependencyList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igDependencyList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDependencyList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c7e20();
+        igDependencyList_EnsureRegistered();
     return g_igDependencyList_metaObject[0];
 }
 
@@ -20,33 +20,33 @@ int igDependencyList_GetVTable(void) {
     return *(int *)((char *)obj + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
 }
 
-void FUN_002c7e20(void)
+void igDependencyList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDependencyList_Register);
 }
 
 void igDependencyList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igDependencyList_metaObject),
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igDependencyList_GetMetaObject,
+        igDependencyList_GetMetaObjectFunction,
         igDependencyList_className,
         0x14, /* instance size */
         igDependencyList_GetVTable,
-        FUN_002c7eb0,
+        igDependencyList_InitFields,
         0, /* extra callback item */
         0 /* callback list */
     );
 }
 
-void thunk_igDependencyList_GetMetaObject(void) {
+void igDependencyList_GetMetaObjectFunction(void) {
     igDependencyList_GetMetaObject();
 }
 
-void FUN_002c7eb0(void) {
+void igDependencyList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;
@@ -56,7 +56,7 @@ void FUN_002c7eb0(void) {
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
     temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_s0 = (void *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
-    *(int *)((char *)(temp_s0) + 60) = FUN_002c81f0();
+    *(int *)((char *)(temp_s0) + 60) = igDependencyMetaField_GetDefaultDescriptor();
     *(int *)((char *)(temp_s0) + 56) = 0;
     *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_00586770[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);

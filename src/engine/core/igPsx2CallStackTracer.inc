@@ -1,4 +1,4 @@
-void thunk_igPsx2CallStackTracer_GetMetaObject(void) {
+void igPsx2CallStackTracer_GetMetaObjectFunction(void) {
     igPsx2CallStackTracer_GetMetaObject();
 }
 

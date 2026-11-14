@@ -44,7 +44,7 @@ void *FUN_00194490(struct S *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -84,16 +84,16 @@ void igTraversal_InitFields(void) {
     temp_s0 = (void *)g_igTraversal_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igTraversal_ctorTable[0], 5);
-    FUN_002ebc00(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), -1);
+    igLongMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019a720();
     igMetaObject_NameFields(temp_s0, &g_igTraversal_fieldTable[0], &DAT_0048af50[0], &DAT_0048af70[0], temp_s2);
-    FUN_002fe480(&thunk_FUN_001e0470);
+    igMetaObject_AddExitCallback(&thunk_FUN_001e0470);
 }
 
 void FUN_00194690(void) {
     FUN_001e0410();
-    FUN_002fe490((int *)FUN_001e02e0);
+    igMetaObject_AddRegistrationCallback((int *)FUN_001e02e0);
 }
 
 void thunk_FUN_001e0470(void) {

@@ -56,7 +56,7 @@ void igShadeModelAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igShadeModelAttr_ctorTable[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_00485f30[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485f30[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149680);
     igMetaObject_NameFields(temp_s0, &g_igShadeModelAttr_fieldTable[0], &DAT_00485f20[0], &DAT_00485f28[0], temp_s2);
 }

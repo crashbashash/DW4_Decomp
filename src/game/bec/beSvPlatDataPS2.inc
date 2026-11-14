@@ -76,7 +76,7 @@ void beSvPlatDataPS2_InitFields(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_connectMax[0]));
     temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
     temp_v0_2 = (igEnumMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    FUN_002ea4b0(temp_v0_2, 5);
+    igIntMetaField_SetDefault(temp_v0_2, 5);
     temp_v0_2->_externalEnumStorage = (int)(&DAT_00588090[0]);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->_refCount = (int)temp_v0_2->_refCount - 1;

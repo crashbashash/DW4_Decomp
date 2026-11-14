@@ -76,7 +76,7 @@ void *FUN_00195970(struct T_195970 *arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -133,7 +133,7 @@ void *FUN_00195a90(struct T_195a90 *arg0, long long arg1) {
             }
         }
         if ((short)arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

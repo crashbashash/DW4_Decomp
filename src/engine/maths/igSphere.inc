@@ -69,7 +69,7 @@ void igSphere_InitFields(void) {
     v[1] = 0;
     v[2] = 0;
     FUN_0018e470((igVec3fMetaFieldView *)temp_a0, (const float *)v);
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1.0f);
     igMetaObject_NameFields(temp_s0, &g_igSphere_fieldTable[0], &DAT_0048adb0[0], &DAT_0048adb8[0], temp_s1);
 }
 

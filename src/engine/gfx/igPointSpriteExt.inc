@@ -62,7 +62,7 @@ O *FUN_0014c440(O *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) thunk_FUN_002ed460__002ff810(arg0);
+        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
     }
     return arg0;
 }
@@ -81,7 +81,7 @@ O_14c580 *FUN_0014c580(O_14c580 *arg0, short arg1) {
                 if (t2) { t2->f4 -= 1; if ((t2->f4 & 0x7fffff) == 0) igObject_Destroy(t2); }
             }
         }
-        if (arg1 > 0) thunk_FUN_002ed460__002ff810(arg0);
+        if (arg1 > 0) thunk_Memory_FreeBuffer(arg0);
     }
     return arg0;
 }
@@ -131,11 +131,11 @@ void igPointSpriteExt_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0014b980();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    FUN_002e3810(temp_v0, 1.0f);
+    igFloatMetaField_SetDefault(temp_v0, 1.0f);
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3))->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    FUN_002dc7a0(temp_v0_2, &DAT_004889b8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_004889b8[0]);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_0014c290);
     ((igMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5))->_persistent = 0;

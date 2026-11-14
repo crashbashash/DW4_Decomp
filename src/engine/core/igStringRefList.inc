@@ -1,9 +1,9 @@
 void * igStringRefList_Create(int arg0) {
-    FUN_002b9200();
+    igStringRefList_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5858D8), (igMemoryPoolView *)arg0));
 }
 
-igMetaObject *FUN_002b9120(void) {
+igMetaObject *igStringRefList_GetOrCreateMetaObject(void) {
     if (g_igStringRefList_metaObject[0] == 0) {
         g_igStringRefList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -14,7 +14,7 @@ igMetaObject *igStringRefList_GetMetaObject(void)
 {
     igMetaObject *g = g_igStringRefList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002b9200();
+        igStringRefList_EnsureRegistered();
     return g_igStringRefList_metaObject[0];
 }
 
@@ -26,19 +26,19 @@ int igStringRefList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002b9200(void)
+void igStringRefList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStringRefList_Register);
 }
 
 void igStringRefList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igStringRefList_metaObject),
         igDataList_Register,                     /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igStringRefList_GetMetaObject,
+        igStringRefList_GetMetaObjectFunction,
         igStringRefList_className,
         0x14, /* instance size */
         igStringRefList_GetVTable,
@@ -48,11 +48,11 @@ void igStringRefList_Register(void) {
     );
 }
 
-void thunk_igStringRefList_GetMetaObject(void) {
+void igStringRefList_GetMetaObjectFunction(void) {
     igStringRefList_GetMetaObject();
 }
 
-void FUN_002b9290(void) {
+void igStringRefList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;
@@ -62,7 +62,7 @@ void FUN_002b9290(void) {
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
     temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_s0 = (void *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
-    *(int *)((char *)(temp_s0) + 60) = FUN_002b9c60();
+    *(int *)((char *)(temp_s0) + 60) = igStringMetaField_GetDefaultDescriptor();
     *(int *)((char *)(temp_s0) + 56) = 0;
     *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_005858e0[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);

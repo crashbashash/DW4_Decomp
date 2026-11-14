@@ -74,15 +74,15 @@ void igViewportAttr_InitFields(void) {
     temp_s0 = (void *)g_igViewportAttr_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igViewportAttr_ctorTable[0], 7);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x27F);
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0x1BF);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x27F);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0x1BF);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     *(int *)((char *)(temp_s1) + 56) = FUN_0014bc80();
     *(char *)((char *)(temp_s1) + 38) = 0;
     *(char *)((char *)(temp_s1) + 40) = 1;
     *(char *)((char *)(temp_s1) + 39) = 1;
     *(char *)((char *)(temp_s1) + 44) = 3;
-    FUN_002e3810(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1.0f);
     igMetaObject_NameFields(temp_s0, &g_igViewportAttr_fieldTable[0], &DAT_00485980[0], &DAT_004859a0[0], temp_s2);
 }
 

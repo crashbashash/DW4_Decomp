@@ -64,7 +64,7 @@ void igEnbayaTransformSource_InitFields(void) {
     temp_s0 = (void *)g_igEnbayaTransformSource_metaObject[0];
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igEnbayaTransformSource_ctorTable[0], 2);
-    FUN_002ea4b0(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
+    igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a2210();
     igMetaObject_NameFields(temp_s0, &g_igEnbayaTransformSource_fieldTable[0], &DAT_0048c2e0[0], &DAT_0048c2e8[0], temp_s2);

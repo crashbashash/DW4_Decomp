@@ -2,23 +2,23 @@ igMetaObject *igContextExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igContextExt_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002cb980();
+        igContextExt_EnsureRegistered();
     return g_igContextExt_metaObject[0];
 }
 
-void FUN_002cb980(void)
+void igContextExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExt_Register);
 }
 
 void igContextExt_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
         ((char *)g_igContextExt_metaObject),
         igContext_Register,
         igContext_GetPublishedMetaObject,
-        thunk_igContextExt_GetMetaObject,
+        igContextExt_GetMetaObjectFunction,
         igContextExt_className,
         0x14, /* instance size */
         0,
@@ -28,7 +28,7 @@ void igContextExt_Register(void) {
     );
 }
 
-void thunk_igContextExt_GetMetaObject(void) {
+void igContextExt_GetMetaObjectFunction(void) {
     igContextExt_GetMetaObject();
 }
 

@@ -1,34 +1,34 @@
-int Gap__Core__igObject__vfunc_00(int extra0)
+int igMemoryPool_Destruct(int extra0)
 {
-    return Gap__Core__igObject__vfunc_00__002ff0a0(extra0);
+    return igObject_Destruct(extra0);
 }
 
-void * FUN_002f0040(int a0, int a1, int extra2) {
+void * igObject_OperatorNew(int a0, int a1, int extra2) {
     return (void *)(malloc((char *)a1 + a0, a1));
 }
 
-int thunk_free_2(int extra0)
+int igObject_OperatorDelete(int extra0)
 {
     return free();
 }
 
-int FUN_002f0060(int arg0, int arg1, int arg2) {
+int igMemoryPool_HandleOutOfMemory(int arg0, int arg1, int arg2) {
     if (DAT_00586f50 != 0) {
         return DAT_00586f50();
     }
     return arg2 == 4;
 }
 
-void FUN_002f00a0(void *arg0) {
+void igMemoryPool_InitDefaults(void *arg0) {
     *(unsigned char *)((char *)arg0 + 104) = (unsigned char) GPR_00554994;
-    FUN_002f0370((void **)arg0);
+    igMemoryPool_RegisterPool((void **)arg0);
 }
 
-void thunk_FUN_002f0460(igMemoryPoolView *pool) {
-    FUN_002f0460((void **)pool);
+void igMemoryPool_ReleaseDefaults(igMemoryPoolView *pool) {
+    igMemoryPool_UnregisterPool((void **)pool);
 }
 
-void FUN_002f00c0(void) {
+void Memory_GetDefaultHandleAllocator(void) {
     Memory_GetAllocatorBySelector(1);
 }
 
@@ -36,11 +36,11 @@ void * Memory_GetDefaultAllocator(void) {
     return (void *)(((int)Memory_GetAllocatorBySelector(2)));
 }
 
-int FUN_002f00e0(void) {
+int Memory_GetNonTrackedAllocator(void) {
     return ((int)Memory_GetAllocatorBySelector(3));
 }
 
-void FUN_002f00f0(void *arg0) {
+void igMemoryDictionary_SetCurrent(void *arg0) {
     void *temp_s0;
 
     temp_s0 = (void *)(((void * *)DAT_00586f68)[0]);
@@ -57,7 +57,7 @@ void FUN_002f00f0(void *arg0) {
     }
 }
 
-igResult FUN_002f0180(int arg1, int *arg2) {
+igResult Memory_LookupAllocation(int arg1, int *arg2) {
     int sp3C;
     igMemoryDictionaryView *o = DAT_00586f68[0];
     if (o != 0) {
@@ -72,20 +72,20 @@ igResult FUN_002f0180(int arg1, int *arg2) {
     return igResult(g_resultFailure.v);
 }
 
-igResult FUN_002f0220(int arg1, igMemoryPoolView *arg2) {
+igResult Memory_RegisterAllocation(int arg1, igMemoryPoolView *arg2) {
     int dictionarySize;
     if (DAT_00586f68[0] == 0) {
         dictionarySize = 0x1000;
-        FUN_003065f0((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
-        DAT_00586f68[0] = (igMemoryDictionaryView *)FUN_002c1070((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
+        igRegistry_GetValueInt((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
+        DAT_00586f68[0] = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
         DAT_00586f68[0]->vfunc_24(dictionarySize);
         DAT_00586f68[0]->vfunc_25();
-        FUN_002f00f0(DAT_00586f68[0]);
+        igMemoryDictionary_SetCurrent(DAT_00586f68[0]);
     }
     return DAT_00586f68[0]->vfunc_31(arg1, arg2->GetPoolIndex());
 }
 
-igResult FUN_002f0320(int arg1, igMemoryPoolView *pool) {
+igResult Memory_UnregisterAllocation(int arg1, igMemoryPoolView *pool) {
     igMemoryDictionaryView *p = DAT_00586f68[0];
     if (p != 0) {
         return p->vfunc_32(arg1);
@@ -93,7 +93,7 @@ igResult FUN_002f0320(int arg1, igMemoryPoolView *pool) {
     return igResult(g_resultFailure.v);
 }
 
-void FUN_002f0370(void **arg0) {
+void igMemoryPool_RegisterPool(void **arg0) {
     AllocatorRegistry *list;
     int idx;
     int flag;
@@ -122,7 +122,7 @@ void FUN_002f0370(void **arg0) {
     ((igMemoryPoolView *)arg0)->SetPoolIndex(flag);
 }
 
-void FUN_002f0460(void **arg0) {
+void igMemoryPool_UnregisterPool(void **arg0) {
     int temp_v0;
 
     if (((igMemoryPoolView *)arg0)->vfunc_29() == 0) {
@@ -163,15 +163,15 @@ void *Memory_FindOwningAllocator(int arg0) {
     return 0;
 }
 
-void FUN_002f0620(int *arg0) {
+void igMemoryPool_TransferAllocation(int *arg0) {
     *arg0 = g_resultFailure.v;
 }
 
-int FUN_002f0630(void) {
+int igMemoryPool_CanTransferTo(void) {
     return 0;
 }
 
-int FUN_002f0640(void) {
+int igMemoryPool_GetAllocationPoolIndex(void) {
     return -1;
 }
 

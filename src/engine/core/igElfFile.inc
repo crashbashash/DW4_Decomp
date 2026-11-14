@@ -1,9 +1,9 @@
-void thunk_igElfFile_GetMetaObject(void) {
+void igElfFile_GetMetaObjectFunction(void) {
     igElfFile_GetMetaObject();
 }
 
-void * FUN_002cec00(int arg0) {
-    FUN_002ced70();
+void * igElfFile_Create(int arg0) {
+    igElfFile_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586C00), (igMemoryPoolView *)arg0));
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igElfFile_GetMetaObject(void)
 {
     igMetaObject *g = g_igElfFile_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002ced70();
+        igElfFile_EnsureRegistered();
     return g_igElfFile_metaObject[0];
 }
 
@@ -54,19 +54,19 @@ int igElfFile_GetVTable(void) {
     return r;
 }
 
-void FUN_002ced70(void)
+void igElfFile_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igElfFile_Register);
 }
 
 void igElfFile_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igElfFile_metaObject),
         igProgramFile_Register,
         igProgramFile_GetPublishedMetaObject,
-        thunk_igElfFile_GetMetaObject,
+        igElfFile_GetMetaObjectFunction,
         igElfFile_className,
         0x64, /* instance size */
         igElfFile_GetVTable,
@@ -76,7 +76,7 @@ void igElfFile_Register(void) {
     );
 }
 
-int FUN_002cedf0(void) {
+int igProgramFile_GetPublishedMetaObject(void) {
     return ((int *)g_igProgramFile_metaObject)[0];
 }
 

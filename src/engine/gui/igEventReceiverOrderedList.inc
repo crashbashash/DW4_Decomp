@@ -39,7 +39,7 @@ int **FUN_00451160(int **arg0, long long arg1) {
             FUN_0014aa70((int **)((char *)arg0 + 8), -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

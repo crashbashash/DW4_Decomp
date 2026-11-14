@@ -1,8 +1,8 @@
-void thunk_igPsx2Semaphore_GetMetaObject(void) {
+void igPsx2Semaphore_GetMetaObjectFunction(void) {
     igPsx2Semaphore_GetMetaObject();
 }
 
-igSmartPointer<igObject> *FUN_002ba7f0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igCallStackTracer_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
         igObject *object=self->p;
         if(object) {
@@ -15,7 +15,7 @@ igSmartPointer<igObject> *FUN_002ba7f0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-void **FUN_002ba870(void **arg0, int arg1) {
+void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -33,7 +33,7 @@ void **FUN_002ba870(void **arg0, int arg1) {
     return arg0;
 }
 
-void **FUN_002ba8f0(void **arg0, short arg1) {
+void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -51,7 +51,7 @@ void **FUN_002ba8f0(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_002ba970(igObject **self, short flag) {
+void **igSmartPointer_igSemaphore_Destruct(igObject **self, short flag) {
     igObject *p;
     if (self != 0) {
         p = *self;

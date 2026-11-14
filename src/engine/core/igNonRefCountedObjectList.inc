@@ -2,7 +2,7 @@ igMetaObject *igNonRefCountedObjectList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedObjectList_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bdd30();
+        igNonRefCountedObjectList_EnsureRegistered();
     return g_igNonRefCountedObjectList_metaObject[0];
 }
 
@@ -14,19 +14,19 @@ int igNonRefCountedObjectList_GetVTable(void) {
     return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
-void FUN_002bdd30(void)
+void igNonRefCountedObjectList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igNonRefCountedObjectList_Register);
 }
 
 void igNonRefCountedObjectList_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igNonRefCountedObjectList_metaObject),
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igNonRefCountedObjectList_GetMetaObject,
+        igNonRefCountedObjectList_GetMetaObjectFunction,
         igNonRefCountedObjectList_className,
         0x14, /* instance size */
         igNonRefCountedObjectList_GetVTable,
@@ -36,11 +36,11 @@ void igNonRefCountedObjectList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedObjectList_GetMetaObject(void) {
+void igNonRefCountedObjectList_GetMetaObjectFunction(void) {
     igNonRefCountedObjectList_GetMetaObject();
 }
 
-void FUN_002bddc0(void) {
+void igNonRefCountedObjectList_InitFields(void) {
     int temp_s2;
     void **temp_v0;
     void *temp_s0;

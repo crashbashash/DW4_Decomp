@@ -69,12 +69,12 @@ void igClearAttr_InitFields(void) {
     v2.z = 0;
     v2.w = 0;
     FUN_0018e670(temp_a0_2, &v2);
-    FUN_002d9500(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0x3FF00000LL << 0x20);
+    igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0x3FF00000LL << 0x20);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    FUN_0030e9b0(temp_v0, -1);
+    igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    FUN_002e3810(temp_v0_2, 1.0f);
+    igFloatMetaField_SetDefault(temp_v0_2, 1.0f);
     *(char *)((char *)(temp_v0_2) + 38) = 0;
     igMetaObject_NameFields(temp_s1, &g_igClearAttr_fieldTable[0], &DAT_004869a0[0], &DAT_004869c0[0], temp_s0);
 }

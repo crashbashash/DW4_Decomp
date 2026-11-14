@@ -157,9 +157,9 @@ void FUN_001ddfd0(void) {
     if (g_igTransformSequence1_5_metaObject[0] != 0) {
         temp_v0 = igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject[0], &text_interpolationMethod[0]);
         if (temp_v0 != 0) {
-            FUN_002d4c20(temp_v0, 0, 1);
-            FUN_002d4c20(temp_v0, 1, 3);
-            FUN_002d4c20(temp_v0, 2, 1);
+            igCharArrayMetaField_SetDefaultElement(temp_v0, 0, 1);
+            igCharArrayMetaField_SetDefaultElement(temp_v0, 1, 3);
+            igCharArrayMetaField_SetDefaultElement(temp_v0, 2, 1);
         }
     }
 }

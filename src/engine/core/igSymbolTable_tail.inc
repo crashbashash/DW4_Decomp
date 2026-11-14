@@ -1,9 +1,9 @@
-void FUN_0030da10(int a0, int a1)
+void igSymbolTable_SetHashCapacity(int a0, int a1)
 {
     *(int *)((char *)a0 + 12) = a1;
 }
 
-void FUN_0030da20(igSymbolTableView *arg0, unsigned arg1, unsigned arg2) {
+void igSymbolTable_SetAddressRange(igSymbolTableView *arg0, unsigned arg1, unsigned arg2) {
     unsigned temp_a2;
 
     arg0->_lowAddress = arg1;
@@ -19,7 +19,7 @@ void FUN_0030da20(igSymbolTableView *arg0, unsigned arg1, unsigned arg2) {
     }
 }
 
-void FUN_0030daa0(igSymbolTableView *arg0) {
+void igSymbolTable_ReserveStorage(igSymbolTableView *arg0) {
     igTDataList<int> *temp_a0;
     int temp_a1;
     temp_a1 = arg0->_capacity * 4;
@@ -28,22 +28,22 @@ void FUN_0030daa0(igSymbolTableView *arg0) {
         List_Reserve((igDataList *)temp_a0, temp_a1, 4);
     }
     arg0->vfunc_32(arg0->_hashCapacity);
-    FUN_0030cf20(arg0->_symbolNames, arg0->_capacity * 4);
-    FUN_0030cf30(arg0->_symbolNames, arg0->_capacity);
-    FUN_0030cf40((void *)arg0->_symbolNames);
-    FUN_0030cf20(arg0->_sourceFileNames, 0x1000);
-    FUN_0030cf30(arg0->_sourceFileNames, 0x100);
-    FUN_0030cf40((void *)arg0->_sourceFileNames);
+    igStringTable_SetCapacity(arg0->_symbolNames, arg0->_capacity * 4);
+    igStringTable_SetHashCapacity(arg0->_symbolNames, arg0->_capacity);
+    igStringTable_Reserve((void *)arg0->_symbolNames);
+    igStringTable_SetCapacity(arg0->_sourceFileNames, 0x1000);
+    igStringTable_SetHashCapacity(arg0->_sourceFileNames, 0x100);
+    igStringTable_Reserve((void *)arg0->_sourceFileNames);
 }
 
 /* Number of symbols in the table. The symbols list stores four ints per symbol, so the count is
  * the list length divided by four (the resize sibling vfunc_24 sets the length to count << 2). */
 
-int Gap__Core__igSymbolTable__vfunc_23(igSymbolTable *self) {
+int igSymbolTable_GetSymbolCount(igSymbolTable *self) {
     return ((igDataList *)(self->_symbols))->_count / 4;
 }
 
-void Gap__Core__igSymbolTable__vfunc_24(int *arg0, igSymbolTableView *arg1, int arg2) {
+void igSymbolTable_SetSymbolCount(int *arg0, igSymbolTableView *arg1, int arg2) {
     igTDataList<int> *l = arg1->_symbols;
     int n = arg2 << 2;
     if (n >= 0) {
@@ -56,7 +56,7 @@ void Gap__Core__igSymbolTable__vfunc_24(int *arg0, igSymbolTableView *arg1, int 
     *arg0 = g_resultSuccess.v;
 }
 
-igResult Gap__Core__igSymbolTable__vfunc_25(igSymbolTable *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
+igResult igSymbolTable_GetSymbol(igSymbolTable *self, int idx, char *name, int nameSize, int *a, int *b, char *path, int pathSize) {
     igResult result = g_resultFailure;
     SymbolRecord *e;
     char *s;
@@ -65,11 +65,11 @@ igResult Gap__Core__igSymbolTable__vfunc_25(igSymbolTable *self, int idx, char *
         e = &((igTDataList<SymbolRecord> *)self->_symbols)->_data[idx];
         *a = e->address;
         if (name != 0) {
-if ((s = FUN_0030d1d0((int *)self->_symbolNames, e->name)) != 0) { strncpy(name, s, nameSize); } else { *name = 0; }
+if ((s = igStringTable_GetString((int *)self->_symbolNames, e->name)) != 0) { strncpy(name, s, nameSize); } else { *name = 0; }
         }
         *b = e->size;
         if (path != 0) {
-if ((s = FUN_0030d1d0((int *)self->_sourceFileNames, e->path)) != 0) { strncpy(path, s, pathSize); } else { *path = 0; }
+if ((s = igStringTable_GetString((int *)self->_sourceFileNames, e->path)) != 0) { strncpy(path, s, pathSize); } else { *path = 0; }
         }
         result = g_resultSuccess;
     } else {
@@ -85,7 +85,7 @@ if ((s = FUN_0030d1d0((int *)self->_sourceFileNames, e->path)) != 0) { strncpy(p
     return result;
 }
 
-int Gap__Core__igSymbolTable__vfunc_26(igSymbolTableView *o, unsigned key) {
+int igSymbolTable_FindSymbolIndex(igSymbolTableView *o, unsigned key) {
 SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int cnt; int e2; unsigned end1; unsigned end2; int k; unsigned st1; int j; SymbolRecord *en2; igTDataList<int> *l;
     i0 = o->vfunc_30(key);
     i = i0;
@@ -124,7 +124,7 @@ SymbolRecord *en1; int len2; int i; int i0; int e1; int len1; unsigned st2; int 
     return -1;
 }
 
-void Gap__Core__igSymbolTable__vfunc_27(int *out, igSymbolTableView *o, int a, int b, int c, int d, int e, int f, int g, int *h) {
+void igSymbolTable_GetSymbolAtAddress(int *out, igSymbolTableView *o, int a, int b, int c, int d, int e, int f, int g, int *h) {
     igResult r;
     int i = o->vfunc_26(a);
     r.v = g_resultFailure.v;
@@ -133,9 +133,9 @@ void Gap__Core__igSymbolTable__vfunc_27(int *out, igSymbolTableView *o, int a, i
     *out = r.v;
 }
 
-void Gap__Core__igSymbolTable__vfunc_28(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->vfunc_26(b)) { case -1: o->vfunc_29(a, b, c, d); break; default: break; } }
+void igSymbolTable_AddSymbolIfMissing(igSymbolTableView *o, int a, int b, int c, int d) { switch (o->vfunc_26(b)) { case -1: o->vfunc_29(a, b, c, d); break; default: break; } }
 
-unsigned int Gap__Core__igSymbolTable__vfunc_30(igSymbolTable *arg0, int arg1) {
+unsigned int igSymbolTable_HashAddress(igSymbolTable *arg0, int arg1) {
     unsigned int temp_a2;
     unsigned int temp_v1;
     unsigned int var_v0;
@@ -151,7 +151,7 @@ unsigned int Gap__Core__igSymbolTable__vfunc_30(igSymbolTable *arg0, int arg1) {
     return var_v0;
 }
 
-int Gap__Core__igSymbolTable__vfunc_31(igSymbolTableView *self, int key, int key2, int value) {
+int igSymbolTable_InsertHashEntry(igSymbolTableView *self, int key, int key2, int value) {
     int probes = 0;
     int size = self->_hashIndex->_count;
     int half = size / 2;
@@ -183,7 +183,7 @@ static inline void reserve(igTDataList<int> *l, int n) { if (n >= l->_count) { L
 
 static inline void setCount_30e2a0(igTDataList<int> *l, int n) { if (n >= 0) { if (n <= l->_capacity) { l->_count = n; } else { List_Resize(l, n, 4); } } }
 
-void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
+void igSymbolTable_RebuildHashIndex(igSymbolTableView *self, int n) {
     igTDataList<int> *l;
     int count;
     int *data;
@@ -192,7 +192,7 @@ void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
     SymbolRecord *end;
     SymbolRecord *e;
 
-    FUN_0030da10((int)self, n);
+    igSymbolTable_SetHashCapacity((int)self, n);
     reserve(self->_hashIndex, n);
     setCount_30e2a0(self->_hashIndex, n);
     l = self->_hashIndex;
@@ -219,7 +219,7 @@ void Gap__Core__igSymbolTable__vfunc_32(igSymbolTableView *self, int n) {
     }
 }
 
-igResult FUN_0030e430(igPsx2Thread *self, int priority) {
+igResult igThread_SetPriority(igPsx2Thread *self, int priority) {
     self->_priority = priority;
     return g_resultSuccess;
 }

@@ -72,7 +72,7 @@ void igColorAttr_InitFields(void) {
     FUN_0018e670(temp_a0, sp40);
     *(int *)((char *)(temp_s1) + 48) = (int)(&FUN_0013c870);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    FUN_0030e9b0(temp_v0, -1);
+    igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     igMetaObject_NameFields(temp_s0, &g_igColorAttr_fieldTable[0], &DAT_00486928[0], &DAT_00486930[0], temp_s2);
 }

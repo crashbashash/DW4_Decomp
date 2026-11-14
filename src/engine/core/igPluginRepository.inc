@@ -1,12 +1,12 @@
-int FUN_002bc8d0(void) {
+int igPluginRepository_GetLocationTypeMetaEnum(void) {
     if (DAT_00585ae8[0] == 0) {
         DAT_00585ae8[0] = ((int)igMetaEnum_Create((char *)&LOCATION_TYPE[0], (char **)&DAT_004bfa38[0], &DAT_004bfa48[0], 3));
     }
     return DAT_00585ae8[0];
 }
 
-int FUN_002bc930(int arg0) {
-    FUN_002bca90();
+int igPluginRepository_Create(int arg0) {
+    igPluginRepository_EnsureRegistered();
     return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AF0), (igMemoryPoolView *)arg0);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igPluginRepository_GetMetaObject(void)
 {
     igMetaObject *g = g_igPluginRepository_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bca90();
+        igPluginRepository_EnsureRegistered();
     return g_igPluginRepository_metaObject[0];
 }
 
@@ -61,19 +61,19 @@ int igPluginRepository_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_002bca90(void)
+void igPluginRepository_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPluginRepository_Register);
 }
 
 void igPluginRepository_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igPluginRepository_metaObject),
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igPluginRepository_GetMetaObject,
+        igPluginRepository_GetMetaObjectFunction,
         igPluginRepository_className,
         0x14, /* instance size */
         igPluginRepository_GetVTable,
@@ -83,7 +83,7 @@ void igPluginRepository_Register(void) {
     );
 }
 
-void thunk_igPluginRepository_GetMetaObject(void) {
+void igPluginRepository_GetMetaObjectFunction(void) {
     igPluginRepository_GetMetaObject();
 }
 
@@ -93,7 +93,7 @@ void igPluginRepository_InitFields(void) {
     igMetaField *field;
     igMetaObject_CreateFields(meta, (FieldFactory *)g_igPluginRepository_ctorTable, 2);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 1));
-    *(int *)((char *)field + 52) = (int)FUN_002bc8d0;
+    *(int *)((char *)field + 52) = (int)igPluginRepository_GetLocationTypeMetaEnum;
     igMetaObject_NameFields(meta, (const char **)g_igPluginRepository_fieldTable, (igMetaField ***)DAT_004bfa68, (int *)DAT_004bfa70, base);
 }
 

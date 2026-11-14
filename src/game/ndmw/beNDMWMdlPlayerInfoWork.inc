@@ -68,7 +68,7 @@ Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
             FUN_00350b10((char *)arg0 + 8, -1);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

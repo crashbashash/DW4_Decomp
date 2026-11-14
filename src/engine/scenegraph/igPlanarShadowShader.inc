@@ -62,7 +62,7 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
             FUN_00195970((struct T_195970 *)arg0, 0);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

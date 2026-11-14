@@ -10,7 +10,7 @@ void ***FUN_002e2fb0(void) {
     int *hdr;
     int c;
     if (DAT_00586e18[0] == 0) {
-        al = (void **)FUN_002f8a20();
+        al = (void **)Memory_GetCurrentAllocator();
         if (g_useOwnerAllocator != 0) {
             a = al;
         } else {
@@ -42,7 +42,7 @@ void ***FUN_002e2fb0(void) {
     return &DAT_00586e18[0];
 }
 
-void FUN_002e30b0(int *arg0, const char *name) {
+void igFile_SetFileName(int *arg0, const char *name) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -69,7 +69,7 @@ void FUN_002e30b0(int *arg0, const char *name) {
     arg0[3] = (int)temp_s0;
 }
 
-void Gap__igAdxFile__vfunc_38(igFileView *arg0, long long arg1) {
+void igFile_SkipToChar(igFileView *arg0, long long arg1) {
     signed char want = (signed char)arg1;
     signed char c;
     do {
@@ -77,7 +77,7 @@ void Gap__igAdxFile__vfunc_38(igFileView *arg0, long long arg1) {
     } while (want != c && c != -1);
 }
 
-void FUN_002e31b0(int a0, int a1)
+void igAdxFile_SetOpenMode(int a0, int a1)
 {
     *(int *)((char *)a0 + 20) = a1;
 }
@@ -105,7 +105,7 @@ bool FilePath_HasDirectory(const char *path) {
     return 1;
 }
 
-void FUN_002e3280(int arg0) {
+void igAdxFile_SetBasePath(int arg0) {
     int *temp_a1;
     int *temp_a1_2;
     int temp_v0;
@@ -156,32 +156,32 @@ void FUN_002e3280(int arg0) {
     }
 }
 
-void Gap__igAdxFile__vfunc_26(igFileView *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
+void igFile_ReadAsync(igFileView *arg0, int arg1, int arg2, int (*arg3)(int, int), int arg4) {
     arg3(arg0->Read((void *)arg1, 1, arg2), arg4);
 }
 
-void FUN_002e33d0(void) {
+void igAdxFile_LoadSearchFilePath(void) {
     const char *searchPathKey = (const char *)DAT_004c2128[0];
     int registry = (int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry;
     igStringObj *text;
     int path;
     if (registry != 0) {
         text = (igStringObj *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
-        FUN_00306770(registry, 2, (const char *)text_searchFilePath, &text, searchPathKey, 0);
+        igRegistry_GetValueStringObj(registry, 2, (const char *)text_searchFilePath, &text, searchPathKey, 0);
         path = text->_buffer;
         if (path == 0) {
             path = (int)g_stringObjEmptyText[0];
         }
-        FUN_002e3280(path);
+        igAdxFile_SetBasePath(path);
         igRelease(text);
     }
 }
 
-int FUN_002e34a0(void) {
+int igAdxFile_GetSearchPaths(void) {
     return **((int **)FUN_002e2fb0());
 }
 
-int FUN_002e34d0(char **arg0, char *arg1, int arg2) {
+int igAdxFile_GetNextSearchPath(char **arg0, char *arg1, int arg2) {
     char *temp_s1;
     char *temp_v0;
     char temp_v1;
@@ -222,7 +222,7 @@ int FUN_002e34d0(char **arg0, char *arg1, int arg2) {
     return 1;
 }
 
-int Gap__igAdxFile__vfunc_39(igFileView *arg0, int arg1) {
+int igFile_SetCompleteFilename(igFileView *arg0, int arg1) {
     int s0;
     int *a0;
     int *hdr;

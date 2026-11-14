@@ -34,7 +34,7 @@ int EIntr();
 int p2GrowPool();
 int p2ResetDmaPacketCount(int);
 int p2FlushVif1Packet(void);
-int FUN_00330770();
+int Memory_FreeToSelector();
 void p2ReadClock(long long *);
 int FlushCache(int);
 int iReferSemaStatus();
@@ -475,7 +475,7 @@ void p2ShutdownDmaChannels(void) {
         current = &p2DmaCurrentPacket[channel];
         packet = *current;
         do {
-            FUN_00330770(packet->memory, 22);
+            Memory_FreeToSelector(packet->memory, 22);
             packet->memory = 0;
             if (packet->predicates == 0 && channel == P2_DMA_GIF) p2FreeDmaPredicates(channel);
             packet = packet->next;
@@ -492,7 +492,7 @@ void p2ShutdownDmaChannels(void) {
         do {
             p2DmaPacket *block = packet;
             packet = packet->next;
-            FUN_00330770(block, 22);
+            Memory_FreeToSelector(block, 22);
         } while (packet != head);
         *current = 0;
         p2DmaCompletedSequence[channel] = -1;

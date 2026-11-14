@@ -1,85 +1,85 @@
-void Gap__Core__igDirEntry__vfunc_27(void) {
+void igDirEntry_RetainSharedRef(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_28(void) {
+void igDirEntry_ReleaseSharedRef(void) {
 
 }
 
-int Gap__Core__igDirEntry__vfunc_26(int arg0) {
+int igDirEntry_GetSharedEntry(int arg0) {
     return arg0;
 }
 
-int Gap__Core__igDirEntry__vfunc_42(void) {
+int igDirEntry_IsRefMemory(void) {
     return 0;
 }
 
-void Gap__Core__igDirEntry__vfunc_29(void) {
+void igDirEntry_SetMemoryPoolHandle(void) {
 
 }
 
-int Gap__Core__igDirEntry__vfunc_30(void) {
+int igDirEntry_GetMemoryPoolHandle(void) {
     return -1;
 }
 
-void Gap__Core__igDirEntry__vfunc_41(void) {
+void igDirEntry_WriteMemory(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_40(void) {
+void igDirEntry_WriteObject(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_38(void) {
+void igDirEntry_PrepareWrite(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_39(void) {
+void igDirEntry_ComputeWriteSize(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_35(void) {
+void igDirEntry_ReadMemory(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_36(void) {
+void igDirEntry_RegisterRef(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_37(void) {
+void igDirEntry_PostProcess(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_33(void) {
+void igDirEntry_ResolveRefOld(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_34(void) {
+void igDirEntry_ResolveRef(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_32(void) {
+void igDirEntry_Resolve(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_31(void) {
+void igDirEntry_CreateRef(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_11(int arg0) {
-    Gap__Core__igObject__vfunc_09(arg0);
+void igDirEntry_InitDefaults(int arg0) {
+    igObject_InitDefaults(arg0);
     igNamedObject_SetName((igNamedObject *)arg0, 0);
 }
 
-void Gap__Core__igDirEntry__vfunc_23(void *arg0, int arg1) {
+void igDirEntry_SetRef(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 24) = arg1;
 }
 
-void Gap__Core__igDirEntry__vfunc_24(void) {
+void igDirEntry_RetainRef(void) {
 
 }
 
-void Gap__Core__igDirEntry__vfunc_25(void) {
+void igDirEntry_ReleaseRef(void) {
 
 }
 

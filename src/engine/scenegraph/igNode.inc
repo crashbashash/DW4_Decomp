@@ -113,7 +113,7 @@ void igNode_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_shallowCopyMethod = 4;
     ((igObjectRefMetaField *)temp_s2_2)->_constructCopyMethod = 4;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
-    FUN_002ea4b0(temp_v0, -1);
+    igIntMetaField_SetDefault(temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields(temp_s1, &g_igNode_fieldTable[0], &DAT_0048bcb0[0], &DAT_0048bcc0[0], temp_s0);
 }
@@ -152,7 +152,7 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
             FUN_00195a90((struct T_195a90 *)arg0, 0);
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;

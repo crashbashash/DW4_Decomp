@@ -1,5 +1,5 @@
-void * FUN_002befe0(int arg0) {
-    FUN_002bf190();
+void * igMetaEnum_CreateInstance(int arg0) {
+    igMetaEnum_EnsureRegistered();
     return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585D60), (igMemoryPoolView *)arg0));
 }
 
@@ -7,7 +7,7 @@ igMetaObject *igMetaEnum_GetMetaObject(void)
 {
     igMetaObject *g = g_igMetaEnum_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002bf190();
+        igMetaEnum_EnsureRegistered();
     return g_igMetaEnum_metaObject[0];
 }
 
@@ -63,19 +63,19 @@ int igMetaEnum_GetVTable(void) {
     return t;
 }
 
-void FUN_002bf190(void)
+void igMetaEnum_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaEnum_Register);
 }
 
 void igMetaEnum_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igMetaEnum_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMetaEnum_GetMetaObject,
+        igMetaEnum_GetMetaObjectFunction,
         igMetaEnum_className,
         0x14, /* instance size */
         igMetaEnum_GetVTable,
@@ -85,7 +85,7 @@ void igMetaEnum_Register(void) {
     );
 }
 
-void thunk_igMetaEnum_GetMetaObject(void) {
+void igMetaEnum_GetMetaObjectFunction(void) {
     igMetaEnum_GetMetaObject();
 }
 
@@ -99,7 +99,7 @@ void igMetaEnum_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, (igMetaField * (**)(void *))&g_igMetaEnum_ctorTable[0], 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002b9120();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)&g_igMetaEnum_fieldTable[0], (igMetaField ***)&DAT_004bff68[0], &DAT_004bff78[0], temp_s2);

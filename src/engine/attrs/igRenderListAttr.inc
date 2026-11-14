@@ -72,7 +72,7 @@ void igRenderListAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igRenderListAttr_ctorTable[0], 2);
     temp_v0 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002ea4b0(temp_v0, -1);
+    igIntMetaField_SetDefault(temp_v0, -1);
     temp_v0->b38 = 0;
     temp_s1 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     temp_s1->f56 = FUN_0014a040();

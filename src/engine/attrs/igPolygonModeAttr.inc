@@ -55,7 +55,7 @@ void igPolygonModeAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igPolygonModeAttr_ctorTable[0], 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    FUN_002dc7a0(temp_v0, &DAT_00486120[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00486120[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001495c0);
     igMetaObject_NameFields(temp_s0, &g_igPolygonModeAttr_fieldTable[0], &DAT_00486110[0], &DAT_00486118[0], temp_s2);
 }

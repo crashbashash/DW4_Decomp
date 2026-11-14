@@ -58,7 +58,7 @@ void igTimeAttr_InitFields(void) {
     temp_s0 = (void *)g_igTimeAttr_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_igTimeAttr_ctorTable[0], 1);
-    FUN_002ebc00(igMetaObject_GetFieldAt(temp_s0, temp_s1), 0);
+    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1), 0);
     igMetaObject_NameFields(temp_s0, &g_igTimeAttr_fieldTable[0], &DAT_00485aa0[0], &DAT_00485aa8[0], temp_s1);
 }
 

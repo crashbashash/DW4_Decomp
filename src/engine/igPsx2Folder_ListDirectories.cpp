@@ -15,7 +15,7 @@ char *StringPool_Intern(int, char *);
 void StringChunk_ReleaseHeader(int, int *);
 FolderObject *igStringRefList_Create(int);
 FolderPathText *igStringObj_Create(int);
-int FUN_0030b7e0(FolderPathText *, const char *, int, char *);
+int igStringObj_Format(FolderPathText *, const char *, int, char *);
 int sceGetstat(const char *, FolderFileStat *);
 extern char DAT_004f9a78[];
 extern char *DAT_004c22f0;
@@ -52,8 +52,8 @@ struct FolderObjectRef {
         }
     }
 };
-extern "C" FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self);
-FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self) {
+extern "C" FolderObjectRef igPsx2Folder_ListDirectories(FolderSelf *self);
+FolderObjectRef igPsx2Folder_ListDirectories(FolderSelf *self) {
     FolderEntry entry;
     FolderFileStat st;
     int handle = sceDopen(self->path);
@@ -65,7 +65,7 @@ FolderObjectRef Gap__Core__igPsx2Folder__vfunc_25(FolderSelf *self) {
     FolderObjectRef path;
     path.obj = igStringObj_Create(igObject_GetAllocator(self));
     while (sceDread(handle, &entry) != 0) {
-        FUN_0030b7e0((FolderPathText *)path.obj, DAT_004f9a78, self->path, (char *)&entry + 64);
+        igStringObj_Format((FolderPathText *)path.obj, DAT_004f9a78, self->path, (char *)&entry + 64);
         char *full = ((FolderPathText *)path.obj)->text;
         full = (full == 0) ? DAT_004c22f0 : full;
         if (sceGetstat(full, &st) != 0) {

@@ -26,7 +26,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
                 old->_refCount = old->_refCount - 1;
                 if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old);
             }
-            arg0->_compressedTranslationList = FUN_002c9ff0(al);
+            arg0->_compressedTranslationList = igUnsignedShortList_Create(al);
         }
         int c = n * 3;
         l = arg0->_compressedTranslationList;
@@ -49,7 +49,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
                 old->_refCount = old->_refCount - 1;
                 if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old);
             }
-            arg0->_compressedQuaternionList = FUN_002c9ff0(al);
+            arg0->_compressedQuaternionList = igUnsignedShortList_Create(al);
         }
         int c = n * 4;
         l = arg0->_compressedQuaternionList;
@@ -71,7 +71,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
             old->_refCount = old->_refCount - 1;
             if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old);
         }
-        arg0->_compressedTimeList = FUN_002c9ff0(al);
+        arg0->_compressedTimeList = igUnsignedShortList_Create(al);
     }
     l = arg0->_compressedTimeList;
     if (n >= 0) {

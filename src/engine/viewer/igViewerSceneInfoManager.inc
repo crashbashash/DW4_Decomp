@@ -78,11 +78,11 @@ int igViewerSceneInfoManager_GetVTable(void) {
     p304 = &u.b[144];
     FUN_00459d90((int *)p304);
     p308 = &u.b[148];
-    FUN_002c3d50(p308);
+    igSmartPointer_igObjectList_Construct(p308);
     p312 = &u.b[152];
     FUN_00459d80((int *)p312);
     p316 = &u.b[156];
-    FUN_002c3d50(p316);
+    igSmartPointer_igObjectList_Construct(p316);
     p340 = &u.b[180];
     FUN_00459d70((int *)p340);
     p344 = &u.b[184];
@@ -488,7 +488,7 @@ void FUN_00459ee0(void) {
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 5));
     *(int *)((char *)(temp_s0_6) + 56) = FUN_00233a40();
     *(char *)((char *)(temp_s0_6) + 52) = 1;
-    FUN_002ea4b0(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 6), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 6), -1);
     temp_s0_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7));
     *(int *)((char *)(temp_s0_7) + 56) = FUN_0044ded0();
     *(char *)((char *)(temp_s0_7) + 52) = 1;
@@ -557,7 +557,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_35) + 56) = igObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_35) + 52) = 1;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x26));
-    FUN_002dc7a0(temp_v0_3, &DAT_004d0e10[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_004d0e10[0]);
     *(int *)((char *)(temp_v0_3) + 52) = (int)(&FUN_004592e0);
     temp_s0_36 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x27));
     *(int *)((char *)(temp_s0_36) + 56) = FUN_0013a360();

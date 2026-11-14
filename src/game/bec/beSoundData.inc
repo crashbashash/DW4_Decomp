@@ -56,7 +56,7 @@ struct W_344030 *FUN_00344030(struct W_344030 *arg0, short arg1) {
             }
         }
         if (arg1 > 0) {
-            thunk_FUN_002ed460__002ff810(arg0);
+            thunk_Memory_FreeBuffer(arg0);
         }
     }
     return arg0;
@@ -96,10 +96,10 @@ void beSoundData_InitFields(void) {
     temp_s0 = (void *)g_beSoundData_metaObject[0];
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, &g_beSoundData_ctorTable[0], 6);
-    FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
-    FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
-    FUN_002ea4b0(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
-    FUN_0030a520(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 1);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), -1);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), -1);
+    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), -1);
+    igShortMetaField_SetDefault(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)), 1);
     igMetaObject_NameFields(temp_s0, &g_beSoundData_fieldTable[0], &DAT_004c3870[0], &DAT_004c3890[0], temp_s1);
 }
 

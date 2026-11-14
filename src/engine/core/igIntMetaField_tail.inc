@@ -1,4 +1,4 @@
-int Gap__Core__igIntMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+int igIntMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     int sp1C;
 
     sp1C = 0;
@@ -6,7 +6,7 @@ int Gap__Core__igIntMetaField__vfunc_56(int arg0, int arg1, int arg2) {
     return sp1C;
 }
 
-void Gap__Core__igIntMetaField__vfunc_57(int *arg0, int arg1, int *arg2) {
+void igIntMetaField_ValueToString(int *arg0, int arg1, int *arg2) {
     int sp20[256];
     int var_v0;
     int var_v1;
@@ -27,7 +27,7 @@ void Gap__Core__igIntMetaField__vfunc_57(int *arg0, int arg1, int *arg2) {
     *arg0 = var_v1;
 }
 
-int FUN_002ea3d0(void) {
+int igIntMetaField_GetSize(void) {
     return 4;
 }
 
@@ -46,24 +46,24 @@ void *igIntMetaField_Init(igMetaField *self) {
     return self;
 }
 
-int **FUN_002ea460(int **arg0, int extra1) {
+int **igIntMetaField_CopyConstruct(int **arg0, int extra1) {
     igMetaField_CopyConstruct((igMetaField *)arg0, (igMetaField *)extra1);
     *arg0 = &g_igIntMetaField_vtable[0];
     return arg0;
 }
 
-void Gap__Core__igIntMetaField__vfunc_02(int extra0) {
+void igIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void FUN_002ea4b0(void **arg0, int arg1) {
+void igIntMetaField_SetDefault(void **arg0, int arg1) {
     int sp1C;
 
     sp1C = arg1;
     ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
 }
 
-int Gap__Core__igIntMetaField__vfunc_27(void) {
+int igIntMetaField_GetAlignment(void) {
     return 4;
 }
 

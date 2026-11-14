@@ -113,7 +113,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
     igTDataList<int> *vl;
     int a;
     char **slot;
-    e = ((MetaEnumView *)FUN_002befe0(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    e = ((MetaEnumView *)igMetaEnum_CreateInstance(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     v = ((char *)StringPool_Intern((StringPool *)(pool_2fbc70()), (const char *)name));
     old = e->name;
     releaseString(old);
@@ -152,7 +152,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
         releaseString(held);
         setValue(e->values, i, &values[i]);
     }
-    FUN_002d30b0((int *)((*(int *)g_objectSystem)), (int)e);
+    igObjectSystem_AppendMetaEnum((int *)((*(int *)g_objectSystem)), (int)e);
     e->_refCount = e->_refCount - 1;
     if (((unsigned long long)((long long)e->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(e); }
     return e;

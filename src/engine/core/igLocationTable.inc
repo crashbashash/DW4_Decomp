@@ -1,4 +1,4 @@
-igMetaObject *FUN_002c1fa0(void) {
+igMetaObject *igLocationTable_GetOrCreateMetaObject(void) {
     if (g_igLocationTable_metaObject[0] == 0) {
         g_igLocationTable_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
@@ -9,7 +9,7 @@ igMetaObject *igLocationTable_GetMetaObject(void)
 {
     igMetaObject *g = g_igLocationTable_metaObject[0];
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002c20f0();
+        igLocationTable_EnsureRegistered();
     return g_igLocationTable_metaObject[0];
 }
 
@@ -30,26 +30,26 @@ int igLocationTable_GetVTable(void) {
     o._sourceFileNames = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
     o._vtable = (int)&DAT_0052fc50[0];
-    FUN_002b8740((igSmartPointer<igObject> *)&o._sourceFileNames, -1);
-    FUN_002b8740((igSmartPointer<igObject> *)p18, -1);
-    FUN_002b86c0((void **)p17, -1);
-    FUN_002b8640((igSmartPointer<igObject> *)p16, -1);
+    igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&o._sourceFileNames, -1);
+    igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)p18, -1);
+    igSmartPointer_igIntListNoClean_Destruct((void **)p17, -1);
+    igSmartPointer_igUnsignedIntListNoClean_Destruct((igSmartPointer<igObject> *)p16, -1);
     return r;
 }
 
-void FUN_002c20f0(void)
+void igLocationTable_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLocationTable_Register);
 }
 
 void igLocationTable_Register(void) {
-    FUN_002b5d50();
+    CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
         ((char *)g_igLocationTable_metaObject),
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igLocationTable_GetMetaObject,
+        igLocationTable_GetMetaObjectFunction,
         igLocationTable_className,
         0x20, /* instance size */
         igLocationTable_GetVTable,
@@ -59,7 +59,7 @@ void igLocationTable_Register(void) {
     );
 }
 
-void thunk_igLocationTable_GetMetaObject(void) {
+void igLocationTable_GetMetaObjectFunction(void) {
     igLocationTable_GetMetaObject();
 }
 
@@ -75,16 +75,16 @@ void igLocationTable_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igLocationTable_ctorTable[0], 6);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002ca2a0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_002ca8f0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002b8d90();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, (const char **)&g_igLocationTable_fieldTable[0], (igMetaField ***)&DAT_004c0560[0], &DAT_004c0580[0], temp_s0);
 }

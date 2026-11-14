@@ -108,7 +108,7 @@ void igDefaultAspectElement_InitFields(void) {
     *(int *)((char *)(temp_s1_3) + 56) = FUN_00196190();
     *(unsigned char *)((char *)(temp_s1_3) + 52) = 1;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    FUN_002dc7a0(temp_v0, &DAT_004d0838[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004d0838[0]);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00451ac0);
     igMetaObject_NameFields(temp_s0, &g_igDefaultAspectElement_fieldTable[0], &DAT_004d0800[0], &DAT_004d0820[0], temp_s2);
 }

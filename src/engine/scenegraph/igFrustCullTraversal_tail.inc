@@ -48,10 +48,10 @@ void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1) {
 
 void FUN_001c4700(int arg0, int arg1) {
     FUN_001b68c0((void *)arg0, (void *)arg1);
-    if (FUN_002fe290(arg1, ((int)igNode_GetMetaObject())) != 0) {
+    if (igMetaObject_IsOfType(arg1, ((int)igNode_GetMetaObject())) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001c5030);
     }
-    if (FUN_002fe290(arg1, ((int)igPlanarShadowShader_GetMetaObject())) != 0) {
+    if (igMetaObject_IsOfType(arg1, ((int)igPlanarShadowShader_GetMetaObject())) != 0) {
         igTraversal_RegisterFunction((struct L_1e06c0 *)arg0, (struct X_1e06c0 *)arg1, (void *)&FUN_001c5130);
     }
 }

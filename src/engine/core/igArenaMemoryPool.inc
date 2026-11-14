@@ -1,4 +1,4 @@
-void thunk_igArenaMemoryPool_GetMetaObject(void) {
+void igArenaMemoryPool_GetMetaObjectFunction(void) {
     igArenaMemoryPool_GetMetaObject();
 }
 
