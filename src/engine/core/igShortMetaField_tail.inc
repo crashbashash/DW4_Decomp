@@ -61,7 +61,7 @@ void FUN_0030a520(void **arg0, short arg1) {
     short sp1E;
 
     sp1E = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp1E));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp1E);
 }
 
 int Gap__Core__igShortMetaField__vfunc_27(void) {

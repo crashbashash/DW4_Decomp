@@ -13,8 +13,8 @@ void **igStringMetaField_Create(int allocator) {
         if (field != 0) {
             field = ((void **)igStringMetaField_Construct((igStringMetaField *)field, 1));
         }
-        ((igObjectSlot09_2b9750 *)field)->vfunc_09();
-        ((igObjectSlot07_2b9750 *)field)->vfunc_07(0);
+        ((igObjectDispatchView *)field)->vfunc_09();
+        ((igObjectDispatchView *)field)->userConstruct(0);
     }
     return field;
 }
@@ -45,7 +45,7 @@ done:
 }
 
 int igStringMetaField_GetVTable(void) {
-    Obj_2b98c0 o;
+    igStringMetaField o;
     int r;
     char *p;
     int *hdr;
@@ -53,9 +53,9 @@ int igStringMetaField_GetVTable(void) {
 
     igStringMetaField_Init((igStringMetaField *)&o);
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        p = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        p = (char *)o._fieldName;
         if (p != 0) {
             hdr = (int *)(p - 8);
             c = *(int *)(p - 4) - 1;
@@ -101,31 +101,31 @@ void igStringMetaField_InitFields(void) {
     int temp_s2;
     int temp_s3;
     void **temp_v0;
-    M_2b99e0 *temp_s1;
-    T_2b99e0 *temp_v0_2;
-    T_2b99e0 *temp_v0_4;
+    igMetaObject *temp_s1;
+    igMetaField *temp_v0_2;
+    igMetaField *temp_v0_4;
 
-    temp_s1 = (M_2b99e0 *)(((void * *)g_igStringMetaField_metaObject)[0]);
+    temp_s1 = (igMetaObject *)(((void * *)g_igStringMetaField_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, (igMetaField * (**)(void *))&g_igStringMetaField_ctorTable[0], 1);
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&text_shallowCopyMethod[0])));
-    temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
-    temp_v0_2 = (T_2b99e0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
+    temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->_metaFields, (int)temp_v0);
+    temp_v0_2 = (igMetaField *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
     FUN_002d4e40((void **)temp_v0_2, 2);
-    temp_v0_2->f28 = (int)(&DAT_00585918[0]);
+    temp_v0_2->_externalEnumStorage = (int)(&DAT_00585918[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
-    temp_v0_2->references = temp_v0_2->references - 1;
-    if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
+    temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
+    if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(temp_v0_2);
     }
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, (const char *)&text_destruct[0])));
-    temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->f40, (int)temp_v0);
-    temp_v0_4 = (T_2b99e0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
+    temp_s3 = ObjectPointerList_FindIndex((char *)temp_s1->_metaFields, (int)temp_v0);
+    temp_v0_4 = (igMetaField *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
     FUN_002d3890((void **)temp_v0_4, 1);
-    temp_v0_4->f28 = (int)(&DAT_00585920[0]);
+    temp_v0_4->_externalEnumStorage = (int)(&DAT_00585920[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_4);
-    temp_v0_4->references = temp_v0_4->references - 1;
-    if (((unsigned long long)(long long)temp_v0_4->references & 0x7fffffULL) == 0) {
+    temp_v0_4->_refCount = temp_v0_4->_refCount - 1;
+    if (((unsigned long long)(long long)temp_v0_4->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(temp_v0_4);
     }
     FUN_002d3890((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2))), 1);

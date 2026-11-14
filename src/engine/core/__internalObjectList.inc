@@ -9,8 +9,8 @@ void **InternalObjectList_Create(int allocator) {
         if (list != 0) {
             list = (void **)(((void **)InternalObjectList_Construct((PointerList *)list, 1)));
         }
-        ((DW4VC_44_0 *)(list))->vX();
-        ((DW4VC_36_1 *)(list))->vX((int)(0));
+        ((igObjectDispatchView *)(list))->vfunc_09();
+        ((igObjectDispatchView *)(list))->userConstruct((int)(0));
     }
     return list;
 }
@@ -88,7 +88,7 @@ void __internalObjectList_InitFields(void) {
     temp_s0 = (void *)(((void * *)g___internalObjectList_metaObject)[0]);
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s0, data)));
     temp_s1 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s0) + 40)), (int)temp_v0);
-    temp_v0_2 = (T_2c2900 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
+    temp_v0_2 = (T_2c2900 *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
     *(char *)((char *)(temp_v0_2) + 66) = 1;
     temp_v0_2->f28 = (int)(&DAT_005860d8[0]);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s0, temp_s1, (igMetaField *)temp_v0_2);

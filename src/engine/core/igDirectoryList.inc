@@ -14,10 +14,10 @@ igMetaObject *igDirectoryList_GetMetaObject(void)
 }
 
 int igDirectoryList_GetVTable(void) {
-    union U_2c71f0 u;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_005323c0[0];
-    return *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    igDirectoryList list;
+    igObject_InitHeader((ObjectHeader *)&list);
+    list._vtable = (int)&DAT_005323c0[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c7230(void)

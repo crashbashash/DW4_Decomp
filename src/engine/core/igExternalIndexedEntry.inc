@@ -7,19 +7,19 @@ igMetaObject *igExternalIndexedEntry_GetMetaObject(void)
 }
 
 int igExternalIndexedEntry_GetVTable(void) {
-    union U_2c5240 u;
+    igExternalIndexedEntry entry;
     int temp_s1;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.w[2] = 0;
-    u.w[0] = (int)(&DAT_005302b0[0]);
-    u.w[9] = 0;
-    u.w[11] = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&DAT_005302b0[0]);
-    FUN_0019c840(&u.w[11], -1);
-    FUN_0019c840(&u.w[9], -1);
-    FUN_0014f4e0(&u.w[0], 0);
+    igObject_InitHeader((ObjectHeader *)&entry);
+    entry._name = 0;
+    entry._vtable = (int)(&DAT_005302b0[0]);
+    entry._entryType = 0;
+    entry._objectType = 0;
+    temp_s1 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)(&DAT_005302b0[0]);
+    FUN_0019c840(&entry._objectType, -1);
+    FUN_0019c840(&entry._entryType, -1);
+    FUN_0014f4e0(&entry, 0);
     return temp_s1;
 }
 

@@ -5,7 +5,7 @@ void Gap__Core__igObjectRefMetaField__vfunc_12(int arg0) {
 
 void igObjectRefMetaField_InitDefaults(void **self) {
     Gap__Core__igObject__vfunc_09((int)self);
-    ((igObjectSlot33 *)self)->vfunc_33(0);
+    ((igMetaFieldView *)self)->SetDefault(0);
 }
 
 void igObjectRefMetaField_Assign(igObjectRefMetaField *field,void *object,igObject *value){
@@ -121,26 +121,26 @@ void Gap__Core__igObjectRefMetaField__vfunc_36(igObjectRefMetaField *self, char 
     }
 }
 
-void Gap__Core__igObjectRefMetaField__vfunc_38(M_303320 *arg0, int arg1, int arg2) {
+void Gap__Core__igObjectRefMetaField__vfunc_38(igObjectRefMetaField *arg0, int arg1, int arg2) {
     int temp_a0;
-    VC_84_1 *temp_a1;
-    R_303320 *temp_v0;
+    igObjectDispatchView *temp_a1;
+    igObject *temp_v0;
     int off;
 
-    off = arg0->f8;
+    off = arg0->_offset;
     temp_a0 = *(int *)(arg1 + off);
-    temp_a1 = *(VC_84_1 **)(arg2 + off);
+    temp_a1 = *(igObjectDispatchView **)(arg2 + off);
     if ((temp_a0 != 0) || (temp_a1 != 0)) {
         if ((temp_a0 != 0) && (temp_a1 != 0)) {
             FUN_00300770((ShallowObject *)temp_a0, (int)temp_a1);
             return;
         }
         if (temp_a0 == 0) {
-            temp_v0 = (R_303320 *)temp_a1->vX(0);
+            temp_v0 = (igObject *)temp_a1->cloneViaMetadata(0);
             igObjectRefMetaField_Assign((igObjectRefMetaField *)arg0, (void *)arg1, (igObject *)temp_v0);
-            if ((arg0->f53 == 0) && (temp_v0 != 0)) {
-                temp_v0->f4 = temp_v0->f4 - 1;
-                if (((unsigned long long) ((long long) temp_v0->f4 << 0x29) >> 0x29) == 0) {
+            if ((arg0->_destruct == 0) && (temp_v0 != 0)) {
+                temp_v0->_refCount = temp_v0->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)temp_v0->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(temp_v0);
                 }
             }
@@ -223,7 +223,7 @@ int Gap__Core__igObjectRefMetaField__vfunc_47(igObjectRefMetaField *self, int ob
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return igObject_IsAlikeShallow((V_2fef20 *)refA, (V_2fef20 *)refB);
+    return igObject_IsAlikeShallow((igObjectDispatchView *)refA, (igObjectDispatchView *)refB);
 }
 
 void *igObjectRefMetaField_Construct(igObjectRefMetaField *self, int extra1) {
@@ -258,18 +258,18 @@ void Gap__Core__igObjectRefMetaField__vfunc_02(void) {
     igRefMetaField_Destruct();
 }
 
-void FUN_00303cd0(Dir *self, int name, void *object) {
-    Obj_303cd0 *entry;
-    Obj_303cd0 *held;
+void FUN_00303cd0(igObjectStringMap *self, int name, void *object) {
+    igObject *entry;
+    igObject *held;
 
-    *(Obj_303cd0 **)&entry = (Obj_303cd0 *)(FUN_002be270(((int)igObject_GetAllocator((int)self))));
-    igNamedObject_SetName((N_2fecb0 *)entry, name);
-    ObjectList_AppendRetained((igObjectList *)self->names, (igObject *)entry);
-    ObjectList_AppendRetained((igObjectList *)self->objects, (igObject *)object);
+    *(igObject **)&entry = (igObject *)(FUN_002be270(((int)igObject_GetAllocator((int)self))));
+    igNamedObject_SetName((igNamedObject *)entry, name);
+    ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
+    ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
     held = entry;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
-        if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
+        if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(held);
         }
     }
@@ -286,7 +286,7 @@ int FUN_00303d70(void *arg0, int extra1) {
 }
 
 int FUN_00303dc0(FieldTable *table, int name) {
-    igObject *field = ((igObject *)igProperty_FindByName((struct L_3022c0 *)table->fields, (struct P_3022c0 *)g_propertyNameField[0], name));
+    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)table->fields, (igMetaField *)g_propertyNameField[0], name));
     if (field == 0) {
         return -1;
     }
@@ -317,33 +317,33 @@ int *FUN_00303e80(void *arg0, int arg1) {
     return &emptyString[0];
 }
 
-void FUN_00303ed0(Owner_303ed0 *o) {
-    List_303ed0 *l = o->a;
-    int n = l->count;
+void FUN_00303ed0(igObjectStringMap *o) {
+    igObjectList *l = (igObjectList *)o->_names;
+    int n = l->_count;
     int i;
     for (i = 0; i < n; i++) {
-        Obj_303ed0 *p = l->data[i];
+        igObject *p = ((igObject **)l->_data)[i];
         if (p) {
-            p->refs = p->refs - 1;
-            if ((((unsigned long long)(long long)p->refs) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+            p->_refCount = p->_refCount - 1;
+            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
         }
     }
-    { int m = l->count; for (i = 0; i < m; i++) l->data[i] = 0; }
-    l->count = 0;
-    l = o->b;
-    n = l->count;
+    { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
+    l->_count = 0;
+    l = (igObjectList *)o->_data;
+    n = l->_count;
     for (i = 0; i < n; i++) {
-        Obj_303ed0 *p = l->data[i];
+        igObject *p = ((igObject **)l->_data)[i];
         if (p) {
-            p->refs = p->refs - 1;
-            if ((((unsigned long long)(long long)p->refs) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
+            p->_refCount = p->_refCount - 1;
+            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((void *)p);
         }
     }
-    { int m = l->count; for (i = 0; i < m; i++) l->data[i] = 0; }
-    l->count = 0;
+    { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
+    l->_count = 0;
 }
 
-void FUN_00304030(S_304030 *arg0, int arg1) {
+void FUN_00304030(igObjectStringMap *arg0, int arg1) {
     /*D*/
     igObject *o;
     igObjectList *l2;
@@ -361,7 +361,7 @@ void FUN_00304030(S_304030 *arg0, int arg1) {
     int a4;
     /*E*/
     idx = FUN_00303e50((void *)arg0);
-    l1 = arg0->l12;
+    l1 = (igObjectList *)arg0->_data;
     s4 = 4 * idx;
     s6 = ((igObject **)((char *)l1->_data + s4 - 4))[0];
     if (s6) { s6->_refCount = 1 + (int)s6->_refCount; }
@@ -369,63 +369,63 @@ void FUN_00304030(S_304030 *arg0, int arg1) {
     o = ((igObject **)((char *)l1->_data + a4))[0];
     REL(o)
     if (l1->_count && arg1 >= 0 && arg1 < l1->_count) { ((igObject **)((char *)l1->_data + a4))[0] = s6; }
-    l2 = arg0->l12;
+    l2 = (igObjectList *)arg0->_data;
     o = ((igObject **)(s4 + (char *)l2->_data - 4))[0];
     REL(o)
     if (l2->_count && idx - 1 >= 0 && idx - 1 < l2->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l2->_data) - 4))[0] = 0; }
-    l3 = arg0->l12;
+    l3 = (igObjectList *)arg0->_data;
     c1 = l3->_count - 1;
     o = ((igObject **)(l3->_data + c1 * 4))[0];
     REL(o)
-    List_RemoveWordAt((L_2d6cf0 *)l3, c1);
+    List_RemoveWordAt((igDataList *)l3, c1);
     ((igObject **)(l3->_data + 4 * l3->_count))[0] = 0;
-    l4 = arg0->l8;
+    l4 = (igObjectList *)arg0->_names;
     s6b = ((igObject **)(s4 + (char *)l4->_data - 4))[0];
     if (s6b) { s6b->_refCount = 1 + (int)s6b->_refCount; }
     o = ((igObject **)((char *)l4->_data + a4))[0];
     REL(o)
     if (l4->_count && arg1 >= 0 && arg1 < l4->_count) { ((igObject **)(a4 + (char *)l4->_data))[0] = s6b; }
-    l5 = arg0->l8;
+    l5 = (igObjectList *)arg0->_names;
     o = ((igObject **)((char *)l5->_data + s4 - 4))[0];
     REL(o)
     if (l5->_count && idx - 1 >= 0 && idx - 1 < l5->_count) { ((igObject **)((char *)(s4 + (int)(igObject **)l5->_data) - 4))[0] = 0; }
-    l6 = arg0->l8;
+    l6 = (igObjectList *)arg0->_names;
     c2 = l6->_count - 1;
     o = ((igObject **)(l6->_data + 4 * c2))[0];
     REL(o)
-    List_RemoveWordAt((L_2d6cf0 *)l6, c2);
+    List_RemoveWordAt((igDataList *)l6, c2);
     ((igObject **)(l6->_data + l6->_count * 4))[0] = 0;
 }
 
-void FUN_00304350(Q_304350 *arg0) {
-    Q_304350 *p;
+void FUN_00304350(igPsx2FileView *arg0) {
+    igPsx2FileView *p;
 
     p = DAT_005871b0[0];
     if (p != 0) {
-        p->f4 -= 1;
-        if ((p->f4 & 0x7fffff) == 0) {
+        p->_refCount -= 1;
+        if ((p->_refCount & 0x7fffff) == 0) {
             igObject_Destroy(p);
         }
     }
     if (arg0 != 0) {
-        arg0->f4 += 1;
+        arg0->_refCount += 1;
     }
     DAT_005871b0[0] = arg0;
 }
 
-void FUN_003043c0(R_3043c0 *arg0) {
-    R_3043c0 *p;
+void FUN_003043c0(igPsx2FileView *arg0) {
+    igPsx2FileView *p;
     int rc;
     p = DAT_005871b8[0];
     if (p != 0) {
-        rc = p->f4 - 1;
-        p->f4 = rc;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+        rc = p->_refCount - 1;
+        p->_refCount = rc;
+        if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(p);
         }
     }
     if (arg0 != 0) {
-        arg0->f4 = arg0->f4 + 1;
+        arg0->_refCount = arg0->_refCount + 1;
     }
     DAT_005871b8[0] = arg0;
 }
@@ -441,13 +441,13 @@ void FUN_003044a0(const char *arg0, int arg1) {
     char sp10[4096];
     int var_v0;
 
-    if ((((VC_3044a0 * *)DAT_005871b0)[0] != 0) && (GPR_00554998 != 0)) {
+    if ((DAT_005871b0[0] != 0) && (GPR_00554998 != 0)) {
         var_v0 = vsnprintf(&sp10[0], 0x1000, arg0, arg1);
         if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
             sp10[4095] = 0;
             var_v0 = 0x1000;
         }
-        ((VC_3044a0 * *)DAT_005871b0)[0]->vX(&sp10[0], var_v0, 1);
+        DAT_005871b0[0]->vfunc_29(&sp10[0], var_v0, 1);
         if (GPR_0055499c != 0) {
             printf(&DAT_004f95a0[0], &sp10[0]);
         }
@@ -466,13 +466,13 @@ int FUN_003045c0(int arg0, int arg1) {
     char buf[4096];
     int var_v0;
 
-    if ((((Out * *)DAT_005871b8)[0] != 0) && (GPR_005549a4 != 0)) {
+    if ((DAT_005871b8[0] != 0) && (GPR_005549a4 != 0)) {
         var_v0 = vsnprintf(buf, 0x1000, arg0, arg1);
         if ((var_v0 < 0) || (var_v0 >= 0x1000)) {
             buf[4095] = 0;
             var_v0 = 0x1000;
         }
-        ((Out * *)DAT_005871b8)[0]->vX(buf, var_v0, 1);
+        DAT_005871b8[0]->vfunc_29(buf, var_v0, 1);
         if (GPR_005549a8 != 0) {
             fprintf(*(int *)((char *)(((int *)_impure_ptr)[0]) + 12), &DAT_004f95a0[0], buf);
         }
@@ -482,15 +482,15 @@ int FUN_003045c0(int arg0, int arg1) {
 }
 
 void FUN_00304680(void) {
-    if (((void ** *)DAT_005871b0)[0] != 0) {
-        ((DW4VC_128_0 *)(((void ** *)DAT_005871b0)[0]))->vX();
+    if (DAT_005871b0[0] != 0) {
+        DAT_005871b0[0]->vfunc_32();
     }
     fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 8));
 }
 
 void FUN_003046d0(void) {
-    if (((void ** *)DAT_005871b8)[0] != 0) {
-        ((DW4VC_128_0 *)(((void ** *)DAT_005871b8)[0]))->vX();
+    if (DAT_005871b8[0] != 0) {
+        DAT_005871b8[0]->vfunc_32();
     }
     fflush(*(int *)((char *)(((void * *)_impure_ptr)[0]) + 12));
 }
@@ -501,7 +501,7 @@ void FUN_00304720(igPluginHelper *helper, int name, int location, int locationTy
     igPluginRepository *target;
     char *old;
     igSmartPointer<igPluginRepository> repository(((igPluginRepository *)FUN_002bc930(((int)igObject_GetAllocator((int)helper)))));
-    igNamedObject_SetName((N_2fecb0 *)repository.p, name);
+    igNamedObject_SetName((igNamedObject *)repository.p, name);
     target = repository.p;
     if (g_stringPool[0] == 0) {
         pool = ((int)StringPool_Allocate(0x10));

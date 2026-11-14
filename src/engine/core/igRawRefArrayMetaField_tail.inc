@@ -2,10 +2,10 @@ void Gap__Core__igRawRefArrayMetaField__vfunc_52(igRawRefArrayMetaField *self, i
     void **descriptor;
 
     descriptor = (void **)(((void **)igRawRefMetaField_GetDefaultDescriptor()));
-    ((DW4VC_208_2 *)(descriptor))->vX((int)(item), (int)(count * self->_num));
+    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
-int Gap__Core__igRawRefArrayMetaField__vfunc_51(F_305210 *self, int src, void *dst, int a3, int a4) {
+int Gap__Core__igRawRefArrayMetaField__vfunc_51(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
     int s;
     int d;
     int start;
@@ -21,7 +21,7 @@ int Gap__Core__igRawRefArrayMetaField__vfunc_51(F_305210 *self, int src, void *d
     return d - start;
 }
 
-int Gap__Core__igRawRefArrayMetaField__vfunc_50(F_3052b0 *self, int src, void *dst, int a3, int a4) {
+int Gap__Core__igRawRefArrayMetaField__vfunc_50(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
     int s;
     int d;
     int start;

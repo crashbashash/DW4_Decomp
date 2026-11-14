@@ -9,8 +9,8 @@ void **FUN_002c5fb0(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_002dc8c0((int **)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -38,7 +38,7 @@ igMetaObject *igEnumMetaField_GetMetaObject(void)
 }
 
 int igEnumMetaField_GetVTable(void) {
-    Obj_2c6120 o;
+    igEnumMetaField o;
     int *temp_a1;
     int temp_s0;
     int temp_v0;
@@ -46,9 +46,9 @@ int igEnumMetaField_GetVTable(void) {
 
     FUN_002dc900((int **)&o);
     temp_s0 = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        temp_v1 = (void *)(o.str);
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        temp_v1 = (void *)((char *)o._fieldName);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;

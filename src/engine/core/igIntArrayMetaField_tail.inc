@@ -2,7 +2,7 @@ void Gap__Core__igIntArrayMetaField__vfunc_52(igIntArrayMetaField *self, int pas
     void **elementDescriptor;
 
     elementDescriptor = (void **)(((void **)igIntMetaField_GetDefaultDescriptor()));
-    ((DW4VC_208_2 *)(elementDescriptor))->vX((int)(passThrough), (int)(perElement * self->_num));
+    ((igMetaFieldView *)(elementDescriptor))->SwapBytes((void *)(passThrough), (int)(perElement * self->_num));
 }
 
 int Gap__Core__igIntArrayMetaField__vfunc_25(void *arg0) {
@@ -11,11 +11,11 @@ int Gap__Core__igIntArrayMetaField__vfunc_25(void *arg0) {
 
 void FUN_002ea290(void **arg0, int arg1) {
     int *p;
-    S_2ea290 *o = (S_2ea290 *)arg0;
-    ((DW4VC_140_1 *)arg0)->vX(0);
+    igIntArrayMetaField *o = (igIntArrayMetaField *)arg0;
+    ((igMetaFieldView *)arg0)->SetDefault(0);
     int i;
-    p = o->arr;
-    for (i = 0; i < o->n; i++) {
+    p = (int *)o->_default;
+    for (i = 0; i < o->_num; i++) {
         p[i] = arg1;
     }
 }

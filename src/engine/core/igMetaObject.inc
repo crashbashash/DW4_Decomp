@@ -9,8 +9,8 @@ void **igMetaObject_Create(int allocator) {
         if (metaObject != 0) {
             metaObject = (void **)(((void **)igMetaObject_Construct((igMetaObject *)metaObject, 1)));
         }
-        ((igObjectSlot09 *)(metaObject))->vfunc_09();
-        ((igObjectSlot07 *)(metaObject))->vfunc_07((int)(0));
+        ((igObjectDispatchView *)(metaObject))->vfunc_09();
+        ((igObjectDispatchView *)(metaObject))->userConstruct((int)(0));
     }
     return metaObject;
 }
@@ -45,7 +45,7 @@ igMetaObject *igMetaObject_GetMetaObject(void)
 }
 
 int igMetaObject_GetVTable(void) {
-    union U_2be6b0 u;
+    igMetaObject u;
     int *temp_a1;
     int *temp_a1_2;
     int temp_s0;
@@ -54,11 +54,11 @@ int igMetaObject_GetVTable(void) {
     void *temp_v1;
     void *temp_v1_2;
 
-    igMetaObject_Init((igMetaObject *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&g_igMetaObject_vtable[0]);
-    if (&u.p[24] != 0) {
-        temp_v1 = (void *)(u.p[24]);
+    igMetaObject_Init((igMetaObject *)&u);
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaObject_vtable[0];
+    if ((void **)&u._poolName != 0) {
+        temp_v1 = (void *)((void *)u._poolName);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
@@ -68,8 +68,8 @@ int igMetaObject_GetVTable(void) {
             }
         }
     }
-    if (&u.p[7] != 0) {
-        temp_v1_2 = (void *)(u.p[7]);
+    if ((void **)&u._name != 0) {
+        temp_v1_2 = (void *)((void *)u._name);
         if (temp_v1_2 != 0) {
             temp_a1_2 = (int *)((char *)temp_v1_2 - 8);
             temp_v0_2 = *(int *)((char *)(temp_v1_2) - 4) - 1;

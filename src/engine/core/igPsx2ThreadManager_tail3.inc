@@ -10,51 +10,49 @@ int Gap__Core__igPsx2ThreadManager__vfunc_23(igPsx2ThreadManager *arg0) {
     return temp_s1;
 }
 
-void FUN_003304e0(void **arg0, igPsx2Thread *arg1) {
-    DW4SR4 sp3C;
-    void **temp_a1;
+void FUN_003304e0(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
+    igResult signalled;
+    igSemaphoreView *done;
 
-    ((DW4VC_100_0 *)(arg0))->vX();
-    int *tid = &arg1->_threadID;
+    manager->removeThread(thread);
+    int *tid = &thread->_threadID;
     ChangeThreadPriority(*tid, 1);
     *tid = -1;
-    temp_a1 = (void **)(arg1->_threadDoneSema);
-    sp3C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
-    arg1->_refCount = (int)((int) (arg1->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) arg1->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(arg1);
+    done = thread->_threadDoneSema;
+    signalled = done->signal();
+    thread->_refCount = (int)((int) (thread->_refCount - 1));
+    if (((unsigned long long) ((long long) (int) thread->_refCount << 0x29) >> 0x29) == 0) {
+        igObject_Destroy(thread);
     }
     ExitDeleteThread();
 }
 
-static inline int count_of_330570(const struct List_330570 *list) { return list->count; }
-
-void Gap__Core__igPsx2ThreadManager__vfunc_24(struct Mgr_330570 *arg0, struct Obj_330570 *arg1) {
-    int prio; struct List_330570 *lst; int n; int id;
-    arg1->refs = arg1->refs + 1;
+void Gap__Core__igPsx2ThreadManager__vfunc_24(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
+    int prio; igTDataList<igPsx2ThreadView *> *lst; int n; int id;
+    thread->_refCount = thread->_refCount + 1;
     id = GetThreadId();
     prio = ChangeThreadPriority(id, 1);
-    lst = arg0->list;
-    n = lst->count;
-    if (n < lst->cap) {
-        lst->count = count_of_330570(lst) + 1;
+    lst = self->_threadList;
+    n = lst->_count;
+    if (n < lst->_capacity) {
+        lst->_count = lst->count() + 1;
     } else {
         List_Resize(lst, n + 1, 4);
     }
-    lst->items[n] = (int)arg1;
+    lst->_data[n] = thread;
     ChangeThreadPriority(id, prio);
 }
 
-void Gap__Core__igPsx2ThreadManager__vfunc_25(Psx2ThreadTable *self, ManagedThread *thread) {
+void Gap__Core__igPsx2ThreadManager__vfunc_25(igPsx2ThreadManagerView *self, igPsx2ThreadView *thread) {
     int i;
     int old;
-    igTDataList<ManagedThread *> *list;
+    igTDataList<igPsx2ThreadView *> *list;
     int tid;
     tid = GetThreadId();
     old = ChangeThreadPriority(tid, 1);
-    i = (list = self->_threads)->find(thread);
+    i = (list = self->_threadList)->find(thread);
     if (i >= 0) {
-        List_RemoveWordAt((L_2d6cf0 *)list, i);
+        List_RemoveWordAt((igDataList *)list, i);
     }
     ChangeThreadPriority(tid, old);
 }

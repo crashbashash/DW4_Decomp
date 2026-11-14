@@ -39,7 +39,7 @@ void FUN_0030e750(void **arg0, char arg1) {
     char sp1F;
 
     sp1F = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp1F));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
 }
 
 int Gap__Core__igUnsignedCharMetaField__vfunc_27(void) {

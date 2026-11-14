@@ -7,7 +7,7 @@ igMetaObject *igMemoryDescriptorMetaField_GetMetaObject(void)
 }
 
 int igMemoryDescriptorMetaField_GetVTable(void) {
-    union U_2ce600 u;
+    igMemoryDescriptorMetaField u;
     int temp_s0;
     S_ref *q0;
     char *q1;
@@ -15,13 +15,13 @@ int igMemoryDescriptorMetaField_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    igMetaField_Init((igMetaField *)u.b);
-    u.vt = (int)&DAT_00531740[0];
-    q0 = (S_ref *)&u.b[52];
+    igMetaField_Init((igMetaField *)&u);
+    u._vtable = (int)&DAT_00531740[0];
+    q0 = (S_ref *)&u._fieldList;
     *(int *)q0 = 0;
-    u.vt = (int)&DAT_00530d90[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00531740[0];
+    u._vtable = (int)&DAT_00530d90[0];
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&DAT_00531740[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -31,8 +31,8 @@ int igMemoryDescriptorMetaField_GetVTable(void) {
             }
         }
     }
-    q1 = &u.b[12];
-    u.vt = (int)&g_igMetaField_vtable[0];
+    q1 = (char *)&u._fieldName;
+    u._vtable = (int)&g_igMetaField_vtable[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
         if (temp_v1 != 0) {

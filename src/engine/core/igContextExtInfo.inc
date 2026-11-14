@@ -12,22 +12,22 @@ igMetaObject *igContextExtInfo_GetMetaObject(void)
 }
 
 int igContextExtInfo_GetVTable(void) {
-    union U_2cb6f0 u;
+    igContextExtInfo info;
     int temp_s0;
-    char *q0;
+    int *q0;
     S_ref *q1;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_005318b0[0];
-    q1 = (S_ref *)&u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&info);
+    info._vtable = (int)&DAT_005318b0[0];
+    q1 = (S_ref *)&info._pMeta;
     *(int *)q1 = 0;
-    q0 = &u.b[12];
+    q0 = &info._pName;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_005318b0[0];
+    temp_s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&DAT_005318b0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {

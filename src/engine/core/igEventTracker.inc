@@ -23,36 +23,36 @@ done:
 }
 
 int igEventTracker_GetVTable(void) {
-    struct Obj_2c5860 obj;
+    igEventTracker tracker;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00530420[0];
-    obj.w2 = 0;
-    obj.w12 = 0;
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.w20 = 0;
-    obj.w21 = 0;
-    obj.w23 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_00530420[0];
-    FUN_002ba7f0((ObjectRefWord *)&obj.w23, -1);
-    FUN_002b86c0((void **)&obj.w21, -1);
-    FUN_002b8f10((R_2b8f10 **)&obj.w20, -1);
-    FUN_002ba870((void **)&obj.w19, -1);
-    FUN_002ba8f0((void **)&obj.w18, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w17, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w16, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w15, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w14, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w13, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.w12, -1);
-    FUN_002ba970((Ref **)&obj.w2, -1);
+    igObject_InitHeader((struct ObjectHeader *)&tracker);
+    tracker._vtable = (int)&DAT_00530420[0];
+    tracker._lock = 0;
+    tracker._names = 0;
+    tracker._groups = 0;
+    tracker._classNames = 0;
+    tracker._memberNames = 0;
+    tracker._annotations = 0;
+    tracker._sourceFileNames = 0;
+    tracker._callStacks = 0;
+    tracker._locations = 0;
+    tracker._eventRecords = 0;
+    tracker._hashIndex = 0;
+    tracker._callStackTracer = 0;
+    t = *(int *)((char *)&tracker + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    tracker._vtable = (int)&DAT_00530420[0];
+    FUN_002ba7f0((ObjectRefWord *)&tracker._callStackTracer, -1);
+    FUN_002b86c0((void **)&tracker._hashIndex, -1);
+    FUN_002b8f10((igObject **)&tracker._eventRecords, -1);
+    FUN_002ba870((void **)&tracker._locations, -1);
+    FUN_002ba8f0((void **)&tracker._callStacks, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._sourceFileNames, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._annotations, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._memberNames, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._classNames, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._groups, -1);
+    FUN_002b8740((ObjectRefWord *)&tracker._names, -1);
+    FUN_002ba970((Ref **)&tracker._lock, -1);
     return t;
 }
 

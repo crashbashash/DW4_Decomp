@@ -26,19 +26,19 @@ igMetaObject *igDirEntry_GetMetaObject(void)
 }
 
 int igDirEntry_GetVTable(void) {
-    union U_2c7870 u;
+    igDirEntry entry;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    ps = &u.b[8];
+    igObject_InitHeader((ObjectHeader *)&entry);
+    ps = (char *)&entry._name;
     *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00530900[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    entry._vtable = (int)&g_igNamedObject_vtable[0];
+    entry._vtable = (int)&DAT_00530900[0];
+    temp_s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {
@@ -93,11 +93,11 @@ void igDirEntry_InitFields(void) {
     FUN_002ea4b0((void **)temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    FUN_002dc7a0((igEnumMetaFieldView *)temp_v0_2, (const int *)&DAT_004c12d0[0]);
+    FUN_002dc7a0((igMetaFieldView *)temp_v0_2, (const int *)&DAT_004c12d0[0]);
     ((igEnumMetaField *)temp_v0_2)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_002c7780);
     temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    FUN_002dc7a0((igEnumMetaFieldView *)temp_v0_3, (const int *)&DAT_004c12d8[0]);
+    FUN_002dc7a0((igMetaFieldView *)temp_v0_3, (const int *)&DAT_004c12d8[0]);
     ((igEnumMetaField *)temp_v0_3)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_002c7720);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3))) + 38) = 0;

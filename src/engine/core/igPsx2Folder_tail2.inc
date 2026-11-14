@@ -251,10 +251,10 @@ void FUN_0032d220(void) {
             setName(second.p, DAT_00587358[0]);
         }
         if (first->open(text_stdout_txt, (const char *)DAT_004f9c50) != 0) {
-            FUN_00304350((Q_304350 *)first.p);
+            FUN_00304350(first.p);
         }
         if (second->open(text_stderr_txt, (const char *)DAT_004f9c50) != 0) {
-            FUN_003043c0((R_3043c0 *)second.p);
+            FUN_003043c0(second.p);
         }
     }
 }

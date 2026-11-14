@@ -12,18 +12,18 @@ igMetaObject *igFloatMetaField_GetMetaObject(void)
 }
 
 int igFloatMetaField_GetVTable(void) {
-    Obj_2c4680 o;
+    igFloatMetaField o;
     int r;
     int *temp_a1;
     int temp_v0;
     void *temp_v1;
 
     igMetaField_Init((igMetaField *)&o);
-    o.vt = &DAT_0052ff50[0];
+    o._vtable = (int)&DAT_0052ff50[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        temp_v1 = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        temp_v1 = (char *)o._fieldName;
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;

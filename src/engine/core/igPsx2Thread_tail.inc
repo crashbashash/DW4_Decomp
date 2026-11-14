@@ -7,20 +7,20 @@ igMetaObject *igPsx2Thread_GetMetaObject(void)
 }
 
 int igPsx2Thread_GetVTable(void) {
-    union U_2cf460 u;
+    igPsx2Thread thread;
     int t;
     char *o;
     int *a1;
     int v0;
     S_ref *p0, *p1;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    p0 = (S_ref *)&u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&thread);
+    p0 = (S_ref *)&thread._name;
     *(int *)p0 = 0;
-    u.vt = (int)&DAT_0052d7c0[0];
-    p1 = (S_ref *)&u.b[48];
+    thread._vtable = (int)&DAT_0052d7c0[0];
+    p1 = (S_ref *)&thread._threadDoneSema;
     *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052d7c0[0];
+    t = *(int *)((char *)&thread + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    thread._vtable = (int)&DAT_0052d7c0[0];
     if (p1 != 0) {
         p1 = *(S_ref **)p1;
         if (p1 != 0) {
@@ -30,7 +30,7 @@ int igPsx2Thread_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    thread._vtable = (int)&g_igNamedObject_vtable[0];
     if (p0 != 0) {
         o = *(char **)p0;
         if (o != 0) {

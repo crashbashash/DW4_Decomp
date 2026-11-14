@@ -12,17 +12,17 @@ igMetaObject *igMemoryDictionary_GetMetaObject(void)
 }
 
 int igMemoryDictionary_GetVTable(void) {
-    struct F_2c1100 f;
+    igMemoryDictionary dictionary;
     int **pr;
     int temp_s0;
     int *o;
 
-    igObject_InitHeader((struct ObjectHeader *)&f);
-    f.vt = &DAT_0052f910[0];
-    pr = &f.ref;
+    igObject_InitHeader((struct ObjectHeader *)&dictionary);
+    dictionary._vtable = (int)&DAT_0052f910[0];
+    pr = (int **)&dictionary._memoryEntries;
     *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    f.vt = &DAT_0052f910[0];
+    temp_s0 = *(int *)((char *)&dictionary + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    dictionary._vtable = (int)&DAT_0052f910[0];
     if (pr != 0) {
         if (*pr != 0) {
             o = *pr;

@@ -9,8 +9,8 @@ void **FUN_002bba00(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_00305400((int **)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -45,7 +45,7 @@ igMetaObject *igRawRefMetaField_GetMetaObject(void)
 }
 
 int igRawRefMetaField_GetVTable(void) {
-    Obj_2bbbc0 o;
+    igRawRefMetaField o;
     int r;
     int *temp_a1;
     int temp_v0;
@@ -53,9 +53,9 @@ int igRawRefMetaField_GetVTable(void) {
 
     FUN_00305440((int **)&o);
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        temp_v1 = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        temp_v1 = (char *)o._fieldName;
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;

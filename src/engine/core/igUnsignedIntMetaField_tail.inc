@@ -64,7 +64,7 @@ void FUN_0030e9b0(void **arg0, int arg1) {
     int sp1C;
 
     sp1C = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp1C));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
 }
 
 int Gap__Core__igUnsignedIntMetaField__vfunc_27(void) {

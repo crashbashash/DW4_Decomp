@@ -7,13 +7,13 @@ igMetaObject *igMemoryRefArrayMetaField_GetMetaObject(void)
 }
 
 int igMemoryRefArrayMetaField_GetVTable(void) {
-    struct Obj_2bfaf0 obj;
+    igMemoryRefArrayMetaField obj;
     int temp_s0;
 
     igMemoryRefMetaField_Init((igMemoryRefMetaField *)&obj);
-    obj.vt = &DAT_0052f330[0];
+    obj._vtable = (int)&DAT_0052f330[0];
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052f330[0];
+    obj._vtable = (int)&DAT_0052f330[0];
     FUN_002bf4c0((igMemoryRefMetaField *)&obj, (long long)0);
     return temp_s0;
 }
@@ -60,19 +60,19 @@ void igMemoryRefArrayMetaField_InitFields(void) {
 }
 
 void FUN_002bfc90(void) {
-    X *temp_s0;
-    X *t;
+    igMemoryRefArrayMetaField *temp_s0;
+    igMemoryRefArrayMetaField *t;
     if (DAT_00585de8[0] == 0) {
-        DAT_00585de8[0] = ((X *)igMetaObject_CreateInstance((CreateMeta *)g_igMemoryRefArrayMetaField_metaObject_00585de0[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        DAT_00585de8[0] = ((igMemoryRefArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igMemoryRefArrayMetaField_metaObject_00585de0[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = DAT_00585de8[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((Y *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
             t = DAT_00585de8[0];
-            t->f4 = t->f4 - 1;
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
+            t->_refCount = t->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(t);
             }
-            DAT_00585de8[0]->f18 = ((Y *)FUN_002fc250())->f12 - 1;
+            DAT_00585de8[0]->_internalIndex = ((PointerList *)FUN_002fc250())->count - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)DAT_00585de8[0]);
         }
     }

@@ -12,17 +12,17 @@ igMetaObject *igIntArrayMetaField_GetMetaObject(void)
 }
 
 int igIntArrayMetaField_GetVTable(void) {
-    struct Obj_2c3160 obj;
+    igIntArrayMetaField obj;
     char *o;
     int *a1;
     int v0;
     int t;
     igIntMetaField_Init((igMetaField *)&obj);
-    obj.vt = &DAT_0052fce0[0];
+    obj._vtable = (int)&DAT_0052fce0[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &g_igMetaField_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
+    obj._vtable = (int)&g_igMetaField_vtable[0];
+    if (&obj._fieldName != 0) {
+        o = (char *)obj._fieldName;
         if (o != 0) {
             a1 = (int *)(o - 8);
             v0 = *(int *)(o - 4) - 1;
@@ -77,20 +77,20 @@ void igIntArrayMetaField_InitFields(void) {
 }
 
 void FUN_002c3330(void) {
-    struct R *temp_s0;
-    struct R *g;
+    igIntArrayMetaField *temp_s0;
+    igIntArrayMetaField *g;
 
     if (DAT_00586110[0] == 0) {
-        DAT_00586110[0] = (R *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        DAT_00586110[0] = (igIntArrayMetaField *)(((void *)igMetaObject_CreateInstance((CreateMeta *)g_igIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
         temp_s0 = DAT_00586110[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((struct M *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
             g = DAT_00586110[0];
-            g->rc = g->rc - 1;
-            if ((g->rc & 0x7FFFFF) == 0) {
+            g->_refCount = g->_refCount - 1;
+            if ((g->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(g);
             }
-            DAT_00586110[0]->s18 = ((struct M *)FUN_002fc250())->f12 - 1;
+            DAT_00586110[0]->_internalIndex = ((PointerList *)FUN_002fc250())->count - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)DAT_00586110[0]);
         }
     }

@@ -19,22 +19,22 @@ igMetaObject *igRegistry_GetMetaObject(void)
 }
 
 int igRegistry_GetVTable(void) {
-    union U_2bb0d0 u;
+    igRegistry registry;
     int temp_s0;
     S_ref *q0;
     S_ref *q1;
     S_ref *q2;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_0052ebf0[0];
-    q2 = (S_ref *)&u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&registry);
+    registry._vtable = (int)&DAT_0052ebf0[0];
+    q2 = (S_ref *)&registry._valueTable;
     *(int *)q2 = 0;
-    q1 = (S_ref *)&u.b[12];
+    q1 = (S_ref *)&registry._registryFile;
     *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[16];
+    q0 = (S_ref *)&registry._additionalSectionNames;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052ebf0[0];
+    temp_s0 = *(int *)((char *)&registry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    registry._vtable = (int)&DAT_0052ebf0[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {

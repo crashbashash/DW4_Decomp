@@ -28,7 +28,7 @@ igObject *igObject_ConstructHeader(igObject *self) {
     if (*g_objectSystem[0] != 0) {
         owner = (void **)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))));
         if (owner != 0) {
-            *(unsigned char *)((char *)(self) + 7) = ((DW4VC_364_0 *)(owner))->vX();
+            *(unsigned char *)((char *)(self) + 7) = ((igMemoryPoolView *)(owner))->GetPoolIndex();
         } else {
             *(unsigned char *)((char *)(self) + 7) = 0;
         }
@@ -187,8 +187,8 @@ void igObject_RegisterInstance(void **arg0, void *arg1) {
     }
     ((DW4VC_12_1 *)(arg0))->vX((int)(0));
     ((DW4VC_52_1 *)(arg0))->vX((int)(0));
-    ((DW4VC_36_1 *)(arg0))->vX((int)(1));
-    temp_v0 = (void *)(((DW4VC_88_0 *)(arg0))->vX());
+    ((igObjectDispatchView *)(arg0))->userConstruct((int)(1));
+    temp_v0 = (void *)(((igObjectDispatchView *)(arg0))->getMeta());
     if (temp_v0 != 0) {
         *(int *)((char *)(temp_v0) + 44) = (int)((int) (*(int *)((char *)(temp_v0) + 44) + 1));
         temp_a0 = *(int *)((char *)(temp_v0) + 48);
@@ -347,9 +347,9 @@ void igObject_Destroy(void *input) {
     if (g_objectSystem[0]) {
         igObjectDispatchView *object = (igObjectDispatchView *)input;
         if (!*g_objectSystem[0]) {
-            object->slot_08();
-            object->slot_10();
-            object->slot_00();
+            object->userDestruct();
+            object->vfunc_10();
+            object->vfunc_00();
             Memory_FreeBuffer(object);
             return;
         }
@@ -357,9 +357,9 @@ void igObject_Destroy(void *input) {
         type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
         void *instances = (void *)type->_instances;
         if (instances) ObjectPointerList_EraseAt((PointerList *)instances, ObjectPointerList_FindIndex((char *)instances, (int)object));
-        object->slot_16();
-        object->slot_08();
-        object->slot_10();
+        object->vfunc_16();
+        object->userDestruct();
+        object->vfunc_10();
         igObject_DestructFieldValues((int *)object);
         igObject_ClearFieldValues((int *)object);
         Memory_FreeBuffer(igObject_GetAllocationBase(object));
@@ -664,23 +664,23 @@ int igObject_IsAlikeDeep(DeepObject *a, DeepObject *b) {
     return a->v5(b);
 }
 
-int igObject_IsAlikeShallow(V_2fef20 *arg0, V_2fef20 *arg1) {
+int igObject_IsAlikeShallow(igObjectDispatchView *arg0, igObjectDispatchView *arg1) {
     W_2fef20 *meta;
     int i;
     M_2fef20 *fields;
     int count;
-    meta = (W_2fef20 *)((DW4VC_88_0 *)arg1)->vX();
-    if (meta != (W_2fef20 *)((DW4VC_88_0 *)arg0)->vX()) {
+    meta = (W_2fef20 *)((igObjectDispatchView *)arg1)->getMeta();
+    if (meta != (W_2fef20 *)((igObjectDispatchView *)arg0)->getMeta()) {
         return 0;
     }
-    fields = ((W_2fef20 *)((DW4VC_88_0 *)arg0)->vX())->f40;
+    fields = ((W_2fef20 *)((igObjectDispatchView *)arg0)->getMeta())->f40;
     count = fields->f12;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
         if (igMetaField_IsAlikeShallow(fields->f8[i], (int)arg0, (int)arg1) == 0) {
             return 0;
         }
     }
-    return arg0->v32(arg1);
+    return arg0->vfunc_06(arg1);
 }
 
 int igObject_IsAlikeExactly(void *arg0, void *arg1) {
@@ -689,11 +689,11 @@ int igObject_IsAlikeExactly(void *arg0, void *arg1) {
     T_2fef20 *fields;
     int count;
 
-    meta = ((DW4VC_88_0 *)arg1)->vX();
-    if (meta != ((DW4VC_88_0 *)arg0)->vX()) {
+    meta = (int)((igObjectDispatchView *)arg1)->getMeta();
+    if (meta != (int)((igObjectDispatchView *)arg0)->getMeta()) {
         return 0;
     }
-    fields = ((K_2fef20 *)((DW4VC_88_0 *)arg0)->vX())->f40;
+    fields = ((K_2fef20 *)((igObjectDispatchView *)arg0)->getMeta())->f40;
     count = fields->f12;
     for (i = igMetaObject_GetFieldCount(g_igObject_metaObject[0]); i < count; i++) {
         if (igMetaField_IsAlikeExactly(fields->f8[i], (int)arg0, (int)arg1) == 0) {
@@ -740,7 +740,7 @@ int igObject_CloneViaMetadata(void **source, int copyMode) {
     int metaObject;
     int copy;
 
-    metaObject = ((DW4VC_88_0 *)(source))->vX();
+    metaObject = (int)((igObjectDispatchView *)(source))->getMeta();
     copy = igMetaObject_CreateInstance((CreateMeta *)metaObject, (MemoryPool *)(igObject_GetAllocator((int)source)));
     FUN_00300c00(copy, (int)source, copyMode);
     return copy;

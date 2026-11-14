@@ -47,17 +47,17 @@ var_v0 = g_useOwnerAllocator != 0 ? var_v0 : ((int)Memory_GetAllocatorBySelector
 int StringTable_Find(int arg0, int arg1) {
     int sp3C;
     int sp38;
-    DW4SR4 sp34;
-    DW4SR4 sp30;
+    igResult sp34;
+    igResult sp30;
 
     sp3C = 0;
     sp38 = 0;
     if (DAT_005871c8[0] != 0) {
-        sp34 = ((DW4VCSR_132_1_30c0c0 *)(DAT_005871c8[0]))->vX((int)(1));
+        sp34 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
     }
     StringTable_SearchRetained((struct StringTableSearchView *)arg0, arg1, &sp38, (unsigned int *)&sp3C);
     if (DAT_005871c8[0] != 0) {
-        sp30 = ((DW4VCSR_124_0 *)(DAT_005871c8[0]))->vX();
+        sp30 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
     }
     return sp38;
 }
@@ -65,11 +65,11 @@ int StringTable_Find(int arg0, int arg1) {
 void *StringTable_Register(int arg0, void *arg1, int arg2, int arg3) {
     int sp5C;
     int sp58;
-    DW4SR4 sp54;
-    DW4SR4 sp50;
+    igResult sp54;
+    igResult sp50;
 
     if (DAT_005871c8[0] != 0) {
-        sp54 = ((DW4VCSR_132_1_30c0c0 *)(DAT_005871c8[0]))->vX((int)(1));
+        sp54 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
     }
     *(int *)((char *)(arg1) + 0) = arg2;
     *(int *)((char *)(arg1) + 4) = 1;
@@ -78,7 +78,7 @@ void *StringTable_Register(int arg0, void *arg1, int arg2, int arg3) {
     StringTable_SearchRetained((struct StringTableSearchView *)arg0, arg3, &sp58, (unsigned int *)&sp5C);
     StringTable_InsertAt((struct StringTableInsertView *)arg0, (int)arg1, sp5C);
     if (DAT_005871c8[0] != 0) {
-        sp50 = ((DW4VCSR_124_0 *)(DAT_005871c8[0]))->vX();
+        sp50 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
     }
     return arg1;
 }
@@ -86,24 +86,24 @@ void *StringTable_Register(int arg0, void *arg1, int arg2, int arg3) {
 void StringTable_RemoveHeader(int arg0, int arg1) {
     int sp3C;
     int sp38;
-    DW4SR4 sp34;
-    DW4SR4 sp30;
+    igResult sp34;
+    igResult sp30;
 
     if (DAT_005871c8[0] != 0) {
-        sp34 = ((DW4VCSR_132_1_30c0c0 *)(DAT_005871c8[0]))->vX((int)(1));
+        sp34 = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
     }
     sp3C = 0;
     sp38 = 0;
     StringTable_SearchRetained((struct StringTableSearchView *)arg0, arg1 + 8, &sp38, (unsigned int *)&sp3C);
     StringTable_EraseAt((StringTableLayout *)arg0, sp3C);
     if (DAT_005871c8[0] != 0) {
-        sp30 = ((DW4VCSR_124_0 *)(DAT_005871c8[0]))->vX();
+        sp30 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
     }
 }
 
 void StringTable_NotifyEmptyChunk(StringTableChunkList *arg0, void *arg1) {
-    DW4SR4 sp3C;
-    DW4SR4 sp38;
+    igResult sp3C;
+    igResult sp38;
     int temp_v1;
     void *temp_v0;
     void *temp_v0_2;
@@ -111,7 +111,7 @@ void StringTable_NotifyEmptyChunk(StringTableChunkList *arg0, void *arg1) {
     void *temp_v1_2;
 
     if (DAT_005871c8[0] != 0) {
-        sp3C = ((DW4VCSR_132_1_30c0c0 *)(DAT_005871c8[0]))->vX((int)(1));
+        sp3C = ((igSemaphoreView *)(DAT_005871c8[0]))->wait(1);
     }
     temp_v1 = arg0->cnt;
     if (temp_v1 > 0) {
@@ -132,7 +132,7 @@ void StringTable_NotifyEmptyChunk(StringTableChunkList *arg0, void *arg1) {
         arg0->cnt = temp_v1 + 1;
     }
     if (DAT_005871c8[0] != 0) {
-        sp38 = ((DW4VCSR_124_0 *)(DAT_005871c8[0]))->vX();
+        sp38 = ((igSemaphoreView *)(DAT_005871c8[0]))->signal();
     }
 }
 

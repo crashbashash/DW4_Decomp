@@ -12,17 +12,17 @@ igMetaObject *igUnsignedCharMetaField_GetMetaObject(void)
 }
 
 int igUnsignedCharMetaField_GetVTable(void) {
-    struct Obj_2b7470 obj;
+    igUnsignedCharMetaField obj;
     char *o;
     int *a1;
     int v0;
     int t;
     igMetaField_Init((igMetaField *)&obj);
-    obj.vt = &DAT_0052e530[0];
+    obj._vtable = (int)&DAT_0052e530[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &g_igMetaField_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
+    obj._vtable = (int)&g_igMetaField_vtable[0];
+    if (&obj._fieldName != 0) {
+        o = (char *)obj._fieldName;
         if (o != 0) {
             a1 = (int *)(o - 8);
             v0 = *(int *)(o - 4) - 1;

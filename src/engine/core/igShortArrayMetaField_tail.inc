@@ -2,7 +2,7 @@ void Gap__Core__igShortArrayMetaField__vfunc_52(igShortArrayMetaField *self, int
     void **descriptor;
 
     descriptor = (void **)(((void **)igShortMetaField_GetDefaultDescriptor()));
-    ((DW4VC_208_2 *)(descriptor))->vX((int)(item), (int)(count * self->_num));
+    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
 /* Storage size in bytes of an array field of _num shorts, truncated to 16 bits. Vtable slot 25 is

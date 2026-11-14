@@ -12,35 +12,21 @@ igMetaObject *igRegistryValue_GetMetaObject(void)
 }
 
 int igRegistryValue_GetVTable(void) {
-    struct Obj_2bb590 o;
+    igRegistryValue value;
     int r;
-    int *t;
-    int *p;
-    int c;
-    igObject_InitHeader((struct ObjectHeader *)&o);
-    o.vt = &DAT_00532fb0[0];
-    o.m12 = 0;
-    o.m16 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &DAT_00532fb0[0];
-    if (&o.m16 != 0) {
-        t = o.m16;
-        if (t != 0) {
-            t[1] = t[1] - 1;
-            if ((t[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
-    if (&o.m12 != 0) {
-        t = o.m12;
-        if (t != 0) {
-            t[1] = t[1] - 1;
-            if ((t[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
+    int *valueRef;
+    int *valueName;
+
+    igObject_InitHeader((struct ObjectHeader *)&value);
+    value._vtable = (int)&DAT_00532fb0[0];
+    valueRef = &value._value;
+    *valueRef = 0;
+    valueName = &value._valueName;
+    *valueName = 0;
+    r = *(int *)((char *)&value + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    value._vtable = (int)&DAT_00532fb0[0];
+    ReleaseObjectField(valueName);
+    ReleaseObjectField(valueRef);
     return r;
 }
 

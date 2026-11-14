@@ -12,7 +12,7 @@ igMetaObject *igPsx2Media_GetMetaObject(void)
 }
 
 int igPsx2Media_GetVTable(void) {
-    union U_2cf990 u;
+    igPsx2Media media;
     int temp_s2;
     S_ref * q1;
     S_ref * q0;
@@ -23,16 +23,16 @@ int igPsx2Media_GetVTable(void) {
     void *temp_a0;
     void *temp_v1;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)(&DAT_0052da00[0]);
-    q0 = (S_ref *)&u.b[12];
+    igObject_InitHeader((ObjectHeader *)&media);
+    media._vtable = (int)(&DAT_0052da00[0]);
+    q0 = (S_ref *)&media._connection;
     *(int *)q0 = 0;
-    q1 = (S_ref *)&u.b[16];
+    q1 = (S_ref *)&media._sema;
     *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[32];
+    q2 = (S_ref *)&media._conversionString;
     *(int *)q2 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)(&DAT_0052da00[0]);
+    temp_s2 = *(int *)((char *)&media + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    media._vtable = (int)(&DAT_0052da00[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {

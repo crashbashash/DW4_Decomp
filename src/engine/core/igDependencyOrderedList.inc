@@ -7,20 +7,20 @@ igMetaObject *igDependencyOrderedList_GetMetaObject(void)
 }
 
 int igDependencyOrderedList_GetVTable(void) {
-    struct Obj_2c7af0 obj;
+    igDependencyOrderedList list;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052cc20[0];
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052cc20[0];
-    ObjectRef_Destruct_001c6460(&obj.w5, -1);
-    FUN_00135430(&obj.w4, -1);
-    FUN_00233590(&obj.w3, -1);
-    FUN_0014aa70(&obj.w2, -1);
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_0052cc20[0];
+    list._objectList = 0;
+    list._dependencies = 0;
+    list._order = 0;
+    list._checkPoints = 0;
+    t = *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    list._vtable = (int)&DAT_0052cc20[0];
+    ObjectRef_Destruct_001c6460(&list._checkPoints, -1);
+    FUN_00135430(&list._order, -1);
+    FUN_00233590(&list._dependencies, -1);
+    FUN_0014aa70(&list._objectList, -1);
     return t;
 }
 

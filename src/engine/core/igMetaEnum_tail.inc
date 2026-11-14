@@ -29,17 +29,17 @@ int igMetaEnum_GetValueByName(int *status, igMetaEnum *meta, const char *name, i
     *status = g_resultFailure.v;
 }
 
-void igMetaEnum_GetNameByValue(int *arg0, const struct E_2fbb40 *arg1, int arg2) {
+void igMetaEnum_GetNameByValue(int *arg0, const igMetaEnum *arg1, int arg2) {
     int i;
     int n;
     int a4;
-    a4 = arg1->f12;
+    a4 = arg1->_names;
     if (a4 != 0) {
-        n = arg1->f16->cnt;
+        n = ((igIntList *)arg1->_values)->_count;
         i = 0;
         goto test;
 body:
-        if (arg2 == arg1->f16->data[i]) {
+        if (arg2 == ((int *)((igIntList *)arg1->_values)->_data)[i]) {
             StringList_CopyRetained(arg0, a4, i);
             return;
         }

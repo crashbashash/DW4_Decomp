@@ -19,34 +19,34 @@ igMetaObject *igResource_GetMetaObject(void)
 }
 
 int igResource_GetVTable(void) {
-    struct Obj_2baad0 obj;
+    igResource resource;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052eb90[0];
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w8 = 0;
-    obj.w9 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052eb90[0];
-    FUN_001509f0(&obj.w16, -1);
-    FUN_001509f0(&obj.w15, -1);
-    FUN_001509f0(&obj.w14, -1);
-    ObjectRef_Destruct_00150eb0(&obj.w12, -1);
-    FUN_001a0790(&obj.w11, -1);
-    FUN_001432d0(&obj.w9, -1);
-    FUN_002bacc0((O *)&obj.w8, -1);
-    StringRef_Destruct_00130720(&obj.w6, -1);
-    StringRef_Destruct_00130720(&obj.w5, -1);
-    FUN_002bac40((void **)&obj.w4, -1);
-    FUN_001d36d0(&obj.w3, -1);
+    igObject_InitHeader((struct ObjectHeader *)&resource);
+    resource._vtable = (int)&DAT_0052eb90[0];
+    resource._imageDirectory = 0;
+    resource._directoryList = 0;
+    resource._relativeFilePath = 0;
+    resource._absoluteFilePath = 0;
+    resource._loadQueue = 0;
+    resource._loadThread = 0;
+    resource._alignmentStrings = 0;
+    resource._alignmentValues = 0;
+    resource._temporaryMemoryPool = 0;
+    resource._dataMemoryPool = 0;
+    resource._objectMemoryPool = 0;
+    t = *(int *)((char *)&resource + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    resource._vtable = (int)&DAT_0052eb90[0];
+    FUN_001509f0(&resource._objectMemoryPool, -1);
+    FUN_001509f0(&resource._dataMemoryPool, -1);
+    FUN_001509f0(&resource._temporaryMemoryPool, -1);
+    ObjectRef_Destruct_00150eb0(&resource._alignmentValues, -1);
+    FUN_001a0790(&resource._alignmentStrings, -1);
+    FUN_001432d0(&resource._loadThread, -1);
+    FUN_002bacc0((igQueue **)&resource._loadQueue, -1);
+    StringRef_Destruct_00130720(&resource._absoluteFilePath, -1);
+    StringRef_Destruct_00130720(&resource._relativeFilePath, -1);
+    FUN_002bac40((void **)&resource._directoryList, -1);
+    FUN_001d36d0(&resource._imageDirectory, -1);
     return t;
 }
 
@@ -68,10 +68,10 @@ void **FUN_002bac40(void **arg0, long long arg1) {
     return arg0;
 }
 
-O *FUN_002bacc0(O *arg0, short arg1) {
+igQueue **FUN_002bacc0(igQueue **arg0, short arg1) {
     if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
+        igQueue *t = *arg0;
+        if (t) { t->_refCount -= 1; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
         if (arg1 > 0) __dl__FPv(arg0);
     }
     return arg0;

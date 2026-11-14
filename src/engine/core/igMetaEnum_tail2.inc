@@ -38,7 +38,7 @@ char *igMetaEnum_GetValueName(char *arg0, int arg1, int arg2, int arg3) {
     int *h;
     int c;
 
-    igMetaEnum_GetNameByValue((int *)&s, (const E_2fbb40 *)arg3, arg2);
+    igMetaEnum_GetNameByValue((int *)&s, (const igMetaEnum *)arg3, arg2);
     strncpy(arg0, s, arg1 - 1);
     *(arg0 + arg1 - 1) = 0;
     if (s != 0) {

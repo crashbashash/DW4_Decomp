@@ -42,7 +42,7 @@ void Gap__Core__igAliasMemoryPool__vfunc_31(igAliasMemoryPool *self) {
 /* Disable the pool: run the receiver's virtual at vtable offset 124 (the reset callback), then
  * clear _isActive afterwards, even if the callback wrote it. */
 void Gap__Core__igAliasMemoryPool__vfunc_32(igAliasMemoryPool *self) {
-    ((DW4VC_124_0 *)(((char *)(self) + 0)))->vX();
+    ((igMemoryPoolView *)self)->vfunc_31();
     self->_isActive = 0;
 }
 
@@ -235,7 +235,7 @@ int Gap__Core__igAliasMemoryPool__vfunc_56(igAliasMemoryPool *arg0, int arg1, in
     int n;
     int p;
     n = arg1 * arg2;
-    p = ((VC *)arg0)->vX(0, n, arg0->_alignment);
+    p = ((igAliasMemoryPoolView *)arg0)->ManageAllocation(0, n, arg0->_alignment);
     if (p != 0) {
         if (n != 0) {
             memset(p, 0, n);
@@ -244,12 +244,12 @@ int Gap__Core__igAliasMemoryPool__vfunc_56(igAliasMemoryPool *arg0, int arg1, in
     return p;
 }
 
-int Gap__Core__igAliasMemoryPool__vfunc_57(void **arg0, int arg1, int arg2) {
+int Gap__Core__igAliasMemoryPool__vfunc_57(igAliasMemoryPool *arg0, int arg1, int arg2, unsigned short alignment) {
     int temp_s1;
     int temp_v0;
 
     temp_s1 = arg1 * arg2;
-    temp_v0 = ((DW4VC_412_2 *)(arg0))->vX((int)(0), (int)(temp_s1));
+    temp_v0 = ((igAliasMemoryPoolView *)arg0)->ManageAllocation(0, temp_s1, alignment);
     if (temp_v0 != 0) {
         if (temp_s1 != 0) {
             memset(temp_v0, 0, temp_s1);
@@ -268,11 +268,11 @@ int Gap__Core__igAliasMemoryPool__vfunc_65(igAliasMemoryPool *arg0, int arg1) {
     long long temp_v1;
 
     if (arg0->_aliasedMemoryPool != 0) {
-        temp_s1 = ((DW4VC_192_0 *)arg0->_aliasedMemoryPool)->vX();
-        temp_s0 = ((DW4VC_260_1 *)arg0->_aliasedMemoryPool)->vX(arg1);
-        temp_v1 = ((DW4VC_192_0 *)arg0->_aliasedMemoryPool)->vX() - temp_s1;
+        temp_s1 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_48();
+        temp_s0 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_65(arg1);
+        temp_v1 = ((igMemoryPoolView *)arg0->_aliasedMemoryPool)->vfunc_48() - temp_s1;
         if (arg0->_updateStatistics != 0) {
-            ((DW4VC_200_3 *)(arg0))->vX(arg1, (int)temp_v1, 1);
+            ((igMemoryPoolView *)arg0)->vfunc_50(arg1, (int)temp_v1, 1);
         }
         return temp_s0;
     }
@@ -391,13 +391,13 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = &DAT_004f92b0[0];
     if (t0 != 0) {
-        igSmartPointer<V> r((V *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (r.p->v23(t0, &DAT_004f92f0[0]) == 0) {
+        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        if (r.p->Open((const char *)t0, (const char *)&DAT_004f92f0[0]) == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
         }
-        r.p->v29(g);
-        r.p->v24();
+        r.p->Print((const char *)g);
+        r.p->Close();
     } else {
         printf(g);
     }
@@ -433,7 +433,7 @@ int igAliasMemoryPool_ManageAllocation(ManagedPool *arg0, int arg1, long long ar
             if (arg0->f113 != 0) {
                 ManageStatus sp8C = arg0->f180->v372(arg1, arg0->f180);
             } else {
-                R_2f0320 sp88 = FUN_002f0320(arg1, (V_2f0220 *)arg0);
+                igResult sp88 = FUN_002f0320(arg1, (igMemoryPoolView *)arg0);
             }
             arg0->f180->v264(arg1);
             break;
@@ -454,7 +454,7 @@ int igAliasMemoryPool_ManageAllocation(ManagedPool *arg0, int arg1, long long ar
                 if (arg0->f113 != 0) {
                     ManageStatus sp84 = arg0->f180->v372(arg1, arg0->f180);
                 } else {
-                    R_2f0320 sp80 = FUN_002f0320(arg1, (V_2f0220 *)arg0);
+                    igResult sp80 = FUN_002f0320(arg1, (igMemoryPoolView *)arg0);
                 }
                 s1 = arg0->f180->v236(arg1, arg2, arg3);
             }
@@ -472,7 +472,7 @@ int igAliasMemoryPool_ManageAllocation(ManagedPool *arg0, int arg1, long long ar
             if (arg0->f113 != 0) {
                 ManageStatus sp7C = arg0->f180->v372(s1, arg0);
             } else {
-                R_2f0220 sp78 = FUN_002f0220(s1, (V_2f0220 *)arg0);
+                igResult sp78 = FUN_002f0220(s1, (igMemoryPoolView *)arg0);
             }
         }
         break;

@@ -24,11 +24,11 @@ igMetaObject *igIntList_GetMetaObject(void)
 }
 
 int igIntList_GetVTable(void) {
-    struct Obj_2cab50 obj;
+    igIntList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531b70[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531b70[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void igIntList_EnsureRegistered(void)
@@ -68,7 +68,7 @@ void igIntList_InitFields(void) {
     igMetaObject *meta = g_igIntList_metaObject[0];
     igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     int index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    field = ((DescriptorCloneView_2cac20 *)field)->Clone(1);
+    field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     field->_memType = igIntMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)g_igIntList_dataDescriptorCell;

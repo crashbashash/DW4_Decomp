@@ -14,23 +14,23 @@ igMetaObject *igLocationTable_GetMetaObject(void)
 }
 
 int igLocationTable_GetVTable(void) {
-    struct W o;
+    igLocationTable o;
     int *p18;
     int *p17;
     int *p16;
     int r;
     igObject_InitHeader((struct ObjectHeader *)&o);
-    o.vt = &DAT_0052fc50[0];
-    p16 = &o.f[3];
+    o._vtable = (int)&DAT_0052fc50[0];
+    p16 = &o._locations;
     *p16 = 0;
-    p17 = &o.f[4];
+    p17 = &o._hashIndex;
     *p17 = 0;
-    p18 = &o.f[5];
+    p18 = &o._symbolNames;
     *p18 = 0;
-    o.f[6] = 0;
+    o._sourceFileNames = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &DAT_0052fc50[0];
-    FUN_002b8740((ObjectRefWord *)&o.f[6], -1);
+    o._vtable = (int)&DAT_0052fc50[0];
+    FUN_002b8740((ObjectRefWord *)&o._sourceFileNames, -1);
     FUN_002b8740((ObjectRefWord *)p18, -1);
     FUN_002b86c0((void **)p17, -1);
     FUN_002b8640((ObjectRefWord *)p16, -1);

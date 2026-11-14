@@ -9,8 +9,8 @@ void **FUN_002cdab0(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_0031ebd0((igArenaMemoryPool *)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -41,15 +41,15 @@ done:
 }
 
 int igArenaMemoryPool_GetVTable(void) {
-    union U_2cdc20 u;
+    igArenaMemoryPool pool;
     int temp_s0;
     S_ref *p;
     S_ref *r;
 
-    FUN_0031eb90((igArenaMemoryPool *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00531030[0];
-    p = (S_ref *)&u.b[176];
+    FUN_0031eb90(&pool);
+    temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&DAT_00531030[0];
+    p = (S_ref *)&pool._eventTracker;
     if (p != 0) {
         p = *(S_ref **)p;
         if (p != 0) {
@@ -59,7 +59,7 @@ int igArenaMemoryPool_GetVTable(void) {
             }
         }
     }
-    r = (S_ref *)&u.b[120];
+    r = (S_ref *)&pool._allocationLock;
     if (r != 0) {
         r = *(S_ref **)r;
         if (r != 0) {

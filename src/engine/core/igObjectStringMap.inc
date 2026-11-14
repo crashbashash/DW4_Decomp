@@ -14,7 +14,7 @@ igMetaObject *igObjectStringMap_GetMetaObject(void)
 }
 
 int igObjectStringMap_GetVTable(void) {
-    union U u;
+    igObjectStringMap map;
     int t;
     igObject *o;
     int *temp_v1;
@@ -22,14 +22,14 @@ int igObjectStringMap_GetVTable(void) {
     int temp_v0;
     int *q8;
     int *q12;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_00532d80[0];
-    q8 = (int *)&u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&map);
+    map._vtable = (int)&DAT_00532d80[0];
+    q8 = &map._names;
     *q8 = 0;
-    q12 = (int *)&u.b[12];
+    q12 = &map._data;
     *q12 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00532d80[0];
+    t = *(int *)((char *)&map + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    map._vtable = (int)&DAT_00532d80[0];
     if (q12 != 0) {
         o = (igObject *)*q12;
         if (o != 0) {

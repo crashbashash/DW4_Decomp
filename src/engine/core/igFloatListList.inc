@@ -14,11 +14,11 @@ igMetaObject *igFloatListList_GetMetaObject(void)
 }
 
 int igFloatListList_GetVTable(void) {
-    struct Obj_2c9670 obj;
+    igFloatListList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531e80[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531e80[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c96b0(void)

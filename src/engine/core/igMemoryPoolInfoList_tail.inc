@@ -34,11 +34,11 @@ void igMemoryPoolInfoList_Append(RegistryList *list,void *entry){
 
 void *igMemoryPoolInfoList_Allocate(unsigned int size)
 {
-    return ((BootstrapSystem_2fa6c0 * *)g_objectSystem)[0]->allocator->Allocate(size);
+    return ((BootstrapSystem * *)g_objectSystem)[0]->allocator->Allocate(size);
 }
 
 void igMemoryPoolInfoList_Delete(void *block)
 {
-    ((BootstrapSystem_2fa6e0 * *)g_objectSystem)[0]->allocator->Free(block);
+    ((BootstrapSystem * *)g_objectSystem)[0]->allocator->Free(block);
 }
 

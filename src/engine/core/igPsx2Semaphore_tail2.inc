@@ -14,9 +14,9 @@ int Gap__Core__igPsx2Semaphore__vfunc_27(igPsx2Semaphore *self) {
     return self->_initCount;
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_28(int *arg0, struct S_32ed50 *arg1, int arg2) {
-    if (arg1->f12 == -1) {
-        arg1->f20 = arg2;
+void Gap__Core__igPsx2Semaphore__vfunc_28(int *arg0, igPsx2Semaphore *self, int arg2) {
+    if (self->_semaID == -1) {
+        self->_maxCount = arg2;
         *arg0 = g_resultSuccess.v;
     } else {
         *arg0 = g_resultFailure.v;
@@ -41,14 +41,14 @@ int Gap__Core__igPsx2Semaphore__vfunc_30(igPsx2Semaphore *arg0) {
     return sp[0];
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, struct S_arg1 *arg1) {
-    union U_32ede0 u;
+void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, igPsx2Semaphore *self) {
+    SemaParam param;
     char *var_v1_2;
     unsigned int var_v0;
-    if (arg1->f12 != -1) {
+    if (self->_semaID != -1) {
         *arg0 = g_resultFailure.v;
     } else {
-        var_v1_2 = u.b;
+        var_v1_2 = (char *)&param;
         var_v0 = 0x18;
         if (var_v1_2 != 0) {
             do {
@@ -57,11 +57,11 @@ void Gap__Core__igPsx2Semaphore__vfunc_23(int *arg0, struct S_arg1 *arg1) {
                 var_v1_2 += 1;
             } while (var_v0 != 0);
         }
-        u.w[1] = arg1->f20;
-        u.w[2] = arg1->f16;
-        arg1->f12 = CreateSema(&u);
-        if (arg1->f12 < 0) {
-            arg1->f12 = -1;
+        param.maxCount = self->_maxCount;
+        param.initCount = self->_initCount;
+        self->_semaID = CreateSema(&param);
+        if (self->_semaID < 0) {
+            self->_semaID = -1;
             *arg0 = g_resultFailure.v;
         } else {
             *arg0 = g_resultSuccess.v;
@@ -114,9 +114,9 @@ void Gap__Core__igPsx2Semaphore__vfunc_35(int *arg0, void *arg1) {
     }
 }
 
-void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, struct T_32f1f0 *arg1) {
+void Gap__Core__igPsx2Semaphore__vfunc_34(int *arg0, igPsx2Semaphore *self) {
     const int *p;
-    if (arg1->t == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(arg1->t) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
+    if (self->_semaID == -1) { *arg0 = g_resultFailure.v; return; } p = (iPollSema(self->_semaID) >= 0) ? &g_resultSuccess.v : &g_resultFailure.v; *arg0 = *p;
 }
 
 SystemAllocator::SystemAllocator() {}

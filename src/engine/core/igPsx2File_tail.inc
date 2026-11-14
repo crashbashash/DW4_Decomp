@@ -12,18 +12,18 @@ igMetaObject *igPsx2File_GetMetaObject(void)
 }
 
 int igPsx2File_GetVTable(void) {
-    struct F_2d0230 f;
+    igPsx2File f;
     int temp_s0;
 
     igObject_InitHeader((struct ObjectHeader *)&f);
-    f.w[1] = 0;
-    f.w[2] = 0;
-    f.w[9] = 0;
-    f.vt = &DAT_0052dc00[0];
-    f.w[17] = 0;
+    f._name = 0;
+    f._fileName = 0;
+    f._completeFilename = 0;
+    f._vtable = (int)&DAT_0052dc00[0];
+    f._prefix = 0;
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    f.vt = &DAT_0052dc00[0];
-    FUN_00130720(&f.w[17], -1);
+    f._vtable = (int)&DAT_0052dc00[0];
+    FUN_00130720(&f._prefix, -1);
     FUN_002c0790((igFile *)&f, (short)0);
     return temp_s0;
 }

@@ -7,11 +7,11 @@ igMetaObject *igNonRefCountedObjectList_GetMetaObject(void)
 }
 
 int igNonRefCountedObjectList_GetVTable(void) {
-    struct Obj_2bdcf0 obj;
+    igNonRefCountedObjectList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00524500[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00524500[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002bdd30(void)
@@ -49,7 +49,7 @@ void FUN_002bddc0(void) {
     temp_s1 = (void *)(g_igNonRefCountedObjectList_metaObject[0]);
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
     temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
-    temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
+    temp_s0 = (void *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = igObjectRefMetaField_GetDefaultDescriptor();
     *(int *)((char *)(temp_s0) + 56) = 0;
     *(char *)((char *)(temp_s0) + 66) = 0;

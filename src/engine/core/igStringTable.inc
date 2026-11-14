@@ -19,28 +19,32 @@ igMetaObject *igStringTable_GetMetaObject(void)
 }
 
 int igStringTable_GetVTable(void) {
-    Obj_2b8e30 obj;
+    igStringTable table;
     int r;
+    int *strings;
+    int *hashIndex;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052e8c0[0];
-    obj.r3 = 0;
-    obj.r4 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052e8c0[0];
-    obj.rel4();
-    obj.rel3();
+    igObject_InitHeader((struct ObjectHeader *)&table);
+    table._vtable = (int)&DAT_0052e8c0[0];
+    strings = &table._strings;
+    *strings = 0;
+    hashIndex = &table._hashIndex;
+    *hashIndex = 0;
+    r = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    table._vtable = (int)&DAT_0052e8c0[0];
+    ReleaseObjectField(hashIndex);
+    ReleaseObjectField(strings);
     return r;
 }
 
-struct R_2b8f10 **FUN_002b8f10(struct R_2b8f10 **arg0, short arg1) {
-    struct R_2b8f10 *temp_a0;
+igObject **FUN_002b8f10(igObject **arg0, short arg1) {
+    igObject *temp_a0;
 
     if (arg0 != 0) {
         temp_a0 = *arg0;
         if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
+            temp_a0->_refCount = temp_a0->_refCount - 1;
+            if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(temp_a0);
             }
         }

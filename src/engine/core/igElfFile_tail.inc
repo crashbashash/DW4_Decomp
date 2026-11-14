@@ -180,8 +180,8 @@ int FUN_00320f70(void *arg0, int arg1) {
 static inline void prepareSink(ElfSymbolSink *sink, int count, unsigned low, unsigned top) {
     FUN_0030da00((int)sink, count);
     FUN_0030da10((int)sink, count * 4);
-    FUN_0030da20((S_30da20 *)sink, low & ~1023, top);
-    FUN_0030daa0((int *)sink);
+    FUN_0030da20((igSymbolTableView *)sink, low & ~1023, top);
+    FUN_0030daa0((igSymbolTableView *)sink);
 }
 
 void FUN_00321530(const char *in, char *out, int size) {

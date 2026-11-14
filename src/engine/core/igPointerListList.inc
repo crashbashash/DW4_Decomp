@@ -14,11 +14,11 @@ igMetaObject *igPointerListList_GetMetaObject(void)
 }
 
 int igPointerListList_GetVTable(void) {
-    struct Obj_2c9060 obj;
+    igPointerListList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531f50[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531f50[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c90a0(void)

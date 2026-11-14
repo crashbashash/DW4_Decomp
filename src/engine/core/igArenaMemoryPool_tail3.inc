@@ -519,32 +519,32 @@ void *Gap__Core__igArenaMemoryPool__vfunc_53(igArenaMemoryPoolView *self)
 }
 
 void FUN_0031d3f0(void *arg0) {
-    DW4SR4 sp1C;
+    igResult sp1C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((DW4VCSR_132_1_3125d0 *)(temp_a1))->vX((int)(1));
+        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
     }
 }
 
 void FUN_0031d430(void *arg0) {
-    DW4SR4 sp1C;
+    igResult sp1C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+        sp1C = ((igSemaphoreView *)(temp_a1))->signal();
     }
 }
 
 int FUN_0031d460(void *arg0, int arg1) {
-    DW4SR4 sp2C;
+    igResult sp2C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 120));
+    temp_a1 = (void **)((igArenaMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp2C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
     }
     return arg1;
 }
@@ -1035,7 +1035,7 @@ S_320830 Gap__Core__igArenaMemoryPool__vfunc_106(void *arg1, int arg2, long long
 
 void Gap__Core__igArenaMemoryPool__vfunc_107(igArenaMemoryPoolView *self)
 {
-    (*(igObjectSlots_3208a0 * *)g_activeSystemAllocator)->vfunc_17();
+    (*(igObjectDispatchView **)g_activeSystemAllocator)->vfunc_17();
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_108(void) {

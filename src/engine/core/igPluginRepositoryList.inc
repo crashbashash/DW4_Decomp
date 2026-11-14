@@ -14,11 +14,11 @@ igMetaObject *igPluginRepositoryList_GetMetaObject(void)
 }
 
 int igPluginRepositoryList_GetVTable(void) {
-    struct Obj_2bc800 obj;
+    igPluginRepositoryList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00532e40[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00532e40[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002bc840(void)

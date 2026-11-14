@@ -7,20 +7,20 @@ igMetaObject *igMediaFile_GetMetaObject(void)
 }
 
 int igMediaFile_GetVTable(void) {
-    union U_2c1330 u;
+    igMediaFile file;
     int temp_s0;
     char *ps;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[12] = 0;
-    *(int *)&u.b[40] = 0;
-    u.vt = (int)&DAT_0052f9a0[0];
-    ps = &u.b[64];
+    igObject_InitHeader((ObjectHeader *)&file);
+    file._name = 0;
+    file._fileName = 0;
+    file._completeFilename = 0;
+    file._vtable = (int)&DAT_0052f9a0[0];
+    ps = (char *)&file._media;
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052f9a0[0];
+    temp_s0 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    file._vtable = (int)&DAT_0052f9a0[0];
     FUN_002c13b0((void **)ps, -1);
-    FUN_002c0790((igFile *)u.b, 0);
+    FUN_002c0790((igFile *)&file, 0);
     return temp_s0;
 }
 

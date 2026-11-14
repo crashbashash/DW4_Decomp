@@ -9,8 +9,8 @@ void **igUnsignedIntMetaField_Create(int allocator) {
         if (field != 0) {
             field = (void **)(((void **)igUnsignedIntMetaField_Construct((igMetaField *)field, 1)));
         }
-        ((igObjectSlot09 *)(field))->vfunc_09();
-        ((igObjectSlot07 *)(field))->vfunc_07((int)(0));
+        ((igObjectDispatchView *)(field))->vfunc_09();
+        ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
     return field;
 }
@@ -38,17 +38,17 @@ igMetaObject *igUnsignedIntMetaField_GetMetaObject(void)
 }
 
 int igUnsignedIntMetaField_GetVTable(void) {
-    union U_2b6e90 u;
+    igUnsignedIntMetaField u;
     int *temp_a1;
     int temp_s0;
     int temp_v0;
     void *temp_v1;
 
-    igUnsignedIntMetaField_Init((igMetaField *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&g_igMetaField_vtable[0]);
-    if (&u.p[3] != 0) {
-        temp_v1 = (void *)(u.p[3]);
+    igUnsignedIntMetaField_Init((igMetaField *)&u);
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    if ((void **)&u._fieldName != 0) {
+        temp_v1 = (void *)((void *)u._fieldName);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;

@@ -32,28 +32,28 @@ void igMemoryRefMetaField_SetAlignmentType(AlignmentFieldView *self, char *name)
     dropNames(names);
 }
 
-int igMemoryRefMetaField_Write(F_2fb3d0 *f, int off, int a2) {
+int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
     unsigned int n;
     int p;
     int s1;
     int s0;
-    if (f->f38 == 0) return -1;
-    p = *(int *)(off + f->base);
+    if (f->_persistent == 0) return -1;
+    p = *(int *)(off + f->_offset);
     if (p == 0) return -1;
-    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
+    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
-        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->f60, f->f68, 0, 0, 1);
+        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
         for (s0 = 0; s0 < (int)n; s0++) {
             int e = *(int *)(p + s0 * 4);
-            if (e != 0) FUN_002d8a80((L8a80 *)a2, (int)f, e, 0, f->f68, 0, 0, 1);
+            if (e != 0) FUN_002d8a80((L8a80 *)a2, (int)f, e, 0, f->_alignmentType, 0, 0, 1);
         }
         return s1;
     }
-    if (igObject_IsKindOf((void *)f->f60, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
-        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->f60, f->f68, 0, 0, ((F2 *)f)->f66);
+    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
+        s1 = FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
         return s1;
     }
-    return FUN_002d8a80((L8a80 *)a2, (int)f, p, f->f60, f->f68, 0, 0, 1);
+    return FUN_002d8a80((L8a80 *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
 }
 
 int Gap__Core__igMemoryRefMetaField__vfunc_45(igMemoryRefMetaField *arg0, int arg1, int arg2) {
@@ -63,17 +63,17 @@ int Gap__Core__igMemoryRefMetaField__vfunc_45(igMemoryRefMetaField *arg0, int ar
     return *(int *)(arg1 + temp_v0) == *(int *)(arg2 + temp_v0);
 }
 
-int igMemoryRefMetaField_IsAlikeDeep(DW4VC_188_2 *arg0, int arg1, int arg2) {
+int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *arg0, int arg1, int arg2) {
     int off;
     int n;
     int a;
     int b;
     int i;
 
-    if (igObject_IsKindOf((void *)arg0->f60, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
-        return arg0->vX(arg1, arg2);
+    if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
+        return ((igMetaFieldView *)arg0)->IsAlikeShallow(arg1, arg2);
     }
-    off = arg0->f8;
+    off = arg0->_offset;
     a = *(int *)(arg1 + off);
     b = *(int *)(arg2 + off);
     if (a == b) {
@@ -94,22 +94,22 @@ int igMemoryRefMetaField_IsAlikeDeep(DW4VC_188_2 *arg0, int arg1, int arg2) {
     return 1;
 }
 
-int igMemoryRefMetaField_ReadRawFieldMem(Fld_2fb690 *arg0, int a1, int *arg2, void *arg3, int arg4) {
+int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *arg0, int a1, int *arg2, void *arg3, int arg4) {
     struct { int w0; } v;
     int *arg1 = (int *)a1;
     int t;
-    Ent_2fb690 *e;
+    igMemoryDirEntry *e;
 
     if (arg3 != 0 && (t = *arg2) != -1) {
         v.w0 = t;
         if (arg4 != 0) {
-            ((D_2fb690 *)((void *)igIntMetaField_GetDefaultDescriptor()))->v208(&v.w0, 1);
+            ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&v.w0, 1);
         }
-        e = (Ent_2fb690 *)FUN_002d7e90((int *)arg3, v.w0);
+        e = (igMemoryDirEntry *)FUN_002d7e90((int *)arg3, v.w0);
         if (e != 0) {
-            *arg1 = e->f24;
-            if (arg0->f60 == 0 && arg0 != ((void * *)DAT_00585d88)[0]) {
-                arg0->f60 = *(void **)((char *)e + 36);
+            *arg1 = e->_ref;
+            if (arg0->_memType == 0 && arg0 != ((void * *)DAT_00585d88)[0]) {
+                arg0->_memType = e->_memType;
             }
         } else {
             *arg1 = 0;
@@ -120,14 +120,14 @@ int igMemoryRefMetaField_ReadRawFieldMem(Fld_2fb690 *arg0, int a1, int *arg2, vo
     return 4;
 }
 
-int igMemoryRefMetaField_IsAlikeShallow(struct M_2fb760 *arg0, int arg1, int arg2) {
+int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *arg0, int arg1, int arg2) {
     int off;
     int n;
     char *a;
     char *b;
     int i;
 
-    off = arg0->f8;
+    off = arg0->_offset;
     a = *(char **)(arg1 + off);
     b = *(char **)(arg2 + off);
     if (a == b) {
@@ -148,7 +148,7 @@ int igMemoryRefMetaField_IsAlikeShallow(struct M_2fb760 *arg0, int arg1, int arg
     return 1;
 }
 
-void igMemoryRefMetaField_SetPoolName(struct M_2fb830 *arg0, int arg1) {
+void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -163,7 +163,7 @@ void igMemoryRefMetaField_SetPoolName(struct M_2fb830 *arg0, int arg1) {
         g_stringPool[0] = var_v0;
     }
     temp_s0 = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1));
-    temp_a0 = arg0->f76;
+    temp_a0 = (char *)arg0->_poolName;
     if (temp_a0 != 0) {
         temp_a1 = (int *)(temp_a0 - 8);
         temp_v1 = *(int *)(temp_a0 - 4) - 1;
@@ -172,7 +172,7 @@ void igMemoryRefMetaField_SetPoolName(struct M_2fb830 *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
         }
     }
-    arg0->f76 = temp_s0;
+    arg0->_poolName = (int)temp_s0;
 }
 
 int igMemoryRefMetaField_GetPoolName(int *p)

@@ -12,23 +12,23 @@ igMetaObject *igExternalInfoEntry_GetMetaObject(void)
 }
 
 int igExternalInfoEntry_GetVTable(void) {
-    union U_2c5010 u;
+    igExternalInfoEntry entry;
     int temp_s0;
     int *p;
     int *q;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&DAT_00530200[0];
-    p = (int *)&u.b[28];
-    q = (int *)&u.b[36];
+    igObject_InitHeader((ObjectHeader *)&entry);
+    entry._name = 0;
+    entry._vtable = (int)&DAT_00530200[0];
+    p = &entry._key;
+    q = &entry._infoName;
     *p = 0;
     *q = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00530200[0];
+    temp_s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)&DAT_00530200[0];
     FUN_00130720(q, -1);
     FUN_00130720(p, -1);
-    FUN_0014f4e0(u.b, 0);
+    FUN_0014f4e0(&entry, 0);
     return temp_s0;
 }
 

@@ -13,24 +13,24 @@ int *Gap__Core__igCallStackTracer__vfunc_24(int *arg0) {
 }
 
 int Gap__Core__igCallStackTracer__vfunc_25(void) {
-    DW4VC_92_0 *temp_a0;
-    temp_a0 = (DW4VC_92_0 *)(*(int *)((char *)(((void * *)g_objectSystem)[0]) + 80));
-    if (temp_a0 != 0) {
-        if (temp_a0->vX() != 0) {
+    Resolver *resolver;
+    resolver = (Resolver *)(*(int *)((char *)(((void * *)g_objectSystem)[0]) + 80));
+    if (resolver != 0) {
+        if (resolver->IsReady() != 0) {
             return 1;
         }
     }
     return 0;
 }
 
-void Gap__Core__igCallStackTracer__vfunc_26(int *arg0, VC_2d43a0 *arg1, int arg2, int arg3, long long arg4, long long arg5) {
-    char b1[256];
-    char b2[256];
-    int o1;
-    int o2;
-    igResult r1 = arg1->vX1(arg2, b1, 255, &o1, b2, 255, &o2);
-    igResult r2 = arg1->vX2(arg2, b1, o1, b2, o2, arg3, arg4, arg5);
-    *arg0 = r1.v;
+void Gap__Core__igCallStackTracer__vfunc_26(igResult *result, igCallStackTracerView *self, int addr, int format, long long output, long long outputSize) {
+    char buf[256];
+    char name[256];
+    int offset;
+    int line;
+    igResult resolved = self->vfunc_27(addr, buf, 255, &offset, name, 255, &line);
+    igResult formatted = self->vfunc_28(addr, buf, offset, name, line, format, output, outputSize);
+    result->v = resolved.v;
 }
 
 igResult Gap__Core__igCallStackTracer__vfunc_27(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {

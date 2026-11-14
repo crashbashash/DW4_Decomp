@@ -3,49 +3,50 @@ void FUN_002eb0a0(int a0, int a1)
     *(int *)((char *)a0 + 12) = a1;
 }
 
-void FUN_002eb0b0(int *arg0) {
-    int *temp_a0;
+void FUN_002eb0b0(igLocationTableView *arg0) {
+    igTDataList<unsigned int> *temp_a0;
     int temp_a1;
-    temp_a1 = arg0[2] * 5;
-    temp_a0 = (int *)arg0[4];
-    if (temp_a1 >= temp_a0[2]) {
+    temp_a1 = arg0->_capacity * 5;
+    temp_a0 = arg0->_locations;
+    if (temp_a1 >= temp_a0->_count) {
         List_Reserve((L_2d6680 *)temp_a0, temp_a1, 4);
     }
-    ((A_2eb0b0 *)arg0)->vX(arg0[3]);
-    FUN_0030cf20(arg0[6], arg0[2] * 4);
-    FUN_0030cf30(arg0[6], arg0[2]);
-    FUN_0030cf40((void *)arg0[6]);
-    FUN_0030cf20(arg0[7], 0x1000);
-    FUN_0030cf30(arg0[7], 0x100);
-    FUN_0030cf40((void *)arg0[7]);
+    arg0->vfunc_32(arg0->_hashCapacity);
+    FUN_0030cf20(arg0->_symbolNames, arg0->_capacity * 4);
+    FUN_0030cf30(arg0->_symbolNames, arg0->_capacity);
+    FUN_0030cf40((void *)arg0->_symbolNames);
+    FUN_0030cf20(arg0->_sourceFileNames, 0x1000);
+    FUN_0030cf30(arg0->_sourceFileNames, 0x100);
+    FUN_0030cf40((void *)arg0->_sourceFileNames);
 }
 
-void FUN_002eb150(struct O_2eb150 *arg0) {
-    struct L_2eb150 *a;
-    a = arg0->f16;
-    if (0 <= a->f12) {
-        a->f8 = 0;
+void FUN_002eb150(igLocationTableView *table) {
+    igTDataList<unsigned int> *locations;
+    igTDataList<int> *hashIndex;
+    locations = table->_locations;
+    if (0 <= locations->_capacity) {
+        locations->_count = 0;
     } else {
-        List_Resize(a, 0, 4);
+        List_Resize(locations, 0, 4);
     }
-    a = arg0->f16;
-    if (!(0 < a->f8)) {
-        List_Reserve((L_2d6680 *)a, 0, 4);
+    locations = table->_locations;
+    if (!(0 < locations->_count)) {
+        List_Reserve((L_2d6680 *)locations, 0, 4);
     }
-    if (arg0->f20 != 0) {
-        a = arg0->f20;
-        if (0 <= a->f12) {
-            a->f8 = 0;
+    if (table->_hashIndex != 0) {
+        hashIndex = table->_hashIndex;
+        if (0 <= hashIndex->_capacity) {
+            hashIndex->_count = 0;
         } else {
-            List_Resize(a, 0, 4);
+            List_Resize(hashIndex, 0, 4);
         }
-        a = arg0->f20;
-        if (!(0 < a->f8)) {
-            List_Reserve((L_2d6680 *)a, 0, 4);
+        hashIndex = table->_hashIndex;
+        if (!(0 < hashIndex->_count)) {
+            List_Reserve((L_2d6680 *)hashIndex, 0, 4);
         }
     }
-    FUN_0030cfa0((ClearOwner *)arg0->f24);
-    FUN_0030cfa0((ClearOwner *)arg0->f28);
+    FUN_0030cfa0((ClearOwner *)table->_symbolNames);
+    FUN_0030cfa0((ClearOwner *)table->_sourceFileNames);
 }
 
 int FUN_002eb210(void *arg0) {
@@ -79,88 +80,88 @@ void Gap__Core__igLocationTable__vfunc_24(int *arg0, void *arg1, int arg2)
   *arg0 = g_resultSuccess.v;
 }
 
-void Gap__Core__igLocationTable__vfunc_25(int *arg0, S_2eb2b0 *arg1, int arg2, int *arg3, char *arg4, int arg5, int *arg6, char *arg7, int arg8, int *arg9) {
+void Gap__Core__igLocationTable__vfunc_25(int *arg0, igLocationTableView *arg1, int arg2, int *arg3, char *arg4, int arg5, int *arg6, char *arg7, int arg8, int *arg9) {
     int rc;
-    Tb *t;
-    E_2eb2b0 *e;
+    igTDataList<unsigned int> *t;
+    LocationRecord *e;
     int r;
     rc = g_resultFailure.v;
     if (arg2 >= 0) {
-        t = arg1->f16;
-        if (arg2 * 5 < t->n) {
-            e = (E_2eb2b0 *)(t->v + arg2 * 0x14);
-            *arg3 = e->f0;
+        t = arg1->_locations;
+        if (arg2 * 5 < t->_count) {
+            e = (LocationRecord *)((char *)t->_data + arg2 * 0x14);
+            *arg3 = e->address;
             if (arg4 != 0) {
-                if ((r = ((int)FUN_0030d1d0((int *)arg1->f24, e->f4))) != 0) {
+                if ((r = ((int)FUN_0030d1d0((int *)arg1->_symbolNames, e->name))) != 0) {
                     strncpy(arg4, r, arg5);
                 } else {
                     *arg4 = 0;
                 }
             }
-            *arg6 = e->f8;
+            *arg6 = e->offset;
             if (arg7 != 0) {
-                if ((r = ((int)FUN_0030d1d0((int *)arg1->f28, e->f12))) != 0) {
+                if ((r = ((int)FUN_0030d1d0((int *)arg1->_sourceFileNames, e->file))) != 0) {
                     strncpy(arg7, r, arg8);
                 } else {
                     *arg7 = 0;
                 }
             }
-            *arg9 = e->f16;
+            *arg9 = e->line;
             rc = g_resultSuccess.v;
         }
     }
     *arg0 = rc;
 }
 
-int Gap__Core__igLocationTable__vfunc_26(O_2eb3d0 *o, int key) {
-int i = o->v28();
-L_2eb3d0 *l = o->idx;
+int Gap__Core__igLocationTable__vfunc_26(igLocationTableView *o, int key) {
+int i = o->vfunc_30(key);
+igTDataList<int> *l = o->_hashIndex;
 int e;
-int n = l->cnt;
+int n = l->_count;
 int j = 0;
 int r = -1;
-for (;;) { e = l->arr[i]; if (e == -1) { return r; } { int kk = o->ents->arr[e].key; if (kk == key) { r = e; break; } } i++; if (i >= n) i = 0; j++; if (!(j < n)) break; } return r;}
+for (;;) { e = l->_data[i]; if (e == -1) { return r; } { int kk = ((LocationRecord *)o->_locations->_data)[e].address; if (kk == key) { r = e; break; } } i++; if (i >= n) i = 0; j++; if (!(j < n)) break; } return r;}
 
-void Gap__Core__igLocationTable__vfunc_27(int *arg0, LT *arg1, int arg2, char *arg3, int arg4, int *arg5, char *arg6, int arg7, int *arg_sp0) {
+void Gap__Core__igLocationTable__vfunc_27(int *arg0, igLocationTableView *arg1, int arg2, char *arg3, int arg4, int *arg5, char *arg6, int arg7, int *arg_sp0) {
     int h; 
     int n; 
     int i; 
     int res; 
     int *idx;
-    Dat *d;
-    Entry *e;
+    igTDataList<int> *d;
+    LocationRecord *e;
     char *s;
     char *s2;
 
-    h = arg1->v120(arg2);
-    d = arg1->f20;
+    h = arg1->vfunc_30(arg2);
+    d = arg1->_hashIndex;
     res = g_resultFailure.v;
-    n = d->count;
-    idx = d->data;
+    n = d->_count;
+    idx = d->_data;
     i = 0;
     do {
         if (idx[h] == -1) {
             *arg0 = res;
             return;
         }
-        e = &arg1->f16->data[idx[h]];
-        if (e->key == arg2) {
+        e = &((LocationRecord *)arg1->_locations->_data)[idx[h]];
+        if (e->address == arg2) {
             if (arg3 != 0) {
-                if ((s = FUN_0030d1d0((int *)arg1->f24, e->f4)) != 0) {
+                if ((s = FUN_0030d1d0((int *)arg1->_symbolNames, e->name)) != 0) {
                     strncpy(arg3, s, arg4);
                 } else {
                     *arg3 = 0;
                 }
             }
-            *arg5 = e->f8;
+            *arg5 = e->offset;
             if (arg6 != 0) {
-                if ((s2 = FUN_0030d1d0((int *)arg1->f28, e->f12)) != 0) {
+                if ((s2 = FUN_0030d1d0((int *)arg1->_sourceFileNames, e->file)) != 0) {
                     strncpy(arg6, s2, arg7);
                 } else {
                     *arg6 = 0;
                 }
             }
-            *arg_sp0 = e->f16;
+            *arg_sp0 = e->line;
             res = g_resultSuccess.v;
             break;
         }
@@ -173,8 +174,8 @@ void Gap__Core__igLocationTable__vfunc_27(int *arg0, LT *arg1, int arg2, char *a
     *arg0 = res;
 }
 
-void Gap__Core__igLocationTable__vfunc_28(C_2eb630 *o, int a1, int a2, int a3, int a4, int a5) {
-    switch (o->v24()) { case -1: o->v27(a1,a2,a3,a4,a5); break; default: break; }
+void Gap__Core__igLocationTable__vfunc_28(igLocationTableView *o, int a1, char *a2, int a3, char *a4, int a5) {
+    switch (o->vfunc_26(a1)) { case -1: o->vfunc_29(a1,a2,a3,a4,a5); break; default: break; }
 }
 
 /* Hash-bucket index for `key`: key modulo the hash-table size (`_hashCapacity`), or 0 when there
@@ -218,27 +219,27 @@ done:
     return 1;
 }
 
-void Gap__Core__igLocationTable__vfunc_32(Tab_2eb980 *arg0, int arg1) {
-    IL *l; int n; W_2eb980 *a; int i; E_2eb980 *s1; E_2eb980 *s0; E_2eb980 *s3;
+void Gap__Core__igLocationTable__vfunc_32(igLocationTableView *arg0, int arg1) {
+    igTDataList<int> *l; int n; int *a; int i; LocationRecord *s1; LocationRecord *s0; LocationRecord *s3;
     FUN_002eb0a0((int)arg0, arg1);
-    l = arg0->idx;
-    if (!(arg1 < l->cnt)) List_Reserve((L_2d6680 *)l, arg1, 4);
-    l = arg0->idx;
+    l = arg0->_hashIndex;
+    if (!(arg1 < l->_count)) List_Reserve((L_2d6680 *)l, arg1, 4);
+    l = arg0->_hashIndex;
     if (arg1 >= 0) {
-        if (!(arg1 > l->cap)) { l->cnt = arg1; } else { List_Resize((void *)l, arg1, 4); }
+        if (!(arg1 > l->_capacity)) { l->_count = arg1; } else { List_Resize((void *)l, arg1, 4); }
     }
-    l = arg0->idx;
-    n = l->cnt;
-    a = l->arr;
+    l = arg0->_hashIndex;
+    n = l->_count;
+    a = l->_data;
     for (i = 0; i < n; i++) {
         a[i] = DAT_004c2148;
     }
-    EL_2eb980 *e = arg0->ents;
-    s1 = e->arr;
+    igTDataList<unsigned int> *e = arg0->_locations;
+    s1 = (LocationRecord *)e->_data;
     s0 = s1;
-    s3 = s1 + e->cnt / 5;
+    s3 = s1 + e->_count / 5;
     while (s0 < s3) {
-        if (arg0->v124(s0->w[0], s0 - s1) == 0) break;
+        if (arg0->vfunc_31(s0->address, s0 - s1) == 0) break;
         s0++;
     }
 }

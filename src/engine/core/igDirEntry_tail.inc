@@ -68,7 +68,7 @@ void Gap__Core__igDirEntry__vfunc_31(void) {
 
 void Gap__Core__igDirEntry__vfunc_11(int arg0) {
     Gap__Core__igObject__vfunc_09(arg0);
-    igNamedObject_SetName((N_2fecb0 *)arg0, 0);
+    igNamedObject_SetName((igNamedObject *)arg0, 0);
 }
 
 void Gap__Core__igDirEntry__vfunc_23(void *arg0, int arg1) {

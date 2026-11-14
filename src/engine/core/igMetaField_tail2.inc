@@ -355,24 +355,24 @@ int FUN_002fca50(void **arg0) {
     return ((TypeSizeView *)(arg0))->vX() & 0xFFFF;
 }
 
-igString_2fbf90 FUN_002fca80(StringJoinView *arg1, int arg2, int arg3, int arg4)
+RecoveryString FUN_002fca80(igMetaFieldView *arg1, int arg2, int arg3, int arg4)
 {
     int i;
-    igString_2fbf90 *list;
+    RecoveryString *list;
     int total;
     int cnt;
     char *buf;
     char *p;
 
-    list = (igString_2fbf90 *)((char *)igObject_AllocateStorage((int)arg1, arg3 * 4));
+    list = (RecoveryString *)((char *)igObject_AllocateStorage((int)arg1, arg3 * 4));
     total = 0;
     cnt = 0;
     for (i = 0; i < arg3; i++) {
-        igString_2fbf90 part = arg1->v228(arg2, arg4);
+        RecoveryString part = arg1->vfunc_57(arg2, arg4);
         if (part.p != 0) {
-            list[cnt++].assign(part);
+            list[cnt++] = part;
             total += strlen(part.p);
-            arg2 += arg1->v104();
+            arg2 += arg1->vfunc_26();
         }
     }
     buf = ((char *)igObject_AllocateStorage((int)arg1, total + 1));
@@ -381,7 +381,7 @@ igString_2fbf90 FUN_002fca80(StringJoinView *arg1, int arg2, int arg3, int arg4)
         p += sprintf(p, DAT_004f95a0, list[i].p);
     }
     *p = 0;
-    igString_2fbf90 result(buf == 0 ? (char *)0 : ((char *)StringPool_Intern((StringPool *)(InternedStrings::get()), (const char *)buf)));
+    RecoveryString result(buf == 0 ? (char *)0 : ((char *)StringPool_Intern((StringPool *)(InternedStrings::get()), (const char *)buf)));
     FUN_00300f50((int)arg1, (int)list);
     FUN_00300f50((int)arg1, (int)buf);
     return result;
@@ -628,5 +628,5 @@ block_3:
     return var_v0;
 }
 
-static inline X_2fbf90 *cast0(X_2fbf90 *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject[0]) != 0) { return o; } return 0; }
 

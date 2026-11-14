@@ -25,25 +25,25 @@ void Gap__Core__igMallocMemoryPool__vfunc_30(igMallocMemoryPool *self) {
     self->_isActive = 1;
 }
 
-R_3223d0 Gap__Core__igMallocMemoryPool__vfunc_34(OB_3223d0 *arg1, unsigned char arg2) {
-    R_3223d0 a;
-    R_3223d0 b;
-    R_3223d0 c;
+igResult Gap__Core__igMallocMemoryPool__vfunc_34(igMallocMemoryPoolView *arg1, unsigned char arg2) {
+    igResult a;
+    igResult b;
+    igResult c;
     if (arg2 == 0) {
-        igSmartPointer<Rc_3223d0> held(arg1->lock);
-        arg1->lock.clear();
+        igSmartPointer<igSemaphoreView> held(arg1->_allocationLock);
+        arg1->_allocationLock.clear();
         if (held.p != 0) {
-            a = held.p->v132(1);
-            b = held.p->v96();
+            a = held.p->wait(1);
+            b = held.p->destroy();
         }
-        arg1->lock.clear();
+        arg1->_allocationLock.clear();
     } else if (arg2 == 1) {
-        if (arg1->lock.p != 0) return R_3223d0(g_resultSuccess.v);
-        igSmartPointer<Rc_3223d0> created((Rc_3223d0 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
-        c = created.p->v92();
-        arg1->lock = created;
+        if (arg1->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
+        c = created.p->create();
+        arg1->_allocationLock = created;
     }
-    return R_3223d0(g_resultSuccess.v);
+    return igResult(g_resultSuccess.v);
 }
 
 void Gap__Core__igMallocMemoryPool__vfunc_35(int *outStatus, igMallocMemoryPool *self, long long size) {
@@ -119,32 +119,32 @@ void *Gap__Core__igMallocMemoryPool__vfunc_53(igMallocMemoryPoolView *self)
 }
 
 void FUN_00322820(void *arg0) {
-    DW4SR4 sp1C;
+    igResult sp1C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 116));
+    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((DW4VCSR_132_1_3223d0 *)(temp_a1))->vX((int)(1));
+        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
     }
 }
 
 void FUN_00322860(void *arg0) {
-    DW4SR4 sp1C;
+    igResult sp1C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 116));
+    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+        sp1C = ((igSemaphoreView *)(temp_a1))->signal();
     }
 }
 
 int FUN_00322890(void *arg0, int arg1) {
-    DW4SR4 sp2C;
+    igResult sp2C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 116));
+    temp_a1 = (void **)((igMallocMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp2C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
     }
     return arg1;
 }
@@ -374,16 +374,16 @@ void igMallocMemoryPool_Dump(void *self, int a1, int a2, int a3, int t0) {
     FUN_00322820(self);
     g = &DAT_004ff1b0[0];
     if (t0 != 0) {
-        igSmartPointer<V> r((V *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (r.p->v23(t0, &DAT_004f92f0[0]) == 0) {
+        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+        if (r.p->Open((const char *)t0, (const char *)&DAT_004f92f0[0]) == 0) {
             if (((M_3223d0 *)self)->f152 >= 2) {
                 FUN_00308390(DAT_004ff1f0, t0);
             }
             FUN_00322860(self);
             return;
         }
-        r.p->v29(g);
-        r.p->v24();
+        r.p->Print((const char *)g);
+        r.p->Close();
     } else {
         printf(g);
     }

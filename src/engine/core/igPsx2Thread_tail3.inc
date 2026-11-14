@@ -39,23 +39,23 @@ int Gap__Core__igPsx2Thread__vfunc_36(igPsx2Thread *self) {
     return self->_arg;
 }
 
-R_3308a0 Gap__Core__igPsx2Thread__vfunc_37(C_3308a0 *arg1, int arg2, int arg3) {
-    if (arg1->v30() == 0) {
-        if (arg2 & 0xF) {
-            return R_3308a0(g_resultFailure.v);
+igResult Gap__Core__igPsx2Thread__vfunc_37(igPsx2ThreadView *self, int stack, int size) {
+    if (self->isRunning() == 0) {
+        if (stack & 0xF) {
+            return igResult(g_resultFailure.v);
         }
-        if (arg1->f45 == 0) {
-            int a1 = arg1->f32;
+        if (self->_userStack == 0) {
+            int a1 = self->_stack;
             if (a1 != 0) {
-                FUN_00300f50((int)arg1, a1);
+                FUN_00300f50((int)self, a1);
             }
         }
-        arg1->f32 = arg2;
-        arg1->f45 = 1;
-        arg1->f36 = arg3;
-        return R_3308a0(g_resultSuccess.v);
+        self->_stack = stack;
+        self->_userStack = 1;
+        self->_stackSize = size;
+        return igResult(g_resultSuccess.v);
     }
-    return R_3308a0(g_resultFailure.v);
+    return igResult(g_resultFailure.v);
 }
 
 /* IgPsx2Thread vtable slot 38, a plain getter that returns the reflected field _stack (the raw

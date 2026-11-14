@@ -1,8 +1,8 @@
-void List_RemoveWordAt(L_2d6cf0 *l, int i) {
-    int n = l->n; int d;
+void List_RemoveWordAt(igDataList *l, int i) {
+    int n = l->_count; int d;
     if (n <= 0 || i < 0 || i >= n) return;
-    if (i != n - 1) { d = l->data + i * 4; memmove(d, d + 4, 4 * (n - (i + 1))); }
-    l->n = l->n - 1; }
+    if (i != n - 1) { d = l->_data + i * 4; memmove(d, d + 4, 4 * (n - (i + 1))); }
+    l->_count = l->_count - 1; }
 
 int List_BinarySearchWords(struct LL *arg0, int arg1, int (*arg2)(int, int)) {
     int lo = 0;
@@ -29,40 +29,40 @@ int List_BinarySearchWords(struct LL *arg0, int arg1, int (*arg2)(int, int)) {
     return -1;
 }
 
-int FUN_002d6e60(L_2d6e60 *l, void *key, Cmp cmp) {
-    int lo = 0; int hi = l->n - 1; int mid; int r;
+int FUN_002d6e60(igDataList *l, void *key, Cmp cmp) {
+    int lo = 0; int hi = l->_count - 1; int mid; int r;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        r = cmp(l->d + mid, key);
+        r = cmp((int *)l->_data + mid, key);
         if (r < 0) lo = mid + 1; else if (r > 0) hi = mid - 1; else return mid;
     }
-    if (l->n == 0) return 0;
-    if (cmp(l->d + lo, key) < 0) lo++;
+    if (l->_count == 0) return 0;
+    if (cmp((int *)l->_data + lo, key) < 0) lo++;
     return lo;
 }
 
-static inline int count_of(const struct Q_2d7090 *list) { return list->count; }
+static inline int count_of(const igDependencyListView *list) { return list->_count; }
 
-void FUN_002d7090(struct O_2d7090 *arg0, int arg1, int arg2) {
-    int n; struct Q_2d7090 *q; struct It *it;
-    q = arg0->q;
-    n = q->count;
-    if (n < q->cap) {
-        q->count = count_of(q) + 1;
+void FUN_002d7090(igDependencyOrderedListView *arg0, int arg1, int arg2) {
+    int n; igDependencyListView *q; struct It *it;
+    q = arg0->_dependencies;
+    n = q->_count;
+    if (n < q->_capacity) {
+        q->_count = count_of(q) + 1;
     } else {
         List_Resize(q, n + 1, 8);
     }
-    it = (struct It *)((char *)q->items + n * 8);
+    it = (struct It *)((char *)q->_data + n * 8);
     it->a = arg1;
     it->b = arg2;
     FUN_002d7280(arg0);
-    FUN_002d7130((Owner_2d7130 *)arg0);
+    FUN_002d7130(arg0);
 }
 
-void FUN_002d7130(Owner_2d7130 *owner) {
+void FUN_002d7130(igDependencyOrderedListView *owner) {
     igSmartPointer<ObjectList> copy(((ObjectList *)FUN_002bd680(((int)igObject_GetAllocator((int)owner)))));
-    ObjectList_AppendRetainedList((int)copy.p, (L_301e90 *)owner->children);
-    ObjectList *children = owner->children;
+    ObjectList_AppendRetainedList((int)copy.p, (L_301e90 *)owner->_objectList);
+    ObjectList *children = owner->_objectList;
     int count = children->count;
     int i;
     for (i = 0; i < count; i++) {
@@ -86,30 +86,30 @@ void FUN_002d7130(Owner_2d7130 *owner) {
 }
 
 void igRendererOrderedList_Clear(char *arg0) {
-    L_2d7690 *l;
+    ObjectList *l;
     int n;
     int i;
-    S1_2d7690 *t;
-    l = *(L_2d7690 **)(arg0 + 8);
-    n = l->n;
+    igObject *t;
+    l = *(ObjectList **)(arg0 + 8);
+    n = l->count;
     for (i = 0; i < n; i++) {
         t = l->data[i];
         if (t != 0) {
-            t->f4 = (int)((int) (t->f4 - 1));
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
+            t->_refCount = (int)((int) (t->_refCount - 1));
+            if (((unsigned long long) ((long long)(int) t->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(t);
             }
         }
     }
-    n = l->n;
+    n = l->count;
     for (i = 0; i < n; i++) {
         l->data[i] = 0;
     }
-    l->n = 0;
+    l->count = 0;
 }
 
-void FUN_002d7760(int *arg0, O_2d7760 *arg1, int arg2, int arg3) {
-    L_2d7760 *temp_a0 = arg1->list;
+void FUN_002d7760(int *arg0, igDependencyOrderedListView *arg1, int arg2, int arg3) {
+    igDependencyListView *temp_a0 = arg1->_dependencies;
     int idx = temp_a0->Find(arg2, arg3);
     int var_s2;
     if (idx >= 0) {
@@ -118,31 +118,31 @@ void FUN_002d7760(int *arg0, O_2d7760 *arg1, int arg2, int arg3) {
     } else {
         var_s2 = g_resultFailure.v;
     }
-    if (arg1->f24 != 0) {
+    if (arg1->_hasCircularDependencies != 0) {
         FUN_002d7280(arg1);
-        FUN_002d7130((Owner_2d7130 *)arg1);
+        FUN_002d7130(arg1);
     }
     *arg0 = var_s2;
 }
 
-void FUN_002d7840(struct S_2d7840 *arg0, int arg1) {
+void FUN_002d7840(igDependencyOrderedListView *arg0, int arg1) {
     int var_s0;
-    struct L_2d7840 *temp_a0;
+    igDependencyListView *temp_a0;
     int *temp_v1;
     int a, b;
 
-    for (var_s0 = arg0->f12->cnt - 1; var_s0 >= 0; var_s0--) {
-        temp_a0 = arg0->f12;
-        temp_v1 = temp_a0->data + var_s0 * 2;
+    for (var_s0 = arg0->_dependencies->_count - 1; var_s0 >= 0; var_s0--) {
+        temp_a0 = arg0->_dependencies;
+        temp_v1 = (int *)&temp_a0->_data[var_s0];
         b = temp_v1[1];
         a = temp_v1[0];
         if ((a == arg1) || (b == arg1)) {
             List_RemoveAt((L_2d69a0 *)temp_a0, var_s0, 8);
         }
     }
-    if (arg0->f24 != 0) {
+    if (arg0->_hasCircularDependencies != 0) {
         FUN_002d7280(arg0);
-        FUN_002d7130((Owner_2d7130 *)arg0);
+        FUN_002d7130(arg0);
     }
 }
 

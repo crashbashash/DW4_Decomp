@@ -107,7 +107,7 @@ void FUN_0032d9b0(int *arg0, Ob_32d9b0 *arg1, int arg2, int arg3) {
     *arg0 = *var_v1;
 }
 
-void thunk_iSignalSema(void) {
-    iSignalSema();
+void thunk_iSignalSema(int sema) {
+    iSignalSema(sema);
 }
 

@@ -12,20 +12,20 @@ igMetaObject *igMemoryDirEntry_GetMetaObject(void)
 }
 
 int igMemoryDirEntry_GetVTable(void) {
-    union U_2c0e10 u;
+    igMemoryDirEntry entry;
     int temp_s0;
     char *q1;
     int *tv1, *ta1;
     int tc1;
     
     
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    q1 = &u.b[8];
+    igObject_InitHeader((ObjectHeader *)&entry);
+    entry._vtable = (int)(&g_igNamedObject_vtable[0]);
+    q1 = (char *)&entry._name;
     *(int *)q1 = 0;
-    u.w[0] = (int)(&DAT_0052f860[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
+    entry._vtable = (int)(&DAT_0052f860[0]);
+    temp_s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)(&g_igNamedObject_vtable[0]);
     if (q1 != 0) {
         tv1 = *(int **)q1;
         if (tv1 != 0) {

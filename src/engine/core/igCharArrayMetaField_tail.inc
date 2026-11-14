@@ -2,7 +2,7 @@ void Gap__Core__igCharArrayMetaField__vfunc_52(igCharArrayMetaField *self, int b
     void **elementField;
 
     elementField = (void **)(((void **)FUN_002cc2c0()));
-    ((MetaFieldSwapBytesSlot *)(elementField))->SwapBytes((int)(buffer), (int)(count * self->_num));
+    ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
 /* IgCharArrayMetaField virtual getter 25. Returns the array's storage size in bytes as 16 bits:
@@ -14,7 +14,7 @@ unsigned short Gap__Core__igCharArrayMetaField__vfunc_25(igCharArrayMetaField *s
 }
 
 void FUN_002d4c20(void *arg0, int arg1, char arg2) {
-    ((DW4VC_140_1 *)(((char *)(arg0) + 0)))->vX((int)(0));
+    ((igMetaFieldView *)(((char *)(arg0) + 0)))->SetDefault(0);
     *(char *)(*(int *)((char *)(arg0) + 32) + arg1) = arg2;
 }
 

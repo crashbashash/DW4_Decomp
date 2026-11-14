@@ -14,11 +14,11 @@ igMetaObject *igMemoryPoolInfoList_GetMetaObject(void)
 }
 
 int igMemoryPoolInfoList_GetVTable(void) {
-    struct Obj_2bfe00 obj;
+    igMemoryPoolInfoList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_005329e0[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_005329e0[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002bfe40(void)

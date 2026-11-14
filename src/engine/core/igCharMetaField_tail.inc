@@ -64,7 +64,7 @@ void FUN_002d4e40(void **arg0, char arg1) {
     char sp1F;
 
     sp1F = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp1F));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp1F);
 }
 
 /* igMetaField slot 27 (+0x6c) for a char array: returns 1, the alignment of a single char element.
@@ -77,11 +77,11 @@ unsigned short FUN_002d4e80(void *arg0) {
     return *(int *)((char *)(arg0) + 20);
 }
 
-int FUN_002d4e90(S_2d4e90 *arg0) {
+int FUN_002d4e90(igCompoundMetaField *arg0) {
     int mx = 0;
     int i = 0;
-    while (i < arg0->list->count) {
-        int r = arg0->list->data[i]->vX();
+    while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
+        int r = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_27();
         if (mx < r) mx = r;
         i++;
     }
@@ -95,7 +95,7 @@ void FUN_002d4f20(void *arg0, int arg1) {
 
     for (var_s0 = 0; temp_a0 = (int *)*(int *)((char *)(arg0) + 52), var_s0 < temp_a0[2]; var_s0++) {
         temp_a0_2 = (void *)(*(int *)(temp_a0[4] + (var_s0 * 4)));
-        ((C112 *)temp_a0_2)->vX(arg1);
+        ((igMetaFieldView *)temp_a0_2)->SetToDefault(arg1);
     }
 }
 
@@ -103,175 +103,175 @@ void FUN_002d4fa0(void *arg0, int arg1) {
     int i;
     int lst;
     for (i = 0; lst = *(int *)((char *)arg0 + 52), i < *(int *)(lst + 8); i++) {
-        ((V120 *)(*(int *)(*(int *)(lst + 16) + i * 4)))->vX(arg1);
+        ((igMetaFieldView *)(*(int *)(*(int *)(lst + 16) + i * 4)))->CopyDefaultToValue(arg1);
     }
 }
 
-void FUN_002d5020(S_2d5020 *arg0, int arg1) {
+void FUN_002d5020(igCompoundMetaField *arg0, int arg1) {
     int i;
-    L_2d5020 *l;
+    igMetaFieldList *l;
     i = 0;
-    while (l = arg0->list, i < l->n) {
-        l->arr[i]->vX(arg1);
+    while (l = (igMetaFieldList *)arg0->_fieldList, i < l->_count) {
+        ((igMetaFieldView **)l->_data)[i]->ConstructValue(arg1);
         i++;
     }
 }
 
-void FUN_002d50a0(H *arg0, int arg1) {
+void FUN_002d50a0(igCompoundMetaField *arg0, int arg1) {
     int i;
-    void **o;
-    for (i = 0; i < arg0->list->count; i++) {
-        o = arg0->list->items[i];
-        ((V128 *)o)->vX(arg1);
+    igMetaFieldView *o;
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        o = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i];
+        o->DestructValue(arg1);
     }
 }
 
-void FUN_002d5120(A *a, int x) {
+void FUN_002d5120(igCompoundMetaField *a, int x) {
     int i;
-    for (i = 0; i < a->b->cnt; i++) {
-        a->b->arr[i]->vX(x);
+    for (i = 0; i < ((igMetaFieldList *)a->_fieldList)->_count; i++) {
+        ((igMetaFieldView **)((igMetaFieldList *)a->_fieldList)->_data)[i]->ZeroValue(x);
     }
 }
 
-void FUN_002d51a0(S_2d51a0 *arg0, int arg1) {
+void FUN_002d51a0(igCompoundMetaField *arg0, int arg1) {
     int i = 0;
-    while (i < arg0->list->count) {
-        arg0->list->data[i]->vX(arg1);
+    while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
+        ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->ClearValue(arg1);
         i++;
     }
 }
 
 void FUN_002d5220(void *arg0, int arg1, int arg2) {
     int i;
-    for (i = 0; i < (*(L_2d5220 **)((char *)arg0 + 52))->n; i++) {
-        (*(L_2d5220 **)((char *)arg0 + 52))->a[i]->vX(arg1, arg2);
+    for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_count; i++) {
+        ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_data)[i]->DeepCopy(arg1, arg2);
     }
 }
 
 void FUN_002d52b0(void *arg0, int arg1, int arg2) {
     int i;
-    for (i = 0; i < (*(L_2d52b0 **)((char *)arg0 + 52))->n; i++) {
-        DW4VC_148 *o = (*(L_2d52b0 **)((char *)arg0 + 52))->arr[i];
-        o->vX(arg1, arg2);
+    for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_count; i++) {
+        igMetaFieldView *o = ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)arg0)->_fieldList)->_data)[i];
+        o->vfunc_37(arg1, arg2);
     }
 }
 
-void FUN_002d5340(H_2d5340 *arg0, int arg1, int arg2) {
+void FUN_002d5340(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
-    void **o;
-    for (i = 0; i < arg0->list->count; i++) {
-        o = arg0->list->items[i];
-        ((V156 *)o)->vX(arg1, arg2);
+    igMetaFieldView *o;
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        o = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i];
+        o->vfunc_39(arg1, arg2);
     }
 }
 
-void FUN_002d53d0(S_2d53d0 *arg0, int arg1, int arg2) {
+void FUN_002d53d0(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i = 0;
-    while (i < arg0->list->count) {
-        arg0->list->data[i]->vX(arg1, arg2);
+    while (i < ((igMetaFieldList *)arg0->_fieldList)->_count) {
+        ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_40(arg1, arg2);
         i++;
     }
 }
 
-void FUN_002d5460(A_2d5460 *arg0, int arg1, int arg2, int arg3) {
+void FUN_002d5460(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     unsigned int temp_s1;
     unsigned int i;
 
-    temp_s1 = arg0->f52->n;
+    temp_s1 = ((igMetaFieldList *)arg0->_fieldList)->_count;
     for (i = 0; i < temp_s1; i++) {
-        arg0->f52->arr[i]->vX(arg1, arg2, arg3);
+        ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->Print(arg1, arg2, arg3);
     }
 }
 
-void FUN_002d5500(S52 *arg0, int arg1, int arg2, int arg3) {
+void FUN_002d5500(igCompoundMetaField *arg0, int arg1, int arg2, int arg3) {
     int i;
 
-    for (i = 0; i < arg0->f52->count; i++) {
-        arg0->f52->data[i]->vX(arg1, arg2, arg3);
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->ReleaseElements(arg1, arg2, arg3);
     }
 }
 
-int FUN_002d55a0(Self *arg0, int arg1, int arg2) {
+int FUN_002d55a0(igCompoundMetaField *arg0, int arg1, int arg2) {
     int sum = 0;
     int i;
-    for (i = 0; i < arg0->list->count; i++) {
-        sum += arg0->list->arr[i]->v41(arg1, arg2);
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        sum += ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->Write(arg1, arg2);
     }
     return sum;
 }
 
-int FUN_002d5640(struct S_2d5640 *arg0, int arg1, int arg2) {
+int FUN_002d5640(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
-    DW4VC_176 *o;
+    igMetaFieldView *o;
 
-    for (i = 0; i < arg0->list->n; i++) {
-        o = (DW4VC_176 *)arg0->list->data[i];
-        if (o->vX(arg1, arg2) != 0) {
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        o = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i];
+        if (o->vfunc_44(arg1, arg2) != 0) {
             return -1;
         }
     }
     return 0;
 }
 
-int FUN_002d56e0(O_2d56e0 *arg0, int arg1, int arg2) {
+int FUN_002d56e0(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
-    for (i = 0; i < arg0->list->count; i++) {
-        if (arg0->list->items[i]->vX(arg1, arg2) == 0) {
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_45(arg1, arg2) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-int FUN_002d5780(T_2d5780 *arg0, int arg1, int arg2) {
+int FUN_002d5780(igCompoundMetaField *arg0, int arg1, int arg2) {
     int var_s0;
 
-    for (var_s0 = 0; var_s0 < arg0->f52->f8; var_s0++) {
-        if (arg0->f52->f16[var_s0]->vX(arg1, arg2) == 0) {
+    for (var_s0 = 0; var_s0 < ((igMetaFieldList *)arg0->_fieldList)->_count; var_s0++) {
+        if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[var_s0]->IsAlikeDeep(arg1, arg2) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-int FUN_002d5820(S_2d5820 *arg0, int arg1, int arg2) {
+int FUN_002d5820(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
 
-    for (i = 0; i < arg0->l->cnt; i++) {
-        if (arg0->l->arr[i]->vX(arg1, arg2) == 0) {
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->IsAlikeShallow(arg1, arg2) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-int FUN_002d58c0(O_2d58c0 *arg0, int arg1, int arg2) {
+int FUN_002d58c0(igCompoundMetaField *arg0, int arg1, int arg2) {
     int i;
-    for (i = 0; i < arg0->l->n; i++) {
-        if (arg0->l->a[i]->vX(arg1, arg2) == 0) {
+    for (i = 0; i < ((igMetaFieldList *)arg0->_fieldList)->_count; i++) {
+        if (((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i]->vfunc_48(arg1, arg2) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-int FUN_002d59f0(Obj_2d59f0 *arg0, int arg1, int arg2, int arg3, int arg4) {
+int FUN_002d59f0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4) {
     int sum = 0;
     int n;
     int base;
     int i;
-    base = arg0->base;
-    n = arg0->arr->n;
+    base = arg0->_offset;
+    n = ((igMetaFieldList *)arg0->_fieldList)->_count;
     for (i = 0; i < n; i++) {
-        Elem *e = arg0->arr->data[i];
-        int o = e->off;
-        sum += e->run((arg1 + o) - base, (arg2 + o) - base, arg3, arg4);
+        igMetaFieldView *e = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[i];
+        int o = ((igMetaField *)e)->_offset;
+        sum += e->WriteRawFieldMem((arg1 + o) - base, (arg2 + o) - base, arg3, arg4);
     }
     return sum;
 }
 
-int FUN_002d5ad0(S_2d5ad0 *arg0, int arg1, int arg2, int arg3, int arg4) {
-    VC_2d5ad0 *temp_a0;
+int FUN_002d5ad0(igCompoundMetaField *arg0, int arg1, int arg2, int arg3, int arg4) {
+    igMetaFieldView *temp_a0;
     int var_s7;
     int temp_v0;
     int temp_s6;
@@ -280,31 +280,31 @@ int FUN_002d5ad0(S_2d5ad0 *arg0, int arg1, int arg2, int arg3, int arg4) {
 
     var_s7 = 0;
     var_s4 = 0;
-    temp_s5 = arg0->f8;
-    temp_s6 = arg0->f34->cnt;
+    temp_s5 = arg0->_offset;
+    temp_s6 = ((igMetaFieldList *)arg0->_fieldList)->_count;
     for (; var_s4 < temp_s6; var_s4++) {
-        temp_a0 = (VC_2d5ad0 *)arg0->f34->arr[var_s4];
-        temp_v0 = ((E *)temp_a0)->f8;
-        var_s7 += temp_a0->vX((arg1 + temp_v0) - temp_s5, (arg2 + temp_v0) - temp_s5, arg3, arg4);
+        temp_a0 = ((igMetaFieldView **)((igMetaFieldList *)arg0->_fieldList)->_data)[var_s4];
+        temp_v0 = ((igMetaField *)temp_a0)->_offset;
+        var_s7 += temp_a0->ReadRawFieldMem((arg1 + temp_v0) - temp_s5, (arg2 + temp_v0) - temp_s5, arg3, arg4);
     }
     return var_s7;
 }
 
-void FUN_002d5bb0(A_2d5bb0 *arg0, int arg1, int arg2) {
+void FUN_002d5bb0(igMetaFieldView *arg0, int arg1, int arg2) {
     int var_s3;
-    L_2d5bb0 *temp_s2;
-    E_2d5bb0 *temp_a0;
+    igMetaFieldList *temp_s2;
+    igMetaFieldView *temp_a0;
     int var_s1;
     int var_s0;
 
     var_s3 = arg1;
-    temp_s2 = arg0->vX()->f52;
+    temp_s2 = (igMetaFieldList *)arg0->vfunc_23()->_fieldList;
     for (var_s1 = 0; var_s1 < arg2; var_s1++) {
-        for (var_s0 = 0; var_s0 < temp_s2->count; var_s0++) {
-            temp_a0 = temp_s2->data[var_s0];
-            temp_a0->vX(var_s3 + temp_a0->f8, 1);
+        for (var_s0 = 0; var_s0 < temp_s2->_count; var_s0++) {
+            temp_a0 = ((igMetaFieldView **)temp_s2->_data)[var_s0];
+            temp_a0->SwapBytes((void *)(var_s3 + ((igMetaField *)temp_a0)->_offset), 1);
         }
-        var_s3 += arg0->f20;
+        var_s3 += ((igCompoundMetaField *)arg0)->_size;
     }
 }
 
@@ -315,11 +315,11 @@ int FUN_002d5c80(void) {
 void FUN_002d5c90(void *arg0, int arg1) {
     int i;
     int *t;
-    VC212 *o;
+    igMetaFieldView *o;
     i = 0;
     while (t = *(int **)((char *)arg0 + 52), i < t[2]) {
-        o = (VC212 *)(*(int *)(t[4] + (i * 4)));
-        o->vX(arg1);
+        o = (igMetaFieldView *)(*(int *)(t[4] + (i * 4)));
+        o->SwapValue(arg1);
         i += 1;
     }
 }
@@ -327,32 +327,32 @@ void FUN_002d5c90(void *arg0, int arg1) {
 int FUN_002d5d10(int *arg0, int arg1, int arg2, int arg3) {
     int b;
     int a;
-    Q_2d5d10 *q;
+    igMetaFieldList *q;
     int i;
 
     a = 0;
     sscanf(arg2, &DAT_004f95e8[0], &a);
-    q = (Q_2d5d10 *)((A_2d5d10 *)arg0)->vX()[13];
-    for (i = 0; i < q->count; i++) {
-        B_2d5d10 *o = q->data[i];
-        o->vX(arg1 + ((int *)o)[2], arg2 + a, arg3);
+    q = (igMetaFieldList *)((igMetaFieldView *)arg0)->vfunc_23()->_fieldList;
+    for (i = 0; i < q->_count; i++) {
+        igMetaFieldView *o = ((igMetaFieldView **)q->_data)[i];
+        o->vfunc_56(arg1 + ((igMetaField *)o)->_offset, arg2 + a, arg3);
     }
     sscanf(arg2, &DAT_004f95f0[0], &b);
     return a + b;
 }
 
-int FUN_002d5df0(RecoveryString *out, Ctx *ctx, int a2, int a3) {
+int FUN_002d5df0(RecoveryString *out, igMetaFieldView *ctx, int a2, int a3) {
     char *sepA = (char *)&DAT_004f95f8[0];
     char *sepB = (char *)&DAT_004f9600[0];
-    igMetaFieldList *list = (igMetaFieldList *)ctx->get()->_fieldList;
+    igMetaFieldList *list = (igMetaFieldList *)ctx->vfunc_23()->_fieldList;
     int n = list->_count;
     RecoveryString *arr = (RecoveryString *)((void *)FUN_00300e00((int)ctx, n, 4));
     int total = 9;
     int i;
     for (i = 0; i < n; i++) {
         int off = i * 4;
-        Elem_2d5df0 *e = ((Elem_2d5df0 **)list->_data)[i];
-        *(RecoveryString *)((char *)arr + off) = e->vf(a2 + ((igMetaField *)e)->_offset, a3);
+        igMetaFieldView *e = ((igMetaFieldView **)list->_data)[i];
+        *(RecoveryString *)((char *)arr + off) = e->vfunc_57(a2 + ((igMetaField *)e)->_offset, a3);
         total += strlen(((RecoveryString *)((char *)arr + off))->p) + 1;
     }
     char *buf = ((char *)igObject_AllocateStorage((int)ctx, total));
@@ -452,33 +452,33 @@ int FUN_002d6380(void) {
     return ((int *)g_igContext_metaObject)[0];
 }
 
-int FUN_002d6390(S_2d6390 *arg0) {
-    if (arg0->a == 0) {
-        FUN_002d60b0((igContext *)arg0);
+int FUN_002d6390(igContext *arg0) {
+    if (arg0->_pExtList == 0) {
+        FUN_002d60b0(arg0);
     }
-    if (arg0->n <= 0) {
+    if (arg0->_iNumExts <= 0) {
         return 0;
     }
-    return arg0->a;
+    return arg0->_pExtList;
 }
 
-int FUN_002d63e0(struct A_2d63e0 *arg0, int arg1) {
+int FUN_002d63e0(igContext *arg0, int arg1) {
     int i;
     bool found;
-    struct E_2d63e0 *e;
+    igContextExtInfo *e;
 
     e = 0;
-    if (arg0->f8 == 0) {
-        FUN_002d60b0((igContext *)arg0);
+    if (arg0->_pExtList == 0) {
+        FUN_002d60b0(arg0);
     }
     i = 0;
-    if (arg0->n <= 0) {
+    if (arg0->_iNumExts <= 0) {
         return 0;
     }
     found = true;
-    while (i < arg0->n && found) {
-        e = arg0->f8->arr[i];
-        if (strcmp(e->name, arg1) == 0) {
+    while (i < arg0->_iNumExts && found) {
+        e = ((igContextExtInfo **)((igContextExtInfoList *)arg0->_pExtList)->_data)[i];
+        if (strcmp(e->_pName, arg1) == 0) {
             found = false;
         } else {
             i += 1;
@@ -487,22 +487,22 @@ int FUN_002d63e0(struct A_2d63e0 *arg0, int arg1) {
     if ((found & 0xFF) == 1) {
         return 0;
     }
-    return e->f8;
+    return e->_pMeta;
 }
 
 void *FUN_002d64c0(igVisualContext *arg0, int extra1) {
     int temp_v0;
     igObject *var_s0;
 
-    temp_v0 = FUN_002d63e0((struct A_2d63e0 *)arg0, extra1);
+    temp_v0 = FUN_002d63e0((igContext *)arg0, extra1);
     if (temp_v0 == 0) {
         return 0;
     }
-    var_s0 = (igObject *)(((void *)FUN_002d65e0((O_2d65e0 *)arg0, temp_v0)));
+    var_s0 = (igObject *)(((void *)FUN_002d65e0((igContext *)arg0, temp_v0)));
     if (var_s0 == 0) {
         var_s0 = (igObject *)(((void *)igMetaObject_CreateInstance((CreateMeta *)temp_v0, (MemoryPool *)(((int)igObject_GetAllocator((int)arg0))))));
         if (var_s0 != 0) {
-            if (((DW4VC_112_1 *)(((char *)(var_s0) + 0)))->vX((int)(arg0)) == 0) {
+            if (((igContextExtView *)var_s0)->vfunc_28(arg0) == 0) {
                 var_s0->_refCount = var_s0->_refCount - 1;
                 if ((var_s0->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(var_s0);
@@ -514,18 +514,18 @@ void *FUN_002d64c0(igVisualContext *arg0, int extra1) {
                 if ((var_s0->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(var_s0);
                 }
-                ((DW4VC_116_1 *)(((char *)(var_s0) + 0)))->vX((int)(arg0));
+                ((igContextExtView *)var_s0)->vfunc_29(arg0);
             }
         }
     }
     return var_s0;
 }
 
-int FUN_002d65e0(struct O_2d65e0 *arg0, int arg1) {
+int FUN_002d65e0(igContext *arg0, int arg1) {
     int i;
-    for (i = 0; i < arg0->list->n; i++) {
-        if (igObject_IsKindOf((void *)arg0->list->arr[i], (igMetaObject *)arg1) != 0) {
-            return arg0->list->arr[i];
+    for (i = 0; i < ((igObjectList *)arg0->_pExtInstances)->_count; i++) {
+        if (igObject_IsKindOf((void *)((int *)((igObjectList *)arg0->_pExtInstances)->_data)[i], (igMetaObject *)arg1) != 0) {
+            return ((int *)((igObjectList *)arg0->_pExtInstances)->_data)[i];
         }
     }
     return 0;

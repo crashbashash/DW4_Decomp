@@ -19,10 +19,10 @@ igMetaObject *igPsx2IopRpcConnection_GetMetaObject(void)
 }
 
 int igPsx2IopRpcConnection_GetVTable(void) {
-    union U_2cfef0 u;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_0052db30[0];
-    return *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    igPsx2IopRpcConnection connection;
+    igObject_InitHeader((struct ObjectHeader *)&connection);
+    connection._vtable = (int)&DAT_0052db30[0];
+    return *(int *)((char *)&connection + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cff30(void)

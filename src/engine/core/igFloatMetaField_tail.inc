@@ -6,7 +6,7 @@ void FUN_002e3810(void **arg0, float fparg0) {
     float sp1C;
 
     sp1C = fparg0;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp1C));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp1C);
 }
 
 int Gap__Core__igFloatMetaField__vfunc_27(void) {

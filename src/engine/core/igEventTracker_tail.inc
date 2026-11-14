@@ -65,102 +65,102 @@ void FUN_002dcc60(FileRequest *request, int path) {
     request->flags = request->flags & ~2;
 }
 
-void FUN_002dcd70(W_2dcd70 *arg0, int arg1) {
-    ScopedLock_2dcd70 guard(arg0->lock);
-    if (arg0->isBusy() != false) {
+void FUN_002dcd70(igEventTrackerView *tracker, int className) {
+    EventTrackerScopedLock guard(tracker->_lock);
+    if (tracker->isBusy() != false) {
         return;
     }
-    arg0->flags = arg0->flags | 2;
-    if (arg1 != 0) {
-        strncpy(arg0->buf, arg1, 0xFF);
+    tracker->_flags = tracker->_flags | 2;
+    if (className != 0) {
+        strncpy(tracker->_eventClassName, className, 0xFF);
     } else {
-        arg0->buf[0] = 0;
+        tracker->_eventClassName[0] = 0;
     }
-    if (arg0->buf[0] != 0) {
-        arg0->res = FUN_0030d300(arg0->h, (int)arg0->buf);
+    if (tracker->_eventClassName[0] != 0) {
+        tracker->_eventClassNameOffset = FUN_0030d300(tracker->_classNames, (int)tracker->_eventClassName);
     } else {
-        arg0->res = -1;
+        tracker->_eventClassNameOffset = -1;
     }
-    arg0->flags = arg0->flags & ~2;
+    tracker->_flags = tracker->_flags & ~2;
 }
 
-void Gap__Core__igEventTracker__vfunc_23(Ev *arg0) {
+void Gap__Core__igEventTracker__vfunc_23(igEventTrackerView *arg0) {
     int n;
-    FUN_0030cf20(arg0->f52, 0x100);
-    FUN_0030cf30(arg0->f52, 0x20);
-    FUN_0030cf40((void *)arg0->f52);
-    FUN_0030cf20(arg0->f56, 0x1000);
-    FUN_0030cf30(arg0->f56, 0x100);
-    FUN_0030cf40((void *)arg0->f56);
-    FUN_0030cf20(arg0->f68, 0x200);
-    FUN_0030cf30(arg0->f68, 0x20);
-    FUN_0030cf40((void *)arg0->f68);
-    FUN_0030cf20(arg0->f64, 0x10000);
-    FUN_0030cf30(arg0->f64, 0x1000);
-    FUN_0030cf40((void *)arg0->f64);
-    FUN_0030cf20(arg0->f68, 0x2000);
-    FUN_0030cf30(arg0->f68, 0x100);
-    FUN_0030cf40((void *)arg0->f68);
-    FUN_002d38d0(arg0->f72, 0x10000);
-    FUN_002d38e0(arg0->f72, 0x1000);
-    FUN_002d38f0((void *)arg0->f72);
-    if (arg0->f92->v23() != 0) {
-        FUN_002eb090(arg0->f76, 0x4000);
-        FUN_002eb0a0(arg0->f76, 0x4000);
-        FUN_002eb0b0((int *)arg0->f76);
+    FUN_0030cf20(arg0->_groups, 0x100);
+    FUN_0030cf30(arg0->_groups, 0x20);
+    FUN_0030cf40((void *)arg0->_groups);
+    FUN_0030cf20(arg0->_classNames, 0x1000);
+    FUN_0030cf30(arg0->_classNames, 0x100);
+    FUN_0030cf40((void *)arg0->_classNames);
+    FUN_0030cf20(arg0->_sourceFileNames, 0x200);
+    FUN_0030cf30(arg0->_sourceFileNames, 0x20);
+    FUN_0030cf40((void *)arg0->_sourceFileNames);
+    FUN_0030cf20(arg0->_annotations, 0x10000);
+    FUN_0030cf30(arg0->_annotations, 0x1000);
+    FUN_0030cf40((void *)arg0->_annotations);
+    FUN_0030cf20(arg0->_sourceFileNames, 0x2000);
+    FUN_0030cf30(arg0->_sourceFileNames, 0x100);
+    FUN_0030cf40((void *)arg0->_sourceFileNames);
+    FUN_002d38d0(arg0->_callStacks, 0x10000);
+    FUN_002d38e0((igCallStackTableView *)arg0->_callStacks, 0x1000);
+    FUN_002d38f0((igCallStackTableView *)arg0->_callStacks);
+    if (arg0->_callStackTracer->vfunc_25() != 0) {
+        FUN_002eb090((int)arg0->_locations, 0x4000);
+        FUN_002eb0a0((int)arg0->_locations, 0x4000);
+        FUN_002eb0b0(arg0->_locations);
     }
-    n = arg0->f36 * 0x14;
-    if (n >= arg0->f80->cap) {
-        List_Reserve((L_2d6680 *)arg0->f80, n, 1);
+    n = arg0->_capacity * 0x14;
+    if (n >= arg0->_eventRecords->_count) {
+        List_Reserve((L_2d6680 *)arg0->_eventRecords, n, 1);
     }
-    arg0->v48(arg0->f36 * 2);
+    arg0->vfunc_50(arg0->_capacity * 2);
     FUN_002dca90();
-    arg0->f88 = (int)FUN_002dca90;
+    arg0->_codeReferenceAddress = (int)FUN_002dca90;
     FUN_002dcaa0((PoolOwner *)arg0, 1);
 }
 
-void Gap__Core__igEventTracker__vfunc_24(E_2dd000 *arg0) {
+void Gap__Core__igEventTracker__vfunc_24(igEventTrackerView *arg0) {
     int busy = (arg0->getFlags() & 2) != 0;
     if (!busy) {
-        arg0->flags = arg0->flags | 2;
-        FUN_0030cfa0((struct ClearOwner *)arg0->f52);
-        FUN_0030cfa0((struct ClearOwner *)arg0->f56);
-        FUN_0030cfa0((struct ClearOwner *)arg0->f68);
-        FUN_0030cfa0((struct ClearOwner *)arg0->f64);
-        FUN_0030cfa0((struct ClearOwner *)arg0->f68);
-        FUN_002d3950((struct S_2d3950 *)arg0->f72);
-        if (arg0->f92->vA() != 0) {
-            FUN_002eb150((struct O_2eb150 *)arg0->f76);
+        arg0->_flags = arg0->_flags | 2;
+        FUN_0030cfa0((struct ClearOwner *)arg0->_groups);
+        FUN_0030cfa0((struct ClearOwner *)arg0->_classNames);
+        FUN_0030cfa0((struct ClearOwner *)arg0->_sourceFileNames);
+        FUN_0030cfa0((struct ClearOwner *)arg0->_annotations);
+        FUN_0030cfa0((struct ClearOwner *)arg0->_sourceFileNames);
+        FUN_002d3950((igCallStackTableView *)arg0->_callStacks);
+        if (arg0->_callStackTracer->vfunc_25() != 0) {
+            FUN_002eb150(arg0->_locations);
         }
-        if (0 <= arg0->f80->cap) {
-            arg0->f80->cnt = 0;
+        if (0 <= arg0->_eventRecords->_capacity) {
+            arg0->_eventRecords->_count = 0;
         } else {
-            List_Resize(arg0->f80, 0, 1);
+            List_Resize(arg0->_eventRecords, 0, 1);
         }
-        if (!(0 < arg0->f80->cnt)) {
-            List_Reserve((L_2d6680 *)arg0->f80, 0, 1);
+        if (!(0 < arg0->_eventRecords->_count)) {
+            List_Reserve((L_2d6680 *)arg0->_eventRecords, 0, 1);
         }
         FUN_002dcaa0((PoolOwner *)arg0, 0);
-        arg0->flags = arg0->flags & ~2;
+        arg0->_flags = arg0->_flags & ~2;
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_25(E_2dd0f0 *arg0) {
-    EventTrackerScopedLock guard(arg0->lock);
-    arg0->f40 = 0;
-    FUN_0030d050(arg0->f52);
-    FUN_0030d050(arg0->f56);
-    FUN_0030d050(arg0->f68);
-    FUN_0030d050(arg0->f64);
-    FUN_0030d050(arg0->f68);
-    FUN_002d3a20((void **)arg0->f72);
-    Lst_2dd0f0 *l = arg0->f80;
+void Gap__Core__igEventTracker__vfunc_25(igEventTrackerView *arg0) {
+    EventTrackerScopedLock guard(arg0->_lock);
+    arg0->_count = 0;
+    FUN_0030d050(arg0->_groups);
+    FUN_0030d050(arg0->_classNames);
+    FUN_0030d050(arg0->_sourceFileNames);
+    FUN_0030d050(arg0->_annotations);
+    FUN_0030d050(arg0->_sourceFileNames);
+    FUN_002d3a20((igCallStackTableView *)arg0->_callStacks);
+    igTDataList<signed char> *l = arg0->_eventRecords;
     if (0 <= l->_capacity) {
         l->_count = 0;
     } else {
         List_Resize(l, 0, 1);
     }
-    arg0->v200(arg0->f84->f12);
+    arg0->vfunc_50(arg0->_hashIndex->_capacity);
 }
 
 void Gap__Core__igEventTracker__vfunc_28(int *arg0, char *arg1, char *arg2, int *arg3) {
@@ -319,28 +319,28 @@ void Gap__Core__igEventTracker__vfunc_30(int *result, igEventTracker *self, char
     }
 }
 
-void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
+void Gap__Core__igEventTracker__vfunc_33(igEventTrackerView *arg0, int arg1, int arg2, int arg3, int *arg4, int *arg5, int *arg6, int *arg7)
 {
     int var_s1;
     int var_s0;
-    Ev_2df6d0 ev;
+    EventRecord ev;
     int key = arg3;
     var_s1 = 0;
     var_s0 = 0;
     FUN_002e2130((int)&ev);
     if (arg2 == -1) {
-        arg2 = arg0->f40 - 1;
+        arg2 = arg0->_count - 1;
     }
     *arg4 = 0;
     *arg5 = 0;
     *arg6 = 0;
     *arg7 = 0;
     while (var_s1 < arg1) {
-        var_s0 = arg0->v32(var_s0);
+        var_s0 = arg0->vfunc_34(var_s0);
         var_s1 += 1;
     }
     for (;;) {
-        int c = arg0->v25(var_s0, &ev).Code();
+        int c = arg0->vfunc_27(var_s0, &ev).Code();
         if (c != g_resultSuccess.v) break;
         if (ev.str != 0 && *ev.str != 0 && strcmp(ev.str, key) == 0) {
             switch (ev.type) {
@@ -354,29 +354,29 @@ void Gap__Core__igEventTracker__vfunc_33(T_2df6d0 *arg0, int arg1, int arg2, int
                 break;
             }
         }
-        var_s0 = arg0->v32(var_s0);
+        var_s0 = arg0->vfunc_34(var_s0);
         var_s1 += 1;
         if (var_s1 >= arg2 || var_s0 == -1) break;
     }
     FUN_002e2300(&ev, (long long)(-1));
 }
 
-int Gap__Core__igEventTracker__vfunc_31(ET *arg0, int arg1) {
+int Gap__Core__igEventTracker__vfunc_31(igEventTrackerView *arg0, int arg1) {
     int out;
     int k;
     int idx;
     int n;
     int i;
 
-    k = arg0->vB();
+    k = arg0->vfunc_48(arg1);
     i = 0;
-    n = arg0->f84->n;
+    n = arg0->_hashIndex->_count;
     for (;;) {
-        idx = arg0->f84->data[k];
+        idx = arg0->_hashIndex->_data[k];
         if (idx == -1) {
             return -1;
         }
-        arg0->vA(idx, &out);
+        arg0->vfunc_29(idx, &out);
         if (out == arg1) {
             return idx;
         }
@@ -391,18 +391,18 @@ int Gap__Core__igEventTracker__vfunc_31(ET *arg0, int arg1) {
     }
 }
 
-int Gap__Core__igEventTracker__vfunc_34(int *arg0, int arg1) {
-    struct Q_2df990 *q;
+int Gap__Core__igEventTracker__vfunc_34(igEventTrackerView *self, int arg1) {
+    igTDataList<signed char> *q;
     signed char *p;
     int n;
     int c;
 
-    q = (struct Q_2df990 *)arg0[20];
-    n = q->count;
+    q = self->_eventRecords;
+    n = q->_count;
     if (n < arg1) {
         return -1;
     }
-    p = q->data + arg1;
+    p = q->_data + arg1;
     if ((unsigned int)*p++ >= 0x20U) {
         return -1;
     }
@@ -430,40 +430,40 @@ unsigned int Gap__Core__igEventTracker__vfunc_48(igEventTracker *self, unsigned 
     return 0U;
 }
 
-void Gap__Core__igEventTracker__vfunc_49(O_2dff30 *self, int arg1, int arg2) {
+void Gap__Core__igEventTracker__vfunc_49(igEventTrackerView *self, int arg1, int arg2) {
     int sp9C;
     int idx, tried, n, half, cnt;
-    TB *tb;
+    igTDataList<int> *tb;
     int *slot;
     int v;
 loop:
-    n = self->tab->count;
+    n = self->_hashIndex->_count;
     half = n >> 1;
     if (n < 0) half = (n + 1) >> 1;
     tried = 0;
     bool z = !(n != 0);
     if (z) goto done;
     {
-        idx = self->v46(arg1);
+        idx = self->vfunc_48(arg1);
 again:
-        tb = self->tab;
-        slot = tb->data + idx;
+        tb = self->_hashIndex;
+        slot = tb->_data + idx;
         v = *slot;
         if (v == -1) {
-            cnt = tb->count;
+            cnt = tb->_count;
             if (cnt != 0 && idx >= 0 && idx < cnt) *slot = arg2;
         } else {
-            self->v27(v, &sp9C);
+            self->vfunc_29(v, &sp9C);
             if (sp9C == arg1) {
-                tb = self->tab;
-                cnt = tb->count;
-                if (cnt != 0 && idx >= 0 && idx < cnt) tb->data[idx] = arg2;
+                tb = self->_hashIndex;
+                cnt = tb->_count;
+                if (cnt != 0 && idx >= 0 && idx < cnt) tb->_data[idx] = arg2;
             } else {
                 idx += 1;
                 if (idx >= n) idx = 0;
                 tried += 1;
                 if (tried >= half) {
-                    self->v48(n * 2);
+                    self->vfunc_50(n * 2);
                     goto loop;
                 }
                 goto again;
@@ -545,24 +545,24 @@ int FUN_002e1500(void *arg0, int arg1) {
     return 0;
 }
 
-int FUN_002e1550(struct S_2e1550 *arg0, int arg1) {
+int FUN_002e1550(igEventTrackerView *tracker, int type) {
     int t;
-    if (arg1 >= 0 && arg1 < 32) {
-        t = arg0->tab[arg1];
+    if (type >= 0 && type < 32) {
+        t = tracker->_markerTypeNameOffsets[type];
         if (t != -1) {
-            return ((int)FUN_0030d1d0((int *)arg0->a, t));
+            return ((int)FUN_0030d1d0((int *)tracker->_names, t));
         }
     }
     return 0;
 }
 
-int FUN_002e15a0(S_2e15a0 *arg0, int arg1) {
-    int temp_a1;
+int FUN_002e15a0(igEventTrackerView *tracker, int type) {
+    int offset;
 
-    if (arg1 >= 0 && arg1 < 16) {
-        temp_a1 = arg0->tbl[arg1];
-        if (temp_a1 != -1) {
-            return ((int)FUN_0030d1d0((int *)arg0->f48, temp_a1));
+    if (type >= 0 && type < 16) {
+        offset = tracker->_notificationTypeNameOffsets[type];
+        if (offset != -1) {
+            return ((int)FUN_0030d1d0((int *)tracker->_names, offset));
         }
     }
     return 0;
@@ -572,96 +572,96 @@ int FUN_002e15f0(void *arg0, int arg1) {
     int t; if (arg1 >= 0 && arg1 < 0x40) { t = *(int *)((arg1 << 2) + (int)arg0 + 548); if (t != -1) return ((int)FUN_0030d1d0((int *)(*(int *)((char *)arg0 + 48)), t)); } return 0;
 }
 
-R_2e1640 Gap__Core__igEventTracker__vfunc_39(Tracker *self, int a, int b, long long c, long long d) {
-    char first[256];
-    char second[256];
-    int firstLen;
-    int secondLen;
-    R_2e1640 r = self->Format(a, first, 255, &firstLen, second, 255, &secondLen);
-    self->sink->Write(a, first, firstLen, second, secondLen, b, c, d);
+igResult Gap__Core__igEventTracker__vfunc_39(igEventTrackerView *self, int addr, int format, long long output, long long outputSize) {
+    char buf[256];
+    char name[256];
+    int offset;
+    int line;
+    igResult r = self->vfunc_40(addr, buf, 255, &offset, name, 255, &line);
+    self->_callStackTracer->vfunc_28(addr, buf, offset, name, line, format, output, outputSize);
     return r;
 }
 
-R_2e1710 Gap__Core__igEventTracker__vfunc_40(T_2e1710 *arg1, int arg2, int arg3, int arg4, int *arg5, int arg6, int arg7, int *arg8) {
+igResult Gap__Core__igEventTracker__vfunc_40(igEventTrackerView *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
     int s0;
-    if (FUN_002eb210((void *)arg1->f76) != 0) {
-        s0 = arg1->f76->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
+    if (FUN_002eb210((void *)self->_locations) != 0) {
+        s0 = self->_locations->vfunc_27(addr, buf, size, offset, name, nameSize, line).v;
         if (s0 == g_resultFailure.v) {
-            if (arg1->f92->v100() != 0) {
-                s0 = arg1->f92->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
-                arg1->f76->v116(arg2, arg3, *arg5, arg6, *arg8);
+            if (self->_callStackTracer->vfunc_25() != 0) {
+                s0 = self->_callStackTracer->vfunc_27(addr, buf, size, offset, name, nameSize, line).v;
+                self->_locations->vfunc_29(addr, buf, *offset, name, *line);
                 DAT_00586e08[0] = DAT_00586e08[0] + 1;
                 goto join;
             }
         }
         DAT_00586e10[0] += 1;
     } else {
-        s0 = arg1->f92->v108(arg2, arg3, arg4, arg5, arg6, arg7, arg8).a;
+        s0 = self->_callStackTracer->vfunc_27(addr, buf, size, offset, name, nameSize, line).v;
         DAT_00586e08[0] = DAT_00586e08[0] + 1;
     }
 join:
     DAT_00586e00[0] += 1;
-    return R_2e1710(s0);
+    return igResult(s0);
 }
 
-void Gap__Core__igEventTracker__vfunc_42(V_2e1a40 *arg0) {
+void Gap__Core__igEventTracker__vfunc_42(igEventTrackerView *self) {
     int s = 0;
     while (s != -1) {
-        arg0->vX(s);
-        s = arg0->vY(s);
+        self->vfunc_41(s);
+        s = self->vfunc_34(s);
     }
 }
 
-static inline bool hasFlag(const Tk_2e1bb0 *tracker, unsigned mask) { return (tracker->flags & mask) != 0; }
+static inline bool hasFlag(const igEventTrackerView *tracker, unsigned mask) { return (tracker->_flags & mask) != 0; }
 
-R_2e1bb0 Gap__Core__igEventTracker__vfunc_44(Tk_2e1bb0 *arg1, int arg2) {
+igResult Gap__Core__igEventTracker__vfunc_44(igEventTrackerView *arg1, int arg2) {
     bool had;
     bool trk;
     int r;
     igObject *a;
     igObject *old;
-    Ob *o;
+    igIGBFileView *o;
     had = hasFlag(arg1, 2);
-    arg1->flags = arg1->flags | 2;
+    arg1->_flags = arg1->_flags | 2;
     trk = hasFlag(arg1, 4);
     if (trk == false) {
-        arg1->v180();
+        arg1->vfunc_45();
     }
     {
-    igSmartPointer<Ob> sp7C(((Ob *)FUN_002c37e0((int)(((igObject *)igObject_GetAllocator((int)arg1))))));
+    igSmartPointer<igIGBFileView> sp7C(((igIGBFileView *)FUN_002c37e0((int)(((igObject *)igObject_GetAllocator((int)arg1))))));
     a = ((igObject *)igObject_GetAllocator((int)arg1));
     o = sp7C.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
-    old = o->f280;
+    old = (igObject *)o->_temporaryMemoryPool;
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
-    o->f280 = a;
+    o->_temporaryMemoryPool = (int)a;
     a = ((igObject *)igObject_GetAllocator((int)arg1));
     o = sp7C.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
-    old = o->f288;
+    old = (igObject *)o->_objectMemoryPool;
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
-    o->f288 = a;
+    o->_objectMemoryPool = (int)a;
     a = ((igObject *)igObject_GetAllocator((int)arg1));
     o = sp7C.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
-    old = o->f284;
+    old = (igObject *)o->_dataMemoryPool;
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
-    o->f284 = a;
-    sp7C.p->f65 = 1;
+    o->_dataMemoryPool = (int)a;
+    sp7C.p->_useMemoryPoolAssignmentsState = 1;
     FUN_002d8620((int)sp7C.p, (int)arg1, DAT_004c1ed8[0], 0);
-    r = sp7C.p->v112(arg2);
+    r = sp7C.p->vfunc_28(arg2);
     }
-    arg1->flags = had ? (arg1->flags | 2) : (arg1->flags & ~2);
-    return R_2e1bb0(r);
+    arg1->_flags = had ? (arg1->_flags | 2) : (arg1->_flags & ~2);
+    return igResult(r);
 }
 
 void Gap__Core__igEventTracker__vfunc_45(EventTrackerRunner *self) {
@@ -694,12 +694,12 @@ void Gap__Core__igEventTracker__vfunc_45(EventTrackerRunner *self) {
 
 void Gap__Core__igEventTracker__vfunc_46(igEventTrackerView *self)
 {
-    self->_callStackTracer->vfunc_27();
+    self->_callStackTracer->vfunc_29();
 }
 
 void Gap__Core__igEventTracker__vfunc_47(igEventTrackerView *self)
 {
-    self->_callStackTracer->vfunc_28();
+    self->_callStackTracer->vfunc_30();
 }
 
 void Gap__Core__igEventTracker__vfunc_13(TrackerConfig *self) {

@@ -19,7 +19,7 @@ igMetaObject *igDirectory_GetMetaObject(void)
 }
 
 int igDirectory_GetVTable(void) {
-    union U_2c73a0 u;
+    igDirectory dir;
     int temp_s;
     char *p188;
     char *p172;
@@ -27,24 +27,24 @@ int igDirectory_GetVTable(void) {
     char *p156;
     char *p152;
     char *p148;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_00530890[0];
-    p148 = &u.b[20];
+    igObject_InitHeader((ObjectHeader *)&dir);
+    dir._vtable = (int)&DAT_00530890[0];
+    p148 = (char *)&dir._name;
     *(int *)p148 = 0;
-    p152 = &u.b[24];
+    p152 = (char *)&dir._externalDirectoryList;
     *(int *)p152 = 0;
-    p156 = &u.b[28];
+    p156 = (char *)&dir._infoList;
     *(int *)p156 = 0;
-    p168 = &u.b[40];
+    p168 = (char *)&dir._uniqueEntryList;
     *(int *)p168 = 0;
-    p172 = &u.b[44];
+    p172 = (char *)&dir._refList;
     *(int *)p172 = 0;
-    p188 = &u.b[60];
+    p188 = (char *)&dir._metaFieldPerObjectIndices;
     *(int *)p188 = 0;
-    *(int *)&u.b[68] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00530890[0];
-    FUN_002ba970((Ref **)&u.b[68], -1);
+    dir._loadingSemaphore = 0;
+    temp_s = *(int *)((char *)&dir + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    dir._vtable = (int)&DAT_00530890[0];
+    FUN_002ba970((Ref **)&dir._loadingSemaphore, -1);
     FUN_002c3a80((ObjectRefWord *)p188, -1);
     FUN_00135430(p172, -1);
     FUN_001d36d0(p168, -1);

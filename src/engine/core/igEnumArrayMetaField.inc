@@ -12,18 +12,18 @@ igMetaObject *igEnumArrayMetaField_GetMetaObject(void)
 }
 
 int igEnumArrayMetaField_GetVTable(void) {
-    union U_2c6450 u;
+    igEnumArrayMetaField u;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    FUN_002dc900((int **)u.b);
-    u.vt = (int)&DAT_005304f0[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
+    FUN_002dc900((int **)&u);
+    u._vtable = (int)&DAT_005304f0[0];
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    ps = (char *)&u._fieldName;
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {

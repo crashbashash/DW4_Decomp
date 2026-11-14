@@ -12,19 +12,19 @@ igMetaObject *igFolder_GetMetaObject(void)
 }
 
 int igFolder_GetVTable(void) {
-    union U_2c4440 u;
+    igFolder folder;
     void **q;
     int *temp_a1;
     int temp_s0;
     int temp_v0;
     void *temp_v1;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    q = &u.p[2];
-    u.w[0] = (int)(&DAT_0052fee0[0]);
+    igObject_InitHeader((ObjectHeader *)&folder);
+    q = (void **)&folder._folderName;
+    folder._vtable = (int)(&DAT_0052fee0[0]);
     *q = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052fee0[0]);
+    temp_s0 = *(int *)((char *)&folder + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    folder._vtable = (int)(&DAT_0052fee0[0]);
     if (q != 0) {
         temp_v1 = *q;
         if (temp_v1 != 0) {

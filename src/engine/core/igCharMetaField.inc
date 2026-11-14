@@ -9,8 +9,8 @@ void **FUN_002cbf70(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_002d4d60((int **)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -35,17 +35,17 @@ igMetaObject *igCharMetaField_GetMetaObject(void)
 }
 
 int igCharMetaField_GetVTable(void) {
-    union U_2cc0e0 u;
+    igCharMetaField u;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    FUN_002d4da0((int **)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
+    FUN_002d4da0((int **)&u);
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    ps = (char *)&u._fieldName;
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {

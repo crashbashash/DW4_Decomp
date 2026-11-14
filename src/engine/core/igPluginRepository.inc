@@ -19,22 +19,22 @@ igMetaObject *igPluginRepository_GetMetaObject(void)
 }
 
 int igPluginRepository_GetVTable(void) {
-    union U_2bc9c0 u;
+    igPluginRepository repository;
     int temp_s0;
-    char *q0;
-    char *q1;
+    int *q0;
+    int *q1;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    q1 = &u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&repository);
+    q1 = &repository._name;
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_00532de0[0];
-    q0 = &u.b[12];
+    repository._vtable = (int)&DAT_00532de0[0];
+    q0 = &repository._location;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00532de0[0];
+    temp_s0 = *(int *)((char *)&repository + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    repository._vtable = (int)&DAT_00532de0[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;
         if (temp_v1 != 0) {
@@ -46,7 +46,7 @@ int igPluginRepository_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    repository._vtable = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
         if (temp_v1 != 0) {

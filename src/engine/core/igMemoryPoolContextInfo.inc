@@ -12,20 +12,20 @@ igMetaObject *igMemoryPoolContextInfo_GetMetaObject(void)
 }
 
 int igMemoryPoolContextInfo_GetVTable(void) {
-    struct Obj_2c0280 obj;
+    igMemoryPoolContextInfo info;
     char *o;
     igObject *r;
     int *a1;
     int v0;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.w2 = 0;
-    obj.vt = &DAT_0052f4a0[0];
-    obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052f4a0[0];
-    if (&obj.w5 != 0) {
-        r = obj.w5;
+    igObject_InitHeader((struct ObjectHeader *)&info);
+    info._name = 0;
+    *(int **)&info._vtable = &DAT_0052f4a0[0];
+    info._memoryPoolInfos = 0;
+    t = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&DAT_0052f4a0[0];
+    if (&info._memoryPoolInfos != 0) {
+        r = (igObject *)info._memoryPoolInfos;
         if (r != 0) {
             r->_refCount = r->_refCount - 1;
             if ((r->_refCount & 0x7FFFFF) == 0) {
@@ -33,9 +33,9 @@ int igMemoryPoolContextInfo_GetVTable(void) {
             }
         }
     }
-    obj.vt = &g_igNamedObject_vtable[0];
-    if (&obj.w2 != 0) {
-        o = obj.w2;
+    info._vtable = (int)&g_igNamedObject_vtable[0];
+    if (&info._name != 0) {
+        o = (char *)info._name;
         if (o != 0) {
             a1 = (int *)(o - 8);
             v0 = *(int *)(o - 4) - 1;

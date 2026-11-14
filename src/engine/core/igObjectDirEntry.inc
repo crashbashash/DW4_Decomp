@@ -12,18 +12,18 @@ igMetaObject *igObjectDirEntry_GetMetaObject(void)
 }
 
 int igObjectDirEntry_GetVTable(void) {
-    Obj_2bd980 o;
+    igObjectDirEntry o;
     int r;
 
     igObject_InitHeader((struct ObjectHeader *)&o);
-    o.f8 = 0;
-    o.vt = &DAT_0052f040[0];
-    o.a = 0;
-    o.b = 0;
+    o._name = 0;
+    o._vtable = (int)&DAT_0052f040[0];
+    o._typeMeta = 0;
+    o._typeMetaName = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &DAT_0052f040[0];
-    StringRef_Destruct_00130720(&o.b, -1);
-    FUN_0019c840(&o.a, -1);
+    o._vtable = (int)&DAT_0052f040[0];
+    StringRef_Destruct_00130720(&o._typeMetaName, -1);
+    FUN_0019c840(&o._typeMeta, -1);
     FUN_0014f4e0(&o, 0);
     return r;
 }

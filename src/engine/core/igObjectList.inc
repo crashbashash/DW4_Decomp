@@ -64,7 +64,7 @@ void igObjectList_InitFields(void) {
     igMetaObject *meta = g_igObjectList_metaObject[0];
     igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     int index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    field = ((DescriptorCloneView_2bd830 *)field)->Clone(1);
+    field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     field->_memType = igObjectRefMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)g_igObjectList_dataDescriptorCell;

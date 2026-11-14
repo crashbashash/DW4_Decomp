@@ -9,8 +9,8 @@ void **FUN_002b5fe0(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_0030edd0((int **)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -38,7 +38,7 @@ igMetaObject *igUnsignedShortMetaField_GetMetaObject(void)
 }
 
 int igUnsignedShortMetaField_GetVTable(void) {
-    Obj_2b6150 o;
+    igUnsignedShortMetaField o;
     int r;
     char *p;
     int *hdr;
@@ -46,9 +46,9 @@ int igUnsignedShortMetaField_GetVTable(void) {
 
     FUN_0030ee10((int **)&o);
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        p = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        p = (char *)o._fieldName;
         if (p != 0) {
             hdr = (int *)(p - 8);
             c = *(int *)(p - 4) - 1;

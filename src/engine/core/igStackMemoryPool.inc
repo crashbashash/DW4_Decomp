@@ -12,15 +12,25 @@ igMetaObject *igStackMemoryPool_GetMetaObject(void)
 }
 
 int igStackMemoryPool_GetVTable(void) {
-    Obj_2cdfc0 obj;
+    igStackMemoryPool pool;
     int r;
+    igObject **tracker;
+    igObject *object;
 
-    igMemoryPool_Initialize((int **)&obj);
-    obj.vt = &DAT_0052de80[0];
-    obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052de80[0];
-    obj.release();
+    igMemoryPool_Initialize((int **)&pool);
+    pool._vtable = (int)&DAT_0052de80[0];
+    pool._eventTracker = 0;
+    r = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&DAT_0052de80[0];
+    tracker = (igObject **)&pool._eventTracker;
+    if (tracker) {
+        object = *tracker;
+        if (object) {
+            --*(int *)&object->_refCount;
+            if (((unsigned long long)(long long)*(int *)&object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy((void *)object);
+        }
+    }
     return r;
 }
 

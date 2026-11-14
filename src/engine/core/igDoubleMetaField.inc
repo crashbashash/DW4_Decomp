@@ -12,18 +12,18 @@ igMetaObject *igDoubleMetaField_GetMetaObject(void)
 }
 
 int igDoubleMetaField_GetVTable(void) {
-    union U_2c6c30 u;
+    igDoubleMetaField u;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    igMetaField_Init((igMetaField *)u.b);
-    u.vt = (int)&DAT_00530690[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
+    igMetaField_Init((igMetaField *)&u);
+    u._vtable = (int)&DAT_00530690[0];
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    ps = (char *)&u._fieldName;
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {

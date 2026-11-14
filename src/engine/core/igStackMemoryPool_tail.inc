@@ -5,20 +5,20 @@ igResult Gap__Core__igStackMemoryPool__vfunc_45(igStackMemoryPool *self, igMemor
     return result;
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_30(S30 *p) {
-    unsigned v = p->a;
+void Gap__Core__igStackMemoryPool__vfunc_30(igStackMemoryPool *p) {
+    unsigned v = p->_rawMemory;
     if (v != 0) {
-        p->c = v;
-        p->d = (int)((unsigned long long)p->c + p->len + 0xFFFFFFFFFFFFFFFCULL);
-        p->d = p->d - (p->d & 3);
-        p->flag = 1;
+        p->_stackPtr = v;
+        p->_nextInt = (int)((unsigned long long)p->_stackPtr + p->_totalSize + 0xFFFFFFFFFFFFFFFCULL);
+        p->_nextInt = p->_nextInt - (p->_nextInt & 3);
+        p->_isActive = 1;
     }
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_31(S31 *s) {
-    s->f132 = s->f116;
-    s->f136 = (int)(s->f132 + s->f120 + (long long)(unsigned __int128)(unsigned long long)-4LL);
-    s->f136 = s->f136 - (s->f136 & 3);
+void Gap__Core__igStackMemoryPool__vfunc_31(igStackMemoryPool *s) {
+    s->_stackPtr = s->_rawMemory;
+    s->_nextInt = (int)(s->_stackPtr + s->_totalSize + (long long)(unsigned __int128)(unsigned long long)-4LL);
+    s->_nextInt = s->_nextInt - (s->_nextInt & 3);
 }
 
 void Gap__Core__igStackMemoryPool__vfunc_32(igStackMemoryPool *self) {
@@ -97,19 +97,19 @@ long long Gap__Core__igStackMemoryPool__vfunc_46(igStackMemoryPool *arg0) {
     return 0;
 }
 
-long long Gap__Core__igStackMemoryPool__vfunc_47(struct P47 *arg0) {
+long long Gap__Core__igStackMemoryPool__vfunc_47(igStackMemoryPool *arg0) {
     int cur;
     long long total = 0;
-    struct E47 *e;
+    StackBlockRecord *e;
     int raw;
-    if (arg0->active == 0) {
+    if (arg0->_isActive == 0) {
         return 0;
     }
-    cur = arg0->top;
-    e = arg0->e + 1;
-    raw = arg0->raw;
+    cur = arg0->_stackPtr;
+    e = (StackBlockRecord *)arg0->_nextInt + 1;
+    raw = arg0->_rawMemory;
     while (cur != raw) {
-        unsigned t = e->sz;
+        unsigned t = e->size;
         e++;
         total += t;
         cur -= t;
@@ -118,7 +118,7 @@ long long Gap__Core__igStackMemoryPool__vfunc_47(struct P47 *arg0) {
 }
 
 long long Gap__Core__igStackMemoryPool__vfunc_48(igStackMemoryPool *arg0) {
-    return arg0->_totalSize - ((DW4VC_196_0_3275e0 *)(((char *)(arg0) + 0)))->vX();
+    return arg0->_totalSize - ((igMemoryPoolView *)arg0)->vfunc_49();
 }
 
 long long Gap__Core__igStackMemoryPool__vfunc_49(igStackMemoryPool *arg0) {
@@ -127,69 +127,69 @@ long long Gap__Core__igStackMemoryPool__vfunc_49(igStackMemoryPool *arg0) {
     return 0;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_53(struct S53 *arg0) {
+int Gap__Core__igStackMemoryPool__vfunc_53(igStackMemoryPool *arg0) {
     int total, pad, mask;
     int cur;
     unsigned short align;
     int size;
-    if (arg0->active == 0) { return 0; }
-    size = arg0->size;
+    if (arg0->_isActive == 0) { return 0; }
+    size = arg0->_elementSize;
     if (size == 0) { return 0; }
     if (size == 0) { return 0; }
-    align = arg0->align;
+    align = arg0->_alignment;
     mask = align - 1;
-    pad = (align - (arg0->top & mask)) & mask;
+    pad = (align - ((int)arg0->_stackPtr & mask)) & mask;
     total = size + pad;
-    if ((int)arg0->end - arg0->top < total) { return 0; }
-    cur = arg0->top + pad;
-    arg0->top += total;
-    *arg0->end = total;
-    arg0->end--;
+    if ((int)arg0->_nextInt - (int)arg0->_stackPtr < total) { return 0; }
+    cur = (int)arg0->_stackPtr + pad;
+    arg0->_stackPtr += total;
+    *(int *)arg0->_nextInt = total;
+    arg0->_nextInt -= 4;
     return cur;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_54(struct S54_3275e0 *arg0, int arg1) {
+int Gap__Core__igStackMemoryPool__vfunc_54(igStackMemoryPool *arg0, int arg1) {
     int total, pad, mask;
     int cur;
     unsigned short align;
     if (arg1 == 0) {
         return 0;
     }
-    align = arg0->align;
+    align = arg0->_alignment;
     mask = align - 1;
-    cur = arg0->top;
+    cur = arg0->_stackPtr;
     pad = mask & (align - (cur & mask));
     total = arg1 + pad;
-    if ((int)arg0->end - cur < total) {
+    if ((int)arg0->_nextInt - cur < total) {
         return 0;
     }
-    arg0->top = cur + total;
-    *arg0->end = total;
-    arg0->end--;
+    arg0->_stackPtr = cur + total;
+    *(int *)arg0->_nextInt = total;
+    arg0->_nextInt -= 4;
     return cur + pad;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_55(struct S54_3275e0 *arg0, int size, unsigned short arg2) {
+int Gap__Core__igStackMemoryPool__vfunc_55(igStackMemoryPool *arg0, int size, unsigned short arg2) {
     int total, pad, mask, ret;
     unsigned short align;
     unsigned short pool;
     if (size == 0) { size = 1; }
-    pool = arg0->align;
+    pool = arg0->_alignment;
     if (size == 0) { return 0; }
     arg2 = (arg2 > pool) ? arg2 : pool;
     align = arg2;
     mask = align - 1;
-    pad = (align - (arg0->top & mask)) & mask;
+    pad = (align - ((int)arg0->_stackPtr & mask)) & mask;
     total = size + pad;
-    if ((int)arg0->end - arg0->top < total) { return 0; }
-    ret = arg0->top + pad;
-    arg0->top += total;
-    *arg0->end = total;
-    arg0->end--;
+    if ((int)arg0->_nextInt - (int)arg0->_stackPtr < total) { return 0; }
+    ret = (int)arg0->_stackPtr + pad;
+    arg0->_stackPtr += total;
+    *(int *)arg0->_nextInt = total;
+    arg0->_nextInt -= 4;
     return ret;
 }
 
-void *Gap__Core__igStackMemoryPool__vfunc_56(struct S54_3275e0 *s, int count, int size) {
+void *Gap__Core__igStackMemoryPool__vfunc_56(igStackMemoryPool *s, int count, int size) {
     int total = count * size;
     if (total == 0) { total = 1; }
     if (total == 0) {
@@ -199,25 +199,25 @@ void *Gap__Core__igStackMemoryPool__vfunc_56(struct S54_3275e0 *s, int count, in
         int pad;
         int mask;
         int need;
-        unsigned short align = s->align;
+        unsigned short align = s->_alignment;
         mask = align - 1;
-        pad = (align - (s->top & mask)) & mask;
+        pad = (align - ((int)s->_stackPtr & mask)) & mask;
         need = total + pad;
-        if ((int)s->end - s->top < need) { return 0; }
-        p = (void *)(s->top + pad);
-        s->top += need;
-        *s->end = need;
-        s->end--;
+        if ((int)s->_nextInt - (int)s->_stackPtr < need) { return 0; }
+        p = (void *)((int)s->_stackPtr + pad);
+        s->_stackPtr += need;
+        *(int *)s->_nextInt = need;
+        s->_nextInt -= 4;
         memset(p, 0, total);
         return p;
     }
 }
 
-void *Gap__Core__igStackMemoryPool__vfunc_57(struct S54_3275e0 *s, int count, int size, unsigned short a) {
+void *Gap__Core__igStackMemoryPool__vfunc_57(igStackMemoryPool *s, int count, int size, unsigned short a) {
     int total = count * size;
     unsigned short pool;
     if (total == 0) { total = 1; }
-    pool = s->align;
+    pool = s->_alignment;
     if (total == 0) {
         return 0;
     } else {
@@ -229,13 +229,13 @@ void *Gap__Core__igStackMemoryPool__vfunc_57(struct S54_3275e0 *s, int count, in
         a = (a > pool) ? a : pool;
         align = a;
         mask = align - 1;
-        pad = (align - (s->top & mask)) & mask;
+        pad = (align - ((int)s->_stackPtr & mask)) & mask;
         need = total + pad;
-        if ((int)s->end - s->top < need) { return 0; }
-        p = (void *)(s->top + pad);
-        s->top += need;
-        *s->end = need;
-        s->end--;
+        if ((int)s->_nextInt - (int)s->_stackPtr < need) { return 0; }
+        p = (void *)((int)s->_stackPtr + pad);
+        s->_stackPtr += need;
+        *(int *)s->_nextInt = need;
+        s->_nextInt -= 4;
         memset(p, 0, total);
         return p;
     }
@@ -247,19 +247,19 @@ int Gap__Core__igStackMemoryPool__vfunc_58(void **arg0, int arg1, unsigned int a
     unsigned int temp_v0_2;
 
     if (arg2 != 0) {
-        var_v0 = ((DW4VC_216_1 *)(arg0))->vX((int)(arg2));
+        var_v0 = (int)((igMemoryPoolView *)arg0)->Allocate(arg2);
     } else {
         var_v0 = 0;
     }
     if (arg1 != 0) {
         if (var_v0 != 0) {
-            temp_v0 = ((DW4VC_336_1 *)(arg0))->vX((int)(arg1));
+            temp_v0 = ((igMemoryPoolView *)arg0)->GetAllocationSize((void *)arg1);
             temp_v0_2 = (temp_v0 < arg2) ? temp_v0 : arg2;
             if (var_v0 != 0) {
                 memcpy(var_v0, arg1, temp_v0_2);
             }
         }
-        ((DW4VC_264_1 *)(arg0))->vX((int)(arg1));
+        ((igMemoryPoolView *)arg0)->Free((void *)arg1);
     }
     return var_v0;
 }
@@ -270,19 +270,19 @@ int Gap__Core__igStackMemoryPool__vfunc_59(void **arg0, int arg1, unsigned int a
     unsigned int temp_v0_2;
 
     if (arg2 != 0) {
-        var_v0 = ((DW4VC_220_2 *)(arg0))->vX((int)(arg2), (int)(arg3));
+        var_v0 = (int)((igMemoryPoolView *)arg0)->AllocateAligned(arg2, arg3);
     } else {
         var_v0 = 0;
     }
     if (arg1 != 0) {
         if (var_v0 != 0) {
-            temp_v0 = ((DW4VC_336_1 *)(arg0))->vX((int)(arg1));
+            temp_v0 = ((igMemoryPoolView *)arg0)->GetAllocationSize((void *)arg1);
             temp_v0_2 = (temp_v0 < arg2) ? temp_v0 : arg2;
             if (var_v0 != 0) {
                 memcpy(var_v0, arg1, temp_v0_2);
             }
         }
-        ((DW4VC_264_1 *)(arg0))->vX((int)(arg1));
+        ((igMemoryPoolView *)arg0)->Free((void *)arg1);
     }
     return var_v0;
 }
@@ -403,28 +403,28 @@ void Gap__Core__igStackMemoryPool__vfunc_63(int *result, StackPoolFields *pool, 
     *result = g_resultFailure.v;
 }
 
-int Gap__Core__igStackMemoryPool__vfunc_84(DW4VC_340_0 *arg0, unsigned int arg1) {
-    E84 *a1;
+int Gap__Core__igStackMemoryPool__vfunc_84(igStackMemoryPool *arg0, unsigned int arg1) {
+    StackBlockRecord *a1;
     unsigned int a0;
     unsigned int v1;
-    if (arg0->vX() == 0) {
+    if (((igMemoryPoolView *)arg0)->OwnsAllocation((void *)arg1) == 0) {
         return 0;
     }
-    a1 = arg0->f136 + 1;
-    v1 = a1->len;
-    a0 = arg0->f132 - v1;
+    a1 = (StackBlockRecord *)arg0->_nextInt + 1;
+    v1 = a1->size;
+    a0 = arg0->_stackPtr - v1;
     while (a0 > arg1) {
         a1 += 1;
-        v1 = a1->len;
+        v1 = a1->size;
         a0 -= v1;
     }
     return v1 - (arg1 - a0);
 }
 
-bool Gap__Core__igStackMemoryPool__vfunc_85(S85 *s, unsigned a) {
+bool Gap__Core__igStackMemoryPool__vfunc_85(igStackMemoryPool *s, unsigned a) {
     bool r = false;
-    if (a >= s->start) {
-        if ((unsigned long long)a < (unsigned long long)s->start + s->len) r = true;
+    if (a >= (unsigned)s->_rawMemory) {
+        if ((unsigned long long)a < (unsigned long long)(unsigned)s->_rawMemory + s->_totalSize) r = true;
     }
     return r;
 }
@@ -500,20 +500,15 @@ int Gap__Core__igStackMemoryPool__vfunc_89(void *arg0) {
     return *(int *)((char *)(arg0) + 148);
 }
 
-void Gap__Core__igStackMemoryPool__vfunc_90(S0_3275e0 *arg0, S1_3275e0 *arg1) {
-    S1_3275e0 *temp_a0;
+void Gap__Core__igStackMemoryPool__vfunc_90(igStackMemoryPool *arg0, igObject *arg1) {
+    igObject *temp_a0;
     if ((arg1 == 0) || (((void *)igObject_GetAllocator((int)arg1)) != arg0)) {
         if (arg1 != 0) {
-            arg1->f4 = (int)((int) (arg1->f4 + 1));
+            arg1->_refCount = (int)((int) (arg1->_refCount + 1));
         }
-        temp_a0 = arg0->f94;
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-        arg0->f94 = arg1;
+        temp_a0 = (igObject *)arg0->_eventTracker;
+        IG_OBJECT_RELEASE(temp_a0);
+        arg0->_eventTracker = (int)arg1;
     }
 }
 
@@ -543,6 +538,6 @@ void Gap__Core__igStackMemoryPool__vfunc_96(igStackMemoryPool *self, igDataList 
         entry->size = self->_totalSize;
         FUN_0032a180(entry, text_Pool_igStackMemoryPool);
         FUN_0032a1b0(entry, (const char *)FUN_002f89a0((int)self));
-        List_InsertWords(list, FUN_002d6e60((L_2d6e60 *)list, &entry, (Cmp)FUN_0032a260), 1, &entry);
+        List_InsertWords(list, FUN_002d6e60(list, &entry, (Cmp)FUN_0032a260), 1, &entry);
     }
 }

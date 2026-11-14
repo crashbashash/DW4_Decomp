@@ -173,28 +173,28 @@ int Gap__Core__igPageMemoryPool__vfunc_29(igPageMemoryPool *self) {
     return 1;
 }
 
-R4_325850 Gap__Core__igPageMemoryPool__vfunc_34(Pool34_325850 *arg1, int arg2) {
+igResult Gap__Core__igPageMemoryPool__vfunc_34(igPageMemoryPoolView *arg1, int arg2) {
     int a1;
     if (arg2 != 0) {
-        a1 = arg1->f140 | 4;
+        a1 = arg1->poolOptionFlags | 4;
     } else {
-        a1 = arg1->f140 & ~4;
+        a1 = arg1->poolOptionFlags & ~4;
     }
     FUN_00326330(arg1, a1);
     if ((arg2 & 0xFF) == 0) {
-        igSmartPointer<Ob_325850> held(arg1->f116);
-        arg1->f116.clear();
+        igSmartPointer<igSemaphoreView> held(arg1->allocationLock);
+        arg1->allocationLock.clear();
         if (held.p != 0) {
-            held.p->a132(1);
-            held.p->a96();
+            held.p->wait(1);
+            held.p->destroy();
         }
     } else if ((arg2 & 0xFF) == 1) {
-        if (arg1->f116.p != 0) {
+        if (arg1->allocationLock.p != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<Ob_325850> created((Ob_325850 *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
-        created.p->a92();
-        arg1->f116 = created;
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)FUN_002ba650((int)(((void *)igObject_GetAllocator((int)arg1)))));
+        created.p->create();
+        arg1->allocationLock = created;
     }
     return g_resultSuccess.v;
 }
@@ -286,22 +286,22 @@ int Gap__Core__igPageMemoryPool__vfunc_53(igPageMemoryPool *self) {
 }
 
 void FUN_00326090(void *arg0) {
-    DW4SR4 sp1C;
+    igResult sp1C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 116));
+    temp_a1 = (void **)((igPageMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp1C = ((DW4VCSR_132_1_325850 *)(temp_a1))->vX((int)(1));
+        sp1C = ((igSemaphoreView *)(temp_a1))->wait(1);
     }
 }
 
 int FUN_003260d0(void *arg0, int arg1) {
-    DW4SR4 sp2C;
+    igResult sp2C;
     void **temp_a1;
 
-    temp_a1 = (void **)(*(int *)((char *)(arg0) + 116));
+    temp_a1 = (void **)((igPageMemoryPool *)arg0)->_allocationLock;
     if (temp_a1 != 0) {
-        sp2C = ((DW4VCSR_124_0 *)(temp_a1))->vX();
+        sp2C = ((igSemaphoreView *)(temp_a1))->signal();
     }
     return arg1;
 }

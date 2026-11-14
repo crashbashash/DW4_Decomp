@@ -7,35 +7,35 @@ igMetaObject *igStandardQueue_GetMetaObject(void)
 }
 
 int igStandardQueue_GetVTable(void) {
-    union U_2cef90 u;
+    igStandardQueue queue;
     int temp_s2;
-    char *p2;
-    char *p1;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&DAT_0052ddf0[0];
-    p1 = &u.b[12];
-    *(int *)p1 = 0;
-    p2 = &u.b[16];
-    *(int *)p2 = 0;
-    *(int *)&u.b[20] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052ddf0[0];
-    FUN_002ba970((Ref **)&u.b[20], -1);
+    int *p2;
+    int *p1;
+    igObject_InitHeader((struct ObjectHeader *)&queue);
+    queue._serviceThreads = 0;
+    queue._vtable = (int)&DAT_0052ddf0[0];
+    p1 = &queue._insertLock;
+    *p1 = 0;
+    p2 = &queue._removeLock;
+    *p2 = 0;
+    queue._queueSema = 0;
+    temp_s2 = *(int *)((char *)&queue + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    queue._vtable = (int)&DAT_0052ddf0[0];
+    FUN_002ba970((Ref **)&queue._queueSema, -1);
     FUN_002ba970((Ref **)p2, -1);
     FUN_002ba970((Ref **)p1, -1);
-    FUN_002cf040((S_2cf040 *)u.b, 0);
+    FUN_002cf040((igQueue *)&queue, 0);
     return temp_s2;
 }
 
-void *FUN_002cf040(struct S_2cf040 *arg0, short arg1) {
+void *FUN_002cf040(igQueue *arg0, short arg1) {
     void *p;
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_0052ee50[0];
-        if (&arg0->f8) {
-            p = arg0->f8;
+        arg0->_vtable = (int)&DAT_0052ee50[0];
+        if (&arg0->_serviceThreads) {
+            p = (void *)arg0->_serviceThreads;
             if (p != 0) {
                 rc = *(int *)((char *)(p) + 4) - 1;
                 *(int *)((char *)(p) + 4) = rc;

@@ -2,7 +2,7 @@ void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *arg0, int arg1, in
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)FUN_002c6e20()));
-    ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * arg0->_num));
+    ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
 }
 
 /* Storage size in bytes of the field's array: `_num` elements of 8 bytes (double), truncated to

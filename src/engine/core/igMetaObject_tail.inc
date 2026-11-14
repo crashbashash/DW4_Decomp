@@ -284,8 +284,8 @@ void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int co
     for(i=0;i<count;i++){
         field=factories[i](Memory_GetAllocatorBySelector(*(int *)0x587040));
         igMetaObject_AppendField(meta,field);
-        --((RefHeader_2fd610 *)field)->refs;
-        if(!(((RefHeader_2fd610 *)field)->refs&0x7fffff))igObject_Destroy(field);
+        --field->_refCount;
+        if(!(field->_refCount&0x7fffff))igObject_Destroy(field);
     }
 }
 
@@ -427,7 +427,7 @@ void FUN_002fe480(int arg0) {
 }
 
 void FUN_002fe490(int arg0) {
-    FUN_002d30d0((S24 *)(((void * *)g_objectSystem)[0]), (int (*)(int))arg0);
+    FUN_002d30d0((ObjectSystemView *)(((void * *)g_objectSystem)[0]), (int (*)(int))arg0);
 }
 
 void igMetaObject_AddField(igMetaObject *arg0, void *arg1) {
@@ -495,10 +495,10 @@ int FUN_002fe730(int arg0) {
 /* Search the object system's registry; when absent (-1) append the metaobject and search again,
  * since appending can replace the registry. */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
-    meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemRecord_2fd610 *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
+    meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
     if(meta->_index==-1){
         igObjectSystem_AppendMetaObject(((void * *)g_objectSystem)[0],meta);
-        meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemRecord_2fd610 *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
+        meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
     }
 }
 

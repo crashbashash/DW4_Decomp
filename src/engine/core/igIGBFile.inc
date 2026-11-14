@@ -19,40 +19,38 @@ igMetaObject *igIGBFile_GetMetaObject(void)
 }
 
 int igIGBFile_GetVTable(void) {
-    union U_2c38c0 u;
+    igIGBFile file;
     int temp_s5;
 
-    
-    
-    FUN_002c3d60((igIGBFile *)&u.w[0]);
-    u.w[0] = (int)(&DAT_0052fe50[0]);
-    FUN_002c3d50(&u.w[23]);
-    FUN_002c3d40(&u.w[26]);
-    FUN_002c3d30(&u.w[47]);
-    FUN_001a4510(&u.w[48]);
-    FUN_002c3d20(&u.w[51]);
-    FUN_002c3d20(&u.w[52]);
-    FUN_00229270(&u.w[58]);
-    FUN_001510d0(&u.w[61]);
-    FUN_002c3d10(&u.w[70]);
-    FUN_002c3d10(&u.w[71]);
-    FUN_002c3d10(&u.w[72]);
-    FUN_001510d0(&u.w[76]);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052fe40[4]);
-    ObjectRef_Destruct_00150eb0(&u.w[76], -1);
-    FUN_001509f0(&u.w[72], -1);
-    FUN_001509f0(&u.w[71], -1);
-    FUN_001509f0(&u.w[70], -1);
-    ObjectRef_Destruct_00150eb0(&u.w[61], -1);
-    StringRef_Destruct_00130720(&u.w[58], -1);
-    FUN_0014ec50(&u.w[52], -1);
-    FUN_0014ec50(&u.w[51], -1);
-    FUN_0013a880(&u.w[48], -1);
-    FUN_0014e420(&u.w[47], -1);
-    FUN_00150180(&u.w[26], -1);
-    FUN_0014aa70(&u.w[23], -1);
-    FUN_002c3b00((Obj_2c3b00 *)&u.w[0], 0);
+    FUN_002c3d60(&file);
+    file._vtable = (int)(&DAT_0052fe50[0]);
+    FUN_002c3d50(&file._entryPool);
+    FUN_002c3d40(&file._file);
+    FUN_002c3d30(&file._metaFieldListInFile);
+    FUN_001a4510(&file._metaObjectListInFile);
+    FUN_002c3d20(&file.imf);
+    FUN_002c3d20(&file.smf);
+    FUN_00229270(&file._previousResourceFilePath);
+    FUN_001510d0(&file._alignmentListInFile);
+    FUN_002c3d10(&file._temporaryMemoryPool);
+    FUN_002c3d10(&file._dataMemoryPool);
+    FUN_002c3d10(&file._objectMemoryPool);
+    FUN_001510d0(&file._memoryPoolHandles);
+    temp_s5 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    file._vtable = (int)(&DAT_0052fe40[4]);
+    ObjectRef_Destruct_00150eb0(&file._memoryPoolHandles, -1);
+    FUN_001509f0(&file._objectMemoryPool, -1);
+    FUN_001509f0(&file._dataMemoryPool, -1);
+    FUN_001509f0(&file._temporaryMemoryPool, -1);
+    ObjectRef_Destruct_00150eb0(&file._alignmentListInFile, -1);
+    StringRef_Destruct_00130720(&file._previousResourceFilePath, -1);
+    FUN_0014ec50(&file.smf, -1);
+    FUN_0014ec50(&file.imf, -1);
+    FUN_0013a880(&file._metaObjectListInFile, -1);
+    FUN_0014e420(&file._metaFieldListInFile, -1);
+    FUN_00150180(&file._file, -1);
+    FUN_0014aa70(&file._entryPool, -1);
+    FUN_002c3b00((igDirectory *)&file, 0);
     return temp_s5;
 }
 
@@ -69,16 +67,16 @@ ObjectRefWord *FUN_002c3a80(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-Obj_2c3b00 *FUN_002c3b00(Obj_2c3b00 *p, short n) {
+igDirectory *FUN_002c3b00(igDirectory *p, short n) {
     if (p) {
-        p->vt = (int)&DAT_00530890[0];
-        p->f44.release();
-        p->f3c.release();
-        p->f2c.release();
-        p->f28.release();
-        p->f1c.release();
-        p->f18.release();
-        p->f14.release();
+        p->_vtable = (int)&DAT_00530890[0];
+        ((R_2c3b00 *)&p->_loadingSemaphore)->release();
+        ((R_2c3b00 *)&p->_metaFieldPerObjectIndices)->release();
+        ((R_2c3b00 *)&p->_refList)->release();
+        ((R_2c3b00 *)&p->_uniqueEntryList)->release();
+        ((R_2c3b00 *)&p->_infoList)->release();
+        ((R_2c3b00 *)&p->_externalDirectoryList)->release();
+        ((S_2c3b00 *)&p->_name)->release();
         if (n > 0) thunk_FUN_002ed460__002ff810((int)p);
     }
     return p;
@@ -170,21 +168,21 @@ void igIGBFile_InitFields(void) {
     igMetaObject_CreateFields(meta, (igMetaField * (**)(void *))g_igIGBFile_ctorTable, 0x41);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
+    clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
     clone->_externalEnumStorage = (int)DAT_00586148;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_count));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
+    clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
     clone->_externalEnumStorage = (int)DAT_00586150;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);
     releaseField(clone);
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_capacity));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
-    clone = ((DescriptorCloneView_2c3e90 *)field)->Clone(1);
+    clone = (igMetaField *)((igObjectDispatchView *)field)->cloneViaMetadata(1);
     clone->_persistent = 0;
     clone->_externalEnumStorage = (int)DAT_00586158;
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

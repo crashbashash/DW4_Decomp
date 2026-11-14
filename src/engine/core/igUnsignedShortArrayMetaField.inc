@@ -12,18 +12,18 @@ igMetaObject *igUnsignedShortArrayMetaField_GetMetaObject(void)
 }
 
 int igUnsignedShortArrayMetaField_GetVTable(void) {
-    Obj_2b6400 o;
+    igUnsignedShortArrayMetaField o;
     int r;
     int *temp_a1;
     int temp_v0;
     void *temp_v1;
 
     FUN_0030ee10((int **)&o);
-    o.vt = &DAT_0052e230[0];
+    o._vtable = (int)&DAT_0052e230[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        temp_v1 = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        temp_v1 = (char *)o._fieldName;
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
@@ -78,20 +78,20 @@ void igUnsignedShortArrayMetaField_InitFields(void) {
 }
 
 void FUN_002b65d0(void) {
-    T_2b65d0 *temp_s0;
-    T_2b65d0 *p;
+    igUnsignedShortArrayMetaField *temp_s0;
+    igUnsignedShortArrayMetaField *p;
 
     if (g_igUnsignedShortArrayMetaField_descriptor[0] == 0) {
-        g_igUnsignedShortArrayMetaField_descriptor[0] = ((T_2b65d0 *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedShortArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igUnsignedShortArrayMetaField_descriptor[0] = ((igUnsignedShortArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedShortArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igUnsignedShortArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((C *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
             p = g_igUnsignedShortArrayMetaField_descriptor[0];
-            p->references = p->references - 1;
-            if (((unsigned long long)(long long)p->references & 0x7fffffULL) == 0) {
+            p->_refCount = p->_refCount - 1;
+            if (((unsigned long long)(long long)p->_refCount & 0x7fffffULL) == 0) {
                 igObject_Destroy(p);
             }
-            g_igUnsignedShortArrayMetaField_descriptor[0]->s18 = ((C *)FUN_002fc250())->cnt - 1;
+            g_igUnsignedShortArrayMetaField_descriptor[0]->_internalIndex = ((PointerList *)FUN_002fc250())->count - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)g_igUnsignedShortArrayMetaField_descriptor[0]);
         }
     }

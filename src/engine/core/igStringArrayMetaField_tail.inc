@@ -2,34 +2,34 @@ void Gap__Core__igStringArrayMetaField__vfunc_52(igStringArrayMetaField *self, i
     void **descriptor;
 
     descriptor = (void **)(((void **)FUN_002b9c60()));
-    ((DW4VC_208_2 *)(descriptor))->vX((int)(item), (int)(count * self->_num));
+    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
-int Gap__Core__igStringArrayMetaField__vfunc_51(struct S_30a5c0 *arg0, void *parg1, void *parg2, int arg3, int arg4) {
+int Gap__Core__igStringArrayMetaField__vfunc_51(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
     int arg1 = (int)parg1;
     int arg2 = (int)parg2;
     int start = arg2;
     int i;
-    for (i = 0; i < arg0->n; i++) {
+    for (i = 0; i < arg0->_num; i++) {
         arg2 = arg2 + igStringMetaField_ReadRawValue(arg0, arg1, arg2, arg3, arg4);
         arg1 += 4;
     }
     return arg2 - start;
 }
 
-int Gap__Core__igStringArrayMetaField__vfunc_50(struct S_30a660 *arg0, void *parg1, void *parg2, int arg3, int arg4) {
+int Gap__Core__igStringArrayMetaField__vfunc_50(igStringArrayMetaField *arg0, void *parg1, void *parg2, int arg3, int arg4) {
     int arg1 = (int)parg1;
     int arg2 = (int)parg2;
     int start = arg2;
     int i;
-    for (i = 0; i < arg0->n; i++) {
+    for (i = 0; i < arg0->_num; i++) {
         arg2 = arg2 + igStringMetaField_WriteRawValue((void *)arg0, (void *)arg1, (void *)arg2, arg3, arg4);
         arg1 += 4;
     }
     return ((arg2 - start) + 3) & ~3;
 }
 
-void Gap__Core__igStringArrayMetaField__vfunc_32(struct SS *arg0, int arg1) {
+void Gap__Core__igStringArrayMetaField__vfunc_32(igStringArrayMetaField *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -38,9 +38,9 @@ void Gap__Core__igStringArrayMetaField__vfunc_32(struct SS *arg0, int arg1) {
     int temp_a0;
     int temp_s3;
 
-    if (arg0->f53 != 0) {
-        var_s1 = (int *)(arg1 + arg0->f8);
-        for (var_s0 = 0; var_s0 < arg0->f60; var_s0++) {
+    if (arg0->_destruct != 0) {
+        var_s1 = (int *)(arg1 + arg0->_offset);
+        for (var_s0 = 0; var_s0 < arg0->_num; var_s0++) {
             if (g_stringPool[0] == 0) {
                 var_v0 = ((int)StringPool_Allocate(0x10));
                 if (var_v0 != 0) {

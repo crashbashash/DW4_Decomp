@@ -3,7 +3,7 @@ void FUN_002efa20(int arg0, int arg1, int arg2) {
     if (arg1 != 0) {
         Ref_2efa20 sp4C;
         sp4C.p = (Rc_2efa20 *)FUN_002c0b60(((int)igObject_GetAllocator(((int *)DAT_00586f48)[0])));
-        igNamedObject_SetName((N_2fecb0 *)sp4C.p, arg0);
+        igNamedObject_SetName((igNamedObject *)sp4C.p, arg0);
         sp4C.p->f16 = arg2;
         sp4C.p->f12 = arg1;
         ObjectList_AppendRetained((igObjectList *)(((int *)DAT_00586f48)[0]), (igObject *)sp4C.p);
@@ -18,7 +18,7 @@ void FUN_002efae0(int arg0, int *arg1, int *arg2) {
     *arg2 = 0;
     temp_a0 = *(int *)0x586F48;
     if (temp_a0 != 0) {
-        temp_v0 = ((void *)igProperty_FindByName((struct L_3022c0 *)temp_a0, (struct P_3022c0 *)(*(int *)0x585BE0), arg0));
+        temp_v0 = ((void *)igProperty_FindByName((igObjectList *)temp_a0, (igMetaField *)(*(int *)0x585BE0), arg0));
         if (temp_v0 != 0) {
             *arg1 = *(int *)((char *)temp_v0 + 12);
             *arg2 = *(int *)((char *)temp_v0 + 16);

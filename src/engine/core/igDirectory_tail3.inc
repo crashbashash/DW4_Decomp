@@ -1,7 +1,7 @@
 int FUN_002d8e70(int arg0, int arg1) {
     void *temp_v0;
 
-    temp_v0 = (void *)(((void *)igProperty_FindByName((struct L_3022c0 *)arg0, (struct P_3022c0 *)g_propertyNameField[0], arg1)));
+    temp_v0 = (void *)(((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1)));
     if (temp_v0 == 0) {
         return 0;
     }
@@ -10,25 +10,25 @@ int FUN_002d8e70(int arg0, int arg1) {
 
 int FUN_002d8eb0(int arg0, int arg1) {
     struct P8eb0 *s0;
-    s0 = (struct P8eb0 *)((void *)igProperty_FindByName((struct L_3022c0 *)arg0, (struct P_3022c0 *)g_propertyNameField[0], arg1)); if (s0 == 0) return 0; if (igObject_IsKindOf(s0, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) return s0->val; return 0;
+    s0 = (struct P8eb0 *)((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1)); if (s0 == 0) return 0; if (igObject_IsKindOf(s0, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) return s0->val; return 0;
 }
 
 void *FUN_002d8f10(int arg0, int arg1) {
-    return ((void *)igProperty_FindByName((struct L_3022c0 *)arg0, (struct P_3022c0 *)g_propertyNameField[0], arg1));
+    return ((void *)igProperty_FindByName((igObjectList *)arg0, (igMetaField *)g_propertyNameField[0], arg1));
 }
 
 void FUN_002d8f20(Coll *arg0) {
     unsigned n;
     unsigned i;
-    Elem_2d78e0 *e;
+    igObjectDirEntry *e;
     if (arg0->done != 1) {
         n = arg0->n;
         i = 0;
         while (i < n) {
-            e = (Elem_2d78e0 *)FUN_002d7e90((int *)arg0, i);
+            e = (igObjectDirEntry *)FUN_002d7e90((int *)arg0, i);
             if (e != 0 && igObject_IsKindOf(e, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) {
-                if (e->s != 0 && e->s->w60 != 0) {
-                    e->t->v80(e->s);
+                if (e->_typeMeta != 0 && ((igMetaObject *)e->_typeMeta)->_abstractProxy != 0) {
+                    ((Tgt *)e->_ref)->v80((void *)e->_typeMeta);
                 }
             }
             i++;
@@ -64,30 +64,30 @@ void FUN_002d8fe0(A8fe0 *arg0, int arg1) {
     arg0->f20 = temp_s0;
 }
 
-int Gap__Core__igDirectory__vfunc_25(Cont *c, Obj25 *o) {
-if (o->key != 0) { Item *it = (Item *)FUN_002d8f10((int)c, o->key); if (it) { o->vcall(it->f24); return 1; } } else { int i = o->idx; int n = c->count; if (i >= 0 && i < n) { Item *it = (Item *)FUN_002d7e90((int *)c, i); o->vcall(it->f24); return 1; } } return 0;
+int Gap__Core__igDirectory__vfunc_25(Cont *c, igExternalDirEntryView *o) {
+if (o->_entryName != 0) { Item *it = (Item *)FUN_002d8f10((int)c, o->_entryName); if (it) { o->vfunc_23(it->f24); return 1; } } else { int i = o->_entryIndex; int n = c->count; if (i >= 0 && i < n) { Item *it = (Item *)FUN_002d7e90((int *)c, i); o->vfunc_23(it->f24); return 1; } } return 0;
 }
 
 int FUN_002d9120(void *arg0) {
     return *(int *)((char *)(*(int *)((char *)(arg0) + 28)) + 8);
 }
 
-int FUN_002d9130(int *arg0) {
-    SR a;
-    SR b;
+int FUN_002d9130(igDirectoryView *arg0) {
+    igResult a;
+    igResult b;
     int v;
 
-    if (arg0[17] == 0) {
-        v = arg0[13] + 1;
-        arg0[13] = v;
+    if (arg0->_loadingSemaphore == 0) {
+        v = arg0->_loadedRefCount + 1;
+        arg0->_loadedRefCount = v;
         return v;
     }
-    a = ((A9130 *)arg0[17])->vX(1);
-    v = arg0[13];
-    if (a.w0 == g_resultSuccess.v) {
+    a = arg0->_loadingSemaphore->wait(1);
+    v = arg0->_loadedRefCount;
+    if (a.v == g_resultSuccess.v) {
         v += 1;
-        arg0[13] = v;
-        b = ((B9130 *)arg0[17])->vX();
+        arg0->_loadedRefCount = v;
+        b = arg0->_loadingSemaphore->signal();
     }
     return v;
 }
@@ -116,7 +116,7 @@ int FUN_002d91c0(RefCountedHandle *self) {
                     igObject_Destroy(o);
                 }
             }
-            List_RemoveWordAt((L_2d6cf0 *)list, index);
+            List_RemoveWordAt((igDataList *)list, index);
             list->_data[list->_count] = 0;
         }
     } else {

@@ -9,8 +9,8 @@ void **FUN_002c29c0(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)ObjectPointerList_Construct((__internalNonRefCountedObjectList *)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }

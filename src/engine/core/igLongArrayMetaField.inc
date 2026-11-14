@@ -7,18 +7,18 @@ igMetaObject *igLongArrayMetaField_GetMetaObject(void)
 }
 
 int igLongArrayMetaField_GetVTable(void) {
-    Obj_2c1d00 o;
+    igLongArrayMetaField o;
     int r;
     char *p;
     int *hdr;
     int c;
 
     igMetaField_Init((igMetaField *)&o);
-    o.vt = &DAT_0052fb50[0];
+    o._vtable = (int)&DAT_0052fb50[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        p = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        p = (char *)o._fieldName;
         if (p != 0) {
             hdr = (int *)(p - 8);
             c = *(int *)(p - 4) - 1;
@@ -73,17 +73,17 @@ void igLongArrayMetaField_InitFields(void) {
 }
 
 void FUN_002c1ed0(void) {
-    T_2c1ed0 *temp_s0;
-    T_2c1ed0 *p;
+    igLongArrayMetaField *temp_s0;
+    igLongArrayMetaField *p;
 
     if (g_igLongArrayMetaField_descriptor[0] == 0) {
-        g_igLongArrayMetaField_descriptor[0] = ((T_2c1ed0 *)igMetaObject_CreateInstance((CreateMeta *)g_igLongArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igLongArrayMetaField_descriptor[0] = ((igLongArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igLongArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igLongArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((LST *)FUN_002fc250())), (RefHeader *)temp_s0);
             p = g_igLongArrayMetaField_descriptor[0];
-            p->refs = p->refs - 1;
-            if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
+            p->_refCount = p->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
             *(short *)((char *)(g_igLongArrayMetaField_descriptor[0]) + 18) = (short) (((LST *)FUN_002fc250())->count - 1);

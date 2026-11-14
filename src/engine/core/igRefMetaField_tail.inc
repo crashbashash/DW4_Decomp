@@ -13,19 +13,19 @@ void igRefMetaField_ClearValue(igMetaField *field,void *object) {
 }
 
 int igRefMetaField_ReadRawFieldMem(void *arg0, int a1, int *arg2, int arg3, int arg4) {
-    DW4SR4 sp3C;
+    int sp3C;
     int *arg1 = (int *)a1;
     int temp_v1;
     void **temp_v0;
     void *temp_v0_2;
 
     if ((arg3 != 0) && (temp_v1 = *arg2, (temp_v1 != -1))) {
-        sp3C.w0 = temp_v1;
+        sp3C = temp_v1;
         if (arg4 != 0) {
             temp_v0 = (void **)(((void **)igIntMetaField_GetDefaultDescriptor()));
-            ((DW4VCSR_208_1 *)(temp_v0))->vX(&sp3C.w0, 1);
+            ((igMetaFieldView *)(temp_v0))->SwapBytes(&sp3C, 1);
         }
-        temp_v0_2 = (void *)(FUN_002d7e90((int *)arg3, sp3C.w0));
+        temp_v0_2 = (void *)(FUN_002d7e90((int *)arg3, sp3C));
         if (temp_v0_2 != 0) {
             *arg1 = *(int *)((char *)(temp_v0_2) + 24);
         } else {
@@ -49,10 +49,10 @@ char *FUN_003057b0(char *s, char ch) {
     return r;
 }
 
-int FUN_00305800(RecoveryString_305800 *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6) {
+int FUN_00305800(RecoveryString *arg0, void *arg1, int *arg2, int arg3, int arg4, char *arg5, int arg6) {
     char spC0[256];
     char spA0[32];
-    Alloc_305800 *a;
+    igMemoryPoolView *a;
     char *buf;
     char *w;
     int i;
@@ -61,9 +61,9 @@ int FUN_00305800(RecoveryString_305800 *arg0, void *arg1, int *arg2, int arg3, i
     if (arg5 == 0) arg5 = &GPR_00554c2c;
     if (arg6 == -1) arg6 = strlen(arg5) + 5;
     sprintf(spA0, DAT_004fb0c8, arg6);
-    a = ((Alloc_305800 *)igObject_GetAllocator((int)arg1));
-    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
-    buf = a->alloc(arg3 * (strlen(spA0) + 0x80));
+    a = ((igMemoryPoolView *)igObject_GetAllocator((int)arg1));
+    a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
+    buf = (char *)a->Allocate(arg3 * (strlen(spA0) + 0x80));
     w = buf;
     for (i = 0; i < arg3; i++) {
         sprintf(spC0, spA0, arg5);
@@ -100,30 +100,30 @@ block12:
         }
         pi = ((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buf));
     }
-    RecoveryString_305800 sp1CC(pi);
-    a = ((Alloc_305800 *)igObject_GetAllocator((int)arg1));
-    a = g_useOwnerAllocator ? a : ((Alloc_305800 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
-    a->release(buf);
-    int *src = sp1CC.p;
+    RecoveryString sp1CC((char *)pi);
+    a = ((igMemoryPoolView *)igObject_GetAllocator((int)arg1));
+    a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
+    a->Free(buf);
+    char *src = sp1CC.p;
     arg0->p = src;
-    if (arg0->p != 0) *(int *)((char *)arg0->p - 4) = *(int *)((char *)arg0->p - 4) + 1;
+    if (arg0->p != 0) *(int *)(arg0->p - 4) = *(int *)(arg0->p - 4) + 1;
     return 0;
 }
 
-int FUN_00305aa0(int self, int str, int *out, int n, Lst_305aa0 *list) {
+int FUN_00305aa0(int self, int str, int *out, int n, igDirectory *list) {
     int idx;
     int s = str;
     int *o = out;
     int i;
     for (i = 0; i < n; i++) {
-        E_305aa0 *e;
+        igDirEntry *e;
         s = ((int)FUN_003057b0((char *)s, (char)0x7b));
         if (list != 0) {
             s = ((int)FUN_003057b0((char *)s, (char)0x5b));
             if (sscanf(s, &DAT_004f95c0[0], &idx) == 0) idx = -1;
-            if (idx >= 0 && idx < list->n) {
-                e = ((E_305aa0 *)FUN_002d7e90((int *)list, idx));
-                if (e != 0) o[i] = e->v;
+            if (idx >= 0 && idx < list->_count) {
+                e = ((igDirEntry *)FUN_002d7e90((int *)list, idx));
+                if (e != 0) o[i] = e->_ref;
                 else o[i] = 0;
             } else o[i] = 0;
         } else o[i] = 0;

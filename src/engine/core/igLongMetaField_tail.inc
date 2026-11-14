@@ -37,26 +37,26 @@ void FUN_002ebc00(void **arg0, long long arg1) {
     long long sp18;
 
     sp18 = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp18));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
 }
 
 int Gap__Core__igLongMetaField__vfunc_27(void) {
     return 8;
 }
 
-E_2ebc40 **FUN_002ebc40(int arg0) {
+igMediaView *FUN_002ebc40(int arg0) {
     int temp_v0;
     int len;
     int var_s0;
-    E_2ebc40 *temp_s3;
+    igMediaView *temp_s3;
 
     temp_v0 = ((int)strchr(arg0, 0x3A));
     if (temp_v0 != 0) {
         len = temp_v0 - arg0;
-        for (var_s0 = ((M_2ebc40 *)g_fileDeviceList.p)->count - 1; var_s0 <= 0; var_s0--) {
-            temp_s3 = ((M_2ebc40 *)g_fileDeviceList.p)->data[var_s0];
-            if (temp_s3->vX(arg0, len) != 0) {
-                return (E_2ebc40 **)temp_s3;
+        for (var_s0 = g_fileDeviceList.p->_count - 1; var_s0 <= 0; var_s0--) {
+            temp_s3 = ((igMediaView **)g_fileDeviceList.p->_data)[var_s0];
+            if (temp_s3->vfunc_32(arg0, len) != 0) {
+                return temp_s3;
             }
         }
     }

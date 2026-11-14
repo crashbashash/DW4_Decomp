@@ -9,8 +9,8 @@ void **FUN_002b9f90(int arg0) {
         if (var_s0 != 0) {
             var_s0 = (void **)(((void **)FUN_0030a440((int **)var_s0, 1)));
         }
-        ((DW4VC_44_0 *)(var_s0))->vX();
-        ((DW4VC_36_1 *)(var_s0))->vX((int)(0));
+        ((igObjectDispatchView *)(var_s0))->vfunc_09();
+        ((igObjectDispatchView *)(var_s0))->userConstruct((int)(0));
     }
     return var_s0;
 }
@@ -38,16 +38,16 @@ igMetaObject *igShortMetaField_GetMetaObject(void)
 }
 
 int igShortMetaField_GetVTable(void) {
-    struct Obj_2ba100 obj;
+    igShortMetaField obj;
     char *o;
     int *a1;
     int v0;
     int t;
     FUN_0030a480((int **)&obj);
     t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &g_igMetaField_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
+    obj._vtable = (int)&g_igMetaField_vtable[0];
+    if (&obj._fieldName != 0) {
+        o = (char *)obj._fieldName;
         if (o != 0) {
             a1 = (int *)(o - 8);
             v0 = *(int *)(o - 4) - 1;

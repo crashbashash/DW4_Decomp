@@ -23,23 +23,23 @@ void FUN_002f0750(void) {
 
 void FUN_002f0760(int arg0, int extra1) {
     int var_s2;
-    VC_2f0760 *temp_s1;
-    VC_2f0760 *temp_s2;
+    AllocatorLookupView *temp_s1;
+    AllocatorLookupView *temp_s2;
     int var_s1;
 
-    var_s2 = ((L_2f0760 * *)g_secondaryAllocatorList)[0]->n - 1;
+    var_s2 = g_secondaryAllocatorList[0]->count - 1;
     while (var_s2 >= 0) {
-        temp_s1 = ((L_2f0760 * *)g_secondaryAllocatorList)[0]->arr[var_s2];
-        if ((temp_s1 != 0) && (temp_s1->a() != 0)) {
-            temp_s1->b(arg0);
+        temp_s1 = g_secondaryAllocatorList[0]->data[var_s2];
+        if ((temp_s1 != 0) && (temp_s1->Available() != 0)) {
+            temp_s1->vfunc_96(arg0);
         }
         var_s2 -= 1;
     }
-    var_s1 = ((L_2f0760 * *)g_primaryAllocatorList)[0]->n - 1;
+    var_s1 = g_primaryAllocatorList[0]->count - 1;
     while (var_s1 >= 0) {
-        temp_s2 = ((L_2f0760 * *)g_primaryAllocatorList)[0]->arr[var_s1];
-        if ((temp_s2 != 0) && (temp_s2->a() != 0)) {
-            temp_s2->b(arg0);
+        temp_s2 = g_primaryAllocatorList[0]->data[var_s1];
+        if ((temp_s2 != 0) && (temp_s2->Available() != 0)) {
+            temp_s2->vfunc_96(arg0);
         }
         var_s1 -= 1;
     }
@@ -53,13 +53,13 @@ int FUN_002f0870(void) {
     return 0;
 }
 
-igResult FUN_002f0880(void **arg1, void *arg2) {
-    DW4SR4 sp2C;
+igResult FUN_002f0880(void **pool, void *info) {
+    igResult discarded;
     int temp_v1;
 
-    temp_v1 = *(int *)((char *)(arg2) + 32);
+    temp_v1 = *(int *)((char *)(info) + 32);
     if (temp_v1 != 0) {
-        sp2C = ((DW4VCSR_164_1 *)(arg1))->vX((long long)temp_v1);
+        discarded = ((AllocatorLookupView *)pool)->vfunc_41((long long)temp_v1);
     }
     return g_resultSuccess;
 }

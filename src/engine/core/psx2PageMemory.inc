@@ -622,7 +622,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         row->size = out.b0;
         FUN_0032a180(row, text_Section_Code);
         FUN_0032a1b0(row, text_Program);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a1;
     if (*s1 != -1) {
@@ -633,7 +633,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         row->size = out.b1;
         FUN_0032a180(row, text_Section_Data);
         FUN_0032a1b0(row, text_Program);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a2;
     if (*s1 != -1) {
@@ -644,7 +644,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         row->size = out.b2;
         FUN_0032a180(row, text_Section_Initialized_Data);
         FUN_0032a1b0(row, text_Program);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a3;
     if (*s1 != -1) {
@@ -655,7 +655,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         row->size = out.b3;
         FUN_0032a180(row, text_Section_Uninitialized_Data);
         FUN_0032a1b0(row, text_Program);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
     s1 = &out.a4;
     if (*s1 != -1) {
@@ -666,7 +666,7 @@ void FUN_0032a600(A600 *arg0, int arg1) {
         row->size = out.b4;
         FUN_0032a180(row, text_Section_Stack_Data);
         FUN_0032a1b0(row, text_Program);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
 }
 
@@ -693,7 +693,7 @@ void FUN_0032a900(A900 *arg0, int arg1) {
             case 2: FUN_0032a180(row, text_Heap_Blocked); FUN_0032a1b0(row, text_SystemHeap); break;
             case 3: FUN_0032a180(row, text_Heap_Allocated); FUN_0032a1b0(row, text_SystemHeap); break;
             }
-            List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+            List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
         }
     }
     if (out.b != -1 && out.a != -1) {
@@ -704,7 +704,7 @@ void FUN_0032a900(A900 *arg0, int arg1) {
         row->size = out.a;
         FUN_0032a180(row, text_Heap_Free_from_top);
         FUN_0032a1b0(row, text_SystemHeap);
-        List_InsertWords((igDataList *)arg1, FUN_002d6e60((L_2d6e60 *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
+        List_InsertWords((igDataList *)arg1, FUN_002d6e60((igDataList *)arg1, &row, (Cmp)FUN_0032a260), 1, &row);
     }
 }
 

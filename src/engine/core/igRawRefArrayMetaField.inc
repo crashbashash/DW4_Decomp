@@ -7,20 +7,20 @@ igMetaObject *igRawRefArrayMetaField_GetMetaObject(void)
 }
 
 int igRawRefArrayMetaField_GetVTable(void) {
-    struct F f;
+    igRawRefArrayMetaField f;
     int temp_s0;
     int *temp_a1;
     int temp_v0;
 
     FUN_00305440((int **)&f);
-    f.obj.vt = &DAT_0052ed50[0];
+    f._vtable = (int)&DAT_0052ed50[0];
     temp_s0 = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    f.obj.vt = &g_igMetaField_vtable[0];
-    if (&f.ref != 0) {
-        if (f.ref != 0) {
-            temp_a1 = f.ref - 2;
-            temp_v0 = f.ref[-1] - 1;
-            f.ref[-1] = temp_v0;
+    f._vtable = (int)&g_igMetaField_vtable[0];
+    if (&f._fieldName != 0) {
+        if (((int *)f._fieldName) != 0) {
+            temp_a1 = ((int *)f._fieldName) - 2;
+            temp_v0 = ((int *)f._fieldName)[-1] - 1;
+            ((int *)f._fieldName)[-1] = temp_v0;
             if (temp_v0 == 0) {
                 StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
             }
@@ -71,20 +71,20 @@ void igRawRefArrayMetaField_InitFields(void) {
 }
 
 void FUN_002bc000(void) {
-    Q *temp_s0;
-    Q *p;
+    igRawRefArrayMetaField *temp_s0;
+    igRawRefArrayMetaField *p;
 
     if (g_igRawRefArrayMetaField_descriptor[0] == 0) {
-        g_igRawRefArrayMetaField_descriptor[0] = ((Q *)igMetaObject_CreateInstance((CreateMeta *)g_igRawRefArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igRawRefArrayMetaField_descriptor[0] = ((igRawRefArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igRawRefArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igRawRefArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((R_2bc000 *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
             p = g_igRawRefArrayMetaField_descriptor[0];
-            p->f4 -= 1;
-            if ((p->f4 & 0x7fffff) == 0) {
+            p->_refCount -= 1;
+            if ((p->_refCount & 0x7fffff) == 0) {
                 igObject_Destroy(p);
             }
-            g_igRawRefArrayMetaField_descriptor[0]->f18 = ((R_2bc000 *)FUN_002fc250())->f12 - 1;
+            g_igRawRefArrayMetaField_descriptor[0]->_internalIndex = ((PointerList *)FUN_002fc250())->count - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)g_igRawRefArrayMetaField_descriptor[0]);
         }
     }

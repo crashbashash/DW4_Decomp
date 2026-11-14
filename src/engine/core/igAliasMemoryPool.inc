@@ -38,16 +38,16 @@ done:
 }
 
 int igAliasMemoryPool_GetVTable(void) {
-    union U_2cd2e0 u;
+    igAliasMemoryPool pool;
     int temp_s0;
     S_ref *q0;
     S_ref *q1;
     S_ref *q2;
 
-    FUN_002d1500(u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igAliasMemoryPool_vtable[0];
-    q2 = (S_ref *)&u.b[180];
+    FUN_002d1500(&pool);
+    temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&g_igAliasMemoryPool_vtable[0];
+    q2 = (S_ref *)&pool._aliasedMemoryPool;
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {
@@ -57,7 +57,7 @@ int igAliasMemoryPool_GetVTable(void) {
             }
         }
     }
-    q1 = (S_ref *)&u.b[152];
+    q1 = (S_ref *)&pool._eventTracker;
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {
@@ -67,7 +67,7 @@ int igAliasMemoryPool_GetVTable(void) {
             }
         }
     }
-    q0 = (S_ref *)&u.b[116];
+    q0 = (S_ref *)&pool._allocationLock;
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {

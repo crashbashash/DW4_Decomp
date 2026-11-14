@@ -14,19 +14,19 @@ igMetaObject *igCallStackTable_GetMetaObject(void)
 }
 
 int igCallStackTable_GetVTable(void) {
-    union U_2cc880 u;
+    igCallStackTable table;
     int temp_s0;
     S_ref *q0;
     S_ref *q1;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_00530c00[0];
-    q1 = (S_ref *)&u.b[16];
+    igObject_InitHeader((ObjectHeader *)&table);
+    table._vtable = (int)&DAT_00530c00[0];
+    q1 = (S_ref *)&table._callStacks;
     *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[20];
+    q0 = (S_ref *)&table._hashIndex;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00530c00[0];
+    temp_s0 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    table._vtable = (int)&DAT_00530c00[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {

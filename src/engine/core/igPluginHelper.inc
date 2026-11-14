@@ -12,20 +12,20 @@ igMetaObject *igPluginHelper_GetMetaObject(void)
 }
 
 int igPluginHelper_GetVTable(void) {
-    struct Obj_2bc390 obj;
+    igPluginHelper helper;
     int t;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052eee0[0];
-    obj.w[1] = 0;
-    obj.w[2] = 0;
-    obj.w[3] = 0;
-    obj.w[4] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_0052eee0[0];
-    FUN_002bc540((ObjectRefWord *)(&obj.w[4]), -1);
-    FUN_002bc4c0((void **)(&obj.w[3]), (short)(-1));
-    FUN_002bc440((void **)(&obj.w[2]), (long long)(-1));
-    StringRef_Destruct_00130720(&obj.w[1], -1);
+    igObject_InitHeader((struct ObjectHeader *)&helper);
+    helper._vtable = (int)&DAT_0052eee0[0];
+    helper._pluginExtension = 0;
+    helper._repositoryList = 0;
+    helper._libraryLoader = 0;
+    helper._loadedPlugins = 0;
+    t = *(int *)((char *)&helper + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    helper._vtable = (int)&DAT_0052eee0[0];
+    FUN_002bc540((ObjectRefWord *)(&helper._loadedPlugins), -1);
+    FUN_002bc4c0((void **)(&helper._libraryLoader), (short)(-1));
+    FUN_002bc440((void **)(&helper._repositoryList), (long long)(-1));
+    StringRef_Destruct_00130720(&helper._pluginExtension, -1);
     return t;
 }
 

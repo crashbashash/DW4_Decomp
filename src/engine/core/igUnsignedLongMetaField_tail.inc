@@ -60,7 +60,7 @@ void FUN_0030ec10(void **arg0, long long arg1) {
     long long sp18;
 
     sp18 = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp18));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
 }
 
 /* igUnsignedLongArrayMetaField vtable slot 27 (+0x6c): constant leaf returning 8, the byte size of

@@ -92,10 +92,10 @@ void FUN_002da010(void *self, ConfigPlatformSourceList *list) {
 }
 
 static inline int openPath(igDriverDatabase *database, const Mem &path) {
-    O100 *file = (O100 *)database->_databaseFile;
-    int text = path.p->f8;
+    igFileView *file = (igFileView *)database->_databaseFile;
+    int text = path.p->_buffer;
     if (text == 0) text = ((int *)g_stringObjEmptyText)[0];
-    return file->vX((const char *)text, &DAT_004f96a8[0]);
+    return file->Open((const char *)text, (const char *)&DAT_004f96a8[0]);
 }
 
 int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
@@ -117,10 +117,10 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
     }
     {
         int al = ((int)igObject_GetAllocator((int)arg0));
-        release_2da1c0((T *)arg0->_databaseFile);
-        arg0->_databaseFile = (int)((T *)igFile_Create(al));
+        release_2da1c0((igObject *)arg0->_databaseFile);
+        arg0->_databaseFile = (int)((igObject *)igFile_Create(al));
     }
-    s0 = ((O100 *)arg0->_databaseFile)->vX(name.p, &DAT_004f96a8[0]);
+    s0 = ((igFileView *)arg0->_databaseFile)->Open(name.p, (const char *)&DAT_004f96a8[0]);
     if (s0 == 0) {
         if (arg2 == 0 || strlen(arg2) == 0) {
             arg2 = ((const char *)FUN_002d1c20((int *)(((int *)g_objectSystem)[0])));
@@ -133,14 +133,14 @@ int FUN_002da1c0(igDriverDatabase *arg0, const char *arg1, const char *arg2) {
         BLOCK(FUN_002c43b0, ((const char *)FUN_002d1c30((int *)(((int *)g_objectSystem)[0]))))
     }
     if (s0 == 0) {
-        release_2da1c0((T *)arg0->_databaseFile);
+        release_2da1c0((igObject *)arg0->_databaseFile);
         arg0->_databaseFile = 0;
         return 0;
     }
     igStringObj_Set(arg0->_databaseFileName, *(int *)((char *)s0 + 12));
     FUN_002daac0((S_2daac0 *)arg0, arg0->_databaseFile);
-    ((O104 *)arg0->_databaseFile)->vX();
-    release_2da1c0((T *)arg0->_databaseFile);
+    ((igFileView *)arg0->_databaseFile)->Close();
+    release_2da1c0((igObject *)arg0->_databaseFile);
     arg0->_databaseFile = 0;
     return 1;
 }
@@ -475,21 +475,21 @@ void *FUN_002dc180(void *arg0) {
     return arg0;
 }
 
-O_2dc1e0 *FUN_002dc1e0(O_2dc1e0 *self, int delete_storage) {
-    T_2dc1e0 *p;
-    T_2dc1e0 *q;
+ConfigPair *FUN_002dc1e0(ConfigPair *self, int delete_storage) {
+    igStringObj *p;
+    igStringObj *q;
     if (self) {
-        self->vt = &DAT_00530608[0];
-        p = self->a;
-        --p->references;
-        if (((unsigned long long)(long long)p->references & 0x7fffffULL) == 0)
+        *(int **)((char *)self + 8) = &DAT_00530608[0];
+        p = self->key;
+        --p->_refCount;
+        if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0)
             igObject_Destroy((void *)p);
-        self->a = 0;
-        q = self->b;
-        --q->references;
-        if (((unsigned long long)(long long)q->references & 0x7fffffULL) == 0)
+        self->key = 0;
+        q = self->value;
+        --q->_refCount;
+        if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0)
             igObject_Destroy((void *)q);
-        self->b = 0;
+        self->value = 0;
         if ((short)delete_storage > 0) Memory_FreeBufferAliasB(self);
     }
     return self;
@@ -511,37 +511,37 @@ void *FUN_002dc2a0(void *arg0) {
     return arg0;
 }
 
-void *FUN_002dc340(S_2dc340 *arg0, long long arg1) {
+void *FUN_002dc340(ConfigSettingsNode *arg0, long long arg1) {
     int var_s0;
     int s3;
-    RO *a0;
-    RO *v1;
+    igObject *a0;
+    igTDataList<ConfigPair *> *v1;
     int v0;
-    E_2dc340 *e;
+    ConfigPair *e;
     if (arg0 != 0) {
-        arg0->vt = (int)&DAT_005305f8[0];
-        for (var_s0 = 0; var_s0 < arg0->l->count; var_s0++) {
+        arg0->vtable = (int)&DAT_005305f8[0];
+        for (var_s0 = 0; var_s0 < arg0->entries->_count; var_s0++) {
             s3 = var_s0 * 4;
-            e = arg0->l->data[var_s0];
+            e = arg0->entries->_data[var_s0];
             if (e != 0) {
-                e->d0(1);
+                e->Delete(1);
             }
-            v1 = arg0->l;
-            v0 = v1->count;
+            v1 = arg0->entries;
+            v0 = v1->_count;
             if (v0 != 0 && var_s0 >= 0 && var_s0 < v0) {
-                *(int *)((char *)v1->data + s3) = 0;
+                *(int *)((char *)v1->_data + s3) = 0;
             }
         }
-        a0 = arg0->l;
-        a0->u.w = a0->u.w - 1;
-        if (a0->u.b.cnt == 0) igObject_Destroy(a0);
-        arg0->l = 0;
-        a0 = arg0->r;
-        a0->u.w = a0->u.w - 1;
-        if (a0->u.b.cnt == 0) igObject_Destroy(a0);
-        arg0->r = 0;
+        a0 = (igObject *)arg0->entries;
+        a0->_refCount = a0->_refCount - 1;
+        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        arg0->entries = 0;
+        a0 = arg0->name;
+        a0->_refCount = a0->_refCount - 1;
+        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        arg0->name = 0;
         if (arg0 != 0) {
-            arg0->vt = (int)&DAT_00530618[0];
+            arg0->vtable = (int)&DAT_00530618[0];
         }
         if ((short)arg1 > 0) {
             Memory_FreeBufferAliasB(arg0);
@@ -569,43 +569,43 @@ void *FUN_002dc490(void *arg0, int arg1) {
     return arg0;
 }
 
-void *FUN_002dc530(S_2dc530 *arg0, long long arg1) {
+void *FUN_002dc530(ConfigSectionNode *arg0, long long arg1) {
     int var_s0;
     int s3;
-    RO_2dc530 *a0;
-    RO_2dc530 *v1;
+    igObject *a0;
+    igTDataList<TrackedEntry *> *v1;
     int v0;
-    E_2dc530 *e;
+    TrackedEntry *e;
     if (arg0 != 0) {
-        arg0->vt = (int)&DAT_005305e8[0];
-        a0 = arg0->a;
-        a0->u.w = a0->u.w - 1;
-        if (a0->u.b.cnt == 0) igObject_Destroy(a0);
-        arg0->a = 0;
-        a0 = arg0->b;
+        arg0->vtable = (int)&DAT_005305e8[0];
+        a0 = arg0->name;
+        a0->_refCount = a0->_refCount - 1;
+        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        arg0->name = 0;
+        a0 = arg0->selector;
         if (a0 != 0) {
-            a0->u.w = a0->u.w - 1;
-            if (a0->u.b.cnt == 0) igObject_Destroy(a0);
-            arg0->b = 0;
+            a0->_refCount = a0->_refCount - 1;
+            if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+            arg0->selector = 0;
         }
-        for (var_s0 = 0; var_s0 < arg0->l->count; var_s0++) {
+        for (var_s0 = 0; var_s0 < arg0->children->_count; var_s0++) {
             s3 = var_s0 * 4;
-            e = arg0->l->data[var_s0];
+            e = arg0->children->_data[var_s0];
             if (e != 0) {
-                e->d0(1);
+                e->Delete(1);
             }
-            v1 = arg0->l;
-            v0 = v1->count;
+            v1 = arg0->children;
+            v0 = v1->_count;
             if (v0 != 0 && var_s0 >= 0 && var_s0 < v0) {
-                *(int *)((char *)v1->data + s3) = 0;
+                *(int *)((char *)v1->_data + s3) = 0;
             }
         }
-        a0 = arg0->l;
-        a0->u.w = a0->u.w - 1;
-        if (a0->u.b.cnt == 0) igObject_Destroy(a0);
-        arg0->l = 0;
+        a0 = (igObject *)arg0->children;
+        a0->_refCount = a0->_refCount - 1;
+        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        arg0->children = 0;
         if (arg0 != 0) {
-            arg0->vt = (int)&DAT_00530618[0];
+            arg0->vtable = (int)&DAT_00530618[0];
         }
         if ((short)arg1 > 0) {
             Memory_FreeBufferAliasB(arg0);

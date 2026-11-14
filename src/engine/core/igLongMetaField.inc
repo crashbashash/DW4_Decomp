@@ -12,18 +12,18 @@ igMetaObject *igLongMetaField_GetMetaObject(void)
 }
 
 int igLongMetaField_GetVTable(void) {
-    union U_2c1a80 u;
+    igLongMetaField u;
     int *temp_a1;
     int temp_s0;
     int temp_v0;
     void *temp_v1;
 
-    igMetaField_Init((igMetaField *)u.b);
-    u.w[0] = (int)(&DAT_0052fa50[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&g_igMetaField_vtable[0]);
-    if (&u.p[3] != 0) {
-        temp_v1 = (void *)(u.p[3]);
+    igMetaField_Init((igMetaField *)&u);
+    u._vtable = (int)&DAT_0052fa50[0];
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    if ((void **)&u._fieldName != 0) {
+        temp_v1 = (void *)((void *)u._fieldName);
         if (temp_v1 != 0) {
             temp_a1 = (int *)((char *)temp_v1 - 8);
             temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;

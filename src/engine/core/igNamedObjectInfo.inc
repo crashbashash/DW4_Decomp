@@ -7,22 +7,22 @@ igMetaObject *igNamedObjectInfo_GetMetaObject(void)
 }
 
 int igNamedObjectInfo_GetVTable(void) {
-    union U_2bdee0 u;
+    igNamedObjectInfo info;
     int temp_s0;
     S_ref *q0;
-    char *q1;
+    int *q1;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    q1 = &u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&info);
+    q1 = &info._name;
     *(int *)q1 = 0;
-    u.vt = (int)&DAT_0052f150[0];
-    q0 = (S_ref *)&u.b[20];
+    info._vtable = (int)&DAT_0052f150[0];
+    q0 = (S_ref *)&info._objects;
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052f150[0];
+    temp_s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&DAT_0052f150[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -32,7 +32,7 @@ int igNamedObjectInfo_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    info._vtable = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {
         temp_v1 = *(int **)q1;
         if (temp_v1 != 0) {

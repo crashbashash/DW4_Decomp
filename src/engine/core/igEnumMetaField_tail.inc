@@ -17,7 +17,7 @@ int Gap__Core__igEnumMetaField__vfunc_56(void *arg0, int *arg1, int arg2) {
 }
 
 void Gap__Core__igEnumMetaField__vfunc_57(int result, igEnumArrayMetaField *self, int *value) {
-    igMetaEnum_GetNameByValue((int *)result, (const E_2fbb40 *)(((int (*)())self->_getMetaEnumFunction)()), *value);
+    igMetaEnum_GetNameByValue((int *)result, (const igMetaEnum *)(((int (*)())self->_getMetaEnumFunction)()), *value);
 }
 
 int **FUN_002dc8c0(int **arg0, int extra1) {

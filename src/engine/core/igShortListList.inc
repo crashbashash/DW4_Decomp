@@ -19,11 +19,11 @@ igMetaObject *igShortListList_GetMetaObject(void)
 }
 
 int igShortListList_GetVTable(void) {
-    struct Obj_2c9cb0 obj;
+    igShortListList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531d50[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531d50[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c9cf0(void)

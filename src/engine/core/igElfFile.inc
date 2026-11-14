@@ -16,21 +16,21 @@ igMetaObject *igElfFile_GetMetaObject(void)
 }
 
 int igElfFile_GetVTable(void) {
-    union U_2cec90 u;
+    igElfFile elf;
     int r;
     int *tv1, *ta1;
     int tc1;
     char *q1;
     S_ref *q2;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.vt = (int)&DAT_0052e010[0];
-    q1 = (char *)&u.b[8];
+    igObject_InitHeader((ObjectHeader *)&elf);
+    elf._vtable = (int)&DAT_0052e010[0];
+    q1 = (char *)&elf._fileName;
     *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[12];
+    q2 = (S_ref *)&elf._file;
     *(int *)q2 = 0;
-    u.vt = (int)&DAT_0052e0a0[0];
-    r = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052e010[0];
+    elf._vtable = (int)&DAT_0052e0a0[0];
+    r = *(int *)((char *)&elf + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    elf._vtable = (int)&DAT_0052e010[0];
     if (q2 != 0) {
         q2 = *(S_ref **)q2;
         if (q2 != 0) {

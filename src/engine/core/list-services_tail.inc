@@ -69,7 +69,7 @@ igResult ObjectList_RemoveFirstRetained(ObjectListView *self, ObjectListItem *va
         ObjectListItem *o = self->data[i];
         unsigned int k = i;
         if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)((long long)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); } }
-        List_RemoveWordAt((L_2d6cf0 *)self, k);
+        List_RemoveWordAt((igDataList *)self, k);
         self->data[self->count] = 0;
         return g_resultSuccess;
     }
@@ -87,7 +87,7 @@ int ObjectList_RemoveAllRetained(igTDataList<igObject *> *list, igObject *object
                 igObject_Destroy(element);
             }
         }
-        List_RemoveWordAt((L_2d6cf0 *)list, i);
+        List_RemoveWordAt((igDataList *)list, i);
         list->_data[list->_count] = 0;
         removed++;
         i = list->find(object, i);
@@ -104,7 +104,7 @@ int ObjectList_AppendUniqueRetained(igTDataList<igObject *> *list, igObject *obj
     return index;
 }
 
-int igProperty_FindByName(struct L_3022c0 *arg0, struct P_3022c0 *arg1, int arg2) {
+int igProperty_FindByName(igObjectList *arg0, igMetaField *arg1, int arg2) {
     int temp_a0;
     int var_s2;
     int temp_s1;
@@ -112,10 +112,10 @@ int igProperty_FindByName(struct L_3022c0 *arg0, struct P_3022c0 *arg1, int arg2
     if ((arg1 == 0) || (arg2 == 0)) {
         return 0;
     }
-    temp_s1 = arg0->n;
+    temp_s1 = arg0->_count;
     for (var_s2 = 0; var_s2 < temp_s1; var_s2++) {
-        temp_s0 = arg0->arr[var_s2];
-        temp_a0 = *(int *)(temp_s0 + arg1->off);
+        temp_s0 = ((int *)arg0->_data)[var_s2];
+        temp_a0 = *(int *)(temp_s0 + arg1->_offset);
         if ((temp_a0 != 0) && (strcmp(temp_a0, arg2) == 0)) {
             return temp_s0;
         }

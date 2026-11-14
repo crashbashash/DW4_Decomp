@@ -10,8 +10,8 @@ void **igIntMetaField_Create(int allocator) {
         if (field != 0) {
             field = ((void **)igIntMetaField_Construct((igMetaField *)field, 1));
         }
-        ((igObjectSlot09_2b9750 *)field)->vfunc_09();
-        ((igObjectSlot07_2b9750 *)field)->vfunc_07(0);
+        ((igObjectDispatchView *)field)->vfunc_09();
+        ((igObjectDispatchView *)field)->userConstruct(0);
     }
     return field;
 }
@@ -45,17 +45,17 @@ igMetaObject *igIntMetaField_GetMetaObject(void)
 }
 
 int igIntMetaField_GetVTable(void) {
-    union U_2c2eb0 u;
+    igIntMetaField u;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    FUN_002ea420(u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
+    FUN_002ea420((char *)&u);
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    ps = (char *)&u._fieldName;
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {

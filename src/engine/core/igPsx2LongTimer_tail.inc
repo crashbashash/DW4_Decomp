@@ -7,10 +7,11 @@ igMetaObject *igPsx2LongTimer_GetMetaObject(void)
 }
 
 int igPsx2LongTimer_GetVTable(void) {
-    struct Obj_2cfd30 obj;
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052da90[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igPsx2LongTimer timer;
+
+    igObject_InitHeader((struct ObjectHeader *)&timer);
+    timer._vtable = (int)&DAT_0052da90[0];
+    return *(int *)((char *)&timer + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cfd70(void)

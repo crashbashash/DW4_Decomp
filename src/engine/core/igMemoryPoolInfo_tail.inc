@@ -27,23 +27,23 @@ void Gap__Core__igMemoryPoolInfo__vfunc_26(int *arg0, int *arg1, int arg2, int a
     }
 }
 
-void Gap__Core__igMemoryPoolInfo__vfunc_18(S_2f9c60 *arg0) {
+void Gap__Core__igMemoryPoolInfo__vfunc_18(igMemoryPoolInfo *arg0) {
     Gap__Core__igObject__vfunc_16((int)arg0);
-    SETSTR(20)
-    SETSTR(24)
-    arg0->f28 = 0;
-    arg0->f32 = 0;
-    arg0->f36 = 0;
-    SETSTR(40)
-    SETSTR(44)
-    SETSTR(48)
-    SETSTR(52)
-    SETSTR(56)
-    SETSTR(60)
-    SETSTR(64)
-    SETSTR(68)
-    SETSTR(72)
-    SETSTR(76)
-    arg0->f80 = 0;
+    SETSTR(_handleName)
+    SETSTR(_aliasedTo)
+    arg0->_size = 0;
+    arg0->_maxSize = 0;
+    arg0->_address = 0;
+    SETSTR(_class)
+    SETSTR(_arenaType)
+    SETSTR(_source)
+    SETSTR(_scope)
+    SETSTR(_debugOptions)
+    SETSTR(_releaseOptions)
+    SETSTR(_debugChecking)
+    SETSTR(_releaseChecking)
+    SETSTR(_debugMessages)
+    SETSTR(_releaseMessages)
+    arg0->_eventTrackerCapacity = 0;
 }
 

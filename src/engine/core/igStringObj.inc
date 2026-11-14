@@ -19,11 +19,11 @@ igMetaObject *igStringObj_GetMetaObject(void)
 }
 
 int igStringObj_GetVTable(void) {
-    union U_2b95e0 u;
+    igStringObj string;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.w[0] = (int)(&DAT_00533280[0]);
-    return *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
+    igObject_InitHeader((struct ObjectHeader *)&string);
+    string._vtable = (int)(&DAT_00533280[0]);
+    return *(int *)((char *)&string + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002b9620(void)

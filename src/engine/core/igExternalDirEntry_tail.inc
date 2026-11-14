@@ -1,7 +1,7 @@
-void Gap__Core__igExternalDirEntry__vfunc_31(O_2e25a0 *arg0, void *arg1) {
+void Gap__Core__igExternalDirEntry__vfunc_31(igExternalDirEntryView *arg0, void *arg1) {
     int s2, v, old, r;
     int *hd;
-    s2 = ((A_2e25a0 *)arg1)->f200;
+    s2 = ((igIGBFile *)arg1)->_basePath;
     if (g_stringPool[0] == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) {
@@ -10,7 +10,7 @@ void Gap__Core__igExternalDirEntry__vfunc_31(O_2e25a0 *arg0, void *arg1) {
         g_stringPool[0] = v;
     }
     s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)s2);
-    old = arg0->f40;
+    old = arg0->_externalFilePath;
     if (old != 0) {
         hd = (int *)(old - 8);
         v = *(int *)(old - 4) - 1;
@@ -19,18 +19,18 @@ void Gap__Core__igExternalDirEntry__vfunc_31(O_2e25a0 *arg0, void *arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
         }
     }
-    arg0->f40 = s2;
-    arg0->v172(((B_2e25a0 *)arg1)->f160);
-    if (arg0->f24 == 0 && GPR_00554c00 == 0) {
-        r = FUN_00308390(DAT_004f99f0, arg0->f32, arg0->f40);
+    arg0->_externalFilePath = s2;
+    arg0->vfunc_43(((igIGBFile *)arg1)->_userLoadFunction);
+    if (arg0->_ref == 0 && GPR_00554c00 == 0) {
+        r = FUN_00308390(DAT_004f99f0, arg0->_entryName, arg0->_externalFilePath);
         if (r != 1 && r == 2) {
             GPR_00554c00 = 1;
         }
     }
-    FUN_002d7da0((A7da0 *)arg1, arg0->f12, arg0->f24);
+    FUN_002d7da0((A7da0 *)arg1, arg0->_index, arg0->_ref);
 }
 
-void FUN_002e26b0(struct O_2e26b0 *arg0, int arg1) {
+void FUN_002e26b0(igExternalDirEntry *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -44,7 +44,7 @@ void FUN_002e26b0(struct O_2e26b0 *arg0, int arg1) {
         g_stringPool[0] = var_v0;
     }
     temp_s0 = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
-    temp_a0 = arg0->s;
+    temp_a0 = (int *)arg0->_directoryName;
     if (temp_a0 != 0) {
         temp_a1 = temp_a0 - 2;
         temp_v1 = temp_a0[-1] - 1;
@@ -53,33 +53,33 @@ void FUN_002e26b0(struct O_2e26b0 *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
         }
     }
-    arg0->s = temp_s0;
+    arg0->_directoryName = (int)temp_s0;
 }
 
-void Gap__Core__igExternalDirEntry__vfunc_23(S0_2e2750 *arg0, S1_2e2750 *arg1) {
-    S_temp_a0_2e2750 *temp_a0;
+void Gap__Core__igExternalDirEntry__vfunc_23(igDirEntry *arg0, igObject *arg1) {
+    igObject *temp_a0;
     if (arg1 != 0) {
-        arg1->f4 = (int)((int) (arg1->f4 + 1));
+        arg1->_refCount = (int)((int) (arg1->_refCount + 1));
     }
-    temp_a0 = (S_temp_a0_2e2750 *)((void *)(arg0->f18));
+    temp_a0 = (igObject *)((void *)(arg0->_ref));
     if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
+        temp_a0->_refCount = (int)((int) (temp_a0->_refCount - 1));
+        if (((unsigned long long) ((long long)(int) temp_a0->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(temp_a0);
         }
     }
-    arg0->f18 = (int)(arg1);
+    arg0->_ref = (int)(arg1);
 }
 
 int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
-    igSmartPointer<Obj_2e27d0> stream(((class Obj_2e27d0 *)FUN_002c37e0(((int)igObject_GetAllocator((int)arg0)))));
+    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)FUN_002c37e0(((int)igObject_GetAllocator((int)arg0)))));
     char *s1;
     int len;
     int c;
     char *buf;
-    stream.get()->f160 = arg1;
-    stream.get()->vX(arg0->f28);
-    if (stream.get()->f8 == 0) {
+    stream.get()->_userLoadFunction = arg1;
+    stream.get()->ReadFile(arg0->f28);
+    if (stream.get()->_count == 0) {
         s1 = arg0->f28;
         len = strlen(arg0->f40);
         len = len + strlen(s1);
@@ -88,7 +88,7 @@ int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
         strcpy(buf, arg0->f40);
         strcat(buf, &DAT_004f9a48[0]);
         strcat(buf, arg0->f28);
-        stream.get()->vX(buf);
+        stream.get()->ReadFile(buf);
         FUN_00300f50((int)arg0, (int)buf);
     }
     arg0->vY(((void *)FUN_002d8e70((int)(stream.get()), (int)arg0->f32)));
@@ -98,13 +98,6 @@ int Gap__Core__igExternalDirEntry__vfunc_44(Ent *arg0, int arg1) {
     return arg0->f24 != 0;
 }
 
-static inline void releaseObject(Obj_2e2950 *object) {
-    object->_refCount = object->_refCount - 1;
-    if ((object->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(object);
-    }
-}
-
 void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0) {
     Gap__Core__igDirEntry__vfunc_11((int)arg0);
     arg0->_resolveMethod = 2;
@@ -112,7 +105,7 @@ void Gap__Core__igExternalDirEntry__vfunc_11(igDirEntry *arg0) {
 }
 
 void Gap__Core__igExternalDirEntry__vfunc_12(void **arg0) {
-    ((DW4VC_92_1 *)(arg0))->vX((int)(0));
+    ((igDirEntryView *)(arg0))->vfunc_23((int)(0));
     Gap__Core__igObject__vfunc_10((int)arg0);
 }
 

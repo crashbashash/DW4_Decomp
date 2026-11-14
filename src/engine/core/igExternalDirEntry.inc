@@ -7,24 +7,24 @@ igMetaObject *igExternalDirEntry_GetMetaObject(void)
 }
 
 int igExternalDirEntry_GetVTable(void) {
-    union U_2c54a0 u;
+    igExternalDirEntry entry;
     int t;
     char *o;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&DAT_00530360[0];
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[32] = 0;
-    *(int *)&u.b[40] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00530360[0];
-    StringRef_Destruct_00130720(&u.b[40], -1);
-    StringRef_Destruct_00130720(&u.b[32], -1);
-    StringRef_Destruct_00130720(&u.b[28], -1);
-    FUN_0014f4e0(u.b, 0);
+    igObject_InitHeader((ObjectHeader *)&entry);
+    entry._name = 0;
+    entry._vtable = (int)&DAT_00530360[0];
+    entry._directoryName = 0;
+    entry._entryName = 0;
+    entry._externalFilePath = 0;
+    t = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)&DAT_00530360[0];
+    StringRef_Destruct_00130720(&entry._externalFilePath, -1);
+    StringRef_Destruct_00130720(&entry._entryName, -1);
+    StringRef_Destruct_00130720(&entry._directoryName, -1);
+    FUN_0014f4e0(&entry, 0);
     return t;
 }
 

@@ -1,4 +1,4 @@
-void igNamedObject_SetName(struct N_2fecb0 *arg0, int arg1) {
+void igNamedObject_SetName(igNamedObject *arg0, int arg1) {
     int *temp_a1;
     int temp_v1;
     int var_v0;
@@ -12,7 +12,7 @@ void igNamedObject_SetName(struct N_2fecb0 *arg0, int arg1) {
         g_stringPool[0] = var_v0;
     }
     temp_s0 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)arg1)));
-    temp_a0 = arg0->f8;
+    temp_a0 = (char *)arg0->_name;
     if (temp_a0 != 0) {
         temp_a1 = (int *)(temp_a0 - 8);
         temp_v1 = *(int *)((char *)temp_a0 - 4) - 1;
@@ -21,6 +21,6 @@ void igNamedObject_SetName(struct N_2fecb0 *arg0, int arg1) {
             StringChunk_ReleaseHeader((StringChunkOwnerView *)(*temp_a1), (int)temp_a1);
         }
     }
-    arg0->f8 = (char *)temp_s0;
+    arg0->_name = (int)temp_s0;
 }
 

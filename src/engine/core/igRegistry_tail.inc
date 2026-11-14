@@ -87,7 +87,7 @@ bool FUN_00305d30(IniReaderView *self, char *name, char *dir) {
         dropString(held);
         return false;
     }
-    FUN_003077a0((struct A_3077a0 *)self);
+    FUN_003077a0((igRegistry *)self);
     FUN_00307870((Ini *)self, (int)self->file, 1);
     self->file->Close();
     dropString(held);
@@ -189,7 +189,7 @@ int FUN_00306770(int arg0, int arg1, const char *arg2, T_306770 **arg3, const ch
     Node *node;
     T_306770 *t;
     T_306770 *old;
-    Holder_306770 h;
+    StringObjHolder h;
     node = ((Node *)FUN_00307c10((igRegistry *)arg0, arg1, arg2, 0));
     if (node != 0) {
         t = node->f12;
@@ -327,18 +327,18 @@ int FUN_00306aa0(void *self, int section, const char *key, SL *list, int create)
     int *r2;
     int *r3;
     const char *saved;
-    int i; Pair_306aa0 *p; int n; int j; Str *c; char *s2; Str *held; Str *c2; int at; int at2;
+    int i; igRegistryValue *p; int n; int j; Str *c; char *s2; Str *held; Str *c2; int at; int at2;
 
     saved = key;
-    p = (Pair_306aa0 *)(((void *)FUN_00307c10((igRegistry *)self, section, key, 0)));
+    p = FUN_00307c10((igRegistry *)self, section, key, 0);
     if (p != 0) {
-        FUN_0030bce0((SrcStr *)p->value, 0x2C, (List_30bce0 *)list);
+        FUN_0030bce0((SrcStr *)p->_value, 0x2C, (igTDataList<char *> *)list);
         *(Str **)&a = (Str *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         for (i = 0; i < list->count; i++) {
             StringList_CopyRetained(&r1, list, i);
             igStringObj_Set((int)a, (int)r1);
             releaseRef(r1);
-            FUN_0030bee0((S_30bee0 *)a);
+            FUN_0030bee0((igStringObj *)a);
             *(int **)&tmp = intern(text_306aa0(a));
             setAt_306aa0(list, i, &tmp);
             releaseRef(tmp);
@@ -430,11 +430,11 @@ int FUN_00307660(void *arg0, int arg1, const char *arg2, int arg3) {
 }
 
 int FUN_003076b0(int a0, int a1, const char *a2, float x) {
-    struct O_3076b0 *o = ((struct O_3076b0 *)FUN_00307c10((igRegistry *)a0, a1, a2, 1));
+    igRegistryValue *o = FUN_00307c10((igRegistry *)a0, a1, a2, 1);
     if (o == 0) {
         return 0;
     }
-    FUN_0030b730(o->f12, (void *)((int)(((char *)DAT_004f9a70))), x);
+    FUN_0030b730(o->_value, (void *)((int)(((char *)DAT_004f9a70))), x);
     return 1;
 }
 
@@ -457,31 +457,31 @@ int FUN_00307750(int arg0, int arg1, const char *arg2, int arg3) {
     return 1;
 }
 
-void FUN_003077a0(struct A_3077a0 *arg0) {
+void FUN_003077a0(igRegistry *self) {
     int n2;
     int j;
-    L_3077a0 *l;
+    igTDataList<igObject *> *l;
     int n1;
     int i;
-    R_3077a0 *p;
+    igObject *p;
 
-    l = arg0->list;
-    n1 = l->cnt;
+    l = (igTDataList<igObject *> *)self->_additionalSectionNames;
+    n1 = l->_count;
     for (i = 0; i < n1; i++) {
-        p = l->arr[i];
+        p = l->_data[i];
         if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
+            p->_refCount = p->_refCount - 1;
+            if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
         }
     }
-    n2 = l->cnt;
+    n2 = l->_count;
     for (j = 0; j < n2; j++) {
-        l->arr[j] = 0;
+        l->_data[j] = 0;
     }
-    l->cnt = 0;
-    ObjectList_ClearRetainedPreserveCount((L_301d80 *)arg0->w8, n2);
+    l->_count = 0;
+    ObjectList_ClearRetainedPreserveCount((L_301d80 *)self->_valueTable, n2);
 }
 
 bool FUN_00307a50(void *unused, Stream *s, char *buf, int *lines) {
@@ -528,7 +528,7 @@ bool FUN_00307a50(void *unused, Stream *s, char *buf, int *lines) {
 igRegistryValue *FUN_00307c10(igRegistry *arg0, int arg1, const char *arg2, int arg3) {
     int s2 = 0;
     int s1 = -1;
-    Ref_307c10 r;
+    RegistryValueRef r;
     r.p = 0;
     for (; s2 < ((igRegistryValueList *)arg0->_valueTable)->_count; s2++) {
         igRegistryValue *s0 = ((igRegistryValue **)((igRegistryValueList *)arg0->_valueTable)->_data)[s2];
@@ -740,9 +740,9 @@ void FUN_00308770(void) {
 
 igSmartPointer<igObject> FUN_003087a0(void *directory, int name) {
     if (strcmp(name, &text_igImageDirectory[0]) == 0) {
-        return igSmartPointer<igObject>((igObject *)FUN_00308a90((O_308a90 *)directory), kRetainReference);
+        return igSmartPointer<igObject>((igObject *)FUN_00308a90((igResource *)directory), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((struct L_3022c0 *)(*(int *)((char *)directory + 16)), (struct P_3022c0 *)DAT_00586670[0], name), kRetainReference);
+    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)(*(int *)((char *)directory + 16)), (igMetaField *)DAT_00586670[0], name), kRetainReference);
 }
 
 int FUN_00308850(int *p, int extra1)
@@ -750,71 +750,69 @@ int FUN_00308850(int *p, int extra1)
     return ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)p + 16)), (igObject *)extra1);
 }
 
-static inline int countOf_308860(const List_308860 *list) { return list->count; }
-
-static inline void setNames(Self_308860 *self, const MemberRef &value) {
-    Obj_308860 *held = value.p;
-    Obj_308860 *old;
+static inline void setNames(igResource *self, const MemberRef &value) {
+    igObject *held = value.p;
+    igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
-    old = self->names;
+    old = (igObject *)self->_alignmentStrings;
     if (old) {
         old->_refCount = old->_refCount - 1;
         if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
     }
-    self->names = held;
+    self->_alignmentStrings = (int)held;
 }
 
-static inline void setValues(Self_308860 *self, const MemberRef &value) {
-    Obj_308860 *held = value.p;
-    Obj_308860 *old;
+static inline void setValues(igResource *self, const MemberRef &value) {
+    igObject *held = value.p;
+    igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
-    old = (Obj_308860 *)self->values;
+    old = (igObject *)self->_alignmentValues;
     if (old) {
         old->_refCount = old->_refCount - 1;
         if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
     }
-    self->values = (List_308860 *)held;
+    self->_alignmentValues = (int)held;
 }
 
-void FUN_00308860(Self_308860 *self, int name, int value) {
-    if (self->names == 0) {
-        setNames(self, MemberRef((Obj_308860 *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
-        setValues(self, MemberRef((Obj_308860 *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
+void FUN_00308860(igResource *self, int name, int value) {
+    if (self->_alignmentStrings == 0) {
+        setNames(self, MemberRef((igObject *)FUN_002b9350((int)(((void *)igObject_GetAllocator((int)self))))));
+        setValues(self, MemberRef((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((int)self))))));
     }
-    igSmartPointer<Obj_308860> entry((Obj_308860 *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self)))));
+    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((int)self)))));
     igStringObj_Set((int)entry.p, name);
-    ObjectList_AppendRetained((igObjectList *)self->names, (igObject *)entry.p);
-    List_308860 *values = self->values;
-    int top = countOf_308860(values);
-    if (top < values->cap) {
-        values->count = values->count + 1;
+    ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
+    igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
+    int top = values->count();
+    if (top < values->_capacity) {
+        values->_count = values->_count + 1;
     } else {
         List_Resize(values, top + 1, 4);
     }
-    values->data[top] = value;
+    values->_data[top] = value;
 }
 
-static inline void setHeader(O_308a90 *owner, const igSmartPointer<Ob_308a90> &value) {
-    Ob_308a90 *held = value.p;
-    Ob_308a90 *old;
+static inline void setImageDirectory(igResource *owner, const igSmartPointer<igDirectory> &value) {
+    igDirectory *held = value.p;
+    igDirectory *old;
     if (held != 0) held->_refCount = held->_refCount + 1;
-    old = (Ob_308a90 *)owner->f12;
+    old = (igDirectory *)owner->_imageDirectory;
     if (old != 0) {
         old->_refCount = old->_refCount - 1;
         if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
     }
-    owner->f12 = (Hd *)held;
+    owner->_imageDirectory = (int)held;
 }
 
-Hd *FUN_00308a90(O_308a90 *arg0) {
-    if (arg0->f12 == 0) {
+igDirectory *FUN_00308a90(igResource *self) {
+    if (self->_imageDirectory == 0) {
         int *hd;
         int v;
         int s2;
-        Hd *s0;
+        igDirectory *s0;
         int old;
-        setHeader(arg0, igSmartPointer<Ob_308a90>(((Ob_308a90 *)FUN_002c72c0(FUN_00301000()))));
-        s0 = arg0->f12;
+        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)FUN_002c72c0(FUN_00301000()))));
+        s0 = (igDirectory *)self->_imageDirectory;
         if (0 == g_stringPool[0]) {
             v = ((int)StringPool_Allocate(16));
             if (v != 0) {
@@ -823,7 +821,7 @@ Hd *FUN_00308a90(O_308a90 *arg0) {
             g_stringPool[0] = v;
         }
         s2 = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)(((char *)text_igImageDirectory)));
-        old = s0->f20;
+        old = s0->_name;
         if (old != 0) {
             hd = (int *)(old - 8);
             v = *(int *)(old - 4) - 1;
@@ -832,12 +830,12 @@ Hd *FUN_00308a90(O_308a90 *arg0) {
                 StringChunk_ReleaseHeader((StringChunkOwnerView *)(*hd), (int)hd);
             }
         }
-        s0->f20 = s2;
-        arg0->f12->f32 = (Ob_308a90 *)arg0;
-        FUN_00308850((int *)arg0, (int)arg0->f12);
+        s0->_name = s2;
+        ((igDirectory *)self->_imageDirectory)->_managingResource = (int)self;
+        FUN_00308850((int *)self, self->_imageDirectory);
     }
     fflush(_impure_ptr[0]->f8);
-    return arg0->f12;
+    return (igDirectory *)self->_imageDirectory;
 }
 
 void FUN_00308c00(int *arg0, void *arg1) {
@@ -848,8 +846,8 @@ void FUN_00308c00(int *arg0, void *arg1) {
     } else {
         temp_s0 = *(int *)((char *)(arg1) + 32);
         if (*(int *)((char *)(arg1) + 52) > 1) {
-            FUN_00309640((P_309640 *)temp_s0, (P_309640 *)arg1);
-            igResource_UnloadDirectory((W_309750 *)temp_s0, *(int *)((char *)(arg1) + 20));
+            FUN_00309640((igResource *)temp_s0, (igIGBFileView *)arg1);
+            igResource_UnloadDirectory((igResource *)temp_s0, *(int *)((char *)(arg1) + 20));
         }
         *arg0 = g_resultSuccess.v;
     }

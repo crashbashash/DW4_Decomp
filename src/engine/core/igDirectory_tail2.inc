@@ -9,16 +9,15 @@ void FUN_002d7b00(void) {
     igResource_GetMetaObject();
 }
 
-void Gap__Core__igDirectory__vfunc_12(Obj12 *arg0) {
-    R12 sp4C;
+void Gap__Core__igDirectory__vfunc_12(igDirectoryView *arg0) {
+    igResult sp4C;
     int temp_s2;
     int i;
     int *temp_v0;
-    Lst12 *l;
 
-    if (arg0->f32 != 0) {
-        for (i = 0; i < arg0->list->count; i++) {
-            igResource_UnloadDirectory((W_309750 *)arg0->f32, ((int *)arg0->list->data[i])[5]);
+    if (arg0->_managingResource != 0) {
+        for (i = 0; i < arg0->_externalDirectoryList->_count; i++) {
+            igResource_UnloadDirectory((igResource *)arg0->_managingResource, arg0->_externalDirectoryList->_data[i]->_name);
         }
     }
     temp_s2 = FUN_002d9120(arg0);
@@ -29,8 +28,8 @@ void Gap__Core__igDirectory__vfunc_12(Obj12 *arg0) {
         }
     }
     Gap__Core__igObject__vfunc_10((int)arg0);
-    if (arg0->vo != 0 && arg0->vo->v100() != 0) {
-        sp4C = arg0->vo->v96();
+    if (arg0->_loadingSemaphore != 0 && arg0->_loadingSemaphore->isCreated() != 0) {
+        sp4C = arg0->_loadingSemaphore->destroy();
     }
 }
 
@@ -92,15 +91,15 @@ int FUN_002d7d60(void *arg0, int arg1) {
 
 void FUN_002d7da0(A7da0 *a, int i, int x) {
     if (a->l != 0 && a->f40 != 0) {
-        VC92 *o = a->arr[i];
-        o->vX(x);
-        ((VC96 *)o)->vX(x);
+        igDirEntryView *o = a->arr[i];
+        o->vfunc_23(x);
+        o->vfunc_24(x);
         {
             struct L7da0 *l = a->l;
             if (l->cnt != 0 && i >= 0 && i < l->cnt) l->arr[i] = x;
         }
     } else {
-        a->arr[i]->vX(x);
+        a->arr[i]->vfunc_23(x);
     }
 }
 
@@ -187,7 +186,7 @@ int FUN_002d7f10(FieldBindSet *self, FieldBindObject **field, FieldBindObject **
 }
 
 void FUN_002d81f0(void *arg0, int arg1) {
-    FUN_002d8230((RemovableListHolder *)arg0, (igObject *)((void *)igProperty_FindByName((struct L_3022c0 *)(*(int *)((char *)arg0 + 28)), (struct P_3022c0 *)(*(int *)0x585BE0), arg1)));
+    FUN_002d8230((RemovableListHolder *)arg0, (igObject *)((void *)igProperty_FindByName((igObjectList *)(*(int *)((char *)arg0 + 28)), (igMetaField *)(*(int *)0x585BE0), arg1)));
 }
 
 void FUN_002d8230(RemovableListHolder *h, igObject *object) {
@@ -206,7 +205,7 @@ void FUN_002d8310(void *arg0, void *arg1) {
 }
 
 void * igDirectory_FindInfoByName(int *arg0, int arg1) {
-    return ((void *)igProperty_FindByName((struct L_3022c0 *)arg0[7], (struct P_3022c0 *)g_propertyNameField[0], arg1));
+    return ((void *)igProperty_FindByName((igObjectList *)arg0[7], (igMetaField *)g_propertyNameField[0], arg1));
 }
 
 /* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */
@@ -235,28 +234,28 @@ int FUN_002d83b0(T83b0 *arg0, int arg1, int arg2) {
 }
 
 int FUN_002d8460(void *dir, unsigned key) {
-    igSmartPointer<R8460> h((R8460 *)FUN_002d7c50((O7c50 *)dir, key), kRetainReference);
+    igSmartPointer<igDirEntry> h((igDirEntry *)FUN_002d7c50((O7c50 *)dir, key), kRetainReference);
     if (h.get() != 0) {
         return 1;
     }
     return 0;
 }
 
-int FUN_002d8520(int arg0, VC8520 *arg1, Ctx8520 *arg2) {
+int FUN_002d8520(int arg0, VisitorFieldView *arg1, igDirectoryView *arg2) {
     int i;
     int n;
     if (arg0 == 0) {
         return 1;
     }
     if (arg1 != 0) {
-        return arg1->v172(arg0) == -1;
+        return arg1->Write(arg0) == -1;
     }
     if ((FUN_002d8460(arg2, arg0) & 0xFF) == 1) {
         return 1;
     }
-    n = arg2->list->count;
+    n = arg2->_externalDirectoryList->_count;
     for (i = 0; i < n; i++) {
-        if ((FUN_002d83b0((T83b0 *)arg2->list->data[i], (int)arg2, arg0) & 0xFF) == 1) {
+        if ((FUN_002d83b0((T83b0 *)arg2->_externalDirectoryList->_data[i], (int)arg2, arg0) & 0xFF) == 1) {
             return 1;
         }
     }
@@ -270,7 +269,7 @@ int FUN_002d8620(int arg0, int arg1, int arg2, int extra3) {
     if (arg1 != 0) {
         igObject_VisitFields((VisitorObjectView *)arg1, (int (*)(void *, void *, void *))&FUN_002d8520, (void *)arg0);
         temp_v0 = FUN_002d86b0((A86b0 *)arg0, (K86b0 *)DAT_00586730[0], arg1);
-        igNamedObject_SetName((N_2fecb0 *)(FUN_002d7e90((int *)arg0, temp_v0)), arg2);
+        igNamedObject_SetName((igNamedObject *)(FUN_002d7e90((int *)arg0, temp_v0)), arg2);
         return temp_v0;
     }
     return -1;
@@ -338,7 +337,7 @@ int FUN_002d87b0(FieldLinkSet *self, FieldLinkObject *obj, char *name, int user)
     RetainedWord<FieldLinkRecord> inserted(record.get());
     List_InsertWords((igDataList *)self, index, 1, &inserted);
     if (name != 0) {
-        igNamedObject_SetName((N_2fecb0 *)(record.get()), (int)name);
+        igNamedObject_SetName((igNamedObject *)(record.get()), (int)name);
     }
     record.get()->user = user;
     record.get()->extra = 0;
@@ -381,10 +380,10 @@ int FUN_002d8a80(L8a80 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, 
     record.get()->idx = s0;
     RetainedWord<E8a80> inserted(record.get());
     List_InsertWords((igDataList *)arg0, s0, 1, &inserted);
-    if (arg5) igNamedObject_SetName((N_2fecb0 *)(record.get()), arg5);
+    if (arg5) igNamedObject_SetName((igNamedObject *)(record.get()), arg5);
     record.get()->f16 = arg6;
     record.get()->f20 = 1;
-    FUN_002eed00((A_2eed00 *)(record.get()), (V88 *)arg3);
+    FUN_002eed00((igMemoryDirEntry *)(record.get()), (igObjectDispatchView *)arg3);
     int size = ((int)Memory_GetBufferSize((void *)arg2));
     record.get()->f28 = size;
     record.get()->f44 = arg4;
@@ -417,7 +416,7 @@ int FUN_002d8d00(Lst8d00 *list, int key, int name, int val) {
         }
     }
     igSmartPointer<R8d00> entry((R8d00 *)FUN_002c77e0((int)(((void *)igObject_GetAllocator((int)list)))));
-    igNamedObject_SetName((N_2fecb0 *)(entry.get()), name);
+    igNamedObject_SetName((igNamedObject *)(entry.get()), name);
     entry.get()->f16 = val;
     entry.get()->f20 = 2;
     entry.get()->vX(key);

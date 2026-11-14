@@ -9,7 +9,7 @@ void igFloatArrayMetaField_SwapBytes(igFloatArrayMetaField *arg0, int arg1, int 
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)FUN_002c4870()));
-    ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * arg0->_num));
+    ((igMetaFieldView *)(temp_v0))->SwapBytes((void *)(arg1), (int)(arg2 * arg0->_num));
 }
 
 int Gap__Core__igFloatArrayMetaField__vfunc_56(int arg0, int arg1, int arg2) {

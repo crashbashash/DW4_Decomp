@@ -7,17 +7,17 @@ igMetaObject *igDoubleArrayMetaField_GetMetaObject(void)
 }
 
 int igDoubleArrayMetaField_GetVTable(void) {
-    struct F_2c6eb0 o;
+    igDoubleArrayMetaField o;
     int r;
     int *s;
     int *h;
     int c;
     igMetaField_Init((igMetaField *)&o);
-    o.vt = DAT_00530790;
+    o._vtable = (int)&DAT_00530790[0];
     r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_igMetaField_vtable;
-    if (&o.str != 0) {
-        s = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        s = (int *)o._fieldName;
         if (s != 0) {
             h = s - 2;
             c = s[-1] - 1;
@@ -70,22 +70,22 @@ void igDoubleArrayMetaField_InitFields(void) {
 }
 
 void FUN_002c7080(void) {
-    M_2c7080 *temp_s0;
-    M_2c7080 *p;
+    igDoubleArrayMetaField *temp_s0;
+    igDoubleArrayMetaField *p;
     int len;
 
     if (g_igDoubleArrayMetaField_descriptor[0] == 0) {
-        g_igDoubleArrayMetaField_descriptor[0] = ((M_2c7080 *)igMetaObject_CreateInstance((CreateMeta *)g_igDoubleArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igDoubleArrayMetaField_descriptor[0] = ((igDoubleArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igDoubleArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igDoubleArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained((PointerList *)(((R_2c7080 *)FUN_002fc250())), (RefHeader *)temp_s0);
+            MetaRefList_AppendRetained((PointerList *)FUN_002fc250(), (RefHeader *)temp_s0);
             p = g_igDoubleArrayMetaField_descriptor[0];
-            p->f4 = p->f4 - 1;
-            if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
+            p->_refCount = p->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
-            len = ((R_2c7080 *)FUN_002fc250())->f12;
-            g_igDoubleArrayMetaField_descriptor[0]->f18 = len - 1;
+            len = ((PointerList *)FUN_002fc250())->count;
+            g_igDoubleArrayMetaField_descriptor[0]->_internalIndex = len - 1;
             igMetaField_FinalizeDescriptor((igMetaField *)g_igDoubleArrayMetaField_descriptor[0]);
         }
     }

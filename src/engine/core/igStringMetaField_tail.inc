@@ -6,7 +6,7 @@ void Gap__Core__igStringMetaField__vfunc_12(int arg0) {
 /* Post-construction defaults; same two steps. */
 void igStringMetaField_InitDefaults(void **self) {
     Gap__Core__igObject__vfunc_09((int)self);
-    ((igObjectSlot33 *)self)->vfunc_33(0);
+    ((igMetaFieldView *)self)->SetDefault(0);
 }
 
 void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
@@ -44,7 +44,7 @@ void Gap__Core__igStringMetaField__vfunc_56(int arg0, int a1, int arg2) {
  * created on first use. */
 void igStringMetaField_AssignText(igStringMetaField *self, int object, int *textCell) {
     void *token;
-    StringTokenHeader_30a910 *header;
+    StringTokenHeader *header;
     int text;
     int count;
     int pool;
@@ -66,7 +66,7 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
     token = interned;
     igStringMetaField_AssignRetainedToken(self, object, &token);
     if (token != 0) {
-        header = (StringTokenHeader_30a910 *)token - 1;
+        header = (StringTokenHeader *)token - 1;
         count = header->refCount - 1;
         header->refCount = count;
         if (count == 0) {
@@ -78,12 +78,12 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
 /* Output-first retained copy: *output = *sourceCell, taking one more reference on the token. */
 void Gap__Core__igStringMetaField__vfunc_57(void **output, void *field, void **sourceCell) {
     void *token;
-    StringTokenHeader_30a910 *header;
+    StringTokenHeader *header;
 
     *output = *sourceCell;
     token = *output;
     if (token != 0) {
-        header = (StringTokenHeader_30a910 *)token - 1;
+        header = (StringTokenHeader *)token - 1;
         header->refCount = header->refCount + 1;
     }
 }
@@ -122,16 +122,16 @@ void igStringMetaField_SetDefaultText(int *arg0, int arg1) {
     *temp_s1 = temp_s0;
 }
 
-int Gap__Core__igStringMetaField__vfunc_49(S_30aab0 *arg0, int arg1) {
+int Gap__Core__igStringMetaField__vfunc_49(igStringMetaField *arg0, int arg1) {
     int temp_a0;
     int var_s0;
     int len;
 
-    if (arg0->f26 == 0) {
+    if (arg0->_persistent == 0) {
         return 0;
     }
     var_s0 = 0;
-    temp_a0 = *(int *)(arg1 + arg0->f8);
+    temp_a0 = *(int *)(arg1 + arg0->_offset);
     var_s0 += 4;
     if (temp_a0 != 0) {
         len = strlen(temp_a0) + 1;
@@ -269,13 +269,13 @@ void igStringMetaField_ConstructValue(void) {
  * the string it held. */
 void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
     void *token;
-    StringTokenHeader_30a910 *header;
+    StringTokenHeader *header;
     int count;
     if (self->_destruct != 0) {
         token = 0;
         igStringMetaField_AssignRetainedToken(self, object, &token);
         if (token != 0) {
-            header = (StringTokenHeader_30a910 *)token - 1;
+            header = (StringTokenHeader *)token - 1;
             count = header->refCount - 1;
             header->refCount = count;
             if (count == 0) {
@@ -436,12 +436,12 @@ int igStringObj_ToFloat(void *arg0, int arg1) {
     return sscanf(var_a0, &DAT_004f9738[0], arg1) == 1;
 }
 
-bool FUN_0030b670(O_30b670 *o, char *out) {
+bool FUN_0030b670(igStringObj *o, char *out) {
     bool r = false;
-    if (*o->Str() == 't' || *o->Str() == 'T') {
+    if (*igStringObj_Text(o) == 't' || *igStringObj_Text(o) == 'T') {
         *out = 1;
         r = true;
-    } else if (*o->Str() == 'f' || *o->Str() == 'F') {
+    } else if (*igStringObj_Text(o) == 'f' || *igStringObj_Text(o) == 'F') {
         *out = 0;
         r = true;
     }
@@ -515,19 +515,19 @@ void igStringObj_KeepExtension(O_30b8a0 *o) {
     }
 }
 
-void FUN_0030b980(struct P_30b980 *p) {
-    char *base = p->path;
+void FUN_0030b980(igStringObj *p) {
+    char *base = (char *)p->_buffer;
     char *q;
     if (base != 0) {
-        q = base + p->len;
+        q = base + p->_length;
         while (q--, base < q) {
             if (*q == 0x5C || *q == 0x2F) {
                 *q = 0;
-                igStringObj_Set((int)p, (int)p->path);
+                igStringObj_Set((int)p, (int)(char *)p->_buffer);
                 break;
             }
         }
-        if (q == p->path) {
+        if (q == (char *)p->_buffer) {
             igStringObj_Set((int)p, ((int *)g_stringObjEmptyText)[0]);
         }
     }
@@ -598,44 +598,43 @@ int FUN_0030bb40(char *arg0, char *arg1) {
     }
 }
 
-static inline char *text_30bbf0(Str_30bbf0 *s) { char *t = s->text_30bbf0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
-int igStringObj_Erase(Str_30bbf0 *self, unsigned int pos, unsigned int len) {
+int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     unsigned int end;
-    Str_30bbf0 *tmp;
-    Str_30bbf0 *held;
+    igStringObj *tmp;
+    igStringObj *held;
 
-    if (pos > self->length - 1 || (end = pos + len) > self->length) {
+    if (pos > self->_length - 1 || (end = pos + len) > self->_length) {
         return 0;
     }
-    *(Str_30bbf0 **)&tmp = (Str_30bbf0 *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
-    igStringObj_Set((int)tmp, (int)(self->text_30bbf0 + end));
-    igStringObj_Insert((IniStringView *)tmp, self->text_30bbf0, 0, pos);
-    igStringObj_Set((int)self, (int)(text_30bbf0(tmp)));
+    *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((int)self))));
+    igStringObj_Set((int)tmp, (int)((char *)self->_buffer + end));
+    igStringObj_Insert((IniStringView *)tmp, (char *)self->_buffer, 0, pos);
+    igStringObj_Set((int)self, (int)(igStringObj_Text(tmp)));
     held = tmp;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
-        if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
+        if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy(held);
         }
     }
     return 1;
 }
 
-void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
-    int n = list->count;
+void FUN_0030bce0(SrcStr *src, long long delim, igTDataList<char *> *list) {
+    int n = list->_count;
     for (int i = 0; i < n; i++) {
-        void **slot = (void **)((char *)list->items + i * 4);
+        void **slot = (void **)((char *)list->_data + i * 4);
         if (g_stringPool[0] == 0) {
             int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct((S_2eadf0 *)v));
             g_stringPool[0] = v;
         }
         void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
-        Rel_30bce0::go(*slot);
+        releaseString((const char *)*slot);
         *slot = ni;
     }
-    list->count = 0;
+    list->_count = 0;
     if (src->f8 != 0) {
         char *buf = ((char *)igObject_DuplicateString((int)src, src->f8));
         for (unsigned i = 0; i < (unsigned)src->f12; i++) {
@@ -655,7 +654,7 @@ void FUN_0030bce0(SrcStr *src, long long delim, List_30bce0 *list) {
             }
             void *sp = s;
             StringList_AppendRetained(list, &sp);
-            Rel_30bce0::go(sp);
+            releaseString((const char *)sp);
             p += strlen(p) + 1;
         }
         Memory_FreeBuffer(buf);
@@ -667,19 +666,18 @@ int thunk_strcasecmp(const char *s1, const char *s2)
     return strcasecmp(s1, s2);
 }
 
-static inline char *text_30bfa0(ShortStr_30bfa0 *s) { char *t = s->text_30bfa0; if (t == 0) { return g_stringObjEmptyText[0]; } return t; }
 
-int FUN_0030bfa0(L_30bfa0 *self, int key, int (*cmp)(char *, int)) {
+int FUN_0030bfa0(igStringObjList *self, int key, int (*cmp)(char *, int)) {
     int lo;
     int hi;
     int mid;
     int c;
 
     lo = 0;
-    hi = self->count - 1;
+    hi = self->_count - 1;
     while (lo < hi) {
         mid = (lo + hi) >> 1;
-        c = cmp(text_30bfa0(self->data[mid]), key);
+        c = cmp(igStringObj_Text(((igStringObj **)self->_data)[mid]), key);
         if (c < 0) {
             lo = mid + 1;
         } else if (c > 0) {
@@ -688,10 +686,10 @@ int FUN_0030bfa0(L_30bfa0 *self, int key, int (*cmp)(char *, int)) {
             return mid;
         }
     }
-    if (self->count == 0) {
+    if (self->_count == 0) {
         return -1;
     }
-    if (cmp(text_30bfa0(self->data[lo]), key) == 0) {
+    if (cmp(igStringObj_Text(((igStringObj **)self->_data)[lo]), key) == 0) {
         return lo;
     }
     return -1;

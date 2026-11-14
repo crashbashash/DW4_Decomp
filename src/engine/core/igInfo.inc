@@ -7,19 +7,19 @@ igMetaObject *igInfo_GetMetaObject(void)
 }
 
 int igInfo_GetVTable(void) {
-    union U_2c3600 u;
+    igInfo info;
     int s0;
-    char *ps;
+    int *ps;
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    ps = &u.b[8];
+    igObject_InitHeader((struct ObjectHeader *)&info);
+    ps = &info._name;
     *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_0052fde0[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    info._vtable = (int)&g_igNamedObject_vtable[0];
+    info._vtable = (int)&DAT_0052fde0[0];
+    s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    info._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

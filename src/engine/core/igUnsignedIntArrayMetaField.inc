@@ -12,18 +12,18 @@ igMetaObject *igUnsignedIntArrayMetaField_GetMetaObject(void)
 }
 
 int igUnsignedIntArrayMetaField_GetVTable(void) {
-    union U_2b7140 u;
+    igUnsignedIntArrayMetaField u;
     int temp_s0;
     char *ps;
     int *temp_v1;
     int *temp_a1;
     int temp_v0;
 
-    igUnsignedIntMetaField_Init((igMetaField *)u.b);
-    u.vt = (int)&DAT_0052e430[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
+    igUnsignedIntMetaField_Init((igMetaField *)&u);
+    u._vtable = (int)&DAT_0052e430[0];
+    temp_s0 = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&g_igMetaField_vtable[0];
+    ps = (char *)&u._fieldName;
     if (ps != 0) {
         temp_v1 = *(int **)ps;
         if (temp_v1 != 0) {
@@ -80,17 +80,17 @@ void igUnsignedIntArrayMetaField_InitFields(void) {
 }
 
 void FUN_002b7310(void) {
-    T_2b7310 *temp_s0;
-    T_2b7310 *p;
+    igUnsignedIntArrayMetaField *temp_s0;
+    igUnsignedIntArrayMetaField *p;
 
     if (g_igUnsignedIntArrayMetaField_descriptor[0] == 0) {
-        g_igUnsignedIntArrayMetaField_descriptor[0] = ((T_2b7310 *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+        g_igUnsignedIntArrayMetaField_descriptor[0] = ((igUnsignedIntArrayMetaField *)igMetaObject_CreateInstance((CreateMeta *)g_igUnsignedIntArrayMetaField_metaObject[0], (MemoryPool *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
         temp_s0 = g_igUnsignedIntArrayMetaField_descriptor[0];
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained((PointerList *)(((LST *)FUN_002fc250())), (RefHeader *)temp_s0);
             p = g_igUnsignedIntArrayMetaField_descriptor[0];
-            p->refs = p->refs - 1;
-            if (((unsigned long long) ((long long) p->refs << 0x29) >> 0x29) == 0) {
+            p->_refCount = p->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(p);
             }
             *(short *)((char *)(g_igUnsignedIntArrayMetaField_descriptor[0]) + 18) = (short) (((LST *)FUN_002fc250())->count - 1);

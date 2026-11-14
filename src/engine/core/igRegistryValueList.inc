@@ -14,11 +14,11 @@ igMetaObject *igRegistryValueList_GetMetaObject(void)
 }
 
 int igRegistryValueList_GetVTable(void) {
-    Obj_2bb430 o;
+    igRegistryValueList list;
 
-    igObject_InitHeader((ObjectHeader *)&o);
-    o.vt = &DAT_00533010[0];
-    return *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00533010[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002bb470(void)

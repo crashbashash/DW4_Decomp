@@ -35,7 +35,7 @@ void igVirtualCFuncMetaField_SetToDefault(void *arg0, int arg1) {
  if (arg1 != 0) {
 int a = **(int **)((char *)(arg0) + 32);
  int b = *(int *)(arg1 + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
- ((VC_30ef90 *)arg0)->vX(arg1, b + a);
+ ((igMetaFieldView *)arg0)->vfunc_24(arg1, b + a);
 }
 }
 
@@ -43,7 +43,7 @@ void Gap__Core__igVirtualCFuncMetaField__vfunc_30(int *arg0, int arg1) {
     if (arg1 != 0) {
         int *c = (int *)arg0[8];
         int u = *(int *)(arg1 + *(int *)((char *)((void * *)g_objectSystem)[0] + 916));
-        ((VC_30efe0 *)arg0)->vX(arg1, u + *c);
+        ((igMetaFieldView *)arg0)->vfunc_24(arg1, u + *c);
     }
 }
 

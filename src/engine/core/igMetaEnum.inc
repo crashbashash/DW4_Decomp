@@ -12,39 +12,39 @@ igMetaObject *igMetaEnum_GetMetaObject(void)
 }
 
 int igMetaEnum_GetVTable(void) {
-    union U_2bf070 u;
+    igMetaEnum u;
     int t;
-    struct Rc *a;
+    igObject *a;
     int *a1;
     int v0;
     char *c;
     void **q4c;
     void **q48;
     void **q50;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    q48 = &u.p[2];
-    q4c = &u.p[3];
-    q50 = &u.p[4];
-    u.w[0] = (int)(&DAT_00532b50[0]);
+    igObject_InitHeader((ObjectHeader *)&u);
+    q48 = (void **)&u._name;
+    q4c = (void **)&u._names;
+    q50 = (void **)&u._values;
+    u._vtable = (int)&DAT_00532b50[0];
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&DAT_00532b50[0]);
+    t = *(int *)((char *)&u + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    u._vtable = (int)&DAT_00532b50[0];
     if (q50 != 0) {
-        a = (struct Rc *)*q50;
+        a = (igObject *)*q50;
         if (a != 0) {
-            a->rc = a->rc - 1;
-            if ((a->rc & 0x7FFFFF) == 0) {
+            a->_refCount = a->_refCount - 1;
+            if ((a->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(a);
             }
         }
     }
     if (q4c != 0) {
-        a = (struct Rc *)*q4c;
+        a = (igObject *)*q4c;
         if (a != 0) {
-            a->rc = a->rc - 1;
-            if ((a->rc & 0x7FFFFF) == 0) {
+            a->_refCount = a->_refCount - 1;
+            if ((a->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(a);
             }
         }

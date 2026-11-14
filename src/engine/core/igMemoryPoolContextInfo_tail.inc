@@ -11,9 +11,9 @@ ContextView *igMemoryPoolContextInfo_Construct(ContextView *self) {
         self->parent->_refCount += 1;
     }
     self->_refCount = 0;
-    ((BF *)&self->_refCount)->lo = 1;
+    ((RefCount *)&self->_refCount)->u.b.cnt = 1;
     memset(self->records, 0, sizeof(self->records));
-    ((ContextVirtuals *)self)->InitializeRecordNames();
+    ((MemoryContext *)self)->InitializeRecordNames();
     return self;
 }
 
@@ -30,7 +30,7 @@ ContextView *igMemoryPoolContextInfo_Construct(ContextView *self) {
 void *igMemoryPoolContextInfo_Destruct(ContextView *self, long long deleteFlags) {
     if (self) {
         self->_vtable = (int)g_igMemoryPoolContextInfo_vtable; self->_refCount = 0;
-        memset(self->records, 0, 6624); ((ContextVirtuals *)self)->InitializeRecordNames();
+        memset(self->records, 0, 6624); ((MemoryContext *)self)->InitializeRecordNames();
         if ((char *)self + 16) {
             igObject *parent = self->parent;
             if (parent) {
@@ -43,7 +43,7 @@ void *igMemoryPoolContextInfo_Destruct(ContextView *self, long long deleteFlags)
     return self;
 }
 
-int FUN_002f2730(Ctx_2f25d0 *arg0, int arg1) {
+int FUN_002f2730(MemoryContext *arg0, int arg1) {
     int i, j;
     int r = 0;
     if (arg1 >= 0 && arg1 < 46) {
@@ -52,17 +52,17 @@ int FUN_002f2730(Ctx_2f25d0 *arg0, int arg1) {
         r = *pk;
         if (r == 0) {
             if (*(int *)(e + 160) & 0x04000000) {
-                arg0->v208(arg1);
+                arg0->BuildAndAttachEventTracker(arg1);
                 return *pk;
             }
             if (1 < DAT_00587010[0]) {
                 for (i = DAT_00587010[0] - 1; i >= 0; i--) {
-                    if (DAT_00587000[i] == (VC_2f25d0 *)arg0) break;
+                    if (DAT_00587000[i] == (MemoryContext *)arg0) break;
                 }
                 j = i - 1;
                 if (j >= 0) {
-                    VC_2f25d0 *p = (VC_2f25d0 *)DAT_00587000[j];
-                    if (p != (VC_2f25d0 *)arg0) r = p->v92(arg1);
+                    MemoryContext *p = (MemoryContext *)DAT_00587000[j];
+                    if (p != (MemoryContext *)arg0) r = (int)p->getAllocatorBySelector(arg1);
                 }
             }
         }
@@ -78,11 +78,11 @@ int FUN_002f2730(Ctx_2f25d0 *arg0, int arg1) {
 /* 0 when the strings are equal */
 /* Finds the first of the 46 records whose name equals `name` and returns what its slot-21 lookup
  * yields; null or empty names, and unknown names, give null. */
-void *FUN_002f2830(ContextVirtuals2 *self, const char *name) {
+void *FUN_002f2830(MemoryContext *self, const char *name) {
     if (name) {
         if (*name) {
             for (int i = 0; i < 46; ++i)
-                if (!strcmp(((ContextRecords *)self)->records[i].name, name)) return self->Lookup(i);
+                if (!strcmp(self->records[i].name, name)) return self->getAllocatorBySelector(i);
         }
     }
     return 0;
@@ -99,7 +99,7 @@ void FUN_002f28d0(ContextView *self, int index, igObject *value) {
         igObject **slot = (igObject **)(address + 20);
         igObject *previous = *slot;
         if (!previous || previous != value) {
-            if (previous) ((ContextVirtuals *)self)->Clear(index);
+            if (previous) ((MemoryContext *)self)->RemoveAllocator(index);
             *slot = value;
             if (value) {
                 ++value->_refCount;
@@ -117,21 +117,21 @@ int FUN_002f2990(int arg0, int arg1) {
 }
 
 /* The global count test is written `1 < n`. */
-int *FUN_002f29d0(Ctx2 *arg0, int arg1) {
+int *FUN_002f29d0(MemoryContext *arg0, void *pool) {
     int i, j;
-    if (arg1 != 0) {
+    if (pool != 0) {
         for (i = 0; i < 46; i++) {
-            { int k = arg0->e[i].key; if (k == arg1) return arg0->e[i].val; }
+            { void *k = arg0->records[i].allocator; if (k == pool) return (int *)arg0->records[i].name; }
         }
     }
     if (1 < DAT_00587010[0]) {
         for (i = DAT_00587010[0] - 1; i >= 0; i--) {
-            if (DAT_00587000[i] == (VC2 *)arg0) break;
+            if (DAT_00587000[i] == (MemoryContext *)arg0) break;
         }
         j = i - 1;
         if (j >= 0) {
-            VC2 *p = (VC2 *)DAT_00587000[j];
-            if (p != (VC2 *)arg0) return p->v108(arg1);
+            MemoryContext *p = (MemoryContext *)DAT_00587000[j];
+            if (p != (MemoryContext *)arg0) return (int *)p->vfunc_27(pool);
         }
     }
     return (int *)((char *)DAT_004f7910);
@@ -151,7 +151,7 @@ void FUN_002f2ab0(int self, int recordIndex, int name) {
         *(char *)((char *)(record) + 131) = 0;
         boundObject = *(int *)((char *)(record) + 132);
         if (boundObject != 0) {
-            igNamedObject_SetName((N_2fecb0 *)boundObject, name);
+            igNamedObject_SetName((igNamedObject *)boundObject, name);
         }
     }
 }
@@ -200,47 +200,47 @@ int FUN_002f2cd0(int arg0, int arg1) {
     return -1;
 }
 
-R2 FUN_002f2d20(OB *arg1, int arg2, int arg3) {
+igResult FUN_002f2d20(MemoryContext *self, int config, int section) {
     int temp_s0;
-    RO_2f25d0 *temp_a0;
-    if (arg1->f16 == 0) {
-        temp_s0 = ((int)igObject_GetAllocator((int)arg1));
-        temp_a0 = arg1->f16;
+    Ref *temp_a0;
+    if (self->contextInfo == 0) {
+        temp_s0 = ((int)igObject_GetAllocator((int)self));
+        temp_a0 = (Ref *)self->contextInfo;
         if (temp_a0 != 0) {
             temp_a0->u.w = temp_a0->u.w - 1;
             if (temp_a0->u.b.cnt == 0) igObject_Destroy(temp_a0);
         }
-        arg1->f16 = (RO_2f25d0 *)FUN_002c01f0(temp_s0);
+        self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(temp_s0);
     }
-    if (arg2 == 0) {
-        arg2 = *(int *)((char *)(*(void * *)g_objectSystem) + 56);
+    if (config == 0) {
+        config = (int)((ObjectSystemView *)(*(void * *)g_objectSystem))->configRegistry;
     }
-    R2 sp6C = ((Child *)arg1->f16)->vA(arg2, arg3);
+    igResult sp6C = self->contextInfo->vfunc_25((IniSectionsView *)config, (char *)section);
     if (sp6C.v == g_resultSuccess.v) {
-        R2 sp68 = ((Self_2f25d0 *)arg1)->vB((int)arg1->f16, 1);
+        igResult sp68 = self->vfunc_35((int)self->contextInfo, 1);
         sp6C = sp68;
     }
     return sp6C;
 }
 
-R2 FUN_002f2e30(OB *arg1, int arg2, int arg3) {
+igResult FUN_002f2e30(MemoryContext *self, int config, int index) {
     int temp_s0;
-    RO_2f25d0 *temp_a0;
-    if (arg1->f16 == 0) {
-        temp_s0 = ((int)igObject_GetAllocator((int)arg1));
-        temp_a0 = arg1->f16;
+    Ref *temp_a0;
+    if (self->contextInfo == 0) {
+        temp_s0 = ((int)igObject_GetAllocator((int)self));
+        temp_a0 = (Ref *)self->contextInfo;
         if (temp_a0 != 0) {
             temp_a0->u.w = temp_a0->u.w - 1;
             if (temp_a0->u.b.cnt == 0) igObject_Destroy(temp_a0);
         }
-        arg1->f16 = (RO_2f25d0 *)FUN_002c01f0(temp_s0);
+        self->contextInfo = (igMemoryPoolContextInfoView *)FUN_002c01f0(temp_s0);
     }
-    if (arg2 == 0) {
-        arg2 = *(int *)((char *)(*(void * *)g_objectSystem) + 56);
+    if (config == 0) {
+        config = (int)((ObjectSystemView *)(*(void * *)g_objectSystem))->configRegistry;
     }
-    R2 sp6C = ((Child2 *)arg1->f16)->vA(arg2, arg3);
+    igResult sp6C = self->contextInfo->vfunc_26((IniSectionsView *)config, index);
     if (sp6C.v == g_resultSuccess.v) {
-        R2 sp68 = ((Self_2f25d0 *)arg1)->vB((int)arg1->f16, 1);
+        igResult sp68 = self->vfunc_35((int)self->contextInfo, 1);
         sp6C = sp68;
     }
     return sp6C;
@@ -310,7 +310,7 @@ void FUN_002f31b0(int *result, PoolTable *table, int index, PoolHandle *handle)
     status = g_resultSuccess.v;
     if (index >= 0 && index < 46) {
         entry = &table->entries[index];
-        igNamedObject_SetName((N_2fecb0 *)handle, (int)entry->name);
+        igNamedObject_SetName((igNamedObject *)handle, (int)entry->name);
         if (entry->defaults != 0) {
             ASSIGN_TOKEN(handle->token0, entry->defaults->text0);
             object = table->entries[index].object;
@@ -433,7 +433,7 @@ void FUN_002f4070(ContextView *self) {
         }
         record++;
     }
-    ((ContextVirtuals *)self)->setFlags(self->flags | 8);
+    ((MemoryContext *)self)->setFlags(self->flags | 8);
 }
 
 void FUN_002f4110(Par *arg0) {
@@ -810,7 +810,7 @@ void FUN_002f5230(int *out, PoolDescSetup *self, int config, char *name) {
     i = 0;
     do {
         rec = (PoolDescRecord *)FUN_002bfed0((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
-        igNamedObject_SetName((N_2fecb0 *)rec, (int)(self->recordName(i)));
+        igNamedObject_SetName((igNamedObject *)rec, (int)(self->recordName(i)));
         setDescString(&rec->alias, g_memoryContextNames[i]);
         switch (i) {
         case 0:
@@ -1049,8 +1049,8 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
         obj = ((igMemoryPool *)igMetaObject_CreateInstance((CreateMeta *)meta, (MemoryPool *)allocA));
         igMemoryPool *o2 = obj;
         int size = cfg->_size;
-        al = size + (((Gl *)((void * *)g_activeSystemAllocator)[0])->v84() - 1);
-        aligned = al & ~(((Gl *)((void * *)g_activeSystemAllocator)[0])->v84() - 1);
+        al = size + (g_activeSystemAllocator[0]->vfunc_21() - 1);
+        aligned = al & ~(g_activeSystemAllocator[0]->vfunc_21() - 1);
         if (size != 0) {
             char *kind = (char *)cfg->_arenaType;
             if (kind == 0 || strcmp(kind, text_Dynamic) == 0) {
@@ -1060,7 +1060,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *arg1, int i
                 if (sub == 0 || *sub == 0) { a = allocB; goto common; }
                 if (strcmp(sub, text_SystemMemory) == 0) {
 b78:
-                    int v = ((Gl *)((void * *)g_activeSystemAllocator)[0])->v68(0, aligned);
+                    int v = g_activeSystemAllocator[0]->vfunc_17(0, aligned);
                     r3 = ((OV *)o2)->v96(v, aligned, 0);
                     slot->f136 = slot->f136 | 2;
                 } else if (strcmp(sub, text_Low) == 0 || strcmp(sub, text_High) == 0 || strcmp(sub, text_Virtual) == 0) {
@@ -1092,7 +1092,7 @@ common:
     *out = g_resultSuccess.v;
 }
 
-void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
+void MemoryContext_BuildAndAttachEventTracker(igResult *out, Ctx3 *self, int idx) {
     void *ty;
     Trk *trk;
     Obj5 *o2;
@@ -1100,7 +1100,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
     Obj5 *o;
     int tv;
     igMemoryPoolInfo **ps;
-    R4 t = self->v204(idx, 1); tv = t.v;
+    igResult t = self->v204(idx, 1); tv = t.v;
     int off = idx * 0x90; Slot2 *slot = (Slot2 *)(off + (int)self);
     trk = slot->trk;
     /* +12 of the context is igInfo::_directory in reflection but is read here as a flag word. The second flag test below stays on Ctx3::flags: typing both makes MWCC hoist the member address into a saved register. */
@@ -1113,7 +1113,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
             int h2 = (self->flags & 2) != 0;
             if ((h2 && idx != 1) || (ty != 0 && strstr(ty, &text_UseEventTracker[0]) != 0)) {
                 o = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
-                void *b = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
+                void *b = ((ObjectSystemView *)(*(void * *)g_objectSystem))->eventTrackerInitialCapacity;
                 void *f = (void *)(*ps)->_eventTrackerCapacity;
                 if (f != 0) b = f;
                 FUN_002dcc40((int)o, (int)b);
@@ -1132,7 +1132,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
         if (sub2 != 0) ty2 = (void *)sub2->_releaseOptions;
         if (ty2 != 0 && strstr(ty2, &text_UseEventTracker[0]) != 0) {
             o2 = (Obj5 *)FUN_002c5780((int)(self->v92(3)));
-            void *b2 = ((Gl2 *)(*(void * *)g_objectSystem))->f124;
+            void *b2 = ((ObjectSystemView *)(*(void * *)g_objectSystem))->eventTrackerInitialCapacity;
             void *f2 = (void *)(*ps2)->_eventTrackerCapacity;
             if (f2 != 0) b2 = f2;
             FUN_002dcc40((int)o2, (int)b2);
@@ -1146,7 +1146,7 @@ void MemoryContext_BuildAndAttachEventTracker(R4 *out, Ctx3 *self, int idx) {
 }
 
 void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
-    R4 sp6C, sp68, sp64;
+    igResult sp6C, sp68, sp64;
     if (arg1 >= 0 && arg1 < 0x2E) {
         Obj6 *o = *(Obj6 **)((char *)arg0 + arg1 * 0x90 + 20);
         Slot3 *slot = (Slot3 *)((char *)arg0 + arg1 * 0x90 + 20);
@@ -1181,7 +1181,7 @@ void MemoryContext_RemoveAllocator(void *arg0, int arg1) {
                         if (a != 0) {
                             long long b = (long long)((C144 *)o)->vX();
                             sp68 = ((C96 *)o)->vX(0, 0, 0);
-                            sp64 = ((C72 *)((void * *)g_activeSystemAllocator)[0])->vX(a, b);
+                            sp64 = g_activeSystemAllocator[0]->vfunc_18(a, b);
                         }
                     }
                 }
@@ -1247,11 +1247,11 @@ void FUN_002f69b0(PoolSetup *self) {
     FUN_003065f0(registry, 2, text_eventTrackerNotificationCodeFilt, &notificationCodeFilter, -1, 0);
     ((MemoryContextState *)g_objectSystem[0])->value140 = notificationCodeFilter;
     FUN_00306910(registry, 2, text_memoryEventFormat, (int **)&memoryEventFormat, (char *)DAT_004f7910, 0);
-    FUN_002d31d0((N *)g_objectSystem[0], (char *)memoryEventFormat.p);
+    FUN_002d31d0((ObjectSystemView *)g_objectSystem[0], (char *)memoryEventFormat.p);
     FUN_00306910(registry, 2, text_markerEventFormat, (int **)&markerEventFormat, (char *)DAT_004f7910, 0);
-    FUN_002d3240((S_2d3240 *)g_objectSystem[0], (char *)markerEventFormat.p);
+    FUN_002d3240((ObjectSystemView *)g_objectSystem[0], (char *)markerEventFormat.p);
     FUN_00306910(registry, 2, text_notificationEventFormat, (int **)&notificationEventFormat, (char *)DAT_004f7910, 0);
-    FUN_002d32b0((O_2d32b0 *)g_objectSystem[0], (char *)notificationEventFormat.p);
+    FUN_002d32b0((ObjectSystemView *)g_objectSystem[0], (char *)notificationEventFormat.p);
     FUN_003065f0(registry, 2, text_eventTrackerScopeFlags, &scopeFlags, -1, 0);
     FUN_002f0db0(scopeFlags);
     FUN_00306e50(registry, 2, text_saveEventTrackerOnExit, (char *)&saveEventTrackerOnExit, 0, 0);
@@ -1470,7 +1470,7 @@ void FUN_002f78b0(VA_2f25d0 *arg0) {
     bool s0;
 
     VB *t;
-    R_2f25d0 r;
+    igResult r;
     s4 = 0;
     s0 = false;
     do {
@@ -1645,7 +1645,7 @@ void FUN_002f7f20(ContextView *self, int arg1) {
                     }
                 }
                 if (found == 0 && tracker != 0) {
-                    FUN_002dcd70((W_2dcd70 *)tracker, arg1);
+                    FUN_002dcd70((igEventTrackerView *)tracker, arg1);
                 }
             }
         }
@@ -1675,7 +1675,7 @@ void FUN_002f8020(Slot4 *slots, int arg1, int *out, int n) {
                 *out = id + 0x242C;
                 n--;
                 out++;
-                FUN_002dcd70((W_2dcd70 *)id, arg1);
+                FUN_002dcd70((igEventTrackerView *)id, arg1);
             }
         }
     }
@@ -1703,7 +1703,7 @@ void FUN_002f8160(Slot5 *arg0, int *arg1, int arg2) {
                 }
                 if (dup == 0 && id != 0) {
                     if (arg2 > 0) {
-                        FUN_002dcd70((W_2dcd70 *)id, *arg1);
+                        FUN_002dcd70((igEventTrackerView *)id, *arg1);
                         arg1 += 1;
                         arg2--;
                     } else {
@@ -1891,35 +1891,35 @@ void * Memory_GetAllocatorBySelector(int selector) {
     void **context;
 
     context = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((MemoryContext *)(context))->vX((int)(selector)));
+    return (void *)(((MemoryContext *)(context))->getAllocatorBySelector((int)(selector)));
 }
 
 void * Memory_GetAllocatorByName(int name) {
     void **context;
 
     context = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((MemoryContext_2f8920 *)(context))->vX((int)(name)));
+    return (void *)(((MemoryContext *)(context))->getAllocatorByName((int)(name)));
 }
 
 int FUN_002f8960(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return ((DW4VC_104_1 *)(temp_v0))->vX((int)(arg0));
+    return ((MemoryContext *)(temp_v0))->vfunc_26((int)(arg0));
 }
 
 void * FUN_002f89a0(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return (void *)(((DW4VC_108_1_2f89a0 *)(temp_v0))->vX((int)(arg0)));
+    return (void *)(((MemoryContext *)(temp_v0))->vfunc_27((void *)(arg0)));
 }
 
 int FUN_002f89e0(int arg0) {
     void **temp_v0;
 
     temp_v0 = (void **)(((void **)Memory_GetCurrentContextAlias()));
-    return ((DW4VC_116_1 *)(temp_v0))->vX((int)(arg0));
+    return ((MemoryContext *)(temp_v0))->vfunc_29((int)(arg0));
 }
 
 void * FUN_002f8a20(void) {
@@ -2034,7 +2034,7 @@ struct Item_2f8ca0 *FUN_002f8ca0(struct Own_2f8ca0 *arg0, char *arg1) {
 
 /* The smart pointer is declared and never assigned: retail clears its slot on entry and releases it on
  * every return, so the source had the local with its use compiled out. */
-igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev_2f8e10 *self, IniSectionsView *ini, char *section) {
+igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(igMemoryPoolContextInfoView *self, IniSectionsView *ini, char *section) {
     igSmartPointer<igObject> unused;
     int index;
     if (ini == 0) {
@@ -2050,7 +2050,7 @@ igResult Gap__Core__igMemoryPoolContextInfo__vfunc_25(Dev_2f8e10 *self, IniSecti
     if (index == -1) {
         return g_resultFailure;
     }
-    if (self->get(ini, index) == g_resultSuccess) {
+    if (self->vfunc_26(ini, index) == g_resultSuccess) {
         return g_resultSuccess;
     }
     return g_resultFailure;

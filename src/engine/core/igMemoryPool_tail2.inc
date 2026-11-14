@@ -2,7 +2,7 @@ void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
     long long s4, s3, s2, s1, s0, s6, s7, s8;
     long long sp120, sp110, sp100, spF0;
     __int128 spE0;
-    VT_2f08d0 *o = (VT_2f08d0 *)arg0;
+    igMemoryPoolView *o = (igMemoryPoolView *)arg0;
 
     if (arg1 != 0 && *arg1 != 0) {
         FUN_00304430(DAT_004f90b0);
@@ -20,8 +20,8 @@ void FUN_002f08d0(igMemoryPool *arg0, char *arg1) {
     sp110 = arg0->_localNetAllocated;
     sp100 = arg0->_localFreed;
     spF0 = arg0->_localAllocated;
-    spE0 = o->v144();
-    FUN_00304430(DAT_004f9d60, (int)spF0, (int)sp100, (int)sp110, (int)sp120, (long long)(int)s8, (long long)(int)s7, (long long)(int)s6, (long long)(int)s0, (long long)(int)s1, (long long)(int)s2, (long long)(int)s3, (long long)(int)s4, (long long)spE0, (long long)o->v168());
+    spE0 = o->vfunc_36();
+    FUN_00304430(DAT_004f9d60, (int)spF0, (int)sp100, (int)sp110, (int)sp120, (long long)(int)s8, (long long)(int)s7, (long long)(int)s6, (long long)(int)s0, (long long)(int)s1, (long long)(int)s2, (long long)(int)s3, (long long)(int)s4, (long long)spE0, (long long)o->vfunc_42());
     FUN_00304680();
 }
 
@@ -44,23 +44,23 @@ int FUN_002f0b40(void) {
 
 bool FUN_002f0b50(int arg0, int arg1) {
     int s2;
-    VM *o;
+    igMemoryPoolView *o;
     int s1;
-    VM *q;
+    igMemoryPoolView *q;
     bool s0;
     s0 = false;
-    s1 = ((L_2f0b50 * *)g_secondaryAllocatorList)[0]->count - 1;
+    s1 = ((RegistryList * *)g_secondaryAllocatorList)[0]->count - 1;
     while (s1 >= 0) {
-        o = (VM *)((L_2f0b50 * *)g_secondaryAllocatorList)[0]->data[s1];
-        if (o != 0 && o->v132() != 0 && o->v108(arg1) != 0) {
+        o = (igMemoryPoolView *)((RegistryList * *)g_secondaryAllocatorList)[0]->data[s1];
+        if (o != 0 && o->isActive() != 0 && o->Trim(arg1) != 0) {
             s0 = true;
         }
         s1--;
     }
-    s2 = ((L_2f0b50 * *)g_primaryAllocatorList)[0]->count - 1;
+    s2 = ((RegistryList * *)g_primaryAllocatorList)[0]->count - 1;
     while (s2 >= 0) {
-        q = (VM *)((L_2f0b50 * *)g_primaryAllocatorList)[0]->data[s2];
-        if (q != 0 && q->v132() != 0 && q->v108(arg1) != 0) {
+        q = (igMemoryPoolView *)((RegistryList * *)g_primaryAllocatorList)[0]->data[s2];
+        if (q != 0 && q->isActive() != 0 && q->Trim(arg1) != 0) {
             s0 = true;
         }
         s2--;
@@ -76,7 +76,7 @@ void *FUN_002f0c80(igMemoryPoolView *self, unsigned int size)
 int FUN_002f0c90(void **arg0, int arg1) {
     int temp_v0;
 
-    temp_v0 = ((DW4VC_216_1 *)(arg0))->vX((int)(strlen(arg1) + 1));
+    temp_v0 = (int)((igMemoryPoolView *)arg0)->Allocate(strlen(arg1) + 1);
     strcpy(temp_v0, arg1);
     return temp_v0;
 }
@@ -84,7 +84,7 @@ int FUN_002f0c90(void **arg0, int arg1) {
 int FUN_002f0cf0(void **arg0, int arg1, int arg2) {
     int temp_v0;
 
-    temp_v0 = ((DW4VC_220_2 *)(arg0))->vX((int)(strlen(arg1) + 1), (int)(arg2));
+    temp_v0 = (int)((igMemoryPoolView *)arg0)->AllocateAligned(strlen(arg1) + 1, arg2);
     strcpy(temp_v0, arg1);
     return temp_v0;
 }
@@ -93,13 +93,8 @@ int FUN_002f0d60(void) {
     return 0;
 }
 
-void FUN_002f0d70(int dummy0, S0_2f0d70 *arg1) {
-    if (arg1 != 0) {
-        arg1->f4 = (int)((int) (arg1->f4 - 1));
-        if (((unsigned long long) ((long long) arg1->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(arg1);
-        }
-    }
+void FUN_002f0d70(int dummy0, igObject *arg1) {
+    IG_OBJECT_RELEASE(arg1);
 }
 
 void FUN_002f0db0(int arg0) {
@@ -112,78 +107,78 @@ void FUN_002f0dc0(void **arg0, int arg1, int arg2, int arg3) {
     if ((arg2 == 0) || (arg2 & DAT_004c2160[0])) {
         temp_v0 = (void **)(((DW4VC_356_0 *)(arg0))->vX());
         if (temp_v0 != 0) {
-            ((DW4VC_104_2 *)(temp_v0))->vX((int)(arg1), (int)(arg3 + 1));
+            ((EventTrackerQueryView *)(temp_v0))->Update((EventRecordInfo *)arg1, arg3 + 1);
         }
     }
 }
 
-int FUN_002f1410(F_2f1410 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
+int FUN_002f1410(igMemoryPoolView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg_sp0) {
     char sp170[160];
     char spD0[160];
     int size;
     int flags;
     int flags2;
-    Ctx_2f1410 *ctx;
-    Ctx_2f1410 *ctx2;
+    MemoryContext *ctx;
+    MemoryContext *ctx2;
 
     if (arg1 != 0) {
         size = ((int)Memory_GetBufferSize((void *)arg1));
-        FUN_002e2190(sp170, 3, (void *)arg1, size, (unsigned short)arg0->v152(), arg4, 0, 0, arg5, arg6, arg7, ((Ctx_2f1410 *)((void *)Memory_GetCurrentContextAlias()))->v108(arg0));
-        arg0->v268(sp170, arg3, arg_sp0 + 1);
+        FUN_002e2190(sp170, 3, (void *)arg1, size, arg0->vfunc_38(), arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)((void *)Memory_GetCurrentContextAlias()))->vfunc_27(arg0));
+        arg0->vfunc_67(sp170, arg3, arg_sp0 + 1);
         FUN_002e2300(sp170, -1);
     }
-    arg1 = arg0->v232(arg1, arg2);
+    arg1 = (int)arg0->Reallocate((void *)arg1, arg2);
     if (arg1 != 0) {
-        flags2 = arg0->v152() & 0xFFFF;
-        ctx2 = (Ctx_2f1410 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spD0, 1, (void *)arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->v108(arg0));
-        arg0->v268(spD0, arg3, arg_sp0 + 1);
+        flags2 = arg0->vfunc_38() & 0xFFFF;
+        ctx2 = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
+        FUN_002e2190(spD0, 1, (void *)arg1, arg2, flags2, arg4, 0, 0, arg5, arg6, arg7, ctx2->vfunc_27(arg0));
+        arg0->vfunc_67(spD0, arg3, arg_sp0 + 1);
         FUN_002e2300(spD0, -1);
     }
     return arg1;
 }
 
-void FUN_002f19f0(R_2f19f0 *arg0, F_2f19f0 *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10) {
+void FUN_002f19f0(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10) {
     char spB0[156];
     int first;
     int total;
     int flags;
     unsigned int i;
-    Ctx_2f19f0 *ctx;
+    MemoryContext *ctx;
 
-    R_2f19f0 res = arg1->v248();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_resultSuccess.v)) {
+    igResult res = arg1->gangAlloc(arg2, (unsigned int *)arg3, (void **)arg4);
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.v == g_resultSuccess.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
             total += arg3[i];
         }
-        flags = arg1->v152() & 0xFFFF;
-        ctx = (Ctx_2f19f0 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spB0, 1, (void *)first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->v108(arg1));
-        arg1->v268(spB0, arg5, arg_sp10 + 1);
+        flags = arg1->vfunc_38() & 0xFFFF;
+        ctx = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
+        FUN_002e2190(spB0, 1, (void *)first, total, flags, arg6, 0, 0, arg7, arg_sp0, arg_sp8, ctx->vfunc_27(arg1));
+        arg1->vfunc_67(spB0, arg5, arg_sp10 + 1);
         FUN_002e2300(spB0, -1);
     }
     *arg0 = res;
 }
 
-void FUN_002f1b70(R_2f1b70 *arg0, F_2f1b70 *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
+void FUN_002f1b70(igResult *arg0, igMemoryPoolView *arg1, int arg2, int *arg3, int *arg4, int arg5, int arg6, int arg7, int arg_sp0, int arg_sp8, int arg_sp10, int arg_sp18) {
     char spA0[156];
     int first;
     int total;
     unsigned int i;
-    Ctx_2f1b70 *ctx;
+    MemoryContext *ctx;
 
-    R_2f1b70 res = arg1->v252();
-    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.w == g_resultSuccess.v)) {
+    igResult res = arg1->gangAllocAligned(arg2, (unsigned int *)arg3, (void **)arg4, (unsigned short *)arg5);
+    if ((arg2 != 0) && (arg3 != 0) && (arg4 != 0) && (res.v == g_resultSuccess.v)) {
         first = *arg4;
         total = 0;
         for (i = 0; i < (unsigned int) (arg2 & 0xFFFF); i++) {
             total += arg3[i];
         }
-        ctx = (Ctx_2f1b70 *)(((void *)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spA0, 1, (void *)first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->v108(arg1));
-        arg1->v268(spA0, arg6, arg_sp18 + 1);
+        ctx = (MemoryContext *)(((void *)Memory_GetCurrentContextAlias()));
+        FUN_002e2190(spA0, 1, (void *)first, total, 0, arg7, 0, 0, arg_sp0, arg_sp8, arg_sp10, ctx->vfunc_27(arg1));
+        arg1->vfunc_67(spA0, arg6, arg_sp18 + 1);
         FUN_002e2300(spA0, -1);
     }
     *arg0 = res;
@@ -206,8 +201,8 @@ void FUN_002f1cd0(void **arg0, unsigned int arg1, int *arg2, int arg3, int arg4,
             }
         }
         ctx = (void **)(((void **)Memory_GetCurrentContextAlias()));
-        FUN_002e2190(spE0, 3, (void *)first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((DW4VC_108_1_2f1cd0 *)(ctx))->vX((int)(arg0)));
-        ((DW4VC_268_3_2f1cd0 *)(arg0))->vX(spE0, (int)(arg3), (int)(arg_sp0 + 1));
+        FUN_002e2190(spE0, 3, (void *)first, total, 0, arg4, 0, 0, arg5, arg6, arg7, ((MemoryContext *)(ctx))->vfunc_27(arg0));
+        ((igMemoryPoolView *)(arg0))->vfunc_67(spE0, (int)(arg3), (int)(arg_sp0 + 1));
         FUN_002e2300(spE0, -1);
     }
 }
@@ -266,37 +261,37 @@ void FUN_002f22f0(igMemoryPool *arg0) {
     arg0->_updateStatistics = (unsigned char) GPR_00554994;
 }
 
-void FUN_002f2340(struct R2340 *arg0, int arg1, int arg2, int arg3) {
+void FUN_002f2340(igMemoryPool *arg0, int arg1, int arg2, int arg3) {
     long long a;
     long long b;
 
     if (arg3 != 0) {
         a = arg1;
-        arg0->f8 = arg0->f8 + a;
-        arg0->f24 = arg0->f24 + a;
-        if (arg0->f32 < arg0->f24) {
-            arg0->f32 = arg0->f24;
+        arg0->_localAllocated = arg0->_localAllocated + a;
+        arg0->_localNetAllocated = arg0->_localNetAllocated + a;
+        if (arg0->_localNetAllocatedHigh < arg0->_localNetAllocated) {
+            arg0->_localNetAllocatedHigh = arg0->_localNetAllocated;
         }
         b = arg2;
-        arg0->f40 = arg0->f40 + b;
-        arg0->f56 = arg0->f56 + b;
-        if (arg0->f64 < arg0->f56) {
-            arg0->f64 = arg0->f56;
+        arg0->_localAllocatedWithOverhead = arg0->_localAllocatedWithOverhead + b;
+        arg0->_localNetAllocatedWithOverhead = arg0->_localNetAllocatedWithOverhead + b;
+        if (arg0->_localNetAllocatedWithOverheadHigh < arg0->_localNetAllocatedWithOverhead) {
+            arg0->_localNetAllocatedWithOverheadHigh = arg0->_localNetAllocatedWithOverhead;
         }
-        arg0->f72 = arg0->f72 + 1;
-        arg0->f88 = arg0->f88 + 1;
-        if (arg0->f96 < arg0->f88) {
-            arg0->f96 = arg0->f88;
+        arg0->_localAllocationCount = arg0->_localAllocationCount + 1;
+        arg0->_localNetAllocationCount = arg0->_localNetAllocationCount + 1;
+        if (arg0->_localNetAllocationCountHigh < arg0->_localNetAllocationCount) {
+            arg0->_localNetAllocationCountHigh = arg0->_localNetAllocationCount;
         }
     } else {
         a = arg1;
         b = arg2;
-        arg0->f16 = arg0->f16 + a;
-        arg0->f24 = arg0->f24 - a;
-        arg0->f48 = arg0->f48 + b;
-        arg0->f56 = arg0->f56 - b;
-        arg0->f80 = arg0->f80 + 1;
-        arg0->f88 = arg0->f88 - 1;
+        arg0->_localFreed = arg0->_localFreed + a;
+        arg0->_localNetAllocated = arg0->_localNetAllocated - a;
+        arg0->_localFreedWithOverhead = arg0->_localFreedWithOverhead + b;
+        arg0->_localNetAllocatedWithOverhead = arg0->_localNetAllocatedWithOverhead - b;
+        arg0->_localFreeCount = arg0->_localFreeCount + 1;
+        arg0->_localNetAllocationCount = arg0->_localNetAllocationCount - 1;
     }
 }
 

@@ -6,7 +6,7 @@ void igMemoryRefMetaField_SetDefaultWord(void **self, int defaultWord) {
     int defaultCell;
 
     defaultCell = defaultWord;
-    ((MemoryRefMetaFieldVtable *)(self))->setDefault((int)(&defaultCell));
+    ((igMetaFieldView *)(self))->SetDefault(&defaultCell);
 }
 
 /* Allocates the array a memory-reference field points at, if the field is constructed
@@ -23,7 +23,7 @@ void igMemoryRefMetaField_ConstructValue(igMemoryRefMetaField *self, int object)
 
     if (self->_construct != 0) {
         memType = (void **)(self->_memType);
-        elementSize = ((FieldElementSizeDispatchView *)(memType))->vX() & 0xFFFF;
+        elementSize = ((igMetaFieldView *)(memType))->GetSize() & 0xFFFF;
         poolName = (char *)(self->_poolName);
         elementCount = (int)((unsigned int) ((self->_memSize + elementSize) - 1) / elementSize);
         if ((poolName != 0) && (*poolName != 0)) {
@@ -47,33 +47,33 @@ void igMemoryRefMetaField_DestructValue(igMemoryRefMetaField *field,void *object
 }
 
 void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *field,void *object){
-    RefHeader_2fab40 **data;
+    igObject **data;
     int n;
     int i;
-    RefHeader_2fab40 *value;
+    igObject *value;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
     if(!igObject_IsKindOf((void *)field->_memType, (igMetaObject *)(((int *)g_igObjectRefMetaField_metaObject)[0])))return;
-    data=*(RefHeader_2fab40 ***)((char *)object+field->_offset);
+    data=*(igObject ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;
-    for(i=0;i<n;i++){value=data[i];if(value)++value->refs;}
+    for(i=0;i<n;i++){value=data[i];if(value)++value->_refCount;}
 }
 
 void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *field,void *object, int extra2){
-    RefHeader_2fabf0 **data;
+    igObject **data;
     int n;
     int i;
-    RefHeader_2fabf0 *value;
+    igObject *value;
     if(!field->_refCounted)return;
     if(!field->_memType)return;
     if(!igObject_IsKindOf((void *)field->_memType, (igMetaObject *)(((int *)g_igObjectRefMetaField_metaObject)[0])))return;
-    data=*(RefHeader_2fabf0 ***)((char *)object+field->_offset);
+    data=*(igObject ***)((char *)object+field->_offset);
     if(!data)return;
     n=Memory_GetBufferSize(data)>>2;
     for(i=0;i<n;i++){
         value=data[i];
-        if(value){--value->refs;if(!(value->refs&0x7fffff))igObject_Destroy(value);}
+        if(value){--value->_refCount;if(!(value->_refCount&0x7fffff))igObject_Destroy(value);}
     }
 }
 
@@ -107,9 +107,9 @@ void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *m, int arg1, int arg2) 
                 unsigned n = Memory_GetBufferSize((void *)src) >> 2;
                 int i;
                 for (i = 0; i < (int)n; i++) {
-                    V_2fad50 *e = *(V_2fad50 **)(src + i * 4);
+                    igObjectDispatchView *e = *(igObjectDispatchView **)(src + i * 4);
                     int r = 0;
-                    if (e != 0) r = e->v19(1);
+                    if (e != 0) r = (int)e->cloneViaMetadata(1);
                     *(int *)(dst + i * 4) = r;
                 }
             }
@@ -146,9 +146,9 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *arg0, int arg1, int arg2, 
     FUN_00304430(DAT_004faef0, arg3, arg0->_fieldName, base);
     FUN_00304680();
     if (arg2 != 0 && base != 0) {
-        sz = ((E_2fafb0 *)arg0->_memType)->vX();
+        sz = ((igMetaFieldView *)arg0->_memType)->vfunc_26();
         n = Memory_GetBufferSize((void *)base) / sz;
-        if (igObject_IsKindOf((void *)((E_2fafb0 *)arg0->_memType), (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
+        if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
             for (i = 0; i < (int)n; i++) {
                 int e = *(int *)(base + i * 4);
                 if (e != 0) {
@@ -160,18 +160,18 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *arg0, int arg1, int arg2, 
 }
 
 void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *arg0, int arg1, int arg2, int arg3) {
-    E_2fb0b0 **arr;
+    igObjectDispatchView **arr;
     unsigned int n;
     int i;
-    E_2fb0b0 *e;
+    igObjectDispatchView *e;
     if (igObject_IsKindOf((void *)arg0->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
-        arr = *(E_2fb0b0 ***)(arg1 + arg0->_offset);
+        arr = *(igObjectDispatchView ***)(arg1 + arg0->_offset);
         if (arr != 0) {
             n = Memory_GetBufferSize((void *)arr) >> 2;
             for (i = 0; i < (int)n; i++) {
                 e = arr[i];
                 if (e != 0) {
-                    e->vX();
+                    e->vfunc_16();
                     igObject_VisitFields((VisitorObjectView *)arr[i], (Visitor)arg2, (void *)arg3);
                 }
             }

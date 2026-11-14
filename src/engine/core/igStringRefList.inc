@@ -19,11 +19,11 @@ igMetaObject *igStringRefList_GetMetaObject(void)
 }
 
 int igStringRefList_GetVTable(void) {
-    struct Obj_2b91c0 obj;
+    igStringRefList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_0052e930[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_0052e930[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002b9200(void)
@@ -61,7 +61,7 @@ void FUN_002b9290(void) {
     temp_s1 = (void *)(((void * *)g_igStringRefList_metaObject)[0]);
     temp_v0 = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, data)));
     temp_s2 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
-    temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
+    temp_s0 = (void *)(((igObjectDispatchView *)(temp_v0))->cloneViaMetadata((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = FUN_002b9c60();
     *(int *)((char *)(temp_s0) + 56) = 0;
     *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_005858e0[0]);

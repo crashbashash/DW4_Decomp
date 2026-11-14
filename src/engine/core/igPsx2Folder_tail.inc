@@ -7,19 +7,19 @@ igMetaObject *igPsx2Folder_GetMetaObject(void)
 }
 
 int igPsx2Folder_GetVTable(void) {
-    union U_2d0080 u;
+    igPsx2Folder folder;
     int s0;
     char *ps;
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    ps = &u.b[8];
+    igObject_InitHeader((ObjectHeader *)&folder);
+    ps = (char *)&folder._folderName;
     *(int *)ps = 0;
-    u.vt = (int)&DAT_0052fee0[0];
-    u.vt = (int)&DAT_0052db90[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_0052fee0[0];
+    folder._vtable = (int)&DAT_0052fee0[0];
+    folder._vtable = (int)&DAT_0052db90[0];
+    s0 = *(int *)((char *)&folder + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    folder._vtable = (int)&DAT_0052fee0[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

@@ -19,27 +19,27 @@ igMetaObject *igDriverDatabase_GetMetaObject(void)
 }
 
 int igDriverDatabase_GetVTable(void) {
-    struct Obj_2c67e0 obj;
+    igDriverDatabase db;
     int r;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00530630[0];
-    obj.w[1] = 0;
-    obj.w[2] = 0;
-    obj.w[3] = 0;
-    obj.w[4] = 0;
-    obj.w[7] = 0;
-    obj.w[8] = 0;
-    obj.w[9] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = &DAT_00530630[0];
-    FUN_001489a0(&obj.w[9], -1);
-    FUN_001489a0(&obj.w[8], -1);
-    FUN_00150180(&obj.w[7], -1);
-    FUN_0019eeb0(&obj.w[4], -1);
-    FUN_00227e70(&obj.w[3], -1);
-    FUN_00227e70(&obj.w[2], -1);
-    FUN_001a0790(&obj.w[1], -1);
+    igObject_InitHeader((struct ObjectHeader *)&db);
+    db._vtable = (int)&DAT_00530630[0];
+    db._currentProperties = 0;
+    db._subPropertyNames = 0;
+    db._subPropertyValues = 0;
+    db._overrideSource = 0;
+    db._databaseFile = 0;
+    db._databaseFileName = 0;
+    db._rawDatabase = 0;
+    r = *(int *)((char *)&db + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    db._vtable = (int)&DAT_00530630[0];
+    FUN_001489a0(&db._rawDatabase, -1);
+    FUN_001489a0(&db._databaseFileName, -1);
+    FUN_00150180(&db._databaseFile, -1);
+    FUN_0019eeb0(&db._overrideSource, -1);
+    FUN_00227e70(&db._subPropertyValues, -1);
+    FUN_00227e70(&db._subPropertyNames, -1);
+    FUN_001a0790(&db._currentProperties, -1);
     return r;
 }
 
@@ -99,7 +99,7 @@ void igDriverDatabase_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002bb030();
     FUN_002ea4b0((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4))), -1);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
-    FUN_002dc7a0((igEnumMetaFieldView *)temp_v0, (const int *)&DAT_004c10b0[0]);
+    FUN_002dc7a0((igMetaFieldView *)temp_v0, (const int *)&DAT_004c10b0[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_002c66f0);
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_002c4ce0();

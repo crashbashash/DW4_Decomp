@@ -14,11 +14,11 @@ igMetaObject *igCharListNoClean_GetMetaObject(void)
 }
 
 int igCharListNoClean_GetVTable(void) {
-    struct Obj_2cad80 obj;
+    igCharListNoClean list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531a50[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531a50[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cadc0(void)

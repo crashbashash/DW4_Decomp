@@ -1,73 +1,73 @@
-void FUN_002d38e0(int a0, int a1)
+void FUN_002d38e0(igCallStackTableView *table, int hashCapacity)
 {
-    *(int *)((char *)a0 + 12) = a1;
+    table->_hashCapacity = hashCapacity;
 }
 
-void FUN_002d38f0(void *arg0) {
-    int temp_a1;
-    void *temp_a0;
+void FUN_002d38f0(igCallStackTableView *table) {
+    int capacity;
+    igTDataList<unsigned int> *callStacks;
 
-    temp_a1 = *(int *)((char *)(arg0) + 8);
-    temp_a0 = (void *)(*(int *)((char *)(arg0) + 16));
-    if (temp_a1 >= *(int *)((char *)(temp_a0) + 8)) {
-        List_Reserve((L_2d6680 *)temp_a0, temp_a1, 4);
+    capacity = table->_capacity;
+    callStacks = table->_callStacks;
+    if (capacity >= callStacks->_count) {
+        List_Reserve((L_2d6680 *)callStacks, capacity, 4);
     }
-    ((DW4VC_124_1 *)(((char *)(arg0) + 0)))->vX((int)(*(int *)((char *)(arg0) + 12)));
+    table->vfunc_31(table->_hashCapacity);
 }
 
-void FUN_002d3950(struct S_2d3950 *arg0) {
-    struct L_2d3950 *temp_a0;
-    struct L_2d3950 *temp_a0_2;
-    struct L_2d3950 *temp_a0_3;
-    struct L_2d3950 *temp_a0_4;
-    struct L_2d3950 *temp_a0_5;
-    temp_a0 = arg0->f16;
-    if (!(0 > temp_a0->cap)) {
-        temp_a0->cnt = 0;
+void FUN_002d3950(igCallStackTableView *table) {
+    igTDataList<unsigned int> *callStacks;
+    igTDataList<unsigned int> *callStacks2;
+    igTDataList<int> *hashIndex;
+    igTDataList<int> *hashIndex2;
+    igTDataList<int> *hashIndex3;
+    callStacks = table->_callStacks;
+    if (!(0 > callStacks->_capacity)) {
+        callStacks->_count = 0;
     } else {
-        List_Resize(temp_a0, 0, 4);
+        List_Resize(callStacks, 0, 4);
     }
-    temp_a0_2 = arg0->f16;
-    if (!(0 < temp_a0_2->cnt)) {
-        List_Reserve((L_2d6680 *)temp_a0_2, 0, 4);
+    callStacks2 = table->_callStacks;
+    if (!(0 < callStacks2->_count)) {
+        List_Reserve((L_2d6680 *)callStacks2, 0, 4);
     }
-    temp_a0_3 = arg0->f20;
-    if (!(0 > temp_a0_3->cap)) {
-        temp_a0_3->cnt = 0;
+    hashIndex = table->_hashIndex;
+    if (!(0 > hashIndex->_capacity)) {
+        hashIndex->_count = 0;
     } else {
-        List_Resize(temp_a0_3, 0, 4);
+        List_Resize(hashIndex, 0, 4);
     }
-    temp_a0_4 = arg0->f20;
-    if (temp_a0_4 != 0) {
-    if (!(0 > temp_a0_4->cap)) {
-        temp_a0_4->cnt = 0;
+    hashIndex2 = table->_hashIndex;
+    if (hashIndex2 != 0) {
+    if (!(0 > hashIndex2->_capacity)) {
+        hashIndex2->_count = 0;
     } else {
-        List_Resize(temp_a0_4, 0, 4);
+        List_Resize(hashIndex2, 0, 4);
     }
-    temp_a0_5 = arg0->f20;
-    if (!(0 < temp_a0_5->cnt)) {
-        List_Reserve((L_2d6680 *)temp_a0_5, 0, 4);
+    hashIndex3 = table->_hashIndex;
+    if (!(0 < hashIndex3->_count)) {
+        List_Reserve((L_2d6680 *)hashIndex3, 0, 4);
     }
     }
 }
 
-void FUN_002d3a20(void **arg0) {
-    DW4SR4 sp1C;
+void FUN_002d3a20(igCallStackTableView *table) {
+    igResult discarded;
 
-    sp1C = ((DW4VCSR_96_1 *)(arg0))->vX((int)(0));
+    discarded = table->vfunc_24(0);
 }
 
-int Gap__Core__igCallStackTable__vfunc_23(void *arg0) {
-    void *obj;
-    int *p;
+int Gap__Core__igCallStackTable__vfunc_23(igCallStackTableView *table) {
+    igTDataList<unsigned int> *callStacks;
+    unsigned int *p;
     int n;
     int i;
     int cnt;
 
-    obj = (void *)(*(int *)((char *)(arg0) + 16));
+    callStacks = table->_callStacks;
     cnt = 0;
-    p = (int *)(*(int *)((char *)(obj) + 16));
-    n = *(int *)((char *)(obj) + 8);
+    p = callStacks->_data;
+    n = callStacks->_count;
     for (i = 0; i < n; i++) {
         if (*p == 0) {
             cnt++;
@@ -77,40 +77,40 @@ int Gap__Core__igCallStackTable__vfunc_23(void *arg0) {
     return cnt;
 }
 
-void Gap__Core__igCallStackTable__vfunc_24(int *arg0, struct S_2d3aa0 *arg1, int arg2) {
-    struct L_2d3aa0 *l;
+void Gap__Core__igCallStackTable__vfunc_24(igResult *result, igCallStackTableView *table, int count) {
+    igTDataList<unsigned int> *l;
     int i;
     int cnt;
-    int *data;
+    unsigned int *data;
     int n;
     int t;
-    l = arg1->f16;
-    data = l->data;
-    n = l->n;
+    l = table->_callStacks;
+    data = l->_data;
+    n = l->_count;
     cnt = 0;
-    if (arg2 == 0) {
-        if (0 <= l->cap) { l->n = 0; } else { List_Resize(l, 0, 4); }
-        *arg0 = g_resultSuccess.v;
+    if (count == 0) {
+        if (0 <= l->_capacity) { l->_count = 0; } else { List_Resize(l, 0, 4); }
+        result->v = g_resultSuccess.v;
         return;
     }
     for (i = 0; i < n; i++) {
         if (data[0] == 0) {
             cnt = cnt + 1;
-            if (cnt == arg2) {
+            if (cnt == count) {
                 t = i + 1;
                 if (t >= 0) {
-                    if (t <= l->cap) { l->n = t; } else { List_Resize(l, t, 4); }
+                    if (t <= l->_capacity) { l->_count = t; } else { List_Resize(l, t, 4); }
                 }
-                *arg0 = g_resultSuccess.v;
+                result->v = g_resultSuccess.v;
                 return;
             }
         }
     }
-    *arg0 = g_resultFailure.v;
+    result->v = g_resultFailure.v;
 }
 
-int *Gap__Core__igCallStackTable__vfunc_25(struct O_2d3b80 *o, int i) {
-int *r; if (i < 0 || i >= o->l->count || o->l->data == 0) { r = 0; } else { r = o->l->data + i; if (i > 0 && r[-1] != 0) r = 0; } return r;
+unsigned int *Gap__Core__igCallStackTable__vfunc_25(igCallStackTableView *table, int offset) {
+unsigned int *r; if (offset < 0 || offset >= table->_callStacks->_count || table->_callStacks->_data == 0) { r = 0; } else { r = table->_callStacks->_data + offset; if (offset > 0 && r[-1] != 0) r = 0; } return r;
 }
 
 /* igCallStackTable: words = zero-terminated call stacks packed end to end, index = hash slots.
@@ -156,7 +156,12 @@ extern "C" int Gap__Core__igCallStackTable__addCallStack(CallStackTableAddView *
     return offset;
 }
 
-void Gap__Core__igCallStackTable__vfunc_27(O_2d3cd0 *o, int x) { switch (o->v26()) { case -1: o->v24(x); break; default: break; } }
+void Gap__Core__igCallStackTable__vfunc_27(igCallStackTableView *table, int *stack) {
+    switch (table->findCallStack((unsigned int *)stack)) {
+    case -1: table->addCallStack(stack); break;
+    default: break;
+    }
+}
 
 /* igCallStackTable: words = zero-terminated call stacks packed end to end, index = hash slots
  * holding word offsets (-1 = empty). Slot 29 (vfunc_29) hashes a stack. */
@@ -287,61 +292,61 @@ ok:
     return 1;
 }
 
-void Gap__Core__igCallStackTable__vfunc_31(T_2d40f0 *self, int arg1)
+void Gap__Core__igCallStackTable__vfunc_31(igCallStackTableView *self, int arg1)
 {
     Ref *r;
     int cnt;
-    IList *l;
+    igTDataList<int> *l;
     unsigned *var_a1_2;
     unsigned *data;
     int var_a0;
-    IList *v;
+    igTDataList<int> *v;
     unsigned *temp_s2;
     int var_a1;
     unsigned *temp_s1_2;
     unsigned *var_s0;
     int temp_s1;
 
-    FUN_002d38e0((int)self, arg1);
+    FUN_002d38e0(self, arg1);
     if (arg1 != 0) {
-        if (self->list == 0) {
+        if (self->_hashIndex == 0) {
             temp_s1 = ((int)igObject_GetAllocator((int)self));
-            r = (Ref *)self->list;
+            r = (Ref *)self->_hashIndex;
             if (r != 0) {
                 r->u.w = r->u.w - 1;
                 if (r->u.b.cnt == 0) igObject_Destroy(r);
             }
-            self->list = (IList *)FUN_002ca8b0(temp_s1);
+            self->_hashIndex = (igTDataList<int> *)FUN_002ca8b0(temp_s1);
         }
-        l = self->list;
-        if (arg1 >= l->count) List_Reserve((L_2d6680 *)l, arg1, 4);
-        l = self->list;
+        l = self->_hashIndex;
+        if (arg1 >= l->_count) List_Reserve((L_2d6680 *)l, arg1, 4);
+        l = self->_hashIndex;
         if (arg1 >= 0) {
-            if (arg1 <= l->cap) l->count = arg1;
+            if (arg1 <= l->_capacity) l->_count = arg1;
             else List_Resize(l, arg1, 4);
         }
-        v = self->list;
-        cnt = v->count;
-        data = v->data;
+        v = self->_hashIndex;
+        cnt = v->_count;
+        data = (unsigned *)v->_data;
         for (var_a1 = 0; var_a1 < cnt; var_a1++) data[var_a1] = *(unsigned *)DAT_004c1e98;
-        temp_s2 = self->tab->data;
+        temp_s2 = self->_callStacks->_data;
         var_s0 = temp_s2;
-        temp_s1_2 = temp_s2 + self->tab->count;
+        temp_s1_2 = temp_s2 + self->_callStacks->_count;
         while (var_s0 < temp_s1_2) {
-            if (!self->v28(var_s0, var_s0 - temp_s2)) return;
+            if (!self->vfunc_30(var_s0, var_s0 - temp_s2)) return;
             var_a1_2 = var_s0;
             var_a0 = 0;
             while (*var_a1_2++ != 0) var_a0++;
             var_s0 += var_a0 + 1;
         }
     } else {
-        r = (Ref *)self->list;
+        r = (Ref *)self->_hashIndex;
         if (r != 0) {
             if (r != 0) {
                 r->u.w = r->u.w - 1;
                 if (r->u.b.cnt == 0) igObject_Destroy(r);
             }
-            self->list = 0;
+            self->_hashIndex = 0;
         }
     }
 }

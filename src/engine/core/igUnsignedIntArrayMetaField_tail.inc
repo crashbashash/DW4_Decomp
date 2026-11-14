@@ -2,7 +2,7 @@ void Gap__Core__igUnsignedIntArrayMetaField__vfunc_52(igUnsignedIntArrayMetaFiel
     void **descriptor;
 
     descriptor = (void **)(((void **)igUnsignedIntMetaField_GetDefaultDescriptor()));
-    ((DW4VC_208_2 *)(descriptor))->vX((int)(item), (int)(count * self->_num));
+    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
 /* Size in bytes of the array field: `_num` unsigned-int elements, truncated to the 16-bit `_size`

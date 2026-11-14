@@ -12,19 +12,19 @@ igMetaObject *igMemoryFileEntry_GetMetaObject(void)
 }
 
 int igMemoryFileEntry_GetVTable(void) {
-    union U_2c0bf0 u;
+    igMemoryFileEntry entry;
     int s0;
     char *ps;
     int *v1;
     int *a1;
     int v0;
-    igObject_InitHeader((ObjectHeader *)u.b);
-    ps = &u.b[8];
+    igObject_InitHeader((ObjectHeader *)&entry);
+    ps = (char *)&entry._name;
     *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&DAT_00532910[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
+    entry._vtable = (int)&g_igNamedObject_vtable[0];
+    entry._vtable = (int)&DAT_00532910[0];
+    s0 = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    entry._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
         if (v1 != 0) {

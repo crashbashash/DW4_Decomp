@@ -12,22 +12,22 @@ igMetaObject *igSymbolTable_GetMetaObject(void)
 }
 
 int igSymbolTable_GetVTable(void) {
-    struct Obj_2b8590 obj;
+    igSymbolTable table;
 
     int temp_s3;
 
-    igObject_InitHeader((ObjectHeader *)&obj);
-    obj.vt = (&DAT_0052e730[0]);
-    obj.f1C = 0;
-    obj.f20 = 0;
-    obj.f24 = 0;
-    obj.f28 = 0;
-    temp_s3 = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    obj.vt = (&DAT_0052e730[0]);
-    FUN_002b8740((ObjectRefWord *)&obj.f28, -1);
-    FUN_002b8740((ObjectRefWord *)&obj.f24, -1);
-    FUN_002b86c0((void **)&obj.f20, -1);
-    FUN_002b8640((ObjectRefWord *)&obj.f1C, -1);
+    igObject_InitHeader((ObjectHeader *)&table);
+    table._vtable = (int)(&DAT_0052e730[0]);
+    table._symbols = 0;
+    table._hashIndex = 0;
+    table._symbolNames = 0;
+    table._sourceFileNames = 0;
+    temp_s3 = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    table._vtable = (int)(&DAT_0052e730[0]);
+    FUN_002b8740((ObjectRefWord *)&table._sourceFileNames, -1);
+    FUN_002b8740((ObjectRefWord *)&table._symbolNames, -1);
+    FUN_002b86c0((void **)&table._hashIndex, -1);
+    FUN_002b8640((ObjectRefWord *)&table._symbols, -1);
     return temp_s3;
 }
 

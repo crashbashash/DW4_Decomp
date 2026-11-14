@@ -12,11 +12,11 @@ igMetaObject *igContextList_GetMetaObject(void)
 }
 
 int igContextList_GetVTable(void) {
-    struct Obj_2cba90 obj;
+    igContextList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00531840[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00531840[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002cbad0(void)

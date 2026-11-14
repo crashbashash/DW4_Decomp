@@ -1,6 +1,6 @@
 void igMetaField_AllocateArray(int *outStatus,igMemoryRefMetaField *field,void *object,int count,AlignedAllocatorView *allocator){
-    unsigned int bytes=(unsigned int)count*(unsigned short)((ElementLayoutView *)field->_memType)->Size();
-    int alignment=(unsigned short)((ElementLayoutView *)field->_memType)->Alignment();
+    unsigned int bytes=(unsigned int)count*(unsigned short)((igMetaFieldView *)field->_memType)->GetSize();
+    int alignment=(unsigned short)((igMetaFieldView *)field->_memType)->vfunc_27();
     void *data=allocator->Allocate(bytes,alignment);
     if(!data){*outStatus=g_resultFailure.v;return;}
     /* Reference-typed elements start zeroed; other element types keep the allocator's contents. */

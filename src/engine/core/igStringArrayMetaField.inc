@@ -7,18 +7,18 @@ igMetaObject *igStringArrayMetaField_GetMetaObject(void)
 }
 
 int igStringArrayMetaField_GetVTable(void) {
-    Obj_2b9cf0 o;
+    igStringArrayMetaField o;
     int r;
     char *p;
     int *hdr;
     int c;
 
     igStringMetaField_Init((igStringMetaField *)&o);
-    o.vt = &DAT_0052e990[0];
+    o._vtable = (int)&DAT_0052e990[0];
     r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igMetaField_vtable[0];
-    if (&o.str != 0) {
-        p = o.str;
+    o._vtable = (int)&g_igMetaField_vtable[0];
+    if (&o._fieldName != 0) {
+        p = (char *)o._fieldName;
         if (p != 0) {
             hdr = (int *)(p - 8);
             c = *(int *)(p - 4) - 1;

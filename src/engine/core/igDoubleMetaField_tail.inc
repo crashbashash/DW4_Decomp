@@ -35,7 +35,7 @@ void FUN_002d9500(void **arg0, long long arg1) {
     long long sp18;
 
     sp18 = arg1;
-    ((DW4VC_140_1 *)(arg0))->vX((int)(&sp18));
+    ((igMetaFieldView *)(arg0))->SetDefault(&sp18);
 }
 
 int Gap__Core__igDoubleMetaField__vfunc_27(void) {

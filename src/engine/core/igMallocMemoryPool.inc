@@ -36,14 +36,14 @@ done:
 }
 
 int igMallocMemoryPool_GetVTable(void) {
-    union U_2ce2f0 u;
+    igMallocMemoryPool pool;
     int temp_s0;
     S_ref *q0;
     S_ref *q1;
-    FUN_003235c0((igMallocMemoryPool *)u.b);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.vt = (int)&DAT_00530e90[0];
-    q0 = (S_ref *)&u.b[148];
+    FUN_003235c0(&pool);
+    temp_s0 = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    pool._vtable = (int)&DAT_00530e90[0];
+    q0 = (S_ref *)&pool._eventTracker;
     if (q0 != 0) {
         q0 = *(S_ref **)q0;
         if (q0 != 0) {
@@ -53,7 +53,7 @@ int igMallocMemoryPool_GetVTable(void) {
             }
         }
     }
-    q1 = (S_ref *)&u.b[116];
+    q1 = (S_ref *)&pool._allocationLock;
     if (q1 != 0) {
         q1 = *(S_ref **)q1;
         if (q1 != 0) {

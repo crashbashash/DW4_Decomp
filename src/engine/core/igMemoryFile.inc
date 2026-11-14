@@ -12,17 +12,17 @@ igMetaObject *igMemoryFile_GetMetaObject(void)
 }
 
 int igMemoryFile_GetVTable(void) {
-    union U_2c0720 u;
+    igMemoryFile file;
     int temp_s0;
 
-    igObject_InitHeader((ObjectHeader *)u.b);
-    u.w[2] = 0;
-    u.w[3] = 0;
-    u.w[10] = 0;
-    u.w[0] = (int)(&DAT_0052f7b0[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(((void * *)g_objectSystem)[0]) + 916)];
-    u.w[0] = (int)(&DAT_0052f7b0[0]);
-    FUN_002c0790((igFile *)&u.w[0], 0);
+    igObject_InitHeader((ObjectHeader *)&file);
+    file._name = 0;
+    file._fileName = 0;
+    file._completeFilename = 0;
+    file._vtable = (int)(&DAT_0052f7b0[0]);
+    temp_s0 = *(int *)((char *)&file + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    file._vtable = (int)(&DAT_0052f7b0[0]);
+    FUN_002c0790((igFile *)&file, 0);
     return temp_s0;
 }
 

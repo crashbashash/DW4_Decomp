@@ -118,55 +118,55 @@ void Gap__Core__igPsx2File__vfunc_24(int *arg0) {
 }
 
 void **Gap__Core__igPsx2File__vfunc_25(void **arg0, const char *fileName, int arg2) {
-    DW4SR4 sp4C;
-    DW4SR4 sp48;
-    DW4SR4 sp44;
-    DW4SR4 sp40;
-    DW4SR4 sp3C;
-    DW4SR4 sp38;
-    DW4SR4 sp34;
-    DW4SR4 sp30;
+    igResult sp4C;
+    igResult sp48;
+    igResult sp44;
+    igResult sp40;
+    igResult sp3C;
+    igResult sp38;
+    igResult sp34;
+    igResult sp30;
     int var_v1;
 
     FUN_002e30b0((int *)arg0, fileName);
     if (strcmp(arg2, &DAT_004f96a8[0]) == 0) {
-        sp4C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(0));
-        var_v1 = sp4C.w0;
+        sp4C = ((igFileView *)(arg0))->vfunc_23((int)(0));
+        var_v1 = sp4C.v;
         goto block_21;
     }
     if (strcmp(arg2, (int *)DAT_004f9c48) == 0) {
-        sp48 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(4));
-        var_v1 = sp48.w0;
+        sp48 = ((igFileView *)(arg0))->vfunc_23((int)(4));
+        var_v1 = sp48.v;
         goto block_21;
     }
     if (strcmp(arg2, (int *)((char *)DAT_004f92f0)) == 0) {
-        sp44 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(1));
-        var_v1 = sp44.w0;
+        sp44 = ((igFileView *)(arg0))->vfunc_23((int)(1));
+        var_v1 = sp44.v;
         goto block_21;
     }
     if (strcmp(arg2, (int *)((char *)DAT_004f9c50)) == 0) {
-        sp40 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(5));
-        var_v1 = sp40.w0;
+        sp40 = ((igFileView *)(arg0))->vfunc_23((int)(5));
+        var_v1 = sp40.v;
         goto block_21;
     }
     if ((strcmp(arg2, (int *)DAT_004f9c58) == 0) || (strcmp(arg2, &DAT_004f9c60[0]) == 0)) {
-        sp3C = ((DW4VCSR_92_1 *)(arg0))->vX((int)(3));
-        var_v1 = sp3C.w0;
+        sp3C = ((igFileView *)(arg0))->vfunc_23((int)(3));
+        var_v1 = sp3C.v;
         goto block_21;
     }
     if ((strcmp(arg2, (int *)DAT_004f9c68) == 0) || (strcmp(arg2, &DAT_004f9c70[0]) == 0)) {
-        sp38 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(7));
-        var_v1 = sp38.w0;
+        sp38 = ((igFileView *)(arg0))->vfunc_23((int)(7));
+        var_v1 = sp38.v;
         goto block_21;
     }
     if ((strcmp(arg2, (int *)DAT_004f9c78) == 0) || (strcmp(arg2, &DAT_004f9c80[0]) == 0)) {
-        sp34 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(2));
-        var_v1 = sp34.w0;
+        sp34 = ((igFileView *)(arg0))->vfunc_23((int)(2));
+        var_v1 = sp34.v;
         goto block_21;
     }
     if ((strcmp(arg2, (int *)DAT_004f9c88) == 0) || (strcmp(arg2, &DAT_004f9c90[0]) == 0)) {
-        sp30 = ((DW4VCSR_92_1 *)(arg0))->vX((int)(6));
-        var_v1 = sp30.w0;
+        sp30 = ((igFileView *)(arg0))->vfunc_23((int)(6));
+        var_v1 = sp30.v;
         goto block_21;
     }
     return 0;

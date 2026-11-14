@@ -7,20 +7,20 @@ igMetaObject *igPsx2Semaphore_GetMetaObject(void)
 }
 
 int igPsx2Semaphore_GetVTable(void) {
-    struct Obj_2cf710 o;
+    igPsx2Semaphore semaphore;
     int temp_s0;
     void **q;
     int *temp_a1;
     int temp_v0;
     void *temp_v1;
 
-    igObject_InitHeader((struct ObjectHeader *)&o);
-    q = &o.s;
+    igObject_InitHeader((struct ObjectHeader *)&semaphore);
+    q = (void **)&semaphore._name;
     *q = 0;
-    o.vt = &g_igNamedObject_vtable[0];
-    o.vt = &DAT_0052d970[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
-    o.vt = &g_igNamedObject_vtable[0];
+    semaphore._vtable = (int)&g_igNamedObject_vtable[0];
+    semaphore._vtable = (int)&DAT_0052d970[0];
+    temp_s0 = *(int *)((char *)&semaphore + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    semaphore._vtable = (int)&g_igNamedObject_vtable[0];
     if (q != 0) {
         temp_v1 = *q;
         if (temp_v1 != 0) {

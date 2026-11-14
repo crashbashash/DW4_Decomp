@@ -169,13 +169,13 @@ int FUN_002d30c0(int *p, int extra1)
     return igArray_Append((CallbackArray *)(*(int *)((char *)p + 40)), extra1);
 }
 
-void FUN_002d30d0(struct S24 *arg0, int (*arg1)(int)) {
+void FUN_002d30d0(ObjectSystemView *arg0, int (*arg1)(int)) {
     int i;
 
-    for (i = 0; i < arg0->f24->count; i++) {
-        arg1(arg0->f24->data[i]);
+    for (i = 0; i < ((PointerList *)arg0->metaRegistry)->count; i++) {
+        arg1(((PointerList *)arg0->metaRegistry)->data[i]);
     }
-    igArray_Append((CallbackArray *)arg0->f44, (int)arg1);
+    igArray_Append((CallbackArray *)arg0->registrationCallbacks, (int)arg1);
 }
 
 void FUN_002d3150(int *arg0, int arg1) {
@@ -187,39 +187,39 @@ void FUN_002d3150(int *arg0, int arg1) {
     }
 }
 
-void FUN_002d31d0(struct N *arg0, char *arg1) {
-    if (arg1 != 0) {
-        strncpy(arg0->name, arg1, 0x7F);
-        arg0->name[127] = 0;
+void FUN_002d31d0(ObjectSystemView *objectSystem, char *format) {
+    if (format != 0) {
+        strncpy(objectSystem->memoryEventFormat, format, 0x7F);
+        objectSystem->memoryEventFormat[127] = 0;
     } else {
-        arg0->name[0] = 0;
+        objectSystem->memoryEventFormat[0] = 0;
     }
-    if ((arg1 != 0) && (*arg1 != 0)) {
-        DAT_004c1eb8[0] = arg0->name;
+    if ((format != 0) && (*format != 0)) {
+        DAT_004c1eb8[0] = objectSystem->memoryEventFormat;
     }
 }
 
-void FUN_002d3240(S_2d3240 *arg0, char *arg1) {
-    if (arg1 != 0) {
-        strncpy(arg0->f272, arg1, 0x7F);
-        arg0->f399 = 0;
+void FUN_002d3240(ObjectSystemView *objectSystem, char *format) {
+    if (format != 0) {
+        strncpy(objectSystem->markerEventFormat, format, 0x7F);
+        objectSystem->markerEventFormat[127] = 0;
     } else {
-        arg0->f272[0] = 0;
+        objectSystem->markerEventFormat[0] = 0;
     }
-    if ((arg1 != 0) && (*arg1 != 0)) {
-        DAT_004c1ec0[0] = (void *)arg0->f272;
+    if ((format != 0) && (*format != 0)) {
+        DAT_004c1ec0[0] = (void *)objectSystem->markerEventFormat;
     }
 }
 
-void FUN_002d32b0(struct O_2d32b0 *arg0, char *arg1) {
-    if (arg1 != 0) {
-        strncpy(arg0->buf, arg1, 0x7F);
-        arg0->buf[127] = 0;
+void FUN_002d32b0(ObjectSystemView *objectSystem, char *format) {
+    if (format != 0) {
+        strncpy(objectSystem->notificationEventFormat, format, 0x7F);
+        objectSystem->notificationEventFormat[127] = 0;
     } else {
-        arg0->buf[0] = 0;
+        objectSystem->notificationEventFormat[0] = 0;
     }
-    if ((arg1 != 0) && (*arg1 != 0)) {
-        DAT_004c1ec8[0] = arg0->buf;
+    if ((format != 0) && (*format != 0)) {
+        DAT_004c1ec8[0] = objectSystem->notificationEventFormat;
     }
 }
 

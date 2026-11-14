@@ -12,11 +12,11 @@ igMetaObject *igMemoryFileEntryList_GetMetaObject(void)
 }
 
 int igMemoryFileEntryList_GetVTable(void) {
-    struct Obj_2c0a90 obj;
+    igMemoryFileEntryList list;
 
-    igObject_InitHeader((struct ObjectHeader *)&obj);
-    obj.vt = &DAT_00532970[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    igObject_InitHeader((struct ObjectHeader *)&list);
+    list._vtable = (int)&DAT_00532970[0];
+    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
 }
 
 void FUN_002c0ad0(void)
