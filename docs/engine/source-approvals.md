@@ -545,7 +545,7 @@ also uses.
 
 ### sony-vu-and-gp-asm
 
-`sceGsResetPath` and `sceSdRemote` hold statements C has no spelling for.
+`sceGsResetPath`, `sceSdRemote` and `sceSdCallBack` hold statements C has no spelling for.
 
 * Sony's `libgraph` source in SDK 3.0.3 (`graphdev.c`, source text `r03376`) writes `sceGsResetPath`'s statements
   as `__asm__`: it orders the VIF1 reset with `sync.l`, then sets a bit of VU control register `$vi28` with `cfc2`,
@@ -558,6 +558,9 @@ also uses.
 * `sceSdRemote`'s two `volatile` keywords are the header's. Neither can go: without the one on the read the registers
   differ, and without the one on the swap the function comes out 164 bytes short. `sceGsResetPath`'s statements have
   no outputs, so its `__volatile__` changes nothing and is left out, by the rule in "Testing a `volatile`".
+* `sceSdCallBack` records `$gp` beside the end function it registers with the same `GetGp()` (`r03289:101-110`),
+  and is byte-identical to SDK 3.0.3 `sdr_main.o`. Without the header's `volatile` its two stores trade places;
+  `register void *gp asm("$28")` is asm too and drops the `move`.
 
 ### dma-channel-cop0
 

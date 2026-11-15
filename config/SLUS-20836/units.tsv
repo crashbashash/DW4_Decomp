@@ -25,7 +25,9 @@
 0x00100cf0	0x001024e0	runtime_ExceptionHandler	b52	-O4,p -sdatathreshold 0 -Iinclude -str readonly	on	-	whole file
 0x001024e0	0x001029c0	runtime_ExceptionHandlerTS	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
 0x001029c0	0x001029f8	runtime___init_cpp	b52	-O4,p -sdatathreshold 0 -Iinclude	off	-	whole file
-0x001029f8	0x00102c98	sony-libgraph_1029f8	ee-gcc-2.9-as210	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x102310-0x1030d0; `sd` prologues (Sony EE GCC); exceptions off: none of 5 non-leaf functions has a retail index record; 10 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
+0x001029f8	0x00102b94	sony_libgraph_sceGsResetGraph	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00102b98	0x00102c00	sony_libgraph_sceGsResetPath	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00102c00	0x00102c94	sony_libgraph_sceGsSyncV	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00102c98	0x001034dc	sony_libdma	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x001034e0	0x00106df4	sony_libmpeg_mpc	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00106df8	0x00107790	sony_libmpeg_ext	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
@@ -37,8 +39,9 @@
 0x00109b68	0x00109c68	sony-libmpeg_109b68	ee-gcc-2.9-as210	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x109410-0x10aaa8; `sd` prologues (Sony EE GCC); exceptions off: none of 25 non-leaf functions has a retail index record; 24 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 0/7 members; 7 member(s) keep a provisional override
 0x00109c68	0x0010a418	sony_libmpeg_sequence	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010a418	0x0010a468	sony_libmpeg_defhandler	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x0010a468	0x0010aaa8	sony-libipu_10a468	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x109410-0x10aaa8; `sd` prologues (Sony EE GCC); exceptions off: none of 25 non-leaf functions has a retail index record; 24 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 0/7 members; 7 member(s) keep a provisional override
-0x0010aac0	0x0010b360	sony_libkernl_klib	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	klib.o: libkernl system-call stubs, the approved assembly source src/sony/libkernl/klib.S (docs/engine/assembly-sources.md); stubs without a symbol link from retail
+0x0010a468	0x0010a7f8	sony_libipu_libipu	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x0010a7f8	0x0010aaa8	sony_libipu_ipuinit	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x0010aac0	0x0010b360	sony_libkernl_klib	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	klib.o: libkernl's 138 system-call stubs, the approved assembly source src/sony/libkernl/klib.S (docs/engine/assembly-sources.md)
 0x0010b360	0x0010b730	sony_libkernl_glue	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010b730	0x0010b9ac	sony_libkernl_cache	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010b9b0	0x0010bbe0	sony_libkernl_intr	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
@@ -66,10 +69,8 @@
 0x00116498	0x00116fb0	sony-sdk_116498	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x116498-0x116f00; `sd` prologues (Sony EE GCC); exceptions off: none of 12 non-leaf functions has a retail index record; 11 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
 0x00116fb0	0x00117b60	sony-libcdvd_116fb0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x116fb0-0x1181d8; `sd` prologues (Sony EE GCC); exceptions off: none of 15 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
 0x00117b60	0x00118fe0	sony_libpad	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00118fe0	0x00119134	sony-libsdr_118fe0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x118770-0x119114; `sd` prologues (Sony EE GCC); exceptions off: none of 16 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x00119138	0x001194c0	sony-libsdr_119138	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 17 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x001194c0	0x0011a500	sony-libmc_1194c0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 17 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x0011a500	0x0011acc0	sony-libmc_11a500	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x11a500-0x11b3d4; `sd` prologues (Sony EE GCC); exceptions off: none of 8 non-leaf functions has a retail index record; 7 asm bodies not scored; ee-gcc -O2 -G0 -g -Iinclude reproduces 1/1 members
+0x00118fe0	0x001194c0	sony_libsdr_sdr_main	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x001194c0	0x0011acc0	sony_libmc	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0011acc0	0x0011b3e4	newlib-libm_11acc0	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x11a500-0x11b3d4; `sd` prologues (Sony EE GCC); exceptions off: none of 8 non-leaf functions has a retail index record; 7 asm bodies not scored; ee-gcc -O2 -G0 -g -Iinclude reproduces 1/1 members
 0x0011b3e8	0x0011c21c	newlib-libm_11b3e8	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x11b3e8-0x11c20c; `sd` prologues (Sony EE GCC); exceptions off: none of 3 non-leaf functions has a retail index record; 1 asm body not scored; ee-gcc -O2 -G0 -g -Iinclude reproduces 2/2 members
 0x0011c220	0x0011cc48	newlib-libm_11c220	ee-gcc	-O2 -G0 -g -fno-builtin -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x11c220-0x11cc34; `sd` prologues (Sony EE GCC); exceptions off: none of 2 non-leaf functions has a retail index record; ee-gcc -O2 -G0 -g -Iinclude reproduces 2/2 members

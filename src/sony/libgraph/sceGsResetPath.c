@@ -1,10 +1,14 @@
 typedef int quadword __attribute__((mode(TI)));
-extern unsigned int DAT_00481c40[];
+
 #define VIF1_FBRST (*(volatile unsigned int *)0x10003c10)
 #define VIF1_ERR (*(volatile unsigned int *)0x10003c20)
 #define VIF1_FIFO (*(volatile quadword *)0x10005000)
 #define GIF_CTRL (*(volatile unsigned int *)0x10003000)
-void sceGsResetPath(void) {
+
+static unsigned int init_vif_regs[8] = {0x01000404, 0x20000000, 0, 0x05000000, 0x06000000, 0x03000000, 0x02000000, 0x04000000};
+
+void sceGsResetPath(void)
+{
     unsigned int status = 0;
 
     VIF1_FBRST = 1;
@@ -15,7 +19,7 @@ void sceGsResetPath(void) {
             "ctc2 %0, $vi28\n"
             "sync.p\n"
             : : "r"(status));
-    VIF1_FIFO = *(quadword *)&DAT_00481c40[0];
-    VIF1_FIFO = *(quadword *)&DAT_00481c40[4];
+    VIF1_FIFO = *(quadword *)&init_vif_regs[0];
+    VIF1_FIFO = *(quadword *)&init_vif_regs[4];
     GIF_CTRL = 1;
 }

@@ -156,6 +156,27 @@
     },
     "anon": []
   },
+  "0x001029f8": {
+    "whole_file": true,
+    "emitted": {
+      "sceGsGetGParam": "0x00102b88"
+    },
+    "data": {
+      "@data": "0x00481c20"
+    }
+  },
+  "0x00102b98": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {
+      "@data": "0x00481c40"
+    }
+  },
+  "0x00102c00": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
   "0x00102c98": {
     "whole_file": true,
     "emitted": {
@@ -349,6 +370,26 @@
       "_sceMpegDefaultRestartDMA": "0x0010a440"
     },
     "data": {}
+  },
+  "0x0010a468": {
+    "whole_file": true,
+    "emitted": {
+      "setD4_CHCR": "0x0010a4e0",
+      "sceIpuStopDMA": "0x0010a558",
+      "sceIpuRestartDMA": "0x0010a640",
+      "sceIpuSync": "0x0010a790"
+    },
+    "data": {}
+  },
+  "0x0010a7f8": {
+    "whole_file": true,
+    "symbol": "setD4_CHCR",
+    "emitted": {
+      "sceIpuInit": "0x0010a870"
+    },
+    "data": {
+      "@data": "0x00481dc0"
+    }
   },
   "0x0010b360": {
     "whole_file": true,
@@ -842,6 +883,64 @@
       "sifSetDmaFailedMessage": "0x004d2950",
       "versionMismatchMessage": "0x004d2998",
       "versionReportFormat": "0x004d29c0"
+    }
+  },
+  "0x00118fe0": {
+    "whole_file": true,
+    "emitted": {
+      "sceSdTransToIOP": "0x00119090",
+      "sceSdCallBack": "0x00119118",
+      "sceSdRemote": "0x00119138"
+    },
+    "data": {
+      "@bss": "0x0055d500",
+      "@data": "0x00485140",
+      "@rodata": "0x004d2aa8",
+      "_sce_sdr_transIntr0Hdr": "0x00485158",
+      "_sce_sdr_transIntr1Hdr": "0x0048515c",
+      "_sce_sdr_spu2IntrHdr": "0x00485160",
+      "_sce_sdr_transIntr0Arg": "0x00485164",
+      "_sce_sdr_transIntr1Arg": "0x00485168",
+      "_sce_sdr_spu2IntrArg": "0x0048516c",
+      "_sce_sdr_transIntr0Gp": "0x00485170",
+      "_sce_sdr_transIntr1Gp": "0x00485174",
+      "_sce_sdr_spu2IntrGp": "0x00485178"
+    }
+  },
+  "0x001194c0": {
+    "whole_file": true,
+    "emitted": {
+      "sceMcEnd": "0x00119690",
+      "mceGetClientState": "0x001196e0",
+      "mceSifRpcEndFunc": "0x00119710",
+      "sceMcChangeThreadPriority": "0x00119720",
+      "sceMcGetSlotMax": "0x001197e0",
+      "sceMcOpen": "0x001198a8",
+      "sceMcMkdir": "0x001199d0",
+      "sceMcClose": "0x00119a08",
+      "sceMcSeek": "0x00119ac8",
+      "mceIntrReadFixAlign": "0x00119ba8",
+      "sceMcRead": "0x00119c40",
+      "sceMcWrite": "0x00119d58",
+      "sceMcSync": "0x00119ed0",
+      "mceGetInfoApdx": "0x00119f98",
+      "sceMcGetInfo": "0x00119ff0",
+      "sceMcUdCheckNewCard": "0x0011a170",
+      "sceMcGetDir": "0x0011a1e0",
+      "mceStorePwd": "0x0011a330",
+      "sceMcChdir": "0x0011a3c0",
+      "sceMcFormat": "0x0011a500",
+      "sceMcDelete": "0x0011a5d0",
+      "sceMcFlush": "0x0011a6f0",
+      "sceMcSetFileInfo": "0x0011a7b0",
+      "sceMcRename": "0x0011a980",
+      "sceMcUnformat": "0x0011aae0",
+      "sceMcGetEntSpace": "0x0011abb0"
+    },
+    "data": {
+      "@bss": "0x0055d5c0",
+      "@data": "0x00485180",
+      "@rodata": "0x004d2ad0"
     }
   },
   "0x001273e0": {

@@ -9,7 +9,7 @@ asm	__udivdi3	1	#umul_ppmm
 asm	__umoddi3	1	#umul_ppmm
 asm	sceGsResetPath	2	#sony-vu-and-gp-asm
 asm	sceSdRemote	2	#sony-vu-and-gp-asm
-volatile	sceGsResetGraph	4	#sony-hardware-registers
+volatile	sceGsResetGraph	1	#sony-hardware-registers
 volatile	sceGsSyncV	1	#sony-hardware-registers
 volatile	WaitDma	1	#sony-hardware-registers
 volatile	WatchDma	1	#sony-hardware-registers
@@ -33,9 +33,9 @@ volatile	_doCSC	6	#sony-hardware-registers
 volatile	sceMpegInit	8	#sony-hardware-registers
 volatile	_clearEach	11	#sony-hardware-registers
 volatile	_loadQuantMatrix	4	#sony-hardware-registers
-volatile	setD3_CHCR	5	#sony-hardware-registers
-volatile	FUN_0010a4e0	5	#sony-hardware-registers
-volatile	FUN_0010a7f8	5	#sony-hardware-registers
+volatile	setD3_CHCR	3	#sony-hardware-registers
+volatile	setD4_CHCR_libipu	3	#sony-hardware-registers
+volatile	setD4_CHCR_ipuinit	3	#sony-hardware-registers
 volatile	FUN_0010c7b0	2	#sony-hardware-registers
 volatile	InitAlarm	1	#sony-hardware-registers
 volatile	InitTimer	6	#sony-timer-state
@@ -44,8 +44,10 @@ volatile	StopTimerSystemTime	1	#sony-hardware-registers
 volatile	FUN_002a8ba0	3	#sony-hardware-registers
 volatile	FUN_002a8c08	3	#sony-hardware-registers
 volatile	FUN_002a9628	3	#sony-hardware-registers
-volatile	sceIpuStopDMA	1	#sony-hardware-registers
-volatile	sceIpuRestartDMA	1	#sony-hardware-registers
+volatile	sceIpuStopDMA	9	#sony-hardware-registers
+volatile	sceIpuRestartDMA	7	#sony-hardware-registers
+volatile	sceIpuSync	1	#sony-hardware-registers
+volatile	sceIpuInit	3	#sony-hardware-registers
 volatile	AlarmHandler	1	#sony-alarm-id
 volatile	SetTimerAlarm	1	#sony-alarm-id
 volatile	iSetTimerAlarm	1	#sony-alarm-id
@@ -61,6 +63,8 @@ volatile	SetNextComp	7	#sony-timer-state
 volatile	sceDmaReset	2	#sony-hardware-registers
 volatile	sceGsResetPath	4	#sony-hardware-registers
 volatile	sceSdRemote	2	#sony-vu-and-gp-asm
+asm	sceSdCallBack	1	#sony-vu-and-gp-asm
+volatile	sceSdCallBack	1	#sony-vu-and-gp-asm
 volatile	FUN_0020c8b0	2	#stream-slot-state
 volatile	FUN_0020b650	1	#stream-slot-state
 volatile	adxm_lock	1	#adxm-thread-ids
