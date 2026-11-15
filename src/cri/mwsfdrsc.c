@@ -14,12 +14,12 @@ typedef struct DmaChan {
 /* Called with each new player handle and the scratchpad-swap enable. */
 typedef void (*MwsfdCreateCb)(void *ply, int sprEnable);
 
-extern int mwsfd_enable;
-extern MwsfdCreateCb mwsfd_create_cb;
-extern int mwsfd_spr_swapped;
-extern int mwsfd_spr_cpu_copy;
-extern char mwsfd_spr_save_buf[MWSFD_SPR_SIZE];
-extern char mwsfd_spr_work_buf[MWSFD_SPR_SIZE];
+static int mwsfd_enable = 1;
+static MwsfdCreateCb mwsfd_create_cb = 0;
+static int mwsfd_spr_swapped = 0;
+static int mwsfd_spr_cpu_copy = 0;
+static char mwsfd_spr_save_buf[MWSFD_SPR_SIZE];
+static char mwsfd_spr_work_buf[MWSFD_SPR_SIZE];
 
 void *memcpy(void *dst, const void *src, unsigned int size);
 DmaChan *sceDmaGetChan(int id);

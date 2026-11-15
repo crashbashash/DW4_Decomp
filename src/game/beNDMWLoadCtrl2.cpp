@@ -14,9 +14,9 @@
 #include "dw4/igTDataList.h"
 #define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained(l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igTDataList<unsigned char> *l = FN(props, REC)->value; int i = 0; if (0 < l->_count) { do { DST[i] = l->_data[i]; i++; } while (i < l->_count); } }
-#define FINDN(DST, REC, N) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value; int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
-#define FIND1(DSTV, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value; IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
-#define FINDV(DST, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value; int a; for (a = 0; a < l->_count; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
+#define FINDN(DST, REC, N) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value; int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
+#define FIND1(DSTV, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value; IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
+#define FINDV(DST, REC) { igObjectList *l = igProperty_GetRecordFolder(props, REC)->value; igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value; int a; for (a = 0; a < l->_count; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
 #define INTS(DST, FN, REC) { igIntList *l = FN(props, REC)->value; int i = 0; if (0 < l->_count) { do { DST[i] = ((int *)l->_data)[i]; i++; } while (i < l->_count); } }
 #define OWNER_ALLOCATOR(dst, obj) { int alloc = igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); } }
 
@@ -62,19 +62,12 @@ extern "C" int LoadCtrl2Message_GetMetaEnum(...);
 extern "C" int beMessenger_GetObjectCount(...);
 extern "C" int beMessenger_GetIntCount(...);
 extern "C" int beMessenger_ResolveEnumValue(...);
-extern "C" char TEXTCTL_4[];
-extern "C" char SWITCH_3[];
-extern "C" char CLR_3[];
 extern "C" void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color);
 extern "C" void TextOrder_PublishLine(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font);
 extern "C" void TextOrder_ConfigureFont(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, const char *text, int align, int color);
 extern "C" void TextOrder_ClearFont(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex);
 extern "C" void TextOrder_PublishLineListOnly(beNDMWLoadIntf2TextOrder *order, int messageId);
 extern "C" void TextOrder_ConfigureUnicode(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, int unicodeText, int align, int color);
-/* Font names by player (row) and font (column). */
-extern "C" const char *g_loadFontNames[][20];
-extern "C" char txt_mem_lua[];
-extern "C" char txt_Tar_lua[];
 extern "C" int g_mdlEntity[4];
 extern "C" int g_txtCallNo[4];
 extern "C" void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *order, int messageId, int withFollowUp);
@@ -84,38 +77,447 @@ struct LoadMessageLine { const char *line; int player; int fontIndex; };
  * and its lines. A message with a follow-up also plays the next entry's call number. The table
  * ends with an id of -1. */
 struct LoadMessage { unsigned int id:20; unsigned int hasFollowUp:1; unsigned int pad:11; int txtCallNo; LoadMessageLine *lines; };
-extern "C" LoadMessage g_loadMessageTable[];
-extern "C" char LEFT_2[];
-extern "C" char ALIGN[];
-extern "C" char CENTER[];
-extern "C" char RIGHT[];
-extern "C" char DEFAULTCOLOR[];
-extern "C" char CANCELCOLOR[];
-extern "C" char TEXTSET_2[];
-extern "C" char SET_2[];
-extern "C" char REPLACEUNKNOWN[];
+#pragma push
+#pragma readonly_strings on
+
+extern "C" {
+LoadMessageLine g_loadMessageLines_404[] = { {"CHRSELFONT06", 0, 0}, {"CHRSELFONT06", 0, 1}, {"CHRSELFONT06", 0, 2}, {"CHRSELFONT06", 0, 3}, {"CHRSELFONT16", 0, 0}, {"CHRSELFONT16", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10500[] = { {"CHRSELFONT06", 1, 0}, {"CHRSELFONT06", 1, 1}, {"CHRSELFONT06", 1, 2}, {"CHRSELFONT06", 1, 3}, {"CHRSELFONT16", 1, 0}, {"CHRSELFONT16", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20500[] = { {"CHRSELFONT06", 2, 0}, {"CHRSELFONT06", 2, 1}, {"CHRSELFONT06", 2, 2}, {"CHRSELFONT06", 2, 3}, {"CHRSELFONT16", 2, 0}, {"CHRSELFONT16", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30500[] = { {"CHRSELFONT06", 3, 0}, {"CHRSELFONT06", 3, 1}, {"CHRSELFONT06", 3, 2}, {"CHRSELFONT06", 3, 3}, {"CHRSELFONT16", 3, 0}, {"CHRSELFONT16", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_504[] = { {"CHRSELFONT16", 0, 0}, {"CHRSELFONT16", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10504[] = { {"CHRSELFONT16", 1, 0}, {"CHRSELFONT16", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20504[] = { {"CHRSELFONT16", 2, 0}, {"CHRSELFONT16", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30504[] = { {"CHRSELFONT16", 3, 0}, {"CHRSELFONT16", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_400[] = { {"CHRSELFONT01", 0, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10400[] = { {"CHRSELFONT01", 1, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20400[] = { {"CHRSELFONT01", 2, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30400[] = { {"CHRSELFONT01", 3, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_401[] = { {"CHRSELFONT02", 0, 0}, {"CHRSELFONT02", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10401[] = { {"CHRSELFONT02", 1, 0}, {"CHRSELFONT02", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20401[] = { {"CHRSELFONT02", 2, 0}, {"CHRSELFONT02", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30401[] = { {"CHRSELFONT02", 3, 0}, {"CHRSELFONT02", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_403[] = { {"CHRSELFONT15", 0, 0}, {"CHRSELFONT15", 0, 1}, {"CHRSELFONT15", 0, 2}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_100C[] = { {"CHRSELFONT07", 0, 0}, {"CHRSELFONT07", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_1100C[] = { {"CHRSELFONT07", 1, 0}, {"CHRSELFONT07", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_2100C[] = { {"CHRSELFONT07", 2, 0}, {"CHRSELFONT07", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_3100C[] = { {"CHRSELFONT07", 3, 0}, {"CHRSELFONT07", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_110[] = { {"CHRSELFONT09", 0, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10110[] = { {"CHRSELFONT09", 1, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20110[] = { {"CHRSELFONT09", 2, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30110[] = { {"CHRSELFONT09", 3, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10[] = { {"CHRSELFONT09", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10010[] = { {"CHRSELFONT09", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20010[] = { {"CHRSELFONT09", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30010[] = { {"CHRSELFONT09", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_300[] = { {"CHRSELFONT08", 0, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10300[] = { {"CHRSELFONT08", 1, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20300[] = { {"CHRSELFONT08", 2, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30300[] = { {"CHRSELFONT08", 3, 0}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_301[] = { {"CHRSELFONT08", 0, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10301[] = { {"CHRSELFONT08", 1, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20301[] = { {"CHRSELFONT08", 2, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30301[] = { {"CHRSELFONT08", 3, 1}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_302[] = { {"CHRSELFONT08", 0, 2}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10302[] = { {"CHRSELFONT08", 1, 2}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20302[] = { {"CHRSELFONT08", 2, 2}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30302[] = { {"CHRSELFONT08", 3, 2}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_303[] = { {"CHRSELFONT08", 0, 3}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_10303[] = { {"CHRSELFONT08", 1, 3}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_20303[] = { {"CHRSELFONT08", 2, 3}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_30303[] = { {"CHRSELFONT08", 3, 3}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_1100[] = { {"CHRSELFONT07", 0, 10}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_11100[] = { {"CHRSELFONT07", 1, 10}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_21100[] = { {"CHRSELFONT07", 2, 10}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_31100[] = { {"CHRSELFONT07", 3, 10}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_102E[] = { {"CHRSELFONT07", 0, 11}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_1102E[] = { {"CHRSELFONT07", 1, 11}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_2102E[] = { {"CHRSELFONT07", 2, 11}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_3102E[] = { {"CHRSELFONT07", 3, 11}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_F0001[] = { {"TITLEFONT01", 1, 0}, {"TITLEFONT01", 1, 1}, {"TITLEFONT01", 1, 6}, {"TITLEFONT01", 1, 7}, {"TITLEFONT01", 1, 8}, {"TITLEFONT01", 1, 9}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_F0002[] = { {"TITLEFONT01", 1, 3}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_F0004[] = { {"TITLEFONT01", 1, 4}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_F0007[] = { {"TITLEFONT01", 1, 5}, {0, 0, 0} };
+LoadMessageLine g_loadMessageLines_F0006[] = { {"TITLEFONT01", 1, 2}, {0, 0, 0} };
+LoadMessage g_loadMessageTable[] = {
+    {0xF0001, 0, 0, 30, g_loadMessageLines_F0001},
+    {0xF0002, 0, 0, 40, g_loadMessageLines_F0002},
+    {0xF0003, 0, 0, 41, g_loadMessageLines_F0002},
+    {0xF0004, 0, 0, 42, g_loadMessageLines_F0004},
+    {0xF0005, 0, 0, 43, g_loadMessageLines_F0004},
+    {0xF0006, 0, 0, 44, g_loadMessageLines_F0006},
+    {0xF0007, 0, 0, 45, g_loadMessageLines_F0007},
+    {0xF0008, 0, 0, 46, g_loadMessageLines_F0007},
+    {0xF0009, 0, 0, 47, g_loadMessageLines_F0007},
+    {0xF000A, 0, 0, 48, g_loadMessageLines_F0007},
+    {0xF000B, 0, 0, 49, g_loadMessageLines_F0007},
+    {0xF000C, 0, 0, 50, g_loadMessageLines_F0007},
+    {0xF000D, 0, 0, 51, g_loadMessageLines_F0007},
+    {0x10, 0, 0, 116, g_loadMessageLines_10},
+    {0x110, 0, 0, 136, g_loadMessageLines_110},
+    {0x300, 0, 0, 150, g_loadMessageLines_300},
+    {0x301, 0, 0, 151, g_loadMessageLines_301},
+    {0x302, 0, 0, 152, g_loadMessageLines_302},
+    {0x303, 0, 0, 153, g_loadMessageLines_303},
+    {0x400, 0, 0, 160, g_loadMessageLines_400},
+    {0x401, 0, 0, 161, g_loadMessageLines_401},
+    {0x402, 0, 0, 163, g_loadMessageLines_401},
+    {0x403, 0, 0, 165, g_loadMessageLines_403},
+    {0x404, 0, 0, 168, g_loadMessageLines_404},
+    {0x500, 0, 0, 200, g_loadMessageLines_404},
+    {0x502, 0, 0, 201, g_loadMessageLines_404},
+    {0x503, 1, 0, 204, g_loadMessageLines_404},
+    {0x504, 0, 0, 300, g_loadMessageLines_504},
+    {0x505, 0, 0, 205, g_loadMessageLines_404},
+    {0x507, 0, 0, 208, g_loadMessageLines_404},
+    {0x508, 0, 0, 211, g_loadMessageLines_404},
+    {0x50A, 0, 0, 213, g_loadMessageLines_404},
+    {0x50B, 0, 0, 216, g_loadMessageLines_404},
+    {0x50D, 0, 0, 218, g_loadMessageLines_404},
+    {0x50E, 0, 0, 221, g_loadMessageLines_404},
+    {0x510, 0, 0, 222, g_loadMessageLines_404},
+    {0x511, 0, 0, 225, g_loadMessageLines_404},
+    {0x513, 0, 0, 227, g_loadMessageLines_404},
+    {0x515, 0, 0, 230, g_loadMessageLines_404},
+    {0x517, 0, 0, 232, g_loadMessageLines_404},
+    {0x519, 0, 0, 235, g_loadMessageLines_404},
+    {0x51B, 0, 0, 236, g_loadMessageLines_404},
+    {0x51C, 0, 0, 239, g_loadMessageLines_404},
+    {0x51D, 0, 0, 240, g_loadMessageLines_404},
+    {0x51F, 0, 0, 243, g_loadMessageLines_404},
+    {0x521, 0, 0, 246, g_loadMessageLines_404},
+    {0x522, 0, 0, 248, g_loadMessageLines_404},
+    {0x523, 0, 0, 250, g_loadMessageLines_404},
+    {0x524, 0, 0, 251, g_loadMessageLines_404},
+    {0x525, 0, 0, 252, g_loadMessageLines_404},
+    {0x527, 0, 0, 255, g_loadMessageLines_404},
+    {0x529, 0, 0, 257, g_loadMessageLines_404},
+    {0x52A, 0, 0, 260, g_loadMessageLines_404},
+    {0x52B, 0, 0, 262, g_loadMessageLines_404},
+    {0x52C, 0, 0, 264, g_loadMessageLines_404},
+    {0x52D, 0, 0, 265, g_loadMessageLines_404},
+    {0x52F, 0, 0, 268, g_loadMessageLines_404},
+    {0x530, 0, 0, 270, g_loadMessageLines_404},
+    {0x1000, 0, 0, 1000, g_loadMessageLines_404},
+    {0x1002, 0, 0, 1002, g_loadMessageLines_404},
+    {0x1003, 0, 0, 1005, g_loadMessageLines_404},
+    {0x1004, 0, 0, 1007, g_loadMessageLines_404},
+    {0x1005, 0, 0, 1009, g_loadMessageLines_404},
+    {0x1007, 0, 0, 1012, g_loadMessageLines_404},
+    {0x1008, 0, 0, 1015, g_loadMessageLines_404},
+    {0x1009, 0, 0, 1017, g_loadMessageLines_404},
+    {0x100A, 0, 0, 1019, g_loadMessageLines_404},
+    {0x100B, 0, 0, 1021, g_loadMessageLines_404},
+    {0x100C, 0, 0, 1050, g_loadMessageLines_100C},
+    {0x100D, 0, 0, 1100, g_loadMessageLines_404},
+    {0x100E, 0, 0, 1102, g_loadMessageLines_404},
+    {0x100F, 0, 0, 1104, g_loadMessageLines_404},
+    {0x1010, 0, 0, 1106, g_loadMessageLines_404},
+    {0x1011, 0, 0, 1108, g_loadMessageLines_404},
+    {0x1012, 0, 0, 1110, g_loadMessageLines_404},
+    {0x1013, 0, 0, 1112, g_loadMessageLines_404},
+    {0x1014, 0, 0, 1114, g_loadMessageLines_404},
+    {0x1015, 0, 0, 1117, g_loadMessageLines_404},
+    {0x1016, 0, 0, 1119, g_loadMessageLines_404},
+    {0x1017, 0, 0, 1120, g_loadMessageLines_404},
+    {0x1018, 0, 0, 1122, g_loadMessageLines_404},
+    {0x101A, 0, 0, 1125, g_loadMessageLines_404},
+    {0x101B, 0, 0, 1127, g_loadMessageLines_404},
+    {0x101D, 0, 0, 1130, g_loadMessageLines_404},
+    {0x101E, 0, 0, 1132, g_loadMessageLines_404},
+    {0x101F, 0, 0, 1134, g_loadMessageLines_404},
+    {0x1024, 0, 0, 1144, g_loadMessageLines_404},
+    {0x1026, 0, 0, 1147, g_loadMessageLines_404},
+    {0x1027, 0, 0, 1150, g_loadMessageLines_404},
+    {0x1028, 0, 0, 1152, g_loadMessageLines_404},
+    {0x1029, 0, 0, 1154, g_loadMessageLines_404},
+    {0x102A, 0, 0, 1156, g_loadMessageLines_404},
+    {0x102B, 0, 0, 1300, g_loadMessageLines_404},
+    {0x102C, 0, 0, 1301, g_loadMessageLines_404},
+    {0x102D, 0, 0, 1302, g_loadMessageLines_404},
+    {0x102E, 0, 0, 1304, g_loadMessageLines_102E},
+    {0x1100, 0, 0, 1200, g_loadMessageLines_1100},
+    {0x1101, 0, 0, 1201, g_loadMessageLines_1100},
+    {0x1102, 0, 0, 1202, g_loadMessageLines_1100},
+    {0x1103, 0, 0, 1203, g_loadMessageLines_1100},
+    {0x1104, 0, 0, 1204, g_loadMessageLines_1100},
+    {0x1105, 0, 0, 1205, g_loadMessageLines_1100},
+    {0x10010, 0, 0, 10116, g_loadMessageLines_10010},
+    {0x10110, 0, 0, 10136, g_loadMessageLines_10110},
+    {0x10300, 0, 0, 10150, g_loadMessageLines_10300},
+    {0x10301, 0, 0, 10151, g_loadMessageLines_10301},
+    {0x10302, 0, 0, 10152, g_loadMessageLines_10302},
+    {0x10303, 0, 0, 10153, g_loadMessageLines_10303},
+    {0x10400, 0, 0, 10160, g_loadMessageLines_10400},
+    {0x10401, 0, 0, 10161, g_loadMessageLines_10401},
+    {0x10500, 0, 0, 10200, g_loadMessageLines_10500},
+    {0x10502, 0, 0, 10201, g_loadMessageLines_10500},
+    {0x10503, 1, 0, 10204, g_loadMessageLines_10500},
+    {0x10504, 0, 0, 10300, g_loadMessageLines_10504},
+    {0x10505, 0, 0, 10205, g_loadMessageLines_10500},
+    {0x10507, 0, 0, 10208, g_loadMessageLines_10500},
+    {0x10508, 0, 0, 10211, g_loadMessageLines_10500},
+    {0x1050A, 0, 0, 10213, g_loadMessageLines_10500},
+    {0x1050B, 0, 0, 10216, g_loadMessageLines_10500},
+    {0x1050D, 0, 0, 10218, g_loadMessageLines_10500},
+    {0x1050E, 0, 0, 10221, g_loadMessageLines_10500},
+    {0x10510, 0, 0, 10222, g_loadMessageLines_10500},
+    {0x10511, 0, 0, 10225, g_loadMessageLines_10500},
+    {0x10513, 0, 0, 10227, g_loadMessageLines_10500},
+    {0x10515, 0, 0, 10230, g_loadMessageLines_10500},
+    {0x10517, 0, 0, 10232, g_loadMessageLines_10500},
+    {0x10519, 0, 0, 10235, g_loadMessageLines_10500},
+    {0x1051B, 0, 0, 10236, g_loadMessageLines_10500},
+    {0x1051C, 0, 0, 10239, g_loadMessageLines_10500},
+    {0x1051D, 0, 0, 10240, g_loadMessageLines_10500},
+    {0x1051F, 0, 0, 10243, g_loadMessageLines_10500},
+    {0x10521, 0, 0, 10246, g_loadMessageLines_10500},
+    {0x10522, 0, 0, 10248, g_loadMessageLines_10500},
+    {0x10523, 0, 0, 10250, g_loadMessageLines_10500},
+    {0x10524, 0, 0, 10251, g_loadMessageLines_10500},
+    {0x10525, 0, 0, 10252, g_loadMessageLines_10500},
+    {0x10527, 0, 0, 10255, g_loadMessageLines_10500},
+    {0x10529, 0, 0, 10257, g_loadMessageLines_10500},
+    {0x1052A, 0, 0, 10260, g_loadMessageLines_10500},
+    {0x1052B, 0, 0, 10262, g_loadMessageLines_10500},
+    {0x1052C, 0, 0, 10264, g_loadMessageLines_10500},
+    {0x1052D, 0, 0, 10265, g_loadMessageLines_10500},
+    {0x1052F, 0, 0, 10268, g_loadMessageLines_10500},
+    {0x10530, 0, 0, 10270, g_loadMessageLines_10500},
+    {0x11000, 0, 0, 11000, g_loadMessageLines_10500},
+    {0x11002, 0, 0, 11002, g_loadMessageLines_10500},
+    {0x11003, 0, 0, 11005, g_loadMessageLines_10500},
+    {0x11004, 0, 0, 11007, g_loadMessageLines_10500},
+    {0x11005, 0, 0, 11009, g_loadMessageLines_10500},
+    {0x11007, 0, 0, 11012, g_loadMessageLines_10500},
+    {0x11008, 0, 0, 11015, g_loadMessageLines_10500},
+    {0x11009, 0, 0, 11017, g_loadMessageLines_10500},
+    {0x1100A, 0, 0, 11019, g_loadMessageLines_10500},
+    {0x1100B, 0, 0, 11021, g_loadMessageLines_10500},
+    {0x1100C, 0, 0, 11050, g_loadMessageLines_1100C},
+    {0x1100D, 0, 0, 11100, g_loadMessageLines_10500},
+    {0x1100E, 0, 0, 11102, g_loadMessageLines_10500},
+    {0x1100F, 0, 0, 11104, g_loadMessageLines_10500},
+    {0x11010, 0, 0, 11106, g_loadMessageLines_10500},
+    {0x11011, 0, 0, 11108, g_loadMessageLines_10500},
+    {0x11012, 0, 0, 11110, g_loadMessageLines_10500},
+    {0x11013, 0, 0, 11112, g_loadMessageLines_10500},
+    {0x11014, 0, 0, 11114, g_loadMessageLines_10500},
+    {0x11015, 0, 0, 11117, g_loadMessageLines_10500},
+    {0x11016, 0, 0, 11119, g_loadMessageLines_10500},
+    {0x11017, 0, 0, 11120, g_loadMessageLines_10500},
+    {0x11018, 0, 0, 11122, g_loadMessageLines_10500},
+    {0x1101A, 0, 0, 11125, g_loadMessageLines_10500},
+    {0x1101B, 0, 0, 11127, g_loadMessageLines_10500},
+    {0x1101D, 0, 0, 11130, g_loadMessageLines_10500},
+    {0x1101E, 0, 0, 11132, g_loadMessageLines_10500},
+    {0x1101F, 0, 0, 11134, g_loadMessageLines_10500},
+    {0x11024, 0, 0, 11144, g_loadMessageLines_10500},
+    {0x11026, 0, 0, 11147, g_loadMessageLines_10500},
+    {0x11027, 0, 0, 11150, g_loadMessageLines_10500},
+    {0x11028, 0, 0, 11152, g_loadMessageLines_10500},
+    {0x11029, 0, 0, 11154, g_loadMessageLines_10500},
+    {0x1102A, 0, 0, 11156, g_loadMessageLines_10500},
+    {0x1102B, 0, 0, 11300, g_loadMessageLines_10500},
+    {0x1102C, 0, 0, 11301, g_loadMessageLines_10500},
+    {0x1102D, 0, 0, 11302, g_loadMessageLines_10500},
+    {0x1102E, 0, 0, 11304, g_loadMessageLines_1102E},
+    {0x11100, 0, 0, 11200, g_loadMessageLines_11100},
+    {0x11101, 0, 0, 11201, g_loadMessageLines_11100},
+    {0x11102, 0, 0, 11202, g_loadMessageLines_11100},
+    {0x11103, 0, 0, 11203, g_loadMessageLines_11100},
+    {0x11104, 0, 0, 11204, g_loadMessageLines_11100},
+    {0x11105, 0, 0, 11205, g_loadMessageLines_11100},
+    {0x20010, 0, 0, 20116, g_loadMessageLines_20010},
+    {0x20110, 0, 0, 20136, g_loadMessageLines_20110},
+    {0x20300, 0, 0, 20150, g_loadMessageLines_20300},
+    {0x20301, 0, 0, 20151, g_loadMessageLines_20301},
+    {0x20302, 0, 0, 20152, g_loadMessageLines_20302},
+    {0x20303, 0, 0, 20153, g_loadMessageLines_20303},
+    {0x20400, 0, 0, 20160, g_loadMessageLines_20400},
+    {0x20401, 0, 0, 20161, g_loadMessageLines_20401},
+    {0x20500, 0, 0, 20200, g_loadMessageLines_20500},
+    {0x20502, 0, 0, 20201, g_loadMessageLines_20500},
+    {0x20503, 1, 0, 20204, g_loadMessageLines_20500},
+    {0x20504, 0, 0, 20300, g_loadMessageLines_20504},
+    {0x20505, 0, 0, 20205, g_loadMessageLines_20500},
+    {0x20507, 0, 0, 20208, g_loadMessageLines_20500},
+    {0x20508, 0, 0, 20211, g_loadMessageLines_20500},
+    {0x2050A, 0, 0, 20213, g_loadMessageLines_20500},
+    {0x2050B, 0, 0, 20216, g_loadMessageLines_20500},
+    {0x2050D, 0, 0, 20218, g_loadMessageLines_20500},
+    {0x2050E, 0, 0, 20221, g_loadMessageLines_20500},
+    {0x20510, 0, 0, 20222, g_loadMessageLines_20500},
+    {0x20511, 0, 0, 20225, g_loadMessageLines_20500},
+    {0x20513, 0, 0, 20227, g_loadMessageLines_20500},
+    {0x20515, 0, 0, 20230, g_loadMessageLines_20500},
+    {0x20517, 0, 0, 20232, g_loadMessageLines_20500},
+    {0x20519, 0, 0, 20235, g_loadMessageLines_20500},
+    {0x2051B, 0, 0, 20236, g_loadMessageLines_20500},
+    {0x2051C, 0, 0, 20239, g_loadMessageLines_20500},
+    {0x2051D, 0, 0, 20240, g_loadMessageLines_20500},
+    {0x2051F, 0, 0, 20243, g_loadMessageLines_20500},
+    {0x20521, 0, 0, 20246, g_loadMessageLines_20500},
+    {0x20522, 0, 0, 20248, g_loadMessageLines_20500},
+    {0x20523, 0, 0, 20250, g_loadMessageLines_20500},
+    {0x20524, 0, 0, 20251, g_loadMessageLines_20500},
+    {0x20525, 0, 0, 20252, g_loadMessageLines_20500},
+    {0x20527, 0, 0, 20255, g_loadMessageLines_20500},
+    {0x20529, 0, 0, 20257, g_loadMessageLines_20500},
+    {0x2052A, 0, 0, 20260, g_loadMessageLines_20500},
+    {0x2052B, 0, 0, 20262, g_loadMessageLines_20500},
+    {0x2052C, 0, 0, 20264, g_loadMessageLines_20500},
+    {0x2052D, 0, 0, 20265, g_loadMessageLines_20500},
+    {0x2052F, 0, 0, 20268, g_loadMessageLines_20500},
+    {0x20530, 0, 0, 20270, g_loadMessageLines_20500},
+    {0x21000, 0, 0, 21000, g_loadMessageLines_20500},
+    {0x21002, 0, 0, 21002, g_loadMessageLines_20500},
+    {0x21003, 0, 0, 21005, g_loadMessageLines_20500},
+    {0x21004, 0, 0, 21007, g_loadMessageLines_20500},
+    {0x21005, 0, 0, 21009, g_loadMessageLines_20500},
+    {0x21007, 0, 0, 21012, g_loadMessageLines_20500},
+    {0x21008, 0, 0, 21015, g_loadMessageLines_20500},
+    {0x21009, 0, 0, 21017, g_loadMessageLines_20500},
+    {0x2100A, 0, 0, 21019, g_loadMessageLines_20500},
+    {0x2100B, 0, 0, 21021, g_loadMessageLines_20500},
+    {0x2100C, 0, 0, 21050, g_loadMessageLines_2100C},
+    {0x2100D, 0, 0, 21100, g_loadMessageLines_20500},
+    {0x2100E, 0, 0, 21102, g_loadMessageLines_20500},
+    {0x2100F, 0, 0, 21104, g_loadMessageLines_20500},
+    {0x21010, 0, 0, 21106, g_loadMessageLines_20500},
+    {0x21011, 0, 0, 21108, g_loadMessageLines_20500},
+    {0x21012, 0, 0, 21110, g_loadMessageLines_20500},
+    {0x21013, 0, 0, 21112, g_loadMessageLines_20500},
+    {0x21014, 0, 0, 21114, g_loadMessageLines_20500},
+    {0x21015, 0, 0, 21117, g_loadMessageLines_20500},
+    {0x21016, 0, 0, 21119, g_loadMessageLines_20500},
+    {0x21017, 0, 0, 21120, g_loadMessageLines_20500},
+    {0x21018, 0, 0, 21122, g_loadMessageLines_20500},
+    {0x2101A, 0, 0, 21125, g_loadMessageLines_20500},
+    {0x2101B, 0, 0, 21127, g_loadMessageLines_20500},
+    {0x2101D, 0, 0, 21130, g_loadMessageLines_20500},
+    {0x2101E, 0, 0, 21132, g_loadMessageLines_20500},
+    {0x2101F, 0, 0, 21134, g_loadMessageLines_20500},
+    {0x21024, 0, 0, 21144, g_loadMessageLines_20500},
+    {0x21026, 0, 0, 21147, g_loadMessageLines_20500},
+    {0x21027, 0, 0, 21150, g_loadMessageLines_20500},
+    {0x21028, 0, 0, 21152, g_loadMessageLines_20500},
+    {0x21029, 0, 0, 21154, g_loadMessageLines_20500},
+    {0x2102A, 0, 0, 21156, g_loadMessageLines_20500},
+    {0x2102B, 0, 0, 21300, g_loadMessageLines_20500},
+    {0x2102C, 0, 0, 21301, g_loadMessageLines_20500},
+    {0x2102D, 0, 0, 21302, g_loadMessageLines_20500},
+    {0x2102E, 0, 0, 21304, g_loadMessageLines_2102E},
+    {0x21100, 0, 0, 21200, g_loadMessageLines_21100},
+    {0x21101, 0, 0, 21201, g_loadMessageLines_21100},
+    {0x21102, 0, 0, 21202, g_loadMessageLines_21100},
+    {0x21103, 0, 0, 21203, g_loadMessageLines_21100},
+    {0x21104, 0, 0, 21204, g_loadMessageLines_21100},
+    {0x21105, 0, 0, 21205, g_loadMessageLines_21100},
+    {0x30010, 0, 0, 30116, g_loadMessageLines_30010},
+    {0x30110, 0, 0, 30136, g_loadMessageLines_30110},
+    {0x30300, 0, 0, 30150, g_loadMessageLines_30300},
+    {0x30301, 0, 0, 30151, g_loadMessageLines_30301},
+    {0x30302, 0, 0, 30152, g_loadMessageLines_30302},
+    {0x30303, 0, 0, 30153, g_loadMessageLines_30303},
+    {0x30400, 0, 0, 30160, g_loadMessageLines_30400},
+    {0x30401, 0, 0, 30161, g_loadMessageLines_30401},
+    {0x30500, 0, 0, 30200, g_loadMessageLines_30500},
+    {0x30502, 0, 0, 30201, g_loadMessageLines_30500},
+    {0x30503, 1, 0, 30204, g_loadMessageLines_30500},
+    {0x30504, 0, 0, 30300, g_loadMessageLines_30504},
+    {0x30505, 0, 0, 30205, g_loadMessageLines_30500},
+    {0x30507, 0, 0, 30208, g_loadMessageLines_30500},
+    {0x30508, 0, 0, 30211, g_loadMessageLines_30500},
+    {0x3050A, 0, 0, 30213, g_loadMessageLines_30500},
+    {0x3050B, 0, 0, 30216, g_loadMessageLines_30500},
+    {0x3050D, 0, 0, 30218, g_loadMessageLines_30500},
+    {0x3050E, 0, 0, 30221, g_loadMessageLines_30500},
+    {0x30510, 0, 0, 30222, g_loadMessageLines_30500},
+    {0x30511, 0, 0, 30225, g_loadMessageLines_30500},
+    {0x30513, 0, 0, 30227, g_loadMessageLines_30500},
+    {0x30515, 0, 0, 30230, g_loadMessageLines_30500},
+    {0x30517, 0, 0, 30232, g_loadMessageLines_30500},
+    {0x30519, 0, 0, 30235, g_loadMessageLines_30500},
+    {0x3051B, 0, 0, 30236, g_loadMessageLines_30500},
+    {0x3051C, 0, 0, 30239, g_loadMessageLines_30500},
+    {0x3051D, 0, 0, 30240, g_loadMessageLines_30500},
+    {0x3051F, 0, 0, 30243, g_loadMessageLines_30500},
+    {0x30521, 0, 0, 30246, g_loadMessageLines_30500},
+    {0x30522, 0, 0, 30248, g_loadMessageLines_30500},
+    {0x30523, 0, 0, 30250, g_loadMessageLines_30500},
+    {0x30524, 0, 0, 30251, g_loadMessageLines_30500},
+    {0x30525, 0, 0, 30252, g_loadMessageLines_30500},
+    {0x30527, 0, 0, 30255, g_loadMessageLines_30500},
+    {0x30529, 0, 0, 30257, g_loadMessageLines_30500},
+    {0x3052A, 0, 0, 30260, g_loadMessageLines_30500},
+    {0x3052B, 0, 0, 30262, g_loadMessageLines_30500},
+    {0x3052C, 0, 0, 30264, g_loadMessageLines_30500},
+    {0x3052D, 0, 0, 30265, g_loadMessageLines_30500},
+    {0x3052F, 0, 0, 30268, g_loadMessageLines_30500},
+    {0x30530, 0, 0, 30270, g_loadMessageLines_30500},
+    {0x31000, 0, 0, 31000, g_loadMessageLines_30500},
+    {0x31002, 0, 0, 31002, g_loadMessageLines_30500},
+    {0x31003, 0, 0, 31005, g_loadMessageLines_30500},
+    {0x31004, 0, 0, 31007, g_loadMessageLines_30500},
+    {0x31005, 0, 0, 31009, g_loadMessageLines_30500},
+    {0x31007, 0, 0, 31012, g_loadMessageLines_30500},
+    {0x31008, 0, 0, 31015, g_loadMessageLines_30500},
+    {0x31009, 0, 0, 31017, g_loadMessageLines_30500},
+    {0x3100A, 0, 0, 31019, g_loadMessageLines_30500},
+    {0x3100B, 0, 0, 31021, g_loadMessageLines_30500},
+    {0x3100C, 0, 0, 31050, g_loadMessageLines_3100C},
+    {0x3100D, 0, 0, 31100, g_loadMessageLines_30500},
+    {0x3100E, 0, 0, 31102, g_loadMessageLines_30500},
+    {0x3100F, 0, 0, 31104, g_loadMessageLines_30500},
+    {0x31010, 0, 0, 31106, g_loadMessageLines_30500},
+    {0x31011, 0, 0, 31108, g_loadMessageLines_30500},
+    {0x31012, 0, 0, 31110, g_loadMessageLines_30500},
+    {0x31013, 0, 0, 31112, g_loadMessageLines_30500},
+    {0x31014, 0, 0, 31114, g_loadMessageLines_30500},
+    {0x31015, 0, 0, 31117, g_loadMessageLines_30500},
+    {0x31016, 0, 0, 31119, g_loadMessageLines_30500},
+    {0x31017, 0, 0, 31120, g_loadMessageLines_30500},
+    {0x31018, 0, 0, 31122, g_loadMessageLines_30500},
+    {0x3101A, 0, 0, 31125, g_loadMessageLines_30500},
+    {0x3101B, 0, 0, 31127, g_loadMessageLines_30500},
+    {0x3101D, 0, 0, 31130, g_loadMessageLines_30500},
+    {0x3101E, 0, 0, 31132, g_loadMessageLines_30500},
+    {0x3101F, 0, 0, 31134, g_loadMessageLines_30500},
+    {0x31024, 0, 0, 31144, g_loadMessageLines_30500},
+    {0x31026, 0, 0, 31147, g_loadMessageLines_30500},
+    {0x31027, 0, 0, 31150, g_loadMessageLines_30500},
+    {0x31028, 0, 0, 31152, g_loadMessageLines_30500},
+    {0x31029, 0, 0, 31154, g_loadMessageLines_30500},
+    {0x3102A, 0, 0, 31156, g_loadMessageLines_30500},
+    {0x3102B, 0, 0, 31300, g_loadMessageLines_30500},
+    {0x3102C, 0, 0, 31301, g_loadMessageLines_30500},
+    {0x3102D, 0, 0, 31302, g_loadMessageLines_30500},
+    {0x3102E, 0, 0, 31304, g_loadMessageLines_3102E},
+    {0x31100, 0, 0, 31200, g_loadMessageLines_31100},
+    {0x31101, 0, 0, 31201, g_loadMessageLines_31100},
+    {0x31102, 0, 0, 31202, g_loadMessageLines_31100},
+    {0x31103, 0, 0, 31203, g_loadMessageLines_31100},
+    {0x31104, 0, 0, 31204, g_loadMessageLines_31100},
+    {0x31105, 0, 0, 31205, g_loadMessageLines_31100},
+    {0xFFFFF, 1, 0x7FF, 0, 0}
+};
+/* Font names by player (row) and font (column). */
+const char *g_loadFontNames[4][20] = {
+    {"font000", "font001", "font002", "font003", "font004", "font005", "font006", "font007", "font008", "font009", "font010", "font011", "font012", "font013", "font014", "font015", "font016", "font017", "font018", "font019"},
+    {"font100", "font101", "font102", "font103", "font104", "font105", "font106", "font107", "font108", "font109", "font110", "font111", "font112", "font113", "font114", "font115", "font116", "font117", "font118", "font119"},
+    {"font200", "font201", "font202", "font203", "font204", "font205", "font206", "font207", "font208", "font209", "font210", "font211", "font212", "font213", "font214", "font215", "font216", "font217", "font218", "font219"},
+    {"font300", "font301", "font302", "font303", "font304", "font305", "font306", "font307", "font308", "font309", "font310", "font311", "font312", "font313", "font314", "font315", "font316", "font317", "font318", "font319"}
+};
+}
 extern "C" bePadData *bePadManager_GetPadForPlayer(...);
-extern "C" char CHRSELFONT06[];
-extern "C" char CHRSELFONT16[];
-extern "C" char SQ_LINESL00_3[];
-extern "C" char SQ_LINESL01_2[];
-extern "C" char SQ_LINEUP00_3[];
-extern "C" char SQ_LINEDW01_3[];
-extern "C" char SQ_LINEON00_3[];
-extern "C" char SQ_LINEON01_3[];
-extern "C" char SQ_NEXTSL00[];
-extern "C" char SQ_NEXTON00[];
 extern "C" void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win);
-extern "C" char MODELCTRL_6[];
-extern "C" char ISSEQNAME_3[];
 extern "C" unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence);
 extern "C" void beNDMWLoadIntf2MesWin__RequestOpen(beNDMWLoadIntf2MesWin *win);
 extern "C" void beNDMWLoadIntf2MesWin__RequestClose(beNDMWLoadIntf2MesWin *win);
 extern "C" void beNDMWLoadIntf2MesWin__RequestMessage(beNDMWLoadIntf2MesWin *win, int messageNo);
 extern "C" void beNDMWLoadIntf2MesWin__RequestQuestion(beNDMWLoadIntf2MesWin *win, int messageNo, int cursor);
 extern "C" void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *win, int messageNo);
-extern "C" char j_chrselmesswin_3[];
-extern "C" char SQ_WAIT[];
 extern "C" void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *win);
 extern "C" unsigned char beNDMWLoadIntf2MesWin__GetIsCtrl(beNDMWLoadIntf2MesWin *win);
 extern "C" int beNDMWLoadIntf2MesWin__GetCurPoint(beNDMWLoadIntf2MesWin *win);
@@ -125,7 +527,6 @@ extern "C" void beNDMWLoadIntf2MesWin__EndSystemMessage(beNDMWLoadIntf2MesWin *w
 extern "C" void beNDMWLoadCtrl2CommonIntf__UpdateCutConnect(beNDMWLoadCtrl2CommonIntf *intf);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepNoticeQuestion(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int promptNo, int questionNo, int cursor, int depth);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
-extern "C" char MakeDataTime[];
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beFont_metaObject[4];
@@ -150,7 +551,6 @@ public:
     ~DegiDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)o); } }
 };
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, int player, int mesWin, int slot, int depth);
-extern "C" char SaveDataTime[];
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int saveIndex, int depth);
 extern "C" int beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth);
 extern "C" void beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *intf, int player);
@@ -208,35 +608,6 @@ extern "C" PropObjListRecord * igProperty_GetRecordFolder(...);
 extern "C" PropByteListRecord * igProperty_GetRecordArray(...);
 extern "C" PropStringRecord * igProperty_GetRecordString(...);
 extern "C" PropIntListRecord * igProperty_GetRecordIntList(...);
-extern "C" char ISUSE_5[];
-extern "C" char UNIQUE_2[];
-extern "C" char LEVEL_5[];
-extern "C" char HP_3[];
-extern "C" char MHP_2[];
-extern "C" char MP_3[];
-extern "C" char MMP_2[];
-extern "C" char PLAYERNAME_2[];
-extern "C" char DIGIMONNAME_3[];
-extern "C" char XDATA_2[];
-extern "C" char BIT_4[];
-extern "C" char DEVICEFOLDER_2[];
-extern "C" char DISKFOLDER_2[];
-extern "C" char CARDLIST[];
-extern "C" char BANKDEVICE[];
-extern "C" char BANKBIT[];
-extern "C" char POWERSOCKET_2[];
-extern "C" char POWERPOCKET_2[];
-extern "C" char MAINSLOT_2[];
-extern "C" char MAINPOCKET_2[];
-extern "C" char SUBSLOT_2[];
-extern "C" char BASE_FLAG_2[];
-extern "C" char BASE_FLAGFOLDER_2[];
-extern "C" char BASE_COUNTER_2[];
-extern "C" char BASE_ISUSE_2[];
-extern "C" char BASE_LEVEL_2[];
-extern "C" char BASE_EXP_2[];
-extern "C" char BASE_SKILL_2[];
-extern "C" char BASE_UPCNT_2[];
 extern "C" void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props);
 
 static inline int listCount(const igObjectList *l) { return l->_count; }
@@ -293,67 +664,24 @@ public:
     ~SlotRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)o); } }
 };
 extern "C" void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard);
-extern "C" char SAVEUTILITY[];
-extern "C" char GENERATE_5[];
 extern "C" void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util);
-extern "C" char ISRDY[];
 extern "C" unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util);
-extern "C" char REMOVE[];
 extern "C" void beNDMWMcUtilCtrl__Remove(beNDMWMcUtilCtrl *util);
 extern "C" bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util);
 extern "C" void beNDMWMcUtilCtrl__Request(beNDMWMcUtilCtrl *util, int kind, int slot);
-extern "C" char GETDELIVER[];
-extern "C" char REQUEST_FILEMAKE[];
-extern "C" char REQUEST_FILEFIND[];
-extern "C" char REQUEST_FORMAT[];
-extern "C" char REQUEST_USE_CHECK[];
-extern "C" char REQUEST_READ_MEDIA[];
-extern "C" char REQUEST_WRITE_MEDIA[];
-extern "C" char REQUEST_GETFREESIZE[];
-extern "C" char REPORT_GAMEDATA[];
-extern "C" char ISBUSY[];
-extern "C" char GETRESULT[];
 extern "C" beSvDeliver * beMessenger_GetObject(...);
 extern "C" void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util);
 extern "C" int g_beNDMWLoadCtrl2Info_metaObject[4];
 extern "C" int g_beNDMWLoadCtrl2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" char LOADCTRL2[];
 extern "C" void beNDMWLoadCtrl2__ResolvePadManager(beNDMWLoadCtrl2 *self);
 extern "C" void beNDMWLoadCtrl2__RegisterReceiver(beNDMWLoadCtrl2 *self, int info);
-extern "C" char CTRL_4[];
-extern "C" char COMMONINTF_3[];
-extern "C" char j_chrselback[];
-extern "C" char SQ_OPEN_4[];
-extern "C" char i_fadewn01_2[];
-extern "C" char ISRUN_3[];
-extern "C" char SQ_WTIN60[];
-extern "C" char LOADINTF2_ALL[];
-extern "C" char SQ_BLOUT30_2[];
-extern "C" char SQ_CLOSE_6[];
-extern "C" char SETSELECT_DATA[];
-extern "C" char GAMERAM_7[];
-extern "C" char GETCOMMON_5[];
-extern "C" char NINZU_3[];
-extern "C" char DIFFICULTY_3[];
-extern "C" char CAMERAMODE_3[];
-extern "C" char LIGHTMODE_3[];
-extern "C" char TITLE2_2[];
-extern "C" char GAMESTART_3[];
-extern "C" char PLAYERPOINT_2[];
-extern "C" char SETGENERATEPOS[];
-extern "C" char gameStart_lua[];
-extern "C" char STAGECTL_2[];
-extern "C" char stagML11[];
-extern "C" char NEXTSTAGE_2[];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram);
 extern "C" igObject *beNDMWLoadCtrl2CtrlData_Create(int);
 extern "C" igObject *beNDMWLoadCtrl2CommonIntf_Create(int);
 extern "C" igObject *beNDMWLoadSavePlWork_Create(int);
-extern "C" char GAMEDATAINIT_2[];
-extern "C" char GETPLAYER_4[];
 extern "C" int g_beSystem_metaObject[4];
 /* Owning stack references while the controller list is wired up; each releases its object on scope
  * exit. */
@@ -389,61 +717,61 @@ extern "C" int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *
 void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color) {
     switch (align) {
     case 0:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, LEFT_2);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "LEFT");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     case 1:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, CENTER);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "CENTER");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     case 2:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, RIGHT);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "RIGHT");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     }
     switch (color) {
     case 0:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_DispatchSelected(order->_messenger, DEFAULTCOLOR);
+        beMessenger_DispatchSelected(order->_messenger, "DEFAULTCOLOR");
         break;
     case 1:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_DispatchSelected(order->_messenger, CANCELCOLOR);
+        beMessenger_DispatchSelected(order->_messenger, "CANCELCOLOR");
         break;
     case 2:
         break;
     }
-    beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+    beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(order->_messenger, line);
     beMessenger_AppendString(order->_messenger, font);
     beMessenger_AppendString(order->_messenger, text);
-    beMessenger_DispatchSelected(order->_messenger, TEXTSET_2);
-    beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+    beMessenger_DispatchSelected(order->_messenger, "TEXTSET");
+    beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(order->_messenger, line);
     beMessenger_AppendString(order->_messenger, font);
-    beMessenger_AppendString(order->_messenger, SET_2);
-    beMessenger_DispatchSelected(order->_messenger, SWITCH_3);
+    beMessenger_AppendString(order->_messenger, "SET");
+    beMessenger_DispatchSelected(order->_messenger, "SWITCH");
 }
 
 void TextOrder_PublishLine(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font) {
-    beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+    beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(order->_messenger, line);
     beMessenger_AppendString(order->_messenger, font);
-    beMessenger_AppendString(order->_messenger, CLR_3);
-    beMessenger_DispatchSelected(order->_messenger, SWITCH_3);
+    beMessenger_AppendString(order->_messenger, "CLR");
+    beMessenger_DispatchSelected(order->_messenger, "SWITCH");
 }
 
 void TextOrder_ConfigureFont(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, const char *text, int align, int color) {
@@ -483,12 +811,12 @@ void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *order, in
         g_mdlEntity[0] = 0;
         switch (group) {
         case 0:
-            beLua__RunNamedChunk(order->_lua, txt_mem_lua, 0);
+            beLua__RunNamedChunk(order->_lua, "txt_mem.lua", 0);
             break;
         case 0x1000:
         case 0x2000:
         case 0x3000:
-            beLua__RunNamedChunk(order->_lua, txt_Tar_lua, 0);
+            beLua__RunNamedChunk(order->_lua, "txt_Tar.lua", 0);
             break;
         }
         if (withFollowUp == 1 && (*(int *)((char *)g_loadMessageTable + off) & 0x100000)) {
@@ -496,12 +824,12 @@ void beNDMWLoadIntf2TextOrder_PublishIdLines(beNDMWLoadIntf2TextOrder *order, in
             g_mdlEntity[0] = 0;
             switch (group) {
             case 0:
-                beLua__RunNamedChunk(order->_lua, txt_mem_lua, 0);
+                beLua__RunNamedChunk(order->_lua, "txt_mem.lua", 0);
                 break;
             case 0x1000:
             case 0x2000:
             case 0x3000:
-                beLua__RunNamedChunk(order->_lua, txt_Tar_lua, 0);
+                beLua__RunNamedChunk(order->_lua, "txt_Tar.lua", 0);
                 break;
             }
         }
@@ -526,56 +854,56 @@ void TextOrder_PublishLineListOnly(beNDMWLoadIntf2TextOrder *order, int messageI
 void TextOrder_ConfigureUnicode(beNDMWLoadIntf2TextOrder *order, const char *line, int player, int fontIndex, int unicodeText, int align, int color) {
     const char *font;
 
-    beMessenger_SelectGroup(order->_messenger, TEXTCTL_4);
+    beMessenger_SelectGroup(order->_messenger, "TEXTCTL");
     beMessenger_AppendObject(order->_messenger, unicodeText);
     beMessenger_AppendInt(order->_messenger, 0x3F);
-    beMessenger_DispatchSelected(order->_messenger, REPLACEUNKNOWN);
+    beMessenger_DispatchSelected(order->_messenger, "REPLACEUNKNOWN");
     font = g_loadFontNames[player][fontIndex];
     switch (align) {
     case 0:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, LEFT_2);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "LEFT");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     case 1:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, CENTER);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "CENTER");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     case 2:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_AppendString(order->_messenger, RIGHT);
-        beMessenger_DispatchSelected(order->_messenger, ALIGN);
+        beMessenger_AppendString(order->_messenger, "RIGHT");
+        beMessenger_DispatchSelected(order->_messenger, "ALIGN");
         break;
     }
-    beMessenger_SelectGroup(order->_messenger, TEXTCTL_4);
+    beMessenger_SelectGroup(order->_messenger, "TEXTCTL");
     beMessenger_AppendString(order->_messenger, line);
     beMessenger_AppendString(order->_messenger, font);
     beMessenger_AppendObject(order->_messenger, unicodeText);
-    beMessenger_DispatchSelected(order->_messenger, TEXTSET_2);
-    beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+    beMessenger_DispatchSelected(order->_messenger, "TEXTSET");
+    beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(order->_messenger, line);
     beMessenger_AppendString(order->_messenger, font);
-    beMessenger_AppendString(order->_messenger, SET_2);
-    beMessenger_DispatchSelected(order->_messenger, SWITCH_3);
+    beMessenger_AppendString(order->_messenger, "SET");
+    beMessenger_DispatchSelected(order->_messenger, "SWITCH");
     switch (color) {
     case 0:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_DispatchSelected(order->_messenger, DEFAULTCOLOR);
+        beMessenger_DispatchSelected(order->_messenger, "DEFAULTCOLOR");
         return;
     case 1:
-        beMessenger_SelectReceivers(order->_messenger, TEXTCTL_4, 0, -1);
+        beMessenger_SelectReceivers(order->_messenger, "TEXTCTL", 0, -1);
         beMessenger_AppendString(order->_messenger, line);
         beMessenger_AppendString(order->_messenger, font);
-        beMessenger_DispatchSelected(order->_messenger, CANCELCOLOR);
+        beMessenger_DispatchSelected(order->_messenger, "CANCELCOLOR");
     case 2:
         ;
     }
@@ -591,9 +919,9 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
                     switch (win->_statCtrl) {
                     case 0:
                         if (win->_curPoint == 0) {
-                            beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINESL00_3);
+                            beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINESL00");
                         } else {
-                            beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINESL01_2);
+                            beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINESL01");
                         }
                         win->_statCtrl = win->_statCtrl + 1;
                         break;
@@ -609,39 +937,39 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
                         if (up) {
                             if (win->_curPoint == 1) {
                                 win->_curPoint = 0;
-                                beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINEUP00_3);
+                                beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINEUP00");
                                 win->_statCtrl = 2;
                             }
                         } else if (down) {
                             if (win->_curPoint == 0) {
                                 win->_curPoint = 1;
-                                beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINEDW01_3);
+                                beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINEDW01");
                                 win->_statCtrl = 3;
                             }
                         } else if (trigger & 0x4000) {
                             if (win->_curPoint == 0) {
-                                beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINEON00_3);
+                                beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINEON00");
                             } else {
-                                beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_LINEON01_3);
+                                beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_LINEON01");
                             }
                             win->_statCtrl = 4;
                         }
                         break;
                     }
                     case 2:
-                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEUP00_3) == 0) win->_statCtrl = 1;
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, "j_chrselmesswin", "SQ_LINEUP00") == 0) win->_statCtrl = 1;
                         break;
                     case 3:
-                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEDW01_3) == 0) win->_statCtrl = 1;
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, "j_chrselmesswin", "SQ_LINEDW01") == 0) win->_statCtrl = 1;
                         break;
                     case 4:
                         if (win->_curPoint == 0) {
-                            if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON00_3) == 0) {
+                            if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, "j_chrselmesswin", "SQ_LINEON00") == 0) {
                                 beNDMWLoadIntf2MesWin__RequestMesErase(win);
                                 win->_isSelect = 1;
                                 win->_isCtrl = 0;
                             }
-                        } else if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_LINEON01_3) == 0) {
+                        } else if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, "j_chrselmesswin", "SQ_LINEON01") == 0) {
                             beNDMWLoadIntf2MesWin__RequestMesErase(win);
                             win->_isSelect = 1;
                             win->_isCtrl = 0;
@@ -652,17 +980,17 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
                 case 1:
                     switch (win->_statCtrl) {
                     case 0:
-                        beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_NEXTSL00);
+                        beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_NEXTSL00");
                         win->_statCtrl = win->_statCtrl + 1;
                         break;
                     case 1:
                         if (bePadManager_GetPadForPlayer(win->_padManager, win->_ramNo, 1)->_trigger & 0x4000) {
-                            beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_NEXTON00);
+                            beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_NEXTON00");
                             win->_statCtrl = win->_statCtrl + 1;
                         }
                         break;
                     case 2:
-                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, j_chrselmesswin_3, SQ_NEXTON00) == 0) {
+                        if (beNDMWLoadIntf2MesWin__IsSequencePlaying(win, win->_ramNo, "j_chrselmesswin", "SQ_NEXTON00") == 0) {
                             beNDMWLoadIntf2MesWin__RequestMesErase(win);
                             win->_isSelect = 1;
                             win->_isCtrl = 0;
@@ -675,7 +1003,7 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
         } else {
             switch (win->_sysStat) {
             case 0:
-                beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_WAIT);
+                beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_WAIT");
                 win->_sysStat = win->_sysStat + 1;
                 break;
             case 1:
@@ -691,12 +1019,12 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
             } else {
                 line = 0;
                 do {
-                    TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)win->_textOrder, CHRSELFONT06, win->_ramNo, line);
+                    TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)win->_textOrder, "CHRSELFONT06", win->_ramNo, line);
                     line += 1;
                 } while (line < 4);
                 line = 4;
                 do {
-                    TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)win->_textOrder, CHRSELFONT16, win->_ramNo, line - 4);
+                    TextOrder_ClearFont((beNDMWLoadIntf2TextOrder *)win->_textOrder, "CHRSELFONT16", win->_ramNo, line - 4);
                     line += 1;
                 } while (line < 6);
                 win->_isMesErase = 0;
@@ -711,9 +1039,9 @@ void beNDMWLoadIntf2MesWin__Update(beNDMWLoadIntf2MesWin *win) {
 }
 
 unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence) {
-    beMessenger_SelectReceivers(win->_messenger, MODELCTRL_6, target, player);
+    beMessenger_SelectReceivers(win->_messenger, "MODELCTRL", target, player);
     beMessenger_AppendString(win->_messenger, sequence);
-    beMessenger_DispatchSelected(win->_messenger, ISSEQNAME_3);
+    beMessenger_DispatchSelected(win->_messenger, "ISSEQNAME");
     return beMessenger_GetBool(win->_messenger, 0);
 }
 
@@ -756,7 +1084,7 @@ void beNDMWLoadIntf2MesWin__RequestPrompt(beNDMWLoadIntf2MesWin *win, int messag
 
 void beNDMWLoadIntf2MesWin__Cancel(beNDMWLoadIntf2MesWin *win) {
     win->_isCtrl = 0;
-    beMessenger_SendNamed(win->_messenger, MODELCTRL_6, j_chrselmesswin_3, win->_ramNo, SQ_WAIT);
+    beMessenger_SendNamed(win->_messenger, "MODELCTRL", "j_chrselmesswin", win->_ramNo, "SQ_WAIT");
     beNDMWLoadIntf2MesWin__RequestMesErase(win);
 }
 
@@ -968,6 +1296,35 @@ int beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard(beNDMWLoadCtrl2CommonIntf *in
     return result;
 }
 
+/* One row of the player-model table: the model name and the open and face sequences its face
+ * window plays. */
+struct PlayerModelRow {
+    const char *model;
+    const char *openSequence;
+    const char *faceSequence;
+};
+extern "C" {
+PlayerModelRow g_playerModelRow[17] = {
+    {"p_agumon", "SQ_agumonOPEN", "SQ_p_agumon"},
+    {"p_vmon", "SQ_vmonOPEN", "SQ_p_vmon"},
+    {"p_girumon", "SQ_girumonOPEN", "SQ_p_girumon"},
+    {"p_dorumon", "SQ_dorumonOPEN", "SQ_p_dorumon"},
+    {"p_weregaru", "SQ_weregaruOPEN", "SQ_p_weregaru"},
+    {"p_hekabut", "SQ_hekabutOPEN", "SQ_p_hekabut"},
+    {"p_wargrey", "SQ_wargreyOPEN", "SQ_p_wargrey"},
+    {"p_angelr", "SQ_angelrOPEN", "SQ_p_angelr"},
+    {"p_beelzeb", "SQ_beelzebOPEN", "SQ_p_beelzeb"},
+    {"p_alpha", "SQ_alphaOPEN", "SQ_p_alpha"},
+    {"p_bwargrey", "SQ_bwargreyOPEN", "SQ_p_bwargrey"},
+    {"p_impdrafm", "SQ_impdrafmOPEN", "SQ_p_impdrafm"},
+    {"p_impdrapm", "SQ_impdrapmOPEN", "SQ_p_impdrapm"},
+    {"p_metalgaru", "SQ_metalgaruOPEN", "SQ_p_metalgaru"},
+    {"p_dukecrim", "SQ_dukecrimOPEN", "SQ_p_dukecrim"},
+    {"p_susanoo", "SQ_susanooOPEN", "SQ_p_susanoo"},
+    {"", "SQ_nofaceOPEN", "SQ_p_noface"}
+};
+}
+
 int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *intf, int player, beNDMWLoadIntf2MesWin *mesWin, int slot, int depth) {
     int result;
     int state;
@@ -1005,12 +1362,12 @@ int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *int
         break;
     case 2:
         beNDMWMcUtilCtrl__Request((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl, 0, slot);
-        beBaseInfoRam_StartTimer(intf->_inforam, MakeDataTime, 0xB2D05E00ULL);
+        beBaseInfoRam_StartTimer(intf->_inforam, "MakeDataTime", 0xB2D05E00ULL);
         state += 1;
         break;
     case 3:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, MakeDataTime) == 1) {
+            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, "MakeDataTime") == 1) {
                 state += 1;
                 goto waitResult;
             }
@@ -1180,12 +1537,12 @@ int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *intf
     case 0:
         beNDMWLoadSlotPlayer__WriteToBuffer((beNDMWLoadSlotPlayer *)PLW(intf, player)->_haveSaveData, ((beSaveDataDeliver *)MCU(intf)->_svData)->_data, saveIndex, ((beNDMWDegiData **)((beNDMWDegiDataList *)intf->_gameUseData)->_data)[player]);
         beNDMWMcUtilCtrl__Request((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl, 5, slot);
-        beBaseInfoRam_StartTimer(intf->_inforam, SaveDataTime, 0xB2D05E00ULL);
+        beBaseInfoRam_StartTimer(intf->_inforam, "SaveDataTime", 0xB2D05E00ULL);
         state += 1;
         break;
     case 1:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, SaveDataTime) == 1) {
+            if (beBaseInfoRam_IsTimerExpired(intf->_inforam, "SaveDataTime") == 1) {
                 state += 1;
                 goto waitResult;
             }
@@ -1436,15 +1793,15 @@ void beNDMWDegiData__LoadFromBuffer(beNDMWDegiData *degi, int buffer) {
 
 void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props) {
     DegiSaveRecord *record = (DegiSaveRecord *)degi->_data;
-    record->isUse = igProperty_GetRecordByte(props, ISUSE_5)->value;
-    record->unique = igProperty_GetRecord(props, UNIQUE_2)->value;
-    record->level = igProperty_GetRecord(props, LEVEL_5)->value;
-    record->hp = igProperty_GetRecord(props, HP_3)->value;
-    record->maxHp = igProperty_GetRecord(props, MHP_2)->value;
-    record->mp = igProperty_GetRecord(props, MP_3)->value;
-    record->maxMp = igProperty_GetRecord(props, MMP_2)->value;
+    record->isUse = igProperty_GetRecordByte(props, "ISUSE")->value;
+    record->unique = igProperty_GetRecord(props, "UNIQUE")->value;
+    record->level = igProperty_GetRecord(props, "LEVEL")->value;
+    record->hp = igProperty_GetRecord(props, "HP")->value;
+    record->maxHp = igProperty_GetRecord(props, "MHP")->value;
+    record->mp = igProperty_GetRecord(props, "MP")->value;
+    record->maxMp = igProperty_GetRecord(props, "MMP")->value;
     {
-        igStringObjList *sl = (igStringObjList *)igProperty_GetRecordFolder(props, PLAYERNAME_2)->value;
+        igStringObjList *sl = (igStringObjList *)igProperty_GetRecordFolder(props, "PLAYERNAME")->value;
         if (sl->_count != 0) {
             igSmartPointer<beUnicodeObj> s(((beUnicodeObj **)sl->_data)[0]);
             if (s.p != 0) s.p->_refCount = s.p->_refCount + 1;
@@ -1467,30 +1824,30 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props) {
         }
     }
     {
-        PropStringRecord *rs = igProperty_GetRecordString(props, DIGIMONNAME_3);
+        PropStringRecord *rs = igProperty_GetRecordString(props, "DIGIMONNAME");
         char *str = rs->value;
         if (str != 0) strcpy(record->digimonName, str);
     }
-    record->xdata = igProperty_GetRecord(props, XDATA_2)->value;
-    record->bit = igProperty_GetRecord(props, BIT_4)->value;
-    IDS(record->deviceFolder, DEVICEFOLDER_2, 36, 1)
-    IDS(record->diskFolder, DISKFOLDER_2, 12, 1)
-    BYTES(record->cardList, igProperty_GetRecordArray, CARDLIST)
-    IDS(record->bankDevice, BANKDEVICE, 96, 0)
-    record->bankBit = igProperty_GetRecord(props, BANKBIT)->value;
-    FINDN(record->powerSocket, POWERSOCKET_2, 3)
-    FINDN(record->powerPocket, POWERPOCKET_2, 5)
-    FIND1(record->mainSlot, MAINSLOT_2)
-    FINDV(record->mainPocket, MAINPOCKET_2)
-    FIND1(record->subSlot, SUBSLOT_2)
-    BYTES(record->baseFlag, igProperty_GetRecordArray, BASE_FLAG_2)
-    BYTES(record->baseFlagFolder, igProperty_GetRecordArray, BASE_FLAGFOLDER_2)
-    INTS(record->baseCounter, igProperty_GetRecordIntList, BASE_COUNTER_2)
-    BYTES(record->baseIsUse, igProperty_GetRecordArray, BASE_ISUSE_2)
-    INTS(record->baseLevel, igProperty_GetRecordIntList, BASE_LEVEL_2)
-    INTS(record->baseExp, igProperty_GetRecordIntList, BASE_EXP_2)
-    INTS(record->baseSkill, igProperty_GetRecordIntList, BASE_SKILL_2)
-    INTS(record->baseUpcnt, igProperty_GetRecordIntList, BASE_UPCNT_2)
+    record->xdata = igProperty_GetRecord(props, "XDATA")->value;
+    record->bit = igProperty_GetRecord(props, "BIT")->value;
+    IDS(record->deviceFolder, "DEVICEFOLDER", 36, 1)
+    IDS(record->diskFolder, "DISKFOLDER", 12, 1)
+    BYTES(record->cardList, igProperty_GetRecordArray, "CARDLIST")
+    IDS(record->bankDevice, "BANKDEVICE", 96, 0)
+    record->bankBit = igProperty_GetRecord(props, "BANKBIT")->value;
+    FINDN(record->powerSocket, "POWERSOCKET", 3)
+    FINDN(record->powerPocket, "POWERPOCKET", 5)
+    FIND1(record->mainSlot, "MAINSLOT")
+    FINDV(record->mainPocket, "MAINPOCKET")
+    FIND1(record->subSlot, "SUBSLOT")
+    BYTES(record->baseFlag, igProperty_GetRecordArray, "BASE_FLAG")
+    BYTES(record->baseFlagFolder, igProperty_GetRecordArray, "BASE_FLAGFOLDER")
+    INTS(record->baseCounter, igProperty_GetRecordIntList, "BASE_COUNTER")
+    BYTES(record->baseIsUse, igProperty_GetRecordArray, "BASE_ISUSE")
+    INTS(record->baseLevel, igProperty_GetRecordIntList, "BASE_LEVEL")
+    INTS(record->baseExp, igProperty_GetRecordIntList, "BASE_EXP")
+    INTS(record->baseSkill, igProperty_GetRecordIntList, "BASE_SKILL")
+    INTS(record->baseUpcnt, igProperty_GetRecordIntList, "BASE_UPCNT")
     beNDMWDegiData__UpdateFieldsFromData((beNDMWDegiData *)degi);
 }
 
@@ -1554,15 +1911,15 @@ ItemRef beNDMWDegiData__CreateItem(void *owner, int id) {
 
 void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int font) {
     DegiSaveRecord *record = (DegiSaveRecord *)degi->_data;
-    igProperty_GetRecordByte(props, ISUSE_5)->value = record->isUse;
-    igProperty_GetRecord(props, UNIQUE_2)->value = record->unique;
-    igProperty_GetRecord(props, LEVEL_5)->value = record->level;
-    igProperty_GetRecord(props, HP_3)->value = record->hp;
-    igProperty_GetRecord(props, MHP_2)->value = record->maxHp;
-    igProperty_GetRecord(props, MP_3)->value = record->mp;
-    igProperty_GetRecord(props, MMP_2)->value = record->maxMp;
+    igProperty_GetRecordByte(props, "ISUSE")->value = record->isUse;
+    igProperty_GetRecord(props, "UNIQUE")->value = record->unique;
+    igProperty_GetRecord(props, "LEVEL")->value = record->level;
+    igProperty_GetRecord(props, "HP")->value = record->hp;
+    igProperty_GetRecord(props, "MHP")->value = record->maxHp;
+    igProperty_GetRecord(props, "MP")->value = record->mp;
+    igProperty_GetRecord(props, "MMP")->value = record->maxMp;
     char *digimonName = record->digimonName;
-    PropStringRecord *rs = igProperty_GetRecordString(props, DIGIMONNAME_3);
+    PropStringRecord *rs = igProperty_GetRecordString(props, "DIGIMONNAME");
     if (((void * *)g_stringPool)[0] == 0) {
         void *p = StringPool_Allocate(16);
         if (p != 0)
@@ -1579,7 +1936,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             StringChunk_ReleaseHeader(hdr[0], hdr);
     }
     rs->value = interned;
-    igObjectList *playerNameList = igProperty_GetRecordFolder(props, PLAYERNAME_2)->value;
+    igObjectList *playerNameList = igProperty_GetRecordFolder(props, "PLAYERNAME")->value;
     ObjectListOps::Clear(playerNameList);
     int alloc = igObject_GetAllocator(degi);
     int a;
@@ -1617,9 +1974,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
     }
     ObjectList_AppendRetained(playerNameList, nameText.p);
     }
-    igProperty_GetRecord(props, XDATA_2)->value = record->xdata;
-    igProperty_GetRecord(props, BIT_4)->value = record->bit;
-    igObjectList *deviceFolderList = igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value;
+    igProperty_GetRecord(props, "XDATA")->value = record->xdata;
+    igProperty_GetRecord(props, "BIT")->value = record->bit;
+    igObjectList *deviceFolderList = igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value;
     ObjectListOps::Clear(deviceFolderList);
     for (int i = 0; i < 36; i++) {
         int id = record->deviceFolder[i];
@@ -1628,7 +1985,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
         ObjectList_AppendRetained(deviceFolderList, item.p);
     }
-    igObjectList *diskFolderList = igProperty_GetRecordFolder(props, DISKFOLDER_2)->value;
+    igObjectList *diskFolderList = igProperty_GetRecordFolder(props, "DISKFOLDER")->value;
     ObjectListOps::Clear(diskFolderList);
     for (int i = 0; i < 12; i++) {
         int id = record->diskFolder[i];
@@ -1637,13 +1994,13 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
         ObjectList_AppendRetained(diskFolderList, item.p);
     }
-    igUnsignedCharList *cardList = (igUnsignedCharList *)igProperty_GetRecordArray(props, CARDLIST)->value;
+    igUnsignedCharList *cardList = (igUnsignedCharList *)igProperty_GetRecordArray(props, "CARDLIST")->value;
     for (int i = 0; i < 50; i++) {
         unsigned char v = record->cardList[i];
         if (cardList->_count != 0 && i >= 0 && i < cardList->_count)
             ((unsigned char *)cardList->_data)[i] = v;
     }
-    igObjectList *bankDeviceList = igProperty_GetRecordFolder(props, BANKDEVICE)->value;
+    igObjectList *bankDeviceList = igProperty_GetRecordFolder(props, "BANKDEVICE")->value;
     ObjectListOps::Clear(bankDeviceList);
     for (int i = 0; i < 96; i++) {
         int id = record->bankDevice[i];
@@ -1652,13 +2009,13 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
         ObjectList_AppendRetained(bankDeviceList, item.p);
     }
-    igProperty_GetRecord(props, BANKBIT)->value = record->bankBit;
-    igObjectList *powerSocketList = igProperty_GetRecordFolder(props, POWERSOCKET_2)->value;
+    igProperty_GetRecord(props, "BANKBIT")->value = record->bankBit;
+    igObjectList *powerSocketList = igProperty_GetRecordFolder(props, "POWERSOCKET")->value;
     ObjectListOps::Clear(powerSocketList);
     for (int i = 0; i < 3; i++) {
         int id = record->powerSocket[i];
         if (id != -1) {
-            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value->_data)[id]);
+            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value->_data)[id]);
             if (item.p)
                 item.p->refCount++;
             ObjectList_AppendRetained(powerSocketList, item.p);
@@ -1666,12 +2023,12 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ObjectList_AppendRetained(powerSocketList, 0);
         }
     }
-    igObjectList *powerPocketList = igProperty_GetRecordFolder(props, POWERPOCKET_2)->value;
+    igObjectList *powerPocketList = igProperty_GetRecordFolder(props, "POWERPOCKET")->value;
     ObjectListOps::Clear(powerPocketList);
     for (int i = 0; i < 5; i++) {
         int id = record->powerPocket[i];
         if (id != -1) {
-            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value->_data)[id]);
+            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value->_data)[id]);
             if (item.p)
                 item.p->refCount++;
             ObjectList_AppendRetained(powerPocketList, item.p);
@@ -1679,12 +2036,12 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ObjectList_AppendRetained(powerPocketList, 0);
         }
     }
-    igObjectList *mainSlotList = igProperty_GetRecordFolder(props, MAINSLOT_2)->value;
+    igObjectList *mainSlotList = igProperty_GetRecordFolder(props, "MAINSLOT")->value;
     ObjectListOps::Clear(mainSlotList);
     {
         int id = record->mainSlot;
         if (id != -1) {
-            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value->_data)[id]);
+            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value->_data)[id]);
             if (item.p)
                 item.p->refCount++;
             ObjectList_AppendRetained(mainSlotList, item.p);
@@ -1692,12 +2049,12 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ObjectList_AppendRetained(mainSlotList, 0);
         }
     }
-    igObjectList *mainPocketList = igProperty_GetRecordFolder(props, MAINPOCKET_2)->value;
+    igObjectList *mainPocketList = igProperty_GetRecordFolder(props, "MAINPOCKET")->value;
     ObjectListOps::Clear(mainPocketList);
     for (int i = 0; i < 5; i++) {
         int id = record->mainPocket[i];
         if (id != -1) {
-            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value->_data)[id]);
+            ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value->_data)[id]);
             if (item.p)
                 item.p->refCount++;
             ObjectList_AppendRetained(mainPocketList, item.p);
@@ -1705,60 +2062,60 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ObjectList_AppendRetained(mainPocketList, 0);
         }
     }
-    igObjectList *subSlotList = igProperty_GetRecordFolder(props, SUBSLOT_2)->value;
+    igObjectList *subSlotList = igProperty_GetRecordFolder(props, "SUBSLOT")->value;
     int subSlotId = record->subSlot;
     ObjectListOps::Clear(subSlotList);
     if (subSlotId != -1) {
-        ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, DEVICEFOLDER_2)->value->_data)[subSlotId]);
+        ItemRef item(((RefCounted **)igProperty_GetRecordFolder(props, "DEVICEFOLDER")->value->_data)[subSlotId]);
         if (item.p)
             item.p->refCount++;
         ObjectList_AppendRetained(subSlotList, item.p);
     } else {
         ObjectList_AppendRetained(subSlotList, 0);
     }
-    igUnsignedCharList *baseFlagList = (igUnsignedCharList *)igProperty_GetRecordArray(props, BASE_FLAG_2)->value;
+    igUnsignedCharList *baseFlagList = (igUnsignedCharList *)igProperty_GetRecordArray(props, "BASE_FLAG")->value;
     for (int i = 0; i < 1024; i++) {
         unsigned char v = record->baseFlag[i];
         if (baseFlagList->_count != 0 && i >= 0 && i < baseFlagList->_count)
             ((unsigned char *)baseFlagList->_data)[i] = v;
     }
-    igUnsignedCharList *baseFlagFolderList = (igUnsignedCharList *)igProperty_GetRecordArray(props, BASE_FLAGFOLDER_2)->value;
+    igUnsignedCharList *baseFlagFolderList = (igUnsignedCharList *)igProperty_GetRecordArray(props, "BASE_FLAGFOLDER")->value;
     for (int i = 0; i < 12; i++) {
         unsigned char v = record->baseFlagFolder[i];
         if (baseFlagFolderList->_count != 0 && i >= 0 && i < baseFlagFolderList->_count)
             ((unsigned char *)baseFlagFolderList->_data)[i] = v;
     }
-    igIntList *baseCounterList = igProperty_GetRecordIntList(props, BASE_COUNTER_2)->value;
+    igIntList *baseCounterList = igProperty_GetRecordIntList(props, "BASE_COUNTER")->value;
     for (int i = 0; i < 16; i++) {
         int v = record->baseCounter[i];
         if (baseCounterList->_count != 0 && i >= 0 && i < baseCounterList->_count)
             ((int *)baseCounterList->_data)[i] = v;
     }
-    igUnsignedCharList *baseIsUseList = (igUnsignedCharList *)igProperty_GetRecordArray(props, BASE_ISUSE_2)->value;
+    igUnsignedCharList *baseIsUseList = (igUnsignedCharList *)igProperty_GetRecordArray(props, "BASE_ISUSE")->value;
     for (int i = 0; i < 16; i++) {
         unsigned char v = record->baseIsUse[i];
         if (baseIsUseList->_count != 0 && i >= 0 && i < baseIsUseList->_count)
             ((unsigned char *)baseIsUseList->_data)[i] = v;
     }
-    igIntList *baseLevelList = igProperty_GetRecordIntList(props, BASE_LEVEL_2)->value;
+    igIntList *baseLevelList = igProperty_GetRecordIntList(props, "BASE_LEVEL")->value;
     for (int i = 0; i < 16; i++) {
         int v = record->baseLevel[i];
         if (baseLevelList->_count != 0 && i >= 0 && i < baseLevelList->_count)
             ((int *)baseLevelList->_data)[i] = v;
     }
-    igIntList *baseExpList = igProperty_GetRecordIntList(props, BASE_EXP_2)->value;
+    igIntList *baseExpList = igProperty_GetRecordIntList(props, "BASE_EXP")->value;
     for (int i = 0; i < 16; i++) {
         int v = record->baseExp[i];
         if (baseExpList->_count != 0 && i >= 0 && i < baseExpList->_count)
             ((int *)baseExpList->_data)[i] = v;
     }
-    igIntList *baseSkillList = igProperty_GetRecordIntList(props, BASE_SKILL_2)->value;
+    igIntList *baseSkillList = igProperty_GetRecordIntList(props, "BASE_SKILL")->value;
     for (int i = 0; i < 144; i++) {
         int v = record->baseSkill[i];
         if (baseSkillList->_count != 0 && i >= 0 && i < baseSkillList->_count)
             ((int *)baseSkillList->_data)[i] = v;
     }
-    igIntList *baseUpcntList = igProperty_GetRecordIntList(props, BASE_UPCNT_2)->value;
+    igIntList *baseUpcntList = igProperty_GetRecordIntList(props, "BASE_UPCNT")->value;
     for (int i = 0; i < 176; i++) {
         if (baseUpcntList->_count != 0 && i >= 0 && i < baseUpcntList->_count)
             ((int *)baseUpcntList->_data)[i] = record->baseUpcnt[i];
@@ -1844,9 +2201,9 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
 }
 
 void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util) {
-    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
     beMessenger_AppendInt(util->_messenger, 4);
-    beMessenger_DispatchSelected(util->_messenger, GENERATE_5);
+    beMessenger_DispatchSelected(util->_messenger, "GENERATE");
     if (beMessenger_GetBoolCount(util->_messenger) > 0) {
         util->_isUseUtil = 1;
     } else {
@@ -1857,7 +2214,7 @@ void beNDMWMcUtilCtrl__Generate(beNDMWMcUtilCtrl *util) {
 unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util) {
     unsigned char ready = 0;
     if (util->_isUseUtil == 1) {
-        beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISRDY);
+        beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "ISRDY");
         if (beMessenger_GetBool(util->_messenger, 0) == 1) {
             util->_isRdy = 1;
             ready = 1;
@@ -1871,14 +2228,14 @@ unsigned char beNDMWMcUtilCtrl__CheckReady(beNDMWMcUtilCtrl *util) {
 
 void beNDMWMcUtilCtrl__Remove(beNDMWMcUtilCtrl *util) {
     if (util->_isUseUtil == 1) {
-        beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, REMOVE);
+        beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "REMOVE");
     }
 }
 
 bool beNDMWMcUtilCtrl__IsRemoved(beNDMWMcUtilCtrl *util) {
     bool removed = false;
     if (util->_isUseUtil == 1) {
-        beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISRDY);
+        beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "ISRDY");
         if (beMessenger_GetBool(util->_messenger, 0) == 0) {
             removed = true;
         }
@@ -1910,7 +2267,7 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
             beNDMWMcSlotList *slots;
             int i;
             int off;
-            beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, GETDELIVER);
+            beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "GETDELIVER");
             deliver = beMessenger_GetObject(util->_messenger, 0);
             slots = (beNDMWMcSlotList *)util->_slot;
             i = 0;
@@ -1966,47 +2323,47 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
                 switch (util->_kind) {
                 case 0:
                     memset(((beSaveDataDeliver *)util->_svData)->_data, 0, sizeOf((beSaveDataDeliver *)util->_svData));
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
                     beMessenger_AppendObject(util->_messenger, util->_svData);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_FILEMAKE);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_FILEMAKE");
                     break;
                 case 1:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_FILEFIND);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_FILEFIND");
                     break;
                 case 2:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_FORMAT);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_FORMAT");
                     break;
                 case 3:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_USE_CHECK);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_USE_CHECK");
                     break;
                 case 4:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
                     beMessenger_AppendObject(util->_messenger, util->_svData);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_READ_MEDIA);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_READ_MEDIA");
                     break;
                 case 5:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
                     beMessenger_AppendObject(util->_messenger, util->_svData);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_WRITE_MEDIA);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_WRITE_MEDIA");
                     break;
                 case 6:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
-                    beMessenger_DispatchSelected(util->_messenger, REQUEST_GETFREESIZE);
+                    beMessenger_DispatchSelected(util->_messenger, "REQUEST_GETFREESIZE");
                     break;
                 case 7:
-                    beMessenger_SelectReceivers(util->_messenger, SAVEUTILITY, 0, -1);
+                    beMessenger_SelectReceivers(util->_messenger, "SAVEUTILITY", 0, -1);
                     beMessenger_AppendInt(util->_messenger, util->_tgCon);
-                    beMessenger_DispatchSelected(util->_messenger, REPORT_GAMEDATA);
+                    beMessenger_DispatchSelected(util->_messenger, "REPORT_GAMEDATA");
                     break;
                 }
                 util->_st0 = util->_st0 + 1;
@@ -2015,7 +2372,7 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
                 util->_st1 = 0;
                 break;
             case 1:
-                beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, ISBUSY);
+                beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "ISBUSY");
                 if (beMessenger_GetBool(util->_messenger, 0) == 0) {
                     util->_st0 = util->_st0 + 1;
                     util->_st3 = 0;
@@ -2024,7 +2381,7 @@ void beNDMWMcUtilCtrl__Update(beNDMWMcUtilCtrl *util) {
                 }
                 break;
             case 2:
-                beMessenger_SendNamed(util->_messenger, SAVEUTILITY, 0, -1, GETRESULT);
+                beMessenger_SendNamed(util->_messenger, "SAVEUTILITY", 0, -1, "GETRESULT");
                 util->_result = beMessenger_GetInt(util->_messenger, 0);
                 util->_isRun = 0;
                 util->_isResult = 1;
@@ -2096,7 +2453,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             }
             ram->_dataList = (int)o;
         }
-        ctrl = (beNDMWLoadCtrl2CtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], CTRL_4);
+        ctrl = (beNDMWLoadCtrl2CtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
         if (ram->_dataList == 0) {
             igObject *o;
             igObject *old;
@@ -2115,7 +2472,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             }
             ram->_dataList = (int)o;
         }
-        intf = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_3);
+        intf = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
         switch (ctrl->_st0) {
         case 0:
             break;
@@ -2140,8 +2497,8 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
         case 2:
             switch (st1(ctrl)) {
             case 0:
-                beMessenger_SendNamed(self->_messenger, MODELCTRL_6, j_chrselback, 0, GENERATE_5);
-                beMessenger_SendNamed(self->_messenger, MODELCTRL_6, j_chrselback, 0, SQ_OPEN_4);
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "GENERATE");
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "SQ_OPEN");
                 ctrl->_st1 = ctrl->_st1 + 1;
                 ctrl->_st3 = 0;
                 ctrl->_st2 = 0;
@@ -2149,9 +2506,9 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             case 1:
                 switch (ctrl->_st2) {
                 case 0:
-                    beMessenger_SelectReceivers(self->_messenger, MODELCTRL_6, j_chrselback, 0);
-                    beMessenger_AppendString(self->_messenger, SQ_OPEN_4);
-                    beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_3);
+                    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", "j_chrselback", 0);
+                    beMessenger_AppendString(self->_messenger, "SQ_OPEN");
+                    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
                     if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         if (ctrl->_isTitle == 1) {
                             ctrl->_st2 = ctrl->_st2 + 1;
@@ -2164,15 +2521,15 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     }
                     break;
                 case 1:
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, ISRUN_3);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "ISRUN");
                     if (beMessenger_GetBool(self->_messenger, 0) == 1) {
-                        beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, SQ_WTIN60);
+                        beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "SQ_WTIN60");
                     }
                     ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     break;
                 case 2:
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, ISRUN_3);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "ISRUN");
                     if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         ctrl->_st1 = ctrl->_st1 + 1;
                         ctrl->_st3 = 0;
@@ -2182,7 +2539,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 }
                 break;
             case 2:
-                beMessenger_SendNamed(self->_messenger, LOADINTF2_ALL, 0, -1, GENERATE_5);
+                beMessenger_SendNamed(self->_messenger, "LOADINTF2_ALL", 0, -1, "GENERATE");
                 ctrl->_st1 = ctrl->_st1 + 1;
                 ctrl->_st3 = 0;
                 ctrl->_st2 = 0;
@@ -2233,14 +2590,14 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                     }
                     break;
                 case 2:
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, GENERATE_5);
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, i_fadewn01_2, 0, SQ_BLOUT30_2);
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, j_chrselback, 0, SQ_CLOSE_6);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "GENERATE");
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0, "SQ_BLOUT30");
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "SQ_CLOSE");
                     ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     break;
                 case 3:
-                    beMessenger_SendNamed(self->_messenger, MODELCTRL_6, j_chrselback, 0, ISRUN_3);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_chrselback", 0, "ISRUN");
                     if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                         ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
@@ -2249,7 +2606,7 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 case 4: {
                     int common;
                     int difficulty, cameraMode, lightMode;
-                    beMessenger_SendNamed(self->_messenger, LOADINTF2_ALL, 0, -1, SETSELECT_DATA);
+                    beMessenger_SendNamed(self->_messenger, "LOADINTF2_ALL", 0, -1, "SETSELECT_DATA");
                     {
                     readyCount = 0;
                     k = 0;
@@ -2260,17 +2617,17 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
                 cnt_test:
                     if (k < 4) goto cnt_body;
                     }
-                    beMessenger_SendGroup(self->_messenger, GAMERAM_7, GETCOMMON_5);
+                    beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
                     common = ((int)beMessenger_GetObject(self->_messenger, 0));
-                    igProperty_GetRecord(common, NINZU_3)->value = readyCount;
+                    igProperty_GetRecord(common, "NINZU")->value = readyCount;
                     if (ctrl->_isTitle == 1) {
                         difficulty = intf->_difficultMode;
-                        igProperty_GetRecord(common, DIFFICULTY_3)->value = difficulty;
+                        igProperty_GetRecord(common, "DIFFICULTY")->value = difficulty;
                         cameraMode = self->_cameraMode;
-                        igProperty_GetRecord(common, CAMERAMODE_3)->value = cameraMode;
+                        igProperty_GetRecord(common, "CAMERAMODE")->value = cameraMode;
                         lightMode = self->_lightMode;
-                        igProperty_GetRecord(common, LIGHTMODE_3)->value = lightMode;
-                        beMessenger_SendGroup(self->_messenger, TITLE2_2, GAMESTART_3);
+                        igProperty_GetRecord(common, "LIGHTMODE")->value = lightMode;
+                        beMessenger_SendGroup(self->_messenger, "TITLE2", "GAMESTART");
                     }
                     ctrl->_st0 = 3;
                     ctrl->_st3 = 0;
@@ -2293,19 +2650,19 @@ void beNDMWLoadCtrl2__Update(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             case 1:
                 if (beNDMWMcUtilCtrl__IsRemoved((beNDMWMcUtilCtrl *)intf->_mcUtilCtrl) == 1) {
                     if (ctrl->_isTitle == 0) {
-                        beMessenger_SelectReceivers(self->_messenger, PLAYERPOINT_2, 0, -1);
+                        beMessenger_SelectReceivers(self->_messenger, "PLAYERPOINT", 0, -1);
                         beMessenger_AppendInt(self->_messenger, 4);
-                        beMessenger_DispatchSelected(self->_messenger, SETGENERATEPOS);
+                        beMessenger_DispatchSelected(self->_messenger, "SETGENERATEPOS");
                     } else {
                         g_mdlEntity[0] = 0;
-                        beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), gameStart_lua, 0);
-                        beMessenger_SelectReceivers(self->_messenger, PLAYERPOINT_2, 0, -1);
+                        beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), "gameStart.lua", 0);
+                        beMessenger_SelectReceivers(self->_messenger, "PLAYERPOINT", 0, -1);
                         beMessenger_AppendInt(self->_messenger, 0);
-                        beMessenger_DispatchSelected(self->_messenger, SETGENERATEPOS);
+                        beMessenger_DispatchSelected(self->_messenger, "SETGENERATEPOS");
                     }
-                    beMessenger_SelectGroup(self->_messenger, STAGECTL_2);
-                    beMessenger_AppendString(self->_messenger, stagML11);
-                    beMessenger_DispatchSelected(self->_messenger, NEXTSTAGE_2);
+                    beMessenger_SelectGroup(self->_messenger, "STAGECTL");
+                    beMessenger_AppendString(self->_messenger, "stagML11");
+                    beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
                     ctrl->_st0 = ctrl->_st0 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -2330,7 +2687,7 @@ int beNDMWLoadCtrl2__GetInfoMeta(void)
 /* Registers the load controller with its messenger as the LOADCTRL2 receiver. */
 void beNDMWLoadCtrl2__RegisterReceiver(beNDMWLoadCtrl2 *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, LOADCTRL2);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "LOADCTRL2");
 }
 
 int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info) {
@@ -2371,20 +2728,20 @@ int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBase
                 ((beNDMWLoadCtrl2CtrlData *)ctrl.p)->_isTitle = i;
                 j = 0;
                 do {
-                    beMessenger_SelectGroup(self->_messenger, GAMERAM_7);
+                    beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                     beMessenger_AppendInt(self->_messenger, j);
-                    beMessenger_DispatchSelected(self->_messenger, GAMEDATAINIT_2);
+                    beMessenger_DispatchSelected(self->_messenger, "GAMEDATAINIT");
                     j++;
                 } while (j < 4);
             } else {
                 do {
-                    beMessenger_SelectGroup(self->_messenger, GAMERAM_7);
+                    beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                     beMessenger_AppendInt(self->_messenger, i);
-                    beMessenger_DispatchSelected(self->_messenger, GETPLAYER_4);
-                    if (igProperty_GetRecordByte((int)beMessenger_GetObject(self->_messenger, 0), ISUSE_5)->value != 1) {
-                        beMessenger_SelectGroup(self->_messenger, GAMERAM_7);
+                    beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
+                    if (igProperty_GetRecordByte((int)beMessenger_GetObject(self->_messenger, 0), "ISUSE")->value != 1) {
+                        beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                         beMessenger_AppendInt(self->_messenger, i);
-                        beMessenger_DispatchSelected(self->_messenger, GAMEDATAINIT_2);
+                        beMessenger_DispatchSelected(self->_messenger, "GAMEDATAINIT");
                     }
                     i++;
                 } while (i < 4);
@@ -2435,7 +2792,7 @@ int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBase
         ram->_dataList = (int)t;
         }
     }
-    igProperty_FindByName(ram->_dataList, g_propertyNameField[0], CTRL_4);
+    igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
     switch (message) {
     case 2:
         return 1;
@@ -2452,7 +2809,7 @@ int beNDMWLoadCtrl2__OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBase
                 ram->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject(self->_messenger, ((int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_3)));
+            beMessenger_AppendObject(self->_messenger, ((int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF")));
         }
         return 1;
     default:
@@ -2464,3 +2821,5 @@ int beNDMWLoadCtrl2__GetMeta(void)
 {
     return g_beNDMWLoadCtrl2_metaObject[0];
 }
+
+#pragma pop

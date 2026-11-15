@@ -5,6 +5,8 @@
  * docs/engine/sound-format.md. */
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 /* beMessenger_ResolveEnumValue values of the handler's command names. */
 enum SoundMessage {
@@ -106,16 +108,6 @@ extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern char *g_stringObjEmptyText[];
 extern char emptyString[];
-extern char SOUND_5[];
-extern char acx[];
-extern char STATICINFO[];
-extern char GETINFOLIST[];
-extern char common[];
-extern char REVERB[];
-extern char PLAY_4[];
-extern char UP_2[];
-extern char DOWN_2[];
-extern char ALL_2[];
 }
 
 /* An IEEE single split into its magnitude and sign bit. */
@@ -244,14 +236,14 @@ void beSound_Prepare(beSound *self) {
 
 void beSound_RegisterReceiver(beSound *self, beBaseInfoRam *ram) {
     beSoundInfo *info;
-    beMessenger_RegisterReceiver(self->_messenger, ram, SOUND_5, 0, -1);
+    beMessenger_RegisterReceiver(self->_messenger, ram, "SOUND", 0, -1);
     info = (beSoundInfo *)ram->_parentInfo;
     ((beCri *)self->_cri)->_baseVolume = info->_baseVolume;
     beCri_SetSndfVolume((beCri *)self->_cri, info->_sndfVolume);
     if (info->_dataType == 0) {
-        SetString(&info->_dataType, acx);
+        SetString(&info->_dataType, "acx");
     }
-    if (strcmp((char *)info->_dataType, acx) == 0) {
+    if (strcmp((char *)info->_dataType, "acx") == 0) {
         ((beCri *)self->_cri)->_dataType = CRI_DATA_ADX;
     } else {
         ((beCri *)self->_cri)->_dataType = CRI_DATA_SFP;
@@ -270,7 +262,7 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
     int infoIndex;
     switch (ram->_st0) {
     case STATE_START:
-        beMessenger_SendGroup(self->_messenger, STATICINFO, GETINFOLIST);
+        beMessenger_SendGroup(self->_messenger, "STATICINFO", "GETINFOLIST");
         if (beMessenger_GetObjectCount(self->_messenger) <= 0) break;
         infos = beMessenger_GetObject(self->_messenger, 0);
         infoIndex = 0;
@@ -280,7 +272,7 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
                 infoIndex++;
                 continue;
             }
-            if (strcmp(NameOf(info->_name), common) == 0) {
+            if (strcmp(NameOf(info->_name), "_common") == 0) {
                 infoIndex++;
                 continue;
             }
@@ -290,7 +282,7 @@ void beSound_Update(beSound *self, beBaseInfoRam *ram) {
             List_RemoveWordAt(infos, infoIndex);
             ((igObject **)infos->_data)[infos->_count] = 0;
         } while (infoIndex < infos->_count);
-        beCri_SetFx((beCri *)self->_cri, REVERB);
+        beCri_SetFx((beCri *)self->_cri, "REVERB");
         ram->_st0++;
         ram->_st3 = 0;
         ram->_st2 = 0;
@@ -350,18 +342,18 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         case SOUND_BGM:
             if (self->_currentBGM != 0 && strcmp(NameOf(data->_name), (char *)self->_currentBGM) == 0) return 1;
             if (beCri_PlayStream((beCri *)self->_cri, (igObjectList *)info->_fnameList, data) == 0) {
-                beMessenger_PrepareDelayedGroup(self->_messenger, SOUND_5);
+                beMessenger_PrepareDelayedGroup(self->_messenger, "SOUND");
                 beMessenger_AppendString(self->_messenger, NameOf(data->_name));
-                beMessenger_EnqueueSelected(self->_messenger, PLAY_4, PLAY_RETRY_DELAY);
+                beMessenger_EnqueueSelected(self->_messenger, "PLAY", PLAY_RETRY_DELAY);
             } else {
                 SetString(&self->_currentBGM, NameOf(data->_name));
             }
             break;
         case SOUND_ENV:
             if (beCri_PlayStream((beCri *)self->_cri, (igObjectList *)info->_fnameList, data) == 0) {
-                beMessenger_PrepareDelayedGroup(self->_messenger, SOUND_5);
+                beMessenger_PrepareDelayedGroup(self->_messenger, "SOUND");
                 beMessenger_AppendString(self->_messenger, NameOf(data->_name));
-                beMessenger_EnqueueSelected(self->_messenger, PLAY_4, PLAY_RETRY_DELAY);
+                beMessenger_EnqueueSelected(self->_messenger, "PLAY", PLAY_RETRY_DELAY);
             }
             break;
         default:
@@ -394,10 +386,10 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     case MESSAGE_VOLUMECTL:
         direction = beMessenger_GetString(self->_messenger, 0);
         if (beMessenger_GetLongCount(self->_messenger) > 0) {
-            if (strcmp(direction, UP_2) == 0) {
+            if (strcmp(direction, "UP") == 0) {
                 cri = (beCri *)self->_cri;
                 beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 0.0f, 1.0f, VOLUMECTL_FADE_FRAMES);
-            } else if (strcmp(direction, DOWN_2) == 0) {
+            } else if (strcmp(direction, "DOWN") == 0) {
                 cri = (beCri *)self->_cri;
                 beCri_FadeByID(cri, beMessenger_GetLong(self->_messenger, 0), 1.0f, 0.0f, VOLUMECTL_FADE_FRAMES);
             }
@@ -405,9 +397,9 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         }
         if (beMessenger_GetStringCount(self->_messenger) <= 1) break;
         name = beMessenger_GetString(self->_messenger, 1);
-        if (strcmp(direction, UP_2) == 0) {
+        if (strcmp(direction, "UP") == 0) {
             beCri_FadeByName((beCri *)self->_cri, name, 0.0f, 1.0f, VOLUMECTL_FADE_FRAMES);
-        } else if (strcmp(direction, DOWN_2) == 0) {
+        } else if (strcmp(direction, "DOWN") == 0) {
             beCri_FadeByName((beCri *)self->_cri, name, 1.0f, 0.0f, VOLUMECTL_FADE_FRAMES);
         }
         if (self->_currentBGM != 0 && strcmp(name, (char *)self->_currentBGM) == 0) {
@@ -447,7 +439,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     case MESSAGE_ISREADY:
     case MESSAGE_ISALLREADY:
         if (beMessenger_GetStringCount(self->_messenger) <= 0) {
-            name = ALL_2;
+            name = "ALL";
         } else {
             name = beMessenger_GetString(self->_messenger, 0);
         }
@@ -470,7 +462,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
         break;
     case MESSAGE_MAKEBINLIST:
         if (info->_dataType == 0) return 0;
-        beMessenger_SendGroup(self->_messenger, STATICINFO, GETINFOLIST);
+        beMessenger_SendGroup(self->_messenger, "STATICINFO", "GETINFOLIST");
         if (beMessenger_GetObjectCount(self->_messenger) <= 0) return 0;
         infos = beMessenger_GetObject(self->_messenger, 0);
         fileNames = (igObjectList *)info->_fnameList;
@@ -559,3 +551,5 @@ int beSound_GetMeta(void)
 {
     return g_beSound_metaObject[0];
 }
+
+#pragma pop

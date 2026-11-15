@@ -111,7 +111,7 @@ void igClut_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igClut_ctorTable, 7);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igClut_fmtDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, g_igClut_fmtDefault);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));

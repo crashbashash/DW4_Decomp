@@ -1,0 +1,20 @@
+# CRI MFCI (memory-file cvFs device): the functions of its CvFsVtbl interface table, named from the slot each fills (as dvCi/htCi in CriDevices.tsv), plus mfCiOpenEntry, which the E1041001 message names. Table at 0x4b0380.
+# CRI ADXB: the three expand-entry helpers and the decode evoker, named as in the CRI ADXB source (adx_bsc.c, ADXB_EvokeDecode/ExpandMono/ExpandSte/ExpandPl2).
+0x00277f30	mfCiExecServer	cri
+0x00277f88	mfCiEntryErrFunc	cri
+0x00277fa0	mfCiGetFileSize	cri
+0x002780a8	mfCiOpen	cri
+0x00278148	mfCiClose	cri
+0x00278190	mfCiSeek	cri
+0x00278250	mfCiTell	cri
+0x00278288	mfCiReqRd	cri
+0x00278410	mfCiStopTr	cri
+0x00278460	mfCiGetStat	cri
+0x00278498	mfCiGetSctLen	cri
+0x002784d0	mfCiSetSctLen	cri
+0x00278550	mfCiGetNumTr	cri
+0x00278588	mfCiOpenEntry	cri
+0x0025e018	ADXB_EvokeDecode	cri
+0x0025df18	ADXB_EvokeExpandMono	cri
+0x0025df68	ADXB_EvokeExpandSte	cri
+0x0025dfc0	ADXB_EvokeExpandPl2	cri

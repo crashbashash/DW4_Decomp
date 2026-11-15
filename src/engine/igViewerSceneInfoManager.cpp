@@ -3,8 +3,6 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/DisableFeature.h"
 
-#pragma push
-#pragma readonly_strings on
 
 extern "C" {
 
@@ -95,20 +93,35 @@ void igObject_Destroy(void *);
 
 void *memset(void *, int, unsigned int);
 
-/* The scene-info manager's hot-key handlers, as the member-function pointers igViewerAction calls. */
-extern char g_fitSelectionHandler[16];
-extern char g_printViewMatrixHandler[16];
-extern char g_centerSelectionHandler[16];
-extern char g_cycleGuiVisibilityHandler[16];
-extern char g_playHandler[16];
-extern char g_pauseHandler[16];
-extern char g_hotKeyMHandler[16];
-extern char g_hotKeyWHandler[16];
-extern char g_resetOperationModeHandler[16];
-extern char g_hotKeyTHandler[16];
-extern char g_hotKeyPHandler[16];
-extern char g_button1Handler[16];
-extern char g_button2Handler[16];
+/* The scene-info manager's hot-key handlers, as the member-function pointers igViewerAction calls:
+ * this adjustment, virtual slot (-1 for a plain function), function. */
+struct MemberFunctionPointer { int adjust; int virtualSlot; void *function; };
+void igViewerSceneInfoManager_FitSelection(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_PrintViewMatrix(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_CenterSelection(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_CycleGuiVisibility(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_Play(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_Pause(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnHotKeyM(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnHotKeyW(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_ResetOperationMode(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnHotKeyT(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnHotKeyP(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnButton1(igViewerSceneInfoManager *self);
+void igViewerSceneInfoManager_OnButton2(igViewerSceneInfoManager *self);
+MemberFunctionPointer g_fitSelectionHandler = {0, -1, (void *)igViewerSceneInfoManager_FitSelection};
+MemberFunctionPointer g_printViewMatrixHandler = {0, -1, (void *)igViewerSceneInfoManager_PrintViewMatrix};
+MemberFunctionPointer g_centerSelectionHandler = {0, -1, (void *)igViewerSceneInfoManager_CenterSelection};
+MemberFunctionPointer g_cycleGuiVisibilityHandler = {0, -1, (void *)igViewerSceneInfoManager_CycleGuiVisibility};
+MemberFunctionPointer g_playHandler = {0, -1, (void *)igViewerSceneInfoManager_Play};
+MemberFunctionPointer g_pauseHandler = {0, -1, (void *)igViewerSceneInfoManager_Pause};
+MemberFunctionPointer g_hotKeyMHandler = {0, -1, (void *)igViewerSceneInfoManager_OnHotKeyM};
+MemberFunctionPointer g_hotKeyWHandler = {0, -1, (void *)igViewerSceneInfoManager_OnHotKeyW};
+MemberFunctionPointer g_resetOperationModeHandler = {0, -1, (void *)igViewerSceneInfoManager_ResetOperationMode};
+MemberFunctionPointer g_hotKeyTHandler = {0, -1, (void *)igViewerSceneInfoManager_OnHotKeyT};
+MemberFunctionPointer g_hotKeyPHandler = {0, -1, (void *)igViewerSceneInfoManager_OnHotKeyP};
+MemberFunctionPointer g_button1Handler = {0, -1, (void *)igViewerSceneInfoManager_OnButton1};
+MemberFunctionPointer g_button2Handler = {0, -1, (void *)igViewerSceneInfoManager_OnButton2};
 
 /* The viewer options every viewer object shares, reference counted and created on first use. */
 struct SharedViewerOptions {
@@ -136,7 +149,7 @@ struct RendererLink {
 #define BIND(setter, receiver, name, ...)                                                 \
     {                                                                                     \
         igObject *action;                                                                 \
-        igViewerGuiFactory_CreateAction(&action, self->_guiFactory, self, name);          \
+        igViewerGuiFactory_CreateAction(&action, self->_guiFactory, self, &name);          \
         setter(receiver, __VA_ARGS__, action);                                            \
         IG_OBJECT_RELEASE(action);                                                        \
     }
@@ -190,7 +203,6 @@ int igViewManager_FrameObject(...);
 
 int igViewerRenderer_ApplyOptions(...);
 
-void igViewerSceneInfoManager_OnButton1(igViewerSceneInfoManager *self);
 
 int igViewManager_ApplyOptions(...);
 
@@ -1214,4 +1226,3 @@ DisableFeature g_viewerDisableFeatures[12] = {
     DisableFeature(true, 8, "clipping"),
     DisableFeature(true, 9, "cullface")
 };
-#pragma pop

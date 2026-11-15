@@ -12,6 +12,11 @@ typedef unsigned long u_long;
 #define T2_MODE_KSEG1 0xb0001010
 #define T2_COMP_KSEG1 0xb0001020
 
+/* COP0 Status bits SetT2 sets to reach kernel mode: EIE, EXL, ERL */
+#define SR_EIE 0x10000
+#define SR_EXL 0x2
+#define SR_ERL 0x4
+
 /* Tn_MODE bits */
 #define T_MODE_CLKS 0x3U
 #define T_MODE_CUE 0x80U
@@ -26,7 +31,9 @@ typedef unsigned long u_long;
 #define TIMER_ID_KEY_MASK 0x3ff
 
 #define BUS_CLOCK 147456000
+#define BUS_CLOCKS_100_USEC (BUS_CLOCK * 100UL / 1000000)
 #define BUS_CLOCKS_200_USEC (BUS_CLOCK * 200UL / 1000000)
+#define PRESCALE_L(clocks, mode) ((clocks) << (((mode) & T_MODE_CLKS) << 2))
 #define PRESCALED(clocks, mode) ((clocks) >> (((mode) & T_MODE_CLKS) << 2))
 
 #define KE_OK 0
@@ -60,7 +67,7 @@ typedef struct Counter {
 } Counter;
 
 typedef struct {
-    u_long overflows;
+    volatile u_long overflows;
     int intcHandler;
     volatile unsigned int uniqueKey;
     volatile int usedCounters;
@@ -79,10 +86,34 @@ int RemoveIntcHandler(int cause, int id);
 int EnableIntc(int cause);
 int DisableIntc(int cause);
 void SetT2(unsigned int addr, unsigned int value);
-int cbTimerHandler(int cause);
+int cbTimerHandler(int cause, void *arg, void *addr);
 
-extern TimerState g_Timer;
-extern Counter timerCounters[TIMER_COUNTERS];
+static TimerState g_Timer = {0, -1, 1, 0, 0, 0, -1};
+static Counter timerCounters[TIMER_COUNTERS] __attribute__((aligned(64)));
+
+/* Writes a timer-2 register, which user mode cannot reach: interrupts off, kernel mode through the
+ * error level, the store, then eret back to the caller. */
+void SetT2(unsigned int addr, unsigned int value)
+{
+    unsigned int eie;
+    unsigned int status;
+
+    __asm__("mfc0 %0, $12" : "=r"(eie));
+    eie &= SR_EIE;
+    if (eie) {
+        do {
+            __asm__ volatile(".p2align 3\n"
+                             "di\n"
+                             "sync.p\n"
+                             "mfc0 %0, $12" : "=r"(status));
+        } while (status & SR_EIE);
+    }
+    __asm__ volatile("mfc0 %0, $12\n\tsync.p" : "=r"(status));
+    status = ((status | SR_EXL | SR_ERL) ^ SR_EXL) | eie;
+    __asm__("mtc0 %0, $12\n\tsync.p" : : "r"(status));
+    *(unsigned int *)addr = value;
+    __asm__(".set push\n\t.set noreorder\n\tmtc0 $31, $30\n\tsync.p\n\teret\n\t.set pop");
+}
 
 void SetT2_COUNT(unsigned int count)
 {
@@ -117,7 +148,7 @@ int InitTimer(int clock)
     }
     timerCounters[TIMER_COUNTERS - 1].next = 0;
     _sceTimerAlarmInit();
-    handler = AddIntcHandler2(INTC_TIM2, cbTimerHandler, 0, 0);
+    handler = AddIntcHandler2(INTC_TIM2, (int (*)(int))cbTimerHandler, 0, 0);
     if (handler < 0) {
         return KE_NO_HANDLER;
     }
@@ -283,6 +314,67 @@ static Counter *UnlinkAlarm(Counter *alarm)
     }
     alarm->prev = 0;
     return next;
+}
+
+/* The system time, counting a pending overflow and clearing its flag. */
+static inline u_long applyOverflow(void)
+{
+    unsigned int count = T2_COUNT;
+    unsigned int mode = T2_MODE;
+    if (mode & T_MODE_OVFF) {
+        g_Timer.overflows++;
+        SetT2_MODE(mode & ~T_MODE_EQUF);
+        count = T2_COUNT;
+    }
+    return PRESCALE_L((g_Timer.overflows << 16) | count, mode);
+}
+
+/* The timer-2 interrupt: runs the handlers of the alarms that are due, each on the $gp it was set
+ * with, then sets the compare register for the next one. */
+int cbTimerHandler(int cause, void *arg, void *addr)
+{
+    u_long now;
+    unsigned int mode = T2_MODE;
+
+    if (mode & T_MODE_EQUF) {
+        Counter *alarm = g_Timer.alarms;
+        while (alarm) {
+            u_long due, actual, next;
+            Counter *following;
+
+            due = alarm->schedule + alarm->base - alarm->count;
+            now = applyOverflow();
+            if (now < due) {
+                break;
+            }
+            following = UnlinkAlarm(alarm);
+            actual = now + alarm->count - alarm->base;
+            g_Timer.current = COUNTER_ID(alarm);
+            __asm__("lw $28, %0\n" : : "m"(alarm->gp) : "memory");
+            next = alarm->handler(COUNTER_ID(alarm), alarm->schedule, actual, alarm->arg, addr);
+            if (next == 0) {
+                alarm->flags &= ~COUNTER_HANDLER;
+            } else if (next == (u_long)-1) {
+                alarm->key = 0;
+                alarm->flags = 0;
+                alarm->next = g_Timer.freeList;
+                g_Timer.freeList = alarm;
+            } else {
+                if (next < BUS_CLOCKS_100_USEC) {
+                    next = BUS_CLOCKS_100_USEC;
+                }
+                alarm->schedule += next;
+                InsertAlarm(alarm);
+            }
+            alarm = following;
+        }
+    }
+    g_Timer.current = -1;
+    now = applyOverflow();
+    SetNextComp(now);
+    applyOverflow();
+    __asm__("sync.l; ei");
+    return 0;
 }
 
 /* The system time: the overflow count above the 16-bit counter, in bus clocks (the counter's

@@ -1,4 +1,6 @@
 #include "dw4/reflected.h"
+#pragma push
+#pragma readonly_strings on
 #define SELECT_ALLOCATOR(var, owner) { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define RELEASE(q) { igObject *o_ = (q); if (o_ != 0) { o_->_refCount = o_->_refCount - 1; if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o_); } } }
 #define OBJECT_LIST(handle) ((igObjectList *)(handle))
@@ -65,7 +67,7 @@ void *beCameraCtrlInfoRamShake_Create(...);
 void *beBaseInfoDataList_Create(...);
 unsigned char beBaseInfoRam_HasTimer(...);
 int beBaseInfoRam_StartTimer(...);
-float beBaseInfoRam_GetTimerFrameDelta(void *, void *);
+float beBaseInfoRam_GetTimerFrameDelta(void *, char *);
 int beBaseInfoRam_IsTimerExpired(...);
 int beBaseInfoRam_RemoveTimer(...);
 void igViewerSceneInfoManager_ResetOperationMode(int);
@@ -109,16 +111,9 @@ extern int kIGMemoryPoolHandleUser1[4];
 extern int g_stringPool[4];
 extern unsigned char g_useOwnerAllocator;
 extern char emptyString[];
-extern char CAMERA[];
-extern int PLAYER_6[4];
-extern int GETMATRIX_7[4];
-extern int SHK[4];
-extern int CAMHOKAN[4];
-extern int SHAKEONE[4];
-extern int SHAKEALL[4];
 /* per shake step: the eye and interest offsets along x and y, indexed by the move code digit */
-extern float g_cameraShakeOffsetX[4];
-extern float g_cameraShakeOffsetY[4];
+float g_cameraShakeOffsetX[12] = {0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f};
+float g_cameraShakeOffsetY[12] = {0.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f};
 }
 
 /* Read-only parameters are const. b52 binds an inlined function's const parameter to its argument before the
@@ -164,7 +159,7 @@ int Gap__Bec__beCameraCtrl__vfunc_30(void)
 
 void Gap__Bec__beCameraCtrl__vfunc_29(beCameraCtrl *self, int ram, char *unused)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, CAMERA);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "CAMERA");
 }
 
 void Gap__Bec__beCameraCtrl__vfunc_32(beCameraCtrl *self) {
@@ -241,7 +236,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
-    beMessenger_SendGroup(self->_messenger, PLAYER_6, GETMATRIX_7);
+    beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
     if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
         n = beMessenger_GetMatrixCount(self->_messenger);
         for (i = 0; i < n; i++) {
@@ -280,7 +275,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], SHK);
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "SHK");
                 if (shake != 0) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
@@ -358,7 +353,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                 self->_cameraOld = self->_cameraNow;
                 igMatrix44f_Copy(TRANSFORM_AT(box->_eyePosList, 0)->_m, TRANSFORM_AT(box->_eyePosList, self->_cameraNow)->_m);
                 igMatrix44f_Copy(TRANSFORM_AT(box->_intPosList, 0)->_m, TRANSFORM_AT(box->_intPosList, self->_cameraNow)->_m);
-                beBaseInfoRam_RemoveTimer(ram, CAMHOKAN);
+                beBaseInfoRam_RemoveTimer(ram, "CAMHOKAN");
             } else {
                 float t = self->_cameraNowFrame / 120.0f;
                 float *from;
@@ -388,22 +383,22 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     igMatrix44f_SetQuaternion(out, fromRot);
                     j += 1;
                 } while (j < 2);
-                if (!(beBaseInfoRam_HasTimer(ram, CAMHOKAN) & 0xFF)) {
-                    beBaseInfoRam_StartTimer(ram, CAMHOKAN, 0);
+                if (!(beBaseInfoRam_HasTimer(ram, "CAMHOKAN") & 0xFF)) {
+                    beBaseInfoRam_StartTimer(ram, "CAMHOKAN", 0);
                 }
                 if (self->_isPosChange == 0) {
                     float frame = self->_cameraNowFrame;
-                    self->_cameraNowFrame = frame + 1.5f * beBaseInfoRam_GetTimerFrameDelta(ram, CAMHOKAN);
+                    self->_cameraNowFrame = frame + 1.5f * beBaseInfoRam_GetTimerFrameDelta(ram, "CAMHOKAN");
                 } else {
                     float frame = self->_cameraNowFrame;
-                    self->_cameraNowFrame = frame + beBaseInfoRam_GetTimerFrameDelta(ram, CAMHOKAN);
+                    self->_cameraNowFrame = frame + beBaseInfoRam_GetTimerFrameDelta(ram, "CAMHOKAN");
                 }
             }
         }
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], SHK);
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "SHK");
                 if (shake != 0) {
                     float *matrix44;
                     int k = 0;
@@ -428,19 +423,19 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         igMatrix44f_SetTranslation(matrix44, shakePos);
                         k += 1;
                     } while (k < 2);
-                    if (beBaseInfoRam_IsTimerExpired(ram, SHAKEONE) != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEONE") != 0) {
                         int next = shake->_movePoint + 1;
                         if (((char *)(next + shake->_moveCode))[0] == 0) next = 0;
                         shake->_movePoint = next;
-                        beBaseInfoRam_StartTimer(ram, SHAKEONE, FramesToTime(shake->_oneTime));
+                        beBaseInfoRam_StartTimer(ram, "SHAKEONE", FramesToTime(shake->_oneTime));
                     }
-                    if (beBaseInfoRam_IsTimerExpired(ram, SHAKEALL) != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEALL") != 0) {
                         int removed;
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
                         ObjectList_RemoveFirstRetained(&removed, ram->_dataList, shake, 0);
-                        beBaseInfoRam_RemoveTimer(ram, SHAKEALL);
-                        beBaseInfoRam_RemoveTimer(ram, SHAKEONE);
+                        beBaseInfoRam_RemoveTimer(ram, "SHAKEALL");
+                        beBaseInfoRam_RemoveTimer(ram, "SHAKEONE");
                     }
                 }
             }
@@ -624,7 +619,7 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
                 ram->_dataList = (int)r;
             }
             DataList::Ensure(ram, ram);
-            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], SHK);
+            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "SHK");
             if (shake == 0) {
                 void *alloc;
                 SELECT_ALLOCATOR(alloc, self)
@@ -653,8 +648,8 @@ int Gap__Bec__beCameraCtrl__vfunc_33(beCameraCtrl *self, beBaseInfoRam *ram, int
             shake->_oneTime = beMessenger_GetFloat(self->_messenger, 1);
             shake->_endTime = beMessenger_GetFloat(self->_messenger, 2);
             shake->_movePoint = 0;
-            beBaseInfoRam_StartTimer(ram, SHAKEALL, FramesToTime(shake->_endTime));
-            beBaseInfoRam_RemoveTimer(ram, SHAKEONE);
+            beBaseInfoRam_StartTimer(ram, "SHAKEALL", FramesToTime(shake->_endTime));
+            beBaseInfoRam_RemoveTimer(ram, "SHAKEONE");
             shake->_isFirst = 1;
         }
         return 1;
@@ -742,3 +737,5 @@ void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
         mode->_camera = (int)camera;
     }
 }
+
+#pragma pop

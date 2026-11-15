@@ -7,6 +7,7 @@
 #define FS_PATH_MAX 1024
 
 /* sceFsSifCallRpc's command numbers: fileio.irx's RPC functions */
+#define FS_OPEN 0
 #define FS_CLOSE 1
 #define FS_REMOVE 6
 #define FS_MKDIR 7
@@ -29,9 +30,20 @@
 #define FS_READLINK 25
 #define FS_IOCTL2 26
 #define FS_POWEROFF 27
+#define FS_INIT 255
+
+/* fileio's RPC server id, and the commands it sends back (the reply handler and the power-off notice) */
+#define FS_SERVER 0x80000001
+#define FS_CMD_RCV 0x80000011
+#define FS_CMD_POFF 0x80000013
+/* the size of each of the two buffers the IOP writes its replies into */
+#define FS_RCV_SLOT 1088
 
 /* The IOP writes the RPC reply by DMA, so the first reply word is read through the uncached segment. */
 #define UNCACHED_WORD(p) (*(int *)((unsigned int)(p) | 0x20000000))
+
+/* what the variadic prologue saves a2 to t3 as, read for the first argument after the named ones */
+#define FIRST_VARARG(last, type) (*(type *)((char *)__builtin_next_arg(last) - 6 * 8))
 
 /* sce error codes the calls return */
 #define SCE_ENXIO (-6)
@@ -40,6 +52,10 @@
 #define SCE_EAGAIN (-11)
 #define SCE_ENODEV (-19)
 #define SCE_EINVAL (-22)
+#define SCE_EFSINIT (-65537)
+#define SCE_EVERSION (-65540)
+
+#define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 
 /* One open descriptor: fileio's descriptor and the mode it was opened with (0 = free). */
 typedef struct {
@@ -57,6 +73,16 @@ typedef struct {
     int mode;
     char name[FS_PATH_MAX];
 } FsOpenRequest;
+
+typedef struct {
+    int sema;
+    int *result;
+    int resultSize;
+    unsigned int flag;
+    int mode;
+    char name[FS_PATH_MAX];
+    int iob;
+} FsOpenCallRequest;
 
 typedef struct {
     int sema;
@@ -185,20 +211,27 @@ int memcmp(const void *a, const void *b, unsigned int size);
 void *memcpy(void *dst, const void *src, unsigned int size);
 void *memset(void *dst, int value, unsigned int size);
 int sceFsInit(void);
+void sceSifInitRpc(unsigned int mode);
+void _sceFs_Rcv_Intr(void *packet);
+void _sceFs_Poff_Intr(void *packet, void *harg);
 
 extern char __ps2_klibinfo__[];
 extern int _fs_init;
+extern int _fs_rcv_bufdbl;
 extern int _fs_semid;
 extern int _fs_iob_semid;
 extern int _fs_fsq_semid;
 extern char *_fswildcard;
 extern FsOpenRequest _send_data;
 extern int _rcv_data_rpc[];
+extern char _rcv_data_cmd[2][FS_RCV_SLOT];
 extern _sceFsIob _iob[FS_MAX_IOB];
 extern sceSifClientData _fs_cd;
 extern char _fsversion[];
 extern FsPowerOffData _sif_FsPoff_Data;
 extern void *sceCbPoff_Gp;
+extern char _sif_FsRcv_Data[64];
+extern int rcv_adr[2];
 
 void _sceFsIobSemaMK(void)
 {
@@ -287,6 +320,51 @@ scePowerOffFunc scePowerOffHandler(scePowerOffFunc func, void *data)
     return old;
 }
 
+int sceFsInit(void)
+{
+    int enabled;
+    int i;
+    int bufferKind;
+    FsPowerOffData *poff = &_sif_FsPoff_Data;
+    _sceFsIob *io;
+
+    sceSifInitRpc(0);
+    _sif_FsPoff_Data.func = 0;
+    poff->data = 0;
+    enabled = DIntr();
+    sceSifAddCmdHandler(FS_CMD_RCV, (sceSifCmdHandler)_sceFs_Rcv_Intr, _sif_FsRcv_Data);
+    sceSifAddCmdHandler(FS_CMD_POFF, (sceSifCmdHandler)_sceFs_Poff_Intr, poff);
+    if (enabled) {
+        EIntr();
+    }
+    while (1) {
+        if (sceSifBindRpc(&_fs_cd, FS_SERVER, 0) < 0) {
+            return -1;
+        }
+        if (_fs_cd.serve != 0) {
+            break;
+        }
+        i = 0x100000;
+        while (i--);
+    }
+    _sceFsIobSemaMK();
+    WaitSema(_fs_iob_semid);
+    for (io = _iob; io < _iob + FS_MAX_IOB; io++) {
+        io->mode = 0;
+    }
+    SignalSema(_fs_iob_semid);
+    rcv_adr[0] = (int)_rcv_data_cmd[0];
+    rcv_adr[1] = (int)_rcv_data_cmd[1];
+    if (sceSifCallRpc(&_fs_cd, FS_INIT, 0, rcv_adr, 8, _rcv_data_rpc, 8, 0, 0) < 0) {
+        return SCE_EFSINIT;
+    }
+    memcpy(_fsversion, UNCACHED(_rcv_data_rpc), 4);
+    memcpy(&bufferKind, UNCACHED(&_rcv_data_rpc[1]), 4);
+    _fs_rcv_bufdbl = bufferKind == 2;
+    _fs_init = 1;
+    return 0;
+}
+
 /* Nonzero when fileio's version differs from libkernl's and neither is the wildcard. */
 int _fs_version(void)
 {
@@ -304,6 +382,77 @@ int sceFsReset(void)
     _fs_init = 0;
     memset(_fsversion, 0, 4);
     return 0;
+}
+
+int sceOpen(const char *name, int flag, ...)
+{
+    FsOpenCallRequest *req = (FsOpenCallRequest *)&_send_data;
+    _sceFsIob *io;
+    struct SemaParam param;
+    int result;
+    int sema;
+    int sent;
+    int index;
+    int mode;
+    int i;
+    _sceFsWaitS(FS_OPEN);
+    if (_fs_init == 0) {
+        sceFsInit();
+    }
+    if (_fs_version() != 0) {
+        _sceFsSigSema();
+        return SCE_EVERSION;
+    }
+    io = new_iob();
+    if (io == 0) {
+        _sceFsSigSema();
+        return SCE_ENODEV;
+    }
+    mode = FIRST_VARARG(flag, int);
+    for (i = 0; i < FS_PATH_MAX; i++) {
+        if ((req->name[i] = name[i]) == 0) {
+            break;
+        }
+    }
+    if (i == FS_PATH_MAX) {
+        req->name[FS_PATH_MAX - 1] = 0;
+    }
+    req->flag = flag & 0x7fffffff;
+    req->mode = mode;
+    index = io - _iob;
+    req->iob = index;
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->result = &result;
+    req->sema = sema;
+    req->resultSize = 4;
+    if (sceSifCallRpc(&_fs_cd, FS_OPEN, 0, &_send_data, sizeof(FsOpenCallRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    if (result < 0) {
+        WaitSema(_fs_iob_semid);
+        io->mode = 0;
+        SignalSema(_fs_iob_semid);
+        return result;
+    }
+    sent = index;
+    WaitSema(_fs_iob_semid);
+    io->fd = result;
+    io->mode |= flag;
+    SignalSema(_fs_iob_semid);
+    return sent;
 }
 
 int sceClose(int fd)

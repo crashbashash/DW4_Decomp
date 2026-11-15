@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#pragma push
+#pragma readonly_strings on
 
 /* beLayerCtl sorts the scene root's children into named layers. ORDER builds an igSwitch,
  * "LayerSwt", under the root's light state set (or its "LAYERPARENT" child), gives it one igGroup
@@ -49,12 +51,6 @@ extern "C" int beMessenger_AppendObject(int, void *);
 extern "C" int beMessenger_AppendString(int, char *);
 extern "C" int beMessenger_ClearObjects(int);
 extern "C" int strcmp(char *, char *);
-extern "C" char LAYERCTL_3[];
-extern "C" char LayerSwt[];
-extern "C" char LAYERPARENT[];
-extern "C" char NONE_2[];
-extern "C" char ROOTATTR[];
-extern "C" char ALL_4[];
 extern "C" char emptyString[];
 extern "C" int g_beLayerInfo_metaObject[4];
 extern "C" int g_beLayerCtl_metaObject[4];
@@ -117,7 +113,7 @@ void beLayerCtl__ReleaseLayerSwitch(beLayerCtl *self) {
 
 void beLayerCtl__RegisterReceiver(beLayerCtl *self, int receiver)
 {
-    beMessenger_RegisterReceiver(self->_messenger, receiver, LAYERCTL_3, 0, -1);
+    beMessenger_RegisterReceiver(self->_messenger, receiver, "LAYERCTL", 0, -1);
 }
 
 int beLayerCtl__GetInfoMeta(void)
@@ -141,7 +137,7 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
             igSwitch *old = LAYER_SWITCH(self);
             IG_OBJECT_RELEASE(old);
             self->_layerSwt = (int)igSwitch_CreateInstance(allocator);
-            igNamedObject_SetName((void *)self->_layerSwt, LayerSwt);
+            igNamedObject_SetName((void *)self->_layerSwt, "LayerSwt");
             igGroup *lights = 0;
             int i;
             for (i = 0; i < CHILD_COUNT(CHILDREN(root)); i++) {
@@ -154,7 +150,7 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
             int j;
             for (j = 0; j < CHILD_COUNT(CHILDREN(lights)); j++) {
                 igGroup *node = NODE_AT(CHILDREN(lights), j);
-                if (NAME_OF(node) != 0 && strcmp(LAYERPARENT, NAME_OF(node)) == 0) { parent = node; break; }
+                if (NAME_OF(node) != 0 && strcmp("LAYERPARENT", NAME_OF(node)) == 0) { parent = node; break; }
             }
             if (parent != 0) igGroup_AppendChild(parent, (void *)self->_layerSwt);
             else igGroup_AppendChild(lights, (void *)self->_layerSwt);
@@ -173,7 +169,7 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
         void *noneAllocator;
         PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1[0])
         Ref none((igNamedObject *)igGroup_CreateInstance(noneAllocator));
-        igNamedObject_SetName(none.p, NONE_2);
+        igNamedObject_SetName(none.p, "NONE");
         igSwitch_AppendChild(LAYER_SWITCH(self), none.p);
         int index;
         igGroup *layer;
@@ -184,8 +180,8 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
         index = 0;
         while (index < CHILD_COUNT(CHILDREN(root))) {
             node = NODE_AT(CHILDREN(root), index);
-            if (NAME_OF(node) == 0) igNamedObject_SetName(node, NONE_2);
-            if (strcmp(ROOTATTR, NAME_OF(node)) == 0 || g_igLightStateSet_metaObject[0] == META_OF(node)) {
+            if (NAME_OF(node) == 0) igNamedObject_SetName(node, "NONE");
+            if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || g_igLightStateSet_metaObject[0] == META_OF(node)) {
                 index += 1;
             } else {
                 name = NAME_OF(node);
@@ -206,7 +202,7 @@ int beLayerCtl__OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork
         if (beMessenger_GetStringCount(self->_messenger) < 2) return 0;
         char *layerName = beMessenger_GetString(self->_messenger, 0);
         char *control = beMessenger_GetString(self->_messenger, 1);
-        if (strcmp(layerName, ALL_4) == 0) {
+        if (strcmp(layerName, "ALL") == 0) {
             switch (beMessenger_ResolveEnumValue(self->_messenger, beLayerCtl_GetSwtCtlEnum(), control)) {
             case SWTCTL_CLR: igSwitch_DisableAllChildren(LAYER_SWITCH(self)); break;
             case SWTCTL_SET: igSwitch_EnableAllChildren(LAYER_SWITCH(self)); break;
@@ -275,3 +271,5 @@ int beLayerCtl__GetMeta(void)
 {
     return g_beLayerCtl_metaObject[0];
 }
+
+#pragma pop

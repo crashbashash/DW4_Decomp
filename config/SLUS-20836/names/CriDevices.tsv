@@ -1,0 +1,32 @@
+# CRI cvFs device interface slots of the DVD (dvCi) and host (htCi) devices, named from the CvFsVtbl slot each
+# function fills, its signature and behaviour (the E00927xx error strings cite dvCiOpen, dvCiReqRd, dvCiStopTr,
+# htCiGetFileSize, htCiStopTr).
+0x00273b58	dvCiExecServer	cri
+0x00273bd0	dvCiEntryErrFunc	cri
+0x00273ce8	dvCiGetFileSize	cri
+0x00273e00	dvCiOpen	cri
+0x00273f78	dvCiClose	cri
+0x00273fd0	dvCiSeek	cri
+0x00274068	dvCiTell	cri
+0x002740a0	dvCiReqRd	cri
+0x00274248	dvCiStopTr	cri
+0x00274330	dvCiGetStat	cri
+0x00274368	dvCiGetSctLen	cri
+0x00274370	dvCiGetNumTr	cri
+0x00273c60	dvCiIsExistFileOnDisc	cri
+0x002744f8	dvCiOptFn1	cri
+0x002755e8	htCiExecServer	cri
+0x00275660	htCiEntryErrFunc	cri
+0x00275718	htCiGetFileSize	cri
+0x002759d8	htCiOpen	cri
+0x00275b50	htCiClose	cri
+0x00275bf0	htCiSeek	cri
+0x00275c88	htCiTell	cri
+0x00275cc0	htCiReqRd	cri
+0x00275e50	htCiStopTr	cri
+0x00275f48	htCiGetStat	cri
+0x00275f80	htCiGetSctLen	cri
+0x00275f88	htCiGetNumTr	cri
+0x00275678	htCiIsExistFileOnHost	cri
+0x00276090	htCiOptFn1	cri
+0x00275740	htCiGetFileSize64	cri

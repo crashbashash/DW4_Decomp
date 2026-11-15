@@ -20,7 +20,7 @@ extern "C" void * StringPool_Construct(...);
 extern "C" const char * StringPool_Intern(...);
 extern "C" void StringChunk_ReleaseHeader(...);
 extern "C" int beMessenger_AppendString(...);
-extern "C" int beMessenger_DispatchSelected(int, int *);
+extern "C" int beMessenger_DispatchSelected(int, const void *);
 extern "C" int beMessenger_SelectReceivers(...);
 extern "C" int sprintf(char *, const char *, int);
 extern "C" void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align);
@@ -36,11 +36,6 @@ extern "C" int beMessenger_GetBool(int, int);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_Destroy(...);
 extern "C" void List_RemoveWordAt(void *, int);
-extern "C" int TEXTCTL_2[4];
-extern "C" int ALIGN_3[4];
-extern "C" int TEXTSET_5[4];
-extern "C" int SET_4[4];
-extern "C" int SWITCH[4];
 extern "C" void *g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -52,11 +47,9 @@ public:
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
 extern "C" void beNDMWWindow_QueueText(beNDMWWindow *self, const char *textType, const char *textName, const char *text, const char *align);
-extern "C" char percent_d_2[];
 extern "C" void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align);
 extern "C" int g_beLua_metaObject[4];
-extern "C" int g_txtCallNo[4];
-extern "C" int CLR[4];
+extern "C" { int g_txtCallNo[4]; }
 extern "C" void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName);
 struct Clr { static inline void ClearList(igStringRefList *l) {
     int n = l->_count;
@@ -77,9 +70,6 @@ struct Clr { static inline void ClearList(igStringRefList *l) {
     l->_count = 0;
 } };
 extern "C" void beNDMWWindow_ClearQueuedText(beNDMWWindow *self);
-extern "C" int MODELCTRL_17[4];
-extern "C" int ISRUN_8[4];
-extern "C" int GENERATE_11[4];
 extern "C" void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close, float *position);
 extern "C" const float g_vec3Zero[4];
 extern "C" void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self,const char *model,int id,const char *sequence,const char *close);
@@ -95,48 +85,51 @@ extern "C" void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, i
 struct WinView { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void f21(); };
 extern "C" void beNDMWWindow_UpdateTree(beNDMWWindow *w);
 
+#pragma push
+#pragma readonly_strings on
+
 void beNDMWWindow_QueueText(beNDMWWindow *self, const char *textType, const char *textName, const char *text, const char *align) {
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
     beMessenger_AppendString(self->_messenger, align);
-    beMessenger_DispatchSelected(self->_messenger, ALIGN_3);
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_DispatchSelected(self->_messenger, "ALIGN");
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
     beMessenger_AppendString(self->_messenger, text);
-    beMessenger_DispatchSelected(self->_messenger, TEXTSET_5);
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_DispatchSelected(self->_messenger, "TEXTSET");
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendString(self->_messenger, SET_4);
-    beMessenger_DispatchSelected(self->_messenger, SWITCH);
+    beMessenger_AppendString(self->_messenger, "SET");
+    beMessenger_DispatchSelected(self->_messenger, "SWITCH");
     INTERN_APPEND(self->_textCloseTypeList, textType)
     INTERN_APPEND(self->_textCloseNameList, textName)
 }
 
 void beNDMWWindow_QueueNumberText(beNDMWWindow *self, const char *textType, const char *textName, int number, const char *align) {
     char text[16];
-    sprintf(text, percent_d_2, number);
+    sprintf(text, "%d", number);
     beNDMWWindow_QueueText(self, textType, textName, text, align);
 }
 
 void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, const char *textName, int *textObject, const char *align) {
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
     beMessenger_AppendString(self->_messenger, align);
-    beMessenger_DispatchSelected(self->_messenger, ALIGN_3);
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_DispatchSelected(self->_messenger, "ALIGN");
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
     beMessenger_AppendObject(self->_messenger, *textObject);
-    beMessenger_DispatchSelected(self->_messenger, TEXTSET_5);
-    beMessenger_SelectReceivers(self->_messenger, TEXTCTL_2, 0, -1);
+    beMessenger_DispatchSelected(self->_messenger, "TEXTSET");
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendString(self->_messenger, SET_4);
-    beMessenger_DispatchSelected(self->_messenger, SWITCH);
+    beMessenger_AppendString(self->_messenger, "SET");
+    beMessenger_DispatchSelected(self->_messenger, "SWITCH");
     INTERN_APPEND(self->_textCloseTypeList, textType)
     INTERN_APPEND(self->_textCloseNameList, textName)
 }
@@ -155,11 +148,11 @@ void beNDMWWindow_RunMessageScript(beNDMWWindow *self, int chunk, int callNo) {
 }
 
 void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName) {
-    beMessenger_SelectReceivers(self->_messenger, &TEXTCTL_2[0], 0, -1);
+    beMessenger_SelectReceivers(self->_messenger, "TEXTCTL", 0, -1);
     beMessenger_AppendString(self->_messenger, textType);
     beMessenger_AppendString(self->_messenger, textName);
-    beMessenger_AppendString(self->_messenger, &CLR[0]);
-    beMessenger_DispatchSelected(self->_messenger, &SWITCH[0]);
+    beMessenger_AppendString(self->_messenger, "CLR");
+    beMessenger_DispatchSelected(self->_messenger, "SWITCH");
 }
 
 void beNDMWWindow_ClearQueuedText(beNDMWWindow *self) {
@@ -189,17 +182,17 @@ static inline int count(const igDataList *list) { return list->_count; }
 
 void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close, float *position) {
     float at[3];
-    beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, (const char *)ISRUN_8);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", model, id, (const char *)"ISRUN");
     if (beMessenger_GetBool(self->_messenger, 0) != 0) {
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, sequence);
+        beMessenger_SendNamed(self->_messenger, "MODELCTRL", model, id, sequence);
     } else {
-        beMessenger_SelectReceivers(self->_messenger, MODELCTRL_17, model, id);
+        beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", model, id);
         beMessenger_AppendString(self->_messenger, sequence);
         at[0] = position[0];
         at[1] = position[1];
         at[2] = position[2];
         beMessenger_AppendVec3(self->_messenger, at);
-        beMessenger_DispatchSelected(self->_messenger, GENERATE_11);
+        beMessenger_DispatchSelected(self->_messenger, "GENERATE");
     }
     if (close != 0) {
         INTERN_APPEND(self->_modelCloseInfoNameList, model)
@@ -222,7 +215,7 @@ void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self, const char *model, in
 }
 
 void beNDMWWindow_SendModelSequence(beNDMWWindow *self, int model, int id, int sequence) {
-    beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, sequence);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", model, id, sequence);
 }
 
 void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
@@ -270,7 +263,7 @@ int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
         StringList_CopyRetained(&sequenceCopy, (igStringRefList *)self->_modelCloseSeqNameList, i);
         sequence = sequenceCopy;
         if (sequence) { header = sequence - 2; refs = sequence[-1] - 1; sequence[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader(*header, header); }
-        beMessenger_SendNamed(self->_messenger, MODELCTRL_17, model, id, ISRUN_8);
+        beMessenger_SendNamed(self->_messenger, "MODELCTRL", model, id, "ISRUN");
         if (beMessenger_GetBoolCount(self->_messenger) > 0 && beMessenger_GetBool(self->_messenger, 0)) return 0;
     }
     if (((igStringRefList *)self->_subWindow)->_count) return 0;
@@ -371,3 +364,4 @@ void beNDMWWindow_UpdateTree(beNDMWWindow *w) {
     }
 }
 
+#pragma pop

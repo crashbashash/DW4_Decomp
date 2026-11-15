@@ -115,7 +115,6 @@ static int g_igSearchSceneGraph_fieldOffsets[] = {
     20,
     24,
 };
-static int g_igSearchSceneGraph_nextOfTypeCodeDefault;
 
 /* Four fields after igNamedObject's: an object reference, a string, a second reference and an enum. */
 void igSearchSceneGraph_InitFields(void) {
@@ -135,7 +134,7 @@ void igSearchSceneGraph_InitFields(void) {
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
     *(int *)((char *)secondRef + 56) = igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
-    igEnumMetaField_SetDefaultValue(enumField, &g_igSearchSceneGraph_nextOfTypeCodeDefault);
+    igEnumMetaField_SetDefaultValue(enumField, 0);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
     igMetaObject_NameFields(meta, g_igSearchSceneGraph_fieldTable, g_igSearchSceneGraph_fieldHandles, g_igSearchSceneGraph_fieldOffsets, first);
 }

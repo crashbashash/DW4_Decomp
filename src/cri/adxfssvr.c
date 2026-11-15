@@ -8,7 +8,7 @@ void ADXSTM_ExecServer(void);
 void FUN_00262398(void);
 
 /* The step the running pass has reached, 0 when no pass is running. */
-extern int adxt_fssvr_step;
+int adxt_fssvr_step = 0;
 
 void ADXT_ExecFsSvr(void)
 {
@@ -39,4 +39,12 @@ void ADXT_ExecFsSvr(void)
 void ADXT_ExecFsServer(void)
 {
     ADXT_ExecFsSvr();
+}
+
+/* Whether a file-system server pass is running. The step word guards the pass against re-entry from the
+ * file-system thread and from the main thread's blocking stream calls, so it is read through a volatile
+ * access. */
+int ADXT_IsActiveFsSvr(void)
+{
+    return *(volatile int *)&adxt_fssvr_step != 0;
 }

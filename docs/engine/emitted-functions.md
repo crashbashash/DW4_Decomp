@@ -295,20 +295,39 @@ decompiled. Moving a definition into the unit is what the data headline counts. 
   anonymous `.data` datum. Retail's literals are all read-only, short ones included, so a unit's functions
   sit inside `#pragma push` / `#pragma readonly_strings on` / `#pragma pop` ([MWCC pragmas](mwcc-pragmas.md));
   without it a one-byte literal goes to `.sdata`, is reached through `gp`, and changes the code. Literals
-  MWCC emits at the end of the translation unit (RTTI type names, strings of inline functions, some static
-  tables' strings) take the setting in force at the end of the file, so the closing `pop` leaves them in
-  `.data`, a kind mismatch. A stock file has no place for the pragma, so its library's profile rows carry
-  `-str readonly` instead (zlib, libpng). A zero global retail keeps in `.data` needs
-  `explicit_zero_data`, an owner's decision.
+  MWCC emits at the end of the translation unit (RTTI type names, the strings of a `__sinit` initialiser, the
+  literals of a last function that instantiates a template) take the setting in force at the end of the file, so
+  the closing `pop` leaves them in `.data`, a kind mismatch. No source spelling reaches them; the unit's profile
+  row carries `-str readonly` instead and the unit has no `readonly_strings` pragma (LuaBinding, LuaRuntime,
+  be.cpp, igViewerSceneInfoManager, New, NMWException, ExceptionHandler). The setting is a per-library build
+  flag, not source text: the GameCube build of the same Alchemy source keeps its Gui, Gfx and Lua literals in
+  `.data` and the game's and runtime's in `.rodata`. A stock file has no place for the pragma either, so its
+  library's rows carry `-str readonly` (zlib, libpng). Zero data retail keeps in `.data`/`.sdata` needs no
+  pragma: it is a constant passed to a `const T &` parameter (an enum default's
+  `igEnumMetaField_SetDefaultValue(field, 0)`, a list's `set(index, 0)`), which b52 stores as an unnamed
+  `.data` temporary (`.sdata` at one byte), zero included. Those temporaries are `anon` addresses
+  (`include/dw4/listSet.h` holds the list helpers). A zero global spelled as a global goes to `.bss`.
 - **Order and naming in the object:** file-scope data in definition order; a function's literals, local
   statics and switch tables directly before its code; one object per distinct literal per translation
   unit, placed by its first use. A named datum is a `data` row and its `data-names.tsv` row goes, and each
   other whole-file unit that uses the name gets a `data` row for it; the row stays only while a function
   not yet folded into its file still names it (verify accepts a definition its own rows place at the
   address the name spells). `@N` and `name$N` are `anon` addresses. `tools/whole_file_rows.py` measures both.
+- **Sony EE GCC 2.96:** an explicitly zero-initialised global stays in `.data`, which is why the CRI and Sony
+  blocks hold so many zero words; an uninitialised one goes to `.bss`. An uninitialised non-`static` global
+  becomes a COMMON symbol, which has no section of the unit for verify to place, so the `.bss` data a unit owns
+  is written `static`. A buffer that GCC sees defined before a function using it is accessed with the alignment
+  its definition gives it (`lhu`/`sh`), while retail copies it byte by byte: such buffers are defined after
+  their users, with a tentative `static` declaration above them.
+- **MWCC C units place `.bss` objects in reverse definition order**, so the definitions read in the reverse
+  of their retail addresses.
+- **A word inside a block that no instruction reads** still has to be defined for the block to be complete;
+  such a word is named `<prefix>_reserved` with a comment that no function reads it.
 - **What stays `extern`:** data in another unit's block (a shared string, another library's global), and
   vtables and RTTI records, which the compiler emits only from a class definition with its virtual
-  members, not from a pointer table.
+  members, not from a pointer table. A block that holds retail code as data (the kernel patch the libkernl
+  alarm file copies into the kernel, `regions.tsv`) cannot be written in source, so its GCC unit cannot own
+  that block at all.
 
 ## Static initialisers
 
@@ -517,6 +536,20 @@ Implementation: `tools/unitobjects.py`, `tools/units.py`, `tools/verify.py`,
 remains the integration oracle.
 
 ## Open questions
+
+- **Read-only literal order in the beNDMW game units.** LoadIntf2, GameRam, MdlPlayer, WindowTitle, MdlItem and
+  MdlPEBase define their tables ahead of their functions, so the strings those tables name are emitted before the
+  code's own literals, where retail interleaves them. Each datum is placed at its retail address and the units
+  match, but the definition order is not yet retail's.
+- **Zero data retail keeps in `.data`/`.sdata` and the literals after the closing `#pragma pop`:** resolved. The
+  zero data is a `const T &` temporary (see "Section kind"), and the end-of-file literals take `-str readonly` in
+  the unit's `units.tsv` row. The one block left is p2multipass's unreferenced zero words at `0x4913b0` and
+  `0x4913d0`: no instruction reads them, `0x4913b0` is the lead of a 24-byte aggregate
+  (`{0,0,0,0, 0x7E01C000, 0x6E018002}`) that has no known purpose, and `0x4913d0` may lead the next unit's data.
+  Both stay undefined until something says what they are.
+- **Names given only by use:** `g_startupFlagB` (GameMain, set 1, cleared once by `main`, read nowhere),
+  `g_raiseFirstValue`/`g_raiseSecondValue` (GameRam, the two ints of the `RAISE` message when the technique has no
+  row), and the `_reserved` words of the CRI blocks.
 
 - **Why `igTDataList` takes its parameter's address.** `find` and `append` take the value by value and read it through
   `const T *p = &v`, which is what keeps it on the stack. A plain read or a reference folds it into a register. The

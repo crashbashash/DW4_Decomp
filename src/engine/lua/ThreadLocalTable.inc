@@ -1,3 +1,9 @@
+unsigned int g_threadLocalBucketShift = 4;
+unsigned int g_threadLocalBucketCount = 16;
+unsigned int g_threadLocalCount;
+ThreadLocalEntry **g_threadLocalBuckets;
+int g_threadLocalTableBusy;
+
 static inline unsigned int ThreadLocalTable_Bucket(unsigned int key, unsigned int bucketCount, unsigned int shift)
 {
     return (bucketCount - 1) & (key ^ (key >> shift));

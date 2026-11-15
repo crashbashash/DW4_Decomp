@@ -101,18 +101,18 @@ void igStencilFunctionAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_ctorTable, 7);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igStencilFunctionAttr_funcDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, g_igStencilFunctionAttr_funcDefault);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149500;
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2), -1);
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), -1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485ef8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485f00[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485f08[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, temp_s0);
 }

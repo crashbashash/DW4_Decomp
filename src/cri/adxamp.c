@@ -26,8 +26,8 @@ typedef struct AdxAmpObj {
     int nfrm;                       /* 0x2c: frames measured */
 } AdxAmpObj;
 
-extern int adxamp_init_cnt;
-extern AdxAmpObj adxamp_obj[ADXAMP_MAX_OBJ];
+static int adxamp_init_cnt = 0;
+static AdxAmpObj adxamp_obj[ADXAMP_MAX_OBJ] = {0};
 
 void *memset(void *dst, int value, unsigned int size);
 void ADXCRS_Lock(void);
@@ -181,4 +181,62 @@ void ADXAMP_SetFrmPrd(AdxAmpObj *amp, float frmprd)
 float ADXAMP_GetFrmPrd(AdxAmpObj *amp)
 {
     return amp->frmprd;
+}
+
+/* One frame of every channel at a time: the peak of the absolute sample values, written with the running
+ * sample count, the sample rate and the frame length as a 16-byte record. */
+void adxamp_Extract(AdxAmpObj *amp)
+{
+    SfdSjChunk ck;
+    SfdSjChunk rec;
+    short *sample;
+    int *out;
+    int ch;
+    int frm;
+    int navail;
+    int nroom;
+    int n;
+    int got;
+    int count;
+    int peak;
+    int value;
+    int i;
+    int k;
+
+    frm = (int)(amp->sfreq * amp->frmlen);
+    for (ch = 0; ch < amp->nch; ch++) {
+        navail = amp->sji[ch]->vtbl->getNumData(amp->sji[ch], 1) / 2 / frm;
+        nroom = amp->sjo[ch]->vtbl->getNumData(amp->sjo[ch], 0) / 16;
+        n = navail < nroom ? navail : nroom;
+        for (i = 0; i < n; i++) {
+            peak = 0;
+            for (got = 0; got < frm; got += count) {
+                amp->sji[ch]->vtbl->getChunk(amp->sji[ch], 1, (frm - got) * 2, &ck);
+                count = ck.len / 2;
+                for (sample = (short *)ck.data, k = 0; k < count; k++, sample++) {
+                    value = *sample;
+                    if (value < 0) {
+                        value = -value;
+                    }
+                    if (peak < value) {
+                        peak = value;
+                    }
+                }
+                amp->sji[ch]->vtbl->putChunk(amp->sji[ch], 0, &ck);
+            }
+            amp->sjo[ch]->vtbl->getChunk(amp->sjo[ch], 0, 16, &rec);
+            if (rec.len == 0) {
+                for (;;) {
+                }
+            }
+            out = (int *)rec.data;
+            out[0] = peak;
+            out[1] = amp->nsmpl[ch];
+            out[2] = amp->sfreq;
+            out[3] = frm;
+            amp->sjo[ch]->vtbl->putChunk(amp->sjo[ch], 1, &rec);
+            amp->nsmpl[ch] += frm;
+            amp->nfrm++;
+        }
+    }
 }

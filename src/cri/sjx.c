@@ -57,17 +57,15 @@ void DTX_SetSndCbf(void *dtx, DtxCbf func, void *obj);
 int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv);
 void DTX_ExecServer(void);
 
-extern int sjx_init_cnt;
-extern unsigned int sjx_eewk;
-extern int sjx_iopheap;
-extern unsigned int sjx_iopwk;
-extern SjxObj sjx_obj[SJX_MAX_OBJ];
-extern void *sjx_dtx;
-extern int sjx_wklen;
-extern char sjx_eewkbuf[SJX_EEWK_SIZE];
-extern char E0100301_SJX_Init_cant_allocate_IOP_Heap[];
-extern char E0100302_SJX_Init_cant_create_DTX[];
-extern char E0100401_cant_create_SJX_of_IOP[];
+static char *sjx_build = "\nSJX Ver.1.08 Build:Oct  6 2004 11:47:21\n";
+static int sjx_init_cnt = 0;
+static unsigned int sjx_eewk = 0;
+static int sjx_iopheap = 0;
+static unsigned int sjx_iopwk = 0;
+static SjxObj sjx_obj[SJX_MAX_OBJ] = {0};
+static void *sjx_dtx = 0;
+static int sjx_wklen = 0;
+static char sjx_eewkbuf[SJX_EEWK_SIZE] = {0};
 
 void sjx_RcvCbf(void *obj, SjxList *list, int size)
 {
@@ -145,7 +143,7 @@ void SJX_Init(void)
         if (sjx_iopheap == 0) {
             sjx_iopheap = sceSifAllocIopHeap(SJX_EEWK_SIZE);
             if (sjx_iopheap == 0) {
-                ADXMSG_PrintErr(E0100301_SJX_Init_cant_allocate_IOP_Heap);
+                ADXMSG_PrintErr("E0100301: SJX_Init can't allocate IOP Heap\n");
                 for (;;) {
                 }
             }
@@ -153,7 +151,7 @@ void SJX_Init(void)
         sjx_iopwk = (sjx_iopheap + SJX_ALIGN) & -SJX_ALIGN;
         sjx_dtx = DTX_Create(SJX_DTX_ID, sjx_eewk, sjx_iopwk, sjx_wklen);
         if (sjx_dtx == 0) {
-            ADXMSG_PrintErr(E0100302_SJX_Init_cant_create_DTX);
+            ADXMSG_PrintErr("E0100302: SJX_Init can't create DTX\n");
             for (;;) {
             }
         }
@@ -202,7 +200,7 @@ SjxObj *SJX_Create(SfdSj *sj, int sjrmt, int line)
     request[3] = (int)sjx;
     sjx->iopsjx = DTX_CallUrpc(SJX_RPC_CREATE, request, 4, request, 1);
     if (sjx->iopsjx == 0) {
-        ADXMSG_PrintErr(E0100401_cant_create_SJX_of_IOP);
+        ADXMSG_PrintErr("E0100401: can't create SJX of IOP\n");
         return 0;
     }
     sjx->used = 1;

@@ -45,7 +45,7 @@ extern "C" int igMetaObject_NameFields(...);
 extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" int FUN_002274a0(void);
 extern "C" int igMetaObject_GetOrCreateMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(...);
+extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" igMetaField *igObjectRefMetaField_Create(void *);
 extern "C" igMetaField *igStringMetaField_Create(void *);
 extern "C" igMetaField *igEnumMetaField_Create(void *);

@@ -165,7 +165,6 @@ static int g_igStatisticsItem_fieldOffsets[] = {
     56,
 };
 
-int g_igStatisticsItem_statIdDefault = -1;
 
 void igStatisticsItem_InitFields(void) {
     igEnumMetaField *temp_v0;
@@ -192,7 +191,7 @@ void igStatisticsItem_InitFields(void) {
     temp_s2_4->_metaObject = (int)FUN_004586a0();
     temp_s2_4->_refCounted = 0;
     temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igStatisticsItem_statIdDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, -1);
     temp_v0->_getMetaEnumFunction = (int)(&FUN_00149b60);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB), -1);
     igMetaObject_NameFields(temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);

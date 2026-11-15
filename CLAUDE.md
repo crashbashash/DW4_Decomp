@@ -48,9 +48,13 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   mechanical work itself, and names each sub-agent's model to the owner.
 - **Owner decisions are presented one at a time, as a question** the owner answers (the options with a
   recommendation, and the evidence), and an approval row is written only on the owner's instruction for it.
-  An `asm` or `volatile` goes to the owner only after an Opus 5.5 check of whether it is needed: it looks for
-  plain C first, strips each keyword to show which change the bytes, and judges what remains against the
-  approval standard.
+- **Everything a Sonnet sub-agent hands back as needing the owner's approval gets an Opus 5.5 check first.**
+  That covers an `asm`, a `volatile`, a hand-written assembly source, an owner-counted pragma, or any other
+  approval row. The integrator starts the check as soon as the item comes back, without being asked, and
+  never puts Sonnet's evidence to the owner directly. The Opus check looks for plain C first, strips each
+  keyword or statement to show which change the bytes, looks at the GameCube and Xbox builds and other
+  decompilations where they exist, and judges what remains against the approval standard. The owner sees only
+  what survives, with the Opus recommendation.
 - **Names.** A proposed name with high or medium confidence that says what the thing is or does, and reads
   like a name a person on the original team would have written, is applied without asking and listed in the
   report, with its evidence (medium ones with the alternative considered). Low-confidence guesses stay out

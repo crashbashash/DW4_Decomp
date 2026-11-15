@@ -15,20 +15,20 @@ void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 #define CVFS_STAT_COMPLETE 1
 
 /* The normal handles start the table, the real-time ones end it. */
-extern int adxstmf_nrml_ofst;
-extern int adxstmf_nrml_num;
-extern int adxstmf_rtim_ofst;
-extern int adxstmf_rtim_num;
+static int adxstmf_nrml_ofst = 0;
+static int adxstmf_nrml_num = 16;
+static int adxstmf_rtim_ofst = 16;
+static int adxstmf_rtim_num = 24;
 /* Set while a server pass runs. */
-extern int adxstmf_svr_busy;
+static int adxstmf_svr_busy = 0;
 /* Failed reads in a row before a stream gives up; negative retries forever. */
-extern int adxstm_max_retry;
-extern int adxstmf_nosj_cnt;
+static int adxstm_max_retry = -1;
+static int adxstmf_nosj_cnt = 0;
 /* SRD's spindle override: nonzero makes SRD read at the spindle speed in srd_spindlctrl. */
 extern int adxt_srd_rmode_sw;
 extern int srd_spindlctrl_sw;
 extern unsigned char srd_spindlctrl;
-extern AdxStmObj adxstmf_obj[ADXSTM_MAX_OBJ];
+static AdxStmObj adxstmf_obj[ADXSTM_MAX_OBJ] = {0};
 
 void ADXSTMF_SetNrmlNum(int num)
 {

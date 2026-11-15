@@ -119,6 +119,25 @@ extern Ps2RnaPsj ps2rna_psj[PS2RNA_MAX_PSJ];
 extern char ps2rna_psj_buf[PS2RNA_MAX_PSJ][PS2RNA_UNI_WKSIZE];
 extern Ps2Rna ps2rna_obj[PS2RNA_MAX_OBJ];
 extern void *ps2rna_dtx;
+extern char *volatile ps2rna_ver_ptr;
+extern int ps2rna_rna_heap_size;
+extern int ps2rna_rna_work;
+extern int ps2rna_rna_nvoice;
+extern int ps2rna_dtx_eewk;
+extern int ps2rna_dtx_iopwk;
+extern int ps2rna_dtx_bsize;
+extern char ps2rna_dtx_eebuf[];
+extern char PS2RNA_E01112902_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init[];
+extern char E0100302_PS2RNA_Init_can_t_create_DTX[];
+extern char E02041101_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init[];
+void SJRMT_Init(void);
+void SJX_Init(void);
+void DTX_Init(void);
+void *DTX_Create(int id, int eewk, int iopwk, int wksize);
+void DTX_SetRcvCbf(void *dtx, void (*func)(void *obj, int *reply), void *obj);
+void DTX_SetSndCbf(void *dtx, void (*func)(void *obj, int *buf), void *obj);
+void ps2rna_dtx_send(void *obj, int *buf);
+void ps2rna_init_port(void);
 extern char PS2RNA_SetupVoice_Illigal_parameter_nste_d[];
 extern char PS2RNA_SetupVoice_Illigal_parameter_nmono_d[];
 extern char PS2RNA_SetupVoice_The_set_up_value_exceeded_maximum_MAX_d[];
@@ -295,6 +314,65 @@ void ps2rna_dtx_recv(void *obj, int *reply)
         while (--n) {
         }
     }
+}
+
+#define PS2RNA_DTX_HEAPSIZE 2256
+#define PS2RNA_DTX_BSIZE 2176
+#define PS2RNA_RPC_INIT 10
+
+void PS2RNA_Init(void)
+{
+    int prm[3];
+
+    ps2rna_ver_ptr;
+    if (PS2RNA_IS_OFF()) {
+        return;
+    }
+    if (ps2rna_init_cnt == 0) {
+        SJRMT_Init();
+        SJX_Init();
+        DTX_Init();
+        ps2rna_init_port();
+        ps2rna_init_psj();
+        memset(ps2rna_dtx_eebuf, 0, PS2RNA_DTX_HEAPSIZE);
+        ps2rna_dtx_bsize = PS2RNA_DTX_BSIZE;
+        ps2rna_dtx_eewk = ((int)ps2rna_dtx_eebuf + 64) & ~63;
+        if (ps2rna_dtx_heap == 0) {
+            ps2rna_dtx_heap = sceSifAllocIopHeap(PS2RNA_DTX_HEAPSIZE);
+            if (ps2rna_dtx_heap == 0) {
+                ADXMSG_PrintErr(PS2RNA_E01112902_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init, PS2RNA_DTX_HEAPSIZE);
+                for (;;) {
+                }
+            }
+        }
+        ADXMSG_PrintErr(PS2RNA_sceSifAllocIopHeap_d_ret_0x_08x, PS2RNA_DTX_HEAPSIZE, ps2rna_dtx_heap);
+        ps2rna_dtx_iopwk = ((int)ps2rna_dtx_heap + 64) & ~63;
+        ps2rna_dtx = DTX_Create(1, ps2rna_dtx_eewk, ps2rna_dtx_iopwk, ps2rna_dtx_bsize);
+        if (ps2rna_dtx == 0) {
+            ADXMSG_PrintErr(E0100302_PS2RNA_Init_can_t_create_DTX);
+            for (;;) {
+            }
+        }
+        DTX_SetRcvCbf(ps2rna_dtx, ps2rna_dtx_recv, 0);
+        DTX_SetSndCbf(ps2rna_dtx, ps2rna_dtx_send, 0);
+        if (ps2rna_rna_heap == 0) {
+            ps2rna_rna_nvoice = ps2rna_nvoice;
+            ps2rna_rna_heap_size = ps2rna_nvoice * 1024 + 64;
+            ps2rna_rna_heap = sceSifAllocIopHeap(ps2rna_rna_heap_size);
+            if (ps2rna_rna_heap == 0) {
+                ADXMSG_PrintErr(E02041101_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init, ps2rna_rna_heap_size);
+                for (;;) {
+                }
+            }
+            ADXMSG_PrintErr(PS2RNA_sceSifAllocIopHeap_d_ret_0x_08x, ps2rna_rna_heap_size, ps2rna_rna_heap);
+        }
+        ps2rna_rna_work = ((int)ps2rna_rna_heap + 63) & ~63;
+        prm[0] = ps2rna_rna_nvoice;
+        prm[1] = ps2rna_rna_work;
+        prm[2] = ps2rna_rna_heap_size;
+        DTX_CallUrpc(PS2RNA_RPC_INIT, prm, 3, 0, 0);
+    }
+    ps2rna_init_cnt++;
 }
 
 void PS2RNA_SendOutMode(int outmode)

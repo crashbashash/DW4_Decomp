@@ -97,7 +97,7 @@ igLuaGlue::Class::Class(const char *className, const char *baseClassName, lua_CF
             it++;
         }
     }
-    if (strcmp(name, emptyString_3) == 0) {
+    if (strcmp(name, "") == 0) {
         g_luaGlobalClass = this;
     }
     firstDerived = 0;

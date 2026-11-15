@@ -207,7 +207,7 @@ int Memory_AllocateAligned16();
 int Memory_FreeToSelector();
 char *Memory_ReallocateAligned16(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
-void FUN_001fcb00(void);
+void p2UploadTex0Context2(void);
 void p2SendGsRegister(int reg);
 void p2EnableLighting(void);
 void p2DisableLighting(void);
@@ -841,6 +841,234 @@ void p2SetSoftwareBlendSource(const float *positions, const float *matrices, con
     p2BlendIndexStride = indexStride;
 }
 
+void p2SoftwareBlendFourWeights(int count, float *out) {
+    int i;
+    const float *position = p2BlendPositions;
+    const unsigned char *indices = p2BlendIndices;
+    const float *weights = p2BlendWeights;
+    const float *matrices = p2BlendMatrices;
+    int stride = p2BlendIndexStride;
+
+    for (i = 0; i < count; i++) {
+        const float *matrix0 = matrices + indices[0] * 16;
+        const float *matrix1 = matrices + indices[1] * 16;
+        const float *matrix2 = matrices + indices[2] * 16;
+        const float *matrix3 = matrices + indices[3] * 16;
+        asm {
+            lqc2 vf1, 0(matrix0)
+            lqc2 vf2, 16(matrix0)
+            lqc2 vf3, 32(matrix0)
+            lqc2 vf4, 48(matrix0)
+            lqc2 vf5, 0(matrix1)
+            lqc2 vf6, 16(matrix1)
+            lqc2 vf7, 32(matrix1)
+            lqc2 vf8, 48(matrix1)
+            lqc2 vf9, 0(matrix2)
+            lqc2 vf10, 16(matrix2)
+            lqc2 vf11, 32(matrix2)
+            lqc2 vf12, 48(matrix2)
+            lqc2 vf13, 0(matrix3)
+            lqc2 vf14, 16(matrix3)
+            lqc2 vf15, 32(matrix3)
+            lqc2 vf16, 48(matrix3)
+            mtsab position, 0
+            lq a2, 0(position)
+            lq a3, 16(position)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf17
+            mtsab weights, 0
+            lq a2, 0(weights)
+            lq a3, 16(weights)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf20
+            vmulaw.xyzw ACC, vf4, vf0w
+            vmaddax.xyzw ACC, vf1, vf17x
+            vmadday.xyzw ACC, vf2, vf17y
+            vmaddz.xyzw vf25, vf3, vf17z
+            vmulaw.xyzw ACC, vf8, vf0w
+            vmaddax.xyzw ACC, vf5, vf17x
+            vmadday.xyzw ACC, vf6, vf17y
+            vmaddz.xyzw vf26, vf7, vf17z
+            vmulaw.xyzw ACC, vf12, vf0w
+            vmaddax.xyzw ACC, vf9, vf17x
+            vmadday.xyzw ACC, vf10, vf17y
+            vmaddz.xyzw vf27, vf11, vf17z
+            vmulaw.xyzw ACC, vf16, vf0w
+            vmaddax.xyzw ACC, vf13, vf17x
+            vmadday.xyzw ACC, vf14, vf17y
+            vmaddz.xyzw vf28, vf15, vf17z
+            vmulax.xyzw ACC, vf25, vf20x
+            vmadday.xyzw ACC, vf26, vf20y
+            vmaddaz.xyzw ACC, vf27, vf20z
+            vmaddw.xyzw vf30, vf28, vf20w
+            qmfc2 a2, vf30
+            sw a2, 0(out)
+            prot3w a2, a2
+            sw a2, 4(out)
+            prot3w a2, a2
+            sw a2, 8(out)
+        }
+        position += 3;
+        out += 3;
+        weights += stride;
+        indices += stride;
+    }
+}
+
+void p2SoftwareBlendThreeWeights(int count, float *out) {
+    int i;
+    const float *position = p2BlendPositions;
+    const unsigned char *indices = p2BlendIndices;
+    const float *weights = p2BlendWeights;
+    const float *matrices = p2BlendMatrices;
+    int stride = p2BlendIndexStride;
+
+    for (i = 0; i < count; i++) {
+        const float *matrix0 = matrices + indices[0] * 16;
+        const float *matrix1 = matrices + indices[1] * 16;
+        const float *matrix2 = matrices + indices[2] * 16;
+        asm {
+            lqc2 vf1, 0(matrix0)
+            lqc2 vf2, 16(matrix0)
+            lqc2 vf3, 32(matrix0)
+            lqc2 vf4, 48(matrix0)
+            lqc2 vf5, 0(matrix1)
+            lqc2 vf6, 16(matrix1)
+            lqc2 vf7, 32(matrix1)
+            lqc2 vf8, 48(matrix1)
+            lqc2 vf9, 0(matrix2)
+            lqc2 vf10, 16(matrix2)
+            lqc2 vf11, 32(matrix2)
+            lqc2 vf12, 48(matrix2)
+            mtsab position, 0
+            lq a2, 0(position)
+            lq a3, 16(position)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf17
+            mtsab weights, 0
+            lq a2, 0(weights)
+            lq a3, 16(weights)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf20
+            vmulaw.xyzw ACC, vf4, vf0w
+            vmaddax.xyzw ACC, vf1, vf17x
+            vmadday.xyzw ACC, vf2, vf17y
+            vmaddz.xyzw vf25, vf3, vf17z
+            vmulaw.xyzw ACC, vf8, vf0w
+            vmaddax.xyzw ACC, vf5, vf17x
+            vmadday.xyzw ACC, vf6, vf17y
+            vmaddz.xyzw vf26, vf7, vf17z
+            vmulaw.xyzw ACC, vf12, vf0w
+            vmaddax.xyzw ACC, vf9, vf17x
+            vmadday.xyzw ACC, vf10, vf17y
+            vmaddz.xyzw vf27, vf11, vf17z
+            vmulax.xyzw ACC, vf25, vf20x
+            vmadday.xyzw ACC, vf26, vf20y
+            vmaddz.xyzw vf30, vf27, vf20z
+            qmfc2 a2, vf30
+            sw a2, 0(out)
+            prot3w a2, a2
+            sw a2, 4(out)
+            prot3w a2, a2
+            sw a2, 8(out)
+        }
+        position += 3;
+        out += 3;
+        weights += stride;
+        indices += stride;
+    }
+}
+
+void p2SoftwareBlendTwoWeights(int count, float *out) {
+    int i;
+    const float *position = p2BlendPositions;
+    const unsigned char *indices = p2BlendIndices;
+    const float *weights = p2BlendWeights;
+    const float *matrices = p2BlendMatrices;
+    int stride = p2BlendIndexStride;
+
+    for (i = 0; i < count; i++) {
+        const float *matrix0 = matrices + indices[0] * 16;
+        const float *matrix1 = matrices + indices[1] * 16;
+        asm {
+            lqc2 vf1, 0(matrix0)
+            lqc2 vf2, 16(matrix0)
+            lqc2 vf3, 32(matrix0)
+            lqc2 vf4, 48(matrix0)
+            lqc2 vf5, 0(matrix1)
+            lqc2 vf6, 16(matrix1)
+            lqc2 vf7, 32(matrix1)
+            lqc2 vf8, 48(matrix1)
+            mtsab position, 0
+            lq a2, 0(position)
+            lq a3, 16(position)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf17
+            mtsab weights, 0
+            lq a2, 0(weights)
+            lq a3, 16(weights)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf20
+            vmulaw.xyzw ACC, vf4, vf0w
+            vmaddax.xyzw ACC, vf1, vf17x
+            vmadday.xyzw ACC, vf2, vf17y
+            vmaddz.xyzw vf25, vf3, vf17z
+            vmulaw.xyzw ACC, vf8, vf0w
+            vmaddax.xyzw ACC, vf5, vf17x
+            vmadday.xyzw ACC, vf6, vf17y
+            vmaddz.xyzw vf26, vf7, vf17z
+            vmulax.xyzw ACC, vf25, vf20x
+            vmaddy.xyzw vf30, vf26, vf20y
+            qmfc2 a2, vf30
+            sw a2, 0(out)
+            prot3w a2, a2
+            sw a2, 4(out)
+            prot3w a2, a2
+            sw a2, 8(out)
+        }
+        position += 3;
+        out += 3;
+        weights += stride;
+        indices += stride;
+    }
+}
+
+void p2SoftwareBlendOneWeight(int count, float *out) {
+    int i;
+    const float *position = p2BlendPositions;
+    const unsigned char *indices = p2BlendIndices;
+    const float *matrices = p2BlendMatrices;
+    int stride = p2BlendIndexStride;
+
+    for (i = 0; i < count; i++) {
+        const float *matrix0 = matrices + indices[0] * 16;
+        asm {
+            lqc2 vf1, 0(matrix0)
+            lqc2 vf2, 16(matrix0)
+            lqc2 vf3, 32(matrix0)
+            lqc2 vf4, 48(matrix0)
+            mtsab position, 0
+            lq a2, 0(position)
+            lq a3, 16(position)
+            qfsrv a2, a3, a2
+            qmtc2 a2, vf17
+            vmulaw.xyzw ACC, vf4, vf0w
+            vmaddax.xyzw ACC, vf1, vf17x
+            vmadday.xyzw ACC, vf2, vf17y
+            vmaddz.xyzw vf30, vf3, vf17z
+            qmfc2 a2, vf30
+            sw a2, 0(out)
+            prot3w a2, a2
+            sw a2, 4(out)
+            prot3w a2, a2
+            sw a2, 8(out)
+        }
+        position += 3;
+        out += 3;
+        indices += stride;
+    }
+}
+
 int p2SoftwareBlend(int count, int weights, float *out) {
     if (weights == 4) {
         p2StatFourWeightBlendVertices += count;
@@ -1041,7 +1269,7 @@ void p2SetClut(p2Clut *clut) {
         p2CurrentGsRegisters->tex0[1].field.cld = 2;
         p2DirtyFlags |= P2_DIRTY_GS_REGISTERS;
         p2GsDirtyRegisters |= P2_GS_BIT(P2_GS_TEXTURE_30) | P2_GS_BIT(P2_GS_TEXCLUT) | P2_GS_BIT(P2_GS_TEX0_2);
-        if (p2CurrentProgram == 1) FUN_001fcb00();
+        if (p2CurrentProgram == 1) p2UploadTex0Context2();
     }
     p2CurrentGsRegisters->texclut.field.cbw = 1;
     p2CurrentGsRegisters->texclut.field.cou = 0;

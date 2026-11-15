@@ -22,9 +22,9 @@ typedef struct {
 
 void *memset(void *dst, int value, unsigned int size);
 
-extern NotifyEntry *rebootNotifyTable;
-extern unsigned int rebootNotifyCount;
-extern NotifyEntry rebootNotifySysTable[SYSTEM_NOTIFY_SLOTS];
+NotifyEntry *rebootNotifyTable = 0;
+unsigned int rebootNotifyCount = 0;
+static NotifyEntry rebootNotifySysTable[SYSTEM_NOTIFY_SLOTS];
 
 void sceSifInitRebootNotify(void)
 {

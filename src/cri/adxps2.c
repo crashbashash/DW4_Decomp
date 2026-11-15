@@ -95,9 +95,12 @@ extern char ADXM_UsrIdleThread_Stack_pointer[];
 extern char _gp[];
 extern AdxmCallback adxm_vsync_frame_cb;
 extern AdxmCallback adxm_mwidle_sleep_cb;
+extern char *volatile adxps2_build;
 
 int SVM_SetCbLock();
-void SVM_SetCbUnlock(int a, int b);
+void SVM_SetCbUnlock(void (*func)(void), void *obj);
+void SVM_Init(void);
+void SVM_SetCbBdr(int id, void (*func)(void), void *obj);
 int SVM_Finish();
 void SVM_CallErr1(const char *message);
 int SVM_Lock();
@@ -130,7 +133,7 @@ extern int (*adxm_old_cbf)(int arg);
 extern volatile int adxt_vsync_cnt;
 int SVM_ExecSvrVint();
 int adxm_exec_vint(int arg);
-int ADXM_SetupThrd(AdxmThreadPrm *tprm);
+void ADXM_SetupThrd(AdxmThreadPrm *tprm);
 void adxm_delete_mwidle_thrd(void);
 void adxm_delete_vsync_thrd(void);
 void adxm_delete_fs_thrd(void);
@@ -492,6 +495,47 @@ int ADXM_IsSetupThrd(void) {
 
 void ADXM_SetCbErr(void) {
     SVM_SetCbErr();
+}
+
+void ADXM_SetupThrd(AdxmThreadPrm *tprm) {
+    struct ThreadParam param;
+
+    adxps2_build;
+    adxm_vsync_waiting = 0;
+    if (adxm_setup_count == 0) {
+        SVM_Init();
+        SVM_SetCbLock(adxm_lock, 0);
+        SVM_SetCbUnlock(adxm_unlock, 0);
+        adxm_vsync_frame_cb.func = 0;
+        adxm_vsync_frame_cb.arg = 0;
+        adxm_mwidle_sleep_cb.func = 0;
+        adxm_mwidle_sleep_cb.arg = 0;
+        if (tprm == 0) {
+            adxm_tprm.mainPrio = 24;
+            adxm_tprm.lockPrio = 1;
+            adxm_tprm.safePrio = 8;
+            adxm_tprm.vsyncPrio = 16;
+            adxm_tprm.fsPrio = 18;
+            adxm_tprm.mwIdlePrio = ADXPS2_MWIDLE_PRIO;
+        } else {
+            adxm_tprm.mainPrio = tprm->mainPrio;
+            adxm_tprm.lockPrio = tprm->lockPrio;
+            adxm_tprm.safePrio = tprm->safePrio;
+            adxm_tprm.vsyncPrio = tprm->vsyncPrio;
+            adxm_tprm.fsPrio = tprm->fsPrio;
+            adxm_tprm.mwIdlePrio = tprm->mwIdlePrio;
+        }
+        adxm_main_thid = GetThreadId();
+        ReferThreadStatus(adxm_main_thid, &param);
+        adxm_main_init_prio = param.currentPriority;
+        adxm_create_safe_thrd();
+        adxm_create_vsync_thrd();
+        adxm_create_fs_thrd();
+        adxm_create_mwidle_thrd();
+        ChangeThreadPriority(adxm_main_thid, adxm_tprm.mainPrio);
+        SVM_SetCbBdr(6, adxm_goto_mwidle_border, 0);
+    }
+    adxm_setup_count++;
 }
 
 void adxm_request_thrd_exit(void) {

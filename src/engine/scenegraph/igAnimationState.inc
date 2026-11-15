@@ -270,13 +270,13 @@ void igAnimationState_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a9130();
     ((igMetaField *)temp_s2)->_resetMethod = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048d148[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001a6b50);
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_0048d150[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_001a6af0);
     temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3)));
-    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_0048d158[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, 0);
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_001a6a90);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_001a6bf0();

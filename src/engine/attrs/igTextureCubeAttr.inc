@@ -215,7 +215,7 @@ void igTextureCubeAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014dfb0();
     ((igObjectRefArrayMetaField *)temp_s1)->_num = 6;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485c58[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_00131f80);
     igMetaObject_NameFields(temp_s0, g_igTextureCubeAttr_fieldTable, g_igTextureCubeAttr_fieldHandles, g_igTextureCubeAttr_fieldOffsets, temp_s2);
 }

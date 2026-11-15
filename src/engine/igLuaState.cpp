@@ -15,7 +15,8 @@ extern int g_derivedVtable_0052d6d0[4];
 extern int g_baseVtable_0052d6f0[4];
 extern int g_derivedVtable_0052d710[4];
 extern int g_baseVtable_0052d730[4];
-extern int DAT_00570bd0[4];
+/* The 4-byte allocator object FUN_00280a00 creates on first use. */
+int g_luaAllocator;
 
 void FUN_002809e0(igObject *self);
 int FUN_002809f0(int a0, int a1);
@@ -101,13 +102,13 @@ int FUN_002809f0(int a0, int a1)
 }
 
 void FUN_00280a00(void **arg0) {
-    if (DAT_00570bd0[0] == 0) {
+    if (g_luaAllocator == 0) {
         if (arg0 == 0) {
-            DAT_00570bd0[0] = malloc(4);
+            g_luaAllocator = malloc(4);
         } else {
-            DAT_00570bd0[0] = ((DW4VC_12_1 *)(arg0))->vX((int)(4));
+            g_luaAllocator = ((DW4VC_12_1 *)(arg0))->vX((int)(4));
         }
-        FUN_00280a70((int ***)DAT_00570bd0[0], (int **)arg0);
+        FUN_00280a70((int ***)g_luaAllocator, (int **)arg0);
     }
 }
 

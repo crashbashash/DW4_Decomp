@@ -87,3 +87,6 @@ _InitTLB	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 _start	src/runtime/crt0.S	#the-start-up-file
 _exit	src/runtime/crt0.S	#the-start-up-file
 _root	src/runtime/crt0.S	#the-start-up-file
+_kTLBException	src/sony/libkernl/tlbtrap.S	#libkernl-tlb-trap
+_kExitTLBHandler	src/sony/libkernl/tlbtrap.S	#libkernl-tlb-trap
+_kDebugException	src/sony/libkernl/tlbtrap.S	#libkernl-tlb-trap

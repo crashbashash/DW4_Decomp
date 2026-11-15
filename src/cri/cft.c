@@ -235,6 +235,99 @@ void cft_MakeYccTbl(int mode, int lo, int hi, CftEntry *t)
     }
 }
 
+void cft_MakeAlpha3Tbl(CftEntry *t, unsigned char alpha0, unsigned char alpha1, unsigned char alpha2)
+{
+    int i;
+    float c;
+    float f;
+    short y;
+    CftEntry *tb;
+    CftEntry *tr;
+
+    tb = t + 256;
+    tr = t + 512;
+    for (i = 0; i < 256; i++) {
+        c = (float)(i - 128);
+        tb[i].v[0] = 0;
+        tb[i].v[2] = (int)(c * 129.0879974365234375f + 0.5f);
+        tb[i].v[1] = (int)(c * -25.0879993438720703125f + 0.5f);
+        tb[i].v[3] = 0;
+        tr[i].v[1] = (int)(c * -52.0319976806640625f + 0.5f);
+        tr[i].v[0] = (int)(c * 102.1439971923828125f + 0.5f);
+        tr[i].v[2] = 0;
+        tr[i].v[3] = 0;
+    }
+    for (i = 0; i < 9; i++) {
+        t[i].v[2] = 0;
+        t[i].v[1] = 0;
+        t[i].v[0] = 0;
+        t[i].v[3] = alpha0;
+    }
+    for (i = 9; i < 134; i++) {
+        f = (float)i - 16.0f;
+        y = (int)((f < 0.0f ? 0.0f : (255.0f < f ? 255.0f : f)) * 64.0f * (255.0f / 110.0f) + 0.5f);
+        t[i].v[3] = alpha1 << 6;
+        t[i].v[2] = y;
+        t[i].v[1] = y;
+        t[i].v[0] = y;
+    }
+    for (i = 134; i < 256; i++) {
+        f = 251.0f - (float)i;
+        y = (int)((f < 0.0f ? 0.0f : (255.0f < f ? 255.0f : f)) * 64.0f * (255.0f / 110.0f) + 0.5f);
+        t[i].v[3] = alpha2 << 6;
+        t[i].v[2] = y;
+        t[i].v[1] = y;
+        t[i].v[0] = y;
+    }
+}
+
+void cft_MakeAlpha3TblBlack(CftEntry *t, unsigned char alpha0, unsigned char alpha1, unsigned char alpha2)
+{
+    int i;
+    float c;
+    float f;
+    short y;
+    CftEntry *tb;
+    CftEntry *tr;
+
+    tb = t + 256;
+    tr = t + 512;
+    for (i = 0; i < 256; i++) {
+        c = (float)(i - 128);
+        tb[i].v[0] = 0;
+        tb[i].v[2] = (int)(c * 129.0879974365234375f + 0.5f);
+        tb[i].v[1] = (int)(c * -25.0879993438720703125f + 0.5f);
+        tb[i].v[3] = 0;
+        tr[i].v[1] = (int)(c * -52.0319976806640625f + 0.5f);
+        tr[i].v[0] = (int)(c * 102.1439971923828125f + 0.5f);
+        tr[i].v[2] = 0;
+        tr[i].v[3] = 0;
+    }
+    y = -1160;
+    for (i = 0; i < 48; i++) {
+        t[i].v[2] = y;
+        t[i].v[1] = y;
+        t[i].v[0] = y;
+        t[i].v[3] = alpha0;
+    }
+    for (i = 48; i < 130; i++) {
+        f = (float)i - 68.0f;
+        y = (int)((f < 0.0f ? 0.0f : (255.0f < f ? 255.0f : f)) * 64.0f * (255.0f / 55.0f) + 0.5f);
+        t[i].v[3] = alpha1 << 6;
+        t[i].v[2] = y;
+        t[i].v[1] = y;
+        t[i].v[0] = y;
+    }
+    for (i = 130; i < 256; i++) {
+        f = 247.0f - (float)i;
+        y = (int)((f < 0.0f ? 0.0f : (255.0f < f ? 255.0f : f)) * 64.0f * (255.0f / 111.0f) + 0.5f);
+        t[i].v[3] = alpha2 << 6;
+        t[i].v[2] = y;
+        t[i].v[1] = y;
+        t[i].v[0] = y;
+    }
+}
+
 void FUN_00284dc0(void)
 {
 }

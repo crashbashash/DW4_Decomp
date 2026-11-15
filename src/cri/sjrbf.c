@@ -18,10 +18,25 @@ enum SjFlow {
 
 typedef void (*SjErrFunc)(void *obj, int code);
 
-typedef struct SjRbfObj {
-    SfdSjVtbl *vtbl;
+typedef struct SjRbfObj SjRbfObj;
+
+typedef struct SjRbfVtbl {
+    void *reserved[3];
+    void (*destroy)(SjRbfObj *sj);
+    const char *(*getUuid)(SjRbfObj *sj);
+    void (*reset)(SjRbfObj *sj);
+    void (*getChunk)(SjRbfObj *sj, int line, int nbyte, SfdSjChunk *ck);
+    void (*ungetChunk)(SjRbfObj *sj, int line, SfdSjChunk *ck);
+    void (*putChunk)(SjRbfObj *sj, int line, SfdSjChunk *ck);
+    int (*getNumData)(SjRbfObj *sj, int line);
+    int (*isGetChunk)(SjRbfObj *sj, int line, int nbyte, int *rbyte);
+    void (*entryErrFunc)(SjRbfObj *sj, SjErrFunc func, void *obj);
+} SjRbfVtbl;
+
+struct SjRbfObj {
+    const SjRbfVtbl *vtbl;
     int used;
-    char *uuid;
+    const char *uuid;
     int ndata;
     int nfree;
     int wpos;   /* the free line's position */
@@ -32,7 +47,7 @@ typedef struct SjRbfObj {
     int flowcnt[2][2];  /* per line, bytes got and put */
     SjErrFunc err;
     void *errobj;
-} SjRbfObj;
+};
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -43,25 +58,24 @@ void SJCRS_Lock(void);
 void SJCRS_Unlock(void);
 void SJERR_CallErr(const char *message);
 
-extern SfdSjVtbl sjrbf_vtbl;
-extern int sjrbf_init_cnt;
-extern SjRbfObj sjrbf_obj[SJRBF_MAX_OBJ];
-extern char sjrbf_uuid[];
-extern char SJRBF_Error_text[];
-extern char E2004090201_NULL_pointer_is_specified[];
-extern char E2004090202_Specified_handle_is_invalid[];
-extern char E2004090207_NULL_pointer_is_specified[];
-extern char E2004090208_Specified_handle_is_invalid[];
-extern char E2004090211_NULL_pointer_is_specified[];
-extern char E2004090212_Specified_handle_is_invalid[];
-extern char E2004090219_Illegal_buffer_size[];
-extern char E2004090213_NULL_pointer_is_specified[];
-extern char E2004090214_Specified_handle_is_invalid[];
-extern char E2004090215_NULL_pointer_is_specified[];
-extern char E2004090216_Specified_handle_is_invalid[];
-extern char E2004090220_Illegal_buffer_size[];
-extern char E2004090217_NULL_pointer_is_specified[];
-extern char E2004090218_Specified_handle_is_invalid[];
+void SJRBF_Destroy(SjRbfObj *sj);
+const char *SJRBF_GetUuid(SjRbfObj *sj);
+void SJRBF_EntryErrFunc(SjRbfObj *sj, SjErrFunc func, void *obj);
+void SJRBF_Reset(SjRbfObj *sj);
+int SJRBF_GetNumData(SjRbfObj *sj, int line);
+void SJRBF_GetChunk(SjRbfObj *sj, int line, int nbyte, SfdSjChunk *ck);
+void SJRBF_PutChunk(SjRbfObj *sj, int line, SfdSjChunk *ck);
+void SJRBF_UngetChunk(SjRbfObj *sj, int line, SfdSjChunk *ck);
+int SJRBF_IsGetChunk(SjRbfObj *sj, int line, int nbyte, int *rbyte);
+
+static SjRbfVtbl sjrbf_vtbl = {
+    {0, 0, 0},
+    SJRBF_Destroy, SJRBF_GetUuid, SJRBF_Reset, SJRBF_GetChunk, SJRBF_UngetChunk,
+    SJRBF_PutChunk, SJRBF_GetNumData, SJRBF_IsGetChunk, SJRBF_EntryErrFunc
+};
+static int sjrbf_init_cnt = 0;
+static SjRbfObj sjrbf_obj[SJRBF_MAX_OBJ] = {0};
+static const char sjrbf_uuid[16] = "\x81\x9e\x9a\x3b\xbb\x0d\xd2\x11\xa6\xbf" "DEST";
 
 void sjrbf_Init(void);
 void sjrbf_Finish(void);
@@ -75,7 +89,7 @@ int sjrbf_IsGetChunk(SjRbfObj *sj, int line, int nbyte, int *rbyte);
 
 void sjrbf_Error(void *obj, int code)
 {
-    SJERR_CallErr(SJRBF_Error_text);
+    SJERR_CallErr("SJRBF Error");
 }
 
 void SJRBF_Init(void)
@@ -153,18 +167,18 @@ void SJRBF_Destroy(SjRbfObj *sj)
 void sjrbf_Destroy(SjRbfObj *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090201_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090201 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090202_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090202 : Specified handle is invalid.");
         return;
     }
     memset(sj, 0, sizeof(*sj));
     sj->used = 0;
 }
 
-char *SJRBF_GetUuid(SjRbfObj *sj)
+const char *SJRBF_GetUuid(SjRbfObj *sj)
 {
     return sj->uuid;
 }
@@ -185,11 +199,11 @@ void SJRBF_Reset(SjRbfObj *sj)
 void sjrbf_Reset(SjRbfObj *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090207_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090207 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090208_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090208 : Specified handle is invalid.");
         return;
     }
     sj->nfree = sj->bsize;
@@ -227,15 +241,15 @@ void SJRBF_GetChunk(SjRbfObj *sj, int line, int nbyte, SfdSjChunk *ck)
 void sjrbf_GetChunk(SjRbfObj *sj, int line, int nbyte, SfdSjChunk *ck)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090211_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090211 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090212_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090212 : Specified handle is invalid.");
         return;
     }
     if (sj->bsize == 0) {
-        SJERR_CallErr(E2004090219_Illegal_buffer_size);
+        SJERR_CallErr("E2004090219 : Illegal buffer size.");
         return;
     }
     if (line == SJ_LIN_FREE) {
@@ -274,11 +288,11 @@ void sjrbf_PutChunk(SjRbfObj *sj, int line, SfdSjChunk *ck)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090213_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090213 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090214_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090214 : Specified handle is invalid.");
         return;
     }
     if (ck->len <= 0 || ck->data == 0) {
@@ -322,15 +336,15 @@ void sjrbf_UngetChunk(SjRbfObj *sj, int line, SfdSjChunk *ck)
     int pos;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090215_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090215 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090216_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090216 : Specified handle is invalid.");
         return;
     }
     if (sj->bsize == 0) {
-        SJERR_CallErr(E2004090220_Illegal_buffer_size);
+        SJERR_CallErr("E2004090220 : Illegal buffer size.");
         return;
     }
     if (ck->len <= 0 || ck->data == 0) {
@@ -379,11 +393,11 @@ int sjrbf_IsGetChunk(SjRbfObj *sj, int line, int nbyte, int *rbyte)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090217_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090217 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090218_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090218 : Specified handle is invalid.");
         return 0;
     }
     if (line == SJ_LIN_FREE) {

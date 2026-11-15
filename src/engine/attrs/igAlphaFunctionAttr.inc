@@ -77,7 +77,7 @@ void igAlphaFunctionAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igAlphaFunctionAttr_ctorTable, 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igAlphaFunctionAttr_funcDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, g_igAlphaFunctionAttr_funcDefault);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001496e0);
     igMetaObject_NameFields(temp_s0, g_igAlphaFunctionAttr_fieldTable, g_igAlphaFunctionAttr_fieldHandles, g_igAlphaFunctionAttr_fieldOffsets, temp_s2);
 }

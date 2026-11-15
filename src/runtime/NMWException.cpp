@@ -3,8 +3,6 @@
 #include "dw4/runtime/exception.h"
 #include "dw4/runtime/cxxlib.h"
 
-#pragma push
-#pragma readonly_strings on
 
 /* Allocates `size` bytes; while there is no memory it calls the new handler, and with no handler it throws
  * std::bad_alloc or returns null as __throws_bad_alloc says. */
@@ -149,4 +147,3 @@ extern "C" void __call_static_initializers(StaticInitializer *begin, StaticIniti
         (*initializer)();
     }
 }
-#pragma pop

@@ -175,7 +175,7 @@ void igLightAttr_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igLightAttr_ctorTable, 0x10);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    igEnumMetaField_SetDefaultValue(temp_s2, &g_igLightAttr_lightTypeDefault);
+    igEnumMetaField_SetDefaultValue(temp_s2, g_igLightAttr_lightTypeDefault);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2->f52 = (void (*)(void))FUN_00149a40;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);

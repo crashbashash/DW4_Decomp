@@ -29,10 +29,6 @@ extern void (*adxt_detach_pl2)(AdxtObj *adxt);
 extern void (*adxb_pl2_exec_func)(AdxbObj *adxb, short in, short *out_l, short *out_r);
 extern void (*adxb_pl2_reset_func)(AdxbObj *adxb);
 extern void (*adxsjd_header_hook)(AdxbObj *adxb, int sfreq);
-extern char E2003091101_ADXT_handle_must_be_created_for_stereo_output[];
-extern char E2003091002_Fail_to_attach_Dolby_Pro_Logic_II[];
-extern char E2003091605_NULL_pointer_is_specified[];
-extern char E2003091606_ADXT_handle_must_be_created_for_3D_sound[];
 
 void adxt_CallDetachPl2(AdxtObj *adxt);
 void adxt_Pl2ErrFunc(void *obj, const char *message);
@@ -47,7 +43,7 @@ void ADXT_AttachPl2(AdxtObj *adxt, void *work, int wksize)
     Pl2Enc *pl2;
 
     if (adxt->maxnch < 2) {
-        ADXERR_CallErrFunc1(E2003091101_ADXT_handle_must_be_created_for_stereo_output);
+        ADXERR_CallErrFunc1("E2003091101 : ADXT handle must be created for stereo output.");
         return;
     }
     ADXT_Stop(adxt);
@@ -58,7 +54,7 @@ void ADXT_AttachPl2(AdxtObj *adxt, void *work, int wksize)
     ADXM_Lock();
     pl2 = PL2ENC_Create(work, wksize);
     if (pl2 == 0) {
-        ADXERR_CallErrFunc1(E2003091002_Fail_to_attach_Dolby_Pro_Logic_II);
+        ADXERR_CallErrFunc1("E2003091002 : Fail to attach Dolby Pro Logic II.");
         return;
     }
     PL2ENC_SetPos(pl2, adxb->pl2_x, adxb->pl2_y);
@@ -84,13 +80,13 @@ void ADXT_SetPl2Pos(AdxtObj *adxt, int x, int y)
     Pl2Enc *pl2;
 
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(E2003091605_NULL_pointer_is_specified);
+        ADXERR_CallErrFunc1("E2003091605 : NULL pointer is specified.");
         return;
     }
     adxb = adxt->sjd->adxb;
     pl2 = adxb->pl2;
     if (adxt->maxnch < 2 || pl2 == 0) {
-        ADXERR_CallErrFunc1(E2003091606_ADXT_handle_must_be_created_for_3D_sound);
+        ADXERR_CallErrFunc1("E2003091606 : ADXT handle must be created for 3D sound.");
         return;
     }
     PL2ENC_SetPos(pl2, x, y);

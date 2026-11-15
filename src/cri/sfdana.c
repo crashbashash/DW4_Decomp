@@ -237,6 +237,38 @@ void sfana_LoadHdr(unsigned char *p, int size, SfdHdrInf *hdr) {
     sfhdr_Analy(hdr);
 }
 
+void sfana_ChkMpsAudio(unsigned char *buf, int size, SfdAnaInf *inf) {
+    unsigned char *end = buf + size;
+    int packSize = inf->packSize;
+    unsigned char *pes;
+    unsigned char *data;
+    int n;
+    int skip;
+
+    while (size > 0) {
+        pes = sfana_FindCode(buf, size, MPS_SC_PES);
+        if (pes == 0) {
+            break;
+        }
+        if ((unsigned char)(pes[3] + 64) < 32) {
+            data = sfana_SkipPesHdr(pes, end - pes);
+            n = packSize;
+            if (end - data < n) {
+                n = end - data;
+            }
+            if (sfana_ChkAdx(data, n, inf) != 0) {
+                break;
+            }
+            if (sfana_ChkMpa(data, n, inf) != 0) {
+                break;
+            }
+        }
+        skip = pes - buf + 1;
+        buf += skip;
+        size -= skip;
+    }
+}
+
 unsigned char *sfana_FindCode(unsigned char *p, int size, int kind) {
     while (size >= 4) {
         if (MPS_GetStartCodeKind(p) == kind) {

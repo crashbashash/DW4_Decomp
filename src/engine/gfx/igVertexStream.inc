@@ -176,13 +176,13 @@ void igVertexStream_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014b1c0();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00488628[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_0014ad60);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_00488630[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_00149aa0);
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
-    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_00488638[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, 0);
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_0014ad00);
     igMetaObject_NameFields(meta, g_igVertexStream_fieldTable, g_igVertexStream_fieldHandles, g_igVertexStream_fieldOffsets, fieldStart);
     ((igMetaObject *)g_igVertexStream_metaObject)->_abstractProxy = (int)thunk_igPsx2VertexStream_GetMetaObject;

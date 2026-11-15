@@ -223,11 +223,11 @@ void igRenderDestinationAttr_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igRenderDestinationAttr_ctorTable, 0xE);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004860c8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00134150);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_004860d0[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_001340f0);
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
@@ -244,7 +244,7 @@ void igRenderDestinationAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00132ba0();
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_v0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    igEnumMetaField_SetDefaultValue(temp_v0_5, &g_igRenderDestinationAttr_iTypeDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_5, g_igRenderDestinationAttr_iTypeDefault);
     ((igEnumMetaField *)temp_v0_5)->_getMetaEnumFunction = (int)(&FUN_00149b00);
     temp_v0_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     igIntMetaField_SetDefault(temp_v0_6, -1);

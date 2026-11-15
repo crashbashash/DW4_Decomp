@@ -125,10 +125,10 @@ void igFile_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igFile_ctorTable, 8);
     igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))), (int)"DefaultFileName");
     readMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)readMode, (const int *)&g_igFile_defaultReadMode[0]);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)readMode, 0);
     ((igEnumMetaField *)readMode)->_getMetaEnumFunction = (int)(&igFile_GetReadModeMetaEnum);
     openMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)openMode, (const int *)&g_igFile_defaultOpenMode[0]);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)openMode, 0);
     ((igEnumMetaField *)openMode)->_getMetaEnumFunction = (int)(&igFile_GetOpenModeMetaEnum);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))->_persistent = 0;
     igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), 0x100000);

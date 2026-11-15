@@ -21,8 +21,9 @@
 #define SIF_CMD_PACKET_SIZE 64
 
 typedef struct {
-    unsigned int size; /* packet size in the low byte, extra data size above it */
-    void *dest;
+    unsigned int psize : 8; /* the packet's size */
+    unsigned int dsize : 24; /* the extra data's size */
+    unsigned int dest; /* where on the receiving side the extra data goes */
     int cid;
     unsigned int opt;
 } sceSifCmdHdr;

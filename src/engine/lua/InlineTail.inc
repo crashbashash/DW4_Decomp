@@ -1,5 +1,5 @@
 inline igMetaObject *igLuaGlue::getMeta() {
-    return g_igLuaGlue_metaObject[0];
+    return g_igLuaGlue_metaObject;
 }
 
 inline void igLuaGlue::userConstruct() {

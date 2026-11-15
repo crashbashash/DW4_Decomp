@@ -21,9 +21,11 @@ extern "C" int igAdxFile_GetFileSize(igObject *);
 extern "C" int igAdxFile_SetUseBuffer(igObject *, int);
 extern "C" int igAdxFile_SetUseAsync(igObject *, int);
 extern "C" int igAdxFile_WaitForReadEnd(igObject *);
-extern "C" int DAT_0050ecc8[4];
+#pragma push
+#pragma readonly_strings on
+
 /* matching construct: dummy-virtual receiver for the reader's vtable calls */
-class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(int, int *); virtual void v24(); virtual void v25(int, int, int); };
+class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(int, const char *); virtual void v24(); virtual void v25(int, int, int); };
 /* Owning stack reference to the script locator; released on scope exit (reference count in the low
  * 23 bits of _refCount). */
 
@@ -68,7 +70,7 @@ int Gap__Bec__beLuaState__vfunc_22(beLuaState *arg0, int arg1) {
     var_v0 = igObject_GetAllocator(arg0);
     var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     ReaderRef reader(FUN_00334dc0(var_v0));
-    if (((V *)reader.p)->v23(arg1, DAT_0050ecc8) == 0) {
+    if (((V *)reader.p)->v23(arg1, "rb") == 0) {
         return -1;
     }
     s0 = igAdxFile_GetFileSize(reader.p);
@@ -119,3 +121,4 @@ int Gap__Bec__beLuaState__vfunc_20(void)
     return g_beLuaState_metaObject[0];
 }
 
+#pragma pop

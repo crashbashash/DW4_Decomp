@@ -14,8 +14,6 @@ typedef struct AdxbSpsdHeader {
 
 int memcmp(const void *a, const void *b, unsigned int size);
 
-extern char SPSD[];
-
 int adxb_GetSpsdInfo(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                      signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl,
                      short *pcm_fmt)
@@ -61,6 +59,36 @@ int adxb_GetSpsdInfo(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char *
     *bits = 16;
     *type = -1;
     return 0;
+}
+
+/* matching construct: hill climb — the order of the copies after the call */
+int ADXB_DecodeHeaderSpsd(AdxbObj *adxb, AdxbSpsdHeader *hdr, int size)
+{
+    short hdrlen;
+
+    adxb->hdr_set = 1;
+    if (adxb_GetSpsdInfo(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
+                         &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
+        return 0;
+    }
+    adxb->cof = 0;
+    adxb->lptype = 0;
+    adxb->lp_end_ofst = 0;
+    adxb->lp_end_pos = 0;
+    adxb->lp_start_ofst = 0;
+    adxb->lp_start_pos = 0;
+    adxb->nloop = 0;
+    adxb->lpins_nsmpl = 0;
+    adxb->buf.nch = adxb->nch;
+    adxb->buf.blklen = adxb->blklen;
+    adxb->buf.blksmpl = adxb->blksmpl;
+    adxb->format = ADXB_FORMAT_SPSD;
+    adxb->buf.pcmbuf = adxb->pcmbuf;
+    adxb->buf.pcmbsize = adxb->pcmbsize;
+    adxb->dec_nsmpl = 0;
+    adxb->buf.pcmbdist = adxb->pcmbdist;
+    adxb->wpos = 0;
+    return hdrlen;
 }
 
 void ADXB_ExecOneSpsd(AdxbObj *obj)
@@ -109,5 +137,5 @@ void ADXB_ExecOneSpsd(AdxbObj *obj)
 
 int ADXB_CheckSpsd(unsigned char *hdr)
 {
-    return memcmp(hdr, SPSD, 4) == 0;
+    return memcmp(hdr, "SPSD", 4) == 0;
 }

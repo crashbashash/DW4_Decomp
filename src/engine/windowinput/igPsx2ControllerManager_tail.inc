@@ -97,7 +97,6 @@ static int g_igPsx2ControllerManager_fieldOffsets[] = {
     16,
     17,
 };
-static int g_igPsx2ControllerManager_multitapDefault = 0;
 
 void igPsx2ControllerManager_InitFields(void) {
     int temp_s2;
@@ -108,7 +107,7 @@ void igPsx2ControllerManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igPsx2ControllerManager_ctorTable, 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igPsx2ControllerManager_multitapDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00146d90);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
     igMetaObject_NameFields(temp_s0, g_igPsx2ControllerManager_fieldTable, g_igPsx2ControllerManager_fieldHandles, g_igPsx2ControllerManager_fieldOffsets, temp_s2);

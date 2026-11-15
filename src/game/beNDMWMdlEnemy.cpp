@@ -28,7 +28,6 @@ extern "C" void beNDMWMdlPEBase_OnSequenceChange(void);
 extern "C" int KIND_ENEMY[4];
 extern "C" int emptyString[4];
 extern "C" int ENEMY_3[4];
-extern "C" int ONE_5[4];
 extern "C" int DATABASE_8[4];
 extern "C" int enemy_2[4];
 extern "C" int GETDATABASE_8[4];
@@ -73,6 +72,9 @@ extern "C" void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *
 extern "C" void beNDMWMdlEnemy__OnSequenceChange(void);
 extern "C" int beNDMWMdlEnemy__GetMeta(void);
 
+#pragma push
+#pragma readonly_strings on
+
 int beNDMWMdlEnemy__IsKind(int self, int kind) {
     return strcmp(kind, &KIND_ENEMY[0]) == 0;
 }
@@ -96,7 +98,7 @@ void beNDMWMdlEnemy__OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
         DataListSlot::adopt(ram, created);
     }
-    record = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], &ONE_5[0]);
+    record = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "ONE");
     {
         int allocator = igObject_GetAllocator(self);
         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
@@ -134,3 +136,5 @@ int beNDMWMdlEnemy__GetMeta(void)
 {
     return g_beNDMWMdlEnemy_metaObject[0];
 }
+
+#pragma pop

@@ -58,38 +58,6 @@ extern "C" int beDataBase_GetRecordInt(beDataBase *, int, const char *);
 extern "C" unsigned long long beDataBase_GetRecordBool(beDataBase *, int, const char *);
 extern "C" char *beDataBase_GetRecordString(beDataBase *, int, const char *);
 
-extern "C" char DATABASE_2[];
-extern "C" char GETDATABASE_2[];
-extern "C" char HANBAI[];
-extern "C" char KAITORI[];
-extern "C" char weapon[];
-extern "C" char armor1[];
-extern "C" char armor2[];
-extern "C" char abChip[];
-extern "C" char conItem[];
-extern "C" char HP_2[];
-extern "C" char MP_2[];
-extern "C" char PLAYER[];
-extern "C" char GETPEBASEWORK_2[];
-extern "C" char GAMERAM_4[];
-extern "C" char P2PKOUKAMAGIC_2[];
-extern "C" char FIGHTCALC_2[];
-extern "C" char Player[];
-extern "C" char gatedisc_lua[];
-extern "C" char insItem[];
-extern "C" char GETPLAYER_2[];
-extern "C" char UP[];
-extern "C" char GETPLAYER1[];
-extern "C" char LEVEL_4[];
-extern "C" char BITRITSU[];
-extern "C" char GETCOMMON_3[];
-extern "C" char BIT_2[];
-extern "C" char DIFFICULTY_2[];
-extern "C" char XDATA[];
-extern "C" char UPCNT_2[];
-extern "C" char RECALCPLAYER_2[];
-extern "C" char impItem[];
-extern "C" char pcTech[];
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beNDMWGameRam_metaObject[4];
 extern "C" int g_beNDMWItemWeapon_metaObject[4];
@@ -211,12 +179,15 @@ extern "C" int Gap__Bec__beNDMWItemYellowArmor__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWItemBlueArmor__vfunc_20(void);
 extern "C" int Gap__Bec__beNDMWItemWeapon__vfunc_20(void);
 
+#pragma push
+#pragma readonly_strings on
+
 /* Send "DATABASE <name>" / "GETDATABASE" to the status messenger and return the database object it
  * answers with. */
 beDataBase *beNDMWItemBase_RequestDataBase(beNDMWItemBase *self, beNDMWStatus *status,
                                            const char *name) {
     void *messenger = (void *)status->_messenger;
-    beMessenger_SendNamed(messenger, DATABASE_2, name, 0, GETDATABASE_2);
+    beMessenger_SendNamed(messenger, "DATABASE", name, 0, "GETDATABASE");
     return (beDataBase *)beMessenger_GetObject(messenger, 0);
 }
 
@@ -275,8 +246,8 @@ int beNDMWItemRevisionPocketBase_GetPrice(beNDMWItemRevisionPocketBase *self, be
                                           const char *priceKey) {
     int price;
 
-    if (strcmp(priceKey, HANBAI) == 0) {
-        price = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, status, HANBAI);
+    if (strcmp(priceKey, "HANBAI") == 0) {
+        price = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, status, "HANBAI");
         if (self->_kindNo == ITEM_KIND_YELLOW_ARMOR) {
             price += self->_revision * 100;
         } else if (self->_kindNo == ITEM_KIND_WEAPON || self->_kindNo == ITEM_KIND_BLUE_ARMOR) {
@@ -285,7 +256,7 @@ int beNDMWItemRevisionPocketBase_GetPrice(beNDMWItemRevisionPocketBase *self, be
             price += pocketBonus[self->_pocket];
         }
     } else {
-        price = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, status, KAITORI);
+        price = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, status, "KAITORI");
         if (self->_kindNo == ITEM_KIND_YELLOW_ARMOR) {
             price += self->_revision * 25;
         } else if (self->_kindNo == ITEM_KIND_WEAPON || self->_kindNo == ITEM_KIND_BLUE_ARMOR) {
@@ -358,7 +329,7 @@ void beNDMWItemRevisionPocketBase_RollPocket(beNDMWItemRevisionPocketBase *self,
 }
 
 beDataBase *Gap__Bec__beNDMWItemWeapon__vfunc_21(beNDMWItemWeapon *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, weapon);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "weapon");
 }
 
 void beNDMWItemWeapon_Set(beNDMWItemWeapon *self, int recNo, int pocket, int revision) {
@@ -395,7 +366,7 @@ void Gap__Bec__beNDMWItemWeapon__vfunc_24(beNDMWItemWeapon *self, int packed) {
 }
 
 beDataBase *Gap__Bec__beNDMWItemBlueArmor__vfunc_21(beNDMWItemBlueArmor *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, armor1);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "armor1");
 }
 
 void beNDMWItemBlueArmor_Set(beNDMWItemBlueArmor *self, int recNo, int pocket, int revision) {
@@ -433,7 +404,7 @@ void Gap__Bec__beNDMWItemBlueArmor__vfunc_24(beNDMWItemBlueArmor *self, int pack
 }
 
 beDataBase *Gap__Bec__beNDMWItemYellowArmor__vfunc_21(beNDMWItemYellowArmor *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, armor2);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "armor2");
 }
 
 void beNDMWItemYellowArmor_Set(beNDMWItemYellowArmor *self, int recNo, int revision) {
@@ -468,7 +439,7 @@ void Gap__Bec__beNDMWItemYellowArmor__vfunc_24(beNDMWItemYellowArmor *self, int 
 
 beDataBase *Gap__Bec__beNDMWItemAbilityChip__vfunc_21(beNDMWItemAbilityChip *self,
                                                       beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, abChip);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "abChip");
 }
 
 void beNDMWItemAbilityChip_Set(beNDMWItemAbilityChip *self, int recNo) {
@@ -493,7 +464,7 @@ void Gap__Bec__beNDMWItemAbilityChip__vfunc_24(beNDMWItemAbilityChip *self, int 
 }
 
 beDataBase *Gap__Bec__beNDMWItemDisk__vfunc_21(beNDMWItemDisk *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, conItem);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "conItem");
 }
 
 void beNDMWItemDisk_Set(beNDMWItemDisk *self, int recNo) {
@@ -529,21 +500,21 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     switch (recNo) {
     case 9: {
         int ram = igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]);
-        beNDMWGameRam_ChangeHp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2), -1);
-        beNDMWGameRam_ChangeMp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2));
+        beNDMWGameRam_ChangeHp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "HP"), -1);
+        beNDMWGameRam_ChangeMp(ram, playerNo, beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "MP"));
         return 0;
     }
     }
     switch (recNo) {
     case 0: case 1: case 2: {
-        int hp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, HP_2);
+        int hp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "HP");
         beNDMWGameRam_ChangeHp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, hp, -1);
         return 0;
     }
     }
     switch (recNo) {
     case 3: case 4: case 5: {
-        int mp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, MP_2);
+        int mp = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "MP");
         beNDMWGameRam_ChangeMp(igInsightCore_FindManager(gameRam->_insight, g_beNDMWGameRam_metaObject[0]), playerNo, mp);
         return 0;
     }
@@ -551,7 +522,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     switch (recNo) {
     case 6: {
         int messenger = gameRam->_messenger;
-        beMessenger_SendNamed(messenger, PLAYER, 0, playerNo, GETPEBASEWORK_2);
+        beMessenger_SendNamed(messenger, "PLAYER", 0, playerNo, "GETPEBASEWORK");
         void *model = beMessenger_GetObject(messenger, 0);
         beNDMWMdlPEBaseInfoWork *work = (beNDMWMdlPEBaseInfoWork *)beMessenger_GetObject(messenger, 1);
         if (beNDMWMdlPEBaseInfoWork_IsPoisoned(work) != 0) {
@@ -564,18 +535,18 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
     }
     case 7: {
         int messenger = gameRam->_messenger;
-        beMessenger_SelectGroup(messenger, GAMERAM_4);
-        beMessenger_AppendString(messenger, P2PKOUKAMAGIC_2);
+        beMessenger_SelectGroup(messenger, "GAMERAM");
+        beMessenger_AppendString(messenger, "P2PKOUKAMAGIC");
         beMessenger_AppendInt(messenger, playerNo);
         beMessenger_AppendInt(messenger, playerNo);
         beMessenger_AppendInt(messenger, -50);
-        beMessenger_DispatchSelected(messenger, FIGHTCALC_2);
+        beMessenger_DispatchSelected(messenger, "FIGHTCALC");
         return 0;
     }
     case 8: {
         int lua = igInsightCore_FindManager(gameRam->_insight, g_beLua_metaObject[0]);
-        SYSsetGateStage(Player, playerNo);
-        beLua__RunNamedChunk(lua, gatedisc_lua, 0);
+        SYSsetGateStage("Player", playerNo);
+        beLua__RunNamedChunk(lua, "gatedisc.lua", 0);
         return 1;
     }
     }
@@ -583,7 +554,7 @@ int Gap__Bec__beNDMWItemDisk__vfunc_22(beNDMWItemDisk *self, beNDMWGameRam *game
 }
 
 beDataBase *Gap__Bec__beNDMWItemInstant__vfunc_21(beNDMWItemInstant *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, insItem);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "insItem");
 }
 
 void beNDMWItemInstant_Set(beNDMWItemInstant *self, int recNo) {
@@ -593,7 +564,7 @@ void beNDMWItemInstant_Set(beNDMWItemInstant *self, int recNo) {
 
 /* Uses a consumable on player `playerNo`, by the record's UP value. Record 0 pays bits: a random
  * amount from a band set by the first player's level, raised by its BITRITSU percentage, kept in
- * _value. Records 1-3 add to the player's XDATA; 4-25 add to one UPCNT counter and recalculate the
+ * _value. Records 1-3 add to the player's "XDATA"; 4-25 add to one UPCNT counter and recalculate the
  * player, the only use that returns 1. */
 int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam *gameRam, int playerNo) {
     unsigned int recNo;
@@ -616,22 +587,22 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
     int count;
 
     messenger = gameRam->_messenger;
-    beMessenger_SelectGroup(messenger, GAMERAM_4);
+    beMessenger_SelectGroup(messenger, "GAMERAM");
     beMessenger_AppendInt(messenger, playerNo);
-    beMessenger_DispatchSelected(messenger, GETPLAYER_2);
+    beMessenger_DispatchSelected(messenger, "GETPLAYER");
     player = (int)beMessenger_GetObject(messenger, 0);
-    up = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, UP);
+    up = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)self, (beNDMWStatus *)gameRam, "UP");
     recNo = self->_recNo;
     switch (recNo) {
     case 0: {
-        beMessenger_SendGroup(messenger, GAMERAM_4, GETPLAYER1);
+        beMessenger_SendGroup(messenger, "GAMERAM", "GETPLAYER1");
         leader = (int)beMessenger_GetObject(messenger, 0);
-        level = ((IntProperty *)igProperty_GetRecord(leader, LEVEL_4))->_value;
-        rate = ((IntProperty *)igProperty_GetRecord(leader, BITRITSU))->_value;
-        beMessenger_SendGroup(messenger, GAMERAM_4, GETCOMMON_3);
+        level = ((IntProperty *)igProperty_GetRecord(leader, "LEVEL"))->_value;
+        rate = ((IntProperty *)igProperty_GetRecord(leader, "BITRITSU"))->_value;
+        beMessenger_SendGroup(messenger, "GAMERAM", "GETCOMMON");
         common = (int)beMessenger_GetObject(messenger, 0);
-        bits = ((IntProperty *)igProperty_GetRecord(player, BIT_2))->_value;
-        igProperty_GetRecord(common, DIFFICULTY_2);
+        bits = ((IntProperty *)igProperty_GetRecord(player, "BIT"))->_value;
+        igProperty_GetRecord(common, "DIFFICULTY");
         if (level < 19) { low = 10; high = 55; }
         else if (level < 39) { low = 55; high = 100; }
         else if (level < 60) { low = 87; high = 195; }
@@ -645,14 +616,14 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
             roll = draw + low;
         }
         amount = roll * (rate + 100) / 100;
-        field = (IntProperty *)igProperty_GetRecord(player, BIT_2);
+        field = (IntProperty *)igProperty_GetRecord(player, "BIT");
         field->_value = bits + amount;
         self->_value = amount;
         break;
     }
     case 1: case 2: case 3: {
-        int xdata = ((IntProperty *)igProperty_GetRecord(player, XDATA))->_value;
-        field = (IntProperty *)igProperty_GetRecord(player, XDATA);
+        int xdata = ((IntProperty *)igProperty_GetRecord(player, "XDATA"))->_value;
+        field = (IntProperty *)igProperty_GetRecord(player, "XDATA");
         field->_value = xdata + up;
         break;
     }
@@ -673,18 +644,18 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
         case 18: case 19: counter = 9; break;
         case 20: case 21: counter = 10; break;
         }
-        upcnt = (IntListProperty *)igProperty_GetRecordIntList(player, UPCNT_2);
+        upcnt = (IntListProperty *)igProperty_GetRecordIntList(player, "UPCNT");
         {
             int current = ((int *)upcnt->_value->_data)[counter];
             count = current + up;
         }
-        counters = ((IntListProperty *)igProperty_GetRecordIntList(player, UPCNT_2))->_value;
+        counters = ((IntListProperty *)igProperty_GetRecordIntList(player, "UPCNT"))->_value;
         if (counters->_count != 0 && counter >= 0 && counter < counters->_count) {
             ((int *)counters->_data)[counter] = count;
         }
-        beMessenger_SelectGroup(messenger, GAMERAM_4);
+        beMessenger_SelectGroup(messenger, "GAMERAM");
         beMessenger_AppendInt(messenger, playerNo);
-        beMessenger_DispatchSelected(messenger, RECALCPLAYER_2);
+        beMessenger_DispatchSelected(messenger, "RECALCPLAYER");
         return 1;
     }
     }
@@ -692,7 +663,7 @@ int Gap__Bec__beNDMWItemInstant__vfunc_22(beNDMWItemInstant *self, beNDMWGameRam
 }
 
 beDataBase *Gap__Bec__beNDMWItemImportant__vfunc_21(beNDMWItemImportant *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, impItem);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "impItem");
 }
 
 void beNDMWItemImportant_Set(beNDMWItemImportant *self, int recNo) {
@@ -701,7 +672,7 @@ void beNDMWItemImportant_Set(beNDMWItemImportant *self, int recNo) {
 }
 
 beDataBase *Gap__Bec__beNDMWItemWaza__vfunc_21(beNDMWItemWaza *self, beNDMWStatus *status) {
-    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, pcTech);
+    return beNDMWItemBase_RequestDataBase((beNDMWItemBase *)self, status, "pcTech");
 }
 
 void beNDMWItemWaza_Set(beNDMWItemWaza *self, int recNo, int baseNo) {
@@ -750,3 +721,5 @@ int Gap__Bec__beNDMWItemWeapon__vfunc_20(void)
 {
     return g_beNDMWItemWeapon_metaObject[0];
 }
+
+#pragma pop

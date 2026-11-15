@@ -54,75 +54,20 @@ extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
 extern "C" int FUN_002ff820(...);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, int *);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, const void *);
 extern "C" int Gap__Bec__beNDMWTitle2__vfunc_30(void);
 extern "C" int Gap__Bec__beNDMWTitle2__vfunc_20(void);
 extern "C" int FUN_003b2840(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
-extern "C" int GAMERAM_3[4];
-extern "C" int GETCOMMON_2[4];
-extern "C" int CAMERAMODE_2[4];
-extern "C" int LIGHTMODE_2[4];
 extern "C" void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger);
-extern "C" int CTRL_2[4];
-extern "C" int COMMDLCTRL_2[4];
-extern "C" int TEXTORDER_2[4];
-extern "C" int j_startlogo[4];
-extern "C" int SQ_OPEN_2[4];
-extern "C" int j_startmenu01[4];
-extern "C" int MODELCTRL_2[4];
-extern "C" int SQ_LINESL00_2[4];
-extern "C" int ISSEQNAME_2[4];
-extern "C" int i_fadewn01[4];
-extern "C" int GENERATE_2[4];
-extern "C" int SQ_BLOUT30[4];
-extern "C" int ISRUN_2[4];
-extern "C" int STAGECTL[4];
-extern "C" int stagIS09[4];
-extern "C" int NEXTSTAGE[4];
-extern "C" int SQ_LINEON00_2[4];
-extern "C" int j_startmenu02[4];
-extern "C" int SQ_LINEUP00_2[4];
-extern "C" int SQ_LINEDW01_2[4];
-extern "C" int SQ_LINEON01_2[4];
-extern "C" int SQ_CANCEL_2[4];
-extern "C" int SQ_CLOSE_2[4];
-extern "C" int OPTION[4];
-extern "C" int j_optionwin02[4];
-extern "C" int SQ_BOPEN[4];
-extern "C" int SQ_AOPEN[4];
-extern "C" int j_optioncursor11[4];
-extern "C" int j_optioncursor12[4];
-extern "C" int SQ_MOVE[4];
-extern "C" int SQ_LINERT00[4];
-extern "C" int SQ_LINERT01[4];
-extern "C" int SQ_LINERT02[4];
-extern "C" int SQ_LINELF00[4];
-extern "C" int SQ_LINELF01[4];
-extern "C" int SQ_LINELF02[4];
-extern "C" int SQ_LINESL01[4];
-extern "C" int SQ_LINESL02[4];
-extern "C" int SQ_LINESL03[4];
-extern "C" int SQ_LINEON02[4];
-extern "C" int SQ_LINEON03[4];
-extern "C" int SOUND[4];
-extern "C" int BGMSTOP[4];
-extern "C" int ENVSTOP[4];
-extern "C" int SESTOP[4];
-extern "C" int stagIS08[4];
-extern "C" int SQ_WTOUT60[4];
-extern "C" int j_startback[4];
-extern "C" int LOADCTRL2_2[4];
-extern "C" int GENERATE_TITLE[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beLua_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" char g_commonSettingsValid;
+extern "C" { char g_commonSettingsValid; }
 extern "C" int g_beNDMWTitle2Info_metaObject[4];
 extern "C" int g_beNDMWTitle2_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" int TITLE2[4];
 extern "C" void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self);
 /* Outer state, CTRL._st0. */
 enum TitleState {
@@ -145,7 +90,7 @@ enum PadButton {
     ButtonCircle = 0x2000,
     ButtonCross = 0x4000
 };
-/* Options window rows, OPTION._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and row 2 the
+/* Options window rows, "OPTION"._ctrlPos. Row 0 edits _comConf, row 1 _lightConf and row 2 the
  * country (only with _selLang != 0); row 3 confirms. */
 enum OptionRow { OptionRowCamera = 0, OptionRowLight = 1, OptionRowCountry = 2, OptionRowOk = 3 };
 enum TitleReferenceRole {
@@ -177,15 +122,18 @@ extern "C" int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRa
  * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record
  * value at +12); otherwise the defaults are camera 0 and light 1. The language selector always
  * starts at 0. */
+#pragma push
+#pragma readonly_strings on
+
 void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger) {
     int commonSettings;
 
     self->_messenger = messenger;
     if ((*(unsigned char *)&g_commonSettingsValid) == 1) {
-        beMessenger_SendGroup(self->_messenger, &GAMERAM_3[0], &GETCOMMON_2[0]);
+        beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
         commonSettings = beMessenger_GetObject(self->_messenger, 0);
-        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &CAMERAMODE_2[0])) + 12));
-        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, &LIGHTMODE_2[0])) + 12));
+        self->_comConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, "CAMERAMODE")) + 12));
+        self->_lightConf = (int)((int) *(int *)((char *)(igProperty_GetRecord(commonSettings, "LIGHTMODE")) + 12));
         self->_selLang = 0;
         return;
     }
@@ -246,7 +194,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_32(beNDMWTitle2 *self) {
 /* Store a reference-counted object as infoRam->_dataList, releasing the old list. */
 
 
-/* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / OPTION / TEXTORDER objects in
+/* per-frame title-menu update. Lazily builds the CTRL / COMMDLCTRL / "OPTION" / TEXTORDER objects in
  * the info record's property list, then runs the CTRL._st0.._st3 state machine. */
 void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
     int allocator;
@@ -314,19 +262,19 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         SET_DATA(workListRef);
     }
     ctrl = (beNDMWTitle2CtrlData *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
-                                                          &CTRL_2[0]));
+                                                          "CTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    models = (beNDMWLoadIntf2ComMdlCtrl *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], &COMMDLCTRL_2[0]));
+    models = (beNDMWLoadIntf2ComMdlCtrl *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], "COMMDLCTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    text = (beNDMWLoadIntf2TextOrder *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], &TEXTORDER_2[0]));
+    text = (beNDMWLoadIntf2TextOrder *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0], "TEXTORDER"));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
     pad = (bePadData *)(bePadManager_GetPadForPlayer(self->_padManager, 0));
     pressed = pad->_trigger;
@@ -368,8 +316,8 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         case 1:
             switch (ctrl->_st2) {
             case 0:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_startlogo[0]) & 0xFF) != 1) {
-                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startlogo[0], &SQ_OPEN_2[0], 1);
+                if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_startlogo") & 0xFF) != 1) {
+                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_startlogo", "SQ_OPEN", 1);
                 }
                 ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
@@ -389,7 +337,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             case 0:
                 switch (ctrl->_st3) {
                 case 0:
-                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startmenu01[0], &SQ_OPEN_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_startmenu01", "SQ_OPEN", 1);
                     ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
@@ -409,10 +357,10 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st3 = 0;
                         goto done;
                     }
-                    beMessenger_SelectReceivers(self->_messenger, &MODELCTRL_2[0],
-                                                &j_startmenu01[0], 0, 1);
-                    beMessenger_AppendString(self->_messenger, &SQ_LINESL00_2[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &ISSEQNAME_2[0]);
+                    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
+                                                "j_startmenu01", 0, 1);
+                    beMessenger_AppendString(self->_messenger, "SQ_LINESL00");
+                    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
                     if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
                         ctrl->_st3 = 0x3E8;
                         goto done;
@@ -420,23 +368,23 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     break;
                 case 0x3E8:
                     ctrl->_st3 = 0x3E9;
-                    beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &i_fadewn01[0], 0,
-                                          &GENERATE_2[0]);
-                    beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &i_fadewn01[0], 0,
-                                          &SQ_BLOUT30[0]);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                                          "GENERATE");
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                                          "SQ_BLOUT30");
                     goto done;
                 case 0x3E9:
-                    beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &j_startmenu01[0], 0,
-                                          &ISRUN_2[0]);
+                    beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_startmenu01", 0,
+                                          "ISRUN");
                     if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
                         ctrl->_st3 = 0x3EA;
                         goto done;
                     }
                     break;
                 case 0x3EA:
-                    beMessenger_SelectGroup(self->_messenger, &STAGECTL[0]);
-                    beMessenger_AppendString(self->_messenger, &stagIS09[0]);
-                    beMessenger_DispatchSelected(self->_messenger, &NEXTSTAGE[0]);
+                    beMessenger_SelectGroup(self->_messenger, "STAGECTL");
+                    beMessenger_AppendString(self->_messenger, "stagIS09");
+                    beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
                     ctrl->_st3 = 0x3EB;
                     goto done;
                 case 0x3EB:
@@ -446,7 +394,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             case 2:
                 switch (ctrl->_st3) {
                 case 0:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startmenu01[0], &SQ_LINEON00_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_startmenu01", "SQ_LINEON00", 1);
                     ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
@@ -472,7 +420,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         case 0:
             switch (ctrl->_st2) {
             case 0:
-                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startmenu02[0], &SQ_OPEN_2[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_startmenu02", "SQ_OPEN", 1);
                 ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
@@ -498,7 +446,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 if (up) {
                     if (ctrl->_gameMenuCnt == 1) {
                         ctrl->_gameMenuCnt = 0;
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEUP00_2[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_startmenu02", "SQ_LINEUP00", 1);
                     }
                     ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
@@ -507,7 +455,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 if (down) {
                     if (ctrl->_gameMenuCnt == 0) {
                         ctrl->_gameMenuCnt = 1;
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEDW01_2[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_startmenu02", "SQ_LINEDW01", 1);
                     }
                     ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
@@ -515,10 +463,10 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 }
                 if (pressed & ButtonCross) {
                     if (ctrl->_gameMenuCnt == 0) {
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEON00_2[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_startmenu02", "SQ_LINEON00", 1);
                         ctrl->_gameMenuNext = 1;
                     } else {
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_startmenu02[0], &SQ_LINEON01_2[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_startmenu02", "SQ_LINEON01", 1);
                         ctrl->_gameMenuNext = 2;
                     }
                     ctrl->_st2 = ctrl->_st2 + 1;
@@ -526,7 +474,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     goto done;
                 }
                 if (pressed & ButtonCircle) {
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startmenu02[0], &SQ_CANCEL_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_startmenu02", "SQ_CANCEL", 1);
                     ctrl->_st2 = 3;
                     ctrl->_st3 = 0;
                     goto done;
@@ -543,7 +491,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                             goto done;
                         case 1:
                         case 2:
-                            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startlogo[0], &SQ_CLOSE_2[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_startlogo", "SQ_CLOSE", 1);
                             ctrl->_st3 = ctrl->_st3 + 1;
                             goto done;
                         case 3:
@@ -595,7 +543,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             SET_DATA(workListRef);
         }
         option = (beNDMWTitle2Option *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
-                                                              &OPTION[0]));
+                                                              "OPTION"));
         switch (ctrl->_st1) {
         case 0:
             switch (ctrl->_st2) {
@@ -614,15 +562,15 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 option->_dispCountryConf = 1U;
                 switch (option->_selLang) {
                 case 0:
-                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optionwin02[0], &SQ_BOPEN[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optionwin02", "SQ_BOPEN", 1);
                     break;
                 case 1:
                 case 2:
-                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optionwin02[0], &SQ_AOPEN[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optionwin02", "SQ_AOPEN", 1);
                     break;
                 }
-                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor11[0], &SQ_OPEN_2[0], 1);
-                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor12[0], &SQ_OPEN_2[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor11", "SQ_OPEN", 1);
+                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_OPEN", 1);
                 option->_ctrlPos = 0;
                 option->_isOK = 0U;
                 ctrl->_st2 = ctrl->_st2 + 1;
@@ -685,12 +633,12 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     case 0:
                         if (rowUp == OptionRowOk) {
                             rowUp = OptionRowLight;
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_MOVE", 1);
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         } else if (rowUp != 0) {
                             rowUp = 0;
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_MOVE", 1);
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
@@ -701,7 +649,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         if (rowUp < 0) {
                             rowUp = 0;
                         } else {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_MOVE", 1);
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
@@ -717,7 +665,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                     case 0:
                         if ((rowDown + 1) == 2) {
                             rowDown = OptionRowOk;
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_MOVE", 1);
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                             break;
@@ -728,7 +676,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         if (rowDown > OptionRowOk) {
                             rowDown = OptionRowOk;
                         } else {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_MOVE[0], 1);
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_MOVE", 1);
                             ctrl->_st2 = ctrl->_st2 + 1;
                             ctrl->_st3 = 0;
                         }
@@ -740,7 +688,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 if (right) {
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINERT00[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINERT00", 1);
                         nextComConf = option->_dispComConf + 1;
                         if (nextComConf > 1) {
                             nextComConf = 0;
@@ -750,7 +698,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowLight:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINERT01[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINERT01", 1);
                         nextLightConf = option->_dispLightConf + 1;
                         if (nextLightConf > 1) {
                             nextLightConf = 0;
@@ -760,7 +708,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowCountry:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINERT02[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINERT02", 1);
                         switch (option->_selLang) {
                         case 1:
                             nextCountryLang1 = option->_dispCountryConf + 1;
@@ -786,7 +734,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 } else if (left) {
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINELF00[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINELF00", 1);
                         prevComConf = option->_dispComConf - 1;
                         if (prevComConf < 0) {
                             prevComConf = 1;
@@ -796,7 +744,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowLight:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINELF01[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINELF01", 1);
                         prevLightConf = option->_dispLightConf - 1;
                         if (prevLightConf < 0) {
                             prevLightConf = 1;
@@ -806,7 +754,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                         ctrl->_st3 = 0;
                         goto done;
                     case OptionRowCountry:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINELF02[0], 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINELF02", 1);
                         switch (option->_selLang) {
                         case 1:
                             prevCountryLang1 = option->_dispCountryConf - 1;
@@ -854,43 +802,43 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_LINESL00_2[0], 0);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_LINESL00", 0);
                         break;
                     case OptionRowLight:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_LINESL01[0], 0);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_LINESL01", 0);
                         break;
                     case OptionRowCountry:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_LINESL02[0], 0);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_LINESL02", 0);
                         break;
                     case OptionRowOk:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor11[0], &SQ_LINESL03[0], 0);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_LINESL03", 0);
                         break;
                     }
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_optioncursor12[0]) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINESL00_2[0], 0);
+                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL00", 0);
                         } else {
-                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor12[0], &SQ_LINESL00_2[0], 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL00", 0);
                         }
                         break;
                     case OptionRowLight:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_optioncursor12[0]) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINESL01[0], 0);
+                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL01", 0);
                         } else {
-                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor12[0], &SQ_LINESL01[0], 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL01", 0);
                         }
                         break;
                     case OptionRowCountry:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_optioncursor12[0]) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, &j_optioncursor12[0], &SQ_LINESL02[0], 0);
+                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                            beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor12", "SQ_LINESL02", 0);
                         } else {
-                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_optioncursor12[0], &SQ_LINESL02[0], 0);
+                            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_optioncursor12", "SQ_LINESL02", 0);
                         }
                         break;
                     case OptionRowOk:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, &j_optioncursor12[0]) & 0xFF) == 1) {
-                            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor12[0], &SQ_CLOSE_2[0], 0);
+                        if ((beNDMWLoadIntf2ComMdlCtrl__IsRunning(models, 0, "j_optioncursor12") & 0xFF) == 1) {
+                            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor12", "SQ_CLOSE", 0);
                         }
                         break;
                     }
@@ -942,27 +890,27 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             case 0:
                 switch (option->_ctrlPos) {
                 case OptionRowCamera:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor11[0], &SQ_LINEON00_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor11", "SQ_LINEON00", 1);
                     break;
                 case OptionRowLight:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor11[0], &SQ_LINEON01_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor11", "SQ_LINEON01", 1);
                     break;
                 case OptionRowCountry:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor11[0], &SQ_LINEON02[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor11", "SQ_LINEON02", 1);
                     break;
                 case OptionRowOk:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor11[0], &SQ_LINEON03[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor11", "SQ_LINEON03", 1);
                     break;
                 }
                 switch (option->_ctrlPos) {
                 case OptionRowCamera:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor12[0], &SQ_CLOSE_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor12", "SQ_CLOSE", 1);
                     break;
                 case OptionRowLight:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor12[0], &SQ_CLOSE_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor12", "SQ_CLOSE", 1);
                     break;
                 case OptionRowCountry:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optioncursor12[0], &SQ_CLOSE_2[0], 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optioncursor12", "SQ_CLOSE", 1);
                     break;
                 }
                 TextOrder_PublishLineListOnly(text, 0xF0001);
@@ -983,7 +931,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 }
                 break;
             case 2:
-                beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_optionwin02[0], &SQ_CLOSE_2[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_optionwin02", "SQ_CLOSE", 1);
                 ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
@@ -1010,7 +958,7 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
         case 3:
             switch (ctrl->_st2) {
             case 0:
-                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &j_startlogo[0], &SQ_OPEN_2[0], 1);
+                beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "j_startlogo", "SQ_OPEN", 1);
                 ctrl->_st2 = ctrl->_st2 + 1;
                 ctrl->_st3 = 0;
                 goto done;
@@ -1030,14 +978,14 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
             case 0:
                 ctrl->_st2 = 1;
                 ctrl->_st3 = 0;
-                beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &i_fadewn01[0], 0,
-                                      &GENERATE_2[0]);
-                beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &i_fadewn01[0], 0,
-                                      &SQ_BLOUT30[0]);
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                                      "GENERATE");
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "i_fadewn01", 0,
+                                      "SQ_BLOUT30");
                 goto done;
             case 1:
-                beMessenger_SendNamed(self->_messenger, &MODELCTRL_2[0], &j_startmenu01[0], 0,
-                                      &ISRUN_2[0]);
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_startmenu01", 0,
+                                      "ISRUN");
                 if (!(beMessenger_GetBool(self->_messenger, 0) & 0xFF)) {
                     ctrl->_st2 = 2;
                     ctrl->_st3 = 0;
@@ -1045,23 +993,23 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 }
                 break;
             case 2:
-                beMessenger_SendGroup(self->_messenger, &GAMERAM_3[0], &GETCOMMON_2[0]);
+                beMessenger_SendGroup(self->_messenger, "GAMERAM", "GETCOMMON");
                 commonSettings = beMessenger_GetObject(self->_messenger, 0);
                 savedCameraMode = option->_comConf;
                 savedLightMode = option->_lightConf;
                 /* Write the saved settings back into the GAMERAM common-settings records
                  * (value word at record +12). */
-                *(int *)((char *)(igProperty_GetRecord(commonSettings, &CAMERAMODE_2[0])) + 12) =
+                *(int *)((char *)(igProperty_GetRecord(commonSettings, "CAMERAMODE")) + 12) =
                     savedCameraMode;
-                *(int *)((char *)(igProperty_GetRecord(commonSettings, &LIGHTMODE_2[0])) + 12) =
+                *(int *)((char *)(igProperty_GetRecord(commonSettings, "LIGHTMODE")) + 12) =
                     savedLightMode;
                 g_commonSettingsValid = 1;
-                beMessenger_SendNamed(self->_messenger, &SOUND[0], 0, -1, &BGMSTOP[0]);
-                beMessenger_SendNamed(self->_messenger, &SOUND[0], 0, -1, &ENVSTOP[0]);
-                beMessenger_SendNamed(self->_messenger, &SOUND[0], 0, -1, &SESTOP[0]);
-                beMessenger_SelectGroup(self->_messenger, &STAGECTL[0]);
-                beMessenger_AppendString(self->_messenger, &stagIS08[0]);
-                beMessenger_DispatchSelected(self->_messenger, &NEXTSTAGE[0]);
+                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "BGMSTOP");
+                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "ENVSTOP");
+                beMessenger_SendNamed(self->_messenger, "SOUND", 0, -1, "SESTOP");
+                beMessenger_SelectGroup(self->_messenger, "STAGECTL");
+                beMessenger_AppendString(self->_messenger, "stagIS08");
+                beMessenger_DispatchSelected(self->_messenger, "NEXTSTAGE");
                 ctrl->_st2 = 3;
                 ctrl->_st3 = 0;
                 goto done;
@@ -1074,8 +1022,8 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
     case TitleStateFadeOut: /* Fade out for Game Start. */
         switch (ctrl->_st1) {
         case 0:
-            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, &i_fadewn01[0], &SQ_WTOUT60[0], 1);
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, &j_startback[0], &SQ_CLOSE_2[0], 1);
+            beNDMWLoadIntf2ComMdlCtrl__Start(models, 0, "i_fadewn01", "SQ_WTOUT60", 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, 0, "j_startback", "SQ_CLOSE", 1);
             ctrl->_st1 = ctrl->_st1 + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
@@ -1100,13 +1048,13 @@ void Gap__Bec__beNDMWTitle2__vfunc_31(beNDMWTitle2 *self, beBaseInfoRam *infoRam
                 SET_DATA(workListRef);
             }
             option = (beNDMWTitle2Option *)(igProperty_FindByName(infoRam->_dataList, g_propertyNameField[0],
-                                                       &OPTION[0]));
+                                                       "OPTION"));
             cameraMode = option->_comConf;
             lightMode = option->_lightConf;
-            beMessenger_SelectReceivers(self->_messenger, &LOADCTRL2_2[0], 0, 0);
+            beMessenger_SelectReceivers(self->_messenger, "LOADCTRL2", 0, 0);
             beMessenger_AppendInt(self->_messenger, cameraMode);
             beMessenger_AppendInt(self->_messenger, lightMode);
-            beMessenger_DispatchSelected(self->_messenger, &GENERATE_TITLE[0]);
+            beMessenger_DispatchSelected(self->_messenger, "GENERATE_TITLE");
             ctrl->_st1 = ctrl->_st1 + 1;
             ctrl->_st3 = 0;
             ctrl->_st2 = 0;
@@ -1135,7 +1083,7 @@ int Gap__Bec__beNDMWTitle2__vfunc_30(void)
 /* Slot 29: register the controller as the TITLE2 message receiver. */
 void Gap__Bec__beNDMWTitle2__vfunc_29(beNDMWTitle2 *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, &TITLE2[0]);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "TITLE2");
 }
 
 int Gap__Bec__beNDMWTitle2__vfunc_34(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2) {
@@ -1163,3 +1111,5 @@ int Gap__Bec__beNDMWTitle2__vfunc_20(void)
 {
     return g_beNDMWTitle2_metaObject[0];
 }
+
+#pragma pop

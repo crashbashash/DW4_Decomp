@@ -221,7 +221,7 @@ void igTransformSequence_InitFields(void) {
     temp_s2_4->f52 = 1;
     igDoubleMetaField_SetDefaultDouble(((struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)), -1.0);
     temp_v0 = ((struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048b138[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(int *)((char *)temp_v0 + 52) = (int)&igMetaEnum_GetEmpty;
     temp_v0_2 = ((struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
     igIntMetaField_SetDefault(temp_v0_2, 1);

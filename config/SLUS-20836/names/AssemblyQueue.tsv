@@ -712,8 +712,8 @@
 0x00113920	ProbeTLBEntry	sony/libkernl
 0x00113930	iProbeTLBEntry	sony/libkernl
 0x00113940	ExpandScratchPad	sony/libkernl
-0x00113bc0	_kTLBException	unmatched
-0x00113d00	_kExitTLBHandler	unmatched
+0x00113bc0	_kTLBException	sony/libkernl
+0x00113d00	_kExitTLBHandler	sony/libkernl
 0x00113f90	supplement_crt0	sony/libkernl
 0x00113fe8	Copy_initsys	sony/libkernl
 0x00113ff8	kCopy_initsys	sony/libkernl

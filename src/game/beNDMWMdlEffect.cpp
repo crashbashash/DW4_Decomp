@@ -14,7 +14,6 @@ extern "C" igObject *beBaseInfoDataList_Create(...);
 /* Property record: reference at +20. */
 struct PropertyRecordRef { char p[20]; igObject *f20; };
 extern "C" PropertyRecordRef *igProperty_FindByName(...);
-extern "C" int ONE_10[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -56,6 +55,9 @@ static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> 
 struct EffectReceiverShim { int dummy; };
 extern "C" void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
 
+#pragma push
+#pragma readonly_strings on
+
 int Gap__Bec__beNDMWMdlEffect__vfunc_35(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_EFFECT[0]) == 0;
 }
@@ -78,7 +80,7 @@ void Gap__Bec__beNDMWMdlEffect__vfunc_36(EffectReceiverShim *arg0, beBaseInfoRam
         }
         DataList::create(arg1, a);
     }
-    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_10);
+    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE");
     alloc = igObject_GetAllocator(arg0);
     if (g_useOwnerAllocator != 0) {
         a = alloc;
@@ -101,3 +103,5 @@ int Gap__Bec__beNDMWMdlEffect__vfunc_20(void)
 {
     return g_beNDMWMdlEffect_metaObject[0];
 }
+
+#pragma pop

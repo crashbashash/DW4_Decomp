@@ -5,9 +5,9 @@ int strcmp(const char *a, const char *b);
 int atoi(const char *s);
 
 extern char p2Vu1SymbolText[];
-extern int p2Vu1SymbolsUnsplit;
-extern int p2Vu1SymbolTextLength;
-extern int p2Vu1SymbolBase;
+int p2Vu1SymbolsUnsplit = 1;
+int p2Vu1SymbolBase;
+int p2Vu1SymbolTextLength;
 
 /* Splits the text into NUL-terminated names and offsets once; offsets are read relative to `base`. */
 int p2OpenVu1Symbols(const char *path, int base) {

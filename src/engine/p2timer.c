@@ -17,6 +17,8 @@
 
 /* Timer 0 counts 576 ticks a millisecond. */
 #define P2_TICKS_PER_MILLISECOND 576
+/* Timer 1 counts 65536 ticks between overflows, 71111 in units of 100 ns. */
+#define P2_NANOSECONDS_PER_WRAP 71111
 /* The compare register holds at most this many ticks; a longer delay wraps through it. */
 #define P2_TIMER_SPAN 0xffff
 
@@ -53,6 +55,7 @@ typedef union p2TimerCount {
 
 int DisableIntc(int cause);
 int EnableIntc(int cause);
+int iSignalSema(int sema);
 int fprintf(struct __sFILE *stream, const char *format, ...);
 void p2StartTimers(void);
 int p2Timer1Handler(int cause);
@@ -60,20 +63,20 @@ int p2Timer0Handler(int cause);
 void p2ArmAlarmTimer(void);
 void p2AddAlarm(int sema, int milliseconds);
 
-extern int p2Timer0HandlerId;
-extern int p2Timer1HandlerId;
-extern p2Alarm *p2PendingAlarms;
-extern p2Alarm *p2FreeAlarms;
-extern p2Alarm p2Alarms[P2_ALARM_COUNT];
-extern int p2AlarmSema;
-extern int p2TimerUsers;
-extern int p2AlarmWraps;
-extern p2TimerMode p2Timer0Mode;
-extern p2TimerMode p2Timer1Mode;
-extern long long p2ClockOverflows;
-extern long long p2NanosecondsBase;
-extern struct SemaParam p2AlarmSemaParam;
-extern struct SemaParam p2SleepSemaParam;
+int p2TimerUsers;
+int p2AlarmSema;
+p2Alarm *p2PendingAlarms;
+p2Alarm p2Alarms[P2_ALARM_COUNT];
+p2TimerMode p2Timer1Mode;
+long long p2NanosecondsBase;
+long long p2ClockOverflows;
+p2TimerMode p2Timer0Mode;
+int p2AlarmWraps;
+int p2Timer0HandlerId = -1;
+int p2Timer1HandlerId = -1;
+p2Alarm *p2FreeAlarms = p2Alarms;
+struct SemaParam p2AlarmSemaParam = {0, 1, 1, 0, 0, 0};
+struct SemaParam p2SleepSemaParam = {0, 1, 0, 0, 0, 0};
 
 void p2InitTimer(void) {
     if (p2TimerUsers++ == 0) {
@@ -135,6 +138,61 @@ void p2StartTimers(void) {
     *T1_COUNT = count.word;
     p2Timer1Mode.bits.countUp = 1;
     *T1_MODE = p2Timer1Mode.word;
+}
+
+/* Timer 1 overflowed: the clock gains a wrap and the nanosecond base one wrap's worth of 100 ns
+ * units; writing the flags back acknowledges the interrupt. */
+int p2Timer1Handler(int cause) {
+    p2TimerMode mode;
+
+    p2ClockOverflows += (*T1_MODE >> 11) & 1;
+    p2NanosecondsBase += P2_NANOSECONDS_PER_WRAP;
+    mode.word = *T1_MODE;
+    mode.bits.overflowFlag = 1;
+    mode.bits.equalFlag = 1;
+    *T1_MODE = mode.word;
+    __asm__ __volatile__("sync\nei\n");
+    return 0;
+}
+
+/* Timer 0 reached the compare value of the first pending alarm. While the alarm still has whole
+ * wraps to wait out, the timer starts another; otherwise the alarms that are due signal their
+ * semaphores and return to the pool, and the timer is armed for the next. */
+int p2Timer0Handler(int cause) {
+    p2Alarm *alarm;
+
+    if (p2AlarmWraps != 0) {
+        p2Timer0Mode.bits.countUp = 0;
+        *T0_MODE = p2Timer0Mode.word;
+        p2AlarmWraps--;
+        p2Timer0Mode.bits.zeroReturn = 0;
+        p2Timer0Mode.bits.compareInterrupt = 0;
+        p2Timer0Mode.bits.overflowInterrupt = 1;
+        p2Timer0Mode.bits.equalFlag = 1;
+        p2Timer0Mode.bits.overflowFlag = 1;
+        p2Timer0Mode.bits.countUp = 1;
+        *T0_MODE = p2Timer0Mode.word;
+    } else {
+        p2Timer0Mode.bits.countUp = 0;
+        *T0_MODE = p2Timer0Mode.word;
+        if (p2PendingAlarms != 0) {
+            p2PendingAlarms->delay = 0;
+            while (p2PendingAlarms != 0 && p2PendingAlarms->delay == 0) {
+                iSignalSema(p2PendingAlarms->sema);
+                alarm = p2PendingAlarms;
+                p2PendingAlarms = alarm->next;
+                alarm->next = p2FreeAlarms;
+                p2FreeAlarms = alarm;
+            }
+            if (p2PendingAlarms != 0) {
+                p2ArmAlarmTimer();
+                p2Timer0Mode.bits.countUp = 1;
+                *T0_MODE = p2Timer0Mode.word;
+            }
+        }
+    }
+    __asm__ __volatile__("sync\nei\n");
+    return 0;
 }
 
 void p2ReadClock(long long *time) {

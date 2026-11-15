@@ -5,18 +5,62 @@
 
 #define DMAC_SIF0 5
 
+/* sceSifSendCmd modes: wait-free (interrupt-level) send, and write back the extra data first */
+#define SIF_CMD_M_INTR 0x1
+#define SIF_CMD_M_WBDC 0x4
+/* the sizes a command packet may have */
+#define SIF_CMD_PACKET_MIN 16
+#define SIF_CMD_PACKET_MAX 112
+/* the transfer attributes of the packet's own DMA: end-of-transfer, interrupt on the IOP */
+#define SIF_DMA_PACKET 0x44
+
+typedef struct {
+    unsigned int data;
+    unsigned int addr;
+    unsigned int size;
+    unsigned int mode;
+} sceSifDmaData;
+
+/* the SIF registers sceSifInitCmd hands the receive buffer and the command data over in */
+#define SIF_SYSREG_SUBADDR 0x80000000
+#define SIF_SYSREG_MAINADDR 0x80000001
+#define SIF_REG_SUBADDR 2
+#define SIF_REG_SMFLAG 4
+#define SIF_STAT_CMDINIT 0x20000
+/* the system commands' handler table */
+#define SIF_SYS_CMD_MAX 32
+
+#define D_STAT (*(volatile unsigned int *)0x1000E010)
+#define D_STAT_CIS_SIF0 (1 << DMAC_SIF0)
+#define D5_CHCR (*(volatile unsigned int *)0x1000C000)
+#define D_CHCR_STR 0x100
+
+#define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
+
 int DIntr(void);
 int EIntr(void);
+void FlushCache(int operation);
+int AddDmacHandler(int channel, int (*handler)(int), int next);
+int EnableDmac(int channel);
 int DisableDmac(int channel);
 int RemoveDmacHandler(int channel, int id);
+unsigned int sceSifGetReg(unsigned int reg);
+int sceSifSetReg(unsigned int reg, unsigned int value);
+void sceSifSetDChain(void);
 
 extern int _cmd_init_check;
+extern char _pckt_buffer[128];
+extern char _send_buffer[64];
+extern sceSifCmdChangeAddr _csdata;
 extern int sif0_handleid;
 extern sceSifCmdState _sif_cmd_data;
+extern sceSifCmdData _sys_buffer[SIF_SYS_CMD_MAX];
 extern unsigned int sifSregs[32];
 
-unsigned int _sceSifSendCmd(unsigned int cid, int mode, void *packet, int size, void *src, void *dest,
-                            int len);
+unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
+unsigned int isceSifSetDma(sceSifDmaData *transfers, int count);
+unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len);
+int _sceSifCmdIntrHdlr(int channel);
 
 static void _set_sreg(sceSifCmdSRegData *packet, sceSifCmdState *state)
 {
@@ -42,6 +86,61 @@ unsigned int sceSifSetSreg(int reg, unsigned int value)
 sceSifCmdState *sceSifGetDataTable(void)
 {
     return &_sif_cmd_data;
+}
+
+void sceSifInitCmd(void)
+{
+    int i;
+
+    DIntr();
+    if (_cmd_init_check) {
+        EIntr();
+        return;
+    }
+    _cmd_init_check = 1;
+    /* matching construct: permutation search — field store order */
+    _sif_cmd_data.pktbuf = UNCACHED(_pckt_buffer);
+    _sif_cmd_data.unused = UNCACHED(_send_buffer);
+    _sif_cmd_data.sysCount = SIF_SYS_CMD_MAX;
+    _sif_cmd_data.iopbuf = 0;
+    _sif_cmd_data.sysTable = _sys_buffer;
+    _sif_cmd_data.userTable = 0;
+    _sif_cmd_data.userCount = 0;
+    _sif_cmd_data.sregs = sifSregs;
+    for (i = 0; i < SIF_SYS_CMD_MAX; i++) {
+        _sys_buffer[i].func = 0;
+        _sys_buffer[i].data = 0;
+    }
+    for (i = 0; i < 32; i++) {
+        sifSregs[i] = 0;
+    }
+    _sys_buffer[0].func = (sceSifCmdHandler)_change_addr;
+    _sys_buffer[0].data = &_sif_cmd_data;
+    _sys_buffer[1].func = (sceSifCmdHandler)_set_sreg;
+    _sys_buffer[1].data = &_sif_cmd_data;
+    EIntr();
+    FlushCache(0);
+    if (D_STAT & D_STAT_CIS_SIF0) {
+        D_STAT = D_STAT_CIS_SIF0;
+    }
+    if (!(D5_CHCR & D_CHCR_STR)) {
+        sceSifSetDChain();
+    }
+    sif0_handleid = AddDmacHandler(DMAC_SIF0, _sceSifCmdIntrHdlr, 0);
+    EnableDmac(DMAC_SIF0);
+    _sif_cmd_data.iopbuf = (void *)sceSifGetReg(SIF_SYSREG_SUBADDR);
+    if (_sif_cmd_data.iopbuf) {
+        _csdata.iopbuf = _pckt_buffer;
+        sceSifSendCmd(SIF_CMD_SYSTEM, &_csdata, sizeof(_csdata), 0, 0, 0);
+        return;
+    }
+    while (!(sceSifGetReg(SIF_REG_SMFLAG) & SIF_STAT_CMDINIT));
+    _sif_cmd_data.iopbuf = (void *)sceSifGetReg(SIF_REG_SUBADDR);
+    sceSifSetReg(SIF_SYSREG_SUBADDR, (unsigned int)_sif_cmd_data.iopbuf);
+    sceSifSetReg(SIF_SYSREG_MAINADDR, (unsigned int)&_sif_cmd_data);
+    _csdata.iopbuf = _pckt_buffer;
+    _csdata.hdr.opt = 0;
+    sceSifSendCmd(SIF_CMD_INIT_CMD, &_csdata, sizeof(_csdata), 0, 0, 0);
 }
 
 void sceSifExitCmd(void)
@@ -87,6 +186,46 @@ void sceSifRemoveCmdHandler(unsigned int cid)
         return;
     }
     _sif_cmd_data.userTable[cid].func = 0;
+}
+
+static unsigned int _sceSifSendCmd(unsigned int cid, int mode, void *packet, int size, void *src,
+                                   void *dest, int len)
+{
+    sceSifDmaData transfers[2];
+    sceSifCmdHdr *hdr = packet;
+    int count;
+
+    if (size < SIF_CMD_PACKET_MIN || size > SIF_CMD_PACKET_MAX) {
+        return 0;
+    }
+    count = 0;
+    if (len > 0) {
+        hdr->dsize = len;
+        transfers[0].data = (unsigned int)src;
+        transfers[0].addr = (unsigned int)dest;
+        hdr->dest = (unsigned int)dest;
+        transfers[0].size = len;
+        transfers[0].mode = 0;
+        count = 1;
+        if (mode & SIF_CMD_M_WBDC) {
+            sceSifWriteBackDCache(src, len);
+        }
+    } else {
+        hdr->dsize = 0;
+        hdr->dest = 0;
+    }
+    transfers[count].data = (unsigned int)packet;
+    transfers[count].addr = (unsigned int)_sif_cmd_data.iopbuf;
+    transfers[count].size = size;
+    hdr->cid = cid;
+    hdr->psize = size;
+    transfers[count].mode = SIF_DMA_PACKET;
+    sceSifWriteBackDCache(packet, size);
+    count++;
+    if (mode & SIF_CMD_M_INTR) {
+        return isceSifSetDma(transfers, count);
+    }
+    return sceSifSetDma(transfers, count);
 }
 
 unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len)

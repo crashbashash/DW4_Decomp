@@ -1,9 +1,13 @@
+igMetaObject *g_igLuaState_metaObject;
+igMetaField *g_igLuaState_luaStateMetaField;
+igMetaField *g_igLuaState_memPoolMetaField;
+
 igMetaObject *igLuaState_GetMetaObject(void)
 {
-    igMetaObject *meta = g_igLuaState_metaObject[0];
+    igMetaObject *meta = g_igLuaState_metaObject;
     if (!meta || isRegistered(meta) == false)
         igLuaState_EnsureRegistered();
-    return g_igLuaState_metaObject[0];
+    return g_igLuaState_metaObject;
 }
 
 int igLuaState_GetVTable(void) {
@@ -36,15 +40,17 @@ void igLuaState_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLuaState_Register);
 }
 
+static igMetaObjectCallback g_igLuaState_callbackList[] = {igMemoryPool_EnsureRegistered, 0};
+
 void *igLuaState_Register(void) {
     LuaLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igLuaState_metaObject,
+        &g_igLuaState_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igLuaState_GetMetaObject,
-        igLuaState_className,
+        "igLuaState",
         0x14, /* instance size */
         igLuaState_GetVTable,
         igLuaState_InitFields,
@@ -57,8 +63,25 @@ void thunk_igLuaState_GetMetaObject(void) {
     igLuaState_GetMetaObject();
 }
 
+static FieldFactory g_igLuaState_fieldConstructors[] = {
+    igRawRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igLuaState_fieldNames[] = {
+    "_luaState",
+    "_memPool",
+};
+static igMetaField **g_igLuaState_fieldDescriptors[] = {
+    &g_igLuaState_luaStateMetaField,
+    &g_igLuaState_memPoolMetaField,
+};
+static int g_igLuaState_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void igLuaState_InitFields(void) {
-    igMetaObject *meta = g_igLuaState_metaObject[0];
+    igMetaObject *meta = g_igLuaState_metaObject;
     int first = igMetaObject_GetFieldCount(meta);
     igObjectRefMetaField *memPool;
 

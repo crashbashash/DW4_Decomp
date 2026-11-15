@@ -209,8 +209,6 @@ static int g_igPsx2Controller_fieldOffsets[] = {
     89,
     90,
 };
-static int g_igPsx2Controller_typeDefault = 1;
-static int g_igPsx2Controller_phaseDefault = 0;
 
 void igPsx2Controller_InitFields(void) {
     int temp_s1;
@@ -229,7 +227,7 @@ void igPsx2Controller_InitFields(void) {
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6); q->f52 = 2; }
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7); q->f52 = 2; }
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igPsx2Controller_typeDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, 1);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), 0xFFFF);
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE); q->f52 = 2; }
@@ -238,7 +236,7 @@ void igPsx2Controller_InitFields(void) {
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11), 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12), 1);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &g_igPsx2Controller_phaseDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     *(int *)((char *)(temp_v0_2) + 52) = (int)(&FUN_00147030);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15), 1);
     igMetaObject_NameFields(temp_s0, g_igPsx2Controller_fieldTable, g_igPsx2Controller_fieldHandles, g_igPsx2Controller_fieldOffsets, temp_s1);

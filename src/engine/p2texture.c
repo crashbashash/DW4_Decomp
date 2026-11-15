@@ -7,7 +7,7 @@ int EIntr();
 int p2GrowPool();
 int p2SubmitDmaPacket();
 void p2SetClut(void *clut);
-int FUN_001fcb00();
+int p2UploadTex0Context2();
 int p2GetTextureBase();
 int p2RegisterPredicateName();
 void textureDeferredPredicate(void);
@@ -216,7 +216,7 @@ void FUN_002084e0(Texture *texture) {
     extern GsSyncState *p2CurrentGsRegisters;
     extern int p2DirtyFlags;
     extern long long p2GsDirtyRegisters;
-    void FUN_001fcb00(void);
+    void p2UploadTex0Context2(void);
     if (texture == 0) return;
     if (texture->clut != 0) {
         p2SetClut(texture->clut);
@@ -252,7 +252,7 @@ void FUN_002084e0(Texture *texture) {
         p2CurrentGsRegisters->tex0_2.th = texture->tex0.th;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x48000080LL;
-        if (p2CurrentProgram == 1 && texture->bufferMode == 0) FUN_001fcb00();
+        if (p2CurrentProgram == 1 && texture->bufferMode == 0) p2UploadTex0Context2();
     }
 }
 
@@ -289,7 +289,7 @@ void FUN_00208f70(int arg0) {
         p2DirtyFlags[0] = temp_a2;
         p2GsDirtyRegisters[0] = temp_a1;
         if (p2CurrentProgram[0] == 1) {
-            FUN_001fcb00();
+            p2UploadTex0Context2();
         }
     }
     p2DirtyFlags[0] |= 0x11;
@@ -317,7 +317,7 @@ void FUN_00209090(int arg0, int arg1) {
         p2DirtyFlags[0] |= 0x40;
         p2GsDirtyRegisters[0] |= 0x80;
         if (p2CurrentProgram[0] == 1) {
-            FUN_001fcb00();
+            p2UploadTex0Context2();
         }
     }
     p2DirtyFlags[0] |= 0x11;
@@ -358,7 +358,7 @@ void FUN_00209210(int arg0, int arg1, int arg2, long long arg3, long long arg4, 
         p2DirtyFlags[0] = temp_a2;
         p2GsDirtyRegisters[0] = temp_a1;
         if (p2CurrentProgram[0] == 1) {
-            FUN_001fcb00();
+            p2UploadTex0Context2();
         }
     }
 }

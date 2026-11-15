@@ -8,16 +8,12 @@ enum { LSC_STAT_ERROR = 3 };
 
 typedef void (*AdxtDecInfoFunc)(AdxtObj *adxt, int sfreq, int nch, int total_nsmpl);
 
-extern AdxtDecInfoFunc adxt_decinfo_func;
-extern int adxt_playing_nch;
-extern int adxt_playing_ndata;
-extern int adxt_eos_rna_ndata;
+AdxtDecInfoFunc adxt_decinfo_func = 0;
+int adxt_playing_nch = 0;
+int adxt_playing_ndata = 0;
+int adxt_eos_rna_ndata = 0;
 /* The V-sync count; the vertical-blank interrupt path increments it. */
 extern volatile int adxt_vsync_cnt;
-
-extern char E8101201_adxt_trap_entry_not_enough_data[];
-extern char E9081001_adxt_stat_decinfo_can_t_play_this_number_of_channels[];
-extern char E02080842_ADXT_ExecHndl_parameter_error[];
 
 int ADX_DecodeFooter(char *buf, int len, short *ftrlen);
 int ADX_ScanInfoCode(char *buf, int len, short *pos);
@@ -77,7 +73,7 @@ void adxt_trap_entry(AdxtObj *adxt)
     }
     sji->vtbl->getChunk(sji, SJ_LIN_DATA, adxt->lp_skiplen, &ck);
     if (ck.len < adxt->lp_skiplen) {
-        ADXERR_CallErrFunc1(E8101201_adxt_trap_entry_not_enough_data);
+        ADXERR_CallErrFunc1("E8101201 adxt_trap_entry: not enough data");
     }
     sji->vtbl->putChunk(sji, SJ_LIN_FREE, &ck);
     ADXSJD_SetTrapCnt(sjd, 0);
@@ -229,7 +225,7 @@ void adxt_stat_decinfo(AdxtObj *adxt)
     nch = ADXSJD_GetNumChan(sjd);
     if (adxt->maxnch < nch) {
         ADXERR_ItoA2(nch, adxt->maxnch, nchstr, 16);
-        ADXERR_CallErrFunc2(E9081001_adxt_stat_decinfo_can_t_play_this_number_of_channels, nchstr);
+        ADXERR_CallErrFunc2("E9081001 adxt_stat_decinfo: can't play this number of channels", nchstr);
         ADXT_Stop(adxt);
         return;
     }
@@ -565,7 +561,7 @@ void adxt_ExecRdCompChk(AdxtObj *adxt)
 void ADXT_ExecHndl(AdxtObj *adxt)
 {
     if (adxt == 0) {
-        ADXERR_CallErrFunc1(E02080842_ADXT_ExecHndl_parameter_error);
+        ADXERR_CallErrFunc1("E02080842 ADXT_ExecHndl: parameter error");
         return;
     }
     if (adxt->stat == ADXT_STAT_PLAYING) {

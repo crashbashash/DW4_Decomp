@@ -13,7 +13,6 @@ extern "C" igObject *FUN_00350020(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
 struct PropertyRecord { char header[20]; igObject *value; };
 extern "C" PropertyRecord *igProperty_FindByName(...);
-extern "C" int ONE_9[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -59,6 +58,9 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
 } };
 extern "C" void Gap__Bec__beNDMWMdlEBullet__vfunc_36(beNDMWMdlEBullet *arg0, beBaseInfoRam *arg1);
 
+#pragma push
+#pragma readonly_strings on
+
 int Gap__Bec__beNDMWMdlEBullet__vfunc_35(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_EBULLET[0]) == 0;
 }
@@ -73,7 +75,7 @@ void Gap__Bec__beNDMWMdlEBullet__vfunc_36(beNDMWMdlEBullet *arg0, beBaseInfoRam 
     int alloc;
     int a;
     RamDataList::Ensure(arg1);
-    s1 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], ONE_9);
+    s1 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], "ONE");
     alloc = igObject_GetAllocator(arg0);
     if (g_useOwnerAllocator != 0) {
         a = alloc;
@@ -94,3 +96,5 @@ int Gap__Bec__beNDMWMdlEBullet__vfunc_20(void)
 {
     return g_beNDMWMdlEBullet_metaObject[0];
 }
+
+#pragma pop

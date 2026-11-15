@@ -110,6 +110,30 @@ name them (`config/SLUS-20836/names/newlib.tsv`).
 * The two leading `nop`s and the `_args` block stay outside the file: a function's object may hold only its own code.
 * `tools/check.py` needed one fix for it: an `R_MIPS_26` jump to a local label keeps its offset in the instruction field (ELF REL), and `verify.apply_relocs` now adds that in-place addend.
 
+### libkernl TLB trap
+
+`_kTLBException` (`0x113bc0`, 284 bytes), `_kExitTLBHandler` (`0x113d00`, 244 bytes) and `_kDebugException`
+(`0x113e00`, 288 bytes): `src/sony/libkernl/tlbtrap.S`.
+
+* Sony's own build records it. The SDK 3.0.3 `libkernl.a` holds the three functions in one member, `tlbtrap.o`, whose
+  file symbols name `tlbtrap.s` and which has none of the compiler markers its C siblings carry. Its `.text` is the
+  executable's, relocated words masked: three functions at offsets `0x0`, `0x140` and `0x240`, which the executable
+  keeps 64-byte aligned, and a debug function one padding word longer in the executable than in the member.
+* No compiler writes them. They are kernel exception entries with no frame: each saves the general registers with
+  `sq` through `k0`, reads HI, HI1, LO, LO1 and SA with `mfhi1`, `mflo1` and `mfsa`, reads Status, Cause, EPC and the
+  bad-address registers, points EPC at a stub, clears EXL in Status and leaves through `eret`; the stub calls the
+  registered handler with `sp` at the frame and ends in a `syscall` (`-84`) or a `break`. `_kExitTLBHandler` is the
+  function that system call reaches: the syscall table at `0x4822a8` installs it as call `0x54`. It clears IE, EXL and
+  the mode bits in Status, restores EPC, HI, HI1, LO, LO1, SA and the registers with `lq`, sets IE, EXL and user mode
+  in Status (`ori 0x13`) and returns from the exception with `eret`.
+* The file keeps the member's name for each register-save datum, which is data of the image (`EEREG`, the frame and
+  the top of the handler stack, `EERH0`, `EERH1`, `EERL0`, `EERL1`, `EERSA` and `EEEPC`, at `0x55a700` and
+  `0x55a900` to `0x55a928`), and takes the handler words `_kTLBRefillHandler` and `_kDebugHandler` from `tlbfunc.c`.
+  Instructions are mnemonics in `noreorder` mode, as in the other kernel files; the member's two local labels, which
+  the stubs' addresses are formed from, are the stub's own.
+* No upstream text of the file exists. The `.S` is written from the member's symbols and the executable's code, as
+  the syscall stubs are, and assembles to the executable's bytes.
+
 ## Open questions
 
 * **Which compiler generated the R5900 `.S` files** before they were edited. Their `lui`/`ori` -1

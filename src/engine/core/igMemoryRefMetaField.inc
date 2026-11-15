@@ -237,7 +237,7 @@ void igMemoryRefMetaField_InitFields(void) {
     index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
     field = (igMetaField *)igEnumMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_resetMethod, &g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)field, &g_igMemoryRefMetaField_resetMethodDefault);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)field, g_igMemoryRefMetaField_resetMethodDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)igMetaField_GetResetTypeMetaEnum;
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);

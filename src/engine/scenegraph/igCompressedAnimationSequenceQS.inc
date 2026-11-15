@@ -177,7 +177,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     temp_s2_3->f56 = igUnsignedShortList_GetOrCreateMetaObject();
     igUnsignedLongMetaField_SetDefaultValue(((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)), 0xFFFFFFFFFFFFFFFFULL);
     temp_v0 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048c5a0[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     temp_v0->f52 = (int)&igMetaEnum_GetEmpty;
     temp_v0_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     igIntMetaField_SetDefault(temp_v0_2, 1);

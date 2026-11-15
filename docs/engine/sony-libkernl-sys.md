@@ -10,7 +10,7 @@ from the retail relocations.
 |---|---|---|
 | `src/sony/libkernl/iopreset.c` | `0x113398..0x113678` | `sceSifResetIop`, `sceSifIsAliveIop`, `sceSifSyncIop`, `sceSifRebootIop`; strings `"rom0:UDNL "` and the too-long message at `0x4d26a0`, `resetPacket` in `.bss` |
 | `src/sony/libkernl/tlbfunc.c` | `0x113678..0x113bc0` | TLB refill/debug hooks, the TLB patch (`tlbsrc`, `SysEntry_tlbfunc`), the TLB system calls, `InitTLB`, `InitTLB32MB` (static); the `# TLB` strings at `0x4d26d0` |
-| tlbtrap (assembly) | `0x113bc0..0x113f20` | `_kTLBException`, `_kExitTLBHandler`, `_kDebugException`: kernel-mode exception entries, no C |
+| `src/sony/libkernl/tlbtrap.S` | `0x113bc0..0x113f20` | `_kTLBException`, `_kExitTLBHandler`, `_kDebugException`: kernel-mode exception entries, an approved assembly source ([assembly sources](assembly-sources.md#libkernl-tlb-trap)); the frame they save to is data at `0x55a700` |
 | `src/sony/libkernl/diei.c` | `0x113f20..0x113f90` | `DIntr`, `EIntr` |
 | `src/sony/libkernl/initsys.c` | `0x113f90..0x114220` | `_InitSys` and the start-up it runs: the two semaphores, finding the kernel's system call table |
 | `src/sony/libkernl/libosd.c` | `0x114220..0x1143a0` | the ExecPS2 kernel patch (`osdsrc`, `SysExecPS2Entry`), applied when `PatchIsNeeded` |

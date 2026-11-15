@@ -118,6 +118,7 @@
 00108538	_doCSC	match	-
 00108660	_ch3dmaCSC	match	-
 00108968	_ch4dma	match	-
+00108a40	_cscStoreImage	match	-
 00108cc8	sceMpegInit	match	-
 00108d78	sceMpegCreate	match	-
 00108f88	sceMpegDelete	match	-
@@ -310,11 +311,13 @@
 0010d198	sceSifGetSreg	match	-
 0010d1b0	sceSifSetSreg	match	-
 0010d1d0	sceSifGetDataTable	match	-
+0010d1e0	sceSifInitCmd	match	-
 0010d460	sceSifExitCmd	match	-
 0010d498	sceSifSetCmdBuffer	match	-
 0010d4b0	sceSifSetSysCmdBuffer	match	-
 0010d4c8	sceSifAddCmdHandler	match	-
 0010d540	sceSifRemoveCmdHandler	match	-
+0010d590	_sceSifSendCmd	match	-
 0010d6c8	sceSifSendCmd	match	-
 0010d708	isceSifSendCmd	match	-
 0010d890	sceSifWriteBackDCache	match	-
@@ -348,8 +351,10 @@
 0010ef30	_sceFsWaitS	match	-
 0010ef60	_sceFsSigSema	match	-
 0010ef70	scePowerOffHandler	match	-
+0010f060	sceFsInit	match	-
 0010f268	_fs_version	match	-
 0010f2f8	sceFsReset	match	-
+0010f330	sceOpen	match	-
 0010f5b8	sceClose	match	-
 00110208	sceIoctl2	match	-
 001103e8	_sceCallCode	match	-
@@ -415,6 +420,9 @@
 001138c0	SetTLBEntry	match	-
 00113950	InitTLB	match	-
 00113990	InitTLB32MB	match	-
+00113bc0	_kTLBException	assembly	-
+00113d00	_kExitTLBHandler	assembly	-
+00113e00	_kDebugException	assembly	-
 00113f20	DIntr	match	-
 00113f78	EIntr	match	-
 00113f90	supplement_crt0	match	-
@@ -447,6 +455,7 @@
 00114660	kCopy_alarm	match	-
 00114698	GetEntryAddress_alarm	match	-
 001146a8	InitAlarm	match	-
+00114780	SetT2	match	-
 001147f0	SetT2_COUNT	match	-
 00114800	SetT2_MODE	match	-
 00114810	SetT2_COMP	match	-
@@ -458,6 +467,7 @@
 00114b70	SetNextComp	match	-
 00114d00	InsertAlarm	match	-
 00114d88	UnlinkAlarm	match	-
+00114dc0	cbTimerHandler	match	-
 00115060	iGetTimerSystemTime	match	-
 001150b0	GetTimerSystemTime	match	-
 00115130	iAllocTimerCounter	match	-
@@ -5621,6 +5631,10 @@
 001e8be0	p2SetColorScaler	match	-
 001e8d10	p2SetScissor	match	-
 001e9090	p2SetSoftwareBlendSource	match	-
+001e91c0	p2SoftwareBlendFourWeights	match	-
+001e9320	p2SoftwareBlendThreeWeights	match	-
+001e9450	p2SoftwareBlendTwoWeights	match	-
+001e9550	p2SoftwareBlendOneWeight	match	-
 001e9600	p2SoftwareBlend	match	-
 001e96d0	p2SetBlendWeightCount	match	-
 001e9720	p2SetBlendWeightArray	match	-
@@ -5772,7 +5786,9 @@
 001fc680	p2GetPassCombineMode	match	-
 001fc770	p2WritePassPacket	match	-
 001fca50	p2GetPassMasks	match	-
+001fcb00	p2UploadTex0Context2	match	-
 001fcc10	p2LayoutParticleFormat	match	-
+001fd160	p2WriteParticleBlockCodes	match	-
 001fd5a0	FUN_001fd5a0	match	-
 001fd660	FUN_001fd660	match	-
 001fd7a0	FUN_001fd7a0	match	-
@@ -5858,6 +5874,8 @@
 0020cc50	p2StopTimers	match	-
 0020ccd0	p2ShutdownTimer	match	-
 0020cd10	p2StartTimers	match	-
+0020cfa0	p2Timer1Handler	match	-
+0020d040	p2Timer0Handler	match	-
 0020d270	p2ReadClock	match	-
 0020d290	p2ReadNanoseconds	match	-
 0020d340	p2Sleep	match	-
@@ -7370,6 +7388,7 @@
 0025b468	ADXAMP_GetStat	match	-
 0025b470	ADXAMP_Start	match	-
 0025b610	ADXAMP_Stop	match	-
+0025b618	adxamp_Extract	match	-
 0025b8a8	ADXAMP_ExecHndl	match	-
 0025b8d0	ADXAMP_ExecServer	match	-
 0025b930	ADXAMP_GetNumSmpl	match	-
@@ -7397,6 +7416,8 @@
 0025c5a0	adxb_GetAuInfo	match	-
 0025c8b8	ADXB_CheckAu	match	-
 0025c910	ADX_DecodeInfoAu	match	-
+0025ca20	ADXB_DecodeHeaderAu	match	-
+0025cb20	ADXB_ExecOneAu16	match	-
 0025ccb8	ADXB_ExecOneAu8	match	-
 0025ce38	ADXB_ExecOneAuUlaw	match	-
 0025cfe0	ADXB_ExecOneAu	match	-
@@ -7454,9 +7475,10 @@
 0025def8	ADXB_GetDecNumSmpl	match	-
 0025df00	FUN_0025df00	match	-
 0025df10	FUN_0025df10	match	-
-0025df18	FUN_0025df18	match	-
-0025df68	FUN_0025df68	match	-
-0025dfc0	FUN_0025dfc0	match	-
+0025df18	ADXB_EvokeExpandMono	match	-
+0025df68	ADXB_EvokeExpandSte	match	-
+0025dfc0	ADXB_EvokeExpandPl2	match	-
+0025e018	ADXB_EvokeDecode	match	-
 0025e120	FUN_0025e120	match	-
 0025e150	FUN_0025e150	match	-
 0025e1c0	FUN_0025e1c0	match	-
@@ -7466,6 +7488,7 @@
 0025e5a0	FUN_0025e5a0	match	-
 0025e608	FUN_0025e608	match	-
 0025e668	adxb_GetSpsdInfo	match	-
+0025e788	ADXB_DecodeHeaderSpsd	match	-
 0025e880	ADXB_ExecOneSpsd	match	-
 0025e9f8	ADXB_CheckSpsd	match	-
 0025ed50	ADXB_ExecOneWav16	match	-
@@ -7555,6 +7578,7 @@
 00262938	FUN_00262938	match	-
 00262950	ADXT_ExecFsSvr	match	-
 00262a00	ADXT_ExecFsServer	match	-
+00262a18	ADXT_IsActiveFsSvr	match	-
 00262a30	FUN_00262a30	match	-
 00262a48	FUN_00262a48	match	-
 00262a60	FUN_00262a60	match	-
@@ -7598,8 +7622,8 @@
 00263db0	adxm_safe_count_up	match	-
 00263dc8	adxm_safe_thrd	match	-
 00263e20	adxm_usrvsync_thrd	unapproved	unapproved: 4 volatile without an approval row
-00263eb8	adxm_vsync_thrd	unapproved	unapproved: 7 volatile without an approval row
-00263fc0	adxm_fs_thrd	unapproved	unapproved: 6 volatile without an approval row
+00263eb8	adxm_vsync_thrd	match	-
+00263fc0	adxm_fs_thrd	match	-
 002640a0	adxm_mwidle_thrd	unapproved	unapproved: 7 volatile without an approval row
 002641d8	adxm_usridle_thrd	unapproved	unapproved: 5 volatile without an approval row
 002642b0	adxm_iwakeup_thrd	match	-
@@ -7623,6 +7647,7 @@
 002648a8	ADXM_ExecSvrAll	match	-
 002648e8	ADXM_IsSetupThrd	match	-
 002648f8	ADXM_SetCbErr	match	-
+00264910	ADXM_SetupThrd	match	-
 00264aa0	adxm_request_thrd_exit	match	-
 00264af0	ADXM_ShutdownThrd	match	-
 00264b88	adxm_delete_usridle_thrd	match	-
@@ -7785,6 +7810,7 @@
 002677c8	FUN_002677c8	match	-
 002677d0	FUN_002677d0	match	-
 002677e0	FUN_002677e0	match	-
+00267810	FUN_00267810	match	-
 00267968	FUN_00267968	match	-
 002679d0	FUN_002679d0	match	-
 00267b90	FUN_00267b90	match	-
@@ -8194,22 +8220,22 @@
 002739e8	FUN_002739e8	match	-
 00273a40	FUN_00273a40	match	-
 00273a90	FUN_00273a90	match	-
-00273b58	FUN_00273b58	match	-
-00273bd0	FUN_00273bd0	match	-
+00273b58	dvCiExecServer	match	-
+00273bd0	dvCiEntryErrFunc	match	-
 00273be8	FUN_00273be8	match	-
-00273c60	FUN_00273c60	match	-
-00273ce8	FUN_00273ce8	match	-
+00273c60	dvCiIsExistFileOnDisc	match	-
+00273ce8	dvCiGetFileSize	match	-
 00273da8	FUN_00273da8	match	-
 00273de0	FUN_00273de0	match	-
-00273e00	FUN_00273e00	match	-
-00273f78	FUN_00273f78	match	-
-00273fd0	FUN_00273fd0	match	-
-00274068	FUN_00274068	match	-
-002740a0	FUN_002740a0	match	-
-00274248	FUN_00274248	match	-
-00274330	FUN_00274330	match	-
-00274368	FUN_00274368	match	-
-00274370	FUN_00274370	match	-
+00273e00	dvCiOpen	match	-
+00273f78	dvCiClose	match	-
+00273fd0	dvCiSeek	match	-
+00274068	dvCiTell	match	-
+002740a0	dvCiReqRd	match	-
+00274248	dvCiStopTr	match	-
+00274330	dvCiGetStat	match	-
+00274368	dvCiGetSctLen	match	-
+00274370	dvCiGetNumTr	match	-
 002743c0	FUN_002743c0	match	-
 002743d0	FUN_002743d0	match	-
 002743e0	dvCiSetLayer	match	-
@@ -8219,7 +8245,7 @@
 002744b8	FUN_002744b8	match	-
 002744d8	FUN_002744d8	match	-
 002744e0	FUN_002744e0	match	-
-002744f8	FUN_002744f8	match	-
+002744f8	dvCiOptFn1	match	-
 002745c0	FUN_002745c0	match	-
 00274668	FUN_00274668	match	-
 002746a0	FUN_002746a0	match	-
@@ -8250,29 +8276,29 @@
 00275458	FUN_00275458	match	-
 002754c0	FUN_002754c0	match	-
 00275520	FUN_00275520	match	-
-002755e8	FUN_002755e8	match	-
-00275660	FUN_00275660	match	-
-00275678	FUN_00275678	match	-
-00275718	FUN_00275718	match	-
-00275740	FUN_00275740	match	-
+002755e8	htCiExecServer	match	-
+00275660	htCiEntryErrFunc	match	-
+00275678	htCiIsExistFileOnHost	match	-
+00275718	htCiGetFileSize	match	-
+00275740	htCiGetFileSize64	match	-
 002758f8	FUN_002758f8	match	-
 00275980	FUN_00275980	match	-
 002759b8	FUN_002759b8	match	-
-002759d8	FUN_002759d8	match	-
-00275b50	FUN_00275b50	match	-
-00275bf0	FUN_00275bf0	match	-
-00275c88	FUN_00275c88	match	-
-00275cc0	FUN_00275cc0	match	-
-00275e50	FUN_00275e50	match	-
-00275f48	FUN_00275f48	match	-
-00275f80	FUN_00275f80	match	-
-00275f88	FUN_00275f88	match	-
+002759d8	htCiOpen	match	-
+00275b50	htCiClose	match	-
+00275bf0	htCiSeek	match	-
+00275c88	htCiTell	match	-
+00275cc0	htCiReqRd	match	-
+00275e50	htCiStopTr	match	-
+00275f48	htCiGetStat	match	-
+00275f80	htCiGetSctLen	match	-
+00275f88	htCiGetNumTr	match	-
 00275fd8	FUN_00275fd8	match	-
 00275ff0	FUN_00275ff0	match	-
 00276010	FUN_00276010	match	-
 00276040	FUN_00276040	match	-
 00276060	FUN_00276060	match	-
-00276090	FUN_00276090	match	-
+00276090	htCiOptFn1	match	-
 00276158	FUN_00276158	match	-
 002761c8	FUN_002761c8	match	-
 00276220	FUN_00276220	match	-
@@ -8332,27 +8358,28 @@
 00277cd0	lsc_ExecHndl	match	-
 00277da0	FUN_00277da0	match	-
 00277db8	FUN_00277db8	match	-
+00277dd0	mfCiGetInterface	match	-
 00277de8	FUN_00277de8	match	-
 00277e18	FUN_00277e18	match	-
 00277e30	FUN_00277e30	match	-
 00277f28	FUN_00277f28	match	-
-00277f30	FUN_00277f30	match	-
-00277f88	FUN_00277f88	match	-
-00277fa0	FUN_00277fa0	match	-
+00277f30	mfCiExecServer	match	-
+00277f88	mfCiEntryErrFunc	match	-
+00277fa0	mfCiGetFileSize	match	-
 00277fc0	FUN_00277fc0	match	-
 00278018	FUN_00278018	match	-
 00278038	FUN_00278038	match	-
-002780a8	FUN_002780a8	match	-
-00278148	FUN_00278148	match	-
-00278190	FUN_00278190	match	-
-00278250	FUN_00278250	match	-
-00278288	FUN_00278288	match	-
-00278410	FUN_00278410	match	-
-00278460	FUN_00278460	match	-
-00278498	FUN_00278498	match	-
-002784d0	FUN_002784d0	match	-
-00278550	FUN_00278550	match	-
-00278588	FUN_00278588	match	-
+002780a8	mfCiOpen	match	-
+00278148	mfCiClose	match	-
+00278190	mfCiSeek	match	-
+00278250	mfCiTell	match	-
+00278288	mfCiReqRd	match	-
+00278410	mfCiStopTr	match	-
+00278460	mfCiGetStat	match	-
+00278498	mfCiGetSctLen	match	-
+002784d0	mfCiSetSctLen	match	-
+00278550	mfCiGetNumTr	match	-
+00278588	mfCiOpenEntry	match	-
 00278610	pl2enc_Lock	match	-
 00278628	pl2enc_Unlock	match	-
 00278640	PL2ENC_EntryErrFunc	match	-
@@ -8389,6 +8416,7 @@
 002796b0	ps2rna_get_psj	match	-
 00279728	ps2rna_release_psj	match	-
 00279730	ps2rna_dtx_recv	match	-
+00279b00	PS2RNA_Init	match	-
 00279dd0	PS2RNA_SendOutMode	match	-
 00279e28	ps2rna_init_port	match	-
 00279f08	ps2rna_finish_port	match	-
@@ -8520,6 +8548,7 @@
 0027d080	SJUNI_UngetChunk	match	-
 0027d0d0	sjuni_UngetChunk	match	-
 0027d1e0	SJUNI_IsGetChunk	match	-
+0027d248	sjuni_IsGetChunk	match	-
 0027d300	SJUNI_GetNumChunk	match	-
 0027d348	sjuni_GetNumChunk	match	-
 0027d3c8	SJUNI_GetNumFreeNode	match	-
@@ -8565,6 +8594,7 @@
 0027e298	SVM_UnlockDev	match	-
 0027e2b0	SVM_UnlockEtc	match	-
 0027e2c8	SVM_UnlockUsr	match	-
+0027e2e0	SVM_GetLockType	match	-
 0027e2f0	SVM_CallErr	match	-
 0027e398	SVM_CallErr1	match	-
 0027e3e8	SVM_CallErr2	match	-
@@ -8589,6 +8619,8 @@
 0027eb10	SVM_ExecSvrMwIdle	match	-
 0027eb28	SVM_ExecSvrUsrIdle	match	-
 0027eb68	svm_reset	match	-
+0027ec10	SVM_Init	match	-
+0027ec50	SVM_Finish	match	-
 0027eca8	SVM_TestAndSet	match	-
 0027ed10	SVM_SetCbTestAndSet	match	-
 0027ed38	SVM_DelCbTestAndSet	match	-
@@ -8704,6 +8736,8 @@
 00283140	FUN_00283140	match	-
 00283148	FUN_00283148	match	-
 002846c0	cft_MakeYccTbl	match	-
+00284910	cft_MakeAlpha3Tbl	match	-
+00284b68	cft_MakeAlpha3TblBlack	match	-
 00284dc0	FUN_00284dc0	match	-
 00284dc8	FUN_00284dc8	match	-
 00284e80	FUN_00284e80	match	-
@@ -9298,7 +9332,7 @@
 0029aa10	mwsfsvr_IdleSvr	match	-
 0029aa78	mwsfsvr_IsDecSvr	match	-
 0029aa98	mwsfsvr_ExecVsync	match	-
-0029aab8	mwsfsvr_VsyncProc	unapproved	unapproved: 1 volatile without an approval row
+0029aab8	mwsfsvr_VsyncProc	match	-
 0029ab58	mwsfsvr_SetSvrHooks	match	-
 0029abb0	mwsfsvr_CallPreSvr	match	-
 0029abe0	mwsfsvr_CallPostSvr	match	-
@@ -9492,6 +9526,7 @@
 0029f4b8	sfana_GetMuxRate	match	-
 0029f550	sfana_ReadHdr	match	-
 0029f640	sfana_LoadHdr	match	-
+0029f690	sfana_ChkMpsAudio	match	-
 0029f798	sfana_FindCode	match	-
 0029f800	sfana_SkipPesHdr	match	-
 0029f880	sfana_ChkAdx	match	-
@@ -9505,9 +9540,11 @@
 0029fea0	sfhdr_Finish	match	-
 0029feb8	sfhdr_InitInf	match	-
 0029fed0	sfhdr_ResetInf	match	-
+0029fee0	sfhdr_ChkPrv2	match	-
 0029ff98	sfhdr_IsPrv2	match	-
 0029ffc0	sfhdr_GetCode	match	-
 0029fff0	sfhdr_IsHdr	match	-
+002a0048	sfhdr_SetHdr	match	-
 002a0110	sfhdr_SaveRec	match	-
 002a0150	sfhdr_CopyInf	match	-
 002a0220	sfhdr_LoadRec	match	-
@@ -16258,140 +16295,140 @@
 00370750	Gap__Bec__beBaseInfoRamList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370760	Gap__Bec__beBaseInfoList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 00370770	Gap__Bec__beBaseInfoDataList__vfunc_22	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-00370780	LuaAPI_Dispatch	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003717e0	beLuaWrapper_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371840	beLuaWrapper_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003718d0	BecLuaWrapper_Construct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371930	BecLuaWrapper_Create	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003719c0	LuaAPI_RegisterClasses	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003719d0	beLuaWrapper__registerFunctions	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a10	be_AddToScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a20	be_RemoveFromScheduler	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371a30	be_Start	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ac0	be_Stop	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ad0	be_AcceptInfo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ae0	be_Reset	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371c00	be_Update	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371c10	bePlayer_GetStruct	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371c70	SYSisJoinPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ca0	SYSgetPlayerName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371cd0	SYSgetWeaponName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371d70	SYSgetPlayerNinzu	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371da0	SYSgetDifficulty	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371dd0	SYSsetDifficulty	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371e10	SYSgetCameraMode	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371e70	SYSgetLightMode	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ed0	SYSgetArea	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ee0	SYSgetCountry	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371ef0	SYSgetTarget	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371f00	SYSgetIsPackOnly	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371f10	SYSgetRandom	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00371f60	SYSsetGateStage	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003720f0	SYSgetGateStageName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372150	SYSgetGateStageNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003721b0	SYSctlDeviceFolder	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003722c0	SYSctlDiskFolder	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003723c0	SYSctlFlagFolder	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003724a0	SYSctlBit	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372590	SYSgetPlayerLevel	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003725c0	SYSgetPlayerDigimon	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003725f0	SYSisGetShinkaDigimon	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372640	SYSctlCardFolder	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003727d0	SYSctlShinka	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372970	SYSctlPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372a30	CFLclear	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372b50	CFLsetName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372ce0	CFLgetFolderName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372cf0	Lua_sd_OptionalArg	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00372ff0	sd_29	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373060	sd_30	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003730a0	sd_31	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373120	sd_32	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373160	MATisPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373180	MATisAllPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003731a0	MATgetPlayerNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003731c0	MATisRidePlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003731f0	MATisRideOffPlayer	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373220	MATgetPlayerMatStat	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373250	MATsetRun	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373280	DMsetSD_40	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003732d0	DMsetSD_41	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373310	DMsetSD_42	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373350	DMsetSD_43	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373390	DMchkSD_44	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003734b0	DMchkSD_45	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003735c0	DMsetLua	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003735f0	DMmsgBox	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373620	DMswtSD_46	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373660	DMswtSD_47	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003736a0	DMswtEnd	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003736c0	DMcase	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003736f0	DMrun	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373710	DMgetCount	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003737b0	FLGisOn	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373840	FLGset	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003738e0	FLGflip	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003739f0	COUNTERset	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373aa0	COUNTERget	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373b20	MDLgetRamNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373b30	MDLgetInfoName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373b40	MDLgetPosStr	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373c10	MDLgetRotStr	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373d00	MDLgetMHp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373d10	MDLgetHp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373d20	MDLaddHp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373d50	MDLsetSeq	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373d90	MDLsetSD	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373dd0	MDLisLive	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373e80	MDLgetBulletKind	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373e90	MDLgetBulletName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373ee0	MDLgetBulletBoxNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00373ef0	FloatingNumber_Spawn	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374100	MDLdspDamage	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374120	MDLdspDamageP	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374140	MDLdspExp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374160	MDLsetDMGTurn	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374180	MDLisCallName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003741d0	MDLsetWorldPosTarget_78	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374200	MDLsetWorldPosTarget_79	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374260	MDLgetKyoriSquare	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003742d0	MDLgetRecNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003742e0	MDLisSeqName	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374410	MDLisStatus	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003744a0	PLAYERgetPos	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003744e0	PLAYERgetDataStr	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374620	PLAYERgetPosStr	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374730	MsgBox	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374740	ShutDown	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003747f0	TXTgetCallNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374800	BLTisPlayerBullet	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374880	BLTgetShootRamNo	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374890	BLTisHitCheck	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003749a0	BLTisCritical	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374a40	BLTgetDamageValue	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374bb0	BLTgetDamageRank	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374cc0	BLTgetAttributeStr	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374d00	BLTgetStunTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374de0	BLTgetPoisonTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00374f00	BLTgetSleepTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375010	BLTgetBindTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375120	BLTgetAttackDownTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375240	BLTgetPowerDownTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375360	BLTcalcSkillUp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375410	BLTcalcEXPUp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-003754a0	BLPisHitCheck	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375540	BLPgetDamageValue	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375690	BLPgetAttackZokusei	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375730	BLPgetDamageRank	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375830	BLPgetStunTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375980	BLPgetPoisonTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375a30	BLPgetSleepTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375ad0	BLPgetBindTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375b70	BLPgetAttackDownTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375c30	BLPgetPowerDownTime	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375cf0	BLPcalcKoukaMagic	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375d90	LISsetDifficultMax	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
-00375df0	be_GetMetaObject_Virtual	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+00370780	LuaAPI_Dispatch	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003717e0	beLuaWrapper_Construct	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371840	beLuaWrapper_Create	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003718d0	BecLuaWrapper_Construct	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371930	BecLuaWrapper_Create	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003719c0	LuaAPI_RegisterClasses	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003719d0	beLuaWrapper__registerFunctions	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371a10	be_AddToScheduler	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371a20	be_RemoveFromScheduler	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371a30	be_Start	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ac0	be_Stop	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ad0	be_AcceptInfo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ae0	be_Reset	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371c00	be_Update	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371c10	bePlayer_GetStruct	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371c70	SYSisJoinPlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ca0	SYSgetPlayerName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371cd0	SYSgetWeaponName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371d70	SYSgetPlayerNinzu	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371da0	SYSgetDifficulty	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371dd0	SYSsetDifficulty	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371e10	SYSgetCameraMode	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371e70	SYSgetLightMode	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ed0	SYSgetArea	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ee0	SYSgetCountry	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371ef0	SYSgetTarget	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371f00	SYSgetIsPackOnly	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371f10	SYSgetRandom	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00371f60	SYSsetGateStage	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003720f0	SYSgetGateStageName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372150	SYSgetGateStageNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003721b0	SYSctlDeviceFolder	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003722c0	SYSctlDiskFolder	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003723c0	SYSctlFlagFolder	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003724a0	SYSctlBit	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372590	SYSgetPlayerLevel	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003725c0	SYSgetPlayerDigimon	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003725f0	SYSisGetShinkaDigimon	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372640	SYSctlCardFolder	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003727d0	SYSctlShinka	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372970	SYSctlPlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372a30	CFLclear	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372b50	CFLsetName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372ce0	CFLgetFolderName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372cf0	Lua_sd_OptionalArg	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00372ff0	sd_29	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373060	sd_30	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003730a0	sd_31	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373120	sd_32	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373160	MATisPlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373180	MATisAllPlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003731a0	MATgetPlayerNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003731c0	MATisRidePlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003731f0	MATisRideOffPlayer	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373220	MATgetPlayerMatStat	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373250	MATsetRun	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373280	DMsetSD_40	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003732d0	DMsetSD_41	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373310	DMsetSD_42	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373350	DMsetSD_43	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373390	DMchkSD_44	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003734b0	DMchkSD_45	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003735c0	DMsetLua	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003735f0	DMmsgBox	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373620	DMswtSD_46	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373660	DMswtSD_47	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003736a0	DMswtEnd	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003736c0	DMcase	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003736f0	DMrun	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373710	DMgetCount	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003737b0	FLGisOn	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373840	FLGset	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003738e0	FLGflip	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003739f0	COUNTERset	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373aa0	COUNTERget	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373b20	MDLgetRamNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373b30	MDLgetInfoName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373b40	MDLgetPosStr	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373c10	MDLgetRotStr	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373d00	MDLgetMHp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373d10	MDLgetHp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373d20	MDLaddHp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373d50	MDLsetSeq	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373d90	MDLsetSD	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373dd0	MDLisLive	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373e80	MDLgetBulletKind	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373e90	MDLgetBulletName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373ee0	MDLgetBulletBoxNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00373ef0	FloatingNumber_Spawn	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374100	MDLdspDamage	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374120	MDLdspDamageP	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374140	MDLdspExp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374160	MDLsetDMGTurn	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374180	MDLisCallName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003741d0	MDLsetWorldPosTarget_78	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374200	MDLsetWorldPosTarget_79	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374260	MDLgetKyoriSquare	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003742d0	MDLgetRecNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003742e0	MDLisSeqName	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374410	MDLisStatus	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003744a0	PLAYERgetPos	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003744e0	PLAYERgetDataStr	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374620	PLAYERgetPosStr	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374730	MsgBox	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374740	ShutDown	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003747f0	TXTgetCallNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374800	BLTisPlayerBullet	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374880	BLTgetShootRamNo	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374890	BLTisHitCheck	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003749a0	BLTisCritical	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374a40	BLTgetDamageValue	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374bb0	BLTgetDamageRank	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374cc0	BLTgetAttributeStr	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374d00	BLTgetStunTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374de0	BLTgetPoisonTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00374f00	BLTgetSleepTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375010	BLTgetBindTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375120	BLTgetAttackDownTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375240	BLTgetPowerDownTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375360	BLTcalcSkillUp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375410	BLTcalcEXPUp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003754a0	BLPisHitCheck	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375540	BLPgetDamageValue	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375690	BLPgetAttackZokusei	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375730	BLPgetDamageRank	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375830	BLPgetStunTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375980	BLPgetPoisonTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375a30	BLPgetSleepTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375ad0	BLPgetBindTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375b70	BLPgetAttackDownTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375c30	BLPgetPowerDownTime	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375cf0	BLPcalcKoukaMagic	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375d90	LISsetDifficultMax	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00375df0	be_GetMetaObject_Virtual	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00375e00	beAction2_Prepare	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
 00375e10	beAction2_GetInfoMeta	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
 00375e20	beAction2_RegisterReceiver	match	DEFERRED duplicate 0x19ab10 __dt__10AttrRef<0>Fv 128B (compared under the profile of its retail unit)
@@ -20014,7 +20051,7 @@
 00521360	__sinit_CoreLibrary.cpp	match	-
 00521600	__sinit_igAdx.cpp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
 005216a0	__sinit_igCriMovieCodec.cpp	match	-
-005216e0	__sinit_be.cpp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)
+005216e0	__sinit_be.cpp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00521730	__sinit_beTargetObj.cpp	match	-
 00521750	__sinit_GuiLibrary.cpp	match	-
 00521790	__sinit_igViewerGuiFactory.cpp	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)

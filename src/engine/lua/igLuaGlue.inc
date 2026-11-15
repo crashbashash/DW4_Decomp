@@ -1,16 +1,18 @@
+igMetaObject *g_igLuaGlue_metaObject;
+
 igMetaObject *igLuaGlue_GetOrCreateMetaObject(void) {
-    if (g_igLuaGlue_metaObject[0] == 0) {
-        g_igLuaGlue_metaObject[0] = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igLuaGlue_metaObject == 0) {
+        g_igLuaGlue_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igLuaGlue_metaObject[0];
+    return g_igLuaGlue_metaObject;
 }
 
 igMetaObject *igLuaGlue_GetMetaObject(void)
 {
-    igMetaObject *meta = g_igLuaGlue_metaObject[0];
+    igMetaObject *meta = g_igLuaGlue_metaObject;
     if (!meta || isRegistered(meta) == false)
         igLuaGlue_EnsureRegistered();
-    return g_igLuaGlue_metaObject[0];
+    return g_igLuaGlue_metaObject;
 }
 
 int igLuaGlue_GetVTable(void) {
@@ -28,11 +30,11 @@ void *igLuaGlue_Register(void) {
     LuaLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igLuaGlue_metaObject,
+        &g_igLuaGlue_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igLuaGlue_GetMetaObject,
-        igLuaGlue_className,
+        "igLuaGlue",
         8, /* instance size */
         igLuaGlue_GetVTable,
         0, /* no reflected fields */

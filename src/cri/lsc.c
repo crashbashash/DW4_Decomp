@@ -44,25 +44,7 @@ void ADXSTM_Stop(void *stm);
 void ADXSTM_SetEos(void *stm, int size);
 void ADXSTM_SetBufSize(void *stm, int min, int max);
 
-extern char E0001_Illigal_parameter_sj_LSC_Create[];
-extern char E0002_Not_enough_instance_LSC_Create[];
-extern char E0003_Illigal_parameter_lsc_NULL[];
-extern char E0011_Illigal_parameter_fname_s[];
-extern char E0009_Illigal_parameter_no_d[];
-extern char E0012_Can_not_find_stream_ID_d[];
-extern char E0010_Illigal_parameter_min_val_d[];
-extern char E0013_s_is_different_from_entry_file_name_LSC_ExecServer[];
-extern char E0007_lsc_fp_NULL[];
-
-extern LscStatFunc lsc_stat_func;
-extern void *lsc_stat_obj;
-extern void *lsc_stat_usr;
-extern LscErrFunc lsc_err_func;
-extern void *lsc_err_obj;
-extern char lsc_err_msg[256];
-extern char *volatile lsc_build;
-extern int lsc_init_cnt;
-extern LscObj lsc_objs[LSC_MAX_OBJ];
+static LscObj lsc_objs[LSC_MAX_OBJ];
 
 void lsc_Lock(LscCrs *crs);
 void lsc_Unlock(LscCrs *crs);
@@ -93,13 +75,13 @@ LscObj *LSC_Create(SfdSj *sj)
     int i;
 
     if (sj == 0) {
-        lsc_CallErrFunc(E0001_Illigal_parameter_sj_LSC_Create);
+        lsc_CallErrFunc("E0001: Illigal parameter=sj (LSC_Create)\n");
         return 0;
     }
     lsc_Lock(&crs);
     lsc = lsc_SearchFreeObj();
     if (lsc == 0) {
-        lsc_CallErrFunc(E0002_Not_enough_instance_LSC_Create);
+        lsc_CallErrFunc("E0002: Not enough instance (LSC_Create)\n");
     } else {
         lsc->stat = LSC_STAT_STOP;
         lsc->sj = sj;
@@ -144,14 +126,14 @@ int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct)
     int id;
 
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     if (lsc->nstm >= LSC_MAX_STM) {
         return -1;
     }
     if (fname == 0) {
-        lsc_CallErrFunc(E0011_Illigal_parameter_fname_s, fname);
+        lsc_CallErrFunc("E0011: Illigal parameter fname=%s\n", fname);
         return -1;
     }
     last = (lsc->wpos + LSC_MAX_STM - 1) % LSC_MAX_STM;
@@ -184,7 +166,7 @@ int LSC_EntryFileRange(LscObj *lsc, char *fname, void *dir, int ofst, int nsct)
 void LSC_ResetEntry(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     if (lsc->stat == LSC_STAT_STOP) {
@@ -197,7 +179,7 @@ void LSC_ResetEntry(LscObj *lsc)
 void LSC_Start(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     if (lsc->stat != LSC_STAT_STOP) {
@@ -213,7 +195,7 @@ void LSC_Start(LscObj *lsc)
 void LSC_Stop(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     if (lsc->stat != LSC_STAT_STOP) {
@@ -231,7 +213,7 @@ void LSC_Stop(LscObj *lsc)
 void LSC_Pause(LscObj *lsc, int sw)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     if (sw == 1) {
@@ -256,7 +238,7 @@ void LSC_ExecServer(void)
 int LSC_GetStat(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     return lsc->stat;
@@ -265,7 +247,7 @@ int LSC_GetStat(LscObj *lsc)
 int LSC_GetNumStm(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     return lsc->nstm;
@@ -276,11 +258,11 @@ int LSC_GetStmId(LscObj *lsc, int no)
     int slot;
 
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     if (no < 0 || no >= lsc->nstm) {
-        lsc_CallErrFunc(E0009_Illigal_parameter_no_d, no);
+        lsc_CallErrFunc("E0009: Illigal parameter no=%d\n", no);
         return -1;
     }
     slot = (lsc->rpos + no) % LSC_MAX_STM;
@@ -292,7 +274,7 @@ char *LSC_GetStmFname(LscObj *lsc, int id)
     int i;
 
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return 0;
     }
     for (i = 0; i < LSC_MAX_STM; i++) {
@@ -301,7 +283,7 @@ char *LSC_GetStmFname(LscObj *lsc, int id)
         }
     }
     if (i == LSC_MAX_STM) {
-        lsc_CallErrFunc(E0012_Can_not_find_stream_ID_d, id);
+        lsc_CallErrFunc("E0012: Can not find stream ID =%d\n", id);
         return 0;
     }
     return lsc->stms[i].fname;
@@ -312,7 +294,7 @@ int LSC_GetStmStat(LscObj *lsc, int id)
     int i;
 
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     for (i = 0; i < LSC_MAX_STM; i++) {
@@ -321,7 +303,7 @@ int LSC_GetStmStat(LscObj *lsc, int id)
         }
     }
     if (i == LSC_MAX_STM) {
-        lsc_CallErrFunc(E0012_Can_not_find_stream_ID_d, id);
+        lsc_CallErrFunc("E0012: Can not find stream ID =%d\n", id);
         return -1;
     }
     return lsc->stms[i].stat;
@@ -332,7 +314,7 @@ int LSC_GetStmRdSct(LscObj *lsc, int id)
     int i;
 
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return 0;
     }
     for (i = 0; i < LSC_MAX_STM; i++) {
@@ -341,7 +323,7 @@ int LSC_GetStmRdSct(LscObj *lsc, int id)
         }
     }
     if (i == LSC_MAX_STM) {
-        lsc_CallErrFunc(E0012_Can_not_find_stream_ID_d, id);
+        lsc_CallErrFunc("E0012: Can not find stream ID =%d\n", id);
         return 0;
     }
     return lsc->stms[i].rdsct;
@@ -350,11 +332,11 @@ int LSC_GetStmRdSct(LscObj *lsc, int id)
 void LSC_SetFlowLimit(LscObj *lsc, int min)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     if (min < 0 || lsc->flow_max < min) {
-        lsc_CallErrFunc(E0010_Illigal_parameter_min_val_d, min);
+        lsc_CallErrFunc("E0010: Illigal parameter min_val=%d\n", min);
         return;
     }
     lsc->flow_min = min;
@@ -363,11 +345,23 @@ void LSC_SetFlowLimit(LscObj *lsc, int min)
 int LSC_GetFlowLimit(LscObj *lsc)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return -1;
     }
     return lsc->flow_min;
 }
+
+static LscStatFunc lsc_stat_func = 0;
+static void *lsc_stat_obj = 0;
+static void *lsc_stat_usr = 0;
+static int lsc_stat_reserved = 0; /* no function reads it */
+static LscErrFunc lsc_err_func = 0;
+static void *lsc_err_obj = 0;
+static char lsc_err_msg[256] = {0};
+static char *volatile lsc_build = "\nLSC/PS2EE Ver.2.18 Build:Oct  6 2004 11:47:43\n";
+static char lsc_objs_tag[] = "MARK:lsc_obj";
+static int lsc_init_cnt = 0;
+static LscObj lsc_objs[LSC_MAX_OBJ] = {0};
 
 void LSC_EntryChgStatFunc(LscStatFunc func, void *obj, void *usr)
 {
@@ -392,7 +386,7 @@ void lsc_CallStatFunc(void)
 void LSC_SetLpFlg(LscObj *lsc, int loop)
 {
     if (lsc == 0) {
-        lsc_CallErrFunc(E0003_Illigal_parameter_lsc_NULL);
+        lsc_CallErrFunc("E0003: Illigal parameter lsc=NULL\n");
         return;
     }
     lsc->loop = loop;
@@ -497,7 +491,7 @@ void lsc_StartStm(LscObj *lsc)
         sum += (unsigned char)fname[i];
     }
     if (sum != stm->fname_sum) {
-        lsc_CallErrFunc(E0013_s_is_different_from_entry_file_name_LSC_ExecServer, stm->fname);
+        lsc_CallErrFunc("E0013: '%s' is different from entry file name.(LSC_ExecServer)\n", stm->fname);
         return;
     }
     ADXSTM_BindFileNw(lsc->stm, stm->fname, stm->dir, stm->ofst, stm->nsct);
@@ -517,7 +511,7 @@ void lsc_StatRead(LscObj *lsc)
     LscStm *stm;
 
     if (lsc->stm == 0) {
-        lsc_CallErrFunc(E0007_lsc_fp_NULL);
+        lsc_CallErrFunc("E0007: lsc->fp=NULL\n");
         return;
     }
     stm = &lsc->stms[lsc->rpos];

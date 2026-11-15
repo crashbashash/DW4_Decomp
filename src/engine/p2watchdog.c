@@ -17,12 +17,12 @@ int p2IsVuProgramLoaded(int program);
 void p2RunWatchdog(void *arg);
 
 extern char _gp[];
-extern int p2WatchdogThread;
-extern int p2WatchdogDisabled;
-extern char p2WatchdogStack[0x1000];
-extern volatile int p2WatchdogTicks;
+int p2WatchdogThread = -1;
+int p2WatchdogDisabled = 1;
+volatile int p2WatchdogTicks;
 /* other threads and the DMA handlers write these words while the thread runs */
-extern volatile p2DmaWatch p2DmaWatchFlags;
+volatile p2DmaWatch p2DmaWatchFlags;
+char p2WatchdogStack[0x1000];
 extern int p2FunctionTables[];
 extern int p2FunctionTableSizes[3];
 extern char newline[];

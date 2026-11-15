@@ -7,50 +7,49 @@ unsigned int strlen(const char *s);
 void SVM_SetCbErr(void);
 void SVM_CallErr(char *msg);
 
-extern AdxErrFunc DAT_00499cd8;
-extern int DAT_00499cdc;
-extern char DAT_00499ce0[256];
-extern char DAT_0056df88[];
-extern char DAT_004ed8c0[];
+AdxErrFunc adxerr_func = 0;
+int adxerr_obj = 0;
+char adxerr_msg[256] = {0};
+static char adxerr_digits[32];
 
 void FUN_00260750(void)
 {
-    memset(DAT_00499ce0, 0, 0x100);
-    DAT_00499cd8 = 0;
-    DAT_00499cdc = 0;
+    memset(adxerr_msg, 0, 0x100);
+    adxerr_func = 0;
+    adxerr_obj = 0;
 }
 
 void FUN_00260788(void)
 {
-    memset(DAT_00499ce0, 0, 0x100);
-    DAT_00499cd8 = 0;
-    DAT_00499cdc = 0;
+    memset(adxerr_msg, 0, 0x100);
+    adxerr_func = 0;
+    adxerr_obj = 0;
 }
 
 void ADXERR_EntryErrFunc(AdxErrFunc func, int obj)
 {
-    DAT_00499cd8 = func;
-    DAT_00499cdc = obj;
+    adxerr_func = func;
+    adxerr_obj = obj;
     SVM_SetCbErr();
 }
 
 void ADXERR_CallErrFunc1(const char *msg)
 {
-    strncpy(DAT_00499ce0, msg, 0xFF);
-    if (DAT_00499cd8 != 0) {
-        DAT_00499cd8(DAT_00499cdc, DAT_00499ce0);
+    strncpy(adxerr_msg, msg, 0xFF);
+    if (adxerr_func != 0) {
+        adxerr_func(adxerr_obj, adxerr_msg);
     }
-    SVM_CallErr(DAT_00499ce0);
+    SVM_CallErr(adxerr_msg);
 }
 
 void ADXERR_CallErrFunc2(const char *code, const char *msg)
 {
-    strncpy(DAT_00499ce0, code, 0xFF);
-    strncat(DAT_00499ce0, msg, 0xFF);
-    if (DAT_00499cd8 != 0) {
-        DAT_00499cd8(DAT_00499cdc, DAT_00499ce0);
+    strncpy(adxerr_msg, code, 0xFF);
+    strncat(adxerr_msg, msg, 0xFF);
+    if (adxerr_func != 0) {
+        adxerr_func(adxerr_obj, adxerr_msg);
     }
-    SVM_CallErr(DAT_00499ce0);
+    SVM_CallErr(adxerr_msg);
 }
 
 void FUN_002608b0(int value, char *dst, int size)
@@ -66,12 +65,12 @@ void FUN_002608b0(int value, char *dst, int size)
             break;
         }
     }
-    len = strlen(DAT_0056df88);
+    len = strlen(adxerr_digits);
     if (len >= size - 1) {
         len = size - 1;
     }
     for (i = 0; i < len; i++) {
-        dst[i] = DAT_0056df88[len - 1 - i];
+        dst[i] = adxerr_digits[len - 1 - i];
     }
     dst[i] = 0;
 }
@@ -79,6 +78,6 @@ void FUN_002608b0(int value, char *dst, int size)
 void ADXERR_ItoA2(int value, int extra, char *text, int size)
 {
     FUN_002608b0(value, text, size);
-    strncat(text, DAT_004ed8c0, (size - strlen(text)) - 1);
+    strncat(text, " ", (size - strlen(text)) - 1);
     FUN_002608b0(extra, text + strlen(text), 4 - strlen(text));
 }

@@ -1,3 +1,5 @@
+#include "dw4/cri/cvfs.h"
+
 typedef struct SrdObj SrdObj;
 
 typedef struct HtCiFile {
@@ -28,20 +30,40 @@ typedef struct HtCiTable {
     int namelen;
 } HtCiTable;
 
-extern char *volatile DAT_004ab5d8;
-extern void (*DAT_004ab5dc)(void *context, const char *message, void *detail);
-extern void *DAT_004ab5e0;
-extern int DAT_004ab5e4;
-extern int DAT_004ab5e8[];
-extern HtCiFile DAT_004ab650[13];
-extern char DAT_004ab8c0[];
-extern HtCiTable DAT_004ab9f0;
-extern int DAT_004aba00;
-extern int DAT_004aba04;
-extern char DAT_004aba08[];
-extern char DAT_004abb10[];
-extern char DAT_0056f780[];
+void htCiExecServer(void);
+void htCiEntryErrFunc(void (*callback)(void *context, const char *message, void *detail), void *context);
+int htCiGetFileSize(const char *fname);
+HtCiFile *htCiOpen(const char *fname, void *atr, int rw);
+void htCiClose(HtCiFile *h);
+int htCiSeek(HtCiFile *h, int offset, int origin);
+int htCiTell(HtCiFile *h);
+int htCiReqRd(HtCiFile *h, int nsct, char *buf);
+void htCiStopTr(HtCiFile *h);
+int htCiGetStat(HtCiFile *h);
+int htCiGetSctLen(void);
+int htCiGetNumTr(HtCiFile *h);
+int htCiIsExistFileOnHost(const char *name);
+int htCiOptFn1(void *obj, int code);
 
+static char *volatile htci_build = "\nHTCI/PS2EE Ver.2.69 Build:Oct  6 2004 11:47:42\n";
+static void (*htci_err_func)(void *context, const char *message, void *detail) = 0;
+static void *htci_err_obj = 0;
+static int htci_lock = 0;
+static CvFsVtbl htci_vtbl = {
+    (int)htCiExecServer, (int)htCiEntryErrFunc, (int)htCiGetFileSize, 0,
+    (int)htCiOpen, (int)htCiClose, (int)htCiSeek, (int)htCiTell,
+    (int)htCiReqRd, 0, (int)htCiStopTr, (int)htCiGetStat,
+    (int)htCiGetSctLen, 0, (int)htCiGetNumTr, 0,
+    (int)htCiIsExistFileOnHost, 0, 0, 0, 0, 0, 0, 0, (int)htCiOptFn1, 0
+};
+static HtCiFile htci_files[13] = {0};
+static char htci_path[304] = {0};
+static HtCiTable htci_dir_table = {0};
+static int htci_open_mode = 0x8001;
+static int htci_option = 0;
+static char htci_root_dir[264];
+static char htci_prefix[40];
+static char htci_dir_buf[4096];
 
 void *memset(void *dst, int value, unsigned int n);
 void *memcpy(void *dst, const void *src, unsigned int n);
@@ -69,9 +91,9 @@ void SVM_LockVar(void);
 void SVM_UnlockVar(void);
 int SVM_TestAndSet(int *flag);
 
-long FUN_00275740(const char *fname);
-void FUN_00275e50(HtCiFile *h);
-int FUN_00275f48(HtCiFile *h);
+long htCiGetFileSize64(const char *fname);
+void htCiStopTr(HtCiFile *h);
+int htCiGetStat(HtCiFile *h);
 void FUN_00276220(const char *name, char *out);
 int FUN_00276440(char *buf, char *list, int n, int nameLen);
 int FUN_002765e0(const char *name, void *buf);
@@ -82,12 +104,12 @@ void FUN_00276b18(const char *name, HtCiFileLoc *loc);
 void htCiSetRootDir(const char *path);
 void FUN_00276da8(const char *prefix);
 
-int *htCiGetInterface(void)
+CvFsVtbl *htCiGetInterface(void)
 {
-    DAT_004ab5d8;
+    htci_build;
     htCiSetRootDir(0);
     FUN_00276da8(0);
-    return DAT_004ab5e8;
+    return &htci_vtbl;
 }
 
 void FUN_002753a8(void)
@@ -100,8 +122,8 @@ void FUN_002753a8(void)
 
 void FUN_002753d8(void *detail, const char *message)
 {
-    if (DAT_004ab5dc != 0) {
-        DAT_004ab5dc(DAT_004ab5e0, message, detail);
+    if (htci_err_func != 0) {
+        htci_err_func(htci_err_obj, message, detail);
     }
 }
 
@@ -109,7 +131,7 @@ int FUN_00275408(void)
 {
     int i;
     for (i = 0; i < 13; i++) {
-        if (DAT_004ab650[i].used == 1 && DAT_004ab650[i].state == 2) {
+        if (htci_files[i].used == 1 && htci_files[i].state == 2) {
             return 1;
         }
     }
@@ -170,26 +192,26 @@ void FUN_00275520(HtCiFile *h)
     SVM_UnlockVar();
 }
 
-void FUN_002755e8(void)
+void htCiExecServer(void)
 {
     int i;
-    if (SVM_TestAndSet(&DAT_004ab5e4) != 0) {
+    if (SVM_TestAndSet(&htci_lock) != 0) {
         for (i = 0; i < 13; i++) {
-            if (DAT_004ab650[i].used == 1) {
-                FUN_00275520(&DAT_004ab650[i]);
+            if (htci_files[i].used == 1) {
+                FUN_00275520(&htci_files[i]);
             }
         }
-        DAT_004ab5e4 = 0;
+        htci_lock = 0;
     }
 }
 
-void FUN_00275660(void (*callback)(void *context, const char *message, void *detail), void *context)
+void htCiEntryErrFunc(void (*callback)(void *context, const char *message, void *detail), void *context)
 {
-    DAT_004ab5dc = callback;
-    DAT_004ab5e0 = context;
+    htci_err_func = callback;
+    htci_err_obj = context;
 }
 
-int FUN_00275678(const char *name)
+int htCiIsExistFileOnHost(const char *name)
 {
     HtCiFileLoc loc;
     int fd;
@@ -198,9 +220,9 @@ int FUN_00275678(const char *name)
     }
     FUN_00276b18(name, &loc);
     if (loc.size == 0) {
-        FUN_00276220(name, DAT_004ab8c0);
+        FUN_00276220(name, htci_path);
         FUN_002725a0(0x4200);
-        fd = FUN_002728b0(DAT_004ab8c0, 1);
+        fd = FUN_002728b0(htci_path, 1);
         FUN_002725a0(0x4201);
         if (fd < 0) {
             return 0;
@@ -212,12 +234,12 @@ int FUN_00275678(const char *name)
     return 1;
 }
 
-int FUN_00275718(const char *fname)
+int htCiGetFileSize(const char *fname)
 {
-    return FUN_00275740(fname);
+    return htCiGetFileSize64(fname);
 }
 
-long FUN_00275740(const char *fname)
+long htCiGetFileSize64(const char *fname)
 {
     HtCiFileLoc loc;
     long size;
@@ -228,12 +250,12 @@ long FUN_00275740(const char *fname)
     }
     FUN_00276b18(fname, &loc);
     if (loc.size == 0) {
-        FUN_00276220(fname, DAT_004ab8c0);
+        FUN_00276220(fname, htci_path);
         FUN_002725a0(0x4400);
-        fd = FUN_002728b0(DAT_004ab8c0, 1);
+        fd = FUN_002728b0(htci_path, 1);
         FUN_002725a0(0x4401);
         if (fd < 0) {
-            ADXMSG_PrintErr("HTCI: sceOpen failed. \"%s\"\n", DAT_004ab8c0);
+            ADXMSG_PrintErr("HTCI: sceOpen failed. \"%s\"\n", htci_path);
             FUN_002753d8(0, "E0092705:sceOpen fail.(htCiGetFileSize)");
             return 0;
         }
@@ -296,8 +318,8 @@ HtCiFile *FUN_00275980(void)
     HtCiFile *found = 0;
     int i;
     for (i = 0; i < 13; i++) {
-        if (DAT_004ab650[i].used == 0) {
-            found = &DAT_004ab650[i];
+        if (htci_files[i].used == 0) {
+            found = &htci_files[i];
         }
     }
     return found;
@@ -308,7 +330,7 @@ void FUN_002759b8(HtCiFile *h)
     memset(h, 0, sizeof(HtCiFile));
 }
 
-HtCiFile *FUN_002759d8(const char *fname, void *atr, int rw)
+HtCiFile *htCiOpen(const char *fname, void *atr, int rw)
 {
     HtCiFileLoc loc;
     HtCiFile *h;
@@ -328,14 +350,14 @@ HtCiFile *FUN_002759d8(const char *fname, void *atr, int rw)
     }
     FUN_00276b18(fname, &loc);
     if (loc.size == 0) {
-        FUN_00276220(fname, DAT_004ab8c0);
+        FUN_00276220(fname, htci_path);
         FUN_00265928("HTCI: File cache was not hit. \"%s\"\n", fname);
-        h->size = FUN_00275740(fname);
+        h->size = htCiGetFileSize64(fname);
         if (h->size == 0) {
             return 0;
         }
         FUN_002725a0(0x4900);
-        h->fd = FUN_002728b0(DAT_004ab8c0, DAT_004aba00);
+        h->fd = FUN_002728b0(htci_path, htci_open_mode);
         FUN_002725a0(0x4901);
         if (h->fd < 0) {
             FUN_002753d8(0, "E0092711:sceOpen fail.(htCiOpen)");
@@ -358,12 +380,12 @@ HtCiFile *FUN_002759d8(const char *fname, void *atr, int rw)
     return h;
 }
 
-void FUN_00275b50(HtCiFile *h)
+void htCiClose(HtCiFile *h)
 {
     int result;
     if (h != 0) {
         if ((unsigned char)h->state >= 2) {
-            FUN_00275e50(h);
+            htCiStopTr(h);
         }
         if (h->cached == 0) {
             FUN_002725a0(0x5000);
@@ -378,7 +400,7 @@ void FUN_00275b50(HtCiFile *h)
     }
 }
 
-int FUN_00275bf0(HtCiFile *h, int offset, int origin)
+int htCiSeek(HtCiFile *h, int offset, int origin)
 {
     int position;
     if (h == 0) {
@@ -404,7 +426,7 @@ int FUN_00275bf0(HtCiFile *h, int offset, int origin)
     return position;
 }
 
-int FUN_00275c88(HtCiFile *h)
+int htCiTell(HtCiFile *h)
 {
     if (h == 0) {
         FUN_002753d8(0, "E0092712:handl is null.");
@@ -413,7 +435,7 @@ int FUN_00275c88(HtCiFile *h)
     return h->pos;
 }
 
-int FUN_00275cc0(HtCiFile *h, int nsct, char *buf)
+int htCiReqRd(HtCiFile *h, int nsct, char *buf)
 {
     unsigned long nbyte;
     if (h == 0) {
@@ -452,7 +474,7 @@ int FUN_00275cc0(HtCiFile *h, int nsct, char *buf)
     if (FUN_00271888(h->stm, h->fd, h->pos, nbyte, buf) == 0) {
         return 0;
     }
-    if (DAT_004aba00 == 1) {
+    if (htci_open_mode == 1) {
         FUN_00272228();
         FUN_00272118();
         h->pos += h->req;
@@ -468,7 +490,7 @@ int FUN_00275cc0(HtCiFile *h, int nsct, char *buf)
     return h->req;
 }
 
-void FUN_00275e50(HtCiFile *h)
+void htCiStopTr(HtCiFile *h)
 {
     int i;
     i = 0;
@@ -484,8 +506,8 @@ void FUN_00275e50(HtCiFile *h)
     }
     while (1) {
         FUN_00272118();
-        FUN_002755e8();
-        FUN_00275f48(h);
+        htCiExecServer();
+        htCiGetStat(h);
         if (h->state != 2) {
             break;
         }
@@ -499,7 +521,7 @@ void FUN_00275e50(HtCiFile *h)
     h->done = 0;
 }
 
-int FUN_00275f48(HtCiFile *h)
+int htCiGetStat(HtCiFile *h)
 {
     if (h == 0) {
         FUN_002753d8(0, "E0092712:handl is null.");
@@ -508,12 +530,12 @@ int FUN_00275f48(HtCiFile *h)
     return h->state;
 }
 
-int FUN_00275f80(void)
+int htCiGetSctLen(void)
 {
     return 0x800;
 }
 
-int FUN_00275f88(HtCiFile *h)
+int htCiGetNumTr(HtCiFile *h)
 {
     if (h == 0) {
         FUN_002753d8(0, "E0092712:handl is null.");
@@ -527,7 +549,7 @@ int FUN_00275f88(HtCiFile *h)
 
 long FUN_00275fd8(const char *fname)
 {
-    return FUN_00275740(fname);
+    return htCiGetFileSize64(fname);
 }
 
 int FUN_00275ff0(h)
@@ -557,7 +579,7 @@ int FUN_00276060(fname)
 }
 
 /* matching construct: old-style getter definitions called with no arguments; retail never loads a0 before these calls */
-int FUN_00276090(void *obj, int code)
+int htCiOptFn1(void *obj, int code)
 {
     int result;
     result = 0;
@@ -618,11 +640,11 @@ void FUN_00276220(const char *name, char *out)
     int i;
     out[0] = 0;
     if (FUN_00276158(name) == 0) {
-        strcpy(out, DAT_004abb10);
+        strcpy(out, htci_prefix);
     }
     if (FUN_002761c8(out) == 1) {
-        strcat(out, DAT_004aba08);
-        c = DAT_004aba08[strlen(DAT_004aba08) - 1];
+        strcat(out, htci_root_dir);
+        c = htci_root_dir[strlen(htci_root_dir) - 1];
         if (c != '\\' && c != '/' && c != 0 && name[0] != '\\' && name[0] != '/') {
             strcat(out, "/");
         }
@@ -699,11 +721,11 @@ int FUN_00276440(char *buf, char *list, int n, int nameLen)
         }
         i++;
     }
-    if (DAT_004ab9f0.files == 0) {
-        DAT_004ab9f0.files = (int)buf;
-        DAT_004ab9f0.nfiles = count;
-        DAT_004ab9f0.nent = n;
-        DAT_004ab9f0.namelen = nameLen;
+    if (htci_dir_table.files == 0) {
+        htci_dir_table.files = (int)buf;
+        htci_dir_table.nfiles = count;
+        htci_dir_table.nent = n;
+        htci_dir_table.namelen = nameLen;
     }
     return count;
 }
@@ -767,7 +789,7 @@ int FUN_00276740(HtCiFileLoc *files, int n)
         n = 13;
     }
     for (i = 0; i < n; i++) {
-        name = (char *)files + (DAT_004ab9f0.nent * 8 + (DAT_004ab9f0.namelen + 1) * i);
+        name = (char *)files + (htci_dir_table.nent * 8 + (htci_dir_table.namelen + 1) * i);
         FUN_00276220(name, path);
         if (name[0] == 0) {
             continue;
@@ -788,7 +810,7 @@ int FUN_00276740(HtCiFileLoc *files, int n)
         FUN_00272918(fd);
         FUN_002725a0(0x6801);
         FUN_002725a0(0x6700);
-        FUN_002728b0(path, DAT_004aba00);
+        FUN_002728b0(path, htci_open_mode);
         FUN_002725a0(0x6701);
     }
     FUN_00265928("HTCI: Total %d files.\n", opened);
@@ -808,13 +830,13 @@ int FUN_002768f8(void)
     int closed;
     int ret;
     closed = 0;
-    files = (HtCiFileLoc *)DAT_004ab9f0.files;
+    files = (HtCiFileLoc *)htci_dir_table.files;
     if (files == 0) {
         return 0;
     }
-    n = DAT_004ab9f0.nfiles;
+    n = htci_dir_table.nfiles;
     for (i = 0; i < n; i++) {
-        name = (char *)files + (DAT_004ab9f0.nent * 8 + (DAT_004ab9f0.namelen + 1) * i);
+        name = (char *)files + (htci_dir_table.nent * 8 + (htci_dir_table.namelen + 1) * i);
         FUN_00276220(name, path);
         if (name[0] == 0) {
             continue;
@@ -839,7 +861,7 @@ void FUN_00276a28(HtCiFileLoc *out, const char *name, HtCiFileLoc *entries, int 
 {
     int i;
     for (i = 0; i < n; i++) {
-        const char *entryName = (char *)entries + (DAT_004ab9f0.nent * sizeof(HtCiFileLoc) + i * (DAT_004ab9f0.namelen + 1));
+        const char *entryName = (char *)entries + (htci_dir_table.nent * sizeof(HtCiFileLoc) + i * (htci_dir_table.namelen + 1));
         if (FUN_002763a8(name, entryName) == 0) {
             out->fd = entries[i].fd;
             out->size = entries[i].size;
@@ -852,15 +874,15 @@ void FUN_00276a28(HtCiFileLoc *out, const char *name, HtCiFileLoc *entries, int 
 
 void FUN_00276af0(void)
 {
-    memset(&DAT_004ab9f0, 0, sizeof(HtCiTable));
+    memset(&htci_dir_table, 0, sizeof(HtCiTable));
 }
 
 void FUN_00276b18(const char *name, HtCiFileLoc *loc)
 {
     loc->fd = 0;
     loc->size = 0;
-    if (DAT_004ab9f0.files != 0) {
-        FUN_00276a28(loc, name, (HtCiFileLoc *)DAT_004ab9f0.files, DAT_004ab9f0.nfiles);
+    if (htci_dir_table.files != 0) {
+        FUN_00276a28(loc, name, (HtCiFileLoc *)htci_dir_table.files, htci_dir_table.nfiles);
     }
 }
 
@@ -869,8 +891,8 @@ int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
     int n;
     int found;
     int stride;
-    memset(DAT_0056f780, 0, 4096);
-    if (DAT_004ab9f0.files == 0) {
+    memset(htci_dir_buf, 0, 4096);
+    if (htci_dir_table.files == 0) {
         FUN_00276af0();
     }
     FUN_002768f8();
@@ -886,12 +908,12 @@ int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
         return 0;
     }
     memset(buf, 0, size);
-    if (FUN_002765e0(path, DAT_0056f780) == 0) {
+    if (FUN_002765e0(path, htci_dir_buf) == 0) {
         FUN_00265928("HTCI: Can't read filelist file.(%s)\n", path);
         FUN_002753d8(0, "E0111501:can't read filelist.(htCiLoadDirInfo)");
         return 0;
     }
-    n = FUN_00276440(buf, DAT_0056f780, size / (nameLen + 9), nameLen);
+    n = FUN_00276440(buf, htci_dir_buf, size / (nameLen + 9), nameLen);
     stride = nameLen + 1;
     found = FUN_00276740(buf, n);
     return size / (nameLen + 9) * 8 + found * stride;
@@ -909,13 +931,13 @@ void htCiSetOpenMode(int mode)
 {
     switch (mode) {
     case 0:
-        DAT_004aba00 = 0x8001;
+        htci_open_mode = 0x8001;
         break;
     case 1:
-        DAT_004aba00 = mode;
+        htci_open_mode = mode;
         break;
     default:
-        DAT_004aba00 = 0x8001;
+        htci_open_mode = 0x8001;
         break;
     }
 }
@@ -923,47 +945,50 @@ void htCiSetOpenMode(int mode)
 void htCiSetRootDir(const char *path)
 {
     if (path == 0) {
-        DAT_004aba08[0] = 0;
+        htci_root_dir[0] = 0;
         return;
     }
     if (path[0] != '/' && path[0] != '\\') {
-        strcpy(DAT_004aba08, "/");
+        strcpy(htci_root_dir, "/");
     } else {
-        DAT_004aba08[0] = 0;
+        htci_root_dir[0] = 0;
     }
-    strcpy(DAT_004aba08, path);
+    strcpy(htci_root_dir, path);
 }
 
 char *FUN_00276d98(void)
 {
-    return DAT_004aba08;
+    return htci_root_dir;
 }
 
 void FUN_00276da8(const char *prefix)
 {
     if (prefix == 0) {
-        strcpy(DAT_004abb10, "host:");
+        strcpy(htci_prefix, "host:");
     } else {
-        strcpy(DAT_004abb10, prefix);
+        strcpy(htci_prefix, prefix);
     }
 }
 
 char *FUN_00276e10(void)
 {
-    return DAT_004abb10;
+    return htci_prefix;
 }
 
 int FUN_00276e20(void)
 {
-    return DAT_004aba00;
+    return htci_open_mode;
 }
 
 void FUN_00276e30(int value)
 {
-    DAT_004aba04 = value;
+    htci_option = value;
 }
 
 int FUN_00276e40(void)
 {
-    return DAT_004aba04;
+    return htci_option;
 }
+
+static char htci_root_dir[264] = {0};
+static char htci_prefix[40] = {0};

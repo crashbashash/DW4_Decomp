@@ -59,6 +59,7 @@ char *strncpy(char *dst, const char *src, unsigned int size);
 char *strncat(char *dst, const char *src, unsigned int size);
 int vsprintf(char *buf, const char *format, va_list args);
 
+extern volatile int svm_init_cnt;
 extern volatile int svm_lock_level;
 extern volatile int svm_lock_type;
 extern int svm_exec_cnt[SVM_SVTYPE_NUM];
@@ -170,6 +171,11 @@ void SVM_UnlockEtc(void)
 void SVM_UnlockUsr(void)
 {
     svm_unlock(SVM_LOCK_USR);
+}
+
+int SVM_GetLockType(void)
+{
+    return svm_lock_type;
 }
 
 void SVM_CallErr(const char *format, ...)
@@ -424,6 +430,23 @@ void svm_reset(void)
         *cnt++ = 0;
     }
     svm_tas_func = 0;
+}
+
+void SVM_Init(void)
+{
+    if (svm_init_cnt == 0) {
+        svm_reset();
+    }
+    svm_init_cnt++;
+}
+
+void SVM_Finish(void)
+{
+    svm_init_cnt--;
+    if (svm_init_cnt == 0) {
+        svm_reset();
+        memset(&svm_cberr, 0, sizeof(svm_cberr));
+    }
 }
 
 /* Sets *flag to 1 and returns 1 if it was not 1 already, through the host's function when one is set. */

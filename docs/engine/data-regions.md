@@ -32,7 +32,7 @@ checking it is current. Each section opens with the first object of the link, th
 | Section | Starts | Note |
 | --- | --- | --- |
 | 0 | `0x481c00` | |
-| 1 | `0x4d1c18` | |
+| 1 | `0x4d1c18` | the first datum the code names; the read-only sequence itself opens at `0x4d1c00` with `"std::exception"`, which New emits |
 | 2 | `0x522440` | holds the vtables |
 | 3 | `0x554f00` | `.bss`, past the end of the file image at `0x554b00` |
 
@@ -65,6 +65,44 @@ Two consequences worth stating:
   The microcode, the descriptors and the kernel patch arrays are `config/SLUS-20836/regions.tsv` rows
   and count as whole regions. Identifying a region does not decompile it: its bytes count as matched
   only once the unit that owns them defines them.
+
+## The bytes between identified data
+
+At commit `1a005257b` the classification left 277 spans, 6,742 bytes, as `?`. They fall into a handful of
+patterns, each now a rule of `scripts/data_layout.py` or `tools/datamap.py`; 451 bytes in 13 spans stay
+`?` because no rule reaches them.
+
+* **The vtable section holds only vtables.** MWCC compiles each class's vtable into its own section, and
+  retail's runs from the static-initializer table at `0x522440` to the exception metadata at `0x542ae0`.
+  A pure virtual function's slot is zero, so an abstract class's vtable is mostly zeros with a function
+  or two among them (`beSaveApi`: slots 21-23 zero, `vfunc_24` at `0x53c0d8`; 26 `vfunc_N` symbols sit
+  past a zero slot at their own slot number). Every one of the 977 dumped vtables starts 16-aligned, as
+  every matched MWCC datum of 16 bytes or more does, so zeros of 16 bytes or more before the next vtable
+  are slots, not padding. Outside the section a `[0, 0]` pair before a function table is padding, not a
+  vtable header: 197 such guesses in `.data` cut a matched table's padding into `?`.
+* **Pointer tables hold nulls and records.** CRI's device interfaces (DVCI, HTCI, MFCI) are 26 function
+  slots with the unimplemented ones null; MWCC's RTTI base lists are `{type_info *, offset}` records
+  ending in a zero record, and the type_info records they name are `{name, bases}` pairs; game tables
+  are `{name, value}` and `{font, column, row}` records. A run that stops at the first zero cuts all of
+  them. A table's end is not the end of the datum it sits in: newlib's `impure_data` (`struct _reent` at
+  `0x4851b0`, `_rand_next = 1` at `+0xa8`, the three `FILE`s from `+0x1e4`) holds a run of three `FILE`
+  pointers that used to split it.
+* **Alignment is not always 8.** `.sdata` starts at every multiple of 4 like `.sbss`; inside a GCC unit's
+  block a word starts at 4 (29 % of code references into GCC-owned `.data` are 4 mod 8, against 3 % for
+  MWCC); before a function the assembler pads with zero words to the function's alignment (Sony
+  libkernl's `_kTLBException` at `0x113bc0` and `_kExitTLBHandler` at `0x113d00`, the static initialisers
+  at `0x51fd00`). An unaligned reference is not a start: `luaX_token2str` forms `token2string - 0x404`
+  and `Memory_GetCurrentContext` forms `g_memoryContextStack - 4`.
+* **Short strings.** `data/strings.json` leaves out strings of a few characters (`"C"`, `"add"`,
+  `"host0"`, `"fmt "`, Shift-JIS names); a pointer table naming text up to a zero byte identifies them.
+
+What stays `?`: the unreferenced file-scope constants of fdlibm units (`e_atan2.c`'s `tiny … pi_lo`,
+`k_cos.c`'s `one, C1 … C6`, `k_sin.c`'s, `k_tan.c`'s, `e_fmod.c`'s `one`, `s_ceil.c`'s `huge`), which
+Sony EE GCC emits at the head of each unit's read-only block before the literal copies the code loads;
+CRI Sofdec's blank-padded version string and the M2V decoder's default-condition and build-info records
+(`0x4f2850`, `0x4f2948`); the tail of `mpv_build_inf` behind a misread string; an MPEG frame-rate table at
+`0x4f5060`; the high byte of `g_byteOrderProbe` (retail's datum is the short `0x1234`); and two 16-byte
+`.bss` datums in Gfx's block that its source does not define.
 
 ## Unclaimed code hiding inside the "data" regions
 

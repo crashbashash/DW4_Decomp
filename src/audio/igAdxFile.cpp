@@ -61,12 +61,10 @@ int memcpy(char *, char *, int);
 extern int g_resultSuccess[4];
 extern int g_resultFailure[4];
 extern int g_igAdxFile_metaObject[4];
-extern const char DAT_00500060[8]; /* "rb" */
-extern const char DAT_00500068[8]; /* "r" */
 extern unsigned char GPR_00554de8; /* set while igAdx is initialised */
-extern unsigned char g_igAdxFile_ignoreReadModeWarning;
-extern unsigned char g_igAdxFile_ignoreWriteWarning;
-extern unsigned char g_igAdxFile_ignoreOpenModeWarning;
+unsigned char g_igAdxFile_ignoreReadModeWarning;
+unsigned char g_igAdxFile_ignoreWriteWarning;
+unsigned char g_igAdxFile_ignoreOpenModeWarning;
 }
 
 inline bool igResult::succeeded() { return value == g_resultSuccess[0]; }
@@ -264,9 +262,9 @@ igAdxFile *Gap__igAdxFile__vfunc_23(igAdxFile *self, const char *fileName, const
     bool opened;
 
     igFile_SetFileName(self, fileName);
-    if (strcmp(mode, DAT_00500060) == 0) {
+    if (strcmp(mode, "rb") == 0) {
         opened = ((igAdxFileVirtuals *)self)->vfunc_21(kReadBinary).succeeded();
-    } else if (strcmp(mode, DAT_00500068) == 0) {
+    } else if (strcmp(mode, "r") == 0) {
         opened = ((igAdxFileVirtuals *)self)->vfunc_21(kRead).succeeded();
     } else {
         return 0;

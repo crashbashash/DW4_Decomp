@@ -2,6 +2,8 @@
  * header in memory; the getters return its file information and, per stream id, the audio and video
  * stream descriptors. */
 
+#include "dw4/cri/sfh.h"
+
 void *memset(void *dst, int value, unsigned int size);
 int memcmp(const void *a, const void *b, unsigned int size);
 char *strstr(const char *text, const char *pattern);
@@ -104,13 +106,6 @@ enum {
     SFH_STAT_ANALYSED = 2
 };
 
-typedef struct SfhHn {
-    int stat;
-    SfhHdr *hdr;
-    unsigned int size;
-    int version;          /* major * 100 + minor */
-} SfhHn;
-
 typedef struct SfhPool {
     int maxHn;
     int nHn;
@@ -123,12 +118,9 @@ enum {
     SFH_STM_PRIVATE = 0xBD
 };
 
-extern char sfh_ver_str[];
-extern char sfh_magic[];
-extern char sfh_ver_tag[];
-extern char *sfh_verstr_ptr;
-extern SfhPool sfh_pool;
-extern int sfh_init_cnt;
+static char *sfh_verstr_ptr;
+static SfhPool sfh_pool;
+static int sfh_init_cnt;
 
 void clearObjInf(SfhPool *pool);
 void initObjInf(SfhPool *pool, int maxHn, SfhHn *hns);
@@ -150,7 +142,7 @@ int isEnableVidFtr(int id, SfhVideoStm *stm);
 int chkStmId(int id);
 
 char *SFH_GetVersionStr(void) {
-    return sfh_ver_str;
+    return "\nCRI SFH/PS2EE Ver.1.19 Build:Oct  6 2004 11:36:25\n";
 }
 
 int sfh_IsStatAnalysed(int stat) {
@@ -277,7 +269,7 @@ int SFH_IsSfdHeader(SfhHn *hn, int *ok) {
         hn->stat = SFH_STAT_INVALID;
         return 0;
     }
-    if (memcmp(magic, sfh_magic, 24) != 0) {
+    if (memcmp(magic, "SofdecStream            ", 24) != 0) {
         hn->stat = SFH_STAT_INVALID;
         return 0;
     }
@@ -483,9 +475,9 @@ int SFH_AnlyPackSiz(SfhHn *hn, int *value) {
     return 1;
 }
 
-/* Finds the sfh_ver_tag marker ("Ver.") in `text` and reads the "major.minor" after it. */
+/* Finds the "Ver." marker in `text` and reads the "major.minor" after it. */
 int getToolVer(char *text, int *major, int *minor) {
-    char *found = strstr(text, sfh_ver_tag);
+    char *found = strstr(text, "Ver.");
 
     if (found == 0) {
         return 0;

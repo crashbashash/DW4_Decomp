@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 typedef void (*TraversalFunction)(void);
 typedef int (*PopProc)(int attr, int data);
@@ -41,8 +43,8 @@ int beMessenger_AppendBool(int, unsigned char);
 int beMessenger_AppendVec3(int, float *);
 int beMessenger_GetObjectCount(int);
 beBaseInfoRam *beMessenger_GetObject(int, int);
-int beMessenger_SelectReceivers(int, int *, int, int);
-int beMessenger_SendNamed(int, int *, int, int, int *);
+int beMessenger_SelectReceivers(int, char *, int, int);
+int beMessenger_SendNamed(int, char *, int, int, char *);
 int beMessenger_GetInt(int, int);
 long long beMessenger_GetLong(int, int);
 int beMessenger_AppendLong(int, long long);
@@ -63,23 +65,9 @@ extern int kIGMemoryPoolHandleUser1[4];
 extern int g_stringPool[4];
 extern unsigned char g_useOwnerAllocator;
 extern int emptyString[4];
-extern int ONE[4];
-extern int HITPLAYERBULLET[4];
-extern int HITPLAYERTALK[4];
-extern int HITENEMYBULLET[4];
-extern int CHKBULLET[4];
-extern int BHit[4];
-extern int MODELCTRL_4[4];
-extern int FIND_SPACE[4];
-extern int GENERATE_3[4];
-extern int SQ_ERAS[4];
-extern int SOUND_2[4];
-extern int PLAY[4];
-extern int DOWN[4];
-extern int VOLUMECTL[4];
 /* Debug draw colour per bullet mode (RGBA), filled on first use. */
-extern float g_hitBoxDebugColors[12];
-extern char g_hitBoxDebugColorsReady;
+float g_hitBoxDebugColors[12];
+char g_hitBoxDebugColorsReady;
 
 int beModelCtrlNode2_TraversalFunction(igCommonTraversal *trav, beModelCtrlNode2 *node);
 long long beModelCtrlNode2_LocalTime(beModelCtrlNode2 *node, long long now);
@@ -277,7 +265,7 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_21(beModelCtrlSCHitBox *self, beBaseInf
         int own = igObject_GetAllocator(ram);
         RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
     }
-    ramData = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE);
+    ramData = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
     work = (beModelCtrlInfoWork *)ramData->_work;
     ctrl = (beModelCtrl *)ram->_parentManager;
     int own = igObject_GetAllocator(self);
@@ -324,13 +312,13 @@ send:
     }
     switch (self->_bulletMode) {
     case 0:
-        beMessenger_SelectGroup(ctrl->_messenger, HITPLAYERBULLET);
+        beMessenger_SelectGroup(ctrl->_messenger, "HITPLAYERBULLET");
         break;
     case 1:
-        beMessenger_SelectGroup(ctrl->_messenger, HITPLAYERTALK);
+        beMessenger_SelectGroup(ctrl->_messenger, "HITPLAYERTALK");
         break;
     default:
-        beMessenger_SelectGroup(ctrl->_messenger, HITENEMYBULLET);
+        beMessenger_SelectGroup(ctrl->_messenger, "HITENEMYBULLET");
         break;
     }
     beMessenger_AppendInt(ctrl->_messenger, self->_kind);
@@ -348,12 +336,12 @@ send:
         }
     }
     beMessenger_SetRunCheck(ctrl->_messenger, 1);
-    beMessenger_DispatchSelected(ctrl->_messenger, CHKBULLET);
+    beMessenger_DispatchSelected(ctrl->_messenger, "CHKBULLET");
     if (beMessenger_GetBoolCount(ctrl->_messenger) != 0) {
         int luaBHit = ((beModelCtrlInfoWork *)ramData->_work)->_luaBHit;
         if (luaBHit != 0) {
             int name = info->_name != 0 ? info->_name : (int)emptyString;
-            beModelCtrl_CallLua(ctrl, ram, luaBHit, BHit, name, 0, 0, 0, 0, 0);
+            beModelCtrl_CallLua(ctrl, ram, luaBHit, "BHit", name, 0, 0, 0, 0, 0);
         }
     }
     return 1;
@@ -395,10 +383,10 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInf
     float rotation[3];
     manager = (beBaseInfoManager *)ram->_parentManager;
     info = (beBaseInfo *)ram->_parentInfo;
-    beMessenger_SendNamed(manager->_messenger, &MODELCTRL_4[0], self->_modelName, -1, &FIND_SPACE[0]);
+    beMessenger_SendNamed(manager->_messenger, "MODELCTRL", self->_modelName, -1, "FIND_SPACE");
     if (beMessenger_GetObjectCount(manager->_messenger) != 0) {
         self->_geneRamNo = beMessenger_GetObject(manager->_messenger, 0)->_ramNo;
-        beMessenger_SelectReceivers(manager->_messenger, &MODELCTRL_4[0], self->_modelName, self->_geneRamNo);
+        beMessenger_SelectReceivers(manager->_messenger, "MODELCTRL", self->_modelName, self->_geneRamNo);
         beMessenger_AppendInt(manager->_messenger, ram->_ramNo);
         name = (int *)info->_name;
         if (name != 0) ownerName = name; else ownerName = &emptyString[0];
@@ -408,7 +396,7 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInf
             int own = igObject_GetAllocator(ram);
             RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]));
         }
-        work = (beModelCtrlInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], &ONE[0])->_work;
+        work = (beModelCtrlInfoWork *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE")->_work;
         if (work->_hitParentName == 0) {
             name = (int *)info->_name;
             if (name != 0) ownerName = name; else ownerName = &emptyString[0];
@@ -427,7 +415,7 @@ int Gap__Bec__beModelCtrlSCEffect__vfunc_21(beModelCtrlSCEffect *self, beBaseInf
         rotation[2] = self->_rotation[2];
         beMessenger_AppendVec3(manager->_messenger, rotation);
         beMessenger_AppendBool(manager->_messenger, self->_isPositionLock);
-        beMessenger_DispatchSelected(manager->_messenger, &GENERATE_3[0]);
+        beMessenger_DispatchSelected(manager->_messenger, "GENERATE");
     } else {
         return 0;
     }
@@ -441,7 +429,7 @@ void Gap__Bec__beModelCtrlSCEffect__vfunc_23(beModelCtrlSCEffect *self, beBaseIn
     if (self->_isOneSet != 0) {
         geneRamNo = self->_geneRamNo;
         if (geneRamNo != -1) {
-            beMessenger_SendNamed(((beBaseInfoManager *)ram->_parentManager)->_messenger, &MODELCTRL_4[0], self->_modelName, geneRamNo, &SQ_ERAS[0]);
+            beMessenger_SendNamed(((beBaseInfoManager *)ram->_parentManager)->_messenger, "MODELCTRL", self->_modelName, geneRamNo, "SQ_ERAS");
         }
     }
 }
@@ -450,9 +438,9 @@ void Gap__Bec__beModelCtrlSCEffect__vfunc_23(beModelCtrlSCEffect *self, beBaseIn
 int Gap__Bec__beModelCtrlSCSound__vfunc_21(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
     beBaseInfoManager *manager = (beBaseInfoManager *)ram->_parentManager;
     long long handle;
-    beMessenger_SelectGroup(manager->_messenger, &SOUND_2[0]);
+    beMessenger_SelectGroup(manager->_messenger, "SOUND");
     beMessenger_AppendString(manager->_messenger, self->_sndName);
-    beMessenger_DispatchSelected(manager->_messenger, &PLAY[0]);
+    beMessenger_DispatchSelected(manager->_messenger, "PLAY");
     handle = beMessenger_GetLong(manager->_messenger, 0);
     if (handle == -1) {
         return 0;
@@ -471,10 +459,10 @@ int Gap__Bec__beModelCtrlSCSound__vfunc_21(beModelCtrlSCSound *self, beBaseInfoR
 void Gap__Bec__beModelCtrlSCSound__vfunc_23(beModelCtrlSCSound *self, beBaseInfoRam *ram) {
     beBaseInfoManager *manager = (beBaseInfoManager *)ram->_parentManager;
     if (self->_sndHandle != 0) {
-        beMessenger_SelectGroup(manager->_messenger, &SOUND_2[0]);
-        beMessenger_AppendString(manager->_messenger, &DOWN[0]);
+        beMessenger_SelectGroup(manager->_messenger, "SOUND");
+        beMessenger_AppendString(manager->_messenger, "DOWN");
         beMessenger_AppendLong(manager->_messenger, self->_sndHandle);
-        beMessenger_DispatchSelected(manager->_messenger, &VOLUMECTL[0]);
+        beMessenger_DispatchSelected(manager->_messenger, "VOLUMECTL");
     }
 }
 
@@ -747,3 +735,5 @@ int Gap__Bec__beModelCtrlSCHitBox__vfunc_20(void)
 {
     return g_beModelCtrlSCHitBox_metaObject[0];
 }
+
+#pragma pop

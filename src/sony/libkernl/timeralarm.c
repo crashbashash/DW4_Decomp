@@ -34,8 +34,8 @@ int iStartTimerCounter(int id);
 int SetTimerHandler(int id, u_long schedule, int (*handler)(int, int, int, Alarm *), Alarm *arg);
 int iSetTimerHandler(int id, u_long schedule, int (*handler)(int, int, int, Alarm *), Alarm *arg);
 
-extern Alarm timerAlarms[TIMER_ALARMS];
-extern Alarm *freeAlarms;
+static Alarm timerAlarms[TIMER_ALARMS];
+static Alarm *freeAlarms;
 
 int _sceTimerAlarmInit(void)
 {

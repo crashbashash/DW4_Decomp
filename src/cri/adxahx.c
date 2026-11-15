@@ -6,10 +6,10 @@
 /* The AHX decoder works in 96-sample units. */
 #define ADXB_AHX_FRMSMPL 96
 
-extern void (*adxb_ahx_setsjifn)(void *ahx, SfdSj *sji);
-extern void (*adxb_ahx_setdecsmplfn)(void *ahx, int nsmpl);
-extern void (*adxb_ahx_termsupplyfn)(void *ahx);
-extern void (*adxb_ahx_execfn)(AdxbObj *adxb);
+void (*adxb_ahx_setsjifn)(void *ahx, SfdSj *sji) = 0;
+void (*adxb_ahx_setdecsmplfn)(void *ahx, int nsmpl) = 0;
+void (*adxb_ahx_termsupplyfn)(void *ahx) = 0;
+void (*adxb_ahx_execfn)(AdxbObj *adxb) = 0;
 
 void ADXB_SetAhxInSj(AdxbObj *adxb, SfdSj *sji)
 {

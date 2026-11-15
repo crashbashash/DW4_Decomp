@@ -66,12 +66,13 @@ typedef struct EnbayaMaskReader {
 typedef struct EnbayaMaskKey { char _pad0[92]; unsigned char mask; char _pad93[3]; } EnbayaMaskKey;
 typedef struct EnbayaMaskRun { int remaining; int consumed; } EnbayaMaskRun;
 
-extern int DAT_004bb0c0[4];
-extern int DAT_004bb0d0[2];
-extern int DAT_004bb0e0[4];
-extern int DAT_004bb0f0[4];
-extern int DAT_004f2740[4];
-extern int DAT_004f2750[16];
+/* Bit shifts that pick the next 2-bit and 4-bit code out of a packed byte, high bits first. */
+int g_deltaCodeShifts[4] = {6, 4, 2, 0};
+int g_deltaNibbleShifts[2] = {4, 0};
+int g_maskCodeShifts[4] = {6, 4, 2, 0};
+int g_runLengthCodeShifts[4] = {6, 4, 2, 0};
+extern const int g_deltaCodeValues[4];
+extern const int g_deltaNibbleValues[16];
 
 }
 
@@ -383,7 +384,7 @@ static inline int readRunLength(EnbayaMaskReader *r) {
         r->shift = 0;
         r->codes++;
     }
-    code = (*r->codes >> DAT_004bb0f0[r->shift]) & 3;
+    code = (*r->codes >> g_runLengthCodeShifts[r->shift]) & 3;
     r->shift++;
     if (code == 0) {
         value = code;
@@ -416,7 +417,7 @@ static inline int readRunLengthBackward(EnbayaMaskReader *r) {
         r->shift = 3;
         r->codes--;
     }
-    code = (*r->codes >> DAT_004bb0f0[r->shift]) & 3;
+    code = (*r->codes >> g_runLengthCodeShifts[r->shift]) & 3;
     if (code == 0) {
         value = code;
     } else {
@@ -530,7 +531,7 @@ static inline int readValue(EnbayaReader *r) {
         r->codes++;
     }
     /* matching construct: template sweep — zero code kept as its own branch before the switch */
-    code = (*r->codes >> DAT_004bb0e0[r->shift]) & 3;
+    code = (*r->codes >> g_maskCodeShifts[r->shift]) & 3;
     r->shift++;
     if (code == 0) {
         value = code;
@@ -572,19 +573,19 @@ static inline int readDelta(EnbayaDeltaReader *r) {
         r->shift = 0;
         r->codes++;
     }
-    code = (*r->codes >> DAT_004bb0c0[r->shift]) & 3;
+    code = (*r->codes >> g_deltaCodeShifts[r->shift]) & 3;
     r->shift++;
     if (code != 2) {
-        return DAT_004f2740[code];
+        return g_deltaCodeValues[code];
     }
     if (r->nibbleShift == 2) {
         r->nibbleShift = 0;
         r->nibbles++;
     }
-    code = (*r->nibbles >> DAT_004bb0d0[r->nibbleShift]) & 15;
+    code = (*r->nibbles >> g_deltaNibbleShifts[r->nibbleShift]) & 15;
     r->nibbleShift++;
     if (code != 0) {
-        return DAT_004f2750[code];
+        return g_deltaNibbleValues[code];
     }
     value = *r->bytes++;
     if (value != 0) {
@@ -628,18 +629,18 @@ static inline int readDeltaBackward(EnbayaDeltaReader *r) {
         r->shift = 3;
         r->codes--;
     }
-    code = (*r->codes >> DAT_004bb0c0[r->shift]) & 3;
+    code = (*r->codes >> g_deltaCodeShifts[r->shift]) & 3;
     if (code != 2) {
-        return DAT_004f2740[code];
+        return g_deltaCodeValues[code];
     }
     r->nibbleShift--;
     if (r->nibbleShift == -1) {
         r->nibbleShift = 1;
         r->nibbles--;
     }
-    code = (*r->nibbles >> DAT_004bb0d0[r->nibbleShift]) & 15;
+    code = (*r->nibbles >> g_deltaNibbleShifts[r->nibbleShift]) & 15;
     if (code != 0) {
-        return DAT_004f2750[code];
+        return g_deltaNibbleValues[code];
     }
     r->bytes--;
     value = *r->bytes;
@@ -814,3 +815,7 @@ void FUN_002805a0(EnbayaMaskRun *run, EnbayaMaskKey *keys, int count, EnbayaMask
 }
 
 }
+
+/* The delta a 2-bit code stands for (code 2 reads a nibble instead) and a 4-bit code. */
+const int g_deltaCodeValues[4] = {0, 1, 0, -1};
+const int g_deltaNibbleValues[16] = {0, 8, 2, 3, 4, 5, 6, 7, -8, -7, -6, -5, -4, -3, -2, -9};

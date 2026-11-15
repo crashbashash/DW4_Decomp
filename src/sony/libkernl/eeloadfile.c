@@ -74,11 +74,12 @@ char *strncpy(char *dst, const char *src, unsigned int size);
 
 extern char __ps2_klibinfo__[];
 /* negative until the server is bound */
-extern int _bind_check;
-extern char *_lfwildcard;
-extern LfSendData _lf_senddata;
-extern sceSifClientData _lf_cd;
-extern LfVersion _lfversion;
+static int _bind_check = -1;
+/* the version text that matches any */
+static char *_lfwildcard = "....";
+static LfSendData _lf_senddata __attribute__((aligned(64)));
+static sceSifClientData _lf_cd;
+static LfVersion _lfversion;
 
 int _lf_bind(void)
 {

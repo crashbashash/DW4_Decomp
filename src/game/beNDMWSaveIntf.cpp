@@ -34,10 +34,8 @@ extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWSaveIntf_AcquirePadManager(beNDMWSaveIntf *self);
 extern "C" int g_beNDMWSaveIntfInfo_metaObject[4];
 extern "C" int g_beNDMWSaveIntf_metaObject[4];
-extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, int *, int, int);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, int *);
-extern "C" int SAVEINTF_ALL[4];
-extern "C" int SAVEINTF[4];
+extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
 extern "C" void beNDMWSaveIntf_RegisterReceivers(beNDMWSaveIntf *self, beBaseInfoRam *ram);
 /* The values of the save interface's Message enum (beNDMWSaveIntf_GetMessageEnum). */
 enum SaveMessage {
@@ -52,17 +50,11 @@ enum SaveMessage {
 /* Message record: only the enum value name at +20 is read. */
 struct MessageArg { char header[20]; int enumName; };
 struct ModelPlacement { float x, y, z; };
-extern "C" ModelPlacement g_saveModelPlacement[4];
-extern "C" int CTRL_3[4];
-extern "C" int COMMDLCTRL_3[4];
-extern "C" int MESWIN_2[4];
-extern "C" int COMMONINTF_2[4];
-extern "C" int DEGISTATECTRL_2[4];
-extern "C" int GAMERAM_5[4];
-extern "C" int SAVECTRL[4];
-extern "C" int GETCOMMON_4[4];
-extern "C" int TEXTORDER_3[4];
-extern "C" int GAMEREMOVE[4];
+extern "C" {
+ModelPlacement g_saveModelPlacement[4] = {
+    {-315.0f, 240.0f, 0.0f}, {-5.0f, 240.0f, 0.0f}, {-315.0f, 20.0f, 0.0f}, {-5.0f, 20.0f, 0.0f}
+};
+}
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" int g_beSystem_metaObject[4];
@@ -157,17 +149,6 @@ extern "C" int beMessenger_AppendString(...);
 extern "C" void *bePadManager_GetPadForPlayer(...);
 extern "C" void *igProperty_GetRecordByte(...);
 extern "C" int * g_playerModelRow[4];
-extern "C" int SELSLOT_2[4];
-extern "C" int DATASELINTF_2[4];
-extern "C" int j_chrselbase_2[4];
-extern "C" int SQ_OPEN_3[4];
-extern "C" int GETPLAYER_3[4];
-extern "C" int ISUSE_3[4];
-extern "C" int CURRENT2BASE[4];
-extern "C" int g_defaultPlayerName[4];
-extern "C" int GAMESTART_2[4];
-extern "C" int j_chrselmesswin_2[4];
-extern "C" int SQ_CLOSE_5[4];
 struct ReleasedObject {
     int vtable;
     int refCount;
@@ -199,7 +180,7 @@ struct ModelPos {
     float x, y, z, w;
     ModelPos(const ModelPos &o);
 };
-extern "C" int beNDMWLoadIntf2ComMdlCtrl__StartAt(void *, int, void *, void *, ModelPos &, int);
+extern "C" int beNDMWLoadIntf2ComMdlCtrl__StartAt(void *, int, const void *, const void *, ModelPos &, int);
 class NewDataListRef {
 public:
     void *value;
@@ -256,6 +237,9 @@ static inline void SetStageSubstep(beNDMWLoadSavePlWork *w, int substep) { w->_s
 static inline void NextStageTick(beNDMWLoadSavePlWork *w) { w->_sysStat3 = w->_sysStat3 + 1; }
 static inline int TextId(const beBaseInfoRam *host, int token) { return (host->_ramNo << 0x10) | token; }
 static inline int PlayerTextId(int player, int token) { return (player << 0x10) | token; }
+#pragma push
+#pragma readonly_strings on
+
 static inline int AllEntriesReady(void *works) {
     int entryCount = 0;
     int readyCount = 0;
@@ -346,37 +330,37 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        ctrl = (beNDMWSaveIntfCtrlData *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], CTRL_3));
+        ctrl = (beNDMWSaveIntfCtrlData *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "CTRL"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], COMMDLCTRL_3));
+        comMdl = (beNDMWLoadIntf2ComMdlCtrl *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "COMMDLCTRL"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        mesWin = (beNDMWLoadIntf2MesWin *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], MESWIN_2));
+        mesWin = (beNDMWLoadIntf2MesWin *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "MESWIN"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        selSlot = (beNDMWLoadIntf2SelSlot *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], SELSLOT_2));
+        selSlot = (beNDMWLoadIntf2SelSlot *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "SELSLOT"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        common = (beNDMWLoadCtrl2CommonIntf *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], COMMONINTF_2));
+        common = (beNDMWLoadCtrl2CommonIntf *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "COMMONINTF"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], DEGISTATECTRL_2));
+        degiStates = (beNDMWLoadIntf2DegiStateCtrl *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "DEGISTATECTRL"));
         tref = ObjectRef_Get_003e93b0(&ram->_dataList);
         if (tref == 0) {
             FreshDataList::Assign(&ram->_dataList, igObject_GetAllocator(ram));
         }
-        dataSel = (beNDMWLoadIntf2DataSelIntf *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], DATASELINTF_2));
+        dataSel = (beNDMWLoadIntf2DataSelIntf *)(DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&ram->_dataList), g_propertyNameField[0], "DATASELINTF"));
         beNDMWLoadIntf2ComMdlCtrl__Poll(comMdl);
         beNDMWLoadIntf2MesWin__Update(mesWin);
         padTrigger = 0;
@@ -408,7 +392,7 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     switch (ctrl->_st1) {
                     default:
                         ModelPos openPos(*(ModelPos *)comMdl->_pos);
-                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, j_chrselbase_2, SQ_OPEN_3, openPos, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselbase", "SQ_OPEN", openPos, 1);
                         NextStep(ctrl);
                         return;
                     case 1:
@@ -418,14 +402,14 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         }
                         break;
                     case 2:
-                        beMessenger_SelectGroup(self->_messenger, GAMERAM_5);
+                        beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                         beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                        beMessenger_DispatchSelected(self->_messenger, GETPLAYER_3);
+                        beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
                         playerData = beMessenger_GetObject(self->_messenger, 0);
-                        if (*(unsigned char *)((char *)(igProperty_GetRecordByte(playerData, ISUSE_3)) + 12) == 1) {
-                            beMessenger_SelectGroup(self->_messenger, GAMERAM_5);
+                        if (*(unsigned char *)((char *)(igProperty_GetRecordByte(playerData, "ISUSE")) + 12) == 1) {
+                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                             beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                            beMessenger_DispatchSelected(self->_messenger, CURRENT2BASE);
+                            beMessenger_DispatchSelected(self->_messenger, "CURRENT2BASE");
                             beNDMWDegiData__LoadFromProperties(ObjectList_GetAt_003e9260(common->_gameUseData, ram->_ramNo), playerData);
                             EnterState(ctrl, SAVE_OPEN_WINDOW);
                             { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)ObjectList_GetAt_003e9260(common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
@@ -433,14 +417,14 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             return;
                         }
                         if (ram->_ramNo == 0) {
-                            beMessenger_SelectGroup(self->_messenger, GAMERAM_5);
+                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                             beMessenger_AppendInt(self->_messenger, ram->_ramNo);
                             beMessenger_AppendString(self->_messenger, g_playerModelRow[0]);
-                            beMessenger_AppendString(self->_messenger, g_defaultPlayerName);
-                            beMessenger_DispatchSelected(self->_messenger, GAMESTART_2);
-                            beMessenger_SelectGroup(self->_messenger, GAMERAM_5);
+                            beMessenger_AppendString(self->_messenger, "\202\305\202\316\202\301\202\255\202\361");
+                            beMessenger_DispatchSelected(self->_messenger, "GAMESTART");
+                            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                             beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                            beMessenger_DispatchSelected(self->_messenger, GETPLAYER_3);
+                            beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
                             playerData = beMessenger_GetObject(self->_messenger, 0);
                             beNDMWDegiData__LoadFromProperties(ObjectList_GetAt_003e9260(common->_gameUseData, ram->_ramNo), playerData);
                             return;
@@ -455,7 +439,7 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     switch (ctrl->_st1) {
                     case 0:
                         ModelPos winPos(*(ModelPos *)comMdl->_pos);
-                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, j_chrselmesswin_2, SQ_OPEN_3, winPos, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_OPEN", winPos, 1);
                         beNDMWLoadIntf2MesWin__RequestOpen(mesWin);
                         NextStep(ctrl);
                         return;
@@ -917,7 +901,7 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             switch (ctrl->_st3) {
                             case 0:
                                 beNDMWLoadIntf2DegiState__RequestClose(ObjectList_GetAt_003e9260(degiStates->_statDataList, 0), 1);
-                                beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, j_chrselmesswin_2, SQ_CLOSE_5, 1);
+                                beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_CLOSE", 1);
                                 beNDMWLoadIntf2MesWin__RequestClose(mesWin);
                                 NextTick(ctrl);
                                 return;
@@ -1075,13 +1059,13 @@ void beNDMWSaveIntf_Update(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     SetStageStep(((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(common->_flagWork, ram->_ramNo))), 1);
                     break;
                 case SAVE_WAIT_PLAYERS:
-                    beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, j_chrselmesswin_2, SQ_CLOSE_5, 1);
+                    beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_CLOSE", 1);
                     beNDMWLoadIntf2MesWin__RequestClose(mesWin);
                     beNDMWLoadIntf2DegiState__RequestConfirmClose(ObjectList_GetAt_003e9260(degiStates->_statDataList, 0));
                     SetStageStep(((beNDMWLoadSavePlWork *)(DataList_GetWordAt_003e9240(common->_flagWork, ram->_ramNo))), 2);
                     break;
                 }
-                beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, j_chrselbase_2, SQ_CLOSE_5, 1);
+                beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselbase", "SQ_CLOSE", 1);
                 return;
             case 1:
                 if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1) {
@@ -1980,8 +1964,8 @@ int beNDMWSaveIntf_GetInfoMeta(void)
 }
 
 void beNDMWSaveIntf_RegisterReceivers(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, SAVEINTF_ALL);
-    beMessenger_RegisterReceiver(self->_messenger, ram, SAVEINTF, 0, ram->_ramNo);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "SAVEINTF_ALL");
+    beMessenger_RegisterReceiver(self->_messenger, ram, "SAVEINTF", 0, ram->_ramNo);
 }
 
 int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageArg *message) {
@@ -2010,7 +1994,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                     ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isCtrl = 1;
                 }
             }
-            beMessenger_SendNamed(self->_messenger, SAVECTRL, 0, 0, GETCOMMON_4);
+            beMessenger_SendNamed(self->_messenger, "SAVECTRL", 0, 0, "GETCOMMON");
             ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
@@ -2043,7 +2027,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 ObjectList_AppendRetained(ram->_dataList, window.object);
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
+                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
             }
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
@@ -2052,11 +2036,11 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_messenger = self->_messenger;
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3);
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
                 ObjectList_AppendRetained(ram->_dataList, slots.object);
             }
             {
@@ -2066,22 +2050,22 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                     int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                     ChildRef<7> upperState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
+                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
+                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init(upperState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3), self->_messenger, 0);
+                    beNDMWLoadIntf2DegiState__Init(upperState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL"), self->_messenger, 0);
                     ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, upperState.object);
                 }
                 {
                     int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1[0], igObject_GetAllocator(self));
                     ChildRef<7> lowerState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
+                    void *commonIntf = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
+                    void *textOrderObj = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init(lowerState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3), self->_messenger, 1);
+                    beNDMWLoadIntf2DegiState__Init(lowerState.object, ram->_ramNo, commonIntf, textOrderObj, igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL"), self->_messenger, 1);
                     ObjectList_AppendRetained(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, lowerState.object);
                 }
                 ObjectList_AppendRetained(ram->_dataList, stateCtrl.object);
@@ -2091,15 +2075,15 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ChildRef<8> dataSel((RefObject *)beNDMWLoadIntf2DataSelIntf_Create(allocator));
                 ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMDLCTRL_3);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], TEXTORDER_3);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], MESWIN_2);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "MESWIN");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], DEGISTATECTRL_2);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "DEGISTATECTRL");
                 ObjectList_AppendRetained(ram->_dataList, dataSel.object);
             }
         }
@@ -2109,7 +2093,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
         return 1;
     }
     DataListGuard::Ensure(ram);
-    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], CTRL_3);
+    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "CTRL");
     switch (command) {
     case MSG_LINKCOMMON:
         ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
@@ -2139,11 +2123,11 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
     case MSG_SETSELECT_DATA:
         DataListGuard::Ensure(ram);
         {
-            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], COMMONINTF_2);
+            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "COMMONINTF");
             if (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)common->_flagWork)->_data)[ram->_ramNo]->_isRdy != 1) {
-                beMessenger_SelectGroup(self->_messenger, GAMERAM_5);
+                beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                 beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-                beMessenger_DispatchSelected(self->_messenger, GAMEREMOVE);
+                beMessenger_DispatchSelected(self->_messenger, "GAMEREMOVE");
             }
         }
         return 1;
@@ -2157,3 +2141,4 @@ int beNDMWSaveIntf_GetMeta(void)
     return g_beNDMWSaveIntf_metaObject[0];
 }
 
+#pragma pop

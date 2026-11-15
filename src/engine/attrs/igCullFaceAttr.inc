@@ -82,7 +82,7 @@ void igCullFaceAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igCullFaceAttr_ctorTable, 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00486788[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149620);
     igMetaObject_NameFields(temp_s0, g_igCullFaceAttr_fieldTable, g_igCullFaceAttr_fieldHandles, g_igCullFaceAttr_fieldOffsets, temp_s2);
 }

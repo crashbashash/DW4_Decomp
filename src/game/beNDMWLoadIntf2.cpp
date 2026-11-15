@@ -21,14 +21,14 @@ extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" void *StringPool_Construct(...);
 extern "C" void * StringPool_Intern(...);
 extern "C" int beMessenger_AppendVec3(int, float *);
-extern "C" int beMessenger_DispatchSelected(int, int *);
-extern "C" int beMessenger_SelectReceivers(int, int *, int, int);
+extern "C" int beMessenger_DispatchSelected(int, const void *);
+extern "C" int beMessenger_SelectReceivers(int, const void *, int, int);
 extern "C" int beMessenger_AppendString(int, int);
 extern "C" int beMessenger_GetBool(int, int);
 extern "C" void igObject_Destroy(void *);
 extern "C" void Vec3f_Copy(void *destination, void *source);
-extern "C" void *igProperty_FindByName(int list, int nameField, int *name);
-extern "C" void *DataList_FindProperty_003e9280(int list, int nameField, int *name);
+extern "C" void *igProperty_FindByName(int list, int nameField, const void *name);
+extern "C" void *DataList_FindProperty_003e9280(int list, int nameField, const void *name);
 extern "C" int ObjectRef_Get_003e92a0(int *reference);
 extern "C" int beBaseInfoDataList_Create(int);
 /* An allocator handle returned by value. */
@@ -48,14 +48,6 @@ extern "C" void beNDMWLoadIntf2DegiState__RequestChange(beNDMWLoadIntf2DegiState
 extern "C" void beNDMWLoadIntf2DegiState__RequestClose(beNDMWLoadIntf2DegiState *self, int closeKind);
 extern "C" void beNDMWLoadIntf2DegiState__RequestConfirmClose(beNDMWLoadIntf2DegiState *self);
 extern "C" beUnicodeObj * beUnicodeObj_Create(...);
-extern "C" int CHRSELFONT03[4];
-extern "C" int DATABASE[4];
-extern "C" int shinka[4];
-extern "C" int GETDATABASE[4];
-extern "C" int NAME[4];
-extern "C" int CHRSELFONT04[4];
-extern "C" int percent_d_4[4];
-extern "C" int CHRSELFONT05[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self);
@@ -68,64 +60,29 @@ struct PlayerModelRow {
     const char *faceSequence;
 };
 extern "C" PlayerModelRow g_playerModelRow[16];
-extern "C" int j_digifacewin[4];
-extern "C" int j_mainstatuswin[4];
-extern "C" int SQ_OPEN[4];
-extern "C" int j_savecheckwin[4];
-extern "C" int SQ_nofaceOPEN[4];
-extern "C" int SQ_NOOPEN[4];
-extern "C" int SQ_WAIT_4[4];
-extern "C" int SQ_noface[4];
-extern "C" int SQ_NOWAIT[4];
-extern "C" int SQ_CLOSE[4];
-extern "C" int SQ_LINEON00[4];
-extern "C" int SQ_CANCEL[4];
-extern "C" int SQ_NOCLOSE[4];
 struct Ob { char p[28]; float v28; float v32; float v36; };
 struct V3 { float x; float y; float z; };
 extern "C" unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self);
 extern "C" void beNDMWLoadIntf2DataSelIntf__Init(beNDMWLoadIntf2DataSelIntf *self, int player, int kind);
 extern "C" void beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" int j_saveareacursorr[4];
-extern "C" int CHRSELFONT08[4];
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
 
 
 
 
-extern "C" int SQ_MOVE_2[4];
-extern "C" const char *g_saveAreaLineSelectSeqs[4];
-extern "C" const char *g_saveAreaLineOnSeqs[4];
 extern "C" void *g_stringPool[4];
 extern "C" bePadData * bePadManager_GetPadForPlayer(...);
 extern "C" int beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(beNDMWLoadCtrl2CommonIntf *, int);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" int j_saveareawin01[4];
-extern "C" int j_saveareawin02[4];
-extern "C" int j_saveareawin03[4];
-extern "C" int j_saveareawin04[4];
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" const char *g_saveAreaWindowNames[4];
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
-extern "C" int SQ_AAREAOPEN[4];
-extern "C" int SQ_BAREAOPEN[4];
-extern "C" int SQ_CAREAOPEN[4];
-extern "C" int SQ_DAREAOPEN[4];
 extern "C" bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *self, int level);
 extern "C" void beNDMWLoadIntf2Diffselect__Init(beNDMWLoadIntf2Diffselect *self, int kind, int plNo);
-extern "C" int SQ_LINEON01[4];
-extern "C" int SQ_LINEON02_2[4];
-extern "C" int j_linewin02[4];
-extern "C" int j_linewin03[4];
-extern "C" int SQ_LINEUP00[4];
-extern "C" int SQ_LINEUP01[4];
-extern "C" int SQ_LINEDW01[4];
-extern "C" int SQ_LINEDW02[4];
 extern "C" unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self, unsigned char usePad);
 extern "C" void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char resetName);
 
@@ -135,10 +92,7 @@ extern "C" void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, un
  * letters. Rows 0-3 are lower case, upper case, digits and symbols, 4-23 hiragana and katakana,
  * 24-27 the Latin rows again and 28-29 accented letters. */
 struct NameEntryLetterRow { int letterCount; unsigned short letters[32]; };
-extern "C" NameEntryLetterRow g_nameEntryLetterRows[];
-extern "C" int CHRSELFONT10[4];
 extern "C" void beNDMWLoadIntf2NameSel__DrawRowLetters(beNDMWLoadIntf2NameSel *nameSel, int clear);
-extern "C" int CHRSELFONT11[4];
 extern "C" void beNDMWLoadIntf2NameSel__DrawColumnLetters(beNDMWLoadIntf2NameSel *nameSel, int clear);
 /* Where the letter cursor stood when a character of the name was entered; erasing the character
  * puts the cursor back there. */
@@ -153,8 +107,6 @@ struct NameSelWork {
     unsigned char unusedFlags[6];     /* cleared with the name; nothing reads them */
 };
 union NameSelRam { beNDMWLoadIntf2NameSel n; NameSelWork t; };
-extern "C" int CHRSELFONT12[4];
-extern "C" int CHRSELFONT13[4];
 extern "C" void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear);
 extern "C" void beNDMWLoadIntf2NameSel__SetAnswer(beNDMWLoadIntf2NameSel *nameSel, char isNameOK);
 extern "C" int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad);
@@ -163,31 +115,63 @@ extern "C" void beNDMWLoadIntf2SelSlot__Init(beNDMWLoadIntf2SelSlot *self);
 /* One entry of the slot screen: the slot-cursor sequence that points at it (SQ_SELECT..) and its
  * index in beNDMWMcUtilCtrl::_slot. g_slotMarkSelectSeqs lists the multitap layout (ports 1A-1D,
  * then slot 2), g_slotModeSelectSeqs the two-slot layout. */
-struct SlotCursorEntry { int *sequence; int mcSlot; };
-extern "C" SlotCursorEntry g_slotMarkSelectSeqs[5];
-extern "C" SlotCursorEntry g_slotModeSelectSeqs[2];
-extern "C" int j_slotbase[4];
-extern "C" int SQ_OPENPS01[4];
-extern "C" int SQ_OPENPS02[4];
-extern "C" int j_memoryiconwin[4];
-extern "C" int j_slotcursor[4];
-extern "C" int j_slotmark02[4];
-extern "C" int SQ_OPEN01_2[4];
-extern "C" int SQ_OPEN02_2[4];
-extern "C" int j_slotmark01[4];
-extern "C" int SQ_OPEN1A[4];
-extern "C" int SQ_OPEN1B[4];
-extern "C" int SQ_OPEN1C[4];
-extern "C" int SQ_OPEN1D[4];
+struct SlotCursorEntry { const char *sequence; int mcSlot; };
+#pragma push
+#pragma readonly_strings on
+
+extern "C" {
+const char *g_saveAreaWindowNames[4] = { "j_saveareawin01", "j_saveareawin02", "j_saveareawin03", "j_saveareawin04" };
+const char *g_saveAreaLineSelectSeqs[4] = { "SQ_LINESL00", "SQ_LINESL01", "SQ_LINESL02", "SQ_LINESL03" };
+const char *g_saveAreaLineOnSeqs[4] = { "SQ_LINEON00", "SQ_LINEON01", "SQ_LINEON02", "SQ_LINEON03" };
+NameEntryLetterRow g_nameEntryLetterRows[30] = {
+    {26, {0xFF41, 0xFF42, 0xFF43, 0xFF44, 0xFF45, 0xFF46, 0xFF47, 0xFF48, 0xFF49, 0xFF4A, 0xFF4B, 0xFF4C, 0xFF4D, 0xFF4E, 0xFF4F, 0xFF50, 0xFF51, 0xFF52, 0xFF53, 0xFF54, 0xFF55, 0xFF56, 0xFF57, 0xFF58, 0xFF59, 0xFF5A}},
+    {26, {0xFF21, 0xFF22, 0xFF23, 0xFF24, 0xFF25, 0xFF26, 0xFF27, 0xFF28, 0xFF29, 0xFF2A, 0xFF2B, 0xFF2C, 0xFF2D, 0xFF2E, 0xFF2F, 0xFF30, 0xFF31, 0xFF32, 0xFF33, 0xFF34, 0xFF35, 0xFF36, 0xFF37, 0xFF38, 0xFF39, 0xFF3A}},
+    {10, {0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19}},
+    {7, {0xFF06, 0xFF01, 0xFF1F, 0xFF5E, 0x30FC, 0x30FB, 0xFF1A}},
+    {10, {0x3042, 0x3044, 0x3046, 0x3048, 0x304A, 0x3041, 0x3043, 0x3045, 0x3047, 0x3049}},
+    {10, {0x304B, 0x304D, 0x304F, 0x3051, 0x3053, 0x304C, 0x304E, 0x3050, 0x3052, 0x3054}},
+    {10, {0x3055, 0x3057, 0x3059, 0x305B, 0x305D, 0x3056, 0x3058, 0x305A, 0x305C, 0x305E}},
+    {12, {0x305F, 0x3061, 0x3064, 0x3066, 0x3068, 0x3063, 0x3060, 0x3062, 0x3065, 0x3067, 0x3069, 0x3063}},
+    {5, {0x306A, 0x306B, 0x306C, 0x306D, 0x306E}},
+    {15, {0x306F, 0x3072, 0x3075, 0x3078, 0x307B, 0x3070, 0x3073, 0x3076, 0x3079, 0x307C, 0x3071, 0x3074, 0x3077, 0x307A, 0x307D}},
+    {5, {0x307E, 0x307F, 0x3080, 0x3081, 0x3082}},
+    {6, {0x3084, 0x3086, 0x3088, 0x3083, 0x3085, 0x3087}},
+    {5, {0x3089, 0x308A, 0x308B, 0x308C, 0x308D}},
+    {5, {0x308F, 0x3092, 0x3093, 0x3000, 0x3000}},
+    {10, {0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30AA, 0x30A1, 0x30A3, 0x30A5, 0x30A7, 0x30A9}},
+    {10, {0x30AB, 0x30AD, 0x30AF, 0x30B1, 0x30B3, 0x30AC, 0x30AE, 0x30B0, 0x30B2, 0x30B4}},
+    {10, {0x30B5, 0x30B7, 0x30B9, 0x30BB, 0x30BD, 0x30B6, 0x30B8, 0x30BA, 0x30BC, 0x30BE}},
+    {12, {0x30BF, 0x30C1, 0x30C4, 0x30C6, 0x30C8, 0x30C3, 0x30C0, 0x30C2, 0x30C5, 0x30C7, 0x30C9, 0x30C3}},
+    {5, {0x30CA, 0x30CB, 0x30CC, 0x30CD, 0x30CE}},
+    {15, {0x30CF, 0x30D2, 0x30D5, 0x30D8, 0x30DB, 0x30D0, 0x30D3, 0x30D6, 0x30D9, 0x30DC, 0x30D1, 0x30D4, 0x30D7, 0x30DA, 0x30DD}},
+    {5, {0x30DE, 0x30DF, 0x30E0, 0x30E1, 0x30E2}},
+    {6, {0x30E4, 0x30E6, 0x30E8, 0x30E3, 0x30E5, 0x30E7}},
+    {5, {0x30E9, 0x30EA, 0x30EB, 0x30EC, 0x30ED}},
+    {5, {0x30EF, 0x30F2, 0x30F3, 0x3000, 0x3000}},
+    {26, {0xFF41, 0xFF42, 0xFF43, 0xFF44, 0xFF45, 0xFF46, 0xFF47, 0xFF48, 0xFF49, 0xFF4A, 0xFF4B, 0xFF4C, 0xFF4D, 0xFF4E, 0xFF4F, 0xFF50, 0xFF51, 0xFF52, 0xFF53, 0xFF54, 0xFF55, 0xFF56, 0xFF57, 0xFF58, 0xFF59, 0xFF5A}},
+    {26, {0xFF21, 0xFF22, 0xFF23, 0xFF24, 0xFF25, 0xFF26, 0xFF27, 0xFF28, 0xFF29, 0xFF2A, 0xFF2B, 0xFF2C, 0xFF2D, 0xFF2E, 0xFF2F, 0xFF30, 0xFF31, 0xFF32, 0xFF33, 0xFF34, 0xFF35, 0xFF36, 0xFF37, 0xFF38, 0xFF39, 0xFF3A}},
+    {10, {0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19}},
+    {7, {0xFF06, 0xFF01, 0xFF1F, 0xFF5E, 0x30FC, 0x30FB, 0xFF1A}},
+    {28, {0x00A1, 0x00A3, 0x00A7, 0x00B5, 0x00BF, 0x00C3, 0x00C4, 0x00C5, 0x00C6, 0x00C7, 0x00D1, 0x00D5, 0x00D6, 0x00D8, 0x00DC, 0x00DF, 0x00E0, 0x00E2, 0x00E3, 0x00E4, 0x00E7, 0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x00EC, 0x00EE, 0x00EF}},
+    {28, {0x00F1, 0x00F2, 0x00F4, 0x00F5, 0x00F6, 0x00F9, 0x00FB, 0x00FC, 0x00E1, 0x00ED, 0x00F3, 0x00FA, 0x00C2, 0x00CA, 0x00D4, 0x00CD, 0x00CF, 0x00C1, 0x00C9, 0x00CD, 0x00D3, 0x00DA, 0x00C0, 0x00C8, 0x00CC, 0x00D2, 0x00D9, 0x00B0}}
+};
+SlotCursorEntry g_slotMarkSelectSeqs[5] = { {"SQ_SELECT1A", 0}, {"SQ_SELECT1B", 2}, {"SQ_SELECT1C", 3}, {"SQ_SELECT1D", 4}, {"SQ_SELECT02", 1} };
+SlotCursorEntry g_slotModeSelectSeqs[2] = { {"SQ_SELECT01", 0}, {"SQ_SELECT02", 1} };
+float g_interfaceKindPositions[4][3] = {
+    {-315.0f, 240.0f, 0.0f},
+    {-5.0f, 240.0f, 0.0f},
+    {-315.0f, 20.0f, 0.0f},
+    {-5.0f, 20.0f, 0.0f}
+};
+const char *g_starterSelectModelNames[4] = { "h_agumon", "h_vmon", "h_girumon", "h_dorumon" };
+const char *g_starterPlayerModelNames[4] = { "p_agumon", "p_vmon", "p_girumon", "p_dorumon" };
+}
 extern "C" unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int selPoint);
-extern "C" int SQ_ON[4];
 extern "C" unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *self, unsigned char usePad, unsigned char checkDone);
 extern "C" void beNDMWLoadIntf2SelSlot__PublishCursor(beNDMWLoadIntf2SelSlot *self);
 extern "C" unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self);
 extern "C" void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int lostEntry);
 extern "C" beLoadIntf2ComMdlData *beLoadIntf2ComMdlData__Create(int allocator);
-extern "C" int MODELCTRL[4];
-extern "C" int GENERATE[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 /* Header in front of the text of an interned string: the owning chunk and the reference count. */
 struct StringTokenHeader {
@@ -196,12 +180,10 @@ struct StringTokenHeader {
 };
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSQ, int recordOpen);
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSQ, float *position, int recordOpen);
-extern "C" void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int *modelName, int *sequenceName, int wait);
-extern "C" int ISSEQNAME[4];
+extern "C" void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const void *modelName, const void *sequenceName, int wait);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSequence, unsigned char trackClose);
-extern "C" int ISRUN[4];
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const char *name);
 extern "C" int beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(beNDMWLoadIntf2ComMdlCtrl *self);
 extern "C" int List_RemoveWordAt(beLoadIntf2ComMdlDataList *list, int index);
@@ -222,10 +204,8 @@ extern "C" int ObjectList_GetAt_003e9260(igDataList *list, int index);
 extern "C" ObjectRefTarget **ObjectRef_Assign_003e92b0(ObjectRefTarget **destination,ObjectRefTarget **source);
 extern "C" int g_beNDMWLoadIntf2Info_metaObject[4];
 extern "C" int g_beNDMWLoadIntf2_metaObject[4];
-extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, int *, int, int);
-extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, int *);
-extern "C" int LOADINTF2_ALL_2[4];
-extern "C" int LOADINTF2_2[4];
+extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
+extern "C" int beMessenger_RegisterReceiverFromInfo(int, beBaseInfoRam *, const void *);
 extern "C" void beNDMWLoadIntf2__RegisterReceivers(beNDMWLoadIntf2 *self, beBaseInfoRam *ram);
 
 /* The request a beNDMWLoadIntf2DegiState is carrying out (_st0). */
@@ -301,32 +281,32 @@ static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data
     for (; i < 8; i++) {
         dst[i] = 0;
     }
-    TextOrder_ConfigureUnicode(self->_textOrder, CHRSELFONT03, self->_plNo, nameSlot, text.p, 0, 0);
+    TextOrder_ConfigureUnicode(self->_textOrder, "CHRSELFONT03", self->_plNo, nameSlot, text.p, 0, 0);
 }
 
 /* Writes the database name of the record's Digimon kind into status text slot kindSlot. */
 static inline void DrawKindName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int kindSlot) {
     int modelIndex;
     int database;
-    beMessenger_SendNamed(self->_messenger, DATABASE, shinka, 0, GETDATABASE);
+    beMessenger_SendNamed(self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
     database = beMessenger_GetObject(self->_messenger, 0);
     FindPlayerModel(data, &modelIndex);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT04, self->_plNo, kindSlot, beDataBase_GetRecordString(database, modelIndex, NAME), 0, 0);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT04", self->_plNo, kindSlot, beDataBase_GetRecordString(database, modelIndex, "NAME"), 0, 0);
 }
 
 /* Writes the record's level, HP/max HP and MP/max MP as numbers into their status text slots. */
 static inline void DrawStats(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int levelSlot, int hpSlot, int maxHpSlot, int mpSlot, int maxMpSlot) {
     char number[32];
-    sprintf(number, percent_d_4, data->_lv);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT04, self->_plNo, levelSlot, number, 1, 0);
-    sprintf(number, percent_d_4, data->_hp);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT05, self->_plNo, hpSlot, number, 2, 0);
-    sprintf(number, percent_d_4, data->_maxHp);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT05, self->_plNo, maxHpSlot, number, 2, 0);
-    sprintf(number, percent_d_4, data->_mp);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT05, self->_plNo, mpSlot, number, 2, 0);
-    sprintf(number, percent_d_4, data->_maxMp);
-    TextOrder_ConfigureFont(self->_textOrder, CHRSELFONT05, self->_plNo, maxMpSlot, number, 2, 0);
+    sprintf(number, "%d", data->_lv);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT04", self->_plNo, levelSlot, number, 1, 0);
+    sprintf(number, "%d", data->_hp);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, hpSlot, number, 2, 0);
+    sprintf(number, "%d", data->_maxHp);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, maxHpSlot, number, 2, 0);
+    sprintf(number, "%d", data->_mp);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, mpSlot, number, 2, 0);
+    sprintf(number, "%d", data->_maxMp);
+    TextOrder_ConfigureFont(self->_textOrder, "CHRSELFONT05", self->_plNo, maxMpSlot, number, 2, 0);
 }
 
 /* Opens a window of the player's face/status model at the model controller's position. */
@@ -392,57 +372,8 @@ extern "C" int beMessenger_SelectGroup(...);
  * header. */
 struct IntProperty { char header[12]; int value; };
 struct BoolProperty { char header[12]; unsigned char value; };
-extern "C" IntProperty *igProperty_GetRecord(int object, int *name);
-extern "C" BoolProperty *igProperty_GetRecordByte(int object, int *name);
-extern "C" const char *g_starterSelectModelNames[4];
-extern "C" const char *g_starterPlayerModelNames[4];
-extern "C" int DATABASE[4];
-extern "C" int shinka[4];
-extern "C" int GETDATABASE[4];
-extern "C" int NAME[4];
-extern "C" int j_digifacewin[4];
-extern "C" int j_mainstatuswin[4];
-extern "C" int SQ_OPEN[4];
-extern "C" int SQ_CLOSE[4];
-extern "C" int SQ_LINEON00[4];
-extern "C" int SQ_CANCEL[4];
-extern "C" char SQ_LINESL00[];
-extern "C" int SQ_LINEON01[4];
-extern "C" int j_linewin02[4];
-extern "C" int SQ_LINEUP00[4];
-extern "C" int SQ_LINEDW01[4];
-extern "C" char SQ_ON00[];
-extern "C" int COMMONINTF[4];
-extern "C" int CTRL[4];
-extern "C" int MAKECHR[4];
-extern "C" int COMMDLCTRL[4];
-extern "C" int MESWIN[4];
-extern "C" int SELSLOT[4];
-extern "C" int NAMESEL[4];
-extern "C" int TEXTORDER[4];
-extern "C" int DEGISTATECTRL[4];
-extern "C" int DATASELINTF[4];
-extern "C" int DIFFSELECT[4];
-extern "C" int j_chrselbase[4];
-extern "C" int GAMERAM_2[4];
-extern "C" int GETPLAYER[4];
-extern "C" int ISUSE_2[4];
-extern "C" int j_chrselmesswin[4];
-extern "C" int j_linewin01[4];
-extern "C" int j_digiselcursorleft[4];
-extern "C" int j_digiselcursorright[4];
-extern "C" int j_namewin02[4];
-extern "C" int CHRSELFONT14[4];
-extern "C" int MOVETRANS[4];
-extern "C" int SQ_ENTR[4];
-extern "C" int SQ_EXIT[4];
-extern "C" int SQ_LINECG00[4];
-extern "C" int GAMEDATAINIT[4];
-extern "C" int GAMESTART[4];
-extern "C" int UNIQUE[4];
-extern "C" int BASE2CURRENT[4];
-extern "C" int RECALCPLAYER[4];
-extern "C" char hostLoad_lua[];
+extern "C" IntProperty *igProperty_GetRecord(int object, const void *name);
+extern "C" BoolProperty *igProperty_GetRecordByte(int object, const void *name);
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_bePadManager_metaObject[4];
@@ -578,7 +509,7 @@ static inline void ShowStarterName(beNDMWLoadIntf2 *self, beNDMWLoadIntf2TextOrd
   int row;
   int index;
   const PlayerModelRow *entry;
-  beMessenger_SendNamed(self->_messenger, DATABASE, shinka, 0, GETDATABASE);
+  beMessenger_SendNamed(self->_messenger, "DATABASE", "shinka", 0, "GETDATABASE");
   database = beMessenger_GetObject(self->_messenger, 0);
   for (index = 0, entry = g_playerModelRow; index < 16; index++, entry++) {
     if (strcmp(entry->model, g_starterPlayerModelNames[creation->_chaSelDegi]) == 0) {
@@ -586,15 +517,15 @@ static inline void ShowStarterName(beNDMWLoadIntf2 *self, beNDMWLoadIntf2TextOrd
       break;
     }
   }
-  TextOrder_ConfigureFont(textOrder, CHRSELFONT14, host->_ramNo, 0, beDataBase_GetRecordString(database, row, NAME), 1, 0);
+  TextOrder_ConfigureFont(textOrder, "CHRSELFONT14", host->_ramNo, 0, beDataBase_GetRecordString(database, row, "NAME"), 1, 0);
 }
 /* Plays the exit of the starter's select-screen model if it is shown and running. */
 static inline void ExitStarterModel(beNDMWLoadIntf2 *self, beBaseInfoRam *host,
     beNDMWLoadIntf2CtrlData *control, beNDMWLoadIntf2MakeChr *creation) {
   if (control->_isNoSelMdl == 0) {
-    beMessenger_SendNamed(self->_messenger, MODELCTRL, g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, ISRUN);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "ISRUN");
     if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) == 1) {
-      beMessenger_SendNamed(self->_messenger, MODELCTRL, g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, SQ_EXIT);
+      beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "SQ_EXIT");
     }
   }
 }
@@ -603,8 +534,8 @@ static inline beNDMWLoadIntf2DegiState *FirstDegiState(beNDMWLoadIntf2DegiStateC
   return (beNDMWLoadIntf2DegiState *)ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0);
 }
 /* Sends a GAMERAM request about this player (the player number is its only argument). */
-static inline void RequestGameRam(beNDMWLoadIntf2 *self, beBaseInfoRam *host, int *request) {
-  beMessenger_SelectGroup(self->_messenger, GAMERAM_2);
+static inline void RequestGameRam(beNDMWLoadIntf2 *self, beBaseInfoRam *host, const void *request) {
+  beMessenger_SelectGroup(self->_messenger, "GAMERAM");
   beMessenger_AppendInt(self->_messenger, host->_ramNo);
   beMessenger_DispatchSelected(self->_messenger, request);
 }
@@ -678,7 +609,7 @@ static inline void CopyTypedName(unsigned short *destination, beNDMWLoadIntf2Nam
     destination[count] = 0;
 }
 /* One named object of the player's working set (host->_dataList). */
-static inline void *FindWorkObject(beBaseInfoRam *host, int *name) {
+static inline void *FindWorkObject(beBaseInfoRam *host, const void *name) {
   return DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0], name);
 }
 /* The memory-card slot picked on the slot screen. */
@@ -720,7 +651,7 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
   }
 }
 /* Per-frame master update of the Game Start interface for one player (`host`): looks up the named
- * working set under host->_dataList (COMMONINTF, CTRL, MAKECHR, ...), samples that player's pad,
+ * working set under host->_dataList ("COMMONINTF", "CTRL", "MAKECHR", ...), samples that player's pad,
  * and advances the player's stage (_sysStat0: screens, system message, close, card utility, utility
  * error, utility done, resume) and, while the screens run, the CtrlData screen state machine (open,
  * wait for a pad, join, new or load, Digimon choice, name, slot, save data, start). */
@@ -763,47 +694,47 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  common = (beNDMWLoadCtrl2CommonIntf *)FindWorkObject(host, COMMONINTF);
+  common = (beNDMWLoadCtrl2CommonIntf *)FindWorkObject(host, "COMMONINTF");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  control = (beNDMWLoadIntf2CtrlData *)FindWorkObject(host, CTRL);
+  control = (beNDMWLoadIntf2CtrlData *)FindWorkObject(host, "CTRL");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  creation = (beNDMWLoadIntf2MakeChr *)FindWorkObject(host, MAKECHR);
+  creation = (beNDMWLoadIntf2MakeChr *)FindWorkObject(host, "MAKECHR");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  models = (beNDMWLoadIntf2ComMdlCtrl *)FindWorkObject(host, COMMDLCTRL);
+  models = (beNDMWLoadIntf2ComMdlCtrl *)FindWorkObject(host, "COMMDLCTRL");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  messages = (beNDMWLoadIntf2MesWin *)FindWorkObject(host, MESWIN);
+  messages = (beNDMWLoadIntf2MesWin *)FindWorkObject(host, "MESWIN");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  slots = (beNDMWLoadIntf2SelSlot *)FindWorkObject(host, SELSLOT);
+  slots = (beNDMWLoadIntf2SelSlot *)FindWorkObject(host, "SELSLOT");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  nameEntry = (beNDMWLoadIntf2NameSel *)FindWorkObject(host, NAMESEL);
+  nameEntry = (beNDMWLoadIntf2NameSel *)FindWorkObject(host, "NAMESEL");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  textOrder = (beNDMWLoadIntf2TextOrder *)FindWorkObject(host, TEXTORDER);
+  textOrder = (beNDMWLoadIntf2TextOrder *)FindWorkObject(host, "TEXTORDER");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  status = (beNDMWLoadIntf2DegiStateCtrl *)FindWorkObject(host, DEGISTATECTRL);
+  status = (beNDMWLoadIntf2DegiStateCtrl *)FindWorkObject(host, "DEGISTATECTRL");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  dataSelection = (beNDMWLoadIntf2DataSelIntf *)FindWorkObject(host, DATASELINTF);
+  dataSelection = (beNDMWLoadIntf2DataSelIntf *)FindWorkObject(host, "DATASELINTF");
   if (ObjectRef_Get_003e93b0(&host->_dataList) == 0) {
     FreshDataList::Assign(&host->_dataList, igObject_GetAllocator(host));
   }
-  difficulty = (beNDMWLoadIntf2Diffselect *)FindWorkObject(host, DIFFSELECT);
+  difficulty = (beNDMWLoadIntf2Diffselect *)FindWorkObject(host, "DIFFSELECT");
   beNDMWLoadIntf2ComMdlCtrl__Poll(models);
   beNDMWLoadIntf2MesWin__Update(messages);
   /* This frame's input for the player: pad trigger/repeat bits plus the
@@ -866,7 +797,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
   case LOAD_STAGE_SCREENS:
     switch (control->_st0) {
     /* Screen 0: open the character-select base window and fetch the
-     * player's GAMERAM record (GETPLAYER, ISUSE). A used slot opens the
+     * player's GAMERAM record ("GETPLAYER", ISUSE). A used slot opens the
      * message window and goes straight to screen 8; otherwise the host
      * (player 0) starts at screen 3 and the others at screen 2 (pad
      * connected) or 1. */
@@ -875,8 +806,8 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       case 0: {
         igVec3f chrSelBasePos;
         Vec3f_Copy(&chrSelBasePos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_chrselbase,
-            (const char *)SQ_OPEN, (float *)&chrSelBasePos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_chrselbase",
+            (const char *)"SQ_OPEN", (float *)&chrSelBasePos, 1);
         NextStep(control);
         break;
       }
@@ -886,10 +817,10 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         }
         break;
       case 2: {
-        RequestGameRam(self, host, GETPLAYER);
+        RequestGameRam(self, host, "GETPLAYER");
         int gamePlayer = beMessenger_GetObject(self->_messenger, 0);
         /* ISUSE: the GAMERAM record already holds a character. */
-        if (igProperty_GetRecordByte(gamePlayer, ISUSE_2)->value == 1) {
+        if (igProperty_GetRecordByte(gamePlayer, "ISUSE")->value == 1) {
           beNDMWDegiData__LoadFromProperties(PlayerDegiData(common, host), gamePlayer);
           NextStep(control);
         } else {
@@ -907,8 +838,8 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       case 3: {
         igVec3f chrSelMessWinPos;
         Vec3f_Copy(&chrSelMessWinPos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_chrselmesswin,
-            (const char *)SQ_OPEN, (float *)&chrSelMessWinPos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_chrselmesswin",
+            (const char *)"SQ_OPEN", (float *)&chrSelMessWinPos, 1);
         beNDMWLoadIntf2MesWin__RequestOpen(messages);
         HostWork(common, host)->_isEntry = 1;
         NextStep(control);
@@ -930,15 +861,15 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       }
       break;
     /* Screen 2: join window (linewin01, text 0x400) for players 2-4.
-     * Cross enters (SQ_LINEON00) and continues at screen 3; a missing pad
-     * closes it (SQ_CLOSE) and returns to screen 1. */
+     * Cross enters ("SQ_LINEON00") and continues at screen 3; a missing pad
+     * closes it ("SQ_CLOSE") and returns to screen 1. */
     case LOAD_SCREEN_JOIN:
       switch (control->_st1) {
       case 0: {
         igVec3f lineWin01Pos;
         Vec3f_Copy(&lineWin01Pos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_linewin01,
-            (const char *)SQ_OPEN, (float *)&lineWin01Pos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_linewin01",
+            (const char *)"SQ_OPEN", (float *)&lineWin01Pos, 1);
         NextStep(control);
         break;
       }
@@ -965,11 +896,11 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         }
         if (decided == 1) {
           if (control->_isEntry == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_linewin01,
-                (const char *)SQ_LINEON00, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_linewin01",
+                (const char *)"SQ_LINEON00", 1);
           } else {
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_linewin01,
-                (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_linewin01",
+                (const char *)"SQ_CLOSE", 1);
           }
           TextOrder_PublishLineListOnly(textOrder, TextId(host, 0x400));
           NextStep(control);
@@ -996,16 +927,16 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         if (control->_isMesWin == 0) {
           igVec3f chrSelMessWinPos;
           Vec3f_Copy(&chrSelMessWinPos, &models->_pos);
-          beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_chrselmesswin,
-              (const char *)SQ_OPEN, (float *)&chrSelMessWinPos, 1);
+          beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_chrselmesswin",
+              (const char *)"SQ_OPEN", (float *)&chrSelMessWinPos, 1);
           beNDMWLoadIntf2MesWin__RequestOpen(messages);
           control->_isMesWin = 1;
         }
         HostWork(common, host)->_isEntry = 1;
         igVec3f lineWin02Pos;
         Vec3f_Copy(&lineWin02Pos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_linewin02,
-            (const char *)SQ_OPEN, (float *)&lineWin02Pos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_linewin02",
+            (const char *)"SQ_OPEN", (float *)&lineWin02Pos, 1);
         control->_newLoadSel = 0;
         NextStep(control);
         break;
@@ -1013,7 +944,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       case 1:
         if ((control->_st2 == 0) &&
             !(beNDMWLoadIntf2ComMdlCtrl__IsSequence((beNDMWSaveIntfComMdlCtrl *)models, host->_ramNo,
-            (const char *)j_linewin02, (const char *)SQ_OPEN) & 0xFF)) {
+            (const char *)"j_linewin02", (const char *)"SQ_OPEN") & 0xFF)) {
           beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, TextId(host, 0x401), 0);
           NextSubstep(control);
           int player = host->_ramNo;
@@ -1035,7 +966,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
             if (selection < 0) {
               selection = 0;
             } else {
-              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_linewin02, SQ_LINEUP00, 1);
+              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_linewin02", "SQ_LINEUP00", 1);
             }
             control->_newLoadSel = selection;
             NextSubstep(control);
@@ -1044,24 +975,24 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
             if (1 < selection) {
               selection = 1;
             } else {
-              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_linewin02, SQ_LINEDW01, 1);
+              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_linewin02", "SQ_LINEDW01", 1);
             }
             control->_newLoadSel = selection;
             NextSubstep(control);
           } else if (padTrigger & kPadCross) {
             if (control->_newLoadSel == 0) {
-              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_linewin02, SQ_LINEON00, 1);
+              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_linewin02", "SQ_LINEON00", 1);
             } else {
-              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_linewin02, SQ_LINEON01, 1);
+              beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_linewin02", "SQ_LINEON01", 1);
             }
             NextStep(control);
           } else if (padTrigger & kPadCircle) {
             int player = host->_ramNo;
             if (player != 0) {
-              beNDMWLoadIntf2ComMdlCtrl__Close(models, player, (const char *)j_linewin02,
-                  (const char *)SQ_CANCEL, 1);
-              beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_chrselmesswin,
-                  (const char *)SQ_CLOSE, 1);
+              beNDMWLoadIntf2ComMdlCtrl__Close(models, player, (const char *)"j_linewin02",
+                  (const char *)"SQ_CANCEL", 1);
+              beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_chrselmesswin",
+                  (const char *)"SQ_CLOSE", 1);
               TextOrder_PublishLineListOnly(textOrder, TextId(host, 0x401));
               beNDMWLoadIntf2MesWin__RequestClose(messages);
               SetStep(control, control->_st1 + 2);
@@ -1105,32 +1036,32 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       case 0: {
         igVec3f cursorLeftPos;
         Vec3f_Copy(&cursorLeftPos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_digiselcursorleft,
-            (const char *)SQ_OPEN, (float *)&cursorLeftPos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_digiselcursorleft",
+            (const char *)"SQ_OPEN", (float *)&cursorLeftPos, 1);
         igVec3f cursorRightPos;
         Vec3f_Copy(&cursorRightPos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_digiselcursorright,
-            (const char *)SQ_OPEN, (float *)&cursorRightPos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_digiselcursorright",
+            (const char *)"SQ_OPEN", (float *)&cursorRightPos, 1);
         igVec3f nameWin02Pos;
         Vec3f_Copy(&nameWin02Pos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_namewin02,
-            (const char *)SQ_OPEN, (float *)&nameWin02Pos, 1);
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_namewin02",
+            (const char *)"SQ_OPEN", (float *)&nameWin02Pos, 1);
         creation->_chaSelDegi = 3;
         beNDMWLoadIntf2MesWin__RequestMessage(messages, TextId(host, 0x511));
         ShowStarterName(self, textOrder, host, creation);
         igVec3f faceWinPos;
         Vec3f_Copy(&faceWinPos, &models->_pos);
-        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)j_digifacewin,
+        beNDMWLoadIntf2ComMdlCtrl__StartAt(models, host->_ramNo, (const char *)"j_digifacewin",
             g_playerModelRow[creation->_chaSelDegi].openSequence, (float *)&faceWinPos, 1);
-        beMessenger_SendNamed(self->_messenger, MODELCTRL, g_starterSelectModelNames[creation->_chaSelDegi],
-            host->_ramNo, GENERATE);
-        beMessenger_SendNamed(self->_messenger, MODELCTRL, g_starterSelectModelNames[creation->_chaSelDegi],
-            host->_ramNo, ISRUN);
+        beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+            host->_ramNo, "GENERATE");
+        beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+            host->_ramNo, "ISRUN");
         int modelRunning = FirstBoolReply(self);
         if ((modelRunning & 0xFF) == 1) {
           Vec3f_Set(&previewPosition, 0.0f, 0.0f, 0.0f);
           Vec3f_Set(&previewRotation, 0.0f, 0.0f, 0.0f);
-          beMessenger_SelectReceivers(self->_messenger, MODELCTRL,
+          beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
               (int)g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo);
           igVec3f positionArg;
           Vec3f_Copy(&positionArg, &previewPosition);
@@ -1138,9 +1069,9 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
           igVec3f rotationArg;
           Vec3f_Copy(&rotationArg, &previewRotation);
           beMessenger_AppendVec3(self->_messenger, (float *)&rotationArg);
-          beMessenger_DispatchSelected(self->_messenger, MOVETRANS);
-          beMessenger_SendNamed(self->_messenger, MODELCTRL, g_starterSelectModelNames[creation->_chaSelDegi],
-              host->_ramNo, SQ_ENTR);
+          beMessenger_DispatchSelected(self->_messenger, "MOVETRANS");
+          beMessenger_SendNamed(self->_messenger, "MODELCTRL", g_starterSelectModelNames[creation->_chaSelDegi],
+              host->_ramNo, "SQ_ENTR");
           control->_isNoSelMdl = 0;
         } else {
           control->_isNoSelMdl = 1;
@@ -1151,7 +1082,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       }
       case 1:
         if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-          beMessenger_SendNamed(self->_messenger, MODELCTRL, j_namewin02, host->_ramNo, SQ_LINESL00);
+          beMessenger_SendNamed(self->_messenger, "MODELCTRL", "j_namewin02", host->_ramNo, "SQ_LINESL00");
           NextStep(control);
         }
         break;
@@ -1166,9 +1097,9 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
             }
             creation->_chaSelDegi = starter;
             ShowStarterName(self, textOrder, host, creation);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_digiselcursorright, (int *)SQ_ON00, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_namewin02, SQ_LINECG00, 0);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_digifacewin,
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_digiselcursorright", (int *)"SQ_ON00", 1);
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_namewin02", "SQ_LINECG00", 0);
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_digifacewin",
                 (int *)g_playerModelRow[creation->_chaSelDegi].faceSequence, 0);
             NextSubstep(control);
           } else if (moveLeft) {
@@ -1179,15 +1110,15 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
             }
             creation->_chaSelDegi = starter;
             ShowStarterName(self, textOrder, host, creation);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_digiselcursorleft, (int *)SQ_ON00, 1);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_namewin02, SQ_LINECG00, 0);
-            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_digifacewin,
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_digiselcursorleft", (int *)"SQ_ON00", 1);
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_namewin02", "SQ_LINECG00", 0);
+            beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_digifacewin",
                 (int *)g_playerModelRow[creation->_chaSelDegi].faceSequence, 0);
             NextSubstep(control);
           } else {
             unsigned char modelReady = 0;
-            beMessenger_SendNamed(self->_messenger, MODELCTRL,
-                g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, ISRUN);
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+                g_starterSelectModelNames[creation->_chaSelDegi], host->_ramNo, "ISRUN");
             if (beMessenger_GetBoolCount(self->_messenger) > 0) {
               modelReady = beMessenger_GetBool(self->_messenger, 0) & 0xFF;
             } else if (control->_isNoSelMdl == 1) {
@@ -1201,15 +1132,15 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
                 NextStep(control);
               }
             } else {
-              beMessenger_SendNamed(self->_messenger, MODELCTRL,
-                  g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, GENERATE);
-              beMessenger_SendNamed(self->_messenger, MODELCTRL,
-                  g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, ISRUN);
+              beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+                  g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "GENERATE");
+              beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+                  g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "ISRUN");
               int modelRunning = FirstBoolReply(self);
               if ((modelRunning & 0xFF) == 1) {
                 Vec3f_Set(&retryPosition, 0, 0, 0);
                 Vec3f_Set(&retryRotation, 0, 0, 0);
-                beMessenger_SelectReceivers(self->_messenger, MODELCTRL,
+                beMessenger_SelectReceivers(self->_messenger, "MODELCTRL",
                     (int)g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo);
                 igVec3f positionArg;
                 Vec3f_Copy(&positionArg, &retryPosition);
@@ -1217,9 +1148,9 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
                 igVec3f rotationArg;
                 Vec3f_Copy(&rotationArg, &retryRotation);
                 beMessenger_AppendVec3(self->_messenger, (float *)&rotationArg);
-                beMessenger_DispatchSelected(self->_messenger, MOVETRANS);
-                beMessenger_SendNamed(self->_messenger, MODELCTRL,
-                    g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, SQ_ENTR);
+                beMessenger_DispatchSelected(self->_messenger, "MOVETRANS");
+                beMessenger_SendNamed(self->_messenger, "MODELCTRL",
+                    g_starterSelectModelNames[creation ->_chaSelDegi], host->_ramNo, "SQ_ENTR");
                 control->_isNoSelMdl = 0;
               } else {
                 control->_isNoSelMdl = 1;
@@ -1236,17 +1167,17 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         break;
       case 3:
         if (control->_isCansel != 0) {
-          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_namewin02,
-              (const char *)SQ_CANCEL, 1);
+          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_namewin02",
+              (const char *)"SQ_CANCEL", 1);
         } else {
-          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_namewin02,
-              (const char *)SQ_LINEON00, 1);
+          beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_namewin02",
+              (const char *)"SQ_LINEON00", 1);
         }
         if (control->_isNoSelMdl == 0) {
           beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo,
-              (const char *)(g_starterSelectModelNames[creation->_chaSelDegi]), (const char *)SQ_EXIT, 1);
+              (const char *)(g_starterSelectModelNames[creation->_chaSelDegi]), (const char *)"SQ_EXIT", 1);
         }
-        TextOrder_ClearFont(textOrder, CHRSELFONT14, host->_ramNo, 0);
+        TextOrder_ClearFont(textOrder, "CHRSELFONT14", host->_ramNo, 0);
         NextStep(control);
         break;
       case 4:
@@ -1255,12 +1186,12 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         }
         break;
       case 5:
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_digifacewin,
-            (const char *)SQ_CLOSE, 1);
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_digiselcursorleft,
-            (const char *)SQ_CLOSE, 1);
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_digiselcursorright,
-            (const char *)SQ_CLOSE, 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_digifacewin",
+            (const char *)"SQ_CLOSE", 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_digiselcursorleft",
+            (const char *)"SQ_CLOSE", 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_digiselcursorright",
+            (const char *)"SQ_CLOSE", 1);
         NextStep(control);
         break;
       case 6:
@@ -1490,8 +1421,8 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       }
       break;
     /* Screen 8: start. Builds the player record (a new character through
-     * GAMESTART/UNIQUE, or the saved one through
-     * GAMEDATAINIT/BASE2CURRENT/ RECALCPLAYER), then the difficulty
+     * "GAMESTART"/"UNIQUE", or the saved one through
+     * "GAMEDATAINIT"/"BASE2CURRENT"/ "RECALCPLAYER"), then the difficulty
      * choice and status display; START with every entered player ready
      * ends the interface (common->_intfStat = 3). */
     case LOAD_SCREEN_START:
@@ -1503,45 +1434,45 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
           case 0: {
             if (control->_isRdyCancel == 1) {
               if (control->_isNewMake == 1) {
-                RequestGameRam(self, host, GAMEDATAINIT);
+                RequestGameRam(self, host, "GAMEDATAINIT");
                 int allocator = SelectAllocator(kIGMemoryPoolHandleUser0, igObject_GetAllocator(self));
                 beUnicodeObj *nameObject = beUnicodeObj_Create(allocator);
                 {
                   igSmartPointer<beUnicodeObj> nameRef(nameObject);
                   beUnicodeObj_AllocateBuffer(nameRef.p, 8);
                   CopyTypedName((unsigned short *)nameRef.p->_buffer, nameEntry);
-                  beMessenger_SelectGroup(self->_messenger, GAMERAM_2);
+                  beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                   beMessenger_AppendInt(self->_messenger, host->_ramNo);
                   beMessenger_AppendString(self->_messenger, (int)g_playerModelRow[creation->_chaSelDegi].model);
                   beMessenger_AppendObject(self->_messenger, nameRef.p);
-                  beMessenger_DispatchSelected(self->_messenger, GAMESTART);
+                  beMessenger_DispatchSelected(self->_messenger, "GAMESTART");
                 }
-                RequestGameRam(self, host, GETPLAYER);
+                RequestGameRam(self, host, "GETPLAYER");
                 int newPlayer = beMessenger_GetObject(self->_messenger, 0);
                 /* Stamp the new character with the low word of the world
                  * clock as its UNIQUE property. */
                 long long worldTime = ((igInsightCore *)self->_insight)->_worldTime;
-                IntProperty *unique = igProperty_GetRecord(newPlayer, UNIQUE);
+                IntProperty *unique = igProperty_GetRecord(newPlayer, "UNIQUE");
                 unique->value = (int)worldTime;
                 beNDMWDegiData__LoadFromProperties(PlayerDegiData(common, host), newPlayer);
               } else {
-                RequestGameRam(self, host, GAMEDATAINIT);
+                RequestGameRam(self, host, "GAMEDATAINIT");
                 void *savedData = PlayerSaveData(common, host->_ramNo, dataSelection->_svDataSelPoint);
                 {
                   DegiDataRef savedDataRef(savedData, true);
                   ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)savedDataRef.value);
                   beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, host->_ramNo);
                 }
-                RequestGameRam(self, host, GETPLAYER);
+                RequestGameRam(self, host, "GETPLAYER");
                 int loadedPlayer = beMessenger_GetObject(self->_messenger, 0);
                 igObject *font = igInsightCore_FindManager(self->_insight, g_beFont_metaObject[0]);
                 beNDMWDegiData__StoreToProperties(PlayerDegiData(common, host), loadedPlayer, font);
                 int kindName = PlayerDegiData(common, host)->_dmkind;
-                beMessenger_SelectGroup(self->_messenger, GAMERAM_2);
+                beMessenger_SelectGroup(self->_messenger, "GAMERAM");
                 beMessenger_AppendInt(self->_messenger, host->_ramNo);
                 beMessenger_AppendString(self->_messenger, kindName);
-                beMessenger_DispatchSelected(self->_messenger, BASE2CURRENT);
-                RequestGameRam(self, host, RECALCPLAYER);
+                beMessenger_DispatchSelected(self->_messenger, "BASE2CURRENT");
+                RequestGameRam(self, host, "RECALCPLAYER");
               }
             }
             unsigned char needsDifficulty = 0;
@@ -1550,7 +1481,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
               common->_difficultMode = 0;
               self->_difficultMax = 0;
               g_mdlEntity[0] = 0;
-              beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), hostLoad_lua, 0);
+              beLua__RunNamedChunk(igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]), "hostLoad.lua", 0);
               switch (self->_difficultMax) {
               case 0:
                 break;
@@ -1669,7 +1600,7 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
       case 2:
         switch (control->_st2) {
         case 0:
-          beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, j_mainstatuswin, SQ_CANCEL, 1);
+          beNDMWLoadIntf2ComMdlCtrl__Play(models, host->_ramNo, "j_mainstatuswin", "SQ_CANCEL", 1);
           NextSubstep(control);
           break;
         case 1:
@@ -1747,15 +1678,15 @@ extern "C" void beNDMWLoadIntf2__Update(beNDMWLoadIntf2 *self, beBaseInfoRam *ho
         SetPlayerStep(WorkAt(common, host->_ramNo), 1);
         break;
       case LOAD_SCREEN_START:
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_chrselmesswin,
-            (const char *)SQ_CLOSE, 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_chrselmesswin",
+            (const char *)"SQ_CLOSE", 1);
         beNDMWLoadIntf2MesWin__RequestClose(messages);
         beNDMWLoadIntf2DegiState__RequestConfirmClose(FirstDegiState(status));
         SetPlayerStep(WorkAt(common, host->_ramNo), 2);
         break;
       }
-      beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)j_chrselbase,
-          (const char *)SQ_CLOSE, 1);
+      beNDMWLoadIntf2ComMdlCtrl__Close(models, host->_ramNo, (const char *)"j_chrselbase",
+          (const char *)"SQ_CLOSE", 1);
       break;
     case 1:
       if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
@@ -2206,24 +2137,24 @@ void beNDMWLoadIntf2DegiState__DrawStatusText(beNDMWLoadIntf2DegiState *self) {
 
 void beNDMWLoadIntf2DegiState__ClearStatusText(beNDMWLoadIntf2DegiState *self) {
     if (self->_dispPos == 0) {
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT03, self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT04, self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT04, self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 0);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 1);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 11);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT03", self->_plNo, 0);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 0);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 10);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 0);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 10);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 1);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 11);
         TextOrder_PublishLineListOnly(self->_textOrder, (self->_plNo << 16) | 0x10);
         return;
     }
     if (self->_isUseData == 1) {
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT03, self->_plNo, 10);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT04, self->_plNo, 11);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT04, self->_plNo, 1);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 2);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 12);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 3);
-        TextOrder_ClearFont(self->_textOrder, CHRSELFONT05, self->_plNo, 13);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT03", self->_plNo, 10);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 11);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT04", self->_plNo, 1);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 2);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 12);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 3);
+        TextOrder_ClearFont(self->_textOrder, "CHRSELFONT05", self->_plNo, 13);
         return;
     }
     TextOrder_PublishLineListOnly(self->_textOrder, (self->_plNo << 16) | 0x110);
@@ -2247,16 +2178,16 @@ unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self) {
                 int modelIndex = 0;
                 FindPlayerModel(data, &modelIndex);
                 if (self->_dispPos == 0) {
-                    OpenWindow(self, j_digifacewin, g_playerModelRow[modelIndex].openSequence);
-                    OpenWindow(self, j_mainstatuswin, SQ_OPEN);
+                    OpenWindow(self, "j_digifacewin", g_playerModelRow[modelIndex].openSequence);
+                    OpenWindow(self, "j_mainstatuswin", "SQ_OPEN");
                 } else {
-                    OpenWindow(self, j_savecheckwin, g_playerModelRow[modelIndex].openSequence);
+                    OpenWindow(self, "j_savecheckwin", g_playerModelRow[modelIndex].openSequence);
                 }
             } else if (self->_dispPos == 0) {
-                OpenWindow(self, j_digifacewin, SQ_nofaceOPEN);
-                OpenWindow(self, j_mainstatuswin, SQ_NOOPEN);
+                OpenWindow(self, "j_digifacewin", "SQ_nofaceOPEN");
+                OpenWindow(self, "j_mainstatuswin", "SQ_NOOPEN");
             } else {
-                OpenWindow(self, j_savecheckwin, SQ_nofaceOPEN);
+                OpenWindow(self, "j_savecheckwin", "SQ_nofaceOPEN");
             }
             NextDegiStep(self);
             break;
@@ -2277,16 +2208,16 @@ unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self) {
             int modelIndex = 0;
             FindPlayerModel(data, &modelIndex);
             if (self->_dispPos == 0) {
-                PlayWindow(self, j_digifacewin, g_playerModelRow[modelIndex].faceSequence);
-                PlayWindow(self, j_mainstatuswin, SQ_WAIT_4);
+                PlayWindow(self, "j_digifacewin", g_playerModelRow[modelIndex].faceSequence);
+                PlayWindow(self, "j_mainstatuswin", "SQ_WAIT");
             } else {
-                PlayWindow(self, j_savecheckwin, g_playerModelRow[modelIndex].faceSequence);
+                PlayWindow(self, "j_savecheckwin", g_playerModelRow[modelIndex].faceSequence);
             }
         } else if (self->_dispPos == 0) {
-            PlayWindow(self, j_digifacewin, SQ_noface);
-            PlayWindow(self, j_mainstatuswin, SQ_NOWAIT);
+            PlayWindow(self, "j_digifacewin", "SQ_noface");
+            PlayWindow(self, "j_mainstatuswin", "SQ_NOWAIT");
         } else {
-            PlayWindow(self, j_savecheckwin, SQ_noface);
+            PlayWindow(self, "j_savecheckwin", "SQ_noface");
         }
         beNDMWLoadIntf2DegiState__ClearStatusText(self);
         beNDMWLoadIntf2DegiState__DrawStatusText(self);
@@ -2299,24 +2230,24 @@ unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self) {
         switch (self->_st1) {
         case 0:
             if (self->_dispPos == 0) {
-                CloseWindow(self, j_digifacewin, SQ_CLOSE);
+                CloseWindow(self, "j_digifacewin", "SQ_CLOSE");
                 if (self->_isUseData == 1) {
                     switch (self->_closeKind) {
                     case 0:
-                        CloseWindow(self, j_mainstatuswin, SQ_CLOSE);
+                        CloseWindow(self, "j_mainstatuswin", "SQ_CLOSE");
                         break;
                     case 1:
-                        CloseWindow(self, j_mainstatuswin, SQ_LINEON00);
+                        CloseWindow(self, "j_mainstatuswin", "SQ_LINEON00");
                         break;
                     case 2:
-                        CloseWindow(self, j_mainstatuswin, SQ_CANCEL);
+                        CloseWindow(self, "j_mainstatuswin", "SQ_CANCEL");
                         break;
                     }
                 } else {
-                    CloseWindow(self, j_mainstatuswin, SQ_NOCLOSE);
+                    CloseWindow(self, "j_mainstatuswin", "SQ_NOCLOSE");
                 }
             } else {
-                CloseWindow(self, j_savecheckwin, SQ_CLOSE);
+                CloseWindow(self, "j_savecheckwin", "SQ_CLOSE");
             }
             beNDMWLoadIntf2DegiState__ClearStatusText(self);
             NextDegiStep(self);
@@ -2488,7 +2419,7 @@ static inline void OpenSaveAreaWindow(beNDMWLoadIntf2DataSelIntf *self, beNDMWLo
         int row = FindPlayerModelRow(data);
         OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], g_playerModelRow[row].openSequence);
     } else {
-        OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)SQ_NOOPEN);
+        OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)"SQ_NOOPEN");
     }
 }
 
@@ -2498,7 +2429,7 @@ static inline void ShowSaveAreaName(beNDMWLoadIntf2DataSelIntf *self, int textOr
     if (data->_isUse == 1) {
         igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
         SetAreaName(name, data);
-        TextOrder_ConfigureUnicode(textOrder, CHRSELFONT08, self->_plNo, area, name.p, 1, 0);
+        TextOrder_ConfigureUnicode(textOrder, "CHRSELFONT08", self->_plNo, area, name.p, 1, 0);
     } else {
         beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, UnusedAreaTextId(self->_plNo, area), 0);
     }
@@ -2507,14 +2438,14 @@ static inline void ShowSaveAreaName(beNDMWLoadIntf2DataSelIntf *self, int textOr
 /* Closes the four save-area windows and clears their name lines, if they are open. */
 static inline void CloseSaveAreaWindows(beNDMWLoadIntf2DataSelIntf *self, beNDMWLoadIntf2ComMdlCtrl *models, int textOrder) {
     if (self->_isSaveArea == 1) {
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareawin01, (const char *)SQ_CLOSE, 1);
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareawin02, (const char *)SQ_CLOSE, 1);
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareawin03, (const char *)SQ_CLOSE, 1);
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareawin04, (const char *)SQ_CLOSE, 1);
-        TextOrder_ClearFont(textOrder, CHRSELFONT08, self->_plNo, 0);
-        TextOrder_ClearFont(textOrder, CHRSELFONT08, self->_plNo, 1);
-        TextOrder_ClearFont(textOrder, CHRSELFONT08, self->_plNo, 2);
-        TextOrder_ClearFont(textOrder, CHRSELFONT08, self->_plNo, 3);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin01", (const char *)"SQ_CLOSE", 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin02", (const char *)"SQ_CLOSE", 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin03", (const char *)"SQ_CLOSE", 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareawin04", (const char *)"SQ_CLOSE", 1);
+        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 0);
+        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 1);
+        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 2);
+        TextOrder_ClearFont(textOrder, "CHRSELFONT08", self->_plNo, 3);
         self->_isSaveArea = 0;
     }
 }
@@ -2598,15 +2529,15 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelInt
                     OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], g_playerModelRow[row].openSequence);
                 } else {
                     data->_isUse = 0;
-                    OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)SQ_NOOPEN);
+                    OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)"SQ_NOOPEN");
                 }
             } else {
                 data->_isUse = 0;
-                OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)SQ_NOOPEN);
+                OpenWindowAtModels(self, models, g_saveAreaWindowNames[area], (const char *)"SQ_NOOPEN");
             }
         }
         self->_isSaveArea = 1;
-        OpenWindowAtModels(self, models, (const char *)j_saveareacursorr, (const char *)SQ_OPEN);
+        OpenWindowAtModels(self, models, (const char *)"j_saveareacursorr", (const char *)"SQ_OPEN");
         self->_isSelCur = 1;
         if (self->_kind == kDataSelLoad) {
             beNDMWDegiData *selected = SaveAreaData(common, self->_plNo, self->_svDataSelPoint);
@@ -2634,7 +2565,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__OpenSaveArea(beNDMWLoadIntf2DataSelInt
                 if (data->_isUse == 1) {
                     igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
                     SetAreaName(name, data);
-                    TextOrder_ConfigureUnicode(textOrder, CHRSELFONT08, self->_plNo, area, name.p, 1, 0);
+                    TextOrder_ConfigureUnicode(textOrder, "CHRSELFONT08", self->_plNo, area, name.p, 1, 0);
                 } else {
                     data->_isUse = 0;
                     beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, UnusedAreaTextId(self->_plNo, area), 0);
@@ -2705,7 +2636,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
         if (next != current) {
             self->_svDataSelPoint = next;
             if (self->_kind == kDataSelLoad) beNDMWLoadIntf2DegiState__RequestChange(StatusWindowOf(statusCtrl, kUpperStatus), kStatusSaveArea, self->_svDataSelPoint);
-            PlaySequence(models, self->_plNo, (const char *)j_saveareacursorr, (const char *)SQ_MOVE_2);
+            PlaySequence(models, self->_plNo, (const char *)"j_saveareacursorr", (const char *)"SQ_MOVE");
             step = kSelectWaitMove;
         } else if (trigger & kPadCross) {
             if (self->_kind == kDataSelLoad) {
@@ -2752,12 +2683,12 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
             if ((beNDMWLoadIntf2DegiState__Update(StatusWindowOf(statusCtrl, kUpperStatus)) & 0xFF) != 1) break;
         }
         if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
-            PlaySequence(models, self->_plNo, (const char *)j_saveareacursorr, g_saveAreaLineSelectSeqs[self->_svDataSelPoint]);
+            PlaySequence(models, self->_plNo, (const char *)"j_saveareacursorr", g_saveAreaLineSelectSeqs[self->_svDataSelPoint]);
             step = kSelectChoose;
         }
         break;
     case kSelectConfirm:
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareacursorr, g_saveAreaLineOnSeqs[self->_svDataSelPoint], 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareacursorr", g_saveAreaLineOnSeqs[self->_svDataSelPoint], 1);
         self->_isSelCur = 0;
         step = kSelectWaitConfirm;
         break;
@@ -2765,7 +2696,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__UpdateSelection(beNDMWLoadIntf2DataSel
         if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) step = kSelectDone;
         break;
     case kSelectCancel:
-        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareacursorr, (const char *)SQ_CANCEL, 1);
+        beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareacursorr", (const char *)"SQ_CANCEL", 1);
         self->_isSelCur = 0;
         step = kSelectWaitCancel;
         break;
@@ -2797,7 +2728,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseAll(beNDMWLoadIntf2DataSelIntf *s
             beNDMWLoadIntf2DegiState__RequestClose(StatusWindowOf(statusCtrl, kLowerStatus), 0);
         }
         if (self->_isSelCur == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareacursorr, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareacursorr", (const char *)"SQ_CLOSE", 1);
         }
         step++;
         break;
@@ -2975,10 +2906,10 @@ bool beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(beNDMWLoadIntf2DataSelIntf *self
     case 0:
         if (self->_isSelCur == 0) {
             switch (self->_svDataSelPoint) {
-            case 0: OpenWindowAtModels(self, models, (const char *)j_saveareacursorr, (const char *)SQ_AAREAOPEN); break;
-            case 1: OpenWindowAtModels(self, models, (const char *)j_saveareacursorr, (const char *)SQ_BAREAOPEN); break;
-            case 2: OpenWindowAtModels(self, models, (const char *)j_saveareacursorr, (const char *)SQ_CAREAOPEN); break;
-            case 3: OpenWindowAtModels(self, models, (const char *)j_saveareacursorr, (const char *)SQ_DAREAOPEN); break;
+            case 0: OpenWindowAtModels(self, models, (const char *)"j_saveareacursorr", (const char *)"SQ_AAREAOPEN"); break;
+            case 1: OpenWindowAtModels(self, models, (const char *)"j_saveareacursorr", (const char *)"SQ_BAREAOPEN"); break;
+            case 2: OpenWindowAtModels(self, models, (const char *)"j_saveareacursorr", (const char *)"SQ_CAREAOPEN"); break;
+            case 3: OpenWindowAtModels(self, models, (const char *)"j_saveareacursorr", (const char *)"SQ_DAREAOPEN"); break;
             }
             self->_isSelCur = 1;
         }
@@ -3009,7 +2940,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIn
     case 0:
         CloseSaveAreaWindows(self, models, textOrder);
         if (self->_isSelCur == 1) {
-            beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)j_saveareacursorr, (const char *)SQ_CLOSE, 1);
+            beNDMWLoadIntf2ComMdlCtrl__Close(models, self->_plNo, (const char *)"j_saveareacursorr", (const char *)"SQ_CLOSE", 1);
         }
         step++;
         break;
@@ -3045,9 +2976,9 @@ int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *se
                 PlaySequence(models, player, g_saveAreaWindowNames[area], g_playerModelRow[row].faceSequence);
                 igSmartPointer<beUnicodeObj> name(CreateUnicodeText(self));
                 SetAreaName(name, data);
-                TextOrder_ConfigureUnicode(textOrder, CHRSELFONT08, player, area, name.p, 1, 0);
+                TextOrder_ConfigureUnicode(textOrder, "CHRSELFONT08", player, area, name.p, 1, 0);
             } else {
-                PlaySequence(models, player, g_saveAreaWindowNames[area], (const char *)SQ_NOOPEN);
+                PlaySequence(models, player, g_saveAreaWindowNames[area], (const char *)"SQ_NOOPEN");
                 beNDMWLoadIntf2TextOrder_PublishIdLines(textOrder, UnusedAreaTextId(player, area), 0);
             }
         }
@@ -3056,8 +2987,8 @@ int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *se
     return 1;
 }
 
-/* A Diffselect is a small line-choice window: kind 0 offers two lines (j_linewin02), kind 1 three
- * (j_linewin03). */
+/* A Diffselect is a small line-choice window: kind 0 offers two lines ("j_linewin02"), kind 1 three
+ * ("j_linewin03"). */
 enum DiffselectKind {
     kDiffselectTwoLines = 0,
     kDiffselectThreeLines = 1
@@ -3191,11 +3122,11 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             switch (self->_kind) {
             case kDiffselectTwoLines:
                 twoLinePos[0] = comMdl->_pos[0]; twoLinePos[1] = comMdl->_pos[1]; twoLinePos[2] = comMdl->_pos[2];
-                beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, self->_plNo, (const char *)j_linewin02, (const char *)SQ_OPEN, twoLinePos, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_OPEN", twoLinePos, 1);
                 break;
             case kDiffselectThreeLines:
                 threeLinePos[0] = comMdl->_pos[0]; threeLinePos[1] = comMdl->_pos[1]; threeLinePos[2] = comMdl->_pos[2];
-                beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, self->_plNo, (const char *)j_linewin03, (const char *)SQ_OPEN, threeLinePos, 1);
+                beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_OPEN", threeLinePos, 1);
                 break;
             }
             DiffselectNextStep(self);
@@ -3221,11 +3152,11 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
                 else {
                     switch (self->_kind) {
                     case kDiffselectTwoLines:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin02, SQ_LINEUP00, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin02", "SQ_LINEUP00", 1);
                         break;
                     case kDiffselectThreeLines:
-                        if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin03, SQ_LINEUP00, 1);
-                        else beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin03, SQ_LINEUP01, 1);
+                        if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin03", "SQ_LINEUP00", 1);
+                        else beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin03", "SQ_LINEUP01", 1);
                         break;
                     }
                     DiffselectNextStep(self);
@@ -3236,11 +3167,11 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
                 else {
                     switch (self->_kind) {
                     case kDiffselectTwoLines:
-                        beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin02, SQ_LINEDW01, 1);
+                        beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin02", "SQ_LINEDW01", 1);
                         break;
                     case kDiffselectThreeLines:
-                        if (self->_selectPoint == 1) beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin03, SQ_LINEDW01, 1);
-                        else beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, j_linewin03, SQ_LINEDW02, 1);
+                        if (self->_selectPoint == 1) beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin03", "SQ_LINEDW01", 1);
+                        else beNDMWLoadIntf2ComMdlCtrl__Play(comMdl, self->_plNo, "j_linewin03", "SQ_LINEDW02", 1);
                         break;
                     }
                     DiffselectNextStep(self);
@@ -3265,19 +3196,19 @@ unsigned char beNDMWLoadIntf2Diffselect__Update(beNDMWLoadIntf2Diffselect *self,
             case kDiffselectTwoLines:
                 TextOrder_PublishLineListOnly(textOrder, (self->_plNo << 16) | kDiffselectTwoLineText);
                 if (self->_isCancel == 0) {
-                    if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin02, (const char *)SQ_LINEON00, 1);
-                    else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin02, (const char *)SQ_LINEON01, 1);
-                } else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin02, (const char *)SQ_CANCEL, 1);
+                    if (self->_selectPoint == 0) beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_LINEON00", 1);
+                    else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_LINEON01", 1);
+                } else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin02", (const char *)"SQ_CANCEL", 1);
                 break;
             case kDiffselectThreeLines:
                 TextOrder_PublishLineListOnly(textOrder, (self->_plNo << 16) | kDiffselectThreeLineText);
                 if (self->_isCancel == 0) {
                     switch (self->_selectPoint) {
-                    case 0: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin03, (const char *)SQ_LINEON00, 1); break;
-                    case 1: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin03, (const char *)SQ_LINEON01, 1); break;
-                    case 2: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin03, (const char *)SQ_LINEON02_2, 1); break;
+                    case 0: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_LINEON00", 1); break;
+                    case 1: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_LINEON01", 1); break;
+                    case 2: beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_LINEON02", 1); break;
                     }
-                } else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)j_linewin03, (const char *)SQ_CANCEL, 1);
+                } else beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, self->_plNo, (const char *)"j_linewin03", (const char *)"SQ_CANCEL", 1);
                 break;
             }
             DiffselectNextStep(self);
@@ -3353,7 +3284,7 @@ static inline beUnicodeObj *NameSelNewLetterText(beNDMWLoadIntf2NameSel *nameSel
 
 /* Shows one letter in text slot `slot` of the font line `font` of the player's text order; color 1
  * marks the character being chosen. */
-static inline void NameSelShowLetter(beNDMWLoadIntf2NameSel *nameSel, int *font, int slot, const unsigned short *letters, int index, int color) {
+static inline void NameSelShowLetter(beNDMWLoadIntf2NameSel *nameSel, const void *font, int slot, const unsigned short *letters, int index, int color) {
     igSmartPointer<beUnicodeObj> text(NameSelNewLetterText(nameSel));
     beUnicodeObj_AllocateBuffer(text.p, 1);
     *(unsigned short *)text.p->_buffer = letters[index];
@@ -3366,20 +3297,20 @@ void beNDMWLoadIntf2NameSel__DrawRowLetters(beNDMWLoadIntf2NameSel *nameSel, int
     int row;
     switch (clear) {
     case 1:
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT10, nameSel->_ramNo, 0);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT10, nameSel->_ramNo, 1);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT10, nameSel->_ramNo, 2);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 0);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 1);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT10", nameSel->_ramNo, 2);
         return;
     case 0: {
         row = nameSel->_tatePoint - 1;
         if (row < nameSel->_tateMin) row = nameSel->_tateMax - 1;
-        NameSelShowLetter(nameSel, CHRSELFONT10, 0, g_nameEntryLetterRows[row].letters, 0, 0);
+        NameSelShowLetter(nameSel, "CHRSELFONT10", 0, g_nameEntryLetterRows[row].letters, 0, 0);
         row = nameSel->_tatePoint;
-        NameSelShowLetter(nameSel, CHRSELFONT10, 1, g_nameEntryLetterRows[row].letters, 0, 0);
+        NameSelShowLetter(nameSel, "CHRSELFONT10", 1, g_nameEntryLetterRows[row].letters, 0, 0);
         int nextRow = nameSel->_tatePoint + 1;
         /* matching construct: if/else on the unwrapped row — the if-without-else spelling pads the join label with a nop */
         if (nextRow >= nameSel->_tateMax) row = nameSel->_tateMin; else row = nextRow;
-        NameSelShowLetter(nameSel, CHRSELFONT10, 2, g_nameEntryLetterRows[row].letters, 0, 0);
+        NameSelShowLetter(nameSel, "CHRSELFONT10", 2, g_nameEntryLetterRows[row].letters, 0, 0);
     }
     }
 }
@@ -3392,11 +3323,11 @@ void beNDMWLoadIntf2NameSel__DrawColumnLetters(beNDMWLoadIntf2NameSel *nameSel, 
     int slot;
     switch (clear) {
     case 1:
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, 0);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, 1);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, 2);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, 3);
-        TextOrder_ClearFont(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, 4);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 0);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 1);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 2);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 3);
+        TextOrder_ClearFont(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, 4);
         return;
     case 0:
         firstColumn = nameSel->_yokoPoint;
@@ -3405,7 +3336,7 @@ void beNDMWLoadIntf2NameSel__DrawColumnLetters(beNDMWLoadIntf2NameSel *nameSel, 
             igSmartPointer<beUnicodeObj> text(NameSelNewLetterText(nameSel));
             beUnicodeObj_AllocateBuffer(text.p, 1);
             *(unsigned short *)text.p->_buffer = g_nameEntryLetterRows[nameSel->_tatePoint].letters[column];
-            TextOrder_ConfigureUnicode(nameSel->_textOrder, CHRSELFONT11, nameSel->_ramNo, slot, text.p, 1, 0);
+            TextOrder_ConfigureUnicode(nameSel->_textOrder, "CHRSELFONT11", nameSel->_ramNo, slot, text.p, 1, 0);
         }
     }
 }
@@ -3419,12 +3350,12 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
     case kNameLangJapanese:
         switch (clear) {
         case 1:
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 0);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 1);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 2);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 3);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 4);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, 5);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 0);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 1);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 2);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 3);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 4);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, 5);
             return;
         case 0:
             japaneseSlot = 0;
@@ -3433,12 +3364,12 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
                 switch (nameSel->t.letterState[japaneseSlot]) {
                 case kLetterEmpty: break;
                 default: break;
-                case kLetterChoosing: NameSelShowLetter(&nameSel->n, CHRSELFONT12, japaneseSlot, nameSel->t.name, japaneseSlot, 1); break;
-                case kLetterEntered: NameSelShowLetter(&nameSel->n, CHRSELFONT12, japaneseSlot, nameSel->t.name, japaneseSlot, 0); break;
+                case kLetterChoosing: NameSelShowLetter(&nameSel->n, "CHRSELFONT12", japaneseSlot, nameSel->t.name, japaneseSlot, 1); break;
+                case kLetterEntered: NameSelShowLetter(&nameSel->n, "CHRSELFONT12", japaneseSlot, nameSel->t.name, japaneseSlot, 0); break;
                 }
                 japaneseSlot++;
             } while (japaneseSlot < 6);
-            for (; japaneseSlot < 6; japaneseSlot++) TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT12, nameSel->n._ramNo, japaneseSlot);
+            for (; japaneseSlot < 6; japaneseSlot++) TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT12", nameSel->n._ramNo, japaneseSlot);
             return;
         }
         break;
@@ -3446,14 +3377,14 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
     default:
         switch (clear) {
         case 1:
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 0);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 1);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 2);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 3);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 4);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 5);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 6);
-            TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, 7);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 0);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 1);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 2);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 3);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 4);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 5);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 6);
+            TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, 7);
             return;
         case 0:
             slot = 0;
@@ -3462,12 +3393,12 @@ void beNDMWLoadIntf2NameSel__DrawEnteredName(NameSelRam *nameSel, int clear) {
                 switch (nameSel->t.letterState[slot]) {
                 case kLetterEmpty: break;
                 default: break;
-                case kLetterChoosing: NameSelShowLetter(&nameSel->n, CHRSELFONT13, slot, nameSel->t.name, slot, 1); break;
-                case kLetterEntered: NameSelShowLetter(&nameSel->n, CHRSELFONT13, slot, nameSel->t.name, slot, 0); break;
+                case kLetterChoosing: NameSelShowLetter(&nameSel->n, "CHRSELFONT13", slot, nameSel->t.name, slot, 1); break;
+                case kLetterEntered: NameSelShowLetter(&nameSel->n, "CHRSELFONT13", slot, nameSel->t.name, slot, 0); break;
                 }
                 slot++;
             } while (slot < 8);
-            for (; slot < 8; slot++) TextOrder_ClearFont(nameSel->n._textOrder, CHRSELFONT13, nameSel->n._ramNo, slot);
+            for (; slot < 8; slot++) TextOrder_ClearFont(nameSel->n._textOrder, "CHRSELFONT13", nameSel->n._ramNo, slot);
             break;
         }
         break;
@@ -3480,11 +3411,6 @@ void beNDMWLoadIntf2NameSel__SetAnswer(beNDMWLoadIntf2NameSel *nameSel, char isN
     nameSel->_isAnswer = 1;
 }
 
-extern "C" char j_namecursor01[], j_namecursor02[], j_namewin01[], j_namecursordown[], j_namecursorup[], j_namecursorleft[], j_namecursorright[];
-extern "C" char SQ_NAMESL0_d[], j_namecursorjp[], j_namecursorus[], SQ_SELECT0_d[], SQ_NAMECG0_d[], SQ_SELECT00[];
-extern "C" char SQ_NOSELECT[], SQ_NAMEON0_d[], SQ_NAMECANCEL[];
-extern "C" char SQ_ON00[];
-extern "C" char SQ_LINESL00[];
 
 static inline beNDMWLoadIntf2ComMdlCtrl *NameSelComMdl(beNDMWLoadIntf2NameSel *sel) {
     return (beNDMWLoadIntf2ComMdlCtrl *)sel->_comMdlCtrl;
@@ -3503,7 +3429,7 @@ static inline void NameSelOpenFace(beNDMWLoadIntf2NameSel *sel) {
     float pos[3];
     const float *at = NameSelComMdl(sel)->_pos;
     pos[0] = at[0]; pos[1] = at[1]; pos[2] = at[2];
-    beNDMWLoadIntf2ComMdlCtrl__StartAt(NameSelComMdl(sel), sel->_ramNo, (const char *)j_digifacewin, g_playerModelRow[sel->_selDataNo].openSequence, pos, 1);
+    beNDMWLoadIntf2ComMdlCtrl__StartAt(NameSelComMdl(sel), sel->_ramNo, (const char *)"j_digifacewin", g_playerModelRow[sel->_selDataNo].openSequence, pos, 1);
 }
 
 static inline void NameSelPlay(beNDMWLoadIntf2NameSel *sel, char *window, char *sequence, int track) {
@@ -3517,18 +3443,18 @@ static inline void NameSelClose(beNDMWLoadIntf2NameSel *sel, const char *window,
 /* Opens the language's name cursor window on the character being chosen. */
 static inline void NameSelOpenCursor(beNDMWLoadIntf2NameSel *sel) {
     char sequence[80];
-    sprintf(sequence, SQ_NAMESL0_d, sel->_nameCurPos);
+    sprintf(sequence, "SQ_NAMESL0%d", sel->_nameCurPos);
     switch (sel->_langID) {
-    case kNameLangJapanese: NameSelOpen(sel, j_namecursorjp, sequence, 0); break;
-    default: case kNameLangEnglish: NameSelOpen(sel, j_namecursorus, sequence, 0); break;
+    case kNameLangJapanese: NameSelOpen(sel, "j_namecursorjp", sequence, 0); break;
+    default: case kNameLangEnglish: NameSelOpen(sel, "j_namecursorus", sequence, 0); break;
     }
 }
 
 /* Plays a sequence on the language's name cursor window. */
 static inline void NameSelPlayCursor(beNDMWLoadIntf2NameSel *sel, char *sequence, int track) {
     switch (sel->_langID) {
-    case kNameLangJapanese: NameSelPlay(sel, j_namecursorjp, sequence, track); break;
-    default: case kNameLangEnglish: NameSelPlay(sel, j_namecursorus, sequence, track); break;
+    case kNameLangJapanese: NameSelPlay(sel, "j_namecursorjp", sequence, track); break;
+    default: case kNameLangEnglish: NameSelPlay(sel, "j_namecursorus", sequence, track); break;
     }
 }
 
@@ -3541,25 +3467,25 @@ static inline void NameSelPlayCursorAt(beNDMWLoadIntf2NameSel *sel, char *format
 
 static inline void NameSelCloseCursor(beNDMWLoadIntf2NameSel *sel, const char *sequence) {
     switch (sel->_langID) {
-    case kNameLangJapanese: NameSelClose(sel, j_namecursorjp, sequence); break;
-    default: case kNameLangEnglish: NameSelClose(sel, j_namecursorus, sequence); break;
+    case kNameLangJapanese: NameSelClose(sel, "j_namecursorjp", sequence); break;
+    default: case kNameLangEnglish: NameSelClose(sel, "j_namecursorus", sequence); break;
     }
 }
 
-/* Moves the letter cursor (j_namecursor02) to column _yokoCurPos of the letter window. */
+/* Moves the letter cursor ("j_namecursor02") to column _yokoCurPos of the letter window. */
 static inline void NameSelMoveLetterCursor(beNDMWLoadIntf2NameSel *sel) {
     char sequence[80];
-    sprintf(sequence, SQ_SELECT0_d, sel->_yokoCurPos);
-    NameSelPlay(sel, j_namecursor02, sequence, 1);
+    sprintf(sequence, "SQ_SELECT0%d", sel->_yokoCurPos);
+    NameSelPlay(sel, "j_namecursor02", sequence, 1);
 }
 
 /* Back from the question to typing: the cursor windows return to the character being chosen. */
 static inline void NameSelShowCursorsAgain(beNDMWLoadIntf2NameSel *sel) {
     char sequence[80];
-    sprintf(sequence, SQ_NAMESL0_d, sel->_nameCurPos);
+    sprintf(sequence, "SQ_NAMESL0%d", sel->_nameCurPos);
     NameSelPlayCursor(sel, sequence, 0);
-    sprintf(sequence, SQ_SELECT0_d, sel->_yokoCurPos);
-    NameSelPlay(sel, j_namecursor02, sequence, 1);
+    sprintf(sequence, "SQ_SELECT0%d", sel->_yokoCurPos);
+    NameSelPlay(sel, "j_namecursor02", sequence, 1);
 }
 
 /* Puts the letter under the cursor into the name at the current position. */
@@ -3578,12 +3504,12 @@ static inline void NameSelRestoreCursor(NameSelRam *nameSel) {
 /* After a row change: the side arrows are live only when the row is wider than the letter window. */
 static inline void NameSelShowSideArrows(beNDMWLoadIntf2NameSel *sel) {
     if (g_nameEntryLetterRows[sel->_tatePoint].letterCount > kVisibleColumns) {
-        NameSelPlay(sel, j_namecursorleft, SQ_SELECT00, 0);
-        NameSelPlay(sel, j_namecursorright, SQ_SELECT00, 0);
+        NameSelPlay(sel, "j_namecursorleft", "SQ_SELECT00", 0);
+        NameSelPlay(sel, "j_namecursorright", "SQ_SELECT00", 0);
         sel->_isSideCur = 1;
     } else {
-        NameSelPlay(sel, j_namecursorleft, SQ_NOSELECT, 0);
-        NameSelPlay(sel, j_namecursorright, SQ_NOSELECT, 0);
+        NameSelPlay(sel, "j_namecursorleft", "SQ_NOSELECT", 0);
+        NameSelPlay(sel, "j_namecursorright", "SQ_NOSELECT", 0);
         sel->_isSideCur = 0;
     }
 }
@@ -3642,13 +3568,13 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
         switch (sel->_st1) {
         case 0:
             NameSelOpenFace(sel);
-            NameSelOpen(sel, j_namecursor01, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namecursor02, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namewin01, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namecursordown, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namecursorup, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namecursorleft, (const char *)SQ_OPEN, 1);
-            NameSelOpen(sel, j_namecursorright, (const char *)SQ_OPEN, 1);
+            NameSelOpen(sel, "j_namecursor01", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namecursor02", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namewin01", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namecursordown", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namecursorup", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namecursorleft", (const char *)"SQ_OPEN", 1);
+            NameSelOpen(sel, "j_namecursorright", (const char *)"SQ_OPEN", 1);
             sel->_isSideCur = 1;
             NameSelTakeLetter(nameSel);
             NameSelOpenCursor(sel);
@@ -3681,14 +3607,14 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                         sel->_yokoPoint++;
                         if (sel->_yokoPoint >= g_nameEntryLetterRows[sel->_tatePoint].letterCount) sel->_yokoPoint = 0;
                         if (sel->_isSideCur == 1) {
-                            NameSelPlay(sel, j_namecursorright, SQ_ON00, 1);
-                            NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                            NameSelPlay(sel, "j_namecursorright", "SQ_ON00", 1);
+                            NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                         }
                         beNDMWLoadIntf2NameSel__DrawColumnLetters(sel, 0);
                     }
                 } else {
                     NameSelMoveLetterCursor(sel);
-                    NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                    NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                 }
                 NameSelTakeLetter(nameSel);
                 beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
@@ -3702,20 +3628,20 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                         if (0 > sel->_yokoPoint) sel->_yokoPoint = g_nameEntryLetterRows[sel->_tatePoint].letterCount - 1;
                         beNDMWLoadIntf2NameSel__DrawColumnLetters(sel, 0);
                         if (sel->_isSideCur == 1) {
-                            NameSelPlay(sel, j_namecursorleft, SQ_ON00, 1);
-                            NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                            NameSelPlay(sel, "j_namecursorleft", "SQ_ON00", 1);
+                            NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                         }
                     }
                 } else {
                     NameSelMoveLetterCursor(sel);
-                    NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                    NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                 }
                 NameSelTakeLetter(nameSel);
                 beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
                 NameSelNextStep(sel);
             } else if (up) {
-                NameSelPlay(sel, j_namecursorup, SQ_ON00, 1);
-                NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                NameSelPlay(sel, "j_namecursorup", "SQ_ON00", 1);
+                NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                 sel->_tatePoint--;
                 if (sel->_tatePoint < sel->_tateMin) sel->_tatePoint = sel->_tateMax - 1;
                 NameSelShowSideArrows(sel);
@@ -3726,8 +3652,8 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                 beNDMWLoadIntf2NameSel__DrawRowLetters(sel, 0);
                 beNDMWLoadIntf2NameSel__DrawColumnLetters(sel, 0);
             } else if (down) {
-                NameSelPlay(sel, j_namecursordown, SQ_ON00, 1);
-                NameSelPlayCursorAt(sel, SQ_NAMECG0_d, 1);
+                NameSelPlay(sel, "j_namecursordown", "SQ_ON00", 1);
+                NameSelPlayCursorAt(sel, "SQ_NAMECG0%d", 1);
                 sel->_tatePoint++;
                 if (sel->_tatePoint >= sel->_tateMax) sel->_tatePoint = sel->_tateMin;
                 NameSelShowSideArrows(sel);
@@ -3744,7 +3670,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                     nameSel->t.enteredAt[sel->_nameCurPos].yokoCurPos = sel->_yokoCurPos;
                     nameSel->t.letterState[sel->_nameCurPos] = kLetterEntered;
                     NameSelTakeLetter(nameSel);
-                    NameSelPlayCursorAt(sel, SQ_NAMEON0_d, 1);
+                    NameSelPlayCursorAt(sel, "SQ_NAMEON0%d", 1);
                     sel->_nameCurPos++;
                     nameSel->t.name[sel->_nameCurPos + 1] = 0;
                     nameSel->t.letterState[sel->_nameCurPos] = kLetterChoosing;
@@ -3754,7 +3680,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             } else if (trigger & kPadCircle) {
                 nameSel->t.name[sel->_nameCurPos] = 0;
                 sel->_nameCurPos--;
-                NameSelPlayCursor(sel, SQ_NAMECANCEL, 1);
+                NameSelPlayCursor(sel, "SQ_NAMECANCEL", 1);
                 if (sel->_nameCurPos < 0) {
                     sel->_nameCurPos = -1;
                     NameSelGoToPhase(sel, kNameSelGiveUp);
@@ -3769,7 +3695,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                 beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
             } else if (trigger & kPadStart) {
                 if (sel->_nameCurPos > 0) {
-                    NameSelPlayCursorAt(sel, SQ_NAMEON0_d, 1);
+                    NameSelPlayCursorAt(sel, "SQ_NAMEON0%d", 1);
                     nameSel->t.name[sel->_nameCurPos] = 0;
                     sel->_nameCurPos--;
                     beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
@@ -3782,7 +3708,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             break;
         case kTypingAfterErase:
             if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(NameSelComMdl(sel)) & 0xFF) {
-                NameSelPlayCursorAt(sel, SQ_NAMESL0_d, 0);
+                NameSelPlayCursorAt(sel, "SQ_NAMESL0%d", 0);
                 nameSel->t.letterState[sel->_nameCurPos] = kLetterChoosing;
                 beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
                 NameSelGoToStep(sel, kTypingInput);
@@ -3794,7 +3720,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
                     sel->_nameCurPos = sel->_nameMojiMax - 1;
                     NameSelGoToPhase(sel, kNameSelFinishTyping);
                 } else {
-                    NameSelPlayCursorAt(sel, SQ_NAMESL0_d, 0);
+                    NameSelPlayCursorAt(sel, "SQ_NAMESL0%d", 0);
                     NameSelTakeLetter(nameSel);
                     beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 0);
                 }
@@ -3813,7 +3739,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
     case kNameSelFinishTyping:
         switch (sel->_st1) {
         case 0:
-            NameSelPlayCursor(sel, SQ_LINESL00, 1);
+            NameSelPlayCursor(sel, "SQ_LINESL00", 1);
             NameSelNextStep(sel);
             break;
         case 1:
@@ -3836,7 +3762,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             }
             break;
         case kQuestionAccept:
-            NameSelCloseCursor(sel, (const char *)SQ_LINEON00);
+            NameSelCloseCursor(sel, (const char *)"SQ_LINEON00");
             NameSelNextStep(sel);
             break;
         case kQuestionAcceptWait:
@@ -3859,7 +3785,7 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
     case kNameSelGiveUp:
         switch (sel->_st1) {
         case 0:
-            NameSelCloseCursor(sel, (const char *)SQ_CLOSE);
+            NameSelCloseCursor(sel, (const char *)"SQ_CLOSE");
             NameSelNextStep(sel);
             break;
         case 1:
@@ -3873,14 +3799,14 @@ int beNDMWLoadIntf2NameSel__Update(NameSelRam *nameSel, int usePad) {
             beNDMWLoadIntf2NameSel__DrawRowLetters(sel, 1);
             beNDMWLoadIntf2NameSel__DrawColumnLetters(sel, 1);
             beNDMWLoadIntf2NameSel__DrawEnteredName(nameSel, 1);
-            NameSelClose(sel, (const char *)j_digifacewin, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namewin01, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursor01, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursor02, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursordown, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursorup, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursorleft, (const char *)SQ_CLOSE);
-            NameSelClose(sel, j_namecursorright, (const char *)SQ_CLOSE);
+            NameSelClose(sel, (const char *)"j_digifacewin", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namewin01", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursor01", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursor02", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursordown", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursorup", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursorleft", (const char *)"SQ_CLOSE");
+            NameSelClose(sel, "j_namecursorright", (const char *)"SQ_CLOSE");
             NameSelNextStep(sel);
             break;
         case 1:
@@ -3944,14 +3870,14 @@ static inline void CopyModelPos(beNDMWLoadIntf2SelSlot *self, float *pos) {
 static inline int ModelSlot(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index) { return self->_ramNo * perPlayer + index; }
 
 /* Opens a window at the model controller's position. */
-static inline void OpenWindow(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, int *model, int *sequence, int recordOpen) {
+static inline void OpenWindow(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, const void *model, const void *sequence, int recordOpen) {
     float pos[3];
     CopyModelPos(self, pos);
     beNDMWLoadIntf2ComMdlCtrl__StartAt(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model, (const char *)sequence, pos, recordOpen);
 }
 
 /* Shows a card-present mark: opens its window, or replays the open sequence if it is already up. */
-static inline void ShowMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, int *model, int *sequence) {
+static inline void ShowMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, const void *model, const void *sequence) {
     if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 0) {
         float pos[3];
         CopyModelPos(self, pos);
@@ -3961,9 +3887,9 @@ static inline void ShowMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int ind
     }
 }
 
-static inline void HideMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, int *model) {
+static inline void HideMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int index, const void *model) {
     if ((unsigned char)beNDMWLoadIntf2ComMdlCtrl__IsRunning(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model) == 1) {
-        beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model, (const char *)SQ_CLOSE, 0);
+        beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), ModelSlot(self, perPlayer, index), (const char *)model, (const char *)"SQ_CLOSE", 0);
     }
 }
 
@@ -3971,7 +3897,7 @@ static inline void HideMark(beNDMWLoadIntf2SelSlot *self, int perPlayer, int ind
 static inline void OpenCursor(beNDMWLoadIntf2SelSlot *self, SlotCursorEntry *entries) {
     float pos[3];
     CopyModelPos(self, pos);
-    beNDMWLoadIntf2ComMdlCtrl__StartAt(ModelCtrl(self), self->_ramNo, (const char *)j_slotcursor, (const char *)entries[self->_selPoint].sequence, pos, 1);
+    beNDMWLoadIntf2ComMdlCtrl__StartAt(ModelCtrl(self), self->_ramNo, (const char *)"j_slotcursor", (const char *)entries[self->_selPoint].sequence, pos, 1);
 }
 
 /* Sets the "no memory card" line for the card under the cursor. */
@@ -4037,8 +3963,8 @@ static inline void ShowMultitapName(beNDMWLoadIntf2SelSlot *self, int textOrder)
     }
 }
 
-static inline void PlayCursor(beNDMWLoadIntf2SelSlot *self, int *sequence, int wait) {
-    beNDMWLoadIntf2ComMdlCtrl__Play(ModelCtrl(self), self->_ramNo, j_slotcursor, sequence, wait);
+static inline void PlayCursor(beNDMWLoadIntf2SelSlot *self, const void *sequence, int wait) {
+    beNDMWLoadIntf2ComMdlCtrl__Play(ModelCtrl(self), self->_ramNo, "j_slotcursor", sequence, wait);
 }
 
 void beNDMWLoadIntf2SelSlot__Reset(beNDMWLoadIntf2SelSlot *self) {
@@ -4090,13 +4016,13 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
                 self->_selPoint = selPoint;
             }
             if (McUtil(common)->_isMtap == 0) {
-                OpenWindow(self, 1, 0, j_slotbase, SQ_OPENPS01, 1);
+                OpenWindow(self, 1, 0, "j_slotbase", "SQ_OPENPS01", 1);
                 self->_mode = SLOT_LAYOUT_TWO_SLOTS;
             } else {
-                OpenWindow(self, 1, 0, j_slotbase, SQ_OPENPS02, 1);
+                OpenWindow(self, 1, 0, "j_slotbase", "SQ_OPENPS02", 1);
                 self->_mode = SLOT_LAYOUT_MULTITAP;
             }
-            OpenWindow(self, 1, 0, j_memoryiconwin, SQ_OPEN, 1);
+            OpenWindow(self, 1, 0, "j_memoryiconwin", "SQ_OPEN", 1);
             self->_isReOpenReq = 0;
             NextStep(self);
             break;
@@ -4111,10 +4037,10 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
                         if (McSlotAt(McSlots(common), entries[entry].mcSlot)->_isConnect == 1) {
                             switch (entry) {
                             case 0:
-                                ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN01_2);
+                                ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN01");
                                 break;
                             case 1:
-                                ShowMark(self, 2, 1, j_slotmark02, SQ_OPEN02_2);
+                                ShowMark(self, 2, 1, "j_slotmark02", "SQ_OPEN02");
                                 break;
                             }
                         }
@@ -4133,19 +4059,19 @@ unsigned char beNDMWLoadIntf2SelSlot__Open(beNDMWLoadIntf2SelSlot *self, int sel
                         if (McSlotAt(McSlots(common), entries[entry].mcSlot)->_isConnect == 1) {
                             switch (entry) {
                             case 0:
-                                ShowMark(self, 5, 0, j_slotmark01, SQ_OPEN1A);
+                                ShowMark(self, 5, 0, "j_slotmark01", "SQ_OPEN1A");
                                 break;
                             case 1:
-                                ShowMark(self, 5, 1, j_slotmark01, SQ_OPEN1B);
+                                ShowMark(self, 5, 1, "j_slotmark01", "SQ_OPEN1B");
                                 break;
                             case 2:
-                                ShowMark(self, 5, 2, j_slotmark01, SQ_OPEN1C);
+                                ShowMark(self, 5, 2, "j_slotmark01", "SQ_OPEN1C");
                                 break;
                             case 3:
-                                ShowMark(self, 5, 3, j_slotmark01, SQ_OPEN1D);
+                                ShowMark(self, 5, 3, "j_slotmark01", "SQ_OPEN1D");
                                 break;
                             case 4:
-                                ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN02_2);
+                                ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN02");
                                 break;
                             }
                         }
@@ -4179,21 +4105,21 @@ static inline void ConfirmSlot(beNDMWLoadIntf2SelSlot *self, beNDMWLoadCtrl2Comm
     if (McSlotAt(slots, entries[self->_selPoint].mcSlot)->_isConnect == 1) {
         beNDMWLoadCtrl2CommonIntf__GiveCtrlTo(common, self->_ramNo);
         self->_mcSelPoint = entries[self->_selPoint].mcSlot;
-        PlayCursor(self, SQ_ON, 1);
+        PlayCursor(self, "SQ_ON", 1);
         SetStep(self, 2);
     }
 }
 
 static inline void CancelSelection(beNDMWLoadIntf2SelSlot *self) {
     self->_isCansel = 1;
-    PlayCursor(self, SQ_CANCEL, 1);
+    PlayCursor(self, "SQ_CANCEL", 1);
     SetStep(self, 2);
 }
 
 static inline void MoveCursorTo(beNDMWLoadIntf2SelSlot *self, int selPoint) {
     if (self->_selPoint != selPoint) {
         self->_selPoint = selPoint;
-        PlayCursor(self, SQ_MOVE_2, 1);
+        PlayCursor(self, "SQ_MOVE", 1);
         NextStep(self);
     }
 }
@@ -4249,19 +4175,19 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                 if (McSlotAt(McSlots(common), cursor->mcSlot)->_isConnect == 1) {
                     switch (entry) {
                     case 0:
-                        ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN01_2);
+                        ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN01");
                         break;
                     case 1:
-                        ShowMark(self, 2, 1, j_slotmark02, SQ_OPEN02_2);
+                        ShowMark(self, 2, 1, "j_slotmark02", "SQ_OPEN02");
                         break;
                     }
                 } else {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     case 1:
-                        HideMark(self, 2, 1, j_slotmark02);
+                        HideMark(self, 2, 1, "j_slotmark02");
                         break;
                     }
                 }
@@ -4280,37 +4206,37 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                 if (McSlotAt(McSlots(common), cursor->mcSlot)->_isConnect == 1) {
                     switch (entry) {
                     case 0:
-                        ShowMark(self, 5, 0, j_slotmark01, SQ_OPEN1A);
+                        ShowMark(self, 5, 0, "j_slotmark01", "SQ_OPEN1A");
                         break;
                     case 1:
-                        ShowMark(self, 5, 1, j_slotmark01, SQ_OPEN1B);
+                        ShowMark(self, 5, 1, "j_slotmark01", "SQ_OPEN1B");
                         break;
                     case 2:
-                        ShowMark(self, 5, 2, j_slotmark01, SQ_OPEN1C);
+                        ShowMark(self, 5, 2, "j_slotmark01", "SQ_OPEN1C");
                         break;
                     case 3:
-                        ShowMark(self, 5, 3, j_slotmark01, SQ_OPEN1D);
+                        ShowMark(self, 5, 3, "j_slotmark01", "SQ_OPEN1D");
                         break;
                     case 4:
-                        ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN02_2);
+                        ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN02");
                         break;
                     }
                 } else {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 5, 0, j_slotmark01);
+                        HideMark(self, 5, 0, "j_slotmark01");
                         break;
                     case 1:
-                        HideMark(self, 5, 1, j_slotmark01);
+                        HideMark(self, 5, 1, "j_slotmark01");
                         break;
                     case 2:
-                        HideMark(self, 5, 2, j_slotmark01);
+                        HideMark(self, 5, 2, "j_slotmark01");
                         break;
                     case 3:
-                        HideMark(self, 5, 3, j_slotmark01);
+                        HideMark(self, 5, 3, "j_slotmark01");
                         break;
                     case 4:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     }
                 }
@@ -4352,7 +4278,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                     if (self->_selPoint >= self->_selMax - 1) {
                         self->_selPoint = self->_selMax - 2;
                     } else {
-                        PlayCursor(self, SQ_MOVE_2, 1);
+                        PlayCursor(self, "SQ_MOVE", 1);
                         NextStep(self);
                     }
                 } else if (left) {
@@ -4360,7 +4286,7 @@ unsigned char beNDMWLoadIntf2SelSlot__UpdateSelection(beNDMWLoadIntf2SelSlot *se
                     if (self->_selPoint < 0) {
                         self->_selPoint = 0;
                     } else {
-                        PlayCursor(self, SQ_MOVE_2, 1);
+                        PlayCursor(self, "SQ_MOVE", 1);
                         NextStep(self);
                     }
                 }
@@ -4415,9 +4341,9 @@ void beNDMWLoadIntf2SelSlot__PublishCursor(beNDMWLoadIntf2SelSlot *self) {
 
 static inline void CloseSlotWindows(beNDMWLoadIntf2SelSlot *self) {
     int textOrder;
-    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)j_slotbase, (const char *)SQ_CLOSE, 1);
-    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)j_slotcursor, (const char *)SQ_CLOSE, 1);
-    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)j_memoryiconwin, (const char *)SQ_CLOSE, 1);
+    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)"j_slotbase", (const char *)"SQ_CLOSE", 1);
+    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)"j_slotcursor", (const char *)"SQ_CLOSE", 1);
+    beNDMWLoadIntf2ComMdlCtrl__Close(ModelCtrl(self), self->_ramNo, (const char *)"j_memoryiconwin", (const char *)"SQ_CLOSE", 1);
     textOrder = self->_textOrder;
     TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_TITLE));
     TextOrder_PublishLineListOnly(textOrder, SlotTextId(self, SELSLOT_TEXT_SLOT1));
@@ -4438,10 +4364,10 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
                 for (entry = 0; entry < 2; entry++) {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     case 1:
-                        HideMark(self, 2, 1, j_slotmark02);
+                        HideMark(self, 2, 1, "j_slotmark02");
                         break;
                     }
                 }
@@ -4451,19 +4377,19 @@ unsigned char beNDMWLoadIntf2SelSlot__Close(beNDMWLoadIntf2SelSlot *self) {
                 for (entry = 0; entry < 5; entry++) {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 5, 0, j_slotmark01);
+                        HideMark(self, 5, 0, "j_slotmark01");
                         break;
                     case 1:
-                        HideMark(self, 5, 1, j_slotmark01);
+                        HideMark(self, 5, 1, "j_slotmark01");
                         break;
                     case 2:
-                        HideMark(self, 5, 2, j_slotmark01);
+                        HideMark(self, 5, 2, "j_slotmark01");
                         break;
                     case 3:
-                        HideMark(self, 5, 3, j_slotmark01);
+                        HideMark(self, 5, 3, "j_slotmark01");
                         break;
                     case 4:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     }
                 }
@@ -4500,19 +4426,19 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
                 if (connected == 1) {
                     switch (entry) {
                     case 0:
-                        ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN01_2);
+                        ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN01");
                         break;
                     case 1:
-                        ShowMark(self, 2, 1, j_slotmark02, SQ_OPEN02_2);
+                        ShowMark(self, 2, 1, "j_slotmark02", "SQ_OPEN02");
                         break;
                     }
                 } else {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     case 1:
-                        HideMark(self, 2, 1, j_slotmark02);
+                        HideMark(self, 2, 1, "j_slotmark02");
                         break;
                     }
                 }
@@ -4528,37 +4454,37 @@ void beNDMWLoadIntf2SelSlot__RefreshSlotMarks(beNDMWLoadIntf2SelSlot *self, int 
                 if (connected == 1) {
                     switch (entry) {
                     case 0:
-                        ShowMark(self, 5, 0, j_slotmark01, SQ_OPEN1A);
+                        ShowMark(self, 5, 0, "j_slotmark01", "SQ_OPEN1A");
                         break;
                     case 1:
-                        ShowMark(self, 5, 1, j_slotmark01, SQ_OPEN1B);
+                        ShowMark(self, 5, 1, "j_slotmark01", "SQ_OPEN1B");
                         break;
                     case 2:
-                        ShowMark(self, 5, 2, j_slotmark01, SQ_OPEN1C);
+                        ShowMark(self, 5, 2, "j_slotmark01", "SQ_OPEN1C");
                         break;
                     case 3:
-                        ShowMark(self, 5, 3, j_slotmark01, SQ_OPEN1D);
+                        ShowMark(self, 5, 3, "j_slotmark01", "SQ_OPEN1D");
                         break;
                     case 4:
-                        ShowMark(self, 2, 0, j_slotmark02, SQ_OPEN02_2);
+                        ShowMark(self, 2, 0, "j_slotmark02", "SQ_OPEN02");
                         break;
                     }
                 } else {
                     switch (entry) {
                     case 0:
-                        HideMark(self, 5, 0, j_slotmark01);
+                        HideMark(self, 5, 0, "j_slotmark01");
                         break;
                     case 1:
-                        HideMark(self, 5, 1, j_slotmark01);
+                        HideMark(self, 5, 1, "j_slotmark01");
                         break;
                     case 2:
-                        HideMark(self, 5, 2, j_slotmark01);
+                        HideMark(self, 5, 2, "j_slotmark01");
                         break;
                     case 3:
-                        HideMark(self, 5, 3, j_slotmark01);
+                        HideMark(self, 5, 3, "j_slotmark01");
                         break;
                     case 4:
-                        HideMark(self, 2, 0, j_slotmark02);
+                        HideMark(self, 2, 0, "j_slotmark02");
                         break;
                     }
                 }
@@ -4595,18 +4521,6 @@ unsigned int beMessenger_ResolveEnumValue(...);
 int beMessenger_SelectGroup(...);
 int beMessenger_SetInt(...);
 /* The model position of each interface kind (one per player). */
-extern float g_interfaceKindPositions[4][3];
-extern int COMMONINTF[4];
-extern int CTRL[4];
-extern int MAKECHR[4];
-extern int COMMDLCTRL[4];
-extern int MESWIN[4];
-extern int TEXTORDER[4];
-extern int DEGISTATECTRL[4];
-extern int GAMERAM_2[4];
-extern int LOADCTRL2_3[4];
-extern int GETCOMMON_8[4];
-extern int GAMEREMOVE_2[4];
 extern int g_propertyNameField[4];
 extern int g_beSystem_metaObject[4];
 extern int g_beLua_metaObject[4];
@@ -4681,13 +4595,13 @@ struct ChildList {
             Create(ram, OwnerAllocator(ram));
         }
     }
-    static inline void *Find(beBaseInfoRam *ram, int *name) {
+    static inline void *Find(beBaseInfoRam *ram, const void *name) {
         Ensure(ram);
         return igProperty_FindByName(ram->_dataList, g_propertyNameField[0], name);
     }
 };
 
-/* Asks the MODELCTRL receivers named (infoName, ramNo) to GENERATE, then sends them `openSQ`. When
+/* Asks the MODELCTRL receivers named (infoName, ramNo) to "GENERATE", then sends them `openSQ`. When
  * `recordOpen` is 1 the request (ram number and the pooled names) is also queued on the open list,
  * which Poll empties once the model is in that sequence. */
 void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo, const char *infoName, const char *openSQ, int recordOpen) {
@@ -4697,8 +4611,8 @@ void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], infoName, ramNo, &GENERATE[0]);
-    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], infoName, ramNo, openSQ);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, "GENERATE");
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
     if ((recordOpen & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4722,13 +4636,13 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
     beLoadIntf2ComMdlData *request;
     struct { float x, y, z; } at;
 
-    beMessenger_SelectReceivers(self->_messenger, &MODELCTRL[0], (int)infoName, ramNo);
+    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (int)infoName, ramNo);
     at.x = position[0];
     at.y = position[1];
     at.z = position[2];
     beMessenger_AppendVec3(self->_messenger, (float *)&at);
-    beMessenger_DispatchSelected(self->_messenger, &GENERATE[0]);
-    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], infoName, ramNo, openSQ);
+    beMessenger_DispatchSelected(self->_messenger, "GENERATE");
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);
     if ((recordOpen & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4746,13 +4660,13 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
 
 /* Sends `sequenceName` to the model `modelName` of `slot`; with `wait` 1 the request is queued on
  * the open list like an opening sequence. */
-void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, int *modelName, int *sequenceName, int wait) {
+void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const void *modelName, const void *sequenceName, int wait) {
     /* matching construct: declaration-order sweep — as in Start */
     const char *infoToken;
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, MODELCTRL, modelName, slot, sequenceName);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", modelName, slot, sequenceName);
     if ((wait & 0xFF) == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = slot;
@@ -4770,9 +4684,9 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
 
 /* Whether the model (infoName, ramNo) is playing the sequence `sqName` (the ISSEQNAME query). */
 int beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName) {
-    beMessenger_SelectReceivers(self->_messenger, &MODELCTRL[0], (int)infoName, ramNo);
+    beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (int)infoName, ramNo);
     beMessenger_AppendString(self->_messenger, (int)sqName);
-    beMessenger_DispatchSelected(self->_messenger, &ISSEQNAME[0]);
+    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
     return beMessenger_GetBool(self->_messenger, 0);
 }
 
@@ -4789,7 +4703,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
 
-    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], infoName, ramNo, openSequence);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", infoName, ramNo, openSequence);
     if (trackClose == 1) {
         igSmartPointer<beLoadIntf2ComMdlData> created(beLoadIntf2ComMdlData__Create(OwnerAllocator(self)));
         created.p->_ramNo = ramNo;
@@ -4807,7 +4721,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
 
 /* Whether the model (name, slot) is still running (the ISRUN query). */
 int beNDMWLoadIntf2ComMdlCtrl__IsRunning(beNDMWLoadIntf2ComMdlCtrl *self, int slot, const char *name) {
-    beMessenger_SendNamed(self->_messenger, &MODELCTRL[0], name, slot, &ISRUN[0]);
+    beMessenger_SendNamed(self->_messenger, "MODELCTRL", name, slot, "ISRUN");
     return beMessenger_GetBool(self->_messenger, 0);
 }
 
@@ -4929,7 +4843,7 @@ int ObjectList_GetAt_003e9260(igDataList *list, int index)
 }
 
 /* The child of `list` whose name field (`nameField`) is `name`. */
-void *DataList_FindProperty_003e9280(int list, int nameField, int *name)
+void *DataList_FindProperty_003e9280(int list, int nameField, const void *name)
 {
     return igProperty_FindByName(list, nameField, name);
 }
@@ -4978,8 +4892,8 @@ int beNDMWLoadIntf2__GetInfoMeta(void)
 
 /* Registers the info record as a receiver of LOADINTF2_ALL and of LOADINTF2 for its ram number. */
 void beNDMWLoadIntf2__RegisterReceivers(beNDMWLoadIntf2 *self, beBaseInfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, &LOADINTF2_ALL_2[0]);
-    beMessenger_RegisterReceiver(self->_messenger, ram, &LOADINTF2_2[0], 0, ram->_ramNo);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "LOADINTF2_ALL");
+    beMessenger_RegisterReceiver(self->_messenger, ram, "LOADINTF2", 0, ram->_ramNo);
 }
 
 /* Answers the messages sent to one player's load interface (`ram`, whose _ramNo is the player):
@@ -5014,7 +4928,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                     ctrl.p->_isCtrl = 1;
                 }
             }
-            beMessenger_SendNamed(self->_messenger, &LOADCTRL2_3[0], 0, 0, &GETCOMMON_8[0]);
+            beMessenger_SendNamed(self->_messenger, "LOADCTRL2", 0, 0, "GETCOMMON");
             ObjectList_AppendRetained(ram->_dataList, beMessenger_GetObject(self->_messenger, 0));
             {
                 igSmartPointer<beNDMWLoadIntf2MakeChr> maker(beNDMWLoadIntf2MakeChr_Create(OwnerAllocator(self)));
@@ -5052,9 +4966,9 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 slots.p->_ramNo = ram->_ramNo;
                 slots.p->_messenger = self->_messenger;
                 slots.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-                slots.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
-                slots.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
-                slots.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);
+                slots.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
+                slots.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
+                slots.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
                 ObjectList_AppendRetained(ram->_dataList, slots.p);
             }
             {
@@ -5064,8 +4978,8 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 names.p->_ramNo = ram->_ramNo;
                 names.p->_messenger = self->_messenger;
                 names.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-                comMdlCtrl = ChildList::Find(ram, COMMDLCTRL);
-                textOrder = ChildList::Find(ram, TEXTORDER);
+                comMdlCtrl = ChildList::Find(ram, "COMMDLCTRL");
+                textOrder = ChildList::Find(ram, "TEXTORDER");
                 names.p->_comMdlCtrl = (int)comMdlCtrl;
                 names.p->_textOrder = (int)textOrder;
                 ObjectList_AppendRetained(ram->_dataList, names.p);
@@ -5076,7 +4990,7 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                 window.p->_messenger = self->_messenger;
                 window.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
                 ObjectList_AppendRetained(ram->_dataList, window.p);
-                window.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
+                window.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
             }
             {
                 igSmartPointer<beNDMWLoadIntf2DegiStateCtrl> status(beNDMWLoadIntf2DegiStateCtrl_Create(OwnerAllocator(self)));
@@ -5084,18 +4998,18 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
                     igSmartPointer<beNDMWLoadIntf2DegiState> upper(beNDMWLoadIntf2DegiState_Create(OwnerAllocator(self)));
                     void *commonIntf;
                     void *textOrder;
-                    commonIntf = ChildList::Find(ram, COMMONINTF);
-                    textOrder = ChildList::Find(ram, TEXTORDER);
-                    beNDMWLoadIntf2DegiState__Init(upper.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, COMMDLCTRL), self->_messenger, 0);
+                    commonIntf = ChildList::Find(ram, "COMMONINTF");
+                    textOrder = ChildList::Find(ram, "TEXTORDER");
+                    beNDMWLoadIntf2DegiState__Init(upper.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 0);
                     ObjectList_AppendRetained(status.p->_statDataList, upper.p);
                 }
                 {
                     igSmartPointer<beNDMWLoadIntf2DegiState> lower(beNDMWLoadIntf2DegiState_Create(OwnerAllocator(self)));
                     void *commonIntf;
                     void *textOrder;
-                    commonIntf = ChildList::Find(ram, COMMONINTF);
-                    textOrder = ChildList::Find(ram, TEXTORDER);
-                    beNDMWLoadIntf2DegiState__Init(lower.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, COMMDLCTRL), self->_messenger, 1);
+                    commonIntf = ChildList::Find(ram, "COMMONINTF");
+                    textOrder = ChildList::Find(ram, "TEXTORDER");
+                    beNDMWLoadIntf2DegiState__Init(lower.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 1);
                     ObjectList_AppendRetained(status.p->_statDataList, lower.p);
                 }
                 ObjectList_AppendRetained(ram->_dataList, status.p);
@@ -5103,28 +5017,28 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
             {
                 igSmartPointer<beNDMWLoadIntf2DataSelIntf> dataSel(beNDMWLoadIntf2DataSelIntf_Create(OwnerAllocator(self)));
                 dataSel.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-                dataSel.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
-                dataSel.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
-                dataSel.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);
-                dataSel.p->_mesWin = (int)ChildList::Find(ram, MESWIN);
-                dataSel.p->_statDisp = (int)ChildList::Find(ram, DEGISTATECTRL);
+                dataSel.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
+                dataSel.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
+                dataSel.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
+                dataSel.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
+                dataSel.p->_statDisp = (int)ChildList::Find(ram, "DEGISTATECTRL");
                 ObjectList_AppendRetained(ram->_dataList, dataSel.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2Diffselect> difficulty(beNDMWLoadIntf2Diffselect_Create(OwnerAllocator(self)));
                 difficulty.p->_padManager = (int)igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
-                difficulty.p->_comMdlCtrl = (int)ChildList::Find(ram, COMMDLCTRL);
-                difficulty.p->_textOrder = (int)ChildList::Find(ram, TEXTORDER);
-                difficulty.p->_commonIntf = (int)ChildList::Find(ram, COMMONINTF);
-                difficulty.p->_mesWin = (int)ChildList::Find(ram, MESWIN);
+                difficulty.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
+                difficulty.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
+                difficulty.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
+                difficulty.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
                 ObjectList_AppendRetained(ram->_dataList, difficulty.p);
             }
         }
         return 1;
     }
     if (ram->_dataList == 0) return 1;
-    control = (beNDMWLoadIntf2CtrlData *)ChildList::Find(ram, CTRL);
-    ChildList::Find(ram, MAKECHR); /* looked up, not used */
+    control = (beNDMWLoadIntf2CtrlData *)ChildList::Find(ram, "CTRL");
+    ChildList::Find(ram, "MAKECHR"); /* looked up, not used */
     switch (command) {
     case MSG_ISENTRY:
         if (beMessenger_GetIntCount(self->_messenger) == 0) {
@@ -5149,11 +5063,11 @@ int beNDMWLoadIntf2__OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMess
         control->_isCtrl = 0;
         return 1;
     case MSG_SETSELECT_DATA:
-        common = (beNDMWLoadCtrl2CommonIntf *)ChildList::Find(ram, COMMONINTF);
+        common = (beNDMWLoadCtrl2CommonIntf *)ChildList::Find(ram, "COMMONINTF");
         if (PlayerWork(common, ram->_ramNo)->_isRdy != 1) {
-            beMessenger_SelectGroup(self->_messenger, &GAMERAM_2[0]);
+            beMessenger_SelectGroup(self->_messenger, "GAMERAM");
             beMessenger_AppendInt(self->_messenger, ram->_ramNo);
-            beMessenger_DispatchSelected(self->_messenger, &GAMEREMOVE_2[0]);
+            beMessenger_DispatchSelected(self->_messenger, "GAMEREMOVE");
         }
         return 1;
     case MSG_SETDIFFICULTMAX:
@@ -5171,3 +5085,5 @@ int beNDMWLoadIntf2__GetMeta(void)
 {
     return g_beNDMWLoadIntf2_metaObject[0];
 }
+
+#pragma pop

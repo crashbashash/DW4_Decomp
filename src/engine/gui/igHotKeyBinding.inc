@@ -85,8 +85,6 @@ static int g_igHotKeyBinding_fieldOffsets[] = {
     12,
     16,
 };
-static int g_igHotKeyBinding_keyDefault;
-static int g_igHotKeyBinding_buttonDefault = 0x20;
 
 void igHotKeyBinding_InitFields(void) {
     int temp_s2;
@@ -99,10 +97,10 @@ void igHotKeyBinding_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igHotKeyBinding_ctorTable, 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igHotKeyBinding_keyDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_00145eb0);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &g_igHotKeyBinding_buttonDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0x20);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(FUN_00146850);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00453250();

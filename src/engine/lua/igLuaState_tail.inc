@@ -1,3 +1,12 @@
+const char *g_luaErrorNames[] = {"NONE", "LUA_ERRRUN", "LUA_ERRFILE", "LUA_ERRSYNTAX", "LUA_ERRMEM", "LUA_ERRERR"};
+LuaErrorHandler g_luaErrorHandler;
+void *g_luaErrorHandlerData;
+Gap::Lua::igLuaState *g_currentLuaState;
+unsigned char g_luaStatePerThread;
+int g_luaStateSlot;
+int g_threadLocalNextSlot;
+LuaSemaphoreView *g_threadLocalSemaphore;
+
 ThreadLocalEntry::ThreadLocalEntry(void *thread, int slot, void *value) {
     key = (unsigned int)thread ^ slot;
     next = 0;

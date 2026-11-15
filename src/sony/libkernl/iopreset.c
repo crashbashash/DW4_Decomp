@@ -45,7 +45,7 @@ int scePrintf(const char *fmt, ...);
 void sceSifInitRpc(unsigned int mode);
 void sceSifExitRpc(void);
 
-extern SifResetPacket resetPacket;
+static SifResetPacket resetPacket __attribute__((aligned(64)));
 
 int sceSifResetIop(const char *arg, int mode)
 {

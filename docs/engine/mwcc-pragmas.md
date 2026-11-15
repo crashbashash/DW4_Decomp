@@ -99,10 +99,10 @@ in `src/`), **runtime** (the Metrowerks runtime files only).
 
 | Pragma | Effect on b52 | Policy |
 |---|---|---|
-| `readonly_strings on` | Verified: string literals go to `.rodata` instead of `.data`, the same as `-str readonly`; the setting at the closing brace places every literal of the function. The source form of the flag for functions of a unit whose row does not carry it ([understanding shapes](understanding-shapes.md#types-and-values)); used in three core files | scoped |
+| `readonly_strings on` | Verified: string literals go to `.rodata` instead of `.data`, the same as `-str readonly`; the setting at the closing brace places every literal of the function. The source form of the flag for functions of a unit whose row does not carry it ([understanding shapes](understanding-shapes.md#types-and-values)); used in three core files. It does not reach the literals MWCC emits at the end of the file (RTTI names, `__sinit` strings, a last function that instantiates a template): those take the setting at the end of the file, so a closing `pop` leaves them in `.data`; the unit's `-str readonly` row flag places them | scoped |
 | `pool_strings on` | Verified: the file's literals become one `.rodata` object | owner, counted |
 | `dont_reuse_strings on` | Verified: an equal literal in a second function gets its own copy | owner, counted |
-| `explicit_zero_data on` | Verified: zero-initialised globals go to `.data` instead of `.bss` | owner, counted |
+| `explicit_zero_data on` | Verified: zero-initialised globals go to `.data` instead of `.bss`. No match has needed it: the zeros retail keeps in `.data`/`.sdata` are constants passed to `const T &` parameters, which b52 stores as unnamed `.data` temporaries | owner, counted |
 | `const_strings on` | Verified: no change in section | owner, counted |
 | `reverse_bitfields on` | Verified: bit-fields are allocated from the other end of their unit (a 3-bit first field at bits 29–31, byte 3, instead of bits 0–2, byte 0). Acts on the `struct` definitions written under it | owner, counted |
 | `unsigned_char on` | Verified: plain `char` loads with `lbu` | owner, counted |

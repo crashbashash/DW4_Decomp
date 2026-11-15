@@ -73,7 +73,7 @@ static sceDmaChan *dch[DMA_CHANNELS] = {
     (sceDmaChan *)0x1000d000, (sceDmaChan *)0x1000d400,
 };
 
-sceDmaEnv sceDmaCurrentEnv;
+static sceDmaEnv sceDmaCurrentEnv;
 
 /* Spins while the channel runs; after about 16M polls it reports and pauses it. */
 static void WaitDma(sceDmaChan *d)

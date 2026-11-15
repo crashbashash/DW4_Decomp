@@ -1,6 +1,7 @@
 /* Multipass texturing. With the multipass capability on, each texture stage beyond the first is
  * drawn as a pass of its own in GS context 2, so the GS register sets of the stages and the stage
  * capabilities are read per pass. p2SetPassCount sets how many passes there are. */
+#include "dw4/p2dma.h"
 #include "dw4/p2core.h"
 
 /* GS TEX0.TFX, p2TextureFunction */
@@ -27,14 +28,40 @@ enum {
 
 #define P2_STAGE_FLAG(stage, cap) ((p2ProgramFlags[stage] >> (cap)) & 1)
 
-extern int p2TextureCombineMode[P2_PROGRAM_COUNT];
-extern int p2TextureFunction[P2_PROGRAM_COUNT];
 extern int p2PassFrameMask;
 extern int p2PassZbufMask;
-extern unsigned int p2PassDmaTag[4];
-extern unsigned int p2PassGifTag[4];
-extern unsigned int p2PassUnpack[2];
-extern unsigned int p2PassMscnt[2];
+
+/* A VIF code, written to the packet as one word. */
+typedef union p2VifCode {
+    unsigned int word;
+    struct {
+        unsigned short immediate;
+        unsigned char num;
+        unsigned char command;
+    } field;
+} p2VifCode;
+
+/* The packets and VIF codes the file writes, from templates that keep their constant words. */
+unsigned int p2PassDmaTag[4] = { 0x10000005, 0, 0, 0 };
+unsigned int p2PassGifTag[4] = { 0x00008001, 0x40000000, 0xEEEEEEEE, 0xEEEEEEEE };
+unsigned int p2PassUnpack[2] = { 0x68068002, 0 };
+unsigned int p2PassMscnt[2] = { 0x17000000, 0 };
+unsigned int p2Tex0UploadTag[4] = { 0x10000002, 0, 0, 0 };
+unsigned int p2Tex0UploadFlush = 0x10000000;
+unsigned int p2Tex0UploadStmask = 0x20000000;
+unsigned int p2Tex0UploadUnpack = 0x7C010049;
+p2VifCode p2ParticleUnpackV4 = { 0x6C000000 };
+p2VifCode p2ParticleUnpackV3 = { 0x68000000 };
+p2VifCode p2ParticleUnpackV2 = { 0x64000000 };
+p2VifCode p2ParticleUnpackS = { 0x60000000 };
+unsigned int p2ParticleBlockHeader[2] = { 0x0700001B, 0x20000000 };
+unsigned int p2ParticleRowCodes[2] = { 0x7E01C000, 0x6E018002 };
+p2VifCode p2ParticleMscal = { 0x14000000 };
+
+/* Uninitialised data is emitted last definition first. */
+int p2TextureFunction[P2_PROGRAM_COUNT];
+int p2TextureCombineMode[P2_PROGRAM_COUNT];
+unsigned int p2ParticleBlockNop;
 
 /* The low (0) or high (1) word of a 64-bit GS register image. */
 #define P2_GS_WORD(reg, half) (((unsigned int *)&(reg))[half])
@@ -281,15 +308,46 @@ void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask) {
     }
 }
 
-extern unsigned int DAT_00491360[4];
-extern unsigned int DAT_00491370, DAT_00491378, DAT_00491380;
-extern unsigned int DAT_00569378, DAT_0056937c;
-typedef struct { char pad0[40]; unsigned int *end; unsigned int pad44; unsigned int *cursor; } GsPacketBuffer;
-extern GsPacketBuffer *DAT_00568f04;
 extern int p2DisplayListMode;
+extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
 void p2GrowDisplayList(void);
-void p2SubmitDmaPacket(int arg);
+void p2SubmitDmaPacket(int channel);
 
+/* Writing past the limit of the current VIF1 packet hands it over: while a display list is
+ * recorded the list grows a block instead. */
+static inline void p2EndVif1Write(void) {
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+        if (p2DisplayListMode != 0) {
+            p2GrowDisplayList();
+        } else {
+            p2SubmitDmaPacket(P2_DMA_VIF1);
+        }
+    }
+}
+
+/* Sends the TEX0 register of context 2 to VU1: the two halves of the register set's image go to
+ * the last two words of one vector, the mask leaving the other two as they are. */
+void p2UploadTex0Context2(void) {
+    unsigned int *p;
+    unsigned int *word;
+
+    p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    p[0] = p2Tex0UploadTag[0];
+    p[1] = p2Tex0UploadTag[1];
+    p[2] = p2Tex0UploadTag[2];
+    p[3] = p2Tex0UploadTag[3];
+    p += 4;
+    word = p; p = word + 1; *word = p2Tex0UploadFlush;
+    *p++ = p2Tex0UploadStmask;
+    *p++ = 0x0F0F0F0F;
+    *p++ = p2Tex0UploadUnpack;
+    *p++ = 0;
+    *p++ = 0;
+    *p++ = p2GsRegisterSets[0].tex0[1].half[0];
+    *p++ = p2GsRegisterSets[0].tex0[1].half[1];
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p;
+    p2EndVif1Write();
+}
 
 /* The layout of a particle block: per-row arrays of the components the particle format has. */
 typedef struct p2ParticleFormat {
@@ -450,21 +508,113 @@ int p2LayoutParticleFormat(p2ParticleFormat *format) {
     return format->size;
 }
 
-/* A VIF code, written to the packet as one word. */
-typedef union p2VifCode {
-    struct {
-        unsigned short immediate;
-        unsigned char num;
-        unsigned char command;
-    } field;
-    unsigned int word;
-} p2VifCode;
 
-extern unsigned int DAT_004913a8, DAT_004913ac;
-extern p2VifCode DAT_00491388, DAT_00491390, DAT_00491398, DAT_004913a0;
-extern unsigned int DAT_004913c0, DAT_004913c4;
-extern p2VifCode DAT_004913c8;
 extern int DAT_0056b458;
-extern unsigned int DAT_0056b068;
 unsigned short p2GetVuProgramAddress(int);
 
+
+
+
+void p2WriteParticleBlockCodes(p2ParticleFormat *format) {
+    unsigned char *rows;
+    int row;
+    int remaining;
+    int width;
+    int count;
+    int widthField;
+    unsigned int *word;
+    unsigned int *slot;
+
+    width = format->sizeCount0 > format->sizeCount1 ? format->sizeCount0 : format->sizeCount1;
+    width = (unsigned char)width > format->byteCount ? width : format->byteCount;
+    width = width > format->wordCount ? width : format->wordCount;
+    word = (unsigned int *)format->data;
+    *word++ = p2ParticleBlockHeader[0];
+    slot = word++;
+    *slot = p2ParticleBlockHeader[1];
+    *word++ = 0x0C0C0C0C;
+    remaining = format->count;
+    rows = (unsigned char *)word;
+    p2ParticleMscal.field.immediate = p2GetVuProgramAddress(DAT_0056b458);
+    widthField = (unsigned char)(width - 2) << 16;
+    for (row = 0; row < format->rowCount; ) {
+        if (format->positionCount) {
+            slot = (unsigned int *)(rows + format->rowStride * row + format->positionOffset);
+            p2ParticleUnpackV3.field.num = format->keysPerRow * format->positionCount;
+            p2ParticleUnpackV3.field.immediate = format->vuAddress0 | 0x8000;
+            slot[-1] = p2ParticleUnpackV3.word;
+        }
+        if (format->colourCount) {
+            slot = (unsigned int *)(rows + format->rowStride * row + format->colourOffset);
+            p2ParticleUnpackV4.field.num = format->keysPerRow * format->colourCount;
+            p2ParticleUnpackV4.field.immediate = format->vuAddress2 | 0x8000;
+            slot[-1] = p2ParticleUnpackV4.word;
+        }
+        if (format->attributeKind) {
+            slot = (unsigned int *)(rows + format->rowStride * row + format->attributeOffset);
+            if (format->attributeKind == 1) {
+                p2ParticleUnpackS.field.num = format->keysPerRow * width;
+                p2ParticleUnpackS.field.immediate = format->vuAddress1 | 0x8000;
+                slot[-1] = p2ParticleUnpackS.word;
+            } else if (format->attributeKind == 2) {
+                p2ParticleUnpackV2.field.num = format->keysPerRow * width;
+                p2ParticleUnpackV2.field.immediate = format->vuAddress1 | 0x8000;
+                slot[-1] = p2ParticleUnpackV2.word;
+            } else if (format->attributeKind == 3) {
+                p2ParticleUnpackV3.field.num = format->keysPerRow * width;
+                p2ParticleUnpackV3.field.immediate = format->vuAddress1 | 0x8000;
+                slot[-1] = p2ParticleUnpackV3.word;
+            } else if (format->attributeKind == 4) {
+                p2ParticleUnpackV4.field.num = format->keysPerRow * width;
+                p2ParticleUnpackV4.field.immediate = format->vuAddress1 | 0x8000;
+                slot[-1] = p2ParticleUnpackV4.word;
+            }
+        }
+        if (format->texCoordCount) {
+            slot = (unsigned int *)(rows + format->rowStride * row + format->texCoordOffset);
+            p2ParticleUnpackV2.field.num = format->keysPerRow;
+            p2ParticleUnpackV2.field.immediate = format->vuAddress3 | 0x8000;
+            slot[-1] = p2ParticleUnpackV2.word;
+        }
+        remaining -= format->keysPerRow;
+        word = (unsigned int *)(rows + format->rowStride * row + format->endOffset);
+        *word = p2ParticleRowCodes[0];
+        if (remaining < 0) {
+            count = format->keysPerRow + remaining;
+            switch (format->primitive) {
+            case 1:
+                if (count % 2) {
+                    count -= count % 2;
+                }
+                break;
+            case 3:
+                if (count % 3) {
+                    count -= count % 3;
+                }
+                break;
+            case 0:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+                break;
+            }
+            word[1] = count | (row == 0) << 16;
+            word += 2;
+        } else {
+            word[1] = format->keysPerRow | (row == 0) << 16;
+            word += 2;
+        }
+        row++;
+        *word++ = p2ParticleRowCodes[1];
+        *word = (unsigned char)(format->positionCount - 2);
+        *word |= (unsigned char)(format->colourCount - 2) << 8;
+        *word |= widthField;
+        word++;
+        slot = word++;
+        *slot = p2ParticleMscal.word;
+    }
+    while ((int)word < (int)format->data + format->size) {
+        *word++ = p2ParticleBlockNop;
+    }
+}

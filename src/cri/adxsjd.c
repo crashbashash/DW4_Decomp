@@ -100,11 +100,10 @@ int ADX_DecodeFooter(char *hdr, int size, short *ofst);
 void ADXERR_CallErrFunc2(const char *code, const char *message);
 void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 
-extern int adxsjd_use_cnt;
-extern void (*adxsjd_header_hook)(AdxbObj *adxb, int rate);
-extern AdxSjdObj adxsjd_objs[ADXSJD_MAX_OBJ];
-extern char E03010901_ADXB_DecodeHeader[];
-extern char Can_not_decode_this_file_format[];
+int adxsjd_use_cnt = 0;
+int adxsjd_use_reserved = 0; /* no function reads it */
+void (*adxsjd_header_hook)(AdxbObj *adxb, int rate) = 0;
+AdxSjdObj adxsjd_objs[ADXSJD_MAX_OBJ] = {0};
 
 void adxsjd_decode_prep(AdxSjdObj *sjd);
 int adxsjd_get_wr(AdxSjdObj *sjd, int *offset, int *room, int *until_trap);
@@ -288,7 +287,7 @@ void adxsjd_decode_prep(AdxSjdObj *sjd)
             hdrlen = 0;
         } else {
             sji->vtbl->ungetChunk(sji, 1, &ck);
-            ADXERR_CallErrFunc2(E03010901_ADXB_DecodeHeader, Can_not_decode_this_file_format);
+            ADXERR_CallErrFunc2("E03010901 ADXB_DecodeHeader: ", "Can not decode this file format.");
             sjd->stat = ADXSJD_STAT_ERROR;
             return;
         }

@@ -3,6 +3,11 @@
 int DIntr(void);
 int EIntr(void);
 void _ipuCommand(_sceMpegDecoder *dec, unsigned int command);
+int AddDmacHandler2(int channel, int (*handler)(int, void *), int next, void *arg);
+int RemoveDmacHandler(int channel, int id);
+int EnableDmac(int channel);
+int DisableDmac(int channel);
+void _doCSC2(_sceMpegDecoder *dec, unsigned int addr, int count);
 
 /* The progress of a colour-space conversion the channel-3 handler feeds in 1023-macroblock chunks. */
 typedef struct {
@@ -27,6 +32,11 @@ typedef struct {
 #define D4_MADR (*(volatile unsigned int *)0x1000B410)
 #define D4_QWC (*(volatile unsigned int *)0x1000B420)
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
+#define IPU_CTRL (*(volatile int *)0x10002010)
+
+#define DMA_CHAN_IPU_TO 4
+#define IPU_CTRL_ECD 0x4000
+#define IPU_CTRL_RST 0x40000000
 
 /* Clears `size` bytes at `addr` in the scratchpad with an IPU-to-memory transfer. */
 void _sprClear(unsigned int addr, int size) {
@@ -109,4 +119,62 @@ int _ch4dma(int channel, DmaChunk *chunk) {
     __asm__("sync");
     __asm__ volatile("ei");
     return 0;
+}
+
+/* Converts a decoded picture to RGB32 in the image buffer: channel 4 feeds the picture to the IPU while
+ * the conversion drains it, the handler sending what is left past one transfer's 0xFFFF quadwords. */
+void _cscStoreImage(_sceMpegDecoder *dec, _sceMpegPicture *picture) {
+    sceMpegCbData cbdata;
+    DmaChunk chunk;
+    int count = picture->mb_width * picture->mb_height;
+    int handler;
+    int intr;
+
+    cbdata.type = sceMpegCbStopDMA;
+    _sceMpegDispatchMpegCallback(dec->mp, &cbdata);
+    if (IPU_CTRL & IPU_CTRL_ECD) {
+        IPU_CTRL = IPU_CTRL_RST;
+    }
+    while (IPU_CTRL < 0);
+    _ipuCommand(dec, 0);
+    while (IPU_CTRL < 0);
+    chunk.addr = (unsigned int)picture->base & 0x0FFFFFFF;
+    chunk.qwc = count * 24;
+    if (chunk.qwc > 0xFFFF) {
+        handler = AddDmacHandler2(DMA_CHAN_IPU_TO, _ch4dma, 0, &chunk);
+        D_STAT = 0x10;
+        EnableDmac(DMA_CHAN_IPU_TO);
+        intr = DIntr();
+        D4_MADR = chunk.addr;
+        D4_QWC = 0xFFFF;
+        D4_CHCR = 0x101;
+        if (intr) {
+            EIntr();
+        }
+        chunk.addr = (chunk.addr + 0xFFFF0) & 0x0FFFFFFF;
+        chunk.qwc -= 0xFFFF;
+        if (count < 1024) {
+            _doCSC(dec, dec->image_buff, count);
+        } else {
+            _doCSC2(dec, dec->image_buff, count);
+        }
+        DisableDmac(DMA_CHAN_IPU_TO);
+        RemoveDmacHandler(DMA_CHAN_IPU_TO, handler);
+    } else {
+        intr = DIntr();
+        D4_MADR = (unsigned int)picture->base & 0x0FFFFFFF;
+        D4_QWC = chunk.qwc;
+        D4_CHCR = 0x101;
+        if (intr) {
+            EIntr();
+        }
+        chunk.qwc = 0;
+        if (count < 1024) {
+            _doCSC(dec, dec->image_buff, count);
+        } else {
+            _doCSC2(dec, dec->image_buff, count);
+        }
+    }
+    cbdata.type = sceMpegCbRestartDMA;
+    _sceMpegDispatchMpegCallback(dec->mp, &cbdata);
 }

@@ -5,9 +5,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/beDemoManager.h"
+#include "dw4/listSet.h"
 
-#pragma push
-#pragma readonly_strings on
 
 /* The C runtime and the Alchemy memory services this file uses. */
 extern "C" unsigned int strlen(const char *s);
@@ -322,11 +321,11 @@ void igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int 
 float atan2f(float y, float x);
 
 /* The managers be_Start finds, and the be itself. */
-extern beSystem *g_beSystem[4];
-extern beMessenger *g_beMessenger[4];
-extern beMatCtrl *g_matCtrl[4];
-extern beDemoManager *g_beDemoManager[4];
-extern be *g_be[4];
+extern beSystem *g_beSystem;
+extern beMessenger *g_beMessenger;
+extern beMatCtrl *g_matCtrl;
+extern beDemoManager *g_beDemoManager;
+extern be *g_be;
 extern igMetaObject *g_be_metaObject[4];
 extern igMetaObject *g_beSystem_metaObject[4];
 extern igMetaObject *g_beMessenger_metaObject[4];
@@ -339,43 +338,31 @@ extern int g_propertyNameField[4];
 
 /* The model the running MDL / BLT / BLP script is about, cached by beModelCtrl before it calls
  * the script, and the hitter of the bullet that struck it. */
-extern beBaseInfoRam *g_mdlEntity[4];
-extern int g_mdlRamNo[4];
-extern float *g_mdlMatrix[4];
-extern int g_mdlMaxHp[4];
-extern int g_mdlHp[4];
-extern int g_mdlRecNo[4];
-extern const char *g_mdlInfoName[4];
-extern int g_mdlBulletKind[4];
-extern int g_mdlBulletBoxNo[4];
-extern const char *g_hitterInfoName[4];
-extern int g_bltShootRamNo[4];
-extern int g_hitterRecNo[4];
-extern const char *g_mdlCallName[4];
-extern float *g_mdlWorldPosTarget[4];
-extern int g_txtCallNo[4];
+extern beBaseInfoRam *g_mdlEntity;
+extern int g_mdlRamNo;
+extern float *g_mdlMatrix;
+extern int g_mdlMaxHp;
+extern int g_mdlHp;
+extern int g_mdlRecNo;
+extern const char *g_mdlInfoName;
+extern int g_mdlBulletKind;
+extern int g_mdlBulletBoxNo;
+extern const char *g_hitterInfoName;
+extern int g_bltShootRamNo;
+extern int g_hitterRecNo;
+extern const char *g_mdlCallName;
+extern float *g_mdlWorldPosTarget;
+extern int g_txtCallNo;
 
 /* The last FIGHTCALC damage reply: damage, attribute index and rank flag. */
-extern int g_damageResult[4];
-extern int g_attackZokusei[4];
-extern int g_damageFlag[4];
+extern int g_damageResult;
+extern int g_attackZokusei;
+extern int g_damageFlag;
 
 /* The Lua class tables `be` hands the binding. */
-extern const char *g_luaApiFunctionNames[116];
-extern const unsigned int g_luaApiFunctionCodes[];
 
-extern const char *g_getRecordCommands[5];
-extern const char *g_bulletKindNames[9];
-extern const char *g_attributeNameDefault[1];
-extern const char *g_attributeNames[4];
-extern const FloatingNumberStyleData g_floatingNumberStyles[5];
 extern const float g_vec3ZAxis[4];
 extern unsigned char g_mdlDmgTurn[4];
-extern unsigned char g_cardFolderSetValue;
-extern unsigned char g_cardFolderClearValue;
-extern unsigned char g_shinkaSetValue;
-extern unsigned char g_flagFlipOffValue;
-extern unsigned char g_flagFlipOnValue;
 
 /* Result strings the string getters return. */
 extern char g_mdlPosStrBuffer[64];
@@ -383,89 +370,6 @@ extern char g_mdlRotStrBuffer[64];
 extern char g_playerDataStrBuffer[64];
 extern char g_playerPosStrBuffer[64];
 
-extern const char Can_t_find_method_s_s[];
-extern const char text_be[];
-extern const char text_igInfoManager[];
-extern const char Bec[];
-extern const char GAMERAM[];
-extern const char GETCOMMON[];
-extern const char ISUSE[];
-extern const char DIGIMONNAME[];
-extern const char POWERSOCKETNAME_4[];
-extern const char NINZU[];
-extern const char DIFFICULTY[];
-extern const char CAMERAMODE[];
-extern const char LIGHTMODE[];
-extern const char GATESTAGENAME[];
-extern const char GATESTAGENO[];
-extern const char EMPTY[];
-extern const char DEVICE[];
-extern const char CTRLITEM[];
-extern const char DISK[];
-extern const char FLAG[];
-extern const char BIT[];
-extern const char LEVEL[];
-extern const char DIGIMONNO[];
-extern const char BASE_ISUSE_4[];
-extern const char CARDLIST_2[];
-extern const char KAZU[];
-extern const char SET_3[];
-extern const char CLR_4[];
-extern const char GETEXP[];
-extern const char BASE_EXP_3[];
-extern const char GETLEVEL[];
-extern const char BASE_LEVEL_3[];
-extern const char SETSHINKA[];
-extern const char CTRLPLAYER[];
-extern const char text_vec3Format[];
-extern const char text_ne0[];
-extern const char text_eq1[];
-extern const char text_eq0[];
-extern const char text_ne1[];
-extern const char SUBWND_3[];
-extern const char ISRUN_6[];
-extern const char COUNTER_2[];
-extern const char V_f_f_f[];
-extern const char MODELCTRL_9[];
-extern const char FIND_SPACE_2[];
-extern const char GENERATE_8[];
-extern const char NUMBERCTRL_3[];
-extern const char SETVALUE_3[];
-extern const char ONE_7[];
-extern const char CHECKSTATUS[];
-extern const char PLAYERPOINT[];
-extern const char GETGENERATEPOS[];
-extern const char GETMATRIXDIRECT[];
-extern const char V_f_f_f_V_0_f_0[];
-extern const char PLAYER_7[];
-extern const char GETMATRIX_4[];
-extern const char ENEMY[];
-extern const char GETPEBASEWORK[];
-extern const char FIGHTCALC[];
-extern const char P2EISHITCHECK[];
-extern const char P2EISCRITICAL[];
-extern const char P2EDAMAGE[];
-extern const char P2ESTUNTIME[];
-extern const char P2EPOISONTIME[];
-extern const char P2ESLEEPTIME[];
-extern const char P2EBINDTIME[];
-extern const char P2EATKDWNTIME[];
-extern const char P2EPOWDWNTIME[];
-extern const char P2ESKILLUP[];
-extern const char P2EEXPUP[];
-extern const char E2PISHITCHECK[];
-extern const char E2PDAMAGE[];
-extern const char GETPATKZOKUSEI[];
-extern const char E2PDAMAGERANK[];
-extern const char E2PSTUNTIME[];
-extern const char E2PPOISONTIME[];
-extern const char E2PSLEEPTIME[];
-extern const char E2PBINDTIME[];
-extern const char E2PATKDWNTIME[];
-extern const char E2PPOWDWNTIME[];
-extern const char P2PKOUKAMAGIC[];
-extern const char LOADINTF2[];
-extern const char SETDIFFICULTMAX[];
 }
 
 /* The game's string pool, created on first use. */
@@ -522,6 +426,94 @@ static inline int allocatorFor(void *object) {
     int allocator = (int)igObject_GetAllocator(object);
     return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
 }
+
+/* The Lua functions `be` hands the binding, with the argument codes of each. */
+/* 116 functions share 109 names: overloads bind under one. */
+const int LUA_API_FUNCTION_COUNT = 116;
+
+const char *g_luaApiFunctionNames[109] = {
+    "MATsetRun", "sd", "MDLisLive", "BLPcalcKoukaMagic",
+    "BLTisPlayerBullet", "MDLisCallName", "BLPgetAttackDownTime", "MDLsetSeq",
+    "BLTgetDamageValue", "SYSctlPlayer", "SYSisGetShinkaDigimon", "MDLdspDamageP",
+    "MDLgetPosStr", "SYSgetArea", "MDLgetRecNo", "SYSctlCardFolder",
+    "MDLgetMHp", "BLTgetBindTime", "SYSgetLightMode", "BLTgetDamageRank",
+    "SYSgetIsPackOnly", "MDLisSeqName", "MDLsetDMGTurn", "DMrun",
+    "BLPgetPoisonTime", "Bec", "CFLsetName", "LISsetDifficultMax",
+    "SYSgetRandom", "BLTgetShootRamNo", "COUNTERset", "MATisPlayer",
+    "MsgBox", "MATisRidePlayer", "MDLsetSD", "PLAYERgetPosStr",
+    "PLAYERgetDataStr", "MDLgetBulletName", "TXTgetCallNo", "MDLgetRotStr",
+    "MATgetPlayerMatStat", "SYSsetDifficulty", "BLPgetSleepTime", "BLTgetStunTime",
+    "MDLgetInfoName", "MDLgetRamNo", "BLPgetBindTime", "MDLaddHp",
+    "BLPgetStunTime", "SYSisJoinPlayer", "BLTisCritical", "MDLgetBulletBoxNo",
+    "BLPgetDamageRank", "BLPgetAttackZokusei", "DMchkSD", "BLPisHitCheck",
+    "SYSgetPlayerName", "SYSgetPlayerLevel", "BLPgetDamageValue", "BLTgetAttributeStr",
+    "BLTcalcEXPUp", "BLTcalcSkillUp", "SYSgetCountry", "BLTgetPowerDownTime",
+    "SYSgetDifficulty", "BLTisHitCheck", "FLGflip", "BLTgetSleepTime",
+    "SYSgetPlayerDigimon", "BLTgetPoisonTime", "MDLisStatus", "SYSctlDeviceFolder",
+    "SYSgetGateStageName", "DMswtEnd", "MDLgetKyoriSquare", "MDLsetWorldPosTarget",
+    "ShutDown", "MDLdspDamage", "SYSctlDiskFolder", "MATisRideOffPlayer",
+    "PLAYERgetPos", "MDLgetBulletKind", "MATisAllPlayer", "MATgetPlayerNo",
+    "SYSctlBit", "DMmsgBox", "FLGisOn", "SYSgetGateStageNo",
+    "SYSgetPlayerNinzu", "SYSctlFlagFolder", "CFLclear", "DMswtSD",
+    "MDLgetHp", "CFLgetFolderName", "be", "SYSgetCameraMode",
+    "BLPgetPowerDownTime", "DMsetSD", "DMgetCount", "FLGset",
+    "MDLdspExp", "DMsetLua", "DMcase", "COUNTERget",
+    "SYSgetTarget", "SYSsetGateStage", "SYSctlShinka", "BLTgetAttackDownTime",
+    "SYSgetWeaponName",
+};
+
+const unsigned int g_luaApiFunctionCodes[400] = {
+    0x62100, 0x209, 0x5, 0x70101, 0x20d, 0x5, 0xb0002, 0x205,
+    0xd8203, 0x20d, 0x5, 0x5, 0x38104, 0x205, 0x5, 0x80005,
+    0x205, 0x52106, 0x20f, 0x5, 0xbe007, 0x205, 0x24008, 0x205,
+    0x1a009, 0x205, 0x7c00a, 0x205, 0xd000b, 0x205, 0x2800c, 0x205,
+    0xd220d, 0x20f, 0xd, 0x5, 0x9000e, 0x20d, 0xae00f, 0x205,
+    0x8e610, 0x209, 0xd, 0x5, 0xd, 0x5, 0x5, 0x5,
+    0x9c411, 0x209, 0xd, 0x5, 0x5, 0x5, 0xb2212, 0x209,
+    0xd, 0x5, 0x72113, 0x205, 0x5, 0x88114, 0x205, 0x5,
+    0x14215, 0x209, 0x5, 0x5, 0x1e216, 0x205, 0xd, 0x5,
+    0xa8317, 0x205, 0xd, 0x5, 0x5, 0xd4318, 0x205, 0xd,
+    0x5, 0x5, 0x12419, 0x205, 0xd, 0xd, 0x5, 0x5,
+    0xb401a, 0x20f, 0x3411b, 0x20f, 0xd, 0xba01c, 0x20d, 0x251d,
+    0x20f, 0xd, 0xd, 0x5, 0xd, 0xd, 0x241e, 0x20f,
+    0xd, 0xd, 0x5, 0xd, 0x261f, 0x20f, 0xd, 0xd,
+    0x5, 0xd, 0xd, 0x7, 0x2520, 0x20f, 0xd, 0xd,
+    0x5, 0xd, 0x7, 0x3e021, 0x209, 0xa4022, 0x209, 0xa6023,
+    0x205, 0x42124, 0x205, 0x5, 0x9e125, 0x205, 0x5, 0x50126,
+    0x205, 0x5, 0x127, 0x20f, 0x9, 0xc2628, 0x20f, 0xd,
+    0xd, 0x5, 0xd, 0xd, 0x7, 0xc2529, 0x20f, 0xd,
+    0xd, 0x5, 0xd, 0xd, 0xc252a, 0x20f, 0xd, 0xd,
+    0x5, 0xd, 0x7, 0xc242b, 0x20f, 0xd, 0xd, 0x5,
+    0xd, 0x6c62c, 0x20f, 0xd, 0xd, 0x5, 0xd, 0xd,
+    0xd, 0x6c52d, 0x20f, 0xd, 0xd, 0x5, 0xd, 0xd,
+    0xb652e, 0x20f, 0xd, 0xd, 0x5, 0xd, 0xd, 0xb642f,
+    0x20f, 0xd, 0xd, 0x5, 0xd, 0x92030, 0x20f, 0xcc131,
+    0x20f, 0x5, 0xca132, 0x20f, 0xd, 0xaa233, 0x20f, 0xd,
+    0x5, 0x2e034, 0x20f, 0xc4035, 0x205, 0xac136, 0x209, 0x5,
+    0xc6237, 0x20f, 0x5, 0x9, 0x84138, 0x20f, 0x5, 0x3c239,
+    0x20f, 0x5, 0x5, 0xce13a, 0x205, 0x5, 0x5803b, 0x20d,
+    0x5a03c, 0x205, 0x1c03d, 0x205, 0x2003e, 0x205, 0xb803f, 0x205,
+    0x18340, 0x20d, 0xb, 0xb, 0xb, 0x4e341, 0x20d, 0xb,
+    0xb, 0xb, 0x5e142, 0x20f, 0x5, 0xe143, 0x20f, 0xd,
+    0x44244, 0x20f, 0xd, 0xd, 0x4245, 0x209, 0xd, 0x5,
+    0xa2046, 0x205, 0x4a047, 0x20d, 0x66048, 0x205, 0x9a149, 0x20f,
+    0x5, 0x1614a, 0x20f, 0x5, 0xc814b, 0x20f, 0x5, 0x2c14c,
+    0x20f, 0x5, 0xa14d, 0x209, 0xd, 0x9634e, 0x20f, 0xb,
+    0xb, 0xb, 0x9614f, 0x20f, 0xd, 0x94350, 0x20b, 0xb,
+    0xb, 0xb, 0x2a151, 0x209, 0xd, 0x8c352, 0x209, 0xd,
+    0x5, 0xd, 0x8053, 0x209, 0x3a054, 0x205, 0x82055, 0x209,
+    0x10156, 0x205, 0x9, 0x26257, 0x205, 0x5, 0x9, 0x64058,
+    0x209, 0x56259, 0x205, 0x5, 0x9, 0x8a15a, 0x205, 0xd,
+    0x8605b, 0x205, 0x2205c, 0x205, 0xd615d, 0x205, 0xd, 0x7e15e,
+    0x205, 0xd, 0x7a25f, 0x20f, 0x9, 0x9, 0x78060, 0x205,
+    0x76061, 0x20d, 0x6e062, 0x209, 0x74063, 0x205, 0x6a064, 0x20d,
+    0x68265, 0x205, 0x5, 0x5, 0x60266, 0x205, 0x5, 0x5,
+    0x30167, 0x205, 0xd, 0x54068, 0x205, 0x5c069, 0x205, 0xc16a,
+    0x205, 0xd, 0xc016b, 0x205, 0xd, 0x606c, 0x205, 0x4c06d,
+    0x205, 0xa006e, 0x205, 0x4836f, 0x20d, 0x5, 0x5, 0xb,
+    0x46470, 0x20d, 0x5, 0xb, 0xb, 0xb, 0x36171, 0x20f,
+    0x5, 0x40272, 0x20f, 0xd, 0x5, 0x98073, 0x20f, 0x0,
+};
 
 int LuaAPI_Dispatch(lua_State *L) {
     LuaFunction *function = (LuaFunction *)lua_touserdata(L, -1);
@@ -761,12 +753,12 @@ int LuaAPI_Dispatch(lua_State *L) {
     case 115:
         ShutDown(); return 0;
     default:
-        LuaError(Can_t_find_method_s_s, function->owner->name, function->name);
+        LuaError("Can't find method %s::%s", function->owner->name, function->name);
         return 0;
     }
 }
 
-Gap::Bec::beLuaWrapper::beLuaWrapper() : Class(text_be, text_igInfoManager, 0, 0, 0, 0, 0) {
+Gap::Bec::beLuaWrapper::beLuaWrapper() : Class("be", "igInfoManager", 0, 0, 0, 0, 0) {
 }
 
 /* The start-up hook's factory for the `be` class. */
@@ -775,7 +767,7 @@ igLuaGlue::Class *beLuaWrapper_Create(void) {
     return new (g_luaGluePool) Gap::Bec::beLuaWrapper;
 }
 
-Gap::BecLuaWrapper::BecLuaWrapper() : Class(::Bec, 0, 0, 0, 0, 0, 0) {
+Gap::BecLuaWrapper::BecLuaWrapper() : Class("Bec", 0, 0, 0, 0, 0, 0) {
 }
 
 /* The start-up hook's factory for the `Bec` class. */
@@ -787,6 +779,36 @@ igLuaGlue::Class *BecLuaWrapper_Create(void) {
 static LuaStartupHook beLuaStartupHook(beLuaWrapper_Create, 0);
 static LuaStartupHook BecLuaStartupHook(BecLuaWrapper_Create, 0);
 
+/* The managers be_Start finds, then the model, hit and damage state the queries below read. */
+beSystem *g_beSystem;
+beMessenger *g_beMessenger;
+beMatCtrl *g_matCtrl;
+beDemoManager *g_beDemoManager;
+be *g_be;
+beBaseInfoRam *g_mdlEntity;
+int g_mdlRamNo;
+float *g_mdlMatrix;
+int g_mdlMaxHp;
+int g_mdlHp;
+int g_mdlRecNo;
+const char *g_mdlInfoName;
+int g_mdlBulletKind;
+int g_mdlBulletBoxNo;
+const char *g_hitterInfoName;
+int g_bltShootRamNo;
+int g_hitterRecNo;
+unsigned char g_mdlDmgTurn[4];
+const char *g_mdlCallName;
+float *g_mdlWorldPosTarget;
+int g_txtCallNo;
+char g_mdlPosStrBuffer[64];
+char g_mdlRotStrBuffer[64];
+char g_playerDataStrBuffer[64];
+char g_playerPosStrBuffer[64];
+int g_damageResult;
+int g_attackZokusei;
+int g_damageFlag;
+
 /* The game's per-library class registration; this file registers no reflected class. */
 void LuaAPI_RegisterClasses(void)
 {
@@ -794,8 +816,7 @@ void LuaAPI_RegisterClasses(void)
 
 void Gap::Bec::beLuaWrapper::registerFunctions() {
     LuaClass_BindFunctions(this, 0, LuaAPI_Dispatch, g_luaApiFunctionNames,
-                           sizeof(g_luaApiFunctionNames) / sizeof(g_luaApiFunctionNames[0]),
-                           g_luaApiFunctionCodes, 0);
+                           LUA_API_FUNCTION_COUNT, g_luaApiFunctionCodes, 0);
 }
 
 void be_AddToScheduler(void)
@@ -810,12 +831,12 @@ void be_RemoveFromScheduler(void)
 void be_Start(be *self) {
     int demoManager;
 
-    g_beSystem[0] = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
-    g_beMessenger[0] = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
-    g_matCtrl[0] = (beMatCtrl *)igInsightCore_FindManager(self->_insight, g_beMatCtrl_metaObject[0]);
+    g_beSystem = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    g_beMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
+    g_matCtrl = (beMatCtrl *)igInsightCore_FindManager(self->_insight, g_beMatCtrl_metaObject[0]);
     demoManager = igInsightCore_FindManager(self->_insight, g_beDemoManager_metaObject[0]);
-    g_be[0] = self;
-    g_beDemoManager[0] = (beDemoManager *)demoManager;
+    g_be = self;
+    g_beDemoManager = (beDemoManager *)demoManager;
 }
 
 void be_Stop(void)
@@ -829,9 +850,9 @@ int be_AcceptInfo(void) {
 
 /* Empties the be's string list. */
 void be_Reset(void) {
-    clearStringList((igStringRefList *)g_be[0]->_stringRefList);
+    clearStringList((igStringRefList *)g_be->_stringRefList);
     {
-        igStringRefList *list = (igStringRefList *)g_be[0]->_stringRefList;
+        igStringRefList *list = (igStringRefList *)g_be->_stringRefList;
         if (!(0 < list->_count)) {
             List_Reserve(list, 0, 4);
         }
@@ -843,17 +864,19 @@ void be_Update(void)
 }
 
 /* Asks GAMERAM for a property record: the shared one (PLAYER_SLOT_COMMON) or a player's. */
+const char *g_getRecordCommands[5] = {"GETCOMMON", "GETPLAYER1", "GETPLAYER2", "GETPLAYER3", "GETPLAYER4"};
+
 int bePlayer_GetStruct(int slot) {
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, g_getRecordCommands[slot]);
-    return beMessenger_GetObject(g_beMessenger[0], 0);
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, g_getRecordCommands[slot]);
+    return beMessenger_GetObject(g_beMessenger, 0);
 }
 
 unsigned char SYSisJoinPlayer(int playerIndex) {
-    return igProperty_GetRecordByte(bePlayer_GetStruct(playerIndex + 1), ISUSE)->_data;
+    return igProperty_GetRecordByte(bePlayer_GetStruct(playerIndex + 1), "ISUSE")->_data;
 }
 
 const char *SYSgetPlayerName(int playerIndex) {
-    return (const char *)igProperty_GetRecordString(bePlayer_GetStruct(playerIndex + 1), DIGIMONNAME)->_data;
+    return (const char *)igProperty_GetRecordString(bePlayer_GetStruct(playerIndex + 1), "DIGIMONNAME")->_data;
 }
 
 /* The name of a player's power-socket weapon, or 0 past the end of the list. */
@@ -861,7 +884,7 @@ const char *SYSgetWeaponName(int playerIndex, int slot) {
     const char *name;
     igStringRefList *list;
 
-    list = (igStringRefList *)igProperty_GetRecordStringList(bePlayer_GetStruct(playerIndex + 1), POWERSOCKETNAME_4)->_data;
+    list = (igStringRefList *)igProperty_GetRecordStringList(bePlayer_GetStruct(playerIndex + 1), "POWERSOCKETNAME")->_data;
     if (list->_count <= slot) {
         return 0;
     }
@@ -874,25 +897,25 @@ const char *SYSgetWeaponName(int playerIndex, int slot) {
 
 /* NINZU: "number of people", the joined-player count. */
 int SYSgetPlayerNinzu(void) {
-    return igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), NINZU)->_data;
+    return igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), "NINZU")->_data;
 }
 
 int SYSgetDifficulty(void) {
-    return igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), DIFFICULTY)->_data;
+    return igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), "DIFFICULTY")->_data;
 }
 
 void SYSsetDifficulty(int difficulty) {
-    igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), DIFFICULTY)->_data = difficulty;
+    igProperty_GetRecord(bePlayer_GetStruct(PLAYER_SLOT_COMMON), "DIFFICULTY")->_data = difficulty;
 }
 
 int SYSgetCameraMode(void) {
-    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger[0], 0), CAMERAMODE)->_data;
+    beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
+    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger, 0), "CAMERAMODE")->_data;
 }
 
 int SYSgetLightMode(void) {
-    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger[0], 0), LIGHTMODE)->_data;
+    beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
+    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger, 0), "LIGHTMODE")->_data;
 }
 
 int SYSgetArea(void)
@@ -917,106 +940,106 @@ int SYSgetIsPackOnly(void)
 
 /* The game's only random-number entry point: genrand() % range. */
 unsigned int SYSgetRandom(unsigned int range) {
-    return ((RandomNumberDispatch *)g_beSystem[0]->_random)->genrand() % range;
+    return ((RandomNumberDispatch *)g_beSystem->_random)->genrand() % range;
 }
 
 /* Records the gate stage; a null name stores the empty string. */
 void SYSsetGateStage(const char *stageName, int stageNo) {
     int common;
 
-    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    common = beMessenger_GetObject(g_beMessenger[0], 0);
-    igProperty_GetRecord(common, GATESTAGENO)->_data = stageNo;
+    beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
+    common = beMessenger_GetObject(g_beMessenger, 0);
+    igProperty_GetRecord(common, "GATESTAGENO")->_data = stageNo;
     if (stageName == 0) {
-        setRecordString(igProperty_GetRecordString(common, GATESTAGENAME), EMPTY);
+        setRecordString(igProperty_GetRecordString(common, "GATESTAGENAME"), "");
         return;
     }
-    setRecordString(igProperty_GetRecordString(common, GATESTAGENAME), stageName);
+    setRecordString(igProperty_GetRecordString(common, "GATESTAGENAME"), stageName);
 }
 
 const char *SYSgetGateStageName(void) {
-    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    return (const char *)igProperty_GetRecordString(beMessenger_GetObject(g_beMessenger[0], 0), GATESTAGENAME)->_data;
+    beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
+    return (const char *)igProperty_GetRecordString(beMessenger_GetObject(g_beMessenger, 0), "GATESTAGENAME")->_data;
 }
 
 int SYSgetGateStageNo(void) {
-    beMessenger_SendGroup(g_beMessenger[0], GAMERAM, GETCOMMON);
-    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger[0], 0), GATESTAGENO)->_data;
+    beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
+    return igProperty_GetRecord(beMessenger_GetObject(g_beMessenger, 0), "GATESTAGENO")->_data;
 }
 
 /* GAMERAM CTRLITEM requests: a kind, a command, an item database, then four integers. */
 unsigned char SYSctlDeviceFolder(const char *command, int index, const char *itemDb, int itemId, int extra0, int extra1) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], DEVICE);
-    beMessenger_AppendString(g_beMessenger[0], command);
-    beMessenger_AppendString(g_beMessenger[0], itemDb);
-    beMessenger_AppendInt(g_beMessenger[0], index);
-    beMessenger_AppendInt(g_beMessenger[0], itemId);
-    beMessenger_AppendInt(g_beMessenger[0], extra0);
-    beMessenger_AppendInt(g_beMessenger[0], extra1);
-    beMessenger_DispatchSelected(g_beMessenger[0], CTRLITEM);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "DEVICE");
+    beMessenger_AppendString(g_beMessenger, command);
+    beMessenger_AppendString(g_beMessenger, itemDb);
+    beMessenger_AppendInt(g_beMessenger, index);
+    beMessenger_AppendInt(g_beMessenger, itemId);
+    beMessenger_AppendInt(g_beMessenger, extra0);
+    beMessenger_AppendInt(g_beMessenger, extra1);
+    beMessenger_DispatchSelected(g_beMessenger, "CTRLITEM");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 unsigned char SYSctlDiskFolder(const char *command, int index, int itemId, int count) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], DISK);
-    beMessenger_AppendString(g_beMessenger[0], command);
-    beMessenger_AppendString(g_beMessenger[0], EMPTY);
-    beMessenger_AppendInt(g_beMessenger[0], index);
-    beMessenger_AppendInt(g_beMessenger[0], itemId);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_AppendInt(g_beMessenger[0], count);
-    beMessenger_DispatchSelected(g_beMessenger[0], CTRLITEM);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "DISK");
+    beMessenger_AppendString(g_beMessenger, command);
+    beMessenger_AppendString(g_beMessenger, "");
+    beMessenger_AppendInt(g_beMessenger, index);
+    beMessenger_AppendInt(g_beMessenger, itemId);
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_AppendInt(g_beMessenger, count);
+    beMessenger_DispatchSelected(g_beMessenger, "CTRLITEM");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 unsigned char SYSctlFlagFolder(const char *command, int index) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], FLAG);
-    beMessenger_AppendString(g_beMessenger[0], command);
-    beMessenger_AppendString(g_beMessenger[0], EMPTY);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_AppendInt(g_beMessenger[0], index);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_DispatchSelected(g_beMessenger[0], CTRLITEM);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "FLAG");
+    beMessenger_AppendString(g_beMessenger, command);
+    beMessenger_AppendString(g_beMessenger, "");
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_AppendInt(g_beMessenger, index);
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_DispatchSelected(g_beMessenger, "CTRLITEM");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 int SYSctlBit(const char *command, int index, int value) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], BIT);
-    beMessenger_AppendString(g_beMessenger[0], command);
-    beMessenger_AppendString(g_beMessenger[0], EMPTY);
-    beMessenger_AppendInt(g_beMessenger[0], index);
-    beMessenger_AppendInt(g_beMessenger[0], value);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_AppendInt(g_beMessenger[0], 0);
-    beMessenger_DispatchSelected(g_beMessenger[0], CTRLITEM);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "BIT");
+    beMessenger_AppendString(g_beMessenger, command);
+    beMessenger_AppendString(g_beMessenger, "");
+    beMessenger_AppendInt(g_beMessenger, index);
+    beMessenger_AppendInt(g_beMessenger, value);
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_AppendInt(g_beMessenger, 0);
+    beMessenger_DispatchSelected(g_beMessenger, "CTRLITEM");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int SYSgetPlayerLevel(int playerIndex) {
-    return igProperty_GetRecord(bePlayer_GetStruct(playerIndex + 1), LEVEL)->_data;
+    return igProperty_GetRecord(bePlayer_GetStruct(playerIndex + 1), "LEVEL")->_data;
 }
 
 int SYSgetPlayerDigimon(int playerIndex) {
-    return igProperty_GetRecord(bePlayer_GetStruct(playerIndex + 1), DIGIMONNO)->_data;
+    return igProperty_GetRecord(bePlayer_GetStruct(playerIndex + 1), "DIGIMONNO")->_data;
 }
 
 /* SHINKA: "evolution". Whether the player has obtained the species (BASE_ISUSE). */
 unsigned char SYSisGetShinkaDigimon(int playerIndex, int species)
 {
-    igBoolList *obtained = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), BASE_ISUSE_4)->_data;
+    igBoolList *obtained = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), "BASE_ISUSE")->_data;
     return *(unsigned char *)(obtained->_data + species);
 }
 
 /* The first player's card list: KAZU counts the cards held, SET and CLR take or give back the
  * card at `index` and report whether it changed. */
 int SYSctlCardFolder(const char *command, int index) {
-    igBoolList *cards = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(PLAYER_SLOT_FIRST), CARDLIST_2)->_data;
-    if (strcmp(command, KAZU) == 0) {
+    igBoolList *cards = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(PLAYER_SLOT_FIRST), "CARDLIST")->_data;
+    if (strcmp(command, "KAZU") == 0) {
         int count = cards->_count;
         int total = 0;
         int i;
@@ -1025,16 +1048,16 @@ int SYSctlCardFolder(const char *command, int index) {
         }
         return total;
     }
-    if (strcmp(command, SET_3) == 0) {
+    if (strcmp(command, "SET") == 0) {
         unsigned char *card = (unsigned char *)cards->_data + index;
         if (*card != 0) return 0;
-        if (cards->_count != 0 && index >= 0 && index < cards->_count) *card = g_cardFolderSetValue;
+        ListSet(cards, index, true);
         return 1;
     }
-    if (strcmp(command, CLR_4) == 0) {
+    if (strcmp(command, "CLR") == 0) {
         unsigned char *card = (unsigned char *)cards->_data + index;
         if (*card == 0) return 0;
-        if (cards->_count != 0 && index >= 0 && index < cards->_count) *card = g_cardFolderClearValue;
+        ListSet(cards, index, false);
         return 1;
     }
     return 0;
@@ -1047,19 +1070,19 @@ int SYSctlShinka(const char *command, int playerIndex, int species) {
     int result;
     igBoolList *obtainedList;
     unsigned char *obtainedFlags;
-    obtainedFlags = (unsigned char *)((igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), BASE_ISUSE_4)->_data)->_data; /* matching construct: byte base held in a pointer local keeps the retail operand order of the index add */
+    obtainedFlags = (unsigned char *)((igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), "BASE_ISUSE")->_data)->_data; /* matching construct: byte base held in a pointer local keeps the retail operand order of the index add */
     obtained = obtainedFlags[species];
-    if (strcmp(command, GETEXP) == 0) {
-        if (obtained != 0) result = ((int *)((igIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(playerIndex + 1), BASE_EXP_3)->_data)->_data)[species];
+    if (strcmp(command, "GETEXP") == 0) {
+        if (obtained != 0) result = ((int *)((igIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(playerIndex + 1), "BASE_EXP")->_data)->_data)[species];
         else result = -1;
-    } else if (strcmp(command, GETLEVEL) == 0) {
-        if (obtained != 0) result = ((int *)((igIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(playerIndex + 1), BASE_LEVEL_3)->_data)->_data)[species];
+    } else if (strcmp(command, "GETLEVEL") == 0) {
+        if (obtained != 0) result = ((int *)((igIntList *)igProperty_GetRecordIntList(bePlayer_GetStruct(playerIndex + 1), "BASE_LEVEL")->_data)->_data)[species];
         else result = -1;
-    } else if (strcmp(command, SETSHINKA) == 0) {
+    } else if (strcmp(command, "SETSHINKA") == 0) {
         if (obtained != 0) result = 0;
         else {
-            obtainedList = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), BASE_ISUSE_4)->_data;
-            if (obtainedList->_count != 0 && species >= 0 && species < obtainedList->_count) ((unsigned char *)obtainedList->_data)[species] = g_shinkaSetValue;
+            obtainedList = (igBoolList *)igProperty_GetRecordArray(bePlayer_GetStruct(playerIndex + 1), "BASE_ISUSE")->_data;
+            ListSet(obtainedList, species, true);
             result = 1;
         }
     } else result = 0;
@@ -1068,20 +1091,20 @@ int SYSctlShinka(const char *command, int playerIndex, int species) {
 
 /* GAMERAM CTRLPLAYER request: a property, a command, a player and a value. */
 int SYSctlPlayer(const char *property, const char *command, int playerIndex, int value) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], property);
-    beMessenger_AppendString(g_beMessenger[0], command);
-    beMessenger_AppendInt(g_beMessenger[0], playerIndex);
-    beMessenger_AppendInt(g_beMessenger[0], value);
-    beMessenger_DispatchSelected(g_beMessenger[0], CTRLPLAYER);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, property);
+    beMessenger_AppendString(g_beMessenger, command);
+    beMessenger_AppendInt(g_beMessenger, playerIndex);
+    beMessenger_AppendInt(g_beMessenger, value);
+    beMessenger_DispatchSelected(g_beMessenger, "CTRLPLAYER");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 /* CFL: the system's list of files read for the stage. */
 void CFLclear(void) {
-    clearStringList((igStringRefList *)g_beSystem[0]->_readFileList);
+    clearStringList((igStringRefList *)g_beSystem->_readFileList);
     {
-        igStringRefList *list = (igStringRefList *)g_beSystem[0]->_readFileList;
+        igStringRefList *list = (igStringRefList *)g_beSystem->_readFileList;
         if (!(0 < list->_count)) {
             List_Reserve(list, 0, 4);
         }
@@ -1097,7 +1120,7 @@ void CFLsetName(const char *name) {
     int i;
 
     found = false;
-    list = (igStringRefList *)g_beSystem[0]->_readFileList;
+    list = (igStringRefList *)g_beSystem->_readFileList;
     count = list->_count;
     i = 0;
     if (0 < count) {
@@ -1126,7 +1149,7 @@ void CFLsetName(const char *name) {
 }
 
 const char *CFLgetFolderName(void) {
-    return (const char *)g_beSystem[0]->_stageName;
+    return (const char *)g_beSystem->_stageName;
 }
 
 /* Appends sd's argument string to the selected message. The string is '/'-separated; a part of
@@ -1181,7 +1204,7 @@ void Lua_sd_OptionalArg(const char *args) {
             for (i = 0; i < partCount; i++, cursor++) {
                 part = *cursor;
                 if (part[1] != '<') {
-                    beMessenger_AppendString(g_beMessenger[0], part);
+                    beMessenger_AppendString(g_beMessenger, part);
                 } else {
                     switch (part[0]) {
                     case 'I':
@@ -1198,7 +1221,7 @@ void Lua_sd_OptionalArg(const char *args) {
                             k++;
                         }
                         if (negative) intValue = -intValue;
-                        beMessenger_AppendInt(g_beMessenger[0], intValue);
+                        beMessenger_AppendInt(g_beMessenger, intValue);
                         break;
                     case 'L':
                         longValue = 0;
@@ -1208,21 +1231,21 @@ void Lua_sd_OptionalArg(const char *args) {
                             longValue += part[k] - '0';
                             k++;
                         }
-                        beMessenger_AppendLong(g_beMessenger[0], longValue);
+                        beMessenger_AppendLong(g_beMessenger, longValue);
                         break;
                     case 'V':
-                        Vec3f_FromString(part + 1, parsed, text_vec3Format);
+                        Vec3f_FromString(part + 1, parsed, " < %f , %f , %f > ");
                         vector[0] = parsed[0];
                         vector[1] = parsed[1];
                         vector[2] = parsed[2];
-                        beMessenger_AppendVec3(g_beMessenger[0], vector);
+                        beMessenger_AppendVec3(g_beMessenger, vector);
                         break;
                     case 'F':
-                        text = (igStringObj *)g_beSystem[0]->_globalStrObj;
+                        text = (igStringObj *)g_beSystem->_globalStrObj;
                         igStringObj_Set(text, part + 2);
                         igStringObj_Erase(text, text->_length - 1, 1);
                         igStringObj_ToFloat(text, &floatValue);
-                        beMessenger_AppendFloat(g_beMessenger[0], floatValue);
+                        beMessenger_AppendFloat(g_beMessenger, floatValue);
                         break;
                     default:
                         break;
@@ -1236,119 +1259,119 @@ void Lua_sd_OptionalArg(const char *args) {
 /* sd: send a message to the receivers a group, info name and ram number select, with an
  * optional argument string (Lua_sd_OptionalArg) and, for the delayed forms, a delay. */
 void sd_29(const char *group, const char *infoName, int ramNo, const char *message, const char *args) {
-    beMessenger_SelectReceivers(g_beMessenger[0], group, infoName, ramNo);
+    beMessenger_SelectReceivers(g_beMessenger, group, infoName, ramNo);
     if (args != 0) {
         Lua_sd_OptionalArg(args);
     }
-    beMessenger_DispatchSelected(g_beMessenger[0], message);
+    beMessenger_DispatchSelected(g_beMessenger, message);
 }
 
 void sd_30(const char *group, const char *infoName, int ramNo, const char *message) {
-    beMessenger_SendNamed(g_beMessenger[0], group, infoName, ramNo, message);
+    beMessenger_SendNamed(g_beMessenger, group, infoName, ramNo, message);
 }
 
 void sd_31(const char *group, const char *infoName, int ramNo, const char *message, const char *args, long long delay) {
-    beMessenger_PrepareDelayedSelection(g_beMessenger[0], group, infoName, ramNo);
+    beMessenger_PrepareDelayedSelection(g_beMessenger, group, infoName, ramNo);
     if (args != 0) {
         Lua_sd_OptionalArg(args);
     }
-    beMessenger_EnqueueSelected(g_beMessenger[0], message, delay);
+    beMessenger_EnqueueSelected(g_beMessenger, message, delay);
 }
 
 void sd_32(const char *group, const char *infoName, int ramNo, const char *message, long long delay) {
-    beMessenger_SendDelayedNamed(g_beMessenger[0], group, infoName, ramNo, message, delay);
+    beMessenger_SendDelayedNamed(g_beMessenger, group, infoName, ramNo, message, delay);
 }
 
-unsigned char MATisPlayer(void) { return beMatCtrl_IsPlayer(g_matCtrl[0]); }
+unsigned char MATisPlayer(void) { return beMatCtrl_IsPlayer(g_matCtrl); }
 
-unsigned char MATisAllPlayer(void) { return beMatCtrl_IsAllPlayer(g_matCtrl[0]); }
+unsigned char MATisAllPlayer(void) { return beMatCtrl_IsAllPlayer(g_matCtrl); }
 
-int MATgetPlayerNo(void) { return beMatCtrl_GetPlayerNo(g_matCtrl[0]); }
+int MATgetPlayerNo(void) { return beMatCtrl_GetPlayerNo(g_matCtrl); }
 
-unsigned char MATisRidePlayer(int player) { return beMatCtrl_IsRidePlayer(g_matCtrl[0], player); }
+unsigned char MATisRidePlayer(int player) { return beMatCtrl_IsRidePlayer(g_matCtrl, player); }
 
-unsigned char MATisRideOffPlayer(int player) { return beMatCtrl_IsRideOffPlayer(g_matCtrl[0], player); }
+unsigned char MATisRideOffPlayer(int player) { return beMatCtrl_IsRideOffPlayer(g_matCtrl, player); }
 
-int MATgetPlayerMatStat(int player) { return beMatCtrl_GetPlayerMatStat(g_matCtrl[0], player); }
+int MATgetPlayerMatStat(int player) { return beMatCtrl_GetPlayerMatStat(g_matCtrl, player); }
 
-void MATsetRun(int run) { beMatCtrl_SetRun(g_matCtrl[0], run); }
+void MATsetRun(int run) { beMatCtrl_SetRun(g_matCtrl, run); }
 
 /* DM: queue messages on the demo manager's build data; DMrun hands the queue over to play. */
 void DMsetSD_40(const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime) {
-    beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND, group, infoName, ramNo, message, param, sendTime);
+    beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND, group, infoName, ramNo, message, param, sendTime);
 }
 
 void DMsetSD_41(const char *group, const char *infoName, int ramNo, const char *message, const char *param) {
-    beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND, group, infoName, ramNo, message, param, 0);
+    beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND, group, infoName, ramNo, message, param, 0);
 }
 
 void DMsetSD_42(const char *group, const char *infoName, int ramNo, const char *message, long long sendTime) {
-    beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND, group, infoName, ramNo, message, 0, sendTime);
+    beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND, group, infoName, ramNo, message, 0, sendTime);
 }
 
 void DMsetSD_43(const char *group, const char *infoName, int ramNo, const char *message)
 {
-    beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND, group, infoName, ramNo, message, 0, 0);
+    beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND, group, infoName, ramNo, message, 0, 0);
 }
 
 /* A wait: the message is sent again every update while its bool reply meets the condition ("!=0" and
  * "==1" wait out a true reply, "==0" and "!=1" a false one). */
 void DMchkSD_44(const char *group, const char *infoName, int ramNo, const char *message, const char *param, const char *condition) {
-    if (strcmp(text_ne0, condition) == 0 || strcmp(text_eq1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, param, 0);
-    } else if (strcmp(text_eq0, condition) == 0 || strcmp(text_ne1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, param, 0);
+    if (strcmp("!=0", condition) == 0 || strcmp("==1", condition) == 0) {
+        beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, param, 0);
+    } else if (strcmp("==0", condition) == 0 || strcmp("!=1", condition) == 0) {
+        beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, param, 0);
     }
 }
 
 void DMchkSD_45(const char *group, const char *infoName, int ramNo, const char *message, const char *condition) {
-    if (strcmp(text_ne0, condition) == 0 || strcmp(text_eq1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, 0, 0);
-    } else if (strcmp(text_eq0, condition) == 0 || strcmp(text_ne1, condition) == 0) {
-        beDemoManager_AddKeepMes(g_beDemoManager[0], DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, 0, 0);
+    if (strcmp("!=0", condition) == 0 || strcmp("==1", condition) == 0) {
+        beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND_UNTIL_FALSE, group, infoName, ramNo, message, 0, 0);
+    } else if (strcmp("==0", condition) == 0 || strcmp("!=1", condition) == 0) {
+        beDemoManager_AddKeepMes(g_beDemoManager, DEMO_MES_SEND_UNTIL_TRUE, group, infoName, ramNo, message, 0, 0);
     }
 }
 
 void DMsetLua(const char *chunk)
 {
-    beDemoManager_SetLua(g_beDemoManager[0], chunk);
+    beDemoManager_SetLua(g_beDemoManager, chunk);
 }
 
 void DMmsgBox(const char *text, int ramNo) {
-    beDemoManager_MsgBox(g_beDemoManager[0], text, ramNo);
+    beDemoManager_MsgBox(g_beDemoManager, text, ramNo);
 }
 
 void DMswtSD_46(const char *group, const char *infoName, int ramNo, const char *message, const char *param) {
-    beDemoManager_SwitchSD(g_beDemoManager[0], group, infoName, ramNo, message, param);
+    beDemoManager_SwitchSD(g_beDemoManager, group, infoName, ramNo, message, param);
 }
 
 void DMswtSD_47(const char *group, const char *infoName, int ramNo, const char *message) {
-    beDemoManager_SwitchSD(g_beDemoManager[0], group, infoName, ramNo, message, 0);
+    beDemoManager_SwitchSD(g_beDemoManager, group, infoName, ramNo, message, 0);
 }
 
 void DMswtEnd(void)
 {
-    beDemoManager_SwitchEnd(g_beDemoManager[0]);
+    beDemoManager_SwitchEnd(g_beDemoManager);
 }
 
 void DMcase(int ramNo)
 {
-    beDemoManager_Case(g_beDemoManager[0], ramNo);
+    beDemoManager_Case(g_beDemoManager, ramNo);
 }
 
 void DMrun(void)
 {
-    beDemoManager_Run(g_beDemoManager[0]);
+    beDemoManager_Run(g_beDemoManager);
 }
 
 /* The number of queued demos; with none queued, -1 while the SUBWND window runs, else 0. */
 int DMgetCount(void) {
     int count;
-    count = ((beDemoManagerWorkList *)g_beDemoManager[0]->_activeDataList)->_count;
+    count = ((beDemoManagerWorkList *)g_beDemoManager->_activeDataList)->_count;
     if (count != 0) { return count; }
-    beMessenger_SendNamed(g_beMessenger[0], SUBWND_3, 0, 0, ISRUN_6);
-    if (beMessenger_GetBoolCount(g_beMessenger[0]) == 0) { return 0; }
-    count = beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SendNamed(g_beMessenger, "SUBWND", 0, 0, "ISRUN");
+    if (beMessenger_GetBoolCount(g_beMessenger) == 0) { return 0; }
+    count = beMessenger_GetBool(g_beMessenger, 0);
     count = (count & 0xFF) != 0;
     return -count;
 }
@@ -1357,12 +1380,12 @@ int DMgetCount(void) {
 unsigned char FLGisOn(int flagNo) {
     int common;
 
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    common = beMessenger_GetObject(g_beMessenger[0], 0);
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
+    common = beMessenger_GetObject(g_beMessenger, 0);
     if (flagNo == FLAG_PLAYERS_JOINED) {
         return SYSgetPlayerNinzu() != 0;
     }
-    igBoolList *flags = (igBoolList *)igProperty_GetRecordArray(common, FLAG)->_data;
+    igBoolList *flags = (igBoolList *)igProperty_GetRecordArray(common, "FLAG")->_data;
     return *(unsigned char *)(flags->_data + flagNo);
 }
 
@@ -1370,8 +1393,8 @@ void FLGset(int flagNo, unsigned char on) {
     igBoolList *flags;
     int count;
 
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    flags = (igBoolList *)igProperty_GetRecordArray(beMessenger_GetObject(g_beMessenger[0], 0), FLAG)->_data;
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
+    flags = (igBoolList *)igProperty_GetRecordArray(beMessenger_GetObject(g_beMessenger, 0), "FLAG")->_data;
     count = flags->_count;
     if ((count != 0) && (flagNo >= 0) && (flagNo < count)) {
         *(char *)(flagNo + flags->_data) = on;
@@ -1380,32 +1403,22 @@ void FLGset(int flagNo, unsigned char on) {
 
 void FLGflip(int flagNo) {
     int common;
-    igBoolList *flags;
-    int count;
     unsigned char *values;
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    common = beMessenger_GetObject(g_beMessenger[0], 0);
-    values = (unsigned char *)((igBoolList *)igProperty_GetRecordArray(common, FLAG)->_data)->_data;
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
+    common = beMessenger_GetObject(g_beMessenger, 0);
+    values = (unsigned char *)((igBoolList *)igProperty_GetRecordArray(common, "FLAG")->_data)->_data;
     if (values[flagNo] != 0) {
-        flags = (igBoolList *)igProperty_GetRecordArray(common, FLAG)->_data;
-        count = flags->_count;
-        if (count != 0 && flagNo >= 0 && flagNo < count) {
-            ((unsigned char *)flags->_data)[flagNo] = g_flagFlipOffValue;
-        }
+        ListSet((igBoolList *)igProperty_GetRecordArray(common, "FLAG")->_data, flagNo, false);
     } else {
-        flags = (igBoolList *)igProperty_GetRecordArray(common, FLAG)->_data;
-        count = flags->_count;
-        if (count != 0 && flagNo >= 0 && flagNo < count) {
-            ((unsigned char *)flags->_data)[flagNo] = g_flagFlipOnValue;
-        }
+        ListSet((igBoolList *)igProperty_GetRecordArray(common, "FLAG")->_data, flagNo, true);
     }
 }
 
 void COUNTERset(int counterNo, int value) {
     igIntList *counters;
     int count;
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    counters = (igIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger[0], 0), COUNTER_2)->_data;
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
+    counters = (igIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger, 0), "COUNTER")->_data;
     count = counters->_count;
     if ((count != 0) && (counterNo >= 0) && (counterNo < count)) {
         *(int *)(counters->_data + (counterNo * 4)) = value;
@@ -1414,18 +1427,18 @@ void COUNTERset(int counterNo, int value) {
 
 int COUNTERget(int counterNo)
 {
-    beMessenger_SendNamed(g_beMessenger[0], GAMERAM, 0, 0, GETCOMMON);
-    return ((int *)((igIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger[0], 0), COUNTER_2)->_data)->_data)[counterNo];
+    beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
+    return ((int *)((igIntList *)igProperty_GetRecordIntList(beMessenger_GetObject(g_beMessenger, 0), "COUNTER")->_data)->_data)[counterNo];
 }
 
 int MDLgetRamNo(void)
 {
-    return g_mdlRamNo[0];
+    return g_mdlRamNo;
 }
 
 const char *MDLgetInfoName(void)
 {
-    return g_mdlInfoName[0];
+    return g_mdlInfoName;
 }
 
 /* The model's position moved by a local offset, as "V<x,y,z>". */
@@ -1435,13 +1448,13 @@ char *MDLgetPosStr(float x, float y, float z) {
     float position[3];
 
     igMatrix44f_SetIdentity(matrix);
-    igMatrix44f_Copy(matrix, g_mdlMatrix[0]);
+    igMatrix44f_Copy(matrix, g_mdlMatrix);
     offset[0] = x;
     offset[1] = y;
     offset[2] = z;
     igMatrix44f_TranslateLocal(matrix, offset);
     igMatrix44f_GetTranslation(matrix, position);
-    sprintf(g_mdlPosStrBuffer, V_f_f_f, position[0], position[1], position[2]);
+    sprintf(g_mdlPosStrBuffer, "V<%f,%f,%f>", position[0], position[1], position[2]);
     return g_mdlPosStrBuffer;
 }
 
@@ -1451,38 +1464,38 @@ char *MDLgetRotStr(float x, float y, float z) {
     float matrix[16];
     float heading;
     igMatrix44f_SetIdentity(matrix);
-    igMatrix44f_Copy(matrix, g_mdlMatrix[0]);
+    igMatrix44f_Copy(matrix, g_mdlMatrix);
     Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
-    sprintf(g_mdlRotStrBuffer, V_f_f_f, x, RADIANS_TO_DEGREES * heading + y, z);
+    sprintf(g_mdlRotStrBuffer, "V<%f,%f,%f>", x, RADIANS_TO_DEGREES * heading + y, z);
     return g_mdlRotStrBuffer;
 }
 
 int MDLgetMHp(void)
 {
-    return g_mdlMaxHp[0];
+    return g_mdlMaxHp;
 }
 
 int MDLgetHp(void)
 {
-    return g_mdlHp[0];
+    return g_mdlHp;
 }
 
 void MDLaddHp(int amount) {
-    g_mdlHp[0] = g_mdlHp[0] + amount;
-    if (g_mdlHp[0] < 0) {
-        g_mdlHp[0] = 0;
+    g_mdlHp = g_mdlHp + amount;
+    if (g_mdlHp < 0) {
+        g_mdlHp = 0;
     }
 }
 
 void MDLsetSeq(const char *sequence)
 {
-    beMessenger_SendNamed(g_beMessenger[0], MODELCTRL_9, g_mdlInfoName[0], g_mdlRamNo[0], sequence);
+    beMessenger_SendNamed(g_beMessenger, "MODELCTRL", g_mdlInfoName, g_mdlRamNo, sequence);
 }
 
 void MDLsetSD(const char *message, const char *args)
 {
-    sd_29(MODELCTRL_9, g_mdlInfoName[0], g_mdlRamNo[0], message, args);
+    sd_29("MODELCTRL", g_mdlInfoName, g_mdlRamNo, message, args);
 }
 
 /* Whether any of the named models still runs. */
@@ -1490,11 +1503,11 @@ unsigned char MDLisLive(const char *infoName, int ramNo) {
     int count;
     bool live;
     int i;
-    beMessenger_SendNamed(g_beMessenger[0], MODELCTRL_9, infoName, ramNo, ISRUN_6);
-    count = beMessenger_GetBoolCount(g_beMessenger[0]);
+    beMessenger_SendNamed(g_beMessenger, "MODELCTRL", infoName, ramNo, "ISRUN");
+    count = beMessenger_GetBoolCount(g_beMessenger);
     live = false;
     for (i = 0; i < count; i++) {
-        if (beMessenger_GetBool(g_beMessenger[0], i)) {
+        if (beMessenger_GetBool(g_beMessenger, i)) {
             live = true;
             break;
         }
@@ -1504,17 +1517,27 @@ unsigned char MDLisLive(const char *infoName, int ramNo) {
 
 int MDLgetBulletKind(void)
 {
-    return g_mdlBulletKind[0];
+    return g_mdlBulletKind;
 }
 
+const char *g_bulletKindNames[9] = {0, "PCWA", "PCCA", "PCSA", "PCMA", "PCBA", "PCTK", "ENAT", "PCMK"};
+
 const char *MDLgetBulletName(void) {
-    return g_bulletKindNames[g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE];
+    return g_bulletKindNames[g_mdlBulletKind / BULLET_KIND_GROUP_SIZE];
 }
 
 int MDLgetBulletBoxNo(void)
 {
-    return g_mdlBulletBoxNo[0];
+    return g_mdlBulletBoxNo;
 }
+
+FloatingNumberStyleData g_floatingNumberStyles[5] = {
+    {"i_dmgnum", "dmgnm0", {"SQ_DMGNM01", "SQ_DMGNM02", "SQ_DMGNM03", "SQ_DMGNM04", "SQ_DMGNM05"}},
+    {"i_expnum", "expnm0", {"SQ_EXPNM01", "SQ_EXPNM02", "SQ_EXPNM03", "SQ_EXPNM04", "SQ_EXPNM04"}},
+    {"i_healnum", "healnm0", {"SQ_HEALNM01", "SQ_HEALNM02", "SQ_HEALNM03", "SQ_HEALNM04", "SQ_HEALNM05"}},
+    {"i_pcdmgnum", "dmgnm1", {"SQ_DMGNM01", "SQ_DMGNM02", "SQ_DMGNM03", "SQ_DMGNM04", "SQ_DMGNM05"}},
+    {"i_bitnum", "bitnum0", {"SQ_BITNM01", "SQ_BITNM02", "SQ_BITNM03", "SQ_BITNM04", "SQ_BITNM04"}},
+};
 
 /* Pops a number up at the model: a free floating-number model plays the sequence for the digit
  * count at the model's position, and its number control shows the value (capped at 99999). */
@@ -1526,9 +1549,9 @@ void FloatingNumber_Spawn(int value, int style) {
     const char *sequence;
     float position[3];
     float at[3];
-    beMessenger_SendNamed(g_beMessenger[0], MODELCTRL_9, modelInfoName, -1, FIND_SPACE_2);
-    if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
-        number = (beBaseInfoRam *)beMessenger_GetObject(g_beMessenger[0], 0);
+    beMessenger_SendNamed(g_beMessenger, "MODELCTRL", modelInfoName, -1, "FIND_SPACE");
+    if (beMessenger_GetObjectCount(g_beMessenger) != 0) {
+        number = (beBaseInfoRam *)beMessenger_GetObject(g_beMessenger, 0);
         if (value < 10) digits = 0;
         else if (value < 100) digits = 1;
         else if (value < 1000) digits = 2;
@@ -1536,15 +1559,15 @@ void FloatingNumber_Spawn(int value, int style) {
         else if (value < 100000) digits = 4;
         else { digits = 4; value = 99999; }
         sequence = g_floatingNumberStyles[style].digitSequences[digits];
-        beMessenger_SelectReceivers(g_beMessenger[0], MODELCTRL_9, modelInfoName, number->_ramNo);
-        beMessenger_AppendString(g_beMessenger[0], sequence);
-        igMatrix44f_GetTranslation(g_mdlMatrix[0], position);
+        beMessenger_SelectReceivers(g_beMessenger, "MODELCTRL", modelInfoName, number->_ramNo);
+        beMessenger_AppendString(g_beMessenger, sequence);
+        igMatrix44f_GetTranslation(g_mdlMatrix, position);
         at[0] = position[0]; at[1] = position[1]; at[2] = position[2];
-        beMessenger_AppendVec3(g_beMessenger[0], at);
-        beMessenger_DispatchSelected(g_beMessenger[0], GENERATE_8);
-        beMessenger_SelectReceivers(g_beMessenger[0], NUMBERCTRL_3, numberInfoName, number->_ramNo);
-        beMessenger_AppendInt(g_beMessenger[0], value);
-        beMessenger_DispatchSelected(g_beMessenger[0], SETVALUE_3);
+        beMessenger_AppendVec3(g_beMessenger, at);
+        beMessenger_DispatchSelected(g_beMessenger, "GENERATE");
+        beMessenger_SelectReceivers(g_beMessenger, "NUMBERCTRL", numberInfoName, number->_ramNo);
+        beMessenger_AppendInt(g_beMessenger, value);
+        beMessenger_DispatchSelected(g_beMessenger, "SETVALUE");
     }
 }
 
@@ -1571,13 +1594,13 @@ static inline int isZero(int value) { return value == 0; }
 
 /* Whether the model was called by `name`; with no call name, whether `name` is null. */
 unsigned char MDLisCallName(const char *name) {
-    const char *callName = g_mdlCallName[0];
+    const char *callName = g_mdlCallName;
     if (callName == 0) return isZero((int)name);
     return isZero(strcmp(callName, name));
 }
 
 void MDLsetWorldPosTarget_78(float x, float y, float z) {
-    float *target = g_mdlWorldPosTarget[0];
+    float *target = g_mdlWorldPosTarget;
     if (target != 0) {
         target[0] = x;
         target[1] = y;
@@ -1591,10 +1614,10 @@ void MDLsetWorldPosTarget_79(const char *text) {
     float x, y, z;
     float *target;
 
-    if (g_mdlWorldPosTarget[0] != 0) {
-        Vec3f_FromString(text, parsed, V_f_f_f);
+    if (g_mdlWorldPosTarget != 0) {
+        Vec3f_FromString(text, parsed, "V<%f,%f,%f>");
         x = parsed[0]; z = parsed[2]; y = parsed[1];
-        target = g_mdlWorldPosTarget[0];
+        target = g_mdlWorldPosTarget;
         target[0] = x;
         target[1] = y;
         target[2] = z;
@@ -1605,7 +1628,7 @@ void MDLsetWorldPosTarget_79(const char *text) {
 float MDLgetKyoriSquare(float x, float y, float z) {
     float position[3];
     float dx, dy, dz;
-    igMatrix44f_GetTranslation(g_mdlMatrix[0], position);
+    igMatrix44f_GetTranslation(g_mdlMatrix, position);
     dy = position[1] - y;
     dx = position[0] - x;
     dz = position[2] - z;
@@ -1614,12 +1637,12 @@ float MDLgetKyoriSquare(float x, float y, float z) {
 
 int MDLgetRecNo(void)
 {
-    return g_mdlRecNo[0];
+    return g_mdlRecNo;
 }
 
 /* Whether the model's current sequence is `sequence`; creates the model's data list if it has none. */
 unsigned char MDLisSeqName(const char *sequence) {
-    beBaseInfoRam *model = g_mdlEntity[0];
+    beBaseInfoRam *model = g_mdlEntity;
     if (model->_dataList == 0) {
         igObject *old;
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocatorFor(model)));
@@ -1636,24 +1659,24 @@ unsigned char MDLisSeqName(const char *sequence) {
         }
         model->_dataList = (int)list;
     }
-    beModelCtrlInfoRamData *data = igProperty_FindByName(model->_dataList, g_propertyNameField[0], ONE_7);
+    beModelCtrlInfoRamData *data = igProperty_FindByName(model->_dataList, g_propertyNameField[0], "ONE");
     return strcmp((const char *)((beModelCtrlInfoWork *)data->_work)->_seqCodeName, sequence) == 0;
 }
 
 /* Asks the named model whether it is in a status (CHECKSTATUS); false without exactly one reply. */
 unsigned char MDLisStatus(const char *infoName, int ramNo, const char *status) {
-    beMessenger_SelectReceivers(g_beMessenger[0], MODELCTRL_9, infoName, ramNo);
-    beMessenger_AppendString(g_beMessenger[0], status);
-    beMessenger_DispatchSelected(g_beMessenger[0], CHECKSTATUS);
-    if (beMessenger_GetBoolCount(g_beMessenger[0]) == 1) {
-        return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectReceivers(g_beMessenger, "MODELCTRL", infoName, ramNo);
+    beMessenger_AppendString(g_beMessenger, status);
+    beMessenger_DispatchSelected(g_beMessenger, "CHECKSTATUS");
+    if (beMessenger_GetBoolCount(g_beMessenger) == 1) {
+        return beMessenger_GetBool(g_beMessenger, 0);
     }
     return 0;
 }
 
 int PLAYERgetPos(void) {
-    beMessenger_SendGroup(g_beMessenger[0], PLAYERPOINT, GETGENERATEPOS);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SendGroup(g_beMessenger, "PLAYERPOINT", "GETGENERATEPOS");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 /* A player point's position and heading, as "V<x,y,z>/V<0,heading,0>" with `yaw` added. */
@@ -1662,15 +1685,15 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
     float forward[3];
     float matrix[16];
     float position[3];
-    beMessenger_SelectGroup(g_beMessenger[0], PLAYERPOINT);
-    beMessenger_AppendInt(g_beMessenger[0], point);
-    beMessenger_AppendInt(g_beMessenger[0], index);
-    beMessenger_DispatchSelected(g_beMessenger[0], GETMATRIXDIRECT);
-    beMessenger_GetMatrix(matrix, g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "PLAYERPOINT");
+    beMessenger_AppendInt(g_beMessenger, point);
+    beMessenger_AppendInt(g_beMessenger, index);
+    beMessenger_DispatchSelected(g_beMessenger, "GETMATRIXDIRECT");
+    beMessenger_GetMatrix(matrix, g_beMessenger, 0);
     igMatrix44f_GetTranslation(matrix, position);
     Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
     heading = atan2f(forward[0], forward[2]);
-    sprintf(g_playerDataStrBuffer, V_f_f_f_V_0_f_0, position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
+    sprintf(g_playerDataStrBuffer, "V<%f,%f,%f>/V<0,%f,0>", position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
     return g_playerDataStrBuffer;
 }
 
@@ -1680,15 +1703,15 @@ char *PLAYERgetPosStr(int ramNo, float x, float y, float z) {
     float position[4];
     float matrix[16];
 
-    beMessenger_SendNamed(g_beMessenger[0], PLAYER_7, 0, ramNo, GETMATRIX_4);
-    if (beMessenger_GetMatrixCount(g_beMessenger[0]) != 0) {
-        beMessenger_GetMatrix(matrix, g_beMessenger[0], 0);
+    beMessenger_SendNamed(g_beMessenger, "PLAYER", 0, ramNo, "GETMATRIX");
+    if (beMessenger_GetMatrixCount(g_beMessenger) != 0) {
+        beMessenger_GetMatrix(matrix, g_beMessenger, 0);
         offset[0] = x;
         offset[1] = y;
         offset[2] = z;
         igMatrix44f_TranslateLocal(matrix, offset);
         igMatrix44f_GetTranslation(matrix, position);
-        sprintf(g_playerPosStrBuffer, V_f_f_f, position[0], position[1], position[2]);
+        sprintf(g_playerPosStrBuffer, "V<%f,%f,%f>", position[0], position[1], position[2]);
         return g_playerPosStrBuffer;
     }
     return 0;
@@ -1701,7 +1724,7 @@ void MsgBox(const char *, int)
 /* Ends the game loop: no next stage. */
 void ShutDown(void) {
     beSystem *system;
-    system = g_beSystem[0];
+    system = g_beSystem;
     system->_isShutDown = 1;
     system->_isStageLoop = 0;
     setPooledString(system->_nextStage, 0);
@@ -1709,23 +1732,23 @@ void ShutDown(void) {
 
 int TXTgetCallNo(void)
 {
-    return g_txtCallNo[0];
+    return g_txtCallNo;
 }
 
 /* True below 1000, for 10000..59999 and for 80000..89999. The cached code is signed and not range-
  * checked, so a negative code also counts. */
 unsigned char BLTisPlayerBullet(void) {
-    if (g_mdlBulletKind[0] < BULLET_KIND_GROUP_SIZE) {
-        if (g_mdlBulletKind[0] < PLAYER_BULLET_WEAPON_END) {
+    if (g_mdlBulletKind < BULLET_KIND_GROUP_SIZE) {
+        if (g_mdlBulletKind < PLAYER_BULLET_WEAPON_END) {
             return 1;
         }
         /* The early return and this jump are not interchangeable with a plain `return 0`. */
         goto notPlayerBullet;
     }
-    if (g_mdlBulletKind[0] < PLAYER_BULLET_RANGE_A_END) {
+    if (g_mdlBulletKind < PLAYER_BULLET_RANGE_A_END) {
         return 1;
     }
-    if ((g_mdlBulletKind[0] >= PLAYER_BULLET_RANGE_B_BEGIN) && (g_mdlBulletKind[0] < PLAYER_BULLET_RANGE_B_END)) {
+    if ((g_mdlBulletKind >= PLAYER_BULLET_RANGE_B_BEGIN) && (g_mdlBulletKind < PLAYER_BULLET_RANGE_B_END)) {
         return 1;
     }
 notPlayerBullet:
@@ -1734,7 +1757,7 @@ notPlayerBullet:
 
 int BLTgetShootRamNo(void)
 {
-    return g_bltShootRamNo[0];
+    return g_bltShootRamNo;
 }
 
 /* BLT: a player bullet hitting the cached model; BLP: an enemy bullet hitting the player. Each
@@ -1746,30 +1769,30 @@ unsigned char BLTisHitCheck(void) {
     int baseWork;
 
     baseWork = 0;
-    if (g_mdlInfoName[0] != 0) {
-        beMessenger_SendNamed(g_beMessenger[0], ENEMY, g_mdlInfoName[0], g_mdlRamNo[0], GETPEBASEWORK);
-        if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
-            baseWork = beMessenger_GetObject(g_beMessenger[0], 1);
+    if (g_mdlInfoName != 0) {
+        beMessenger_SendNamed(g_beMessenger, "ENEMY", g_mdlInfoName, g_mdlRamNo, "GETPEBASEWORK");
+        if (beMessenger_GetObjectCount(g_beMessenger) != 0) {
+            baseWork = beMessenger_GetObject(g_beMessenger, 1);
         }
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EISHITCHECK);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendObject(g_beMessenger[0], (void *)baseWork);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EISHITCHECK");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 unsigned char BLTisCritical(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EISCRITICAL);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EISCRITICAL");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 /* P2EDAMAGE with the script's critical flag. The reply's three integers (damage, attribute
@@ -1779,24 +1802,24 @@ int BLTgetDamageValue(unsigned char critical) {
     int baseWork;
 
     baseWork = 0;
-    if (g_mdlInfoName[0] != 0) {
-        beMessenger_SendNamed(g_beMessenger[0], ENEMY, g_mdlInfoName[0], g_mdlRamNo[0], GETPEBASEWORK);
-        if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
-            baseWork = beMessenger_GetObject(g_beMessenger[0], 1);
+    if (g_mdlInfoName != 0) {
+        beMessenger_SendNamed(g_beMessenger, "ENEMY", g_mdlInfoName, g_mdlRamNo, "GETPEBASEWORK");
+        if (beMessenger_GetObjectCount(g_beMessenger) != 0) {
+            baseWork = beMessenger_GetObject(g_beMessenger, 1);
         }
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EDAMAGE);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendInt(g_beMessenger[0], critical);
-    beMessenger_AppendObject(g_beMessenger[0], (void *)baseWork);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    g_damageResult[0] = beMessenger_GetInt(g_beMessenger[0], 0);
-    g_attackZokusei[0] = beMessenger_GetInt(g_beMessenger[0], 1);
-    g_damageFlag[0] = beMessenger_GetInt(g_beMessenger[0], 2);
-    return g_damageResult[0];
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EDAMAGE");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendInt(g_beMessenger, critical);
+    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    g_damageResult = beMessenger_GetInt(g_beMessenger, 0);
+    g_attackZokusei = beMessenger_GetInt(g_beMessenger, 1);
+    g_damageFlag = beMessenger_GetInt(g_beMessenger, 2);
+    return g_damageResult;
 }
 
 /* Damage rank 0..3 of the last BLTgetDamageValue result. `currentHp` is what the script passes
@@ -1813,20 +1836,20 @@ int BLTgetDamageRank(int currentHp, unsigned char rankBonus) {
         return 3;
     }
     rank = 0;
-    damageFraction = (float) g_damageResult[0] / (float) g_mdlMaxHp[0];
+    damageFraction = (float) g_damageResult / (float) g_mdlMaxHp;
     if (!(damageFraction <= DAMAGE_RANK2_FRACTION)) {
         rank = 2;
     } else if (!(damageFraction <= DAMAGE_RANK1_FRACTION)) {
         rank = 1;
     }
-    if ((rank == 0) && (g_damageFlag[0] == 1)) {
+    if ((rank == 0) && (g_damageFlag == 1)) {
         return rank + 1;
     }
     if ((rank == 0) || (rank == 1)) {
         if (rankBonus) {
             return rank + 1;
         }
-        group = g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE;
+        group = g_mdlBulletKind / BULLET_KIND_GROUP_SIZE;
         if ((group == BULLET_KIND_RANK_BONUS_GROUP_A) || (group == BULLET_KIND_RANK_BONUS_GROUP_B)) {
             rank += 1;
         }
@@ -1834,25 +1857,28 @@ int BLTgetDamageRank(int currentHp, unsigned char rankBonus) {
     return rank;
 }
 
+const char *g_attributeNameDefault[1] = {"common"};
+const char *g_attributeNames[4] = {"fire", "ice", "thunder", "dark"};
+
 /* Name of the cached damage attribute ("fire", "ice", "thunder", "dark"); any index of 4 or more
  * gives "common". Scripts build the "SQ_LDMG/<attribute>" sequence label from it. */
 const char *BLTgetAttributeStr(void)
 {
-    if (g_attackZokusei[0] >= 4)
+    if (g_attackZokusei >= 4)
         return g_attributeNameDefault[0];
-    return g_attributeNames[g_attackZokusei[0]];
+    return g_attributeNames[g_attackZokusei];
 }
 
 int BLTgetStunTime(int stunValue, unsigned char rankBonus) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2ESTUNTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlMaxHp[0]);
-    beMessenger_AppendInt(g_beMessenger[0], stunValue);
-    beMessenger_AppendInt(g_beMessenger[0], rankBonus);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2ESTUNTIME");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlMaxHp);
+    beMessenger_AppendInt(g_beMessenger, stunValue);
+    beMessenger_AppendInt(g_beMessenger, rankBonus);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 /* The five BLTget*Time helpers share one shape: only a technique attack (group 4) of the matching
@@ -1861,115 +1887,115 @@ int BLTgetStunTime(int stunValue, unsigned char rankBonus) {
  * Poison, attack-down and power-down also pass the script's `effectKey` string. */
 
 int BLTgetPoisonTime(const char *effectKey) {
-    if ((g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
+    if ((g_mdlBulletKind / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
     }
-    if ((g_mdlBulletKind[0] % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_POISON) {
+    if ((g_mdlBulletKind % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_POISON) {
         return 0;
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EPOISONTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EPOISONTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLTgetSleepTime(void) {
-    if ((g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
+    if ((g_mdlBulletKind / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
     }
-    if ((g_mdlBulletKind[0] % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_SLEEP) {
+    if ((g_mdlBulletKind % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_SLEEP) {
         return 0;
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2ESLEEPTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2ESLEEPTIME");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLTgetBindTime(void) {
-    if ((g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
+    if ((g_mdlBulletKind / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
     }
-    if ((g_mdlBulletKind[0] % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_BIND) {
+    if ((g_mdlBulletKind % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_BIND) {
         return 0;
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EBINDTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EBINDTIME");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLTgetAttackDownTime(const char *effectKey) {
-    if ((g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
+    if ((g_mdlBulletKind / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
     }
-    if ((g_mdlBulletKind[0] % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_ATTACK_DOWN) {
+    if ((g_mdlBulletKind % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_ATTACK_DOWN) {
         return 0;
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EATKDWNTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EATKDWNTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLTgetPowerDownTime(const char *effectKey) {
-    if ((g_mdlBulletKind[0] / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
+    if ((g_mdlBulletKind / BULLET_KIND_GROUP_SIZE) != BULLET_KIND_TECHNIQUE_GROUP) {
         return 0;
     }
-    if ((g_mdlBulletKind[0] % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_POWER_DOWN) {
+    if ((g_mdlBulletKind % BULLET_KIND_GROUP_SIZE) != BULLET_SUBKIND_POWER_DOWN) {
         return 0;
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EPOWDWNTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EPOWDWNTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 void BLTcalcSkillUp(unsigned char first, unsigned char second) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2ESKILLUP);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendInt(g_beMessenger[0], first);
-    beMessenger_AppendInt(g_beMessenger[0], second);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2ESKILLUP");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendInt(g_beMessenger, first);
+    beMessenger_AppendInt(g_beMessenger, second);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
 }
 
 int BLTcalcEXPUp(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2EEXPUP);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRecNo[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2EEXPUP");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 unsigned char BLPisHitCheck(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PISHITCHECK);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetBool(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PISHITCHECK");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetBool(g_beMessenger, 0);
 }
 
 /* E2PDAMAGE, the enemy-to-player counterpart of BLTgetDamageValue: the hitter's base work goes
@@ -1978,33 +2004,33 @@ int BLPgetDamageValue(void) {
     int baseWork;
 
     baseWork = 0;
-    if (g_hitterInfoName[0] != 0) {
-        beMessenger_SendNamed(g_beMessenger[0], ENEMY, g_hitterInfoName[0], g_bltShootRamNo[0], GETPEBASEWORK);
-        if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
-            baseWork = beMessenger_GetObject(g_beMessenger[0], 1);
+    if (g_hitterInfoName != 0) {
+        beMessenger_SendNamed(g_beMessenger, "ENEMY", g_hitterInfoName, g_bltShootRamNo, "GETPEBASEWORK");
+        if (beMessenger_GetObjectCount(g_beMessenger) != 0) {
+            baseWork = beMessenger_GetObject(g_beMessenger, 1);
         }
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PDAMAGE);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendObject(g_beMessenger[0], (void *)baseWork);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    g_damageResult[0] = beMessenger_GetInt(g_beMessenger[0], 0);
-    g_attackZokusei[0] = beMessenger_GetInt(g_beMessenger[0], 1);
-    g_damageFlag[0] = beMessenger_GetInt(g_beMessenger[0], 2);
-    return g_damageResult[0];
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PDAMAGE");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    g_damageResult = beMessenger_GetInt(g_beMessenger, 0);
+    g_attackZokusei = beMessenger_GetInt(g_beMessenger, 1);
+    g_damageFlag = beMessenger_GetInt(g_beMessenger, 2);
+    return g_damageResult;
 }
 
 /* ZOKUSEI: "attribute". Asks FIGHTCALC for the attack's attribute and returns its name. */
 const char *BLPgetAttackZokusei(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], GETPATKZOKUSEI);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    g_attackZokusei[0] = beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "GETPATKZOKUSEI");
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    g_attackZokusei = beMessenger_GetInt(g_beMessenger, 0);
     return BLTgetAttributeStr();
 }
 
@@ -2013,16 +2039,16 @@ const char *BLPgetAttackZokusei(void) {
 int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
     int rank;
 
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PDAMAGERANK);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendInt(g_beMessenger[0], scriptArg1);
-    beMessenger_AppendInt(g_beMessenger[0], scriptArg2);
-    beMessenger_AppendObject(g_beMessenger[0], g_mdlEntity[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    rank = beMessenger_GetInt(g_beMessenger[0], 0);
-    if ((rank == 0) && (g_damageFlag[0] == 1)) {
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PDAMAGERANK");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendInt(g_beMessenger, scriptArg1);
+    beMessenger_AppendInt(g_beMessenger, scriptArg2);
+    beMessenger_AppendObject(g_beMessenger, g_mdlEntity);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    rank = beMessenger_GetInt(g_beMessenger, 0);
+    if ((rank == 0) && (g_damageFlag == 1)) {
         rank += 1;
     }
     return rank;
@@ -2034,95 +2060,94 @@ int BLPgetStunTime(int scriptArg1, int scriptArg2) {
     int baseWork;
 
     baseWork = 0;
-    if (g_hitterInfoName[0] != 0) {
-        beMessenger_SendNamed(g_beMessenger[0], ENEMY, g_hitterInfoName[0], g_bltShootRamNo[0], GETPEBASEWORK);
-        if (beMessenger_GetObjectCount(g_beMessenger[0]) != 0) {
-            baseWork = beMessenger_GetObject(g_beMessenger[0], 1);
+    if (g_hitterInfoName != 0) {
+        beMessenger_SendNamed(g_beMessenger, "ENEMY", g_hitterInfoName, g_bltShootRamNo, "GETPEBASEWORK");
+        if (beMessenger_GetObjectCount(g_beMessenger) != 0) {
+            baseWork = beMessenger_GetObject(g_beMessenger, 1);
         }
     }
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PSTUNTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_AppendInt(g_beMessenger[0], scriptArg1);
-    beMessenger_AppendInt(g_beMessenger[0], scriptArg2);
-    beMessenger_AppendObject(g_beMessenger[0], (void *)baseWork);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PSTUNTIME");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_AppendInt(g_beMessenger, scriptArg1);
+    beMessenger_AppendInt(g_beMessenger, scriptArg2);
+    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLPgetPoisonTime(const char *effectKey) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PPOISONTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PPOISONTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLPgetSleepTime(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PSLEEPTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PSLEEPTIME");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLPgetBindTime(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PBINDTIME);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PBINDTIME");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLPgetAttackDownTime(const char *effectKey) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PATKDWNTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PATKDWNTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 int BLPgetPowerDownTime(const char *effectKey) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], E2PPOWDWNTIME);
-    beMessenger_AppendString(g_beMessenger[0], effectKey);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_hitterRecNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "E2PPOWDWNTIME");
+    beMessenger_AppendString(g_beMessenger, effectKey);
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 /* KOUKA: "effect". */
 int BLPcalcKoukaMagic(void) {
-    beMessenger_SelectGroup(g_beMessenger[0], GAMERAM);
-    beMessenger_AppendString(g_beMessenger[0], P2PKOUKAMAGIC);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_bltShootRamNo[0]);
-    beMessenger_AppendInt(g_beMessenger[0], g_mdlBulletKind[0]);
-    beMessenger_DispatchSelected(g_beMessenger[0], FIGHTCALC);
-    return beMessenger_GetInt(g_beMessenger[0], 0);
+    beMessenger_SelectGroup(g_beMessenger, "GAMERAM");
+    beMessenger_AppendString(g_beMessenger, "P2PKOUKAMAGIC");
+    beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
+    beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
+    beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
+    return beMessenger_GetInt(g_beMessenger, 0);
 }
 
 void LISsetDifficultMax(int maxDifficulty) {
-    beMessenger_SelectReceivers(g_beMessenger[0], LOADINTF2, 0, 0);
-    beMessenger_AppendInt(g_beMessenger[0], maxDifficulty);
-    beMessenger_DispatchSelected(g_beMessenger[0], SETDIFFICULTMAX);
+    beMessenger_SelectReceivers(g_beMessenger, "LOADINTF2", 0, 0);
+    beMessenger_AppendInt(g_beMessenger, maxDifficulty);
+    beMessenger_DispatchSelected(g_beMessenger, "SETDIFFICULTMAX");
 }
 
 int be_GetMetaObject_Virtual(void)
 {
     return (int)g_be_metaObject[0];
 }
-#pragma pop

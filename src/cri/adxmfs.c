@@ -1,7 +1,8 @@
 /* CRI ADX on PS2, memory side: the memory device alone, and the end-of-stream margin of ADXT's streams. */
 #include "dw4/cri/adxfs.h"
 
-extern int adxt_stm_eos;
+/* End-of-stream margin handed to each ADXT stream. */
+int adxt_stm_eos = 25;
 
 void adxps2_mfs_errfn(void *obj, const char *msg, int code)
 {

@@ -178,7 +178,7 @@ void igImage_InitFields(void) {
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x64);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igImage_pfmtDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, g_igImage_pfmtDefault);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001499e0);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0xA), -2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));

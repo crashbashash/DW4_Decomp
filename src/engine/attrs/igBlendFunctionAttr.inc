@@ -197,13 +197,13 @@ void igBlendFunctionAttr_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igBlendFunctionAttr_ctorTable, 0xB);
     temp_v0 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igBlendFunctionAttr_srcDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, g_igBlendFunctionAttr_srcDefault);
     temp_v0->f52 = FUN_00149740;
     temp_v0_2 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &g_igBlendFunctionAttr_dstDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, g_igBlendFunctionAttr_dstDefault);
     temp_v0_2->f52 = FUN_00149740;
     temp_v0_3 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);
-    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_00486bb0[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, 0);
     temp_v0_3->f52 = igMetaEnum_GetEmpty;
     temp_s2 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3);
     temp_s2->f56 = FUN_0014fe60();
@@ -218,16 +218,16 @@ void igBlendFunctionAttr_InitFields(void) {
     temp_v0_4->f38 = 0;
     temp_v0_4->f48 = (void (*)())FUN_0013c470;
     temp_v0_5 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7);
-    igEnumMetaField_SetDefaultValue(temp_v0_5, &DAT_00486bb8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_5, 0);
     temp_v0_5->f52 = (void (*)())FUN_00139e70;
     temp_v0_6 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8);
-    igEnumMetaField_SetDefaultValue(temp_v0_6, &g_igBlendFunctionAttr_blendBDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_6, g_igBlendFunctionAttr_blendBDefault);
     temp_v0_6->f52 = (void (*)())FUN_00139e70;
     temp_v0_7 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
-    igEnumMetaField_SetDefaultValue(temp_v0_7, &g_igBlendFunctionAttr_blendCDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_7, g_igBlendFunctionAttr_blendCDefault);
     temp_v0_7->f52 = (void (*)())FUN_00139e10;
     temp_v0_8 = (BlendAttrMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA);
-    igEnumMetaField_SetDefaultValue(temp_v0_8, &g_igBlendFunctionAttr_blendDDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0_8, g_igBlendFunctionAttr_blendDDefault);
     temp_v0_8->f52 = (void (*)())FUN_00139e70;
     igMetaObject_NameFields(temp_s0, g_igBlendFunctionAttr_fieldTable, g_igBlendFunctionAttr_fieldHandles, g_igBlendFunctionAttr_fieldOffsets, temp_s1);
 }

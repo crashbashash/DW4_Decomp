@@ -224,11 +224,11 @@ void igArenaMemoryPool_InitFields(void) {
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 12), -1);
     heapIntegrityCheckLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     defaultHeapCheck = g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel;
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)heapIntegrityCheckLevel, &defaultHeapCheck);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)heapIntegrityCheckLevel, defaultHeapCheck);
     heapIntegrityCheckLevel->_getMetaEnumFunction = (int)igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum;
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 14);
     defaultMessageLevel = g_igArenaMemoryPool_defaultMessageLevel;
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, &defaultMessageLevel);
+    igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igArenaMemoryPool_GetMessageLevelMetaEnum;
     igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 15), g_igArenaMemoryPool_defaultPoolOptionFlags);
     igUnsignedIntMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 17), 16);

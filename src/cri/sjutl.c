@@ -10,8 +10,14 @@ void *memset(void *dst, int value, unsigned int size);
 char *strncpy(char *dst, const char *src, unsigned int size);
 int strncmp(const char *a, const char *b, unsigned int size);
 
-extern unsigned char sj_hex_digit[];   /* "0123456789abcdef" */
-extern int sj_hex_value[];    /* indexed by character */
+char sj_hex_digit[] = "0123456789abcdef";
+/* Digit value by character code; every other character reads 0. */
+int sj_hex_value[112] = {
+    ['1'] = 1, ['2'] = 2, ['3'] = 3, ['4'] = 4, ['5'] = 5, ['6'] = 6, ['7'] = 7, ['8'] = 8, ['9'] = 9,
+    ['A'] = 10, ['B'] = 11, ['C'] = 12, ['D'] = 13, ['E'] = 14, ['F'] = 15,
+    ['a'] = 10, ['b'] = 11, ['c'] = 12, ['d'] = 13, ['e'] = 14, ['f'] = 15,
+};
+
 
 /* head gets the first nbyte of a chunk (all of it if shorter), rest the remainder, with no data pointer
  * when nothing is left. */

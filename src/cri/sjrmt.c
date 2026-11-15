@@ -21,11 +21,11 @@ int DTX_CallUrpc(int fno, int *send, int nsend, int *recv, int nrecv);
 void DTX_Init(void);
 void DTX_Finish(void);
 
-extern int sjrmt_uuid[4];
-extern int sjrmt_sbuf[4];
-extern int sjrmt_rbuf[4];
-extern char *volatile sjrmt_build;  /* the version string, read so it is linked */
-extern int sjrmt_init_cnt;
+static int sjrmt_uuid[4];
+static int sjrmt_sbuf[64] __attribute__((aligned(64)));
+static int sjrmt_rbuf[64] __attribute__((aligned(64)));
+char *volatile sjrmt_build = "\nSJRMT Ver.1.03 Build:Oct  6 2004 11:47:21\n";  /* the version string, read so it is linked */
+int sjrmt_init_cnt = 0;
 
 int SJRMT_RbfCreate(int buf, int bsize, int xsize)
 {

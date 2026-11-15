@@ -1,6 +1,6 @@
 #include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfh.h"
 
-typedef struct SfhHn SfhHn;
 typedef int (*SfhGetFn)(SfhHn *sfh, int *value);
 typedef int (*SfhGetStmFn)(SfhHn *sfh, unsigned char id, int *value);
 
@@ -8,7 +8,7 @@ enum {
     MPS_STMID_PRV2 = 0x1BF
 };
 
-extern SfhHn sfhdr_sfh_work[];
+static SfhHn sfhdr_sfh_work[SFH_MAX_HN];
 
 int sfmps_GetNumPics(SfdHandle *hn);
 void SFH_Init(int maxHn, SfhHn *hns);
@@ -48,8 +48,10 @@ int SFH_AnlyFtrGopN(SfhHn *sfh, unsigned char id, int *value);
 int SFH_AnlyFtrGopM(SfhHn *sfh, unsigned char id, int *value);
 
 int sfhdr_IsPrv2(unsigned char *p);
+int SFD_GetCond(SfdHandle *hn, int id);
+void UTY_MemCpy(char *dst, char *src, unsigned int n);
+int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size);
 int sfhdr_GetCode(unsigned char *p);
-int sfhdr_IsHdr(unsigned char *p, int size);
 void sfhdr_SaveRec(SfdHandle *hn);
 void sfhdr_CopyInf(SfdHdrInf *dst, SfdHdrInf *src);
 SfdHdrInf *sfhdr_GetRecHdr(SfdHandle *hn);
@@ -65,7 +67,7 @@ int sfhdr_GetStm(SfhHn *sfh, int id, SfhGetStmFn get);
 void sfhdr_SetVideoInf(SfdHandle *hn);
 
 void sfhdr_Init(void) {
-    SFH_Init(32, sfhdr_sfh_work);
+    SFH_Init(SFH_MAX_HN, sfhdr_sfh_work);
 }
 
 void sfhdr_Finish(void) {
@@ -86,6 +88,29 @@ void sfhdr_ResetInf(SfdHdrInf *hdr) {
     hdr->valid = 0;
     hdr->muxRate = 0;
     hdr->size = 0;
+}
+
+int sfhdr_ChkPrv2(SfdHandle *hn, int type, unsigned char *p, int size, int *set) {
+    *set = 0;
+    if (type != 2) {
+        return 0;
+    }
+    p -= 6;
+    size += 6;
+    if (!sfhdr_IsPrv2(p)) {
+        p -= 2;
+        size += 2;
+        if (!sfhdr_IsPrv2(p)) {
+            return 0;
+        }
+    }
+    p -= 12;
+    size += 12;
+    if (!sfhdr_IsHdr(p, size)) {
+        return 0;
+    }
+    *set = sfhdr_SetHdr(hn, p, size);
+    return 1;
 }
 
 int sfhdr_IsPrv2(unsigned char *p) {
@@ -109,6 +134,30 @@ int sfhdr_IsHdr(unsigned char *p, int size) {
     }
     SFH_Destroy(sfh);
     return ok;
+}
+
+int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size) {
+    void (*callback)(int obj, unsigned char *data, int size);
+    int obj;
+    int len;
+    SfdHdrInf *hdr;
+
+    callback = (void (*)(int, unsigned char *, int))SFD_GetCond(hn, 75);
+    obj = SFD_GetCond(hn, 76);
+    if (callback != 0) {
+        callback(obj, data, size);
+    }
+    hdr = &hn->hdr;
+    if (hdr->valid != 0) {
+        return 0;
+    }
+    len = size > 2048 ? 2048 : size;
+    UTY_MemCpy(hn->hdr.data, (char *)data, len);
+    hdr->size = len;
+    sfhdr_Analy(hdr);
+    sfhdr_SetVideoInf(hn);
+    sfhdr_SaveRec(hn);
+    return 1;
 }
 
 void sfhdr_SaveRec(SfdHandle *hn) {

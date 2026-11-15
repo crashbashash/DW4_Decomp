@@ -179,13 +179,13 @@ extern "C" int igObjectSystem_Acquire(int);
 extern "C" int igObjectSystem_Release(...);
 extern "C" int StringChunk_ReleaseHeader(...);
 extern "C" int main(int arg0, int *arg1);
-extern "C" int *FUN_00259a10(void);
-extern "C" int igObjectSystem_SetIniText(int);
+extern "C" const char *FUN_00259a10(void);
+extern "C" int igObjectSystem_SetIniText(const char *);
 extern "C" void FUN_00259a20(void);
-extern "C" int sceOpen(int *, int);
+extern "C" int sceOpen(char *, int);
 extern "C" int sceClose(int);
 extern "C" int sceRead(int, void *, int);
-extern "C" int sceWrite(int, int *, int);
+extern "C" int sceWrite(int, const char *, int);
 extern "C" char *Memory_SystemAllocate(int);
 extern "C" void FUN_00259a60(void);
 extern "C" void **igThread_Create(...);
@@ -233,7 +233,6 @@ extern "C" Pool *Memory_GetAllocatorBySelector(int);
 extern "C" igAnimationCombinerBoneInfoPool * igAnimationCombinerBoneInfoPool_Create(...);
 extern "C" igAnimationStatePool * igAnimationStatePool_Create(...);
 extern "C" igEnbayaContextPool * igEnbayaContextPool_Create(...);
-extern "C" int text_cdrom0_MODULES_IOPRP280_IMG_1[4];
 extern igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;
 extern "C" G *DAT_0056dc50[4];
 extern "C" int DAT_00586fd8[4];
@@ -242,9 +241,8 @@ extern "C" int DAT_00586fe8[4];
 extern "C" int DAT_00586ff0[4];
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int DAT_00587338[4];
-extern "C" int *DAT_00587340[4];
+extern "C" const char *DAT_00587340[4];
 extern "C" char GPR_0055499c;
-extern "C" char GPR_005549a0;
 extern "C" char GPR_005549b8;
 extern "C" unsigned char g_useOwnerAllocator;
 struct Guard { ~Guard() { igObjectSystem_Release(); } };
@@ -272,11 +270,8 @@ struct U {
         }
     }
 };
-extern "C" int DAT_004ec890[4];
-extern "C" int text_atstream_5150[4];
-extern "C" int DAT_004ecf50[4];
-extern "C" char *DAT_0056df78[4];
-extern "C" char GPR_00554be8;
+extern "C" { char *g_atstreamText; }
+extern "C" { char g_atstreamTextReady; }
 struct DW4SR4 { int w0; };
 class DW4VCSR_120_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual DW4SR4 vX(); };
 class DW4VCSR_132_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual DW4SR4 vX(void (*)(void)); };
@@ -294,9 +289,10 @@ public:
     bool operator==(const igResult &o) const { return v == o.v; }
 };
 extern "C" igResult igPsx2_SetAtfilePrefix(const char *path);
-extern "C" bool GPR_00554bec;
+extern "C" { bool g_atfilePrefixSet; }
 extern "C" void * g_threadManager[4];
-extern "C" unsigned char GPR_00554990;
+extern "C" { unsigned char g_atstreamFullReload = 1; }
+extern "C" { unsigned char g_startupFlagB = 1; }
 struct R_259d40 { int a; };
 class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual R_259d40 vX(int); };
 extern "C" void FUN_00259d40(NamedLists *arg0, int arg1);
@@ -305,7 +301,7 @@ typedef igTDataList<int> NameList;
 typedef struct NamedLists { char pad[36]; NameList *_names; void *_name; } NamedLists;
 extern "C" CountedHeader *igStringRefList_Create(int);
 extern "C" NameList *igIntList_Create(int);
-extern "C" int DAT_00498728[4];
+extern "C" { int g_defaultNameValue = 1; }
 extern "C" int g_stringPool[4];
 struct StringRef {
     int *p;
@@ -322,9 +318,8 @@ struct R_259f90 { int w0; int rc; };
 struct A { char pad[36]; struct R_259f90 *f36; struct R_259f90 *f40; };
 extern "C" void FUN_00259f90(struct A *arg0, struct R_259f90 *arg1, struct R_259f90 *arg2);
 extern "C" void FUN_0025a550(NamedLists *arg0, int);
-extern "C" int text_ndmw_igb[16];
 struct Fr;
-extern "C" struct A0 *DAT_0056df80[16];
+extern "C" { struct A0 *g_activeApp; }
 extern "C" int g_beSystem_metaObject[16];
 struct Fr {
     void *f0;
@@ -375,12 +370,11 @@ struct Tm {
 };
 struct App_25a8c0 { int f0; igViewerSceneInfoManager *f4; char pad[16]; int f24; };
 extern "C" Tm *igTimer_Create(...);
-extern "C" int text_average_frame_rate_over_d_frames[4];
 extern "C" int DAT_0058cab8[4];
 extern "C" int DAT_0058cac0[4];
 extern "C" int DAT_0058cac8[4];
 extern "C" int DAT_0058cad0[4];
-extern "C" unsigned char GPR_00554bf0;
+extern "C" { unsigned char g_frameRateReportIgnored; }
 struct TimerType {};
 struct Ref {
     Tm *p;
@@ -428,7 +422,6 @@ struct Assign {
     }
 };
 struct S { char p0[48]; R_25ac60 *f48; V *f52; };
-extern "C" int text_igb[4];
 extern "C" StringRef StringList_CopyRetained(void *, int);
 extern "C" void FUN_0025ac60(S *arg0);
 class Pool {
@@ -711,9 +704,9 @@ int main(int arg0, int *arg1) {
     FUN_00259cd0((const char *)(*arg1));
     DAT_00587338[0] = 2;
     GPR_0055499c = 0;
-    DAT_00587340[0] = text_cdrom0_MODULES_IOPRP280_IMG_1;
+    DAT_00587340[0] = "cdrom0:\\MODULES\\IOPRP280.IMG;1";
     GPR_005549b8 = 1;
-    GPR_005549a0 = 0;
+    g_startupFlagB = 0;
     DAT_00586fd8[0] = 0x40000;
     DAT_00586fe0[0] = 0x4000;
     DAT_00586fe8[0] = 0xA0000;
@@ -764,14 +757,14 @@ int main(int arg0, int *arg1) {
     return 0;
 }
 
-int *FUN_00259a10(void) {
-    return &DAT_004ec890[0];
+const char *FUN_00259a10(void) {
+    return "[CORE]\nintrinsicModulePath = MODULES\nsonyModulePath = MODULES\nuserFileIO = false\nscratchPoolSize = 0x4000\nmoveVTablesToScratchPad = 1\n[DISPLAY]\nsupportMultitap = PORT0\n[BECRUNTIME]\nAdxModulePath = /MODULES\n[MEMORYPOOLS]\nDefault     = POOL_DEFAULT\nDriverData  = POOL_DRIVERDATA\nRenderList  = POOL_RENDERLIST\nDMA         = POOL_DMA\nHandles     = POOL_HANDLES\n\nTemporary   = POOL_TEMPORARY\nLevel       = POOL_LEVEL\nAttribute   = POOL_ATTRIBUTE\nTexture     = POOL_TEXTURE\nImage       = POOL_IMAGE\nUser0       = POOL_USER0\nUser1       = POOL_USER1\n\nList        = POOL_LIST\nVertex      = POOL_VERTEX\nApplication = POOL_APPLICATION\nWorld       = POOL_WORLD\nActor       = POOL_ACTOR\nFrame       = POOL_FRAME\nPhysics     = POOL_PHYSICS\nAI          = POOL_AI\nClut        = POOL_CLUT\nAudio       = POOL_AUDIO\nVideo       = POOL_VIDEO\nImageObject = POOL_IMAGEOBJECT\nNode        = POOL_NODE\n\n[POOL_DEFAULT]\nSize = 5951424\n[POOL_DRIVERDATA]\nSize = 32768\n[POOL_RENDERLIST]\nSize = 4718592\n[POOL_DMA]\nSize = 1585152\n[POOL_HANDLES]\nSize = 262144\n[POOL_TEMPORARY]\nAliasedTo = Default\n[POOL_LEVEL]\nAliasedTo = Default\n[POOL_ATTRIBUTE]\nAliasedTo = Default\n[POOL_TEXTURE]\nAliasedTo = User1\n[POOL_IMAGE]\nAliasedTo = User1\n[POOL_USER0]\nAliasedTo = Default\n[POOL_USER1]\nSize = 10485760\n[POOL_LIST]\nAliasedTo = Default\n[POOL_VERTEX]\nAliasedTo = Default\n[POOL_APPLICATION]\nAliasedTo = Default\n[POOL_WORLD]\nAliasedTo = Default\n[POOL_ACTOR]\nAliasedTo = Default\n[POOL_FRAME]\nAliasedTo = Default\n[POOL_PHYSICS]\nAliasedTo = Default\n[POOL_AI]\nAliasedTo = Default\n[POOL_CLUT]\nAliasedTo = Default\n[POOL_AUDIO]\nAliasedTo = Default\n[POOL_VIDEO]\nAliasedTo = Default\n[POOL_IMAGEOBJECT]\nAliasedTo = Default\n[POOL_NODE]\nAliasedTo = Default\n";
 }
 
 void FUN_00259a20(void) {
-    int temp_v0;
+    const char *temp_v0;
 
-    temp_v0 = ((int)FUN_00259a10());
+    temp_v0 = FUN_00259a10();
     if (temp_v0 != 0) {
         igObjectSystem_SetIniText(temp_v0);
     }
@@ -784,7 +777,7 @@ void FUN_00259a60(void) {
 
     buf = Memory_SystemAllocate(0x200);
     while (1) {
-        h = sceOpen(&text_atstream_5150[0], 3);
+        h = sceOpen("atstream:!-5150", 3);
         if (sceRead(h, &hdr, 8) < 0) {
             sceClose(h);
             continue;
@@ -797,13 +790,13 @@ void FUN_00259a60(void) {
             sceRead(h, buf, hdr.len);
         }
         if (hdr.type == 1) {
-            DAT_0056df78[0] = buf;
+            g_atstreamText = buf;
             buf[hdr.len] = 0;
-            GPR_00554be8 = 1;
+            g_atstreamTextReady = 1;
         }
         hdr.len = 0;
         hdr.type = 0;
-        sceWrite(h, &DAT_004ecf50[0], 2);
+        sceWrite(h, "a", 2);
         sceClose(h);
     }
 }
@@ -842,11 +835,11 @@ R Gap__Core__igPsx2Thread__vfunc_39(C *arg1, int arg2) {
 }
 
 bool FUN_00259cd0(const char *path) {
-    return GPR_00554bec = igPsx2_SetAtfilePrefix(path) == (*(igResult *)g_resultSuccess);
+    return g_atfilePrefixSet = igPsx2_SetAtfilePrefix(path) == (*(igResult *)g_resultSuccess);
 }
 
 void FUN_00259d10(void) {
-    if ((*(unsigned char *)&GPR_00554bec) != 0) {
+    if ((*(unsigned char *)&g_atfilePrefixSet) != 0) {
         FUN_00259b60();
     }
 }
@@ -855,15 +848,15 @@ void FUN_00259d40(NamedLists *arg0, int arg1) {
     int sp2C;
     VC *temp_a1;
 
-    if ((*(unsigned char *)&GPR_00554bec) != 0) {
+    if ((*(unsigned char *)&g_atfilePrefixSet) != 0) {
         if (arg1 != 0) {
             temp_a1 = (VC *)(**(int **)((char *)(*(int *)((char *)(g_threadManager[0]) + 8)) + 16));
             temp_a1->vX(0xF4240);
         }
-        if ((*(unsigned char *)&GPR_00554be8) != 0) {
-            FUN_00259dc0(arg0, ((int *)DAT_0056df78)[0], GPR_00554990);
-            GPR_00554990 = 0;
-            (*(unsigned char *)&GPR_00554be8) = 0;
+        if ((*(unsigned char *)&g_atstreamTextReady) != 0) {
+            FUN_00259dc0(arg0, (int)g_atstreamText, g_atstreamFullReload);
+            g_atstreamFullReload = 0;
+            (*(unsigned char *)&g_atstreamTextReady) = 0;
         }
     }
 }
@@ -914,7 +907,7 @@ void FUN_00259dc0(NamedLists *arg0, int arg1, int arg2) {
     } else {
         List_Resize(l, n + 1, 4);
     }
-    dv = DAT_00498728[0];
+    dv = g_defaultNameValue;
     l->_data[n] = dv;
     FUN_0025a550(arg0, dv);
     if (arg2 != 0) {
@@ -990,7 +983,7 @@ void FUN_0025a580(A0 *arg0) {
     void *s2;
     int sp40[4];
     if (arg0->f24 != 0) {
-        DAT_0056df80[0] = arg0;
+        g_activeApp = arg0;
         if (((struct Fr * *)DAT_0056dc50)[0] == 0) {
             void **v = ((void **)__nw__FUi(0xF0));
             if (v != 0) {
@@ -1064,7 +1057,7 @@ void FUN_0025a580(A0 *arg0) {
         }
         {
             void *old;
-            s2 = ((void *)StringPool_Intern(g_stringPool[0], text_ndmw_igb));
+            s2 = ((void *)StringPool_Intern(g_stringPool[0], "ndmw.igb"));
             old = s0->f60;
             if (old != 0) {
                 int *h = (int *)((char *)old - 8);
@@ -1101,7 +1094,7 @@ void FUN_0025a580(A0 *arg0) {
         }
         FUN_0025afe0((Holder *)arg0);
         FUN_00463b70(arg0);
-        DAT_0056df80[0] = 0;
+        g_activeApp = 0;
     }
 }
 
@@ -1200,9 +1193,9 @@ void FUN_0025a8c0(App_25a8c0 *arg0) {
         FUN_00463bb0(arg0);
         sp.p->vB();
         temp_f12 = (1e9f * (float)s1) / __floatdisf(sp.p->vA());
-        if (GPR_00554bf0 == 0) {
-            r = igReport_Info(&text_average_frame_rate_over_d_frames[0], s1, fptodp(temp_f12));
-            if (r != 1 && r == 2) GPR_00554bf0 = 1;
+        if (g_frameRateReportIgnored == 0) {
+            r = igReport_Info("average frame rate over %d frames : %f fps", s1, fptodp(temp_f12));
+            if (r != 1 && r == 2) g_frameRateReportIgnored = 1;
         }
         FUN_00463b70(arg0);
     }
@@ -1261,7 +1254,7 @@ void FUN_0025ac60(S *arg0) {
                 do {
                     {
                     StringRef s344 = StringList_CopyRetained(arg0->f48, s2);
-                    if (igStringObj_HasFileExtensionText(s344.p, &text_igb[0]) == 0) {
+                    if (igStringObj_HasFileExtensionText(s344.p, "igb") == 0) {
                         l3 = arg0->f48;
                         StringRef::Release(StringList_CopyRetained(l3, s2).p);
                         List_RemoveWordAt(l3, s2);

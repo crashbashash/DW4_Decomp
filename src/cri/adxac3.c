@@ -6,9 +6,9 @@
 /* AC-3 frames carry 1536 samples. */
 #define ADXB_AC3_FRMSMPL 1536
 
-extern void (*adxb_ac3_setsjifn)(void *ac3, SfdSj *sji);
-extern void (*adxb_ac3_termsupplyfn)(void *ac3);
-extern void (*adxb_ac3_execfn)(AdxbObj *adxb);
+void (*adxb_ac3_setsjifn)(void *ac3, SfdSj *sji) = 0;
+void (*adxb_ac3_termsupplyfn)(void *ac3) = 0;
+void (*adxb_ac3_execfn)(AdxbObj *adxb) = 0;
 
 void ADXB_SetAc3InSj(AdxbObj *adxb, SfdSj *sji)
 {

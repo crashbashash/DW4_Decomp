@@ -222,10 +222,6 @@ static int g_ParticleInfo_fieldOffsets[] = {
     1016,
 };
 
-static int g_ParticleInfo_alphaTypeDefault;
-static int g_ParticleInfo_alphaFunctionDefault;
-static int g_ParticleInfo_timeTypeDefault;
-static int g_ParticleInfo_shapeDefault;
 
 void ParticleInfo_InitFields(void) {
     int temp_s1;
@@ -246,16 +242,16 @@ void ParticleInfo_InitFields(void) {
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
     ((igObjectRefMetaField *)f)->_metaObject = FUN_0014dfb0();
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
-    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_alphaTypeDefault);
+    igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e940;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6);
-    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_alphaFunctionDefault);
+    igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e8e0;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
-    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_timeTypeDefault);
+    igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e880;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
-    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_shapeDefault);
+    igEnumMetaField_SetDefaultValue(f, 0);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e9a0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE), 1);

@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
+#pragma push
+#pragma readonly_strings on
 
 extern "C" void igInsightCore_AddToScheduler(int insight, beTargetObj *object);
 extern "C" void igInsightCore_RemoveFromScheduler(int insight, beTargetObj *object);
@@ -20,25 +22,20 @@ extern "C" int g_beTargetObj_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" float g_vec3Zero[4];
 extern "C" int g_vec3ZAxis[4];
-extern "C" char PLAYER_5[];
-extern "C" char GETMATRIX_6[];
-extern "C" char ENEMY_2[];
-extern "C" char GETMATRIX_ACTIVE[];
-extern "C" char NEAR_2[];
 
 /* The scene's one target object, and the messenger it asks the actors through. */
-extern "C" beTargetObj *g_targetObj;
-extern "C" beMessenger *g_targetMessenger;
+extern "C" {
+beTargetObj *g_targetObj;
+beMessenger *g_targetMessenger;
 
 /* The last target query: where it was asked from, and what it found. */
-extern "C" igVec3f g_targetOrigin;
-extern "C" float g_targetOriginHeading;
-extern "C" {
+igVec3f g_targetOrigin;
+float g_targetOriginHeading;
 igMatrix44f g_targetOriginMatrix;
+igVec3f g_targetPosition;
+float g_targetDistanceSq;
+int g_targetRamNo;
 }
-extern "C" igVec3f g_targetPosition;
-extern "C" float g_targetDistanceSq;
-extern "C" int g_targetRamNo;
 
 #define TARGET_HEADING_UNSET -100.0f
 #define TWO_PI 6.2831855f
@@ -220,7 +217,7 @@ extern "C" int beTargetObj_GetPlayerCentre(float *out)
 
     if (((igVec3fList *)g_targetObj->_playerPosList)->_count == 0) {
         beTargetObj_GatherPositions(g_targetObj, (igVec3fList *)g_targetObj->_playerPosList,
-                                    (igIntList *)g_targetObj->_playerRamNoList, PLAYER_5, GETMATRIX_6);
+                                    (igIntList *)g_targetObj->_playerRamNoList, "PLAYER", "GETMATRIX");
         if (((igVec3fList *)g_targetObj->_playerPosList)->_count == 0) return 0;
     }
     out[0] = g_vec3Zero[0];
@@ -263,7 +260,7 @@ extern "C" int beTargetObj_TargetPlayer(beTargetObj *self, float *from, int near
 
     if (((igVec3fList *)self->_playerPosList)->_count == 0) {
         beTargetObj_GatherPositions(self, (igVec3fList *)self->_playerPosList,
-                                    (igIntList *)self->_playerRamNoList, PLAYER_5, GETMATRIX_6);
+                                    (igIntList *)self->_playerRamNoList, "PLAYER", "GETMATRIX");
         if (((igVec3fList *)self->_playerPosList)->_count == 0) {
             return 0;
         }
@@ -290,8 +287,8 @@ extern "C" int beTargetObj_TargetEnemy(beTargetObj *self, float *from, int neare
     float facingFrom[4];
 
     if (((igVec3fList *)self->_enemyPosList)->_count == 0) {
-        beTargetObj_GatherPositions(self, (igVec3fList *)self->_enemyPosList, (igIntList *)0, ENEMY_2,
-                                    GETMATRIX_ACTIVE);
+        beTargetObj_GatherPositions(self, (igVec3fList *)self->_enemyPosList, (igIntList *)0, "ENEMY",
+                                    "GETMATRIX_ACTIVE");
         if (((igVec3fList *)self->_enemyPosList)->_count == 0) {
             return 0;
         }
@@ -327,14 +324,14 @@ extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const 
     g_targetOrigin.y = origin.y;
     g_targetOrigin.z = origin.z;
     g_targetOriginHeading = TARGET_HEADING_UNSET;
-    nearest = strcmp(mode, NEAR_2) == 0;
-    if (strcmp(group, PLAYER_5) == 0) {
+    nearest = strcmp(mode, "NEAR") == 0;
+    if (strcmp(group, "PLAYER") == 0) {
         playerFrom.x = origin.x;
         playerFrom.y = origin.y;
         playerFrom.z = origin.z;
         return beTargetObj_TargetPlayer(g_targetObj, (float *)&playerFrom, nearest);
     }
-    if (strcmp(group, ENEMY_2) == 0) {
+    if (strcmp(group, "ENEMY") == 0) {
         enemyFrom.x = origin.x;
         enemyFrom.y = origin.y;
         enemyFrom.z = origin.z;
@@ -408,3 +405,5 @@ extern "C" int Gap__Bec__beTargetObj__vfunc_20(void)
 {
     return g_beTargetObj_metaObject[0];
 }
+
+#pragma pop

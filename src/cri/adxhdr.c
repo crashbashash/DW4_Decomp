@@ -47,11 +47,6 @@ typedef struct AdxtHdrInfo {
     int lpEnd;
 } AdxtHdrInfo;
 
-extern unsigned char DAT_004edfc8[];
-extern char DAT_004edfd0[];
-extern char DAT_004ee008[];
-extern char DAT_004ee048[];
-
 void ADXERR_CallErrFunc1(const char *message);
 void *memset(void *dst, int value, unsigned int size);
 
@@ -210,7 +205,7 @@ void FUN_00262ee8(unsigned char *dst, AdxHeader *h)
 {
     unsigned char *p;
     int i;
-    p = DAT_004edfc8;
+    p = (unsigned char *)"(c)CRI";
     *dst++ = h->encoding;
     *dst++ = h->blockSize;
     *dst++ = h->bitsPerSample;
@@ -253,18 +248,18 @@ void FUN_00263060(void *buf, int size, AdxtHdrInfo *out)
     int work[4];
     int ret;
     if (buf == 0 || out == 0) {
-        ADXERR_CallErrFunc1(DAT_004edfd0);
+        ADXERR_CallErrFunc1("E02041201: NULL pointer is specified.(ADXT_GetHdrInfo)");
         return;
     }
     memset(&info, 0, sizeof(info));
     memset(&hdr, 0, sizeof(hdr));
     ret = FUN_00262d30(buf, size, work, &hdr);
     if (ret == -4) {
-        ADXERR_CallErrFunc1(DAT_004ee008);
+        ADXERR_CallErrFunc1("E02041201: Can not get header information.(ADXT_GetHdrInfo)");
         return;
     }
     if (ret < 0) {
-        ADXERR_CallErrFunc1(DAT_004ee048);
+        ADXERR_CallErrFunc1("E02041201: Buffer size is too short.(ADXT_GetHdrInfo)");
         return;
     }
     if (hdr.version == 6) {

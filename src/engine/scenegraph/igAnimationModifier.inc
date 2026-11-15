@@ -118,7 +118,7 @@ void igAnimationModifier_InitFields(void) {
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00196190();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048d1f8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 2);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationModifier_fieldTable, g_igAnimationModifier_fieldHandles, g_igAnimationModifier_fieldOffsets, temp_s2);
 }

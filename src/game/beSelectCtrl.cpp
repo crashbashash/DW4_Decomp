@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 /* SELECTCTRL: a cursor over a row of choices drawn by a MODELCTRL model. The update opens the model,
  * moves the cursor with the stick or D-pad, plays the decide or cancel sequence and closes it again;
@@ -38,18 +40,18 @@ enum PadBits {
 #define RELEASE(type, object) { type *released = (type *)(object); if (released != 0) { released->_refCount = (int)released->_refCount - 1; if ((released->_refCount & 0x7FFFFF) == 0) igObject_Destroy(released); } }
 #define PICK_ALLOCATOR(allocator, owner) { allocator = igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 #define INFO_NAME (info->_name ? info->_name : (int)emptyString)
-#define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers(self->_messenger, MODELCTRL_19, INFO_NAME, ramNo); }
-#define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, MODELCTRL_19, INFO_NAME, ramNo, sequence); }
-#define SEND_SAVED_SEQUENCE() { int sequence = work->_svSeqName; int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, MODELCTRL_19, INFO_NAME, ramNo, sequence); }
+#define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", INFO_NAME, ramNo); }
+#define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, "MODELCTRL", INFO_NAME, ramNo, sequence); }
+#define SEND_SAVED_SEQUENCE() { int sequence = work->_svSeqName; int ramNo = ram->_ramNo; beMessenger_SendNamed(self->_messenger, "MODELCTRL", INFO_NAME, ramNo, sequence); }
 /* Asks the model whether it still plays the named sequence; the reply is the first bool. */
 #define ASK_PLAYING(sequence) \
     SELECT_MODEL() \
     beMessenger_AppendString(self->_messenger, sequence); \
-    beMessenger_DispatchSelected(self->_messenger, ISSEQNAME_5);
+    beMessenger_DispatchSelected(self->_messenger, "ISSEQNAME");
 #define PLAY_CURSOR_NG() \
-    beMessenger_SelectGroup(self->_messenger, SOUND_10); \
-    beMessenger_AppendString(self->_messenger, CURSOR_NG_2); \
-    beMessenger_DispatchSelected(self->_messenger, PLAY_8);
+    beMessenger_SelectGroup(self->_messenger, "SOUND"); \
+    beMessenger_AppendString(self->_messenger, "CURSOR_NG"); \
+    beMessenger_DispatchSelected(self->_messenger, "PLAY");
 #define ENSURE_STRING_POOL() if (g_stringPool[0] == 0) { \
         value = StringPool_Allocate(0x10); \
         if (value != 0) value = StringPool_Construct(value); \
@@ -148,23 +150,6 @@ extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 extern "C" float g_vec3Zero[3];
 extern "C" char emptyString[];
-extern "C" char SELECTCTRL_3[];
-extern "C" char ONE_6[];
-extern "C" char MODELCTRL_19[];
-extern "C" char SQ_OPEN_6[];
-extern "C" char GENERATE_12[];
-extern "C" char ISSEQNAME_5[];
-extern "C" char SQ_LINESL_percent_02d[];
-extern "C" char SQ_LINEUP_percent_02d[];
-extern "C" char SQ_LINEDW_percent_02d[];
-extern "C" char SOUND_10[];
-extern "C" char CURSOR_NG_2[];
-extern "C" char PLAY_8[];
-extern "C" char SQ_LINEON_percent_02d[];
-extern "C" char SQ_CLOSE_7[];
-extern "C" char SQ_CANCEL_3[];
-extern "C" char SQ_FO2TOP[];
-extern "C" char NOCANCEL_2[];
 
 /* Owning stack reference to the work created by GENERATE, released on scope exit. */
 class WorkRef {
@@ -206,7 +191,7 @@ int beSelectCtrl_GetInfoMeta(void)
 
 void beSelectCtrl_RegisterReceiver(beSelectCtrl *self, int info)
 {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, SELECTCTRL_3);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "SELECTCTRL");
 }
 
 static inline int waitOf(const beBaseInfoRam *ram) { return ram->_st2; }
@@ -249,7 +234,7 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
         RELEASE(igObject, ram->_dataList)
         ram->_dataList = (int)created;
     }
-    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_6);
+    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
     pad = bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo);
     state = ram->_st0;
@@ -265,14 +250,14 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
             offset[1] = work->_offsetPos[1];
             offset[2] = work->_offsetPos[2];
             beMessenger_AppendVec3(self->_messenger, offset);
-            beMessenger_AppendString(self->_messenger, SQ_OPEN_6);
-            beMessenger_DispatchSelected(self->_messenger, GENERATE_12);
+            beMessenger_AppendString(self->_messenger, "SQ_OPEN");
+            beMessenger_DispatchSelected(self->_messenger, "GENERATE");
             NEXT_STEP(ram)
             return;
         case 1:
-            ASK_PLAYING(SQ_OPEN_6)
+            ASK_PLAYING("SQ_OPEN")
             if ((beMessenger_GetBool(self->_messenger, 0) & 0xFF) != 1) {
-                sprintf(slideText, SQ_LINESL_percent_02d, data->_selectNo);
+                sprintf(slideText, "SQ_LINESL%02d", data->_selectNo);
                 SEND_MODEL(slideText)
                 NEXT_STATE(ram)
                 return;
@@ -301,13 +286,13 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
                         if (selectNo != 0) {
                             selectNo = selectNo - 1;
                             moved = true;
-                            sprintf(upText, SQ_LINEUP_percent_02d, selectNo);
+                            sprintf(upText, "SQ_LINEUP%02d", selectNo);
                             SAVE_SEQUENCE(upText)
                         }
                     } else if (((value != 0 && down) || (value == 0 && right)) && selectNo != work->_selectMax - 1) {
                         selectNo = selectNo + 1;
                         moved = true;
-                        sprintf(downText, SQ_LINEDW_percent_02d, selectNo);
+                        sprintf(downText, "SQ_LINEDW%02d", selectNo);
                         SAVE_SEQUENCE(downText)
                     }
                     if (moved) {
@@ -342,7 +327,7 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
                     ram->_st2 = 0;
                     return;
                 }
-                sprintf(onText, SQ_LINEON_percent_02d, data->_selectNo);
+                sprintf(onText, "SQ_LINEON%02d", data->_selectNo);
                 SAVE_SEQUENCE(onText)
                 SEND_SAVED_SEQUENCE()
                 NEXT_STEP(ram)
@@ -371,8 +356,8 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
     case STATE_CLOSE:
         switch (ram->_st1) {
         case 0:
-            if (data->_selectNo != -1) name = (int *)SQ_CLOSE_7;
-            else name = (int *)SQ_CANCEL_3;
+            if (data->_selectNo != -1) name = (int *)"SQ_CLOSE";
+            else name = (int *)"SQ_CANCEL";
             ENSURE_STRING_POOL()
             header = StringPool_Intern(g_stringPool[0], name);
             {
@@ -395,11 +380,11 @@ void beSelectCtrl_Update(beSelectCtrl *self, beBaseInfoRam *ram) {
     case STATE_FO2TOP:
         switch (ram->_st1) {
         case 0:
-            SEND_MODEL(SQ_FO2TOP)
+            SEND_MODEL("SQ_FO2TOP")
             NEXT_STEP(ram)
             return;
         case 1:
-            ASK_PLAYING(SQ_FO2TOP)
+            ASK_PLAYING("SQ_FO2TOP")
             if (beMessenger_GetBool(self->_messenger, 0) == 0) {
                 ENTER_STATE(ram, STATE_SELECT)
                 return;
@@ -435,7 +420,7 @@ int beSelectCtrl_OnMessage(beSelectCtrl *self, beBaseInfoRam *ram, int message) 
         PICK_ALLOCATOR(allocator, ram)
         DataList::create(ram, allocator);
     }
-    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_6);
+    data = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
     switch (beMessenger_ResolveEnumValue(self->_messenger, beSelectCtrl_GetMessageEnum(), message)) {
     case MESSAGE_GENERATE:
@@ -470,7 +455,7 @@ int beSelectCtrl_OnMessage(beSelectCtrl *self, beBaseInfoRam *ram, int message) 
             created->_offsetPos[2] = g_vec3Zero[2];
         }
         if (beMessenger_GetStringCount(self->_messenger) != 0) {
-            if (strcmp(beMessenger_GetString(self->_messenger, 0), NOCANCEL_2) == 0) {
+            if (strcmp(beMessenger_GetString(self->_messenger, 0), "NOCANCEL") == 0) {
                 created->_isCancel = 0;
             }
         }
@@ -535,3 +520,5 @@ int beSelectCtrl_GetMeta(void)
 {
     return g_beSelectCtrl_metaObject[0];
 }
+
+#pragma pop

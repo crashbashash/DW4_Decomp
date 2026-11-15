@@ -260,7 +260,7 @@ extern "C" int igHotKeyBinding_GetVTable(void);
 extern "C" void igHotKeyBinding_RunStaticInit(void);
 extern "C" void igHotKeyBinding_Register(void);
 extern "C" void thunk_igHotKeyBinding_GetMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(...);
+extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void FUN_00145eb0(void);
 extern "C" void FUN_00146850(void);
 extern "C" void igHotKeyBinding_InitFields(void);

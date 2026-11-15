@@ -35,8 +35,6 @@ extern "C" char font001[];
 extern "C" char font002[];
 extern "C" char font003[];
 extern "C" char font100[];
-extern "C" char single_space[];
-extern "C" char LEFT[];
 extern "C" char txt_status_lua[];
 extern "C" char i_stcursor01[];
 extern "C" char i_stcursor02[];
@@ -110,6 +108,9 @@ extern "C" int beNDMWStatusSelectE0_GetMeta(void);
 extern "C" int beNDMWStatusSelect01_GetMeta(void);
 extern "C" int beNDMWStatusSelect00_GetMeta(void);
 extern "C" int beNDMWWindowSelect_GetMeta(void);
+
+#pragma push
+#pragma readonly_strings on
 
 void beNDMWWindowSelect_Update(beNDMWWindowSelectVirtuals *view) {
     /* matching construct: typed view of the dummy-virtual receiver; data is reached only through s. */
@@ -237,11 +238,11 @@ void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self) {
     }
     beNDMWWindow_PresentModelAtOrigin(self, i_stmenu01, 0, sequence.p, SQ_CLOSE_4);
     }
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT09, font000, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT09, font001, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT09, font002, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT09, font003, single_space, LEFT);
+    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT09, font000, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT09, font001, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT09, font002, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT09, font003, " ", "LEFT");
     if (self->_entCode > 0) {
         beNDMWWindow_RunMessageScript(self, txt_status_lua, self->_entCode);
     }
@@ -256,10 +257,10 @@ void beNDMWStatusSelect01_Setup(beNDMWStatusSelect01 *self) {
 
 void beNDMWStatusSelectE0_Setup(beNDMWStatusSelectE0 *self) {
     char *cursor;
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font000, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font001, single_space, LEFT);
-    beNDMWWindow_QueueText(self, STWINFONT29_2, font002, single_space, LEFT);
+    beNDMWWindow_QueueText(self, STWINFONT29_2, font100, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT29_2, font000, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT29_2, font001, " ", "LEFT");
+    beNDMWWindow_QueueText(self, STWINFONT29_2, font002, " ", "LEFT");
     if (self->_entCode > 0) {
         beNDMWWindow_RunMessageScript(self, txt_status_lua, self->_entCode);
     }
@@ -304,3 +305,5 @@ int beNDMWWindowSelect_GetMeta(void)
 {
     return g_beNDMWWindowSelect_metaObject[0];
 }
+
+#pragma pop

@@ -23,8 +23,8 @@ void igEnumArrayMetaField_SetDefault(void *self, int value) {
     }
 }
 
-void igEnumMetaField_SetDefaultValue(igMetaFieldView *self, const int *value)
+void igEnumMetaField_SetDefaultValue(igMetaFieldView *self, const int &value)
 {
-    self->SetDefault(value);
+    self->SetDefault(&value);
 }
 

@@ -6,6 +6,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
+#pragma push
+#pragma readonly_strings on
 
 extern "C" {
 /* scene graph */
@@ -103,19 +105,6 @@ extern int g_beCriFxInfo_metaObject[4];
 extern int g_beCriSfpData_metaObject[4];
 extern int g_beCriAcxData_metaObject[4];
 
-extern char BECRUNTIME[];
-extern char AdxModulePath[];
-extern char g_adxModulePathDefault[];
-extern char text_9_31s281[];
-extern char text_9_18[];
-extern char C_cri_ps2_iop_modules[];
-extern char C_usr_local_cri_mwlib_iop_drv[];
-extern char NONE[];
-extern char ALL[];
-extern char sndfBuffer[];
-extern char _dataBuffer[];
-extern int g_savedIgFileAbstractProxy[4];
-extern int g_sfpTransferState[4];
 }
 
 /* The two tables handed to the sound IOP module: per port, a bank's table size and its PCM size. */
@@ -123,7 +112,11 @@ struct SfpPortSizes {
     int tblSize[32];
     int pcmSize[32];
 };
-extern "C" SfpPortSizes g_sfpPortSizes;
+extern "C" {
+int g_savedIgFileAbstractProxy;
+SfpPortSizes g_sfpPortSizes;
+int g_sfpTransferState[32];
+}
 
 /* The classes whose virtual functions this file calls, seen through the slots it calls. */
 /* igModelViewMatrixAttr: slot 30 stores the matrix. */
@@ -408,16 +401,16 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     igInsightCore_AddToScheduler(self->_insight, self);
     registry = g_objectSystem[0]->registry;
     if (registry == 0) return;
-    section = igRegistry_GetSectionIndex(registry, BECRUNTIME, 0);
+    section = igRegistry_GetSectionIndex(registry, "BECRUNTIME", 0);
     if (section == -1) return;
     void *allocator = igObject_GetAllocator(self);
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     igSmartPointer<igStringObj> path(igStringObj_Create(allocator));
-    if (igRegistry_GetValueStringObj(registry, section, AdxModulePath, &path, g_adxModulePathDefault, 0) == 0) {
-        if (strcmp(text_9_31s281, text_9_18) == 0)
-            igStringObj_Set((igStringObj *)path, C_cri_ps2_iop_modules);
+    if (igRegistry_GetValueStringObj(registry, section, "AdxModulePath", &path, "", 0) == 0) {
+        if (strcmp("9.31s281", "9.18") == 0)
+            igStringObj_Set((igStringObj *)path, "C:/cri/ps2/iop/modules");
         else
-            igStringObj_Set((igStringObj *)path, C_usr_local_cri_mwlib_iop_drv);
+            igStringObj_Set((igStringObj *)path, "C:/usr/local/cri/mwlib/iop/drv");
     }
     char *text = (char *)path->_buffer;
     igAdx_SetModulePath(text == 0 ? g_stringObjEmptyText[0] : text);
@@ -426,7 +419,7 @@ void Gap__Bec__beCri__vfunc_21(beCri *self) {
     g_adxMediaMode[0] = 2;
     igAdx_Initialize(1);
     igMetaObject *file = g_igFile_metaObject[0];
-    g_savedIgFileAbstractProxy[0] = file->_abstractProxy;
+    g_savedIgFileAbstractProxy = file->_abstractProxy;
     file->_abstractProxy = (int)beCri_AdxFileProxy;
 }
 
@@ -437,7 +430,7 @@ int beCri_AdxFileProxy(void) {
 
 /* Detach: restores igFile's proxy and leaves the insight. */
 void Gap__Bec__beCri__vfunc_22(beCri *self) {
-    g_igFile_metaObject[0]->_abstractProxy = g_savedIgFileAbstractProxy[0];
+    g_igFile_metaObject[0]->_abstractProxy = g_savedIgFileAbstractProxy;
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
@@ -493,7 +486,7 @@ int Gap__Bec__beCri__vfunc_25(beCri *self, MetaObjectView *info) {
 
 /* Reset: turns the effect off, empties the effect list and frees the sound banks. */
 void Gap__Bec__beCri__vfunc_26(beCri *self) {
-    beCri_SetFx(self, NONE);
+    beCri_SetFx(self, "NONE");
     ReleaseAll((igObjectList *)self->_infoList);
     ReserveIfEmpty((igObjectList *)self->_infoList);
     beCri_FreeSfpData(self, 0);
@@ -1138,7 +1131,7 @@ void beCri_SetFx(beCri *self, char *name) {
     if (infos->_count > 0) {
         info = ((beCriFxInfo **)infos->_data)[0];
         if (name == 0) {
-            name = NONE;
+            name = "NONE";
         }
         if (strcmp(name, NameOf(info->_name)) == 0) {
             FUN_002829f0(0xA4000000, info->_reverb);
@@ -1162,7 +1155,7 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
     int removed0;
     int removed1;
 
-    if (strcmp(name, ALL) == 0) {
+    if (strcmp(name, "ALL") == 0) {
         allReady = 1;
         ObjectList_AppendRetained(self->_hdSEs, self->_hdBGM);
         ObjectList_AppendRetained(self->_hdSEs, self->_hdENV);
@@ -1217,13 +1210,15 @@ static inline int AsMemoryRefField(int field) {
 void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
-    igResource_AddAlignment(g_globalContext[0], sndfBuffer, 0x20);
-    field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject[0], _dataBuffer);
+    igResource_AddAlignment(g_globalContext[0], "sndfBuffer", 0x20);
+    field = igMetaObject_FindFieldByName(g_beCriSfpData_metaObject[0], "_dataBuffer");
     field = AsMemoryRefField(field);
-    igMemoryRefMetaField_SetAlignmentType(field, sndfBuffer);
+    igMemoryRefMetaField_SetAlignmentType(field, "sndfBuffer");
 }
 
 int Gap__Bec__beCri__vfunc_20(void)
 {
     return g_beCri_metaObject[0];
 }
+
+#pragma pop

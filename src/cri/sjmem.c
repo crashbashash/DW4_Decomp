@@ -32,33 +32,55 @@ void SJERR_CallErr(const char *message);
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);
 
-extern SfdSjVtbl sjmem_vtbl;
-extern int sjmem_init_cnt;
-extern SjMem sjmem_obj[SJMEM_MAX_OBJ];
-extern const char sjmem_uuid[];
-extern char SJMEM_Error[];
-extern char E2004090231_NULL_pointer_is_specified[];
-extern char E2004090232_Specified_handle_is_invalid[];
-extern char E2004090233_NULL_pointer_is_specified[];
-extern char E2004090234_Specified_handle_is_invalid[];
-extern char E2004090235_NULL_pointer_is_specified[];
-extern char E2004090236_Specified_handle_is_invalid[];
-extern char E2004090237_NULL_pointer_is_specified[];
-extern char E2004090238_Specified_handle_is_invalid[];
-extern char E2004090241_NULL_pointer_is_specified[];
-extern char E2004090242_Specified_handle_is_invalid[];
-extern char E2004090243_NULL_pointer_is_specified[];
-extern char E2004090244_Specified_handle_is_invalid[];
-extern char E2004090245_NULL_pointer_is_specified[];
-extern char E2004090246_Specified_handle_is_invalid[];
-extern char E2004090247_NULL_pointer_is_specified[];
-extern char E2004090248_Specified_handle_is_invalid[];
+/* The stream joint's function table: the common slots, then the two this joint adds. */
+typedef struct SjMemVtbl {
+    void *f0;
+    void *f4;
+    void *f8;
+    void (*destroy)(SjMem *sj);
+    const void *(*getUuid)(SjMem *sj);
+    void (*reset)(SjMem *sj);
+    void (*getChunk)(SjMem *sj, int line, int nbyte, SfdSjChunk *ck);
+    void (*ungetChunk)(SjMem *sj, int line, SfdSjChunk *ck);
+    void (*putChunk)(SjMem *sj, int line, SfdSjChunk *ck);
+    int (*getNumData)(SjMem *sj, int line);
+    int (*isGetChunk)(SjMem *sj, int line, int nbyte, int *rbyte);
+    void (*entryErrFunc)(SjMem *sj, SjErrFunc errfn, void *errobj);
+} SjMemVtbl;
+
+void SJMEM_Destroy(SjMem *sj);
+const void *SJMEM_GetUuid(SjMem *sj);
+void SJMEM_Reset(SjMem *sj);
+void SJMEM_GetChunk(SjMem *sj, int line, int nbyte, SfdSjChunk *ck);
+void SJMEM_UngetChunk(SjMem *sj, int line, SfdSjChunk *ck);
+void SJMEM_PutChunk(SjMem *sj, int line, SfdSjChunk *ck);
+int SJMEM_GetNumData(SjMem *sj, int line);
+int SJMEM_IsGetChunk(SjMem *sj, int line, int nbyte, int *rbyte);
+void SJMEM_EntryErrFunc(SjMem *sj, SjErrFunc errfn, void *errobj);
+
+SjMemVtbl sjmem_vtbl = {
+    0, 0, 0,
+    SJMEM_Destroy,
+    SJMEM_GetUuid,
+    SJMEM_Reset,
+    SJMEM_GetChunk,
+    SJMEM_UngetChunk,
+    SJMEM_PutChunk,
+    SJMEM_GetNumData,
+    SJMEM_IsGetChunk,
+    SJMEM_EntryErrFunc
+};
+int sjmem_init_cnt = 0;
+SjMem sjmem_obj[SJMEM_MAX_OBJ] = {0};
+const unsigned char sjmem_uuid[16] = {
+    0x41, 0xee, 0x9e, 0xdd, 0x79, 0x16, 0xd2, 0x11, 0x93, 0x6c, 0x00, 0x60, 0x08, 0x94, 0x48, 0xbc
+};
 
 void sjmem_Reset(SjMem *sj);
 
 void sjmem_Error(void *obj, int code)
 {
-    SJERR_CallErr(SJMEM_Error);
+    SJERR_CallErr("SJMEM Error");
 }
 
 void sjmem_Init(void);
@@ -121,7 +143,7 @@ SjMem *sjmem_Create(char *buf, int bsize)
     }
     sj = &sjmem_obj[i];
     sj->used = 1;
-    sj->vtbl = &sjmem_vtbl;
+    sj->vtbl = (SfdSjVtbl *)&sjmem_vtbl;
     sj->buf = buf;
     sj->bsize = bsize;
     sj->uuid = sjmem_uuid;
@@ -143,11 +165,11 @@ void SJMEM_Destroy(SjMem *sj)
 void sjmem_Destroy(SjMem *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090231_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090231 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090232_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090232 : Specified handle is invalid.");
         return;
     }
     memset(sj, 0, sizeof(*sj));
@@ -169,11 +191,11 @@ const void *SJMEM_GetUuid(SjMem *sj)
 const void *sjmem_GetUuid(SjMem *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090233_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090233 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090234_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090234 : Specified handle is invalid.");
         return 0;
     }
     return sj->uuid;
@@ -191,11 +213,11 @@ void SJMEM_EntryErrFunc(SjMem *sj, SjErrFunc errfn, void *errobj)
 void sjmem_EntryErrFunc(SjMem *sj, SjErrFunc errfn, void *errobj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090235_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090235 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090236_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090236 : Specified handle is invalid.");
         return;
     }
     sj->errfn = errfn;
@@ -212,11 +234,11 @@ void SJMEM_Reset(SjMem *sj)
 void sjmem_Reset(SjMem *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090237_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090237 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090238_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090238 : Specified handle is invalid.");
         return;
     }
     sj->ndata = sj->bsize;
@@ -248,11 +270,11 @@ void SJMEM_GetChunk(SjMem *sj, int line, int nbyte, SfdSjChunk *ck)
 void sjmem_GetChunk(SjMem *sj, int line, int nbyte, SfdSjChunk *ck)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090241_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090241 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090242_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090242 : Specified handle is invalid.");
         return;
     }
     if (line == SJ_LIN_FREE) {
@@ -287,11 +309,11 @@ void SJMEM_PutChunk(SjMem *sj, int line, SfdSjChunk *ck)
 void sjmem_PutChunk(SjMem *sj, int line, SfdSjChunk *ck)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090243_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090243 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090244_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090244 : Specified handle is invalid.");
         return;
     }
     if (ck->len > 0 && ck->data != 0 && line != SJ_LIN_FREE && line != SJ_LIN_DATA) {
@@ -318,11 +340,11 @@ void sjmem_UngetChunk(SjMem *sj, int line, SfdSjChunk *ck)
     int rpos;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090245_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090245 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090246_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090246 : Specified handle is invalid.");
         return;
     }
     if (ck->len <= 0 || ck->data == 0) {
@@ -370,11 +392,11 @@ int sjmem_IsGetChunk(SjMem *sj, int line, int nbyte, int *rbyte)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090247_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090247 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090248_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090248 : Specified handle is invalid.");
         return 0;
     }
     switch (line) {

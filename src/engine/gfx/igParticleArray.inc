@@ -325,7 +325,7 @@ void igParticleArray_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x11))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x12))->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x13));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00488b78[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014c920);
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x15))->_persistent = 0;
     igMetaObject_NameFields(meta, g_igParticleArray_fieldTable, g_igParticleArray_fieldHandles, g_igParticleArray_fieldOffsets, fieldStart);

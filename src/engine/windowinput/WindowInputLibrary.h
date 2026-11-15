@@ -138,7 +138,7 @@ extern "C" void FUN_00146ee0(void);
 extern "C" char igControllerManager_GetPublishedMetaObject[];
 extern "C" void igPsx2ControllerManager_Register(void);
 extern "C" igMetaObject *FUN_00146f60(void);
-extern "C" int igEnumMetaField_SetDefaultValue(...);
+extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void igPsx2ControllerManager_InitFields(void);
 extern "C" igMetaEnum *FUN_00147030(void);
 extern "C" int FUN_00147090(int arg0);

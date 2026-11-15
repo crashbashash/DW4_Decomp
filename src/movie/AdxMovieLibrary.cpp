@@ -164,7 +164,7 @@ extern "C" void igMovieInfo_GetMetaObject(void);
 extern "C" int FUN_0013a360(void);
 extern "C" int FUN_0014dfb0(void);
 extern "C" int FUN_0019aee0(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *, int *);
+extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void FUN_00149980(void);
 extern "C" void FUN_001499e0(void);
 extern "C" void igMovieInfo_InitFields(void);
@@ -213,9 +213,6 @@ extern "C" igMetaObject *Gap__igFileName__vfunc_20(void);
 extern "C" igMetaObject *Gap__igAdxAfsFileList__vfunc_20(void);
 extern "C" igMetaObject *Gap__igAdxAfsFileList__vfunc_22(void);
 extern "C" unsigned char g_AdxMovieLibrary_registered;
-extern "C" int g_igMovieInfo_typeDefault;
-extern "C" int g_igMovieInfo_minificationFilterDefault;
-extern "C" int g_igMovieInfo_magnificationFilterDefault;
 extern "C" igMetaObject *g_igAdx_metaObject;
 struct Obj { int *vt; char pad[4]; };
 extern "C" int DAT_00533790[4];
@@ -1820,8 +1817,6 @@ static int g_igMovieInfo_fieldOffsets[] = {
     96,
     100,
 };
-static int g_igMovieInfo_stateDefault = 1;
-static int g_igMovieInfo_imageFormatDefault = 7;
 
 void igMovieInfo_InitFields(void) {
     int firstField;
@@ -1843,7 +1838,7 @@ void igMovieInfo_InitFields(void) {
     igMetaObject_CreateFields(meta, g_igMovieInfo_ctorTable, 0x15);
     igStringMetaField_SetDefaultText(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField)), 0);
     typeField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 1)));
-    igEnumMetaField_SetDefaultValue(typeField, &g_igMovieInfo_typeDefault);
+    igEnumMetaField_SetDefaultValue(typeField, 0);
     typeField->f52 = (int)FUN_003361a0;
     igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 3)), -1);
     igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 4)), -1);
@@ -1852,10 +1847,10 @@ void igMovieInfo_InitFields(void) {
     videoTexturesField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 7)));
     videoTexturesField->f56 = (int)FUN_00335fb0();
     minificationFilterField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 8)));
-    igEnumMetaField_SetDefaultValue(minificationFilterField, &g_igMovieInfo_minificationFilterDefault);
+    igEnumMetaField_SetDefaultValue(minificationFilterField, 0);
     *(void (**)(void))&minificationFilterField->f52 = FUN_00149980;
     magnificationFilterField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 9)));
-    igEnumMetaField_SetDefaultValue(magnificationFilterField, &g_igMovieInfo_magnificationFilterDefault);
+    igEnumMetaField_SetDefaultValue(magnificationFilterField, 0);
     *(void (**)(void))&magnificationFilterField->f52 = FUN_00149980;
     igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xA)), -1);
     igIntMetaField_SetDefault(((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xB)), -1);
@@ -1864,7 +1859,7 @@ void igMovieInfo_InitFields(void) {
     codecField->f56 = (int)FUN_003355d0();
     codecField->f38 = 0;
     stateField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xE)));
-    igEnumMetaField_SetDefaultValue(stateField, &g_igMovieInfo_stateDefault);
+    igEnumMetaField_SetDefaultValue(stateField, 1);
     stateField->f52 = (int)FUN_00336140;
     sceneInfoField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0xF)));
     sceneInfoField->f56 = FUN_0019aee0();
@@ -1876,7 +1871,7 @@ void igMovieInfo_InitFields(void) {
     runtimeTexturesField->f56 = FUN_0013a360();
     runtimeTexturesField->f38 = 0;
     imageFormatField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x12)));
-    igEnumMetaField_SetDefaultValue(imageFormatField, &g_igMovieInfo_imageFormatDefault);
+    igEnumMetaField_SetDefaultValue(imageFormatField, 7);
     imageFormatField->f38 = 0;
     imageFormatField->f52 = (int)FUN_001499e0;
     userdataField = (((struct MovieInfoFieldView *)igMetaObject_GetFieldAt(meta, firstField + 0x13)));

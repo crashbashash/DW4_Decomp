@@ -10,6 +10,8 @@ int mpv_SkipBytes(SfdSj *sj, int id, int n);
 
 void mpv_ResetErr(MpvErrObj *err);
 
+MpvErrObj mpv_err_global = {0};
+
 void mpv_InitLibErr(void) {
     mpv_ResetErr(&mpv_err_global);
 }

@@ -19,13 +19,13 @@ typedef struct p2Vu0Lock {
 } p2Vu0Lock;
 
 extern int p2FirstOpen;
-extern int p2Vu0Program;
-extern p2Vu0Request p2Vu0Requests[P2_VU0_REQUESTS];
-extern p2Vu0Request *p2FreeVu0Requests;
-extern int p2Vu0LoadSema;
-extern p2Vu0Lock p2Vu0LockState;
-extern struct SemaParam p2Vu0LoadSemaParam;
-extern struct SemaParam p2Vu0LockSemaParam;
+p2Vu0Lock p2Vu0LockState;
+int p2Vu0LoadSema;
+p2Vu0Request *p2FreeVu0Requests;
+p2Vu0Request p2Vu0Requests[P2_VU0_REQUESTS];
+int p2Vu0Program;
+struct SemaParam p2Vu0LoadSemaParam = {0, 64, 0, 2, 0, 0};
+struct SemaParam p2Vu0LockSemaParam = {0, 64, 1, 16, 0, 0};
 
 int p2GetVu0Program(void) {
     return p2Vu0Program;

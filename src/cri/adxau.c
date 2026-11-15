@@ -21,10 +21,41 @@ enum AuEncoding {
 
 int memcmp(const void *a, const void *b, unsigned int size);
 
-extern char _snd[];
-extern char _sd[];
 /* u-law byte -> 16-bit sample */
-extern short adxb_ulaw_tbl[256];
+static short adxb_ulaw_tbl[256] = {
+    -32124, -31100, -30076, -29052, -28028, -27004, -25980, -24956,
+    -23932, -22908, -21884, -20860, -19836, -18812, -17788, -16764,
+    -15996, -15484, -14972, -14460, -13948, -13436, -12924, -12412,
+    -11900, -11388, -10876, -10364, -9852, -9340, -8828, -8316,
+    -7932, -7676, -7420, -7164, -6908, -6652, -6396, -6140,
+    -5884, -5628, -5372, -5116, -4860, -4604, -4348, -4092,
+    -3900, -3772, -3644, -3516, -3388, -3260, -3132, -3004,
+    -2876, -2748, -2620, -2492, -2364, -2236, -2108, -1980,
+    -1884, -1820, -1756, -1692, -1628, -1564, -1500, -1436,
+    -1372, -1308, -1244, -1180, -1116, -1052, -988, -924,
+    -876, -844, -812, -780, -748, -716, -684, -652,
+    -620, -588, -556, -524, -492, -460, -428, -396,
+    -372, -356, -340, -324, -308, -292, -276, -260,
+    -244, -228, -212, -196, -180, -164, -148, -132,
+    -120, -112, -104, -96, -88, -80, -72, -64,
+    -56, -48, -40, -32, -24, -16, -8, 0,
+    32124, 31100, 30076, 29052, 28028, 27004, 25980, 24956,
+    23932, 22908, 21884, 20860, 19836, 18812, 17788, 16764,
+    15996, 15484, 14972, 14460, 13948, 13436, 12924, 12412,
+    11900, 11388, 10876, 10364, 9852, 9340, 8828, 8316,
+    7932, 7676, 7420, 7164, 6908, 6652, 6396, 6140,
+    5884, 5628, 5372, 5116, 4860, 4604, 4348, 4092,
+    3900, 3772, 3644, 3516, 3388, 3260, 3132, 3004,
+    2876, 2748, 2620, 2492, 2364, 2236, 2108, 1980,
+    1884, 1820, 1756, 1692, 1628, 1564, 1500, 1436,
+    1372, 1308, 1244, 1180, 1116, 1052, 988, 924,
+    876, 844, 812, 780, 748, 716, 684, 652,
+    620, 588, 556, 524, 492, 460, 428, 396,
+    372, 356, 340, 324, 308, 292, 276, 260,
+    244, 228, 212, 196, 180, 164, 148, 132,
+    120, 112, 104, 96, 88, 80, 72, 64,
+    56, 48, 40, 32, 24, 16, 8, 0,
+};
 
 /* Reads the big-endian header words, sets the sample format and returns the start of the sample data. */
 unsigned char *adxb_GetAuInfo(unsigned char *buf, int len, int *sfreq, int *nch, int *bits, int *nsmpl,
@@ -93,7 +124,7 @@ unsigned char *adxb_GetAuInfo(unsigned char *buf, int len, int *sfreq, int *nch,
 
 int ADXB_CheckAu(unsigned char *hdr)
 {
-    if (memcmp(hdr, _snd, 4) == 0 || memcmp(hdr, _sd, 4) == 0) {
+    if (memcmp(hdr, ".snd", 4) == 0 || memcmp(hdr, ".sd", 4) == 0) {
         return 1;
     }
     return 0;
@@ -131,8 +162,84 @@ int ADX_DecodeInfoAu(unsigned char *buf, int len, short *hdrlen, signed char *hd
     return 0;
 }
 
-int ADXB_DecodeHeaderAu(AdxbObj *adxb, unsigned char *hdr, int size);
-void ADXB_ExecOneAu16(AdxbObj *adxb);
+int ADXB_DecodeHeaderAu(AdxbObj *adxb, unsigned char *hdr, int size)
+{
+    short hdrlen;
+    int fmt;
+
+    adxb->hdr_set = 1;
+    if (ADX_DecodeInfoAu(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
+                         &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &fmt) < 0) {
+        return 0;
+    }
+    adxb->lp_end_ofst = 0;
+    adxb->lp_end_pos = 0;
+    adxb->lp_start_ofst = 0;
+    adxb->lp_start_pos = 0;
+    adxb->lpins_nsmpl = 0;
+    adxb->cof = 0;
+    adxb->lptype = 0;
+    adxb->nloop = 0;
+    adxb->buf.nch = adxb->nch;
+    adxb->buf.blklen = adxb->blklen;
+    adxb->buf.pcmbuf = adxb->pcmbuf;
+    adxb->format = ADXB_FORMAT_AU;
+    adxb->buf.blksmpl = adxb->blksmpl;
+    adxb->wpos = 0;
+    adxb->buf.pcmbsize = adxb->pcmbsize;
+    adxb->dec_nsmpl = 0;
+    adxb->buf.pcmbdist = adxb->pcmbdist;
+    adxb->pcmfmt = fmt;
+    return hdrlen;
+}
+
+void ADXB_ExecOneAu16(AdxbObj *adxb)
+{
+    AdxbBuf *buf;
+    unsigned short *src;
+    short *dst;
+    short *dst2;
+    unsigned int sample;
+    int n;
+    int i;
+
+    buf = &adxb->buf;
+    src = (unsigned short *)buf->ibuf;
+    if (adxb->stat == 1) {
+        if (ADXPD_GetStat(adxb->adxpd) == 0) {
+            adxb->cb120(adxb->obj124, &buf->pos, &buf->lim, &buf->end);
+            n = buf->pcmbsize - buf->pos;
+            if (buf->lim < n) {
+                n = buf->lim;
+            }
+            if (buf->len < n) {
+                n = buf->len;
+            }
+            dst = buf->pcmbuf + buf->pos;
+            if (adxb->nch == 2) {
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                for (i = 0; i < n; i++) {
+                    sample = src[i * 2];
+                    dst[i] = (sample >> 8) | (sample << 8);
+                    sample = src[i * 2 + 1];
+                    dst2[i] = (sample >> 8) | (sample << 8);
+                }
+            } else {
+                for (i = 0; i < n; i++) {
+                    sample = src[i];
+                    dst[i] = (sample >> 8) | (sample << 8);
+                }
+            }
+            adxb->stat = 2;
+            adxb->f144 = n;
+            adxb->f148 = n * adxb->nch * 2;
+        }
+    }
+    if (adxb->stat == 2) {
+        adxb->cb128(adxb->obj132, adxb->f148, adxb->f144);
+        adxb->stat = 3;
+    }
+}
 
 void ADXB_ExecOneAu8(AdxbObj *adxb)
 {

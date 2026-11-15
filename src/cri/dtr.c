@@ -40,18 +40,9 @@ typedef struct DtrObj {
     int total;              /* 0x3c */
 } DtrObj;
 
-extern int DAT_004a930c;
-extern DtrObj DAT_004a9310[32];
-
-extern char DAT_004eff50[];
-extern char DAT_004eff70[];
-extern char DAT_004eff98[];
-extern char DAT_004effc8[];
-extern char DAT_004efff0[];
-extern char DAT_004f0018[];
-extern char DAT_004f0040[];
-extern char DAT_004f0058[];
-extern char DAT_004f0068[];
+const char *dtr_build = "\nDTR Ver.1.06 Build:Oct  6 2004 11:47:40\n";
+int dtr_init_cnt = 0;
+DtrObj dtr_obj[32] = {0};
 
 void *memset(void *dst, int value, unsigned int n);
 void ADXMSG_PrintErr(const char *format, ...);
@@ -83,7 +74,7 @@ void FUN_002729e8(DtrObj *dtr)
         dtr->total += dtr->cks.len;
         dtr->transfer = 0;
         if (dtr->cks.len != 0) {
-            ADXMSG_PrintErr(DAT_004eff50);
+            ADXMSG_PrintErr("DTR_ExecHndl: Internal Error\n");
             for (;;) {
             }
         }
@@ -103,20 +94,20 @@ void FUN_002729e8(DtrObj *dtr)
         return;
     }
     if (cks.len & 63) {
-        ADXMSG_PrintErr(DAT_004eff70);
-        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr("DTR_ExecHndl: Internal Error len\n");
+        ADXMSG_PrintErr("cks.data=%08x, ckd.data=%08x, cks.len=%d\n", cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
     if ((int)cks.data & 63) {
-        ADXMSG_PrintErr(DAT_004effc8);
-        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr("DTR_ExecHndl: Internal Error cks.data\n");
+        ADXMSG_PrintErr("cks.data=%08x, ckd.data=%08x, cks.len=%d\n", cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
     if ((int)ckd.data & 63) {
-        ADXMSG_PrintErr(DAT_004efff0);
-        ADXMSG_PrintErr(DAT_004eff98, cks.data, ckd.data, cks.len);
+        ADXMSG_PrintErr("DTR_ExecHndl: Internal Error ckd.data\n");
+        ADXMSG_PrintErr("cks.data=%08x, ckd.data=%08x, cks.len=%d\n", cks.data, ckd.data, cks.len);
         for (;;) {
         }
     }
@@ -127,7 +118,7 @@ void FUN_002729e8(DtrObj *dtr)
     dtr->dma.mode = 0;
     dtr->dmaid = sceSifSetDma(&dtr->dma, 1);
     if (dtr->dmaid == 0) {
-        ADXMSG_PrintErr(DAT_004f0018);
+        ADXMSG_PrintErr("E0101701 DTR_ExecHndl: can't use DMA\n");
         dtr->sjs->vtbl->UngetChunk(dtr->sjs, 1, &cks);
         dtr->sjd->vtbl->UngetChunk(dtr->sjd, 0, &ckd);
         return;
@@ -146,15 +137,15 @@ void DTR_ExecServer(void)
 {
     int i;
     for (i = 0; i < 32; i++) {
-        if (DAT_004a9310[i].stat == 1 && DAT_004a9310[i].transfer == 1) {
-            if (sceSifDmaStat(DAT_004a9310[i].dmaid) >= 0) {
+        if (dtr_obj[i].stat == 1 && dtr_obj[i].transfer == 1) {
+            if (sceSifDmaStat(dtr_obj[i].dmaid) >= 0) {
                 return;
             }
         }
     }
     for (i = 0; i < 32; i++) {
-        if (DAT_004a9310[i].used == 1) {
-            FUN_002729e8(&DAT_004a9310[i]);
+        if (dtr_obj[i].used == 1) {
+            FUN_002729e8(&dtr_obj[i]);
         }
     }
     DTX_ExecServer();
@@ -162,17 +153,17 @@ void DTR_ExecServer(void)
 
 void FUN_00272e20(void)
 {
-    ADXMSG_PrintErr(DAT_004f0040, DAT_004a930c);
-    if (DAT_004a930c == 0) {
-        memset(DAT_004a9310, 0, sizeof(DAT_004a9310));
+    ADXMSG_PrintErr("DTR_Init: in (%d)\n", dtr_init_cnt);
+    if (dtr_init_cnt == 0) {
+        memset(dtr_obj, 0, sizeof(dtr_obj));
     }
-    DAT_004a930c++;
-    ADXMSG_PrintErr(DAT_004f0058);
+    dtr_init_cnt++;
+    ADXMSG_PrintErr("DTR_Init: out\n");
 }
 
 void FUN_00272e88(void)
 {
-    DAT_004a930c--;
+    dtr_init_cnt--;
 }
 
 DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
@@ -181,13 +172,13 @@ DtrObj *FUN_00272ea0(SjObj *sjs, SjObj *sjd)
     int i;
     SJCRS_Lock();
     for (i = 0; i < 32; i++) {
-        dtr = &DAT_004a9310[i];
+        dtr = &dtr_obj[i];
         if (dtr->used == 0) {
             break;
         }
     }
     if (i == 32) {
-        ADXMSG_PrintErr(DAT_004f0068, 32, 32);
+        ADXMSG_PrintErr("i:%d DTR_MAX_OBJ:%d\n", 32, 32);
         dtr = 0;
     } else {
         memset(dtr, 0, sizeof(DtrObj));

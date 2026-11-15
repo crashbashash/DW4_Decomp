@@ -242,7 +242,7 @@ void igVisualContext_InitFields(void) {
     igLongMetaField_SetDefault(temp_v0, 0);
     ((igLongMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_004884e0[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_00149440);
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xD))->_persistent = 0;
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xE))->_persistent = 0;

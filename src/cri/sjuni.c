@@ -20,18 +20,33 @@ struct SjUniNode {
     SfdSjChunk ck;
 };
 
-typedef struct SjUniObj {
-    SfdSjVtbl *vtbl;
+typedef struct SjUniObj SjUniObj;
+
+typedef struct SjUniVtbl {
+    void *reserved[3];
+    void (*destroy)(SjUniObj *sj);
+    const char *(*getUuid)(SjUniObj *sj);
+    void (*reset)(SjUniObj *sj);
+    void (*getChunk)(SjUniObj *sj, unsigned int line, int nbyte, SfdSjChunk *ck);
+    void (*ungetChunk)(SjUniObj *sj, unsigned int line, SfdSjChunk *ck);
+    void (*putChunk)(SjUniObj *sj, unsigned int line, SfdSjChunk *ck);
+    int (*getNumData)(SjUniObj *sj, unsigned int line);
+    int (*isGetChunk)(SjUniObj *sj, unsigned int line, int nbyte, int *rbyte);
+    void (*entryErrFunc)(SjUniObj *sj, SjErrFunc func, void *obj);
+} SjUniVtbl;
+
+struct SjUniObj {
+    SjUniVtbl *vtbl;
     signed char used;
     signed char mode;
-    char *uuid;
+    const char *uuid;
     SjUniNode *pool;
     int npool;
     SjUniNode *free;
     SjUniNode *lines[SJUNI_NLINE];
     SjErrFunc err;
     void *errobj;
-} SjUniObj;
+};
 
 void *memset(void *dst, int value, unsigned int size);
 
@@ -40,39 +55,31 @@ void SJCRS_Unlock(void);
 void SJERR_CallErr(const char *message);
 void SJ_SplitChunk(SfdSjChunk *ck, int nbyte, SfdSjChunk *head, SfdSjChunk *rest);
 
-extern SfdSjVtbl sjuni_vtbl;
-extern int sjuni_init_cnt;
-extern SjUniObj sjuni_obj[SJUNI_MAX_OBJ];
-extern char sjuni_uuid[];
-extern char SJUNI_Error_text[];
-extern char E2004090261_NULL_pointer_is_specified[];
-extern char E2004090262_Specified_handle_is_invalid[];
-extern char E2004090263_NULL_pointer_is_specified[];
-extern char E2004090264_Specified_handle_is_invalid[];
-extern char E2004090265_NULL_pointer_is_specified[];
-extern char E2004090266_Specified_handle_is_invalid[];
-extern char E2004090267_NULL_pointer_is_specified[];
-extern char E2004090268_Specified_handle_is_invalid[];
-extern char E2004090269_NULL_pointer_is_specified[];
-extern char E2004090270_Specified_handle_is_invalid[];
-extern char E2004090271_NULL_pointer_is_specified[];
-extern char E2004090272_Specified_handle_is_invalid[];
-extern char E2004090273_NULL_pointer_is_specified[];
-extern char E2004090274_Specified_handle_is_invalid[];
-extern char E2004090275_NULL_pointer_is_specified[];
-extern char E2004090276_Specified_handle_is_invalid[];
-extern char E2004090277_NULL_pointer_is_specified[];
-extern char E2004090278_Specified_handle_is_invalid[];
-extern char E2004090279_NULL_pointer_is_specified[];
-extern char E2004090280_Specified_handle_is_invalid[];
-extern char E2004090281_NULL_pointer_is_specified[];
-extern char E2004090282_Specified_handle_is_invalid[];
+void SJUNI_Destroy(SjUniObj *sj);
+const char *SJUNI_GetUuid(SjUniObj *sj);
+void SJUNI_EntryErrFunc(SjUniObj *sj, SjErrFunc func, void *obj);
+void SJUNI_Reset(SjUniObj *sj);
+int SJUNI_GetNumData(SjUniObj *sj, unsigned int line);
+void SJUNI_GetChunk(SjUniObj *sj, unsigned int line, int nbyte, SfdSjChunk *ck);
+void SJUNI_PutChunk(SjUniObj *sj, unsigned int line, SfdSjChunk *ck);
+void SJUNI_UngetChunk(SjUniObj *sj, unsigned int line, SfdSjChunk *ck);
+int SJUNI_IsGetChunk(SjUniObj *sj, unsigned int line, int nbyte, int *rbyte);
+
+static SjUniVtbl sjuni_vtbl = {
+    {0, 0, 0},
+    SJUNI_Destroy, SJUNI_GetUuid, SJUNI_Reset, SJUNI_GetChunk, SJUNI_UngetChunk,
+    SJUNI_PutChunk, SJUNI_GetNumData, SJUNI_IsGetChunk, SJUNI_EntryErrFunc
+};
+static int sjuni_init_cnt = 0;
+static SjUniObj sjuni_obj[SJUNI_MAX_OBJ] = {0};
+static const char sjuni_uuid[16] = "\xa3\x4f\x53\x2e\x97\xaf\xd2\x11\xa5\x27\x00\x60\x08\x94\x48\xbc";
+
 
 void sjuni_Init(void);
 void sjuni_Finish(void);
 SjUniObj *sjuni_Create(int mode, char *work, int wksize);
 void sjuni_Destroy(SjUniObj *sj);
-char *sjuni_GetUuid(SjUniObj *sj);
+const char *sjuni_GetUuid(SjUniObj *sj);
 void sjuni_EntryErrFunc(SjUniObj *sj, SjErrFunc func, void *obj);
 void sjuni_Reset(SjUniObj *sj);
 int sjuni_GetNumData(SjUniObj *sj, unsigned int line);
@@ -85,7 +92,7 @@ int sjuni_GetNumFreeNode(SjUniObj *sj);
 
 void sjuni_Error(void *obj, int code)
 {
-    SJERR_CallErr(SJUNI_Error_text);
+    SJERR_CallErr("SJUNI Error");
 }
 
 void SJUNI_Init(void)
@@ -163,20 +170,20 @@ void SJUNI_Destroy(SjUniObj *sj)
 void sjuni_Destroy(SjUniObj *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090261_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090261 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090262_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090262 : Specified handle is invalid.");
         return;
     }
     memset(sj, 0, sizeof(*sj));
     sj->used = 0;
 }
 
-char *SJUNI_GetUuid(SjUniObj *sj)
+const char *SJUNI_GetUuid(SjUniObj *sj)
 {
-    char *uuid;
+    const char *uuid;
 
     SJCRS_Lock();
     uuid = sjuni_GetUuid(sj);
@@ -184,14 +191,14 @@ char *SJUNI_GetUuid(SjUniObj *sj)
     return uuid;
 }
 
-char *sjuni_GetUuid(SjUniObj *sj)
+const char *sjuni_GetUuid(SjUniObj *sj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090263_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090263 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090264_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090264 : Specified handle is invalid.");
         return 0;
     }
     return sj->uuid;
@@ -207,11 +214,11 @@ void SJUNI_EntryErrFunc(SjUniObj *sj, SjErrFunc func, void *obj)
 void sjuni_EntryErrFunc(SjUniObj *sj, SjErrFunc func, void *obj)
 {
     if (sj == 0) {
-        SJERR_CallErr(E2004090265_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090265 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090266_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090266 : Specified handle is invalid.");
         return;
     }
     sj->err = func;
@@ -232,11 +239,11 @@ void sjuni_Reset(SjUniObj *sj)
     int i;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090267_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090267 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090268_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090268 : Specified handle is invalid.");
         return;
     }
     pool = sj->pool;
@@ -270,11 +277,11 @@ int sjuni_GetNumData(SjUniObj *sj, unsigned int line)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090269_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090269 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090270_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090270 : Specified handle is invalid.");
         return 0;
     }
     if (line >= SJUNI_NLINE) {
@@ -305,11 +312,11 @@ void sjuni_GetChunk(SjUniObj *sj, unsigned int line, int nbyte, SfdSjChunk *ck)
     SjUniNode *node;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090271_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090271 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090272_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090272 : Specified handle is invalid.");
         return;
     }
     if (line >= SJUNI_NLINE) {
@@ -354,11 +361,11 @@ void sjuni_PutChunk(SjUniObj *sj, unsigned int line, SfdSjChunk *ck)
     SjUniNode *next;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090273_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090273 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090274_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090274 : Specified handle is invalid.");
         return;
     }
     if (line >= SJUNI_NLINE) {
@@ -415,11 +422,11 @@ void sjuni_UngetChunk(SjUniObj *sj, unsigned int line, SfdSjChunk *ck)
     SjUniNode *node;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090275_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090275 : NULL pointer is specified.");
         return;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090276_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090276 : Specified handle is invalid.");
         return;
     }
     if (line >= SJUNI_NLINE) {
@@ -461,6 +468,41 @@ int SJUNI_IsGetChunk(SjUniObj *sj, unsigned int line, int nbyte, int *rbyte)
     return ret;
 }
 
+int sjuni_IsGetChunk(SjUniObj *sj, unsigned int line, int nbyte, int *rbyte)
+{
+    SfdSjChunk ck;
+
+    if (sj == 0) {
+        SJERR_CallErr("E2004090277 : NULL pointer is specified.");
+        return 0;
+    }
+    if (sj->used == 0) {
+        SJERR_CallErr("E2004090278 : Specified handle is invalid.");
+        return 0;
+    }
+    *rbyte = 0;
+    if (line >= SJUNI_NLINE) {
+        if (sj->err != 0) {
+            sj->err(sj->errobj, SJ_ERR_PRM);
+        }
+        return 0;
+    }
+    if (sj->lines[line] == 0) {
+        return 0;
+    }
+    ck = sj->lines[line]->ck;
+    *rbyte = ck.len;
+    if (sj->mode == SJUNI_MODE_JOIN) {
+        if (ck.len >= nbyte) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        return ck.len == nbyte;
+    }
+}
+
 int SJUNI_GetNumChunk(SjUniObj *sj, int line)
 {
     int n;
@@ -477,11 +519,11 @@ int sjuni_GetNumChunk(SjUniObj *sj, int line)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090279_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090279 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090280_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090280 : Specified handle is invalid.");
         return 0;
     }
     n = 0;
@@ -507,11 +549,11 @@ int sjuni_GetNumFreeNode(SjUniObj *sj)
     int n;
 
     if (sj == 0) {
-        SJERR_CallErr(E2004090281_NULL_pointer_is_specified);
+        SJERR_CallErr("E2004090281 : NULL pointer is specified.");
         return 0;
     }
     if (sj->used == 0) {
-        SJERR_CallErr(E2004090282_Specified_handle_is_invalid);
+        SJERR_CallErr("E2004090282 : Specified handle is invalid.");
         return 0;
     }
     n = 0;

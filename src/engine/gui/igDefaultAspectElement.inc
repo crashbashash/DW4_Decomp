@@ -138,7 +138,6 @@ static int g_igDefaultAspectElement_fieldOffsets[] = {
     24,
     28,
 };
-static int g_igDefaultAspectElement_fitModeDefault;
 
 void igDefaultAspectElement_InitFields(void) {
     int temp_s2;
@@ -159,7 +158,7 @@ void igDefaultAspectElement_InitFields(void) {
     *(int *)((char *)(temp_s1_3) + 56) = FUN_00196190();
     *(unsigned char *)((char *)(temp_s1_3) + 52) = 1;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    igEnumMetaField_SetDefaultValue(temp_v0, &g_igDefaultAspectElement_fitModeDefault);
+    igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00451ac0);
     igMetaObject_NameFields(temp_s0, g_igDefaultAspectElement_fieldTable, g_igDefaultAspectElement_fieldHandles, g_igDefaultAspectElement_fieldOffsets, temp_s2);
 }

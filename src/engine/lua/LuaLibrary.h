@@ -6,8 +6,15 @@
 #include "dw4/igSmartPointer.h"
 
 /* The library front: the registration latch. */
-extern "C" unsigned char g_LuaLibrary_registered;
 extern "C" void LuaLibrary_MarkRegistered(void);
+
+/* A class's registration: a field factory builds each reflected field, a callback list runs when the
+ * class registers. */
+typedef igMetaField *(*FieldFactory)(void *);
+typedef void (*igMetaObjectCallback)(void);
+extern "C" igMetaField *igRawRefMetaField_Create(void *);
+extern "C" igMetaField *igObjectRefMetaField_Create(void *);
+extern "C" void igMemoryPool_EnsureRegistered(void);
 
 extern "C" void igObject_InitHeader(void *object);
 extern "C" void igObject_Destroy(void *object);
@@ -16,9 +23,9 @@ extern "C" void igMetaObject_RunStaticInit(void *(*registerClass)(void));
 extern "C" void *igMetaObject_RegisterClass(...);
 extern "C" int igMetaObject_Create(int allocator);
 extern "C" int igMetaObject_GetFieldCount(igMetaObject *meta);
-extern "C" void igMetaObject_CreateFields(igMetaObject *meta, void *constructors, int count);
+extern "C" void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
 extern "C" void *igMetaObject_GetFieldAt(igMetaObject *meta, int index);
-extern "C" void igMetaObject_NameFields(igMetaObject *meta, void *names, void *descriptors, void *offsets, int first);
+extern "C" void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField ***handles, int *offsets, int first);
 extern "C" int Memory_GetAllocatorBySelector(int key);
 
 /* The object system's byte offset of the vtable word inside an object. */
@@ -34,14 +41,8 @@ extern "C" int igMemoryPool_GetOrCreateMetaObject(void);
 
 extern "C" int g_igNamedObject_vtable[4];
 
-extern "C" igMetaObject *g_igLuaState_metaObject[4];
-extern "C" const char igLuaState_className[];
-extern "C" char g_igLuaState_callbackList[];
+extern "C" igMetaObject *g_igLuaState_metaObject;
 extern "C" int g_igLuaState_vtable[4];
-extern "C" int g_igLuaState_fieldConstructors[2];
-extern "C" int g_igLuaState_fieldNames[2];
-extern "C" int g_igLuaState_fieldDescriptors[2];
-extern "C" int g_igLuaState_fieldOffsets[2];
 extern "C" igMetaObject *igLuaState_GetMetaObject(void);
 extern "C" int igLuaState_GetVTable(void);
 extern "C" void igLuaState_EnsureRegistered(void);
@@ -49,8 +50,7 @@ extern "C" void *igLuaState_Register(void);
 extern "C" void thunk_igLuaState_GetMetaObject(void);
 extern "C" void igLuaState_InitFields(void);
 
-extern "C" igMetaObject *g_igLuaGlue_metaObject[4];
-extern "C" const char igLuaGlue_className[];
+extern "C" igMetaObject *g_igLuaGlue_metaObject;
 extern "C" igMetaObject *igLuaGlue_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igLuaGlue_GetMetaObject(void);
 extern "C" int igLuaGlue_GetVTable(void);
@@ -789,11 +789,9 @@ enum { LUA_PUSH_INSTANCE, LUA_PUSH_REFERENCE, LUA_PUSH_KEEP_TAG };
 typedef void (*LuaErrorHandler)(const char *message, void *data);
 
 extern "C" LuaTagList *g_luaObjectTags;
-extern "C" igLuaGlue::Class *g_luaArrayClasses[13];
+extern "C" igLuaGlue::Class *g_luaArrayClasses[LUA_KIND_CHARS + 1];
 extern "C" igLuaGlue::Class *g_luaGlobalClass;
 extern "C" LuaStartupHook *g_luaStartupHooks;
-/* The empty name of the class that holds the global functions. */
-extern "C" const char emptyString_3[];
 /* How many classes wait for a base class of the name they gave to be built. */
 extern "C" int g_luaClassesAwaitingBase;
 extern "C" int g_luaObjectTag;

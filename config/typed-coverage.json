@@ -5,7 +5,7 @@
   "ParticleTimer": 26,
   "__internalNonRefCountedObjectList": 50,
   "__internalObjectList": 69,
-  "be": 4,
+  "be": 6,
   "beAction2": 25,
   "beAction2Data": 4,
   "beAction2FADESET": 10,
@@ -383,7 +383,7 @@
   "igBlendFunctionAttr": 13,
   "igBlendStateAttr": 1,
   "igBoolArrayMetaField": 10,
-  "igBoolList": 105,
+  "igBoolList": 94,
   "igBoolMetaField": 4,
   "igCallStackTable": 34,
   "igCamera": 6,
@@ -472,7 +472,7 @@
   "igIniShaderFactory": 5,
   "igInsightCore": 48,
   "igIntArrayMetaField": 22,
-  "igIntList": 324,
+  "igIntList": 318,
   "igIntMetaField": 14,
   "igInterface": 2,
   "igIntersectTraversal": 7,
@@ -677,29 +677,29 @@
   "cri": {
    "files": 116,
    "offset_casts": 6,
-   "other_members": 6357,
+   "other_members": 6342,
    "recovered": 0,
    "recovered_pct": 0.0,
-   "synthetic": 201,
-   "total": 6564
+   "synthetic": 364,
+   "total": 6712
   },
   "engine": {
    "files": 49,
    "offset_casts": 3313,
-   "other_members": 11496,
+   "other_members": 11554,
    "recovered": 11436,
-   "recovered_pct": 36.33,
+   "recovered_pct": 36.26,
    "synthetic": 5232,
-   "total": 31477
+   "total": 31535
   },
   "game": {
    "files": 86,
-   "offset_casts": 1095,
-   "other_members": 2237,
-   "recovered": 17752,
-   "recovered_pct": 82.19,
+   "offset_casts": 1093,
+   "other_members": 2244,
+   "recovered": 17737,
+   "recovered_pct": 82.16,
    "synthetic": 515,
-   "total": 21599
+   "total": 21589
   },
   "libgcc": {
    "files": 7,
@@ -749,11 +749,11 @@
   "sony": {
    "files": 62,
    "offset_casts": 4,
-   "other_members": 1262,
+   "other_members": 1305,
    "recovered": 0,
    "recovered_pct": 0.0,
    "synthetic": 2,
-   "total": 1268
+   "total": 1311
   },
   "third_party": {
    "files": 40,
@@ -775,9 +775,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 4510,
- "recovered": 29726,
- "synthetic": 6128,
- "total": 66687,
+ "offset_casts": 4508,
+ "recovered": 29711,
+ "synthetic": 6291,
+ "total": 66926,
  "typeable": 298
 }

@@ -2281,7 +2281,7 @@ extern "C" void *ParticleInfo_Register(void);
 extern "C" void ParticleInfo_GetMetaObject(void);
 extern "C" int FUN_0036ebb0(void);
 extern "C" int FUN_0014dfb0(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *, int *);
+extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void ParticleInfo_InitFields(void);
 extern "C" int memset(int, int, int);
 extern "C" int Gap__Core__igObject__resetFields(...);

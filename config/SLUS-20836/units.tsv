@@ -19,10 +19,10 @@
 @compiler	ee-gcc-2.9-as210	local/ee-gcc2.9-991111-01-as210/bin/ee-gcc	64d0a50fef499da0b98177eb5e79e41dfb066ad44246b137c78a266ef97ee265
 0x00100008	0x00100240	runtime_crt0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	crt0.s: the start-up file, the approved assembly source src/runtime/crt0.S (docs/engine/assembly-sources.md)
 0x00100240	0x00100390	runtime_runtime	b52	-O4,p -sdatathreshold 0 -Iinclude	off	-	whole file
-0x00100390	0x001007e0	runtime_New	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
-0x001007e0	0x00100cb0	runtime_NMWException	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
+0x00100390	0x001007e0	runtime_New	b52	-O4,p -sdatathreshold 0 -Iinclude -str readonly	on	-	whole file
+0x001007e0	0x00100cb0	runtime_NMWException	b52	-O4,p -sdatathreshold 0 -Iinclude -str readonly	on	-	whole file
 0x00100cb0	0x00100cf0	runtime___ptmf	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
-0x00100cf0	0x001024e0	runtime_ExceptionHandler	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
+0x00100cf0	0x001024e0	runtime_ExceptionHandler	b52	-O4,p -sdatathreshold 0 -Iinclude -str readonly	on	-	whole file
 0x001024e0	0x001029c0	runtime_ExceptionHandlerTS	b52	-O4,p -sdatathreshold 0 -Iinclude	on	-	whole file
 0x001029c0	0x001029f8	runtime___init_cpp	b52	-O4,p -sdatathreshold 0 -Iinclude	off	-	whole file
 0x001029f8	0x00102c98	sony-libgraph_1029f8	ee-gcc-2.9-as210	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x102310-0x1030d0; `sd` prologues (Sony EE GCC); exceptions off: none of 5 non-leaf functions has a retail index record; 10 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
@@ -53,7 +53,7 @@
 0x00112638	0x00113398	sony_libkernl_eeloadfile	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00113398	0x00113678	sony_libkernl_iopreset	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00113678	0x00113bc0	sony_libkernl_tlbfunc	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00113bc0	0x00113f20	sony-sdk_1131c8	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 25 non-leaf functions has a retail index record; 50 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 0/2 members; 2 member(s) keep a provisional override
+0x00113bc0	0x00113f20	sony_libkernl_tlbtrap	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	tlbtrap.o: libkernl kernel exception entries, the approved assembly source src/sony/libkernl/tlbtrap.S (docs/engine/assembly-sources.md)
 0x00113f20	0x00113f90	sony_libkernl_diei	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00113f90	0x00114220	sony_libkernl_initsys	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00114220	0x001143a0	sony_libkernl_libosd	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
@@ -152,9 +152,9 @@
 0x00238d40	0x0023938c	alchemy-scene-search_SceneSearchLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00239390	0x0023c440	alchemy-collision_CollisionLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0023c440	0x0023c858	alchemy-lua_LuaRegistration	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
-0x0023c860	0x002442dc	alchemy-lua_LuaBinding	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x0023c860	0x002442dc	alchemy-lua_LuaBinding	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -str readonly	off	-	whole file
 0x002442e0	0x0024683c	alchemy-lua_LuaState	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
-0x00246840	0x00246d28	alchemy-lua_LuaRuntime	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00246840	0x00246d28	alchemy-lua_LuaRuntime	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -str readonly	off	-	whole file
 0x00246d30	0x00247ee8	lua_lapi	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -Dlong=int -I- -Isrc/third_party/libc -Isrc/third_party/lua	off	-	whole file
 0x00247ef0	0x00248714	lua_lauxlib	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -I- -Isrc/third_party/libc -Isrc/third_party/lua -prefix dw4_lualib_config.h	off	-	whole file
 0x00248720	0x0024a048	lua_lbaselib	b52	-O4,s -sdatathreshold 2 -str readonly -lang c++ -I- -Isrc/third_party/libc -Isrc/third_party/lua -prefix dw4_lualib_config.h	off	-	whole file
@@ -292,7 +292,7 @@
 0x00338f70	0x0033be60	movie_igMovieManager	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0033be60	0x0033bf50	movie_igMoviePlugin	b52	-O4,p -sdatathreshold 2 -Iinclude	on	-	whole file
 0x0033bf50	0x00370780	bec_BecLibrary	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
-0x00370780	0x00375e00	bec_be	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
+0x00370780	0x00375e00	bec_be	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -str readonly	on	-	whole file
 0x00375e00	0x00378420	bec_beAction2	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00378420	0x00378710	bec_beActionStarter	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00378710	0x00378ce0	bec_beBaseInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
@@ -382,7 +382,7 @@
 0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0045ec90	0x0045f200	viewer_igViewerGuiFactory	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0045f200	0x00460f90	viewer_igViewerRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
-0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -str readonly	off	-	whole file
 0x00463560	0x00464f90	viewer_igViewManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file

@@ -1,3 +1,5 @@
+#include "dw4/cri/adxt.h"
+
 typedef struct CriSjChunk {
     void *ptr;
     int len;
@@ -23,13 +25,17 @@ typedef struct AdxtObject {
     Sj *sji;
 } AdxtObject;
 
-extern int DAT_0049c8d8;
-extern int DAT_0049c8e0;
-extern int DAT_0049c8e4;
-extern int DAT_0049c8ec;
-extern int adxt_vsync_cnt;
-extern char DAT_0049d538[];
-extern char DAT_0049d938[];
+int adxt_init_cnt = 0;
+int adxt_init_reserved = 0; /* no function reads it */
+int adxt_svr_id = 0;
+int adxt_thrd_svr_sw = 1;
+int adxt_output_mono = 0;
+int adxt_fssvr_id = 0;
+int adxt_vsync_cnt = 0;
+AdxtObj adxt_obj[ADXT_MAX_OBJ] = {0};
+char adxt_enc_ibuf[1024] = {0};
+char adxt_enc_obuf[64] = {0};
+static char *volatile adxt_build_ref;
 extern int DAT_004a9b1c;
 
 void ADXERR_CallErrFunc1(const char *message);
@@ -63,10 +69,6 @@ void FUN_00269498(AdxEnc *enc);
 Sj *SJRBF_Create(void *buf, int size, int f8);
 Sj *SJMEM_Create(void *buf, int size);
 
-extern char *volatile DAT_0056dfa8;
-extern char DAT_004ee080[];
-extern int adxt_output_mono;
-extern char adxt_obj[];
 void *memset(void *dst, int value, unsigned int size);
 int ADXCRS_Init();
 int SJUNI_Init();
@@ -86,7 +88,7 @@ int SVM_SetCbSvrId();
 int SVM_SetCbSvr();
 int ADXT_SetDefSvrFreq();
 void FUN_002631c8(int value) {
-    DAT_0049c8e4 = value;
+    adxt_thrd_svr_sw = value;
 }
 
 void FUN_002631d8(void *unused, const char *message) {
@@ -129,8 +131,8 @@ int FUN_002632a0(void *arg) {
 
 void ADXT_Init(void)
 {
-    DAT_0056dfa8 = DAT_004ee080;
-    if (DAT_0049c8d8 == 0) {
+    adxt_build_ref = "\nADXT/PS2EE Ver.9.31s281 Build:Oct  6 2004 11:47:30\n";
+    if (adxt_init_cnt == 0) {
         ADXCRS_Init();
         ADXCRS_Lock();
         SJUNI_Init();
@@ -145,29 +147,29 @@ void ADXT_Init(void)
         SVM_Init();
         FUN_00265c30(FUN_002631d8, 0);
         LSC_EntryErrFunc(FUN_002631f0, 0);
-        memset(adxt_obj, 0, 3136);
-        if (ADXM_IsSetupThrd() == 1 && DAT_0049c8e4 == 1) {
+        memset(adxt_obj, 0, sizeof(adxt_obj));
+        if (ADXM_IsSetupThrd() == 1 && adxt_thrd_svr_sw == 1) {
             SVM_SetCbSvrId(2, 1, FUN_00263280, 0);
-            DAT_0049c8ec = SVM_SetCbSvr(4, FUN_002632a0, 0);
-            DAT_0049c8e0 = SVM_SetCbSvr(5, FUN_00263230, 0);
+            adxt_fssvr_id = SVM_SetCbSvr(4, FUN_002632a0, 0);
+            adxt_svr_id = SVM_SetCbSvr(5, FUN_00263230, 0);
         } else {
-            DAT_0049c8e0 = SVM_SetCbSvr(5, FUN_00263250, 0);
+            adxt_svr_id = SVM_SetCbSvr(5, FUN_00263250, 0);
         }
         *(volatile int *)&adxt_vsync_cnt = 0;
         adxt_output_mono = 0;
         ADXT_SetDefSvrFreq(60);
         ADXCRS_Unlock();
     }
-    DAT_0049c8d8++;
+    adxt_init_cnt++;
 }
 
 void FUN_00263450(void) {
-    DAT_0049c8d8 = 0;
+    adxt_init_cnt = 0;
     ADXT_Init();
 }
 
 void ADXT_Finish(void) {
-    if (--DAT_0049c8d8 == 0) {
+    if (--adxt_init_cnt == 0) {
         DAT_004a9b1c = 0;
         ADXT_DestroyAll();
         FUN_00265c18();
@@ -176,8 +178,8 @@ void ADXT_Finish(void) {
         LSC_Finish();
         ADXCRS_Lock();
         SVM_DelCbSvr(2, 1);
-        SVM_DelCbSvr(4, DAT_0049c8ec);
-        SVM_DelCbSvr(5, DAT_0049c8e0);
+        SVM_DelCbSvr(4, adxt_fssvr_id);
+        SVM_DelCbSvr(5, adxt_svr_id);
         SVM_Finish();
         FUN_00265f88();
         FUN_00260788();
@@ -198,9 +200,9 @@ void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
     Sj *dst;
     AdxEnc *enc;
     FUN_00269268();
-    in = SJRBF_Create(DAT_0049d538, 1024, 0);
-    out[0] = SJMEM_Create(DAT_0049d938, 32);
-    out[1] = SJMEM_Create(DAT_0049d938 + 32, 32);
+    in = SJRBF_Create(adxt_enc_ibuf, 1024, 0);
+    out[0] = SJMEM_Create(adxt_enc_obuf, 32);
+    out[1] = SJMEM_Create(adxt_enc_obuf + 32, 32);
     dst = adxt->sji;
     enc = FUN_002692c8(2, out, in);
     FUN_00269878(enc, nch, f92, end);

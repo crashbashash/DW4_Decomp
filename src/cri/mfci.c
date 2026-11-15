@@ -1,3 +1,5 @@
+#include "dw4/cri/cvfs.h"
+
 typedef struct MfCiFile {
     signed char used;       /* 0x00 */
     signed char stat;       /* 0x01 */
@@ -13,27 +15,7 @@ typedef struct MfCiFile {
     int len;                /* 0x34 */
 } MfCiFile;
 
-extern void (*DAT_004b0374)(void *context, const char *message, void *detail);
-extern void *DAT_004b0378;
-extern MfCiFile DAT_004b03e8[40];
-extern char DAT_004b0ca8[];
 
-extern char DAT_004f0c88[];
-extern char DAT_004f0cc8[];
-extern char E01100301_fname_is_null_mfCiOpen[];
-extern char E01100302_rw_is_illigal_mfCiOpen[];
-extern char E01100303_not_enough_handle_resource_mfCiOpen[];
-extern char E01100305_handl_is_null[];
-extern char E01100306_handl_is_null[];
-extern char DAT_004f0dc8[];
-extern char DAT_004f0de8[];
-extern char DAT_004f0e08[];
-extern char E0092912_handl_is_null_2[];
-extern char E0040301_handl_is_null[];
-extern char E0040302_handl_is_null[];
-extern char E1041001_invalid_entry_number_mfCiOpenEntry[];
-extern char E1041002_rw_is_illigal_mfCiOpenEntry[];
-extern char E1041002_not_enough_handle_resource_mfCiOpenEntry[];
 
 unsigned int strlen(const char *s);
 int sprintf(char *dst, const char *format, ...);
@@ -44,7 +26,34 @@ unsigned long strtoul(const char *s, char **end, int base);
 void SVM_Lock(void);
 void SVM_Unlock(void);
 
-void FUN_00278410(MfCiFile *fh);
+void mfCiExecServer(void);
+void mfCiEntryErrFunc(void (*func)(void *context, const char *message, void *detail), void *context);
+int mfCiGetFileSize(char *name);
+MfCiFile *mfCiOpen(const char *fname, int reserved, int rw);
+int mfCiClose(MfCiFile *fh);
+int mfCiSeek(MfCiFile *fh, int offset, int origin);
+int mfCiTell(MfCiFile *fh);
+int mfCiReqRd(MfCiFile *fh, int nsct, char *buf);
+void mfCiStopTr(MfCiFile *fh);
+char mfCiGetStat(MfCiFile *fh);
+int mfCiGetSctLen(MfCiFile *fh);
+void mfCiSetSctLen(MfCiFile *fh, int sctsize);
+int mfCiGetNumTr(MfCiFile *fh);
+
+static char *volatile mfci_build = "\nMFCI/PS2EE Ver.1.09 Build:Oct  6 2004 11:47:43\n";
+static void (*mfci_err_func)(void *context, const char *message, void *detail) = 0;
+static void *mfci_err_obj = 0;
+static CvFsVtbl mfci_vtbl = {
+    (int)mfCiExecServer, (int)mfCiEntryErrFunc, (int)mfCiGetFileSize, 0,
+    (int)mfCiOpen, (int)mfCiClose, (int)mfCiSeek, (int)mfCiTell,
+    (int)mfCiReqRd, 0, (int)mfCiStopTr, (int)mfCiGetStat,
+    (int)mfCiGetSctLen, (int)mfCiSetSctLen, (int)mfCiGetNumTr, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+static MfCiFile mfci_files[40] = {0};
+static char mfci_msg[304] = {0};
+
+void mfCiStopTr(MfCiFile *fh);
 
 void FUN_00277da0(void)
 {
@@ -56,10 +65,16 @@ void FUN_00277db8(void)
     SVM_Unlock();
 }
 
+CvFsVtbl *mfCiGetInterface(void)
+{
+    mfci_build;
+    return &mfci_vtbl;
+}
+
 void FUN_00277de8(void *detail, const char *message)
 {
-    if (DAT_004b0374 != 0) {
-        DAT_004b0374(DAT_004b0378, message, detail);
+    if (mfci_err_func != 0) {
+        mfci_err_func(mfci_err_obj, message, detail);
     }
 }
 
@@ -74,12 +89,12 @@ char *FUN_00277e30(char *name, int *size)
     char *data;
 
     if (strlen(name) != 17) {
-        sprintf(DAT_004b0ca8, DAT_004f0c88, name);
-        FUN_00277de8(0, DAT_004b0ca8);
+        sprintf(mfci_msg, "E01100308:length of '%s' is not 17 bytes.(mfci_get_adr_size)", name);
+        FUN_00277de8(0, mfci_msg);
     }
     if (name[8] != '.') {
-        sprintf(DAT_004b0ca8, DAT_004f0cc8, name);
-        FUN_00277de8(0, DAT_004b0ca8);
+        sprintf(mfci_msg, "E01100309:illegal file name format '%s'(mfci_get_adr_size)", name);
+        FUN_00277de8(0, mfci_msg);
     }
     p = name;
     data = (char *)FUN_00277e18(p, &p, 16);
@@ -96,12 +111,12 @@ void FUN_00277f28(MfCiFile *fh)
 {
 }
 
-void FUN_00277f30(void)
+void mfCiExecServer(void)
 {
     int i;
     MfCiFile *fh;
 
-    fh = DAT_004b03e8;
+    fh = mfci_files;
     i = 0x27;
     do {
         if (fh->used != 0) {
@@ -112,13 +127,13 @@ void FUN_00277f30(void)
     } while (i >= 0);
 }
 
-void FUN_00277f88(void (*func)(void *context, const char *message, void *detail), void *context)
+void mfCiEntryErrFunc(void (*func)(void *context, const char *message, void *detail), void *context)
 {
-    DAT_004b0374 = func;
-    DAT_004b0378 = context;
+    mfci_err_func = func;
+    mfci_err_obj = context;
 }
 
-int FUN_00277fa0(char *name)
+int mfCiGetFileSize(char *name)
 {
     int size;
 
@@ -132,8 +147,8 @@ MfCiFile *FUN_00277fc0(void)
     int i;
 
     for (i = 0; i < 40; i++) {
-        if (DAT_004b03e8[i].used == 0) {
-            found = &DAT_004b03e8[i];
+        if (mfci_files[i].used == 0) {
+            found = &mfci_files[i];
             break;
         }
     }
@@ -150,7 +165,7 @@ void FUN_00278038(MfCiFile *fh)
     int size;
 
     fh->sctsize = 0x800;
-    size = FUN_00277fa0(fh->name);
+    size = mfCiGetFileSize(fh->name);
     fh->size = size;
     fh->nsct = (size + fh->sctsize - 1) / fh->sctsize;
     fh->used = 1;
@@ -160,21 +175,21 @@ void FUN_00278038(MfCiFile *fh)
     fh->pos = 0;
 }
 
-MfCiFile *FUN_002780a8(const char *fname, int reserved, int rw)
+MfCiFile *mfCiOpen(const char *fname, int reserved, int rw)
 {
     MfCiFile *fh;
 
     if (fname == 0) {
-        FUN_00277de8(0, E01100301_fname_is_null_mfCiOpen);
+        FUN_00277de8(0, "E01100301:fname is null.(mfCiOpen)");
         return 0;
     }
     if (rw != 0) {
-        FUN_00277de8(0, E01100302_rw_is_illigal_mfCiOpen);
+        FUN_00277de8(0, "E01100302:rw is illigal.(mfCiOpen)");
         return 0;
     }
     fh = FUN_00277fc0();
     if (fh == 0) {
-        FUN_00277de8(0, E01100303_not_enough_handle_resource_mfCiOpen);
+        FUN_00277de8(0, "E01100303:not enough handle resource.(mfCiOpen)");
         return 0;
     }
     strcpy(fh->name, fname);
@@ -184,10 +199,10 @@ MfCiFile *FUN_002780a8(const char *fname, int reserved, int rw)
 
 /* matching construct: hand search — int return type with no return value (implicit-int style); a void
    return type lets GCC turn the last call into a sibling call */
-int FUN_00278148(MfCiFile *fh)
+int mfCiClose(MfCiFile *fh)
 {
     if (fh != 0) {
-        FUN_00278410(fh);
+        mfCiStopTr(fh);
         if (fh->used == 1) {
             fh->used = 0;
             FUN_00278018(fh);
@@ -195,12 +210,12 @@ int FUN_00278148(MfCiFile *fh)
     }
 }
 
-int FUN_00278190(MfCiFile *fh, int offset, int origin)
+int mfCiSeek(MfCiFile *fh, int offset, int origin)
 {
     int pos;
 
     if (fh == 0) {
-        FUN_00277de8(fh, E01100305_handl_is_null);
+        FUN_00277de8(fh, "E01100305:handl is null.");
         return 0;
     }
     FUN_00277da0();
@@ -223,16 +238,16 @@ int FUN_00278190(MfCiFile *fh, int offset, int origin)
     return fh->pos;
 }
 
-int FUN_00278250(MfCiFile *fh)
+int mfCiTell(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, E01100306_handl_is_null);
+        FUN_00277de8(0, "E01100306:handl is null.");
         return 0;
     }
     return fh->pos;
 }
 
-int FUN_00278288(MfCiFile *fh, int nsct, char *buf)
+int mfCiReqRd(MfCiFile *fh, int nsct, char *buf)
 {
     char *data;
     int size;
@@ -242,15 +257,15 @@ int FUN_00278288(MfCiFile *fh, int nsct, char *buf)
     int avail;
 
     if (fh == 0) {
-        FUN_00277de8(fh, DAT_004f0dc8);
+        FUN_00277de8(fh, "E01100307:handl is null.");
         return 0;
     }
     if (nsct < 0) {
-        FUN_00277de8(fh, DAT_004f0de8);
+        FUN_00277de8(fh, "E01100308:nsct < 0.(mfCiReqRd)");
         return 0;
     }
     if (buf == 0) {
-        FUN_00277de8(fh, DAT_004f0e08);
+        FUN_00277de8(fh, "E01100309:buf is null.(mfCiReqRd)");
         return 0;
     }
     if (nsct == 0) {
@@ -290,10 +305,10 @@ int FUN_00278288(MfCiFile *fh, int nsct, char *buf)
     return fh->reqsct;
 }
 
-void FUN_00278410(MfCiFile *fh)
+void mfCiStopTr(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, E0092912_handl_is_null_2);
+        FUN_00277de8(0, "E0092912:handl is null.");
         return;
     }
     FUN_00277da0();
@@ -301,31 +316,31 @@ void FUN_00278410(MfCiFile *fh)
     FUN_00277db8();
 }
 
-char FUN_00278460(MfCiFile *fh)
+char mfCiGetStat(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(fh, E0092912_handl_is_null_2);
+        FUN_00277de8(fh, "E0092912:handl is null.");
         return 0;
     }
     return fh->stat;
 }
 
-int FUN_00278498(MfCiFile *fh)
+int mfCiGetSctLen(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, E0040301_handl_is_null);
+        FUN_00277de8(0, "E0040301:handl is null.");
         return 0;
     }
     return fh->sctsize;
 }
 
-void FUN_002784d0(MfCiFile *fh, int sctsize)
+void mfCiSetSctLen(MfCiFile *fh, int sctsize)
 {
     int old;
     int pos;
 
     if (fh == 0) {
-        FUN_00277de8(fh, E0040302_handl_is_null);
+        FUN_00277de8(fh, "E0040302:handl is null.");
         return;
     }
     pos = fh->pos;
@@ -336,30 +351,30 @@ void FUN_002784d0(MfCiFile *fh, int sctsize)
     fh->nbyte = fh->reqsct * sctsize;
 }
 
-int FUN_00278550(MfCiFile *fh)
+int mfCiGetNumTr(MfCiFile *fh)
 {
     if (fh == 0) {
-        FUN_00277de8(0, E0092912_handl_is_null_2);
+        FUN_00277de8(0, "E0092912:handl is null.");
         return 0;
     }
     return fh->nbyte;
 }
 
-MfCiFile *FUN_00278588(int entry, int reserved, int rw)
+MfCiFile *mfCiOpenEntry(int entry, int reserved, int rw)
 {
     MfCiFile *fh;
 
     if (entry <= 0) {
-        FUN_00277de8(0, E1041001_invalid_entry_number_mfCiOpenEntry);
+        FUN_00277de8(0, "E1041001:invalid entry number.(mfCiOpenEntry)");
         return 0;
     }
     if (rw != 0) {
-        FUN_00277de8(0, E1041002_rw_is_illigal_mfCiOpenEntry);
+        FUN_00277de8(0, "E1041002:rw is illigal.(mfCiOpenEntry)");
         return 0;
     }
     fh = FUN_00277fc0();
     if (fh == 0) {
-        FUN_00277de8(0, E1041002_not_enough_handle_resource_mfCiOpenEntry);
+        FUN_00277de8(0, "E1041002:not enough handle resource.(mfCiOpenEntry)");
         return 0;
     }
     FUN_00278038(fh);

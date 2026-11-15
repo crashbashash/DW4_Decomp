@@ -33,6 +33,6 @@ void cvFsAddDev(char *devname, AdxFsGetIfFn get_if, void *prm);
 void cvFsSetDefDev(char *devname);
 void cvFsEntryErrFunc(void (*func)(void *obj, const char *msg, int code), void *obj);
 void ADXERR_CallErrFunc1(const char *msg);
-void *mfCiGetInterface(void);
+struct CvFsVtbl *mfCiGetInterface(void);
 
 #endif

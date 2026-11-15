@@ -20,12 +20,12 @@ classifies each data byte, the first kind that claims it winning:
 | `jtbl` | `config/SLUS-20836/layout.txt` (`jtbl` units of the other owners) | from `config/SLUS-20836/jumptables.txt` |
 | `exc` | `config/SLUS-20836/exceptions.txt` and the static-initializer table | 12-byte index records, the recorded table sizes |
 | `literal` | the compiler's float and double pool | `0x554880`–`0x554974` |
-| `vtable` | `data/vtables.json` (RTTI), `data/vtables-getvtable.json` (each class's `GetVTable`) and the `vtable` rows of `data/data-layout.tsv` | `8 + 4 × len(vfuncs)`, the header and the run of function starts |
-| `str` | `data/strings.json` | `length + 1`, for the strings that are actually in the image |
+| `vtable` | `data/vtables.json` (RTTI), `data/vtables-getvtable.json` (each class's `GetVTable`) and the `vtable` rows of `data/data-layout.tsv` (the vtable section, pure virtual functions' zero slots included) | `8 + 4 × len(vfuncs)`, the header and the run of function starts; the rows to the next vtable |
+| `str` | `data/strings.json` and the `str` rows of `data/data-layout.tsv` (short strings a table names) | `length + 1`, for the strings that are actually in the image |
 | `handle` | `data/reflection.json` | 4 bytes per class handle (they live in the `.bss` tail) |
-| `table` | `table` rows of `data/data-layout.tsv` | a run of pointers to known starts |
+| `table` | `table` rows of `data/data-layout.tsv` | a run of pointers to known starts, null members included, or of records each led by one |
 | `region` | the `data` rows of `config/SLUS-20836/regions.tsv` that say what they hold (VU1 microcode, Sony library descriptors, kernel patch arrays) | the row |
-| `pad` | alignment after a datum of known size (functions included) | zero bytes before the next 8-aligned start, fewer than 16 |
+| `pad` | alignment after a datum of known size (functions included) | zero bytes before the next aligned start (8; 4 in `.sdata`, `.sbss` and GCC-owned data), fewer than 16, or up to the alignment of a function start (at most 256) |
 | `named` | `config/SLUS-20836/data-names.tsv` (the data rows) | to the next start or sized end |
 | `ref` | `ref` rows of `data/data-layout.tsv`: an address retail code forms | to the next start or sized end |
 | `ptr` | `ptr` rows: an address only a pointer word in the data holds | to the next start or sized end |
@@ -38,11 +38,11 @@ they are decompiled.
 
 `named`, `ref` and `ptr` know where a datum starts, not where it ends. Such a datum, with its padding,
 runs to the next start any source records or to the end of a datum of known size, never past its
-section, so a datum nothing references that sits inside that span is counted with it. These bytes are
-identified as belonging to a known datum or one next to it, and are published apart (`START_ONLY`)
-from the data whose extent is recorded. scripts/data_layout.py reads the facts that need the retail
-executable (code references, pointer runs, the zero bytes before each start) into
-`data/data-layout.tsv`.
+section, so a datum nothing references that sits inside that span is counted with it. A pointer table
+is not such an end: its run stops at the first word that is not a pointer. These bytes are identified as
+belonging to a known datum or one next to it, and are published apart (`START_ONLY`) from the data
+whose extent is recorded. scripts/data_layout.py reads the facts that need the retail executable (code
+references, pointer runs, vtables, short strings, the zero runs) into `data/data-layout.tsv`.
 
 Usage:
   datamap.py                # the breakdown
@@ -64,6 +64,7 @@ CATEGORIES = os.path.join(ROOT, "data", "check-categories.tsv")
 DATA_LAYOUT = os.path.join(ROOT, "data", "data-layout.tsv")
 EXCEPTIONS = os.path.join(ROOT, "config", "SLUS-20836", "exceptions.txt")
 REGIONS_TSV = os.path.join(ROOT, "config", "SLUS-20836", "regions.tsv")
+DATA_OWNERS = os.path.join(ROOT, "config", "SLUS-20836", "data-owners.tsv")
 FULLY_MATCHED = ("match", "assembly")
 
 # The image: the one file-backed section, plus the zero-initialised tail the loader
@@ -85,10 +86,10 @@ STATIC_INITIALIZERS = (0x522440, 0x522480)
 # regions.tsv data rows that only say "data follows" rather than what it is
 GENERIC_REGIONS = ("data", "vtables")
 # The retail linker's output sections, each from its start: the section kind a compiled datum must have to be
-# the one retail placed there. The read-only sequence starts at 0x4d1c10 (config/SLUS-20836/regions.tsv; the
+# the one retail placed there. The read-only sequence starts at 0x4d1c00 (config/SLUS-20836/regions.tsv; the
 # runtime's RTTI pointer there compiles read-only), the rest as docs/engine/data-regions.md measures them. The
 # vtable section also holds the static-initializer table and the exception metadata, placed and counted apart.
-REGIONS = ((0x481C00, ".data"), (0x4D1C10, ".rodata"), (0x522440, ".vtables"), (0x554880, ".sdata"),
+REGIONS = ((0x481C00, ".data"), (0x4D1C00, ".rodata"), (0x522440, ".vtables"), (0x554880, ".sdata"),
            (0x554B00, ".sbss"), (0x554F00, ".bss"))
 
 
@@ -151,6 +152,23 @@ def fixed_intervals():
     return out
 
 
+def gcc_owned():
+    """[(lo, hi)] of the data stretches config/SLUS-20836/data-owners.tsv gives to a library
+    config/SLUS-20836/regions.tsv builds with GCC, in address order. A GCC unit's data is one block per
+    section kind, and inside it a datum starts at its own alignment, 4 for a word, not 8."""
+    builds = {}
+    for ln in open(REGIONS_TSV):
+        p = ln.rstrip("\n").split("\t")
+        if not ln.startswith("#") and len(p) > 5:
+            builds[p[2]] = p[5]
+    out = []
+    for ln in open(DATA_OWNERS):
+        p = ln.rstrip("\n").split("\t")
+        if not ln.startswith("#") and len(p) > 3 and builds.get(p[3]) == "gcc":
+            out.append((int(p[0], 16), int(p[1], 16)))
+    return sorted(out)
+
+
 def layout_rows():
     """[(va, size, kind)] of data/data-layout.tsv (scripts/data_layout.py), or [] before it is generated."""
     if not os.path.exists(DATA_LAYOUT):
@@ -194,22 +212,27 @@ def known_intervals():
     out += [(va, va + size, kind) for va, size, kind in rows if size and kind != "zeros"]
     out += bounded_intervals(out, [va for va, _s, kind in rows if kind == "ref"],
                              [va for va, _s, kind in rows if kind == "ptr"],
-                             {va + size: va for va, size, kind in rows if kind == "zeros"})
+                             sorted((va, va + size) for va, size, kind in rows if kind == "zeros"))
     return out
 
 
-def bounded_intervals(known, refs, pointed, zero_gaps):
+def bounded_intervals(known, refs, pointed, zero_runs):
     """GetVTable vtables, the padding, and the data known only by where it starts.
 
     A name (config/SLUS-20836/data-names.tsv), a code reference (`ref`) or a data pointer (`ptr`, rows of
     data/data-layout.tsv) gives a datum's start; the datum, with any alignment padding after it, runs to
     the next start any source records or the end of a datum of known size, never past the end of its
-    section (REGIONS) or of the image. A GetVTable dump is cut the same way.
+    section (REGIONS) or of the image. A pointer table is not a bound: its run ends at the first word that is
+    not a pointer, which may be a null or integer member of the same datum (a vtable-like table's empty
+    slots, a record's count), and a run no name, reference or pointer starts may be a member of the datum
+    before it, so a datum runs past it to the next start. A GetVTable dump is cut the same way.
 
     Padding follows a datum whose size is known: zero bytes up to the next start, fewer than 16 of them,
-    and that start 8-aligned (4 in `.sbss`), the retail linker's placement rule (docs/engine/emitted-
-    functions.md, "A unit's own data"). In the zero-initialised tail every byte is zero; in the file
-    image `zero_gaps` ({start: first zero byte before it}, the `zeros` rows) says which bytes are.
+    and that start 8-aligned (4 in `.sdata` and `.sbss`), the retail linker's placement rule (docs/engine/
+    emitted-functions.md, "A unit's own data"); before a function the assembler's `.align` may pad up to
+    the function's own alignment (at most 256). In the zero-initialised tail every byte is zero; in the
+    file image `zero_runs` ([(lo, hi)], the `zeros` rows) says which bytes are, and the first non-zero byte
+    after a run starts a datum too.
     """
     import bisect
     named = []
@@ -223,9 +246,11 @@ def bounded_intervals(known, refs, pointed, zero_gaps):
     getv = [(int(k, 16), d) for k, d in json.load(open(GETVTABLES)).items()]
     starts = sorted({lo for lo, _hi, _k in known} | set(named) | set(refs) | set(pointed)
                     | {a for a, _d in getv} | {s for s, _n in REGIONS} | {FILE_HI, IMG_HI})
+    sized = [(lo, hi) for lo, hi, kind in known if kind != "table"]
     # where a datum known only by its start can end: the next start, or the end of a sized datum (what
     # follows that is a different datum or padding)
-    bounds = sorted(set(starts) | {hi for _lo, hi, _k in known})
+    bounds = sorted({lo for lo, _hi in sized} | {hi for _lo, hi in sized} | set(named) | set(refs) | set(pointed)
+                    | {a for a, _d in getv} | {s for s, _n in REGIONS} | {FILE_HI, IMG_HI})
 
     def next_bound(a):
         return bounds[bisect.bisect_right(bounds, a)]
@@ -233,20 +258,29 @@ def bounded_intervals(known, refs, pointed, zero_gaps):
     out += [(a, next_bound(a), "named") for a in named]
     out += [(a, next_bound(a), "ref") for a in refs if IMG_LO <= a < IMG_HI]
     out += [(a, next_bound(a), "ptr") for a in pointed if IMG_LO <= a < IMG_HI]
-    gap_starts = sorted(zero_gaps)
+    run_starts = [lo for lo, _hi in zero_runs]
+    functions = {lo for lo, _hi, kind in known if kind == "code"}
+    gcc = gcc_owned()
     for _lo, end, _kind in known:
         # a function is a datum of known size too: the zeros up to the next one are its alignment
         if not IMG_LO <= end < IMG_HI:
             continue
-        following = starts[bisect.bisect_left(starts, end)]
+        i = bisect.bisect_right(gcc, (end, IMG_HI)) - 1
+        align = 4 if region_kind(end) in (".sdata", ".sbss") or (i >= 0 and end < gcc[i][1]) else 8
+        # the next start the alignment allows: an unaligned reference or pointer names a member, or a base
+        # the compiler biased by a constant index (`token2string[token - 257]`), not a datum
+        i = bisect.bisect_left(starts, end)
+        while starts[i] % align:
+            i += 1
+        following = starts[i]
         if end < FILE_HI:
-            # the first datum start the zero-gap facts know after `end`, if no recorded start comes first
-            i = bisect.bisect_right(gap_starts, end)
-            if i == len(gap_starts) or zero_gaps[gap_starts[i]] > end or gap_starts[i] > following:
+            i = bisect.bisect_right(run_starts, end) - 1
+            if i < 0 or zero_runs[i][1] <= end:
                 continue
-            following = gap_starts[i]
-        align = 4 if region_kind(end) == ".sbss" else 8
-        if 0 < following - end < 16 and following % align == 0:
+            following = min(following, zero_runs[i][1])
+        # before a function the assembler aligns further (`.align`, zero words), up to 256
+        longest = max(16, min(following & -following, 256)) if following in functions else 16
+        if 0 < following - end < longest and following % align == 0:
             out.append((end, following, "pad"))
     return out
 

@@ -1,0 +1,4 @@
+# p2 multipass upload helpers (src/engine/p2multipass.c).
+# Columns: <va>  <name>  <module>  <confidence>  <evidence>.
+0x001fcb00	p2UploadTex0Context2	engine	medium	called after every write of tex0[1] (p2SetClut, the texture-function setters) when p2CurrentProgram == 1; sends p2GsRegisterSets[0].tex0[1]'s halves to VU1
+0x001fd160	p2WriteParticleBlockCodes	engine	medium	called with p2LayoutParticleFormat; fills format->data with the MARK/STMASK header, per-row UNPACK codes of each component array, row end tags, MSCAL and padding to format->size

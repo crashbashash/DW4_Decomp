@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igobject_release.h"
+#pragma push
+#pragma readonly_strings on
 
 /* An RGBA colour in floats, as Color4f_Unpack writes it. */
 struct Color4f { float x, y, z, w; };
@@ -116,11 +118,11 @@ static inline void SetMaskBit(igBitMask *mask, unsigned int n) {
 }
 
 extern "C" {
-int beMessenger_RegisterReceiverFromInfo(int messenger, beAction2InfoRam *ram, int *name);
-int beBaseInfoRam_IsTimerExpired(beAction2InfoRam *ram, int *name);
-int beBaseInfoRam_RemoveTimer(beAction2InfoRam *ram, int *name);
-int beBaseInfoRam_StartTimer(beAction2InfoRam *ram, int *name, long long duration);
-float beBaseInfoRam_GetTimerFrameDelta(beAction2InfoRam *ram, int *name);
+int beMessenger_RegisterReceiverFromInfo(int messenger, beAction2InfoRam *ram, const char *name);
+int beBaseInfoRam_IsTimerExpired(beAction2InfoRam *ram, const char *name);
+int beBaseInfoRam_RemoveTimer(beAction2InfoRam *ram, const char *name);
+int beBaseInfoRam_StartTimer(beAction2InfoRam *ram, const char *name, long long duration);
+float beBaseInfoRam_GetTimerFrameDelta(beAction2InfoRam *ram, const char *name);
 int beBaseInfoRam_SetAllTimerScales(beAction2InfoRam *ram, float scale);
 int beBaseInfoRam_RemoveAllTimers(beAction2InfoRam *ram);
 int ObjectList_RemoveFirstRetained(int *result, int list, int object, int start);
@@ -154,10 +156,10 @@ int beMessenger_AppendObject(int messenger, int object);
 int beMessenger_AppendMatrix(int messenger, int matrix);
 int beMessenger_AppendString(int messenger, void *text);
 int beMessenger_GetString(int messenger, int index);
-int beMessenger_SendNamed(int messenger, void *message, void *sender, int ramNo, void *name);
-int strcmp(void *, void *);
+int beMessenger_SendNamed(int messenger, const char *message, void *sender, int ramNo, void *name);
+int strcmp(const void *, const char *);
 int List_Reserve(void *list, int count, int capacity);
-void *igMetaObject_FindFieldByName(int meta, void *name);
+void *igMetaObject_FindFieldByName(int meta, const char *name);
 
 void beAction2_Prepare(void);
 int beAction2_GetInfoMeta(void);
@@ -191,16 +193,8 @@ extern int g_propertyNameField[4];
 extern int kIGMemoryPoolHandleUser1[4];
 extern unsigned char g_useOwnerAllocator;
 extern float g_enbayaPlayOnceEndOffset[4];
-extern float g_randomWaitMinimum[4];
+float g_randomWaitMinimum;
 extern int emptyString[4];
-extern int ACTION[4];
-extern int FLASH[4];
-extern int WAIT[4];
-extern int FADE[4];
-extern int NDSP[4];
-extern int boneMatrixCacheArray[4];
-extern int blendMatrixCacheArray[4];
-extern int ACTION_BROADCAST[4];
 }
 
 /* Slot 32, called before the manager starts and before it drops its infos: nothing to do here. */
@@ -215,7 +209,7 @@ int beAction2_GetInfoMeta(void)
 
 /* Registers the ram as the receiver of ACTION messages and clears its running flag. */
 void beAction2_RegisterReceiver(beAction2 *self, beAction2InfoRam *ram) {
-    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, ACTION);
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "ACTION");
     ram->_isRun = 0;
     g_enbayaPlayOnceEndOffset[0] = -1.0f / 30.0f;
 }
@@ -233,7 +227,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     case 0:
         break;
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(ram, &FLASH[0]) != 0) {
+        if (beBaseInfoRam_IsTimerExpired(ram, "FLASH") != 0) {
             list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             if (work->_blendStateAttr == 0) {
                 ObjectList_RemoveFirstRetained(&removed2, list, work->_colorAttr, 0);
@@ -249,7 +243,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             attr = (igObject *)work->_textureStateAttr;
             IG_OBJECT_RELEASE(attr);
             work->_textureStateAttr = 0;
-            beBaseInfoRam_RemoveTimer(ram, &FLASH[0]);
+            beBaseInfoRam_RemoveTimer(ram, "FLASH");
             work->_flashSt0 = 0;
         }
     }
@@ -308,7 +302,7 @@ int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2
     ((OverrideAttr *)work->_textureStateAttr)->SetValue(0);
     ((OverrideAttr *)work->_lightingStateAttr)->SetValue(0);
     work->_flashSt0 = 1;
-    beBaseInfoRam_StartTimer(ram, &FLASH[0], 66666668);
+    beBaseInfoRam_StartTimer(ram, "FLASH", 66666668);
     return 1;
 }
 
@@ -327,7 +321,7 @@ void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
     info = (beAction2Info *)ram->_parentInfo;
     switch (work->_waitSt0) {
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(ram, &WAIT[0]) != 0) {
+        if (beBaseInfoRam_IsTimerExpired(ram, "WAIT") != 0) {
             work->_waitSt0 = 0;
             beAction2_StartComponents(manager, ram);
         }
@@ -374,15 +368,15 @@ int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction
         const char *random = name ? name : ((char *)emptyString);
         unsigned r, range;
         if (random[3] == 'S') {
-            g_randomWaitMinimum[0] = frames;
+            g_randomWaitMinimum = frames;
             return 1;
         }
-        range = (int)(100.0f * frames - 100.0f * g_randomWaitMinimum[0]);
+        range = (int)(100.0f * frames - 100.0f * g_randomWaitMinimum);
         r = ((RandomSource *)((beSystem *)manager->_system)->_random)->Next() % range;
-        frames = g_randomWaitMinimum[0] + (float)r / 100.0f;
+        frames = g_randomWaitMinimum + (float)r / 100.0f;
     }
     case 'F':
-        beBaseInfoRam_StartTimer(ram, WAIT, __fixsfdi(1e9f * frames / 60.0f));
+        beBaseInfoRam_StartTimer(ram, "WAIT", __fixsfdi(1e9f * frames / 60.0f));
         work->_waitSt0 = 1;
         break;
     case 'M':
@@ -414,7 +408,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         int list;
         int removed0, removed1, removed2;
         igObject *attr;
-        frames = beBaseInfoRam_GetTimerFrameDelta(ram, &FADE[0]);
+        frames = beBaseInfoRam_GetTimerFrameDelta(ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
             alpha = &color.w;
@@ -437,7 +431,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
                 attr = (igObject *)work->_blendStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_blendStateAttr = 0;
-                beBaseInfoRam_RemoveTimer(ram, &FADE[0]);
+                beBaseInfoRam_RemoveTimer(ram, "FADE");
                 work->_fadeSt0 = 3;
             }
         }
@@ -448,7 +442,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         Color4f color;
         float *alpha;
         float next;
-        frames = beBaseInfoRam_GetTimerFrameDelta(ram, &FADE[0]);
+        frames = beBaseInfoRam_GetTimerFrameDelta(ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
             next = work->_fadeValue - frames * work->_fadeAddValue;
@@ -458,7 +452,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
             work->_fadeValue = *alpha;
             if (*alpha <= 0.0f) {
-                beBaseInfoRam_RemoveTimer(ram, &FADE[0]);
+                beBaseInfoRam_RemoveTimer(ram, "FADE");
                 work->_fadeSt0 = 3;
             }
         }
@@ -544,7 +538,7 @@ int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2F
             work->_fadeAddValue = component->_fadeValue / component->_fadeTime;
             work->_fadeSt0 = 2;
         }
-        beBaseInfoRam_StartTimer(ram, &FADE[0], 0);
+        beBaseInfoRam_StartTimer(ram, "FADE", 0);
     }
     return 1;
 }
@@ -931,7 +925,7 @@ int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
         break;
     default:
         mask = (igBitMask *)((igSwitch *)info->_switch)->_childMask;
-        if (strcmp(name, &NDSP[0]) == 0) {
+        if (strcmp(name, "NDSP") == 0) {
             igObjectList *list = (igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             int count = list->_count;
             int i;
@@ -970,13 +964,13 @@ int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
                 actorCount = ((igObjectList *)ram->_actorList)->_count;
                 for (k = 0; k < actorCount; k++) {
                     actor = (VirtualObject *)((int *)((igObjectList *)ram->_actorList)->_data)[k];
-                    field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), &boneMatrixCacheArray[0]);
+                    field = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), "_boneMatrixCacheArray");
                     buffer = *(int *)((char *)actor + field->_offset);
                     if (buffer != 0) {
                         Memory_FreeBuffer(buffer);
                         *(int *)((char *)actor + field->_offset) = 0;
                     }
-                    field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), &blendMatrixCacheArray[0]);
+                    field2 = (igMetaField *)igMetaObject_FindFieldByName(actor->GetMetaObject(), "_blendMatrixCacheArray");
                     buffer2 = *(int *)((char *)actor + field2->_offset);
                     if (buffer2 != 0) {
                         Memory_FreeBuffer(buffer2);
@@ -1037,7 +1031,7 @@ int beAction2_OnMessage(beAction2 *self, beAction2InfoRam *ram, void *name)
                 int ramNumber = ram->_ramNo;
                 void *infoName;
                 if (info->_name != 0) infoName = (void *)info->_name; else infoName = &emptyString[0];
-                beMessenger_SendNamed(self->_messenger, &ACTION_BROADCAST[0], infoName, ramNumber, name);
+                beMessenger_SendNamed(self->_messenger, "ACTION_BROADCAST", infoName, ramNumber, name);
             }
         }
         break;
@@ -1063,3 +1057,5 @@ void Gap__Core__igObject__vfunc_28(void)
 int Gap__Core__igObject__vfunc_34(void) {
     return 0;
 }
+
+#pragma pop

@@ -26,7 +26,6 @@ extern "C" int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void);
 extern "C" int KIND_MAPBASE[4];
 extern "C" char MAPBASE[];
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_37(beNDMWMdlMapBase * p0, int p1, char * p2);
-extern "C" int ONE_16[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
@@ -68,6 +67,9 @@ struct RamInfoArg { char p0[40]; igObject *m40; };
 extern "C" void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *arg1);
 extern "C" int g_beNDMWMdlMapBase_metaObject[4];
 
+#pragma push
+#pragma readonly_strings on
+
 int Gap__Bec__beNDMWMdlMapBase__vfunc_35(int dummy0, int arg1) {
     return strcmp(arg1, &KIND_MAPBASE[0]) == 0;
 }
@@ -86,7 +88,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_36(beNDMWMdlMapBase *arg0, beBaseInfoRam 
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         Slot::adopt(arg1, created);
     }
-    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_16);
+    Prop *s3 = (Prop *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE");
     {
         int a2 = igObject_GetAllocator(arg0);
         int al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
@@ -173,7 +175,7 @@ void Gap__Bec__beNDMWMdlMapBase__vfunc_46(beNDMWMdlMapBase *arg0, RamInfoArg *ar
         }
         arg1->m40 = s0;
     }
-    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], ONE_16));
+    r = ((PropertyRecord *)igProperty_FindByName(arg1->m40, g_propertyNameField[0], "ONE"));
     igMatrix44f_SetTranslation(r->f16 + 32, &sum);
 }
 
@@ -182,3 +184,4 @@ int Gap__Bec__beNDMWMdlMapBase__vfunc_20(void)
     return g_beNDMWMdlMapBase_metaObject[0];
 }
 
+#pragma pop

@@ -119,6 +119,7 @@ char *strncpy(char *dst, const char *src, unsigned int size);
 int ADX_GetCoefficient(short id, int arg, short *first, short *second);
 int ADX_DecodeHeader(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
+int FUN_0025fd98(int type, int len, int ofst, unsigned int blk);
 int adxenc_EncodeBlock(AdxEnc *e, int ch);
 void FUN_002683e8(AdxEnc *e, int ch);
 int FUN_00268b10(AdxEnc *e, Sj *out);
@@ -217,6 +218,25 @@ const char *FUN_002677d0(void)
 int FUN_002677e0(int count, int base, int bits)
 {
     return (bits + 31) / 32 * count * 18 + base + 4;
+}
+
+void FUN_00267810(int nch, int len, int len2, int *hdrlen, int *pad, int *size, int *size2)
+{
+    int blk;
+    int nblk;
+    int body;
+    int hdr;
+    int tail;
+
+    blk = nch == 1 ? 64 : 32;
+    *pad = (blk - len % blk) % blk;
+    nblk = (len + *pad) / 32 * nch;
+    body = nblk * 18;
+    hdr = FUN_0025fd98(1, 0, 4, 4);
+    tail = (2048 - (body + hdr + 4) % 2048) % 2048;
+    *hdrlen = hdr + tail;
+    *size = FUN_002677e0(nch, *hdrlen, len + *pad);
+    *size2 = FUN_002677e0(nch, *hdrlen, len2 + *pad);
 }
 
 int FUN_00267968(unsigned short *data, int size, int *out_c, int *out_e, int *out_f, int *out_g)

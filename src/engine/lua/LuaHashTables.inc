@@ -1,3 +1,34 @@
+unsigned int g_luaFieldBucketShift = 10;
+unsigned int g_luaFieldBucketCount = 0x400;
+unsigned int g_luaFieldCount;
+LuaHashLink **g_luaFieldBuckets;
+int g_luaFieldTableBusy;
+unsigned int g_luaFunctionBucketShift = 8;
+unsigned int g_luaFunctionBucketCount = 0x100;
+unsigned int g_luaFunctionCount;
+LuaHashLink **g_luaFunctionBuckets;
+int g_luaFunctionTableBusy;
+unsigned int g_luaClassBucketShift = 7;
+unsigned int g_luaClassBucketCount = 0x80;
+unsigned int g_luaClassCount;
+LuaHashLink **g_luaClassBuckets;
+int g_luaClassTableBusy;
+unsigned int g_luaPropertyBucketShift = 8;
+unsigned int g_luaPropertyBucketCount = 0x100;
+unsigned int g_luaPropertyCount;
+LuaProperty **g_luaPropertyBuckets;
+int g_luaPropertyTableBusy;
+unsigned int g_luaConstantBucketShift = 8;
+unsigned int g_luaConstantBucketCount = 0x100;
+unsigned int g_luaConstantCount;
+LuaHashLink **g_luaConstantBuckets;
+int g_luaConstantTableBusy;
+unsigned int g_luaEnumBucketShift = 4;
+unsigned int g_luaEnumBucketCount = 0x10;
+unsigned int g_luaEnumCount;
+LuaHashLink **g_luaEnumBuckets;
+int g_luaEnumTableBusy;
+
 /* The binding's hash tables. Each grows to twice its buckets when it holds more entries than
  * buckets and shrinks to half, down to its minimum, when it holds fewer than half; it allocates
  * its buckets on the first insertion and frees them when the last entry goes. */

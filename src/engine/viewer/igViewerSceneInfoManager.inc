@@ -793,7 +793,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_35) + 56) = igObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_35) + 52) = 1;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x26));
-    igEnumMetaField_SetDefaultValue(temp_v0_3, &DAT_004d0e10[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_3, 0);
     *(int *)((char *)(temp_v0_3) + 52) = (int)(&FUN_004592e0);
     temp_s0_36 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x27));
     *(int *)((char *)(temp_s0_36) + 56) = FUN_0013a360();
