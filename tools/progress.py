@@ -880,15 +880,15 @@ _READABLE = {}
 
 
 def _function_texts(path):
-    """({name: source text of that definition}, whole file, the file's global definitions) for one
-    file as the compiler sees it (a whole-file unit's `#include "src/..."` fragments expanded),
-    comments and strings blanked; the global definitions are the file minus every function
-    definition."""
+    """({name: source text of that definition}, whole file, the file's global definitions, the
+    placeholder-named types the file defines) for one file as the compiler sees it (a whole-file unit's
+    `#include "src/..."` fragments expanded), comments and strings blanked; the global definitions are the
+    file minus every function definition. The types are the file's, so they are found once per file."""
     from typed_coverage import strip_comments_and_strings
     try:
         raw = srctext.read(path, errors="replace")
     except OSError:
-        return {}, "", ""
+        return {}, "", "", frozenset()
     out = {}
     whole = strip_comments_and_strings(raw)
     globals_, at = [], 0
@@ -899,7 +899,9 @@ def _function_texts(path):
             at = end
     except Exception:                       # an unparsable file is judged whole, which is the stricter reading
         globals_, at = [], 0
-    return out, whole, " ".join(globals_ + [whole[at:]])
+    placeholders = frozenset(t for t in (a or b for a, b in TYPE_DEFINITION_RE.findall(whole))
+                             if PLACEHOLDER_TYPE_RE.fullmatch(t))
+    return out, whole, " ".join(globals_ + [whole[at:]]), placeholders
 
 
 def readable_failures(name, path, cache):
@@ -910,7 +912,7 @@ def readable_failures(name, path, cache):
         return []
     if path not in cache:
         cache[path] = _function_texts(path)
-    texts, whole, globals_ = cache[path]
+    texts, whole, globals_, placeholders = cache[path]
     # a static initialiser has no source text of its own: it is the file's global definitions
     text = globals_ if name.startswith("__sinit_") else texts.get(name, whole)
     body = re.sub(r"\b%s\b" % re.escape(name), " ", text)            # its own name is not a reference
@@ -919,11 +921,10 @@ def readable_failures(name, path, cache):
         failed.append("name")
     if "/unmatched/" in path.replace(os.sep, "/"):
         failed.append("placed")
-    if carries_address(name) or any(carries_address(i) for i in IDENTIFIER_RE.findall(body)):
+    identifiers = IDENTIFIER_RE.findall(body)
+    if carries_address(name) or any(carries_address(i) for i in identifiers):
         failed.append("addresses")
-    used = set(IDENTIFIER_RE.findall(body))
-    defined = {a or b for a, b in TYPE_DEFINITION_RE.findall(whole)}
-    if any(PLACEHOLDER_TYPE_RE.fullmatch(t) for t in defined & used):
+    if placeholders and not placeholders.isdisjoint(identifiers):
         failed.append("types")
     if FUN_DAT_RE.search(body):
         failed.append("references")

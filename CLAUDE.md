@@ -32,7 +32,8 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   what a wave learned into the topic's document, not a dated log.
 - **One build at a time.** At most one full build (`make check`, `make link`, `make objdiff`) runs on a
   host, from the integrating session, never from a sub-agent. Where several sessions share a host, take a
-  lock: `flock <shared lock file> make check`.
+  lock: `flock <shared lock file> make check`; `tools/apply_names.py --check` takes the file `DW4_BUILD_LOCK`
+  names for its own builds.
 - **Sub-agents write only to a scratch directory outside the repository**, never `src/`, `config/`, `asm/`,
   `docs/` or the repository root. The integrator promotes work ([Delegated work](#delegated-work)).
 - **Commits.** Sync with `git fetch && git merge origin/main` (never rebase shared history).
@@ -172,7 +173,8 @@ the same bytes, keep the more readable one.
 ### Completion and regression
 
 A task is complete only when the report quotes these four lines verbatim from runs on the final tree
-([oracle runner](docs/engine/oracle-runner.md) re-runs them on every pushed commit):
+(the pre-push hook refuses a commit without them; the [oracle runner](docs/engine/oracle-runner.md) repeats
+them from a clean checkout when started by hand):
 
 1. `make check`: the `cover :` summary, `0 mismatch` in its `(N not matched: M mismatch, D debt)` line when
    that line appears, and the `match` count at or above `functions.fully_verified` in the parent commit's

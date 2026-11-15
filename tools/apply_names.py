@@ -783,11 +783,22 @@ def main(argv=None):
             print("pruned %d stale asm units" % pruned)
 
     if a.check:
-        for tgt in (["make", "check"], ["make", "link"]):
-            r = subprocess.run(tgt, cwd=ROOT)
-            if r.returncode:
-                print("apply_names: `%s` failed" % " ".join(tgt), file=sys.stderr)
-                return r.returncode
+        # one full build at a time on a host (CLAUDE.md): with DW4_BUILD_LOCK naming the shared lock file,
+        # both builds run under it, as `flock <lock> make ...` would
+        lock_path = os.environ.get("DW4_BUILD_LOCK")
+        lock = open(lock_path, "a") if lock_path else None
+        try:
+            if lock:
+                import fcntl
+                fcntl.flock(lock, fcntl.LOCK_EX)
+            for tgt in (["make", "check"], ["make", "link"]):
+                r = subprocess.run(tgt, cwd=ROOT)
+                if r.returncode:
+                    print("apply_names: `%s` failed" % " ".join(tgt), file=sys.stderr)
+                    return r.returncode
+        finally:
+            if lock:
+                lock.close()
     else:
         print("\nnext: `make check` (must be green) and `make link` (must be byte-identical)")
     return 0

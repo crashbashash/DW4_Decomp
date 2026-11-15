@@ -1,21 +1,27 @@
-# The oracle runner: the byte oracle on every push
+# The oracle runner: the byte oracle on demand
 
-`.github/workflows/oracle.yml` runs the byte oracle for every pushed commit on a private,
-self-hosted GitHub Actions runner labelled `dw4-oracle`. The hosted runners cannot do this:
-`make check` and `make link` need the retail ELF and the proprietary compiler, neither of which
-is in the repository (`.github/workflows/progress.yml` only *counts* what is committed). The
-self-hosted runner keeps those private inputs outside the checkout and links them in for the
-duration of a run, so every push gets a verdict from a process the pusher did not drive by hand.
+`.github/workflows/oracle.yml` runs the byte oracle on a private, self-hosted GitHub Actions runner labelled
+`dw4-oracle`, when it is started by hand (the Actions tab, or `gh workflow run oracle`, with `fresh` to ignore
+the build cache). The hosted runners cannot do this: `make check` and `make link` need the retail ELF and the
+proprietary compiler, neither of which is in the repository (`.github/workflows/progress.yml` only *counts*
+what is committed). The self-hosted runner keeps those private inputs outside the checkout and links them in
+for the duration of a run.
+
+It does not run on every push. Every pushed commit already carries the author's own passing gates
+([the local stamp](#the-local-stamp)), and a second full build per push on the same machine proved little
+and held the shared build lock. What a run adds is a verdict from a clean checkout, which shows the commit
+does not depend on anything left in the author's clone; it is worth starting before a milestone.
 
 ## What a run proves
 
 The workflow runs the gates the author of a change runs before reporting it
-([CONTRIBUTING](../../CONTRIBUTING.md#checking-your-work)), in order, on a clean checkout of the pushed commit, and records one line per gate in the run's summary:
+([CONTRIBUTING](../../CONTRIBUTING.md#checking-your-work)), in order, on a clean checkout of the commit it is
+started on, and records one line per gate in the run's summary:
 
 | gate | command | required line |
 |---|---|---|
 | mismatches | `make check` | `(N not matched: M mismatch, D debt)` with `M` = 0, no `compile failed` |
-| no lost matches | `make check` | `cover : … K match byte-for-byte` with `K` >= `functions.fully_verified` in `docs/progress.json` of the pushed commit |
+| no lost matches | `make check` | `cover : … K match byte-for-byte` with `K` >= `functions.fully_verified` in `docs/progress.json` of that commit |
 | relink | `make link` | `linkcheck: BYTE-IDENTICAL` |
 | debt ratchet | `python3 tools/progress.py --debt-check` | exit 0 (skipped with a note while the option does not exist at that commit) |
 | typed coverage | `make typed-check` | `… baseline matches` |
@@ -32,19 +38,18 @@ when an earlier one fails; the final *Summary* step writes the table to the run 
 fails the job if any gate failed.
 
 Not covered: the hook's *oracle-change rule* (commits that touch the oracle's own files must
-carry an `oracle-change:` line and show the counterexample suite still failing). It needs the
-pushed range, and the runner checks out the pushed commit alone (`fetch-depth: 1`); adding it
-means fetching `github.event.before` as well and calling `DW4_PREPUSH_ORACLE_ONLY=1`.
+carry an `oracle-change:` line and show the counterexample suite still failing). It needs a
+range of commits, and the runner checks out one commit alone (`fetch-depth: 1`); the pre-push hook
+applies it to every push.
 
 The build cache under `build/` is kept between runs (it is keyed by content, exactly as in a
-developer's clone, so a run after a small push only recompiles what changed); everything else
-untracked is removed before each run. A manual run (`gh workflow run oracle.yml -f fresh=true`)
+developer's clone, so a run only recompiles what changed since the last one); everything else
+untracked is removed before each run. A run started with `fresh` (`gh workflow run oracle.yml -f fresh=true`)
 uses `make check-fresh` and `make link-fresh` to ignore the cache, as before a milestone.
 
 Every `make` on the runner is wrapped in `flock` on a lock file the machine's interactive builds
 share, so an oracle run never overlaps a developer's `make check`; the two simply take turns.
-Run interactive builds through the same lock (`flock "$DW4_BUILD_LOCK" make check`) and a push
-will not slow a build that is already running.
+Run interactive builds through the same lock (`flock "$DW4_BUILD_LOCK" make check`).
 
 ## The local stamp
 
@@ -53,8 +58,10 @@ building again. `make check` (or `check-fresh`), `make link` (or `link-fresh`), 
 `make hygiene` each end with `tools/gate_stamp.py pass <gate>`, which appends the tree id of the working tree
 (every file that is not ignored, as on disk) to `dw4-gate-stamps` in the git common directory. A gate that
 fails never gets there. A tree that changed during the run is not stamped, except for the files the gates
-regenerate themselves (`data/check-categories.tsv`, `config/SLUS-20836/layout.txt`), and `check` is stamped
-only when its match count is at least `functions.fully_verified` in HEAD's `docs/progress.json`. The stamp
+regenerate themselves (`data/check-categories.tsv`, `data/check-data.tsv`, `config/SLUS-20836/layout.txt` and
+the progress pages), and `check` is stamped only when its match count is at least `functions.fully_verified`
+in HEAD's `docs/progress.json`. `make check` writes the layout before it compiles and the progress pages after
+it, so one pass of the four gates leaves a tree all four stamped. The stamp
 never changes a target's exit code; when it cannot stamp it prints one `gate-stamp: … not stamped` line.
 
 `.githooks/pre-push` then refuses every pushed commit whose tree lacks any of the four stamps (only the tip
@@ -66,26 +73,17 @@ stamps when the push sets `DW4_PUSH_DOCS_ONLY=1`; any other commit in that push 
 
 ## What it cannot do
 
-- **It does not block a push.** A failing oracle
-  run is visible as a red status on the commit, in the *Actions* tab and in the run summary; the
-  branch still moves. The pre-push hook does not run `make check` or `make link` (the author's
-  run and this runner already cover them, and a third full build per push proves nothing new).
-  It blocks what cannot be recalled after a push, host details in the pushed lines and messages,
-  and a commit whose tree has no record of the author's four gates passing on it
-  ([the local stamp](#the-local-stamp)). A red run here means the commit is fixed forward at once.
-- To make the oracle *required*: branch protection with `oracle` as a required status check on
-  `main`, after which a red run blocks the merge. Nothing in the workflow needs to change for that.
-- It runs on one machine. If the runner is offline, pushes queue in GitHub until it returns
-  (a queued run waits up to the workflow's 240-minute timeout once started; while nothing is
-  online the run simply stays *queued*). Several pushes serialise through the `oracle`
-  concurrency group and each keeps its own verdict; nothing is cancelled.
+- **It does not block a push.** A push is gated by the author's own runs: the pre-push hook refuses a
+  commit whose tree has no record of the four gates passing on it ([the local stamp](#the-local-stamp)),
+  and blocks what cannot be recalled after a push, host details in the pushed lines and messages. A
+  failing oracle run is visible in the *Actions* tab and in the run summary; the commit is fixed forward
+  at once.
+- It runs on one machine. If the runner is offline, a requested run stays *queued* in GitHub until it
+  returns (once started, a run has the workflow's 240-minute timeout). Several requested runs serialise
+  through the `oracle` concurrency group and each keeps its own verdict; nothing is cancelled.
 - It must not run untrusted workflow files. The workflow has no `pull_request` trigger: a
   pull request from a fork would execute the fork's workflow on the private machine. No forks
   exist; if one appears, keep the trigger list as it is.
-- The `progress` workflow's bot commit never starts an oracle run: it is pushed with the
-  default `GITHUB_TOKEN`, which does not trigger workflows, and its message carries
-  `[skip ci]`, which GitHub honours for `on: push`. The bot commits in the history show no
-  runs of any workflow.
 
 ## Private inputs
 
@@ -133,7 +131,7 @@ trusts with them. Everything lives in one folder outside Git (the workspace sibl
    `systemctl --user status <unit>` shows `√ Connected to GitHub` when it is listening, and
    `gh api repos/<owner>/DW4_Decomp/actions/runners` lists it as `online`.
 5. The first run compiles everything (the build cache is empty); allow ten minutes. Later runs
-   recompile only what the push changed.
+   recompile only what changed since the previous run.
 
 `config.sh` writes the runner's credentials (`.credentials`, `.runner`) into that folder: keep it
 private, and keep it out of any backup that leaves the machine.

@@ -1,11 +1,12 @@
-# The byte oracle, run on every push by a private self-hosted runner.
+# The byte oracle, run on demand by a private self-hosted runner.
 #
 # `make check` and `make link` need the retail ELF and the proprietary compiler, so the hosted
 # runners cannot prove anything about the bytes (see progress.yml). This workflow runs the gates
 # a change's author runs before reporting it (CONTRIBUTING.md) on a runner labelled `dw4-oracle` that
-# holds those private inputs outside the checkout, so every pushed commit gets a verdict from a
-# machine the pusher does not control. What the runner is, what it proves and what it cannot:
-# docs/engine/oracle-runner.md.
+# holds those private inputs outside the checkout, on a clean checkout of the chosen commit. Every push
+# already carries the author's own stamped gate runs (.githooks/pre-push); this run is the independent,
+# clean-checkout proof, started by hand when one is wanted (before a milestone, with `fresh`). What the
+# runner is, what it proves and what it cannot: docs/engine/oracle-runner.md.
 #
 # Private inputs never enter the repository. The runner's own `.env` file (outside Git) sets
 #   DW4_LOCAL_TOOLS  absolute path of the tools folder the repo's `local` link points to
@@ -13,18 +14,14 @@
 #   DW4_BUILD_LOCK   a lock file shared with the machine's interactive builds
 # The values are masked from the log and are never written anywhere in this file.
 #
-# Triggers: every push to every branch, plus a manual run. There is deliberately no
-# `pull_request` trigger: the repository is public and the runner is self-hosted, and a
-# pull request from a fork would run the fork's workflow file on this machine. This trigger
-# list must never grow a `pull_request` entry.
-#
-# The progress workflow's bot commit cannot start a run here: it is pushed with the default
-# GITHUB_TOKEN, which never triggers workflows, and its message carries `[skip ci]`, which
-# GitHub honours for `on: push` (the bot commits in the history show no runs at all).
+# Triggers: a manual run only (Actions tab or `gh workflow run oracle`). It does not run on push: the
+# author's gates already ran on the pushed tree, and a second full build per push on the same machine
+# proved little and held the shared build lock. There is deliberately no `pull_request` trigger: the
+# repository is public and the runner is self-hosted, and a pull request from a fork would run the
+# fork's workflow file on this machine. This trigger list must never grow a `pull_request` entry.
 name: oracle
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       fresh:
@@ -36,7 +33,7 @@ permissions:
   contents: read
 
 # One oracle run at a time; a queued run waits for the current one instead of cancelling it,
-# so every pushed commit keeps its own verdict.
+# so every requested run keeps its own verdict.
 concurrency:
   group: oracle
   cancel-in-progress: false

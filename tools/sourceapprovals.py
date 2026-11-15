@@ -423,26 +423,35 @@ def approved_statements(paths, rows=None):
         found = [start for start, _end, body in inline_asm.statements(text) if not inline_asm.is_hardware(body)]
         if not found:
             continue
+        # each caller's reachable text is built once and tested against every statement: a library unit has
+        # thousands of callers, and rebuilding the text per statement dominated the run
         if path.endswith((".h", ".hpp")):
             header = os.path.normpath(os.path.abspath(path))
+            reach = {start: [] for start in found}
+            for source, source_text in sources:
+                if source.endswith((".h", ".hpp")) or not in_scope(source):
+                    continue
+                combined, _counted, offsets = _source(source)
+                at = offsets.get(header)
+                if at is None:
+                    continue
+                for name in _callers(source_text):
+                    reachable = _reachable_text(combined, name)
+                    for start in found:
+                        if reachable[at + start:at + start + 3] == text[start:start + 3]:
+                            reach[start].append((source, name))
             for start in found:
-                reach = []
-                for source, source_text in sources:
-                    if source.endswith((".h", ".hpp")) or not in_scope(source):
-                        continue
-                    combined, _counted, offsets = _source(source)
-                    at = offsets.get(header)
-                    if at is None:
-                        continue
-                    reach += [(source, name) for name in _callers(source_text)
-                              if _reachable_text(combined, name)[at + start:at + start + 3] == text[start:start + 3]]
-                if reach and all(_covered(source, name, rows, aliases) for source, name in reach):
+                if reach[start] and all(_covered(source, name, rows, aliases) for source, name in reach[start]):
                     approved.add((path, start))
             continue
-        callers = _callers(text)
+        reach = {start: [] for start in found}
+        for name in _callers(text):
+            reachable = _reachable_text(text, name)
+            for start in found:
+                if reachable[start:start + 3] == text[start:start + 3]:
+                    reach[start].append(name)
         for start in found:
-            reach = [name for name in callers if _reachable_text(text, name)[start:start + 3] == text[start:start + 3]]
-            if reach and all(_covered(path, name, rows, aliases) for name in reach):
+            if reach[start] and all(_covered(path, name, rows, aliases) for name in reach[start]):
                 approved.add((path, start))
     return approved
 

@@ -582,8 +582,18 @@ def main(argv=None):
     # Two passes: the C units first, because where their exception metadata and table entries
     # land decides how the raw data units are carved; then everything else.
     c_units = [u for u in to_build if u[2] == "code" and not a.no_c and u[3] in src_index]
+    # The members of a compiler unit share one compile (`unit_object`), so a worker that takes a member
+    # waits until that unit is built. In layout order the workers take consecutive members of one file and
+    # all but one of them wait; the schedule below hands out every unit's first member before any
+    # second one, the largest units first, so the compiles of different files run side by side.
+    by_unit = {}
+    for u in c_units:
+        group = unitobjects.group_for(u[0], a.unit_objects)
+        by_unit.setdefault(group.owner if group else u[0], []).append(u)
+    schedule = [u for _rank, _size, _owner, u in sorted(
+        (rank, -len(members), owner, u) for owner, members in by_unit.items() for rank, u in enumerate(members))]
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for va, info in ex.map(build_one, c_units):
+        for va, info in ex.map(build_one, schedule):
             built[va] = info
 
     # ---- the data-only units: files the retail linker kept the data of and no function ----------------

@@ -438,8 +438,21 @@ def main(argv=None):
                                   "data": unit_data[nm]})
         return (nm, kind, exc, diagnostic, override)
 
+    # The members of a compiler unit share one verification (verify._unit_result), so a worker that takes
+    # a member waits until its unit is built. In address order the workers take consecutive members of one
+    # file and all but one wait: run every unit's first member before any second one, the largest units
+    # first, and read the results back in address order so the report is unchanged.
+    by_unit = {}
+    for i, (va, _sz, _nm, _path) in enumerate(cands):
+        group = unitobjects.group_for(va, a.unit_objects)
+        by_unit.setdefault(group.owner if group else va, []).append(i)
+    order = [i for _rank, _size, _owner, i in sorted(
+        (rank, -len(members), owner, i) for owner, members in by_unit.items() for rank, i in enumerate(members))]
+    results = [None] * len(cands)
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for nm, kind, exc, diagnostic, override in ex.map(cover_one, cands):
+        for i, result in zip(order, ex.map(cover_one, [cands[i] for i in order])):
+            results[i] = result
+        for nm, kind, exc, diagnostic, override in results:
             if nm in asm_bodies and kind not in ("mismatch", "compile"):
                 kind = "asm-body"
             elif nm in assembly and kind == "match":

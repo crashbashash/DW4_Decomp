@@ -3,9 +3,9 @@
 # that guards the byte oracle's own files.
 #
 # The byte oracle is NOT run here. Whoever made the change runs the gates on the final tree
-# (CONTRIBUTING.md, "Checking your work"), and the oracle runner (.github/workflows/oracle.yml)
-# runs them again on every pushed commit, on a machine the pusher does not control; a third
-# run in between proved nothing new and cost a full build per push. A real push checks:
+# (CONTRIBUTING.md, "Checking your work") and this hook requires their stamps; the oracle runner
+# (.github/workflows/oracle.yml) repeats them from a clean checkout when started by hand. Running
+# them again here would cost a full build per push and prove nothing new. A real push checks:
 #
 #   1. host details: the lines and commit messages being pushed carry nothing that identifies
 #      a machine or an account (scripts/check_host_details.py). Published text cannot be
@@ -256,6 +256,6 @@ if [ "$rc" -ne 0 ]; then
     echo "pre-push: REFUSED — see the lines above"
 else
     rm -rf "$logdir"
-    echo "pre-push: PASS — the byte oracle is the runner's verdict on the pushed commit (.github/workflows/oracle.yml)"
+    echo "pre-push: PASS — every pushed commit carries the author's four passing gates (tools/gate_stamp.py)"
 fi
 exit $rc

@@ -214,16 +214,17 @@ Committed files, and the gitignored working directories the analysis writes to. 
   `../PROGRESS.md`, `progress.json`, the `<!-- progress:start -->` block in `../README.md`, and
   `../data/check-categories.tsv` (the per-unit verification category, written by a complete
   `make check` and read by `tools/progress.py` for the fully-verified / debt split).
-  `make progress` writes the progress files, and CI re-runs it on every push. `../PROGRESS.md` is the
+  `make check` writes the progress files at its end (`make progress` alone does the same from the committed
+  categories), and CI re-runs it on every push. `../PROGRESS.md` is the
   single source of counts: other pages point at it rather than restating numbers that go stale.
-- **CI counts; the oracle runner proves.** The hosted GitHub workflows can only run what needs no
+- **CI counts; the author's gates prove.** The hosted GitHub workflows can only run what needs no
   game and no compiler: the hygiene scan, the typed-coverage gate and `tools/progress.py`. The byte
   oracle (`make check`, `make link`) needs the retail ELF and the proprietary toolchains: the author
   of a change runs it on the final tree and quotes its lines, and the self-hosted
-  [oracle runner](engine/oracle-runner.md) runs it again on every pushed commit. The **pre-push hook**
-  (`.githooks/pre-push`, enabled by `scripts/install_git_hooks.sh`) does not run it a third time: it
-  checks the pushed lines and commit messages for host details, refuses a commit whose tree has no stamp
-  from the author's passing `make check`, `make link`, `make typed-check` and `make hygiene`
+  [oracle runner](engine/oracle-runner.md) repeats it from a clean checkout when started by hand. The
+  **pre-push hook** (`.githooks/pre-push`, enabled by `scripts/install_git_hooks.sh`) does not run it
+  again: it checks the pushed lines and commit messages for host details, refuses a commit whose tree has
+  no stamp from the author's passing `make check`, `make link`, `make typed-check` and `make hygiene`
   ([the local stamp](engine/oracle-runner.md#the-local-stamp)), and applies the oracle-change rule when a
   push touches the oracle's own files.
 - **Game data stays out of the repo.** `.gitignore` enforces it; a disc image dropped into a working

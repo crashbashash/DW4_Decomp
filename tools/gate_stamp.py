@@ -5,7 +5,8 @@ A task is complete when `make check`, `make link`, `make typed-check` and `make 
 tree (CLAUDE.md, "Completion and regression"). Each of those targets runs `start GATE` first and `pass GATE`
 last, so a gate that fails never reaches `pass`. `pass` stamps the tree when the tree did not change during
 the run, apart from the files the gates themselves regenerate (`data/check-categories.tsv`,
-`data/check-data.tsv`, `config/SLUS-20836/layout.txt`), and, for `check`, when the match count is at least
+`data/check-data.tsv`, `config/SLUS-20836/layout.txt`, and the progress pages `make check` writes), and, for
+`check`, when the match count is at least
 `functions.fully_verified` in HEAD's `docs/progress.json`. It never changes the target's exit code: a run
 that cannot be stamped says why on one `gate-stamp:` line. .githooks/pre-push refuses a pushed commit whose
 tree is not stamped by all four (docs/engine/oracle-runner.md, "The local stamp").
@@ -35,7 +36,8 @@ import time
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GATES = ("check", "link", "typed-check", "hygiene")
 # tracked files the gates write; a run that only rewrote these verified the tree it leaves behind
-OUTPUTS = {"data/check-categories.tsv", "data/check-data.tsv", "config/SLUS-20836/layout.txt"}
+OUTPUTS = {"data/check-categories.tsv", "data/check-data.tsv", "config/SLUS-20836/layout.txt",
+           "PROGRESS.md", "docs/progress.json", "README.md"}
 CATEGORIES = os.path.join(ROOT, "build", "check-categories.tsv")
 
 

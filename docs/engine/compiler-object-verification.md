@@ -241,7 +241,7 @@ Three guards keep the oracle itself honest:
   check` recorded (`; orphan N bytes` on the diagnostic of every exc=extra/differ
   unit in `data/check-categories.tsv`, N = the aligned size of the unit's
   exception sections). Anything else exits 1. The byte-gate parser in
-  `.githooks/pre-push` (run by the oracle runner on every pushed commit) reads that
+  `.githooks/pre-push` (which the oracle runner uses on its logs) reads that
   line as gate 4 ("orphans ≤ recorded debt"); gate 5 is the exit code of
   `tools/progress.py --debt-check`.
 * **Oracle-change rule.** The oracle's own files are listed, one pathspec per

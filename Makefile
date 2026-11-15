@@ -149,14 +149,21 @@ $(BUILD)/src/%.o: $(SRC)/%.cpp
 
 # Results are cached by content in build/cache/ (tools/buildcache.py): a rerun only recompiles what changed.
 # `make check-fresh` / `make link-fresh` ignore the cache; run them once before publishing a milestone.
+# `check` also writes the files the other gates and the commit read from it: the layout `make link` builds
+# from, and the progress pages built from its categories. One pass of the four gates then leaves the tree
+# they all stamped.
 check: asm-ensure
 	@$(STAMP) start check
+	python3 tools/layout.py >/dev/null
 	python3 tools/check.py --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
+	python3 tools/progress.py
 	@$(STAMP) pass check
 
 check-fresh: asm-ensure
 	@$(STAMP) start check
+	python3 tools/layout.py >/dev/null
 	python3 tools/check.py --no-cache --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
+	python3 tools/progress.py
 	@$(STAMP) pass check
 
 # --- the derived-rule fixtures (no toolchain; the pack paths are pointed at your copies) ----
