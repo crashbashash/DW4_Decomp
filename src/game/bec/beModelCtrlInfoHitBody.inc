@@ -1,21 +1,30 @@
+igMetaObject *g_beModelCtrlInfoHitBody_metaObject;
+igMetaField *g_beModelCtrlInfoHitBody_isFirstMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_calcTimeMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_countMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_orgAABoxListMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_AABoxMinListMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_AABoxMaxListMetaField;
+igMetaField *g_beModelCtrlInfoHitBody_AABoxListMetaField;
+
 void beModelCtrlInfoHitBody_Create(int arg0) {
     FUN_003525e0();
     igMetaObject_CreateInstance(*(int *)0x588B00, arg0);
 }
 
 igMetaObject *FUN_00352410(void) {
-    if (g_beModelCtrlInfoHitBody_metaObject[0] == 0) {
-        g_beModelCtrlInfoHitBody_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beModelCtrlInfoHitBody_metaObject == 0) {
+        g_beModelCtrlInfoHitBody_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beModelCtrlInfoHitBody_metaObject[0];
+    return g_beModelCtrlInfoHitBody_metaObject;
 }
 
 void *FUN_00352460(void) {
-    igMetaObject *g = g_beModelCtrlInfoHitBody_metaObject[0];
+    igMetaObject *g = g_beModelCtrlInfoHitBody_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003525e0();
     }
-    return g_beModelCtrlInfoHitBody_metaObject[0];
+    return g_beModelCtrlInfoHitBody_metaObject;
 }
 
 int beModelCtrlInfoHitBody_GetVTable(void) {
@@ -70,15 +79,17 @@ void FUN_003525e0(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoHitBody_Register);
 }
 
+static igMetaObjectCallback g_beModelCtrlInfoHitBody_callbackList[] = { FUN_0018a5d0, FUN_0018a180, 0 };
+
 void *beModelCtrlInfoHitBody_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlInfoHitBody_metaObject,
+        &g_beModelCtrlInfoHitBody_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beModelCtrlInfoHitBody_GetMetaObject,
-        beModelCtrlInfoHitBody_className,
+        "beModelCtrlInfoHitBody",
         0x30, /* instance size */
         beModelCtrlInfoHitBody_GetVTable,
         beModelCtrlInfoHitBody_InitFields,
@@ -92,6 +103,43 @@ void beModelCtrlInfoHitBody_GetMetaObject(void)
     FUN_00352460();
 }
 
+static FieldFactory g_beModelCtrlInfoHitBody_ctorTable[] = {
+    igBoolMetaField_Create,
+    igLongMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beModelCtrlInfoHitBody_fieldTable[] = {
+    "_isFirst",
+    "_calcTime",
+    "_count",
+    "_orgAABoxList",
+    "_AABoxMinList",
+    "_AABoxMaxList",
+    "_AABoxList",
+};
+static igMetaField **g_beModelCtrlInfoHitBody_fieldHandles[] = {
+    &g_beModelCtrlInfoHitBody_isFirstMetaField,
+    &g_beModelCtrlInfoHitBody_calcTimeMetaField,
+    &g_beModelCtrlInfoHitBody_countMetaField,
+    &g_beModelCtrlInfoHitBody_orgAABoxListMetaField,
+    &g_beModelCtrlInfoHitBody_AABoxMinListMetaField,
+    &g_beModelCtrlInfoHitBody_AABoxMaxListMetaField,
+    &g_beModelCtrlInfoHitBody_AABoxListMetaField,
+};
+static int g_beModelCtrlInfoHitBody_fieldOffsets[] = {
+    8,
+    16,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
+
 void beModelCtrlInfoHitBody_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -100,9 +148,9 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)g_beModelCtrlInfoHitBody_metaObject[0];
+    temp_s1 = (void *)g_beModelCtrlInfoHitBody_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoHitBody_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoHitBody_ctorTable, 7);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0), 1);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0018a4f0();
@@ -116,6 +164,6 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a4f0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoHitBody_fieldTable[0], &DAT_004c5340[0], &DAT_004c5360[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoHitBody_fieldTable, g_beModelCtrlInfoHitBody_fieldHandles, g_beModelCtrlInfoHitBody_fieldOffsets, temp_s0);
 }
 

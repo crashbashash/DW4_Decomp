@@ -1,9 +1,9 @@
 igMetaObject *igCommonTraversal_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCommonTraversal_metaObject[0];
+    igMetaObject *g = g_igCommonTraversal_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a3dd0();
-    return g_igCommonTraversal_metaObject[0];
+    return g_igCommonTraversal_metaObject;
 }
 
 int igCommonTraversal_GetVTable(void) {

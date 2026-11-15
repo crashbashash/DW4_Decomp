@@ -1,16 +1,18 @@
+igMetaObject *g_igVisualAttribute_metaObject;
+
 igMetaObject *FUN_00130310(void) {
-    if (g_igVisualAttribute_metaObject[0] == 0) {
-        g_igVisualAttribute_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igVisualAttribute_metaObject == 0) {
+        g_igVisualAttribute_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igVisualAttribute_metaObject[0];
+    return g_igVisualAttribute_metaObject;
 }
 
 igMetaObject *igVisualAttribute_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVisualAttribute_metaObject[0];
+    igMetaObject *g = g_igVisualAttribute_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001303b0();
-    return g_igVisualAttribute_metaObject[0];
+    return g_igVisualAttribute_metaObject;
 }
 
 void FUN_001303b0(void)
@@ -22,11 +24,11 @@ void igVisualAttribute_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igVisualAttribute_metaObject,
+        &g_igVisualAttribute_metaObject,
         igAttr_Register,
         igAttr_GetPublishedMetaObject,
         thunk_igVisualAttribute_GetMetaObject,
-        igVisualAttribute_className,
+        "igVisualAttribute",
         0xC, /* instance size */
         0,
         0,
@@ -40,6 +42,6 @@ void thunk_igVisualAttribute_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00130430(void) {
-    return g_igAttr_metaObject[0];
+    return g_igAttr_metaObject;
 }
 

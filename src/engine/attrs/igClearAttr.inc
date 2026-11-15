@@ -1,3 +1,12 @@
+igMetaObject *g_igClearAttr_metaObject;
+igMetaField *g_igClearAttr_clearModeMetaField;
+igMetaField *g_igClearAttr_colorMetaField;
+igMetaField *g_igClearAttr_accumMetaField;
+igMetaField *g_igClearAttr_depthMetaField;
+igMetaField *g_igClearAttr_stencilMetaField;
+igMetaField *g_igClearAttr_colorPackedMetaField;
+igMetaField *g_igClearAttr_depthFMetaField;
+
 void FUN_00139370(int arg0) {
     FUN_00139440();
     igMetaObject_CreateInstance(*(int *)0x55F308, arg0);
@@ -5,10 +14,10 @@ void FUN_00139370(int arg0) {
 
 igMetaObject *igClearAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igClearAttr_metaObject[0];
+    igMetaObject *g = g_igClearAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00139440();
-    return g_igClearAttr_metaObject[0];
+    return g_igClearAttr_metaObject;
 }
 
 int igClearAttr_GetVTable(void) {
@@ -27,11 +36,11 @@ void igClearAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igClearAttr_metaObject,
+        &g_igClearAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igClearAttr_GetMetaObject,
-        igClearAttr_className,
+        "igClearAttr",
         0x48, /* instance size */
         igClearAttr_GetVTable,
         &igClearAttr_InitFields,
@@ -44,6 +53,43 @@ void thunk_igClearAttr_GetMetaObject(void) {
     igClearAttr_GetMetaObject();
 }
 
+static FieldFactory g_igClearAttr_ctorTable[] = {
+    igUnsignedIntMetaField_Create,
+    FUN_001872a0,
+    FUN_001872a0,
+    igDoubleMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_igClearAttr_fieldTable[] = {
+    "_clearMode",
+    "_color",
+    "_accum",
+    "_depth",
+    "_stencil",
+    "_colorPacked",
+    "_depthF",
+};
+static igMetaField **g_igClearAttr_fieldHandles[] = {
+    &g_igClearAttr_clearModeMetaField,
+    &g_igClearAttr_colorMetaField,
+    &g_igClearAttr_accumMetaField,
+    &g_igClearAttr_depthMetaField,
+    &g_igClearAttr_stencilMetaField,
+    &g_igClearAttr_colorPackedMetaField,
+    &g_igClearAttr_depthFMetaField,
+};
+static int g_igClearAttr_fieldOffsets[] = {
+    12,
+    16,
+    32,
+    48,
+    56,
+    60,
+    64,
+};
+
 void igClearAttr_InitFields(void) {
     void *temp_v0_2;
     void *temp_v0;
@@ -54,9 +100,9 @@ void igClearAttr_InitFields(void) {
     struct V v1;
     struct V v2;
 
-    temp_s1 = (void *)g_igClearAttr_metaObject[0];
+    temp_s1 = (void *)g_igClearAttr_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igClearAttr_ctorTable[0], 7);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igClearAttr_ctorTable, 7);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
     v1.x = 0;
     v1.w = 0x3F800000;
@@ -76,6 +122,6 @@ void igClearAttr_InitFields(void) {
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
     igFloatMetaField_SetDefault(temp_v0_2, 1.0f);
     *(char *)((char *)(temp_v0_2) + 38) = 0;
-    igMetaObject_NameFields(temp_s1, &g_igClearAttr_fieldTable[0], &DAT_004869a0[0], &DAT_004869c0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igClearAttr_fieldTable, g_igClearAttr_fieldHandles, g_igClearAttr_fieldOffsets, temp_s0);
 }
 

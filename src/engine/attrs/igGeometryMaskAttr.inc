@@ -1,3 +1,6 @@
+igMetaObject *g_igGeometryMaskAttr_metaObject;
+igMetaField *g_igGeometryMaskAttr_maskMetaField;
+
 void FUN_00137070(int arg0) {
     FUN_00137140();
     igMetaObject_CreateInstance(*(int *)0x55F148, arg0);
@@ -5,10 +8,10 @@ void FUN_00137070(int arg0) {
 
 igMetaObject *igGeometryMaskAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGeometryMaskAttr_metaObject[0];
+    igMetaObject *g = g_igGeometryMaskAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00137140();
-    return g_igGeometryMaskAttr_metaObject[0];
+    return g_igGeometryMaskAttr_metaObject;
 }
 
 int igGeometryMaskAttr_GetVTable(void) {
@@ -28,11 +31,11 @@ void igGeometryMaskAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGeometryMaskAttr_metaObject,
+        &g_igGeometryMaskAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igGeometryMaskAttr_GetMetaObject,
-        igGeometryMaskAttr_className,
+        "igGeometryMaskAttr",
         0x10, /* instance size */
         igGeometryMaskAttr_GetVTable,
         &igGeometryMaskAttr_InitFields,
@@ -45,14 +48,27 @@ void thunk_igGeometryMaskAttr_GetMetaObject(void) {
     igGeometryMaskAttr_GetMetaObject();
 }
 
+static FieldFactory g_igGeometryMaskAttr_ctorTable[] = {
+    igUnsignedIntMetaField_Create,
+};
+static const char *g_igGeometryMaskAttr_fieldTable[] = {
+    "_mask",
+};
+static igMetaField **g_igGeometryMaskAttr_fieldHandles[] = {
+    &g_igGeometryMaskAttr_maskMetaField,
+};
+static int g_igGeometryMaskAttr_fieldOffsets[] = {
+    12,
+};
+
 void igGeometryMaskAttr_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igGeometryMaskAttr_metaObject[0];
+    temp_s0 = g_igGeometryMaskAttr_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igGeometryMaskAttr_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igGeometryMaskAttr_ctorTable, 1);
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);
-    igMetaObject_NameFields(temp_s0, &g_igGeometryMaskAttr_fieldTable[0], &DAT_00486540[0], &DAT_00486548[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igGeometryMaskAttr_fieldTable, g_igGeometryMaskAttr_fieldHandles, g_igGeometryMaskAttr_fieldOffsets, temp_s1);
 }
 

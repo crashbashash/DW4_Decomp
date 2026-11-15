@@ -1,5 +1,5 @@
 igMetaObject *Gap__Gfx__igVertexDataList__vfunc_24(void) {
-    return g_igVertexData_metaObject[0];
+    return g_igVertexData_metaObject;
 }
 
 void FUN_00181110(igDataList *arg0) {

@@ -1,10 +1,16 @@
+igMetaObject *g_beTimerData_metaObject;
+igMetaField *g_beTimerData_startTimeMetaField;
+igMetaField *g_beTimerData_resetConditionMetaField;
+igMetaField *g_beTimerData_callLuaFileMetaField;
+igMetaField *g_beTimerData_downTimerMetaField;
+
 igMetaObject *FUN_00341840(void)
 {
-    igMetaObject *g = g_beTimerData_metaObject[0];
+    igMetaObject *g = g_beTimerData_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00341950();
-    return g_beTimerData_metaObject[0];
+    return g_beTimerData_metaObject;
 }
 
 int beTimerData_GetVTable(void) {
@@ -58,11 +64,11 @@ void *beTimerData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beTimerData_metaObject,
+        &g_beTimerData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beTimerData_GetMetaObject,
-        beTimerData_className,
+        "beTimerData",
         0x20, /* instance size */
         beTimerData_GetVTable,
         beTimerData_InitFields,
@@ -76,15 +82,40 @@ void beTimerData_GetMetaObject(void)
     FUN_00341840();
 }
 
+static FieldFactory g_beTimerData_ctorTable[] = {
+    igLongMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_beTimerData_fieldTable[] = {
+    "_startTime",
+    "_resetCondition",
+    "_callLuaFile",
+    "_downTimer",
+};
+static igMetaField **g_beTimerData_fieldHandles[] = {
+    &g_beTimerData_startTimeMetaField,
+    &g_beTimerData_resetConditionMetaField,
+    &g_beTimerData_callLuaFileMetaField,
+    &g_beTimerData_downTimerMetaField,
+};
+static int g_beTimerData_fieldOffsets[] = {
+    8,
+    16,
+    20,
+    24,
+};
+
 void beTimerData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beTimerData_metaObject[0];
+    temp_s0 = (void *)g_beTimerData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beTimerData_ctorTable[0], 4);
+    igMetaObject_CreateFields(temp_s0, g_beTimerData_ctorTable, 4);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 0);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)), 0);
-    igMetaObject_NameFields(temp_s0, &g_beTimerData_fieldTable[0], &DAT_004c3440[0], &DAT_004c3450[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beTimerData_fieldTable, g_beTimerData_fieldHandles, g_beTimerData_fieldOffsets, temp_s1);
 }
 

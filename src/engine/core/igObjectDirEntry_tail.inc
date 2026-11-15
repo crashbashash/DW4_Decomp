@@ -10,7 +10,7 @@ static inline const char *entryNameOf(const igObjectDirEntry *entry) {
 }
 
 static inline igObjectList *asObjectEntryList(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject[0]) != 0) return (igObjectList *)object;
+    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
     return 0;
 }
 
@@ -48,7 +48,7 @@ igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBF
 }
 
 int igObjectDirEntry_GetMeta(void) {
-    return ((int *)g_igObjectDirEntry_metaObject)[0];
+    return (int)g_igObjectDirEntry_metaObject;
 }
 
 /* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
@@ -80,7 +80,7 @@ void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *self, igMetaObject *meta) {
         self->_typeMetaName = (int)interned;
     } else {
         StringPool *pool = InternedStrings::get();
-        interned = ((char *)StringPool_Intern(pool, (const char *)text_NoMeta));
+        interned = ((char *)StringPool_Intern(pool, (const char *)"NoMeta"));
         releaseString((const char *)self->_typeMetaName);
         self->_typeMetaName = (int)interned;
     }

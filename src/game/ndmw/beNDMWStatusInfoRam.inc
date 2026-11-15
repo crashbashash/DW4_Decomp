@@ -1,9 +1,12 @@
+igMetaObject *g_beNDMWStatusInfoRam_metaObject;
+igMetaField *g_beNDMWStatusInfoRam_workMetaField;
+
 void *FUN_003b5bb0(void) {
-    igMetaObject *g = g_beNDMWStatusInfoRam_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b5d70();
     }
-    return g_beNDMWStatusInfoRam_metaObject[0];
+    return g_beNDMWStatusInfoRam_metaObject;
 }
 
 int beNDMWStatusInfoRam_GetVTable(void) {
@@ -63,15 +66,17 @@ void FUN_003b5d70(void)
     igMetaObject_RunStaticInit(beNDMWStatusInfoRam_Register);
 }
 
+static igMetaObjectCallback g_beNDMWStatusInfoRam_callbackList[] = { FUN_003b6110, 0 };
+
 void *beNDMWStatusInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusInfoRam_metaObject,
+        &g_beNDMWStatusInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beNDMWStatusInfoRam_GetMetaObject,
-        beNDMWStatusInfoRam_className,
+        "beNDMWStatusInfoRam",
         0x30, /* instance size */
         beNDMWStatusInfoRam_GetVTable,
         beNDMWStatusInfoRam_InitFields,
@@ -85,16 +90,29 @@ void beNDMWStatusInfoRam_GetMetaObject(void)
     FUN_003b5bb0();
 }
 
+static FieldFactory g_beNDMWStatusInfoRam_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWStatusInfoRam_fieldTable[] = {
+    "_work",
+};
+static igMetaField **g_beNDMWStatusInfoRam_fieldHandles[] = {
+    &g_beNDMWStatusInfoRam_workMetaField,
+};
+static int g_beNDMWStatusInfoRam_fieldOffsets[] = {
+    44,
+};
+
 void beNDMWStatusInfoRam_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStatusInfoRam_metaObject[0];
+    temp_s0 = g_beNDMWStatusInfoRam_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatusInfoRam_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusInfoRam_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b5f00();
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStatusInfoRam_fieldTable[0], &DAT_004c9850[0], &DAT_004c9858[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStatusInfoRam_fieldTable, g_beNDMWStatusInfoRam_fieldHandles, g_beNDMWStatusInfoRam_fieldOffsets, temp_s2);
 }
 

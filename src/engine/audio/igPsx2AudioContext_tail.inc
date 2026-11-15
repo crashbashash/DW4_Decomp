@@ -16,19 +16,22 @@ void FUN_00143800(AudioVoiceHandle *h)
     ((AudioVoiceTable *)g_audioTableOwner.p)->entries[h->voice].active = 0;
 }
 
+int g_pendingIopCallbackValue;
+AudioThread *g_streamingSemaphore;
+
 void FUN_00143840(void *arg0) {
     DW4SR4 sp1C;
 
-    DAT_0055f5b0[0] = *(int *)((char *)(arg0) + 12) | 0x20000000;
-    sp1C = ((DW4VCSR_128_0 *)(DAT_0055f5b8[0]))->vX();
+    g_pendingIopCallbackValue = *(int *)((char *)(arg0) + 12) | 0x20000000;
+    sp1C = ((DW4VCSR_128_0 *)(g_streamingSemaphore))->vX();
 }
 
 void FUN_00143880(int (*arg0)(int)) {
     DW4SR4 sp2C;
 
 loop_1:
-    sp2C = ((DW4VCSR_132_1 *)(DAT_0055f5b8[0]))->vX((int)(1));
-    arg0(DAT_0055f5b0[0]);
+    sp2C = ((DW4VCSR_132_1 *)(g_streamingSemaphore))->vX((int)(1));
+    arg0(g_pendingIopCallbackValue);
     goto loop_1;
 }
 
@@ -76,8 +79,8 @@ static inline RpcStatus CallRpc(InitRef *conn, int command, unsigned int value, 
 void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     struct InitRef *o;
     int s0; int *buf; int n; struct VoiceList *l;
-    if (sceSifSearchModuleByName(text_Intrinsic_Sound_Module) < 0) {
-        if (igPsx2_LoadIopModule(text_igAudio_irx, 2, 0, 0) != *(RpcStatus *)g_resultSuccess) {
+    if (sceSifSearchModuleByName("Intrinsic_Sound_Module") < 0) {
+        if (igPsx2_LoadIopModule("igAudio.irx", 2, 0, 0) != *(RpcStatus *)g_resultSuccess) {
             *arg0 = g_resultFailure[0];
             return;
         }
@@ -511,9 +514,9 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
     AudioThread *p;
     if (arg0->_streamingThread == 0) {
         p = (AudioThread *)igSemaphore_Create(0);
-        DAT_0055f5b8[0] = p;
+        g_streamingSemaphore = p;
         p->a92();
-        DAT_0055f5b8[0]->a132((void *)1);
+        g_streamingSemaphore->a132((void *)1);
         s0 = igThread_Create(0);
         if (s0 != 0) {
             s0->references = s0->references + 1;
@@ -530,7 +533,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
         ((AudioThread *)arg0->_streamingThread)->a140(arg1);
         ((AudioThread *)arg0->_streamingThread)->a120();
         DIntr();
-        sceSifAddCmdHandler(0, &FUN_00143840, &DAT_0055f5b0[0]);
+        sceSifAddCmdHandler(0, &FUN_00143840, &g_pendingIopCallbackValue);
         EIntr();
     }
 }

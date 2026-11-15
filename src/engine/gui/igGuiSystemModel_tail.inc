@@ -11,7 +11,7 @@ void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
         igMatrix44f_SetTranslation(arg0 + 0x20, vec);
         args[0] = 2;
         args[1] = 0;
-        args[2] = DAT_0058c3e8[0];
+        args[2] = (int)g_igGuiSystemModel_viewMatrixMetaField;
         igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)args);
     }
 }

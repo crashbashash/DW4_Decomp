@@ -1,14 +1,22 @@
+igMetaObject *g_beBaseInfoRamTimer_metaObject;
+igMetaField *g_beBaseInfoRamTimer_timeScaleMetaField;
+igMetaField *g_beBaseInfoRamTimer_timeBiasMetaField;
+igMetaField *g_beBaseInfoRamTimer_endTimeMetaField;
+igMetaField *g_beBaseInfoRamTimer_svWorldTimeMetaField;
+igMetaField *g_beBaseInfoRamTimer_svBeforTimeMetaField;
+igMetaField *g_beBaseInfoRamTimer_keikaFrameMetaField;
+
 void beBaseInfoRamTimer_Create(int arg0) {
     FUN_0036a630();
     igMetaObject_CreateInstance(*(int *)0x589D78, arg0);
 }
 
 void *FUN_0036a550(void) {
-    igMetaObject *g = g_beBaseInfoRamTimer_metaObject[0];
+    igMetaObject *g = g_beBaseInfoRamTimer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036a630();
     }
-    return g_beBaseInfoRamTimer_metaObject[0];
+    return g_beBaseInfoRamTimer_metaObject;
 }
 
 int beBaseInfoRamTimer_GetVTable(void) {
@@ -49,11 +57,11 @@ void *beBaseInfoRamTimer_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beBaseInfoRamTimer_metaObject,
+        &g_beBaseInfoRamTimer_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beBaseInfoRamTimer_GetMetaObject,
-        beBaseInfoRamTimer_className,
+        "beBaseInfoRamTimer",
         0x40, /* instance size */
         beBaseInfoRamTimer_GetVTable,
         beBaseInfoRamTimer_InitFields,
@@ -67,15 +75,48 @@ void beBaseInfoRamTimer_GetMetaObject(void)
     FUN_0036a550();
 }
 
+static FieldFactory g_beBaseInfoRamTimer_ctorTable[] = {
+    igFloatMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_beBaseInfoRamTimer_fieldTable[] = {
+    "_timeScale",
+    "_timeBias",
+    "_endTime",
+    "_svWorldTime",
+    "_svBeforTime",
+    "_keikaFrame",
+};
+static igMetaField **g_beBaseInfoRamTimer_fieldHandles[] = {
+    &g_beBaseInfoRamTimer_timeScaleMetaField,
+    &g_beBaseInfoRamTimer_timeBiasMetaField,
+    &g_beBaseInfoRamTimer_endTimeMetaField,
+    &g_beBaseInfoRamTimer_svWorldTimeMetaField,
+    &g_beBaseInfoRamTimer_svBeforTimeMetaField,
+    &g_beBaseInfoRamTimer_keikaFrameMetaField,
+};
+static int g_beBaseInfoRamTimer_fieldOffsets[] = {
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+};
+
 void beBaseInfoRamTimer_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beBaseInfoRamTimer_metaObject[0];
+    temp_s0 = (void *)g_beBaseInfoRamTimer_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beBaseInfoRamTimer_ctorTable[0], 6);
+    igMetaObject_CreateFields(temp_s0, g_beBaseInfoRamTimer_ctorTable, 6);
     igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1))), 1.0f);
     igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5))), 0.0f);
-    igMetaObject_NameFields(temp_s0, &g_beBaseInfoRamTimer_fieldTable[0], &DAT_004c7cb0[0], &DAT_004c7cd0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beBaseInfoRamTimer_fieldTable, g_beBaseInfoRamTimer_fieldHandles, g_beBaseInfoRamTimer_fieldOffsets, temp_s1);
 }
 

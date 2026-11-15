@@ -1,11 +1,13 @@
+igMetaObject *g_beNDMWGameRamInfoRam_metaObject;
+
 void beNDMWGameRamInfoRam_Create(int arg0) {
     FUN_003ca2d0();
-    igMetaObject_CreateInstance(*(int *)0x58C100, arg0);
+    igMetaObject_CreateInstance(g_beNDMWGameRamInfoRam_metaObject, arg0);
 }
 
 igMetaObject *beNDMWGameRamInfoRam_ResolveMetaObject(void) {
-    if (g_beNDMWGameRamInfoRam_metaObject[0] == 0 || !isValid(g_beNDMWGameRamInfoRam_metaObject[0])) FUN_003ca2d0();
-    return g_beNDMWGameRamInfoRam_metaObject[0];
+    if (g_beNDMWGameRamInfoRam_metaObject == 0 || !isValid(g_beNDMWGameRamInfoRam_metaObject)) FUN_003ca2d0();
+    return g_beNDMWGameRamInfoRam_metaObject;
 }
 
 int beNDMWGameRamInfoRam_GetVTable(void) {
@@ -42,11 +44,11 @@ void *beNDMWGameRamInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWGameRamInfoRam_metaObject,
+        &g_beNDMWGameRamInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beNDMWGameRamInfoRam_GetMetaObject,
-        beNDMWGameRamInfoRam_className,
+        "beNDMWGameRamInfoRam",
         0x2c, /* instance size */
         beNDMWGameRamInfoRam_GetVTable,
         0,

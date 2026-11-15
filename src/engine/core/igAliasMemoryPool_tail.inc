@@ -334,14 +334,14 @@ void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *name) 
     long long netCount;
     int freeCount;
     int allocCount;
-    int *poolName;
+    const char *poolName;
     long long allocated;
     long long allocatedWithOverhead;
     long long allocatedHigh;
     __int128 allocatedWithOverheadHigh;
     __int128 maxSize;
     if (name != 0 && *name != 0) {
-        igReport_Printf(percent_s_colon_newline);
+        igReport_Printf("%s:\n");
         igReport_Flush();
     }
     igAliasMemoryPool *pool = (igAliasMemoryPool *)self;
@@ -350,16 +350,16 @@ void igAliasMemoryPool_PrintStatistics(igAliasMemoryPoolView *self, char *name) 
     netCountHigh = pool->_netAllocsHigh;
     netCount = allocCount - freeCount;
     if (self->GetAliasedMemoryPool() != 0) {
-        poolName = ((int *)Memory_GetPoolName(self->GetAliasedMemoryPool()));
+        poolName = ((const char *)Memory_GetPoolName(self->GetAliasedMemoryPool()));
     } else {
-        poolName = text_null;
+        poolName ="(null)";
     }
     allocated = self->GetLocalNetAllocated();
     allocatedWithOverhead = (int)self->GetLocalNetAllocatedWithOverhead();
     allocatedHigh = self->GetLocalNetAllocatedHigh();
     allocatedWithOverheadHigh = (long long)self->GetLocalNetAllocatedWithOverheadHigh();
     maxSize = (long long)self->GetMaxSize();
-    igReport_Printf(text_Aliased_memory_pool_percent_s, poolName, allocated, allocatedWithOverhead, allocatedHigh, allocatedWithOverheadHigh, (long long)allocCount, (long long)freeCount, (long long)(int)netCount, (long long)netCountHigh, (long long)maxSize, self->GetPoolIndex());
+    igReport_Printf("    Aliased memory pool:                  %s\n    Total allocation:                     %u\n    Total allocation with overhead:       %u\n    Total allocation high:                %u\n    Total allocation with overhead high:  %u\n    Allocation count:                     %u\n    Free count:                           %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\n    Max size limit:                       %u\n    Pool index:                           %d\n", poolName, allocated, allocatedWithOverhead, allocatedHigh, allocatedWithOverheadHigh, (long long)allocCount, (long long)freeCount, (long long)(int)netCount, (long long)netCountHigh, (long long)maxSize, self->GetPoolIndex());
     igReport_Flush();
 }
 
@@ -387,12 +387,12 @@ void igAliasMemoryPool_SetEventTracker(igAliasMemoryPool *self, igObject *tracke
 }
 
 void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int t0) {
-    int *g;
+    const char *g;
     igAliasMemoryPool_Lock(self);
-    g = &text_The_method_dump_has_no_meaning[0];
+    g = "The method dump() has no meaning for an igAliasMemoryPool\n";
     if (t0 != 0) {
         igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (r.p->Open((const char *)t0, (const char *)&text_w[0]) == 0) {
+        if (r.p->Open((const char *)t0, (const char *)"w") == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
         }
@@ -549,11 +549,13 @@ void FUN_002d1690(int extra0)
 {
 }
 
+long long g_objectSystemRefCount;
+
 void igObjectSystem_Acquire(int headerVersion) {
     int *probe;
     int system;
 
-    if (g_objectSystemRefCount[0]++ == 0) {
+    if (g_objectSystemRefCount++ == 0) {
         /* The first set-up writes the two status constants again, with the values the static initialiser
          * gives them. */
         const_cast<igResult &>(g_resultSuccess).v = 0;
@@ -563,7 +565,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         if (system != 0) {
             system = ((int)igObjectSystem_Construct((ObjectSystemView *)system));
         }
-        ((int *)g_objectSystem)[0] = system;
+        (*(int *)&g_objectSystem) = system;
         igObjectSystem_Startup((ObjectSystemView *)system);
         igStringObj_EnsureRegistered();
         igStringObjList_EnsureRegistered();
@@ -572,9 +574,9 @@ void igObjectSystem_Acquire(int headerVersion) {
         igResource_EnsureRegistered();
         probe = (int *)(&DAT_00530d80[0]);
         FUN_002d1690((int)&probe);
-        igObjectSystem_Initialize(((ObjectSystemView **)g_objectSystem)[0]);
+        igObjectSystem_Initialize((*(ObjectSystemView * *)&g_objectSystem));
     }
-    igObjectSystem_CheckHeaderVersion((void *)(((int *)g_objectSystem)[0]), headerVersion);
+    igObjectSystem_CheckHeaderVersion((void *)((*(int *)&g_objectSystem)), headerVersion);
 }
 
 void igObjectSystem_Release(void) {
@@ -583,13 +585,13 @@ void igObjectSystem_Release(void) {
     int *h;
     int rc;
 
-    if (((ObjectSystemView **)g_objectSystem)[0]->preExitDone == 0) {
-        igObjectSystem_PreExit((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
+    if ((*(ObjectSystemView * *)&g_objectSystem)->preExitDone == 0) {
+        igObjectSystem_PreExit((ObjectSystemView *)((*(void * *)&g_objectSystem)));
     }
-    if (--g_objectSystemRefCount[0] == 0) {
-        igObjectSystem_Finalize(((ObjectSystemView **)g_objectSystem)[0]);
-        igObjectSystem_Shutdown((ObjectSystemView *)(((void * *)g_objectSystem)[0]));
-        core = ((ObjectSystemView **)g_objectSystem)[0];
+    if (--g_objectSystemRefCount == 0) {
+        igObjectSystem_Finalize((*(ObjectSystemView * *)&g_objectSystem));
+        igObjectSystem_Shutdown((ObjectSystemView *)((*(void * *)&g_objectSystem)));
+        core = (*(ObjectSystemView * *)&g_objectSystem);
         if (core != 0) {
             if (&core->basePath.p) {
                 p = core->basePath.p;
@@ -615,26 +617,30 @@ void igObjectSystem_Release(void) {
             }
             igObjectSystem_OperatorDelete((int)core);
         }
-        ((void * *)g_objectSystem)[0] = 0;
+        (*(void * *)&g_objectSystem) = 0;
     }
 }
 
+int g_emptyMetaEnum;
+
 int igMetaEnum_GetEmpty(void) {
-    if (g_emptyMetaEnum[0] == 0) {
-        g_emptyMetaEnum[0] = ((int)igMetaEnum_Create((char *)(&emptyString_4[0]), (char **)0, (int *)0, 0));
+    if (g_emptyMetaEnum == 0) {
+        g_emptyMetaEnum = ((int)igMetaEnum_Create((char *)(""), 0, 0, 0));
     }
-    return g_emptyMetaEnum[0];
+    return g_emptyMetaEnum;
 }
 
 void igObjectSystem_SetIniText(int text) {
     *(int *)0x586DE0 = text;
 }
 
+unsigned char g_headerVersionWarned;
+
 void igObjectSystem_CheckHeaderVersion(void *self, int headerVersion) {
     int answer;
 
     if ((headerVersion != 0xC80) && (((ObjectSystemView *)self)->reportHeaderVersionMismatch == 1) && (g_headerVersionWarned == 0)) {
-        answer = igReportError(text_The_headers_used_to_build_the_Alchemy_Core, 0xC80, headerVersion);
+        answer = igReportError("The headers used to build the Alchemy Core (version %d) do not match the currently registring dll or application (version %d).\nThis usually means some API changed and you are likely to get unexpected behaviour.\nTo try and load the dll or application anyways, try putting \nfailOnDllVersionMismatch = false in the CORE section of your alchemy.ini", 0xC80, headerVersion);
         if ((answer != 1) && (answer == 2)) {
             g_headerVersionWarned = 1;
         }

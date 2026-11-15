@@ -1,14 +1,16 @@
+igMetaObject *g_beNDMWShopSelect03_metaObject;
+
 void beNDMWShopSelect03_Create(int arg0) {
     FUN_003b4a60();
-    igMetaObject_CreateInstance(*(int *)0x58ABA8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopSelect03_metaObject, arg0);
 }
 
 void *FUN_003b4990(void) {
-    igMetaObject *g = g_beNDMWShopSelect03_metaObject[0];
+    igMetaObject *g = g_beNDMWShopSelect03_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b4a60();
     }
-    return g_beNDMWShopSelect03_metaObject[0];
+    return g_beNDMWShopSelect03_metaObject;
 }
 
 int beNDMWShopSelect03_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beNDMWShopSelect03_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopSelect03_metaObject,
+        &g_beNDMWShopSelect03_metaObject,
         beNDMWWindowSelect_Register,
         beNDMWWindowSelect_GetPublishedMetaObject,
         beNDMWShopSelect03_GetMetaObject,
-        beNDMWShopSelect03_className,
+        "beNDMWShopSelect03",
         0x70, /* instance size */
         beNDMWShopSelect03_GetVTable,
         0,

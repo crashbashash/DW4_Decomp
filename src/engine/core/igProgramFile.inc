@@ -1,9 +1,13 @@
+igMetaObject *g_igProgramFile_metaObject;
+igMetaField *g_igProgramFile_fileNameMetaField;
+igMetaField *g_igProgramFile_fileMetaField;
+
 igMetaObject *igProgramFile_GetMetaObject(void)
 {
-    igMetaObject *g = g_igProgramFile_metaObject[0];
+    igMetaObject *g = g_igProgramFile_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igProgramFile_EnsureRegistered();
-    return g_igProgramFile_metaObject[0];
+    return g_igProgramFile_metaObject;
 }
 
 int igProgramFile_GetVTable(void) {
@@ -16,7 +20,7 @@ int igProgramFile_GetVTable(void) {
     *(int **)&obj._vtable = &g_igProgramFile_vtable[0];
     obj._fileName = 0;
     obj._file = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    t = *(int *)((char *)&obj + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     obj._vtable = (int)&g_igProgramFile_vtable[0];
     if (&obj._file != 0) {
         o = (char *)obj._file;
@@ -46,20 +50,22 @@ void igProgramFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igProgramFile_Register);
 }
 
+static igMetaObjectCallback g_igProgramFile_callbackList[] = { igFile_EnsureRegistered, 0 };
+
 void igProgramFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igProgramFile_metaObject,
+        &g_igProgramFile_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igProgramFile_GetMetaObjectFunction,
-        igProgramFile_className,
+        "igProgramFile",
         0x10,
         igProgramFile_GetVTable,
         igProgramFile_InitFields,
         0,
-        (igMetaObjectCallback *)g_igProgramFile_callbackList
+        g_igProgramFile_callbackList
     );
 }
 
@@ -67,21 +73,38 @@ void igProgramFile_GetMetaObjectFunction(void) {
     igProgramFile_GetMetaObject();
 }
 
+static FieldFactory g_igProgramFile_ctorTable[] = {
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igProgramFile_fieldTable[] = {
+    "_fileName",
+    "_file",
+};
+static igMetaField **g_igProgramFile_fieldDescriptors[] = {
+    &g_igProgramFile_fileNameMetaField,
+    &g_igProgramFile_fileMetaField,
+};
+static int g_igProgramFile_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void igProgramFile_InitFields(void) {
     int base;
     void *fileField;
     void *meta;
 
-    ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_persistent = 0;
-    meta = (void *)(g_igProgramFile_metaObject[0]);
+    ((igMetaObject *)(g_igProgramFile_metaObject))->_persistent = 0;
+    meta = (void *)(g_igProgramFile_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igProgramFile_ctorTable[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igProgramFile_ctorTable, 2);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))))->_persistent = 0;
     fileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)fileField)->_construct = 0;
     ((igObjectRefMetaField *)fileField)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igProgramFile_fieldTable[0], (igMetaField ***)&g_igProgramFile_fieldDescriptors[0], &g_igProgramFile_fieldOffsets[0], base);
-    ((igMetaObject *)(g_igProgramFile_metaObject[0]))->_abstractProxy = (int)igElfFile_GetMetaObjectFunction;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igProgramFile_fieldTable, g_igProgramFile_fieldDescriptors, g_igProgramFile_fieldOffsets, base);
+    ((igMetaObject *)(g_igProgramFile_metaObject))->_abstractProxy = (int)igElfFile_GetMetaObjectFunction;
 }
 

@@ -80,7 +80,7 @@ static inline void setWindowName(igPsx2Window *self, const char *name) {
 
 int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width, int height) {
     if (name == 0) {
-        setWindowName(self, text_Alchemy);
+        setWindowName(self, "Alchemy");
     } else {
         setWindowName(self, name);
     }
@@ -112,7 +112,7 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
         self->_vc = (int)created;
         VisualContext *vc = (VisualContext *)self->_vc;
         if (vc == 0) {
-            printf(DAT_004d7080);
+            printf("error creating visual context\n");
             return 0;
         }
         vc->_refCount = vc->_refCount - 1;
@@ -181,7 +181,7 @@ void Gap__igPsx2Window__vfunc_35(void *arg0, char *arg1, int *arg2, int *arg3, i
 }
 
 igMetaObject *Gap__igPsx2Window__vfunc_22(void) {
-    return g_igPsx2Window_metaObject[0];
+    return g_igPsx2Window_metaObject;
 }
 
 int Gap__igPsx2Window__vfunc_28(void *arg0) {

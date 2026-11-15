@@ -1,14 +1,25 @@
+igMetaObject *g_beNDMWSaveCtrlCtrlData_metaObject;
+int g_beNDMWSaveCtrlCtrlData_nameExternalEnumStorage;
+igMetaField *g_beNDMWSaveCtrlCtrlData_orderMetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_tgPlayerMetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_isSelectMetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_st0MetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_st1MetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_st2MetaField;
+igMetaField *g_beNDMWSaveCtrlCtrlData_st3MetaField;
+igMetaEnum *g_beNDMWSaveCtrlCtrlData_messageMetaEnum;
+
 void FUN_003bd0b0(int arg0) {
     FUN_003bd1d0();
-    igMetaObject_CreateInstance(*(int *)0x58B188, arg0);
+    igMetaObject_CreateInstance(g_beNDMWSaveCtrlCtrlData_metaObject, arg0);
 }
 
 void *FUN_003bd0f0(void) {
-    igMetaObject *g = g_beNDMWSaveCtrlCtrlData_metaObject[0];
+    igMetaObject *g = g_beNDMWSaveCtrlCtrlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bd1d0();
     }
-    return g_beNDMWSaveCtrlCtrlData_metaObject[0];
+    return g_beNDMWSaveCtrlCtrlData_metaObject;
 }
 
 int beNDMWSaveCtrlCtrlData_GetVTable(void) {
@@ -49,11 +60,11 @@ void *beNDMWSaveCtrlCtrlData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWSaveCtrlCtrlData_metaObject,
+        &g_beNDMWSaveCtrlCtrlData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beNDMWSaveCtrlCtrlData_GetMetaObject,
-        beNDMWSaveCtrlCtrlData_className,
+        "beNDMWSaveCtrlCtrlData",
         0x2c, /* instance size */
         beNDMWSaveCtrlCtrlData_GetVTable,
         beNDMWSaveCtrlCtrlData_InitFields,
@@ -67,6 +78,43 @@ void beNDMWSaveCtrlCtrlData_GetMetaObject(void)
     FUN_003bd0f0();
 }
 
+static FieldFactory g_beNDMWSaveCtrlCtrlData_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWSaveCtrlCtrlData_fieldTable[] = {
+    "_order",
+    "_tgPlayer",
+    "_isSelect",
+    "_st0",
+    "_st1",
+    "_st2",
+    "_st3",
+};
+static igMetaField **g_beNDMWSaveCtrlCtrlData_fieldHandles[] = {
+    &g_beNDMWSaveCtrlCtrlData_orderMetaField,
+    &g_beNDMWSaveCtrlCtrlData_tgPlayerMetaField,
+    &g_beNDMWSaveCtrlCtrlData_isSelectMetaField,
+    &g_beNDMWSaveCtrlCtrlData_st0MetaField,
+    &g_beNDMWSaveCtrlCtrlData_st1MetaField,
+    &g_beNDMWSaveCtrlCtrlData_st2MetaField,
+    &g_beNDMWSaveCtrlCtrlData_st3MetaField,
+};
+static int g_beNDMWSaveCtrlCtrlData_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
+
 void beNDMWSaveCtrlCtrlData_InitFields(void) {
     int temp_s2;
     int temp_s3;
@@ -74,26 +122,41 @@ void beNDMWSaveCtrlCtrlData_InitFields(void) {
     void *temp_s1;
     T_3bd280 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)g_beNDMWSaveCtrlCtrlData_metaObject)[0]);
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (void *)(g_beNDMWSaveCtrlCtrlData_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beNDMWSaveCtrlCtrlData_ctorTable[0], 7);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWSaveCtrlCtrlData_ctorTable, 7);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_3bd280 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &CTRL_5[0]);
-    temp_v0_2->f28 = (int)(&DAT_0058b190[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "CTRL");
+    temp_v0_2->f28 = (int)(&g_beNDMWSaveCtrlCtrlData_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->references = temp_v0_2->references - 1;
     if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
         igObject_Destroy(temp_v0_2);
     }
-    igMetaObject_NameFields(temp_s1, &g_beNDMWSaveCtrlCtrlData_fieldTable[0], &DAT_004ca3d0[0], &DAT_004ca3f0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWSaveCtrlCtrlData_fieldTable, g_beNDMWSaveCtrlCtrlData_fieldHandles, g_beNDMWSaveCtrlCtrlData_fieldOffsets, temp_s2);
 }
 
-int FUN_003bd390(void) {
-    if (DAT_0058b1d0[0] == 0) {
-        DAT_0058b1d0[0] = igMetaEnum_Create(Message, &DAT_004ca410[0], &DAT_004ca420[0], 4);
+static const char *g_beNDMWSaveCtrlCtrlData_messageNames[] = {
+    "GENERATE",
+    "GENERATE_PS",
+    "CLOSE_WIN",
+    "GETCOMMON",
+};
+static int g_beNDMWSaveCtrlCtrlData_messageValues[] = {
+    0,
+    1,
+    2,
+    3,
+};
+
+igMetaEnum *FUN_003bd390(void) {
+    if (g_beNDMWSaveCtrlCtrlData_messageMetaEnum == 0) {
+        g_beNDMWSaveCtrlCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWSaveCtrlCtrlData_messageNames, g_beNDMWSaveCtrlCtrlData_messageValues, 4);
     }
-    return DAT_0058b1d0[0];
+    return g_beNDMWSaveCtrlCtrlData_messageMetaEnum;
 }
 

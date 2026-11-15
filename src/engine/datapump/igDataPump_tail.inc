@@ -95,10 +95,11 @@ int FUN_001e6490(ValueBinding *binding, int selection) {
     }
     binding->source->select(selection);
     binding->sink->write(binding->key, (int)binding->source + value->offset);
-    if (DAT_00562c60[0] == 0) {
-        DAT_00562c60[0] = igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], &text_invarianceFunction_2[0]);
+    static FieldDesc *invarianceFunctionField;
+    if (invarianceFunctionField == 0) {
+        invarianceFunctionField = (FieldDesc *)igMetaObject_FindFieldByName(g_igMetaField_metaObject[0], "_invarianceFunction");
     }
-    Notify notify = *(Notify *)((char *)binding->sink + ((FieldDesc *)DAT_00562c60[0])->offset);
+    Notify notify = *(Notify *)((char *)binding->sink + invarianceFunctionField->offset);
     if (notify != 0) {
         notify(binding->key);
     }

@@ -1,21 +1,24 @@
+igMetaObject *g_beNDMWStageCtl_metaObject;
+igMetaField *g_beNDMWStageCtl_resetTrgTimeMetaField;
+
 void beNDMWStageCtl_CreateInstance(int arg0) {
     FUN_003bbf60();
-    igMetaObject_CreateInstance(*(int *)0x58B060, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStageCtl_metaObject, arg0);
 }
 
 igMetaObject *FUN_003bbde0(void) {
-    if (g_beNDMWStageCtl_metaObject[0] == 0) {
-        g_beNDMWStageCtl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWStageCtl_metaObject == 0) {
+        g_beNDMWStageCtl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWStageCtl_metaObject[0];
+    return g_beNDMWStageCtl_metaObject;
 }
 
 igMetaObject *FUN_003bbe30(void) {
-    igMetaObject *g = g_beNDMWStageCtl_metaObject[0];
+    igMetaObject *g = g_beNDMWStageCtl_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003bbf60();
-    return g_beNDMWStageCtl_metaObject[0];
+    return g_beNDMWStageCtl_metaObject;
 }
 
 int beNDMWStageCtl_GetVTable(void) {
@@ -62,11 +65,11 @@ void *beNDMWStageCtl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStageCtl_metaObject,
+        &g_beNDMWStageCtl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beNDMWStageCtl_GetMetaObject,
-        beNDMWStageCtl_className,
+        "beNDMWStageCtl",
         0x28, /* instance size */
         beNDMWStageCtl_GetVTable,
         beNDMWStageCtl_InitFields,
@@ -80,13 +83,26 @@ void beNDMWStageCtl_GetMetaObject(void)
     FUN_003bbe30();
 }
 
+static FieldFactory g_beNDMWStageCtl_ctorTable[] = {
+    igLongMetaField_Create,
+};
+static const char *g_beNDMWStageCtl_fieldTable[] = {
+    "_resetTrgTime",
+};
+static igMetaField **g_beNDMWStageCtl_fieldHandles[] = {
+    &g_beNDMWStageCtl_resetTrgTimeMetaField,
+};
+static int g_beNDMWStageCtl_fieldOffsets[] = {
+    32,
+};
+
 void beNDMWStageCtl_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStageCtl_metaObject[0];
+    temp_s0 = g_beNDMWStageCtl_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStageCtl_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStageCtl_fieldTable[0], &DAT_004ca148[0], &DAT_004ca150[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStageCtl_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStageCtl_fieldTable, g_beNDMWStageCtl_fieldHandles, g_beNDMWStageCtl_fieldOffsets, temp_s1);
 }
 

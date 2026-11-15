@@ -3,6 +3,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/DisableFeature.h"
 
+#pragma push
+#pragma readonly_strings on
+
 extern "C" {
 
 /* The igMetaField handles of igViewerParameters' fields; a change notification names its field by one. */
@@ -1211,3 +1214,4 @@ DisableFeature g_viewerDisableFeatures[12] = {
     DisableFeature(true, 8, "clipping"),
     DisableFeature(true, 9, "cullface")
 };
+#pragma pop

@@ -1,3 +1,6 @@
+int *g_igVectorMorphing_morph;
+int *g_igVectorMorphing_morphVu0;
+
 /* matching construct: template sweep — products computed into locals before the adds */
 void FUN_0018e9e0(const float *base, const float **targets, const float *weights, unsigned int count,
                   unsigned int targetCount, float *out, int stride) {
@@ -18,7 +21,7 @@ void FUN_0018e9e0(const float *base, const float **targets, const float *weights
 }
 
 void FUN_0018ec10(void) {
-    DAT_00561108[0] = (int *)(&FUN_0018e9e0);
-    DAT_00561110[0] = (int *)(&FUN_0018ea90);
+    g_igVectorMorphing_morph = (int *)(&FUN_0018e9e0);
+    g_igVectorMorphing_morphVu0 = (int *)(&FUN_0018ea90);
 }
 

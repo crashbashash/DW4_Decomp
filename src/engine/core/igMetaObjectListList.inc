@@ -1,16 +1,18 @@
+igMetaObject *g_igMetaObjectListList_metaObject;
+
 igMetaObject *igMetaObjectListList_GetOrCreateMetaObject(void) {
-    if (g_igMetaObjectListList_metaObject[0] == 0) {
-        g_igMetaObjectListList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igMetaObjectListList_metaObject == 0) {
+        g_igMetaObjectListList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igMetaObjectListList_metaObject[0];
+    return g_igMetaObjectListList_metaObject;
 }
 
 igMetaObject *igMetaObjectListList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMetaObjectListList_metaObject[0];
+    igMetaObject *g = g_igMetaObjectListList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMetaObjectListList_EnsureRegistered();
-    return g_igMetaObjectListList_metaObject[0];
+    return g_igMetaObjectListList_metaObject;
 }
 
 int igMetaObjectListList_GetVTable(void) {
@@ -18,7 +20,7 @@ int igMetaObjectListList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj._vtable = (int)&g_igMetaObjectListList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&obj + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igMetaObjectListList_EnsureRegistered(void)
@@ -26,20 +28,22 @@ void igMetaObjectListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaObjectListList_Register);
 }
 
+static igMetaObjectCallback g_igMetaObjectListList_callbackList[] = { igMetaObjectList_EnsureRegistered, 0 };
+
 void igMetaObjectListList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igMetaObjectListList_metaObject,
+        &g_igMetaObjectListList_metaObject,
         (igMetaObjectRegisterFunction)igObjectList_Register,
         (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igMetaObjectListList_GetMetaObjectFunction,
-        igMetaObjectListList_className,
+        "igMetaObjectListList",
         0x14,
         igMetaObjectListList_GetVTable,
         0,
         0,
-        (igMetaObjectCallback *)g_igMetaObjectListList_callbackList
+        g_igMetaObjectListList_callbackList
     );
 }
 

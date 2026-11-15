@@ -1,9 +1,11 @@
+igMetaObject *g_igInsightPlugin_metaObject;
+
 igMetaObject *igInsightPlugin_GetMetaObject(void)
 {
-    igMetaObject *g = g_igInsightPlugin_metaObject[0];
+    igMetaObject *g = g_igInsightPlugin_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00232780();
-    return g_igInsightPlugin_metaObject[0];
+    return g_igInsightPlugin_metaObject;
 }
 
 void FUN_00232780(void)
@@ -15,11 +17,11 @@ void igInsightPlugin_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igInsightPlugin_metaObject,
+        &g_igInsightPlugin_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igInsightPlugin_GetMetaObject,
-        igInsightPlugin_className,
+        "igInsightPlugin",
         8, /* instance size */
         0,
         0,

@@ -1,14 +1,17 @@
+igMetaObject *g_beNDMWShopSelect00_metaObject;
+igMetaField *g_beNDMWShopSelect00_panelNameMetaField;
+
 void beNDMWShopSelect00_Create(int arg0) {
     FUN_003b5070();
-    igMetaObject_CreateInstance(*(int *)0x58ABC8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopSelect00_metaObject, arg0);
 }
 
 void *FUN_003b4f90(void) {
-    igMetaObject *g = g_beNDMWShopSelect00_metaObject[0];
+    igMetaObject *g = g_beNDMWShopSelect00_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b5070();
     }
-    return g_beNDMWShopSelect00_metaObject[0];
+    return g_beNDMWShopSelect00_metaObject;
 }
 
 int beNDMWShopSelect00_GetVTable(void) {
@@ -43,11 +46,11 @@ void *beNDMWShopSelect00_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopSelect00_metaObject,
+        &g_beNDMWShopSelect00_metaObject,
         beNDMWWindowSelect_Register,
         beNDMWWindowSelect_GetPublishedMetaObject,
         beNDMWShopSelect00_GetMetaObject,
-        beNDMWShopSelect00_className,
+        "beNDMWShopSelect00",
         0x74, /* instance size */
         beNDMWShopSelect00_GetVTable,
         beNDMWShopSelect00_InitFields,
@@ -61,14 +64,27 @@ void beNDMWShopSelect00_GetMetaObject(void)
     FUN_003b4f90();
 }
 
+static FieldFactory g_beNDMWShopSelect00_ctorTable[] = {
+    igStringMetaField_Create,
+};
+static const char *g_beNDMWShopSelect00_fieldTable[] = {
+    "_panelName",
+};
+static igMetaField **g_beNDMWShopSelect00_fieldHandles[] = {
+    &g_beNDMWShopSelect00_panelNameMetaField,
+};
+static int g_beNDMWShopSelect00_fieldOffsets[] = {
+    112,
+};
+
 void beNDMWShopSelect00_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopSelect00_metaObject[0];
+    temp_s0 = g_beNDMWShopSelect00_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopSelect00_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopSelect00_ctorTable, 1);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopSelect00_fieldTable[0], &DAT_004c97a8[0], &DAT_004c97b0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopSelect00_fieldTable, g_beNDMWShopSelect00_fieldHandles, g_beNDMWShopSelect00_fieldOffsets, temp_s1);
 }
 

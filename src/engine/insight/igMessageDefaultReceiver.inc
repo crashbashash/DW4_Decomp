@@ -1,3 +1,7 @@
+igMetaObject *g_igMessageDefaultReceiver_metaObject;
+igMetaField *g_igMessageDefaultReceiver_msgHandlerMetaField;
+igMetaField *g_igMessageDefaultReceiver_msgHandlerFuncMetaField;
+
 void igMessageDefaultReceiver_CreateInstance(int arg0) {
     FUN_00232320();
     igMetaObject_CreateInstance(*(int *)0x56DB30, arg0);
@@ -6,13 +10,13 @@ void igMessageDefaultReceiver_CreateInstance(int arg0) {
 igMetaObject *igMessageDefaultReceiver_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igMessageDefaultReceiver_metaObject[0] != 0) {
-        ready = (g_igMessageDefaultReceiver_metaObject[0]->_validity & 4) != 0;
+    if (g_igMessageDefaultReceiver_metaObject != 0) {
+        ready = (g_igMessageDefaultReceiver_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00232320();
 done:
-    return g_igMessageDefaultReceiver_metaObject[0];
+    return g_igMessageDefaultReceiver_metaObject;
 }
 
 int igMessageDefaultReceiver_GetVTable(void) {
@@ -45,15 +49,17 @@ void FUN_00232320(void)
     igMetaObject_RunStaticInit(igMessageDefaultReceiver_Register);
 }
 
+static igMetaObjectCallback g_igMessageDefaultReceiver_callbackList[] = { igObject_EnsureRegistered, 0 };
+
 void igMessageDefaultReceiver_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMessageDefaultReceiver_metaObject,
+        &g_igMessageDefaultReceiver_metaObject,
         igMessageReceiver_Register,
         igMessageReceiver_GetPublishedMetaObject,
         thunk_igMessageDefaultReceiver_GetMetaObject,
-        igMessageDefaultReceiver_className,
+        "igMessageDefaultReceiver",
         0x18, /* instance size */
         igMessageDefaultReceiver_GetVTable,
         &igMessageDefaultReceiver_InitFields,
@@ -67,21 +73,38 @@ void thunk_igMessageDefaultReceiver_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_002323c0(void) {
-    return g_igMessageReceiver_metaObject[0];
+    return g_igMessageReceiver_metaObject;
 }
+
+static FieldFactory g_igMessageDefaultReceiver_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igStructMetaField_Create,
+};
+static const char *g_igMessageDefaultReceiver_fieldTable[] = {
+    "_msgHandler",
+    "_msgHandlerFunc",
+};
+static igMetaField **g_igMessageDefaultReceiver_fieldHandles[] = {
+    &g_igMessageDefaultReceiver_msgHandlerMetaField,
+    &g_igMessageDefaultReceiver_msgHandlerFuncMetaField,
+};
+static int g_igMessageDefaultReceiver_fieldOffsets[] = {
+    8,
+    12,
+};
 
 void igMessageDefaultReceiver_InitFields(void) {
     igMetaObject *temp_s0;
     int temp_s1;
     char *p;
 
-    temp_s0 = g_igMessageDefaultReceiver_metaObject[0];
+    temp_s0 = g_igMessageDefaultReceiver_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igMessageDefaultReceiver_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igMessageDefaultReceiver_ctorTable, 2);
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     *(int *)(p + 56) = (int)g_igObject_metaObject[0];
     p = (char *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     *(short *)(p + 20) = 0xC;
-    igMetaObject_NameFields(temp_s0, &g_igMessageDefaultReceiver_fieldTable[0], &DAT_00498058[0], &DAT_00498060[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igMessageDefaultReceiver_fieldTable, g_igMessageDefaultReceiver_fieldHandles, g_igMessageDefaultReceiver_fieldOffsets, temp_s1);
 }
 

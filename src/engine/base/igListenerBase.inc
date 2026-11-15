@@ -1,9 +1,11 @@
+igMetaObject *g_igListenerBase_metaObject;
+
 igMetaObject *igListenerBase_GetMetaObject(void)
 {
-    igMetaObject *g = g_igListenerBase_metaObject[0];
+    igMetaObject *g = g_igListenerBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002272f0();
-    return g_igListenerBase_metaObject[0];
+    return g_igListenerBase_metaObject;
 }
 
 int igListenerBase_GetVTable(void) {
@@ -23,11 +25,11 @@ void igListenerBase_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igListenerBase_metaObject,
+        &g_igListenerBase_metaObject,
         igBase_Register,
         igBase_GetPublishedMetaObject,
         thunk_igListenerBase_GetMetaObject,
-        igListenerBase_className,
+        "igListenerBase",
         0x20, /* instance size */
         igListenerBase_GetVTable,
         0,

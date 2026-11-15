@@ -1,8 +1,11 @@
+igMetaObject *g_igFlushRenderer_metaObject;
+struct FlushShared *g_viewerOptions;
+
 igMetaObject *FUN_00233a40(void) {
-    if (g_igFlushRenderer_metaObject[0] == 0) {
-        g_igFlushRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igFlushRenderer_metaObject == 0) {
+        g_igFlushRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igFlushRenderer_metaObject[0];
+    return g_igFlushRenderer_metaObject;
 }
 
 /* Registers the class first when the slot is empty or its igMetaObject._validity (+36) lacks the
@@ -10,13 +13,13 @@ igMetaObject *FUN_00233a40(void) {
 igMetaObject *igFlushRenderer_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igFlushRenderer_metaObject[0] != 0) {
-        ready = (g_igFlushRenderer_metaObject[0]->_validity & 4) != 0;
+    if (g_igFlushRenderer_metaObject != 0) {
+        ready = (g_igFlushRenderer_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00233b80();
 done:
-    return g_igFlushRenderer_metaObject[0];
+    return g_igFlushRenderer_metaObject;
 }
 
 int igFlushRenderer_GetVTable(void) {
@@ -53,11 +56,11 @@ void igFlushRenderer_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFlushRenderer_metaObject,
+        &g_igFlushRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
         thunk_igFlushRenderer_GetMetaObject,
-        igFlushRenderer_className,
+        "igFlushRenderer",
         0xC, /* instance size */
         igFlushRenderer_GetVTable,
         0,
@@ -92,125 +95,149 @@ void FUN_00233c10(const char *programName)
     float defaultHeadLightSpecular[4];
     float defaultHeadLightAmbient[4];
     float defaultClearColor[4];
-    printf(usage_s_option1_option2_n_number_f, programName);
-    printf(n_number_loads_n_instances_of_the_);
-    printf(possible_options_are);
-    printf(help_prints_this_message);
-    printf(nologo_removes_the_logo_display);
-    OPTION_BOOL(showBbox, show_bounding_box_on_selected_obje, 1);
-    OPTION_BOOL(showNormals, show_normals_on_selected_object, 0.0f);
-    if (normalsColor) {
-        defaultNormalsColor[0] = 0.0f;
-        defaultNormalsColor[1] = 1.0f;
-        defaultNormalsColor[2] = 0.0f;
-        defaultNormalsColor[3] = 1.0f;
-        FUN_002343d0(normalsColor, sets_the_normals_color, defaultNormalsColor);
+    printf("USAGE: %s [option1 [option2 ...]] [[-n number] filename1] [[-n number] filename2 ...]\n\n", programName);
+    printf("-n number\n\tloads n instances of the next file\n\n");
+    printf("Possible options are :\n");
+    printf("--help\n\tPrints this message.\n\n");
+    printf("--nologo\n\tremoves the logo display\n\n");
+    OPTION_BOOL("--show-bbox", "show bounding box on selected object", 1);
+    OPTION_BOOL("--show-normals", "show normals on selected object", 0.0f);
+    {
+        const char *optionName = "--normals-color";
+        if (optionName) {
+            defaultNormalsColor[0] = 0.0f;
+            defaultNormalsColor[1] = 1.0f;
+            defaultNormalsColor[2] = 0.0f;
+            defaultNormalsColor[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the normals color", defaultNormalsColor);
+        }
     }
-    if (invalidStoredNormalsColor) {
-        defaultInvalidNormalsColor[0] = 1.0f;
-        defaultInvalidNormalsColor[1] = 0.5f;
-        defaultInvalidNormalsColor[2] = 0.0f;
-        defaultInvalidNormalsColor[3] = 1.0f;
-        FUN_002343d0(invalidStoredNormalsColor, sets_the_non_normalized_stored_nor, defaultInvalidNormalsColor);
+    {
+        const char *optionName = "--invalid-stored-normals-color";
+        if (optionName) {
+            defaultInvalidNormalsColor[0] = 1.0f;
+            defaultInvalidNormalsColor[1] = 0.5f;
+            defaultInvalidNormalsColor[2] = 0.0f;
+            defaultInvalidNormalsColor[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the non-normalized stored normals color", defaultInvalidNormalsColor);
+        }
     }
-    if (scaledNormalsColor) {
-        defaultScaledNormalsColor[0] = 1.0f;
-        defaultScaledNormalsColor[1] = 0.0f;
-        defaultScaledNormalsColor[2] = 0.0f;
-        defaultScaledNormalsColor[3] = 1.0f;
-        FUN_002343d0(scaledNormalsColor, sets_the_scaled_normals_color, defaultScaledNormalsColor);
+    {
+        const char *optionName = "--scaled-normals-color";
+        if (optionName) {
+            defaultScaledNormalsColor[0] = 1.0f;
+            defaultScaledNormalsColor[1] = 0.0f;
+            defaultScaledNormalsColor[2] = 0.0f;
+            defaultScaledNormalsColor[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the scaled normals color", defaultScaledNormalsColor);
+        }
     }
-    OPTION_FLOAT(invalidNormalsPrecision, sets_the_precision_on_the_normals_, 0.00100000005f);
-    OPTION_BOOL(autoSelectCamera, select_the_first_camera_if_any_in_, 1);
-    OPTION_FLOAT(hfov, sets_the_horizontal_field_of_view, 45.0f);
-    OPTION_BOOL(autoPlanes, find_automatically_near_and_far_cl, 1);
-    OPTION_FLOAT(nearPlane, sets_the_default_near_clipping_pla, 0.100000001f);
-    OPTION_FLOAT(farPlane, sets_the_default_far_clipping_plan, 1000.0f);
-    if (upVector) {
-        defaultUpVector[0] = g_vec3Zero[0];
-        defaultUpVector[1] = g_vec3Zero[1];
-        defaultUpVector[2] = g_vec3Zero[2];
-        FUN_00234350(upVector, sets_the_default_up_vector_0_0_0_m, defaultUpVector);
+    OPTION_FLOAT("--invalid-normals-precision", "sets the precision on the normals norm", 0.00100000005f);
+    OPTION_BOOL("--auto-select-camera", "select the first camera if any in the scene", 1);
+    OPTION_FLOAT("--hfov", "sets the horizontal field of view", 45.0f);
+    OPTION_BOOL("--auto-planes", "find automatically near and far clipping planes", 1);
+    OPTION_FLOAT("--near-plane", "sets the default near clipping plane", 0.100000001f);
+    OPTION_FLOAT("--far-plane", "sets the default far clipping plane", 1000.0f);
+    {
+        const char *optionName = "--up-vector";
+        if (optionName) {
+            defaultUpVector[0] = g_vec3Zero[0];
+            defaultUpVector[1] = g_vec3Zero[1];
+            defaultUpVector[2] = g_vec3Zero[2];
+            FUN_00234350(optionName, "sets the default up vector (<0,0,0> means use scene up vector)", defaultUpVector);
+        }
     }
-    OPTION_BOOL(autoSceneLights, sets_automatic_usage_of_scene_ligh, 1);
-    OPTION_BOOL(autoHeadLight, sets_automatic_usage_of_head_light, 0.0f);
-    OPTION_BOOL(useSceneLights, use_scene_lights_if_not_automatic, 0.0f);
-    OPTION_BOOL(useHeadLight, enable_head_light_if_not_automatic, 0.0f);
-    OPTION_BOOL(useHeadLightSpecular, use_specular_head_light, 0.0f);
-    if (headLightDiffuse) {
-        defaultHeadLightDiffuse[0] = 1.0f;
-        defaultHeadLightDiffuse[1] = 1.0f;
-        defaultHeadLightDiffuse[2] = 1.0f;
-        defaultHeadLightDiffuse[3] = 1.0f;
-        FUN_002343d0(headLightDiffuse, sets_the_diffuse_color_for_the_hea, defaultHeadLightDiffuse);
+    OPTION_BOOL("--auto-scene-lights", "sets automatic usage of scene lights", 1);
+    OPTION_BOOL("--auto-head-light", "sets automatic usage of head light", 0.0f);
+    OPTION_BOOL("--use-scene-lights", "use scene lights (if not automatic)", 0.0f);
+    OPTION_BOOL("--use-head-light", "enable head light (if not automatic)", 0.0f);
+    OPTION_BOOL("--use-head-light-specular", "use specular head light", 0.0f);
+    {
+        const char *optionName = "--head-light-diffuse";
+        if (optionName) {
+            defaultHeadLightDiffuse[0] = 1.0f;
+            defaultHeadLightDiffuse[1] = 1.0f;
+            defaultHeadLightDiffuse[2] = 1.0f;
+            defaultHeadLightDiffuse[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the diffuse color for the head light", defaultHeadLightDiffuse);
+        }
     }
-    if (headLightSpecular) {
-        defaultHeadLightSpecular[0] = 1.0f;
-        defaultHeadLightSpecular[1] = 1.0f;
-        defaultHeadLightSpecular[2] = 1.0f;
-        defaultHeadLightSpecular[3] = 1.0f;
-        FUN_002343d0(headLightSpecular, sets_the_specular_color_for_the_he, defaultHeadLightSpecular);
+    {
+        const char *optionName = "--head-light-specular";
+        if (optionName) {
+            defaultHeadLightSpecular[0] = 1.0f;
+            defaultHeadLightSpecular[1] = 1.0f;
+            defaultHeadLightSpecular[2] = 1.0f;
+            defaultHeadLightSpecular[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the specular color for the head light", defaultHeadLightSpecular);
+        }
     }
-    if (headLightAmbient) {
-        defaultHeadLightAmbient[0] = g_vec4Zero[0];
-        defaultHeadLightAmbient[1] = g_vec4Zero[1];
-        defaultHeadLightAmbient[2] = g_vec4Zero[2];
-        defaultHeadLightAmbient[3] = g_vec4Zero[3];
-        FUN_002343d0(headLightAmbient, sets_the_ambient_color_for_the_hea, defaultHeadLightAmbient);
+    {
+        const char *optionName = "--head-light-ambient";
+        if (optionName) {
+            defaultHeadLightAmbient[0] = g_vec4Zero[0];
+            defaultHeadLightAmbient[1] = g_vec4Zero[1];
+            defaultHeadLightAmbient[2] = g_vec4Zero[2];
+            defaultHeadLightAmbient[3] = g_vec4Zero[3];
+            FUN_002343d0(optionName, "sets the ambient color for the head light", defaultHeadLightAmbient);
+        }
     }
-    if (clearColor) {
-        defaultClearColor[0] = 0.200000003f;
-        defaultClearColor[1] = 0.200000003f;
-        defaultClearColor[2] = 0.200000003f;
-        defaultClearColor[3] = 1.0f;
-        FUN_002343d0(clearColor, sets_the_clear_color, defaultClearColor);
+    {
+        const char *optionName = "--clear-color";
+        if (optionName) {
+            defaultClearColor[0] = 0.200000003f;
+            defaultClearColor[1] = 0.200000003f;
+            defaultClearColor[2] = 0.200000003f;
+            defaultClearColor[3] = 1.0f;
+            FUN_002343d0(optionName, "sets the clear color", defaultClearColor);
+        }
     }
-    OPTION_BOOL(wireframeMode, sets_wireframe_mode, 0.0f);
-    OPTION_BOOL(forceWireframe, force_wireframe_on_all_geometries, 0.0f);
-    OPTION_BOOL(backfaceCullingMode, sets_back_face_culling_mode, 0.0f);
-    OPTION_BOOL(forceBackfaceCulling, force_back_face_culling_on_all_geo, 0.0f);
-    OPTION_BOOL(alphaTest, sets_alpha_test_state, 0.0f);
-    OPTION_BOOL(forceAlphaTest, force_alpha_test_on_all_geometries, 0.0f);
-    OPTION_FLOAT(alphaTestReference, sets_alpha_test_reference_value, 0.100000001f);
-    OPTION_FLOAT(maximumFrameRate, sets_the_maximum_frame_rate_0_mean, 0.0f);
-    OPTION_BOOL(optimizeTextures, share_textures_at_load_time, 1);
-    OPTION_BOOL(halfBuffer, sets_psx2_half_buffer_mode, 0.0f);
-    OPTION_BOOL(palVideoMode, sets_pal_video_mode, 0.0f);
-    OPTION_INT(width, viewer_window_width, 640);
-    OPTION_INT(height, viewer_window_height, 448);
-    OPTION_INT(swapInterval, sets_the_swap_interval_0_means_no_, 0.0f);
-    OPTION_INT(colorBits, sets_color_buffer_bits_1_means_def, -1);
-    OPTION_INT(alphaBits, sets_alpha_buffer_bits_1_means_def, -1);
-    OPTION_INT(depthBits, sets_depth_buffer_bits_1_means_def, -1);
-    OPTION_INT(stencilBits, sets_stencil_buffer_bits_1_means_d, -1);
-    OPTION_BOOL(reportVideoFormat, if_set_reports_requested_and_actua, 1);
-    OPTION_BOOL(showLogo, shows_alchemy_logo, 1);
-    OPTION_BOOL(showUi, sets_initial_gui_visibility, 1);
-    OPTION_BOOL(enableMayaControls, enables_or_disable_maya_controls, 0.0f);
-    OPTION_BOOL(benchmark, enables_or_disable_the_benchmark_m, 0.0f);
-    OPTION_INT(benchmarkSkipFrames, sets_the_number_of_frames_to_skip_, 5);
-    OPTION_INT(benchmarkFrames, sets_the_number_of_frames_to_bench, 30);
-    OPTION_BOOL(columnStatistics, output_statistics_to_console_in_co, 0.0f);
-    OPTION_BOOL(allocateVisualContextInScratchpad, allocate_visual_context_from_scrat, 0.0f);
+    OPTION_BOOL("--wireframe-mode", "sets wireframe mode", 0.0f);
+    OPTION_BOOL("--force-wireframe", "force wireframe on all geometries", 0.0f);
+    OPTION_BOOL("--backface-culling-mode", "sets back-face culling mode", 0.0f);
+    OPTION_BOOL("--force-backface-culling", "force back-face culling on all geometries", 0.0f);
+    OPTION_BOOL("--alpha-test", "sets alpha test state", 0.0f);
+    OPTION_BOOL("--force-alpha-test", "force alpha test on all geometries", 0.0f);
+    OPTION_FLOAT("--alpha-test-reference", "sets alpha test reference value", 0.100000001f);
+    OPTION_FLOAT("--maximum-frame-rate", "sets the maximum frame rate (0 means no maximum)", 0.0f);
+    OPTION_BOOL("--optimize-textures", "share textures at load time", 1);
+    OPTION_BOOL("--half-buffer", "sets PSX2 half-buffer mode", 0.0f);
+    OPTION_BOOL("--pal-video-mode", "sets PAL video mode", 0.0f);
+    OPTION_INT("--width", "viewer window width", 640);
+    OPTION_INT("--height", "viewer window height", 448);
+    OPTION_INT("--swap-interval", "sets the swap interval (0 means no vsync)", 0.0f);
+    OPTION_INT("--color-bits", "sets color buffer bits (-1 means default)", -1);
+    OPTION_INT("--alpha-bits", "sets alpha buffer bits (-1 means default)", -1);
+    OPTION_INT("--depth-bits", "sets depth buffer bits (-1 means default)", -1);
+    OPTION_INT("--stencil-bits", "sets stencil buffer bits (-1 means default)", -1);
+    OPTION_BOOL("--report-video-format", "if set, reports requested and actual video format", 1);
+    OPTION_BOOL("--show-logo", "shows Alchemy logo", 1);
+    OPTION_BOOL("--show-ui", "sets initial GUI visibility", 1);
+    OPTION_BOOL("--enable-maya-controls", "enables or disable maya controls", 0.0f);
+    OPTION_BOOL("--benchmark", "enables or disable the benchmark mode", 0.0f);
+    OPTION_INT("--benchmark-skip-frames", "sets the number of frames to skip before benchmarking", 5);
+    OPTION_INT("--benchmark-frames", "sets the number of frames to benchmark", 30);
+    OPTION_BOOL("--column-statistics", "Output statistics to console in comma-separated column form", 0.0f);
+    OPTION_BOOL("--allocate-visual-context-in-scratchpad", "Allocate visual context from scratchpad (effect on PS2 only)", 0.0f);
 }
 
 void FUN_002342b0(const char *arg0, const char *arg1, int arg2) {
-    int *var_a3;
+    const char *boolText;
 
     if (arg2 != 0) {
-        var_a3 = &text_true[0];
+        boolText = "true";
     } else {
-        var_a3 = &text_false[0];
+        boolText = "false";
     }
-    printf(&DAT_004e95d0[0], arg0, arg1, var_a3);
+    printf("%s on|off|true|false\n\t%s\n\tdefault: %s\n\n", arg0, arg1, boolText);
 }
 
 void FUN_002342e0(const char *arg0, const char *arg1, int arg2) {
-    printf(&DAT_004e9610[0], arg0, arg1, arg2);
+    printf("%s int\n\t%s\n\tdefault: %d\n\n", arg0, arg1, arg2);
 }
 
 void FUN_00234300(const char *arg0, const char *arg1, float arg2) {
-    printf(&DAT_004e9630[0], arg0, arg1, fptodp(arg2));
+    printf("%s float\n\t%s\n\tdefault: %f\n\n", arg0, arg1, fptodp(arg2));
 }
 
 void FUN_00234350(const char *arg0, const char *arg1, float *arg2) {
@@ -220,7 +247,7 @@ void FUN_00234350(const char *arg0, const char *arg1, float *arg2) {
 
     temp_s1 = fptodp(arg2[0]);
     temp_s0 = fptodp(arg2[1]);
-    printf(&DAT_004e9650[0], arg0, arg1, temp_s1, temp_s0, fptodp(arg2[2]));
+    printf("%s <3-vector>\n\t%s\n\tdefault: <%f,%f,%f>\n\n", arg0, arg1, temp_s1, temp_s0, fptodp(arg2[2]));
 }
 
 void FUN_002343d0(const char *arg0, const char *arg1, float *arg2) {
@@ -231,7 +258,7 @@ void FUN_002343d0(const char *arg0, const char *arg1, float *arg2) {
     temp_s2 = fptodp(*(float *)((char *)(arg2) + 0));
     temp_s1 = fptodp(*(float *)((char *)(arg2) + 4));
     temp_s0 = fptodp(*(float *)((char *)(arg2) + 12));
-    printf(&DAT_004e9680[0], arg0, arg1, temp_s2, temp_s1, temp_s0, fptodp(*(float *)((char *)(arg2) + 8)));
+    printf("%s <4-vector>\n\t%s\n\tdefault: <%f,%f,%f,%f>\n\n", arg0, arg1, temp_s2, temp_s1, temp_s0, fptodp(*(float *)((char *)(arg2) + 8)));
 }
 
 int FUN_00234470(igStringRefList *arg0, int *arg1, const char *arg2) {
@@ -359,9 +386,9 @@ int FUN_00234770(igStringRefList *arg0, int *arg1, const char *arg2, unsigned ch
         return 0;
     }
     *arg3 = 0;
-    if (strcmp(sp2C, &DAT_004e96b0[0]) == 0) {
+    if (strcmp(sp2C, "on") == 0) {
         *arg3 = 1;
-    } else if (strcmp(sp2C, &text_true[0]) == 0) {
+    } else if (strcmp(sp2C, "true") == 0) {
         *arg3 = 1;
     }
     return 1;
@@ -386,7 +413,7 @@ int FUN_00234860(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3
     void *sp2C;
 
     if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        return Vec3f_FromString(sp2C, arg3, &DAT_004e96c0[0]);
+        return Vec3f_FromString(sp2C, arg3, " < %f , %f , %f > ");
     }
     return 0;
 }
@@ -394,7 +421,7 @@ int FUN_00234860(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3
 int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3) {
     void *sp2C;
     if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        return FUN_001e6d80(sp2C, arg3, &DAT_004e96e0[0]);
+        return FUN_001e6d80(sp2C, arg3, " < %f , %f , %f , %f > ");
     }
     return 0;
 }
@@ -481,15 +508,15 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->b229 = 0;
     s->f232 = igIntList_Create(renderAllocator());
     s->f236 = igStringRefList_Create(renderAllocator());
-    if (DAT_0056dc50[0] == 0) {
+    if (g_viewerOptions == 0) {
         struct FlushShared *shared = __nw__FUi(240);
         if (shared) {
             shared = (struct FlushShared *)ViewerOptions_Construct(shared);
         }
-        DAT_0056dc50[0] = shared;
+        g_viewerOptions = shared;
     }
-    DAT_0056dc50[0]->refs++;
-    s->shared = DAT_0056dc50[0];
+    g_viewerOptions->refs++;
+    s->shared = g_viewerOptions;
     FUN_00234ee0(s, s->shared->f0);
     return s;
 }
@@ -547,9 +574,9 @@ static inline void releaseSharedOptions(void) {
     int *h;
     int rc;
 
-    if (DAT_0056dc50[0] != 0) {
-        if (--DAT_0056dc50[0]->refs <= 0) {
-            f = DAT_0056dc50[0];
+    if (g_viewerOptions != 0) {
+        if (--g_viewerOptions->refs <= 0) {
+            f = g_viewerOptions;
             if (f != 0) {
                 if (&f->f236) {
                     p = f->f236;
@@ -575,7 +602,7 @@ static inline void releaseSharedOptions(void) {
                 }
                 __dl__FPv(f);
             }
-            DAT_0056dc50[0] = 0;
+            g_viewerOptions = 0;
         }
     }
 }
@@ -627,7 +654,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     index = 1;
 
     while (index < argc) {
-        if (FUN_00234470(args, &index, help)) {
+        if (FUN_00234470(args, &index, "--help")) {
             StringList_CopyRetained(&helpRef, args, 0);
             FUN_00233c10(helpRef);
             ReleaseString(helpRef);
@@ -645,137 +672,137 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
             }
             ReleaseString(applied->modelName);
             applied->modelName = opts->modelName;
-        } else if (FUN_00234770(args, &index, showBbox, &opts->showBbox)) {
+        } else if (FUN_00234770(args, &index, "--show-bbox", &opts->showBbox)) {
             opts->applied->showBbox = opts->showBbox;
-        } else if (FUN_00234770(args, &index, showNormals, &opts->showNormals)) {
+        } else if (FUN_00234770(args, &index, "--show-normals", &opts->showNormals)) {
             opts->applied->showNormals = opts->showNormals;
-        } else if (FUN_002348b0(args, &index, normalsColor, &opts->normalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, "--normals-color", &opts->normalsColor[0])) {
             applied = opts->applied;
             applied->normalsColor[0] = opts->normalsColor[0];
             applied->normalsColor[1] = opts->normalsColor[1];
             applied->normalsColor[2] = opts->normalsColor[2];
             applied->normalsColor[3] = opts->normalsColor[3];
-        } else if (FUN_002348b0(args, &index, invalidStoredNormalsColor, &opts->invalidStoredNormalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, "--invalid-stored-normals-color", &opts->invalidStoredNormalsColor[0])) {
             applied = opts->applied;
             applied->invalidStoredNormalsColor[0] = opts->invalidStoredNormalsColor[0];
             applied->invalidStoredNormalsColor[1] = opts->invalidStoredNormalsColor[1];
             applied->invalidStoredNormalsColor[2] = opts->invalidStoredNormalsColor[2];
             applied->invalidStoredNormalsColor[3] = opts->invalidStoredNormalsColor[3];
-        } else if (FUN_002348b0(args, &index, scaledNormalsColor, &opts->scaledNormalsColor[0])) {
+        } else if (FUN_002348b0(args, &index, "--scaled-normals-color", &opts->scaledNormalsColor[0])) {
             applied = opts->applied;
             applied->scaledNormalsColor[0] = opts->scaledNormalsColor[0];
             applied->scaledNormalsColor[1] = opts->scaledNormalsColor[1];
             applied->scaledNormalsColor[2] = opts->scaledNormalsColor[2];
             applied->scaledNormalsColor[3] = opts->scaledNormalsColor[3];
-        } else if (FUN_00234810(args, &index, invalidNormalsPrecision, &opts->invalidNormalsPrecision)) {
+        } else if (FUN_00234810(args, &index, "--invalid-normals-precision", &opts->invalidNormalsPrecision)) {
             opts->applied->invalidNormalsPrecision = opts->invalidNormalsPrecision;
-        } else if (FUN_00234770(args, &index, autoSelectCamera, &opts->autoSelectCamera)) {
+        } else if (FUN_00234770(args, &index, "--auto-select-camera", &opts->autoSelectCamera)) {
             opts->applied->autoSelectCamera = opts->autoSelectCamera;
-        } else if (FUN_00234810(args, &index, hfov, &opts->hfov)) {
+        } else if (FUN_00234810(args, &index, "--hfov", &opts->hfov)) {
             opts->applied->hfov = opts->hfov;
-        } else if (FUN_00234770(args, &index, autoPlanes, &opts->autoPlanes)) {
+        } else if (FUN_00234770(args, &index, "--auto-planes", &opts->autoPlanes)) {
             opts->applied->autoPlanes = opts->autoPlanes;
-        } else if (FUN_00234810(args, &index, nearPlane, &opts->nearPlane)) {
+        } else if (FUN_00234810(args, &index, "--near-plane", &opts->nearPlane)) {
             opts->applied->nearPlane = opts->nearPlane;
-        } else if (FUN_00234810(args, &index, farPlane, &opts->farPlane)) {
+        } else if (FUN_00234810(args, &index, "--far-plane", &opts->farPlane)) {
             opts->applied->farPlane = opts->farPlane;
-        } else if (FUN_00234860(args, &index, upVector, &opts->upVector[0])) {
+        } else if (FUN_00234860(args, &index, "--up-vector", &opts->upVector[0])) {
             applied = opts->applied;
             applied->upVector[0] = opts->upVector[0];
             applied->upVector[1] = opts->upVector[1];
             applied->upVector[2] = opts->upVector[2];
-        } else if (FUN_00234770(args, &index, autoSceneLights, &opts->autoSceneLights)) {
+        } else if (FUN_00234770(args, &index, "--auto-scene-lights", &opts->autoSceneLights)) {
             opts->applied->autoSceneLights = opts->autoSceneLights;
-        } else if (FUN_00234770(args, &index, autoHeadLight, &opts->autoHeadLight)) {
+        } else if (FUN_00234770(args, &index, "--auto-head-light", &opts->autoHeadLight)) {
             opts->applied->autoHeadLight = opts->autoHeadLight;
-        } else if (FUN_00234770(args, &index, useSceneLights, &opts->useSceneLights)) {
+        } else if (FUN_00234770(args, &index, "--use-scene-lights", &opts->useSceneLights)) {
             opts->applied->useSceneLights = opts->useSceneLights;
-        } else if (FUN_00234770(args, &index, useHeadLight, &opts->useHeadLight)) {
+        } else if (FUN_00234770(args, &index, "--use-head-light", &opts->useHeadLight)) {
             opts->applied->useHeadLight = opts->useHeadLight;
-        } else if (FUN_00234770(args, &index, useHeadLightSpecular, &opts->useHeadLightSpecular)) {
+        } else if (FUN_00234770(args, &index, "--use-head-light-specular", &opts->useHeadLightSpecular)) {
             opts->applied->useHeadLightSpecular = opts->useHeadLightSpecular;
-        } else if (FUN_002348b0(args, &index, headLightDiffuse, &opts->headLightDiffuse[0])) {
+        } else if (FUN_002348b0(args, &index, "--head-light-diffuse", &opts->headLightDiffuse[0])) {
             applied = opts->applied;
             applied->headLightDiffuse[0] = opts->headLightDiffuse[0];
             applied->headLightDiffuse[1] = opts->headLightDiffuse[1];
             applied->headLightDiffuse[2] = opts->headLightDiffuse[2];
             applied->headLightDiffuse[3] = opts->headLightDiffuse[3];
-        } else if (FUN_002348b0(args, &index, headLightSpecular, &opts->headLightSpecular[0])) {
+        } else if (FUN_002348b0(args, &index, "--head-light-specular", &opts->headLightSpecular[0])) {
             applied = opts->applied;
             applied->headLightSpecular[0] = opts->headLightSpecular[0];
             applied->headLightSpecular[1] = opts->headLightSpecular[1];
             applied->headLightSpecular[2] = opts->headLightSpecular[2];
             applied->headLightSpecular[3] = opts->headLightSpecular[3];
-        } else if (FUN_002348b0(args, &index, headLightAmbient, &opts->headLightAmbient[0])) {
+        } else if (FUN_002348b0(args, &index, "--head-light-ambient", &opts->headLightAmbient[0])) {
             applied = opts->applied;
             applied->headLightAmbient[0] = opts->headLightAmbient[0];
             applied->headLightAmbient[1] = opts->headLightAmbient[1];
             applied->headLightAmbient[2] = opts->headLightAmbient[2];
             applied->headLightAmbient[3] = opts->headLightAmbient[3];
-        } else if (FUN_002348b0(args, &index, clearColor, &opts->clearColor[0])) {
+        } else if (FUN_002348b0(args, &index, "--clear-color", &opts->clearColor[0])) {
             applied = opts->applied;
             applied->clearColor[0] = opts->clearColor[0];
             applied->clearColor[1] = opts->clearColor[1];
             applied->clearColor[2] = opts->clearColor[2];
             applied->clearColor[3] = opts->clearColor[3];
-        } else if (FUN_00234770(args, &index, wireframeMode, &opts->wireframeMode)) {
+        } else if (FUN_00234770(args, &index, "--wireframe-mode", &opts->wireframeMode)) {
             opts->applied->wireframeMode = opts->wireframeMode;
-        } else if (FUN_00234770(args, &index, forceWireframe, &opts->forceWireframe)) {
+        } else if (FUN_00234770(args, &index, "--force-wireframe", &opts->forceWireframe)) {
             opts->applied->forceWireframe = opts->forceWireframe;
-        } else if (FUN_00234770(args, &index, backfaceCullingMode, &opts->backfaceCullingMode)) {
+        } else if (FUN_00234770(args, &index, "--backface-culling-mode", &opts->backfaceCullingMode)) {
             opts->applied->backfaceCullingMode = opts->backfaceCullingMode;
-        } else if (FUN_00234770(args, &index, forceBackfaceCulling, &opts->forceBackfaceCulling)) {
+        } else if (FUN_00234770(args, &index, "--force-backface-culling", &opts->forceBackfaceCulling)) {
             opts->applied->forceBackfaceCulling = opts->forceBackfaceCulling;
-        } else if (FUN_00234770(args, &index, alphaTest, &opts->alphaTest)) {
+        } else if (FUN_00234770(args, &index, "--alpha-test", &opts->alphaTest)) {
             opts->applied->alphaTest = opts->alphaTest;
-        } else if (FUN_00234770(args, &index, forceAlphaTest, &opts->forceAlphaTest)) {
+        } else if (FUN_00234770(args, &index, "--force-alpha-test", &opts->forceAlphaTest)) {
             opts->applied->forceAlphaTest = opts->forceAlphaTest;
-        } else if (FUN_00234810(args, &index, alphaTestReference, &opts->alphaTestReference)) {
+        } else if (FUN_00234810(args, &index, "--alpha-test-reference", &opts->alphaTestReference)) {
             opts->applied->alphaTestReference = opts->alphaTestReference;
-        } else if (FUN_00234810(args, &index, maximumFrameRate, &opts->maximumFrameRate)) {
+        } else if (FUN_00234810(args, &index, "--maximum-frame-rate", &opts->maximumFrameRate)) {
             opts->applied->maximumFrameRate = opts->maximumFrameRate;
-        } else if (FUN_00234770(args, &index, optimizeTextures, &opts->optimizeTextures)) {
+        } else if (FUN_00234770(args, &index, "--optimize-textures", &opts->optimizeTextures)) {
             opts->applied->optimizeTextures = opts->optimizeTextures;
-        } else if (FUN_00234770(args, &index, halfBuffer, &opts->halfBuffer)) {
+        } else if (FUN_00234770(args, &index, "--half-buffer", &opts->halfBuffer)) {
             opts->applied->halfBuffer = opts->halfBuffer;
-        } else if (FUN_00234770(args, &index, palVideoMode, &opts->palVideoMode)) {
+        } else if (FUN_00234770(args, &index, "--pal-video-mode", &opts->palVideoMode)) {
             opts->applied->palVideoMode = opts->palVideoMode;
-        } else if (thunk_FUN_00234510(args, &index, width, &opts->width)) {
+        } else if (thunk_FUN_00234510(args, &index, "--width", &opts->width)) {
             opts->applied->width = opts->width;
-        } else if (thunk_FUN_00234510(args, &index, height, &opts->height)) {
+        } else if (thunk_FUN_00234510(args, &index, "--height", &opts->height)) {
             opts->applied->height = opts->height;
-        } else if (thunk_FUN_00234510(args, &index, swapInterval, &opts->swapInterval)) {
+        } else if (thunk_FUN_00234510(args, &index, "--swap-interval", &opts->swapInterval)) {
             opts->applied->swapInterval = opts->swapInterval;
-        } else if (thunk_FUN_00234510(args, &index, colorBits, &opts->colorBits)) {
+        } else if (thunk_FUN_00234510(args, &index, "--color-bits", &opts->colorBits)) {
             opts->applied->colorBits = opts->colorBits;
-        } else if (thunk_FUN_00234510(args, &index, alphaBits, &opts->alphaBits)) {
+        } else if (thunk_FUN_00234510(args, &index, "--alpha-bits", &opts->alphaBits)) {
             opts->applied->alphaBits = opts->alphaBits;
-        } else if (thunk_FUN_00234510(args, &index, depthBits, &opts->depthBits)) {
+        } else if (thunk_FUN_00234510(args, &index, "--depth-bits", &opts->depthBits)) {
             opts->applied->depthBits = opts->depthBits;
-        } else if (thunk_FUN_00234510(args, &index, stencilBits, &opts->stencilBits)) {
+        } else if (thunk_FUN_00234510(args, &index, "--stencil-bits", &opts->stencilBits)) {
             opts->applied->stencilBits = opts->stencilBits;
-        } else if (FUN_00234770(args, &index, reportVideoFormat, &opts->reportVideoFormat)) {
+        } else if (FUN_00234770(args, &index, "--report-video-format", &opts->reportVideoFormat)) {
             opts->applied->reportVideoFormat = opts->reportVideoFormat;
-        } else if (FUN_00234770(args, &index, showLogo, &opts->showLogo)) {
+        } else if (FUN_00234770(args, &index, "--show-logo", &opts->showLogo)) {
             opts->applied->showLogo = opts->showLogo;
-        } else if (FUN_00234770(args, &index, showUi, &opts->showUi)) {
+        } else if (FUN_00234770(args, &index, "--show-ui", &opts->showUi)) {
             opts->applied->showUi = opts->showUi;
-        } else if (FUN_00234770(args, &index, enableMayaControls, &opts->enableMayaControls)) {
+        } else if (FUN_00234770(args, &index, "--enable-maya-controls", &opts->enableMayaControls)) {
             opts->applied->enableMayaControls = opts->enableMayaControls;
-        } else if (FUN_00234770(args, &index, benchmark, &opts->benchmark)) {
+        } else if (FUN_00234770(args, &index, "--benchmark", &opts->benchmark)) {
             opts->applied->benchmark = opts->benchmark;
-        } else if (thunk_FUN_00234510(args, &index, benchmarkSkipFrames, &opts->benchmarkSkipFrames)) {
+        } else if (thunk_FUN_00234510(args, &index, "--benchmark-skip-frames", &opts->benchmarkSkipFrames)) {
             opts->applied->benchmarkSkipFrames = opts->benchmarkSkipFrames;
-        } else if (thunk_FUN_00234510(args, &index, benchmarkFrames, &opts->benchmarkFrames)) {
+        } else if (thunk_FUN_00234510(args, &index, "--benchmark-frames", &opts->benchmarkFrames)) {
             opts->applied->benchmarkFrames = opts->benchmarkFrames;
-        } else if (FUN_00234770(args, &index, columnStatistics, &opts->columnStatistics)) {
+        } else if (FUN_00234770(args, &index, "--column-statistics", &opts->columnStatistics)) {
             opts->applied->columnStatistics = opts->columnStatistics;
-        } else if (FUN_00234770(args, &index, allocateVisualContextInScratchpad, &opts->allocateVisualContextInScratchpad)) {
+        } else if (FUN_00234770(args, &index, "--allocate-visual-context-in-scratchpad", &opts->allocateVisualContextInScratchpad)) {
             opts->applied->allocateVisualContextInScratchpad = opts->allocateVisualContextInScratchpad;
-        } else if (FUN_00234470(args, &index, n)) {
+        } else if (FUN_00234470(args, &index, "-n")) {
             index = index - 1;
             break;
-        } else if (FUN_00234470(args, &index, dashdash)) {
+        } else if (FUN_00234470(args, &index, "--")) {
             break;
         } else {
             int isOption;
@@ -786,7 +813,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
                 break;
             }
             StringList_CopyRetained(&printRef, args, index);
-            printf(unrecognized, printRef);
+            printf("Unrecognized option : %s\n", printRef);
             ReleaseString(printRef);
             StringList_CopyRetained(&helpRef2, args, 0);
             FUN_00233c10(helpRef2);
@@ -800,7 +827,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     }
 
     while (index < argc) {
-        if (!FUN_00234510(args, &index, n, &repeat)) {
+        if (!FUN_00234510(args, &index, "-n", &repeat)) {
             StringList_CopyRetained(&currentRef, args, index);
             if (currentRef != 0) {
                 ((int *)currentRef)[-1]++;
@@ -843,7 +870,7 @@ static inline int internedPool(void) {
 void FUN_00236140(void) {
     igSmartPointer<NamedObject> r(igFolder_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
     NamedObject *s0 = r.get();
-    int *s1 = (int *)StringPool_Intern(internedPool(), &text_plugins[0]);
+    int *s1 = (int *)StringPool_Intern(internedPool(), "plugins");
     int *old = (int *)s0->name;
     if (old != 0) {
         int *hdr = old - 2;
@@ -854,15 +881,15 @@ void FUN_00236140(void) {
         }
     }
     s0->name = (int)s1;
-    igFolder_SetFolderName(r.get(), &text_insight[0]);
-    igPluginHelper_AddRepository(((G *)g_objectSystem[0])->f76, &text_Insight[0], r->name, 1);
+    igFolder_SetFolderName(r.get(), "insight");
+    igPluginHelper_AddRepository(((G *)g_objectSystem[0])->f76, "Insight", r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {
     if (value < 0) {
-        igStringObj_Set(text.p, text_default);
+        igStringObj_Set(text.p, "default");
     } else {
-        igStringObj_SetInt(text.p, value, DAT_004e9780);
+        igStringObj_SetInt(text.p, value, "%d");
     }
 }
 
@@ -879,23 +906,23 @@ FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options
     format.width = options->width;
     format.height = options->height;
     if (options->reportVideoFormat) {
-        printf(text_Requested_format);
+        printf("Requested format: ");
     }
     describe(text, options->colorBits);
     if (options->reportVideoFormat) {
-        printf(text_color_s, textOf(text.p));
+        printf("color=%s, ", textOf(text.p));
     }
     describe(text, options->alphaBits);
     if (options->reportVideoFormat) {
-        printf(text_alpha_s, textOf(text.p));
+        printf("alpha=%s, ", textOf(text.p));
     }
     describe(text, options->depthBits);
     if (options->reportVideoFormat) {
-        printf(text_depth_s, textOf(text.p));
+        printf("depth=%s, ", textOf(text.p));
     }
     describe(text, options->stencilBits);
     if (options->reportVideoFormat) {
-        printf(DAT_004e97b8, textOf(text.p));
+        printf("stencil=%s\n", textOf(text.p));
     }
     format.colorBits = options->colorBits;
     format.alphaBits = options->alphaBits;
@@ -904,6 +931,8 @@ FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options
     format.scale = 1.0f;
     return format;
 }
+
+unsigned char g_displayErrorIgnored;
 
 /* Creates the display from the shared viewer options: a window and a visual context (in the
  * scratchpad allocator when the options ask for it) set to the NTSC or PAL video mode, with a
@@ -920,18 +949,18 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     int depthBits;
     if (allocator == 0) allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     windowAllocator = allocator;
-    if (DAT_0056dc50[0] == 0) {
+    if (g_viewerOptions == 0) {
         struct FlushShared *shared = __nw__FUi(240);
         if (shared != 0) shared = (struct FlushShared *)ViewerOptions_Construct(shared);
-        DAT_0056dc50[0] = shared;
+        g_viewerOptions = shared;
     }
-    DAT_0056dc50[0]->refs++;
-    options = (ViewerOptions_2382e0 *)DAT_0056dc50[0];
+    g_viewerOptions->refs++;
+    options = (ViewerOptions_2382e0 *)g_viewerOptions;
     igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {
-        if (GPR_00554bd0 == 0) {
-            int answer = igReportError(DAT_004e97d0);
-            if (answer != 1 && answer == 2) GPR_00554bd0 = 1;
+        if (g_displayErrorIgnored == 0) {
+            int answer = igReportError("Failed to create display. Aborting\n");
+            if (answer != 1 && answer == 2) g_displayErrorIgnored = 1;
         }
         exit(1);
     }
@@ -967,7 +996,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     FrameBufferFormat requested = ViewerOptions_GetRequestedFormat(options);
     frameBuffer = visualContext->addFrameBuffer(&requested);
     window->setVisualContext(visualContext);
-    if (window->open(DAT_004e96f8, options->width, options->height) == 0) {
+    if (window->open("", options->width, options->height) == 0) {
         return igSmartPointer<igWindowView>(0, kRetainReference);
     }
     if (options->reportVideoFormat != 0) {
@@ -975,7 +1004,7 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
         colorBits = context->getColorBits(frameBuffer);
         alphaBits = context->getAlphaBits(frameBuffer);
         depthBits = context->getDepthBits(frameBuffer);
-        printf(DAT_004e9800, colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
+        printf("Actual format: color=%d, alpha=%d, depth=%d, stencil=%d\n", colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
     }
     fflush(_impure_ptr->_stdout);
     visualContext->setClearColor(&options->clearColor);

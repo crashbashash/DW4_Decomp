@@ -1,9 +1,11 @@
+igMetaObject *g_igFileImage_metaObject;
+
 igMetaObject *igFileImage_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFileImage_metaObject[0];
+    igMetaObject *g = g_igFileImage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014def0();
-    return g_igFileImage_metaObject[0];
+    return g_igFileImage_metaObject;
 }
 
 void FUN_0014def0(void)
@@ -15,11 +17,11 @@ void igFileImage_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igFileImage_metaObject,
+        &g_igFileImage_metaObject,
         igImage_Register,
         igImage_GetPublishedMetaObject,
         thunk_igFileImage_GetMetaObject,
-        igFileImage_className,
+        "igFileImage",
         0x5C, /* instance size */
         0,
         0,

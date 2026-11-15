@@ -1,17 +1,20 @@
+igMetaObject *g_beNDMWStatusCtrlFolder_metaObject;
+igMetaField *g_beNDMWStatusCtrlFolder_folderMenuMetaField;
+
 void beNDMWStatusCtrlFolder_Create(int arg0) {
     FUN_003ba140();
-    igMetaObject_CreateInstance(*(int *)0x58AF08, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlFolder_metaObject, arg0);
 }
 
 igMetaObject *FUN_003ba070(void) {
-    igMetaObject *g = g_beNDMWStatusCtrlFolder_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusCtrlFolder_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003ba140();
 done:
-    return g_beNDMWStatusCtrlFolder_metaObject[0];
+    return g_beNDMWStatusCtrlFolder_metaObject;
 }
 
 int beNDMWStatusCtrlFolder_GetVTable(void) {
@@ -42,11 +45,11 @@ void *beNDMWStatusCtrlFolder_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusCtrlFolder_metaObject,
+        &g_beNDMWStatusCtrlFolder_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWStatusCtrlFolder_GetMetaObject,
-        beNDMWStatusCtrlFolder_className,
+        "beNDMWStatusCtrlFolder",
         0x58, /* instance size */
         beNDMWStatusCtrlFolder_GetVTable,
         beNDMWStatusCtrlFolder_InitFields,
@@ -60,13 +63,26 @@ void beNDMWStatusCtrlFolder_GetMetaObject(void)
     FUN_003ba070();
 }
 
+static FieldFactory g_beNDMWStatusCtrlFolder_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWStatusCtrlFolder_fieldTable[] = {
+    "_folderMenu",
+};
+static igMetaField **g_beNDMWStatusCtrlFolder_fieldHandles[] = {
+    &g_beNDMWStatusCtrlFolder_folderMenuMetaField,
+};
+static int g_beNDMWStatusCtrlFolder_fieldOffsets[] = {
+    84,
+};
+
 void beNDMWStatusCtrlFolder_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStatusCtrlFolder_metaObject[0];
+    temp_s0 = g_beNDMWStatusCtrlFolder_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatusCtrlFolder_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStatusCtrlFolder_fieldTable[0], &DAT_004c9e80[0], &DAT_004c9e88[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlFolder_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlFolder_fieldTable, g_beNDMWStatusCtrlFolder_fieldHandles, g_beNDMWStatusCtrlFolder_fieldOffsets, temp_s1);
 }
 

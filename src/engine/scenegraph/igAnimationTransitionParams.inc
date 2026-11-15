@@ -1,16 +1,22 @@
+igMetaObject *g_igAnimationTransitionParams_metaObject;
+igMetaField *g_igAnimationTransitionParams_startRatioMetaField;
+igMetaField *g_igAnimationTransitionParams_endRatioMetaField;
+igMetaField *g_igAnimationTransitionParams_durationMetaField;
+igMetaField *g_igAnimationTransitionParams_targetStartTimeMetaField;
+
 igMetaObject *FUN_001a9bb0(void) {
-    if (g_igAnimationTransitionParams_metaObject[0] == 0) {
-        g_igAnimationTransitionParams_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAnimationTransitionParams_metaObject == 0) {
+        g_igAnimationTransitionParams_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAnimationTransitionParams_metaObject[0];
+    return g_igAnimationTransitionParams_metaObject;
 }
 
 igMetaObject *igAnimationTransitionParams_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationTransitionParams_metaObject[0];
+    igMetaObject *g = g_igAnimationTransitionParams_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a9c90();
-    return g_igAnimationTransitionParams_metaObject[0];
+    return g_igAnimationTransitionParams_metaObject;
 }
 
 int igAnimationTransitionParams_GetVTable(void) {
@@ -30,11 +36,11 @@ void igAnimationTransitionParams_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationTransitionParams_metaObject),
+        &g_igAnimationTransitionParams_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igAnimationTransitionParams_GetMetaObject,
-        igAnimationTransitionParams_className,
+        "igAnimationTransitionParams",
         0x20, /* instance size */
         igAnimationTransitionParams_GetVTable,
         &igAnimationTransitionParams_InitFields,
@@ -47,13 +53,38 @@ void thunk_igAnimationTransitionParams_GetMetaObject(void) {
     igAnimationTransitionParams_GetMetaObject();
 }
 
+static FieldFactory g_igAnimationTransitionParams_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_igAnimationTransitionParams_fieldTable[] = {
+    "_startRatio",
+    "_endRatio",
+    "_duration",
+    "_targetStartTime",
+};
+static igMetaField **g_igAnimationTransitionParams_fieldHandles[] = {
+    &g_igAnimationTransitionParams_startRatioMetaField,
+    &g_igAnimationTransitionParams_endRatioMetaField,
+    &g_igAnimationTransitionParams_durationMetaField,
+    &g_igAnimationTransitionParams_targetStartTimeMetaField,
+};
+static int g_igAnimationTransitionParams_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    24,
+};
+
 void igAnimationTransitionParams_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAnimationTransitionParams_metaObject[0];
+    temp_s0 = (void *)g_igAnimationTransitionParams_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAnimationTransitionParams_ctorTable[0], 4);
-    igMetaObject_NameFields(temp_s0, &g_igAnimationTransitionParams_fieldTable[0], &DAT_0048d640[0], &DAT_0048d650[0], temp_s1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTransitionParams_ctorTable, 4);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTransitionParams_fieldTable, g_igAnimationTransitionParams_fieldHandles, g_igAnimationTransitionParams_fieldOffsets, temp_s1);
 }
 

@@ -1,17 +1,19 @@
+igMetaObject *g_beNDMWShinkaObjectList_metaObject;
+
 igMetaObject *FUN_003c9810(void) {
-    if (g_beNDMWShinkaObjectList_metaObject[0] == 0) {
-        g_beNDMWShinkaObjectList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWShinkaObjectList_metaObject == 0) {
+        g_beNDMWShinkaObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWShinkaObjectList_metaObject[0];
+    return g_beNDMWShinkaObjectList_metaObject;
 }
 
 igMetaObject *beNDMWShinkaObjectList_ResolveMetaObject(void)
 {
-    igMetaObject *g = g_beNDMWShinkaObjectList_metaObject[0];
+    igMetaObject *g = g_beNDMWShinkaObjectList_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003c98f0();
-    return g_beNDMWShinkaObjectList_metaObject[0];
+    return g_beNDMWShinkaObjectList_metaObject;
 }
 
 int beNDMWShinkaObjectList_GetVTable(void) {
@@ -27,15 +29,17 @@ void FUN_003c98f0(void)
     igMetaObject_RunStaticInit(beNDMWShinkaObjectList_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShinkaObjectList_callbackList[] = { FUN_003c9ac0, 0 };
+
 void *beNDMWShinkaObjectList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShinkaObjectList_metaObject,
+        &g_beNDMWShinkaObjectList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beNDMWShinkaObjectList_GetMetaObject,
-        beNDMWShinkaObjectList_className,
+        "beNDMWShinkaObjectList",
         0x14, /* instance size */
         beNDMWShinkaObjectList_GetVTable,
         0,

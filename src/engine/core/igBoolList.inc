@@ -1,21 +1,24 @@
+igMetaObject *g_igBoolList_metaObject;
+int g_igBoolList_dataDescriptorCell;
+
 void igBoolList_Create(int pool) {
     igBoolList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5868A8), (igMemoryPoolView *)pool);
+    igMetaObject_CreateInstance(g_igBoolList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igBoolList_GetOrCreateMetaObject(void) {
-    if (g_igBoolList_metaObject[0] == 0) {
-        g_igBoolList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igBoolList_metaObject == 0) {
+        g_igBoolList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igBoolList_metaObject[0];
+    return g_igBoolList_metaObject;
 }
 
 igMetaObject *igBoolList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igBoolList_metaObject[0];
+    igMetaObject *g = g_igBoolList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igBoolList_EnsureRegistered();
-    return g_igBoolList_metaObject[0];
+    return g_igBoolList_metaObject;
 }
 
 int igBoolList_GetVTable(void) {
@@ -23,7 +26,7 @@ int igBoolList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igBoolList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igBoolList_EnsureRegistered(void)
@@ -35,11 +38,11 @@ void igBoolList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igBoolList_metaObject,
+        &g_igBoolList_metaObject,
         (igMetaObjectRegisterFunction)igDataList_Register,
         (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igBoolList_GetMetaObjectFunction,
-        igBoolList_className,
+        "igBoolList",
         0x14,
         igBoolList_GetVTable,
         igBoolList_InitFields,
@@ -52,14 +55,15 @@ void igBoolList_GetMetaObjectFunction(void) {
     igBoolList_GetMetaObject();
 }
 
+
 void igBoolList_InitFields(void) {
-    igMetaObject *meta = g_igBoolList_metaObject[0];
+    igMetaObject *meta = g_igBoolList_metaObject;
     igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     int index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     field->_memType = igBoolMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
-    field->_externalEnumStorage = (int)g_igBoolList_dataDescriptorCell;
+    field->_externalEnumStorage = (int)&g_igBoolList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
     field->_refCount = (int)field->_refCount - 1;
     if (((unsigned long long)((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {

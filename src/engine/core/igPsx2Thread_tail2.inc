@@ -68,7 +68,7 @@ void igPsx2Thread_Terminate(int *result, igPsx2ThreadView *self) {
     if (s0 == GetThreadId()) {
         igPsx2Thread_Finish(self, 0);
     }
-    g_threadManager[0]->RemoveThread(self);
+    g_threadManager->RemoveThread(self);
     s1 = self->_threadID;
     s0b = TerminateThread(threadID(self));
     self->_threadID = -1;
@@ -142,7 +142,7 @@ igResult igPsx2Thread_ITerminate(igPsx2ThreadView *self) {
     if (self->_threadID == GetThreadId()) {
         igPsx2Thread_Finish(self, 0);
     }
-    g_threadManager[0]->RemoveThread(self);
+    g_threadManager->RemoveThread(self);
     int id = self->_threadID;
     int status = TerminateThread(igPsx2Thread_getThreadID(self));
     self->_threadID = -1;
@@ -218,7 +218,7 @@ void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
     param.stackSize = thread->_stackSize;
     param.initPriority = thread->_priority / 2;
     param.gpReg = (void *)&_gp[0];
-    g_threadManager[0]->AddThread(thread);
+    g_threadManager->AddThread(thread);
     thread->_threadID = CreateThread(&param);
     if (thread->_threadID < 0) {
         thread->_threadID = -1;
@@ -230,7 +230,7 @@ void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
     t2 = thread->_threadDoneSema->Create();
     thread->_threadID = _StartThread(thread->_threadID, thread);
     if (thread->_threadID == -1) {
-        g_threadManager[0]->RemoveThread(thread);
+        g_threadManager->RemoveThread(thread);
         t3 = thread->_threadDoneSema->Destroy();
         { *out = g_resultFailure.v; return; }
     }
@@ -290,6 +290,6 @@ void igPsx2Thread_LeaveStoppingPoint(void *self) {
 
 void igPsx2Thread_Finish(igPsx2ThreadView *thread, int result) {
     thread->_result = result;
-    igPsx2ThreadManager_FinishThread(g_threadManager[0], thread);
+    igPsx2ThreadManager_FinishThread(g_threadManager, thread);
 }
 

@@ -4,7 +4,7 @@ void igDriverDatabase_InitDefaults(igDriverDatabase *database) {
     unsigned char verbose;
     int i;
     igObject_InitDefaults((int)database);
-    igRegistry_GetValueBool((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_driverDatabaseVerbose, (char *)&verbose, database->_verbose, 1);
+    igRegistry_GetValueBool((int)((ObjectSystemView *)g_objectSystem)->configRegistry, 2,"driverDatabaseVerbose", (char *)&verbose, database->_verbose, 1);
     database->_verbose = verbose;
     ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_currentProperties, 13);
     ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_subPropertyNames, 13);
@@ -28,12 +28,14 @@ void igDriverDatabase_SetCurrentProperty(void *self, int property, int value) {
     igStringObj_Set(((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property], value);
 }
 
+char *g_stringObjEmptyText = "";
+
 int igDriverDatabase_GetCurrentProperty(void *self, int property) {
     int text;
 
     text = ((igStringObj *)((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property])->_buffer;
     if (text == 0) {
-        text = ((int *)g_stringObjEmptyText)[0];
+        text = (*(int *)&g_stringObjEmptyText);
     }
     return text;
 }
@@ -55,12 +57,12 @@ int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *self, int property, i
     if (name == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             int al = ((int)StringPool_Allocate(16));
             if (al != 0) al = ((int)StringPool_Construct((StringPool *)al));
-            g_stringPool[0] = al;
+            g_stringPool = al;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     }
     key = interned;
     idx = igStringRefList_IndexOf(names.p, &key, 0);
@@ -76,7 +78,7 @@ int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *self, int property, i
 
 static inline char *textOf(const igSmartPointer<igStringObj> &ref) {
     char *s = (char *)ref.get()->_buffer;
-    s = (s == 0) ? g_stringObjEmptyText[0] : s;
+    s = (s == 0) ? g_stringObjEmptyText : s;
     return s;
 }
 
@@ -103,8 +105,8 @@ void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextVi
 static inline int openPath(igDriverDatabase *database, const igSmartPointer<igStringObj> &path) {
     igFileView *file = (igFileView *)database->_databaseFile;
     int text = path.p->_buffer;
-    if (text == 0) text = ((int *)g_stringObjEmptyText)[0];
-    return file->Open((const char *)text, (const char *)&text_r[0]);
+    if (text == 0) text = (*(int *)&g_stringObjEmptyText);
+    return file->Open((const char *)text, (const char *)"r");
 }
 
 int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const char *rootPath) {
@@ -112,17 +114,17 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
     igStringRef name((char *)fileName);
     const char *p5 = name.p;
     if (p5 == 0 || strlen(p5) == 0) {
-        name = (char *)&text_drivers_ini[0];
+        name = (char *)"drivers.ini";
     }
     {
         int al = ((int)igObject_GetAllocator((int)self));
         igRelease((igObject *)self->_databaseFile);
         self->_databaseFile = (int)((igObject *)igFile_Create(al));
     }
-    opened = ((igFileView *)self->_databaseFile)->Open(name.p, (const char *)&text_r[0]);
+    opened = ((igFileView *)self->_databaseFile)->Open(name.p, (const char *)"r");
     if (opened == 0) {
         if (rootPath == 0 || strlen(rootPath) == 0) {
-            rootPath = ((const char *)igObjectSystem_GetRootPath((int *)(((int *)g_objectSystem)[0])));
+            rootPath = ((const char *)igObjectSystem_GetRootPath((int *)((*(int *)&g_objectSystem))));
         }
         if (rootPath != 0 && strlen(rootPath) != 0) {
             igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
@@ -132,7 +134,7 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
     }
     if (opened == 0) {
         igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((int)self))));
-        folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)(((int *)g_objectSystem)[0])));
+        folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)((*(int *)&g_objectSystem))));
         opened = openPath(self, folder.p->GetFullPath(name.p));
     }
     if (opened == 0) {
@@ -174,7 +176,7 @@ igTDataList<ConfigNode *> *igDriverDatabase_ParseDatabase(igDriverDatabase *s) {
     s->_currentLine = 1;
     v = ((igStringObj *)s->_rawDatabase)->_buffer;
     if (v == 0) {
-        v = ((int *)g_stringObjEmptyText)[0];
+        v = (*(int *)&g_stringObjEmptyText);
     }
     s->_dbIndex = v;
     do {
@@ -303,17 +305,17 @@ void igDriverDatabase_LoadFromString(void *self, int text) {
 }
 
 int igDriverDatabase_GetOSName(void *text) {
-    igStringObj_Set((int)text, (int)&text_psx2_2[0]);
+    igStringObj_Set((int)text, (int)"psx2");
     return 1;
 }
 
 int igDriverDatabase_GetCpuVendor(void *text) {
-    igStringObj_Set((int)text, (int)&text_mips[0]);
+    igStringObj_Set((int)text, (int)"mips");
     return 1;
 }
 
 int igDriverDatabase_GetCpuType(void *text) {
-    igStringObj_Set((int)text, (int)&text_psx2_2[0]);
+    igStringObj_Set((int)text, (int)"psx2");
     return 1;
 }
 
@@ -352,6 +354,22 @@ bool igDriverDatabase_ReadLineFromString(igDriverDatabase *self, char **cursor, 
     return i > 0 || c != 0;
 }
 
+const char *const g_driverDatabaseKeywords[13] = {
+    "OS",
+    "PLATFORM",
+    "PLATFORM_VERSION",
+    "VENDOR",
+    "CHIPSET",
+    "DRIVER",
+    "CPU_VENDOR",
+    "CPU_TYPE",
+    "GFX_CAPABILITY",
+    "USER_STRING",
+    "USER_INT",
+    "USER_FLOAT",
+    "USER_BOOL"
+};
+
 /* Parses the next node of the database text: a SETTINGS block or a section headed by one of the
  * keywords. Returns 0 at the end of the text or on a parse error. */
 ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
@@ -365,7 +383,7 @@ ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
         return 0;
     }
     if (igDriverDatabase_ParseIdentifier(self, (int *)&word)) {
-        if (strcmp(igStringObj_Text(word), text_SETTINGS) == 0) {
+        if (strcmp(igStringObj_Text(word),"SETTINGS") == 0) {
             void *memory = Memory_AllocateBufferDirect(16, (igMemoryPoolView *)igObject_GetAllocator((int)self));
             ConfigSettingsNode *settings = (ConfigSettingsNode *)memory;
             if (memory != 0) {
@@ -457,7 +475,7 @@ void igDriverDatabase_ApplySettings(igDriverDatabase *self, igTDataList<ConfigPa
     for (i = 0; i < entries->_count; i++) {
         pair = entries->_data[i];
         key = igStringObj_Text(pair->key);
-        igRegistry_GetValueStringObj((int)registry, section, key, &scratch, (const char *)emptyString_4, 0);
+        igRegistry_GetValueStringObj((int)registry, section, key, &scratch, (const char *)"", 0);
         key = igStringObj_Text(pair->key);
         value = igStringObj_Text(pair->value);
         igRegistry_SetValueString(registry, section, key, value);
@@ -481,12 +499,12 @@ int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj 
         igStringObj *held = name;
         char *s = (char *)sectionName->_buffer;
         int length = sectionName->_length;
-        s = (s == 0) ? g_stringObjEmptyText[0] : s;
+        s = (s == 0) ? g_stringObjEmptyText : s;
         igStringObj_SetN(held, (int)s, length);
     } else {
         char *s = (char *)sectionName->_buffer;
-        char *key = (s == 0) ? g_stringObjEmptyText[0] : s;
-        s = (s == 0) ? g_stringObjEmptyText[0] : s;
+        char *key = (s == 0) ? g_stringObjEmptyText : s;
+        s = (s == 0) ? g_stringObjEmptyText : s;
         if ((igRegistry_GetValueStringObj(self->_overrideSource, self->_overrideSourceSection, key, &name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
             igRelease(name);
             return -1;
@@ -524,7 +542,7 @@ bool igDriverDatabase_ParseIdentifier(igDriverDatabase *self, int *out) {
 
     found = 0;
     igDriverDatabase_SkipWhitespace((int *)self);
-    if (sscanf(self->_dbIndex, &text_abcdefghijklmnopqrstuvwxyzABCDEF[0], word) == 1) {
+    if (sscanf(self->_dbIndex, "%[_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./\\-]", word) == 1) {
         self->_dbIndex = self->_dbIndex + strlen(word);
         *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((int)self))));
         igStringObj_Set(*out, (int)word);
@@ -540,7 +558,7 @@ bool igDriverDatabase_ReadToken(char *parser, int *out) {
 
     found = false;
     igDriverDatabase_SkipWhitespace((int *)parser);
-    if (sscanf(database->_dbIndex, &tokenScanFormat[0], buf) == 1) {
+    if (sscanf(database->_dbIndex, "%[^\r\n{};]", buf) == 1) {
         database->_dbIndex = database->_dbIndex + strlen(buf);
         igDriverDatabase_TrimTrailingWhitespace((int)parser, (char *)buf);
         *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((int)parser))));
@@ -550,6 +568,8 @@ bool igDriverDatabase_ReadToken(char *parser, int *out) {
     return found;
 }
 
+const char *const g_driverDatabaseOperators[3] = { "=", ">=", "!=" };
+
 bool igDriverDatabase_ParseOperator(igDriverDatabase *self, int *out) {
     char buf[4096];
     bool found;
@@ -557,7 +577,7 @@ bool igDriverDatabase_ParseOperator(igDriverDatabase *self, int *out) {
 
     found = false;
     igDriverDatabase_SkipWhitespace((int *)self);
-    if (sscanf(self->_dbIndex, &operatorScanFormat[0], buf) == 1) {
+    if (sscanf(self->_dbIndex, "%[=<>!]", buf) == 1) {
         self->_dbIndex = self->_dbIndex + strlen(buf);
         for (i = 0; i < 3; i++) {
             if (strcmp(buf, g_driverDatabaseOperators[i]) == 0) {
@@ -585,7 +605,7 @@ static inline void storeText(igStringObj *target, igStringObj *token) {
     char *text = (char *)token->_buffer;
     int length = token->_length;
     igStringObj *t = target;
-    text = (text == 0) ? g_stringObjEmptyText[0] : text;
+    text = (text == 0) ? g_stringObjEmptyText : text;
     igStringObj_SetN(t, (int)text, length);
 }
 
@@ -738,16 +758,16 @@ unsigned char igDriverDatabase_CompareTyped(igDriverDatabase *self, int valueTyp
     case 1: {
         int first = 0;
         int second = 0;
-        if (sscanf(actual, space_percent_i_space, &first) != 1) return 0;
-        if (sscanf(expected, space_percent_i_space, &second) != 1) return 0;
+        if (sscanf(actual," %i ", &first) != 1) return 0;
+        if (sscanf(expected," %i ", &second) != 1) return 0;
         result = igDriverDatabase_CompareValues((int)self, first, compareMode, second);
         break;
     }
     case 2: {
         float first = 0;
         float second = 0;
-        if (sscanf(actual, space_percent_f_space, &first) != 1) return 0;
-        if (sscanf(expected, space_percent_f_space, &second) != 1) return 0;
+        if (sscanf(actual," %f ", &first) != 1) return 0;
+        if (sscanf(expected," %f ", &second) != 1) return 0;
         result = igDriverDatabase_CompareFloat((int)self, compareMode, first, second);
         break;
     }

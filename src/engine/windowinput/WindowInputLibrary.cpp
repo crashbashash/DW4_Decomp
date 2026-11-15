@@ -1,4 +1,7 @@
 #include "src/engine/windowinput/WindowInputLibrary.h"
+
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/windowinput/LibraryFront.inc"
 #include "src/engine/windowinput/igWindow.inc"
 #include "src/engine/windowinput/igInterfaceManager.inc"
@@ -22,3 +25,4 @@
 #include "src/engine/windowinput/igPsx2ControllerManager_tail4.inc"
 #include "src/engine/windowinput/igPsx2Controller_tail4.inc"
 #include "src/engine/windowinput/InlineTail.inc"
+#pragma pop

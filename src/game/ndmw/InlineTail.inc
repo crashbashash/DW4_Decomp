@@ -1,46 +1,46 @@
 igMetaObject *Gap__Bec__beNDMWAfsSetupData__vfunc_20(void)
 {
-    return g_beNDMWAfsSetupData_metaObject[0];
+    return g_beNDMWAfsSetupData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWAfsSetupDataList__vfunc_20(void)
 {
-    return g_beNDMWAfsSetupDataList_metaObject[0];
+    return g_beNDMWAfsSetupDataList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWAfsSetupInfo__vfunc_20(void)
 {
-    return g_beNDMWAfsSetupInfo_metaObject[0];
+    return g_beNDMWAfsSetupInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWGameRamInfo__vfunc_20(void)
 {
-    return g_beNDMWGameRamInfo_metaObject[0];
+    return g_beNDMWGameRamInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWGameRamInfoRam__vfunc_20(void)
 {
-    return g_beNDMWGameRamInfoRam_metaObject[0];
+    return g_beNDMWGameRamInfoRam_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWShinkaObject__vfunc_20(void)
 {
-    return g_beNDMWShinkaObject_metaObject[0];
+    return g_beNDMWShinkaObject_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWShinkaObjectList__vfunc_20(void)
 {
-    return g_beNDMWShinkaObjectList_metaObject[0];
+    return g_beNDMWShinkaObjectList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWShinkaCtrl__vfunc_20(void)
 {
-    return g_beNDMWShinkaCtrl_metaObject[0];
+    return g_beNDMWShinkaCtrl_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWItemBaseList__vfunc_20(void)
 {
-    return g_beNDMWItemBaseList_metaObject[0];
+    return g_beNDMWItemBaseList_metaObject;
 }
 
 int Gap__Bec__beNDMWItemBase__vfunc_24(void) {
@@ -57,37 +57,37 @@ void Gap__Bec__beNDMWItemBase__vfunc_26(void)
 
 igMetaObject *Gap__Bec__beNDMWLoadCtrl2CtrlData__vfunc_20(void)
 {
-    return g_beNDMWLoadCtrl2CtrlData_metaObject[0];
+    return g_beNDMWLoadCtrl2CtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2TextOrder__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2TextOrder_metaObject[0];
+    return g_beNDMWLoadIntf2TextOrder_metaObject;
 }
 
 igMetaObject *Gap__Bec__beLoadIntf2ComMdlData__vfunc_20(void)
 {
-    return g_beLoadIntf2ComMdlData_metaObject[0];
+    return g_beLoadIntf2ComMdlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beLoadIntf2ComMdlDataList__vfunc_20(void)
 {
-    return g_beLoadIntf2ComMdlDataList_metaObject[0];
+    return g_beLoadIntf2ComMdlDataList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2ComMdlCtrl__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2ComMdlCtrl_metaObject[0];
+    return g_beNDMWLoadIntf2ComMdlCtrl_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2MesWin__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2MesWin_metaObject[0];
+    return g_beNDMWLoadIntf2MesWin_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWDegiData__vfunc_20(void)
 {
-    return g_beNDMWDegiData_metaObject[0];
+    return g_beNDMWDegiData_metaObject;
 }
 
 void Gap__Bec__beNDMWDegiData__vfunc_07(beNDMWDegiData *arg0, int arg1) {
@@ -118,12 +118,12 @@ void Gap__Bec__beNDMWDegiData__vfunc_08(V88 *arg0) {
 
 igMetaObject *Gap__Bec__beNDMWDegiDataList__vfunc_20(void)
 {
-    return g_beNDMWDegiDataList_metaObject[0];
+    return g_beNDMWDegiDataList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadSlotPlayer__vfunc_20(void)
 {
-    return g_beNDMWLoadSlotPlayer_metaObject[0];
+    return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
 void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_07(void **arg0) {
@@ -196,42 +196,42 @@ void Gap__Bec__beNDMWLoadSlotPlayer__vfunc_08(Obj_3cb470 *arg0) {
 
 igMetaObject *Gap__Bec__beNDMWLoadSlotPlayerList__vfunc_20(void)
 {
-    return g_beNDMWLoadSlotPlayerList_metaObject[0];
+    return g_beNDMWLoadSlotPlayerList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcSlotPS2__vfunc_20(void)
 {
-    return g_beNDMWMcSlotPS2_metaObject[0];
+    return g_beNDMWMcSlotPS2_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcSlotGC__vfunc_20(void)
 {
-    return g_beNDMWMcSlotGC_metaObject[0];
+    return g_beNDMWMcSlotGC_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcSlotXbox__vfunc_20(void)
 {
-    return g_beNDMWMcSlotXbox_metaObject[0];
+    return g_beNDMWMcSlotXbox_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcSlotList__vfunc_20(void)
 {
-    return g_beNDMWMcSlotList_metaObject[0];
+    return g_beNDMWMcSlotList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadSavePlWork__vfunc_20(void)
 {
-    return g_beNDMWLoadSavePlWork_metaObject[0];
+    return g_beNDMWLoadSavePlWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadSavePlWorkList__vfunc_20(void)
 {
-    return g_beNDMWLoadSavePlWorkList_metaObject[0];
+    return g_beNDMWLoadSavePlWorkList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcUtilCtrl__vfunc_20(void)
 {
-    return g_beNDMWMcUtilCtrl_metaObject[0];
+    return g_beNDMWMcUtilCtrl_metaObject;
 }
 
 void Gap__Bec__beNDMWMcUtilCtrl__vfunc_07(beNDMWMcUtilCtrl *arg0) {
@@ -248,7 +248,7 @@ void Gap__Bec__beNDMWMcUtilCtrl__vfunc_08(beNDMWMcUtilCtrl *arg0) {
 
 igMetaObject *Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_20(void)
 {
-    return g_beNDMWLoadCtrl2CommonIntf_metaObject[0];
+    return g_beNDMWLoadCtrl2CommonIntf_metaObject;
 }
 
 static inline int countOf_3cb760(const beNDMWDegiDataList *l) { return l->_count; }
@@ -309,101 +309,101 @@ void Gap__Bec__beNDMWLoadCtrl2CommonIntf__vfunc_08(beNDMWLoadCtrl2CommonIntf *ar
 
 igMetaObject *Gap__Bec__beNDMWLoadCtrl2Info__vfunc_20(void)
 {
-    return g_beNDMWLoadCtrl2Info_metaObject[0];
+    return g_beNDMWLoadCtrl2Info_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2CtrlData__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2CtrlData_metaObject[0];
+    return g_beNDMWLoadIntf2CtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2MakeChr__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2MakeChr_metaObject[0];
+    return g_beNDMWLoadIntf2MakeChr_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiState__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2DegiState_metaObject[0];
+    return g_beNDMWLoadIntf2DegiState_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateList__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2DegiStateList_metaObject[0];
+    return g_beNDMWLoadIntf2DegiStateList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateCtrl__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2DegiStateCtrl_metaObject[0];
+    return g_beNDMWLoadIntf2DegiStateCtrl_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2DataSelIntf__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2DataSelIntf_metaObject[0];
+    return g_beNDMWLoadIntf2DataSelIntf_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2Diffselect__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2Diffselect_metaObject[0];
+    return g_beNDMWLoadIntf2Diffselect_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2SelSlot__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2SelSlot_metaObject[0];
+    return g_beNDMWLoadIntf2SelSlot_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2ChrDataSel__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2ChrDataSel_metaObject[0];
+    return g_beNDMWLoadIntf2ChrDataSel_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2NameSel__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2NameSel_metaObject[0];
+    return g_beNDMWLoadIntf2NameSel_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2Info__vfunc_20(void)
 {
-    return g_beNDMWLoadIntf2Info_metaObject[0];
+    return g_beNDMWLoadIntf2Info_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLogoCtrlData__vfunc_20(void)
 {
-    return g_beNDMWLogoCtrlData_metaObject[0];
+    return g_beNDMWLogoCtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLogoInfo__vfunc_20(void)
 {
-    return g_beNDMWLogoInfo_metaObject[0];
+    return g_beNDMWLogoInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMdlEnemyInfoWork__vfunc_20(void)
 {
-    return g_beNDMWMdlEnemyInfoWork_metaObject[0];
+    return g_beNDMWMdlEnemyInfoWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMdlItemInfoWork__vfunc_20(void)
 {
-    return g_beNDMWMdlItemInfoWork_metaObject[0];
+    return g_beNDMWMdlItemInfoWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMdlPlayerInfoWork__vfunc_20(void)
 {
-    return g_beNDMWMdlPlayerInfoWork_metaObject[0];
+    return g_beNDMWMdlPlayerInfoWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMdlPlayer2InfoWork__vfunc_20(void)
 {
-    return g_beNDMWMdlPlayer2InfoWork_metaObject[0];
+    return g_beNDMWMdlPlayer2InfoWork_metaObject;
 }
 
 igMetaObject *FUN_003cbb40(void) {
-    return g_beNDMWPanelObject_metaObject[0];
+    return g_beNDMWPanelObject_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_20(void)
 {
-    return g_beNDMWPanelWazaInfoWork_metaObject[0];
+    return g_beNDMWPanelWazaInfoWork_metaObject;
 }
 
 void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_07(beNDMWPanelWazaInfoWork *arg0) {
@@ -463,7 +463,7 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_07(beNDMWPanelWazaInfoWork *arg0) 
     n2 = l->_count;
     q = (int *)l->_data;
     for (k = 0; k < n2; k++) {
-        q[k] = DAT_004c9228[0];
+        q[k] = g_beNDMWPanelWazaInfoWork_textColorNone;
     }
 }
 
@@ -506,7 +506,7 @@ void Gap__Bec__beNDMWPanelWazaInfoWork__vfunc_16(beNDMWPanelWazaInfoWork *arg0) 
         StringRef_3cbd80 empty(0);
         FUN_003cc490((igDataList *)(((void *)FUN_003cc540(arg0))), (char **)&empty);
     }
-    FUN_003cc3d0((igIntList *)FUN_003cc480(arg0), &DAT_004c9220[0]);
+    FUN_003cc3d0((igIntList *)FUN_003cc480(arg0), &g_beNDMWPanelWazaInfoWork_textColorNoneReset);
     ((PanelVirtualShim *)arg0->_panelWaza)->vX();
     ((PanelVirtualShim *)arg0->_panelItem)->vX();
     ((PanelVirtualShim *)arg0->_panelStat)->vX();
@@ -735,156 +735,156 @@ int *FUN_003cc550(int *arg0, int arg1) {
 
 igMetaObject *Gap__Bec__beNDMWPanelWazaInfoRam__vfunc_20(void)
 {
-    return g_beNDMWPanelWazaInfoRam_metaObject[0];
+    return g_beNDMWPanelWazaInfoRam_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWPanelWazaInfo__vfunc_20(void)
 {
-    return g_beNDMWPanelWazaInfo_metaObject[0];
+    return g_beNDMWPanelWazaInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWSaveCtrlCtrlData__vfunc_20(void)
 {
-    return g_beNDMWSaveCtrlCtrlData_metaObject[0];
+    return g_beNDMWSaveCtrlCtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWSaveCtrlInfo__vfunc_20(void)
 {
-    return g_beNDMWSaveCtrlInfo_metaObject[0];
+    return g_beNDMWSaveCtrlInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWSaveIntfCtrlData__vfunc_20(void)
 {
-    return g_beNDMWSaveIntfCtrlData_metaObject[0];
+    return g_beNDMWSaveIntfCtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beSaveIntfComMdlData__vfunc_20(void)
 {
-    return g_beSaveIntfComMdlData_metaObject[0];
+    return g_beSaveIntfComMdlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beSaveIntfComMdlDataList__vfunc_20(void)
 {
-    return g_beSaveIntfComMdlDataList_metaObject[0];
+    return g_beSaveIntfComMdlDataList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWSaveIntfComMdlCtrl__vfunc_20(void)
 {
-    return g_beNDMWSaveIntfComMdlCtrl_metaObject[0];
+    return g_beNDMWSaveIntfComMdlCtrl_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWSaveIntfInfo__vfunc_20(void)
 {
-    return g_beNDMWSaveIntfInfo_metaObject[0];
+    return g_beNDMWSaveIntfInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWStageCtlInfo__vfunc_20(void)
 {
-    return g_beNDMWStageCtlInfo_metaObject[0];
+    return g_beNDMWStageCtlInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWStageCtlInfoRam__vfunc_20(void)
 {
-    return g_beNDMWStageCtlInfoRam_metaObject[0];
+    return g_beNDMWStageCtlInfoRam_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWWindowCtrl__vfunc_20(void)
 {
-    return g_beNDMWWindowCtrl_metaObject[0];
+    return g_beNDMWWindowCtrl_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWStatusInfoWork__vfunc_20(void)
 {
-    return g_beNDMWStatusInfoWork_metaObject[0];
+    return g_beNDMWStatusInfoWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWStatusInfoRam__vfunc_20(void)
 {
-    return g_beNDMWStatusInfoRam_metaObject[0];
+    return g_beNDMWStatusInfoRam_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWStatusInfo__vfunc_20(void)
 {
-    return g_beNDMWStatusInfo_metaObject[0];
+    return g_beNDMWStatusInfo_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWWindow__vfunc_20(void)
 {
-    return g_beNDMWWindow_metaObject[0];
+    return g_beNDMWWindow_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWTitle2CtrlData__vfunc_20(void)
 {
-    return g_beNDMWTitle2CtrlData_metaObject[0];
+    return g_beNDMWTitle2CtrlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWTitle2Option__vfunc_20(void)
 {
-    return g_beNDMWTitle2Option_metaObject[0];
+    return g_beNDMWTitle2Option_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWTitle2Info__vfunc_20(void)
 {
-    return g_beNDMWTitle2Info_metaObject[0];
+    return g_beNDMWTitle2Info_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWWindowList__vfunc_20(void)
 {
-    return g_beNDMWWindowList_metaObject[0];
+    return g_beNDMWWindowList_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWAfsSetupDataList__vfunc_22(void)
 {
-    return g_beNDMWAfsSetupData_metaObject[0];
+    return g_beNDMWAfsSetupData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWShinkaObjectList__vfunc_22(void)
 {
-    return g_beNDMWShinkaObject_metaObject[0];
+    return g_beNDMWShinkaObject_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadIntf2DegiStateList__vfunc_22(void)
 {
-    return g_beNDMWLoadIntf2DegiState_metaObject[0];
+    return g_beNDMWLoadIntf2DegiState_metaObject;
 }
 
 igMetaObject *Gap__Bec__beSaveIntfComMdlDataList__vfunc_22(void)
 {
-    return g_beSaveIntfComMdlData_metaObject[0];
+    return g_beSaveIntfComMdlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWItemBaseList__vfunc_22(void)
 {
-    return g_beNDMWItemBase_metaObject[0];
+    return g_beNDMWItemBase_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadSavePlWorkList__vfunc_22(void)
 {
-    return g_beNDMWLoadSavePlWork_metaObject[0];
+    return g_beNDMWLoadSavePlWork_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWMcSlotList__vfunc_22(void)
 {
-    return g_beNDMWMcSlot_metaObject[0];
+    return g_beNDMWMcSlot_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWLoadSlotPlayerList__vfunc_22(void)
 {
-    return g_beNDMWLoadSlotPlayer_metaObject[0];
+    return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWDegiDataList__vfunc_22(void)
 {
-    return g_beNDMWDegiData_metaObject[0];
+    return g_beNDMWDegiData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beLoadIntf2ComMdlDataList__vfunc_22(void)
 {
-    return g_beLoadIntf2ComMdlData_metaObject[0];
+    return g_beLoadIntf2ComMdlData_metaObject;
 }
 
 igMetaObject *Gap__Bec__beNDMWWindowList__vfunc_22(void)
 {
-    return g_beNDMWWindow_metaObject[0];
+    return g_beNDMWWindow_metaObject;
 }
 

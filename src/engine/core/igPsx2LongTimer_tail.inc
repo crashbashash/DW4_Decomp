@@ -1,9 +1,11 @@
+igMetaObject *g_igPsx2LongTimer_metaObject;
+
 igMetaObject *igPsx2LongTimer_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2LongTimer_metaObject[0];
+    igMetaObject *g = g_igPsx2LongTimer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPsx2LongTimer_EnsureRegistered();
-    return g_igPsx2LongTimer_metaObject[0];
+    return g_igPsx2LongTimer_metaObject;
 }
 
 int igPsx2LongTimer_GetVTable(void) {
@@ -11,7 +13,7 @@ int igPsx2LongTimer_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&timer);
     timer._vtable = (int)&g_igPsx2LongTimer_vtable[0];
-    return *(int *)((char *)&timer + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&timer + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igPsx2LongTimer_EnsureRegistered(void)
@@ -23,11 +25,11 @@ void igPsx2LongTimer_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
         0,
-        g_igPsx2LongTimer_metaObject,
+        &g_igPsx2LongTimer_metaObject,
         (igMetaObjectRegisterFunction)igLongTimer_Register,
         (igMetaObjectGetFunction)igLongTimer_GetPublishedMetaObject,
         igPsx2LongTimer_GetMetaObjectFunction,
-        igPsx2LongTimer_className,
+        "igPsx2LongTimer",
         0x28,
         igPsx2LongTimer_GetVTable,
         0,
@@ -37,7 +39,7 @@ void igPsx2LongTimer_Register(void) {
 }
 
 int igLongTimer_GetPublishedMetaObject(void) {
-    return ((int *)g_igLongTimer_metaObject)[0];
+    return (int)g_igLongTimer_metaObject;
 }
 
 void igPsx2LongTimer_StaticInitCallback(void) {

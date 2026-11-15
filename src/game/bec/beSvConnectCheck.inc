@@ -1,21 +1,23 @@
+igMetaObject *g_beSvConnectCheck_metaObject;
+
 void FUN_00348170(int arg0) {
     FUN_00348530();
     igMetaObject_CreateInstance(*(int *)0x5881D8, arg0);
 }
 
 igMetaObject *FUN_003481b0(void) {
-    if (g_beSvConnectCheck_metaObject[0] == 0) {
-        g_beSvConnectCheck_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beSvConnectCheck_metaObject == 0) {
+        g_beSvConnectCheck_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beSvConnectCheck_metaObject[0];
+    return g_beSvConnectCheck_metaObject;
 }
 
 void *FUN_00348200(void) {
-    igMetaObject *g = g_beSvConnectCheck_metaObject[0];
+    igMetaObject *g = g_beSvConnectCheck_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00348530();
     }
-    return g_beSvConnectCheck_metaObject[0];
+    return g_beSvConnectCheck_metaObject;
 }
 
 int beSvConnectCheck_GetVTable(void) {
@@ -127,11 +129,11 @@ void *beSvConnectCheck_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvConnectCheck_metaObject,
+        &g_beSvConnectCheck_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
         beSvConnectCheck_GetMetaObject,
-        beSvConnectCheck_className,
+        "beSvConnectCheck",
         0x90, /* instance size */
         beSvConnectCheck_GetVTable,
         0,
@@ -146,6 +148,6 @@ void beSvConnectCheck_GetMetaObject(void)
 }
 
 igMetaObject *FUN_003485e0(void) {
-    return g_beSaveApi_metaObject[0];
+    return g_beSaveApi_metaObject;
 }
 

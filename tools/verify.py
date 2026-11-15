@@ -35,6 +35,7 @@ import bisect
 import collections
 import os
 import re
+import shutil
 import struct
 import threading
 import subprocess
@@ -113,6 +114,10 @@ COMPARED_SECTIONS = {
                                                     "isolate_emitted_body, renamed by retail address: compared, placed",
     ".ctor": "a unit's static-initializer table entry: compared with its slot of the retail table "
              "(STATIC_INITIALIZERS), placed there",
+    re.compile(r"^\.dw4_data_[0-9a-f]{8}$"): "a whole-file unit's data section that compared equal to retail, "
+                                              "renamed by retail address by isolate_unit_data: placed by linkgen",
+    re.compile(r"^\.rel\.dw4_data_[0-9a-f]{8}$"): "relocations of a placed data section: applied before comparing, "
+                                                  "consumed by ld",
     ".rel.ctor": "relocation of the table entry to the unit's static initializer: applied before comparing, "
                  "consumed by ld",
     ".lit4": "MWCC's float literals: every entry compared with the retail pool by fold_literals, discarded by the link",
@@ -1536,12 +1541,15 @@ class Records(dict):
     None, table_va or None, table_size)} for every placed member whose retail exception
     metadata the object reproduces, so `isolate_emitted_body` can keep those sections,
     `ctor_placements`: {compiler_name: (ctor_section, table entry va)} for the static
-    initializer whose `.ctor` word equals its retail table entry, and
+    initializer whose `.ctor` word equals its retail table entry,
     `data`: {compiler_name: retail address} of a whole-file unit's data, its named rows and
-    the anonymous data bound to its `anon` addresses."""
+    the anonymous data bound to its `anon` addresses, and `data_placements`: {section: (retail
+    address, size, label, nobits)} for every data section of a whole-file unit that compared
+    equal to retail, which linkgen places from the source (`isolate_unit_data`)."""
     exception_placements = {}
     ctor_placements = {}
     data = {}
+    data_placements = {}
 
 
 def duplicate_tables(group, jumptables):
@@ -1708,7 +1716,11 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         spans = sorted((address, address + size) for address, _, size in records.values())
         if any(end > following for (_, end), (following, _) in zip(spans, spans[1:])):
             raise ValueError("emitted retail function extents overlap")
-        smuggled = defined_outside(syms, headers, spans, exempt=set(records) | set(stripped))
+        # a datum the unit's own rows place at the address its name already spells is that datum, compared
+        # with retail there below, not a smuggled copy (data-names.tsv keeps the name while a unit that is
+        # not compiled whole still refers to it)
+        own_data = {name for name, address in data_addresses.items() if spelled_address(name, symbols) == address}
+        smuggled = defined_outside(syms, headers, spans, exempt=set(records) | set(stripped) | own_data)
         if smuggled:
             raise ValueError(f"object defines {smuggled[0][0]}, which names retail address "
                              f"0x{smuggled[0][1]:x} outside its own bodies (a candidate may only "
@@ -1810,9 +1822,13 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
 
     for section, address, size in tables:
         success = compare_data("jump table", section, ".rodata", address, size) and success
+    data_placements = {}
     for section, address in sorted(data_sections.items()):
         label, header = headers[section]
-        success = compare_data(f"data {label}", section, label, address, header[5]) and success
+        if compare_data(f"data {label}", section, label, address, header[5]):
+            data_placements[section] = (address, header[5], label, header[1] == 8)
+        else:
+            success = False
     ctor_placements = {}
     if ctor_section is not None:
         if compare_data("static-initializer table entry", ctor_section, ".ctor", ctor_slot, 4):
@@ -1883,6 +1899,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     result.ctor_placements = ctor_placements
     result.data_sections = set(data_sections) | dead
     result.data = {**dict(group.data), **anon_bound}
+    result.data_placements = data_placements
     return kind == "match", report + "\n".join(reports), result if success else None
 
 
@@ -2045,7 +2062,8 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     defined, _ = object_syms(src)
     stripped_sections = {defined[name][0] for name in group.stripped
                          if name in defined and isinstance(defined[name][0], int)}
-    # a whole-file unit's data stays retail's: the object keeps references to it, not copies
+    # a body keeps references to its unit's data, not copies: linkgen places the data that compared
+    # equal to retail from one copy of the unit (`isolate_unit_data`)
     data_addresses = getattr(records, "data", None) or dict(group.data)
     data_names = set(data_addresses)
     stripped_sections |= getattr(records, "data_sections", set())
@@ -2135,6 +2153,106 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
                 for _section, offset, kind, name, addend in relocations]
     if object_relocs(obj, target_section=text[0][0]) != expected:
         raise ValueError("emitted body extraction changed relocation ownership or order")
+
+
+def isolate_unit_data(source, obj, records, group, symbols, keep):
+    """Write `obj`: a copy of the verified whole-file object `source` holding only the data sections
+    in `keep`, {section index: retail address}, a subset of `records.data_placements`.
+
+    Each kept section is renamed `.dw4_data_<address>` (its relocations `.rel.dw4_data_<address>`) so
+    linkgen can pin it at the address its bytes were proven equal to; every other allocated section
+    goes. A symbol a kept section relocates against that the copy no longer defines becomes an
+    undefined reference under the name the bodies' copies give it (`isolate_emitted_body`): a member's
+    retail label, `DAT_<address>` for a datum, so the link resolves it the same way. A relocation
+    against the section symbol of a dropped section has no such name and raises ValueError. Every
+    symbol a kept section defines is made local: the address is reached by name through the bodies'
+    `DAT_<address>` references, so two units placing one shared datum can never clash.
+    """
+    _, by_va = load_symbols(symbols)
+    shutil.copyfile(source, obj)
+    _forget(obj)
+    headers = elf_section_headers(obj)
+    with open(obj, "rb") as fh:
+        data = bytearray(fh.read())
+    symtab = [i for i, (_n, h) in enumerate(headers) if h[1] == 2]
+    if len(symtab) != 1:
+        raise ValueError("the object has no single symbol table")
+    table = headers[symtab[0]][1]
+    strings = headers[table[6]][1]
+    entries = list(range(table[4], table[4] + table[5], 16))
+
+    def symbol(number):
+        st_name, _value, _size, info, _other, shndx = struct.unpack_from("<IIIBBH", data, entries[number])
+        end = data.index(0, strings[4] + st_name)
+        return bytes(data[strings[4] + st_name:end]).decode("latin1"), info, shndx
+
+    external, local = set(), set()
+    for index, (_name, header) in enumerate(headers):
+        if header[1] not in (4, 9) or header[7] not in keep:      # SHT_RELA, SHT_REL
+            continue
+        width = 12 if header[1] == 4 else 8
+        for at in range(header[4], header[4] + header[5], width):
+            number = struct.unpack_from("<I", data, at + 4)[0] >> 8
+            name, info, shndx = symbol(number)
+            if not shndx or shndx >= 0xff00 or shndx in keep:     # undefined, absolute, common
+                continue
+            if info & 15 == 3:
+                raise ValueError(f"data section {header[7]} relocates against the section symbol of "
+                                 f"section {shndx}, which is not placed with it")
+            external.add(number)
+    for number in range(len(entries)):
+        name, info, shndx = symbol(number)
+        if number in external or shndx in (0xfff2, 0xff00, 0xff03):      # COMMON, MIPS ACOMMON, SCOMMON
+            # a common would be allocated again by the link: it is reached at its retail address instead
+            struct.pack_into("<IIBBH", data, entries[number] + 4, 0, 0, (1 << 4) | (info & 15), 0, 0)
+        elif name and shndx in keep and info >> 4:
+            local.add(name)
+    with open(obj, "wb") as fh:
+        fh.write(data)
+    _forget(obj)
+    renames, removed = {}, {}
+    for index, (name, header) in enumerate(headers):
+        if index in keep:
+            renames[index] = ".dw4_data_%08x" % keep[index]
+        elif header[1] in (4, 9) and header[7] in keep:
+            renames[index] = ".rel.dw4_data_%08x" % keep[header[7]]
+        elif header[2] & 2:
+            removed[index] = f".text.owned_{index}"
+    rename_object_sections(obj, {**renames, **removed}, headers=headers)
+    data_addresses = getattr(records, "data", None) or dict(group.data)
+    labels = {name: by_va[address][0] for name, (address, _, _) in records.items()}
+    labels.update({name: by_va[address][0] for name, address in group.externals})
+    labels.update({name: "DAT_%08x" % address for name, address in data_addresses.items()})
+    addresses = {name: address for name, (address, _, _) in records.items()}
+    addresses.update(dict(group.externals))
+    addresses.update(data_addresses)
+    arguments = ["mipsel-linux-gnu-objcopy", "--remove-section=.text.owned_*",
+                 "--remove-section=.mwcats", "--remove-section=.mdebug"]
+    renames = unshared_renames(labels, addresses)
+    # objcopy matches --localize-symbol against the name --redefine-sym gives
+    for name in sorted({renames.get(n, n) for n in local}):
+        arguments += ["--localize-symbol", name]
+    for old, new in renames.items():
+        if old != new:
+            arguments += ["--redefine-sym", f"{old}={new}"]
+    subprocess.run(arguments + [obj], check=True, capture_output=True)
+    _forget(obj)
+    final = {name: h[5] for name, h in elf_section_headers(obj) if h[2] & 2}
+    wanted = {".dw4_data_%08x" % address: headers[index][1][5] for index, address in keep.items()}
+    if final != wanted:
+        raise ValueError("data extraction left a section other than the placed data, or changed a size")
+    tables = _elf_tables(obj)
+    table = [i for i, row in enumerate(tables.rows) if row[1] == 2] if tables else []
+    if len(table) != 1:
+        raise ValueError("data extraction left an unreadable symbol table")
+    defined = [name for name, _value, _size, info, _other, shndx in tables.symbols(table[0])
+               if shndx and info >> 4]
+    if defined:
+        raise ValueError(f"data extraction left a global definition, {defined[0]}")
+    for index, address in keep.items():
+        if (headers[index][1][1] != 8 and object_section(obj, ".dw4_data_%08x" % address)
+                != object_section(source, headers[index][0], index)):
+            raise ValueError(f"data extraction changed the bytes of the datum at 0x{address:x}")
 
 
 def compile_error(output):

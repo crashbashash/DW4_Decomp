@@ -1,16 +1,22 @@
+igMetaObject *g_igGuiSystemRenderer_metaObject;
+igMetaField *g_igGuiSystemRenderer_rootMetaField;
+igMetaField *g_igGuiSystemRenderer_modelMetaField;
+igMetaField *g_igGuiSystemRenderer_commonTraversalMetaField;
+igMetaField *g_igGuiSystemRenderer_displayListAttrMetaField;
+
 igMetaObject *FUN_0044e6b0(void) {
-    if (g_igGuiSystemRenderer_metaObject[0] == 0) {
-        g_igGuiSystemRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGuiSystemRenderer_metaObject == 0) {
+        g_igGuiSystemRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGuiSystemRenderer_metaObject[0];
+    return g_igGuiSystemRenderer_metaObject;
 }
 
 igMetaObject *igGuiSystemRenderer_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGuiSystemRenderer_metaObject[0];
+    igMetaObject *g = g_igGuiSystemRenderer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igGuiSystemRenderer_RunStaticInit();
-    return g_igGuiSystemRenderer_metaObject[0];
+    return g_igGuiSystemRenderer_metaObject;
 }
 
 int igGuiSystemRenderer_GetVTable(void) {
@@ -38,15 +44,17 @@ void igGuiSystemRenderer_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystemRenderer_Register);
 }
 
+static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { FUN_0019cf10, igGuiSystemModel_RunStaticInit, FUN_001a3dd0, FUN_00138160, 0 };
+
 void igGuiSystemRenderer_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGuiSystemRenderer_metaObject,
+        &g_igGuiSystemRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
         thunk_igGuiSystemRenderer_GetMetaObject,
-        igGuiSystemRenderer_className,
+        "igGuiSystemRenderer",
         0x1C, /* instance size */
         igGuiSystemRenderer_GetVTable,
         &igGuiSystemRenderer_InitFields,
@@ -59,6 +67,31 @@ void thunk_igGuiSystemRenderer_GetMetaObject(void) {
     igGuiSystemRenderer_GetMetaObject();
 }
 
+static FieldFactory g_igGuiSystemRenderer_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igGuiSystemRenderer_fieldTable[] = {
+    "_root",
+    "_model",
+    "_commonTraversal",
+    "_displayListAttr",
+};
+static igMetaField **g_igGuiSystemRenderer_fieldHandles[] = {
+    &g_igGuiSystemRenderer_rootMetaField,
+    &g_igGuiSystemRenderer_modelMetaField,
+    &g_igGuiSystemRenderer_commonTraversalMetaField,
+    &g_igGuiSystemRenderer_displayListAttrMetaField,
+};
+static int g_igGuiSystemRenderer_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+};
+
 void igGuiSystemRenderer_InitFields(void) {
     int temp_s2;
     void *temp_s1_4;
@@ -67,9 +100,9 @@ void igGuiSystemRenderer_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igGuiSystemRenderer_metaObject[0];
+    temp_s0 = (void *)g_igGuiSystemRenderer_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igGuiSystemRenderer_ctorTable[0], 4);
+    igMetaObject_CreateFields(temp_s0, g_igGuiSystemRenderer_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019cd50();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -79,6 +112,6 @@ void igGuiSystemRenderer_InitFields(void) {
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = FUN_00137fb0();
-    igMetaObject_NameFields(temp_s0, &g_igGuiSystemRenderer_fieldTable[0], &DAT_004d02a0[0], &DAT_004d02b0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igGuiSystemRenderer_fieldTable, g_igGuiSystemRenderer_fieldHandles, g_igGuiSystemRenderer_fieldOffsets, temp_s2);
 }
 

@@ -6,14 +6,14 @@ void igProgramFile_Reset(igProgramFile *self) {
     igFileView *file;
     char *name;
 
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    name = (char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
+    name = (char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
     oldName = (char *)self->_fileName;
     if (oldName != 0) {
         header = (int *)(oldName - 8);
@@ -44,14 +44,14 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     igFileView *stream;
     int refs;
     file->Reset();
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = (int)StringPool_Allocate(0x10);
         if (pool != 0) {
             pool = (int)StringPool_Construct((StringPool *)pool);
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    name = StringPool_Intern((StringPool *)g_stringPool[0], path);
+    name = StringPool_Intern((StringPool *)g_stringPool, path);
     old = (int *)file->path;
     if (old != 0) {
         header = old - 2;
@@ -73,7 +73,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     file->stream = (igFileView *)igFile_Create(allocator);
     igFile_SetFileName((int *)file->stream, file->path);
     if (file->stream->OpenWithMode(4) == g_resultFailure) {
-        igReport_Printf((const char *)&text_Unable_to_open_percent_s[0], (int)file->path);
+        igReport_Printf((const char *)"Unable to open: %s\n", (int)file->path);
         igReport_Flush();
         return g_resultFailure;
     }
@@ -90,7 +90,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     igFileView *stream;
     stream = self->stream;
     if (stream->Seek(offset, 0) == -1) {
-        igReport_Printf(text_Error_seeking_to_offset_0x_percent_x_in_percent_s, offset, self->path);
+        igReport_Printf("Error seeking to offset 0x%x in: %s\n", offset, self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;
@@ -99,7 +99,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     if (*dest == 0) {
         *dest = (void *)igObject_AllocateStorage((int)self, size);
         if (*dest == 0) {
-            igReport_Printf(text_Error_allocating_buffer_size_0x_percent_x, size, self->path);
+            igReport_Printf("Error allocating buffer size 0x%x in: %s\n", size, self->path);
             igReport_Flush();
             self->Close();
             *result = g_resultFailure.v;
@@ -109,7 +109,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     memset(*dest, 0, size);
     stream = self->stream;
     if (stream->Read(*dest, size, 1) != 1) {
-        igReport_Printf(text_Error_reading_percent_s, self->path);
+        igReport_Printf("Error reading: %s\n", self->path);
         igReport_Flush();
         self->Close();
         *result = g_resultFailure.v;

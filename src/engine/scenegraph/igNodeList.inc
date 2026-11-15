@@ -1,21 +1,23 @@
 int FUN_0019cba0(int arg0) {
     FUN_0019ccc0();
-    return igMetaObject_CreateInstance(*(int *)0x561830, arg0);
+    return igMetaObject_CreateInstance((int)g_igNodeList_metaObject, arg0);
 }
 
+igMetaObject *g_igNodeList_metaObject;
+
 igMetaObject *FUN_0019cbe0(void) {
-    if (g_igNodeList_metaObject[0] == 0) {
-        g_igNodeList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igNodeList_metaObject == 0) {
+        g_igNodeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igNodeList_metaObject[0];
+    return g_igNodeList_metaObject;
 }
 
 igMetaObject *igNodeList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igNodeList_metaObject[0];
+    igMetaObject *g = g_igNodeList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019ccc0();
-    return g_igNodeList_metaObject[0];
+    return g_igNodeList_metaObject;
 }
 
 int igNodeList_GetVTable(void) {
@@ -31,15 +33,17 @@ void FUN_0019ccc0(void)
     igMetaObject_RunStaticInit(igNodeList_Register);
 }
 
+static igMetaObjectCallback g_igNodeList_callbackList[] = { FUN_0019cf10, 0 };
+
 void igNodeList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igNodeList_metaObject),
+        &g_igNodeList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igNodeList_GetMetaObject,
-        igNodeList_className,
+        "igNodeList",
         0x14, /* instance size */
         igNodeList_GetVTable,
         0,

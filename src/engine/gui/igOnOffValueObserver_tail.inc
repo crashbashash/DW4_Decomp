@@ -1,5 +1,5 @@
 void Gap__Gui__igOnOffValueObserver__vfunc_24(void *arg0, void *arg1) {
-    if ((*(int *)((char *)arg1 + 8) == *(int *)0x58C290) || (*(int *)((char *)arg1 + 0) == 0)) {
+    if ((*(int *)((char *)arg1 + 8) == (int)g_igOnOffModel_valueMetaField) || (*(int *)((char *)arg1 + 0) == 0)) {
         FUN_00457ab0((igRadioGroup *)(*(int *)((char *)arg0 + 12)), (igRadioGroupSelectedObserver *)arg0, (int)arg0);
     }
 }
@@ -18,7 +18,7 @@ void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
             *pb = arg1;
             sp[0] = 2;
             sp[1] = 0;
-            sp[2] = DAT_0058c290[0];
+            sp[2] = (int)g_igOnOffModel_valueMetaField;
             igModel_NotifyViews((S_4578c0 *)arg0->t, (S_4578c0 *)sp);
         }
     }

@@ -1,6 +1,12 @@
+igMetaObject *g_beCriSfpData_metaObject;
+igMetaField *g_beCriSfpData_portNoMetaField;
+igMetaField *g_beCriSfpData_tblSizeMetaField;
+igMetaField *g_beCriSfpData_pcmSizeMetaField;
+igMetaField *g_beCriSfpData_isTransferMetaField;
+
 igMetaObject *FUN_00366540(void) {
-    if (g_beCriSfpData_metaObject[0] == 0 || !isValid(g_beCriSfpData_metaObject[0])) FUN_00366620();
-    return g_beCriSfpData_metaObject[0];
+    if (g_beCriSfpData_metaObject == 0 || !isValid(g_beCriSfpData_metaObject)) FUN_00366620();
+    return g_beCriSfpData_metaObject;
 }
 
 int beCriSfpData_GetVTable(void) {
@@ -41,11 +47,11 @@ void *beCriSfpData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCriSfpData_metaObject,
+        &g_beCriSfpData_metaObject,
         beBinDataObject_Register,
         beBinDataObject_GetPublishedMetaObject,
         beCriSfpData_GetMetaObject,
-        beCriSfpData_className,
+        "beCriSfpData",
         0x28, /* instance size */
         beCriSfpData_GetVTable,
         beCriSfpData_InitFields,
@@ -60,17 +66,42 @@ void beCriSfpData_GetMetaObject(void)
 }
 
 igMetaObject *FUN_003666e0(void) {
-    return g_beBinDataObject_metaObject[0];
+    return g_beBinDataObject_metaObject;
 }
+
+static FieldFactory g_beCriSfpData_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beCriSfpData_fieldTable[] = {
+    "_portNo",
+    "_tblSize",
+    "_pcmSize",
+    "_isTransfer",
+};
+static igMetaField **g_beCriSfpData_fieldHandles[] = {
+    &g_beCriSfpData_portNoMetaField,
+    &g_beCriSfpData_tblSizeMetaField,
+    &g_beCriSfpData_pcmSizeMetaField,
+    &g_beCriSfpData_isTransferMetaField,
+};
+static int g_beCriSfpData_fieldOffsets[] = {
+    24,
+    28,
+    32,
+    36,
+};
 
 void beCriSfpData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beCriSfpData_metaObject[0];
+    temp_s0 = (void *)g_beCriSfpData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beCriSfpData_ctorTable[0], 4);
-    igMetaObject_NameFields(temp_s0, &g_beCriSfpData_fieldTable[0], &DAT_004c73f0[0], &DAT_004c7400[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beCriSfpData_ctorTable, 4);
+    igMetaObject_NameFields(temp_s0, g_beCriSfpData_fieldTable, g_beCriSfpData_fieldHandles, g_beCriSfpData_fieldOffsets, temp_s1);
 }
 
 void FUN_00366760(void)

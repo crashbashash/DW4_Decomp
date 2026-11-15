@@ -1,12 +1,14 @@
+igMetaObject *g_beAction2InfoList_metaObject;
+
 igMetaObject *FUN_0036c9c0(void) {
-    igMetaObject *g = g_beAction2InfoList_metaObject[0];
+    igMetaObject *g = g_beAction2InfoList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0036ca50();
 done:
-    return g_beAction2InfoList_metaObject[0];
+    return g_beAction2InfoList_metaObject;
 }
 
 int beAction2InfoList_GetVTable(void) {
@@ -22,15 +24,17 @@ void FUN_0036ca50(void)
     igMetaObject_RunStaticInit(beAction2InfoList_Register);
 }
 
+static igMetaObjectCallback g_beAction2InfoList_callbackList[] = { FUN_0036cc80, 0 };
+
 void *beAction2InfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2InfoList_metaObject,
+        &g_beAction2InfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beAction2InfoList_GetMetaObject,
-        beAction2InfoList_className,
+        "beAction2InfoList",
         0x14, /* instance size */
         beAction2InfoList_GetVTable,
         0,

@@ -140,7 +140,7 @@ void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
     arg0->_focusedComponent = (int)arg1;
     sp30[0] = 2;
     sp30[1] = 0;
-    sp30[2] = DAT_0058c408[0];
+    sp30[2] = (int)g_igGuiSystemModel_focusedComponentMetaField;
     igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp30);
 }
 
@@ -157,7 +157,7 @@ void igGuiSystem_SetRootComponent(W *arg0, T_456cc0 *arg1) {
     *p = arg1;
     sp40[0] = 2;
     sp40[1] = 0;
-    sp40[2] = DAT_0058c400[0];
+    sp40[2] = (int)g_igGuiSystemModel_rootComponentMetaField;
     igModel_NotifyViews((S_4578c0 *)arg0->f12, (S_4578c0 *)sp40);
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }

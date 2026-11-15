@@ -1,9 +1,11 @@
+igMetaObject *g_igImageLoader_metaObject;
+
 igMetaObject *igImageLoader_GetMetaObject(void)
 {
-    igMetaObject *g = g_igImageLoader_metaObject[0];
+    igMetaObject *g = g_igImageLoader_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014da90();
-    return g_igImageLoader_metaObject[0];
+    return g_igImageLoader_metaObject;
 }
 
 void FUN_0014da90(void)
@@ -15,11 +17,11 @@ void igImageLoader_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igImageLoader_metaObject,
+        &g_igImageLoader_metaObject,
         igImageUtils_Register,
         igImageUtils_GetPublishedMetaObject,
         thunk_igImageLoader_GetMetaObject,
-        igImageLoader_className,
+        "igImageLoader",
         8, /* instance size */
         0,
         0,
@@ -33,6 +35,6 @@ void thunk_igImageLoader_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_0014db10(void) {
-    return g_igImageUtils_metaObject[0];
+    return g_igImageUtils_metaObject;
 }
 

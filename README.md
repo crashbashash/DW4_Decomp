@@ -6,8 +6,8 @@ readable source that rebuilds the retail executable byte for byte.
 <!-- progress:start -->
 | Region | Size | Matched | Readable |
 | --- | ---: | ---: | ---: |
-| Game | 1107 KB | 91.9 % | 41.1 % |
-| Alchemy engine | 1573 KB | 84.5 % | 39.1 % |
+| Game | 1107 KB | 91.9 % | 41.4 % |
+| Alchemy engine | 1573 KB | 84.5 % | 38.9 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
 | CRI ADX | 140 KB | 88.5 % | 52.0 % |
 | CRI Sofdec | 209 KB | 72.5 % | 29.5 % |

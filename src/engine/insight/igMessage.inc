@@ -1,9 +1,11 @@
+igMetaObject *g_igMessage_metaObject;
+
 igMetaObject *igMessage_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMessage_metaObject[0];
+    igMetaObject *g = g_igMessage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231700();
-    return g_igMessage_metaObject[0];
+    return g_igMessage_metaObject;
 }
 
 int igMessage_GetVTable(void) {
@@ -21,11 +23,11 @@ void igMessage_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMessage_metaObject,
+        &g_igMessage_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igMessage_GetMetaObject,
-        igMessage_className,
+        "igMessage",
         8, /* instance size */
         igMessage_GetVTable,
         0,

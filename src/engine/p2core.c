@@ -13,6 +13,9 @@
 #include "dw4/p2dma.h"
 #include "dw4/p2core.h"
 
+#pragma push
+#pragma readonly_strings on
+
 #define P2_CAPABILITY_COUNT 28
 #define P2_VU_PROGRAM_COUNT 384
 #define P2_COMPONENT_COUNT 5
@@ -1791,3 +1794,4 @@ p2DisplayList *p2RebaseDisplayList(unsigned int data, p2DisplayList *list) {
     list->ownsData = 0;
     return list;
 }
+#pragma pop

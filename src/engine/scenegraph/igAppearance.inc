@@ -1,16 +1,23 @@
+igMetaObject *g_igAppearance_metaObject;
+igMetaField *g_igAppearance_skinMetaField;
+igMetaField *g_igAppearance_attachedSkinsMetaField;
+igMetaField *g_igAppearance_attachedGraphsMetaField;
+igMetaField *g_igAppearance_segmentOverrideNameListMetaField;
+igMetaField *g_igAppearance_segmentOverrideGraphListMetaField;
+
 igMetaObject *FUN_001a6150(void) {
-    if (g_igAppearance_metaObject[0] == 0) {
-        g_igAppearance_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAppearance_metaObject == 0) {
+        g_igAppearance_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAppearance_metaObject[0];
+    return g_igAppearance_metaObject;
 }
 
 igMetaObject *igAppearance_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAppearance_metaObject[0];
+    igMetaObject *g = g_igAppearance_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a6450();
-    return g_igAppearance_metaObject[0];
+    return g_igAppearance_metaObject;
 }
 
 int igAppearance_GetVTable(void) {
@@ -89,15 +96,17 @@ void FUN_001a6450(void)
     igMetaObject_RunStaticInit(igAppearance_Register);
 }
 
+static igMetaObjectCallback g_igAppearance_callbackList[] = { FUN_00198290, FUN_00197f40, FUN_0019d360, igStringObjList_EnsureRegistered, FUN_0019ccc0, 0 };
+
 void igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAppearance_metaObject),
+        &g_igAppearance_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igAppearance_GetMetaObject,
-        igAppearance_className,
+        "igAppearance",
         0x20, /* instance size */
         igAppearance_GetVTable,
         &igAppearance_InitFields,
@@ -110,6 +119,35 @@ void thunk_igAppearance_GetMetaObject(void) {
     igAppearance_GetMetaObject();
 }
 
+static FieldFactory g_igAppearance_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igAppearance_fieldTable[] = {
+    "_skin",
+    "_attachedSkins",
+    "_attachedGraphs",
+    "_segmentOverrideNameList",
+    "_segmentOverrideGraphList",
+};
+static igMetaField **g_igAppearance_fieldHandles[] = {
+    &g_igAppearance_skinMetaField,
+    &g_igAppearance_attachedSkinsMetaField,
+    &g_igAppearance_attachedGraphsMetaField,
+    &g_igAppearance_segmentOverrideNameListMetaField,
+    &g_igAppearance_segmentOverrideGraphListMetaField,
+};
+static int g_igAppearance_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+};
+
 void igAppearance_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -119,9 +157,9 @@ void igAppearance_InitFields(void) {
     void *temp_s2_5;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igAppearance_metaObject[0];
+    temp_s1 = (void *)g_igAppearance_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igAppearance_ctorTable[0], 5);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igAppearance_ctorTable, 5);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00197fd0();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -136,6 +174,6 @@ void igAppearance_InitFields(void) {
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0019cbe0();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igAppearance_fieldTable[0], &DAT_0048cea0[0], &DAT_0048cec0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAppearance_fieldTable, g_igAppearance_fieldHandles, g_igAppearance_fieldOffsets, temp_s0);
 }
 

@@ -1,16 +1,18 @@
+igMetaObject *g_igSkeletonBoneInfoList_metaObject;
+
 igMetaObject *FUN_001987f0(void) {
-    if (g_igSkeletonBoneInfoList_metaObject[0] == 0) {
-        g_igSkeletonBoneInfoList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igSkeletonBoneInfoList_metaObject == 0) {
+        g_igSkeletonBoneInfoList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igSkeletonBoneInfoList_metaObject[0];
+    return g_igSkeletonBoneInfoList_metaObject;
 }
 
 igMetaObject *igSkeletonBoneInfoList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSkeletonBoneInfoList_metaObject[0];
+    igMetaObject *g = g_igSkeletonBoneInfoList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001988d0();
-    return g_igSkeletonBoneInfoList_metaObject[0];
+    return g_igSkeletonBoneInfoList_metaObject;
 }
 
 int igSkeletonBoneInfoList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_001988d0(void)
     igMetaObject_RunStaticInit(igSkeletonBoneInfoList_Register);
 }
 
+static igMetaObjectCallback g_igSkeletonBoneInfoList_callbackList[] = { FUN_00198a40, 0 };
+
 void igSkeletonBoneInfoList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igSkeletonBoneInfoList_metaObject),
+        &g_igSkeletonBoneInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igSkeletonBoneInfoList_GetMetaObject,
-        igSkeletonBoneInfoList_className,
+        "igSkeletonBoneInfoList",
         0x14, /* instance size */
         igSkeletonBoneInfoList_GetVTable,
         0,

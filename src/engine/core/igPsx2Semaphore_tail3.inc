@@ -1,5 +1,5 @@
 int igPsx2Semaphore_GetMeta(void) {
-    return ((int *)g_igPsx2Semaphore_metaObject)[0];
+    return (int)g_igPsx2Semaphore_metaObject;
 }
 
 /* IgPsx2Semaphore vtable slot 25, tells whether the semaphore has been created. _semaID (+12)

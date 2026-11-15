@@ -1,5 +1,5 @@
 int Gap__Gfx__igVertexArray2Helper__vfunc_22(void) {
-    return (int)g_igVertexArray2Helper_metaObject[0];
+    return (int)g_igVertexArray2Helper_metaObject;
 }
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_55(igVertexArray2Helper *self) {

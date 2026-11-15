@@ -1,8 +1,9 @@
 # The data regions: what is in the 1.4 MB that is not code
 
-`tools/datamap.py` divides the image into code and data and reports how much of the data is
-*identified* (see [`progress-metrics.md`](progress-metrics.md) for why that number is published).
-This page is the identification step above that accounting: what the regions actually are.
+`tools/datamap.py` divides the image into code and data. Its headline is the data the source defines and
+`make check` compared with retail; the rest it classifies from the recovered metadata (see
+[`progress-metrics.md`](progress-metrics.md)). This page is the identification step behind that
+classification: what the regions actually are, and so which units their data belongs to.
 
 The starting fact is that the unclassified data is **highly concentrated**: 20 regions hold
 880,360 of the 1,162,652 unclassified bytes (76 %), and three of them hold 642 KB between them
@@ -56,10 +57,14 @@ Two consequences worth stating:
   would carry the `0x7fELF` magic and the whole image contains exactly one such word, outside these
   regions. What is here is the *library version strings* the SDK registers, relevant to
   [`binary.md`](binary.md).
-* **The data percentage is a floor set by the dumps, not by what is known.** Three of these five
-  are mechanically recoverable: the vtable region by enumerating `[rtti|0, 0, codeptr…]` runs (which
-  would extend `data/vtables.json` well beyond its RTTI-only 478), the reflection metadata from
-  `data/reflection.json`'s own tables, and the strings from `data/strings.json`.
+* **`0x4833c8` is not one object.** Its 321,816 bytes are the whole initialised-data sequence of the
+  link from there, every library's tables and strings in link order; the SDK version strings and the VU
+  program metadata are only what names its first stretch. `tools/datamap.py` therefore classifies it
+  datum by datum, like every other region: strings, pointer tables and vtables by their extents, the
+  rest from the addresses code and pointers name (`data/data-layout.tsv`, `scripts/data_layout.py`).
+  The microcode, the descriptors and the kernel patch arrays are `config/SLUS-20836/regions.tsv` rows
+  and count as whole regions. Identifying a region does not decompile it: its bytes count as matched
+  only once the unit that owns them defines them.
 
 ## Unclaimed code hiding inside the "data" regions
 

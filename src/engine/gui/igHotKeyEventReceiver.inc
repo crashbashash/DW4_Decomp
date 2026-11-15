@@ -1,16 +1,19 @@
+igMetaObject *g_igHotKeyEventReceiver_metaObject;
+igMetaField *g_igHotKeyEventReceiver_hotKeyListMetaField;
+
 igMetaObject *FUN_0044d840(void) {
-    if (g_igHotKeyEventReceiver_metaObject[0] == 0) {
-        g_igHotKeyEventReceiver_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igHotKeyEventReceiver_metaObject == 0) {
+        g_igHotKeyEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igHotKeyEventReceiver_metaObject[0];
+    return g_igHotKeyEventReceiver_metaObject;
 }
 
 igMetaObject *igHotKeyEventReceiver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igHotKeyEventReceiver_metaObject[0];
+    igMetaObject *g = g_igHotKeyEventReceiver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igHotKeyEventReceiver_RunStaticInit();
-    return g_igHotKeyEventReceiver_metaObject[0];
+    return g_igHotKeyEventReceiver_metaObject;
 }
 
 int igHotKeyEventReceiver_GetVTable(void) {
@@ -41,15 +44,17 @@ void igHotKeyEventReceiver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igHotKeyEventReceiver_Register);
 }
 
+static igMetaObjectCallback g_igHotKeyEventReceiver_callbackList[] = { igHotKeyBindingList_RunStaticInit, 0 };
+
 void igHotKeyEventReceiver_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igHotKeyEventReceiver_metaObject,
+        &g_igHotKeyEventReceiver_metaObject,
         igEventReceiver_Register,
         igEventReceiver_GetPublishedMetaObject,
         thunk_igHotKeyEventReceiver_GetMetaObject,
-        igHotKeyEventReceiver_className,
+        "igHotKeyEventReceiver",
         0xC, /* instance size */
         igHotKeyEventReceiver_GetVTable,
         &igHotKeyEventReceiver_InitFields,
@@ -62,17 +67,30 @@ void thunk_igHotKeyEventReceiver_GetMetaObject(void) {
     igHotKeyEventReceiver_GetMetaObject();
 }
 
+static FieldFactory g_igHotKeyEventReceiver_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igHotKeyEventReceiver_fieldTable[] = {
+    "_hotKeyList",
+};
+static igMetaField **g_igHotKeyEventReceiver_fieldHandles[] = {
+    &g_igHotKeyEventReceiver_hotKeyListMetaField,
+};
+static int g_igHotKeyEventReceiver_fieldOffsets[] = {
+    8,
+};
+
 void igHotKeyEventReceiver_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igHotKeyEventReceiver_metaObject[0];
+    temp_s0 = (void *)g_igHotKeyEventReceiver_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igHotKeyEventReceiver_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igHotKeyEventReceiver_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044dab0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igHotKeyEventReceiver_fieldTable[0], &DAT_004d0118[0], &DAT_004d0120[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igHotKeyEventReceiver_fieldTable, g_igHotKeyEventReceiver_fieldHandles, g_igHotKeyEventReceiver_fieldOffsets, temp_s2);
 }
 

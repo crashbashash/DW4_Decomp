@@ -1,12 +1,14 @@
+igMetaObject *g_beHitLandModelInfoRam_metaObject;
+
 igMetaObject *FUN_0035d300(void) {
-    igMetaObject *g = g_beHitLandModelInfoRam_metaObject[0];
+    igMetaObject *g = g_beHitLandModelInfoRam_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0035d3f0();
 done:
-    return g_beHitLandModelInfoRam_metaObject[0];
+    return g_beHitLandModelInfoRam_metaObject;
 }
 
 int beHitLandModelInfoRam_GetVTable(void) {
@@ -32,11 +34,11 @@ void *beHitLandModelInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beHitLandModelInfoRam_metaObject,
+        &g_beHitLandModelInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beHitLandModelInfoRam_GetMetaObject,
-        beHitLandModelInfoRam_className,
+        "beHitLandModelInfoRam",
         0x2c, /* instance size */
         beHitLandModelInfoRam_GetVTable,
         0,

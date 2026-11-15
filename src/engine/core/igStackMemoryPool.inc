@@ -1,14 +1,27 @@
+igMetaObject *g_igStackMemoryPool_metaObject;
+igMetaField *g_igStackMemoryPool_poolIndexMetaField;
+igMetaField *g_igStackMemoryPool_alignmentMetaField;
+igMetaField *g_igStackMemoryPool_rawMemoryMetaField;
+igMetaField *g_igStackMemoryPool_totalSizeMetaField;
+igMetaField *g_igStackMemoryPool_elementSizeMetaField;
+igMetaField *g_igStackMemoryPool_stackPtrMetaField;
+igMetaField *g_igStackMemoryPool_nextIntMetaField;
+igMetaField *g_igStackMemoryPool_isActiveMetaField;
+igMetaField *g_igStackMemoryPool_isAlchemyMemoryMetaField;
+igMetaField *g_igStackMemoryPool_eventTrackerMetaField;
+int g_igMallocMemoryPool_messageLevelMetaEnum;
+
 void *igStackMemoryPool_Create(int pool) {
     igStackMemoryPool_EnsureRegistered();
-    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586B20), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance(g_igStackMemoryPool_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igStackMemoryPool_GetMetaObject(void)
 {
-    igMetaObject *g = g_igStackMemoryPool_metaObject[0];
+    igMetaObject *g = g_igStackMemoryPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igStackMemoryPool_EnsureRegistered();
-    return g_igStackMemoryPool_metaObject[0];
+    return g_igStackMemoryPool_metaObject;
 }
 
 int igStackMemoryPool_GetVTable(void) {
@@ -20,7 +33,7 @@ int igStackMemoryPool_GetVTable(void) {
     igMemoryPool_Initialize((int **)&pool);
     pool._vtable = (int)&g_igStackMemoryPool_vtable[0];
     pool._eventTracker = 0;
-    r = *(int *)((char *)&pool + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    r = *(int *)((char *)&pool + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     pool._vtable = (int)&g_igStackMemoryPool_vtable[0];
     tracker = (igObject **)&pool._eventTracker;
     if (tracker) {
@@ -39,20 +52,22 @@ void igStackMemoryPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStackMemoryPool_Register);
 }
 
+static igMetaObjectCallback g_igStackMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, 0 };
+
 void igStackMemoryPool_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igStackMemoryPool_metaObject,
+        &g_igStackMemoryPool_metaObject,
         (igMetaObjectRegisterFunction)igMemoryPool_Register,
         igMemoryPool_GetPublishedMetaObject,
         igStackMemoryPool_GetMetaObjectFunction,
-        igStackMemoryPool_className,
+        "igStackMemoryPool",
         0x98,
         igStackMemoryPool_GetVTable,
         igStackMemoryPool_InitFields,
         0,
-        (igMetaObjectCallback *)g_igStackMemoryPool_callbackList
+        g_igStackMemoryPool_callbackList
     );
 }
 
@@ -60,18 +75,67 @@ void igStackMemoryPool_GetMetaObjectFunction(void) {
     igStackMemoryPool_GetMetaObject();
 }
 
+static FieldFactory g_igStackMemoryPool_ctorTable[] = {
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igUnsignedShortMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igUnsignedLongMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igStackMemoryPool_fieldTable[] = {
+    "_poolIndex",
+    "_alignment",
+    "_rawMemory",
+    "_totalSize",
+    "_elementSize",
+    "_stackPtr",
+    "_nextInt",
+    "_isActive",
+    "_isAlchemyMemory",
+    "_eventTracker",
+};
+static igMetaField **g_igStackMemoryPool_fieldDescriptors[] = {
+    &g_igStackMemoryPool_poolIndexMetaField,
+    &g_igStackMemoryPool_alignmentMetaField,
+    &g_igStackMemoryPool_rawMemoryMetaField,
+    &g_igStackMemoryPool_totalSizeMetaField,
+    &g_igStackMemoryPool_elementSizeMetaField,
+    &g_igStackMemoryPool_stackPtrMetaField,
+    &g_igStackMemoryPool_nextIntMetaField,
+    &g_igStackMemoryPool_isActiveMetaField,
+    &g_igStackMemoryPool_isAlchemyMemoryMetaField,
+    &g_igStackMemoryPool_eventTrackerMetaField,
+};
+static int g_igStackMemoryPool_fieldOffsets[] = {
+    144,
+    112,
+    116,
+    120,
+    128,
+    132,
+    136,
+    140,
+    141,
+    148,
+};
+
 void igStackMemoryPool_InitFields(void) {
     int base;
     void *field;
     void *meta;
 
-    meta = (void *)g_igStackMemoryPool_metaObject[0];
+    meta = (void *)g_igStackMemoryPool_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igStackMemoryPool_ctorTable[0], 0xA);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igStackMemoryPool_ctorTable, 0xA);
     igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))), -1);
     igUnsignedShortMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1))), 4);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9)));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igStackMemoryPool_fieldTable[0], (igMetaField ***)&g_igStackMemoryPool_fieldDescriptors[0], &g_igStackMemoryPool_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igStackMemoryPool_fieldTable, g_igStackMemoryPool_fieldDescriptors, g_igStackMemoryPool_fieldOffsets, base);
 }
 

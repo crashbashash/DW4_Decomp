@@ -5,7 +5,7 @@ int igPsx2ThreadManager_GetCurrentThread(igPsx2ThreadManager *self) {
 
     threadId = GetThreadId();
     savedPriority = ChangeThreadPriority(threadId, 1);
-    thread = igObjectList_FindByIntField((igTDataList<int> *)self->_threadList, (igMetaField *)g_igPsx2Thread_threadIDField[0], GetThreadId());
+    thread = igObjectList_FindByIntField((igTDataList<int> *)self->_threadList, (igMetaField *)g_igPsx2Thread_threadIDField, GetThreadId());
     ChangeThreadPriority(threadId, savedPriority);
     return thread;
 }
@@ -85,6 +85,6 @@ void Memory_ReallocateAligned16(int block, int size, int selector) {
 }
 
 int igPsx2ThreadManager_GetMeta(void) {
-    return ((int *)g_igPsx2ThreadManager_metaObject)[0];
+    return (int)g_igPsx2ThreadManager_metaObject;
 }
 

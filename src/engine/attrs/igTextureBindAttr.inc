@@ -1,25 +1,29 @@
+igMetaObject *g_igTextureBindAttr_metaObject;
+igMetaField *g_igTextureBindAttr_textureMetaField;
+igMetaField *g_igTextureBindAttr_unitIDMetaField;
+
 void FUN_00132810(int arg0) {
     FUN_00132a00();
     igMetaObject_CreateInstance(*(int *)0x55ED88, arg0);
 }
 
 igMetaObject *FUN_00132850(void) {
-    if (g_igTextureBindAttr_metaObject[0] == 0) {
-        g_igTextureBindAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTextureBindAttr_metaObject == 0) {
+        g_igTextureBindAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTextureBindAttr_metaObject[0];
+    return g_igTextureBindAttr_metaObject;
 }
 
 igMetaObject *igTextureBindAttr_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igTextureBindAttr_metaObject[0] != 0) {
-        ready = (g_igTextureBindAttr_metaObject[0]->_validity & 4) != 0;
+    if (g_igTextureBindAttr_metaObject != 0) {
+        ready = (g_igTextureBindAttr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00132a00();
 done:
-    return g_igTextureBindAttr_metaObject[0];
+    return g_igTextureBindAttr_metaObject;
 }
 
 int igTextureBindAttr_GetVTable(void) {
@@ -61,15 +65,17 @@ void FUN_00132a00(void)
     igMetaObject_RunStaticInit(igTextureBindAttr_Register);
 }
 
+static igMetaObjectCallback g_igTextureBindAttr_callbackList[] = { FUN_00132cf0, 0 };
+
 void igTextureBindAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igTextureBindAttr_metaObject,
+        &g_igTextureBindAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igTextureBindAttr_GetMetaObject,
-        igTextureBindAttr_className,
+        "igTextureBindAttr",
         0x14, /* instance size */
         igTextureBindAttr_GetVTable,
         &igTextureBindAttr_InitFields,
@@ -82,18 +88,35 @@ void thunk_igTextureBindAttr_GetMetaObject(void) {
     igTextureBindAttr_GetMetaObject();
 }
 
+static FieldFactory g_igTextureBindAttr_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igTextureBindAttr_fieldTable[] = {
+    "_texture",
+    "_unitID",
+};
+static igMetaField **g_igTextureBindAttr_fieldHandles[] = {
+    &g_igTextureBindAttr_textureMetaField,
+    &g_igTextureBindAttr_unitIDMetaField,
+};
+static int g_igTextureBindAttr_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void igTextureBindAttr_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
-    temp_s0 = (void *)g_igTextureBindAttr_metaObject[0];
+    igMetaObject *temp_s0;
+    temp_s0 = g_igTextureBindAttr_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igTextureBindAttr_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igTextureBindAttr_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_00132ba0();
     temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(int *)((char *)temp_s1 + 48) = (int)FUN_00140e40;
-    igMetaObject_NameFields(temp_s0, &g_igTextureBindAttr_fieldTable[0], &DAT_00485cc0[0], &DAT_00485cc8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igTextureBindAttr_fieldTable, g_igTextureBindAttr_fieldHandles, g_igTextureBindAttr_fieldOffsets, temp_s2);
 }
 
 void thunk_FUN_00140f40(void) {

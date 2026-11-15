@@ -1,21 +1,24 @@
+igMetaObject *g_beNDMWMdlPlayer2_metaObject;
+igMetaField *g_beNDMWMdlPlayer2_padManagerMetaField;
+
 void beNDMWMdlPlayer2_CreateInstance(int arg0) {
     FUN_003bf3f0();
-    igMetaObject_CreateInstance(*(int *)0x58B368, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2_metaObject, arg0);
 }
 
 igMetaObject *FUN_003bf1f0(void) {
-    if (g_beNDMWMdlPlayer2_metaObject[0] == 0) {
-        g_beNDMWMdlPlayer2_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlPlayer2_metaObject == 0) {
+        g_beNDMWMdlPlayer2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlPlayer2_metaObject[0];
+    return g_beNDMWMdlPlayer2_metaObject;
 }
 
 void *beNDMWMdlPlayer2_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlPlayer2_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlPlayer2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bf3f0();
     }
-    return g_beNDMWMdlPlayer2_metaObject[0];
+    return g_beNDMWMdlPlayer2_metaObject;
 }
 
 int beNDMWMdlPlayer2_GetVTable(void) {
@@ -81,15 +84,17 @@ void FUN_003bf3f0(void)
     igMetaObject_RunStaticInit(beNDMWMdlPlayer2_Register);
 }
 
+static igMetaObjectCallback g_beNDMWMdlPlayer2_callbackList[] = { FUN_0034cb30, 0 };
+
 void *beNDMWMdlPlayer2_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlPlayer2_metaObject,
+        &g_beNDMWMdlPlayer2_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlPlayer2_GetMetaObject,
-        beNDMWMdlPlayer2_className,
+        "beNDMWMdlPlayer2",
         0x30, /* instance size */
         beNDMWMdlPlayer2_GetVTable,
         beNDMWMdlPlayer2_InitFields,
@@ -107,17 +112,30 @@ int FUN_003bf4b0(void) {
     return g_beModelCtrl_metaObject[0];
 }
 
+static FieldFactory g_beNDMWMdlPlayer2_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWMdlPlayer2_fieldTable[] = {
+    "_padManager",
+};
+static igMetaField **g_beNDMWMdlPlayer2_fieldHandles[] = {
+    &g_beNDMWMdlPlayer2_padManagerMetaField,
+};
+static int g_beNDMWMdlPlayer2_fieldOffsets[] = {
+    44,
+};
+
 void beNDMWMdlPlayer2_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWMdlPlayer2_metaObject[0];
+    temp_s0 = g_beNDMWMdlPlayer2_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlPlayer2_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlPlayer2_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWMdlPlayer2_fieldTable[0], &DAT_004ca7d0[0], &DAT_004ca7d8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWMdlPlayer2_fieldTable, g_beNDMWMdlPlayer2_fieldHandles, g_beNDMWMdlPlayer2_fieldOffsets, temp_s2);
 }
 

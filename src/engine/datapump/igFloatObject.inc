@@ -1,9 +1,12 @@
+igMetaObject *g_igFloatObject_metaObject;
+igMetaField *g_igFloatObject_valueMetaField;
+
 igMetaObject *igFloatObject_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFloatObject_metaObject[0];
+    igMetaObject *g = g_igFloatObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001e5050();
-    return g_igFloatObject_metaObject[0];
+    return g_igFloatObject_metaObject;
 }
 
 int igFloatObject_GetVTable(void) {
@@ -22,11 +25,11 @@ void igFloatObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFloatObject_metaObject,
+        &g_igFloatObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igFloatObject_GetMetaObject,
-        igFloatObject_className,
+        "igFloatObject",
         0xC, /* instance size */
         igFloatObject_GetVTable,
         &igFloatObject_InitFields,
@@ -39,13 +42,26 @@ void thunk_igFloatObject_GetMetaObject(void) {
     igFloatObject_GetMetaObject();
 }
 
-void igFloatObject_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igFloatObject_ctorTable[] = {
+    igFloatMetaField_Create,
+};
+static const char *g_igFloatObject_fieldTable[] = {
+    text_value,
+};
+static igMetaField **g_igFloatObject_fieldHandles[] = {
+    &g_igFloatObject_valueMetaField,
+};
+static int g_igFloatObject_fieldOffsets[] = {
+    8,
+};
 
-    temp_s0 = (void *)g_igFloatObject_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igFloatObject_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_igFloatObject_fieldTable[0], &DAT_0048db70[0], &DAT_0048db78[0], temp_s1);
+void igFloatObject_InitFields(void) {
+    int firstField;
+    igMetaObject *meta;
+
+    meta = g_igFloatObject_metaObject;
+    firstField = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igFloatObject_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igFloatObject_fieldTable, g_igFloatObject_fieldHandles, g_igFloatObject_fieldOffsets, firstField);
 }
 

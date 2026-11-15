@@ -1,19 +1,23 @@
+igMetaObject *g_beXboxImage24k_metaObject;
+igMetaField *g_beXboxImage24k_dataSizeMetaField;
+igMetaField *g_beXboxImage24k_dataMetaField;
+
 igMetaObject *FUN_00347600(void) {
-    if (g_beXboxImage24k_metaObject[0] == 0) {
-        g_beXboxImage24k_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beXboxImage24k_metaObject == 0) {
+        g_beXboxImage24k_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beXboxImage24k_metaObject[0];
+    return g_beXboxImage24k_metaObject;
 }
 
 void *FUN_00347650(void) {
     unsigned char b;
-    if (((void * *)g_beXboxImage24k_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)g_beXboxImage24k_metaObject)[0]) + 36) & 4) != 0;
+    if (((void * *)&g_beXboxImage24k_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)&g_beXboxImage24k_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003476e0();
 done:
-    return ((void * *)g_beXboxImage24k_metaObject)[0];
+    return ((void * *)&g_beXboxImage24k_metaObject)[0];
 }
 
 int beXboxImage24k_GetVTable(void) {
@@ -33,11 +37,11 @@ void *beXboxImage24k_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beXboxImage24k_metaObject,
+        &g_beXboxImage24k_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beXboxImage24k_GetMetaObject,
-        beXboxImage24k_className,
+        "beXboxImage24k",
         0x10, /* instance size */
         beXboxImage24k_GetVTable,
         beXboxImage24k_InitFields,
@@ -51,16 +55,33 @@ void beXboxImage24k_GetMetaObject(void)
     FUN_00347650();
 }
 
+static FieldFactory g_beXboxImage24k_ctorTable[] = {
+    igIntMetaField_Create,
+    igMemoryRefMetaField_Create,
+};
+static const char *g_beXboxImage24k_fieldTable[] = {
+    "_dataSize",
+    "_data",
+};
+static igMetaField **g_beXboxImage24k_fieldHandles[] = {
+    &g_beXboxImage24k_dataSizeMetaField,
+    &g_beXboxImage24k_dataMetaField,
+};
+static int g_beXboxImage24k_fieldOffsets[] = {
+    12,
+    8,
+};
+
 void beXboxImage24k_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beXboxImage24k_metaObject[0];
+    temp_s0 = (void *)g_beXboxImage24k_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beXboxImage24k_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beXboxImage24k_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &g_beXboxImage24k_fieldTable[0], &DAT_004c3d70[0], &DAT_004c3d78[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beXboxImage24k_fieldTable, g_beXboxImage24k_fieldHandles, g_beXboxImage24k_fieldOffsets, temp_s2);
 }
 

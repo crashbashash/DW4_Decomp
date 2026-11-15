@@ -3,9 +3,9 @@ void FUN_001c51d0(void) {
     char *name;
     ObjectRefFieldView *held;
     if (((ObjectRefFieldView * *)DAT_00562768)[0] == 0) {
-        field.p = igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
+        field.p = (ObjectRefFieldView *)igObjectRefMetaField_Create((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0]));
         ((ObjectRefFieldView * *)DAT_00562768)[0] = field.p;
-        name = internText(text_geoSet);
+        name = internText("_geoSet");
         igMetaField_SetFieldName(field.p, &name);
         if (name != 0) {
             int *header = (int *)name - 2;
@@ -18,7 +18,7 @@ void FUN_001c51d0(void) {
         field.p->_flag52 = 1;
         field.p->_flag38 = 0;
         field.p->_metaObject = igGeometrySetAttr_GetMetaObject();
-        igMetaObject_AddFieldAndFinalize(g_igGeometry_metaObject[0], field.p);
+        igMetaObject_AddFieldAndFinalize(g_igGeometry_metaObject, field.p);
         held = field.p;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
@@ -262,7 +262,7 @@ void FUN_001c59f0(OO *arg0, int arg1, int arg2, int arg3) {
     igMatrix44f_SetIdentity(arg2);
     for (i = 0; i < arg1; i++) {
         e = (EE *)arg0->list->items[i];
-        if (igMetaObject_IsOfType(((DW4VC_88_0 *)(e))->vX(), g_igTransform_metaObject[0]) != 0) {
+        if (igMetaObject_IsOfType(((DW4VC_88_0 *)(e))->vX(), g_igTransform_metaObject) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_1 *)(e))->vX(arg3);
                 FUN_001906d0(arg2, (char *)e + 0x20);

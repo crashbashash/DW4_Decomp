@@ -1,6 +1,10 @@
+igMetaObject *g_beSaveUtilInfoRam_metaObject;
+igMetaField *g_beSaveUtilInfoRam_isRdyMetaField;
+igMetaField *g_beSaveUtilInfoRam_deliverMetaField;
+
 igMetaObject *FUN_00346810(void) {
-    if (g_beSaveUtilInfoRam_metaObject[0] == 0 || !isValid(g_beSaveUtilInfoRam_metaObject[0])) FUN_00346950();
-    return g_beSaveUtilInfoRam_metaObject[0];
+    if (g_beSaveUtilInfoRam_metaObject == 0 || !isValid(g_beSaveUtilInfoRam_metaObject)) FUN_00346950();
+    return g_beSaveUtilInfoRam_metaObject;
 }
 
 int beSaveUtilInfoRam_GetVTable(void) {
@@ -43,15 +47,17 @@ void FUN_00346950(void)
     igMetaObject_RunStaticInit(beSaveUtilInfoRam_Register);
 }
 
+static igMetaObjectCallback g_beSaveUtilInfoRam_callbackList[] = { FUN_0034b260, 0 };
+
 void *beSaveUtilInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSaveUtilInfoRam_metaObject,
+        &g_beSaveUtilInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beSaveUtilInfoRam_GetMetaObject,
-        beSaveUtilInfoRam_className,
+        "beSaveUtilInfoRam",
         0x34, /* instance size */
         beSaveUtilInfoRam_GetVTable,
         beSaveUtilInfoRam_InitFields,
@@ -65,17 +71,34 @@ void beSaveUtilInfoRam_GetMetaObject(void)
     FUN_00346810();
 }
 
+static FieldFactory g_beSaveUtilInfoRam_ctorTable[] = {
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beSaveUtilInfoRam_fieldTable[] = {
+    "_isRdy",
+    "_deliver",
+};
+static igMetaField **g_beSaveUtilInfoRam_fieldHandles[] = {
+    &g_beSaveUtilInfoRam_isRdyMetaField,
+    &g_beSaveUtilInfoRam_deliverMetaField,
+};
+static int g_beSaveUtilInfoRam_fieldOffsets[] = {
+    44,
+    48,
+};
+
 void beSaveUtilInfoRam_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSaveUtilInfoRam_metaObject[0];
+    temp_s0 = (void *)g_beSaveUtilInfoRam_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSaveUtilInfoRam_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beSaveUtilInfoRam_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034b0d0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beSaveUtilInfoRam_fieldTable[0], &DAT_004c3c38[0], &DAT_004c3c40[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSaveUtilInfoRam_fieldTable, g_beSaveUtilInfoRam_fieldHandles, g_beSaveUtilInfoRam_fieldOffsets, temp_s2);
 }
 

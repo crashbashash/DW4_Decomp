@@ -1,9 +1,13 @@
+igMetaObject *g_beNumVerData_metaObject;
+igMetaField *g_beNumVerData_dispMetaField;
+igMetaField *g_beNumVerData_verDataListMetaField;
+
 void *FUN_0034da80(void) {
-    igMetaObject *g = g_beNumVerData_metaObject[0];
+    igMetaObject *g = g_beNumVerData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034db60();
     }
-    return g_beNumVerData_metaObject[0];
+    return g_beNumVerData_metaObject;
 }
 
 int beNumVerData_GetVTable(void) {
@@ -33,15 +37,17 @@ void FUN_0034db60(void)
     igMetaObject_RunStaticInit(beNumVerData_Register);
 }
 
+static igMetaObjectCallback g_beNumVerData_callbackList[] = { FUN_0034ddb0, 0 };
+
 void *beNumVerData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNumVerData_metaObject,
+        &g_beNumVerData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beNumVerData_GetMetaObject,
-        beNumVerData_className,
+        "beNumVerData",
         0x10, /* instance size */
         beNumVerData_GetVTable,
         beNumVerData_InitFields,
@@ -55,18 +61,35 @@ void beNumVerData_GetMetaObject(void)
     FUN_0034da80();
 }
 
+static FieldFactory g_beNumVerData_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNumVerData_fieldTable[] = {
+    "_disp",
+    "_verDataList",
+};
+static igMetaField **g_beNumVerData_fieldHandles[] = {
+    &g_beNumVerData_dispMetaField,
+    &g_beNumVerData_verDataListMetaField,
+};
+static int g_beNumVerData_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void beNumVerData_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beNumVerData_metaObject[0];
+    temp_s0 = (void *)g_beNumVerData_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNumVerData_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beNumVerData_ctorTable, 2);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034dcd0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNumVerData_fieldTable[0], &DAT_004c49e8[0], &DAT_004c49f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNumVerData_fieldTable, g_beNumVerData_fieldHandles, g_beNumVerData_fieldOffsets, temp_s2);
 }
 

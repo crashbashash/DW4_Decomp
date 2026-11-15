@@ -1,21 +1,56 @@
-int FUN_00147030(void) {
-    if (DAT_0055f758[0] == 0) {
-        DAT_0055f758[0] = igMetaEnum_Create(&text_ControllerPhase[0], &DAT_00487580[0], &DAT_004875a0[0], 8);
+static const char *g_igPsx2Controller_controllerPhaseNames[] = {
+    "SET_TYPE", "SET_ANALOG_SWITCH", "WAIT_SET_ANALOG_SWITCH", "SET_ACTUATORS",
+    "WAIT_SET_ACTUATORS", "SET_PRESSURE_BUTTONS", "WAIT_SET_PRESSURE_BUTTONS", "GET_DATA",
+};
+static int g_igPsx2Controller_controllerPhaseValues[] = {
+    0, 1, 2, 3, 4, 5, 6, 7,
+};
+igMetaEnum *g_igPsx2Controller_controllerPhaseMetaEnum;
+
+igMetaEnum *FUN_00147030(void) {
+    if (g_igPsx2Controller_controllerPhaseMetaEnum == 0) {
+        g_igPsx2Controller_controllerPhaseMetaEnum = igMetaEnum_Create("ControllerPhase", g_igPsx2Controller_controllerPhaseNames, g_igPsx2Controller_controllerPhaseValues, 8);
     }
-    return DAT_0055f758[0];
+    return g_igPsx2Controller_controllerPhaseMetaEnum;
 }
+
+igMetaObject *g_igPsx2Controller_metaObject;
+igMetaField *g_igPsx2Controller_idMetaField;
+igMetaField *g_igPsx2Controller_curr_idMetaField;
+igMetaField *g_igPsx2Controller_term_idMetaField;
+igMetaField *g_igPsx2Controller_buttonCountMetaField;
+igMetaField *g_igPsx2Controller_joyCountMetaField;
+igMetaField *g_igPsx2Controller_attachedWindowMetaField;
+igMetaField *g_igPsx2Controller_xMetaField;
+igMetaField *g_igPsx2Controller_yMetaField;
+igMetaField *g_igPsx2Controller_connectedMetaField;
+igMetaField *g_igPsx2Controller_typeMetaField;
+igMetaField *g_igPsx2Controller_slotMetaField;
+igMetaField *g_igPsx2Controller_portMetaField;
+igMetaField *g_igPsx2Controller_buttonStateMetaField;
+igMetaField *g_igPsx2Controller_dmaBufferMetaField;
+igMetaField *g_igPsx2Controller_oldJoyXMetaField;
+igMetaField *g_igPsx2Controller_oldJoyYMetaField;
+igMetaField *g_igPsx2Controller_analogStateMetaField;
+igMetaField *g_igPsx2Controller_lockStateMetaField;
+igMetaField *g_igPsx2Controller_usePressureMetaField;
+igMetaField *g_igPsx2Controller_hasPressureMetaField;
+igMetaField *g_igPsx2Controller_phaseMetaField;
+igMetaField *g_igPsx2Controller_resetingMetaField;
+igMetaField *g_igPsx2Controller_userResetMetaField;
+igMetaField *g_igPsx2Controller_userResetAnalogOnlyMetaField;
 
 int FUN_00147090(int arg0) {
     FUN_001471b0();
-    return igMetaObject_CreateInstance(*(int *)0x55F760, arg0);
+    return igMetaObject_CreateInstance((int)g_igPsx2Controller_metaObject, arg0);
 }
 
 igMetaObject *igPsx2Controller_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2Controller_metaObject[0];
+    igMetaObject *g = g_igPsx2Controller_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001471b0();
-    return g_igPsx2Controller_metaObject[0];
+    return g_igPsx2Controller_metaObject;
 }
 
 int igPsx2Controller_GetVTable(void) {
@@ -47,15 +82,17 @@ void FUN_001471b0(void)
     igMetaObject_RunStaticInit(igPsx2Controller_Register);
 }
 
+static igMetaObjectCallback g_igPsx2Controller_callbackList[] = { FUN_00145de0, 0 };
+
 void igPsx2Controller_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2Controller_metaObject,
+        &g_igPsx2Controller_metaObject,
         igController_Register,
         igController_GetPublishedMetaObject,
         thunk_igPsx2Controller_GetMetaObject,
-        igPsx2Controller_className,
+        "igPsx2Controller",
         0x70, /* instance size */
         igPsx2Controller_GetVTable,
         &igPsx2Controller_InitFields,
@@ -65,19 +102,126 @@ void igPsx2Controller_Register(void) {
 }
 
 igMetaObject *FUN_00147240(void) {
-    return g_igController_metaObject[0];
+    return g_igController_metaObject;
 }
+
+static FieldFactory g_igPsx2Controller_ctorTable[] = {
+    igUnsignedShortMetaField_Create,
+    igUnsignedShortMetaField_Create,
+    igUnsignedShortMetaField_Create,
+    igIntMetaField_Create,
+    igUnsignedShortMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatArrayMetaField_Create,
+    igFloatArrayMetaField_Create,
+    igBoolMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igUnsignedShortMetaField_Create,
+    igRawRefMetaField_Create,
+    igUnsignedCharArrayMetaField_Create,
+    igUnsignedCharArrayMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igPsx2Controller_fieldTable[] = {
+    "_id",
+    "_curr_id",
+    "_term_id",
+    "_buttonCount",
+    "_joyCount",
+    "_attachedWindow",
+    "_x",
+    "_y",
+    "_connected",
+    "_type",
+    "_slot",
+    "_port",
+    "_buttonState",
+    "_dmaBuffer",
+    "_oldJoyX",
+    "_oldJoyY",
+    "_analogState",
+    "_lockState",
+    "_usePressure",
+    "_hasPressure",
+    "_phase",
+    "_reseting",
+    "_userReset",
+    "_userResetAnalogOnly",
+};
+static igMetaField **g_igPsx2Controller_fieldHandles[] = {
+    &g_igPsx2Controller_idMetaField,
+    &g_igPsx2Controller_curr_idMetaField,
+    &g_igPsx2Controller_term_idMetaField,
+    &g_igPsx2Controller_buttonCountMetaField,
+    &g_igPsx2Controller_joyCountMetaField,
+    &g_igPsx2Controller_attachedWindowMetaField,
+    &g_igPsx2Controller_xMetaField,
+    &g_igPsx2Controller_yMetaField,
+    &g_igPsx2Controller_connectedMetaField,
+    &g_igPsx2Controller_typeMetaField,
+    &g_igPsx2Controller_slotMetaField,
+    &g_igPsx2Controller_portMetaField,
+    &g_igPsx2Controller_buttonStateMetaField,
+    &g_igPsx2Controller_dmaBufferMetaField,
+    &g_igPsx2Controller_oldJoyXMetaField,
+    &g_igPsx2Controller_oldJoyYMetaField,
+    &g_igPsx2Controller_analogStateMetaField,
+    &g_igPsx2Controller_lockStateMetaField,
+    &g_igPsx2Controller_usePressureMetaField,
+    &g_igPsx2Controller_hasPressureMetaField,
+    &g_igPsx2Controller_phaseMetaField,
+    &g_igPsx2Controller_resetingMetaField,
+    &g_igPsx2Controller_userResetMetaField,
+    &g_igPsx2Controller_userResetAnalogOnlyMetaField,
+};
+static int g_igPsx2Controller_fieldOffsets[] = {
+    16,
+    18,
+    20,
+    24,
+    28,
+    32,
+    36,
+    44,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    78,
+    80,
+    81,
+    82,
+    83,
+    84,
+    88,
+    89,
+    90,
+};
+static int g_igPsx2Controller_typeDefault = 1;
+static int g_igPsx2Controller_phaseDefault = 0;
 
 void igPsx2Controller_InitFields(void) {
     int temp_s1;
     void *temp_s2;
     void *temp_v0;
     void *temp_v0_2;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igPsx2Controller_metaObject[0];
+    temp_s0 = g_igPsx2Controller_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2Controller_ctorTable[0], 0x18);
+    igMetaObject_CreateFields(temp_s0, g_igPsx2Controller_ctorTable, 0x18);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 0x10);
     igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 2);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
@@ -85,7 +229,7 @@ void igPsx2Controller_InitFields(void) {
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6); q->f52 = 2; }
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7); q->f52 = 2; }
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00487750[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &g_igPsx2Controller_typeDefault);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC), 0xFFFF);
     { struct Fld *q = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE); q->f52 = 2; }
@@ -94,10 +238,10 @@ void igPsx2Controller_InitFields(void) {
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11), 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12), 1);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x14));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, &DAT_00487758[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_2, &g_igPsx2Controller_phaseDefault);
     *(int *)((char *)(temp_v0_2) + 52) = (int)(&FUN_00147030);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x15), 1);
-    igMetaObject_NameFields(temp_s0, &g_igPsx2Controller_fieldTable[0], &DAT_00487690[0], &DAT_004876f0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igPsx2Controller_fieldTable, g_igPsx2Controller_fieldHandles, g_igPsx2Controller_fieldOffsets, temp_s1);
 }
 
 int FUN_00147430(void *arg0, int arg1) {

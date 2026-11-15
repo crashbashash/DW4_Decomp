@@ -1,14 +1,23 @@
+igMetaObject *g_igMousePosObserver_metaObject;
+igMetaField *g_igMousePosObserver_guiSystemMetaField;
+igMetaField *g_igMousePosObserver_intersectTraversalMetaField;
+igMetaField *g_igMousePosObserver_rayMetaField;
+igMetaField *g_igMousePosObserver_impactLengthMetaField;
+igMetaField *g_igMousePosObserver_hitMetaField;
+igMetaField *g_igMousePosObserver_hitPathMetaField;
+igMetaField *g_igMousePosObserver_inverseProjectionMatrixMetaField;
+
 int FUN_0044ecb0(int arg0) {
     igMousePosObserver_RunStaticInit();
-    return igMetaObject_CreateInstance(*(int *)0x58C380, arg0);
+    return igMetaObject_CreateInstance((int)g_igMousePosObserver_metaObject, arg0);
 }
 
 igMetaObject *igMousePosObserver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMousePosObserver_metaObject[0];
+    igMetaObject *g = g_igMousePosObserver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMousePosObserver_RunStaticInit();
-    return g_igMousePosObserver_metaObject[0];
+    return g_igMousePosObserver_metaObject;
 }
 
 int igMousePosObserver_GetVTable(void) {
@@ -68,15 +77,17 @@ void igMousePosObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igMousePosObserver_Register);
 }
 
+static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, FUN_0019e440, FUN_00188340, FUN_0019f7a0, 0 };
+
 void igMousePosObserver_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMousePosObserver_metaObject,
+        &g_igMousePosObserver_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igMousePosObserver_GetMetaObject,
-        igMousePosObserver_className,
+        "igMousePosObserver",
         0x64, /* instance size */
         igMousePosObserver_GetVTable,
         &igMousePosObserver_InitFields,
@@ -89,6 +100,43 @@ void thunk_igMousePosObserver_GetMetaObject(void) {
     igMousePosObserver_GetMetaObject();
 }
 
+static FieldFactory g_igMousePosObserver_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00188660,
+};
+static const char *g_igMousePosObserver_fieldTable[] = {
+    "_guiSystem",
+    "_intersectTraversal",
+    "_ray",
+    "_impactLength",
+    "_hit",
+    "_hitPath",
+    "_inverseProjectionMatrix",
+};
+static igMetaField **g_igMousePosObserver_fieldHandles[] = {
+    &g_igMousePosObserver_guiSystemMetaField,
+    &g_igMousePosObserver_intersectTraversalMetaField,
+    &g_igMousePosObserver_rayMetaField,
+    &g_igMousePosObserver_impactLengthMetaField,
+    &g_igMousePosObserver_hitMetaField,
+    &g_igMousePosObserver_hitPathMetaField,
+    &g_igMousePosObserver_inverseProjectionMatrixMetaField,
+};
+static int g_igMousePosObserver_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+};
+
 void igMousePosObserver_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -97,9 +145,9 @@ void igMousePosObserver_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igMousePosObserver_metaObject[0];
+    temp_s1 = (void *)g_igMousePosObserver_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igMousePosObserver_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s1, g_igMousePosObserver_ctorTable, 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044ded0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -112,6 +160,6 @@ void igMousePosObserver_InitFields(void) {
     igFloatMetaField_SetDefault((int)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0.0f);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0019f670();
-    igMetaObject_NameFields(temp_s1, &g_igMousePosObserver_fieldTable[0], &DAT_004d0370[0], &DAT_004d0390[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igMousePosObserver_fieldTable, g_igMousePosObserver_fieldHandles, g_igMousePosObserver_fieldOffsets, temp_s0);
 }
 

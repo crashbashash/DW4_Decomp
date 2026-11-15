@@ -1,14 +1,21 @@
+igMetaObject *g_igDataPump_metaObject;
+igMetaField *g_igDataPump_destObjMetaField;
+igMetaField *g_igDataPump_destMetaMetaField;
+igMetaField *g_igDataPump_destMetaClassNameMetaField;
+igMetaField *g_igDataPump_destMetaFieldNameMetaField;
+igMetaField *g_igDataPump_dpiMetaField;
+
 void FUN_001e5950(int arg0) {
     FUN_001e5ab0();
-    igMetaObject_CreateInstance(*(int *)0x562C20, arg0);
+    igMetaObject_CreateInstance(g_igDataPump_metaObject, arg0);
 }
 
 igMetaObject *igDataPump_GetMetaObject(void)
 {
-    igMetaObject *g = g_igDataPump_metaObject[0];
+    igMetaObject *g = g_igDataPump_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001e5ab0();
-    return g_igDataPump_metaObject[0];
+    return g_igDataPump_metaObject;
 }
 
 int igDataPump_GetVTable(void) {
@@ -36,15 +43,17 @@ void FUN_001e5ab0(void)
     igMetaObject_RunStaticInit(igDataPump_Register);
 }
 
+static igMetaObjectCallback g_igDataPump_callbackList[] = { igObject_EnsureRegistered, igMetaField_EnsureRegistered, FUN_001e55d0, 0 };
+
 void igDataPump_Register(void) {
     DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igDataPump_metaObject,
+        &g_igDataPump_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igDataPump_GetMetaObject,
-        igDataPump_className,
+        "igDataPump",
         0x1C, /* instance size */
         igDataPump_GetVTable,
         &igDataPump_InitFields,
@@ -57,26 +66,55 @@ void thunk_igDataPump_GetMetaObject(void) {
     igDataPump_GetMetaObject();
 }
 
-void igDataPump_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igDataPump_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igDataPump_fieldTable[] = {
+    "_destObj",
+    "_destMeta",
+    "_destMetaClassName",
+    "_destMetaFieldName",
+    "_dpi",
+};
+static igMetaField **g_igDataPump_fieldHandles[] = {
+    &g_igDataPump_destObjMetaField,
+    &g_igDataPump_destMetaMetaField,
+    &g_igDataPump_destMetaClassNameMetaField,
+    &g_igDataPump_destMetaFieldNameMetaField,
+    &g_igDataPump_dpiMetaField,
+};
+static int g_igDataPump_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+};
 
-    temp_s0 = (void *)g_igDataPump_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igDataPump_ctorTable[0], 5);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    *(int *)((char *)(temp_v0) + 56) = (int)((int) g_igObject_metaObject[0]);
-    *(char *)((char *)(temp_v0) + 52) = 1;
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    *(int *)((char *)(temp_s1) + 56) = igMetaField_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 38) = 0;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0);
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_001e5530();
-    igMetaObject_NameFields(temp_s0, &g_igDataPump_fieldTable[0], &DAT_0048dc30[0], &DAT_0048dc50[0], temp_s2);
+void igDataPump_InitFields(void) {
+    int firstField;
+    void *destObjField;
+    void *dpiField;
+    void *destMetaField;
+    igMetaObject *meta;
+
+    meta = g_igDataPump_metaObject;
+    firstField = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igDataPump_ctorTable, 5);
+    destObjField = (void *)(igMetaObject_GetFieldAt(meta, firstField));
+    *(int *)((char *)(destObjField) + 56) = (int)((int) g_igObject_metaObject[0]);
+    *(char *)((char *)(destObjField) + 52) = 1;
+    destMetaField = (void *)(igMetaObject_GetFieldAt(meta, firstField + 1));
+    *(int *)((char *)(destMetaField) + 56) = igMetaField_GetOrCreateMetaObject();
+    *(char *)((char *)(destMetaField) + 38) = 0;
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, firstField + 2), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, firstField + 3), 0);
+    dpiField = (void *)(igMetaObject_GetFieldAt(meta, firstField + 4));
+    *(int *)((char *)(dpiField) + 56) = (int)FUN_001e5530();
+    igMetaObject_NameFields(meta, g_igDataPump_fieldTable, g_igDataPump_fieldHandles, g_igDataPump_fieldOffsets, firstField);
 }
 

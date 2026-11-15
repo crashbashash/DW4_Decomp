@@ -31,13 +31,13 @@ int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator
         allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault[0]);
     }
     igSmartPointer<Image> image((Image *)FUN_00140c00(attr, 0), kRetainReference);
-    int *name = &NO_IMAGE[0];
+    const char *name = "NO_IMAGE";
     if (image.p != 0) {
         if (image.p->name != 0) {
-            name = (int *)FUN_001405a0((char *)image.p->name);
+            name = FUN_001405a0((char *)image.p->name);
         }
     }
-    sprintf(text, &text_s_d_d_d_d_d_d_d_d[0], name, attr->bColor, magFilter(attr), minFilter(attr), wrapS(attr), wrapT(attr), (long long)attr->mipmapMode, (long long)attr->source, (long long)attr->paging);
+    sprintf(text, "%s %d %d %d %d %d %d %d %d", name, attr->bColor, magFilter(attr), minFilter(attr), wrapS(attr), wrapT(attr), (long long)attr->mipmapMode, (long long)attr->source, (long long)attr->paging);
     int copy = allocator->allocate(strlen(text) + 1);
     strcpy(copy, text);
     return copy;
@@ -53,19 +53,19 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     int sp2054;
     int sp2050;
     char sp50[8192];
-    int *var_a1;
-    int *var_s1;
+    const char *var_a1;
+    const char *var_s1;
 
-    if (sscanf(arg1, &text_s_d_d_d_d_d_d_d_d[0], sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
+    if (sscanf(arg1, "%s %d %d %d %d %d %d %d %d", sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
         return 0;
     }
-    var_s1 = (int *)(&NO_IMAGE[0]);
-    var_a1 = (int *)(&NO_IMAGE[0]);
+    var_s1 = "NO_IMAGE";
+    var_a1 = "NO_IMAGE";
     if (FUN_00140c00(arg0, 0) != 0) {
         if (((T_140740 *)FUN_00140c00(arg0, 0))->f88 != 0) {
-            var_s1 = (int *)(FUN_001405a0((char *)((T_140740 *)FUN_00140c00(arg0, 0))->f88));
+            var_s1 = (FUN_001405a0((char *)((T_140740 *)FUN_00140c00(arg0, 0))->f88));
         }
-        var_a1 = (int *)(var_s1);
+        var_a1 = var_s1;
     }
     if (strcmp(sp50, var_a1) == 0) {
         if (sp206C == arg0->f16) {

@@ -1,21 +1,26 @@
+igMetaObject *g_igRay_metaObject;
+igMetaField *g_igRay_posMetaField;
+igMetaField *g_igRay_dirMetaField;
+igMetaField *g_igRay_lenMetaField;
+
 void FUN_00188220(int arg0) {
     FUN_00188340();
-    igMetaObject_CreateInstance(*(int *)0x560FC0, arg0);
+    igMetaObject_CreateInstance((int)g_igRay_metaObject, arg0);
 }
 
 igMetaObject *FUN_00188260(void) {
-    if (g_igRay_metaObject[0] == 0) {
-        g_igRay_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igRay_metaObject == 0) {
+        g_igRay_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igRay_metaObject[0];
+    return g_igRay_metaObject;
 }
 
 igMetaObject *igRay_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRay_metaObject[0];
+    igMetaObject *g = g_igRay_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00188340();
-    return g_igRay_metaObject[0];
+    return g_igRay_metaObject;
 }
 
 int igRay_GetVTable(void) {
@@ -34,11 +39,11 @@ void igRay_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igRay_metaObject,
+        &g_igRay_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igRay_GetMetaObject,
-        igRay_className,
+        "igRay",
         0x24, /* instance size */
         igRay_GetVTable,
         &igRay_InitFields,
@@ -51,6 +56,30 @@ void thunk_igRay_GetMetaObject(void) {
     igRay_GetMetaObject();
 }
 
+static FieldFactory g_igRay_ctorTable[] = {
+    FUN_00187890,
+    FUN_00187890,
+    igFloatMetaField_Create,
+};
+
+static const char *g_igRay_fieldTable[] = {
+    "_pos",
+    "_dir",
+    "_len",
+};
+
+static igMetaField **g_igRay_fieldHandles[] = {
+    &g_igRay_posMetaField,
+    &g_igRay_dirMetaField,
+    &g_igRay_lenMetaField,
+};
+
+static int g_igRay_fieldOffsets[] = {
+    8,
+    20,
+    32,
+};
+
 void igRay_InitFields(void) {
     int temp_s1;
     void *temp_s0;
@@ -59,9 +88,9 @@ void igRay_InitFields(void) {
     int sp40[4];
     int sp30[4];
 
-    temp_s0 = (void *)g_igRay_metaObject[0];
+    temp_s0 = (void *)g_igRay_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igRay_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igRay_ctorTable, 3);
     temp_a0 = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     sp40[0] = 0;
     sp40[1] = 0;
@@ -72,6 +101,6 @@ void igRay_InitFields(void) {
     sp30[1] = 0x3F800000;
     sp30[2] = 0;
     FUN_0018e470((igVec3fMetaFieldView *)temp_a0_2, (const float *)&sp30[0]);
-    igMetaObject_NameFields(temp_s0, &g_igRay_fieldTable[0], &DAT_0048ade8[0], &DAT_0048adf8[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igRay_fieldTable, g_igRay_fieldHandles, g_igRay_fieldOffsets, temp_s1);
 }
 

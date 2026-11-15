@@ -1,3 +1,5 @@
+unsigned char g_InsightLibrary_registered;
+
 void InsightLibrary_MarkRegistered(void) {
     if (g_InsightLibrary_registered == 0) {
         g_InsightLibrary_registered = 1;
@@ -32,7 +34,7 @@ int FUN_00231010(void) {
 }
 
 igMetaObject *FUN_00231020(void) {
-    return g_igMessage_metaObject[0];
+    return g_igMessage_metaObject;
 }
 
 void *FUN_00231030(struct S *arg0, short arg1) {
@@ -64,6 +66,6 @@ void *FUN_00231030(struct S *arg0, short arg1) {
 }
 
 igMetaObject *FUN_002310d0(void) {
-    return g_igInfoManager_metaObject[0];
+    return g_igInfoManager_metaObject;
 }
 

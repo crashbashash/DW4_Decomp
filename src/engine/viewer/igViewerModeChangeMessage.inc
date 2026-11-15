@@ -1,19 +1,23 @@
+igMetaObject *g_igViewerModeChangeMessage_metaObject;
+igMetaField *g_igViewerModeChangeMessage_stateMetaField;
+igMetaField *g_igViewerModeChangeMessage_modeMetaField;
+
 igMetaObject *FUN_0045a450(void) {
-    if (g_igViewerModeChangeMessage_metaObject[0] == 0) {
-        g_igViewerModeChangeMessage_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewerModeChangeMessage_metaObject == 0) {
+        g_igViewerModeChangeMessage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewerModeChangeMessage_metaObject[0];
+    return g_igViewerModeChangeMessage_metaObject;
 }
 
 igMetaObject *igViewerModeChangeMessage_GetMetaObject(void) {
-    igMetaObject *g = g_igViewerModeChangeMessage_metaObject[0];
+    igMetaObject *g = g_igViewerModeChangeMessage_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0045a580();
 done:
-    return g_igViewerModeChangeMessage_metaObject[0];
+    return g_igViewerModeChangeMessage_metaObject;
 }
 
 int igViewerModeChangeMessage_GetVTable(void) {
@@ -51,11 +55,11 @@ void igViewerModeChangeMessage_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerModeChangeMessage_metaObject,
+        &g_igViewerModeChangeMessage_metaObject,
         igMessage_Register,
         igMessage_GetPublishedMetaObject,
         thunk_igViewerModeChangeMessage_GetMetaObject,
-        igViewerModeChangeMessage_className,
+        "igViewerModeChangeMessage",
         0x10, /* instance size */
         igViewerModeChangeMessage_GetVTable,
         &igViewerModeChangeMessage_InitFields,
@@ -68,13 +72,30 @@ void thunk_igViewerModeChangeMessage_GetMetaObject(void) {
     igViewerModeChangeMessage_GetMetaObject();
 }
 
+static FieldFactory g_igViewerModeChangeMessage_ctorTable[] = {
+    igBoolMetaField_Create,
+    igStringMetaField_Create,
+};
+static const char *g_igViewerModeChangeMessage_fieldTable[] = {
+    "_state",
+    "_mode",
+};
+static igMetaField **g_igViewerModeChangeMessage_fieldHandles[] = {
+    &g_igViewerModeChangeMessage_stateMetaField,
+    &g_igViewerModeChangeMessage_modeMetaField,
+};
+static int g_igViewerModeChangeMessage_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void igViewerModeChangeMessage_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igViewerModeChangeMessage_metaObject[0];
+    temp_s0 = g_igViewerModeChangeMessage_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewerModeChangeMessage_ctorTable[0], 2);
-    igMetaObject_NameFields(temp_s0, &g_igViewerModeChangeMessage_fieldTable[0], &DAT_004d0e28[0], &DAT_004d0e30[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_igViewerModeChangeMessage_ctorTable, 2);
+    igMetaObject_NameFields(temp_s0, g_igViewerModeChangeMessage_fieldTable, g_igViewerModeChangeMessage_fieldHandles, g_igViewerModeChangeMessage_fieldOffsets, temp_s1);
 }
 

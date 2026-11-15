@@ -262,6 +262,8 @@ ok:
     return 1;
 }
 
+int g_igCallStackTable_emptyHashSlot[] = { -1 };
+
 void igCallStackTable_RebuildHashIndex(igCallStackTableView *self, int hashCapacity)
 {
     igObject *r;

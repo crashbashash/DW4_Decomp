@@ -1,16 +1,18 @@
+igMetaObject *g_beSvSlotDataList_metaObject;
+
 igMetaObject *FUN_0034a4a0(void) {
-    if (g_beSvSlotDataList_metaObject[0] == 0) {
-        g_beSvSlotDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beSvSlotDataList_metaObject == 0) {
+        g_beSvSlotDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beSvSlotDataList_metaObject[0];
+    return g_beSvSlotDataList_metaObject;
 }
 
 void *FUN_0034a4f0(void) {
-    igMetaObject *g = g_beSvSlotDataList_metaObject[0];
+    igMetaObject *g = g_beSvSlotDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a580();
     }
-    return g_beSvSlotDataList_metaObject[0];
+    return g_beSvSlotDataList_metaObject;
 }
 
 int beSvSlotDataList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_0034a580(void)
     igMetaObject_RunStaticInit(beSvSlotDataList_Register);
 }
 
+static igMetaObjectCallback g_beSvSlotDataList_callbackList[] = { FUN_0034ab30, 0 };
+
 void *beSvSlotDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvSlotDataList_metaObject,
+        &g_beSvSlotDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beSvSlotDataList_GetMetaObject,
-        beSvSlotDataList_className,
+        "beSvSlotDataList",
         0x14, /* instance size */
         beSvSlotDataList_GetVTable,
         0,

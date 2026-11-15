@@ -1,9 +1,13 @@
+igMetaObject *g_beModelCtrlMOVE_metaObject;
+igMetaField *g_beModelCtrlMOVE_valueMetaField;
+igMetaField *g_beModelCtrlMOVE_frameMetaField;
+
 void *FUN_00355840(void) {
-    igMetaObject *g = g_beModelCtrlMOVE_metaObject[0];
+    igMetaObject *g = g_beModelCtrlMOVE_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00355920();
     }
-    return g_beModelCtrlMOVE_metaObject[0];
+    return g_beModelCtrlMOVE_metaObject;
 }
 
 int beModelCtrlMOVE_GetVTable(void) {
@@ -44,11 +48,11 @@ void *beModelCtrlMOVE_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlMOVE_metaObject,
+        &g_beModelCtrlMOVE_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlMOVE_GetMetaObject,
-        beModelCtrlMOVE_className,
+        "beModelCtrlMOVE",
         0x14, /* instance size */
         beModelCtrlMOVE_GetVTable,
         beModelCtrlMOVE_InitFields,
@@ -62,13 +66,30 @@ void beModelCtrlMOVE_GetMetaObject(void)
     FUN_00355840();
 }
 
+static FieldFactory g_beModelCtrlMOVE_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_beModelCtrlMOVE_fieldTable[] = {
+    "_value",
+    "_frame",
+};
+static igMetaField **g_beModelCtrlMOVE_fieldHandles[] = {
+    &g_beModelCtrlMOVE_valueMetaField,
+    &g_beModelCtrlMOVE_frameMetaField,
+};
+static int g_beModelCtrlMOVE_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void beModelCtrlMOVE_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlMOVE_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlMOVE_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlMOVE_ctorTable[0], 2);
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlMOVE_fieldTable[0], &DAT_004c5868[0], &DAT_004c5870[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlMOVE_ctorTable, 2);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlMOVE_fieldTable, g_beModelCtrlMOVE_fieldHandles, g_beModelCtrlMOVE_fieldOffsets, temp_s1);
 }
 

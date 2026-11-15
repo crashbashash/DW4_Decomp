@@ -1,14 +1,16 @@
+igMetaObject *g_igAnimationCombinerBoneInfoPool_metaObject;
+
 int igAnimationCombinerBoneInfoPool_Create(int allocator) {
     igAnimationCombinerBoneInfoPool_RunStaticInit();
-    return igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject[0], allocator);
+    return igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject, allocator);
 }
 
 igMetaObject *igAnimationCombinerBoneInfoPool_GetMetaObject(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igAnimationCombinerBoneInfoPool_metaObject)[0];
+    igMetaObject *g = g_igAnimationCombinerBoneInfoPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igAnimationCombinerBoneInfoPool_RunStaticInit();
-    return ((igMetaObject * *)g_igAnimationCombinerBoneInfoPool_metaObject)[0];
+    return g_igAnimationCombinerBoneInfoPool_metaObject;
 }
 
 int igAnimationCombinerBoneInfoPool_GetVTable(void) {
@@ -24,15 +26,17 @@ void igAnimationCombinerBoneInfoPool_RunStaticInit(void)
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoPool_Register);
 }
 
+static igMetaObjectCallback g_igAnimationCombinerBoneInfoPool_callbackList[] = { FUN_001a8220, 0 };
+
 void igAnimationCombinerBoneInfoPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationCombinerBoneInfoPool_metaObject),
+        &g_igAnimationCombinerBoneInfoPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
         thunk_igAnimationCombinerBoneInfoPool_GetMetaObject,
-        igAnimationCombinerBoneInfoPool_className,
+        "igAnimationCombinerBoneInfoPool",
         0x20, /* instance size */
         igAnimationCombinerBoneInfoPool_GetVTable,
         0,

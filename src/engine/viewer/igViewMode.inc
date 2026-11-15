@@ -1,16 +1,19 @@
+igMetaObject *g_igViewMode_metaObject;
+igMetaField *g_igViewMode_inverseMatrixMetaField;
+
 igMetaObject *FUN_0045cf10(void) {
-    if (g_igViewMode_metaObject[0] == 0) {
-        g_igViewMode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewMode_metaObject == 0) {
+        g_igViewMode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewMode_metaObject[0];
+    return g_igViewMode_metaObject;
 }
 
 void *igViewMode_GetMetaObject(void) {
-    igMetaObject *g = g_igViewMode_metaObject[0];
+    igMetaObject *g = g_igViewMode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045d000();
     }
-    return g_igViewMode_metaObject[0];
+    return g_igViewMode_metaObject;
 }
 
 int igViewMode_GetVTable(void) {
@@ -30,11 +33,11 @@ void igViewMode_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewMode_metaObject,
+        &g_igViewMode_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igViewMode_GetMetaObject,
-        igViewMode_className,
+        "igViewMode",
         0x4C, /* instance size */
         igViewMode_GetVTable,
         &igViewMode_InitFields,
@@ -47,13 +50,26 @@ void thunk_igViewMode_GetMetaObject(void) {
     igViewMode_GetMetaObject();
 }
 
+static FieldFactory g_igViewMode_ctorTable[] = {
+    FUN_00188660,
+};
+static const char *g_igViewMode_fieldTable[] = {
+    "_inverseMatrix",
+};
+static igMetaField **g_igViewMode_fieldHandles[] = {
+    &g_igViewMode_inverseMatrixMetaField,
+};
+static int g_igViewMode_fieldOffsets[] = {
+    12,
+};
+
 void igViewMode_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igViewMode_metaObject[0];
+    temp_s0 = g_igViewMode_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewMode_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_igViewMode_fieldTable[0], &DAT_004d1690[0], &DAT_004d1698[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_igViewMode_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_igViewMode_fieldTable, g_igViewMode_fieldHandles, g_igViewMode_fieldOffsets, temp_s1);
 }
 

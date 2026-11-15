@@ -1,14 +1,16 @@
+igMetaObject *g_beNDMWStatusSelect01_metaObject;
+
 void beNDMWStatusSelect01_Create(int arg0) {
     FUN_003b5640();
-    igMetaObject_CreateInstance(*(int *)0x58ABE8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusSelect01_metaObject, arg0);
 }
 
 igMetaObject *FUN_003b5570(void) {
-    igMetaObject *g = g_beNDMWStatusSelect01_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusSelect01_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003b5640();
-    return g_beNDMWStatusSelect01_metaObject[0];
+    return g_beNDMWStatusSelect01_metaObject;
 }
 
 int beNDMWStatusSelect01_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beNDMWStatusSelect01_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusSelect01_metaObject,
+        &g_beNDMWStatusSelect01_metaObject,
         beNDMWWindowSelect_Register,
         beNDMWWindowSelect_GetPublishedMetaObject,
         beNDMWStatusSelect01_GetMetaObject,
-        beNDMWStatusSelect01_className,
+        "beNDMWStatusSelect01",
         0x70, /* instance size */
         beNDMWStatusSelect01_GetVTable,
         0,

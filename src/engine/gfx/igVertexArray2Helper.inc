@@ -1,14 +1,17 @@
+igMetaObject *g_igVertexArray2Helper_metaObject;
+igMetaField *g_igVertexArray2Helper_vertexArrayMetaField;
+
 void FUN_0014a4d0(int arg0) {
     FUN_0014a640();
-    igMetaObject_CreateInstance(*(int *)0x55F9D0, arg0);
+    igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, arg0);
 }
 
 igMetaObject *igVertexArray2Helper_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVertexArray2Helper_metaObject[0];
+    igMetaObject *g = g_igVertexArray2Helper_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014a640();
-    return g_igVertexArray2Helper_metaObject[0];
+    return g_igVertexArray2Helper_metaObject;
 }
 
 int igVertexArray2Helper_GetVTable(void) {
@@ -32,15 +35,17 @@ void FUN_0014a640(void)
     igMetaObject_RunStaticInit(igVertexArray2Helper_Register);
 }
 
+static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { FUN_0014ab70, 0 };
+
 void igVertexArray2Helper_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVertexArray2Helper_metaObject,
+        &g_igVertexArray2Helper_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igVertexArray2Helper_GetMetaObject,
-        igVertexArray2Helper_className,
+        "igVertexArray2Helper",
         0x10, /* instance size */
         igVertexArray2Helper_GetVTable,
         &igVertexArray2Helper_InitFields,
@@ -57,16 +62,29 @@ int FUN_0014a6e0(void) {
     return g_igNamedObject_metaObject[0];
 }
 
-void igVertexArray2Helper_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igVertexArray2Helper_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igVertexArray2Helper_fieldTable[] = {
+    "_vertexArray",
+};
+static igMetaField **g_igVertexArray2Helper_fieldHandles[] = {
+    &g_igVertexArray2Helper_vertexArrayMetaField,
+};
+static int g_igVertexArray2Helper_fieldOffsets[] = {
+    12,
+};
 
-    temp_s0 = (void *)g_igVertexArray2Helper_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igVertexArray2Helper_ctorTable[0], 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+void igVertexArray2Helper_InitFields(void) {
+    int fieldStart;
+    void *temp_s1;
+    igMetaObject *meta;
+
+    meta = g_igVertexArray2Helper_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexArray2Helper_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0014a7c0();
-    igMetaObject_NameFields(temp_s0, &g_igVertexArray2Helper_fieldTable[0], &DAT_00488500[0], &DAT_00488508[0], temp_s2);
+    igMetaObject_NameFields(meta, g_igVertexArray2Helper_fieldTable, g_igVertexArray2Helper_fieldHandles, g_igVertexArray2Helper_fieldOffsets, fieldStart);
 }
 

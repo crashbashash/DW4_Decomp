@@ -45,7 +45,13 @@ class LastRelink(unittest.TestCase):
                          % [(os.path.basename(p), n) for p, n in unknown[:10]])
         self.assertEqual(filled, [], "empty-only sections with content: %r"
                          % [(os.path.basename(p), n, s) for p, n, s in filled[:10]])
-        self.assertEqual(counts[".text"], len(objects))
+        # every object is one unit's code or retail bytes, except the per-unit data objects
+        # (u_<owner>_data.o, verify.isolate_unit_data), which hold only placed data sections
+        data_objects = [p for p in objects if p.endswith("_data.o")]
+        self.assertEqual(counts[".text"], len(objects) - len(data_objects))
+        for path in data_objects:
+            names = {n for n, h in verify.elf_section_headers(path) if h[2] & 2}
+            self.assertTrue(names and all(n.startswith(".dw4_data_") for n in names), (path, names))
         self.assertIn(".exceptix", counts)
 
 

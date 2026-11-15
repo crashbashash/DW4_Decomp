@@ -1,21 +1,21 @@
 void FUN_0019faa0(int arg0) {
     FUN_0019fc00();
-    igMetaObject_CreateInstance(*(int *)0x561A38, arg0);
+    igMetaObject_CreateInstance((int)g_igGeometry_metaObject, arg0);
 }
 
 igMetaObject *FUN_0019fae0(void) {
-    if (g_igGeometry_metaObject[0] == 0) {
-        g_igGeometry_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGeometry_metaObject == 0) {
+        g_igGeometry_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGeometry_metaObject[0];
+    return g_igGeometry_metaObject;
 }
 
 igMetaObject *igGeometry_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGeometry_metaObject[0];
+    igMetaObject *g = g_igGeometry_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019fc00();
-    return g_igGeometry_metaObject[0];
+    return g_igGeometry_metaObject;
 }
 
 int igGeometry_GetVTable(void) {
@@ -41,19 +41,21 @@ void FUN_0019fc00(void)
     igMetaObject_RunStaticInit(igGeometry_Register);
 }
 
+static igMetaObjectCallback g_igGeometry_callbackList[] = { FUN_00133f80, 0 };
+
 void igGeometry_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igGeometry_metaObject),
+        &g_igGeometry_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
         thunk_igGeometry_GetMetaObject,
-        igGeometry_className,
+        "igGeometry",
         0x2C, /* instance size */
         igGeometry_GetVTable,
-        &igGeometry_InitFields_0019fca0[0],
-        &igGeometry_PostInit_0019fdd0[0], /* extra callback item */
+        FUN_0019fca0,
+        FUN_0019fdd0, /* extra callback item */
         g_igGeometry_callbackList /* callback list */
     );
 }
@@ -61,6 +63,19 @@ void igGeometry_Register(void) {
 void thunk_igGeometry_GetMetaObject(void) {
     igGeometry_GetMetaObject();
 }
+
+static FieldFactory g_igGeometry_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igGeometry_fieldTable[] = {
+    "_renderList",
+};
+static igMetaField **g_igGeometry_fieldHandles[] = {
+    &g_igGeometry_renderListMetaField,
+};
+static int g_igGeometry_fieldOffsets[] = {
+    40,
+};
 
 void FUN_0019fca0(void) {
     int temp_s2;
@@ -70,14 +85,14 @@ void FUN_0019fca0(void) {
     void *temp_s1;
     void *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)g_igGeometry_metaObject)[0]);
+    temp_s1 = (void *)(g_igGeometry_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igGeometry_ctorTable[0], 1);
-    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, &text_trigger[0])));
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igGeometry_ctorTable, 1);
+    temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName(temp_s1, "_trigger")));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_00561a40[0]);
+    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igGeometry_triggerMetaField);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
@@ -86,7 +101,7 @@ void FUN_0019fca0(void) {
     temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s2)));
     *(int *)((char *)(temp_s0) + 56) = FUN_00133e50();
     *(char *)((char *)(temp_s0) + 38) = 0;
-    igMetaObject_NameFields(temp_s1, &g_igGeometry_fieldTable[0], &DAT_0048c070[0], &DAT_0048c078[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igGeometry_fieldTable, g_igGeometry_fieldHandles, g_igGeometry_fieldOffsets, temp_s2);
 }
 
 void thunk_FUN_001c51d0(void) {

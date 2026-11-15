@@ -1,14 +1,20 @@
+igMetaObject *g_igMemoryDictionary_metaObject;
+igMetaField *g_igMemoryDictionary_capacityMetaField;
+igMetaField *g_igMemoryDictionary_countMetaField;
+igMetaField *g_igMemoryDictionary_memoryEntriesMetaField;
+igMetaField *g_igMemoryDictionary_cachedIndexMetaField;
+
 void * igMemoryDictionary_Create(int pool) {
     igMemoryDictionary_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585FA0), (igMemoryPoolView *)pool));
+    return (void *)(igMetaObject_CreateInstance(g_igMemoryDictionary_metaObject, (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMemoryDictionary_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMemoryDictionary_metaObject[0];
+    igMetaObject *g = g_igMemoryDictionary_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMemoryDictionary_EnsureRegistered();
-    return g_igMemoryDictionary_metaObject[0];
+    return g_igMemoryDictionary_metaObject;
 }
 
 int igMemoryDictionary_GetVTable(void) {
@@ -21,7 +27,7 @@ int igMemoryDictionary_GetVTable(void) {
     dictionary._vtable = (int)&g_igMemoryDictionary_vtable[0];
     pr = (int **)&dictionary._memoryEntries;
     *pr = 0;
-    vtable = *(int *)((char *)&dictionary + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&dictionary + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     dictionary._vtable = (int)&g_igMemoryDictionary_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {
@@ -40,20 +46,22 @@ void igMemoryDictionary_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMemoryDictionary_Register);
 }
 
+static igMetaObjectCallback g_igMemoryDictionary_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, 0 };
+
 void igMemoryDictionary_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igMemoryDictionary_metaObject,
+        &g_igMemoryDictionary_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMemoryDictionary_GetMetaObjectFunction,
-        igMemoryDictionary_className,
+        "igMemoryDictionary",
         0x18,
         igMemoryDictionary_GetVTable,
         igMemoryDictionary_InitFields,
         0,
-        (igMetaObjectCallback *)g_igMemoryDictionary_callbackList
+        g_igMemoryDictionary_callbackList
     );
 }
 
@@ -61,18 +69,43 @@ void igMemoryDictionary_GetMetaObjectFunction(void) {
     igMemoryDictionary_GetMetaObject();
 }
 
+static FieldFactory g_igMemoryDictionary_ctorTable[] = {
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+};
+static const char *g_igMemoryDictionary_fieldTable[] = {
+    "_capacity",
+    "_count",
+    "_memoryEntries",
+    "_cachedIndex",
+};
+static igMetaField **g_igMemoryDictionary_fieldDescriptors[] = {
+    &g_igMemoryDictionary_capacityMetaField,
+    &g_igMemoryDictionary_countMetaField,
+    &g_igMemoryDictionary_memoryEntriesMetaField,
+    &g_igMemoryDictionary_cachedIndexMetaField,
+};
+static int g_igMemoryDictionary_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+};
+
 void igMemoryDictionary_InitFields(void) {
     int base;
     void *field;
     void *meta;
 
-    meta = (void *)g_igMemoryDictionary_metaObject[0];
+    meta = (void *)g_igMemoryDictionary_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igMemoryDictionary_ctorTable[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryDictionary_ctorTable, 4);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field)->_construct = 1;
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))) + 38) = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMemoryDictionary_fieldTable[0], (igMetaField ***)&g_igMemoryDictionary_fieldDescriptors[0], &g_igMemoryDictionary_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryDictionary_fieldTable, g_igMemoryDictionary_fieldDescriptors, g_igMemoryDictionary_fieldOffsets, base);
 }
 

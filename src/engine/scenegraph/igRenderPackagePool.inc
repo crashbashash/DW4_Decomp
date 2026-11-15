@@ -1,16 +1,18 @@
+igMetaObject *g_igRenderPackagePool_metaObject;
+
 igMetaObject *FUN_00197930(void) {
-    if (g_igRenderPackagePool_metaObject[0] == 0) {
-        g_igRenderPackagePool_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igRenderPackagePool_metaObject == 0) {
+        g_igRenderPackagePool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igRenderPackagePool_metaObject[0];
+    return g_igRenderPackagePool_metaObject;
 }
 
 igMetaObject *igRenderPackagePool_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRenderPackagePool_metaObject[0];
+    igMetaObject *g = g_igRenderPackagePool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00197a10();
-    return g_igRenderPackagePool_metaObject[0];
+    return g_igRenderPackagePool_metaObject;
 }
 
 int igRenderPackagePool_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_00197a10(void)
     igMetaObject_RunStaticInit(igRenderPackagePool_Register);
 }
 
+static igMetaObjectCallback g_igRenderPackagePool_callbackList[] = { FUN_00197cc0, 0 };
+
 void igRenderPackagePool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igRenderPackagePool_metaObject),
+        &g_igRenderPackagePool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
         thunk_igRenderPackagePool_GetMetaObject,
-        igRenderPackagePool_className,
+        "igRenderPackagePool",
         0x20, /* instance size */
         igRenderPackagePool_GetVTable,
         0,
@@ -48,6 +52,6 @@ void thunk_igRenderPackagePool_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00197aa0(void) {
-    return g_igObjectPool_metaObject[0];
+    return g_igObjectPool_metaObject;
 }
 

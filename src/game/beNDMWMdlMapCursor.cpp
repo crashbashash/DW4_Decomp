@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 
-extern "C" int strcmp(int, int *);
-extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, int arg1);
+extern "C" int strcmp(const char *, const char *);
+extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, const char *kind);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
@@ -20,13 +20,11 @@ extern "C" int beMessenger_GetMatrix(...);
 extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int igMatrix44f_SetTranslation(...);
 extern "C" int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void);
-extern "C" int KIND_MAPCURSOR[4];
 extern "C" igObject *beBaseInfoDataList_Create(int);
 struct CursorValue;
 extern "C" CursorValue *FUN_00350020(int);
 struct PropertyEntry;
 extern "C" PropertyEntry * igProperty_FindByName(...);
-extern "C" int ONE_17[4];
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
@@ -65,12 +63,6 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
 } };
 extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
 struct PropertyEntry_44b520 { char p[16]; int f16; };
-extern "C" int PLAYER_11[4];
-extern "C" int GETMATRIX_9[4];
-extern "C" int MODELCTRL_21[4];
-extern "C" int SQ_CLOSE_13[4];
-extern "C" int MAPBASE_2[4];
-extern "C" int DAT_004cfed0[4];
 extern "C" int emptyString[4];
 extern "C" float g_vec3Zero[4];
 extern "C" float DAT_004e105c[4];
@@ -87,8 +79,11 @@ struct Vec3f { float x, y, z; };
 extern "C" void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
 extern "C" int g_beNDMWMdlMapCursor_metaObject[4];
 
-int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, int arg1) {
-    return strcmp(arg1, &KIND_MAPCURSOR[0]) == 0;
+#pragma push
+#pragma readonly_strings on
+
+int Gap__Bec__beNDMWMdlMapCursor__vfunc_35(int dummy0, const char *kind) {
+    return strcmp(kind, "KIND_MAPCURSOR") == 0;
 }
 
 void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
@@ -99,7 +94,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
     PropertyEntry *pr;
     int s;
     RamDataList::Ensure(arg1);
-    pr = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], &ONE_17[0]);
+    pr = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE");
     al = igObject_GetAllocator(arg0);
     al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     {
@@ -134,6 +129,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_36(beNDMWMdlMapCursor *arg0, beBaseInfo
 }
 
 void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
+    static const char *openSequences[] = { "SQ_OPEN00", "SQ_OPEN01", "SQ_OPEN02", "SQ_OPEN03" };
     igObject *s0;
     PropertyEntry_44b520 *r;
     int m1[16];
@@ -149,7 +145,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
     *py = DAT_004e105c[0];
     *pz = DAT_004e1060[0];
     s1 = false;
-    beMessenger_SendRam(arg0->_messenger, PLAYER_11, arg1->_ramNo, GETMATRIX_9);
+    beMessenger_SendRam(arg0->_messenger, "PLAYER", arg1->_ramNo, "GETMATRIX");
     if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
         beMessenger_GetMatrix(m1, arg0->_messenger, 0);
         igMatrix44f_GetTranslation(m1, &sum);
@@ -161,7 +157,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
             int a2 = ((beBaseInfo *)arg1->_parentInfo)->_name;
             int a3 = arg1->_ramNo;
             a2 = a2 ? a2 : (int)emptyString;
-            beMessenger_SendNamed(arg0->_messenger, MODELCTRL_21, a2, a3, DAT_004cfed0[a3]);
+            beMessenger_SendNamed(arg0->_messenger, "MODELCTRL", a2, a3, openSequences[a3]);
             s1 = true;
             arg1->_st0 = 1;
             arg1->_st3 = 0;
@@ -174,7 +170,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
             int a2 = ((beBaseInfo *)arg1->_parentInfo)->_name;
             int a3 = arg1->_ramNo;
             a2 = a2 ? a2 : (int)emptyString;
-            beMessenger_SendNamed(arg0->_messenger, MODELCTRL_21, a2, a3, SQ_CLOSE_13);
+            beMessenger_SendNamed(arg0->_messenger, "MODELCTRL", a2, a3, "SQ_CLOSE");
             arg1->_st0 = 0;
             arg1->_st3 = 0;
             arg1->_st2 = 0;
@@ -184,7 +180,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
         break;
     }
     if (s1) {
-        beMessenger_SendGroup(arg0->_messenger, MAPBASE_2, GETMATRIX_9);
+        beMessenger_SendGroup(arg0->_messenger, "MAPBASE", "GETMATRIX");
         if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
             beMessenger_GetMatrix(m2, arg0->_messenger, 0);
             igMatrix44f_GetTranslation(m2, &t);
@@ -207,7 +203,7 @@ void Gap__Bec__beNDMWMdlMapCursor__vfunc_46(beNDMWMdlMapCursor *arg0, beBaseInfo
                 RefRelease::go((igObject *)arg1->_dataList);
                 arg1->_dataList = (int)s0;
             }
-            r = ((PropertyEntry_44b520 *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_17));
+            r = ((PropertyEntry_44b520 *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE"));
             *py = 0.0f;
             igMatrix44f_SetTranslation(r->f16 + 32, &sum);
         }
@@ -218,4 +214,6 @@ int Gap__Bec__beNDMWMdlMapCursor__vfunc_20(void)
 {
     return g_beNDMWMdlMapCursor_metaObject[0];
 }
+
+#pragma pop
 

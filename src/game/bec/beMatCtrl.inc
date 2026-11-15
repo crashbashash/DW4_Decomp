@@ -1,21 +1,32 @@
+igMetaObject *g_beMatCtrl_metaObject;
+igMetaField *g_beMatCtrl_wkChkMatMetaField;
+igMetaField *g_beMatCtrl_wkChkPlMetaField;
+igMetaField *g_beMatCtrl_wkChgFlagNOMetaField;
+igMetaField *g_beMatCtrl_wkChgFlagMetaField;
+igMetaField *g_beMatCtrl_wkPlExistMetaField;
+igMetaField *g_beMatCtrl_wkMatOnListMetaField;
+igMetaField *g_beMatCtrl_wkMatOldOnListMetaField;
+igMetaField *g_beMatCtrl_isLuaCallDispMetaField;
+igMetaField *g_beMatCtrl_luaMetaField;
+
 void beMatCtrl_CreateInstance(int arg0) {
     FUN_0035a880();
     igMetaObject_CreateInstance(*(int *)0x589160, arg0);
 }
 
 igMetaObject *FUN_0035a750(void) {
-    if (g_beMatCtrl_metaObject[0] == 0) {
-        g_beMatCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beMatCtrl_metaObject == 0) {
+        g_beMatCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beMatCtrl_metaObject[0];
+    return g_beMatCtrl_metaObject;
 }
 
 void *FUN_0035a7a0(void) {
-    struct G *g = ((struct G * *)g_beMatCtrl_metaObject)[0];
+    struct G *g = ((struct G * *)&g_beMatCtrl_metaObject)[0];
     if (!g || ((g->f & 4) != 0) == false) {
         FUN_0035a880();
     }
-    return ((struct G * *)g_beMatCtrl_metaObject)[0];
+    return ((struct G * *)&g_beMatCtrl_metaObject)[0];
 }
 
 int beMatCtrl_GetVTable(void) {
@@ -41,15 +52,17 @@ void FUN_0035a880(void)
     igMetaObject_RunStaticInit(beMatCtrl_Register);
 }
 
+static igMetaObjectCallback g_beMatCtrl_callbackList[] = { igIntList_EnsureRegistered, FUN_0035b9c0, 0 };
+
 void *beMatCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMatCtrl_metaObject,
+        &g_beMatCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beMatCtrl_GetMetaObject,
-        beMatCtrl_className,
+        "beMatCtrl",
         0x44, /* instance size */
         beMatCtrl_GetVTable,
         beMatCtrl_InitFields,
@@ -63,6 +76,51 @@ void beMatCtrl_GetMetaObject(void)
     FUN_0035a7a0();
 }
 
+static FieldFactory g_beMatCtrl_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolArrayMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMatCtrl_fieldTable[] = {
+    "_wkChkMat",
+    "_wkChkPl",
+    "_wkChgFlagNO",
+    "_wkChgFlag",
+    "_wkPlExist",
+    "_wkMatOnList",
+    "_wkMatOldOnList",
+    "_isLuaCallDisp",
+    "_lua",
+};
+static igMetaField **g_beMatCtrl_fieldHandles[] = {
+    &g_beMatCtrl_wkChkMatMetaField,
+    &g_beMatCtrl_wkChkPlMetaField,
+    &g_beMatCtrl_wkChgFlagNOMetaField,
+    &g_beMatCtrl_wkChgFlagMetaField,
+    &g_beMatCtrl_wkPlExistMetaField,
+    &g_beMatCtrl_wkMatOnListMetaField,
+    &g_beMatCtrl_wkMatOldOnListMetaField,
+    &g_beMatCtrl_isLuaCallDispMetaField,
+    &g_beMatCtrl_luaMetaField,
+};
+static int g_beMatCtrl_fieldOffsets[] = {
+    40,
+    44,
+    48,
+    52,
+    32,
+    56,
+    60,
+    64,
+    36,
+};
+
 void beMatCtrl_InitFields(void) {
     igMetaObject *temp_s0;
     int temp_s2;
@@ -71,9 +129,9 @@ void beMatCtrl_InitFields(void) {
     struct F_35a940 *temp_s1_3;
     struct F_35a940 *t;
 
-    temp_s0 = g_beMatCtrl_metaObject[0];
+    temp_s0 = g_beMatCtrl_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMatCtrl_ctorTable[0], 9);
+    igMetaObject_CreateFields(temp_s0, g_beMatCtrl_ctorTable, 9);
     t = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     t->f52 = 4;
     temp_s1 = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
@@ -83,6 +141,6 @@ void beMatCtrl_InitFields(void) {
     temp_s1_3 = ((struct F_35a940 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
     temp_s1_3->f56 = (int)FUN_0035b770();
     temp_s1_3->f60 = 0;
-    igMetaObject_NameFields(temp_s0, &g_beMatCtrl_fieldTable[0], &DAT_004c61e0[0], &DAT_004c6210[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMatCtrl_fieldTable, g_beMatCtrl_fieldHandles, g_beMatCtrl_fieldOffsets, temp_s2);
 }
 

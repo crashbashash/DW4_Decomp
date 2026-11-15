@@ -1,9 +1,9 @@
 igMetaObject *igPsx2VertexStream_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2VertexStream_metaObject[0];
+    igMetaObject *g = g_igPsx2VertexStream_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00152050();
-    return g_igPsx2VertexStream_metaObject[0];
+    return g_igPsx2VertexStream_metaObject;
 }
 
 int igPsx2VertexStream_GetVTable(void) {
@@ -57,11 +57,11 @@ void igPsx2VertexStream_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2VertexStream_metaObject,
+        &g_igPsx2VertexStream_metaObject,
         igVertexStream_Register,
         igVertexStream_GetPublishedMetaObject,
         thunk_igPsx2VertexStream_GetMetaObject,
-        igPsx2VertexStream_className,
+        "igPsx2VertexStream",
         0x90, /* instance size */
         igPsx2VertexStream_GetVTable,
         &igPsx2VertexStream_InitFields,
@@ -71,29 +71,78 @@ void igPsx2VertexStream_Register(void) {
 }
 
 igMetaObject *FUN_001520e0(void) {
-    return g_igVertexStream_metaObject[0];
+    return g_igVertexStream_metaObject;
 }
+
+static FieldFactory g_igPsx2VertexStream_ctorTable[] = {
+    igBoolMetaField_Create,
+    igUnsignedLongMetaField_Create,
+    igUnsignedIntArrayMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igIntMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+};
+static const char *g_igPsx2VertexStream_fieldTable[] = {
+    "_scaleAlphaState",
+    "_syncSequence",
+    "_textureCoordCompiled",
+    "_multipassCompiled",
+    "_blendMatrixCount",
+    "_blendIndexCount",
+    "_vertexCountCompiled",
+    "_renderListHandle",
+    "_dmaBuffer",
+    "_dmaBufferStruct",
+};
+static igMetaField **g_igPsx2VertexStream_fieldHandles[] = {
+    &g_igPsx2VertexStream_scaleAlphaStateMetaField,
+    &g_igPsx2VertexStream_syncSequenceMetaField,
+    &g_igPsx2VertexStream_textureCoordCompiledMetaField,
+    &g_igPsx2VertexStream_multipassCompiledMetaField,
+    &g_igPsx2VertexStream_blendMatrixCountMetaField,
+    &g_igPsx2VertexStream_blendIndexCountMetaField,
+    &g_igPsx2VertexStream_vertexCountCompiledMetaField,
+    &g_igPsx2VertexStream_renderListHandleMetaField,
+    &g_igPsx2VertexStream_dmaBufferMetaField,
+    &g_igPsx2VertexStream_dmaBufferStructMetaField,
+};
+static int g_igPsx2VertexStream_fieldOffsets[] = {
+    36,
+    40,
+    48,
+    112,
+    116,
+    120,
+    124,
+    128,
+    132,
+    136,
+};
 
 void igPsx2VertexStream_InitFields(void) {
     void *temp_s1;
-    int temp_s2;
+    int fieldStart;
     void *f;
     void *temp_s1_2;
-    void *temp_s0;
+    igMetaObject *meta;
 
-    temp_s0 = (void *)g_igPsx2VertexStream_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2VertexStream_ctorTable[0], 0xA);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1);
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)) + 38) = 0;
-    f = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2);
+    meta = g_igPsx2VertexStream_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPsx2VertexStream_ctorTable, 0xA);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart), 1);
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
+    f = igMetaObject_GetFieldAt(meta, fieldStart + 2);
     *(int *)((char *)f + 52) = 0x10;
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)) + 38) = 0;
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 7)) + 38) = 0;
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 8));
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
     *(int *)((char *)(temp_s1_2) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &g_igPsx2VertexStream_fieldTable[0], &DAT_00489cc0[0], &DAT_00489cf0[0], temp_s2);
+    igMetaObject_NameFields(meta, g_igPsx2VertexStream_fieldTable, g_igPsx2VertexStream_fieldHandles, g_igPsx2VertexStream_fieldOffsets, fieldStart);
 }
 
 void thunk_FUN_0017f5a0(void) {

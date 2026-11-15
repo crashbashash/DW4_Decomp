@@ -2,6 +2,9 @@
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/ViewerSetup.h"
+
+#pragma push
+#pragma readonly_strings on
 #define REL(x) if ((x) != 0) { int *hd_ = (int *)(x) - 2; int c_ = ((int *)(x))[-1] - 1; ((int *)(x))[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader(*hd_, hd_); }
 #define REL_25afe0(v) { igObject *t_ = (igObject *)(v); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long) ((long long) (int) t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } }
 
@@ -1307,3 +1310,4 @@ void FUN_0025afe0(Holder *arg0) {
         var_a0->v108(0);
     }
 }
+#pragma pop

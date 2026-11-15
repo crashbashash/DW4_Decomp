@@ -1,13 +1,32 @@
+igMetaObject *g_beNDMWLoadIntf2ChrDataSel_metaObject;
+int g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_messengerMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_padManagerMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_comMdlCtrlMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_commonIntfMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_kindHardMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_oldPadDataMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_selMaxMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_ramNoMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_isCanselMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_isEndMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_selPointMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_mcSelPointMetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_st0MetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_st1MetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_st2MetaField;
+igMetaField *g_beNDMWLoadIntf2ChrDataSel_st3MetaField;
+
 igMetaObject *beNDMWLoadIntf2ChrDataSel_ResolveMetaObject(void)
 {
     unsigned char ready;
-    if (g_beNDMWLoadIntf2ChrDataSel_metaObject[0] != 0) {
-        ready = (g_beNDMWLoadIntf2ChrDataSel_metaObject[0]->_validity & 4) != 0;
+    if (g_beNDMWLoadIntf2ChrDataSel_metaObject != 0) {
+        ready = (g_beNDMWLoadIntf2ChrDataSel_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_003c2c20();
 done:
-    return g_beNDMWLoadIntf2ChrDataSel_metaObject[0];
+    return g_beNDMWLoadIntf2ChrDataSel_metaObject;
 }
 
 int beNDMWLoadIntf2ChrDataSel_GetVTable(void) {
@@ -43,15 +62,17 @@ void FUN_003c2c20(void)
     igMetaObject_RunStaticInit(beNDMWLoadIntf2ChrDataSel_Register);
 }
 
+static igMetaObjectCallback g_beNDMWLoadIntf2ChrDataSel_callbackList[] = { FUN_00357d10, FUN_0034cb30, FUN_003c7090, FUN_003c4f00, 0 };
+
 void *beNDMWLoadIntf2ChrDataSel_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        ((igMetaObject_3c2c40 * *)g_beNDMWLoadIntf2ChrDataSel_metaObject),
+        &g_beNDMWLoadIntf2ChrDataSel_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beNDMWLoadIntf2ChrDataSel_GetMetaObject,
-        beNDMWLoadIntf2ChrDataSel_className,
+        "beNDMWLoadIntf2ChrDataSel",
         0x4c, /* instance size */
         beNDMWLoadIntf2ChrDataSel_GetVTable,
         beNDMWLoadIntf2ChrDataSel_InitFields,
@@ -65,6 +86,79 @@ void beNDMWLoadIntf2ChrDataSel_GetMetaObject(void)
     beNDMWLoadIntf2ChrDataSel_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWLoadIntf2ChrDataSel_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWLoadIntf2ChrDataSel_fieldTable[] = {
+    "_messenger",
+    "_padManager",
+    "_comMdlCtrl",
+    "_commonIntf",
+    "_kindHard",
+    "_oldPadData",
+    "_selMax",
+    "_ramNo",
+    "_isCansel",
+    "_isEnd",
+    "_selPoint",
+    "_mcSelPoint",
+    "_st0",
+    "_st1",
+    "_st2",
+    "_st3",
+};
+static igMetaField **g_beNDMWLoadIntf2ChrDataSel_fieldHandles[] = {
+    &g_beNDMWLoadIntf2ChrDataSel_messengerMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_padManagerMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_comMdlCtrlMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_commonIntfMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_kindHardMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_oldPadDataMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_selMaxMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_ramNoMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_isCanselMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_isEndMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_selPointMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_mcSelPointMetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_st0MetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_st1MetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_st2MetaField,
+    &g_beNDMWLoadIntf2ChrDataSel_st3MetaField,
+};
+static int g_beNDMWLoadIntf2ChrDataSel_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    49,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+};
+
 void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     int temp_s2;
     int temp_s3;
@@ -76,14 +170,16 @@ void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     igMetaObject *temp_s1;
     igStringMetaField *temp_v0_2;
 
-    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2ChrDataSel_metaObject[0]);
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (igMetaObject *)(g_beNDMWLoadIntf2ChrDataSel_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beNDMWLoadIntf2ChrDataSel_ctorTable[0], 0x10);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2ChrDataSel_ctorTable, 0x10);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(temp_s1->_metaFields, temp_v0);
     temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &CHRDATASEL[0]);
-    temp_v0_2->_externalEnumStorage = (int)(&DAT_0058b6b8[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "CHRDATASEL");
+    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
     if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
@@ -101,6 +197,6 @@ void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     temp_s0_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
     temp_s0_4->_metaObject = (int)FUN_003c4c20();
     temp_s0_4->_refCounted = 0;
-    igMetaObject_NameFields(temp_s1, &g_beNDMWLoadIntf2ChrDataSel_fieldTable[0], &DAT_004cafa0[0], &DAT_004cafe0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2ChrDataSel_fieldTable, g_beNDMWLoadIntf2ChrDataSel_fieldHandles, g_beNDMWLoadIntf2ChrDataSel_fieldOffsets, temp_s2);
 }
 

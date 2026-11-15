@@ -1,6 +1,11 @@
 #include "src/engine/scenesearch/SceneSearchLibrary.h"
 #include "dw4/igMath.h"
 
+#pragma push
+#pragma readonly_strings on
+
+unsigned char g_SceneSearchLibrary_registered;
+
 /* SceneSearch's register list: the library has one registrar. */
 void thunk_FUN_00238ed0(void) {
     FUN_00238ed0();
@@ -12,18 +17,31 @@ void SceneSearchLibrary_MarkRegistered(void) {
     }
 }
 
+static const char *g_igSearchSceneGraph_applicationFindTypeNames[] = {
+    "IG_APPLICATION_FIND_ALL", "IG_APPLICATION_FIND_OFTYPE", "IG_APPLICATION_FIND_OFEXACTTYPE",
+};
+static int g_igSearchSceneGraph_applicationFindTypeValues[] = {
+    0, 1, 2,
+};
+igMetaEnum *g_igSearchSceneGraph_applicationFindTypeMetaEnum;
+igMetaObject *g_igSearchSceneGraph_metaObject;
+igMetaField *g_igSearchSceneGraph_iterateGraphMetaField;
+igMetaField *g_igSearchSceneGraph_searchStringMetaField;
+igMetaField *g_igSearchSceneGraph_searchMetaMetaField;
+igMetaField *g_igSearchSceneGraph_nextOfTypeCodeMetaField;
+
 int FUN_00238d70(void) {
-    if (DAT_0056dc58[0] == 0) {
-        DAT_0056dc58[0] = igMetaEnum_Create(&IG_APPLICATION_FIND_TYPE[0], &DAT_00498270[0], &DAT_00498280[0], 3);
+    if (g_igSearchSceneGraph_applicationFindTypeMetaEnum == 0) {
+        g_igSearchSceneGraph_applicationFindTypeMetaEnum = igMetaEnum_Create("IG_APPLICATION_FIND_TYPE", g_igSearchSceneGraph_applicationFindTypeNames, g_igSearchSceneGraph_applicationFindTypeValues, 3);
     }
-    return DAT_0056dc58[0];
+    return (int)g_igSearchSceneGraph_applicationFindTypeMetaEnum;
 }
 
 igMetaObject *igSearchSceneGraph_GetMetaObject(void) {
-    igMetaObject *meta = g_igSearchSceneGraph_metaObject[0];
+    igMetaObject *meta = g_igSearchSceneGraph_metaObject;
     if (!meta || ((meta->_validity & 4) != 0) == false)
         FUN_00238ed0();
-    return g_igSearchSceneGraph_metaObject[0];
+    return g_igSearchSceneGraph_metaObject;
 }
 
 /* Builds an instance on the stack and reads its vtable back through the class's vtable offset. */
@@ -50,15 +68,17 @@ void FUN_00238ed0(void) {
     igMetaObject_RunStaticInit(igSearchSceneGraph_Register);
 }
 
+static igMetaObjectCallback g_igSearchSceneGraph_callbackList[] = { FUN_00227620, igMetaObject_EnsureRegistered, 0 };
+
 void igSearchSceneGraph_Register(void) {
     SceneSearchLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSearchSceneGraph_metaObject,
+        &g_igSearchSceneGraph_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igSearchSceneGraph_GetMetaObject,
-        igSearchSceneGraph_className,
+        "igSearchSceneGraph",
         0x1C, /* instance size */
         igSearchSceneGraph_GetVTable,
         &igSearchSceneGraph_InitFields,
@@ -71,6 +91,32 @@ void thunk_igSearchSceneGraph_GetMetaObject(void) {
     igSearchSceneGraph_GetMetaObject();
 }
 
+static FieldFactory g_igSearchSceneGraph_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+};
+static const char *g_igSearchSceneGraph_fieldTable[] = {
+    "_iterateGraph",
+    "_searchString",
+    "_searchMeta",
+    "_nextOfTypeCode",
+};
+static igMetaField **g_igSearchSceneGraph_fieldHandles[] = {
+    &g_igSearchSceneGraph_iterateGraphMetaField,
+    &g_igSearchSceneGraph_searchStringMetaField,
+    &g_igSearchSceneGraph_searchMetaMetaField,
+    &g_igSearchSceneGraph_nextOfTypeCodeMetaField,
+};
+static int g_igSearchSceneGraph_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+};
+static int g_igSearchSceneGraph_nextOfTypeCodeDefault;
+
 /* Four fields after igNamedObject's: an object reference, a string, a second reference and an enum. */
 void igSearchSceneGraph_InitFields(void) {
     int first;
@@ -79,19 +125,19 @@ void igSearchSceneGraph_InitFields(void) {
     void *firstRef;
     void *meta;
 
-    meta = (void *)g_igSearchSceneGraph_metaObject[0];
+    meta = g_igSearchSceneGraph_metaObject;
     first = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, &g_igSearchSceneGraph_ctorTable[0], 4);
+    igMetaObject_CreateFields(meta, g_igSearchSceneGraph_ctorTable, 4);
     firstRef = igMetaObject_GetFieldAt(meta, first);
     *(int *)((char *)firstRef + 56) = FUN_002274a0();
     *(unsigned char *)((char *)firstRef + 52) = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), &DAT_004e9da0[0]);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), "");
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
     *(int *)((char *)secondRef + 56) = igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
-    igEnumMetaField_SetDefaultValue(enumField, &DAT_004982e0[0]);
+    igEnumMetaField_SetDefaultValue(enumField, &g_igSearchSceneGraph_nextOfTypeCodeDefault);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
-    igMetaObject_NameFields(meta, &g_igSearchSceneGraph_fieldTable[0], &DAT_004982c0[0], &DAT_004982d0[0], first);
+    igMetaObject_NameFields(meta, g_igSearchSceneGraph_fieldTable, g_igSearchSceneGraph_fieldHandles, g_igSearchSceneGraph_fieldOffsets, first);
 }
 
 /* Sets the searched scene (self[8], ref-counted) and reallocates both identity-filled matrix arrays
@@ -202,7 +248,7 @@ void **FUN_00239300(void **ref, short flags) {
 }
 
 igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void) {
-    return g_igSearchSceneGraph_metaObject[0];
+    return g_igSearchSceneGraph_metaObject;
 }
 
 /* A sixteen-colour palette: black, grey, the six half-intensity colours, white, silver, the six full ones. */
@@ -224,3 +270,5 @@ const igVec4f g_colorPalette[16] = {
     igVec4f(0.0, 0.0, 1.0, 1),
     igVec4f(1.0, 0.0, 1.0, 1),
 };
+
+#pragma pop

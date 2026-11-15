@@ -1,12 +1,14 @@
+igMetaObject *g_beSvPlatDataPC_metaObject;
+
 void *FUN_00347060(void) {
     bool ok;
-    if (g_beSvPlatDataPC_metaObject[0] == 0) goto make;
-    ok = !!(g_beSvPlatDataPC_metaObject[0]->_validity & 4);
+    if (g_beSvPlatDataPC_metaObject == 0) goto make;
+    ok = !!(g_beSvPlatDataPC_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003471f0();
 done:;
-    return g_beSvPlatDataPC_metaObject[0];
+    return g_beSvPlatDataPC_metaObject;
 }
 
 int beSvPlatDataPC_GetVTable(void) {
@@ -66,11 +68,11 @@ void *beSvPlatDataPC_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvPlatDataPC_metaObject,
+        &g_beSvPlatDataPC_metaObject,
         beSvPlatBaseData_Register,
         beSvPlatBaseData_GetPublishedMetaObject,
         beSvPlatDataPC_GetMetaObject,
-        beSvPlatDataPC_className,
+        "beSvPlatDataPC",
         0x18, /* instance size */
         beSvPlatDataPC_GetVTable,
         0,
@@ -85,6 +87,6 @@ void beSvPlatDataPC_GetMetaObject(void)
 }
 
 igMetaObject *FUN_003472a0(void) {
-    return g_beSvPlatBaseData_metaObject[0];
+    return g_beSvPlatBaseData_metaObject;
 }
 

@@ -1,16 +1,24 @@
+igMetaObject *g_igLocationTable_metaObject;
+igMetaField *g_igLocationTable_capacityMetaField;
+igMetaField *g_igLocationTable_hashCapacityMetaField;
+igMetaField *g_igLocationTable_locationsMetaField;
+igMetaField *g_igLocationTable_hashIndexMetaField;
+igMetaField *g_igLocationTable_symbolNamesMetaField;
+igMetaField *g_igLocationTable_sourceFileNamesMetaField;
+
 igMetaObject *igLocationTable_GetOrCreateMetaObject(void) {
-    if (g_igLocationTable_metaObject[0] == 0) {
-        g_igLocationTable_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igLocationTable_metaObject == 0) {
+        g_igLocationTable_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igLocationTable_metaObject[0];
+    return g_igLocationTable_metaObject;
 }
 
 igMetaObject *igLocationTable_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLocationTable_metaObject[0];
+    igMetaObject *g = g_igLocationTable_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igLocationTable_EnsureRegistered();
-    return g_igLocationTable_metaObject[0];
+    return g_igLocationTable_metaObject;
 }
 
 int igLocationTable_GetVTable(void) {
@@ -28,7 +36,7 @@ int igLocationTable_GetVTable(void) {
     p18 = &o._symbolNames;
     *p18 = 0;
     o._sourceFileNames = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     o._vtable = (int)&g_igLocationTable_vtable[0];
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&o._sourceFileNames, -1);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)p18, -1);
@@ -42,26 +50,61 @@ void igLocationTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igLocationTable_Register);
 }
 
+static igMetaObjectCallback g_igLocationTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igStringTable_EnsureRegistered, 0 };
+
 void igLocationTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igLocationTable_metaObject,
+        &g_igLocationTable_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igLocationTable_GetMetaObjectFunction,
-        igLocationTable_className,
+        "igLocationTable",
         0x20,
         igLocationTable_GetVTable,
         igLocationTable_InitFields,
         0,
-        (igMetaObjectCallback *)g_igLocationTable_callbackList
+        g_igLocationTable_callbackList
     );
 }
 
 void igLocationTable_GetMetaObjectFunction(void) {
     igLocationTable_GetMetaObject();
 }
+
+static FieldFactory g_igLocationTable_ctorTable[] = {
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igLocationTable_fieldTable[] = {
+    "_capacity",
+    "_hashCapacity",
+    "_locations",
+    "_hashIndex",
+    "_symbolNames",
+    "_sourceFileNames",
+};
+static igMetaField **g_igLocationTable_fieldDescriptors[] = {
+    &g_igLocationTable_capacityMetaField,
+    &g_igLocationTable_hashCapacityMetaField,
+    &g_igLocationTable_locationsMetaField,
+    &g_igLocationTable_hashIndexMetaField,
+    &g_igLocationTable_symbolNamesMetaField,
+    &g_igLocationTable_sourceFileNamesMetaField,
+};
+static int g_igLocationTable_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+};
 
 void igLocationTable_InitFields(void) {
     int base;
@@ -71,9 +114,9 @@ void igLocationTable_InitFields(void) {
     void *sourceFileNamesField;
     void *meta;
 
-    meta = (void *)g_igLocationTable_metaObject[0];
+    meta = (void *)g_igLocationTable_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igLocationTable_ctorTable[0], 6);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igLocationTable_ctorTable, 6);
     locationsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)locationsField)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)locationsField)->_construct = 1;
@@ -86,6 +129,6 @@ void igLocationTable_InitFields(void) {
     sourceFileNamesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     ((igObjectRefMetaField *)sourceFileNamesField)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)sourceFileNamesField)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igLocationTable_fieldTable[0], (igMetaField ***)&g_igLocationTable_fieldDescriptors[0], &g_igLocationTable_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igLocationTable_fieldTable, g_igLocationTable_fieldDescriptors, g_igLocationTable_fieldOffsets, base);
 }
 

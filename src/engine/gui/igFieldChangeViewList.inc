@@ -1,16 +1,18 @@
+igMetaObject *g_igFieldChangeViewList_metaObject;
+
 igMetaObject *FUN_00450c70(void) {
-    if (g_igFieldChangeViewList_metaObject[0] == 0) {
-        g_igFieldChangeViewList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igFieldChangeViewList_metaObject == 0) {
+        g_igFieldChangeViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igFieldChangeViewList_metaObject[0];
+    return g_igFieldChangeViewList_metaObject;
 }
 
 igMetaObject *igFieldChangeViewList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFieldChangeViewList_metaObject[0];
+    igMetaObject *g = g_igFieldChangeViewList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igFieldChangeViewList_EnsureRegistered();
-    return g_igFieldChangeViewList_metaObject[0];
+    return g_igFieldChangeViewList_metaObject;
 }
 
 int igFieldChangeViewList_GetVTable(void) {
@@ -26,15 +28,17 @@ void igFieldChangeViewList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFieldChangeViewList_Register);
 }
 
+static igMetaObjectCallback g_igFieldChangeViewList_callbackList[] = { igFieldChangeView_EnsureRegistered, 0 };
+
 void igFieldChangeViewList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFieldChangeViewList_metaObject,
+        &g_igFieldChangeViewList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igFieldChangeViewList_GetMetaObject,
-        igFieldChangeViewList_className,
+        "igFieldChangeViewList",
         0x14, /* instance size */
         igFieldChangeViewList_GetVTable,
         0,

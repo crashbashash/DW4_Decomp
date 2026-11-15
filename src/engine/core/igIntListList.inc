@@ -1,16 +1,18 @@
+igMetaObject *g_igIntListList_metaObject;
+
 igMetaObject *igIntListList_GetOrCreateMetaObject(void) {
-    if (g_igIntListList_metaObject[0] == 0) {
-        g_igIntListList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igIntListList_metaObject == 0) {
+        g_igIntListList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igIntListList_metaObject[0];
+    return g_igIntListList_metaObject;
 }
 
 igMetaObject *igIntListList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIntListList_metaObject[0];
+    igMetaObject *g = g_igIntListList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igIntListList_EnsureRegistered();
-    return g_igIntListList_metaObject[0];
+    return g_igIntListList_metaObject;
 }
 
 int igIntListList_GetVTable(void) {
@@ -18,7 +20,7 @@ int igIntListList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igIntListList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igIntListList_EnsureRegistered(void)
@@ -26,20 +28,22 @@ void igIntListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igIntListList_Register);
 }
 
+static igMetaObjectCallback g_igIntListList_callbackList[] = { igIntList_EnsureRegistered, 0 };
+
 void igIntListList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igIntListList_metaObject,
+        &g_igIntListList_metaObject,
         (igMetaObjectRegisterFunction)igObjectList_Register,
         (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igIntListList_GetMetaObjectFunction,
-        igIntListList_className,
+        "igIntListList",
         0x14,
         igIntListList_GetVTable,
         0,
         0,
-        (igMetaObjectCallback *)g_igIntListList_callbackList
+        g_igIntListList_callbackList
     );
 }
 

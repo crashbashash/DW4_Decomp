@@ -1,9 +1,11 @@
+igMetaObject *g_igCapabilityManager_metaObject;
+
 igMetaObject *igCapabilityManager_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCapabilityManager_metaObject[0];
+    igMetaObject *g = g_igCapabilityManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014fde0();
-    return g_igCapabilityManager_metaObject[0];
+    return g_igCapabilityManager_metaObject;
 }
 
 void FUN_0014fde0(void)
@@ -15,11 +17,11 @@ void igCapabilityManager_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igCapabilityManager_metaObject,
+        &g_igCapabilityManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igCapabilityManager_GetMetaObject,
-        igCapabilityManager_className,
+        "igCapabilityManager",
         8, /* instance size */
         0,
         0,

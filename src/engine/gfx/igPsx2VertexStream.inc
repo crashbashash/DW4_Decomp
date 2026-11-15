@@ -1,3 +1,15 @@
+igMetaObject *g_igPsx2VertexStream_metaObject;
+igMetaField *g_igPsx2VertexStream_scaleAlphaStateMetaField;
+igMetaField *g_igPsx2VertexStream_syncSequenceMetaField;
+igMetaField *g_igPsx2VertexStream_textureCoordCompiledMetaField;
+igMetaField *g_igPsx2VertexStream_multipassCompiledMetaField;
+igMetaField *g_igPsx2VertexStream_blendMatrixCountMetaField;
+igMetaField *g_igPsx2VertexStream_blendIndexCountMetaField;
+igMetaField *g_igPsx2VertexStream_vertexCountCompiledMetaField;
+igMetaField *g_igPsx2VertexStream_renderListHandleMetaField;
+igMetaField *g_igPsx2VertexStream_dmaBufferMetaField;
+igMetaField *g_igPsx2VertexStream_dmaBufferStructMetaField;
+
 void thunk_igPsx2VertexStream_GetMetaObject(void) {
     igPsx2VertexStream_GetMetaObject();
 }

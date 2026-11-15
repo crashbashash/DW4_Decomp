@@ -10,6 +10,8 @@ void FUN_00239390(void) {
     FUN_0023aaf0();
 }
 
+unsigned char g_CollisionLibrary_registered;
+
 void CollisionLibrary_MarkRegistered(void) {
     if (g_CollisionLibrary_registered == 0) {
         g_CollisionLibrary_registered = 1;

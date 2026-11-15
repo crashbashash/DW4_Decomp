@@ -1,16 +1,23 @@
+igMetaObject *g_igAnimationDatabase_metaObject;
+igMetaField *g_igAnimationDatabase_skeletonListMetaField;
+igMetaField *g_igAnimationDatabase_animationListMetaField;
+igMetaField *g_igAnimationDatabase_skinListMetaField;
+igMetaField *g_igAnimationDatabase_appearanceListMetaField;
+igMetaField *g_igAnimationDatabase_combinerListMetaField;
+
 igMetaObject *FUN_001a7780(void) {
-    if (g_igAnimationDatabase_metaObject[0] == 0) {
-        g_igAnimationDatabase_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAnimationDatabase_metaObject == 0) {
+        g_igAnimationDatabase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAnimationDatabase_metaObject[0];
+    return g_igAnimationDatabase_metaObject;
 }
 
 igMetaObject *igAnimationDatabase_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationDatabase_metaObject[0];
+    igMetaObject *g = g_igAnimationDatabase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a7b00();
-    return g_igAnimationDatabase_metaObject[0];
+    return g_igAnimationDatabase_metaObject;
 }
 
 int igAnimationDatabase_GetVTable(void) {
@@ -109,15 +116,17 @@ void FUN_001a7b00(void)
     igMetaObject_RunStaticInit(igAnimationDatabase_Register);
 }
 
+static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { FUN_001984c0, FUN_001a9060, FUN_00197f40, FUN_001a60c0, FUN_001a8490, 0 };
+
 void igAnimationDatabase_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationDatabase_metaObject),
+        &g_igAnimationDatabase_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
         thunk_igAnimationDatabase_GetMetaObject,
-        igAnimationDatabase_className,
+        "igAnimationDatabase",
         0x28, /* instance size */
         igAnimationDatabase_GetVTable,
         &igAnimationDatabase_InitFields,
@@ -130,6 +139,35 @@ void thunk_igAnimationDatabase_GetMetaObject(void) {
     igAnimationDatabase_GetMetaObject();
 }
 
+static FieldFactory g_igAnimationDatabase_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igAnimationDatabase_fieldTable[] = {
+    "_skeletonList",
+    "_animationList",
+    "_skinList",
+    "_appearanceList",
+    "_combinerList",
+};
+static igMetaField **g_igAnimationDatabase_fieldHandles[] = {
+    &g_igAnimationDatabase_skeletonListMetaField,
+    &g_igAnimationDatabase_animationListMetaField,
+    &g_igAnimationDatabase_skinListMetaField,
+    &g_igAnimationDatabase_appearanceListMetaField,
+    &g_igAnimationDatabase_combinerListMetaField,
+};
+static int g_igAnimationDatabase_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+    36,
+};
+
 void igAnimationDatabase_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -139,9 +177,9 @@ void igAnimationDatabase_InitFields(void) {
     void *temp_s2_5;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igAnimationDatabase_metaObject[0];
+    temp_s1 = (void *)g_igAnimationDatabase_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igAnimationDatabase_ctorTable[0], 5);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igAnimationDatabase_ctorTable, 5);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001983e0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -157,6 +195,6 @@ void igAnimationDatabase_InitFields(void) {
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_001a83b0();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igAnimationDatabase_fieldTable[0], &DAT_0048d260[0], &DAT_0048d280[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAnimationDatabase_fieldTable, g_igAnimationDatabase_fieldHandles, g_igAnimationDatabase_fieldOffsets, temp_s0);
 }
 

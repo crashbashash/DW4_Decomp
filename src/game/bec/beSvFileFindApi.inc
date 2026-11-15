@@ -1,3 +1,5 @@
+igMetaObject *g_beSvFileFindApi_metaObject;
+
 void FUN_00349af0(int arg0) {
     FUN_00349cc0();
     igMetaObject_CreateInstance(*(int *)0x588278, arg0);
@@ -5,13 +7,13 @@ void FUN_00349af0(int arg0) {
 
 void *FUN_00349b30(void) {
     bool ok;
-    if (g_beSvFileFindApi_metaObject[0] == 0) goto make;
-    ok = !!(g_beSvFileFindApi_metaObject[0]->_validity & 4);
+    if (g_beSvFileFindApi_metaObject == 0) goto make;
+    ok = !!(g_beSvFileFindApi_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00349cc0();
 done:;
-    return g_beSvFileFindApi_metaObject[0];
+    return g_beSvFileFindApi_metaObject;
 }
 
 int beSvFileFindApi_GetVTable(void) {
@@ -72,11 +74,11 @@ void *beSvFileFindApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvFileFindApi_metaObject,
+        &g_beSvFileFindApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
         beSvFileFindApi_GetMetaObject,
-        beSvFileFindApi_className,
+        "beSvFileFindApi",
         0x54, /* instance size */
         beSvFileFindApi_GetVTable,
         0,

@@ -1,21 +1,23 @@
+igMetaObject *g_beParticleCtrl2_metaObject;
+
 void beParticleCtrl2_CreateInstance(int arg0) {
     FUN_0034c7f0();
     igMetaObject_CreateInstance(*(int *)0x588510, arg0);
 }
 
 igMetaObject *FUN_0034c670(void) {
-    if (g_beParticleCtrl2_metaObject[0] == 0) {
-        g_beParticleCtrl2_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beParticleCtrl2_metaObject == 0) {
+        g_beParticleCtrl2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beParticleCtrl2_metaObject[0];
+    return g_beParticleCtrl2_metaObject;
 }
 
 void *FUN_0034c6c0(void) {
-    igMetaObject *g = g_beParticleCtrl2_metaObject[0];
+    igMetaObject *g = g_beParticleCtrl2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034c7f0();
     }
-    return g_beParticleCtrl2_metaObject[0];
+    return g_beParticleCtrl2_metaObject;
 }
 
 int beParticleCtrl2_GetVTable(void) {
@@ -69,11 +71,11 @@ void *beParticleCtrl2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beParticleCtrl2_metaObject,
+        &g_beParticleCtrl2_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beParticleCtrl2_GetMetaObject,
-        beParticleCtrl2_className,
+        "beParticleCtrl2",
         0x20, /* instance size */
         beParticleCtrl2_GetVTable,
         0,

@@ -1,3 +1,7 @@
+igMetaObject *g_igMessageFilter_metaObject;
+igMetaField *g_igMessageFilter_msgTypeMetaField;
+igMetaField *g_igMessageFilter_receiversMetaField;
+
 int FUN_00231b40(int arg0) {
     FUN_00231cb0();
     return igMetaObject_CreateInstance(*(int *)0x56DAF8, arg0);
@@ -5,10 +9,10 @@ int FUN_00231b40(int arg0) {
 
 igMetaObject *igMessageFilter_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMessageFilter_metaObject[0];
+    igMetaObject *g = g_igMessageFilter_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231cb0();
-    return g_igMessageFilter_metaObject[0];
+    return g_igMessageFilter_metaObject;
 }
 
 int igMessageFilter_GetVTable(void) {
@@ -54,15 +58,17 @@ void FUN_00231cb0(void)
     igMetaObject_RunStaticInit(igMessageFilter_Register);
 }
 
+static igMetaObjectCallback g_igMessageFilter_callbackList[] = { igMetaObject_EnsureRegistered, FUN_00231870, 0 };
+
 void igMessageFilter_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMessageFilter_metaObject,
+        &g_igMessageFilter_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igMessageFilter_GetMetaObject,
-        igMessageFilter_className,
+        "igMessageFilter",
         0x10, /* instance size */
         igMessageFilter_GetVTable,
         &igMessageFilter_InitFields,
@@ -75,21 +81,38 @@ void thunk_igMessageFilter_GetMetaObject(void) {
     igMessageFilter_GetMetaObject();
 }
 
+static FieldFactory g_igMessageFilter_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igMessageFilter_fieldTable[] = {
+    "_msgType",
+    "_receivers",
+};
+static igMetaField **g_igMessageFilter_fieldHandles[] = {
+    &g_igMessageFilter_msgTypeMetaField,
+    &g_igMessageFilter_receiversMetaField,
+};
+static int g_igMessageFilter_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void igMessageFilter_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igMessageFilter_metaObject[0];
+    temp_s0 = g_igMessageFilter_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igMessageFilter_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igMessageFilter_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObject_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00231790();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igMessageFilter_fieldTable[0], &DAT_00498008[0], &DAT_00498010[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igMessageFilter_fieldTable, g_igMessageFilter_fieldHandles, g_igMessageFilter_fieldOffsets, temp_s2);
 }
 

@@ -1,12 +1,35 @@
+igMetaObject *g_libNdmwRuntimePlugin_metaObject;
+igMetaField *g_libNdmwRuntimePlugin_afsSetupMetaField;
+igMetaField *g_libNdmwRuntimePlugin_stageCtlMetaField;
+igMetaField *g_libNdmwRuntimePlugin_panelWazaMetaField;
+igMetaField *g_libNdmwRuntimePlugin_logoMetaField;
+igMetaField *g_libNdmwRuntimePlugin_title2MetaField;
+igMetaField *g_libNdmwRuntimePlugin_loadCtrl2MetaField;
+igMetaField *g_libNdmwRuntimePlugin_loadIntf2MetaField;
+igMetaField *g_libNdmwRuntimePlugin_saveCtrlMetaField;
+igMetaField *g_libNdmwRuntimePlugin_saveIntfMetaField;
+igMetaField *g_libNdmwRuntimePlugin_gameRamMetaField;
+igMetaField *g_libNdmwRuntimePlugin_statusMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlPlayerMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlPlayer2MetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlPBulletMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlEnemyMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlEBulletMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlObjectMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlItemMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlEffectMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlMapBaseMetaField;
+igMetaField *g_libNdmwRuntimePlugin_mdlMapCursorMetaField;
+
 igMetaObject *FUN_003b0a30(void) {
-    igMetaObject *g = g_libNdmwRuntimePlugin_metaObject[0];
+    igMetaObject *g = g_libNdmwRuntimePlugin_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003b18b0();
 done:
-    return g_libNdmwRuntimePlugin_metaObject[0];
+    return g_libNdmwRuntimePlugin_metaObject;
 }
 
 void **FUN_003b0ce0(struct Ref **self, short flag) {
@@ -462,15 +485,17 @@ void FUN_003b18b0(void)
     igMetaObject_RunStaticInit(libNdmwRuntimePlugin_Register);
 }
 
+static igMetaObjectCallback g_libNdmwRuntimePlugin_callbackList[] = { FUN_003cb020, FUN_003bbf60, FUN_003bf050, FUN_003c2490, FUN_003b2a90, FUN_003c7ef0, FUN_003c4850, FUN_003bd540, FUN_003bcdd0, FUN_003c9f70, FUN_003bb8e0, FUN_003bfae0, FUN_003bf3f0, FUN_003c0aa0, FUN_003c1860, FUN_003c1de0, FUN_003c0c90, FUN_003c1270, FUN_003c1bf0, FUN_003c1070, FUN_003c0e80, 0 };
+
 void *libNdmwRuntimePlugin_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_libNdmwRuntimePlugin_metaObject,
+        &g_libNdmwRuntimePlugin_metaObject,
         igInsightPlugin_Register,
         igInsightPlugin_GetPublishedMetaObject,
         libNdmwRuntimePlugin_GetMetaObject,
-        libNdmwRuntimePlugin_className,
+        "libNdmwRuntimePlugin",
         0x5c, /* instance size */
         libNdmwRuntimePlugin_GetVTable,
         libNdmwRuntimePlugin_InitFields,
@@ -483,6 +508,99 @@ void libNdmwRuntimePlugin_GetMetaObject(void)
 {
     FUN_003b0a30();
 }
+
+static FieldFactory g_libNdmwRuntimePlugin_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_libNdmwRuntimePlugin_fieldTable[] = {
+    "_afsSetup",
+    "_stageCtl",
+    "_panelWaza",
+    "_logo",
+    "_title2",
+    "_loadCtrl2",
+    "_loadIntf2",
+    "_saveCtrl",
+    "_saveIntf",
+    "_gameRam",
+    "_status",
+    "_mdlPlayer",
+    "_mdlPlayer2",
+    "_mdlPBullet",
+    "_mdlEnemy",
+    "_mdlEBullet",
+    "_mdlObject",
+    "_mdlItem",
+    "_mdlEffect",
+    "_mdlMapBase",
+    "_mdlMapCursor",
+};
+static igMetaField **g_libNdmwRuntimePlugin_fieldHandles[] = {
+    &g_libNdmwRuntimePlugin_afsSetupMetaField,
+    &g_libNdmwRuntimePlugin_stageCtlMetaField,
+    &g_libNdmwRuntimePlugin_panelWazaMetaField,
+    &g_libNdmwRuntimePlugin_logoMetaField,
+    &g_libNdmwRuntimePlugin_title2MetaField,
+    &g_libNdmwRuntimePlugin_loadCtrl2MetaField,
+    &g_libNdmwRuntimePlugin_loadIntf2MetaField,
+    &g_libNdmwRuntimePlugin_saveCtrlMetaField,
+    &g_libNdmwRuntimePlugin_saveIntfMetaField,
+    &g_libNdmwRuntimePlugin_gameRamMetaField,
+    &g_libNdmwRuntimePlugin_statusMetaField,
+    &g_libNdmwRuntimePlugin_mdlPlayerMetaField,
+    &g_libNdmwRuntimePlugin_mdlPlayer2MetaField,
+    &g_libNdmwRuntimePlugin_mdlPBulletMetaField,
+    &g_libNdmwRuntimePlugin_mdlEnemyMetaField,
+    &g_libNdmwRuntimePlugin_mdlEBulletMetaField,
+    &g_libNdmwRuntimePlugin_mdlObjectMetaField,
+    &g_libNdmwRuntimePlugin_mdlItemMetaField,
+    &g_libNdmwRuntimePlugin_mdlEffectMetaField,
+    &g_libNdmwRuntimePlugin_mdlMapBaseMetaField,
+    &g_libNdmwRuntimePlugin_mdlMapCursorMetaField,
+};
+static int g_libNdmwRuntimePlugin_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+};
 
 void libNdmwRuntimePlugin_InitFields(void) {
     void *temp_s2;
@@ -509,9 +627,11 @@ void libNdmwRuntimePlugin_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_libNdmwRuntimePlugin_metaObject[0];
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (void *)g_libNdmwRuntimePlugin_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_libNdmwRuntimePlugin_ctorTable[0], 0x15);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_libNdmwRuntimePlugin_ctorTable, 0x15);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003cae40();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -554,6 +674,6 @@ void libNdmwRuntimePlugin_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)FUN_003c0f70();
     temp_s2_21 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14));
     ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_003c0d80();
-    igMetaObject_NameFields(temp_s1, &g_libNdmwRuntimePlugin_fieldTable[0], &DAT_004c9350[0], &DAT_004c93b0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_libNdmwRuntimePlugin_fieldTable, g_libNdmwRuntimePlugin_fieldHandles, g_libNdmwRuntimePlugin_fieldOffsets, temp_s0);
 }
 

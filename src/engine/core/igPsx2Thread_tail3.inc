@@ -1,5 +1,5 @@
 int igPsx2Thread_GetMeta(void) {
-    return ((int *)g_igPsx2Thread_metaObject)[0];
+    return (int)g_igPsx2Thread_metaObject;
 }
 
 /* Vtable slot 42 of igPsx2Thread: returns the constant 0x10. The adjacent slot 43 returns the same

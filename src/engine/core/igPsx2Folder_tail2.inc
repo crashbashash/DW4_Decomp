@@ -22,7 +22,7 @@ void igPsx2Folder_TrimPath(igStringObj *path) {
 
     s = (char *)path->_buffer;
     if (s == 0) {
-        s = g_stringObjEmptyText[0];
+        s = g_stringObjEmptyText;
     }
     i = strlen(s) - 1;
     while ((c = s[i]) == 0x20 || c == 9) {
@@ -53,38 +53,38 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         const char *key;
         igSmartPointer<igObject> path((igObject *)igStringObj_Create((int)currentAllocator()));
         if (kind == 1) {
-            key = text_sonyModulePath;
+            key ="sonyModulePath";
         } else {
-            key = text_intrinsicModulePath;
+            key ="intrinsicModulePath";
         }
-        if (igRegistry_GetValueStringObj(*(int *)(g_objectSystem[0] + 56), 2, key, (igStringObj **)&path, (const char *)emptyString_4, 0) != 0) {
+        if (igRegistry_GetValueStringObj(*(int *)(g_objectSystem + 56), 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
             igPsx2Folder_TrimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
-            dir = (dir == 0) ? g_stringObjEmptyText[0] : dir;
+            dir = (dir == 0) ? g_stringObjEmptyText : dir;
             igMemoryPoolView *allocator = currentAllocator();
             joined = (char *)allocator->Allocate(strlen(dir) + strlen(name) + 2);
-            sprintf(joined, (const char *)percent_s_slash_percent_s, dir, name);
-        } else if (g_igPsx2_useCdrom[0] != 0) {
+            sprintf(joined, (const char *)"%s/%s", dir, name);
+        } else if (g_igPsx2_useCdrom != 0) {
             igMemoryPoolView *allocator = currentAllocator();
             joined = (char *)allocator->Allocate(strlen(name) + 10);
-            sprintf(joined, text_MODULES_s, name);
+            sprintf(joined,"\\MODULES\\%s", name);
         } else {
             igMemoryPoolView *allocator = currentAllocator();
             char *candidate = (char *)allocator->Allocate(strlen(name) + 40);
             int i;
             if (kind == 1) {
-                dirs[0] = text_usr_local_sce_iop_modules;
-                dirs[1] = text_c_usr_local_sce_iop_modules;
-                dirs[2] = text_c_cygwin_usr_local_sce_iop_modul;
+                dirs[0] ="/usr/local/sce/iop/modules";
+                dirs[1] ="c:/usr/local/sce/iop/modules";
+                dirs[2] ="c:/cygwin/usr/local/sce/iop/modules";
             } else {
-                dirs[0] = text_usr_local_Alchemy_iop_modules;
-                dirs[1] = text_c_Alchemy_iop_modules;
+                dirs[0] ="/usr/local/Alchemy/iop/modules";
+                dirs[1] ="c:/Alchemy/iop/modules";
                 dirs[2] = 0;
             }
             for (i = 0; i < 3; i++) {
                 if (dirs[i] != 0) {
                     int file;
-                    sprintf(candidate, (const char *)percent_s_slash_percent_s, dirs[i], name);
+                    sprintf(candidate, (const char *)"%s/%s", dirs[i], name);
                     resolved = igPsx2File_MakeCompletePath(candidate);
                     file = sceOpen(resolved, 1);
                     if (file < 0) {
@@ -150,20 +150,25 @@ void FUN_0032d070(void)
 {
 }
 
+int g_igPsx2_sifCmdBufferCount = 5;
+unsigned char g_igPsx2_resetIopServices = 1;
+int g_igPsx2_iopImagePath;
+int g_igPsx2_loadFileModule;
+
 void igPsx2_RebootIop(void) {
     int n;
     int device;
     sceDmaReset(1);
-    if (g_igPsx2_iopImagePath[0] != 0) {
+    if (g_igPsx2_iopImagePath != 0) {
         sceSifInitRpc(0);
-        if (g_igPsx2_useCdrom[0] != 0) {
+        if (g_igPsx2_useCdrom != 0) {
             sceCdInit(0);
         }
-        if (g_igPsx2_loadFileModule[0] != 0) {
-            while (sceSifLoadModule(g_igPsx2_loadFileModule[0], 0, 0) < 0) {
+        if (g_igPsx2_loadFileModule != 0) {
+            while (sceSifLoadModule(g_igPsx2_loadFileModule, 0, 0) < 0) {
             }
         }
-        while (((sceSifRebootIop(g_igPsx2_iopImagePath[0]) != 0) ^ 1)) {
+        while (((sceSifRebootIop(g_igPsx2_iopImagePath) != 0) ^ 1)) {
         }
         while (((sceSifSyncIop() != 0) ^ 1)) {
         }
@@ -171,11 +176,11 @@ void igPsx2_RebootIop(void) {
     }
     if (g_igPsx2_resetIopServices != 0) {
         sceSifInitRpc(0);
-        if (g_igPsx2_loadFileModule[0] != 0) {
+        if (g_igPsx2_loadFileModule != 0) {
             sceSifLoadFileReset();
         }
         sceFsReset();
-        device = g_igPsx2_useCdrom[0];
+        device = g_igPsx2_useCdrom;
         if (device == 1 || device == 0) {
             sceCdInit(0);
             sceCdMmode(1);
@@ -184,7 +189,7 @@ void igPsx2_RebootIop(void) {
             sceCdMmode(2);
         }
         sceSifInitCmd();
-        n = g_igPsx2_sifCmdBufferCount[0];
+        n = g_igPsx2_sifCmdBufferCount;
         sceSifSetCmdBuffer(((int)Memory_SystemAllocate(n * 12)), n);
     }
 }
@@ -195,14 +200,14 @@ void igPsx2_InitializeIop(void) {
 }
 
 static inline int internPool(void) {
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         int a = ((int)StringPool_Allocate(0x10));
         if (a != 0) {
             a = ((int)StringPool_Construct((StringPool *)a));
         }
-        g_stringPool[0] = a;
+        g_stringPool = a;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 static inline void setName(igPsx2FileView *object, int name) {
@@ -225,20 +230,20 @@ static inline int fileAllocator(void) {
 
 void igPsx2_SetupOutputFiles(void) {
     unsigned char enabled;
-    igRegistry_GetValueBool(*(int *)(g_objectSystem[0] + 56), 2, (const char *)text_useOutputFilesForAtmon, (char *)&enabled, 1, 0);
+    igRegistry_GetValueBool(*(int *)(g_objectSystem + 56), 2, (const char *)"useOutputFilesForAtmon", (char *)&enabled, 1, 0);
     if (enabled != 0) {
         igReport_SetOutputFile(0);
         igReport_SetErrorFile(0);
         igSmartPointer<igPsx2FileView> first((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
         igSmartPointer<igPsx2FileView> second((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
-        if (g_igPsx2_useCdrom[0] != 0) {
-            setName(first.p, g_igPsx2_atfilePrefix[0]);
-            setName(second.p, g_igPsx2_atfilePrefix[0]);
+        if (g_igPsx2_useCdrom != 0) {
+            setName(first.p, g_igPsx2_atfilePrefix);
+            setName(second.p, g_igPsx2_atfilePrefix);
         }
-        if (first->Open(text_stdout_txt, (const char *)text_wb) != 0) {
+        if (first->Open("stdout.txt", (const char *)"wb") != 0) {
             igReport_SetOutputFile(first.p);
         }
-        if (second->Open(text_stderr_txt, (const char *)text_wb) != 0) {
+        if (second->Open("stderr.txt", (const char *)"wb") != 0) {
             igReport_SetErrorFile(second.p);
         }
     }
@@ -248,17 +253,17 @@ void igPsx2_SetAtfilePrefix(int *result, char *text) {
     int length;
     char *cursor;
 
-    if ((text != 0) && (strncasecmp(text, &text_atfile[0], 7) == 0)) {
+    if ((text != 0) && (strncasecmp(text, "atfile:", 7) == 0)) {
         cursor = text + 7;
         do {
             cursor += 1;
         } while (*cursor != 0x2C);
         length = (cursor - text) + 1;
-        g_igPsx2_atfilePrefix[0] = ((int)Memory_SystemAllocate(length + 1));
-        strncpy(g_igPsx2_atfilePrefix[0], text, length);
-        *(char *)(g_igPsx2_atfilePrefix[0] + length) = 0;
-        g_igPsx2File_defaultPrefix[0] = g_igPsx2_atfilePrefix[0];
-        igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix[0]);
+        g_igPsx2_atfilePrefix = ((int)Memory_SystemAllocate(length + 1));
+        strncpy(g_igPsx2_atfilePrefix, text, length);
+        *(char *)(g_igPsx2_atfilePrefix + length) = 0;
+        g_igPsx2File_defaultPrefix = g_igPsx2_atfilePrefix;
+        igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix);
         *result = g_resultSuccess.v;
     } else {
         *result = g_resultFailure.v;

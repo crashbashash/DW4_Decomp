@@ -1,4 +1,10 @@
 #include "src/game/ndmw/NdmwLibrary.h"
+#pragma push
+#pragma readonly_strings on
+int g_beNDMWPanelWazaInfoWork_textColorNoneReset = -1;
+int g_beNDMWPanelWazaInfoWork_textColorNone = -1;
+unsigned char g_NdmwLibrary_registered;
+
 #include "src/game/ndmw/LibraryFront.inc"
 #include "src/game/ndmw/libNdmwRuntimePlugin.inc"
 #include "src/game/ndmw/beNDMWWindowList.inc"
@@ -170,3 +176,4 @@
 #include "src/game/ndmw/beNDMWAfsStageLoad.inc"
 #include "src/game/ndmw/beNDMWAfsSetup.inc"
 #include "src/game/ndmw/InlineTail.inc"
+#pragma pop

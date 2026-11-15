@@ -1,14 +1,17 @@
+igMetaObject *g_igBoundingSphereMaker_metaObject;
+igMetaField *g_igBoundingSphereMaker_sphereMetaField;
+
 void FUN_0023a9d0(int arg0) {
     FUN_0023aaf0();
-    igMetaObject_CreateInstance(*(int *)0x56DE00, arg0);
+    igMetaObject_CreateInstance((int)g_igBoundingSphereMaker_metaObject, arg0);
 }
 
 igMetaObject *igBoundingSphereMaker_GetMetaObject(void)
 {
-    igMetaObject *g = g_igBoundingSphereMaker_metaObject[0];
+    igMetaObject *g = g_igBoundingSphereMaker_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0023aaf0();
-    return g_igBoundingSphereMaker_metaObject[0];
+    return g_igBoundingSphereMaker_metaObject;
 }
 
 int igBoundingSphereMaker_GetVTable(void) {
@@ -39,15 +42,17 @@ void FUN_0023aaf0(void)
     igMetaObject_RunStaticInit(igBoundingSphereMaker_Register);
 }
 
+static igMetaObjectCallback g_igBoundingSphereMaker_callbackList[] = { FUN_00187f30, 0 };
+
 void igBoundingSphereMaker_Register(void) {
     CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igBoundingSphereMaker_metaObject,
+        &g_igBoundingSphereMaker_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igBoundingSphereMaker_GetMetaObject,
-        igBoundingSphereMaker_className,
+        "igBoundingSphereMaker",
         0xC, /* instance size */
         igBoundingSphereMaker_GetVTable,
         &igBoundingSphereMaker_InitFields,
@@ -60,17 +65,30 @@ void thunk_igBoundingSphereMaker_GetMetaObject(void) {
     igBoundingSphereMaker_GetMetaObject();
 }
 
+static FieldFactory g_igBoundingSphereMaker_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igBoundingSphereMaker_fieldTable[] = {
+    "_sphere",
+};
+static igMetaField **g_igBoundingSphereMaker_fieldHandles[] = {
+    &g_igBoundingSphereMaker_sphereMetaField,
+};
+static int g_igBoundingSphereMaker_fieldOffsets[] = {
+    8,
+};
+
 void igBoundingSphereMaker_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igBoundingSphereMaker_metaObject[0];
+    temp_s0 = g_igBoundingSphereMaker_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igBoundingSphereMaker_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igBoundingSphereMaker_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00187e50();
-    igMetaObject_NameFields(temp_s0, &g_igBoundingSphereMaker_fieldTable[0], &DAT_00498630[0], &DAT_00498638[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igBoundingSphereMaker_fieldTable, g_igBoundingSphereMaker_fieldHandles, g_igBoundingSphereMaker_fieldOffsets, temp_s2);
 }
 
 void FUN_0023b110(void *arg0, void *arg1) {

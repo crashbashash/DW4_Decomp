@@ -1,21 +1,23 @@
+igMetaObject *g_igAttrList_metaObject;
+
 void FUN_0013aec0(int arg0) {
     FUN_0013afe0();
     igMetaObject_CreateInstance(*(int *)0x55F460, arg0);
 }
 
 igMetaObject *FUN_0013af00(void) {
-    if (g_igAttrList_metaObject[0] == 0) {
-        g_igAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAttrList_metaObject == 0) {
+        g_igAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAttrList_metaObject[0];
+    return g_igAttrList_metaObject;
 }
 
 igMetaObject *igAttrList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAttrList_metaObject[0];
+    igMetaObject *g = g_igAttrList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0013afe0();
-    return g_igAttrList_metaObject[0];
+    return g_igAttrList_metaObject;
 }
 
 int igAttrList_GetVTable(void) {
@@ -31,15 +33,17 @@ void FUN_0013afe0(void)
     igMetaObject_RunStaticInit(igAttrList_Register);
 }
 
+static igMetaObjectCallback g_igAttrList_callbackList[] = { FUN_0013b110, 0 };
+
 void igAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igAttrList_metaObject,
+        &g_igAttrList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igAttrList_GetMetaObject,
-        igAttrList_className,
+        "igAttrList",
         0x14, /* instance size */
         igAttrList_GetVTable,
         0,

@@ -1,18 +1,21 @@
+igMetaObject *g_beChangePosTransform_metaObject;
+igMetaField *g_beChangePosTransform_oldPosMetaField;
+
 void beChangePosTransform_CreateInstance(int arg0) {
     FUN_003688d0();
     igMetaObject_CreateInstance(*(int *)0x589B80, arg0);
 }
 
 igMetaObject *FUN_00368750(void) {
-    if (g_beChangePosTransform_metaObject[0] == 0) {
-        g_beChangePosTransform_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beChangePosTransform_metaObject == 0) {
+        g_beChangePosTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beChangePosTransform_metaObject[0];
+    return g_beChangePosTransform_metaObject;
 }
 
 igMetaObject *FUN_003687a0(void) {
-    if (g_beChangePosTransform_metaObject[0] == 0 || !isValid(g_beChangePosTransform_metaObject[0])) FUN_003688d0();
-    return g_beChangePosTransform_metaObject[0];
+    if (g_beChangePosTransform_metaObject == 0 || !isValid(g_beChangePosTransform_metaObject)) FUN_003688d0();
+    return g_beChangePosTransform_metaObject;
 }
 
 int beChangePosTransform_GetVTable(void) {
@@ -66,11 +69,11 @@ void *beChangePosTransform_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beChangePosTransform_metaObject,
+        &g_beChangePosTransform_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beChangePosTransform_GetMetaObject,
-        beChangePosTransform_className,
+        "beChangePosTransform",
         0x2c, /* instance size */
         beChangePosTransform_GetVTable,
         beChangePosTransform_InitFields,
@@ -84,13 +87,26 @@ void beChangePosTransform_GetMetaObject(void)
     FUN_003687a0();
 }
 
+static FieldFactory g_beChangePosTransform_ctorTable[] = {
+    FUN_00187890,
+};
+static const char *g_beChangePosTransform_fieldTable[] = {
+    "_oldPos",
+};
+static igMetaField **g_beChangePosTransform_fieldHandles[] = {
+    &g_beChangePosTransform_oldPosMetaField,
+};
+static int g_beChangePosTransform_fieldOffsets[] = {
+    32,
+};
+
 void beChangePosTransform_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beChangePosTransform_metaObject[0];
+    temp_s0 = (void *)g_beChangePosTransform_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beChangePosTransform_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beChangePosTransform_fieldTable[0], &DAT_004c77a8[0], &DAT_004c77b0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beChangePosTransform_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beChangePosTransform_fieldTable, g_beChangePosTransform_fieldHandles, g_beChangePosTransform_fieldOffsets, temp_s1);
 }
 

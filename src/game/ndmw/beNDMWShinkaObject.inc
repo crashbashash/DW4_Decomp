@@ -1,14 +1,35 @@
+igMetaObject *g_beNDMWShinkaObject_metaObject;
+igMetaField *g_beNDMWShinkaObject_idMetaField;
+igMetaField *g_beNDMWShinkaObject_nameMetaField;
+igMetaField *g_beNDMWShinkaObject_levelMetaField;
+igMetaField *g_beNDMWShinkaObject_hpMaxMetaField;
+igMetaField *g_beNDMWShinkaObject_mpMaxMetaField;
+igMetaField *g_beNDMWShinkaObject_tsuyosaMetaField;
+igMetaField *g_beNDMWShinkaObject_mamoriMetaField;
+igMetaField *g_beNDMWShinkaObject_kashikosaMetaField;
+igMetaField *g_beNDMWShinkaObject_seishinMetaField;
+igMetaField *g_beNDMWShinkaObject_subayasaMetaField;
+igMetaField *g_beNDMWShinkaObject_bluntMetaField;
+igMetaField *g_beNDMWShinkaObject_slashMetaField;
+igMetaField *g_beNDMWShinkaObject_stabMetaField;
+igMetaField *g_beNDMWShinkaObject_bashMetaField;
+igMetaField *g_beNDMWShinkaObject_shotMetaField;
+igMetaField *g_beNDMWShinkaObject_crushMetaField;
+igMetaField *g_beNDMWShinkaObject_blastMetaField;
+igMetaField *g_beNDMWShinkaObject_healMetaField;
+igMetaField *g_beNDMWShinkaObject_forceMetaField;
+
 void beNDMWShinkaObject_CreateInstance(int arg0) {
     FUN_003c9ac0();
-    igMetaObject_CreateInstance(*(int *)0x58BFF0, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShinkaObject_metaObject, arg0);
 }
 
 igMetaObject *beNDMWShinkaObject_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWShinkaObject_metaObject[0];
+    igMetaObject *g = g_beNDMWShinkaObject_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003c9ac0();
-    return g_beNDMWShinkaObject_metaObject[0];
+    return g_beNDMWShinkaObject_metaObject;
 }
 
 int beNDMWShinkaObject_GetVTable(void) {
@@ -46,11 +67,11 @@ void *beNDMWShinkaObject_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShinkaObject_metaObject,
+        &g_beNDMWShinkaObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beNDMWShinkaObject_GetMetaObject,
-        beNDMWShinkaObject_className,
+        "beNDMWShinkaObject",
         0x54, /* instance size */
         beNDMWShinkaObject_GetVTable,
         beNDMWShinkaObject_InitFields,
@@ -64,13 +85,98 @@ void beNDMWShinkaObject_GetMetaObject(void)
     beNDMWShinkaObject_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWShinkaObject_ctorTable[] = {
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWShinkaObject_fieldTable[] = {
+    "_id",
+    "_name",
+    "_level",
+    "_hpMax",
+    "_mpMax",
+    "_tsuyosa",
+    "_mamori",
+    "_kashikosa",
+    "_seishin",
+    "_subayasa",
+    "_blunt",
+    "_slash",
+    "_stab",
+    "_bash",
+    "_shot",
+    "_crush",
+    "_blast",
+    "_heal",
+    "_force",
+};
+static igMetaField **g_beNDMWShinkaObject_fieldHandles[] = {
+    &g_beNDMWShinkaObject_idMetaField,
+    &g_beNDMWShinkaObject_nameMetaField,
+    &g_beNDMWShinkaObject_levelMetaField,
+    &g_beNDMWShinkaObject_hpMaxMetaField,
+    &g_beNDMWShinkaObject_mpMaxMetaField,
+    &g_beNDMWShinkaObject_tsuyosaMetaField,
+    &g_beNDMWShinkaObject_mamoriMetaField,
+    &g_beNDMWShinkaObject_kashikosaMetaField,
+    &g_beNDMWShinkaObject_seishinMetaField,
+    &g_beNDMWShinkaObject_subayasaMetaField,
+    &g_beNDMWShinkaObject_bluntMetaField,
+    &g_beNDMWShinkaObject_slashMetaField,
+    &g_beNDMWShinkaObject_stabMetaField,
+    &g_beNDMWShinkaObject_bashMetaField,
+    &g_beNDMWShinkaObject_shotMetaField,
+    &g_beNDMWShinkaObject_crushMetaField,
+    &g_beNDMWShinkaObject_blastMetaField,
+    &g_beNDMWShinkaObject_healMetaField,
+    &g_beNDMWShinkaObject_forceMetaField,
+};
+static int g_beNDMWShinkaObject_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+};
+
 void beNDMWShinkaObject_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShinkaObject_metaObject[0];
+    temp_s0 = g_beNDMWShinkaObject_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShinkaObject_ctorTable[0], 0x13);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShinkaObject_fieldTable[0], &DAT_004cc2b0[0], &DAT_004cc300[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShinkaObject_ctorTable, 0x13);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShinkaObject_fieldTable, g_beNDMWShinkaObject_fieldHandles, g_beNDMWShinkaObject_fieldOffsets, temp_s1);
 }
 

@@ -1,12 +1,14 @@
+igMetaObject *g_beModelCtrlMSGBOX_metaObject;
+
 void *FUN_00355a40(void) {
     unsigned char b;
-    if (g_beModelCtrlMSGBOX_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beModelCtrlMSGBOX_metaObject[0]) + 36) & 4) != 0;
+    if (g_beModelCtrlMSGBOX_metaObject != 0) {
+        b = (*(int *)((char *)(g_beModelCtrlMSGBOX_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00355b20();
 done:
-    return g_beModelCtrlMSGBOX_metaObject[0];
+    return g_beModelCtrlMSGBOX_metaObject;
 }
 
 int beModelCtrlMSGBOX_GetVTable(void) {
@@ -46,11 +48,11 @@ void *beModelCtrlMSGBOX_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlMSGBOX_metaObject,
+        &g_beModelCtrlMSGBOX_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlMSGBOX_GetMetaObject,
-        beModelCtrlMSGBOX_className,
+        "beModelCtrlMSGBOX",
         0xc, /* instance size */
         beModelCtrlMSGBOX_GetVTable,
         0,

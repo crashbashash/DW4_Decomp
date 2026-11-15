@@ -1,14 +1,16 @@
+igMetaObject *g_igTransformFunctionList_metaObject;
+
 OpTable *FUN_00188d40(int arg0) {
     FUN_00188e10();
-    return (OpTable *)igMetaObject_CreateInstance(*(int *)0x561030, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((int)g_igTransformFunctionList_metaObject, arg0);
 }
 
 igMetaObject *igTransformFunctionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTransformFunctionList_metaObject[0];
+    igMetaObject *g = g_igTransformFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00188e10();
-    return g_igTransformFunctionList_metaObject[0];
+    return g_igTransformFunctionList_metaObject;
 }
 
 int igTransformFunctionList_GetVTable(void) {
@@ -28,11 +30,11 @@ void igTransformFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igTransformFunctionList_metaObject,
+        &g_igTransformFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igTransformFunctionList_GetMetaObject,
-        igTransformFunctionList_className,
+        "igTransformFunctionList",
         0x14, /* instance size */
         igTransformFunctionList_GetVTable,
         0,

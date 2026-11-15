@@ -1,15 +1,16 @@
+int g_igBlendFunctionAttr_blendEquationExt;
 void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void **arg0) {
     if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
-        DAT_0055f4c0[0] = 0;
+        g_igBlendFunctionAttr_blendEquationExt = 0;
     }
     igObject_ReleaseDefaults(arg0);
 }
 
 igMetaObject *Gap__Attrs__igBlendFunctionAttr__vfunc_22(void) {
-    return g_igBlendFunctionAttr_metaObject[0];
+    return g_igBlendFunctionAttr_metaObject;
 }
 
-/* igBlendEquationExt (DAT_0055f4c0[0]): slot 30 pushes the stored equation to the GS. */
+/* igBlendEquationExt (g_igBlendFunctionAttr_blendEquationExt): slot 30 pushes the stored equation to the GS. */
 class igBlendEquationExtView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -27,19 +28,19 @@ extern "C" void FUN_0016e290(igBlendEquationExt *ext, int blendA, int blendB, in
 /* apply: set the blend function on the visual context, then the extended blend equation if present. */
 extern "C" void Gap__Attrs__igBlendFunctionAttr__apply(igBlendFunctionAttr *self, void *context) {
     FUN_00174510(context, self->_src, self->_dst, self->_blendConstant, self->_blendStage);
-    if (DAT_0055f4c0[0] != 0) {
-        ((igBlendEquationExt *)DAT_0055f4c0[0])->_equation = self->_eq;
-        FUN_0016e290((igBlendEquationExt *)DAT_0055f4c0[0], self->_blendA, self->_blendB, self->_blendC, self->_blendD,
+    if (g_igBlendFunctionAttr_blendEquationExt != 0) {
+        ((igBlendEquationExt *)g_igBlendFunctionAttr_blendEquationExt)->_equation = self->_eq;
+        FUN_0016e290((igBlendEquationExt *)g_igBlendFunctionAttr_blendEquationExt, self->_blendA, self->_blendB, self->_blendC, self->_blendD,
                      (char)self->_blendConstant);
-        ((igBlendEquationExtView *)DAT_0055f4c0[0])->apply();
+        ((igBlendEquationExtView *)g_igBlendFunctionAttr_blendEquationExt)->apply();
     }
 }
 
 void Gap__Attrs__igBlendFunctionAttr__vfunc_26(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_620_0 *)(arg1))->vX()));
     ((DW4VC_132_1_13c350 *)(arg0))->vX((int)(((DW4VC_628_0 *)(arg1))->vX()));
-    if (DAT_0055f4c0[0] == 0) {
-        DAT_0055f4c0[0] = ((DW4VC_104_1 *)(arg1))->vX(&text_igBlendEquationExt[0]);
+    if (g_igBlendFunctionAttr_blendEquationExt == 0) {
+        g_igBlendFunctionAttr_blendEquationExt = ((DW4VC_104_1 *)(arg1))->vX("igBlendEquationExt");
     }
 }
 

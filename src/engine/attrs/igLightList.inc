@@ -1,16 +1,18 @@
+igMetaObject *g_igLightList_metaObject;
+
 igMetaObject *FUN_001365e0(void) {
-    if (g_igLightList_metaObject[0] == 0) {
-        g_igLightList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igLightList_metaObject == 0) {
+        g_igLightList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igLightList_metaObject[0];
+    return g_igLightList_metaObject;
 }
 
 igMetaObject *igLightList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLightList_metaObject[0];
+    igMetaObject *g = g_igLightList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001366c0();
-    return g_igLightList_metaObject[0];
+    return g_igLightList_metaObject;
 }
 
 int igLightList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_001366c0(void)
     igMetaObject_RunStaticInit(igLightList_Register);
 }
 
+static igMetaObjectCallback g_igLightList_callbackList[] = { FUN_00136880, 0 };
+
 void igLightList_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igLightList_metaObject,
+        &g_igLightList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igLightList_GetMetaObject,
-        igLightList_className,
+        "igLightList",
         0x14, /* instance size */
         igLightList_GetVTable,
         0,

@@ -1,12 +1,23 @@
+igMetaObject *g_beModelCtrlInfoDataAIH_metaObject;
+int g_beModelCtrlInfoDataAIH_nameStorage;
+igMetaField *g_beModelCtrlInfoDataAIH_isXHomingMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_isYHomingMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_firstFrameMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_secondFrameMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_areaSquareMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_limitRotXMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_limitRotYMetaField;
+igMetaField *g_beModelCtrlInfoDataAIH_limitCountMetaField;
+
 void *FUN_00353bf0(void) {
     unsigned char b;
-    if (g_beModelCtrlInfoDataAIH_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beModelCtrlInfoDataAIH_metaObject[0]) + 36) & 4) != 0;
+    if (g_beModelCtrlInfoDataAIH_metaObject != 0) {
+        b = (*(int *)((char *)(g_beModelCtrlInfoDataAIH_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00353cd0();
 done:
-    return g_beModelCtrlInfoDataAIH_metaObject[0];
+    return g_beModelCtrlInfoDataAIH_metaObject;
 }
 
 int beModelCtrlInfoDataAIH_GetVTable(void) {
@@ -47,11 +58,11 @@ void *beModelCtrlInfoDataAIH_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlInfoDataAIH_metaObject,
+        &g_beModelCtrlInfoDataAIH_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beModelCtrlInfoDataAIH_GetMetaObject,
-        beModelCtrlInfoDataAIH_className,
+        "beModelCtrlInfoDataAIH",
         0x2c, /* instance size */
         beModelCtrlInfoDataAIH_GetVTable,
         beModelCtrlInfoDataAIH_InitFields,
@@ -65,6 +76,47 @@ void beModelCtrlInfoDataAIH_GetMetaObject(void)
     FUN_00353bf0();
 }
 
+static FieldFactory g_beModelCtrlInfoDataAIH_ctorTable[] = {
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beModelCtrlInfoDataAIH_fieldTable[] = {
+    "_isXHoming",
+    "_isYHoming",
+    "_firstFrame",
+    "_secondFrame",
+    "_areaSquare",
+    "_limitRotX",
+    "_limitRotY",
+    "_limitCount",
+};
+static igMetaField **g_beModelCtrlInfoDataAIH_fieldHandles[] = {
+    &g_beModelCtrlInfoDataAIH_isXHomingMetaField,
+    &g_beModelCtrlInfoDataAIH_isYHomingMetaField,
+    &g_beModelCtrlInfoDataAIH_firstFrameMetaField,
+    &g_beModelCtrlInfoDataAIH_secondFrameMetaField,
+    &g_beModelCtrlInfoDataAIH_areaSquareMetaField,
+    &g_beModelCtrlInfoDataAIH_limitRotXMetaField,
+    &g_beModelCtrlInfoDataAIH_limitRotYMetaField,
+    &g_beModelCtrlInfoDataAIH_limitCountMetaField,
+};
+static int g_beModelCtrlInfoDataAIH_fieldOffsets[] = {
+    16,
+    17,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
+
 void beModelCtrlInfoDataAIH_InitFields(void) {
     int temp_s2;
     int temp_s3;
@@ -72,19 +124,19 @@ void beModelCtrlInfoDataAIH_InitFields(void) {
     void *temp_s1;
     S_ref *temp_v0_2;
 
-    temp_s1 = (void *)(g_beModelCtrlInfoDataAIH_metaObject[0]);
+    temp_s1 = (void *)(g_beModelCtrlInfoDataAIH_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beModelCtrlInfoDataAIH_ctorTable[0], 8);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name[0]));
+    igMetaObject_CreateFields(temp_s1, g_beModelCtrlInfoDataAIH_ctorTable, 8);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (S_ref *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &AIH_2[0]);
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_00588c38[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "AIH");
+    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->f4 = temp_v0_2->f4 - 1;
     if (((unsigned long long) ((long long) temp_v0_2->f4 << 0x29) >> 0x29) == 0) {
         igObject_Destroy(temp_v0_2);
     }
-    igMetaObject_NameFields(temp_s1, &g_beModelCtrlInfoDataAIH_fieldTable[0], &DAT_004c5580[0], &DAT_004c55a0[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, temp_s2);
 }
 

@@ -14,7 +14,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     int child;
     NodeList *children;
     if (node != 0) {
-        if (igObject_IsKindOf(node, g_igGroup_metaObject[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
             children = node->children;
             count = 0;
             if (children != 0) {
@@ -27,7 +27,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
                 FUN_001c58c0((T_1c58c0 *)path);
             }
         }
-        if (igObject_IsKindOf(node, g_igCamera_metaObject[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igCamera_metaObject) != 0) {
             igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create(igObject_GetAllocator(collector))));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
             ObjectList_AppendRetained(collector->children, entry.p);
@@ -94,10 +94,10 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
         temp_v0 = igDirectory_GetEntry(arg1, var_s2);
         if (0 != igObject_IsKindOf(temp_v0, g_igObjectDirEntry_metaObject[0])) {
             temp_s6 = temp_v0->f24;
-            if (igObject_IsKindOf(temp_s6, g_igTransformSource_metaObject[0]) != 0) {
+            if (igObject_IsKindOf(temp_s6, g_igTransformSource_metaObject) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
                 var_s0 = ((DW4VC_128_0 *)(temp_s6))->vX();
-                if (igObject_IsKindOf(temp_s6, g_igTransformSequence1_5_metaObject[0]) != 0) {
+                if (igObject_IsKindOf(temp_s6, g_igTransformSequence1_5_metaObject) != 0) {
                     temp_v1 = temp_s1 + ((DW4VC_260_0 *)(temp_s6))->vX();
                     if (var_s0 < temp_v1) {
                         var_s0 = temp_v1;
@@ -386,8 +386,8 @@ void FUN_001d7910(void) {
     igObject_Copy(((void *)DAT_005628e0[0]), ((void *)DAT_00562640[0]), 1);
     igObject_Copy(((void *)DAT_005628e8[0]), ((void *)DAT_00562640[0]), 1);
     clearBytes((char *)metas, 28);
-    metas[0] = ((void *)g_igLightStateSet_metaObject[0]);
-    metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject[0]);
+    metas[0] = ((void *)g_igLightStateSet_metaObject);
+    metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
     metas[2] = ((void *)DAT_00561860[0]);
     metas[3] = ((void *)DAT_00561e98[0]);
     metas[4] = ((void *)DAT_00561ee8[0]);
@@ -404,7 +404,7 @@ void FUN_001d7910(void) {
     pairs._pairs[0]._meta = ((void *)DAT_00561860[0]);
     pairs._pairs[1]._meta = ((void *)DAT_00561e98[0]);
     pairs._pairs[2]._meta = ((void *)DAT_00561ee8[0]);
-    pairs._pairs[3]._meta = ((void *)g_igEnvironmentMapShader2_metaObject[0]);
+    pairs._pairs[3]._meta = ((void *)g_igEnvironmentMapShader2_metaObject);
     for (i = 0; i < 4; i++) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree(p->_meta);
@@ -568,13 +568,15 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     DAT_00562640[0] = temp_s4;
 }
 
+char g_disableBumpDotProduct;
+
 int FUN_001d81e0(void) {
     int temp_s0;
 
     if (DAT_0048dae0[0] == -1) {
         temp_s0 = *(int *)((char *)g_objectSystem[0] + 56);
-        igRegistry_GetValueInt(temp_s0, 7, &text_maxLightStateCount[0], &DAT_0048dae0[0], 0x100, 1);
-        igRegistry_GetValueBool(temp_s0, 7, &text_disableBumpDotProduct[0], &GPR_00554b9c, 0, 1);
+        igRegistry_GetValueInt(temp_s0, 7, "maxLightStateCount", &DAT_0048dae0[0], 0x100, 1);
+        igRegistry_GetValueBool(temp_s0, 7, "disableBumpDotProduct", &g_disableBumpDotProduct, 0, 1);
     }
     return DAT_0048dae0[0];
 }

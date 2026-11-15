@@ -1,9 +1,11 @@
+igMetaObject *g_beNDMWPanelWazaInfo_metaObject;
+
 void *beNDMWPanelWazaInfo_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWPanelWazaInfo_metaObject[0];
+    igMetaObject *g = g_beNDMWPanelWazaInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bd750();
     }
-    return g_beNDMWPanelWazaInfo_metaObject[0];
+    return g_beNDMWPanelWazaInfo_metaObject;
 }
 
 int beNDMWPanelWazaInfo_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beNDMWPanelWazaInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWPanelWazaInfo_metaObject,
+        &g_beNDMWPanelWazaInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWPanelWazaInfo_GetMetaObject,
-        beNDMWPanelWazaInfo_className,
+        "beNDMWPanelWazaInfo",
         0x1c, /* instance size */
         beNDMWPanelWazaInfo_GetVTable,
         0,

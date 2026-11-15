@@ -1,21 +1,23 @@
+igMetaObject *g_beSwitchCtrl_metaObject;
+
 void beSwitchCtrl_CreateInstance(int arg0) {
     FUN_00343650();
     igMetaObject_CreateInstance(*(int *)0x587DF8, arg0);
 }
 
 igMetaObject *FUN_003434d0(void) {
-    if (g_beSwitchCtrl_metaObject[0] == 0) {
-        g_beSwitchCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beSwitchCtrl_metaObject == 0) {
+        g_beSwitchCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beSwitchCtrl_metaObject[0];
+    return g_beSwitchCtrl_metaObject;
 }
 
 void *FUN_00343520(void) {
-    igMetaObject *g = g_beSwitchCtrl_metaObject[0];
+    igMetaObject *g = g_beSwitchCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00343650();
     }
-    return g_beSwitchCtrl_metaObject[0];
+    return g_beSwitchCtrl_metaObject;
 }
 
 int beSwitchCtrl_GetVTable(void) {
@@ -69,11 +71,11 @@ void *beSwitchCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSwitchCtrl_metaObject,
+        &g_beSwitchCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beSwitchCtrl_GetMetaObject,
-        beSwitchCtrl_className,
+        "beSwitchCtrl",
         0x20, /* instance size */
         beSwitchCtrl_GetVTable,
         0,
@@ -87,10 +89,18 @@ void beSwitchCtrl_GetMetaObject(void)
     FUN_00343520();
 }
 
-int FUN_00343700(void) {
-    if (DAT_00587e00[0] == 0) {
-        DAT_00587e00[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c3790[0], &DAT_00587e08[0], 1);
+igMetaEnum *g_beSwitchCtrl_messageMetaEnum;
+static const char *g_beSwitchCtrl_messageNames[] = {
+    "GETINFOLIST",
+};
+static int g_beSwitchCtrl_messageValues[] = {
+    0,
+};
+
+igMetaEnum *FUN_00343700(void) {
+    if (g_beSwitchCtrl_messageMetaEnum == 0) {
+        g_beSwitchCtrl_messageMetaEnum = igMetaEnum_Create("Message", g_beSwitchCtrl_messageNames, g_beSwitchCtrl_messageValues, 1);
     }
-    return DAT_00587e00[0];
+    return g_beSwitchCtrl_messageMetaEnum;
 }
 

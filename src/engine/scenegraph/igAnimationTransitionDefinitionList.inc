@@ -1,16 +1,18 @@
+igMetaObject *g_igAnimationTransitionDefinitionList_metaObject;
+
 igMetaObject *FUN_001a9420(void) {
-    if (g_igAnimationTransitionDefinitionList_metaObject[0] == 0) {
-        g_igAnimationTransitionDefinitionList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAnimationTransitionDefinitionList_metaObject == 0) {
+        g_igAnimationTransitionDefinitionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAnimationTransitionDefinitionList_metaObject[0];
+    return g_igAnimationTransitionDefinitionList_metaObject;
 }
 
 igMetaObject *igAnimationTransitionDefinitionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationTransitionDefinitionList_metaObject[0];
+    igMetaObject *g = g_igAnimationTransitionDefinitionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a9500();
-    return g_igAnimationTransitionDefinitionList_metaObject[0];
+    return g_igAnimationTransitionDefinitionList_metaObject;
 }
 
 int igAnimationTransitionDefinitionList_GetVTable(void) {
@@ -27,15 +29,17 @@ void FUN_001a9500(void)
     igMetaObject_RunStaticInit(igAnimationTransitionDefinitionList_Register);
 }
 
+static igMetaObjectCallback g_igAnimationTransitionDefinitionList_callbackList[] = { FUN_001a96c0, 0 };
+
 void igAnimationTransitionDefinitionList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationTransitionDefinitionList_metaObject),
+        &g_igAnimationTransitionDefinitionList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igAnimationTransitionDefinitionList_GetMetaObject,
-        igAnimationTransitionDefinitionList_className,
+        "igAnimationTransitionDefinitionList",
         0x14, /* instance size */
         igAnimationTransitionDefinitionList_GetVTable,
         0,

@@ -1,17 +1,21 @@
+igMetaObject *g_beSvWriteMediaApi_metaObject;
+igMetaField *g_beSvWriteMediaApi_nowGamedataMetaField;
+igMetaField *g_beSvWriteMediaApi_saveWorkMetaField;
+
 void FUN_00348f60(int arg0) {
     FUN_00349100();
     igMetaObject_CreateInstance(*(int *)0x588220, arg0);
 }
 
 igMetaObject *FUN_00348fa0(void) {
-    igMetaObject *g = g_beSvWriteMediaApi_metaObject[0];
+    igMetaObject *g = g_beSvWriteMediaApi_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00349100();
 done:
-    return g_beSvWriteMediaApi_metaObject[0];
+    return g_beSvWriteMediaApi_metaObject;
 }
 
 int beSvWriteMediaApi_GetVTable(void) {
@@ -56,15 +60,17 @@ void FUN_00349100(void)
     igMetaObject_RunStaticInit(beSvWriteMediaApi_Register);
 }
 
+static igMetaObjectCallback g_beSvWriteMediaApi_callbackList[] = { FUN_0034a340, FUN_0034ad70, 0 };
+
 void *beSvWriteMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvWriteMediaApi_metaObject,
+        &g_beSvWriteMediaApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
         beSvWriteMediaApi_GetMetaObject,
-        beSvWriteMediaApi_className,
+        "beSvWriteMediaApi",
         0x4c, /* instance size */
         beSvWriteMediaApi_GetVTable,
         beSvWriteMediaApi_InitFields,
@@ -78,19 +84,36 @@ void beSvWriteMediaApi_GetMetaObject(void)
     FUN_00348fa0();
 }
 
+static FieldFactory g_beSvWriteMediaApi_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beSvWriteMediaApi_fieldTable[] = {
+    "_nowGamedata",
+    "_saveWork",
+};
+static igMetaField **g_beSvWriteMediaApi_fieldHandles[] = {
+    &g_beSvWriteMediaApi_nowGamedataMetaField,
+    &g_beSvWriteMediaApi_saveWorkMetaField,
+};
+static int g_beSvWriteMediaApi_fieldOffsets[] = {
+    64,
+    68,
+};
+
 void beSvWriteMediaApi_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s1_2;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSvWriteMediaApi_metaObject[0];
+    temp_s0 = (void *)g_beSvWriteMediaApi_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSvWriteMediaApi_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beSvWriteMediaApi_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034a210();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0034ac90();
-    igMetaObject_NameFields(temp_s0, &g_beSvWriteMediaApi_fieldTable[0], &DAT_004c4088[0], &DAT_004c4090[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSvWriteMediaApi_fieldTable, g_beSvWriteMediaApi_fieldHandles, g_beSvWriteMediaApi_fieldOffsets, temp_s2);
 }
 

@@ -5,18 +5,18 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
     int index = -1;
     int defaults;
     if (ini == 0) {
-        ini = ((ObjectSystemView *)g_objectSystem[0])->configRegistry;
+        ini = ((ObjectSystemView *)g_objectSystem)->configRegistry;
     }
     if (ini == 0) {
         return g_resultFailure;
     }
     if (section == 0 || *section == 0) {
-        defaults = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName[0], 0);
+        defaults = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName, 0);
         if (defaults == -1) {
             return g_resultFailure;
         }
         if (igRegistry_GetValueStringObj((int)ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
-                         (const char *)emptyString_4, 0) == 0) {
+                         (const char *)"", 0) == 0) {
             return g_resultFailure;
         }
         section = igStringObj_Text(value.p);
@@ -33,10 +33,28 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
     return g_resultFailure;
 }
 
+char *g_memoryPoolInfoNameKey = "Name";
+char *g_memoryPoolInfoHandleKey = "Handle";
+char *g_memoryPoolInfoAliasedToKey = "AliasedTo";
+char *g_memoryPoolInfoSizeKey = "Size";
+char *g_memoryPoolInfoMaxSizeKey = "MaxSize";
+char *g_memoryPoolInfoAddressKey = "Address";
+char *g_memoryPoolInfoClassKey = "Class";
+char *g_memoryPoolInfoArenaTypeKey = "ArenaType";
+char *g_memoryPoolInfoSourceKey = "Source";
+char *g_memoryPoolInfoScopeKey = "Scope";
+char *g_memoryPoolInfoDebugOptionsKey = "DebugOptions";
+char *g_memoryPoolInfoReleaseOptionsKey = "ReleaseOptions";
+char *g_memoryPoolInfoDebugCheckingKey = "DebugChecking";
+char *g_memoryPoolInfoReleaseCheckingKey = "ReleaseChecking";
+char *g_memoryPoolInfoDebugMessagesKey = "DebugMessages";
+char *g_memoryPoolInfoReleaseMessagesKey = "ReleaseMessages";
+char *g_memoryPoolInfoEventTrackerCapacityKey = "EventTrackerCapacity";
+
 void igMemoryPoolInfo_UserRegistryLoad(int *result, int *info, int ini, int section) {
     
     if (ini == 0) {
-        ini = (int)((ObjectSystemView **)g_objectSystem)[0]->configRegistry;
+        ini = (int)(*(ObjectSystemView * *)&g_objectSystem)->configRegistry;
     }
     if (ini == 0) {
         *result = g_resultFailure.v;
@@ -83,42 +101,42 @@ void igMemoryPoolInfo_TrimCapacity(igMemoryPoolInfo *info) {
 }
 
 /* A string field as printed: an unset one prints as the empty text. */
-#define TEXT_OR_NONE(text) ((text) != 0 ? (text) : (const char *)emptyString_4)
+#define TEXT_OR_NONE(text) ((text) != 0 ? (text) : (const char *)"")
 
 void igMemoryPoolInfo_Print(igMemoryPoolInfo *info) {
-    igReport_Printf((const char *)text_igMemoryPoolInfo_s, TEXT_OR_NONE(info->_name != 0 ? (const char *)info->_name : (const char *)emptyString));
+    igReport_Printf((const char *)"igMemoryPoolInfo:          %s\n", TEXT_OR_NONE(info->_name != 0 ? (const char *)info->_name : (const char *)emptyString));
     igReport_Flush();
-    igReport_Printf((const char *)text_handleName_s, TEXT_OR_NONE((const char *)info->_handleName));
+    igReport_Printf((const char *)"    _handleName:           %s\n", TEXT_OR_NONE((const char *)info->_handleName));
     igReport_Flush();
-    igReport_Printf((const char *)text_aliasedTo_s, TEXT_OR_NONE((const char *)info->_aliasedTo));
+    igReport_Printf((const char *)"    _aliasedTo:            %s\n", TEXT_OR_NONE((const char *)info->_aliasedTo));
     igReport_Flush();
-    igReport_Printf((const char *)text_size_d, info->_size);
+    igReport_Printf((const char *)"    _size:                 %d\n", info->_size);
     igReport_Flush();
-    igReport_Printf((const char *)text_maxSize_d, info->_maxSize);
+    igReport_Printf((const char *)"    _maxSize:              %d\n", info->_maxSize);
     igReport_Flush();
-    igReport_Printf((const char *)text_address_0x_08x, info->_address);
+    igReport_Printf((const char *)"    _address:              0x%08x\n", info->_address);
     igReport_Flush();
-    igReport_Printf((const char *)text_class_s, TEXT_OR_NONE((const char *)info->_class));
+    igReport_Printf((const char *)"    _class:                %s\n", TEXT_OR_NONE((const char *)info->_class));
     igReport_Flush();
-    igReport_Printf((const char *)text_arenaType_s, TEXT_OR_NONE((const char *)info->_arenaType));
+    igReport_Printf((const char *)"    _arenaType:            %s\n", TEXT_OR_NONE((const char *)info->_arenaType));
     igReport_Flush();
-    igReport_Printf((const char *)text_source_s, TEXT_OR_NONE((const char *)info->_source));
+    igReport_Printf((const char *)"    _source:               %s\n", TEXT_OR_NONE((const char *)info->_source));
     igReport_Flush();
-    igReport_Printf((const char *)text_scope_s, TEXT_OR_NONE((const char *)info->_scope));
+    igReport_Printf((const char *)"    _scope:                %s\n", TEXT_OR_NONE((const char *)info->_scope));
     igReport_Flush();
-    igReport_Printf((const char *)text_debugOptions_s, TEXT_OR_NONE((const char *)info->_debugOptions));
+    igReport_Printf((const char *)"    _debugOptions:         %s\n", TEXT_OR_NONE((const char *)info->_debugOptions));
     igReport_Flush();
-    igReport_Printf((const char *)text_releaseOptions_s, TEXT_OR_NONE((const char *)info->_releaseOptions));
+    igReport_Printf((const char *)"    _releaseOptions:       %s\n", TEXT_OR_NONE((const char *)info->_releaseOptions));
     igReport_Flush();
-    igReport_Printf((const char *)text_debugChecking_s, TEXT_OR_NONE((const char *)info->_debugChecking));
+    igReport_Printf((const char *)"    _debugChecking:        %s\n", TEXT_OR_NONE((const char *)info->_debugChecking));
     igReport_Flush();
-    igReport_Printf((const char *)text_releaseChecking_s, TEXT_OR_NONE((const char *)info->_releaseChecking));
+    igReport_Printf((const char *)"    _releaseChecking:      %s\n", TEXT_OR_NONE((const char *)info->_releaseChecking));
     igReport_Flush();
-    igReport_Printf((const char *)text_debugMessages_s, TEXT_OR_NONE((const char *)info->_debugMessages));
+    igReport_Printf((const char *)"    _debugMessages:        %s\n", TEXT_OR_NONE((const char *)info->_debugMessages));
     igReport_Flush();
-    igReport_Printf((const char *)text_releaseMessages_s, TEXT_OR_NONE((const char *)info->_releaseMessages));
+    igReport_Printf((const char *)"    _releaseMessages:      %s\n", TEXT_OR_NONE((const char *)info->_releaseMessages));
     igReport_Flush();
-    igReport_Printf((const char *)text_eventTrackerCapacity_d, info->_eventTrackerCapacity);
+    igReport_Printf((const char *)"    _eventTrackerCapacity: %d\n", info->_eventTrackerCapacity);
     igReport_Flush();
 }
 #undef TEXT_OR_NONE

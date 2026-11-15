@@ -1,21 +1,23 @@
+igMetaObject *g_beHitLandDeliv_metaObject;
+
 void beHitLandDeliv_CreateInstance(int arg0) {
     FUN_0035ed50();
     igMetaObject_CreateInstance(*(int *)0x589460, arg0);
 }
 
 igMetaObject *FUN_0035ebd0(void) {
-    if (g_beHitLandDeliv_metaObject[0] == 0) {
-        g_beHitLandDeliv_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beHitLandDeliv_metaObject == 0) {
+        g_beHitLandDeliv_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beHitLandDeliv_metaObject[0];
+    return g_beHitLandDeliv_metaObject;
 }
 
 void *FUN_0035ec20(void) {
-    igMetaObject *g = g_beHitLandDeliv_metaObject[0];
+    igMetaObject *g = g_beHitLandDeliv_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035ed50();
     }
-    return g_beHitLandDeliv_metaObject[0];
+    return g_beHitLandDeliv_metaObject;
 }
 
 int beHitLandDeliv_GetVTable(void) {
@@ -69,11 +71,11 @@ void *beHitLandDeliv_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beHitLandDeliv_metaObject,
+        &g_beHitLandDeliv_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beHitLandDeliv_GetMetaObject,
-        beHitLandDeliv_className,
+        "beHitLandDeliv",
         0x20, /* instance size */
         beHitLandDeliv_GetVTable,
         0,

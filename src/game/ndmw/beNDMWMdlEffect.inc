@@ -1,21 +1,23 @@
+igMetaObject *g_beNDMWMdlEffect_metaObject;
+
 void beNDMWMdlEffect_CreateInstance(int arg0) {
     FUN_003c1bf0();
-    igMetaObject_CreateInstance(*(int *)0x58B518, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlEffect_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c1af0(void) {
-    if (g_beNDMWMdlEffect_metaObject[0] == 0) {
-        g_beNDMWMdlEffect_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlEffect_metaObject == 0) {
+        g_beNDMWMdlEffect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlEffect_metaObject[0];
+    return g_beNDMWMdlEffect_metaObject;
 }
 
 void *beNDMWMdlEffect_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlEffect_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlEffect_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c1bf0();
     }
-    return g_beNDMWMdlEffect_metaObject[0];
+    return g_beNDMWMdlEffect_metaObject;
 }
 
 int beNDMWMdlEffect_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beNDMWMdlEffect_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlEffect_metaObject,
+        &g_beNDMWMdlEffect_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlEffect_GetMetaObject,
-        beNDMWMdlEffect_className,
+        "beNDMWMdlEffect",
         0x2c, /* instance size */
         beNDMWMdlEffect_GetVTable,
         0,

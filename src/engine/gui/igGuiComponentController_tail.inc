@@ -8,7 +8,7 @@ void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0
 
     temp_a1 = *(int *)((char *)(arg1) + 8);
     temp_a2 = (igGuiComponentModel *)(arg0->_model);
-    if (temp_a1 == DAT_0058c448[0]) {
+    if (temp_a1 == (int)g_igGuiComponentModel_enabledMetaField) {
         if (temp_a2->_enabled != 0) {
             ((DW4VC_104_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -16,7 +16,7 @@ void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0
         ((DW4VC_108_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == DAT_0058c450[0]) {
+    if (temp_a1 == (int)g_igGuiComponentModel_hasFocusMetaField) {
         if (temp_a2->_hasFocus != 0) {
             ((DW4VC_112_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -24,7 +24,7 @@ void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0
         ((DW4VC_116_2_4556e0 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == DAT_0058c458[0]) {
+    if (temp_a1 == (int)g_igGuiComponentModel_mouseOverMetaField) {
         if (temp_a2->_mouseOver != 0) {
             ((DW4VC_120_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -32,7 +32,7 @@ void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0
         ((DW4VC_124_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == DAT_0058c460[0]) {
+    if (temp_a1 == (int)g_igGuiComponentModel_pushedMetaField) {
         if (temp_a2->_pushed != 0) {
             ((DW4VC_128_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -84,7 +84,7 @@ void FUN_004558b0(struct S_4558b0 *arg0, unsigned char arg1) {
         arg0->b = arg1;
         sp10[0] = 2;
         sp10[1] = 0;
-        sp10[2] = DAT_0058c450[0];
+        sp10[2] = (int)g_igGuiComponentModel_hasFocusMetaField;
         igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)&sp10[0]);
     }
 }
@@ -98,7 +98,7 @@ void FUN_00455900(struct S_455900 *arg0, unsigned char arg1) {
         arg0->f = arg1;
         sp10[0] = 2;
         sp10[1] = 0;
-        sp10[2] = DAT_0058c458[0];
+        sp10[2] = (int)g_igGuiComponentModel_mouseOverMetaField;
         igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp10);
     }
 }
@@ -112,7 +112,7 @@ void FUN_00455950(S_455950 *arg0, unsigned char arg1) {
         arg0->b = arg1;
         sp10[0] = 2;
         sp10[1] = 0;
-        sp10[2] = DAT_0058c460[0];
+        sp10[2] = (int)g_igGuiComponentModel_pushedMetaField;
         igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp10);
     }
 }
@@ -126,7 +126,7 @@ void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1) {
         arg0->b = arg1;
         sp[0] = 2;
         sp[1] = 0;
-        sp[2] = DAT_0058c470[0];
+        sp[2] = (int)g_igGuiComponentModel_childHasFocusMetaField;
         igModel_NotifyViews((S_4578c0 *)arg0, (S_4578c0 *)sp);
     }
 }

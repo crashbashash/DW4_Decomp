@@ -1,21 +1,23 @@
+igMetaObject *g_beWaterPlain_metaObject;
+
 void beWaterPlain_CreateInstance(int arg0) {
     FUN_00340e80();
     igMetaObject_CreateInstance(*(int *)0x587BF8, arg0);
 }
 
 igMetaObject *FUN_00340d00(void) {
-    if (g_beWaterPlain_metaObject[0] == 0) {
-        g_beWaterPlain_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beWaterPlain_metaObject == 0) {
+        g_beWaterPlain_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beWaterPlain_metaObject[0];
+    return g_beWaterPlain_metaObject;
 }
 
 void *FUN_00340d50(void) {
-    igMetaObject *g = g_beWaterPlain_metaObject[0];
+    igMetaObject *g = g_beWaterPlain_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00340e80();
     }
-    return g_beWaterPlain_metaObject[0];
+    return g_beWaterPlain_metaObject;
 }
 
 int beWaterPlain_GetVTable(void) {
@@ -69,11 +71,11 @@ void *beWaterPlain_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWaterPlain_metaObject,
+        &g_beWaterPlain_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beWaterPlain_GetMetaObject,
-        beWaterPlain_className,
+        "beWaterPlain",
         0x20, /* instance size */
         beWaterPlain_GetVTable,
         0,

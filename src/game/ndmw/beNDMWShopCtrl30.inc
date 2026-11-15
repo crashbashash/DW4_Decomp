@@ -1,14 +1,17 @@
+igMetaObject *g_beNDMWShopCtrl30_metaObject;
+igMetaField *g_beNDMWShopCtrl30_bankMenuMetaField;
+
 void beNDMWShopCtrl30_Create(int arg0) {
     FUN_003b8740();
-    igMetaObject_CreateInstance(*(int *)0x58ADF8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrl30_metaObject, arg0);
 }
 
 void *FUN_003b8670(void) {
-    igMetaObject *g = g_beNDMWShopCtrl30_metaObject[0];
+    igMetaObject *g = g_beNDMWShopCtrl30_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b8740();
     }
-    return g_beNDMWShopCtrl30_metaObject[0];
+    return g_beNDMWShopCtrl30_metaObject;
 }
 
 int beNDMWShopCtrl30_GetVTable(void) {
@@ -39,11 +42,11 @@ void *beNDMWShopCtrl30_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopCtrl30_metaObject,
+        &g_beNDMWShopCtrl30_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopCtrl30_GetMetaObject,
-        beNDMWShopCtrl30_className,
+        "beNDMWShopCtrl30",
         0x58, /* instance size */
         beNDMWShopCtrl30_GetVTable,
         beNDMWShopCtrl30_InitFields,
@@ -57,13 +60,26 @@ void beNDMWShopCtrl30_GetMetaObject(void)
     FUN_003b8670();
 }
 
+static FieldFactory g_beNDMWShopCtrl30_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWShopCtrl30_fieldTable[] = {
+    "_bankMenu",
+};
+static igMetaField **g_beNDMWShopCtrl30_fieldHandles[] = {
+    &g_beNDMWShopCtrl30_bankMenuMetaField,
+};
+static int g_beNDMWShopCtrl30_fieldOffsets[] = {
+    84,
+};
+
 void beNDMWShopCtrl30_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopCtrl30_metaObject[0];
+    temp_s0 = g_beNDMWShopCtrl30_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrl30_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrl30_fieldTable[0], &DAT_004c9c18[0], &DAT_004c9c20[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrl30_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrl30_fieldTable, g_beNDMWShopCtrl30_fieldHandles, g_beNDMWShopCtrl30_fieldOffsets, temp_s1);
 }
 

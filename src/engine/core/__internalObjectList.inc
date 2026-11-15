@@ -1,9 +1,12 @@
+igMetaObject *g___internalObjectList_metaObject;
+int g___internalObjectList_dataDescriptorCell;
+
 void **InternalObjectList_Create(int allocator) {
     void **list;
 
-    if (*g_objectSystem[0] != 0) {
+    if (*g_objectSystem != 0) {
         __internalObjectList_EnsureRegistered();
-        list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)(((int *)g___internalObjectList_metaObject)[0]), (igMemoryPoolView *)allocator)));
+        list = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g___internalObjectList_metaObject), (igMemoryPoolView *)allocator)));
     } else {
         list = (void **)(((void **)igObject_AllocateRawStorage(0x10, 0, (igMemoryPoolView *)allocator)));
         if (list != 0) {
@@ -18,7 +21,7 @@ void **InternalObjectList_Create(int allocator) {
 int __internalObjectList_Clone(int source, int copyMode) {
     int clone;
 
-    if (*g_objectSystem[0] != 0) {
+    if (*g_objectSystem != 0) {
         __internalObjectList_EnsureRegistered();
         return igObject_CloneViaMetadata((void **)source, copyMode);
     }
@@ -30,24 +33,24 @@ int __internalObjectList_Clone(int source, int copyMode) {
 }
 
 igMetaObject *__internalObjectList_GetOrCreateMetaObject(void) {
-    if (g___internalObjectList_metaObject[0] == 0) {
-        g___internalObjectList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g___internalObjectList_metaObject == 0) {
+        g___internalObjectList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g___internalObjectList_metaObject[0];
+    return g___internalObjectList_metaObject;
 }
 
 igMetaObject *__internalObjectList_GetMetaObject(void)
 {
-    igMetaObject *g = g___internalObjectList_metaObject[0];
+    igMetaObject *g = g___internalObjectList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         __internalObjectList_EnsureRegistered();
-    return g___internalObjectList_metaObject[0];
+    return g___internalObjectList_metaObject;
 }
 
 int __internalObjectList_GetVTable(void) {
     int o[4];
     InternalObjectList_Init((__internalObjectList *)o);
-    return *(int *)((char *)o + *(int *)((char *)((int * *)g_objectSystem)[0] + 916));
+    return *(int *)((char *)o + *(int *)((char *)(*(int * *)&g_objectSystem) + 916));
 }
 
 void __internalObjectList_EnsureRegistered(void)
@@ -58,11 +61,11 @@ void __internalObjectList_EnsureRegistered(void)
 void __internalObjectList_Register(void) {
     igMetaObject_RegisterClass(
         0,
-        g___internalObjectList_metaObject,
+        &g___internalObjectList_metaObject,
         (igMetaObjectRegisterFunction)__internalNonRefCountedObjectList_Register,
         __internalNonRefCountedObjectList_GetPublishedMetaObject,
         __internalObjectList_GetMetaObjectFunction,
-        __internalObjectList_className,
+        "__internalObjectList",
         0x10,
         __internalObjectList_GetVTable,
         __internalObjectList_InitFields,
@@ -75,9 +78,14 @@ void __internalObjectList_GetMetaObjectFunction(void) {
     __internalObjectList_GetMetaObject();
 }
 
+igMetaObject *g___internalNonRefCountedObjectList_metaObject;
+igMetaField *g___internalNonRefCountedObjectList_dataMetaField;
+igMetaField *g___internalNonRefCountedObjectList_countMetaField;
+
 igMetaObject *__internalNonRefCountedObjectList_GetPublishedMetaObject(void) {
-    return g___internalNonRefCountedObjectList_metaObject[0];
+    return g___internalNonRefCountedObjectList_metaObject;
 }
+
 
 void __internalObjectList_InitFields(void) {
     void **found;
@@ -85,12 +93,12 @@ void __internalObjectList_InitFields(void) {
     igMetaObject *meta;
     igMemoryRefMetaField *clone;
 
-    meta = g___internalObjectList_metaObject[0];
+    meta = g___internalObjectList_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
     clone = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     clone->_refCounted = 1;
-    clone->_externalEnumStorage = (int)(&g___internalObjectList_dataDescriptorCell[0]);
+    clone->_externalEnumStorage = (int)(&g___internalObjectList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = clone->_refCount - 1;
     if ((clone->_refCount & 0x7fffff) == 0) {

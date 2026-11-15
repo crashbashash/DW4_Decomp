@@ -1,11 +1,20 @@
-void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject[0],allocator));}
+igMetaObject *g_beMessengerDelay_metaObject;
+igMetaField *g_beMessengerDelay_isUseMetaField;
+igMetaField *g_beMessengerDelay_sendTimeMetaField;
+igMetaField *g_beMessengerDelay_groupNameMetaField;
+igMetaField *g_beMessengerDelay_infoNameMetaField;
+igMetaField *g_beMessengerDelay_ramNoMetaField;
+igMetaField *g_beMessengerDelay_messageMetaField;
+igMetaField *g_beMessengerDelay_argDataMetaField;
+
+void *beMessengerDelay_Create(void *allocator){beMessengerDelay_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerDelay_metaObject,allocator));}
 
 igMetaObject *FUN_00358990(void) {
-    igMetaObject *g = g_beMessengerDelay_metaObject[0];
+    igMetaObject *g = g_beMessengerDelay_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         beMessengerDelay_EnsureRegistered();
-    return g_beMessengerDelay_metaObject[0];
+    return g_beMessengerDelay_metaObject;
 }
 
 int beMessengerDelay_GetVTable(void) {
@@ -29,15 +38,17 @@ int beMessengerDelay_GetVTable(void) {
 
 void beMessengerDelay_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerDelay_Register);}
 
+static igMetaObjectCallback g_beMessengerDelay_callbackList[] = { beMessengerArgData_EnsureRegistered, 0 };
+
 void *beMessengerDelay_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMessengerDelay_metaObject,
+        &g_beMessengerDelay_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beMessengerDelay_GetMetaObject,
-        beMessengerDelay_className,
+        "beMessengerDelay",
         0x30, /* instance size */
         beMessengerDelay_GetVTable,
         beMessengerDelay_InitFields,
@@ -51,17 +62,54 @@ void beMessengerDelay_GetMetaObject(void)
     FUN_00358990();
 }
 
+static FieldFactory g_beMessengerDelay_ctorTable[] = {
+    igBoolMetaField_Create,
+    igLongMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMessengerDelay_fieldTable[] = {
+    "_isUse",
+    "_sendTime",
+    "_groupName",
+    "_infoName",
+    "_ramNo",
+    "_message",
+    "_argData",
+};
+static igMetaField **g_beMessengerDelay_fieldHandles[] = {
+    &g_beMessengerDelay_isUseMetaField,
+    &g_beMessengerDelay_sendTimeMetaField,
+    &g_beMessengerDelay_groupNameMetaField,
+    &g_beMessengerDelay_infoNameMetaField,
+    &g_beMessengerDelay_ramNoMetaField,
+    &g_beMessengerDelay_messageMetaField,
+    &g_beMessengerDelay_argDataMetaField,
+};
+static int g_beMessengerDelay_fieldOffsets[] = {
+    8,
+    16,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
+
 void beMessengerDelay_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beMessengerDelay_metaObject[0];
+    temp_s0 = (void *)g_beMessengerDelay_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMessengerDelay_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s0, g_beMessengerDelay_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00358dc0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beMessengerDelay_fieldTable[0], &DAT_004c5e00[0], &DAT_004c5e20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMessengerDelay_fieldTable, g_beMessengerDelay_fieldHandles, g_beMessengerDelay_fieldOffsets, temp_s2);
 }
 

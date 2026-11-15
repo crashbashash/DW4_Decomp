@@ -129,42 +129,42 @@ void **igPsx2File_Open(void **self, const char *fileName, int modeText) {
     int opened;
 
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(modeText, &text_r[0]) == 0) {
+    if (strcmp(modeText, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         opened = readResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)text_rb) == 0) {
+    if (strcmp(modeText, (int *)"rb") == 0) {
         readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
         opened = readBinaryResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)((char *)text_w)) == 0) {
+    if (strcmp(modeText, (int *)((char *)"w")) == 0) {
         writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
         opened = writeResult.v;
         goto block_21;
     }
-    if (strcmp(modeText, (int *)((char *)text_wb)) == 0) {
+    if (strcmp(modeText, (int *)((char *)"wb")) == 0) {
         writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
         opened = writeBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)text_r_plus) == 0) || (strcmp(modeText, &text_w_plus[0]) == 0)) {
+    if ((strcmp(modeText, (int *)"r+") == 0) || (strcmp(modeText, "w+") == 0)) {
         readWriteResult = ((igFileView *)(self))->OpenWithMode((int)(3));
         opened = readWriteResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)text_r_plus_b) == 0) || (strcmp(modeText, &text_w_plus_b[0]) == 0)) {
+    if ((strcmp(modeText, (int *)"r+b") == 0) || (strcmp(modeText, "w+b") == 0)) {
         readWriteBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
         opened = readWriteBinaryResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)text_a) == 0) || (strcmp(modeText, &text_a_plus[0]) == 0)) {
+    if ((strcmp(modeText, (int *)"a") == 0) || (strcmp(modeText, "a+") == 0)) {
         appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
         opened = appendResult.v;
         goto block_21;
     }
-    if ((strcmp(modeText, (int *)text_ab) == 0) || (strcmp(modeText, &text_a_plus_b[0]) == 0)) {
+    if ((strcmp(modeText, (int *)"ab") == 0) || (strcmp(modeText, "a+b") == 0)) {
         appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
         opened = appendBinaryResult.v;
         goto block_21;
@@ -493,18 +493,21 @@ int igPsx2File_Tell(igPsx2File *self) {
     return self->_bufPos;
 }
 
+int g_igPsx2File_defaultPrefix;
+int g_igPsx2_useCdrom;
+
 void igPsx2File_InitDefaultPrefix(void) {
-    if (g_igPsx2_useCdrom[0] == 0) {
-        if (((int * *)g_igPsx2File_defaultPrefix)[0] == 0) {
-            ((int * *)g_igPsx2File_defaultPrefix)[0] = (int *)(&text_host0[0]);
+    if (g_igPsx2_useCdrom == 0) {
+        if ((*(int * *)&g_igPsx2File_defaultPrefix) == 0) {
+            (*(int * *)&g_igPsx2File_defaultPrefix) = (int *)("host0:");
         }
     } else {
-        ((int * *)g_igPsx2File_defaultPrefix)[0] = (int *)text_cdrom0;
+        (*(int * *)&g_igPsx2File_defaultPrefix) = (int *)"cdrom0:";
     }
 }
 
 char *igPsx2File_MakeCompletePath(char *path) {
-    igStringRef text = igPsx2File_JoinPrefix((char *)g_igPsx2File_defaultPrefix[0], path);
+    igStringRef text = igPsx2File_JoinPrefix((char *)g_igPsx2File_defaultPrefix, path);
     return (char *)Memory_Reallocate(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
@@ -534,10 +537,10 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
         igStringObj_Set((int)(text.get()), (int)prefix);
         c = *path;
         if (c != 0x5C && c != 0x2F) {
-            appendText(text, text_backslash);
+            appendText(text,"\\");
         }
         appendText(text, path);
-        appendText(text, text_semicolon_1);
+        appendText(text,";1");
         limit = strlen(path) + 8;
         for (i = 7; i < limit; i++) {
             chars = (char *)text.get()->_buffer + i;
@@ -553,7 +556,7 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
     }
     chars = (char *)text.get()->_buffer;
     if (chars == 0) {
-        chars = g_stringObjEmptyText[0];
+        chars = g_stringObjEmptyText;
     }
     igStringRef result(chars);
     return result;
@@ -572,9 +575,9 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p, percent_s_slash_percent_s, self->_folderName, (char *)(&entry.stat + 1));
+        igStringObj_Format((igStringObj *)path.p,"%s/%s", self->_folderName, (char *)(&entry.stat + 1));
         char *full = (char *)((igStringObj *)path.p)->_buffer;
-        full = (full == 0) ? g_stringObjEmptyText[0] : full;
+        full = (full == 0) ? g_stringObjEmptyText : full;
         if (sceGetstat(full, &stat) != 0) {
             continue;
         }
@@ -601,9 +604,9 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p, percent_s_slash_percent_s, self->_folderName, (char *)(&entry.stat + 1));
+        igStringObj_Format((igStringObj *)path.p,"%s/%s", self->_folderName, (char *)(&entry.stat + 1));
         char *full = (char *)((igStringObj *)path.p)->_buffer;
-        full = (full == 0) ? g_stringObjEmptyText[0] : full;
+        full = (full == 0) ? g_stringObjEmptyText : full;
         if (sceGetstat(full, &stat) != 0) {
             continue;
         }

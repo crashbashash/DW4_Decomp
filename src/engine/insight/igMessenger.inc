@@ -1,16 +1,19 @@
+igMetaObject *g_igMessenger_metaObject;
+igMetaField *g_igMessenger_dispatcherMetaField;
+
 igMetaObject *FUN_00231400(void) {
-    if (g_igMessenger_metaObject[0] == 0) {
-        g_igMessenger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igMessenger_metaObject == 0) {
+        g_igMessenger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igMessenger_metaObject[0];
+    return g_igMessenger_metaObject;
 }
 
 igMetaObject *igMessenger_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMessenger_metaObject[0];
+    igMetaObject *g = g_igMessenger_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231530();
-    return g_igMessenger_metaObject[0];
+    return g_igMessenger_metaObject;
 }
 
 int igMessenger_GetVTable(void) {
@@ -37,15 +40,17 @@ void FUN_00231530(void)
     igMetaObject_RunStaticInit(igMessenger_Register);
 }
 
+static igMetaObjectCallback g_igMessenger_callbackList[] = { FUN_00232150, 0 };
+
 void igMessenger_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMessenger_metaObject,
+        &g_igMessenger_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igMessenger_GetMetaObject,
-        igMessenger_className,
+        "igMessenger",
         0xC, /* instance size */
         igMessenger_GetVTable,
         &igMessenger_InitFields,
@@ -58,17 +63,30 @@ void thunk_igMessenger_GetMetaObject(void) {
     igMessenger_GetMetaObject();
 }
 
+static FieldFactory g_igMessenger_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igMessenger_fieldTable[] = {
+    "_dispatcher",
+};
+static igMetaField **g_igMessenger_fieldHandles[] = {
+    &g_igMessenger_dispatcherMetaField,
+};
+static int g_igMessenger_fieldOffsets[] = {
+    8,
+};
+
 void igMessenger_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igMessenger_metaObject[0];
+    temp_s0 = g_igMessenger_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igMessenger_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igMessenger_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_002320b0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igMessenger_fieldTable[0], &DAT_00497fc8[0], &DAT_00497fd0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igMessenger_fieldTable, g_igMessenger_fieldHandles, g_igMessenger_fieldOffsets, temp_s2);
 }
 

@@ -1,14 +1,16 @@
+igMetaObject *g_igVisualContextList_metaObject;
+
 int FUN_00149ea0(int arg0) {
     FUN_00149f70();
-    return igMetaObject_CreateInstance(*(int *)0x55F8E0, arg0);
+    return igMetaObject_CreateInstance(g_igVisualContextList_metaObject, arg0);
 }
 
 igMetaObject *igVisualContextList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVisualContextList_metaObject[0];
+    igMetaObject *g = g_igVisualContextList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00149f70();
-    return g_igVisualContextList_metaObject[0];
+    return g_igVisualContextList_metaObject;
 }
 
 int igVisualContextList_GetVTable(void) {
@@ -24,15 +26,17 @@ void FUN_00149f70(void)
     igMetaObject_RunStaticInit(igVisualContextList_Register);
 }
 
+static igMetaObjectCallback g_igVisualContextList_callbackList[] = { FUN_0014a0e0, 0 };
+
 void igVisualContextList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVisualContextList_metaObject,
+        &g_igVisualContextList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
         thunk_igVisualContextList_GetMetaObject,
-        igVisualContextList_className,
+        "igVisualContextList",
         0x14, /* instance size */
         igVisualContextList_GetVTable,
         0,

@@ -1,14 +1,21 @@
+igMetaObject *g_beNDMWShopCtrlDiskSell_metaObject;
+igMetaField *g_beNDMWShopCtrlDiskSell_diskIdListMetaField;
+igMetaField *g_beNDMWShopCtrlDiskSell_cursorMetaField;
+igMetaField *g_beNDMWShopCtrlDiskSell_maxSellMetaField;
+igMetaField *g_beNDMWShopCtrlDiskSell_kazuMetaField;
+igMetaField *g_beNDMWShopCtrlDiskSell_tankaMetaField;
+
 void beNDMWShopCtrlDiskSell_Create(int arg0) {
     FUN_003b6f80();
-    igMetaObject_CreateInstance(*(int *)0x58ACE0, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlDiskSell_metaObject, arg0);
 }
 
 void *FUN_003b6ea0(void) {
-    igMetaObject *g = g_beNDMWShopCtrlDiskSell_metaObject[0];
+    igMetaObject *g = g_beNDMWShopCtrlDiskSell_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b6f80();
     }
-    return g_beNDMWShopCtrlDiskSell_metaObject[0];
+    return g_beNDMWShopCtrlDiskSell_metaObject;
 }
 
 int beNDMWShopCtrlDiskSell_GetVTable(void) {
@@ -37,15 +44,17 @@ void FUN_003b6f80(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlDiskSell_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShopCtrlDiskSell_callbackList[] = { igIntList_EnsureRegistered, 0 };
+
 void *beNDMWShopCtrlDiskSell_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopCtrlDiskSell_metaObject,
+        &g_beNDMWShopCtrlDiskSell_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopCtrlDiskSell_GetMetaObject,
-        beNDMWShopCtrlDiskSell_className,
+        "beNDMWShopCtrlDiskSell",
         0x68, /* instance size */
         beNDMWShopCtrlDiskSell_GetVTable,
         beNDMWShopCtrlDiskSell_InitFields,
@@ -59,17 +68,46 @@ void beNDMWShopCtrlDiskSell_GetMetaObject(void)
     FUN_003b6ea0();
 }
 
+static FieldFactory g_beNDMWShopCtrlDiskSell_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWShopCtrlDiskSell_fieldTable[] = {
+    "_diskIdList",
+    "_cursor",
+    "_maxSell",
+    "_kazu",
+    "_tanka",
+};
+static igMetaField **g_beNDMWShopCtrlDiskSell_fieldHandles[] = {
+    &g_beNDMWShopCtrlDiskSell_diskIdListMetaField,
+    &g_beNDMWShopCtrlDiskSell_cursorMetaField,
+    &g_beNDMWShopCtrlDiskSell_maxSellMetaField,
+    &g_beNDMWShopCtrlDiskSell_kazuMetaField,
+    &g_beNDMWShopCtrlDiskSell_tankaMetaField,
+};
+static int g_beNDMWShopCtrlDiskSell_fieldOffsets[] = {
+    84,
+    88,
+    92,
+    96,
+    100,
+};
+
 void beNDMWShopCtrlDiskSell_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopCtrlDiskSell_metaObject[0];
+    temp_s0 = g_beNDMWShopCtrlDiskSell_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlDiskSell_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlDiskSell_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlDiskSell_fieldTable[0], &DAT_004c9a00[0], &DAT_004c9a20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlDiskSell_fieldTable, g_beNDMWShopCtrlDiskSell_fieldHandles, g_beNDMWShopCtrlDiskSell_fieldOffsets, temp_s2);
 }
 

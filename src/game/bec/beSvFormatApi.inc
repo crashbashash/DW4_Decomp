@@ -1,14 +1,16 @@
+igMetaObject *g_beSvFormatApi_metaObject;
+
 void FUN_00349870(int arg0) {
     FUN_00349a40();
     igMetaObject_CreateInstance(*(int *)0x588270, arg0);
 }
 
 void *FUN_003498b0(void) {
-    igMetaObject *g = g_beSvFormatApi_metaObject[0];
+    igMetaObject *g = g_beSvFormatApi_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00349a40();
     }
-    return g_beSvFormatApi_metaObject[0];
+    return g_beSvFormatApi_metaObject;
 }
 
 int beSvFormatApi_GetVTable(void) {
@@ -70,11 +72,11 @@ void *beSvFormatApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvFormatApi_metaObject,
+        &g_beSvFormatApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
         beSvFormatApi_GetMetaObject,
-        beSvFormatApi_className,
+        "beSvFormatApi",
         0x40, /* instance size */
         beSvFormatApi_GetVTable,
         0,

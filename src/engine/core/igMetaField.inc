@@ -1,16 +1,36 @@
+igMetaObject *g_igMetaField_metaObject;
+igMetaField *g_igMetaField_offsetMetaField;
+igMetaField *g_fieldNameMember;
+igMetaField *g_igMetaField_typeIndexMetaField;
+igMetaField *g_igMetaField_internalIndexMetaField;
+igMetaField *g_igMetaField_sizeMetaField;
+igMetaField *g_igMetaField_parentMetaObjectMetaField;
+igMetaField *g_igMetaField_externalEnumStorageMetaField;
+igMetaField *g_igMetaField_defaultMetaField;
+igMetaField *g_igMetaField_resetMethodMetaField;
+igMetaField *g_igMetaField_isRunTimeMetaField;
+igMetaField *g_igMetaField_persistentMetaField;
+igMetaField *g_igMetaField_shallowCopyMethodMetaField;
+igMetaField *g_igMetaField_deepCopyMethodMetaField;
+igMetaField *g_igMetaField_constructCopyMethodMetaField;
+igMetaField *g_igMetaField_isAlikeExactlyMethodMetaField;
+igMetaField *g_igMetaField_isAlikeDeepMethodMetaField;
+igMetaField *g_igMetaField_isAlikeShallowMethodMetaField;
+igMetaField *g_igMetaField_invarianceFunctionMetaField;
+
 igMetaObject *igMetaField_GetOrCreateMetaObject(void) {
-    if (g_igMetaField_metaObject[0] == 0) {
-        g_igMetaField_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igMetaField_metaObject == 0) {
+        g_igMetaField_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igMetaField_metaObject[0];
+    return g_igMetaField_metaObject;
 }
 
 igMetaObject *igMetaField_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMetaField_metaObject[0];
+    igMetaObject *g = g_igMetaField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMetaField_EnsureRegistered();
-    return g_igMetaField_metaObject[0];
+    return g_igMetaField_metaObject;
 }
 
 void igMetaField_EnsureRegistered(void)
@@ -18,25 +38,108 @@ void igMetaField_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMetaField_Register);
 }
 
+static igMetaObjectCallback g_igMetaField_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
+
 void igMetaField_Register(void) {
     igMetaObject_RegisterClass(
         1,
-        g_igMetaField_metaObject,
+        &g_igMetaField_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igMetaField_GetMetaObjectFunction,
-        igMetaField_className,
+        "igMetaField",
         0x34,
         0,
         igMetaField_InitFields,
         0,
-        (igMetaObjectCallback *)g_igMetaField_callbackList
+        g_igMetaField_callbackList
     );
 }
 
 void igMetaField_GetMetaObjectFunction(void) {
     igMetaField_GetMetaObject();
 }
+
+static FieldFactory g_igMetaField_ctorTable[] = {
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
+    (FieldFactory)igShortMetaField_Create,
+    (FieldFactory)igUnsignedShortMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igCharMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+};
+static const char *g_igMetaField_fieldTable[] = {
+    "_offset",
+    "_fieldName",
+    "_typeIndex",
+    "_internalIndex",
+    "_size",
+    "_parentMetaObject",
+    "_externalEnumStorage",
+    "_default",
+    "_resetMethod",
+    "_isRunTime",
+    "_persistent",
+    "_shallowCopyMethod",
+    "_deepCopyMethod",
+    "_constructCopyMethod",
+    "_isAlikeExactlyMethod",
+    "_isAlikeDeepMethod",
+    "_isAlikeShallowMethod",
+    "_invarianceFunction",
+};
+static igMetaField **g_igMetaField_fieldDescriptors[] = {
+    &g_igMetaField_offsetMetaField,
+    &g_fieldNameMember,
+    &g_igMetaField_typeIndexMetaField,
+    &g_igMetaField_internalIndexMetaField,
+    &g_igMetaField_sizeMetaField,
+    &g_igMetaField_parentMetaObjectMetaField,
+    &g_igMetaField_externalEnumStorageMetaField,
+    &g_igMetaField_defaultMetaField,
+    &g_igMetaField_resetMethodMetaField,
+    &g_igMetaField_isRunTimeMetaField,
+    &g_igMetaField_persistentMetaField,
+    &g_igMetaField_shallowCopyMethodMetaField,
+    &g_igMetaField_deepCopyMethodMetaField,
+    &g_igMetaField_constructCopyMethodMetaField,
+    &g_igMetaField_isAlikeExactlyMethodMetaField,
+    &g_igMetaField_isAlikeDeepMethodMetaField,
+    &g_igMetaField_isAlikeShallowMethodMetaField,
+    &g_igMetaField_invarianceFunctionMetaField,
+};
+static int g_igMetaField_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    18,
+    20,
+    24,
+    28,
+    32,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    48,
+};
 
 void igMetaField_InitFields(void) {
     int first;
@@ -47,9 +150,9 @@ void igMetaField_InitFields(void) {
     igMetaField *internalIndexField;
     void *meta;
 
-    meta = (void *)g_igMetaField_metaObject[0];
+    meta = (void *)g_igMetaField_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igMetaField_ctorTable[0], 0x12);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igMetaField_ctorTable, 0x12);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))->_persistent = 0;
     typeIndexField = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2));
     igShortMetaField_SetDefault((void **)typeIndexField, -1);
@@ -81,6 +184,6 @@ void igMetaField_InitFields(void) {
     igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xF), 1);
     igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0x10), 2);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0x11))->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igMetaField_fieldTable[0], (igMetaField ***)&g_igMetaField_fieldDescriptors[0], &g_igMetaField_fieldOffsets[0], first);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igMetaField_fieldTable, g_igMetaField_fieldDescriptors, g_igMetaField_fieldOffsets, first);
 }
 

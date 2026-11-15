@@ -4,7 +4,7 @@ int igEnumMetaField_ValueFromString(igEnumMetaField *self, int *value, int text)
     int scanned;
 
     consumed = 0;
-    scanned = sscanf(text, &percent_d_percent_n[0], value, &consumed);
+    scanned = sscanf(text, "%d%n", value, &consumed);
     if (((scanned == 0) || (scanned == -1)) && (text != 0)) {
         if (g_resultSuccess == igMetaEnum_GetValueByName((igMetaEnum *)(((int (*)())self->_getMetaEnumFunction)()), (const char *)text, &named)) {
             *value = named;
@@ -58,24 +58,27 @@ int igErrorHandler_GetInstanceAlias()
     return igErrorHandler_GetInstance();
 }
 
+unsigned char g_igErrorHandler_released;
+void *g_igErrorHandler_instance;
+
 void igErrorHandler_ReleaseInstance(void) {
-    if (g_igErrorHandler_instance[0] != 0) {
+    if (g_igErrorHandler_instance != 0) {
         {
-            igObject *held = (igObject *)g_igErrorHandler_instance[0];
+            igObject *held = (igObject *)g_igErrorHandler_instance;
             held->_refCount = held->_refCount - 1;
             if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(held);
             }
         }
     }
-    g_igErrorHandler_instance[0] = (void *)(0);
+    g_igErrorHandler_instance = (void *)(0);
     g_igErrorHandler_released = 1;
 }
 
 int igErrorHandler_GetInstance(void) {
-    if ((((int *)g_igErrorHandler_instance)[0] == 0) && (g_igErrorHandler_metaObject[0] != 0) && (g_igErrorHandler_released == 0)) {
-        ((int *)g_igErrorHandler_instance)[0] = igErrorHandler_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+    if (((*(int *)&g_igErrorHandler_instance) == 0) && (g_igErrorHandler_metaObject != 0) && (g_igErrorHandler_released == 0)) {
+        (*(int *)&g_igErrorHandler_instance) = igErrorHandler_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     }
-    return ((int *)g_igErrorHandler_instance)[0];
+    return (*(int *)&g_igErrorHandler_instance);
 }
 

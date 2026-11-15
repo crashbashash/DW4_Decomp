@@ -1,23 +1,40 @@
-int FUN_00131f80(void) {
-    if (DAT_0055ed40[0] == 0) {
-        DAT_0055ed40[0] = igMetaEnum_Create(&text_ApplyType[0], &DAT_00485bf0[0], &DAT_00485c00[0], 3);
+igMetaEnum *g_igTextureCubeAttr_applyTypeMetaEnum;
+igMetaObject *g_igTextureCubeAttr_metaObject;
+igMetaField *g_igTextureCubeAttr_cubeImageMetaField;
+igMetaField *g_igTextureCubeAttr_applyTypeMetaField;
+igMetaField *g_igTextureCubeAttr_unusedMetaField;
+
+static const char *g_igTextureCubeAttr_applyTypeNames[] = {
+    "NOT_SET",
+    "CUBE_MAP",
+    "SPHERE_MAP",
+};
+static int g_igTextureCubeAttr_applyTypeValues[] = {
+    0,
+    1,
+    2,
+};
+
+igMetaEnum *FUN_00131f80(void) {
+    if (g_igTextureCubeAttr_applyTypeMetaEnum == 0) {
+        g_igTextureCubeAttr_applyTypeMetaEnum = igMetaEnum_Create("ApplyType", g_igTextureCubeAttr_applyTypeNames, g_igTextureCubeAttr_applyTypeValues, 3);
     }
-    return DAT_0055ed40[0];
+    return g_igTextureCubeAttr_applyTypeMetaEnum;
 }
 
 igMetaObject *FUN_00131fe0(void) {
-    if (g_igTextureCubeAttr_metaObject[0] == 0) {
-        g_igTextureCubeAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTextureCubeAttr_metaObject == 0) {
+        g_igTextureCubeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTextureCubeAttr_metaObject[0];
+    return g_igTextureCubeAttr_metaObject;
 }
 
 igMetaObject *igTextureCubeAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTextureCubeAttr_metaObject[0];
+    igMetaObject *g = g_igTextureCubeAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00132420();
-    return g_igTextureCubeAttr_metaObject[0];
+    return g_igTextureCubeAttr_metaObject;
 }
 
 int igTextureCubeAttr_GetVTable(void) {
@@ -137,15 +154,17 @@ void FUN_00132420(void)
     igMetaObject_RunStaticInit(igTextureCubeAttr_Register);
 }
 
+static igMetaObjectCallback g_igTextureCubeAttr_callbackList[] = { FUN_0014e050, 0 };
+
 void igTextureCubeAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igTextureCubeAttr_metaObject,
+        &g_igTextureCubeAttr_metaObject,
         igTextureAttr_Register,
         igTextureAttr_GetPublishedMetaObject,
         thunk_igTextureCubeAttr_GetMetaObject,
-        igTextureCubeAttr_className,
+        "igTextureCubeAttr",
         0x68, /* instance size */
         igTextureCubeAttr_GetVTable,
         &igTextureCubeAttr_InitFields,
@@ -159,24 +178,45 @@ void thunk_igTextureCubeAttr_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_001324c0(void) {
-    return g_igTextureAttr_metaObject[0];
+    return g_igTextureAttr_metaObject;
 }
+
+static FieldFactory g_igTextureCubeAttr_ctorTable[] = {
+    igObjectRefArrayMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igTextureCubeAttr_fieldTable[] = {
+    "_cubeImage",
+    "_applyType",
+    "_unused",
+};
+static igMetaField **g_igTextureCubeAttr_fieldHandles[] = {
+    &g_igTextureCubeAttr_cubeImageMetaField,
+    &g_igTextureCubeAttr_applyTypeMetaField,
+    &g_igTextureCubeAttr_unusedMetaField,
+};
+static int g_igTextureCubeAttr_fieldOffsets[] = {
+    72,
+    96,
+    100,
+};
 
 void igTextureCubeAttr_InitFields(void) {
     int temp_s2;
     void *temp_v0;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igTextureCubeAttr_metaObject[0];
+    temp_s0 = g_igTextureCubeAttr_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igTextureCubeAttr_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igTextureCubeAttr_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014dfb0();
     ((igObjectRefArrayMetaField *)temp_s1)->_num = 6;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00485c58[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_00131f80);
-    igMetaObject_NameFields(temp_s0, &g_igTextureCubeAttr_fieldTable[0], &DAT_00485c38[0], &DAT_00485c48[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igTextureCubeAttr_fieldTable, g_igTextureCubeAttr_fieldHandles, g_igTextureCubeAttr_fieldOffsets, temp_s2);
 }
 

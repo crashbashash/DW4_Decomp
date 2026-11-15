@@ -1,21 +1,35 @@
+igMetaObject *g_beCri_metaObject;
+igMetaField *g_beCri_systemMetaField;
+igMetaField *g_beCri_execDvdErrMetaField;
+igMetaField *g_beCri_requestMetaField;
+igMetaField *g_beCri_hdBGMMetaField;
+igMetaField *g_beCri_hdENVMetaField;
+igMetaField *g_beCri_hdSEsMetaField;
+igMetaField *g_beCri_infoListMetaField;
+igMetaField *g_beCri_lsBinObjsMetaField;
+igMetaField *g_beCri_baseVolumeMetaField;
+igMetaField *g_beCri_sndfVolumeMetaField;
+igMetaField *g_beCri_pauseOnetimeMetaField;
+igMetaField *g_beCri_dataTypeMetaField;
+
 void beCri_CreateInstance(int arg0) {
     FUN_00367b20();
     igMetaObject_CreateInstance(*(int *)0x589AD8, arg0);
 }
 
 igMetaObject *FUN_003678a0(void) {
-    if (g_beCri_metaObject[0] == 0) {
-        g_beCri_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beCri_metaObject == 0) {
+        g_beCri_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beCri_metaObject[0];
+    return g_beCri_metaObject;
 }
 
 void *FUN_003678f0(void) {
-    igMetaObject *g = g_beCri_metaObject[0];
+    igMetaObject *g = g_beCri_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00367b20();
     }
-    return g_beCri_metaObject[0];
+    return g_beCri_metaObject;
 }
 
 int beCri_GetVTable(void) {
@@ -77,15 +91,17 @@ void FUN_00367b20(void)
     igMetaObject_RunStaticInit(beCri_Register);
 }
 
+static igMetaObjectCallback g_beCri_callbackList[] = { FUN_00342f30, FUN_00366b20, FUN_00366860, igInfoList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+
 void *beCri_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCri_metaObject,
+        &g_beCri_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
         beCri_GetMetaObject,
-        beCri_className,
+        "beCri",
         0x48, /* instance size */
         beCri_GetVTable,
         beCri_InitFields,
@@ -99,6 +115,63 @@ void beCri_GetMetaObject(void)
     FUN_003678f0();
 }
 
+static FieldFactory g_beCri_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igLongMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beCri_fieldTable[] = {
+    "_system",
+    "_execDvdErr",
+    "_request",
+    "_hdBGM",
+    "_hdENV",
+    "_hdSEs",
+    "_infoList",
+    "_lsBinObjs",
+    "_baseVolume",
+    "_sndfVolume",
+    "_pauseOnetime",
+    "_dataType",
+};
+static igMetaField **g_beCri_fieldHandles[] = {
+    &g_beCri_systemMetaField,
+    &g_beCri_execDvdErrMetaField,
+    &g_beCri_requestMetaField,
+    &g_beCri_hdBGMMetaField,
+    &g_beCri_hdENVMetaField,
+    &g_beCri_hdSEsMetaField,
+    &g_beCri_infoListMetaField,
+    &g_beCri_lsBinObjsMetaField,
+    &g_beCri_baseVolumeMetaField,
+    &g_beCri_sndfVolumeMetaField,
+    &g_beCri_pauseOnetimeMetaField,
+    &g_beCri_dataTypeMetaField,
+};
+static int g_beCri_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+};
+
 void beCri_InitFields(void) {
     void *temp_s2;
     void *temp_s2_2;
@@ -109,9 +182,9 @@ void beCri_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_beCri_metaObject[0];
+    temp_s1 = (void *)g_beCri_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beCri_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, g_beCri_ctorTable, 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00342ce0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -128,6 +201,6 @@ void beCri_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_beCri_fieldTable[0], &DAT_004c76c0[0], &DAT_004c76f0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_beCri_fieldTable, g_beCri_fieldHandles, g_beCri_fieldOffsets, temp_s0);
 }
 

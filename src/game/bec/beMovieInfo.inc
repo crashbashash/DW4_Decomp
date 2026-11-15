@@ -1,9 +1,11 @@
+igMetaObject *g_beMovieInfo_metaObject;
+
 void *FUN_0034eb10(void) {
-    igMetaObject *g = g_beMovieInfo_metaObject[0];
+    igMetaObject *g = g_beMovieInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034ebd0();
     }
-    return g_beMovieInfo_metaObject[0];
+    return g_beMovieInfo_metaObject;
 }
 
 int beMovieInfo_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beMovieInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMovieInfo_metaObject,
+        &g_beMovieInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beMovieInfo_GetMetaObject,
-        beMovieInfo_className,
+        "beMovieInfo",
         0x1c, /* instance size */
         beMovieInfo_GetVTable,
         0,

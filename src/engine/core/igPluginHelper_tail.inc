@@ -1,4 +1,4 @@
-static inline char *keyText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (*(char * *)g_stringObjEmptyText); } return t; }
+static inline char *keyText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (g_stringObjEmptyText); } return t; }
 
 static inline void dropKey(igStringObj *o) {
     if (o != 0) {
@@ -22,8 +22,8 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
     char *string;
     char *text;
     igTDataList<char *> *held;
-    ini = (*(ObjectSystemView **)g_objectSystem)->configRegistry;
-    section = igRegistry_GetSectionIndex((igRegistry *)ini, PLUGINS, 1);
+    ini = ((*(ObjectSystemView * *)&g_objectSystem))->configRegistry;
+    section = igRegistry_GetSectionIndex((igRegistry *)ini,"PLUGINS", 1);
     if (section >= 0) {
         n = ((unsigned int)igRegistry_GetNumValuesInSection((int)ini, section));
         for (i = 0; i < n; i++) {
@@ -101,6 +101,8 @@ void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize)
     return a;
 }
 
+igPsx2ThreadManagerView *g_threadManager;
+
 int igStandardQueue_StopServiceThreads(igStandardQueueView *queue) {
     igResult terminated, joined;
     int n;
@@ -120,7 +122,7 @@ int igStandardQueue_StopServiceThreads(igStandardQueueView *queue) {
             terminated = thread->Terminate();
         }
         if (thread->IsRunning()) {
-            joined = ((igPsx2ThreadManagerView **)g_threadManager)[0]->GetCurrentThread()->Join(thread);
+            joined = ((igPsx2ThreadManagerView **)&g_threadManager)[0]->GetCurrentThread()->Join(thread);
         }
         thread->_refCount = thread->_refCount - 1;
         if (((unsigned long long)((long long)(int)thread->_refCount << 0x29) >> 0x29) == 0) {

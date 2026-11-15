@@ -1,6 +1,11 @@
 #include "src/engine/attrs/AttrsLibrary.h"
 #include "dw4/unregisteredClasses.h"
 
+unsigned char g_AttrsLibrary_registered;
+short g_igAttr_nextAttrIndex;
+char g_igTextureBindAttr_fastApplyEnabled;
+unsigned char g_igTextureBindAttr_slotsCached;
+
 /* Constructed by __sinit_AttrsLibrary.cpp in this order. */
 igSmartPointer<igAttrPool> g_igAttrPool_instance(0, kRetainReference);
 igSmartPointer<igCustomVectorStateList> g_igFloatConstantAttr_stateList(0, kRetainReference);
@@ -8,6 +13,8 @@ igSmartPointer<igCustomMatrixStateList> g_igMatrixConstantAttr_stateList(0, kRet
 igSmartPointer<igModelViewMatrixAttr> g_igModelViewMatrixAttr_instance(0, kRetainReference);
 igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRetainReference);
 
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/attrs/LibraryFront.inc"
 #include "src/engine/attrs/igVisualContextAttrDefaultManager.inc"
 #include "src/engine/attrs/igVisualAttribute.inc"
@@ -226,3 +233,4 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igAttrListList_tail2.inc"
 #include "src/engine/attrs/igAttrList_tail2.inc"
 #include "src/engine/attrs/igVec3fList_tail2.inc"
+#pragma pop

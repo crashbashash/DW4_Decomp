@@ -213,6 +213,8 @@ static inline void reserve(igTDataList<int> *l, int n) { if (n >= l->_count) { L
 
 static inline void setListCount(igTDataList<int> *l, int n) { if (n >= 0) { if (n <= l->_capacity) { l->_count = n; } else { List_Resize(l, n, 4); } } }
 
+int g_igSymbolTable_emptyHashSlot = -1;
+
 void igSymbolTable_RebuildHashIndex(igSymbolTableView *self, int n) {
     igTDataList<int> *l;
     int count;

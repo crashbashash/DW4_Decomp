@@ -1,24 +1,49 @@
-int FUN_0045c540(void) {
-    if (DAT_0058cbf0[0] == 0) {
-        DAT_0058cbf0[0] = igMetaEnum_Create(&CONSTRAINT_AXIS[0], &DAT_004d1460[0], &DAT_004d1470[0], 3);
+static const char *g_igRotateMode_CONSTRAINT_AXISNames[] = {
+    "NONE", "CONSTRAINT_X", "CONSTRAINT_Y",
+};
+static int g_igRotateMode_CONSTRAINT_AXISValues[] = {
+    0, 1, 2,
+};
+igMetaEnum *g_igRotateMode_CONSTRAINT_AXISMetaEnum;
+igMetaObject *g_igRotateMode_metaObject;
+igMetaField *g_igRotateMode_distanceMetaField;
+igMetaField *g_igRotateMode_lastMousePosMetaField;
+igMetaField *g_igRotateMode_leftMouseActiveMetaField;
+igMetaField *g_igRotateMode_middleMouseActiveMetaField;
+igMetaField *g_igRotateMode_rightMouseActiveMetaField;
+igMetaField *g_igRotateMode_joystickTMetaField;
+igMetaField *g_igRotateMode_joystickRMetaField;
+igMetaField *g_igRotateMode_constraintMetaField;
+igMetaField *g_igRotateMode_constraintAxisMetaField;
+igMetaField *g_igRotateMode_activeMetaField;
+igMetaField *g_igRotateMode_mayaMetaField;
+igMetaField *g_igRotateMode_headMetaField;
+igMetaField *g_igRotateMode_rollMetaField;
+igMetaField *g_igRotateMode_pitchMetaField;
+igMetaField *g_igRotateMode_zoomMetaField;
+igMetaField *g_igRotateMode_translationMetaField;
+
+igMetaEnum *FUN_0045c540(void) {
+    if (g_igRotateMode_CONSTRAINT_AXISMetaEnum == 0) {
+        g_igRotateMode_CONSTRAINT_AXISMetaEnum = igMetaEnum_Create("CONSTRAINT_AXIS", g_igRotateMode_CONSTRAINT_AXISNames, g_igRotateMode_CONSTRAINT_AXISValues, 3);
     }
-    return DAT_0058cbf0[0];
+    return g_igRotateMode_CONSTRAINT_AXISMetaEnum;
 }
 
 void igRotateMode_Create(int arg0) {
     FUN_0045c680();
-    igMetaObject_CreateInstance(*(int *)0x58CBF8, arg0);
+    igMetaObject_CreateInstance(g_igRotateMode_metaObject, arg0);
 }
 
 void *igRotateMode_GetMetaObject(void) {
     bool ok;
-    if (((S_45c5e0 *)g_igRotateMode_metaObject[0]) == 0) goto make;
-    ok = !!(((S_45c5e0 *)g_igRotateMode_metaObject[0])->f & 4);
+    if (((S_45c5e0 *)g_igRotateMode_metaObject) == 0) goto make;
+    ok = !!(((S_45c5e0 *)g_igRotateMode_metaObject)->f & 4);
     if (ok != false) goto done;
 make:
     FUN_0045c680();
 done:;
-    return ((S_45c5e0 *)g_igRotateMode_metaObject[0]);
+    return ((S_45c5e0 *)g_igRotateMode_metaObject);
 }
 
 int igRotateMode_GetVTable(void) {
@@ -39,11 +64,11 @@ void igRotateMode_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igRotateMode_metaObject,
+        &g_igRotateMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
         thunk_igRotateMode_GetMetaObject,
-        igRotateMode_className,
+        "igRotateMode",
         0x94, /* instance size */
         igRotateMode_GetVTable,
         &igRotateMode_InitFields,
@@ -55,6 +80,79 @@ void igRotateMode_Register(void) {
 void thunk_igRotateMode_GetMetaObject(void) {
     igRotateMode_GetMetaObject();
 }
+
+static FieldFactory g_igRotateMode_ctorTable[] = {
+    igFloatMetaField_Create,
+    FUN_00187b50,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    FUN_00187b50,
+    FUN_00187b50,
+    igBoolMetaField_Create,
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+};
+static const char *g_igRotateMode_fieldTable[] = {
+    "_distance",
+    "_lastMousePos",
+    "_leftMouseActive",
+    "_middleMouseActive",
+    "_rightMouseActive",
+    "_joystickT",
+    "_joystickR",
+    "_constraint",
+    "_constraintAxis",
+    "_active",
+    "_maya",
+    "_head",
+    "_roll",
+    "_pitch",
+    "_zoom",
+    "_translation",
+};
+static igMetaField **g_igRotateMode_fieldHandles[] = {
+    &g_igRotateMode_distanceMetaField,
+    &g_igRotateMode_lastMousePosMetaField,
+    &g_igRotateMode_leftMouseActiveMetaField,
+    &g_igRotateMode_middleMouseActiveMetaField,
+    &g_igRotateMode_rightMouseActiveMetaField,
+    &g_igRotateMode_joystickTMetaField,
+    &g_igRotateMode_joystickRMetaField,
+    &g_igRotateMode_constraintMetaField,
+    &g_igRotateMode_constraintAxisMetaField,
+    &g_igRotateMode_activeMetaField,
+    &g_igRotateMode_mayaMetaField,
+    &g_igRotateMode_headMetaField,
+    &g_igRotateMode_rollMetaField,
+    &g_igRotateMode_pitchMetaField,
+    &g_igRotateMode_zoomMetaField,
+    &g_igRotateMode_translationMetaField,
+};
+static int g_igRotateMode_fieldOffsets[] = {
+    76,
+    80,
+    88,
+    89,
+    90,
+    92,
+    100,
+    108,
+    112,
+    116,
+    117,
+    120,
+    124,
+    128,
+    132,
+    136,
+};
 
 void igRotateMode_InitFields(void) {
     int temp_s2;
@@ -69,9 +167,9 @@ void igRotateMode_InitFields(void) {
     void *temp_a0;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igRotateMode_metaObject[0];
+    temp_s0 = g_igRotateMode_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igRotateMode_ctorTable[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, g_igRotateMode_ctorTable, 0x10);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2), 1.0f);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     spA[0] = 0;
@@ -98,6 +196,6 @@ void igRotateMode_InitFields(void) {
     spD[1] = 0;
     spD[2] = 0;
     FUN_0018e470(temp_a0_4, spD);
-    igMetaObject_NameFields(temp_s0, &g_igRotateMode_fieldTable[0], &DAT_004d1500[0], &DAT_004d1540[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igRotateMode_fieldTable, g_igRotateMode_fieldHandles, g_igRotateMode_fieldOffsets, temp_s2);
 }
 

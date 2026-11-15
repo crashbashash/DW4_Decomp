@@ -1,12 +1,18 @@
+igMetaObject *g_beCriFxInfo_metaObject;
+igMetaField *g_beCriFxInfo_targetMetaField;
+igMetaField *g_beCriFxInfo_reverbMetaField;
+igMetaField *g_beCriFxInfo_delayMetaField;
+igMetaField *g_beCriFxInfo_xbFxParamMetaField;
+
 void *FUN_00366ca0(void) {
     bool ok;
-    if (g_beCriFxInfo_metaObject[0] == 0) goto make;
-    ok = !!(g_beCriFxInfo_metaObject[0]->_validity & 4);
+    if (g_beCriFxInfo_metaObject == 0) goto make;
+    ok = !!(g_beCriFxInfo_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_00366e00();
 done:;
-    return g_beCriFxInfo_metaObject[0];
+    return g_beCriFxInfo_metaObject;
 }
 
 int beCriFxInfo_GetVTable(void) {
@@ -53,15 +59,17 @@ void FUN_00366e00(void)
     igMetaObject_RunStaticInit(beCriFxInfo_Register);
 }
 
+static igMetaObjectCallback g_beCriFxInfo_callbackList[] = { FUN_00367080, 0 };
+
 void *beCriFxInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCriFxInfo_metaObject,
+        &g_beCriFxInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
         beCriFxInfo_GetMetaObject,
-        beCriFxInfo_className,
+        "beCriFxInfo",
         0x24, /* instance size */
         beCriFxInfo_GetVTable,
         beCriFxInfo_InitFields,
@@ -75,19 +83,44 @@ void beCriFxInfo_GetMetaObject(void)
     FUN_00366ca0();
 }
 
+static FieldFactory g_beCriFxInfo_ctorTable[] = {
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beCriFxInfo_fieldTable[] = {
+    "_target",
+    "_reverb",
+    "_delay",
+    "_xbFxParam",
+};
+static igMetaField **g_beCriFxInfo_fieldHandles[] = {
+    &g_beCriFxInfo_targetMetaField,
+    &g_beCriFxInfo_reverbMetaField,
+    &g_beCriFxInfo_delayMetaField,
+    &g_beCriFxInfo_xbFxParamMetaField,
+};
+static int g_beCriFxInfo_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+};
+
 void beCriFxInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beCriFxInfo_metaObject[0];
+    temp_s0 = (void *)g_beCriFxInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beCriFxInfo_ctorTable[0], 4);
+    igMetaObject_CreateFields(temp_s0, g_beCriFxInfo_ctorTable, 4);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s2), 0);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), -1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00366fa0();
-    igMetaObject_NameFields(temp_s0, &g_beCriFxInfo_fieldTable[0], &DAT_004c74d0[0], &DAT_004c74e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beCriFxInfo_fieldTable, g_beCriFxInfo_fieldHandles, g_beCriFxInfo_fieldOffsets, temp_s2);
 }
 

@@ -154,8 +154,8 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
 void FUN_001ddfd0(void) {
     int temp_v0;
 
-    if (g_igTransformSequence1_5_metaObject[0] != 0) {
-        temp_v0 = igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject[0], &text_interpolationMethod[0]);
+    if (g_igTransformSequence1_5_metaObject != 0) {
+        temp_v0 = igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject, "_interpolationMethod");
         if (temp_v0 != 0) {
             igCharArrayMetaField_SetDefaultElement(temp_v0, 0, 1);
             igCharArrayMetaField_SetDefaultElement(temp_v0, 1, 3);

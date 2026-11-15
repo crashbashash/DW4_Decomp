@@ -3,6 +3,9 @@
 #include "dw4/newlib_reent.h"
 #include "dw4/p2timer.h"
 
+#pragma push
+#pragma readonly_strings on
+
 #define T0_COUNT ((unsigned int *)0x10000000)
 #define T0_MODE ((unsigned int *)0x10000010)
 #define T0_COMP ((unsigned int *)0x10000020)
@@ -275,3 +278,4 @@ void p2AddAlarm(int sema, int milliseconds) {
     *T0_MODE = p2Timer0Mode.word;
     SignalSema(p2AlarmSema);
 }
+#pragma pop

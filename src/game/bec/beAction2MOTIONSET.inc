@@ -1,12 +1,17 @@
+igMetaObject *g_beAction2MOTIONSET_metaObject;
+igMetaField *g_beAction2MOTIONSET_hokanModeMetaField;
+igMetaField *g_beAction2MOTIONSET_hokanTimeMetaField;
+igMetaField *g_beAction2MOTIONSET_loopModeMetaField;
+
 void *FUN_0036d5e0(void) {
     unsigned char b;
-    if (g_beAction2MOTIONSET_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beAction2MOTIONSET_metaObject[0]) + 36) & 4) != 0;
+    if (g_beAction2MOTIONSET_metaObject != 0) {
+        b = (*(int *)((char *)(g_beAction2MOTIONSET_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0036d740();
 done:
-    return g_beAction2MOTIONSET_metaObject[0];
+    return g_beAction2MOTIONSET_metaObject;
 }
 
 int beAction2MOTIONSET_GetVTable(void) {
@@ -75,11 +80,11 @@ void *beAction2MOTIONSET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2MOTIONSET_metaObject,
+        &g_beAction2MOTIONSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2MOTIONSET_GetMetaObject,
-        beAction2MOTIONSET_className,
+        "beAction2MOTIONSET",
         0x18, /* instance size */
         beAction2MOTIONSET_GetVTable,
         beAction2MOTIONSET_InitFields,
@@ -93,13 +98,34 @@ void beAction2MOTIONSET_GetMetaObject(void)
     FUN_0036d5e0();
 }
 
+static FieldFactory g_beAction2MOTIONSET_ctorTable[] = {
+    igStringMetaField_Create,
+    igFloatMetaField_Create,
+    igStringMetaField_Create,
+};
+static const char *g_beAction2MOTIONSET_fieldTable[] = {
+    "_hokanMode",
+    "_hokanTime",
+    "_loopMode",
+};
+static igMetaField **g_beAction2MOTIONSET_fieldHandles[] = {
+    &g_beAction2MOTIONSET_hokanModeMetaField,
+    &g_beAction2MOTIONSET_hokanTimeMetaField,
+    &g_beAction2MOTIONSET_loopModeMetaField,
+};
+static int g_beAction2MOTIONSET_fieldOffsets[] = {
+    12,
+    16,
+    20,
+};
+
 void beAction2MOTIONSET_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2MOTIONSET_metaObject[0];
+    temp_s0 = (void *)g_beAction2MOTIONSET_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2MOTIONSET_ctorTable[0], 3);
-    igMetaObject_NameFields(temp_s0, &g_beAction2MOTIONSET_fieldTable[0], &DAT_004c81a0[0], &DAT_004c81b0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beAction2MOTIONSET_ctorTable, 3);
+    igMetaObject_NameFields(temp_s0, g_beAction2MOTIONSET_fieldTable, g_beAction2MOTIONSET_fieldHandles, g_beAction2MOTIONSET_fieldOffsets, temp_s1);
 }
 

@@ -30,31 +30,64 @@ small functions: the matched ones have a median size of ~28 bytes against ~128 f
 ## Data
 
 There are **no data sections to divide** here: retail is a single merged section
-(`0x100000..0x554b00`, plus a zero-initialised tail to `0x58d280`), so "data" has to be
-*classified* rather than read off the section headers.
+(`0x100000..0x554b00`, plus a zero-initialised tail to `0x58d280`), so "data" is what
+`tools/layout.py` tiles between the functions: 1.30 MB with the `.bss` tail.
 
-`tools/layout.py` already tiles every byte of that section into `code` units (the functions)
-and the data regions between them. `tools/datamap.py` then labels each data byte from the
-metadata the repo has recovered:
+**The data headline is data matched from source**, the counterpart of matched code: the bytes a
+unit defines and `make check` compared byte for byte with retail, relocations applied. A whole-file
+unit gives each datum it defines a retail address (its `data` and `anon` rows,
+[emitted functions](emitted-functions.md)); `tools/verify.py` compares every such section, `tools/check.py`
+writes the compared spans to `data/check-data.tsv` with the owning unit's category, and
+`tools/linkgen.py` places them from the object, so `make link` proves them too. A datum the source only
+declares `extern` at a retail address counts nothing, however well its type is known: data progress is
+moving a definition into the unit. Fully matched has the code headline's meaning, units classified
+`match` or `assembly`; the jump tables of fully matched code count as well, since the compiler
+regenerates them.
+
+`tools/datamap.py` labels each data byte, the first kind that claims it winning:
 
 | kind | source | extent |
 | --- | --- | --- |
 | `code` | `config/SLUS-20836/layout.txt` | the function extents from `config/SLUS-20836/symbols.txt` |
-| `jtbl` | `config/SLUS-20836/layout.txt` | `config/SLUS-20836/jumptables.txt` |
-| `vtable` | `data/vtables.json` (RTTI) and `data/vtables-getvtable.json` (each class's `GetVTable`) | `8 + 4 × len(vfuncs)`; the words are `[rtti, offset, vfuncs…]`; a GetVTable dump is cut at the next labelled address |
+| `source` | `data/check-data.tsv` (fully matched units) and the `jtbl` units of fully matched owners | the compared sections |
+| `jtbl` | the other `jtbl` units of `config/SLUS-20836/layout.txt` | `config/SLUS-20836/jumptables.txt` |
+| `exc` | `config/SLUS-20836/exceptions.txt` and the static-initializer table | 12-byte index records, the recorded table sizes |
+| `literal` | the float and double pool reached through `gp` | `0x554880`–`0x554974` |
+| `vtable` | `data/vtables.json` (RTTI), `data/vtables-getvtable.json` (each class's `GetVTable`) and the `vtable` rows of `data/data-layout.tsv` (a `[0 or pointer, 0]` header and two or more function starts) | `8 + 4 × len(vfuncs)`; the header and the run |
 | `str` | `data/strings.json` | `length + 1`, for strings actually in the image |
 | `handle` | `data/reflection.json` | 4 bytes per class handle (they live in the `.bss` tail) |
-| `named` | the data rows of `config/SLUS-20836/data-names.tsv` | a reflection table (`field-table`, `ctor-table`, `callback-list`) or a `_vtable` runs to the next labelled address, at most 1 KB; any other named datum counts one word |
-| `?` | the remainder | alignment, tables whose extent is not pinned yet, the rest of `.bss` |
+| `table` | `table` rows of `data/data-layout.tsv`: two or more words, each the start of a function, string or referenced datum | the run, with one ending zero word |
+| `region` | the `data` rows of `config/SLUS-20836/regions.tsv` that say what they hold: VU1 microcode, Sony library descriptors, kernel patch arrays | the row |
+| `pad` | after a datum of known size, functions included | zero bytes up to the next 8-aligned start (4 in `.sbss`), fewer than 16 |
+| `named` | the data rows of `config/SLUS-20836/data-names.tsv` | to the next start or the end of a sized datum |
+| `ref` | `ref` rows of `data/data-layout.tsv`: an address retail code forms (`lui` pairs, `gp`-relative) | to the next start or the end of a sized datum |
+| `ptr` | `ptr` rows: an address only a pointer word in the data holds | to the next start or the end of a sized datum |
+| `?` | the remainder | what no evidence reaches |
 
-A name records where a datum starts, not where it ends, so `named` counts only what the evidence
-bounds: tables laid out back to back end where the next labelled datum begins, and a scalar global is
-one word until its declared type gives more. Rows that name a function, a string or a class handle are
-counted by their own kinds, not again.
+Two numbers are published: **data bytes** (`source` / all data) and **data identified** (every kind
+but `?` / all data). The second says how much of the data is understood; it does not move with
+decompilation and is not progress.
 
-The number reported is **identified data bytes / total data bytes**. `?` is the honest
-remainder, not a failure: it is what has *not* been classified yet, and shrinking it is how
-data progress advances.
+`named`, `ref` and `ptr` record where a datum starts, not where it ends. Such a datum, with its padding,
+runs to the next start any source records or to the end of a datum of known size, never past its
+section, so a datum nothing references that sits inside the span is counted with it. The identified
+line gives these bytes' share apart from the data whose extent is recorded. The facts that need the
+retail executable (code references, pointer runs, the zero bytes before each start) are generated into
+`data/data-layout.tsv` by `scripts/data_layout.py`. Padding follows the retail linker's placement rule:
+a datum starts at the previous one's end raised to `max(its alignment, 8)` (4 in `.sbss`), and MWCC
+aligns 16 at most, so fewer than 16 zero bytes before an aligned start are alignment; functions are
+aligned the same way.
+
+A `.bss` datum is compared with the zeros the loader fills, which proves its address and size but
+not its contents, and it is never linked (the link emits only the file image).
+
+A matched datum must also be compiled into the section kind retail's region holds (`.data` from
+`0x481c00`, `.rodata` from `0x4d1c10` as `config/SLUS-20836/regions.tsv` records it, `.vtables` from
+`0x522440`, `.sdata` from `0x554880`, `.sbss` from `0x554b00`, `.bss` from `0x554f00`;
+[data regions](data-regions.md)). A literal compiled into `.data` at a
+read-only address (the unit lacks read-only strings) or a zero global in `.bss` at a `.data` address
+compares equal and links, since the link places by address, but its source still differs from the
+original. Such bytes are published apart and not counted.
 
 ### The third number: typed coverage
 
@@ -91,11 +124,12 @@ linkgen: linked from C        N units     B bytes    P % of the section
 linkgen: asm bodies           N units     B bytes    P %  (not counted)
 linkgen: linked from asm      N units     B bytes    P %
 linkgen: compiler tables                  B bytes    P %
+linkgen: data from C          N sections  B bytes placed at their retail addresses from U units (…)
 ```
 
 The headline is the same accounting against the **whole image**
-(code + data), because the data half is still linked from `asm/`: the matched code
-plus the jump tables the compiler regenerates. That is the number `PROGRESS.md` shows as the
+(code + data): the matched code plus the data the link places from C, the units' verified data
+sections and the jump tables the compiler regenerates. That is the number `PROGRESS.md` shows as the
 `fully linked` bar, with the code-only reading (equal to matched) explained next to it.
 
 Because nothing decompiled is ever *waiting* to be

@@ -1,11 +1,8 @@
 #include "src/engine/base/BaseLibrary.h"
 #include "dw4/unregisteredClasses.h"
 
-/* Constructed by __sinit_BaseLibrary.cpp in this order. */
-igSmartPointer<igIntList> g_baseIntList;
-igSmartPointer<igNodeUsageObjectDefinitionList> g_igStatisticsNodeUsage_definitions;
-igSmartPointer<igIntList> g_igStatisticsNodeUsage_intList;
-
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/base/LibraryFront.inc"
 #include "src/engine/base/igCompoundList.inc"
 #include "src/engine/base/igOptInterface.inc"
@@ -34,4 +31,11 @@ igSmartPointer<igIntList> g_igStatisticsNodeUsage_intList;
 #include "src/engine/base/igFileInfoList.inc"
 #include "src/engine/base/igFileInfo.inc"
 #include "src/engine/base/igBase.inc"
+
+/* Constructed by __sinit_BaseLibrary.cpp in this order. */
+igSmartPointer<igIntList> g_baseIntList;
+igSmartPointer<igNodeUsageObjectDefinitionList> g_igStatisticsNodeUsage_definitions;
+igSmartPointer<igIntList> g_igStatisticsNodeUsage_intList;
+
 #include "src/engine/base/InlineTail.inc"
+#pragma pop

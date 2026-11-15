@@ -1,12 +1,14 @@
+igMetaObject *g_beModelCtrlAIMAP_metaObject;
+
 igMetaObject *FUN_00354ea0(void) {
-    igMetaObject *g = g_beModelCtrlAIMAP_metaObject[0];
+    igMetaObject *g = g_beModelCtrlAIMAP_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00354f80();
 done:
-    return g_beModelCtrlAIMAP_metaObject[0];
+    return g_beModelCtrlAIMAP_metaObject;
 }
 
 int beModelCtrlAIMAP_GetVTable(void) {
@@ -47,11 +49,11 @@ void *beModelCtrlAIMAP_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlAIMAP_metaObject,
+        &g_beModelCtrlAIMAP_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlAIMAP_GetMetaObject,
-        beModelCtrlAIMAP_className,
+        "beModelCtrlAIMAP",
         0xc, /* instance size */
         beModelCtrlAIMAP_GetVTable,
         0,

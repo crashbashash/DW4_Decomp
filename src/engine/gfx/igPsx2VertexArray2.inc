@@ -1,13 +1,15 @@
+igMetaObject *g_igPsx2VertexArray2_metaObject;
+
 igMetaObject *FUN_00152200(void)
 {
     unsigned char ready;
-    if (g_igPsx2VertexArray2_metaObject[0] != 0) {
-        ready = (g_igPsx2VertexArray2_metaObject[0]->_validity & 4) != 0;
+    if (g_igPsx2VertexArray2_metaObject != 0) {
+        ready = (g_igPsx2VertexArray2_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_001522c0();
 done:
-    return g_igPsx2VertexArray2_metaObject[0];
+    return g_igPsx2VertexArray2_metaObject;
 }
 
 int igPsx2VertexArray2_GetVTable(void) {
@@ -35,11 +37,11 @@ void igPsx2VertexArray2_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2VertexArray2_metaObject,
+        &g_igPsx2VertexArray2_metaObject,
         igVertexArray2_Register,
         igVertexArray2_GetPublishedMetaObject,
         thunk_igPsx2VertexArray2_GetMetaObject_0014acf0,
-        igPsx2VertexArray2_className,
+        "igPsx2VertexArray2",
         0x18, /* instance size */
         igPsx2VertexArray2_GetVTable,
         &igPsx2VertexArray2_InitFields_00152350[0],      /* Field adder. */
@@ -49,10 +51,10 @@ void igPsx2VertexArray2_Register(void) {
 }
 
 igMetaObject *FUN_00152340(void) {
-    return g_igVertexArray2_metaObject[0];
+    return g_igVertexArray2_metaObject;
 }
 
 void FUN_00152350(void) {
-    *(int *)((char *)(g_igPsx2VertexArray2_metaObject[0]) + 64) = (int)(&thunk_igVertexArray2_GetMetaObject);
+    *(int *)((char *)(g_igPsx2VertexArray2_metaObject) + 64) = (int)(&thunk_igVertexArray2_GetMetaObject);
 }
 

@@ -1,16 +1,29 @@
-int FUN_00146d90(void) {
-    if (DAT_0055f730[0] == 0) {
-        DAT_0055f730[0] = igMetaEnum_Create(&text_MultitapPort[0], &DAT_00487510[0], &DAT_00487520[0], 4);
+static const char *g_igPsx2ControllerManager_multitapPortNames[] = {
+    "NONE", "PORT0", "PORT1", "ALL",
+};
+static int g_igPsx2ControllerManager_multitapPortValues[] = {
+    0, 1, 2, 0xffff,
+};
+igMetaEnum *g_igPsx2ControllerManager_multitapPortMetaEnum;
+
+igMetaEnum *FUN_00146d90(void) {
+    if (g_igPsx2ControllerManager_multitapPortMetaEnum == 0) {
+        g_igPsx2ControllerManager_multitapPortMetaEnum = igMetaEnum_Create("MultitapPort", g_igPsx2ControllerManager_multitapPortNames, g_igPsx2ControllerManager_multitapPortValues, 4);
     }
-    return DAT_0055f730[0];
+    return g_igPsx2ControllerManager_multitapPortMetaEnum;
 }
+
+igMetaObject *g_igPsx2ControllerManager_metaObject;
+igMetaField *g_igPsx2ControllerManager_multitapMetaField;
+igMetaField *g_igPsx2ControllerManager_validControllerManagerMetaField;
+igMetaField *g_igPsx2ControllerManager_loadIRXsMetaField;
 
 igMetaObject *igPsx2ControllerManager_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2ControllerManager_metaObject[0];
+    igMetaObject *g = g_igPsx2ControllerManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00146ee0();
-    return g_igPsx2ControllerManager_metaObject[0];
+    return g_igPsx2ControllerManager_metaObject;
 }
 
 int igPsx2ControllerManager_GetVTable(void) {
@@ -47,11 +60,11 @@ void igPsx2ControllerManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2ControllerManager_metaObject,
+        &g_igPsx2ControllerManager_metaObject,
         igControllerManager_Register,
         igControllerManager_GetPublishedMetaObject,
         thunk_igPsx2ControllerManager_GetMetaObject,
-        igPsx2ControllerManager_className,
+        "igPsx2ControllerManager",
         0x14, /* instance size */
         igPsx2ControllerManager_GetVTable,
         &igPsx2ControllerManager_InitFields,
@@ -61,21 +74,43 @@ void igPsx2ControllerManager_Register(void) {
 }
 
 igMetaObject *FUN_00146f60(void) {
-    return g_igControllerManager_metaObject[0];
+    return g_igControllerManager_metaObject;
 }
+
+static FieldFactory g_igPsx2ControllerManager_ctorTable[] = {
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igPsx2ControllerManager_fieldTable[] = {
+    "_multitap",
+    "_validControllerManager",
+    "_loadIRXs",
+};
+static igMetaField **g_igPsx2ControllerManager_fieldHandles[] = {
+    &g_igPsx2ControllerManager_multitapMetaField,
+    &g_igPsx2ControllerManager_validControllerManagerMetaField,
+    &g_igPsx2ControllerManager_loadIRXsMetaField,
+};
+static int g_igPsx2ControllerManager_fieldOffsets[] = {
+    12,
+    16,
+    17,
+};
+static int g_igPsx2ControllerManager_multitapDefault = 0;
 
 void igPsx2ControllerManager_InitFields(void) {
     int temp_s2;
     void *temp_v0;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igPsx2ControllerManager_metaObject[0];
+    temp_s0 = g_igPsx2ControllerManager_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2ControllerManager_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igPsx2ControllerManager_ctorTable, 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00487570[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &g_igPsx2ControllerManager_multitapDefault);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00146d90);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1);
-    igMetaObject_NameFields(temp_s0, &g_igPsx2ControllerManager_fieldTable[0], &DAT_00487550[0], &DAT_00487560[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igPsx2ControllerManager_fieldTable, g_igPsx2ControllerManager_fieldHandles, g_igPsx2ControllerManager_fieldOffsets, temp_s2);
 }
 

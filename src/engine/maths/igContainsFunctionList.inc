@@ -1,14 +1,16 @@
+igMetaObject *g_igContainsFunctionList_metaObject;
+
 OpTable *FUN_00189580(int arg0) {
     FUN_00189650();
-    return (OpTable *)igMetaObject_CreateInstance(*(int *)0x561060, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((int)g_igContainsFunctionList_metaObject, arg0);
 }
 
 igMetaObject *igContainsFunctionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igContainsFunctionList_metaObject[0];
+    igMetaObject *g = g_igContainsFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00189650();
-    return g_igContainsFunctionList_metaObject[0];
+    return g_igContainsFunctionList_metaObject;
 }
 
 int igContainsFunctionList_GetVTable(void) {
@@ -27,11 +29,11 @@ void igContainsFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igContainsFunctionList_metaObject,
+        &g_igContainsFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igContainsFunctionList_GetMetaObject,
-        igContainsFunctionList_className,
+        "igContainsFunctionList",
         0x14, /* instance size */
         igContainsFunctionList_GetVTable,
         0,

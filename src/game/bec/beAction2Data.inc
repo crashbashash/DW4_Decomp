@@ -1,16 +1,19 @@
+igMetaObject *g_beAction2Data_metaObject;
+igMetaField *g_beAction2Data_comListMetaField;
+
 igMetaObject *FUN_0036d9f0(void) {
-    if (g_beAction2Data_metaObject[0] == 0) {
-        g_beAction2Data_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beAction2Data_metaObject == 0) {
+        g_beAction2Data_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beAction2Data_metaObject[0];
+    return g_beAction2Data_metaObject;
 }
 
 void *FUN_0036da40(void) {
-    igMetaObject *g = g_beAction2Data_metaObject[0];
+    igMetaObject *g = g_beAction2Data_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036db70();
     }
-    return g_beAction2Data_metaObject[0];
+    return g_beAction2Data_metaObject;
 }
 
 int beAction2Data_GetVTable(void) {
@@ -60,15 +63,17 @@ void FUN_0036db70(void)
     igMetaObject_RunStaticInit(beAction2Data_Register);
 }
 
+static igMetaObjectCallback g_beAction2Data_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
+
 void *beAction2Data_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2Data_metaObject,
+        &g_beAction2Data_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2Data_GetMetaObject,
-        beAction2Data_className,
+        "beAction2Data",
         0x10, /* instance size */
         beAction2Data_GetVTable,
         beAction2Data_InitFields,
@@ -82,24 +87,46 @@ void beAction2Data_GetMetaObject(void)
     FUN_0036da40();
 }
 
+static FieldFactory g_beAction2Data_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beAction2Data_fieldTable[] = {
+    "_comList",
+};
+static igMetaField **g_beAction2Data_fieldHandles[] = {
+    &g_beAction2Data_comListMetaField,
+};
+static int g_beAction2Data_fieldOffsets[] = {
+    12,
+};
+
 void beAction2Data_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2Data_metaObject[0];
+    temp_s0 = (void *)g_beAction2Data_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2Data_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beAction2Data_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beAction2Data_fieldTable[0], &DAT_004c81e0[0], &DAT_004c81e8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beAction2Data_fieldTable, g_beAction2Data_fieldHandles, g_beAction2Data_fieldOffsets, temp_s2);
 }
 
-int beAction2_GetMessageEnum(void) {
-    if (DAT_0058a020[0] == 0) {
-        DAT_0058a020[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c81f0[0], &DAT_004c8210[0], 7);
+igMetaEnum *g_beAction2Data_msgActionMetaEnum;
+static const char *g_beAction2Data_msgActionNames[] = {
+    "ISCOMEND", "ISRUN", "GETNAMELIST", "GETAPPEARANCELIST",
+    "GETBONEMATRIX", "ONFREEZE", "OFFREEZE",
+};
+static int g_beAction2Data_msgActionValues[] = {
+    0, 1, 2, 3, 4, 5, 6,
+};
+
+igMetaEnum *beAction2_GetMessageEnum(void) {
+    if (g_beAction2Data_msgActionMetaEnum == 0) {
+        g_beAction2Data_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beAction2Data_msgActionNames, g_beAction2Data_msgActionValues, 7);
     }
-    return DAT_0058a020[0];
+    return g_beAction2Data_msgActionMetaEnum;
 }
 

@@ -1,14 +1,23 @@
+igMetaObject *g_beNDMWShopCtrlDigilabo_metaObject;
+igMetaField *g_beNDMWShopCtrlDigilabo_playerNoListMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_digimonNoListMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_wpuNoListListMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_isDigimonChangeMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_isWeaponChangeMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_topMenuMetaField;
+igMetaField *g_beNDMWShopCtrlDigilabo_isDemoRunMetaField;
+
 void beNDMWShopCtrlDigilabo_Create(int arg0) {
     FUN_003b78a0();
-    igMetaObject_CreateInstance(*(int *)0x58AD40, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlDigilabo_metaObject, arg0);
 }
 
 igMetaObject *FUN_003b7790(void) {
-    igMetaObject *g = g_beNDMWShopCtrlDigilabo_metaObject[0];
+    igMetaObject *g = g_beNDMWShopCtrlDigilabo_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003b78a0();
-    return g_beNDMWShopCtrlDigilabo_metaObject[0];
+    return g_beNDMWShopCtrlDigilabo_metaObject;
 }
 
 int beNDMWShopCtrlDigilabo_GetVTable(void) {
@@ -41,15 +50,17 @@ void FUN_003b78a0(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlDigilabo_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShopCtrlDigilabo_callbackList[] = { igIntList_EnsureRegistered, igIntListList_EnsureRegistered, 0 };
+
 void *beNDMWShopCtrlDigilabo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopCtrlDigilabo_metaObject,
+        &g_beNDMWShopCtrlDigilabo_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopCtrlDigilabo_GetMetaObject,
-        beNDMWShopCtrlDigilabo_className,
+        "beNDMWShopCtrlDigilabo",
         0x6c, /* instance size */
         beNDMWShopCtrlDigilabo_GetVTable,
         beNDMWShopCtrlDigilabo_InitFields,
@@ -63,16 +74,53 @@ void beNDMWShopCtrlDigilabo_GetMetaObject(void)
     FUN_003b7790();
 }
 
+static FieldFactory g_beNDMWShopCtrlDigilabo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beNDMWShopCtrlDigilabo_fieldTable[] = {
+    "_playerNoList",
+    "_digimonNoList",
+    "_wpuNoListList",
+    "_isDigimonChange",
+    "_isWeaponChange",
+    "_topMenu",
+    "_isDemoRun",
+};
+static igMetaField **g_beNDMWShopCtrlDigilabo_fieldHandles[] = {
+    &g_beNDMWShopCtrlDigilabo_playerNoListMetaField,
+    &g_beNDMWShopCtrlDigilabo_digimonNoListMetaField,
+    &g_beNDMWShopCtrlDigilabo_wpuNoListListMetaField,
+    &g_beNDMWShopCtrlDigilabo_isDigimonChangeMetaField,
+    &g_beNDMWShopCtrlDigilabo_isWeaponChangeMetaField,
+    &g_beNDMWShopCtrlDigilabo_topMenuMetaField,
+    &g_beNDMWShopCtrlDigilabo_isDemoRunMetaField,
+};
+static int g_beNDMWShopCtrlDigilabo_fieldOffsets[] = {
+    84,
+    88,
+    92,
+    96,
+    97,
+    100,
+    104,
+};
+
 void beNDMWShopCtrlDigilabo_InitFields(void) {
     int temp_s2;
     void *temp_s1_3;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopCtrlDigilabo_metaObject[0];
+    temp_s0 = g_beNDMWShopCtrlDigilabo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlDigilabo_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlDigilabo_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -82,6 +130,6 @@ void beNDMWShopCtrlDigilabo_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlDigilabo_fieldTable[0], &DAT_004c9ad0[0], &DAT_004c9af0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlDigilabo_fieldTable, g_beNDMWShopCtrlDigilabo_fieldHandles, g_beNDMWShopCtrlDigilabo_fieldOffsets, temp_s2);
 }
 

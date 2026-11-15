@@ -1,9 +1,11 @@
+igMetaObject *g_igSegment_metaObject;
+
 igMetaObject *igSegment_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSegment_metaObject[0];
+    igMetaObject *g = g_igSegment_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019ae10();
-    return g_igSegment_metaObject[0];
+    return g_igSegment_metaObject;
 }
 
 int igSegment_GetVTable(void) {
@@ -30,11 +32,11 @@ void igSegment_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igSegment_metaObject),
+        &g_igSegment_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igSegment_GetMetaObject,
-        igSegment_className,
+        "igSegment",
         0x20, /* instance size */
         igSegment_GetVTable,
         0,

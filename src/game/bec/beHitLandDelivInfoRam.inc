@@ -1,9 +1,20 @@
+igMetaObject *g_beHitLandDelivInfoRam_metaObject;
+igMetaField *g_beHitLandDelivInfoRam_transformMetaField;
+igMetaField *g_beHitLandDelivInfoRam_checkFlagMetaField;
+igMetaField *g_beHitLandDelivInfoRam_halfWidthMetaField;
+igMetaField *g_beHitLandDelivInfoRam_upRangeMetaField;
+igMetaField *g_beHitLandDelivInfoRam_downRangeMetaField;
+igMetaField *g_beHitLandDelivInfoRam_posMetaField;
+igMetaField *g_beHitLandDelivInfoRam_oldPosMetaField;
+igMetaField *g_beHitLandDelivInfoRam_landPosMetaField;
+igMetaField *g_beHitLandDelivInfoRam_landPosOKMetaField;
+
 void *FUN_0035e660(void) {
-    igMetaObject *g = g_beHitLandDelivInfoRam_metaObject[0];
+    igMetaObject *g = g_beHitLandDelivInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035e7a0();
     }
-    return g_beHitLandDelivInfoRam_metaObject[0];
+    return g_beHitLandDelivInfoRam_metaObject;
 }
 
 int beHitLandDelivInfoRam_GetVTable(void) {
@@ -47,15 +58,17 @@ void FUN_0035e7a0(void)
     igMetaObject_RunStaticInit(beHitLandDelivInfoRam_Register);
 }
 
+static igMetaObjectCallback g_beHitLandDelivInfoRam_callbackList[] = { FUN_001964d0, 0 };
+
 void *beHitLandDelivInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beHitLandDelivInfoRam_metaObject,
+        &g_beHitLandDelivInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beHitLandDelivInfoRam_GetMetaObject,
-        beHitLandDelivInfoRam_className,
+        "beHitLandDelivInfoRam",
         0x68, /* instance size */
         beHitLandDelivInfoRam_GetVTable,
         beHitLandDelivInfoRam_InitFields,
@@ -69,6 +82,51 @@ void beHitLandDelivInfoRam_GetMetaObject(void)
     FUN_0035e660();
 }
 
+static FieldFactory g_beHitLandDelivInfoRam_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187890,
+    igBoolMetaField_Create,
+};
+static const char *g_beHitLandDelivInfoRam_fieldTable[] = {
+    "_transform",
+    "_checkFlag",
+    "_halfWidth",
+    "_upRange",
+    "_downRange",
+    "_pos",
+    "_oldPos",
+    "_landPos",
+    "_landPosOK",
+};
+static igMetaField **g_beHitLandDelivInfoRam_fieldHandles[] = {
+    &g_beHitLandDelivInfoRam_transformMetaField,
+    &g_beHitLandDelivInfoRam_checkFlagMetaField,
+    &g_beHitLandDelivInfoRam_halfWidthMetaField,
+    &g_beHitLandDelivInfoRam_upRangeMetaField,
+    &g_beHitLandDelivInfoRam_downRangeMetaField,
+    &g_beHitLandDelivInfoRam_posMetaField,
+    &g_beHitLandDelivInfoRam_oldPosMetaField,
+    &g_beHitLandDelivInfoRam_landPosMetaField,
+    &g_beHitLandDelivInfoRam_landPosOKMetaField,
+};
+static int g_beHitLandDelivInfoRam_fieldOffsets[] = {
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    76,
+    88,
+    100,
+};
+
 void beHitLandDelivInfoRam_InitFields(void) {
     void *temp_a0;
     int temp_s2;
@@ -80,9 +138,9 @@ void beHitLandDelivInfoRam_InitFields(void) {
     void *temp_a0_2;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beHitLandDelivInfoRam_metaObject[0];
+    temp_s0 = (void *)g_beHitLandDelivInfoRam_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beHitLandDelivInfoRam_ctorTable[0], 9);
+    igMetaObject_CreateFields(temp_s0, g_beHitLandDelivInfoRam_ctorTable, 9);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196190();
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 3.0f);
@@ -103,6 +161,6 @@ void beHitLandDelivInfoRam_InitFields(void) {
     vc[1] = 0;
     vc[2] = 0;
     FUN_0018e470(temp_a0_3, vc);
-    igMetaObject_NameFields(temp_s0, &g_beHitLandDelivInfoRam_fieldTable[0], &DAT_004c67f0[0], &DAT_004c6820[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beHitLandDelivInfoRam_fieldTable, g_beHitLandDelivInfoRam_fieldHandles, g_beHitLandDelivInfoRam_fieldOffsets, temp_s2);
 }
 

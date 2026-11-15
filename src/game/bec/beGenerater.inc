@@ -1,21 +1,25 @@
+igMetaObject *g_beGenerater_metaObject;
+igMetaField *g_beGenerater_luaManagerMetaField;
+igMetaField *g_beGenerater_isPerfectDropMetaField;
+
 void beGenerater_CreateInstance(int arg0) {
     FUN_00360d30();
     igMetaObject_CreateInstance(*(int *)0x5895D0, arg0);
 }
 
 igMetaObject *FUN_00360bb0(void) {
-    if (g_beGenerater_metaObject[0] == 0) {
-        g_beGenerater_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beGenerater_metaObject == 0) {
+        g_beGenerater_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beGenerater_metaObject[0];
+    return g_beGenerater_metaObject;
 }
 
 void *FUN_00360c00(void) {
-    igMetaObject *g = g_beGenerater_metaObject[0];
+    igMetaObject *g = g_beGenerater_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00360d30();
     }
-    return g_beGenerater_metaObject[0];
+    return g_beGenerater_metaObject;
 }
 
 int beGenerater_GetVTable(void) {
@@ -65,15 +69,17 @@ void FUN_00360d30(void)
     igMetaObject_RunStaticInit(beGenerater_Register);
 }
 
+static igMetaObjectCallback g_beGenerater_callbackList[] = { FUN_0035b9c0, 0 };
+
 void *beGenerater_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beGenerater_metaObject,
+        &g_beGenerater_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beGenerater_GetMetaObject,
-        beGenerater_className,
+        "beGenerater",
         0x28, /* instance size */
         beGenerater_GetVTable,
         beGenerater_InitFields,
@@ -87,17 +93,34 @@ void beGenerater_GetMetaObject(void)
     FUN_00360c00();
 }
 
+static FieldFactory g_beGenerater_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beGenerater_fieldTable[] = {
+    "_luaManager",
+    "_isPerfectDrop",
+};
+static igMetaField **g_beGenerater_fieldHandles[] = {
+    &g_beGenerater_luaManagerMetaField,
+    &g_beGenerater_isPerfectDropMetaField,
+};
+static int g_beGenerater_fieldOffsets[] = {
+    32,
+    36,
+};
+
 void beGenerater_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beGenerater_metaObject[0];
+    temp_s0 = (void *)g_beGenerater_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beGenerater_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beGenerater_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035b770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &g_beGenerater_fieldTable[0], &DAT_004c6ba8[0], &DAT_004c6bb0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beGenerater_fieldTable, g_beGenerater_fieldHandles, g_beGenerater_fieldOffsets, temp_s2);
 }
 

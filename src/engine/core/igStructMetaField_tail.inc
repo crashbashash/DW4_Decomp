@@ -15,14 +15,14 @@ void igStructMetaField_ValueToString(int *result, void *self) {
     if (name == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     }
     *result = interned;
 }

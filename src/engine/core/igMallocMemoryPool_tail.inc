@@ -4,13 +4,13 @@ igResult igMallocMemoryPool_Configure(igMallocMemoryPool *self, igMemoryPoolInfo
     const char *messages = igMemoryPoolInfo_messages(info);
     if (messages != 0) {
         int level = self->_messageLevel;
-        if (strstr(messages, (char *)text_NoMessages) != 0) {
+        if (strstr(messages, (char *)"NoMessages") != 0) {
             level = 0;
-        } else if (strstr(messages, (char *)text_ErrorMessages) != 0) {
+        } else if (strstr(messages, (char *)"ErrorMessages") != 0) {
             level = 1;
-        } else if (strstr(messages, (char *)text_WarningMessages) != 0) {
+        } else if (strstr(messages, (char *)"WarningMessages") != 0) {
             level = 2;
-        } else if (strstr(messages, (char *)text_Notifications) != 0) {
+        } else if (strstr(messages, (char *)"Notifications") != 0) {
             level = 3;
         }
         self->_messageLevel = level;
@@ -295,11 +295,11 @@ igResult igMallocMemoryPool_GangAlloc(igMallocMemoryPoolView *self, int count, u
             if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
                 if (self->_messageLevel > 0) {
                     if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
-                        igReportError((const char *)text_igMallocMemoryPool_E98_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                        igReportError((const char *)"igMallocMemoryPool(E98): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (int)self->_maxSize, (int)self->_localNetAllocated);
                     }
                 }
             } else if (self->_messageLevel >= 3) {
-                igReportNotice((const char *)text_igMallocMemoryPool_E100_RequestRefused, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+                igReportNotice((const char *)"igMallocMemoryPool[%d](E100) - refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
             }
             break;
         }
@@ -326,7 +326,7 @@ void igMallocMemoryPool_GangFree(igMallocMemoryPoolView *self, unsigned int size
 
 void Gap__Core__igMallocMemoryPool__resetFields(igMallocMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    self->_poolOptionFlags = (int) g_igMallocMemoryPool_defaultPoolOptionFlags[0];
+    self->_poolOptionFlags = (int) g_igMallocMemoryPool_defaultPoolOptionFlags;
 }
 
 void igMallocMemoryPool_SetDefaults(igMallocMemoryPool *self) {
@@ -414,7 +414,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
     moved = false;
     if (hasPoolOption(self->_poolOptionFlags, 0x100)) {
         if (self->_messageLevel >= 2) {
-            igReport_Warning(text_igMallocMemoryPool_E110_AssertOnMemoryOperation, (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+            igReport_Warning("igMallocMemoryPool(E110): Assert-on-memory-operation is in effect and %s was requested.", (size == -1 && block == 0) ?"a deallocation" :"an allocation");
         }
         if (self->HandleOutOfMemory(size, 4) == 0) {
             return 0;
@@ -446,16 +446,16 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                         h = (TaggedBlockHeader *)blockHeader(block);
                         unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
                         if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
-                            igReportError(text_igMallocMemoryPool_free_E88_BadTailSentinel, block + 8, 0xBBBBBBBF, tail);
+                            igReportError("igMallocMemoryPool::free(E88): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block + 8, 0xBBBBBBBF, tail);
                         }
                     } else if (self->_messageLevel >= 1) {
-                        igReportError(text_igMallocMemoryPool_free_E89_BadHeadSentinel, block, 0xAAAAAAAF, head);
+                        igReportError("igMallocMemoryPool::free(E89): Bad head sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block, 0xAAAAAAAF, head);
                     }
                 } else if (((unsigned *)block)[-1] == 0xAAAAAAAF) {
                     int offset = ((int *)block)[-2];
                     if (offset > 0x100010) {
                         if (self->_messageLevel >= 1) {
-                            igReportError(text_igMallocMemoryPool_free_E107_BadHeadSentinelOffset, block + 8, offset);
+                            igReportError("igMallocMemoryPool::free(E107): Bad head sentinel off.  Offset 0x%x.", block + 8, offset);
                         }
                         igMallocMemoryPool_Unlock(self);
                         return 0;
@@ -465,7 +465,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                     h = (TaggedBlockHeader *)blockHeader(block);
                     unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
                     if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
-                        igReportError(text_igMallocMemoryPool_free_E108_BadTailSentinel, block + 8, 0xBBBBBBBF, tail);
+                        igReportError("igMallocMemoryPool::free(E108): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block + 8, 0xBBBBBBBF, tail);
                     }
                 } else {
                     h = (TaggedBlockHeader *)blockHeader(block);
@@ -478,7 +478,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                 oldSize = payloadSize(h) - oldSentinelBytes;
                 oldBytes = chunkBytes(h);
                 if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
-                    igReportError(text_igMallocMemoryPool_free_E112_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                    igReportError("igMallocMemoryPool::free(E112): Attempt to free user block 0x%08x from pool[%d] with pool[%d].", block, chunkPoolIndex(h), self->_poolIndex);
                 }
                 if (hasPoolOption(self->_poolOptionFlags, 2)) {
                     memset(block, 0xFD, payloadSize(h));
@@ -491,7 +491,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                         first = (GangRecord *)((char *)record - offset);
                     }
                     if (first->count == 0 && self->_messageLevel >= 3) {
-                        igReportNotice(text_free_call_on_gang_alloced_memory, block);
+                        igReportNotice("free() call on gang alloced memory that was already free (0x%08x)", block);
                     }
                     self->_localFreeCount++;
                     self->_localNetAllocationCount--;
@@ -509,7 +509,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                     igMallocMemoryPool_FreeBlock(self, (unsigned char *)block);
                 }
             } else if (self->_messageLevel >= 3) {
-                igReportNotice(text_igMallocMemoryPool_free_E90_InvalidBlock, self->_poolIndex, block);
+                igReportNotice("igMallocMemoryPool::free(E90) - Invalid memory block 0x%x.\n", self->_poolIndex, block);
             }
             break;
         }
@@ -520,11 +520,11 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
             if (hasPoolOption(self->_poolOptionFlags, 0x40)) {
                 if (self->_messageLevel >= 1) {
                     if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel >= 1) {
-                        igReportError(text_igMallocMemoryPool_E101_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                        igReportError("igMallocMemoryPool(E101): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (int)self->_maxSize, (int)self->_localNetAllocated);
                     }
                 }
             } else if (self->_messageLevel >= 3) {
-                igReportNotice(text_igMallocMemoryPool_memoryOperation_E91, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+                igReportNotice("igMallocMemoryPool::memoryOperation[%d](E91) - Operation refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
             }
             result = 0;
             break;
@@ -539,13 +539,13 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                     h = (TaggedBlockHeader *)blockHeader(block);
                     unsigned tail = *(unsigned *)((char *)h + chunkBytes(h) - 4);
                     if (tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
-                        igReportError(text_igMallocMemoryPool_realloc_E92_BadTailSentinel, block + oldHeadBytes, 0xBBBBBBBF, tail);
+                        igReportError("igMallocMemoryPool::realloc(E92): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block + oldHeadBytes, 0xBBBBBBBF, tail);
                     }
                 } else {
                     h = (TaggedBlockHeader *)blockHeader(block);
                     if (igAllocator_ResolveEncodedIndex(chunkPoolIndex(h)) != self) {
                         if (self->_messageLevel >= 1) {
-                            igReportError(text_igMallocMemoryPool_realloc_E109_InvalidHeader, block);
+                            igReportError("igMallocMemoryPool::realloc(E109): Invalid memory block header.  Address 0x%x.", block);
                         }
                         igMallocMemoryPool_Unlock(self);
                         return 0;
@@ -555,7 +555,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
                 h = (TaggedBlockHeader *)blockHeader(block);
             }
             if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
-                igReportError(text_igMallocMemoryPool_free_E113_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                igReportError("igMallocMemoryPool::free(E113): Attempt to free user block 0x%08x from pool[%d] with pool[%d].", block, chunkPoolIndex(h), self->_poolIndex);
             }
             oldSize = payloadSize(h) - oldSentinelBytes;
             oldBytes = chunkBytes(h);
@@ -577,13 +577,13 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
             newBytes = chunkBytes(newHeader);
             if (self->_messageLevel >= 1) {
                 if (total != payloadSize(newHeader) && self->_messageLevel >= 1) {
-                    igReportError(text_igMallocMemoryPool_Invalid_or_corrupted_block, newHeader, text_E65_UnexpectedBlockSize);
+                    igReportError("igMallocMemoryPool: Invalid or corrupted block at 0x%x - %s", newHeader,"(E65) Software error - unexpected block size.");
                 }
             }
             if (alignment) {
                 if (self->_messageLevel >= 1) {
                     if (((unsigned)fresh & (alignment - 1)) != 0 && self->_messageLevel >= 1) {
-                        igReportError(text_E1_memoryOperation_didnt_align, alignment, total, fresh);
+                        igReportError("(E1) Software error - igMallocMemoryPool::memoryOperation(0x%x, 0x%x) didn't align:  0x%x\n", alignment, total, fresh);
                     }
                 }
             }
@@ -613,7 +613,7 @@ void *igMallocMemoryPool_MemoryOperation(igMallocMemoryPoolView *self, char *blo
             result = fresh;
         } else {
             if (self->_messageLevel >= 3) {
-                igReportNotice(text_igMallocMemoryPool_memoryOperation_E94, self->_poolIndex, size);
+                igReportNotice("igMallocMemoryPool::memoryOperation[%d](E94) - Operation failed on request of %d bytes\n", self->_poolIndex, size);
             }
             result = 0;
         }
@@ -676,13 +676,13 @@ void igMallocMemoryPool_PrintStatistics(igMallocMemoryPool *self, char *title) {
     char buf[64];
     char *name;
     if (title != 0 && title[0] != 0) {
-        igReport_Printf(percent_s_colon_newline);
+        igReport_Printf("%s:\n");
         igReport_Flush();
     }
-    if (((struct Ctx { char p[36]; int on; } * *)g_objectSystem)[0]->on != 0) {
+    if (((struct Ctx { char p[36]; int on; } * *)&g_objectSystem)[0]->on != 0) {
         name = igMetaEnum_GetValueName(buf, 64, self->_messageLevel, igMallocMemoryPool_GetMessageLevelMetaEnum());
     } else {
-        name = ((char *)emptyString_4);
+        name = ((char *)"");
     }
     {
         long long netCountHigh = self->_localNetAllocationCountHigh;
@@ -697,7 +697,7 @@ void igMallocMemoryPool_PrintStatistics(igMallocMemoryPool *self, char *title) {
         long long netAllocated = self->_localNetAllocated;
         long long freed = self->_localFreed;
         long long allocated = self->_localAllocated;
-        igReport_Printf(malloc_pool_statistics_format, (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (int)allocatedWithOverhead, (int)freedWithOverhead, (int)netWithOverhead, (int)netWithOverheadHigh, (int)allocationCount, (int)freeCount, (int)netCount, (int)netCountHigh, (int)((igMemoryPoolView *)self)->GetSize(), name);
+        igReport_Printf("    Total allocated:                      %u\n    Total freed:                          %u\n    Net allocated:                        %u\n    Net allocated high:                   %u\n    Total allocated with overhead:        %u\n    Total freed with overhead:            %u\n    Net allocated with overhead:          %u\n    Net allocated high with overhead:     %u\n    Total allocation count:               %u\n    Total free count:                     %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\n    Max size limit:                       %u\n    Message Level:                        %s\n", (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (int)allocatedWithOverhead, (int)freedWithOverhead, (int)netWithOverhead, (int)netWithOverheadHigh, (int)allocationCount, (int)freeCount, (int)netCount, (int)netCountHigh, (int)((igMemoryPoolView *)self)->GetSize(), name);
     }
     igReport_Flush();
 }
@@ -724,14 +724,14 @@ void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *trac
 }
 
 void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, int fileName) {
-    int *message;
+    const char *message;
     igMallocMemoryPool_Lock(self);
-    message = &text_dump_has_no_meaning_for_igMallocMemoryPool[0];
+    message = "The method dump() has no meaning for an igMallocMemoryPool\n";
     if (fileName != 0) {
         igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((int)self)))));
-        if (file.p->Open((const char *)fileName, (const char *)&text_w[0]) == 0) {
+        if (file.p->Open((const char *)fileName, (const char *)"w") == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
-                igReport_Warning(text_igMallocMemoryPool_dump_Could_not_open_file, fileName);
+                igReport_Warning("igMallocMemoryPool::dump() Could not open file (%s) for output\n", fileName);
             }
             igMallocMemoryPool_Unlock(self);
             return;
@@ -837,11 +837,11 @@ void *igMallocMemoryPool_AllocateBlock(igMallocMemoryPoolView *self, unsigned si
     }
     total = overhead + size;
     if (usesAligned(self)) {
-        block = (*(SystemAllocator * *)g_activeSystemAllocator)->AllocateAligned(total + 4);
+        block = (g_activeSystemAllocator)->AllocateAligned(total + 4);
     } else if (usesSized(self)) {
-        block = (*(SystemAllocator * *)g_activeSystemAllocator)->AllocateSized(total + 4);
+        block = (g_activeSystemAllocator)->AllocateSized(total + 4);
     } else {
-        block = (*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total + 4);
+        block = (g_activeSystemAllocator)->Allocate(total + 4);
     }
     if (block != 0) {
     h = (TaggedBlockHeader *)&((int *)block)[1];
@@ -889,20 +889,20 @@ void igMallocMemoryPool_FreeBlock(igMallocMemoryPoolView *self, unsigned char *p
         char *base = (char *)h - off;
         size = size + ((char *)h - base);
         if (usesAligned(self)) {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeAligned(base, size);
+            g_activeSystemAllocator->FreeAligned(base, size);
         } else if (usesSized(self)) {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeSized(base, size);
+            g_activeSystemAllocator->FreeSized(base, size);
         } else {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->Free(base);
+            g_activeSystemAllocator->Free(base);
         }
     } else {
         char *base = (char *)h - 4;
         if (usesAligned(self)) {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeAligned(base, size + 4);
+            g_activeSystemAllocator->FreeAligned(base, size + 4);
         } else if (usesSized(self)) {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->FreeSized(base, size + 4);
+            g_activeSystemAllocator->FreeSized(base, size + 4);
         } else {
-            ((SystemAllocator * *)g_activeSystemAllocator)[0]->Free(base);
+            g_activeSystemAllocator->Free(base);
         }
     }
 }
@@ -961,11 +961,11 @@ void *igMallocMemoryPool_ReallocateBlock(igMallocMemoryPoolView *self, char *p, 
         return moved;
     }
     if (usesAligned(self)) {
-        block = (char *)g_activeSystemAllocator[0]->ReallocateAligned(base, newSize, total + 4);
+        block = (char *)g_activeSystemAllocator->ReallocateAligned(base, newSize, total + 4);
     } else if (usesSized(self)) {
-        block = (char *)g_activeSystemAllocator[0]->ReallocateSized(base, newSize, total + 4);
+        block = (char *)g_activeSystemAllocator->ReallocateSized(base, newSize, total + 4);
     } else {
-        block = (char *)g_activeSystemAllocator[0]->Reallocate(base, newSize);
+        block = (char *)g_activeSystemAllocator->Reallocate(base, newSize);
     }
     if (block == 0) {
         return 0;
@@ -1025,11 +1025,11 @@ void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsi
     }
     total += overhead;
     if (usesAligned(self)) {
-        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateAligned(total);
+        block = (char *)(g_activeSystemAllocator)->AllocateAligned(total);
     } else if (usesSized(self)) {
-        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->AllocateSized(total);
+        block = (char *)(g_activeSystemAllocator)->AllocateSized(total);
     } else {
-        block = (char *)(*(SystemAllocator * *)g_activeSystemAllocator)->Allocate(total);
+        block = (char *)(g_activeSystemAllocator)->Allocate(total);
     }
     if (block == 0) {
         return 0;

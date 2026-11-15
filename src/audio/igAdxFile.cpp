@@ -1,5 +1,8 @@
 #include "dw4/reflected.h"
 
+#pragma push
+#pragma readonly_strings on
+
 /* igFile's OpenMode meta-enum. */
 enum OpenMode {
     kRead,
@@ -459,3 +462,4 @@ int igAdxFile_GetFileSize(igAdxFile *self)
     return 0;
 }
 }
+#pragma pop

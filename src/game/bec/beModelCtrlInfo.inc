@@ -1,6 +1,9 @@
+igMetaObject *g_beModelCtrlInfo_metaObject;
+igMetaField *g_beModelCtrlInfo_kindStringMetaField;
+
 igMetaObject *FUN_00352cd0(void) {
-    if (g_beModelCtrlInfo_metaObject[0] == 0 || !isValid(g_beModelCtrlInfo_metaObject[0])) FUN_00352da0();
-    return g_beModelCtrlInfo_metaObject[0];
+    if (g_beModelCtrlInfo_metaObject == 0 || !isValid(g_beModelCtrlInfo_metaObject)) FUN_00352da0();
+    return g_beModelCtrlInfo_metaObject;
 }
 
 int beModelCtrlInfo_GetVTable(void) {
@@ -29,11 +32,11 @@ void *beModelCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlInfo_metaObject,
+        &g_beModelCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beModelCtrlInfo_GetMetaObject,
-        beModelCtrlInfo_className,
+        "beModelCtrlInfo",
         0x20, /* instance size */
         beModelCtrlInfo_GetVTable,
         beModelCtrlInfo_InitFields,
@@ -47,14 +50,27 @@ void beModelCtrlInfo_GetMetaObject(void)
     FUN_00352cd0();
 }
 
+static FieldFactory g_beModelCtrlInfo_ctorTable[] = {
+    igStringMetaField_Create,
+};
+static const char *g_beModelCtrlInfo_fieldTable[] = {
+    "_kindString",
+};
+static igMetaField **g_beModelCtrlInfo_fieldHandles[] = {
+    &g_beModelCtrlInfo_kindStringMetaField,
+};
+static int g_beModelCtrlInfo_fieldOffsets[] = {
+    28,
+};
+
 void beModelCtrlInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlInfo_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlInfo_ctorTable, 1);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), 0);
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfo_fieldTable[0], &DAT_004c5460[0], &DAT_004c5468[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlInfo_fieldTable, g_beModelCtrlInfo_fieldHandles, g_beModelCtrlInfo_fieldOffsets, temp_s1);
 }
 

@@ -2,17 +2,28 @@ void igElfFile_GetMetaObjectFunction(void) {
     igElfFile_GetMetaObject();
 }
 
+igMetaObject *g_igElfFile_metaObject;
+igMetaField *g_igElfFile_headerMetaField;
+igMetaField *g_igElfFile_sectionHeaderStringTableSizeMetaField;
+igMetaField *g_igElfFile_sectionHeaderStringTableMetaField;
+igMetaField *g_igElfFile_sectionHeaderCountMetaField;
+igMetaField *g_igElfFile_sectionHeadersMetaField;
+igMetaField *g_igElfFile_symbolStringTableSizeMetaField;
+igMetaField *g_igElfFile_symbolStringTableMetaField;
+igMetaField *g_igElfFile_symbolCountMetaField;
+igMetaField *g_igElfFile_symbolsMetaField;
+
 void * igElfFile_Create(int pool) {
     igElfFile_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586C00), (igMemoryPoolView *)pool));
+    return (void *)(igMetaObject_CreateInstance(g_igElfFile_metaObject, (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igElfFile_GetMetaObject(void)
 {
-    igMetaObject *g = g_igElfFile_metaObject[0];
+    igMetaObject *g = g_igElfFile_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igElfFile_EnsureRegistered();
-    return g_igElfFile_metaObject[0];
+    return g_igElfFile_metaObject;
 }
 
 int igElfFile_GetVTable(void) {
@@ -29,7 +40,7 @@ int igElfFile_GetVTable(void) {
     q2 = (igObject *)&elf._file;
     *(int *)q2 = 0;
     elf._vtable = (int)&g_igElfFile_vtable[0];
-    r = *(int *)((char *)&elf + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    r = *(int *)((char *)&elf + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     elf._vtable = (int)&g_igProgramFile_vtable[0];
     if (q2 != 0) {
         q2 = *(igObject **)q2;
@@ -63,11 +74,11 @@ void igElfFile_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igElfFile_metaObject,
+        &g_igElfFile_metaObject,
         (igMetaObjectRegisterFunction)igProgramFile_Register,
         (igMetaObjectGetFunction)igProgramFile_GetPublishedMetaObject,
         igElfFile_GetMetaObjectFunction,
-        igElfFile_className,
+        "igElfFile",
         0x64,
         igElfFile_GetVTable,
         igElfFile_InitFields,
@@ -77,8 +88,53 @@ void igElfFile_Register(void) {
 }
 
 int igProgramFile_GetPublishedMetaObject(void) {
-    return ((int *)g_igProgramFile_metaObject)[0];
+    return (int)g_igProgramFile_metaObject;
 }
+
+static FieldFactory g_igElfFile_ctorTable[] = {
+    (FieldFactory)igStructMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStructMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStructMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStructMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStructMetaField_Create,
+};
+static const char *g_igElfFile_fieldTable[] = {
+    "_header",
+    "_sectionHeaderStringTableSize",
+    "_sectionHeaderStringTable",
+    "_sectionHeaderCount",
+    "_sectionHeaders",
+    "_symbolStringTableSize",
+    "_symbolStringTable",
+    "_symbolCount",
+    "_symbols",
+};
+static igMetaField **g_igElfFile_fieldDescriptors[] = {
+    &g_igElfFile_headerMetaField,
+    &g_igElfFile_sectionHeaderStringTableSizeMetaField,
+    &g_igElfFile_sectionHeaderStringTableMetaField,
+    &g_igElfFile_sectionHeaderCountMetaField,
+    &g_igElfFile_sectionHeadersMetaField,
+    &g_igElfFile_symbolStringTableSizeMetaField,
+    &g_igElfFile_symbolStringTableMetaField,
+    &g_igElfFile_symbolCountMetaField,
+    &g_igElfFile_symbolsMetaField,
+};
+static int g_igElfFile_fieldOffsets[] = {
+    16,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+};
 
 void igElfFile_InitFields(void) {
     void *headerField;
@@ -89,10 +145,10 @@ void igElfFile_InitFields(void) {
     int first;
     void *meta;
 
-    ((igMetaObject *)g_igElfFile_metaObject[0])->_persistent = 0;
-    meta = (void *)(g_igElfFile_metaObject[0]);
+    ((igMetaObject *)g_igElfFile_metaObject)->_persistent = 0;
+    meta = (void *)(g_igElfFile_metaObject);
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igElfFile_ctorTable[0], 9);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igElfFile_ctorTable, 9);
     headerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
     ((igMetaField *)headerField)->_size = 0x34;
     ((igMetaField *)headerField)->_persistent = 0;
@@ -112,6 +168,6 @@ void igElfFile_InitFields(void) {
     symbolsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 8)));
     ((igMetaField *)symbolsField)->_size = 4;
     ((igMetaField *)symbolsField)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igElfFile_fieldTable[0], (igMetaField ***)&g_igElfFile_fieldDescriptors[0], &g_igElfFile_fieldOffsets[0], first);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igElfFile_fieldTable, g_igElfFile_fieldDescriptors, g_igElfFile_fieldOffsets, first);
 }
 

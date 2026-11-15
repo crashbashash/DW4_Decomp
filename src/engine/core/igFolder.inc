@@ -1,14 +1,17 @@
+igMetaObject *g_igFolder_metaObject;
+igMetaField *g_igFolder_folderNameMetaField;
+
 void * igFolder_Create(int pool) {
     igFolder_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586368), (igMemoryPoolView *)pool));
+    return (void *)(igMetaObject_CreateInstance(g_igFolder_metaObject, (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igFolder_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFolder_metaObject[0];
+    igMetaObject *g = g_igFolder_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igFolder_EnsureRegistered();
-    return g_igFolder_metaObject[0];
+    return g_igFolder_metaObject;
 }
 
 int igFolder_GetVTable(void) {
@@ -23,7 +26,7 @@ int igFolder_GetVTable(void) {
     nameSlot = (void **)&folder._folderName;
     folder._vtable = (int)(&g_igFolder_vtable[0]);
     *nameSlot = 0;
-    vtable = *(int *)((char *)&folder + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&folder + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     folder._vtable = (int)(&g_igFolder_vtable[0]);
     if (nameSlot != 0) {
         text = *nameSlot;
@@ -48,11 +51,11 @@ void igFolder_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igFolder_metaObject,
+        &g_igFolder_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igFolder_GetMetaObjectFunction,
-        igFolder_className,
+        "igFolder",
         0xC,
         igFolder_GetVTable,
         igFolder_InitFields,
@@ -65,14 +68,27 @@ void igFolder_GetMetaObjectFunction(void) {
     igFolder_GetMetaObject();
 }
 
+static FieldFactory g_igFolder_ctorTable[] = {
+    (FieldFactory)igStringMetaField_Create,
+};
+static const char *g_igFolder_fieldTable[] = {
+    "_folderName",
+};
+static igMetaField **g_igFolder_fieldDescriptors[] = {
+    &g_igFolder_folderNameMetaField,
+};
+static int g_igFolder_fieldOffsets[] = {
+    8,
+};
+
 void igFolder_InitFields(void) {
     int base;
     void *meta;
 
-    meta = (void *)(((void * *)g_igFolder_metaObject)[0]);
+    meta = (void *)((void *)g_igFolder_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igFolder_ctorTable[0], 1);
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igFolder_fieldTable[0], (igMetaField ***)&g_igFolder_fieldDescriptors[0], &g_igFolder_fieldOffsets[0], base);
-    *(int *)((char *)(((void * *)g_igFolder_metaObject)[0]) + 60) = (int)(&igPsx2Folder_GetMetaObjectFunction);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igFolder_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igFolder_fieldTable, g_igFolder_fieldDescriptors, g_igFolder_fieldOffsets, base);
+    *(int *)((char *)((void *)g_igFolder_metaObject) + 60) = (int)(&igPsx2Folder_GetMetaObjectFunction);
 }
 

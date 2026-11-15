@@ -1,9 +1,11 @@
+igMetaObject *g_beWeaponInfoRam_metaObject;
+
 void *FUN_0033e830(void) {
-    igMetaObject *g = g_beWeaponInfoRam_metaObject[0];
+    igMetaObject *g = g_beWeaponInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033ea40();
     }
-    return g_beWeaponInfoRam_metaObject[0];
+    return g_beWeaponInfoRam_metaObject;
 }
 
 int beWeaponInfoRam_GetVTable(void) {
@@ -73,11 +75,11 @@ void *beWeaponInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWeaponInfoRam_metaObject,
+        &g_beWeaponInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beWeaponInfoRam_GetMetaObject,
-        beWeaponInfoRam_className,
+        "beWeaponInfoRam",
         0x2c, /* instance size */
         beWeaponInfoRam_GetVTable,
         0,
@@ -92,6 +94,6 @@ void beWeaponInfoRam_GetMetaObject(void)
 }
 
 igMetaObject *FUN_0033eaf0(void) {
-    return g_beBaseInfoRam_metaObject[0];
+    return g_beBaseInfoRam_metaObject;
 }
 

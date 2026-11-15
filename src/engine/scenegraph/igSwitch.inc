@@ -1,21 +1,24 @@
 void igSwitch_CreateInstance(int arg0) {
     FUN_00196ad0();
-    igMetaObject_CreateInstance(*(int *)0x561308, arg0);
+    igMetaObject_CreateInstance((int)g_igSwitch_metaObject, arg0);
 }
 
+igMetaObject *g_igSwitch_metaObject;
+igMetaField *g_igSwitch_childMaskMetaField;
+
 igMetaObject *FUN_00196930(void) {
-    if (g_igSwitch_metaObject[0] == 0) {
-        g_igSwitch_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igSwitch_metaObject == 0) {
+        g_igSwitch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igSwitch_metaObject[0];
+    return g_igSwitch_metaObject;
 }
 
 igMetaObject *igSwitch_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSwitch_metaObject[0];
+    igMetaObject *g = g_igSwitch_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00196ad0();
-    return g_igSwitch_metaObject[0];
+    return g_igSwitch_metaObject;
 }
 
 int igSwitch_GetVTable(void) {
@@ -60,15 +63,17 @@ void FUN_00196ad0(void)
     igMetaObject_RunStaticInit(igSwitch_Register);
 }
 
+static igMetaObjectCallback g_igSwitch_callbackList[] = { FUN_001a4e70, 0 };
+
 void igSwitch_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igSwitch_metaObject),
+        &g_igSwitch_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igSwitch_GetMetaObject,
-        igSwitch_className,
+        "igSwitch",
         0x24, /* instance size */
         igSwitch_GetVTable,
         &igSwitch_InitFields,
@@ -81,17 +86,30 @@ void thunk_igSwitch_GetMetaObject(void) {
     igSwitch_GetMetaObject();
 }
 
+static FieldFactory g_igSwitch_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igSwitch_fieldTable[] = {
+    "_childMask",
+};
+static igMetaField **g_igSwitch_fieldHandles[] = {
+    &g_igSwitch_childMaskMetaField,
+};
+static int g_igSwitch_fieldOffsets[] = {
+    32,
+};
+
 void igSwitch_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSwitch_metaObject[0];
+    temp_s0 = (void *)g_igSwitch_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSwitch_ctorTable[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSwitch_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a4d90();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igSwitch_fieldTable[0], &DAT_0048b228[0], &DAT_0048b230[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSwitch_fieldTable, g_igSwitch_fieldHandles, g_igSwitch_fieldOffsets, temp_s2);
 }
 

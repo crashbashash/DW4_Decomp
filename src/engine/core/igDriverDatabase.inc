@@ -1,21 +1,43 @@
+static const char *g_sectionOverrideModeNames[] = {
+    "USE_DEFAULT_SECTION", "IGNORE_SETTING",
+};
+static int g_sectionOverrideModeValues[] = {
+    0, 1,
+};
+
+
 int igDriverDatabase_GetSectionOverrideModeMetaEnum(void) {
-    if (g_sectionOverrideModeMetaEnum[0] == 0) {
-        g_sectionOverrideModeMetaEnum[0] = ((int)igMetaEnum_Create((char *)(&SECTION_OVERRIDE_MODE[0]), (char **)(&g_sectionOverrideModeNames[0]), &g_sectionOverrideModeValues[0], 2));
+    if (g_sectionOverrideModeMetaEnum == 0) {
+        g_sectionOverrideModeMetaEnum = ((int)igMetaEnum_Create((char *)("SECTION_OVERRIDE_MODE"), g_sectionOverrideModeNames, g_sectionOverrideModeValues, 2));
     }
-    return g_sectionOverrideModeMetaEnum[0];
+    return g_sectionOverrideModeMetaEnum;
 }
+
+igMetaObject *g_igDriverDatabase_metaObject;
+igMetaField *g_igDriverDatabase_currentPropertiesMetaField;
+igMetaField *g_igDriverDatabase_subPropertyNamesMetaField;
+igMetaField *g_igDriverDatabase_subPropertyValuesMetaField;
+igMetaField *g_igDriverDatabase_overrideSourceMetaField;
+igMetaField *g_igDriverDatabase_overrideSourceSectionMetaField;
+igMetaField *g_igDriverDatabase_overrideModeMetaField;
+igMetaField *g_igDriverDatabase_databaseFileMetaField;
+igMetaField *g_igDriverDatabase_databaseFileNameMetaField;
+igMetaField *g_igDriverDatabase_rawDatabaseMetaField;
+igMetaField *g_igDriverDatabase_currentLineMetaField;
+igMetaField *g_igDriverDatabase_verboseMetaField;
+igMetaField *g_igDriverDatabase_dbIndexMetaField;
 
 void *igDriverDatabase_Create(int pool) {
     igDriverDatabase_EnsureRegistered();
-    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x5865D0), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance(g_igDriverDatabase_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igDriverDatabase_GetMetaObject(void)
 {
-    igMetaObject *g = g_igDriverDatabase_metaObject[0];
+    igMetaObject *g = g_igDriverDatabase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igDriverDatabase_EnsureRegistered();
-    return g_igDriverDatabase_metaObject[0];
+    return g_igDriverDatabase_metaObject;
 }
 
 int igDriverDatabase_GetVTable(void) {
@@ -31,7 +53,7 @@ int igDriverDatabase_GetVTable(void) {
     db._databaseFile = 0;
     db._databaseFileName = 0;
     db._rawDatabase = 0;
-    r = *(int *)((char *)&db + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    r = *(int *)((char *)&db + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     db._vtable = (int)&g_igDriverDatabase_vtable[0];
     igSmartPointer_igStringObj_Destruct(&db._rawDatabase, -1);
     igSmartPointer_igStringObj_Destruct(&db._databaseFileName, -1);
@@ -48,26 +70,85 @@ void igDriverDatabase_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDriverDatabase_Register);
 }
 
+static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, igRegistry_EnsureRegistered, igFile_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+
 void igDriverDatabase_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igDriverDatabase_metaObject,
+        &g_igDriverDatabase_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igDriverDatabase_GetMetaObjectFunction,
-        igDriverDatabase_className,
+        "igDriverDatabase",
         0x38,
         igDriverDatabase_GetVTable,
         igDriverDatabase_InitFields,
         0,
-        (igMetaObjectCallback *)g_igDriverDatabase_callbackList
+        g_igDriverDatabase_callbackList
     );
 }
 
 void igDriverDatabase_GetMetaObjectFunction(void) {
     igDriverDatabase_GetMetaObject();
 }
+
+static FieldFactory g_igDriverDatabase_ctorTable[] = {
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igEnumMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+};
+static const char *g_igDriverDatabase_fieldTable[] = {
+    "_currentProperties",
+    "_subPropertyNames",
+    "_subPropertyValues",
+    "_overrideSource",
+    "_overrideSourceSection",
+    "_overrideMode",
+    "_databaseFile",
+    "_databaseFileName",
+    "_rawDatabase",
+    "_currentLine",
+    "_verbose",
+    "_dbIndex",
+};
+static igMetaField **g_igDriverDatabase_fieldDescriptors[] = {
+    &g_igDriverDatabase_currentPropertiesMetaField,
+    &g_igDriverDatabase_subPropertyNamesMetaField,
+    &g_igDriverDatabase_subPropertyValuesMetaField,
+    &g_igDriverDatabase_overrideSourceMetaField,
+    &g_igDriverDatabase_overrideSourceSectionMetaField,
+    &g_igDriverDatabase_overrideModeMetaField,
+    &g_igDriverDatabase_databaseFileMetaField,
+    &g_igDriverDatabase_databaseFileNameMetaField,
+    &g_igDriverDatabase_rawDatabaseMetaField,
+    &g_igDriverDatabase_currentLineMetaField,
+    &g_igDriverDatabase_verboseMetaField,
+    &g_igDriverDatabase_dbIndexMetaField,
+};
+static int g_igDriverDatabase_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+};
 
 void igDriverDatabase_InitFields(void) {
     int base;
@@ -83,9 +164,9 @@ void igDriverDatabase_InitFields(void) {
     void *dbIndexField;
     void *meta;
 
-    meta = (void *)g_igDriverDatabase_metaObject[0];
+    meta = (void *)g_igDriverDatabase_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igDriverDatabase_ctorTable[0], 0xC);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igDriverDatabase_ctorTable, 0xC);
     currentPropertiesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igObjectRefMetaField *)currentPropertiesField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)currentPropertiesField)->_construct = 1;
@@ -127,6 +208,6 @@ void igDriverDatabase_InitFields(void) {
     ((igRawRefMetaField *)dbIndexField)->_persistent = 0;
     ((igRawRefMetaField *)dbIndexField)->_deepCopyMethod = 3;
     ((igRawRefMetaField *)dbIndexField)->_shallowCopyMethod = 3;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igDriverDatabase_fieldTable[0], (igMetaField ***)&g_igDriverDatabase_fieldDescriptors[0], &g_igDriverDatabase_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igDriverDatabase_fieldTable, g_igDriverDatabase_fieldDescriptors, g_igDriverDatabase_fieldOffsets, base);
 }
 

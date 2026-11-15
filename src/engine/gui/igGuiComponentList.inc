@@ -1,16 +1,18 @@
+igMetaObject *g_igGuiComponentList_metaObject;
+
 igMetaObject *FUN_0044fdd0(void) {
-    if (g_igGuiComponentList_metaObject[0] == 0) {
-        g_igGuiComponentList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGuiComponentList_metaObject == 0) {
+        g_igGuiComponentList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGuiComponentList_metaObject[0];
+    return g_igGuiComponentList_metaObject;
 }
 
 igMetaObject *igGuiComponentList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGuiComponentList_metaObject[0];
+    igMetaObject *g = g_igGuiComponentList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igGuiComponentList_EnsureRegistered();
-    return g_igGuiComponentList_metaObject[0];
+    return g_igGuiComponentList_metaObject;
 }
 
 int igGuiComponentList_GetVTable(void) {
@@ -26,15 +28,17 @@ void igGuiComponentList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGuiComponentList_Register);
 }
 
+static igMetaObjectCallback g_igGuiComponentList_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
+
 void igGuiComponentList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGuiComponentList_metaObject,
+        &g_igGuiComponentList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igGuiComponentList_GetMetaObject,
-        igGuiComponentList_className,
+        "igGuiComponentList",
         0x14, /* instance size */
         igGuiComponentList_GetVTable,
         0,

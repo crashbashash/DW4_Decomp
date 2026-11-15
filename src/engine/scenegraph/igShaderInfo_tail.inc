@@ -1,14 +1,14 @@
 void FUN_001d8ab0(void) {
     FUN_00199080();
     igSmartPointer<igObject> info((igObject *)FUN_00198cc0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem[0])));
-    igNamedObject_SetName(info.p, &text_shaderInfo[0]);
+    igNamedObject_SetName(info.p, "shaderInfo");
     igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext[0], (const char *)text_system);
     igDirectory_AddInfo(list.p, info.p);
 }
 
 void FUN_001d8b90(void) {
     igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext[0], (const char *)text_system);
-    igDirectory_RemoveInfoByName(list.p, &text_shaderInfo[0]);
+    igDirectory_RemoveInfoByName(list.p, "shaderInfo");
 }
 
 int Gap__Sg__igShaderInfo__vfunc_23(ShaderFieldTable *self, int arg1, ShaderFieldRecord *key) {
@@ -34,6 +34,6 @@ int Gap__Sg__igShaderInfo__vfunc_24(struct S1d *arg0, int *arg1) {
     if (r != 0) {
         return r;
     }
-    return igProperty_FindByName(arg0->f20, g_propertyNameField[0], &text_empty[0]);
+    return igProperty_FindByName(arg0->f20, g_propertyNameField[0], "empty");
 }
 

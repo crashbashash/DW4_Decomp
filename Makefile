@@ -176,6 +176,7 @@ rules:
 	python3 tools/check_regions.py
 	python3 scripts/seed_names_getvtable_slots.py --check --out config/SLUS-20836/names/GetVTableSlots.tsv
 	python3 scripts/data_owners.py --check
+	python3 scripts/data_layout.py --check
 	python3 scripts/module_map.py --check
 	python3 scripts/vu1_microcode.py --check
 	python3 scripts/gen_platform_seam.py --check

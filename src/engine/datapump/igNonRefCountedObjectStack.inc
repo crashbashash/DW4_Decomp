@@ -1,9 +1,12 @@
+igMetaObject *g_igNonRefCountedObjectStack_metaObject;
+igMetaField *g_igNonRefCountedObjectStack_dataMetaField;
+
 igMetaObject *igNonRefCountedObjectStack_GetMetaObject(void)
 {
-    igMetaObject *g = g_igNonRefCountedObjectStack_metaObject[0];
+    igMetaObject *g = g_igNonRefCountedObjectStack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001e4430();
-    return g_igNonRefCountedObjectStack_metaObject[0];
+    return g_igNonRefCountedObjectStack_metaObject;
 }
 
 int igNonRefCountedObjectStack_GetVTable(void) {
@@ -23,11 +26,11 @@ void igNonRefCountedObjectStack_Register(void) {
     DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igNonRefCountedObjectStack_metaObject,
+        &g_igNonRefCountedObjectStack_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igNonRefCountedObjectStack_GetMetaObject,
-        igNonRefCountedObjectStack_className,
+        "igNonRefCountedObjectStack",
         0x14, /* instance size */
         igNonRefCountedObjectStack_GetVTable,
         &igNonRefCountedObjectStack_InitFields_001e44c0[0], /* Field adder. */
@@ -46,14 +49,14 @@ void FUN_001e44c0(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(g_igNonRefCountedObjectStack_metaObject[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_data_3[0]));
+    temp_s1 = (void *)(g_igNonRefCountedObjectStack_metaObject);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_data"));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = igObjectRefMetaField_GetDefaultDescriptor();
     *(int *)((char *)(temp_s0) + 56) = 0;
     *(char *)((char *)(temp_s0) + 66) = 0;
-    *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_00562b80[0]);
+    *(int *)((char *)(temp_s0) + 28) = (int)(&g_igNonRefCountedObjectStack_dataMetaField);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {

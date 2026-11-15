@@ -1,12 +1,53 @@
+igMetaObject *g_libBecRuntimePlugin_metaObject;
+igMetaField *g_libBecRuntimePlugin_particleCtrl2MetaField;
+igMetaField *g_libBecRuntimePlugin_luaManagerMetaField;
+igMetaField *g_libBecRuntimePlugin_matCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_selectCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_waterPlainMetaField;
+igMetaField *g_libBecRuntimePlugin_action2MetaField;
+igMetaField *g_libBecRuntimePlugin_meterCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_targetObjMetaField;
+igMetaField *g_libBecRuntimePlugin_weaponMetaField;
+igMetaField *g_libBecRuntimePlugin_cameraCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_point01MetaField;
+igMetaField *g_libBecRuntimePlugin_bkColorMetaField;
+igMetaField *g_libBecRuntimePlugin_cpTransformMetaField;
+igMetaField *g_libBecRuntimePlugin_shadow01MetaField;
+igMetaField *g_libBecRuntimePlugin_generaterMetaField;
+igMetaField *g_libBecRuntimePlugin_hitLandModelMetaField;
+igMetaField *g_libBecRuntimePlugin_hitLandDelivMetaField;
+igMetaField *g_libBecRuntimePlugin_soundMetaField;
+igMetaField *g_libBecRuntimePlugin_seCtlMetaField;
+igMetaField *g_libBecRuntimePlugin_actionStarterMetaField;
+igMetaField *g_libBecRuntimePlugin_layerCtlMetaField;
+igMetaField *g_libBecRuntimePlugin_fontMetaField;
+igMetaField *g_libBecRuntimePlugin_switchCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_lightCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_numberCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_staticInfoCtlMetaField;
+igMetaField *g_libBecRuntimePlugin_movieMetaField;
+igMetaField *g_libBecRuntimePlugin_dbManagerMetaField;
+igMetaField *g_libBecRuntimePlugin_saveUtilMetaField;
+igMetaField *g_libBecRuntimePlugin_textureCtrlMetaField;
+igMetaField *g_libBecRuntimePlugin_systemMetaField;
+igMetaField *g_libBecRuntimePlugin_messengerMetaField;
+igMetaField *g_libBecRuntimePlugin_fileListMetaField;
+igMetaField *g_libBecRuntimePlugin_padManagerMetaField;
+igMetaField *g_libBecRuntimePlugin_criMetaField;
+igMetaField *g_libBecRuntimePlugin_luaInterfaceMetaField;
+igMetaField *g_libBecRuntimePlugin_demoManagerMetaField;
+igMetaField *g_libBecRuntimePlugin_timerMetaField;
+igMetaField *g_libBecRuntimePlugin_memoryMetaField;
+
 void *FUN_0033c900(void) {
     unsigned char b;
-    if (g_libBecRuntimePlugin_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_libBecRuntimePlugin_metaObject[0]) + 36) & 4) != 0;
+    if (g_libBecRuntimePlugin_metaObject != 0) {
+        b = (*(int *)((char *)(g_libBecRuntimePlugin_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0033e350();
 done:
-    return g_libBecRuntimePlugin_metaObject[0];
+    return g_libBecRuntimePlugin_metaObject;
 }
 
 ObjectRefWord *FUN_0033cd20(ObjectRefWord *self,int delete_storage) {
@@ -854,15 +895,17 @@ void FUN_0033e350(void)
     igMetaObject_RunStaticInit(libBecRuntimePlugin_Register);
 }
 
+static igMetaObjectCallback g_libBecRuntimePlugin_callbackList[] = { FUN_0034c7f0, FUN_0035b9c0, FUN_0035a880, FUN_00345bc0, FUN_00340e80, FUN_0036def0, FUN_00357820, FUN_00342b00, FUN_0033f750, FUN_00369a20, FUN_0034bba0, FUN_00369f80, FUN_003688d0, FUN_00345010, FUN_00360d30, FUN_0035da30, FUN_0035ed50, FUN_003444c0, FUN_003466b0, FUN_0036c1f0, FUN_0035cbf0, FUN_00362170, FUN_00343650, FUN_0035c1d0, FUN_0034e520, FUN_003438b0, FUN_0034f0a0, FUN_00366290, FUN_00346ef0, FUN_003424e0, FUN_00342f30, FUN_00357d10, FUN_003629b0, FUN_0034cb30, FUN_00367b20, be_EnsureRegistered, FUN_00363480, FUN_00341500, FUN_00359310, 0 };
+
 void *libBecRuntimePlugin_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_libBecRuntimePlugin_metaObject,
+        &g_libBecRuntimePlugin_metaObject,
         igInsightPlugin_Register,
         igInsightPlugin_GetPublishedMetaObject,
         libBecRuntimePlugin_GetMetaObject,
-        libBecRuntimePlugin_className,
+        "libBecRuntimePlugin",
         0xa4, /* instance size */
         libBecRuntimePlugin_GetVTable,
         libBecRuntimePlugin_InitFields,
@@ -875,6 +918,171 @@ void libBecRuntimePlugin_GetMetaObject(void)
 {
     FUN_0033c900();
 }
+
+static FieldFactory g_libBecRuntimePlugin_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_libBecRuntimePlugin_fieldTable[] = {
+    "_particleCtrl2",
+    "_luaManager",
+    "_matCtrl",
+    "_selectCtrl",
+    "_waterPlain",
+    "_action2",
+    "_meterCtrl",
+    "_targetObj",
+    "_weapon",
+    "_cameraCtrl",
+    "_point01",
+    "_bkColor",
+    "_cpTransform",
+    "_shadow01",
+    "_generater",
+    "_hitLandModel",
+    "_hitLandDeliv",
+    "_sound",
+    "_seCtl",
+    "_actionStarter",
+    "_layerCtl",
+    "_font",
+    "_switchCtrl",
+    "_lightCtrl",
+    "_numberCtrl",
+    "_staticInfoCtl",
+    "_movie",
+    "_dbManager",
+    "_saveUtil",
+    "_textureCtrl",
+    "_system",
+    "_messenger",
+    "_fileList",
+    "_padManager",
+    "_cri",
+    "_luaInterface",
+    "_demoManager",
+    "_timer",
+    "_memory",
+};
+static igMetaField **g_libBecRuntimePlugin_fieldHandles[] = {
+    &g_libBecRuntimePlugin_particleCtrl2MetaField,
+    &g_libBecRuntimePlugin_luaManagerMetaField,
+    &g_libBecRuntimePlugin_matCtrlMetaField,
+    &g_libBecRuntimePlugin_selectCtrlMetaField,
+    &g_libBecRuntimePlugin_waterPlainMetaField,
+    &g_libBecRuntimePlugin_action2MetaField,
+    &g_libBecRuntimePlugin_meterCtrlMetaField,
+    &g_libBecRuntimePlugin_targetObjMetaField,
+    &g_libBecRuntimePlugin_weaponMetaField,
+    &g_libBecRuntimePlugin_cameraCtrlMetaField,
+    &g_libBecRuntimePlugin_point01MetaField,
+    &g_libBecRuntimePlugin_bkColorMetaField,
+    &g_libBecRuntimePlugin_cpTransformMetaField,
+    &g_libBecRuntimePlugin_shadow01MetaField,
+    &g_libBecRuntimePlugin_generaterMetaField,
+    &g_libBecRuntimePlugin_hitLandModelMetaField,
+    &g_libBecRuntimePlugin_hitLandDelivMetaField,
+    &g_libBecRuntimePlugin_soundMetaField,
+    &g_libBecRuntimePlugin_seCtlMetaField,
+    &g_libBecRuntimePlugin_actionStarterMetaField,
+    &g_libBecRuntimePlugin_layerCtlMetaField,
+    &g_libBecRuntimePlugin_fontMetaField,
+    &g_libBecRuntimePlugin_switchCtrlMetaField,
+    &g_libBecRuntimePlugin_lightCtrlMetaField,
+    &g_libBecRuntimePlugin_numberCtrlMetaField,
+    &g_libBecRuntimePlugin_staticInfoCtlMetaField,
+    &g_libBecRuntimePlugin_movieMetaField,
+    &g_libBecRuntimePlugin_dbManagerMetaField,
+    &g_libBecRuntimePlugin_saveUtilMetaField,
+    &g_libBecRuntimePlugin_textureCtrlMetaField,
+    &g_libBecRuntimePlugin_systemMetaField,
+    &g_libBecRuntimePlugin_messengerMetaField,
+    &g_libBecRuntimePlugin_fileListMetaField,
+    &g_libBecRuntimePlugin_padManagerMetaField,
+    &g_libBecRuntimePlugin_criMetaField,
+    &g_libBecRuntimePlugin_luaInterfaceMetaField,
+    &g_libBecRuntimePlugin_demoManagerMetaField,
+    &g_libBecRuntimePlugin_timerMetaField,
+    &g_libBecRuntimePlugin_memoryMetaField,
+};
+static int g_libBecRuntimePlugin_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112,
+    116,
+    120,
+    124,
+    128,
+    132,
+    136,
+    140,
+    144,
+    148,
+    152,
+    156,
+    160,
+};
 
 void libBecRuntimePlugin_InitFields(void) {
     void *temp_s2;
@@ -919,9 +1127,9 @@ void libBecRuntimePlugin_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_libBecRuntimePlugin_metaObject[0];
+    temp_s1 = (void *)g_libBecRuntimePlugin_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_libBecRuntimePlugin_ctorTable[0], 0x27);
+    igMetaObject_CreateFields(temp_s1, g_libBecRuntimePlugin_ctorTable, 0x27);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0034c670();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -1000,6 +1208,6 @@ void libBecRuntimePlugin_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_38)->_metaObject = (int)FUN_00341380();
     temp_s2_39 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x26));
     ((igObjectRefMetaField *)temp_s2_39)->_metaObject = (int)FUN_003591e0();
-    igMetaObject_NameFields(temp_s1, &g_libBecRuntimePlugin_fieldTable[0], &DAT_004c2e40[0], &DAT_004c2ee0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_libBecRuntimePlugin_fieldTable, g_libBecRuntimePlugin_fieldHandles, g_libBecRuntimePlugin_fieldOffsets, temp_s0);
 }
 

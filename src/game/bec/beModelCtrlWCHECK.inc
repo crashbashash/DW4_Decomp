@@ -1,6 +1,8 @@
+igMetaObject *g_beModelCtrlWCHECK_metaObject;
+
 igMetaObject *FUN_00355030(void) {
-    if (g_beModelCtrlWCHECK_metaObject[0] == 0 || !isValid(g_beModelCtrlWCHECK_metaObject[0])) FUN_00355110();
-    return g_beModelCtrlWCHECK_metaObject[0];
+    if (g_beModelCtrlWCHECK_metaObject == 0 || !isValid(g_beModelCtrlWCHECK_metaObject)) FUN_00355110();
+    return g_beModelCtrlWCHECK_metaObject;
 }
 
 int beModelCtrlWCHECK_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beModelCtrlWCHECK_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlWCHECK_metaObject,
+        &g_beModelCtrlWCHECK_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlWCHECK_GetMetaObject,
-        beModelCtrlWCHECK_className,
+        "beModelCtrlWCHECK",
         0xc, /* instance size */
         beModelCtrlWCHECK_GetVTable,
         0,

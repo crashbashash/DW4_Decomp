@@ -1,16 +1,18 @@
+igMetaObject *g_igAnimationTrackList_metaObject;
+
 igMetaObject *FUN_001a9d90(void) {
-    if (g_igAnimationTrackList_metaObject[0] == 0) {
-        g_igAnimationTrackList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAnimationTrackList_metaObject == 0) {
+        g_igAnimationTrackList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAnimationTrackList_metaObject[0];
+    return g_igAnimationTrackList_metaObject;
 }
 
 igMetaObject *igAnimationTrackList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationTrackList_metaObject[0];
+    igMetaObject *g = g_igAnimationTrackList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a9e70();
-    return g_igAnimationTrackList_metaObject[0];
+    return g_igAnimationTrackList_metaObject;
 }
 
 int igAnimationTrackList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_001a9e70(void)
     igMetaObject_RunStaticInit(igAnimationTrackList_Register);
 }
 
+static igMetaObjectCallback g_igAnimationTrackList_callbackList[] = { FUN_001aa030, 0 };
+
 void igAnimationTrackList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationTrackList_metaObject),
+        &g_igAnimationTrackList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igAnimationTrackList_GetMetaObject,
-        igAnimationTrackList_className,
+        "igAnimationTrackList",
         0x14, /* instance size */
         igAnimationTrackList_GetVTable,
         0,

@@ -1,6 +1,8 @@
+igMetaObject *g_igVolume_metaObject;
+
 void FUN_00186a40(void) {
-    if (DAT_00554b7c == 0) {
-        DAT_00554b7c = 1;
+    if (g_MathsLibrary_registered == 0) {
+        g_MathsLibrary_registered = 1;
         FUN_00186e40();
         FUN_00186f70();
         FUN_00190370();
@@ -8,18 +10,18 @@ void FUN_00186a40(void) {
 }
 
 igMetaObject *FUN_00186a80(void) {
-    if (g_igVolume_metaObject[0] == 0) {
-        g_igVolume_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igVolume_metaObject == 0) {
+        g_igVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igVolume_metaObject[0];
+    return g_igVolume_metaObject;
 }
 
 igMetaObject *igVolume_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVolume_metaObject[0];
+    igMetaObject *g = g_igVolume_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00186b20();
-    return g_igVolume_metaObject[0];
+    return g_igVolume_metaObject;
 }
 
 void FUN_00186b20(void)
@@ -35,11 +37,11 @@ void igVolume_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igVolume_metaObject,
+        &g_igVolume_metaObject,
         igObject_Register,                     /* base class registrar (igObject) */
         igObject_GetMetaObject_ParentAccessor,
         thunk_igVolume_GetMetaObject,
-        igVolume_className,
+        "igVolume",
         8, /* instance size */
         0,
         &igVolume_InitFields_00186bb0[0],      /* field adder (class InitFields) */

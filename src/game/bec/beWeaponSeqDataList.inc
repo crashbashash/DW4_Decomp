@@ -1,16 +1,18 @@
+igMetaObject *g_beWeaponSeqDataList_metaObject;
+
 igMetaObject *FUN_0033efe0(void) {
-    if (g_beWeaponSeqDataList_metaObject[0] == 0) {
-        g_beWeaponSeqDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beWeaponSeqDataList_metaObject == 0) {
+        g_beWeaponSeqDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beWeaponSeqDataList_metaObject[0];
+    return g_beWeaponSeqDataList_metaObject;
 }
 
 void *FUN_0033f030(void) {
-    igMetaObject *g = g_beWeaponSeqDataList_metaObject[0];
+    igMetaObject *g = g_beWeaponSeqDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033f0c0();
     }
-    return g_beWeaponSeqDataList_metaObject[0];
+    return g_beWeaponSeqDataList_metaObject;
 }
 
 int beWeaponSeqDataList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_0033f0c0(void)
     igMetaObject_RunStaticInit(beWeaponSeqDataList_Register);
 }
 
+static igMetaObjectCallback g_beWeaponSeqDataList_callbackList[] = { FUN_0033f290, 0 };
+
 void *beWeaponSeqDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWeaponSeqDataList_metaObject,
+        &g_beWeaponSeqDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beWeaponSeqDataList_GetMetaObject,
-        beWeaponSeqDataList_className,
+        "beWeaponSeqDataList",
         0x14, /* instance size */
         beWeaponSeqDataList_GetVTable,
         0,

@@ -1,9 +1,21 @@
+igMetaObject *g_beNodeAnim_metaObject;
+igMetaField *g_beNodeAnim_startTimeMetaField;
+igMetaField *g_beNodeAnim_loop1TimeMetaField;
+igMetaField *g_beNodeAnim_loop2TimeMetaField;
+igMetaField *g_beNodeAnim_stopTimeMetaField;
+igMetaField *g_beNodeAnim_isFirstTimeMetaField;
+igMetaField *g_beNodeAnim_timeMetaField;
+igMetaField *g_beNodeAnim_timeScaleMetaField;
+igMetaField *g_beNodeAnim_timeBiasMetaField;
+igMetaField *g_beNodeAnim_beforeTimeMetaField;
+igMetaField *g_beNodeAnim_playTimeMetaField;
+
 void *beNodeAnim_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNodeAnim_metaObject[0];
+    igMetaObject *g = g_beNodeAnim_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034e930();
     }
-    return g_beNodeAnim_metaObject[0];
+    return g_beNodeAnim_metaObject;
 }
 
 int beNodeAnim_GetVTable(void) {
@@ -31,11 +43,11 @@ void *beNodeAnim_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNodeAnim_metaObject,
+        &g_beNodeAnim_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beNodeAnim_GetMetaObject,
-        beNodeAnim_className,
+        "beNodeAnim",
         0x70, /* instance size */
         beNodeAnim_GetVTable,
         beNodeAnim_InitFields,
@@ -49,19 +61,68 @@ void beNodeAnim_GetMetaObject(void)
     beNodeAnim_ResolveMetaObject();
 }
 
+static FieldFactory g_beNodeAnim_ctorTable[] = {
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igBoolMetaField_Create,
+    igLongMetaField_Create,
+    igFloatMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_beNodeAnim_fieldTable[] = {
+    "_startTime",
+    "_loop1Time",
+    "_loop2Time",
+    "_stopTime",
+    "_isFirstTime",
+    "_time",
+    "_timeScale",
+    "_timeBias",
+    "_beforeTime",
+    "_playTime",
+};
+static igMetaField **g_beNodeAnim_fieldHandles[] = {
+    &g_beNodeAnim_startTimeMetaField,
+    &g_beNodeAnim_loop1TimeMetaField,
+    &g_beNodeAnim_loop2TimeMetaField,
+    &g_beNodeAnim_stopTimeMetaField,
+    &g_beNodeAnim_isFirstTimeMetaField,
+    &g_beNodeAnim_timeMetaField,
+    &g_beNodeAnim_timeScaleMetaField,
+    &g_beNodeAnim_timeBiasMetaField,
+    &g_beNodeAnim_beforeTimeMetaField,
+    &g_beNodeAnim_playTimeMetaField,
+};
+static int g_beNodeAnim_fieldOffsets[] = {
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+};
+
 void beNodeAnim_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beNodeAnim_metaObject[0];
+    temp_s0 = (void *)g_beNodeAnim_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNodeAnim_ctorTable[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, g_beNodeAnim_ctorTable, 0xA);
     igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1), 0x13DE4355);
     igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 0x77359400);
     igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), ((long long)0xEE6B << 0x10) | 0x2800);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 1);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6), 1.0f);
-    igMetaObject_NameFields(temp_s0, &g_beNodeAnim_fieldTable[0], &DAT_004c4ad0[0], &DAT_004c4b00[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beNodeAnim_fieldTable, g_beNodeAnim_fieldHandles, g_beNodeAnim_fieldOffsets, temp_s1);
 }
 
 void FUN_0034eaf0(void)

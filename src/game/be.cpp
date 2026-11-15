@@ -6,6 +6,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/beDemoManager.h"
 
+#pragma push
+#pragma readonly_strings on
+
 /* The C runtime and the Alchemy memory services this file uses. */
 extern "C" unsigned int strlen(const char *s);
 extern "C" int strcmp(const char *a, const char *b);
@@ -2122,3 +2125,4 @@ int be_GetMetaObject_Virtual(void)
 {
     return (int)g_be_metaObject[0];
 }
+#pragma pop

@@ -1,16 +1,19 @@
+igMetaObject *g_igSetRenderDestinationAttr_metaObject;
+igMetaField *g_igSetRenderDestinationAttr_pRDAttrMetaField;
+
 igMetaObject *FUN_00133b70(void) {
-    if (g_igSetRenderDestinationAttr_metaObject[0] == 0) {
-        g_igSetRenderDestinationAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igSetRenderDestinationAttr_metaObject == 0) {
+        g_igSetRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igSetRenderDestinationAttr_metaObject[0];
+    return g_igSetRenderDestinationAttr_metaObject;
 }
 
 igMetaObject *igSetRenderDestinationAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSetRenderDestinationAttr_metaObject[0];
+    igMetaObject *g = g_igSetRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00133d20();
-    return g_igSetRenderDestinationAttr_metaObject[0];
+    return g_igSetRenderDestinationAttr_metaObject;
 }
 
 int igSetRenderDestinationAttr_GetVTable(void) {
@@ -55,15 +58,17 @@ void FUN_00133d20(void)
     igMetaObject_RunStaticInit(igSetRenderDestinationAttr_Register);
 }
 
+static igMetaObjectCallback g_igSetRenderDestinationAttr_callbackList[] = { FUN_00134370, 0 };
+
 void igSetRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSetRenderDestinationAttr_metaObject,
+        &g_igSetRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igSetRenderDestinationAttr_GetMetaObject,
-        igSetRenderDestinationAttr_className,
+        "igSetRenderDestinationAttr",
         0x10, /* instance size */
         igSetRenderDestinationAttr_GetVTable,
         &igSetRenderDestinationAttr_InitFields,
@@ -76,16 +81,29 @@ void thunk_igSetRenderDestinationAttr_GetMetaObject(void) {
     igSetRenderDestinationAttr_GetMetaObject();
 }
 
+static FieldFactory g_igSetRenderDestinationAttr_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igSetRenderDestinationAttr_fieldTable[] = {
+    "_pRDAttr",
+};
+static igMetaField **g_igSetRenderDestinationAttr_fieldHandles[] = {
+    &g_igSetRenderDestinationAttr_pRDAttrMetaField,
+};
+static int g_igSetRenderDestinationAttr_fieldOffsets[] = {
+    12,
+};
+
 void igSetRenderDestinationAttr_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igSetRenderDestinationAttr_metaObject[0];
+    temp_s0 = g_igSetRenderDestinationAttr_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSetRenderDestinationAttr_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igSetRenderDestinationAttr_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
-    igMetaObject_NameFields(temp_s0, &g_igSetRenderDestinationAttr_fieldTable[0], &DAT_00485f50[0], &DAT_00485f58[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igSetRenderDestinationAttr_fieldTable, g_igSetRenderDestinationAttr_fieldHandles, g_igSetRenderDestinationAttr_fieldOffsets, temp_s2);
 }
 

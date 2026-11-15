@@ -36,7 +36,7 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
     if (f->_persistent == 0) return -1;
     p = *(int *)(off + f->_offset);
     if (p == 0) return -1;
-    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)(((int *)g_igMemoryRefMetaField_metaObject)[0])) != 0) {
+    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
         s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
         for (s0 = 0; s0 < (int)n; s0++) {
@@ -45,7 +45,7 @@ int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
         }
         return s1;
     }
-    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) != 0) {
+    if (igObject_IsKindOf((void *)f->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
         s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
         return s1;
     }
@@ -66,7 +66,7 @@ int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *self, int objectA, in
     int b;
     int i;
 
-    if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject[0]) == 0) {
+    if (igObject_IsKindOf((void *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) == 0) {
         return ((igMetaFieldView *)self)->IsAlikeShallow(objectA, objectB);
     }
     off = self->_offset;
@@ -104,7 +104,7 @@ int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *self, int destina
         entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)directory, index.w0);
         if (entry != 0) {
             *out = entry->_ref;
-            if (self->_memType == 0 && self != ((void * *)g_igMemoryRefMetaField_descriptor)[0]) {
+            if (self->_memType == 0 && self != (*(void * *)&g_igMemoryRefMetaField_descriptor)) {
                 self->_memType = entry->_memType;
             }
         } else {
@@ -151,14 +151,14 @@ void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, int name) {
     char *previous;
     char *interned;
 
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
+    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
     previous = (char *)self->_poolName;
     if (previous != 0) {
         header = (int *)(previous - 8);

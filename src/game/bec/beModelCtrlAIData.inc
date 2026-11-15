@@ -1,9 +1,14 @@
+igMetaObject *g_beModelCtrlAIData_metaObject;
+igMetaField *g_beModelCtrlAIData_dirRadianMetaField;
+igMetaField *g_beModelCtrlAIData_timeMetaField;
+igMetaField *g_beModelCtrlAIData_limitMetaField;
+
 void *FUN_00354860(void) {
-    igMetaObject *g = g_beModelCtrlAIData_metaObject[0];
+    igMetaObject *g = g_beModelCtrlAIData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00354940();
     }
-    return g_beModelCtrlAIData_metaObject[0];
+    return g_beModelCtrlAIData_metaObject;
 }
 
 int beModelCtrlAIData_GetVTable(void) {
@@ -44,11 +49,11 @@ void *beModelCtrlAIData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlAIData_metaObject,
+        &g_beModelCtrlAIData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlAIData_GetMetaObject,
-        beModelCtrlAIData_className,
+        "beModelCtrlAIData",
         0x18, /* instance size */
         beModelCtrlAIData_GetVTable,
         beModelCtrlAIData_InitFields,
@@ -62,13 +67,34 @@ void beModelCtrlAIData_GetMetaObject(void)
     FUN_00354860();
 }
 
+static FieldFactory g_beModelCtrlAIData_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beModelCtrlAIData_fieldTable[] = {
+    "_dirRadian",
+    "_time",
+    "_limit",
+};
+static igMetaField **g_beModelCtrlAIData_fieldHandles[] = {
+    &g_beModelCtrlAIData_dirRadianMetaField,
+    &g_beModelCtrlAIData_timeMetaField,
+    &g_beModelCtrlAIData_limitMetaField,
+};
+static int g_beModelCtrlAIData_fieldOffsets[] = {
+    12,
+    16,
+    20,
+};
+
 void beModelCtrlAIData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlAIData_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlAIData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlAIData_ctorTable[0], 3);
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlAIData_fieldTable[0], &DAT_004c56e0[0], &DAT_004c56f0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlAIData_ctorTable, 3);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlAIData_fieldTable, g_beModelCtrlAIData_fieldHandles, g_beModelCtrlAIData_fieldOffsets, temp_s1);
 }
 

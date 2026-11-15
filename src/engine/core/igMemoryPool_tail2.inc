@@ -5,7 +5,7 @@ void igMemoryPool_PrintStatistics(igMemoryPool *self, char *title) {
     igMemoryPoolView *pool = (igMemoryPoolView *)self;
 
     if (title != 0 && *title != 0) {
-        igReport_Printf(percent_s_colon_newline);
+        igReport_Printf("%s:\n");
         igReport_Flush();
     }
     netCountHigh = self->_localNetAllocationCountHigh;
@@ -21,16 +21,29 @@ void igMemoryPool_PrintStatistics(igMemoryPool *self, char *title) {
     freed = self->_localFreed;
     allocated = self->_localAllocated;
     arenaSize = (int)pool->GetSize();
-    igReport_Printf(memory_pool_statistics_format, (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (long long)(int)allocatedWithOverhead, (long long)(int)freedWithOverhead, (long long)(int)netWithOverhead, (long long)(int)netWithOverheadHigh, (long long)(int)allocationCount, (long long)(int)freeCount, (long long)(int)netCount, (long long)(int)netCountHigh, (long long)arenaSize, (long long)pool->GetMaxSize());
+    igReport_Printf("    Total allocated:                      %u\n    Total freed:                          %u\n    Net allocated:                        %u\n    Net allocated high:                   %u\n    Total allocated with overhead:        %u\n    Total freed with overhead:            %u\n    Net allocated with overhead:          %u\n    Net allocated high with overhead:     %u\n    Total allocation count:               %u\n    Total free count:                     %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\n    Total pool arena size:                %u\n    Max size limit:                       %u\n", (int)allocated, (int)freed, (int)netAllocated, (int)netAllocatedHigh, (long long)(int)allocatedWithOverhead, (long long)(int)freedWithOverhead, (long long)(int)netWithOverhead, (long long)(int)netWithOverheadHigh, (long long)(int)allocationCount, (long long)(int)freeCount, (long long)(int)netCount, (long long)(int)netCountHigh, (long long)arenaSize, (long long)pool->GetMaxSize());
     igReport_Flush();
 }
 
+char *g_globalAllocated;
+int g_globalFreed;
+long long g_globalNetAllocated;
+long long g_globalNetAllocatedHigh;
+int g_globalAllocatedWithOverhead;
+int g_globalFreedWithOverhead;
+long long g_globalNetAllocatedWithOverhead;
+long long g_globalNetAllocatedWithOverheadHigh;
+int g_globalAllocationCount;
+int g_globalFreeCount;
+long long g_globalNetAllocationCount;
+long long g_globalNetAllocationCountHigh;
+
 void igMemoryPool_PrintGlobalStatistics(char *title) {
     if ((title != 0) && (*title != 0)) {
-        igReport_Printf(percent_s_colon_newline, title);
+        igReport_Printf("%s:\n", title);
         igReport_Flush();
     }
-    igReport_Printf(global_memory_statistics_format, g_globalAllocated[0], g_globalFreed[0], ((int *)g_globalNetAllocated)[0], ((int *)g_globalNetAllocatedHigh)[0], g_globalAllocatedWithOverhead[0], g_globalFreedWithOverhead[0], ((int *)g_globalNetAllocatedWithOverhead)[0], (long long) ((int *)g_globalNetAllocatedWithOverheadHigh)[0], (long long) g_globalAllocationCount[0], (long long) g_globalFreeCount[0], (long long) ((int *)g_globalNetAllocationCount)[0], (long long) ((int *)g_globalNetAllocationCountHigh)[0]);
+    igReport_Printf("    Total allocated:                      %u\n    Total freed:                          %u\n    Net allocated:                        %u\n    Net allocated high:                   %u\n    Total allocated with overhead:        %u\n    Total freed with overhead:            %u\n    Net allocated with overhead:          %u\n    Net allocated high with overhead:     %u\n    Total allocation count:               %u\n    Total free count:                     %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\n", g_globalAllocated, g_globalFreed, (*(int *)&g_globalNetAllocated), (*(int *)&g_globalNetAllocatedHigh), g_globalAllocatedWithOverhead, g_globalFreedWithOverhead, (*(int *)&g_globalNetAllocatedWithOverhead), (long long) (*(int *)&g_globalNetAllocatedWithOverheadHigh), (long long) g_globalAllocationCount, (long long) g_globalFreeCount, (long long) (*(int *)&g_globalNetAllocationCount), (long long) (*(int *)&g_globalNetAllocationCountHigh));
     igReport_Flush();
 }
 
@@ -49,17 +62,17 @@ bool igMemoryPool_TrimAllPools(int unused, int flags) {
     igMemoryPoolView *primary;
     bool trimmed;
     trimmed = false;
-    i = g_secondaryAllocatorList[0]->count - 1;
+    i = g_secondaryAllocatorList->count - 1;
     while (i >= 0) {
-        secondary = g_secondaryAllocatorList[0]->data[i];
+        secondary = g_secondaryAllocatorList->data[i];
         if (secondary != 0 && secondary->IsActive() != 0 && secondary->Trim(flags) != 0) {
             trimmed = true;
         }
         i--;
     }
-    j = g_primaryAllocatorList[0]->count - 1;
+    j = g_primaryAllocatorList->count - 1;
     while (j >= 0) {
-        primary = g_primaryAllocatorList[0]->data[j];
+        primary = g_primaryAllocatorList->data[j];
         if (primary != 0 && primary->IsActive() != 0 && primary->Trim(flags) != 0) {
             trimmed = true;
         }
@@ -101,10 +114,12 @@ void igMemoryPool_SetScopeFlags(int flags) {
     *(int *)0x4C2160 = flags;
 }
 
+int g_memoryEventScopeFlags = -1;
+
 void igMemoryPool_TrackEvent(void **pool, int record, int scope, int depth) {
     void **tracker;
 
-    if ((scope == 0) || (scope & g_memoryEventScopeFlags[0])) {
+    if ((scope == 0) || (scope & g_memoryEventScopeFlags)) {
         tracker = (void **)(((igMemoryPoolView *)(pool))->GetEventTracker());
         if (tracker != 0) {
             ((igEventTrackerView *)tracker)->AddEvent((EventRecord *)record, depth + 1);
@@ -350,21 +365,21 @@ void Memory_InitializeAllocatorRegistries(igObject *rootAllocator) {
     if (primaryList != 0) {
         primaryList = ((int)igMemoryPoolInfoList_Init((AllocatorRegistry *)primaryList));
     }
-    ((int *)g_primaryAllocatorList)[0] = primaryList;
+    (*(int *)&g_primaryAllocatorList) = primaryList;
     igMemoryPoolInfoList_Append((AllocatorRegistry *)primaryList, (igMemoryPoolView *)rootAllocator);
     ((char *)&rootAllocator->_refCount)[3] = 0;
     secondaryList = ((int)igMemoryPoolInfoList_Allocate(0xC));
     if (secondaryList != 0) {
         secondaryList = ((int)igMemoryPoolInfoList_Init((AllocatorRegistry *)secondaryList));
     }
-    ((int *)g_secondaryAllocatorList)[0] = secondaryList;
+    (*(int *)&g_secondaryAllocatorList) = secondaryList;
 }
 
 void Memory_ShutdownAllocatorRegistries(void **rootAllocator) {
-    igMemoryPoolInfoList_Release(g_primaryAllocatorList[0], 1);
-    igMemoryPoolInfoList_Release(g_secondaryAllocatorList[0], 1);
-    ((int *)g_primaryAllocatorList)[0] = 0;
-    ((int *)g_secondaryAllocatorList)[0] = 0;
+    igMemoryPoolInfoList_Release(g_primaryAllocatorList, 1);
+    igMemoryPoolInfoList_Release(g_secondaryAllocatorList, 1);
+    (*(int *)&g_primaryAllocatorList) = 0;
+    (*(int *)&g_secondaryAllocatorList) = 0;
     ((igMemoryPoolView *)(rootAllocator))->Shutdown();
 }
 
@@ -441,30 +456,30 @@ void igMemoryPool_UpdateGlobalStatistics(long long size, long long sizeWithOverh
     long long bytes;
     if (allocated != 0) {
         bytes = (int)size;
-        ((long long *)g_globalAllocated)[0] += bytes;
-        g_globalNetAllocated[0] += bytes;
-        if (g_globalNetAllocatedHigh[0] < g_globalNetAllocated[0]) {
-            g_globalNetAllocatedHigh[0] = g_globalNetAllocated[0];
+        (*(long long *)&g_globalAllocated) += bytes;
+        g_globalNetAllocated += bytes;
+        if (g_globalNetAllocatedHigh < g_globalNetAllocated) {
+            g_globalNetAllocatedHigh = g_globalNetAllocated;
         }
         bytes = (int)sizeWithOverhead;
-        ((long long *)g_globalAllocatedWithOverhead)[0] += bytes;
-        g_globalNetAllocatedWithOverhead[0] += bytes;
-        if (g_globalNetAllocatedWithOverheadHigh[0] < g_globalNetAllocatedWithOverhead[0]) {
-            g_globalNetAllocatedWithOverheadHigh[0] = g_globalNetAllocatedWithOverhead[0];
+        (*(long long *)&g_globalAllocatedWithOverhead) += bytes;
+        g_globalNetAllocatedWithOverhead += bytes;
+        if (g_globalNetAllocatedWithOverheadHigh < g_globalNetAllocatedWithOverhead) {
+            g_globalNetAllocatedWithOverheadHigh = g_globalNetAllocatedWithOverhead;
         }
-        ((long long *)g_globalAllocationCount)[0] += 1;
-        g_globalNetAllocationCount[0] += 1;
-        if (g_globalNetAllocationCountHigh[0] < g_globalNetAllocationCount[0]) {
-            g_globalNetAllocationCountHigh[0] = g_globalNetAllocationCount[0];
+        (*(long long *)&g_globalAllocationCount) += 1;
+        g_globalNetAllocationCount += 1;
+        if (g_globalNetAllocationCountHigh < g_globalNetAllocationCount) {
+            g_globalNetAllocationCountHigh = g_globalNetAllocationCount;
         }
     } else {
         bytes = (int)size;
-        ((long long *)g_globalFreed)[0] += bytes;
-        g_globalNetAllocated[0] -= bytes;
-        ((long long *)g_globalFreedWithOverhead)[0] += bytes;
-        g_globalNetAllocatedWithOverhead[0] -= bytes;
-        ((long long *)g_globalFreeCount)[0] += 1;
-        g_globalNetAllocationCount[0] -= 1;
+        (*(long long *)&g_globalFreed) += bytes;
+        g_globalNetAllocated -= bytes;
+        (*(long long *)&g_globalFreedWithOverhead) += bytes;
+        g_globalNetAllocatedWithOverhead -= bytes;
+        (*(long long *)&g_globalFreeCount) += 1;
+        g_globalNetAllocationCount -= 1;
     }
 }
 

@@ -1,14 +1,28 @@
 void FUN_001a2ef0(int arg0) {
     FUN_001a3170();
-    igMetaObject_CreateInstance(*(int *)0x561CC0, arg0);
+    igMetaObject_CreateInstance((int)g_igCompileTraversal_metaObject, arg0);
 }
+
+igMetaObject *g_igCompileTraversal_metaObject;
+igMetaField *g_igCompileTraversal_mvmListMetaField;
+igMetaField *g_igCompileTraversal_xformInfoListMetaField;
+igMetaField *g_igCompileTraversal_moListMetaField;
+igMetaField *g_igCompileTraversal_containsShaderMetaField;
+igMetaField *g_igCompileTraversal_boundMetaField;
+igMetaField *g_igCompileTraversal_transformListMetaField;
+igMetaField *g_igCompileTraversal_isSkinMetaField;
+igMetaField *g_igCompileTraversal_environmentShader2ListMetaField;
+igMetaField *g_igCompileTraversal_bmpaListMetaField;
+igMetaField *g_igCompileTraversal_jointChainCountMetaField;
+igMetaField *g_igCompileTraversal_jointBaseMvmIndexMetaField;
+igMetaField *g_igCompileTraversal_currentBoneIndexMetaField;
 
 igMetaObject *igCompileTraversal_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCompileTraversal_metaObject[0];
+    igMetaObject *g = g_igCompileTraversal_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a3170();
-    return g_igCompileTraversal_metaObject[0];
+    return g_igCompileTraversal_metaObject;
 }
 
 int igCompileTraversal_GetVTable(void) {
@@ -78,15 +92,17 @@ void FUN_001a3170(void)
     igMetaObject_RunStaticInit(igCompileTraversal_Register);
 }
 
+static igMetaObjectCallback g_igCompileTraversal_callbackList[] = { FUN_00135620, FUN_001a3500, FUN_001e4a50, FUN_0018a780, FUN_00195de0, FUN_001a14c0, FUN_00139900, 0 };
+
 void igCompileTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igCompileTraversal_metaObject),
+        &g_igCompileTraversal_metaObject,
         igCommonTraversal_Register,
         igCommonTraversal_GetPublishedMetaObject,
         thunk_igCompileTraversal_GetMetaObject,
-        igCompileTraversal_className,
+        "igCompileTraversal",
         0x208, /* instance size */
         igCompileTraversal_GetVTable,
         &igCompileTraversal_InitFields,
@@ -99,6 +115,63 @@ void thunk_igCompileTraversal_GetMetaObject(void) {
     igCompileTraversal_GetMetaObject();
 }
 
+static FieldFactory g_igCompileTraversal_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igCompileTraversal_fieldTable[] = {
+    "_mvmList",
+    "_xformInfoList",
+    "_moList",
+    "_containsShader",
+    "_bound",
+    "_transformList",
+    "_isSkin",
+    "_environmentShader2List",
+    "_bmpaList",
+    "_jointChainCount",
+    "_jointBaseMvmIndex",
+    "_currentBoneIndex",
+};
+static igMetaField **g_igCompileTraversal_fieldHandles[] = {
+    &g_igCompileTraversal_mvmListMetaField,
+    &g_igCompileTraversal_xformInfoListMetaField,
+    &g_igCompileTraversal_moListMetaField,
+    &g_igCompileTraversal_containsShaderMetaField,
+    &g_igCompileTraversal_boundMetaField,
+    &g_igCompileTraversal_transformListMetaField,
+    &g_igCompileTraversal_isSkinMetaField,
+    &g_igCompileTraversal_environmentShader2ListMetaField,
+    &g_igCompileTraversal_bmpaListMetaField,
+    &g_igCompileTraversal_jointChainCountMetaField,
+    &g_igCompileTraversal_jointBaseMvmIndexMetaField,
+    &g_igCompileTraversal_currentBoneIndexMetaField,
+};
+static int g_igCompileTraversal_fieldOffsets[] = {
+    472,
+    476,
+    480,
+    484,
+    488,
+    492,
+    496,
+    500,
+    504,
+    508,
+    512,
+    516,
+};
+
 void igCompileTraversal_InitFields(void) {
     int temp_s1;
     void *temp_s2;
@@ -110,9 +183,9 @@ void igCompileTraversal_InitFields(void) {
     void *temp_s2_7;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igCompileTraversal_metaObject[0];
+    temp_s0 = (void *)g_igCompileTraversal_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCompileTraversal_ctorTable[0], 0xC);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompileTraversal_ctorTable, 0xC);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00135540();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -145,7 +218,7 @@ void igCompileTraversal_InitFields(void) {
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igCompileTraversal_fieldTable[0], &DAT_0048c660[0], &DAT_0048c690[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCompileTraversal_fieldTable, g_igCompileTraversal_fieldHandles, g_igCompileTraversal_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback(&thunk_FUN_001bb230);
 }
 

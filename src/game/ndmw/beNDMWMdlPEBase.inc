@@ -1,9 +1,11 @@
+igMetaObject *g_beNDMWMdlPEBase_metaObject;
+
 void *beNDMWMdlPEBase_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlPEBase_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlPEBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0550();
     }
-    return g_beNDMWMdlPEBase_metaObject[0];
+    return g_beNDMWMdlPEBase_metaObject;
 }
 
 void FUN_003c0550(void)
@@ -15,11 +17,11 @@ void *beNDMWMdlPEBase_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
-        g_beNDMWMdlPEBase_metaObject,
+        &g_beNDMWMdlPEBase_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlPEBase_GetMetaObject,
-        beNDMWMdlPEBase_className,
+        "beNDMWMdlPEBase",
         0x2c, /* instance size */
         0,
         0,

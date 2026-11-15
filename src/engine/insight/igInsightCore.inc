@@ -1,21 +1,42 @@
+igMetaObject *g_igInsightCore_metaObject;
+igMetaField *g_igInsightCore_managerListMetaField;
+igMetaField *g_igInsightCore_schedulerMetaField;
+igMetaField *g_igInsightCore_infoListMetaField;
+igMetaField *g_igInsightCore_windowMetaField;
+igMetaField *g_igInsightCore_visualContextMetaField;
+igMetaField *g_igInsightCore_rendererListMetaField;
+igMetaField *g_igInsightCore_dispatcherMetaField;
+igMetaField *g_igInsightCore_windowResizeReceiverMetaField;
+igMetaField *g_igInsightCore_messengerMetaField;
+igMetaField *g_igInsightCore_clearRendererMetaField;
+igMetaField *g_igInsightCore_timerMetaField;
+igMetaField *g_igInsightCore_framesMetaField;
+igMetaField *g_igInsightCore_currentTimeMetaField;
+igMetaField *g_igInsightCore_frameTimeMetaField;
+igMetaField *g_igInsightCore_currentToWorldTimeFactorMetaField;
+igMetaField *g_igInsightCore_worldTimeMetaField;
+igMetaField *g_igInsightCore_traversalTimeMetaField;
+igMetaField *g_igInsightCore_outputTimeMetaField;
+igMetaField *g_igInsightCore_pluginsMetaField;
+
 void FUN_00232800(int arg0) {
     FUN_00232de0();
     igMetaObject_CreateInstance(*(int *)0x56DB60, arg0);
 }
 
 igMetaObject *FUN_00232840(void) {
-    if (g_igInsightCore_metaObject[0] == 0) {
-        g_igInsightCore_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igInsightCore_metaObject == 0) {
+        g_igInsightCore_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igInsightCore_metaObject[0];
+    return g_igInsightCore_metaObject;
 }
 
 igMetaObject *igInsightCore_GetMetaObject(void)
 {
-    igMetaObject *g = g_igInsightCore_metaObject[0];
+    igMetaObject *g = g_igInsightCore_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00232de0();
-    return g_igInsightCore_metaObject[0];
+    return g_igInsightCore_metaObject;
 }
 
 int igInsightCore_GetVTable(void) {
@@ -158,15 +179,17 @@ void FUN_00232de0(void)
     igMetaObject_RunStaticInit(igInsightCore_Register);
 }
 
+static igMetaObjectCallback g_igInsightCore_callbackList[] = { FUN_002336b0, FUN_00232510, igInfoList_EnsureRegistered, FUN_00145de0, FUN_0014a0e0, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, FUN_00233160, FUN_00231530, igClearRenderer_EnsureRegistered, igTimer_EnsureRegistered, FUN_002326a0, 0 };
+
 void igInsightCore_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igInsightCore_metaObject,
+        &g_igInsightCore_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igInsightCore_GetMetaObject,
-        igInsightCore_className,
+        "igInsightCore",
         0x70, /* instance size */
         igInsightCore_GetVTable,
         &igInsightCore_InitFields,
@@ -178,6 +201,91 @@ void igInsightCore_Register(void) {
 void thunk_igInsightCore_GetMetaObject(void) {
     igInsightCore_GetMetaObject();
 }
+
+static FieldFactory g_igInsightCore_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igIntMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igInsightCore_fieldTable[] = {
+    "_managerList",
+    "_scheduler",
+    "_infoList",
+    "_window",
+    "_visualContext",
+    "_rendererList",
+    "_dispatcher",
+    "_windowResizeReceiver",
+    "_messenger",
+    "_clearRenderer",
+    "_timer",
+    "_frames",
+    "_currentTime",
+    "_frameTime",
+    "_currentToWorldTimeFactor",
+    "_worldTime",
+    "_traversalTime",
+    "_outputTime",
+    "_plugins",
+};
+static igMetaField **g_igInsightCore_fieldHandles[] = {
+    &g_igInsightCore_managerListMetaField,
+    &g_igInsightCore_schedulerMetaField,
+    &g_igInsightCore_infoListMetaField,
+    &g_igInsightCore_windowMetaField,
+    &g_igInsightCore_visualContextMetaField,
+    &g_igInsightCore_rendererListMetaField,
+    &g_igInsightCore_dispatcherMetaField,
+    &g_igInsightCore_windowResizeReceiverMetaField,
+    &g_igInsightCore_messengerMetaField,
+    &g_igInsightCore_clearRendererMetaField,
+    &g_igInsightCore_timerMetaField,
+    &g_igInsightCore_framesMetaField,
+    &g_igInsightCore_currentTimeMetaField,
+    &g_igInsightCore_frameTimeMetaField,
+    &g_igInsightCore_currentToWorldTimeFactorMetaField,
+    &g_igInsightCore_worldTimeMetaField,
+    &g_igInsightCore_traversalTimeMetaField,
+    &g_igInsightCore_outputTimeMetaField,
+    &g_igInsightCore_pluginsMetaField,
+};
+static int g_igInsightCore_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+};
 
 void igInsightCore_InitFields(void) {
     int temp_s1;
@@ -193,11 +301,11 @@ void igInsightCore_InitFields(void) {
     void *temp_s2_7;
     void *temp_s2_8;
     void *temp_s2_9;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igInsightCore_metaObject[0];
+    temp_s0 = g_igInsightCore_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igInsightCore_ctorTable[0], 0x13);
+    igMetaObject_CreateFields(temp_s0, g_igInsightCore_ctorTable, 0x13);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00233480();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -232,7 +340,7 @@ void igInsightCore_InitFields(void) {
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x12));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002325c0();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igInsightCore_fieldTable[0], &DAT_00498150[0], &DAT_004981a0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igInsightCore_fieldTable, g_igInsightCore_fieldHandles, g_igInsightCore_fieldOffsets, temp_s1);
 }
 
 void thunk_FUN_00236140(void) {

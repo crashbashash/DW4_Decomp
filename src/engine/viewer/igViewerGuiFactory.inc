@@ -1,17 +1,27 @@
+igMetaObject *g_igViewerGuiFactory_metaObject;
+igMetaField *g_igViewerGuiFactory_menuBackColorMetaField;
+igMetaField *g_igViewerGuiFactory_menuItemForeColorMetaField;
+igMetaField *g_igViewerGuiFactory_menuMarkColorMetaField;
+igMetaField *g_igViewerGuiFactory_iconBackColorMetaField;
+igMetaField *g_igViewerGuiFactory_bigIconColorMetaField;
+igMetaField *g_igViewerGuiFactory_bigIconHighlightColorMetaField;
+igMetaField *g_igViewerGuiFactory_smallIconOnOffColorMetaField;
+igMetaField *g_igViewerGuiFactory_fontMetaField;
+
 igMetaObject *FUN_0045b8d0(void) {
-    if (g_igViewerGuiFactory_metaObject[0] == 0) {
-        g_igViewerGuiFactory_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewerGuiFactory_metaObject == 0) {
+        g_igViewerGuiFactory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewerGuiFactory_metaObject[0];
+    return g_igViewerGuiFactory_metaObject;
 }
 
 igMetaObject *igViewerGuiFactory_GetMetaObject(void)
 {
-    igMetaObject *g = ((igMetaObject *)g_igViewerGuiFactory_metaObject[0]);
+    igMetaObject *g = ((igMetaObject *)g_igViewerGuiFactory_metaObject);
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_0045bc10();
-    return ((igMetaObject *)g_igViewerGuiFactory_metaObject[0]);
+    return ((igMetaObject *)g_igViewerGuiFactory_metaObject);
 }
 
 int igViewerGuiFactory_GetVTable(void) {
@@ -94,15 +104,17 @@ void FUN_0045bc10(void)
     igMetaObject_RunStaticInit(igViewerGuiFactory_Register);
 }
 
+static igMetaObjectCallback g_igViewerGuiFactory_callbackList[] = { igBasicColorChanger_RunStaticInit, igOnOffColorChanger_RunStaticInit, igBitmapFont_RunStaticInit, 0 };
+
 void igViewerGuiFactory_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerGuiFactory_metaObject,
+        &g_igViewerGuiFactory_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igViewerGuiFactory_GetMetaObject,
-        igViewerGuiFactory_className,
+        "igViewerGuiFactory",
         0x28, /* instance size */
         igViewerGuiFactory_GetVTable,
         &igViewerGuiFactory_InitFields,
@@ -114,6 +126,47 @@ void igViewerGuiFactory_Register(void) {
 void thunk_igViewerGuiFactory_GetMetaObject(void) {
     igViewerGuiFactory_GetMetaObject();
 }
+
+static FieldFactory g_igViewerGuiFactory_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igViewerGuiFactory_fieldTable[] = {
+    "_menuBackColor",
+    "_menuItemForeColor",
+    "_menuMarkColor",
+    "_iconBackColor",
+    "_bigIconColor",
+    "_bigIconHighlightColor",
+    "_smallIconOnOffColor",
+    "_font",
+};
+static igMetaField **g_igViewerGuiFactory_fieldHandles[] = {
+    &g_igViewerGuiFactory_menuBackColorMetaField,
+    &g_igViewerGuiFactory_menuItemForeColorMetaField,
+    &g_igViewerGuiFactory_menuMarkColorMetaField,
+    &g_igViewerGuiFactory_iconBackColorMetaField,
+    &g_igViewerGuiFactory_bigIconColorMetaField,
+    &g_igViewerGuiFactory_bigIconHighlightColorMetaField,
+    &g_igViewerGuiFactory_smallIconOnOffColorMetaField,
+    &g_igViewerGuiFactory_fontMetaField,
+};
+static int g_igViewerGuiFactory_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+};
 
 void igViewerGuiFactory_InitFields(void) {
     void *temp_s2;
@@ -127,9 +180,9 @@ void igViewerGuiFactory_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igViewerGuiFactory_metaObject[0];
+    temp_s0 = g_igViewerGuiFactory_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewerGuiFactory_ctorTable[0], 8);
+    igMetaObject_CreateFields(temp_s0, g_igViewerGuiFactory_ctorTable, 8);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00451fc0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -154,6 +207,6 @@ void igViewerGuiFactory_InitFields(void) {
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_004524f0();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igViewerGuiFactory_fieldTable[0], &DAT_004d1310[0], &DAT_004d1330[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igViewerGuiFactory_fieldTable, g_igViewerGuiFactory_fieldHandles, g_igViewerGuiFactory_fieldOffsets, temp_s1);
 }
 

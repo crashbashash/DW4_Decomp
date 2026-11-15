@@ -1,16 +1,18 @@
+igMetaObject *g_igGuiComponentController_metaObject;
+
 igMetaObject *FUN_0044fa40(void) {
-    if (g_igGuiComponentController_metaObject[0] == 0) {
-        g_igGuiComponentController_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGuiComponentController_metaObject == 0) {
+        g_igGuiComponentController_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGuiComponentController_metaObject[0];
+    return g_igGuiComponentController_metaObject;
 }
 
 igMetaObject *igGuiComponentController_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGuiComponentController_metaObject[0];
+    igMetaObject *g = g_igGuiComponentController_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igGuiComponentController_EnsureRegistered();
-    return g_igGuiComponentController_metaObject[0];
+    return g_igGuiComponentController_metaObject;
 }
 
 int igGuiComponentController_GetVTable(void) {
@@ -29,11 +31,11 @@ void igGuiComponentController_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGuiComponentController_metaObject,
+        &g_igGuiComponentController_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igGuiComponentController_GetMetaObject,
-        igGuiComponentController_className,
+        "igGuiComponentController",
         0xC, /* instance size */
         igGuiComponentController_GetVTable,
         0,

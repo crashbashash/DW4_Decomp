@@ -1,14 +1,20 @@
+igMetaObject *g_igPluginHelper_metaObject;
+igMetaField *g_igPluginHelper_pluginExtensionMetaField;
+igMetaField *g_igPluginHelper_repositoryListMetaField;
+igMetaField *g_igPluginHelper_libraryLoaderMetaField;
+igMetaField *g_igPluginHelper_loadedPluginsMetaField;
+
 void *igPluginHelper_Create(int pool) {
     igPluginHelper_EnsureRegistered();
-    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585AB8), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance(g_igPluginHelper_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPluginHelper_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPluginHelper_metaObject[0];
+    igMetaObject *g = g_igPluginHelper_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPluginHelper_EnsureRegistered();
-    return g_igPluginHelper_metaObject[0];
+    return g_igPluginHelper_metaObject;
 }
 
 int igPluginHelper_GetVTable(void) {
@@ -20,7 +26,7 @@ int igPluginHelper_GetVTable(void) {
     helper._repositoryList = 0;
     helper._libraryLoader = 0;
     helper._loadedPlugins = 0;
-    vtable = *(int *)((char *)&helper + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&helper + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     helper._vtable = (int)&g_igPluginHelper_vtable[0];
     igSmartPointer_igLibraryList_Destruct((igSmartPointer<igObject> *)(&helper._loadedPlugins), -1);
     igSmartPointer_igLibraryLoader_Destruct((void **)(&helper._libraryLoader), (short)(-1));
@@ -83,26 +89,53 @@ void igPluginHelper_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPluginHelper_Register);
 }
 
+static igMetaObjectCallback g_igPluginHelper_callbackList[] = { igPluginRepositoryList_EnsureRegistered, igLibraryLoader_EnsureRegistered, igLibraryList_EnsureRegistered, 0 };
+
 void igPluginHelper_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igPluginHelper_metaObject,
+        &g_igPluginHelper_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igPluginHelper_GetMetaObjectFunction,
-        igPluginHelper_className,
+        "igPluginHelper",
         0x18,
         igPluginHelper_GetVTable,
         igPluginHelper_InitFields,
         0,
-        (igMetaObjectCallback *)g_igPluginHelper_callbackList
+        g_igPluginHelper_callbackList
     );
 }
 
 void igPluginHelper_GetMetaObjectFunction(void) {
     igPluginHelper_GetMetaObject();
 }
+
+static FieldFactory g_igPluginHelper_ctorTable[] = {
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igPluginHelper_fieldTable[] = {
+    "_pluginExtension",
+    "_repositoryList",
+    "_libraryLoader",
+    "_loadedPlugins",
+};
+static igMetaField **g_igPluginHelper_fieldDescriptors[] = {
+    &g_igPluginHelper_pluginExtensionMetaField,
+    &g_igPluginHelper_repositoryListMetaField,
+    &g_igPluginHelper_libraryLoaderMetaField,
+    &g_igPluginHelper_loadedPluginsMetaField,
+};
+static int g_igPluginHelper_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+};
 
 void igPluginHelper_InitFields(void) {
     int first;
@@ -111,10 +144,10 @@ void igPluginHelper_InitFields(void) {
     void *repositoryField;
     void *meta;
 
-    meta = (void *)g_igPluginHelper_metaObject[0];
+    meta = (void *)g_igPluginHelper_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPluginHelper_ctorTable[0], 4);
-    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))), (int)&text_dot_so[0]);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igPluginHelper_ctorTable, 4);
+    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))), (int)".so");
     repositoryField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
     ((igObjectRefMetaField *)repositoryField)->_metaObject = (int)igPluginRepositoryList_GetOrCreateMetaObject();
     ((igRefMetaField *)repositoryField)->_construct = 1;
@@ -124,6 +157,6 @@ void igPluginHelper_InitFields(void) {
     pluginsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3)));
     ((igObjectRefMetaField *)pluginsField)->_metaObject = (int)igLibraryList_GetOrCreateMetaObject();
     ((igRefMetaField *)pluginsField)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPluginHelper_fieldTable[0], (igMetaField ***)&g_igPluginHelper_fieldDescriptors[0], &g_igPluginHelper_fieldOffsets[0], first);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igPluginHelper_fieldTable, g_igPluginHelper_fieldDescriptors, g_igPluginHelper_fieldOffsets, first);
 }
 

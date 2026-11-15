@@ -1,14 +1,16 @@
+igMetaObject *g_igGetCenterFunctionList_metaObject;
+
 OpTable *FUN_00188920(int arg0) {
     FUN_001889f0();
-    return (OpTable *)igMetaObject_CreateInstance(*(int *)0x561018, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((int)g_igGetCenterFunctionList_metaObject, arg0);
 }
 
 igMetaObject *igGetCenterFunctionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGetCenterFunctionList_metaObject[0];
+    igMetaObject *g = g_igGetCenterFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001889f0();
-    return g_igGetCenterFunctionList_metaObject[0];
+    return g_igGetCenterFunctionList_metaObject;
 }
 
 int igGetCenterFunctionList_GetVTable(void) {
@@ -28,11 +30,11 @@ void igGetCenterFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGetCenterFunctionList_metaObject,
+        &g_igGetCenterFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igGetCenterFunctionList_GetMetaObject,
-        igGetCenterFunctionList_className,
+        "igGetCenterFunctionList",
         0x14, /* instance size */
         igGetCenterFunctionList_GetVTable,
         0,

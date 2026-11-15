@@ -1,24 +1,27 @@
+igMetaObject *g_bePoint01_metaObject;
+igMetaField *g_bePoint01_pointNoMetaField;
+
 void bePoint01_CreateInstance(int arg0) {
     FUN_0034bba0();
     igMetaObject_CreateInstance(*(int *)0x588498, arg0);
 }
 
 igMetaObject *FUN_0034ba20(void) {
-    if (g_bePoint01_metaObject[0] == 0) {
-        g_bePoint01_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_bePoint01_metaObject == 0) {
+        g_bePoint01_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_bePoint01_metaObject[0];
+    return g_bePoint01_metaObject;
 }
 
 void *FUN_0034ba70(void) {
     bool ok;
-    if (g_bePoint01_metaObject[0] == 0) goto make;
-    ok = !!(g_bePoint01_metaObject[0]->_validity & 4);
+    if (g_bePoint01_metaObject == 0) goto make;
+    ok = !!(g_bePoint01_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_0034bba0();
 done:;
-    return g_bePoint01_metaObject[0];
+    return g_bePoint01_metaObject;
 }
 
 int bePoint01_GetVTable(void) {
@@ -69,11 +72,11 @@ void *bePoint01_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_bePoint01_metaObject,
+        &g_bePoint01_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         bePoint01_GetMetaObject,
-        bePoint01_className,
+        "bePoint01",
         0x24, /* instance size */
         bePoint01_GetVTable,
         bePoint01_InitFields,
@@ -87,13 +90,26 @@ void bePoint01_GetMetaObject(void)
     FUN_0034ba70();
 }
 
+static FieldFactory g_bePoint01_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_bePoint01_fieldTable[] = {
+    "_pointNo",
+};
+static igMetaField **g_bePoint01_fieldHandles[] = {
+    &g_bePoint01_pointNoMetaField,
+};
+static int g_bePoint01_fieldOffsets[] = {
+    32,
+};
+
 void bePoint01_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_bePoint01_metaObject[0];
+    temp_s0 = (void *)g_bePoint01_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_bePoint01_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_bePoint01_fieldTable[0], &DAT_004c45a0[0], &DAT_004c45a8[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_bePoint01_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_bePoint01_fieldTable, g_bePoint01_fieldHandles, g_bePoint01_fieldOffsets, temp_s1);
 }
 

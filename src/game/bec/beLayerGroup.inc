@@ -1,9 +1,11 @@
+igMetaObject *g_beLayerGroup_metaObject;
+
 void *FUN_0035c850(void) {
-    igMetaObject *g = g_beLayerGroup_metaObject[0];
+    igMetaObject *g = g_beLayerGroup_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c930();
     }
-    return g_beLayerGroup_metaObject[0];
+    return g_beLayerGroup_metaObject;
 }
 
 int beLayerGroup_GetVTable(void) {
@@ -44,11 +46,11 @@ void *beLayerGroup_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLayerGroup_metaObject,
+        &g_beLayerGroup_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beLayerGroup_GetMetaObject,
-        beLayerGroup_className,
+        "beLayerGroup",
         0xc, /* instance size */
         beLayerGroup_GetVTable,
         0,
@@ -62,17 +64,35 @@ void beLayerGroup_GetMetaObject(void)
     FUN_0035c850();
 }
 
-int beLayerCtl_GetSwtCtlEnum(void) {
-    if (DAT_00589288[0] == 0) {
-        DAT_00589288[0] = igMetaEnum_Create(&text_SwtCtl[0], &DAT_004c63b0[0], &DAT_004c63d0[0], 5);
+igMetaEnum *g_beLayerGroup_swtCtlMetaEnum;
+static const char *g_beLayerGroup_swtCtlNames[] = {
+    "CLR", "SET", "DISPOFF", "DISPON",
+    "FLIP",
+};
+static int g_beLayerGroup_swtCtlValues[] = {
+    0, 1, 0, 1, 2,
+};
+
+igMetaEnum *beLayerCtl_GetSwtCtlEnum(void) {
+    if (g_beLayerGroup_swtCtlMetaEnum == 0) {
+        g_beLayerGroup_swtCtlMetaEnum = igMetaEnum_Create("SwtCtl", g_beLayerGroup_swtCtlNames, g_beLayerGroup_swtCtlValues, 5);
     }
-    return DAT_00589288[0];
+    return g_beLayerGroup_swtCtlMetaEnum;
 }
 
-int beLayerCtl_GetMessageEnum(void) {
-    if (DAT_00589290[0] == 0) {
-        DAT_00589290[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c63f0[0], &DAT_004c6410[0], 6);
+igMetaEnum *g_beLayerGroup_messageMetaEnum;
+static const char *g_beLayerGroup_messageNames[] = {
+    "ORDER", "SWITCH", "REMOVE", "GETNAMELIST",
+    "GETLAYERNODE", "INFO",
+};
+static int g_beLayerGroup_messageValues[] = {
+    0, 1, 2, 3, 4, 5,
+};
+
+igMetaEnum *beLayerCtl_GetMessageEnum(void) {
+    if (g_beLayerGroup_messageMetaEnum == 0) {
+        g_beLayerGroup_messageMetaEnum = igMetaEnum_Create("Message", g_beLayerGroup_messageNames, g_beLayerGroup_messageValues, 6);
     }
-    return DAT_00589290[0];
+    return g_beLayerGroup_messageMetaEnum;
 }
 

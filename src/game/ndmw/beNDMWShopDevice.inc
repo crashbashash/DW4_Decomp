@@ -1,17 +1,20 @@
+igMetaObject *g_beNDMWShopDevice_metaObject;
+igMetaField *g_beNDMWShopDevice_salesListMetaField;
+
 void beNDMWShopDevice_Create(int arg0) {
     FUN_003b67e0();
-    igMetaObject_CreateInstance(*(int *)0x58ACA8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopDevice_metaObject, arg0);
 }
 
 void *FUN_003b6690(void) {
     unsigned char b;
-    if (g_beNDMWShopDevice_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beNDMWShopDevice_metaObject[0]) + 36) & 4) != 0;
+    if (g_beNDMWShopDevice_metaObject != 0) {
+        b = (*(int *)((char *)(g_beNDMWShopDevice_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003b67e0();
 done:
-    return g_beNDMWShopDevice_metaObject[0];
+    return g_beNDMWShopDevice_metaObject;
 }
 
 int beNDMWShopDevice_GetVTable(void) {
@@ -54,15 +57,17 @@ void FUN_003b67e0(void)
     igMetaObject_RunStaticInit(beNDMWShopDevice_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShopDevice_callbackList[] = { FUN_003c9210, 0 };
+
 void *beNDMWShopDevice_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopDevice_metaObject,
+        &g_beNDMWShopDevice_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
         beNDMWShopDevice_GetMetaObject,
-        beNDMWShopDevice_className,
+        "beNDMWShopDevice",
         0x64, /* instance size */
         beNDMWShopDevice_GetVTable,
         beNDMWShopDevice_InitFields,
@@ -77,19 +82,32 @@ void beNDMWShopDevice_GetMetaObject(void)
 }
 
 igMetaObject *FUN_003b68a0(void) {
-    return g_beNDMWListCtrl_metaObject[0];
+    return g_beNDMWListCtrl_metaObject;
 }
+
+static FieldFactory g_beNDMWShopDevice_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWShopDevice_fieldTable[] = {
+    "_salesList",
+};
+static igMetaField **g_beNDMWShopDevice_fieldHandles[] = {
+    &g_beNDMWShopDevice_salesListMetaField,
+};
+static int g_beNDMWShopDevice_fieldOffsets[] = {
+    96,
+};
 
 void beNDMWShopDevice_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopDevice_metaObject[0];
+    temp_s0 = g_beNDMWShopDevice_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopDevice_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopDevice_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9130();
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopDevice_fieldTable[0], &DAT_004c9950[0], &DAT_004c9958[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopDevice_fieldTable, g_beNDMWShopDevice_fieldHandles, g_beNDMWShopDevice_fieldOffsets, temp_s2);
 }
 

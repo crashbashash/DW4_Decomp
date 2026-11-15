@@ -4,7 +4,7 @@ int igCharMetaField_ValueFromString(void *self, char *value, int text) {
     int t;
     consumed = 0;
     parsed = 0;
-    sscanf(text, percent_d_percent_n, &parsed, &consumed);
+    sscanf(text,"%d%n", &parsed, &consumed);
     t = parsed;
     *value = t;
     return consumed;
@@ -19,14 +19,14 @@ void igCharMetaField_ValueToString(int *out, int self, char *value) {
     if (buffer == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
     }
     *out = interned;
 }
@@ -319,7 +319,7 @@ void igCompoundMetaField_SwapBytes(igMetaFieldView *self, int buffer, int count)
 }
 
 int igCompoundMetaField_GetDescriptor(void) {
-    return ((int *)g_igCompoundMetaField_descriptor)[0];
+    return (*(int *)&g_igCompoundMetaField_descriptor);
 }
 
 void igCompoundMetaField_SwapValue(void *self, int object) {
@@ -341,19 +341,19 @@ int igCompoundMetaField_ValueFromString(int *self, int object, int text, int dir
     int i;
 
     openLength = 0;
-    sscanf(text, &open_brace_percent_n[0], &openLength);
+    sscanf(text, "{%n", &openLength);
     fields = (igMetaFieldList *)((igMetaFieldView *)self)->GetDescriptor()->_fieldList;
     for (i = 0; i < fields->_count; i++) {
         igMetaFieldView *field = ((igMetaFieldView **)fields->_data)[i];
         field->ValueFromString(object + ((igMetaField *)field)->_offset, text + openLength, directory);
     }
-    sscanf(text, &close_brace_percent_n[0], &closeLength);
+    sscanf(text, "}%n", &closeLength);
     return openLength + closeLength;
 }
 
 int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
-    char *sepA = (char *)&text_open_brace[0];
-    char *sepB = (char *)&text_close_brace[0];
+    char *sepA = (char *)" { ";
+    char *sepB = (char *)" } ";
     igMetaFieldList *list = (igMetaFieldList *)ctx->GetDescriptor()->_fieldList;
     int n = list->_count;
     igStringRef *arr = (igStringRef *)((void *)igObject_Callocate((int)ctx, n, 4));
@@ -406,7 +406,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((void *)((igObject *)o));
         }
         ((igObjectDispatchView *)self)->GetMeta();
-        meta = igObjectSystem_FindMetaByNameDefault(igContextExt_className);
+        meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
         self->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
         if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) List_Reserve((igDataList *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts, 4);
         ObjectList_ResizeRetained((igTDataList<igObject *> *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts);
@@ -421,13 +421,13 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             igRelease((igObject *)info->_pMeta);
             info->_pMeta = (int)node;
             name = node->_name;
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 int pool = ((int)StringPool_Allocate(16));
                 if (pool != 0) pool = ((int)StringPool_Construct((StringPool *)pool));
-                g_stringPool[0] = pool;
+                g_stringPool = pool;
             }
             {
-                int interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
+                int interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
                 int old = info->_pName;
                 if (old != 0) {
                     int *header = (int *)(old - 8);
@@ -449,7 +449,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
 }
 
 int igContext_GetMeta(void) {
-    return ((int *)g_igContext_metaObject)[0];
+    return (int)g_igContext_metaObject;
 }
 
 int igContext_GetExtensionInfoList(igContext *self) {

@@ -320,9 +320,9 @@ def collect():
     meta["asm_units"] = len(syms)
 
     # ---- the data half of the image (`tools/datamap.py`) ----
-    # Decomp projects are read on code *and* data. Counting only code left the data
-    # regions invisible even where the metadata is fully recovered, so the second
-    # number is reported next to the first. `datamap` explains the classification.
+    # Decomp projects are read on code *and* data. The data headline is the bytes the source
+    # defines and `make check` proved equal to retail (`source`); the other kinds say what the
+    # rest is from the recovered metadata. `datamap` explains the classification.
     dm = datamap.summarise(datamap.build())
 
     # ---- "fully linked" (what the link step actually emits from source) ----
@@ -342,6 +342,7 @@ def collect():
     # never folded into "from C/C++".
     jtbl_b = 0            # compiler-regenerated jump tables of C/C++ owners
     jtbl_asm_b = 0        # jump tables owned by an asm body (its retail words carry them)
+    linked_data = []      # [(lo, hi)] data the link places from C: those tables and the units' data
     try:
         for ln in open(os.path.join(ROOT, "config", "SLUS-20836", "layout.txt")):
             if ln.startswith("#") or not ln.strip():
@@ -353,11 +354,28 @@ def collect():
                     jtbl_asm_b += int(p[1], 16)
                 elif owner in have:
                     jtbl_b += int(p[1], 16)
+                    linked_data.append((int(p[0], 16), int(p[0], 16) + int(p[1], 16)))
     except FileNotFoundError:
         pass
+    # tools/linkgen.py places every data section a unit verified, whatever debt its code carries
+    # (data/check-data.tsv); only what lies inside the linked section counts here
+    if os.path.exists(datamap.CHECK_DATA):
+        for ln in open(datamap.CHECK_DATA):
+            p = ln.rstrip("\n").split("\t")
+            if ln.startswith("#") or len(p) < 5 or p[4] in ("mismatch", "compile", "asm-body"):
+                continue
+            lo = int(p[0], 16)
+            if lo + int(p[1]) <= SECTION_HI:
+                linked_data.append((lo, lo + int(p[1])))
+    data_b, reach = 0, 0
+    for lo, hi in sorted(linked_data):
+        lo = max(lo, reach)
+        if hi > lo:
+            data_b += hi - lo
+            reach = hi
     asm_body_b = sum(s[1] for s in asm_body)
     assembly_b = sum(s[1] for s in assembly)
-    from_c = done_b + jtbl_b                    # the compiler regenerates the jump tables
+    from_c = done_b + data_b                    # the compiler regenerates the tables and the units' data
     from_asm_body = asm_body_b + jtbl_asm_b
     # Typed coverage: how much of the matched C speaks in recovered structs rather than
     # offset casts.  It is not a measure of the matching build.
@@ -371,7 +389,7 @@ def collect():
                 from_c_bytes=from_c, from_c_units=len(matched),
                 from_asm_body_bytes=from_asm_body, from_asm_body_units=len(asm_body),
                 from_assembly_bytes=assembly_b, from_assembly_units=len(assembly),
-                jtbl_bytes=jtbl_b, jtbl_asm_body_bytes=jtbl_asm_b,
+                jtbl_bytes=jtbl_b, jtbl_asm_body_bytes=jtbl_asm_b, data_bytes=data_b,
                 asm_bytes=total_b - done_b - asm_body_b - assembly_b,
                 image_bytes=dm["image_bytes"],
                 from_c_pct=round(100.0 * from_c / SECTION_BYTES, 2),
@@ -402,7 +420,10 @@ def collect():
                         assembly=assembly_b,
                         functions_assembly=len(assembly)),
         categories=cats,
-        data_bytes=dict(identified=dm["identified_data_bytes"],
+        data_bytes=dict(matched=dm["matched_data_bytes"], matched_pct=dm["matched_data_pct"],
+                        kind_mismatch=dm["kind_mismatch_bytes"],
+                        identified=dm["identified_data_bytes"],
+                        start_only=dm["start_only_data_bytes"], start_only_pct=dm["start_only_data_pct"],
                         total=dm["data_bytes"],
                         pct=dm["identified_data_pct"], kinds=dm["kinds"]),
         link=link,
@@ -1033,9 +1054,11 @@ def render_md(d):
       % (bar(lk["from_c_pct"]), lk["from_c_pct"],
          format(lk["from_c_bytes"], ","), format(lk["section_bytes"], ",")))
     dd = d["data_bytes"]
-    A("data bytes %s %5.1f %%   %s / %s identified"
-      % (bar(dd["pct"]), dd["pct"], format(dd["identified"], ","),
-         format(dd["total"], ",")))
+    A("data bytes %s %5.1f %%   %s / %s   (data the source defines, compared with retail by make check)"
+      % (bar(dd["matched_pct"]), dd["matched_pct"], format(dd["matched"], ","), format(dd["total"], ",")))
+    A("data identified %s %5.1f %%   %s / %s   (matched, or classified; %.1f %% of the data only by where a "
+      "datum starts)" % (bar(dd["pct"]), dd["pct"], format(dd["identified"], ","), format(dd["total"], ","),
+                         dd["start_only_pct"]))
     A("not counted: %s asm bodies, %s code bytes (%.1f %%): retail instructions kept as source, "
       "in no figure above" % (format(b["functions_asm_body"], ","), format(b["asm_body"], ","),
                               pct(b["asm_body"], b["total"])))
@@ -1098,14 +1121,16 @@ def render_md(d):
       "decompiled. Counting **code alone**, this repo's two numbers are identical, "
       "**%.1f %%** C/C++, because of how the pipeline works: "
       "`tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces "
-      "retail one function at a time and a match is linked from source immediately. "
-      "`make link` prints the accounting from the link itself (**%s units / %s bytes from "
-      "C/C++ (%s of them compiler-generated jump tables), %s units / %s bytes of asm "
-      "bodies, %s bytes from `asm/`**), and the section then compares byte-identical, so "
-      "nothing decompiled is waiting to be linked."
+      "retail one function at a time and a match is linked from source immediately. The data a "
+      "unit verifies is placed from its object at the same time (`tools/verify.py` "
+      "`isolate_unit_data`). The bar counts **%s units / %s bytes from C/C++**, of them **%s bytes "
+      "of data** (the units' verified data sections and the compiler-generated jump tables), "
+      "beside **%s units / %s bytes of asm bodies** and **%s code bytes from `asm/`**; `make link` "
+      "prints the same accounting from the link itself, and the section then compares "
+      "byte-identical, so nothing decompiled is waiting to be linked."
       % (format(lk["section_bytes"], ","), pct(b["matched"], b["total"]),
          format(lk["from_c_units"], ","), format(lk["from_c_bytes"], ","),
-         format(lk["jtbl_bytes"], ","), format(lk["from_asm_body_units"], ","),
+         format(lk["data_bytes"], ","), format(lk["from_asm_body_units"], ","),
          format(lk["from_asm_body_bytes"], ","), format(lk["asm_bytes"], ",")))
     A("")
 
@@ -1166,14 +1191,25 @@ def render_md(d):
     A("")
     A("A decompilation is read on two numbers, code and data: code bytes and data bytes, ")
     A("each with its own bar. The image here is a single ")
-    A("merged section, so \"data\" is what `tools/layout.py` tiles *between* the functions; ")
-    A("`tools/datamap.py` then classifies those bytes from the metadata the repo has recovered. ")
-    A("Bytes in `?` are not a failure: they are alignment, tables whose extent is not pinned ")
-    A("yet, and the rest of `.bss`.")
+    A("merged section, so \"data\" is what `tools/layout.py` tiles *between* the functions. ")
+    A("The data bar is `source`: the data sections the units define and `make check` compared ")
+    A("byte for byte with retail (`data/check-data.tsv`, units classified `match` or `assembly`), ")
+    A("with the jump tables of fully matched code. It moves when a unit defines its data instead ")
+    A("of naming retail's address. `tools/datamap.py` classifies the other bytes from what the repo has ")
+    A("recovered, which says what they are without decompiling them: recorded extents (strings, vtables, ")
+    A("pointer tables, exception metadata, the regions `config/SLUS-20836/regions.tsv` describes, ")
+    A("alignment padding), and data known only by where it starts (`named`, `ref`, `ptr`), which runs to ")
+    A("the next known start and is shown apart in the identified line. Bytes in `?` are what no evidence ")
+    A("reaches yet.")
+    A("")
+    A("A datum compiled into another section kind than the one retail's region holds (a literal in "
+      "`.data` at a read-only address, a zero global in `.bss` at a `.data` address) compares equal "
+      "and links, but its source still differs from the original: **%s bytes** are such data and are "
+      "not counted as matched." % format(dd["kind_mismatch"], ","))
     A("")
     A("| kind | bytes | % of data |")
     A("| --- | ---: | ---: |")
-    for k in ("jtbl", "vtable", "str", "handle", "named", "?"):
+    for k in datamap.KINDS[1:]:
         A("| `%s` | %s | %.1f |" % (k, format(dd["kinds"][k], ","),
                                      100.0 * dd["kinds"][k] / dd["total"]))
     A("")

@@ -1,13 +1,13 @@
 static inline int getStringPool(void) {
     int p;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         p = ((int)StringPool_Allocate(0x10));
         if (p != 0) {
             p = ((int)StringPool_Construct((StringPool *)p));
         }
-        g_stringPool[0] = p;
+        g_stringPool = p;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 void igStringRefList_ReleaseDefaults(void *self0) {
@@ -57,14 +57,14 @@ void StringList_Resize(igTDataList<char *> *list, int count) {
     {
         for (i = count; i < n; i++) {
             slot = &list->_data[i];
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool = ((int)StringPool_Allocate(0x10));
                 if (pool != 0) {
                     pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool[0] = pool;
+                g_stringPool = pool;
             }
-            nw = (int *)((int *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
+            nw = (int *)((int *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
             old = (int *)*slot;
             if (old != 0) {
                 a1 = old - 2;

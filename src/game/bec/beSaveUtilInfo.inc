@@ -1,9 +1,11 @@
+igMetaObject *g_beSaveUtilInfo_metaObject;
+
 void *FUN_00346ab0(void) {
-    igMetaObject *g = g_beSaveUtilInfo_metaObject[0];
+    igMetaObject *g = g_beSaveUtilInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00346b70();
     }
-    return g_beSaveUtilInfo_metaObject[0];
+    return g_beSaveUtilInfo_metaObject;
 }
 
 int beSaveUtilInfo_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beSaveUtilInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSaveUtilInfo_metaObject,
+        &g_beSaveUtilInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beSaveUtilInfo_GetMetaObject,
-        beSaveUtilInfo_className,
+        "beSaveUtilInfo",
         0x1c, /* instance size */
         beSaveUtilInfo_GetVTable,
         0,
@@ -48,10 +50,24 @@ void beSaveUtilInfo_GetMetaObject(void)
     FUN_00346ab0();
 }
 
-int FUN_00346c20(void) {
-    if (DAT_00588018[0] == 0) {
-        DAT_00588018[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c3c50[0], &DAT_004c3ca0[0], 0x12);
+igMetaEnum *g_beSaveUtilInfo_messageMetaEnum;
+static const char *g_beSaveUtilInfo_messageNames[] = {
+    "GENERATE", "REMOVE", "REQUEST_FILEMAKE", "REQUEST_FILEFIND",
+    "REQUEST_FORMAT", "REQUEST_USE_CHECK", "REQUEST_READ_MEDIA", "REQUEST_WRITE_MEDIA",
+    "REQUEST_GETFREESIZE", "GETDELIVER", "REPORT", "ISBUSY",
+    "GETRESULT", "ISRDY", "CHECKMEM", "GETOPERATE",
+    "ISUSESAVEPOINT", "XBOX_HD_CAPACHK",
+};
+static int g_beSaveUtilInfo_messageValues[] = {
+    0, 1, 2, 3, 4, 5, 6, 7,
+    8, 9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf,
+    0x10, 0x11,
+};
+
+igMetaEnum *FUN_00346c20(void) {
+    if (g_beSaveUtilInfo_messageMetaEnum == 0) {
+        g_beSaveUtilInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beSaveUtilInfo_messageNames, g_beSaveUtilInfo_messageValues, 0x12);
     }
-    return DAT_00588018[0];
+    return g_beSaveUtilInfo_messageMetaEnum;
 }
 

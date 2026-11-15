@@ -1,9 +1,12 @@
+igMetaObject *g_beActionStarterInfo_metaObject;
+igMetaField *g_beActionStarterInfo_modelListMetaField;
+
 void *FUN_0036b360(void) {
-    igMetaObject *g = g_beActionStarterInfo_metaObject[0];
+    igMetaObject *g = g_beActionStarterInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036b4b0();
     }
-    return g_beActionStarterInfo_metaObject[0];
+    return g_beActionStarterInfo_metaObject;
 }
 
 int beActionStarterInfo_GetVTable(void) {
@@ -37,15 +40,17 @@ void FUN_0036b4b0(void)
     igMetaObject_RunStaticInit(beActionStarterInfo_Register);
 }
 
+static igMetaObjectCallback g_beActionStarterInfo_callbackList[] = { FUN_0036b6e0, 0 };
+
 void *beActionStarterInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beActionStarterInfo_metaObject,
+        &g_beActionStarterInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beActionStarterInfo_GetMetaObject,
-        beActionStarterInfo_className,
+        "beActionStarterInfo",
         0x20, /* instance size */
         beActionStarterInfo_GetVTable,
         beActionStarterInfo_InitFields,
@@ -59,16 +64,29 @@ void beActionStarterInfo_GetMetaObject(void)
     FUN_0036b360();
 }
 
+static FieldFactory g_beActionStarterInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beActionStarterInfo_fieldTable[] = {
+    "_modelList",
+};
+static igMetaField **g_beActionStarterInfo_fieldHandles[] = {
+    &g_beActionStarterInfo_modelListMetaField,
+};
+static int g_beActionStarterInfo_fieldOffsets[] = {
+    28,
+};
+
 void beActionStarterInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beActionStarterInfo_metaObject[0];
+    temp_s0 = (void *)g_beActionStarterInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beActionStarterInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beActionStarterInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0036b600();
-    igMetaObject_NameFields(temp_s0, &g_beActionStarterInfo_fieldTable[0], &DAT_004c7db8[0], &DAT_004c7dc0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beActionStarterInfo_fieldTable, g_beActionStarterInfo_fieldHandles, g_beActionStarterInfo_fieldOffsets, temp_s2);
 }
 

@@ -25,7 +25,7 @@ void Gap__Sg__igPlanarShadowShader__vfunc_09(void **arg0, int arg1) {
 }
 
 int Gap__Sg__igPlanarShadowShader__vfunc_22(void) {
-    return ((int *)g_igPlanarShadowShader_metaObject)[0];
+    return ((int)g_igPlanarShadowShader_metaObject);
 }
 
 void Gap__Sg__igPlanarShadowShader__vfunc_10(T_1d39b0 *arg0)

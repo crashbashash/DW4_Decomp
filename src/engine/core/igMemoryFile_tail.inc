@@ -1,11 +1,11 @@
 void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
     igMemoryFile_EnsureRegistered();
     if (buffer != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator(((int *)g_memoryFileEntries)[0]))));
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator((*(int *)&g_memoryFileEntries)))));
         igNamedObject_SetName((igNamedObject *)entry.p, name);
         entry->_size = size;
         entry->_buffer = buffer;
-        ObjectList_AppendRetained((igObjectList *)(((int *)g_memoryFileEntries)[0]), (igObject *)entry.p);
+        ObjectList_AppendRetained((igObjectList *)((*(int *)&g_memoryFileEntries)), (igObject *)entry.p);
     }
 }
 
@@ -15,9 +15,9 @@ void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
 
     *buffer = 0;
     *size = 0;
-    entries = ((int *)g_memoryFileEntries)[0];
+    entries = (*(int *)&g_memoryFileEntries);
     if (entries != 0) {
-        entry = ((igMemoryFileEntry *)igProperty_FindByName((igObjectList *)entries, (igMetaField *)g_propertyNameField[0], name));
+        entry = ((igMemoryFileEntry *)igProperty_FindByName((igObjectList *)entries, (igMetaField *)g_propertyNameField, name));
         if (entry != 0) {
             *buffer = entry->_buffer;
             *size = entry->_size;
@@ -71,9 +71,9 @@ void igMemoryFile_Close(igMemoryFileView *self) {
 igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mode) {
     int ok;
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(mode, &text_r[0]) == 0) {
+    if (strcmp(mode, "r") == 0) {
         ok = self->OpenWithMode(0) == g_resultSuccess;
-    } else if (strcmp(mode, &((int *)text_rb)[0]) == 0) {
+    } else if (strcmp(mode, &((int *)"rb")[0]) == 0) {
         ok = self->OpenWithMode(4) == g_resultSuccess;
     } else {
         return 0;

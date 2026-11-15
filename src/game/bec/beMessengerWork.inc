@@ -1,11 +1,19 @@
-void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject[0],allocator));}
+igMetaObject *g_beMessengerWork_metaObject;
+igMetaField *g_beMessengerWork_groupNameMetaField;
+igMetaField *g_beMessengerWork_infoNameMetaField;
+igMetaField *g_beMessengerWork_ramNoMetaField;
+igMetaField *g_beMessengerWork_messageMetaField;
+igMetaField *g_beMessengerWork_findRamNoListMetaField;
+igMetaField *g_beMessengerWork_findRamListMetaField;
+
+void *beMessengerWork_Create(void *allocator){beMessengerWork_EnsureRegistered();return ((void *)igMetaObject_CreateInstance((void *)g_beMessengerWork_metaObject,allocator));}
 
 void *FUN_003580b0(void) {
-    igMetaObject *g = g_beMessengerWork_metaObject[0];
+    igMetaObject *g = g_beMessengerWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         beMessengerWork_EnsureRegistered();
     }
-    return g_beMessengerWork_metaObject[0];
+    return g_beMessengerWork_metaObject;
 }
 
 int beMessengerWork_GetVTable(void) {
@@ -31,15 +39,17 @@ int beMessengerWork_GetVTable(void) {
 
 void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWork_Register);}
 
+static igMetaObjectCallback g_beMessengerWork_callbackList[] = { igIntList_EnsureRegistered, beBaseInfoRamList_EnsureRegistered, 0 };
+
 void *beMessengerWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMessengerWork_metaObject,
+        &g_beMessengerWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beMessengerWork_GetMetaObject,
-        beMessengerWork_className,
+        "beMessengerWork",
         0x20, /* instance size */
         beMessengerWork_GetVTable,
         beMessengerWork_InitFields,
@@ -53,21 +63,54 @@ void beMessengerWork_GetMetaObject(void)
     FUN_003580b0();
 }
 
+static FieldFactory g_beMessengerWork_ctorTable[] = {
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMessengerWork_fieldTable[] = {
+    "_groupName",
+    "_infoName",
+    "_ramNo",
+    "_message",
+    "_findRamNoList",
+    "_findRamList",
+};
+static igMetaField **g_beMessengerWork_fieldHandles[] = {
+    &g_beMessengerWork_groupNameMetaField,
+    &g_beMessengerWork_infoNameMetaField,
+    &g_beMessengerWork_ramNoMetaField,
+    &g_beMessengerWork_messageMetaField,
+    &g_beMessengerWork_findRamNoListMetaField,
+    &g_beMessengerWork_findRamListMetaField,
+};
+static int g_beMessengerWork_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+};
+
 void beMessengerWork_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beMessengerWork_metaObject[0];
+    temp_s0 = (void *)g_beMessengerWork_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMessengerWork_ctorTable[0], 6);
+    igMetaObject_CreateFields(temp_s0, g_beMessengerWork_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beMessengerWork_fieldTable[0], &DAT_004c5d20[0], &DAT_004c5d40[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMessengerWork_fieldTable, g_beMessengerWork_fieldHandles, g_beMessengerWork_fieldOffsets, temp_s2);
 }
 

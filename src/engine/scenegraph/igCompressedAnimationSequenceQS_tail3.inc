@@ -211,6 +211,10 @@ static inline float degToRad(const float degrees) { return 0.0174532924f * degre
 static inline float nearRegionFar(const DepthOfFieldNode &dof) { return dof._focusDistance + dof._blurPercent * (0.01f * (dof._focusDistance - dof._nearPlane)); }
 extern "C" void DepthOfField_UpdateProjections(DepthOfFieldNode *dof);
 
+void *g_depthOfFieldNearProjectionAttr;
+
+void *g_depthOfFieldFarProjectionAttr;
+
 /* Completes the field of view from the aspect ratio and rebuilds the near-pass and far-pass projections. */
 void DepthOfField_UpdateProjections(DepthOfFieldNode *dof) {
     if (dof->_fovX == -1.0f) {
@@ -221,11 +225,11 @@ void DepthOfField_UpdateProjections(DepthOfFieldNode *dof) {
     igMatrix44fView nearProjection;
     igMatrix44f_MakePerspective(&nearProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
                  dof->_nearPlane, nearRegionFar(*dof));
-    ((ProjectionMatrixAttrView *)g_depthOfFieldNearProjectionAttr[0])->setMatrix(&nearProjection);
+    ((ProjectionMatrixAttrView *)g_depthOfFieldNearProjectionAttr)->setMatrix(&nearProjection);
     igMatrix44fView farProjection;
     igMatrix44f_MakePerspective(&farProjection, degToRad(dof->_fovX), degToRad(dof->_fovY), aspectOf(*dof),
                  dof->_focusDistance, dof->_farPlane);
-    ((ProjectionMatrixAttrView *)g_depthOfFieldFarProjectionAttr[0])->setMatrix(&farProjection);
+    ((ProjectionMatrixAttrView *)g_depthOfFieldFarProjectionAttr)->setMatrix(&farProjection);
 }
 
 int FUN_001c0390(void *, int) {
@@ -269,9 +273,9 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                 igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562670[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562660[0]);
-                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldFarProjectionAttr[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldFarProjectionAttr);
                 igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
-                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldFarProjectionAttr[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldFarProjectionAttr);
                 igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562660[0]);
                 igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562670[0]);
                 igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_00562668[0]);
@@ -305,9 +309,9 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                 igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626a8[0]);
                 igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)DAT_005626c8[0]);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldNearProjectionAttr[0]);
+                igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldNearProjectionAttr);
                 igTraversal_TraverseChildren((int)(arg1), (S_1e07a0 *)arg0);
-                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldNearProjectionAttr[0]);
+                igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)s0, (struct B_1b13d0 *)g_depthOfFieldNearProjectionAttr);
                 FUN_001d9bb0((void *)arg1->f68, s0);
                 FUN_001dc610(arg1->f68);
                 return;

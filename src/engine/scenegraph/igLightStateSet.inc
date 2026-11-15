@@ -1,9 +1,12 @@
+igMetaObject *g_igLightStateSet_metaObject;
+igMetaField *g_igLightStateSet_lightEnablesMetaField;
+
 igMetaObject *igLightStateSet_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLightStateSet_metaObject[0];
+    igMetaObject *g = g_igLightStateSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019da60();
-    return g_igLightStateSet_metaObject[0];
+    return g_igLightStateSet_metaObject;
 }
 
 int igLightStateSet_GetVTable(void) {
@@ -47,15 +50,17 @@ void FUN_0019da60(void)
     igMetaObject_RunStaticInit(igLightStateSet_Register);
 }
 
+static igMetaObjectCallback g_igLightStateSet_callbackList[] = { FUN_00136120, 0 };
+
 void igLightStateSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igLightStateSet_metaObject),
+        &g_igLightStateSet_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igLightStateSet_GetMetaObject,
-        igLightStateSet_className,
+        "igLightStateSet",
         0x24, /* instance size */
         igLightStateSet_GetVTable,
         &igLightStateSet_InitFields,
@@ -68,19 +73,32 @@ void thunk_igLightStateSet_GetMetaObject(void) {
     igLightStateSet_GetMetaObject();
 }
 
+static FieldFactory g_igLightStateSet_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igLightStateSet_fieldTable[] = {
+    "_lightEnables",
+};
+static igMetaField **g_igLightStateSet_fieldHandles[] = {
+    &g_igLightStateSet_lightEnablesMetaField,
+};
+static int g_igLightStateSet_fieldOffsets[] = {
+    32,
+};
+
 void igLightStateSet_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igLightStateSet_metaObject[0];
+    temp_s0 = (void *)g_igLightStateSet_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igLightStateSet_ctorTable[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLightStateSet_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00136040();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields(temp_s0, &g_igLightStateSet_fieldTable[0], &DAT_0048bda8[0], &DAT_0048bdb0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igLightStateSet_fieldTable, g_igLightStateSet_fieldHandles, g_igLightStateSet_fieldOffsets, temp_s2);
 }
 

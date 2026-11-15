@@ -1,159 +1,159 @@
 igMetaObject *Gap__igVec4ucMetaField__vfunc_22(void) {
-    return g_igVec4ucMetaField_metaObject[0];
+    return g_igVec4ucMetaField_metaObject;
 }
 
 int Gap__igVec4ucMetaField__vfunc_23(void) {
-    return (int)DAT_00560f30[0];
+    return (int)g_igVec4ucMetaField_descriptor;
 }
 
 igMetaObject *Gap__igVec4fMetaField__vfunc_22(void) {
-    return g_igVec4fMetaField_metaObject[0];
+    return g_igVec4fMetaField_metaObject;
 }
 
 /* Returns the published default descriptor of igVec4fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
 int Gap__igVec4fMetaField__vfunc_23(void) {
-    return g_igVec4fMetaField_descriptor[0];
+    return g_igVec4fMetaField_descriptor;
 }
 
 igMetaObject *Gap__igVec4fArrayMetaField__vfunc_22(void) {
-    return g_igVec4fArrayMetaField_metaObject[0];
+    return g_igVec4fArrayMetaField_metaObject;
 }
 
 /* Returns the published default descriptor of igVec4fArrayMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
 M *Gap__igVec4fArrayMetaField__vfunc_23(void) {
-    return g_igVec4fArrayMetaField_descriptor[0];
+    return g_igVec4fArrayMetaField_descriptor;
 }
 
 igMetaObject *Gap__igVec3fMetaField__vfunc_22(void) {
-    return g_igVec3fMetaField_metaObject[0];
+    return g_igVec3fMetaField_metaObject;
 }
 
 /* Returns the published default descriptor of igVec3fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
 int Gap__igVec3fMetaField__vfunc_23(void) {
-    return g_igVec3fMetaField_descriptor[0];
+    return g_igVec3fMetaField_descriptor;
 }
 
 igMetaObject *Gap__igVec2fMetaField__vfunc_22(void) {
-    return g_igVec2fMetaField_metaObject[0];
+    return g_igVec2fMetaField_metaObject;
 }
 
 /* Returns the published default descriptor of igVec2fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
 int Gap__igVec2fMetaField__vfunc_23(void) {
-    return g_igVec2fMetaField_descriptor[0];
+    return g_igVec2fMetaField_descriptor;
 }
 
 igMetaObject *Gap__igMatrix44fMetaField__vfunc_22(void) {
-    return g_igMatrix44fMetaField_metaObject[0];
+    return g_igMatrix44fMetaField_metaObject;
 }
 
 /* Returns the published default descriptor of igMatrix44fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
 int Gap__igMatrix44fMetaField__vfunc_23(void) {
-    return g_igMatrix44fMetaField_descriptor[0];
+    return g_igMatrix44fMetaField_descriptor;
 }
 
 igMetaObject *Gap__igAABox__vfunc_22(void) {
-    return g_igAABox_metaObject[0];
+    return g_igAABox_metaObject;
 }
 
 igMetaObject *Gap__igAABoxList__vfunc_22(void) {
-    return g_igAABoxList_metaObject[0];
+    return g_igAABoxList_metaObject;
 }
 
 igMetaObject *Gap__igVec2fList__vfunc_22(void) {
-    return g_igVec2fList_metaObject[0];
+    return g_igVec2fList_metaObject;
 }
 
 igMetaObject *Gap__igVec4ucList__vfunc_22(void) {
-    return g_igVec4ucList_metaObject[0];
+    return g_igVec4ucList_metaObject;
 }
 
 igMetaObject *Gap__igQuaternionfList__vfunc_22(void) {
-    return g_igQuaternionfList_metaObject[0];
+    return g_igQuaternionfList_metaObject;
 }
 
 igMetaObject *Gap__igMatrix44fList__vfunc_22(void) {
-    return g_igMatrix44fList_metaObject[0];
+    return g_igMatrix44fList_metaObject;
 }
 
 igMetaObject *Gap__igIntersectionFunctionList__vfunc_22(void) {
-    return g_igIntersectionFunctionList_metaObject[0];
+    return g_igIntersectionFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igExtendByFunctionList__vfunc_22(void) {
-    return g_igExtendByFunctionList_metaObject[0];
+    return g_igExtendByFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igContainsFunctionList__vfunc_22(void) {
-    return g_igContainsFunctionList_metaObject[0];
+    return g_igContainsFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igRayIntersectionFunctionList__vfunc_22(void) {
-    return g_igRayIntersectionFunctionList_metaObject[0];
+    return g_igRayIntersectionFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igExtendByRayFunctionList__vfunc_22(void) {
-    return g_igExtendByRayFunctionList_metaObject[0];
+    return g_igExtendByRayFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igContainsRayFunctionList__vfunc_22(void) {
-    return g_igContainsRayFunctionList_metaObject[0];
+    return g_igContainsRayFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igExtendByVecFunctionList__vfunc_22(void) {
-    return g_igExtendByVecFunctionList_metaObject[0];
+    return g_igExtendByVecFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igContainsVecFunctionList__vfunc_22(void) {
-    return g_igContainsVecFunctionList_metaObject[0];
+    return g_igContainsVecFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igTransformFunctionList__vfunc_22(void) {
-    return g_igTransformFunctionList_metaObject[0];
+    return g_igTransformFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igEmptyFunctionList__vfunc_22(void) {
-    return g_igEmptyFunctionList_metaObject[0];
+    return g_igEmptyFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igIsEmptyFunctionList__vfunc_22(void) {
-    return g_igIsEmptyFunctionList_metaObject[0];
+    return g_igIsEmptyFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igGetCenterFunctionList__vfunc_22(void) {
-    return g_igGetCenterFunctionList_metaObject[0];
+    return g_igGetCenterFunctionList_metaObject;
 }
 
 igMetaObject *Gap__igPlane__vfunc_22(void) {
-    return g_igPlane_metaObject[0];
+    return g_igPlane_metaObject;
 }
 
 igMetaObject *Gap__igRay__vfunc_22(void) {
-    return g_igRay_metaObject[0];
+    return g_igRay_metaObject;
 }
 
 igMetaObject *Gap__igRayList__vfunc_22(void) {
-    return g_igRayList_metaObject[0];
+    return g_igRayList_metaObject;
 }
 
 igMetaObject *Gap__igSphere__vfunc_22(void) {
-    return g_igSphere_metaObject[0];
+    return g_igSphere_metaObject;
 }
 
 igMetaObject *Gap__igVectorBlending__vfunc_22(void) {
-    return g_igVectorBlending_metaObject[0];
+    return g_igVectorBlending_metaObject;
 }
 
 igMetaObject *Gap__igVectorMorphing__vfunc_22(void) {
-    return g_igVectorMorphing_metaObject[0];
+    return g_igVectorMorphing_metaObject;
 }
 
 igMetaObject *Gap__igVolumeList__vfunc_22(void) {
-    return g_igVolumeList_metaObject[0];
+    return g_igVolumeList_metaObject;
 }
 
 int Gap__igMatrix44fList__vfunc_23(void) {
@@ -221,15 +221,15 @@ int Gap__igIntersectionFunctionList__vfunc_23(void) {
 }
 
 igMetaObject *Gap__igAABoxList__vfunc_24(void) {
-    return g_igAABox_metaObject[0];
+    return g_igAABox_metaObject;
 }
 
 igMetaObject *Gap__igRayList__vfunc_24(void) {
-    return g_igRay_metaObject[0];
+    return g_igRay_metaObject;
 }
 
 igMetaObject *Gap__igVolumeList__vfunc_24(void) {
-    return g_igVolume_metaObject[0];
+    return g_igVolume_metaObject;
 }
 
 void Gap__igIntersectionFunctionList__vfunc_18(igDataList *arg0) {

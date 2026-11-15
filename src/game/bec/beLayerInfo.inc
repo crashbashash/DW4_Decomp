@@ -1,9 +1,12 @@
+igMetaObject *g_beLayerInfo_metaObject;
+igMetaField *g_beLayerInfo_groupsMetaField;
+
 void *FUN_0035c420(void) {
-    igMetaObject *g = g_beLayerInfo_metaObject[0];
+    igMetaObject *g = g_beLayerInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c570();
     }
-    return g_beLayerInfo_metaObject[0];
+    return g_beLayerInfo_metaObject;
 }
 
 int beLayerInfo_GetVTable(void) {
@@ -43,15 +46,17 @@ void FUN_0035c570(void)
     igMetaObject_RunStaticInit(beLayerInfo_Register);
 }
 
+static igMetaObjectCallback g_beLayerInfo_callbackList[] = { FUN_0035c7a0, 0 };
+
 void *beLayerInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLayerInfo_metaObject,
+        &g_beLayerInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beLayerInfo_GetMetaObject,
-        beLayerInfo_className,
+        "beLayerInfo",
         0x20, /* instance size */
         beLayerInfo_GetVTable,
         beLayerInfo_InitFields,
@@ -65,16 +70,29 @@ void beLayerInfo_GetMetaObject(void)
     FUN_0035c420();
 }
 
+static FieldFactory g_beLayerInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beLayerInfo_fieldTable[] = {
+    "_groups",
+};
+static igMetaField **g_beLayerInfo_fieldHandles[] = {
+    &g_beLayerInfo_groupsMetaField,
+};
+static int g_beLayerInfo_fieldOffsets[] = {
+    28,
+};
+
 void beLayerInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beLayerInfo_metaObject[0];
+    temp_s0 = (void *)g_beLayerInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beLayerInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beLayerInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035c6c0();
-    igMetaObject_NameFields(temp_s0, &g_beLayerInfo_fieldTable[0], &DAT_004c6390[0], &DAT_004c6398[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beLayerInfo_fieldTable, g_beLayerInfo_fieldHandles, g_beLayerInfo_fieldOffsets, temp_s2);
 }
 

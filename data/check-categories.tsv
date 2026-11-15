@@ -6037,313 +6037,313 @@
 00225620	sceMtapGetConnection	match	-
 00225690	sceMtapChangeThreadPriority	match	-
 00225700	sceMtapGetModVersion	match	-
-00225770	BaseLibrary_MarkRegistered	match	-
-00225790	FUN_00225790	match	-
-00225870	igCompoundList_GetMetaObject	match	-
-002258c0	igCompoundList_GetVTable	match	-
-00225900	FUN_00225900	match	-
-00225910	igCompoundList_Register	match	-
-00225980	thunk_igCompoundList_GetMetaObject	match	-
-00225990	igCompoundList_InitFields	match	-
-00225a30	FUN_00225a30	match	-
-00225a40	FUN_00225a40	match	-
-00225a90	igOptInterface_GetMetaObject	match	-
-00225ae0	igOptInterface_GetVTable	match	-
-00225b90	FUN_00225b90	match	-
-00225c10	FUN_00225c10	match	-
-00225c20	igOptInterface_Register	match	-
-00225ca0	thunk_igOptInterface_GetMetaObject	match	-
-00225cb0	FUN_00225cb0	match	-
-00225cc0	igOptInterface_InitFields	match	-
-00225dc0	FUN_00225dc0	match	-
-00225e10	igOptConfiguration_GetMetaObject	match	-
-00225e60	igOptConfiguration_GetVTable	match	-
-00225ea0	FUN_00225ea0	match	-
-00225eb0	igOptConfiguration_Register	match	-
-00225f20	thunk_igOptConfiguration_GetMetaObject	match	-
-00225f30	igOptBase_GetMetaObject	match	-
-00225f80	FUN_00225f80	match	-
-00225f90	igOptBase_Register	match	-
-00226000	thunk_igOptBase_GetMetaObject	match	-
-00226010	FUN_00226010	match	-
-00226020	igOptBase_InitFields	match	-
-002260d0	FUN_002260d0	match	-
-00226120	igMessageInterface_GetMetaObject	match	-
-00226170	igMessageInterface_GetVTable	match	-
-00226200	FUN_00226200	match	-
-00226210	igMessageInterface_Register	match	-
-00226290	thunk_igMessageInterface_GetMetaObject	match	-
-002262a0	igMessageInterface_InitFields	match	-
-00226340	FUN_00226340	match	-
-00226390	igMessageList_GetMetaObject	match	-
-002263e0	igMessageList_GetVTable	match	-
-00226420	FUN_00226420	match	-
-00226430	igMessageList_Register	match	-
-002264a0	thunk_igMessageList_GetMetaObject	match	-
-002264b0	igMessageBase_GetMetaObject	match	-
-00226500	igMessageBase_GetVTable	match	-
-00226540	FUN_00226540	match	-
-00226550	igMessageBase_Register	match	-
-002265c0	thunk_igMessageBase_GetMetaObject	match	-
-002265d0	FUN_002265d0	match	-
-002265e0	FUN_002265e0	match	-
-00226630	igLogInterface_GetMetaObject	match	-
-00226680	igLogInterface_GetVTable	match	-
-002266c0	FUN_002266c0	match	-
-002266d0	igLogInterface_Register	match	-
-00226740	thunk_igLogInterface_GetMetaObject	match	-
-00226750	igLogInterface_InitFields	match	-
-002267c0	FUN_002267c0	match	-
-00226810	igLockInterface_GetMetaObject	match	-
-00226860	igLockInterface_GetVTable	match	-
-00226990	FUN_00226990	match	-
-00226a10	FUN_00226a10	match	-
-00226a20	igLockInterface_Register	match	-
-00226aa0	thunk_igLockInterface_GetMetaObject	match	-
-00226ab0	igLockInterface_InitFields	match	-
-00226b90	igLockBase_GetMetaObject	match	-
-00226be0	FUN_00226be0	match	-
-00226bf0	igLockBase_Register	match	-
-00226c50	thunk_igLockBase_GetMetaObject	match	-
-00226c60	FUN_00226c60	match	-
-00226cb0	igListenerInterface_GetMetaObject	match	-
-00226d00	igListenerInterface_GetVTable	match	-
-00226db0	FUN_00226db0	match	-
-00226e30	FUN_00226e30	match	-
-00226e40	igListenerInterface_Register	match	-
-00226ec0	thunk_igListenerInterface_GetMetaObject	match	-
-00226ed0	igListenerInterface_InitFields	match	-
-00226fd0	FUN_00226fd0	match	-
-00227020	igListenerListList_GetMetaObject	match	-
-00227070	igListenerListList_GetVTable	match	-
-002270b0	FUN_002270b0	match	-
-002270c0	igListenerListList_Register	match	-
-00227130	thunk_igListenerListList_GetMetaObject	match	-
-00227140	igListenerList_GetMetaObject	match	-
-00227190	igListenerList_GetVTable	match	-
-002271d0	FUN_002271d0	match	-
-002271e0	igListenerList_Register	match	-
-00227250	thunk_igListenerList_GetMetaObject	match	-
-00227260	igListenerBase_GetMetaObject	match	-
-002272b0	igListenerBase_GetVTable	match	-
-002272f0	FUN_002272f0	match	-
-00227300	igListenerBase_Register	match	-
-00227370	thunk_igListenerBase_GetMetaObject	match	-
-00227380	igIterator_GetMetaObject	match	-
-002273d0	FUN_002273d0	match	-
-002273e0	igIterator_Register	match	-
-00227440	thunk_igIterator_GetMetaObject	match	-
-00227450	FUN_00227450	match	-
-00227460	FUN_00227460	match	-
-002274a0	FUN_002274a0	match	-
-002274f0	igIterateGraph_GetMetaObject	match	-
-00227540	igIterateGraph_GetVTable	match	-
-00227620	FUN_00227620	match	-
-00227630	igIterateGraph_Register	match	-
-002276b0	thunk_igIterateGraph_GetMetaObject	match	-
-002276c0	igIterateGraph_InitFields	match	-
-00227780	FUN_00227780	match	-
-002277c0	igIterateField_GetMetaObject	match	-
-00227810	igIterateField_GetVTable	match	-
-002278a0	FUN_002278a0	match	-
-002278b0	igIterateField_Register	match	-
-00227930	thunk_igIterateField_GetMetaObject	match	-
-00227940	igIterateField_InitFields	match	-
-002279d0	FUN_002279d0	match	-
-00227a10	igIterateDerived_GetMetaObject	match	-
-00227a60	igIterateDerived_GetVTable	match	-
-00227af0	FUN_00227af0	match	-
-00227b00	igIterateDerived_Register	match	-
-00227b80	thunk_igIterateDerived_GetMetaObject	match	-
-00227b90	igIterateDerived_InitFields	match	-
-00227c20	FUN_00227c20	match	-
-00227c70	igItemInterface_GetMetaObject	match	-
-00227cc0	igItemInterface_GetVTable	match	-
-00227d70	FUN_00227d70	match	-
-00227df0	FUN_00227df0	match	-
-00227e70	igSmartPointer_igStringRefListList_Destruct	match	-
-00227ef0	FUN_00227ef0	match	-
-00227f00	igItemInterface_Register	match	-
-00227f80	thunk_igItemInterface_GetMetaObject	match	-
-00227f90	igItemInterface_InitFields	match	-
-002280a0	FUN_002280a0	match	-
-002280b0	FUN_002280b0	match	-
-00228100	igItemDataBaseList_GetMetaObject	match	-
-00228150	igItemDataBaseList_GetVTable	match	-
-00228190	FUN_00228190	match	-
-002281a0	igItemDataBaseList_Register	match	-
-00228210	thunk_igItemDataBaseList_GetMetaObject	match	-
-00228220	FUN_00228220	match	-
-00228230	igItemDataBaseList_InitFields	match	-
-002282f0	igItemDataBaseField_GetMetaObject	match	-
-00228340	igItemDataBaseField_GetVTable	match	-
-00228410	FUN_00228410	match	-
-00228420	igItemDataBaseField_Register	match	-
-00228490	thunk_igItemDataBaseField_GetMetaObject	match	-
-002284a0	FUN_002284a0	match	-
-00228570	FUN_00228570	match	-
-002285b0	Gap__igItemDataBaseField__vfunc_25	match	-
-002285c0	Gap__igItemDataBaseField__vfunc_11	match	-
-002285d0	FUN_002285d0	match	-
-00228900	igItemBase_GetMetaObject	match	-
-00228950	FUN_00228950	match	-
-00228960	igItemBase_Register	match	-
-002289c0	thunk_igItemBase_GetMetaObject	match	-
-002289d0	igInterfaced_GetMetaObject	match	-
-00228a20	FUN_00228a20	match	-
-00228a30	igInterfaced_Register	match	-
-00228aa0	thunk_igInterfaced_GetMetaObject	match	-
-00228ab0	igInterfaced_InitFields	match	-
-00228bd0	igInterface_GetMetaObject	match	-
-00228c20	igInterface_GetVTable	match	-
-00228c60	FUN_00228c60	match	-
-00228c70	igInterface_Register	match	-
-00228ce0	thunk_igInterface_GetMetaObject	match	-
-00228cf0	FUN_00228cf0	match	-
-00228d40	igFileInfoList_GetMetaObject	match	-
-00228d90	igFileInfoList_GetVTable	match	-
-00228dd0	FUN_00228dd0	match	-
-00228de0	igFileInfoList_Register	match	-
-00228e50	thunk_igFileInfoList_GetMetaObject	match	-
-00228e60	FUN_00228e60	match	-
-00228eb0	igFileInfo_GetMetaObject	match	-
-00228f00	igFileInfo_GetVTable	match	-
-00228fc0	FUN_00228fc0	match	-
-00229040	FUN_00229040	match	-
-002290c0	FUN_002290c0	match	-
-002290d0	igFileInfo_Register	match	-
-00229150	thunk_igFileInfo_GetMetaObject	match	-
-00229160	igFileInfo_InitFields	match	-
-00229260	FUN_00229260	match	-
-00229270	igStringRef_Construct	match	-
-00229280	igBase_GetMetaObject	match	-
-002292d0	FUN_002292d0	match	-
-002292e0	igBase_Register	match	-
-00229340	thunk_igBase_GetMetaObject	match	-
-00229350	FUN_00229350	match	-
-002293d0	FUN_002293d0	match	-
-00229450	Gap__igOptInterface__vfunc_29	match	-
-00229460	FUN_00229460	match	-
-002294e0	Gap__igOptConfiguration__vfunc_23	match	-
-002294f0	igDataList_GetCount	match	-
-00229500	FUN_00229500	match	-
-00229570	FUN_00229570	match	-
-00229580	FUN_00229580	match	-
-002295a0	FUN_002295a0	match	-
-002295b0	igInterface_BindInterfaceFields	match	-
-00229700	FUN_00229700	match	-
-00229710	FUN_00229710	match	-
-002297f0	FUN_002297f0	match	-
-00229980	FUN_00229980	match	-
-00229990	Gap__igItemInterface__vfunc_13	match	-
-00229d40	Gap__igItemInterface__vfunc_28	match	-
-00229e20	FUN_00229e20	match	-
-00229f70	FUN_00229f70	match	-
-00229f90	FUN_00229f90	match	-
-00229fb0	FUN_00229fb0	match	-
-0022a030	FUN_0022a030	match	-
-0022a1e0	Gap__igItemInterface__vfunc_27	match	-
-0022a740	FUN_0022a740	match	-
-0022a7b0	Gap__igItemInterface__vfunc_30	match	-
-0022a8d0	FUN_0022a8d0	match	-
-0022a950	FUN_0022a950	match	-
-0022a9b0	FUN_0022a9b0	match	-
-0022a9d0	FUN_0022a9d0	match	-
-0022a9e0	FUN_0022a9e0	match	-
-0022aa60	FUN_0022aa60	match	-
-0022aab0	FUN_0022aab0	match	-
-0022aac0	FUN_0022aac0	match	-
-0022ab90	FUN_0022ab90	match	-
-0022ac00	FUN_0022ac00	match	-
-0022ac40	FUN_0022ac40	match	-
-0022ac60	FUN_0022ac60	match	-
-0022ac70	FUN_0022ac70	match	-
-0022b0a0	FUN_0022b0a0	match	-
-0022b150	Gap__igListenerInterface__vfunc_13	match	-
-0022b180	Gap__igListenerBase__vfunc_28	match	-
-0022b190	Gap__igListenerBase__vfunc_27	match	-
-0022b1a0	Gap__igLockInterface__vfunc_27	match	-
-0022b3d0	Gap__igLogInterface__vfunc_24	match	-
-0022b400	Gap__igLogInterface__vfunc_27	match	-
-0022b430	Gap__Core__igInfo__vfunc_22	match	-
-0022b440	Gap__igMessageInterface__vfunc_13	match	-
-0022b470	FUN_0022b470	match	-
-0022b480	igOptimizer_CheckGraph	match	-
-0022b610	FUN_0022b610	match	-
-0022b620	igOptPass_ApplyToObjects	match	-
-0022b820	FUN_0022b820	match	-
-0022b8a0	FUN_0022b8a0	match	-
-0022b910	FUN_0022b910	match	-
-0022bac0	FUN_0022bac0	match	-
-0022bbc0	thunk_igObject_InitDefaults__0022bbc0	match	-
-0022bbd0	Gap__igOptInterface__vfunc_13	match	-
-0022bc00	Gap__Core__igMetaObject__vfunc_22	match	-
-0022bc10	FUN_0022bc10	match	-
-0022c7f0	FUN_0022c7f0	match	-
-0022c9a0	Gap__igOptInterface__vfunc_22	match	-
-0022c9b0	Gap__igOptInterface__vfunc_27	match	-
-0022c9c0	Gap__igOptInterface__vfunc_28	match	-
-0022c9d0	Gap__igOptInterface__vfunc_30	match	-
-0022c9e0	Gap__igOptInterface__vfunc_31	match	-
-0022c9f0	Gap__igOptInterface__vfunc_32	match	-
-0022ca00	Gap__igOptInterface__vfunc_12	match	-
-0022ca10	FUN_0022ca10	match	-
-0022ca20	Gap__igMessageInterface__vfunc_22	match	-
-0022ca30	Gap__igLogInterface__vfunc_22	match	-
-0022ca40	Gap__igLockInterface__vfunc_22	match	-
-0022ca50	Gap__igListenerInterface__vfunc_22	match	-
-0022ca60	Gap__igItemInterface__vfunc_22	match	-
-0022ca70	Gap__igFileInfo__vfunc_22	match	-
-0022ca80	Gap__igFileInfoList__vfunc_22	match	-
-0022ca90	Gap__igListenerBase__vfunc_29	match	-
-0022caa0	Gap__igCompoundList__vfunc_22	match	-
-0022cab0	Gap__igItemDataBaseField__vfunc_22	match	-
-0022cac0	Gap__igItemDataBaseField__vfunc_23	match	-
-0022cad0	Gap__igItemDataBaseList__vfunc_22	match	-
-0022cae0	Gap__igIterateDerived__vfunc_22	match	-
-0022caf0	Gap__igIterateField__vfunc_22	match	-
-0022cb00	Gap__igIterateGraph__vfunc_22	match	-
-0022cb10	Gap__igListenerList__vfunc_22	match	-
-0022cb20	Gap__igListenerListList__vfunc_22	match	-
-0022cb30	Gap__igMessageList__vfunc_22	match	-
-0022cb40	Gap__igOptConfiguration__vfunc_22	match	-
-0022cb50	Gap__igInterface__vfunc_22	match	-
-0022cb60	Gap__igMessageBase__vfunc_22	match	-
-0022cb70	Gap__igListenerBase__vfunc_22	match	-
-0022cb80	FUN_0022cb80	match	-
-0022cd70	Gap__igMessageList__vfunc_24	match	-
-0022cd80	Gap__igListenerListList__vfunc_24	match	-
-0022cd90	Gap__igListenerList__vfunc_24	match	-
-0022cda0	Gap__igFileInfoList__vfunc_24	match	-
-0022cdb0	FUN_0022cdb0	match	-
-0022ce90	FUN_0022ce90	match	-
-0022cf70	FUN_0022cf70	match	-
-0022d050	FUN_0022d050	match	-
-0022d120	FUN_0022d120	match	-
-0022d1f0	FUN_0022d1f0	match	-
-0022d2c0	FUN_0022d2c0	match	-
-0022d390	FUN_0022d390	match	-
-0022d460	FUN_0022d460	match	-
-0022d520	FUN_0022d520	match	-
-0022d5e0	FUN_0022d5e0	match	-
-0022d6a0	FUN_0022d6a0	match	-
-0022d760	FUN_0022d760	match	-
-0022d820	FUN_0022d820	match	-
-0022d8e0	FUN_0022d8e0	match	-
-0022d9e0	FUN_0022d9e0	match	-
-0022daa0	FUN_0022daa0	match	-
-0022db60	FUN_0022db60	match	-
-0022dc20	FUN_0022dc20	match	-
-0022dce0	FUN_0022dce0	match	-
-0022dda0	FUN_0022dda0	match	-
-0022de60	FUN_0022de60	match	-
-0022df20	FUN_0022df20	match	-
-0022dfe0	FUN_0022dfe0	match	-
-0022e0a0	FUN_0022e0a0	match	-
-0022e160	FUN_0022e160	match	-
-0022e220	Gap__igItemDataBaseList__vfunc_18	match	-
-0022e2a0	Gap__igItemDataBaseList__vfunc_04	match	-
-0022e3c0	FUN_0022e3c0	match	-
+00225770	BaseLibrary_MarkRegistered	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225790	FUN_00225790	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225870	igCompoundList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002258c0	igCompoundList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225900	FUN_00225900	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225910	igCompoundList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225980	thunk_igCompoundList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225990	igCompoundList_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225a30	FUN_00225a30	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225a40	FUN_00225a40	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225a90	igOptInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225ae0	igOptInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225b90	FUN_00225b90	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225c10	FUN_00225c10	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225c20	igOptInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225ca0	thunk_igOptInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225cb0	FUN_00225cb0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225cc0	igOptInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225dc0	FUN_00225dc0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225e10	igOptConfiguration_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225e60	igOptConfiguration_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225ea0	FUN_00225ea0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225eb0	igOptConfiguration_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225f20	thunk_igOptConfiguration_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225f30	igOptBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225f80	FUN_00225f80	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00225f90	igOptBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226000	thunk_igOptBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226010	FUN_00226010	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226020	igOptBase_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002260d0	FUN_002260d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226120	igMessageInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226170	igMessageInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226200	FUN_00226200	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226210	igMessageInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226290	thunk_igMessageInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002262a0	igMessageInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226340	FUN_00226340	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226390	igMessageList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002263e0	igMessageList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226420	FUN_00226420	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226430	igMessageList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002264a0	thunk_igMessageList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002264b0	igMessageBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226500	igMessageBase_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226540	FUN_00226540	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226550	igMessageBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002265c0	thunk_igMessageBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002265d0	FUN_002265d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002265e0	FUN_002265e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226630	igLogInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226680	igLogInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002266c0	FUN_002266c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002266d0	igLogInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226740	thunk_igLogInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226750	igLogInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002267c0	FUN_002267c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226810	igLockInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226860	igLockInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226990	FUN_00226990	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226a10	FUN_00226a10	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226a20	igLockInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226aa0	thunk_igLockInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226ab0	igLockInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226b90	igLockBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226be0	FUN_00226be0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226bf0	igLockBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226c50	thunk_igLockBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226c60	FUN_00226c60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226cb0	igListenerInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226d00	igListenerInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226db0	FUN_00226db0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226e30	FUN_00226e30	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226e40	igListenerInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226ec0	thunk_igListenerInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226ed0	igListenerInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00226fd0	FUN_00226fd0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227020	igListenerListList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227070	igListenerListList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002270b0	FUN_002270b0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002270c0	igListenerListList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227130	thunk_igListenerListList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227140	igListenerList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227190	igListenerList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002271d0	FUN_002271d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002271e0	igListenerList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227250	thunk_igListenerList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227260	igListenerBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002272b0	igListenerBase_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002272f0	FUN_002272f0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227300	igListenerBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227370	thunk_igListenerBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227380	igIterator_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002273d0	FUN_002273d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002273e0	igIterator_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227440	thunk_igIterator_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227450	FUN_00227450	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227460	FUN_00227460	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002274a0	FUN_002274a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002274f0	igIterateGraph_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227540	igIterateGraph_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227620	FUN_00227620	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227630	igIterateGraph_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002276b0	thunk_igIterateGraph_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002276c0	igIterateGraph_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227780	FUN_00227780	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002277c0	igIterateField_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227810	igIterateField_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002278a0	FUN_002278a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002278b0	igIterateField_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227930	thunk_igIterateField_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227940	igIterateField_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002279d0	FUN_002279d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227a10	igIterateDerived_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227a60	igIterateDerived_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227af0	FUN_00227af0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227b00	igIterateDerived_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227b80	thunk_igIterateDerived_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227b90	igIterateDerived_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227c20	FUN_00227c20	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227c70	igItemInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227cc0	igItemInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227d70	FUN_00227d70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227df0	FUN_00227df0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227e70	igSmartPointer_igStringRefListList_Destruct	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227ef0	FUN_00227ef0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227f00	igItemInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227f80	thunk_igItemInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227f90	igItemInterface_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002280a0	FUN_002280a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002280b0	FUN_002280b0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228100	igItemDataBaseList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228150	igItemDataBaseList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228190	FUN_00228190	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002281a0	igItemDataBaseList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228210	thunk_igItemDataBaseList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228220	FUN_00228220	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228230	igItemDataBaseList_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002282f0	igItemDataBaseField_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228340	igItemDataBaseField_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228410	FUN_00228410	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228420	igItemDataBaseField_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228490	thunk_igItemDataBaseField_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002284a0	FUN_002284a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228570	FUN_00228570	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002285b0	Gap__igItemDataBaseField__vfunc_25	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002285c0	Gap__igItemDataBaseField__vfunc_11	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002285d0	FUN_002285d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228900	igItemBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228950	FUN_00228950	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228960	igItemBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002289c0	thunk_igItemBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002289d0	igInterfaced_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228a20	FUN_00228a20	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228a30	igInterfaced_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228aa0	thunk_igInterfaced_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228ab0	igInterfaced_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228bd0	igInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228c20	igInterface_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228c60	FUN_00228c60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228c70	igInterface_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228ce0	thunk_igInterface_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228cf0	FUN_00228cf0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228d40	igFileInfoList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228d90	igFileInfoList_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228dd0	FUN_00228dd0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228de0	igFileInfoList_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228e50	thunk_igFileInfoList_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228e60	FUN_00228e60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228eb0	igFileInfo_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228f00	igFileInfo_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00228fc0	FUN_00228fc0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229040	FUN_00229040	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002290c0	FUN_002290c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002290d0	igFileInfo_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229150	thunk_igFileInfo_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229160	igFileInfo_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229260	FUN_00229260	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229270	igStringRef_Construct	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229280	igBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002292d0	FUN_002292d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002292e0	igBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229340	thunk_igBase_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229350	FUN_00229350	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002293d0	FUN_002293d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229450	Gap__igOptInterface__vfunc_29	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229460	FUN_00229460	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002294e0	Gap__igOptConfiguration__vfunc_23	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002294f0	igDataList_GetCount	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229500	FUN_00229500	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229570	FUN_00229570	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229580	FUN_00229580	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002295a0	FUN_002295a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002295b0	igInterface_BindInterfaceFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229700	FUN_00229700	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229710	FUN_00229710	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002297f0	FUN_002297f0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229980	FUN_00229980	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229990	Gap__igItemInterface__vfunc_13	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229d40	Gap__igItemInterface__vfunc_28	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229e20	FUN_00229e20	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229f70	FUN_00229f70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229f90	FUN_00229f90	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00229fb0	FUN_00229fb0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a030	FUN_0022a030	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a1e0	Gap__igItemInterface__vfunc_27	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a740	FUN_0022a740	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a7b0	Gap__igItemInterface__vfunc_30	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a8d0	FUN_0022a8d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a950	FUN_0022a950	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a9b0	FUN_0022a9b0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a9d0	FUN_0022a9d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022a9e0	FUN_0022a9e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022aa60	FUN_0022aa60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022aab0	FUN_0022aab0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022aac0	FUN_0022aac0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ab90	FUN_0022ab90	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ac00	FUN_0022ac00	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ac40	FUN_0022ac40	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ac60	FUN_0022ac60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ac70	FUN_0022ac70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b0a0	FUN_0022b0a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b150	Gap__igListenerInterface__vfunc_13	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b180	Gap__igListenerBase__vfunc_28	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b190	Gap__igListenerBase__vfunc_27	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b1a0	Gap__igLockInterface__vfunc_27	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b3d0	Gap__igLogInterface__vfunc_24	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b400	Gap__igLogInterface__vfunc_27	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b430	Gap__Core__igInfo__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b440	Gap__igMessageInterface__vfunc_13	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b470	FUN_0022b470	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b480	igOptimizer_CheckGraph	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b610	FUN_0022b610	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b620	igOptPass_ApplyToObjects	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b820	FUN_0022b820	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b8a0	FUN_0022b8a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022b910	FUN_0022b910	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022bac0	FUN_0022bac0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022bbc0	thunk_igObject_InitDefaults__0022bbc0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022bbd0	Gap__igOptInterface__vfunc_13	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022bc00	Gap__Core__igMetaObject__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022bc10	FUN_0022bc10	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c7f0	FUN_0022c7f0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9a0	Gap__igOptInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9b0	Gap__igOptInterface__vfunc_27	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9c0	Gap__igOptInterface__vfunc_28	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9d0	Gap__igOptInterface__vfunc_30	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9e0	Gap__igOptInterface__vfunc_31	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022c9f0	Gap__igOptInterface__vfunc_32	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca00	Gap__igOptInterface__vfunc_12	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca10	FUN_0022ca10	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca20	Gap__igMessageInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca30	Gap__igLogInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca40	Gap__igLockInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca50	Gap__igListenerInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca60	Gap__igItemInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca70	Gap__igFileInfo__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca80	Gap__igFileInfoList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ca90	Gap__igListenerBase__vfunc_29	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022caa0	Gap__igCompoundList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cab0	Gap__igItemDataBaseField__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cac0	Gap__igItemDataBaseField__vfunc_23	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cad0	Gap__igItemDataBaseList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cae0	Gap__igIterateDerived__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022caf0	Gap__igIterateField__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb00	Gap__igIterateGraph__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb10	Gap__igListenerList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb20	Gap__igListenerListList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb30	Gap__igMessageList__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb40	Gap__igOptConfiguration__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb50	Gap__igInterface__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb60	Gap__igMessageBase__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb70	Gap__igListenerBase__vfunc_22	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cb80	FUN_0022cb80	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cd70	Gap__igMessageList__vfunc_24	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cd80	Gap__igListenerListList__vfunc_24	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cd90	Gap__igListenerList__vfunc_24	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cda0	Gap__igFileInfoList__vfunc_24	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cdb0	FUN_0022cdb0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022ce90	FUN_0022ce90	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022cf70	FUN_0022cf70	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d050	FUN_0022d050	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d120	FUN_0022d120	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d1f0	FUN_0022d1f0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d2c0	FUN_0022d2c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d390	FUN_0022d390	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d460	FUN_0022d460	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d520	FUN_0022d520	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d5e0	FUN_0022d5e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d6a0	FUN_0022d6a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d760	FUN_0022d760	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d820	FUN_0022d820	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d8e0	FUN_0022d8e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022d9e0	FUN_0022d9e0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022daa0	FUN_0022daa0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022db60	FUN_0022db60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022dc20	FUN_0022dc20	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022dce0	FUN_0022dce0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022dda0	FUN_0022dda0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022de60	FUN_0022de60	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022df20	FUN_0022df20	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022dfe0	FUN_0022dfe0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e0a0	FUN_0022e0a0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e160	FUN_0022e160	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e220	Gap__igItemDataBaseList__vfunc_18	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e2a0	Gap__igItemDataBaseList__vfunc_04	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+0022e3c0	FUN_0022e3c0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0022e4b8	__divdi3	match	-
 0022eb50	__moddi3	match	-
 0022f1e0	__udivdi3	match	-
@@ -20009,7 +20009,7 @@
 0051fe80	__sinit_GfxLibrary.cpp	match	-
 005208f0	__sinit_MathsLibrary.cpp	match	-
 00520cf0	__sinit_SceneGraphLibrary.cpp	match	-
-005210d0	__sinit_BaseLibrary.cpp	match	-
+005210d0	__sinit_BaseLibrary.cpp	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00521150	__sinit_SceneSearchLibrary.cpp	match	-
 00521360	__sinit_CoreLibrary.cpp	match	-
 00521600	__sinit_igAdx.cpp	match	DEFERRED duplicate 0x130720 __dt__9StringRefFv 120B (compared under the profile of its retail unit)

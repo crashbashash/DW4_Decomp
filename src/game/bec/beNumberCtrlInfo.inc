@@ -1,12 +1,14 @@
+igMetaObject *g_beNumberCtrlInfo_metaObject;
+
 void *FUN_0034e190(void) {
     unsigned char b;
-    if (g_beNumberCtrlInfo_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beNumberCtrlInfo_metaObject[0]) + 36) & 4) != 0;
+    if (g_beNumberCtrlInfo_metaObject != 0) {
+        b = (*(int *)((char *)(g_beNumberCtrlInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0034e250();
 done:
-    return g_beNumberCtrlInfo_metaObject[0];
+    return g_beNumberCtrlInfo_metaObject;
 }
 
 int beNumberCtrlInfo_GetVTable(void) {
@@ -33,11 +35,11 @@ void *beNumberCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNumberCtrlInfo_metaObject,
+        &g_beNumberCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNumberCtrlInfo_GetMetaObject,
-        beNumberCtrlInfo_className,
+        "beNumberCtrlInfo",
         0x1c, /* instance size */
         beNumberCtrlInfo_GetVTable,
         0,
@@ -51,10 +53,18 @@ void beNumberCtrlInfo_GetMetaObject(void)
     FUN_0034e190();
 }
 
-int FUN_0034e300(void) {
-    if (DAT_005886d8[0] == 0) {
-        DAT_005886d8[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c4a30[0], &DAT_004c4a40[0], 4);
+igMetaEnum *g_beNumberCtrlInfo_messageMetaEnum;
+static const char *g_beNumberCtrlInfo_messageNames[] = {
+    "GETVALUE", "SETVALUE", "SETVALUEDIRECT", "ADDVALUE",
+};
+static int g_beNumberCtrlInfo_messageValues[] = {
+    0, 1, 2, 3,
+};
+
+igMetaEnum *FUN_0034e300(void) {
+    if (g_beNumberCtrlInfo_messageMetaEnum == 0) {
+        g_beNumberCtrlInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beNumberCtrlInfo_messageNames, g_beNumberCtrlInfo_messageValues, 4);
     }
-    return DAT_005886d8[0];
+    return g_beNumberCtrlInfo_messageMetaEnum;
 }
 

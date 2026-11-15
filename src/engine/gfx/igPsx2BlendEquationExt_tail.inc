@@ -1,9 +1,9 @@
 igMetaObject *igPsx2BlendEquationExt_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2BlendEquationExt_metaObject[0];
+    igMetaObject *g = g_igPsx2BlendEquationExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00154710();
-    return g_igPsx2BlendEquationExt_metaObject[0];
+    return g_igPsx2BlendEquationExt_metaObject;
 }
 
 int igPsx2BlendEquationExt_GetVTable(void) {
@@ -48,15 +48,17 @@ void FUN_00154710(void)
     igMetaObject_RunStaticInit(igPsx2BlendEquationExt_Register);
 }
 
+static igMetaObjectCallback g_igPsx2BlendEquationExt_callbackList[] = { FUN_001511a0, 0 };
+
 void igPsx2BlendEquationExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2BlendEquationExt_metaObject,
+        &g_igPsx2BlendEquationExt_metaObject,
         igBlendEquationExt_Register,
         igBlendEquationExt_GetPublishedMetaObject,
         thunk_igPsx2BlendEquationExt_GetMetaObject,
-        igPsx2BlendEquationExt_className,
+        "igPsx2BlendEquationExt",
         0x30, /* instance size */
         igPsx2BlendEquationExt_GetVTable,
         &igPsx2BlendEquationExt_InitFields,
@@ -66,21 +68,54 @@ void igPsx2BlendEquationExt_Register(void) {
 }
 
 igMetaObject *FUN_001547a0(void) {
-    return g_igBlendEquationExt_metaObject[0];
+    return g_igBlendEquationExt_metaObject;
 }
 
-void igPsx2BlendEquationExt_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igPsx2BlendEquationExt_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igCharMetaField_Create,
+};
+static const char *g_igPsx2BlendEquationExt_fieldTable[] = {
+    "_context",
+    "_blendA",
+    "_blendB",
+    "_blendC",
+    "_blendD",
+    "_blendConstant",
+};
+static igMetaField **g_igPsx2BlendEquationExt_fieldHandles[] = {
+    &g_igPsx2BlendEquationExt_contextMetaField,
+    &g_igPsx2BlendEquationExt_blendAMetaField,
+    &g_igPsx2BlendEquationExt_blendBMetaField,
+    &g_igPsx2BlendEquationExt_blendCMetaField,
+    &g_igPsx2BlendEquationExt_blendDMetaField,
+    &g_igPsx2BlendEquationExt_blendConstantMetaField,
+};
+static int g_igPsx2BlendEquationExt_fieldOffsets[] = {
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+};
 
-    temp_s0 = (void *)g_igPsx2BlendEquationExt_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2BlendEquationExt_ctorTable[0], 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+void igPsx2BlendEquationExt_InitFields(void) {
+    int fieldStart;
+    void *temp_s1;
+    igMetaObject *meta;
+
+    meta = g_igPsx2BlendEquationExt_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPsx2BlendEquationExt_ctorTable, 6);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), -0x80);
-    igMetaObject_NameFields(temp_s0, &g_igPsx2BlendEquationExt_fieldTable[0], &DAT_0048a140[0], &DAT_0048a160[0], temp_s2);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 5), -0x80);
+    igMetaObject_NameFields(meta, g_igPsx2BlendEquationExt_fieldTable, g_igPsx2BlendEquationExt_fieldHandles, g_igPsx2BlendEquationExt_fieldOffsets, fieldStart);
 }
 

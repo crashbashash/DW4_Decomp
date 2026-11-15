@@ -1,9 +1,14 @@
+igMetaObject *g_beMovieInfoData_metaObject;
+igMetaField *g_beMovieInfoData_parentLayerMetaField;
+igMetaField *g_beMovieInfoData_callLuaNameMetaField;
+igMetaField *g_beMovieInfoData_sceneInfoMetaField;
+
 void *FUN_0034ec80(void) {
-    igMetaObject *g = g_beMovieInfoData_metaObject[0];
+    igMetaObject *g = g_beMovieInfoData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034ed80();
     }
-    return g_beMovieInfoData_metaObject[0];
+    return g_beMovieInfoData_metaObject;
 }
 
 int beMovieInfoData_GetVTable(void) {
@@ -30,15 +35,17 @@ void FUN_0034ed80(void)
     igMetaObject_RunStaticInit(beMovieInfoData_Register);
 }
 
+static igMetaObjectCallback g_beMovieInfoData_callbackList[] = { FUN_0019b270, 0 };
+
 void *beMovieInfoData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMovieInfoData_metaObject,
+        &g_beMovieInfoData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beMovieInfoData_GetMetaObject,
-        beMovieInfoData_className,
+        "beMovieInfoData",
         0x1c, /* instance size */
         beMovieInfoData_GetVTable,
         beMovieInfoData_InitFields,
@@ -52,23 +59,52 @@ void beMovieInfoData_GetMetaObject(void)
     FUN_0034ec80();
 }
 
+static FieldFactory g_beMovieInfoData_ctorTable[] = {
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMovieInfoData_fieldTable[] = {
+    "_parentLayer",
+    "_callLuaName",
+    "_sceneInfo",
+};
+static igMetaField **g_beMovieInfoData_fieldHandles[] = {
+    &g_beMovieInfoData_parentLayerMetaField,
+    &g_beMovieInfoData_callLuaNameMetaField,
+    &g_beMovieInfoData_sceneInfoMetaField,
+};
+static int g_beMovieInfoData_fieldOffsets[] = {
+    16,
+    20,
+    24,
+};
+
 void beMovieInfoData_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beMovieInfoData_metaObject[0];
+    temp_s0 = (void *)g_beMovieInfoData_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMovieInfoData_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_beMovieInfoData_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019aee0();
-    igMetaObject_NameFields(temp_s0, &g_beMovieInfoData_fieldTable[0], &DAT_004c4b50[0], &DAT_004c4b60[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMovieInfoData_fieldTable, g_beMovieInfoData_fieldHandles, g_beMovieInfoData_fieldOffsets, temp_s2);
 }
 
-int FUN_0034eed0(void) {
-    if (DAT_00588780[0] == 0) {
-        DAT_00588780[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c4b70[0], &DAT_004c4b80[0], 4);
+igMetaEnum *g_beMovieInfoData_messageMetaEnum;
+static const char *g_beMovieInfoData_messageNames[] = {
+    "STOP", "PLAY", "PAUSE", "ISPLAY",
+};
+static int g_beMovieInfoData_messageValues[] = {
+    0, 1, 2, 3,
+};
+
+igMetaEnum *FUN_0034eed0(void) {
+    if (g_beMovieInfoData_messageMetaEnum == 0) {
+        g_beMovieInfoData_messageMetaEnum = igMetaEnum_Create("Message", g_beMovieInfoData_messageNames, g_beMovieInfoData_messageValues, 4);
     }
-    return DAT_00588780[0];
+    return g_beMovieInfoData_messageMetaEnum;
 }
 

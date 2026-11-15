@@ -1,18 +1,20 @@
+igMetaObject *g_beNDMWMdlEnemy_metaObject;
+
 void beNDMWMdlEnemy_CreateInstance(int arg0) {
     FUN_003c1860();
-    igMetaObject_CreateInstance(*(int *)0x58B508, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlEnemy_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c1760(void) {
-    if (g_beNDMWMdlEnemy_metaObject[0] == 0) {
-        g_beNDMWMdlEnemy_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlEnemy_metaObject == 0) {
+        g_beNDMWMdlEnemy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlEnemy_metaObject[0];
+    return g_beNDMWMdlEnemy_metaObject;
 }
 
 igMetaObject *beNDMWMdlEnemy_GetReadyMetaObject(void) {
-    if (g_beNDMWMdlEnemy_metaObject[0] == 0 || !isValid(g_beNDMWMdlEnemy_metaObject[0])) FUN_003c1860();
-    return g_beNDMWMdlEnemy_metaObject[0];
+    if (g_beNDMWMdlEnemy_metaObject == 0 || !isValid(g_beNDMWMdlEnemy_metaObject)) FUN_003c1860();
+    return g_beNDMWMdlEnemy_metaObject;
 }
 
 int beNDMWMdlEnemy_GetVTable(void) {
@@ -38,11 +40,11 @@ void *beNDMWMdlEnemy_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlEnemy_metaObject,
+        &g_beNDMWMdlEnemy_metaObject,
         beNDMWMdlPEBase_Register,
         beNDMWMdlPEBase_GetPublishedMetaObject,
         beNDMWMdlEnemy_GetMetaObject,
-        beNDMWMdlEnemy_className,
+        "beNDMWMdlEnemy",
         0x2c, /* instance size */
         beNDMWMdlEnemy_GetVTable,
         0,

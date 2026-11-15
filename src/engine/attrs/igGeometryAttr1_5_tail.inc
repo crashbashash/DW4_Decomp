@@ -17,7 +17,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
     Rc *s0;
     Rc *old;
     int i;
-    if ((int)g_igGeometryAttr_metaObject[0] == arg1 && arg0->f32 != 0) {
+    if ((int)g_igGeometryAttr_metaObject == arg1 && arg0->f32 != 0) {
         old = arg0->f48;
         if (old != 0) {
             old->refs = old->refs - 1;

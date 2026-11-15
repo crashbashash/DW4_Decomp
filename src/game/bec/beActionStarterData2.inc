@@ -1,9 +1,12 @@
+igMetaObject *g_beActionStarterData2_metaObject;
+igMetaField *g_beActionStarterData2_rotationMetaField;
+
 void *FUN_0036ba10(void) {
-    igMetaObject *g = g_beActionStarterData2_metaObject[0];
+    igMetaObject *g = g_beActionStarterData2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036bb30();
     }
-    return g_beActionStarterData2_metaObject[0];
+    return g_beActionStarterData2_metaObject;
 }
 
 int beActionStarterData2_GetVTable(void) {
@@ -62,11 +65,11 @@ void *beActionStarterData2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beActionStarterData2_metaObject,
+        &g_beActionStarterData2_metaObject,
         beActionStarterData_Register,
         beActionStarterData_GetPublishedMetaObject,
         beActionStarterData2_GetMetaObject,
-        beActionStarterData2_className,
+        "beActionStarterData2",
         0x30, /* instance size */
         beActionStarterData2_GetVTable,
         beActionStarterData2_InitFields,
@@ -81,16 +84,29 @@ void beActionStarterData2_GetMetaObject(void)
 }
 
 igMetaObject *FUN_0036bbe0(void) {
-    return g_beActionStarterData_metaObject[0];
+    return g_beActionStarterData_metaObject;
 }
+
+static FieldFactory g_beActionStarterData2_ctorTable[] = {
+    FUN_00187890,
+};
+static const char *g_beActionStarterData2_fieldTable[] = {
+    "_rotation",
+};
+static igMetaField **g_beActionStarterData2_fieldHandles[] = {
+    &g_beActionStarterData2_rotationMetaField,
+};
+static int g_beActionStarterData2_fieldOffsets[] = {
+    36,
+};
 
 void beActionStarterData2_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beActionStarterData2_metaObject[0];
+    temp_s0 = (void *)g_beActionStarterData2_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beActionStarterData2_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beActionStarterData2_fieldTable[0], &DAT_004c7e08[0], &DAT_004c7e10[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beActionStarterData2_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beActionStarterData2_fieldTable, g_beActionStarterData2_fieldHandles, g_beActionStarterData2_fieldOffsets, temp_s1);
 }
 

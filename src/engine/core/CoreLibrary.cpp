@@ -1,4 +1,7 @@
 #include "src/engine/core/CoreLibrary.h"
+
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/core/LibraryFront.inc"
 #include "src/engine/core/igVirtualCFuncMetaField.inc"
 #include "src/engine/core/igUnsignedShortMetaField.inc"
@@ -279,6 +282,7 @@
 #include "src/engine/core/igPsx2Media_tail3.inc"
 #include "src/engine/core/igPsx2LongTimer_tail3.inc"
 #include "src/engine/core/InlineTail.inc"
+#pragma pop
 
 /* The library's global objects, constructed at start-up in this order: the file-device list, the memory
  * contexts, the two statuses and the process memory map. The statuses are constants: retail keeps them in

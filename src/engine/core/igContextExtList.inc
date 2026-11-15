@@ -1,16 +1,18 @@
+igMetaObject *g_igContextExtList_metaObject;
+
 igMetaObject *igContextExtList_GetOrCreateMetaObject(void) {
-    if (g_igContextExtList_metaObject[0] == 0) {
-        g_igContextExtList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igContextExtList_metaObject == 0) {
+        g_igContextExtList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igContextExtList_metaObject[0];
+    return g_igContextExtList_metaObject;
 }
 
 igMetaObject *igContextExtList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igContextExtList_metaObject[0];
+    igMetaObject *g = g_igContextExtList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igContextExtList_EnsureRegistered();
-    return g_igContextExtList_metaObject[0];
+    return g_igContextExtList_metaObject;
 }
 
 int igContextExtList_GetVTable(void) {
@@ -18,7 +20,7 @@ int igContextExtList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igContextExtList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igContextExtList_EnsureRegistered(void)
@@ -26,20 +28,22 @@ void igContextExtList_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igContextExtList_Register);
 }
 
+static igMetaObjectCallback g_igContextExtList_callbackList[] = { igContextExt_EnsureRegistered, 0 };
+
 void igContextExtList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igContextExtList_metaObject,
+        &g_igContextExtList_metaObject,
         (igMetaObjectRegisterFunction)igObjectList_Register,
         (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igContextExtList_GetMetaObjectFunction,
-        igContextExtList_className,
+        "igContextExtList",
         0x14,
         igContextExtList_GetVTable,
         0,
         0,
-        (igMetaObjectCallback *)g_igContextExtList_callbackList
+        g_igContextExtList_callbackList
     );
 }
 

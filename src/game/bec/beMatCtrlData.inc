@@ -1,9 +1,12 @@
+igMetaObject *g_beMatCtrlData_metaObject;
+igMetaField *g_beMatCtrlData_chkBoxMetaField;
+
 void *FUN_0035a430(void) {
-    igMetaObject *g = g_beMatCtrlData_metaObject[0];
+    igMetaObject *g = g_beMatCtrlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035a560();
     }
-    return g_beMatCtrlData_metaObject[0];
+    return g_beMatCtrlData_metaObject;
 }
 
 int beMatCtrlData_GetVTable(void) {
@@ -52,15 +55,17 @@ void FUN_0035a560(void)
     igMetaObject_RunStaticInit(beMatCtrlData_Register);
 }
 
+static igMetaObjectCallback g_beMatCtrlData_callbackList[] = { FUN_0018a780, 0 };
+
 void *beMatCtrlData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMatCtrlData_metaObject,
+        &g_beMatCtrlData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beMatCtrlData_GetMetaObject,
-        beMatCtrlData_className,
+        "beMatCtrlData",
         0x10, /* instance size */
         beMatCtrlData_GetVTable,
         beMatCtrlData_InitFields,
@@ -74,23 +79,45 @@ void beMatCtrlData_GetMetaObject(void)
     FUN_0035a430();
 }
 
+static FieldFactory g_beMatCtrlData_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMatCtrlData_fieldTable[] = {
+    "_chkBox",
+};
+static igMetaField **g_beMatCtrlData_fieldHandles[] = {
+    &g_beMatCtrlData_chkBoxMetaField,
+};
+static int g_beMatCtrlData_fieldOffsets[] = {
+    12,
+};
+
 void beMatCtrlData_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beMatCtrlData_metaObject[0];
+    temp_s0 = (void *)g_beMatCtrlData_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMatCtrlData_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beMatCtrlData_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a6a0();
-    igMetaObject_NameFields(temp_s0, &g_beMatCtrlData_fieldTable[0], &DAT_004c6118[0], &DAT_004c6120[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMatCtrlData_fieldTable, g_beMatCtrlData_fieldHandles, g_beMatCtrlData_fieldOffsets, temp_s2);
 }
 
-int beMatCtrl_GetMessageEnum(void) {
-    if (DAT_00589158[0] == 0) {
-        DAT_00589158[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c6130[0], &DAT_004c6150[0], 6);
+igMetaEnum *g_beMatCtrlData_messageMetaEnum;
+static const char *g_beMatCtrlData_messageNames[] = {
+    "SHOWMAT", "HIDEMAT", "SHOW_LUACALL", "HIDE_LUACALL",
+    "PAUSE", "RESTART",
+};
+static int g_beMatCtrlData_messageValues[] = {
+    0, 1, 2, 3, 4, 5,
+};
+
+igMetaEnum *beMatCtrl_GetMessageEnum(void) {
+    if (g_beMatCtrlData_messageMetaEnum == 0) {
+        g_beMatCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beMatCtrlData_messageNames, g_beMatCtrlData_messageValues, 6);
     }
-    return DAT_00589158[0];
+    return g_beMatCtrlData_messageMetaEnum;
 }
 

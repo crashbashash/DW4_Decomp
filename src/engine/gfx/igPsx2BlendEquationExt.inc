@@ -1,3 +1,11 @@
+igMetaObject *g_igPsx2BlendEquationExt_metaObject;
+igMetaField *g_igPsx2BlendEquationExt_contextMetaField;
+igMetaField *g_igPsx2BlendEquationExt_blendAMetaField;
+igMetaField *g_igPsx2BlendEquationExt_blendBMetaField;
+igMetaField *g_igPsx2BlendEquationExt_blendCMetaField;
+igMetaField *g_igPsx2BlendEquationExt_blendDMetaField;
+igMetaField *g_igPsx2BlendEquationExt_blendConstantMetaField;
+
 void thunk_igPsx2BlendEquationExt_GetMetaObject(void) {
     igPsx2BlendEquationExt_GetMetaObject();
 }

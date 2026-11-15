@@ -14,7 +14,7 @@ int *igCallStackTracer_CaptureCallStack(int *stack) {
 
 int igCallStackTracer_HasSymbols(void) {
     igSymbolTableView *symbols;
-    symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
+    symbols = (igSymbolTableView *)(*(ObjectSystemView * *)&g_objectSystem)->symbolTable;
     if (symbols != 0) {
         if (symbols->GetSymbolCount() != 0) {
             return 1;
@@ -34,7 +34,7 @@ void igCallStackTracer_FormatAddress(igResult *result, igCallStackTracerView *se
 }
 
 igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line) {
-    igSymbolTableView *symbols = (igSymbolTableView *)((ObjectSystemView **)g_objectSystem)[0]->symbolTable;
+    igSymbolTableView *symbols = (igSymbolTableView *)(*(ObjectSystemView * *)&g_objectSystem)->symbolTable;
     if (symbols != 0 && symbols->GetSymbolCount() != 0) {
         int base = 0;
         int other = 0;
@@ -56,11 +56,7 @@ igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int si
     return g_resultFailure;
 }
 
-/* String literals are read-only here, as in the original build: a two-byte literal then lives outside
- * small data and strcpy from it is a fixed-size copy. */
-#pragma push
-#pragma readonly_strings on
-extern "C" const char *g_callStackFormat;
+const char *g_callStackFormat;
 extern "C" char *strrchr(const char *, int);
 extern "C" igResult igCallStackTracer_FormatLocation(igCallStackTracerView *self, int addr, char *function, int offset, char *path, int line,
                                                            const char *format, char *output, int outputSize);
@@ -181,7 +177,6 @@ igResult igCallStackTracer_FormatLocation(igCallStackTracerView *self, int addr,
     return result;
 }
 
-#pragma pop
 
 void igCallStackTracer_PreExit(void) {
 

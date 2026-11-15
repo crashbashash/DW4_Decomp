@@ -1,16 +1,18 @@
+igMetaObject *g_igCollisionCellList_metaObject;
+
 igMetaObject *FUN_0023a570(void) {
-    if (g_igCollisionCellList_metaObject[0] == 0) {
-        g_igCollisionCellList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCollisionCellList_metaObject == 0) {
+        g_igCollisionCellList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCollisionCellList_metaObject[0];
+    return g_igCollisionCellList_metaObject;
 }
 
 igMetaObject *igCollisionCellList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCollisionCellList_metaObject[0];
+    igMetaObject *g = g_igCollisionCellList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0023a650();
-    return g_igCollisionCellList_metaObject[0];
+    return g_igCollisionCellList_metaObject;
 }
 
 int igCollisionCellList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_0023a650(void)
     igMetaObject_RunStaticInit(igCollisionCellList_Register);
 }
 
+static igMetaObjectCallback g_igCollisionCellList_callbackList[] = { FUN_0023a850, 0 };
+
 void igCollisionCellList_Register(void) {
     CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCollisionCellList_metaObject,
+        &g_igCollisionCellList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igCollisionCellList_GetMetaObject,
-        igCollisionCellList_className,
+        "igCollisionCellList",
         0x14, /* instance size */
         igCollisionCellList_GetVTable,
         0,

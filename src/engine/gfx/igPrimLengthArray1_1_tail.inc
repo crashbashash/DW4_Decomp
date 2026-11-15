@@ -34,8 +34,8 @@ void FUN_0015df80(S0_15df80 *arg0) {
 }
 
 void FUN_0015e010(void) {
-    igResource_AddAlignment(g_globalContext[0], &text_VertexArrayData[0], 0x10);
-    igMemoryRefMetaField_SetAlignmentType(DAT_0055faa0[0], &text_VertexArrayData[0]);
+    igResource_AddAlignment(g_globalContext[0], "VertexArrayData", 0x10);
+    igMemoryRefMetaField_SetAlignmentType(g_igVertexArray1_1_blendWeightsMetaField, "VertexArrayData");
 }
 
 void FUN_0015e050(struct S_arg0_15e050 *arg0) {
@@ -417,8 +417,8 @@ int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4
         FUN_0015dbc0(resized.p, i, arg0, i, &sp88);
     }
     resized.p->v45();
-    resized.p->v17((int)g_igVertexArray1_1_metaObject[0]);
-    arg0->v17((int)g_igVertexArray1_1_metaObject[0]);
+    resized.p->v17((int)g_igVertexArray1_1_metaObject);
+    arg0->v17((int)g_igVertexArray1_1_metaObject);
     FUN_0015e7b0((VertexBufferOwner *)arg0);
     Memory_FreeBuffer(arg0->f8);
     arg0->f12 = arg2;
@@ -434,7 +434,7 @@ int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4
     resized.p->f36 = 0;
     resized.p->f40 = 0;
     resized.p->f28 = 0;
-    arg0->v18((int)g_igVertexArray1_1_metaObject[0]);
+    arg0->v18((int)g_igVertexArray1_1_metaObject);
     arg0->v59();
     return r;
 }

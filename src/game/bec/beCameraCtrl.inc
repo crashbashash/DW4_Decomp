@@ -1,21 +1,36 @@
+igMetaObject *g_beCameraCtrl_metaObject;
+igMetaField *g_beCameraCtrl_viewerMangMetaField;
+igMetaField *g_beCameraCtrl_viewerParaMetaField;
+igMetaField *g_beCameraCtrl_cameraModeMetaField;
+igMetaField *g_beCameraCtrl_avgPosMetaField;
+igMetaField *g_beCameraCtrl_savePosMetaField;
+igMetaField *g_beCameraCtrl_isPosChangeMetaField;
+igMetaField *g_beCameraCtrl_cameraNowFrameMetaField;
+igMetaField *g_beCameraCtrl_cameraNowMetaField;
+igMetaField *g_beCameraCtrl_cameraOldMetaField;
+igMetaField *g_beCameraCtrl_eyeMatrixMetaField;
+igMetaField *g_beCameraCtrl_intMatrixMetaField;
+igMetaField *g_beCameraCtrl_debugZoomMetaField;
+igMetaField *g_beCameraCtrl_isFirstMetaField;
+
 void beCameraCtrl_CreateInstance(int arg0) {
     FUN_00369a20();
     igMetaObject_CreateInstance(*(int *)0x589C90, arg0);
 }
 
 igMetaObject *FUN_00369860(void) {
-    if (g_beCameraCtrl_metaObject[0] == 0) {
-        g_beCameraCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beCameraCtrl_metaObject == 0) {
+        g_beCameraCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beCameraCtrl_metaObject[0];
+    return g_beCameraCtrl_metaObject;
 }
 
 void *FUN_003698b0(void) {
-    igMetaObject *g = g_beCameraCtrl_metaObject[0];
+    igMetaObject *g = g_beCameraCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00369a20();
     }
-    return g_beCameraCtrl_metaObject[0];
+    return g_beCameraCtrl_metaObject;
 }
 
 int beCameraCtrl_GetVTable(void) {
@@ -46,15 +61,17 @@ void FUN_00369a20(void)
     igMetaObject_RunStaticInit(beCameraCtrl_Register);
 }
 
+static igMetaObjectCallback g_beCameraCtrl_callbackList[] = { FUN_00459e40, FUN_0045b590, FUN_00368bc0, 0 };
+
 void *beCameraCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCameraCtrl_metaObject,
+        &g_beCameraCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beCameraCtrl_GetMetaObject,
-        beCameraCtrl_className,
+        "beCameraCtrl",
         0xdc, /* instance size */
         beCameraCtrl_GetVTable,
         beCameraCtrl_InitFields,
@@ -68,6 +85,67 @@ void beCameraCtrl_GetMetaObject(void)
     FUN_003698b0();
 }
 
+static FieldFactory g_beCameraCtrl_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    FUN_00188660,
+    FUN_00188660,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beCameraCtrl_fieldTable[] = {
+    "_viewerMang",
+    "_viewerPara",
+    "_cameraMode",
+    "_avgPos",
+    "_savePos",
+    "_isPosChange",
+    "_cameraNowFrame",
+    "_cameraNow",
+    "_cameraOld",
+    "_eyeMatrix",
+    "_intMatrix",
+    "_debugZoom",
+    "_isFirst",
+};
+static igMetaField **g_beCameraCtrl_fieldHandles[] = {
+    &g_beCameraCtrl_viewerMangMetaField,
+    &g_beCameraCtrl_viewerParaMetaField,
+    &g_beCameraCtrl_cameraModeMetaField,
+    &g_beCameraCtrl_avgPosMetaField,
+    &g_beCameraCtrl_savePosMetaField,
+    &g_beCameraCtrl_isPosChangeMetaField,
+    &g_beCameraCtrl_cameraNowFrameMetaField,
+    &g_beCameraCtrl_cameraNowMetaField,
+    &g_beCameraCtrl_cameraOldMetaField,
+    &g_beCameraCtrl_eyeMatrixMetaField,
+    &g_beCameraCtrl_intMatrixMetaField,
+    &g_beCameraCtrl_debugZoomMetaField,
+    &g_beCameraCtrl_isFirstMetaField,
+};
+static int g_beCameraCtrl_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    56,
+    68,
+    72,
+    76,
+    80,
+    84,
+    148,
+    212,
+    216,
+};
+
 void beCameraCtrl_InitFields(void) {
     int temp_s2;
     void *temp_s1;
@@ -75,9 +153,9 @@ void beCameraCtrl_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beCameraCtrl_metaObject[0];
+    temp_s0 = (void *)g_beCameraCtrl_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beCameraCtrl_ctorTable[0], 0xD);
+    igMetaObject_CreateFields(temp_s0, g_beCameraCtrl_ctorTable, 0xD);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     *(int *)((char *)(temp_s1) + 56) = FUN_00459380();
     *(char *)((char *)(temp_s1) + 60) = 0;
@@ -88,6 +166,6 @@ void beCameraCtrl_InitFields(void) {
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00368a30();
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB), 1.0f);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xC), 1);
-    igMetaObject_NameFields(temp_s0, &g_beCameraCtrl_fieldTable[0], &DAT_004c7ae0[0], &DAT_004c7b20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beCameraCtrl_fieldTable, g_beCameraCtrl_fieldHandles, g_beCameraCtrl_fieldOffsets, temp_s2);
 }
 

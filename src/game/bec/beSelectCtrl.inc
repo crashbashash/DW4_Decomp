@@ -1,21 +1,25 @@
+igMetaObject *g_beSelectCtrl_metaObject;
+igMetaField *g_beSelectCtrl_padManagerMetaField;
+igMetaField *g_beSelectCtrl_isEnableCtrlMetaField;
+
 void beSelectCtrl_CreateInstance(int arg0) {
     FUN_00345bc0();
     igMetaObject_CreateInstance(*(int *)0x587F98, arg0);
 }
 
 igMetaObject *FUN_00345a40(void) {
-    if (g_beSelectCtrl_metaObject[0] == 0) {
-        g_beSelectCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beSelectCtrl_metaObject == 0) {
+        g_beSelectCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beSelectCtrl_metaObject[0];
+    return g_beSelectCtrl_metaObject;
 }
 
 void *FUN_00345a90(void) {
-    igMetaObject *g = g_beSelectCtrl_metaObject[0];
+    igMetaObject *g = g_beSelectCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00345bc0();
     }
-    return g_beSelectCtrl_metaObject[0];
+    return g_beSelectCtrl_metaObject;
 }
 
 int beSelectCtrl_GetVTable(void) {
@@ -65,15 +69,17 @@ void FUN_00345bc0(void)
     igMetaObject_RunStaticInit(beSelectCtrl_Register);
 }
 
+static igMetaObjectCallback g_beSelectCtrl_callbackList[] = { FUN_0034cb30, 0 };
+
 void *beSelectCtrl_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSelectCtrl_metaObject,
+        &g_beSelectCtrl_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beSelectCtrl_GetMetaObject,
-        beSelectCtrl_className,
+        "beSelectCtrl",
         0x28, /* instance size */
         beSelectCtrl_GetVTable,
         beSelectCtrl_InitFields,
@@ -87,18 +93,35 @@ void beSelectCtrl_GetMetaObject(void)
     FUN_00345a90();
 }
 
+static FieldFactory g_beSelectCtrl_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beSelectCtrl_fieldTable[] = {
+    "_padManager",
+    "_isEnableCtrl",
+};
+static igMetaField **g_beSelectCtrl_fieldHandles[] = {
+    &g_beSelectCtrl_padManagerMetaField,
+    &g_beSelectCtrl_isEnableCtrlMetaField,
+};
+static int g_beSelectCtrl_fieldOffsets[] = {
+    32,
+    36,
+};
+
 void beSelectCtrl_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSelectCtrl_metaObject[0];
+    temp_s0 = (void *)g_beSelectCtrl_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSelectCtrl_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beSelectCtrl_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0034c8e0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
-    igMetaObject_NameFields(temp_s0, &g_beSelectCtrl_fieldTable[0], &DAT_004c3b98[0], &DAT_004c3ba0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSelectCtrl_fieldTable, g_beSelectCtrl_fieldHandles, g_beSelectCtrl_fieldOffsets, temp_s2);
 }
 

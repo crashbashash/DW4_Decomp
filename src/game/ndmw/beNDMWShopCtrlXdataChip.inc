@@ -1,14 +1,17 @@
+igMetaObject *g_beNDMWShopCtrlXdataChip_metaObject;
+igMetaField *g_beNDMWShopCtrlXdataChip_itemBaseListMetaField;
+
 void beNDMWShopCtrlXdataChip_Create(int arg0) {
     FUN_003b6a60();
-    igMetaObject_CreateInstance(*(int *)0x58ACB8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlXdataChip_metaObject, arg0);
 }
 
 void *FUN_003b6980(void) {
-    igMetaObject *g = g_beNDMWShopCtrlXdataChip_metaObject[0];
+    igMetaObject *g = g_beNDMWShopCtrlXdataChip_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b6a60();
     }
-    return g_beNDMWShopCtrlXdataChip_metaObject[0];
+    return g_beNDMWShopCtrlXdataChip_metaObject;
 }
 
 int beNDMWShopCtrlXdataChip_GetVTable(void) {
@@ -37,15 +40,17 @@ void FUN_003b6a60(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlXdataChip_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShopCtrlXdataChip_callbackList[] = { FUN_003c9210, 0 };
+
 void *beNDMWShopCtrlXdataChip_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopCtrlXdataChip_metaObject,
+        &g_beNDMWShopCtrlXdataChip_metaObject,
         beNDMWListCtrl_Register,
         beNDMWListCtrl_GetPublishedMetaObject,
         beNDMWShopCtrlXdataChip_GetMetaObject,
-        beNDMWShopCtrlXdataChip_className,
+        "beNDMWShopCtrlXdataChip",
         0x64, /* instance size */
         beNDMWShopCtrlXdataChip_GetVTable,
         beNDMWShopCtrlXdataChip_InitFields,
@@ -59,17 +64,30 @@ void beNDMWShopCtrlXdataChip_GetMetaObject(void)
     FUN_003b6980();
 }
 
+static FieldFactory g_beNDMWShopCtrlXdataChip_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWShopCtrlXdataChip_fieldTable[] = {
+    "_itemBaseList",
+};
+static igMetaField **g_beNDMWShopCtrlXdataChip_fieldHandles[] = {
+    &g_beNDMWShopCtrlXdataChip_itemBaseListMetaField,
+};
+static int g_beNDMWShopCtrlXdataChip_fieldOffsets[] = {
+    96,
+};
+
 void beNDMWShopCtrlXdataChip_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShopCtrlXdataChip_metaObject[0];
+    temp_s0 = g_beNDMWShopCtrlXdataChip_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShopCtrlXdataChip_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShopCtrlXdataChip_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c9130();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShopCtrlXdataChip_fieldTable[0], &DAT_004c9978[0], &DAT_004c9980[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShopCtrlXdataChip_fieldTable, g_beNDMWShopCtrlXdataChip_fieldHandles, g_beNDMWShopCtrlXdataChip_fieldOffsets, temp_s2);
 }
 

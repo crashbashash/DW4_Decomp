@@ -1,14 +1,28 @@
+igMetaObject *g_igPickMode_metaObject;
+igMetaField *g_igPickMode_parametersMetaField;
+igMetaField *g_igPickMode_guiSystemMetaField;
+igMetaField *g_igPickMode_cursorMetaField;
+igMetaField *g_igPickMode_savedCursorMetaField;
+igMetaField *g_igPickMode_savedCursorStateMetaField;
+igMetaField *g_igPickMode_intersectTraversalMetaField;
+igMetaField *g_igPickMode_rayMetaField;
+igMetaField *g_igPickMode_impactLengthMetaField;
+igMetaField *g_igPickMode_hitMetaField;
+igMetaField *g_igPickMode_hitPathMetaField;
+igMetaField *g_igPickMode_inverseProjectionMatrixMetaField;
+igMetaField *g_igPickMode_joystickTMetaField;
+
 void igPickMode_Create(int arg0) {
     FUN_0045c330();
-    igMetaObject_CreateInstance(*(int *)0x58CB88, arg0);
+    igMetaObject_CreateInstance(g_igPickMode_metaObject, arg0);
 }
 
 void *igPickMode_GetMetaObject(void) {
-    igMetaObject *g = g_igPickMode_metaObject[0];
+    igMetaObject *g = g_igPickMode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045c330();
     }
-    return g_igPickMode_metaObject[0];
+    return g_igPickMode_metaObject;
 }
 
 int igPickMode_GetVTable(void) {
@@ -44,15 +58,17 @@ void FUN_0045c330(void)
     igMetaObject_RunStaticInit(igPickMode_Register);
 }
 
+static igMetaObjectCallback g_igPickMode_callbackList[] = { FUN_0045b590, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, FUN_00188340, FUN_0019f7a0, 0 };
+
 void igPickMode_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPickMode_metaObject,
+        &g_igPickMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
         thunk_igPickMode_GetMetaObject,
-        igPickMode_className,
+        "igPickMode",
         0xBC, /* instance size */
         igPickMode_GetVTable,
         &igPickMode_InitFields,
@@ -64,6 +80,63 @@ void igPickMode_Register(void) {
 void thunk_igPickMode_GetMetaObject(void) {
     igPickMode_GetMetaObject();
 }
+
+static FieldFactory g_igPickMode_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00188660,
+    FUN_00187b50,
+};
+static const char *g_igPickMode_fieldTable[] = {
+    "_parameters",
+    "_guiSystem",
+    "_cursor",
+    "_savedCursor",
+    "_savedCursorState",
+    "_intersectTraversal",
+    "_ray",
+    "_impactLength",
+    "_hit",
+    "_hitPath",
+    "_inverseProjectionMatrix",
+    "_joystickT",
+};
+static igMetaField **g_igPickMode_fieldHandles[] = {
+    &g_igPickMode_parametersMetaField,
+    &g_igPickMode_guiSystemMetaField,
+    &g_igPickMode_cursorMetaField,
+    &g_igPickMode_savedCursorMetaField,
+    &g_igPickMode_savedCursorStateMetaField,
+    &g_igPickMode_intersectTraversalMetaField,
+    &g_igPickMode_rayMetaField,
+    &g_igPickMode_impactLengthMetaField,
+    &g_igPickMode_hitMetaField,
+    &g_igPickMode_hitPathMetaField,
+    &g_igPickMode_inverseProjectionMatrixMetaField,
+    &g_igPickMode_joystickTMetaField,
+};
+static int g_igPickMode_fieldOffsets[] = {
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112,
+    116,
+    180,
+};
 
 void igPickMode_InitFields(void) {
     void *temp_s2;
@@ -78,9 +151,9 @@ void igPickMode_InitFields(void) {
     int sp48[2];
     void *temp_a0;
 
-    temp_s1 = (void *)g_igPickMode_metaObject[0];
+    temp_s1 = g_igPickMode_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igPickMode_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, g_igPickMode_ctorTable, 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -102,6 +175,6 @@ void igPickMode_InitFields(void) {
     sp48[0] = 0;
     sp48[1] = 0;
     FUN_0018e2f0(temp_a0, sp48);
-    igMetaObject_NameFields(temp_s1, &g_igPickMode_fieldTable[0], &DAT_004d1400[0], &DAT_004d1430[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igPickMode_fieldTable, g_igPickMode_fieldHandles, g_igPickMode_fieldOffsets, temp_s0);
 }
 

@@ -1,14 +1,25 @@
+igMetaObject *g_igSymbolTable_metaObject;
+igMetaField *g_igSymbolTable_capacityMetaField;
+igMetaField *g_igSymbolTable_hashCapacityMetaField;
+igMetaField *g_igSymbolTable_lowAddressMetaField;
+igMetaField *g_igSymbolTable_highAddressMetaField;
+igMetaField *g_igSymbolTable_hashIncrementMetaField;
+igMetaField *g_igSymbolTable_symbolsMetaField;
+igMetaField *g_igSymbolTable_hashIndexMetaField;
+igMetaField *g_igSymbolTable_symbolNamesMetaField;
+igMetaField *g_igSymbolTable_sourceFileNamesMetaField;
+
 void * igSymbolTable_Create(int allocator) {
     igSymbolTable_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x585830), (igMemoryPoolView *)allocator));
+    return (void *)(igMetaObject_CreateInstance(g_igSymbolTable_metaObject, (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igSymbolTable_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSymbolTable_metaObject[0];
+    igMetaObject *g = g_igSymbolTable_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igSymbolTable_EnsureRegistered();
-    return g_igSymbolTable_metaObject[0];
+    return g_igSymbolTable_metaObject;
 }
 
 int igSymbolTable_GetVTable(void) {
@@ -22,7 +33,7 @@ int igSymbolTable_GetVTable(void) {
     table._hashIndex = 0;
     table._symbolNames = 0;
     table._sourceFileNames = 0;
-    vtable = *(int *)((char *)&table + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&table + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     table._vtable = (int)(&g_igSymbolTable_vtable[0]);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._sourceFileNames, -1);
     igSmartPointer_igStringTable_Destruct((igSmartPointer<igObject> *)&table._symbolNames, -1);
@@ -79,26 +90,73 @@ void igSymbolTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igSymbolTable_Register);
 }
 
+static igMetaObjectCallback g_igSymbolTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igStringTable_EnsureRegistered, 0 };
+
 void igSymbolTable_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igSymbolTable_metaObject,
+        &g_igSymbolTable_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igSymbolTable_GetMetaObjectFunction,
-        igSymbolTable_className,
+        "igSymbolTable",
         0x2C,
         igSymbolTable_GetVTable,
         igSymbolTable_InitFields,
         0,
-        (igMetaObjectCallback *)g_igSymbolTable_callbackList
+        g_igSymbolTable_callbackList
     );
 }
 
 void igSymbolTable_GetMetaObjectFunction(void) {
     igSymbolTable_GetMetaObject();
 }
+
+static FieldFactory g_igSymbolTable_ctorTable[] = {
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igSymbolTable_fieldTable[] = {
+    "_capacity",
+    "_hashCapacity",
+    "_lowAddress",
+    "_highAddress",
+    "_hashIncrement",
+    "_symbols",
+    "_hashIndex",
+    "_symbolNames",
+    "_sourceFileNames",
+};
+static igMetaField **g_igSymbolTable_fieldDescriptors[] = {
+    &g_igSymbolTable_capacityMetaField,
+    &g_igSymbolTable_hashCapacityMetaField,
+    &g_igSymbolTable_lowAddressMetaField,
+    &g_igSymbolTable_highAddressMetaField,
+    &g_igSymbolTable_hashIncrementMetaField,
+    &g_igSymbolTable_symbolsMetaField,
+    &g_igSymbolTable_hashIndexMetaField,
+    &g_igSymbolTable_symbolNamesMetaField,
+    &g_igSymbolTable_sourceFileNamesMetaField,
+};
+static int g_igSymbolTable_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
 
 void igSymbolTable_InitFields(void) {
     int base;
@@ -108,9 +166,9 @@ void igSymbolTable_InitFields(void) {
     void *sourceFileNamesField;
     void *meta;
 
-    meta = (void *)g_igSymbolTable_metaObject[0];
+    meta = (void *)g_igSymbolTable_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igSymbolTable_ctorTable[0], 9);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igSymbolTable_ctorTable, 9);
     igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), -1);
     igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), 1);
     symbolsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
@@ -125,6 +183,6 @@ void igSymbolTable_InitFields(void) {
     sourceFileNamesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8)));
     ((igObjectRefMetaField *)sourceFileNamesField)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
     ((igRefMetaField *)sourceFileNamesField)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igSymbolTable_fieldTable[0], (igMetaField ***)&g_igSymbolTable_fieldDescriptors[0], &g_igSymbolTable_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igSymbolTable_fieldTable, g_igSymbolTable_fieldDescriptors, g_igSymbolTable_fieldOffsets, base);
 }
 

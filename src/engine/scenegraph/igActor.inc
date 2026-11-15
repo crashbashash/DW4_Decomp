@@ -1,16 +1,31 @@
+igMetaObject *g_igActor_metaObject;
+igMetaField *g_igActor_animationSystemMetaField;
+igMetaField *g_igActor_boneMatrixCacheArrayMetaField;
+igMetaField *g_igActor_blendMatrixCacheArrayMetaField;
+igMetaField *g_igActor_appearanceMetaField;
+igMetaField *g_igActor_animationDatabaseMetaField;
+igMetaField *g_igActor_modifierListMetaField;
+igMetaField *g_igActor_transformMetaField;
+igMetaField *g_igActor_forceActorCacheUseMetaField;
+igMetaField *g_igActor_actorCacheUsedMetaField;
+igMetaField *g_igActor_mvmWhenTraversedMetaField;
+igMetaField *g_igActor_inverseViewWhenTraversedMetaField;
+igMetaField *g_igActor_updateMetaField;
+igMetaField *g_igActor_renderMetaField;
+
 igMetaObject *FUN_001aa730(void) {
-    if (g_igActor_metaObject[0] == 0) {
-        g_igActor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igActor_metaObject == 0) {
+        g_igActor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igActor_metaObject[0];
+    return g_igActor_metaObject;
 }
 
 igMetaObject *igActor_GetMetaObject(void)
 {
-    igMetaObject *g = g_igActor_metaObject[0];
+    igMetaObject *g = g_igActor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001aaa50();
-    return g_igActor_metaObject[0];
+    return g_igActor_metaObject;
 }
 
 int igActor_GetVTable(void) {
@@ -63,15 +78,17 @@ void FUN_001aaa50(void)
     igMetaObject_RunStaticInit(igActor_Register);
 }
 
+static igMetaObjectCallback g_igActor_callbackList[] = { FUN_001a66a0, FUN_001a6450, FUN_001a7b00, FUN_001a73b0, 0 };
+
 void igActor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igActor_metaObject),
+        &g_igActor_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igActor_GetMetaObject,
-        igActor_className,
+        "igActor",
         0x100, /* instance size */
         igActor_GetVTable,
         &igActor_InitFields,
@@ -83,6 +100,67 @@ void igActor_Register(void) {
 void thunk_igActor_GetMetaObject(void) {
     igActor_GetMetaObject();
 }
+
+static FieldFactory g_igActor_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00188660,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    FUN_00188660,
+    FUN_00188660,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igActor_fieldTable[] = {
+    "_animationSystem",
+    "_boneMatrixCacheArray",
+    "_blendMatrixCacheArray",
+    "_appearance",
+    "_animationDatabase",
+    "_modifierList",
+    "_transform",
+    "_forceActorCacheUse",
+    "_actorCacheUsed",
+    "_mvmWhenTraversed",
+    "_inverseViewWhenTraversed",
+    "_update",
+    "_render",
+};
+static igMetaField **g_igActor_fieldHandles[] = {
+    &g_igActor_animationSystemMetaField,
+    &g_igActor_boneMatrixCacheArrayMetaField,
+    &g_igActor_blendMatrixCacheArrayMetaField,
+    &g_igActor_appearanceMetaField,
+    &g_igActor_animationDatabaseMetaField,
+    &g_igActor_modifierListMetaField,
+    &g_igActor_transformMetaField,
+    &g_igActor_forceActorCacheUseMetaField,
+    &g_igActor_actorCacheUsedMetaField,
+    &g_igActor_mvmWhenTraversedMetaField,
+    &g_igActor_inverseViewWhenTraversedMetaField,
+    &g_igActor_updateMetaField,
+    &g_igActor_renderMetaField,
+};
+static int g_igActor_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    120,
+    121,
+    124,
+    188,
+    252,
+    253,
+};
 
 void igActor_InitFields(void) {
     struct ActorMatrixWords a1;
@@ -105,9 +183,9 @@ void igActor_InitFields(void) {
     void *temp_v0;
     void *temp_v0_2;
 
-    temp_s0 = (void *)g_igActor_metaObject[0];
+    temp_s0 = (void *)g_igActor_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igActor_ctorTable[0], 0xD);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActor_ctorTable, 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a6600();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
@@ -158,6 +236,6 @@ void igActor_InitFields(void) {
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)));
     igBoolMetaField_SetDefaultValue(temp_v0_2, 1);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igActor_fieldTable[0], &DAT_0048d7f0[0], &DAT_0048d830[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActor_fieldTable, g_igActor_fieldHandles, g_igActor_fieldOffsets, temp_s1);
 }
 

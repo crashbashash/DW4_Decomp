@@ -1,4 +1,6 @@
 #include "src/engine/collision/CollisionLibrary.h"
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/collision/LibraryFront.inc"
 #include "src/engine/collision/igCreateCollisionDatabase.inc"
 #include "src/engine/collision/igCollisionInfo.inc"
@@ -12,3 +14,4 @@
 #include "src/engine/collision/igCollisionGrid_tail.inc"
 #include "src/engine/collision/igCreateCollisionDatabase_tail.inc"
 #include "src/engine/collision/InlineTail.inc"
+#pragma pop

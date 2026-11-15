@@ -1,21 +1,26 @@
 void igProbe_Create(int arg0) {
     FUN_0019e890();
-    igMetaObject_CreateInstance(*(int *)0x561970, arg0);
+    igMetaObject_CreateInstance((int)g_igProbe_metaObject, arg0);
 }
 
+igMetaObject *g_igProbe_metaObject;
+igMetaField *g_igProbe_volumeMetaField;
+igMetaField *g_igProbe_raysMetaField;
+igMetaField *g_igProbe_intersectFaceTypeMetaField;
+
 igMetaObject *FUN_0019e6c0(void) {
-    if (g_igProbe_metaObject[0] == 0) {
-        g_igProbe_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igProbe_metaObject == 0) {
+        g_igProbe_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igProbe_metaObject[0];
+    return g_igProbe_metaObject;
 }
 
 igMetaObject *igProbe_GetMetaObject(void)
 {
-    igMetaObject *g = g_igProbe_metaObject[0];
+    igMetaObject *g = g_igProbe_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019e890();
-    return g_igProbe_metaObject[0];
+    return g_igProbe_metaObject;
 }
 
 int igProbe_GetVTable(void) {
@@ -70,15 +75,17 @@ void FUN_0019e890(void)
     igMetaObject_RunStaticInit(igProbe_Register);
 }
 
+static igMetaObjectCallback g_igProbe_callbackList[] = { FUN_00186b20, FUN_00188190, igIntList_EnsureRegistered, 0 };
+
 void igProbe_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igProbe_metaObject),
+        &g_igProbe_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igProbe_GetMetaObject,
-        igProbe_className,
+        "igProbe",
         0x14, /* instance size */
         igProbe_GetVTable,
         &igProbe_InitFields,
@@ -91,6 +98,27 @@ void thunk_igProbe_GetMetaObject(void) {
     igProbe_GetMetaObject();
 }
 
+static FieldFactory g_igProbe_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igProbe_fieldTable[] = {
+    "_volume",
+    "_rays",
+    "_intersectFaceType",
+};
+static igMetaField **g_igProbe_fieldHandles[] = {
+    &g_igProbe_volumeMetaField,
+    &g_igProbe_raysMetaField,
+    &g_igProbe_intersectFaceTypeMetaField,
+};
+static int g_igProbe_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void igProbe_InitFields(void) {
     int temp_s2;
     void *temp_s1_3;
@@ -98,9 +126,9 @@ void igProbe_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igProbe_metaObject[0];
+    temp_s0 = (void *)g_igProbe_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igProbe_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igProbe_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00186a80();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
@@ -109,6 +137,6 @@ void igProbe_InitFields(void) {
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igProbe_fieldTable[0], &DAT_0048beb0[0], &DAT_0048bec0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igProbe_fieldTable, g_igProbe_fieldHandles, g_igProbe_fieldOffsets, temp_s2);
 }
 

@@ -1,21 +1,23 @@
+igMetaObject *g_beNDMWMdlObject_metaObject;
+
 void beNDMWMdlObject_CreateInstance(int arg0) {
     FUN_003c0c90();
-    igMetaObject_CreateInstance(*(int *)0x58B490, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlObject_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c0b90(void) {
-    if (g_beNDMWMdlObject_metaObject[0] == 0) {
-        g_beNDMWMdlObject_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlObject_metaObject == 0) {
+        g_beNDMWMdlObject_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlObject_metaObject[0];
+    return g_beNDMWMdlObject_metaObject;
 }
 
 void *beNDMWMdlObject_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlObject_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0c90();
     }
-    return g_beNDMWMdlObject_metaObject[0];
+    return g_beNDMWMdlObject_metaObject;
 }
 
 int beNDMWMdlObject_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beNDMWMdlObject_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlObject_metaObject,
+        &g_beNDMWMdlObject_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlObject_GetMetaObject,
-        beNDMWMdlObject_className,
+        "beNDMWMdlObject",
         0x2c, /* instance size */
         beNDMWMdlObject_GetVTable,
         0,

@@ -141,8 +141,8 @@ void Memory_FreeOwnedBufferUnchecked(void *buffer)
         mask = (1 << (digits * 4)) - 1; \
         while (more) { \
             if (showAddr) { \
-                if (digits < 8) { EMIT(text_0x_0_x, digits, addr & mask); } \
-                else { EMIT(text_0x_08x_2, addr); } \
+                if (digits < 8) { EMIT("0x%0*x: ", digits, addr & mask); } \
+                else { EMIT("0x%08x: ", addr); } \
             } \
             for (i = 0; i < perLine; i++) { \
                 EMIT(FMT, VALUE); \
@@ -166,21 +166,21 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
         if (g_useOwnerAllocator) alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
         else alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         file = (igFileView *)igFile_Create(alloc);
-        if (0 == file->Open(name, (const char *)text_w)) goto done;
+        if (0 == file->Open(name, (const char *)"w")) goto done;
     }
     {
         unsigned int mask;
         end = (unsigned long long)addr + length;
         unsigned int i;
         switch (size) {
-        case 1: DUMP_CASE(1, text_02x, *(unsigned char *)addr)
-        case 2: DUMP_CASE(2, text_04x, *(unsigned short *)addr)
-        case 3: DUMP_CASE(3, text_06x, *(unsigned int *)addr & 0xFFFFFF)
-        case 4: DUMP_CASE(4, text_08x, *(unsigned int *)addr)
-        case 5: DUMP_CASE(5, text_010lx, *(unsigned long long *)addr & 0xFFFFFFFFFFULL)
-        case 6: DUMP_CASE(6, text_012lx, *(unsigned long long *)addr & 0xFFFFFFFFFFFFULL)
-        case 7: DUMP_CASE(7, text_014lx, *(unsigned long long *)addr & 0xFFFFFFFFFFFFFFULL)
-        default: DUMP_CASE(8, text_016lx, *(unsigned long long *)addr)
+        case 1: DUMP_CASE(1,"%02x ", *(unsigned char *)addr)
+        case 2: DUMP_CASE(2,"%04x ", *(unsigned short *)addr)
+        case 3: DUMP_CASE(3,"%06x ", *(unsigned int *)addr & 0xFFFFFF)
+        case 4: DUMP_CASE(4,"%08x ", *(unsigned int *)addr)
+        case 5: DUMP_CASE(5,"%010lx", *(unsigned long long *)addr & 0xFFFFFFFFFFULL)
+        case 6: DUMP_CASE(6,"%012lx", *(unsigned long long *)addr & 0xFFFFFFFFFFFFULL)
+        case 7: DUMP_CASE(7,"%014lx", *(unsigned long long *)addr & 0xFFFFFFFFFFFFFFULL)
+        default: DUMP_CASE(8,"%016lx", *(unsigned long long *)addr)
         }
     }
     if (file) {
@@ -191,24 +191,26 @@ done:;
 }
 #undef DUMP_CASE
 
+SystemAllocator *g_activeSystemAllocator;
+
 void *Memory_SystemAllocate(unsigned int size)
 {
-    if (g_activeSystemAllocator[0] == 0) {
+    if (g_activeSystemAllocator == 0) {
         SystemAllocator_Activate();
     }
-    if (g_activeSystemAllocator[0] != 0) {
-        return g_activeSystemAllocator[0]->Allocate(size);
+    if (g_activeSystemAllocator != 0) {
+        return g_activeSystemAllocator->Allocate(size);
     }
     return ((void *)malloc(size));
 }
 
 void Memory_SystemFree(void *block)
 {
-    if (g_activeSystemAllocator[0] == 0) {
+    if (g_activeSystemAllocator == 0) {
         SystemAllocator_Activate();
     }
-    if (g_activeSystemAllocator[0] != 0) {
-        g_activeSystemAllocator[0]->Free(block);
+    if (g_activeSystemAllocator != 0) {
+        g_activeSystemAllocator->Free(block);
         return;
     }
     free(block);

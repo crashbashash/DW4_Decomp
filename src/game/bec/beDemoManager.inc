@@ -1,21 +1,30 @@
+igMetaObject *g_beDemoManager_metaObject;
+igMetaField *g_beDemoManager_messengerMetaField;
+igMetaField *g_beDemoManager_luaMetaField;
+igMetaField *g_beDemoManager_buildDataMetaField;
+igMetaField *g_beDemoManager_activeDataListMetaField;
+igMetaField *g_beDemoManager_turningOKMetaField;
+igMetaField *g_beDemoManager_disableRemoveAllMetaField;
+igMetaField *g_beDemoManager_calledRemoveAllMetaField;
+
 void beDemoManager_CreateInstance(int arg0) {
     FUN_00363480();
     igMetaObject_CreateInstance(*(int *)0x589790, arg0);
 }
 
 igMetaObject *FUN_00363250(void) {
-    if (g_beDemoManager_metaObject[0] == 0) {
-        g_beDemoManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beDemoManager_metaObject == 0) {
+        g_beDemoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beDemoManager_metaObject[0];
+    return g_beDemoManager_metaObject;
 }
 
 void *FUN_003632a0(void) {
-    igMetaObject *g = g_beDemoManager_metaObject[0];
+    igMetaObject *g = g_beDemoManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00363480();
     }
-    return g_beDemoManager_metaObject[0];
+    return g_beDemoManager_metaObject;
 }
 
 int beDemoManager_GetVTable(void) {
@@ -70,15 +79,17 @@ void FUN_00363480(void)
     igMetaObject_RunStaticInit(beDemoManager_Register);
 }
 
+static igMetaObjectCallback g_beDemoManager_callbackList[] = { FUN_00357d10, FUN_0035b9c0, FUN_00363930, FUN_00363710, 0 };
+
 void *beDemoManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beDemoManager_metaObject,
+        &g_beDemoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
         beDemoManager_GetMetaObject,
-        beDemoManager_className,
+        "beDemoManager",
         0x24, /* instance size */
         beDemoManager_GetVTable,
         beDemoManager_InitFields,
@@ -92,6 +103,43 @@ void beDemoManager_GetMetaObject(void)
     FUN_003632a0();
 }
 
+static FieldFactory g_beDemoManager_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beDemoManager_fieldTable[] = {
+    "_messenger",
+    "_lua",
+    "_buildData",
+    "_activeDataList",
+    "_turningOK",
+    "_disableRemoveAll",
+    "_calledRemoveAll",
+};
+static igMetaField **g_beDemoManager_fieldHandles[] = {
+    &g_beDemoManager_messengerMetaField,
+    &g_beDemoManager_luaMetaField,
+    &g_beDemoManager_buildDataMetaField,
+    &g_beDemoManager_activeDataListMetaField,
+    &g_beDemoManager_turningOKMetaField,
+    &g_beDemoManager_disableRemoveAllMetaField,
+    &g_beDemoManager_calledRemoveAllMetaField,
+};
+static int g_beDemoManager_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    33,
+    34,
+};
+
 void beDemoManager_InitFields(void) {
     int temp_s2;
     void *temp_s1;
@@ -100,9 +148,9 @@ void beDemoManager_InitFields(void) {
     void *temp_s1_4;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beDemoManager_metaObject[0];
+    temp_s0 = (void *)g_beDemoManager_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beDemoManager_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s0, g_beDemoManager_ctorTable, 7);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00357910();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -114,6 +162,6 @@ void beDemoManager_InitFields(void) {
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00363630();
     ((igRefMetaField *)temp_s1_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beDemoManager_fieldTable[0], &DAT_004c7000[0], &DAT_004c7020[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beDemoManager_fieldTable, g_beDemoManager_fieldHandles, g_beDemoManager_fieldOffsets, temp_s2);
 }
 

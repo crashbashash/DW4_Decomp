@@ -1,14 +1,16 @@
+igMetaObject *g_beNDMWGameRamInfo_metaObject;
+
 void beNDMWGameRamInfo_Create(int arg0) {
     FUN_003ca480();
-    igMetaObject_CreateInstance(*(int *)0x58C108, arg0);
+    igMetaObject_CreateInstance(g_beNDMWGameRamInfo_metaObject, arg0);
 }
 
 void *beNDMWGameRamInfo_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWGameRamInfo_metaObject[0];
+    igMetaObject *g = g_beNDMWGameRamInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003ca480();
     }
-    return g_beNDMWGameRamInfo_metaObject[0];
+    return g_beNDMWGameRamInfo_metaObject;
 }
 
 int beNDMWGameRamInfo_GetVTable(void) {
@@ -35,11 +37,11 @@ void *beNDMWGameRamInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWGameRamInfo_metaObject,
+        &g_beNDMWGameRamInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWGameRamInfo_GetMetaObject,
-        beNDMWGameRamInfo_className,
+        "beNDMWGameRamInfo",
         0x1c, /* instance size */
         beNDMWGameRamInfo_GetVTable,
         0,

@@ -2,46 +2,70 @@ void Gap__Gfx__igPsx2DisableExt__vfunc_29(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 20) = arg1;
 }
 
+unsigned char g_igPsx2DisableExt_ext1Enabled;
+
+unsigned char g_igPsx2DisableExt_ext2Enabled;
+
+unsigned char g_igPsx2DisableExt_ext6Enabled;
+
+unsigned char g_igPsx2DisableExt_ext7Enabled;
+
+unsigned char g_igPsx2DisableExt_ext8Enabled;
+
+unsigned char g_igPsx2DisableExt_ext9Enabled;
+
+unsigned char g_igPsx2DisableExt_ext5Enabled;
+
+unsigned char g_igPsx2DisableExt_ext4Enabled;
+
+unsigned char g_igPsx2DisableExt_ext11Enabled;
+
+unsigned char g_igPsx2DisableExt_ext12Enabled;
+
+unsigned char g_igPsx2DisableExt_ext10Enabled;
+
+unsigned char g_igPsx2DisableExt_ext0Enabled;
+
 int Gap__Gfx__igPsx2DisableExt__vfunc_30(void *self, unsigned int ext)
 {
     int enabled = -1;
 
     switch (ext) {
     case 0:
-        enabled = GPR_00554b78;
+        enabled = g_igPsx2DisableExt_ext0Enabled;
         break;
     case 1:
-        enabled = GPR_00554b44;
+        enabled = g_igPsx2DisableExt_ext1Enabled;
         break;
     case 2:
-        enabled = GPR_00554b48;
+        enabled = g_igPsx2DisableExt_ext2Enabled;
         break;
     case 4:
-        enabled = GPR_00554b60;
+        enabled = g_igPsx2DisableExt_ext4Enabled;
         break;
     case 5:
-        enabled = GPR_00554b5c;
+        enabled = g_igPsx2DisableExt_ext5Enabled;
         break;
     case 6:
-        enabled = GPR_00554b4c;
+        enabled = g_igPsx2DisableExt_ext6Enabled;
         break;
     case 7:
-        enabled = GPR_00554b50;
+        enabled = g_igPsx2DisableExt_ext7Enabled;
         break;
     case 8:
-        enabled = GPR_00554b54;
+        enabled = g_igPsx2DisableExt_ext8Enabled;
         break;
     case 9:
-        enabled = GPR_00554b58;
+        enabled = g_igPsx2DisableExt_ext9Enabled;
         break;
     case 10:
-        enabled = GPR_00554b6c;
+        enabled = g_igPsx2DisableExt_ext10Enabled;
         break;
     case 11:
-        enabled = GPR_00554b64;
+        enabled = g_igPsx2DisableExt_ext11Enabled;
         break;
     case 12:
-        enabled = GPR_00554b68;
+        enabled = g_igPsx2DisableExt_ext12Enabled;
         break;
     }
     return enabled;
@@ -50,40 +74,40 @@ int Gap__Gfx__igPsx2DisableExt__vfunc_30(void *self, unsigned int ext)
 void Gap__Gfx__igPsx2DisableExt__vfunc_31(int arg0, unsigned int arg1, char arg2) {
     switch (arg1) {
     case 0:
-        GPR_00554b78 = arg2;
+        g_igPsx2DisableExt_ext0Enabled = arg2;
         return;
     case 1:
-        GPR_00554b44 = arg2;
+        g_igPsx2DisableExt_ext1Enabled = arg2;
         return;
     case 2:
-        GPR_00554b48 = arg2;
+        g_igPsx2DisableExt_ext2Enabled = arg2;
         return;
     case 4:
-        GPR_00554b60 = arg2;
+        g_igPsx2DisableExt_ext4Enabled = arg2;
         return;
     case 5:
-        GPR_00554b5c = arg2;
+        g_igPsx2DisableExt_ext5Enabled = arg2;
         return;
     case 6:
-        GPR_00554b4c = arg2;
+        g_igPsx2DisableExt_ext6Enabled = arg2;
         return;
     case 7:
-        GPR_00554b50 = arg2;
+        g_igPsx2DisableExt_ext7Enabled = arg2;
         return;
     case 8:
-        GPR_00554b54 = arg2;
+        g_igPsx2DisableExt_ext8Enabled = arg2;
         return;
     case 9:
-        GPR_00554b58 = arg2;
+        g_igPsx2DisableExt_ext9Enabled = arg2;
         return;
     case 10:
-        GPR_00554b6c = arg2;
+        g_igPsx2DisableExt_ext10Enabled = arg2;
         return;
     case 11:
-        GPR_00554b64 = arg2;
+        g_igPsx2DisableExt_ext11Enabled = arg2;
         return;
     case 12:
-        GPR_00554b68 = arg2;
+        g_igPsx2DisableExt_ext12Enabled = arg2;
         
     default:
         return;

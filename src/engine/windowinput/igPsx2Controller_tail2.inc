@@ -132,7 +132,7 @@ extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, Controll
         if (scePadInfoComb(self->_port, self->_slot, -1, 0) == 0) {
             self->_phase = 7;
         } else {
-            PadActAlign align = DAT_00487760;
+            PadActAlign align = { { 0, 1, 0xff, 0xff, 0xff, 0xff } };
             scePadSetActAlign(self->_port, self->_slot, align.data);
             self->_phase = 4;
         }

@@ -1,16 +1,31 @@
+igMetaObject *g_igViewModel_metaObject;
+igMetaField *g_igViewModel_viewMatrixMetaField;
+igMetaField *g_igViewModel_ratioMetaField;
+igMetaField *g_igViewModel_hfovMetaField;
+igMetaField *g_igViewModel_nearPlaneMetaField;
+igMetaField *g_igViewModel_farPlaneMetaField;
+igMetaField *g_igViewModel_positionMetaField;
+igMetaField *g_igViewModel_directionMetaField;
+igMetaField *g_igViewModel_viewUpVectorMetaField;
+igMetaField *g_igViewModel_viewLeftVectorMetaField;
+igMetaField *g_igViewModel_sceneUpVectorMetaField;
+igMetaField *g_igViewModel_drawTimeMetaField;
+igMetaField *g_igViewModel_selectedCenterMetaField;
+igMetaField *g_igViewModel_selectedLengthMetaField;
+
 igMetaObject *FUN_0045d470(void) {
-    if (g_igViewModel_metaObject[0] == 0) {
-        g_igViewModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewModel_metaObject == 0) {
+        g_igViewModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewModel_metaObject[0];
+    return g_igViewModel_metaObject;
 }
 
 void *igViewModel_GetMetaObject(void) {
-    igMetaObject *g = g_igViewModel_metaObject[0];
+    igMetaObject *g = g_igViewModel_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045d5c0();
     }
-    return g_igViewModel_metaObject[0];
+    return g_igViewModel_metaObject;
 }
 
 int igViewModel_GetVTable(void) {
@@ -48,11 +63,11 @@ void igViewModel_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewModel_metaObject,
+        &g_igViewModel_metaObject,
         igModel_Register,
         igModel_GetPublishedMetaObject,
         thunk_igViewModel_GetMetaObject,
-        igViewModel_className,
+        "igViewModel",
         0xB0, /* instance size */
         igViewModel_GetVTable,
         &igViewModel_InitFields,
@@ -65,6 +80,67 @@ void thunk_igViewModel_GetMetaObject(void) {
     igViewModel_GetMetaObject();
 }
 
+static FieldFactory g_igViewModel_ctorTable[] = {
+    FUN_00188660,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187890,
+    igLongMetaField_Create,
+    FUN_00187890,
+    igFloatMetaField_Create,
+};
+static const char *g_igViewModel_fieldTable[] = {
+    "_viewMatrix",
+    "_ratio",
+    "_hfov",
+    "_nearPlane",
+    "_farPlane",
+    "_position",
+    "_direction",
+    "_viewUpVector",
+    "_viewLeftVector",
+    "_sceneUpVector",
+    "_drawTime",
+    "_selectedCenter",
+    "_selectedLength",
+};
+static igMetaField **g_igViewModel_fieldHandles[] = {
+    &g_igViewModel_viewMatrixMetaField,
+    &g_igViewModel_ratioMetaField,
+    &g_igViewModel_hfovMetaField,
+    &g_igViewModel_nearPlaneMetaField,
+    &g_igViewModel_farPlaneMetaField,
+    &g_igViewModel_positionMetaField,
+    &g_igViewModel_directionMetaField,
+    &g_igViewModel_viewUpVectorMetaField,
+    &g_igViewModel_viewLeftVectorMetaField,
+    &g_igViewModel_sceneUpVectorMetaField,
+    &g_igViewModel_drawTimeMetaField,
+    &g_igViewModel_selectedCenterMetaField,
+    &g_igViewModel_selectedLengthMetaField,
+};
+static int g_igViewModel_fieldOffsets[] = {
+    12,
+    76,
+    80,
+    84,
+    88,
+    92,
+    104,
+    116,
+    128,
+    140,
+    152,
+    160,
+    172,
+};
+
 void igViewModel_InitFields(void) {
     int temp_s1;
     void *temp_s0;
@@ -76,9 +152,9 @@ void igViewModel_InitFields(void) {
     float v5[4];
     float v6[4];
 
-    temp_s0 = (void *)g_igViewModel_metaObject[0];
+    temp_s0 = g_igViewModel_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewModel_ctorTable[0], 0xD);
+    igMetaObject_CreateFields(temp_s0, g_igViewModel_ctorTable, 0xD);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 45.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1.0f);
@@ -101,6 +177,6 @@ void igViewModel_InitFields(void) {
     temp_a6 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
     v6[0] = 0.0f; v6[1] = 0.0f; v6[2] = 0.0f;
     FUN_0018e470(temp_a6, v6);
-    igMetaObject_NameFields(temp_s0, &g_igViewModel_fieldTable[0], &DAT_004d1770[0], &DAT_004d17b0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igViewModel_fieldTable, g_igViewModel_fieldHandles, g_igViewModel_fieldOffsets, temp_s1);
 }
 

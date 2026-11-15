@@ -6,6 +6,9 @@
 #include "dw4/p2dma.h"
 #include "dw4/p2timer.h"
 
+#pragma push
+#pragma readonly_strings on
+
 int printf(const char *format, ...);
 void abort(void);
 void exit(int status);
@@ -107,3 +110,4 @@ void p2RunWatchdog(void *arg) {
         exit(1);
     }
 }
+#pragma pop

@@ -536,7 +536,7 @@ void igStackMemoryPool_CollectMemoryRegions(igStackMemoryPool *self, igDataList 
         entry = created;
         created->start = self->_rawMemory;
         entry->size = self->_totalSize;
-        DumpRegion_SetAnnotation(entry, text_Pool_igStackMemoryPool);
+        DumpRegion_SetAnnotation(entry,"Pool igStackMemoryPool");
         DumpRegion_SetPoolName(entry, (const char *)Memory_GetPoolName((int)self));
         List_InsertWords(list, List_LowerBound(list, &entry, (Cmp)DumpRegion_CompareStart), 1, &entry);
     }

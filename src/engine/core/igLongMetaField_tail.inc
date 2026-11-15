@@ -2,7 +2,7 @@ int igLongMetaField_ValueFromString(int self, int unused, int string) {
     int consumed;
 
     consumed = 0;
-    sscanf(string, &text_ld_n[0], unused, &consumed);
+    sscanf(string, "%ld%n", unused, &consumed);
     return consumed;
 }
 
@@ -11,18 +11,18 @@ void igLongMetaField_ValueToString(int *out, int self, long long *value) {
     int pool;
     int interned;
 
-    sprintf(&text[0], &percent_ld[0], *value);
+    sprintf(&text[0], "%ld", *value);
     if (&text[0] == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)&text[0]);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)&text[0]);
     }
     *out = interned;
 }
@@ -44,6 +44,8 @@ int igLongMetaField_GetAlignment(void) {
     return 8;
 }
 
+igMediaView *g_defaultMedia;
+
 igMediaView *igMediaFile_FindDeviceForPath(const char *path) {
     const char *colon;
     int prefixLength;
@@ -60,7 +62,7 @@ igMediaView *igMediaFile_FindDeviceForPath(const char *path) {
             }
         }
     }
-    return g_defaultMedia[0];
+    return g_defaultMedia;
 }
 
 void igMedia_CreateMediaList(void) {
@@ -85,7 +87,7 @@ void igMedia_AddMedia(int media) {
 void igMedia_ReleaseMediaList(void) {
     int *o;
 
-    ((int *)g_defaultMedia)[0] = 0;
+    (*(int *)&g_defaultMedia) = 0;
     o = (int *)g_fileDeviceList.p;
     if (o != 0) {
         o[1] = o[1] - 1;

@@ -35,7 +35,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf(node, ((void * *)g_igGeometry_metaObject)[0]) != 0 || igObject_IsKindOf(node, ((void * *)DAT_00561ca0)[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igGeometry_metaObject) != 0 || igObject_IsKindOf(node, ((void * *)DAT_00561ca0)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -67,7 +67,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 4) {
-        if (igObject_IsKindOf(node, ((void * *)g_igGeometry_metaObject)[0]) != 0) {
+        if (igObject_IsKindOf(node, g_igGeometry_metaObject) != 0) {
             HitMatrix *matrix;
             unsigned int attrCount;
             unsigned int segmentCount;
@@ -185,7 +185,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
             return 0;
         }
         if (r == 2) {
-            int meta = (int)g_igNode_metaObject[0];
+            int meta = (int)g_igNode_metaObject;
             int got = node->getMeta();
             if (got != meta) {
                 return passStop(igTraversal_TraverseChildren((int)(self), (S_1e07a0 *)node));
@@ -224,11 +224,11 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
 }
 
 igMetaObject *FUN_001cfc60(void) {
-    return g_igTransform_metaObject[0];
+    return g_igTransform_metaObject;
 }
 
 int Gap__Sg__igGeometry__vfunc_22(void) {
-    return ((int *)g_igGeometry_metaObject)[0];
+    return ((int)g_igGeometry_metaObject);
 }
 
 void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix *parent, int context) {
@@ -251,7 +251,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     }
     for (i = 0; i < count; i++) {
         child = self->children->data[i];
-        meta = g_unlinkedTransformClass_metaObject[0];
+        meta = (int)g_unlinkedTransformClass_metaObject;
         got = child->getMeta();
         if (meta == got) {
             FUN_001d0130(child, renderer, &world, context);

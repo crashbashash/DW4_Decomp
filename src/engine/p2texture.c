@@ -1,3 +1,5 @@
+#pragma push
+#pragma readonly_strings on
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 int DIntr();
@@ -1420,3 +1422,4 @@ void FUN_0020c9f0(N_20c9f0 *arg0) {
         FUN_002082b0((O *)arg0);
     }
 }
+#pragma pop

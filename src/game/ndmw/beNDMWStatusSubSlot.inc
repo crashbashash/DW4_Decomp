@@ -1,11 +1,11 @@
 void beNDMWStatusSubSlot_Create(int arg0) {
     FUN_003ba6a0();
-    igMetaObject_CreateInstance(*(int *)0x58AF18, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusSubSlot_metaObject, arg0);
 }
 
 igMetaObject *FUN_003ba2a0(void) {
-    if (g_beNDMWStatusSubSlot_metaObject[0] == 0 || !isValid(g_beNDMWStatusSubSlot_metaObject[0])) FUN_003ba6a0();
-    return g_beNDMWStatusSubSlot_metaObject[0];
+    if (g_beNDMWStatusSubSlot_metaObject == 0 || !isValid(g_beNDMWStatusSubSlot_metaObject)) FUN_003ba6a0();
+    return g_beNDMWStatusSubSlot_metaObject;
 }
 
 int beNDMWStatusSubSlot_GetVTable(void) {

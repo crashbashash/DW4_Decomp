@@ -1,9 +1,11 @@
+igMetaObject *g_beSvSlotPS2_metaObject;
+
 void *FUN_0034a630(void) {
-    igMetaObject *g = g_beSvSlotPS2_metaObject[0];
+    igMetaObject *g = g_beSvSlotPS2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a6c0();
     }
-    return g_beSvSlotPS2_metaObject[0];
+    return g_beSvSlotPS2_metaObject;
 }
 
 int beSvSlotPS2_GetVTable(void) {
@@ -23,11 +25,11 @@ void *beSvSlotPS2_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvSlotPS2_metaObject,
+        &g_beSvSlotPS2_metaObject,
         beSvSlotData_Register,
         beSvSlotData_GetPublishedMetaObject,
         beSvSlotPS2_GetMetaObject,
-        beSvSlotPS2_className,
+        "beSvSlotPS2",
         0x18, /* instance size */
         beSvSlotPS2_GetVTable,
         0,
@@ -42,6 +44,6 @@ void beSvSlotPS2_GetMetaObject(void)
 }
 
 igMetaObject *FUN_0034a770(void) {
-    return g_beSvSlotData_metaObject[0];
+    return g_beSvSlotData_metaObject;
 }
 

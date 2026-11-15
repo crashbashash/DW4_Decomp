@@ -1,21 +1,27 @@
 void FUN_00196150(int arg0) {
     FUN_001964d0();
-    igMetaObject_CreateInstance(*(int *)0x5612B0, arg0);
+    igMetaObject_CreateInstance((int)g_igTransform_metaObject, arg0);
 }
 
+igMetaObject *g_igTransform_metaObject;
+igMetaField *g_igTransform_mMetaField;
+igMetaField *g_igTransform_targetMetaField;
+igMetaField *g_igTransform_mvmMetaField;
+igMetaField *g_igTransform_transformInputMetaField;
+
 igMetaObject *FUN_00196190(void) {
-    if (g_igTransform_metaObject[0] == 0) {
-        g_igTransform_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTransform_metaObject == 0) {
+        g_igTransform_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTransform_metaObject[0];
+    return g_igTransform_metaObject;
 }
 
 igMetaObject *igTransform_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTransform_metaObject[0];
+    igMetaObject *g = g_igTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001964d0();
-    return g_igTransform_metaObject[0];
+    return g_igTransform_metaObject;
 }
 
 int igTransform_GetVTable(void) {
@@ -112,15 +118,17 @@ void FUN_001964d0(void)
     igMetaObject_RunStaticInit(igTransform_Register);
 }
 
+static igMetaObjectCallback g_igTransform_callbackList[] = { FUN_001303b0, FUN_00194e70, 0 };
+
 void igTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igTransform_metaObject),
+        &g_igTransform_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igTransform_GetMetaObject,
-        igTransform_className,
+        "igTransform",
         0x6C, /* instance size */
         igTransform_GetVTable,
         &igTransform_InitFields,
@@ -132,6 +140,31 @@ void igTransform_Register(void) {
 void thunk_igTransform_GetMetaObject(void) {
     igTransform_GetMetaObject();
 }
+
+static FieldFactory g_igTransform_ctorTable[] = {
+    FUN_00188660,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igTransform_fieldTable[] = {
+    "_m",
+    "_target",
+    "_mvm",
+    "_transformInput",
+};
+static igMetaField **g_igTransform_fieldHandles[] = {
+    &g_igTransform_mMetaField,
+    &g_igTransform_targetMetaField,
+    &g_igTransform_mvmMetaField,
+    &g_igTransform_transformInputMetaField,
+};
+static int g_igTransform_fieldOffsets[] = {
+    32,
+    96,
+    100,
+    104,
+};
 
 void igTransform_InitFields(void) {
     int temp_s2;
@@ -145,9 +178,9 @@ void igTransform_InitFields(void) {
     struct V o4;
     struct V o5;
 
-    temp_s0 = (void *)g_igTransform_metaObject[0];
+    temp_s0 = (void *)g_igTransform_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igTransform_ctorTable[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTransform_ctorTable, 4);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     o5.x = 0;
     o5.y = 0;
@@ -173,7 +206,7 @@ void igTransform_InitFields(void) {
     *(char *)((char *)(temp_s1_2) + 38) = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_00194dd0();
-    igMetaObject_NameFields(temp_s0, &g_igTransform_fieldTable[0], &DAT_0048b1b0[0], &DAT_0048b1c0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTransform_fieldTable, g_igTransform_fieldHandles, g_igTransform_fieldOffsets, temp_s2);
 }
 
 ObjectRefWord *FUN_001966b0(ObjectRefWord *self,int delete_storage) {

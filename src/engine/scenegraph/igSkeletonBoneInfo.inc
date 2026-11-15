@@ -1,9 +1,14 @@
+igMetaObject *g_igSkeletonBoneInfo_metaObject;
+igMetaField *g_igSkeletonBoneInfo_parentIdxMetaField;
+igMetaField *g_igSkeletonBoneInfo_bmIdxMetaField;
+igMetaField *g_igSkeletonBoneInfo_flagsMetaField;
+
 igMetaObject *FUN_00198960(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igSkeletonBoneInfo_metaObject)[0];
+    igMetaObject *g = g_igSkeletonBoneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00198a40();
-    return ((igMetaObject * *)g_igSkeletonBoneInfo_metaObject)[0];
+    return g_igSkeletonBoneInfo_metaObject;
 }
 
 int igSkeletonBoneInfo_GetVTable(void) {
@@ -43,11 +48,11 @@ void igSkeletonBoneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSkeletonBoneInfo_metaObject,
+        &g_igSkeletonBoneInfo_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igSkeletonBoneInfo_GetMetaObject_00198ac0,
-        igSkeletonBoneInfo_className,
+        "igSkeletonBoneInfo",
         0x18, /* instance size */
         igSkeletonBoneInfo_GetVTable,
         &igSkeletonBoneInfo_InitFields,
@@ -60,14 +65,35 @@ void thunk_FUN_00198960(void) {
     FUN_00198960();
 }
 
+static FieldFactory g_igSkeletonBoneInfo_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igSkeletonBoneInfo_fieldTable[] = {
+    "_parentIdx",
+    "_bmIdx",
+    "_flags",
+};
+static igMetaField **g_igSkeletonBoneInfo_fieldHandles[] = {
+    &g_igSkeletonBoneInfo_parentIdxMetaField,
+    &g_igSkeletonBoneInfo_bmIdxMetaField,
+    &g_igSkeletonBoneInfo_flagsMetaField,
+};
+static int g_igSkeletonBoneInfo_fieldOffsets[] = {
+    12,
+    16,
+    20,
+};
+
 void igSkeletonBoneInfo_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSkeletonBoneInfo_metaObject[0];
+    temp_s0 = (void *)g_igSkeletonBoneInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSkeletonBoneInfo_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_ctorTable, 3);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1);
-    igMetaObject_NameFields(temp_s0, &g_igSkeletonBoneInfo_fieldTable[0], &DAT_0048b5f8[0], &DAT_0048b608[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkeletonBoneInfo_fieldTable, g_igSkeletonBoneInfo_fieldHandles, g_igSkeletonBoneInfo_fieldOffsets, temp_s1);
 }
 

@@ -12,6 +12,9 @@
 #include "dw4/eekernel.h"
 #include "dw4/p2core.h"
 #include "dw4/p2dma.h"
+
+#pragma push
+#pragma readonly_strings on
 #include "dw4/p2pool.h"
 #include "dw4/p2swap.h"
 #include "dw4/p2timer.h"
@@ -407,3 +410,4 @@ void p2FlushVif1Packet(void) {
         p2SubmitDmaPacket(P2_DMA_VIF1, packet);
     }
 }
+#pragma pop

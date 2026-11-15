@@ -1,16 +1,23 @@
+igMetaObject *g_igItemInterface_metaObject;
+igMetaField *g_igItemInterface_itemDataBaseListMetaField;
+igMetaField *g_igItemInterface_metaListMetaField;
+igMetaField *g_igItemInterface_itemListMetaField;
+igMetaField *g_igItemInterface_itemNameListMetaField;
+igMetaField *g_igItemInterface_currentKnownItemMetaField;
+
 igMetaObject *FUN_00227c20(void) {
-    if (g_igItemInterface_metaObject[0] == 0) {
-        g_igItemInterface_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igItemInterface_metaObject == 0) {
+        g_igItemInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igItemInterface_metaObject[0];
+    return g_igItemInterface_metaObject;
 }
 
 igMetaObject *igItemInterface_GetMetaObject(void)
 {
-    igMetaObject *g = g_igItemInterface_metaObject[0];
+    igMetaObject *g = g_igItemInterface_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00227ef0();
-    return g_igItemInterface_metaObject[0];
+    return g_igItemInterface_metaObject;
 }
 
 int igItemInterface_GetVTable(void) {
@@ -85,15 +92,17 @@ void FUN_00227ef0(void)
     igMetaObject_RunStaticInit(igItemInterface_Register);
 }
 
+static igMetaObjectCallback g_igItemInterface_callbackList[] = { FUN_00228190, igMetaObjectList_EnsureRegistered, igMetaObjectListList_EnsureRegistered, igStringRefListList_EnsureRegistered, 0 };
+
 void igItemInterface_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igItemInterface_metaObject,
+        &g_igItemInterface_metaObject,
         igInterface_Register,
         igInterface_GetPublishedMetaObject,
         thunk_igItemInterface_GetMetaObject,
-        igItemInterface_className,
+        "igItemInterface",
         0x34, /* instance size */
         igItemInterface_GetVTable,
         &igItemInterface_InitFields,
@@ -106,17 +115,46 @@ void thunk_igItemInterface_GetMetaObject(void) {
     igItemInterface_GetMetaObject();
 }
 
+static FieldFactory g_igItemInterface_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igUnsignedIntMetaField_Create,
+};
+static const char *g_igItemInterface_fieldTable[] = {
+    "_itemDataBaseList",
+    "_metaList",
+    "_itemList",
+    "_itemNameList",
+    "_currentKnownItem",
+};
+static igMetaField **g_igItemInterface_fieldHandles[] = {
+    &g_igItemInterface_itemDataBaseListMetaField,
+    &g_igItemInterface_metaListMetaField,
+    &g_igItemInterface_itemListMetaField,
+    &g_igItemInterface_itemNameListMetaField,
+    &g_igItemInterface_currentKnownItemMetaField,
+};
+static int g_igItemInterface_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    48,
+};
+
 void igItemInterface_InitFields(void) {
     int temp_s0;
     void *temp_s2;
     void *temp_s2_2;
     void *temp_s2_3;
     void *temp_s2_4;
-    void *temp_s1;
+    igMetaObject *temp_s1;
 
-    temp_s1 = (void *)g_igItemInterface_metaObject[0];
+    temp_s1 = g_igItemInterface_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igItemInterface_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s1, g_igItemInterface_ctorTable, 5);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_002280b0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -129,7 +167,7 @@ void igItemInterface_InitFields(void) {
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igStringRefListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igItemInterface_fieldTable[0], &DAT_00497e30[0], &DAT_00497e50[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igItemInterface_fieldTable, g_igItemInterface_fieldHandles, g_igItemInterface_fieldOffsets, temp_s0);
     igMetaObject_AddExitCallback(FUN_002280a0);
 }
 

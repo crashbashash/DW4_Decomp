@@ -265,9 +265,50 @@ stays out of the file under `--partial` until it reproduces.
 
 A data section no placed body or declared datum reaches went with the functions the retail linker
 dropped, so it needs no row and is not linked. A section a placed body does reach must have a row,
-or the object is rejected as unowned. The data itself is never linked from the object: the isolated
-body refers to `DAT_<address>`, which `tools/linkgen.py` provides, and retail's bytes stay in place
-after being compared.
+or the object is rejected as unowned. Each isolated body refers to its unit's data as `DAT_<address>`,
+never a copy. The data sections that compared equal to retail are linked from one more object per unit,
+`u_<owner>_data.o` (`verify.isolate_unit_data`): only those sections, each renamed `.dw4_data_<address>`
+and pinned there by `tools/linkgen.py`, with every symbol they define made local, so the link reaches
+them only through the bodies' `DAT_<address>` references. When several units define one datum (a
+header's static, a merged string) and all verify it at the same address, the first unit in address
+order places it. A `.bss` section lies past the file image and is compared with the loader's zeros but
+not linked. `make check` writes every compared span to `data/check-data.tsv`, the data headline
+([progress metrics](progress-metrics.md)).
+
+## A unit's own data
+
+A whole-file unit that only declares its data `extern` at retail addresses matches, but its data is not
+decompiled. Moving a definition into the unit is what the data headline counts. What the work found:
+
+- **MWCC emits one section per datum**, and verify gives each section its own retail address, so an MWCC
+  unit can own its data item by item while retail-only items sit between them. Sony EE GCC puts all data
+  of a kind in one section, so such a unit owns a kind's whole block or none of it.
+- **A unit's data is one block per region**, in the order of the code that uses it, and units follow
+  each other in code order. The block starts at the lowest address the unit names in the region and ends
+  before the first one the next unit names. Pointer tables lead to the rest: the strings and `.bss` slots
+  a table points at are the unit's although no instruction names them.
+- **The retail linker's placement is exact:** each datum starts at the previous one's end rounded up to
+  `max(its alignment, 8)` (`max(alignment, 4)` in `.sbss`). MWCC aligns 16 for 16 bytes or more, 8 for
+  5 to 15, otherwise the type's own. A block with no gap under that rule is complete.
+- **Section kind, b52:** initialised → `.data`, `const` → `.rodata`, uninitialised or zero-initialised →
+  `.bss`, two bytes or less → `.sdata`/`.sbss` (`-sdatathreshold 2`), a local aggregate's initialiser → an
+  anonymous `.data` datum. Retail's literals are all read-only, short ones included, so a unit's functions
+  sit inside `#pragma push` / `#pragma readonly_strings on` / `#pragma pop` ([MWCC pragmas](mwcc-pragmas.md));
+  without it a one-byte literal goes to `.sdata`, is reached through `gp`, and changes the code. Literals
+  MWCC emits at the end of the translation unit (RTTI type names, strings of inline functions, some static
+  tables' strings) take the setting in force at the end of the file, so the closing `pop` leaves them in
+  `.data`, a kind mismatch. A stock file has no place for the pragma, so its library's profile rows carry
+  `-str readonly` instead (zlib, libpng). A zero global retail keeps in `.data` needs
+  `explicit_zero_data`, an owner's decision.
+- **Order and naming in the object:** file-scope data in definition order; a function's literals, local
+  statics and switch tables directly before its code; one object per distinct literal per translation
+  unit, placed by its first use. A named datum is a `data` row and its `data-names.tsv` row goes, and each
+  other whole-file unit that uses the name gets a `data` row for it; the row stays only while a function
+  not yet folded into its file still names it (verify accepts a definition its own rows place at the
+  address the name spells). `@N` and `name$N` are `anon` addresses. `tools/whole_file_rows.py` measures both.
+- **What stays `extern`:** data in another unit's block (a shared string, another library's global), and
+  vtables and RTTI records, which the compiler emits only from a class definition with its virtual
+  members, not from a pointer table.
 
 ## Static initialisers
 

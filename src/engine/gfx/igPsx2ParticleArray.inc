@@ -1,11 +1,26 @@
+igMetaObject *g_igPsx2ParticleArray_metaObject;
+igMetaField *g_igPsx2ParticleArray_hardwareSupportMetaField;
+igMetaField *g_igPsx2ParticleArray_currentEditIndexMetaField;
+igMetaField *g_igPsx2ParticleArray_ps2ParticleFormatMetaField;
+igMetaField *g_igPsx2ParticleArray_bSynchronizeMetaField;
+igMetaField *g_igPsx2ParticleArray_lSequenceMetaField;
+
 void thunk_igPsx2ParticleArray_GetMetaObject(void) {
     igPsx2ParticleArray_GetMetaObject();
 }
 
+static const char *g_igPsx2ParticleArray_particleCoordNames[] = {
+    "IG_GFX_PARTICLE_COORD_NONE", "IG_GFX_PARTICLE_COORD_CONSTANT", "IG_GFX_PARTICLE_COORD_LINEAR", "IG_GFX_PARTICLE_COORD_QUADRATIC",
+};
+static int g_igPsx2ParticleArray_particleCoordValues[] = {
+    0, 1, 2, 3,
+};
+igMetaEnum *g_igPsx2ParticleArray_particleCoordMetaEnum;
+
 int FUN_0014d010(void) {
-    if (DAT_0055fc98[0] == 0) {
-        DAT_0055fc98[0] = igMetaEnum_Create(&IG_GFX_PARTICLE_COORD[0], &DAT_00488b80[0], &DAT_00488b90[0], 4);
+    if (g_igPsx2ParticleArray_particleCoordMetaEnum == 0) {
+        g_igPsx2ParticleArray_particleCoordMetaEnum = igMetaEnum_Create("IG_GFX_PARTICLE_COORD", g_igPsx2ParticleArray_particleCoordNames, g_igPsx2ParticleArray_particleCoordValues, 4);
     }
-    return DAT_0055fc98[0];
+    return (int)g_igPsx2ParticleArray_particleCoordMetaEnum;
 }
 

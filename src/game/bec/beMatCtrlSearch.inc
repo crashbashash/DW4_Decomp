@@ -1,16 +1,23 @@
+igMetaObject *g_beMatCtrlSearch_metaObject;
+igMetaField *g_beMatCtrlSearch_minXMetaField;
+igMetaField *g_beMatCtrlSearch_maxXMetaField;
+igMetaField *g_beMatCtrlSearch_matNOMetaField;
+igMetaField *g_beMatCtrlSearch_parentMetaField;
+igMetaField *g_beMatCtrlSearch_memberListMetaField;
+
 igMetaObject *FUN_00359ff0(void) {
-    if (g_beMatCtrlSearch_metaObject[0] == 0) {
-        g_beMatCtrlSearch_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beMatCtrlSearch_metaObject == 0) {
+        g_beMatCtrlSearch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beMatCtrlSearch_metaObject[0];
+    return g_beMatCtrlSearch_metaObject;
 }
 
 void *FUN_0035a040(void) {
-    igMetaObject *g = g_beMatCtrlSearch_metaObject[0];
+    igMetaObject *g = g_beMatCtrlSearch_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035a120();
     }
-    return g_beMatCtrlSearch_metaObject[0];
+    return g_beMatCtrlSearch_metaObject;
 }
 
 int beMatCtrlSearch_GetVTable(void) {
@@ -40,15 +47,17 @@ void FUN_0035a120(void)
     igMetaObject_RunStaticInit(beMatCtrlSearch_Register);
 }
 
+static igMetaObjectCallback g_beMatCtrlSearch_callbackList[] = { FUN_00359f40, 0 };
+
 void *beMatCtrlSearch_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMatCtrlSearch_metaObject,
+        &g_beMatCtrlSearch_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beMatCtrlSearch_GetMetaObject,
-        beMatCtrlSearch_className,
+        "beMatCtrlSearch",
         0x1c, /* instance size */
         beMatCtrlSearch_GetVTable,
         beMatCtrlSearch_InitFields,
@@ -62,15 +71,44 @@ void beMatCtrlSearch_GetMetaObject(void)
     FUN_0035a040();
 }
 
+static FieldFactory g_beMatCtrlSearch_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beMatCtrlSearch_fieldTable[] = {
+    "_minX",
+    "_maxX",
+    "_matNO",
+    "_parent",
+    "_memberList",
+};
+static igMetaField **g_beMatCtrlSearch_fieldHandles[] = {
+    &g_beMatCtrlSearch_minXMetaField,
+    &g_beMatCtrlSearch_maxXMetaField,
+    &g_beMatCtrlSearch_matNOMetaField,
+    &g_beMatCtrlSearch_parentMetaField,
+    &g_beMatCtrlSearch_memberListMetaField,
+};
+static int g_beMatCtrlSearch_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+};
+
 void beMatCtrlSearch_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beMatCtrlSearch_metaObject[0];
+    temp_s0 = (void *)g_beMatCtrlSearch_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beMatCtrlSearch_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s0, g_beMatCtrlSearch_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00359ff0();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -78,6 +116,6 @@ void beMatCtrlSearch_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00359e60();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beMatCtrlSearch_fieldTable[0], &DAT_004c60c0[0], &DAT_004c60e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beMatCtrlSearch_fieldTable, g_beMatCtrlSearch_fieldHandles, g_beMatCtrlSearch_fieldOffsets, temp_s2);
 }
 

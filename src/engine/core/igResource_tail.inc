@@ -1,7 +1,9 @@
+int g_resourceLoaderStackSize = 0x100000;
+
 void igResource_StartAsyncLoading(igResourceView *self) {
     self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((int)self))).get();
     self->_loadQueue->Create();
-    self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize[0]);
+    self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize);
     self->_loadThread->SetPriority(255);
     self->_asyncLoadState = 1;
     ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault))->EnableAllocationLock(1);
@@ -16,7 +18,7 @@ void igResource_StopAsyncLoading(igResourceView *self) {
         self->_loadQueue->Insert(0, 1);
         igPsx2ThreadView *current;
         thread = self->_loadThread;
-        current = ((igPsx2ThreadManagerView **)g_threadManager)[0]->GetCurrentThread();
+        current = ((igPsx2ThreadManagerView **)&g_threadManager)[0]->GetCurrentThread();
         joined = current->Join(thread);
         igStandardQueue_StopServiceThreads(self->_loadQueue);
         queue = self->_loadQueue;
@@ -100,12 +102,12 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     file.p->_validState = 0;
     file.p->_loadPendingState = 1;
     o = file.p;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool[0] = v;
+        g_stringPool = v;
     }
-    v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    v = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = (int *)o->_name;
     if (old != 0) {
         int *hd = old - 2;
@@ -153,12 +155,12 @@ void *igResource_LoadDirectory(igResource *self, int path) {
     file.p->_validState = 0;
     file.p->_loadPendingState = 1;
     o = file.p;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         v = ((int)StringPool_Allocate(16));
         if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool[0] = v;
+        g_stringPool = v;
     }
-    v = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    v = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = (int *)o->_name;
     if (old != 0) {
         hd = old - 2;
@@ -185,12 +187,12 @@ igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileVie
     if (file == 0) return 0;
     r = 0;
     if (self->_relativeFilePath != 0 && strlen(self->_relativeFilePath) != 0) {
-        sprintf(buf, &percent_s_slash_percent_s[0], self->_relativeFilePath, file->_name);
+        sprintf(buf, "%s/%s", self->_relativeFilePath, file->_name);
         r = file->ReadFile(buf) > 0;
     }
     if (r == 0) {
         if (self->_absoluteFilePath != 0 && strlen(self->_absoluteFilePath) != 0) {
-            sprintf(buf, &percent_s_slash_percent_s[0], self->_absoluteFilePath, file->_name);
+            sprintf(buf, "%s/%s", self->_absoluteFilePath, file->_name);
             r = file->ReadFile(buf) > 0;
         }
     }
@@ -273,7 +275,7 @@ void igResource_RemoveIGBFiles(igResource *self) {
     igObject *o;
     for (i = ((igTDataList<igObject *> *)self->_directoryList)->_count - 1; i >= 0; i--) {
         off = i * 4;
-        if (igObject_IsKindOf((void *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)), (igMetaObject *)(((int *)g_igIGBFile_metaObject)[0])) != 0) {
+        if (igObject_IsKindOf((void *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)), (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
             l = (igTDataList<igObject *> *)self->_directoryList;
             o = *(igObject **)((char *)l->_data + off);
             if (o != 0) {
@@ -314,7 +316,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
 }
 
 static inline igObjectDirEntryView *AsObjectDirEntry(void *p) {
-    if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igObjectDirEntry_metaObject[0]) != 0) { return (igObjectDirEntryView *)p; }
+    if (p != 0 && igObject_IsKindOf(p, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
     return 0;
 }
 
@@ -347,7 +349,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         if (((unsigned long long)(long long)created->_refCount & 0x7fffffULL) == 0) igObject_Destroy(created);
                     }
                     fieldCount = igMetaObject_GetFieldCount(fromMeta);
-                    for (field = igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject[0]); field < fieldCount; field++) {
+                    for (field = igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject); field < fieldCount; field++) {
                         igMetaField *from = (igMetaField *)igMetaObject_GetFieldAt(fromMeta, field);
                         igMetaField *to = (igMetaField *)igMetaObject_FindFieldByName(toMeta, (const char *)from->_fieldName);
                         if (to != 0) {
@@ -360,7 +362,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         }
                     }
                     igDirectory_ReplaceReference((igDirectoryView *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
-                    if (igObject_IsKindOf(target.p, (igMetaObject *)g_igInfo_metaObject[0]) != 0) {
+                    if (igObject_IsKindOf(target.p, (igMetaObject *)g_igInfo_metaObject) != 0) {
                         igDirectory_AddInfo(directory, target.p);
                     }
                 }
@@ -374,11 +376,11 @@ void igResource_WrapRootInSceneInfo(int directory) {
     void *root;
     igObject *info;
     if (directory != 0) {
-        nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)&text_igNode[0]);
+        nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igNode");
         if (nodeMeta != 0) {
-            root = ((void *)igDirectory_GetObjectByName(directory, (int)&text_root[0]));
+            root = ((void *)igDirectory_GetObjectByName(directory, (int)"root"));
             if (root != 0 && igObject_IsKindOf(root, (igMetaObject *)nodeMeta) != 0) {
-                infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)&text_igSceneInfo[0]);
+                infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igSceneInfo");
                 if (infoMeta != 0) {
                     igObject *t;
                     igObjectRefMetaField *sceneGraphField, *camerasField, *sceneGraphListField;
@@ -391,10 +393,10 @@ void igResource_WrapRootInSceneInfo(int directory) {
                         u->_refCount = u->_refCount - 1;
                         if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
                     }
-                    sceneGraphField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_sceneGraph[0]));
+                    sceneGraphField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraph"));
                     igObjectRefMetaField_Assign(sceneGraphField, (void *)info, (igObject *)root);
-                    camerasField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_cameras[0]));
-                    sceneGraphListField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)&text_sceneGraphList[0]));
+                    camerasField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_cameras"));
+                    sceneGraphListField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraphList"));
                     sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
                     if (sceneGraphList != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)sceneGraphList, (igObject *)root);
                     igObjectRefMetaField_Assign(camerasField, (void *)info, (igObject *)0);
@@ -419,7 +421,7 @@ void igResource_FinishAsyncLoad(igResource *self, int name) {
     if (self->_autoCompatibility != 0) {
         directory = (igDirectory *)igResource_GetDirectory(self, name).p;
         if (directory != 0) {
-            igDirectory_ConvertObjectsOfType(directory, (const char *)text_igSceneWrapper, (const char *)text_igSceneInfo);
+            igDirectory_ConvertObjectsOfType(directory, (const char *)"igSceneWrapper", (const char *)"igSceneInfo");
             igResource_WrapRootInSceneInfo((int)directory);
             directory->_compatibleState = 1;
         }

@@ -27,9 +27,9 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
     if (var_s0 == 0) {
         var_s0 = ((R_1aea60 *)igProperty_FindByName(arg0->f36, g_propertyNameField[0], arg1));
     }
-    if (strncmp(arg1, DAT_004e44f8, strlen(DAT_004e44f8)) == 0) {
+    if (strncmp(arg1, "__TS__", strlen("__TS__")) == 0) {
         if (DAT_00562560[0] == 0) {
-            var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject[0], text_trackList));
+            var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject, "_trackList"));
             if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igObjectRefMetaField_metaObject[0]) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
@@ -37,11 +37,11 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
             }
             DAT_00562560[0] = (int *)var_s1;
         }
-        sscanf(arg1 + strlen(DAT_004e44f8), DAT_004e4500, sp50, &sp106C);
+        sscanf(arg1 + strlen("__TS__"), "%s %d", sp50, &sp106C);
         igSmartPointer<R_1aea60> record(((R_1aea60 *)igProperty_FindByName(arg0->f24, g_propertyNameField[0], sp50)), kRetainReference);
         if (record.get() != 0) {
             var_s1 = *(R_1aea60 **)((char *)record.get() + DAT_00562560[0][2]);
-            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igAnimationTrackList_metaObject[0]) != 0)) {
+            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igAnimationTrackList_metaObject) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
                 var_s1 = 0;
@@ -99,7 +99,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
         int i;
         int n;
         if (DAT_00562568 == 0) {
-            DAT_00562568 = (AnimDbField *)castField((AnimDbObject *)((void *)igMetaObject_FindFieldByName(((igMetaObject *)g_igAnimation_metaObject[0]), text_trackList)));
+            DAT_00562568 = (AnimDbField *)castField((AnimDbObject *)((void *)igMetaObject_FindFieldByName(((igMetaObject *)g_igAnimation_metaObject), "_trackList")));
         }
         n = db->_animationList->_count;
         for (i = 0; i < n; i++) {
@@ -114,7 +114,7 @@ int Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject
             total = list->_count;
             for (a = 0; a < total; a++) {
                 if ((AnimDbObject *)list->_data[a]->_source == target) {
-                    sprintf(name, text_s_s_d, DAT_004e44f8, nameOf(skin.p->_name), a);
+                    sprintf(name, "%s %s %d", "__TS__", nameOf(skin.p->_name), a);
                     r = (unsigned char)igDirectory_AddExternalInfoRef(file, db, name, obj);
                     return r;
                 }

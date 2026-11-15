@@ -1,14 +1,23 @@
 void FUN_0019fde0(int arg0) {
     FUN_001a1170();
-    igMetaObject_CreateInstance(*(int *)0x561A50, arg0);
+    igMetaObject_CreateInstance((int)g_igFrustCullTraversal_metaObject, arg0);
 }
+
+igMetaObject *g_igFrustCullTraversal_metaObject;
+igMetaField *g_igFrustCullTraversal_compMatMetaField;
+igMetaField *g_igFrustCullTraversal_curMVMatMetaField;
+igMetaField *g_igFrustCullTraversal_curProjectionMatMetaField;
+igMetaField *g_igFrustCullTraversal_cdMetaField;
+igMetaField *g_igFrustCullTraversal_outerFrustCullScaleMetaField;
+igMetaField *g_igFrustCullTraversal_outerScissorWindowScaleMetaField;
+igMetaField *g_igFrustCullTraversal_boundingBoxMetaField;
 
 igMetaObject *igFrustCullTraversal_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFrustCullTraversal_metaObject[0];
+    igMetaObject *g = g_igFrustCullTraversal_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a1170();
-    return g_igFrustCullTraversal_metaObject[0];
+    return g_igFrustCullTraversal_metaObject;
 }
 
 int igFrustCullTraversal_GetVTable(void) {
@@ -431,15 +440,17 @@ void FUN_001a1170(void)
     igMetaObject_RunStaticInit(igFrustCullTraversal_Register);
 }
 
+static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { FUN_00139250, FUN_0018a780, 0 };
+
 void igFrustCullTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFrustCullTraversal_metaObject,
+        &g_igFrustCullTraversal_metaObject,
         igCommonTraversal_Register,
         FUN_001a1210,
         thunk_igFrustCullTraversal_GetMetaObject,
-        igFrustCullTraversal_className,
+        "igFrustCullTraversal",
         0x230, /* instance size */
         igFrustCullTraversal_GetVTable,
         &igFrustCullTraversal_InitFields,
@@ -452,9 +463,83 @@ void thunk_igFrustCullTraversal_GetMetaObject(void) {
     igFrustCullTraversal_GetMetaObject();
 }
 
+igMetaObject *g_igCommonTraversal_metaObject;
+igMetaField *g_igCommonTraversal_attrStackMetaField;
+igMetaField *g_igCommonTraversal_transformStackMetaField;
+igMetaField *g_igCommonTraversal_vcMetaField;
+igMetaField *g_igCommonTraversal_capabilityManagerMetaField;
+igMetaField *g_igCommonTraversal_defaultManagerMetaField;
+igMetaField *g_igCommonTraversal_flushedAttrsMetaField;
+igMetaField *g_igCommonTraversal_sorterMetaField;
+igMetaField *g_igCommonTraversal_matrixPoolMetaField;
+igMetaField *g_igCommonTraversal_timePoolMetaField;
+igMetaField *g_igCommonTraversal_blendMatrixPoolMetaField;
+igMetaField *g_igCommonTraversal_texMatPoolMetaField;
+igMetaField *g_igCommonTraversal_vertexBlendMatListPoolMetaField;
+igMetaField *g_igCommonTraversal_matrixObjectPoolMetaField;
+igMetaField *g_igCommonTraversal_projectionMatrixPoolMetaField;
+igMetaField *g_igCommonTraversal_viewMatMetaField;
+igMetaField *g_igCommonTraversal_viewMatInvMetaField;
+igMetaField *g_igCommonTraversal_modeMaskMetaField;
+igMetaField *g_igCommonTraversal_matrixOptimizationMetaField;
+igMetaField *g_igCommonTraversal_normalizeNormalsEnableMetaField;
+igMetaField *g_igCommonTraversal_timeStackMetaField;
+igMetaField *g_igCommonTraversal_matrixObjectListMetaField;
+igMetaField *g_igCommonTraversal_timeLongBufMetaField;
+igMetaField *g_igCommonTraversal_timeBufferedMetaField;
+igMetaField *g_igCommonTraversal_boneMatrixPaletteListMetaField;
+igMetaField *g_igCommonTraversal_blendMatrixPaletteListMetaField;
+igMetaField *g_igCommonTraversal_blendMatrixPaletteLengthsMetaField;
+igMetaField *g_igCommonTraversal_segmentOverrideNamesMetaField;
+igMetaField *g_igCommonTraversal_segmentOverrideStacksMetaField;
+igMetaField *g_igCommonTraversal_blendMatricesAttrPoolMetaField;
+igMetaField *g_igCommonTraversal_projMatMetaField;
+igMetaField *g_igCommonTraversal_defaultTimeAttrMetaField;
+igMetaField *g_igCommonTraversal_jointChainCountMetaField;
+igMetaField *g_igCommonTraversal_jointMvmBaseMetaField;
+igMetaField *g_igCommonTraversal_jointMvmInverseBaseMetaField;
+igMetaField *g_igCommonTraversal_jointGraphRootTraversedMetaField;
+
 igMetaObject *FUN_001a1210(void) {
-    return g_igCommonTraversal_metaObject[0];
+    return g_igCommonTraversal_metaObject;
 }
+
+static FieldFactory g_igFrustCullTraversal_ctorTable[] = {
+    FUN_00188660,
+    igRawRefMetaField_Create,
+    igRawRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igFrustCullTraversal_fieldTable[] = {
+    "_compMat",
+    "_curMVMat",
+    "_curProjectionMat",
+    "_cd",
+    "_outerFrustCullScale",
+    "_outerScissorWindowScale",
+    "_boundingBox",
+};
+static igMetaField **g_igFrustCullTraversal_fieldHandles[] = {
+    &g_igFrustCullTraversal_compMatMetaField,
+    &g_igFrustCullTraversal_curMVMatMetaField,
+    &g_igFrustCullTraversal_curProjectionMatMetaField,
+    &g_igFrustCullTraversal_cdMetaField,
+    &g_igFrustCullTraversal_outerFrustCullScaleMetaField,
+    &g_igFrustCullTraversal_outerScissorWindowScaleMetaField,
+    &g_igFrustCullTraversal_boundingBoxMetaField,
+};
+static int g_igFrustCullTraversal_fieldOffsets[] = {
+    476,
+    540,
+    544,
+    548,
+    552,
+    556,
+    472,
+};
 
 void igFrustCullTraversal_InitFields(void) {
     void *temp_s2_3;
@@ -468,9 +553,9 @@ void igFrustCullTraversal_InitFields(void) {
     struct V o4;
     struct V o5;
 
-    temp_s1 = (void *)g_igFrustCullTraversal_metaObject[0];
+    temp_s1 = (void *)g_igFrustCullTraversal_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igFrustCullTraversal_ctorTable[0], 7);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igFrustCullTraversal_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     o5.x = 0;
     o5.y = 0;
@@ -498,7 +583,7 @@ void igFrustCullTraversal_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0018a6a0();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igFrustCullTraversal_fieldTable[0], &DAT_0048c0d0[0], &DAT_0048c0f0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igFrustCullTraversal_fieldTable, g_igFrustCullTraversal_fieldHandles, g_igFrustCullTraversal_fieldOffsets, temp_s0);
     igMetaObject_AddExitCallback(&thunk_FUN_001c45d0);
 }
 

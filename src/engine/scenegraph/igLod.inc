@@ -1,9 +1,18 @@
+igMetaObject *g_igLod_metaObject;
+igMetaField *g_igLod_rangeListMetaField;
+igMetaField *g_igLod_lastRangeMetaField;
+igMetaField *g_igLod_lastIndexMetaField;
+igMetaField *g_igLod_lastLowerMetaField;
+igMetaField *g_igLod_lastUpperMetaField;
+igMetaField *g_igLod_centerMetaField;
+igMetaField *g_igLod_hysteresisListMetaField;
+
 igMetaObject *igLod_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLod_metaObject[0];
+    igMetaObject *g = g_igLod_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019d710();
-    return g_igLod_metaObject[0];
+    return g_igLod_metaObject;
 }
 
 int igLod_GetVTable(void) {
@@ -36,15 +45,17 @@ void FUN_0019d710(void)
     igMetaObject_RunStaticInit(igLod_Register);
 }
 
+static igMetaObjectCallback g_igLod_callbackList[] = { igFloatList_EnsureRegistered, FUN_0019cf10, 0 };
+
 void igLod_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igLod_metaObject),
+        &g_igLod_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igLod_GetMetaObject,
-        igLod_className,
+        "igLod",
         0x44, /* instance size */
         igLod_GetVTable,
         &igLod_InitFields,
@@ -56,6 +67,43 @@ void igLod_Register(void) {
 void thunk_igLod_GetMetaObject(void) {
     igLod_GetMetaObject();
 }
+
+static FieldFactory g_igLod_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igLod_fieldTable[] = {
+    "_rangeList",
+    "_lastRange",
+    "_lastIndex",
+    "_lastLower",
+    "_lastUpper",
+    "_center",
+    "_hysteresisList",
+};
+static igMetaField **g_igLod_fieldHandles[] = {
+    &g_igLod_rangeListMetaField,
+    &g_igLod_lastRangeMetaField,
+    &g_igLod_lastIndexMetaField,
+    &g_igLod_lastLowerMetaField,
+    &g_igLod_lastUpperMetaField,
+    &g_igLod_centerMetaField,
+    &g_igLod_hysteresisListMetaField,
+};
+static int g_igLod_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    64,
+};
 
 void igLod_InitFields(void) {
     void *temp_s2;
@@ -69,9 +117,9 @@ void igLod_InitFields(void) {
     void *temp_v0_2;
     void *temp_v0_3;
 
-    temp_s1 = (void *)g_igLod_metaObject[0];
+    temp_s1 = (void *)g_igLod_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igLod_ctorTable[0], 7);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igLod_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -96,6 +144,6 @@ void igLod_InitFields(void) {
     FUN_0018e470(temp_a0, sp40);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igFloatList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, &g_igLod_fieldTable[0], &DAT_0048bd50[0], &DAT_0048bd70[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, temp_s0);
 }
 

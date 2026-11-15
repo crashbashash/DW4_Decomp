@@ -82,7 +82,7 @@ int Gap__Gui__igGuiSystem__vfunc_32(int *self, int x, int y) {
     f[4] = (float)y;
     p.a = 2;
     p.b = 0;
-    p.c = DAT_0058c3d0[0];
+    p.c = (int)g_igGuiSystemModel_windowSizeMetaField;
     igModel_NotifyViews((S_4578c0 *)((void *)self[3]), (S_4578c0 *)&p);
     return 0;
 }
@@ -93,7 +93,7 @@ int Gap__Gui__igGuiSystem__vfunc_34(igGuiSystem *arg0) {
     *(char *)((char *)(arg0->_model) + 180) = 1;
     buf[0] = 2;
     buf[1] = 0;
-    buf[2] = DAT_0058c420[0];
+    buf[2] = (int)g_igGuiSystemModel_windowCloseRequestedMetaField;
     igModel_NotifyViews((S_4578c0 *)arg0->_model, (S_4578c0 *)buf);
     return 1;
 }
@@ -112,7 +112,7 @@ int Gap__Gui__igGuiSystem__vfunc_25(struct P_457220 *arg0, int arg1, char arg2) 
     o->f1c = arg2;
     sp[0] = 2;
     sp[1] = 0;
-    sp[2] = DAT_0058c3e0[0];
+    sp[2] = (int)g_igGuiSystemModel_mousePressedMetaField;
     igModel_NotifyViews((S_4578c0 *)arg0->o, (S_4578c0 *)&sp[0]);
     return arg0->o->fac != 0;
 }

@@ -1,9 +1,12 @@
+igMetaObject *g_igItemDataBaseField_metaObject;
+int g_igItemDataBaseField_defaultDescriptor;
+
 igMetaObject *igItemDataBaseField_GetMetaObject(void)
 {
-    igMetaObject *g = g_igItemDataBaseField_metaObject[0];
+    igMetaObject *g = g_igItemDataBaseField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00228410();
-    return g_igItemDataBaseField_metaObject[0];
+    return g_igItemDataBaseField_metaObject;
 }
 
 int igItemDataBaseField_GetVTable(void) {
@@ -52,15 +55,17 @@ void FUN_00228410(void)
     igMetaObject_RunStaticInit(igItemDataBaseField_Register);
 }
 
+static igMetaObjectCallback g_igItemDataBaseField_callbackList[] = { FUN_002284a0, 0 };
+
 void igItemDataBaseField_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igItemDataBaseField_metaObject,
+        &g_igItemDataBaseField_metaObject,
         igCompoundMetaField_Register,
         igCompoundMetaField_GetPublishedMetaObject,
         thunk_igItemDataBaseField_GetMetaObject,
-        igItemDataBaseField_className,
+        "igItemDataBaseField",
         0x38, /* instance size */
         igItemDataBaseField_GetVTable,
         0,
@@ -76,29 +81,29 @@ void thunk_igItemDataBaseField_GetMetaObject(void) {
 void FUN_002284a0(void) {
     void *temp_s0;
 
-    if (DAT_0056d9e0[0] == 0) {
-        DAT_0056d9e0[0] = (int)(igMetaObject_CreateInstance(g_igItemDataBaseField_metaObject[0], Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
-        temp_s0 = (void *)(DAT_0056d9e0[0]);
+    if (g_igItemDataBaseField_defaultDescriptor == 0) {
+        g_igItemDataBaseField_defaultDescriptor = (int)(igMetaObject_CreateInstance(g_igItemDataBaseField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
+        temp_s0 = (void *)(g_igItemDataBaseField_defaultDescriptor);
         if (temp_s0 != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), temp_s0);
             {
-                void *held = (void *)DAT_0056d9e0[0];
+                void *held = (void *)g_igItemDataBaseField_defaultDescriptor;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
                 if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(DAT_0056d9e0[0]) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
-            igMetaField_FinalizeDescriptor(DAT_0056d9e0[0]);
+            *(short *)((char *)(g_igItemDataBaseField_defaultDescriptor) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
+            igMetaField_FinalizeDescriptor(g_igItemDataBaseField_defaultDescriptor);
         }
     }
 }
 
 int FUN_00228570(void) {
-    if (DAT_0056d9e0[0] == 0) {
+    if (g_igItemDataBaseField_defaultDescriptor == 0) {
         FUN_00228410();
     }
-    return DAT_0056d9e0[0];
+    return g_igItemDataBaseField_defaultDescriptor;
 }
 
 int Gap__igItemDataBaseField__vfunc_25(void) {
@@ -130,7 +135,7 @@ void FUN_002285d0(int arg0) {
     void *var_v0_5;
 
     temp_s0 = (void *)(igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
-    if (&text_interfacedMeta[0] == 0) {
+    if ("_interfacedMeta" == 0) {
         var_v0 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -140,7 +145,7 @@ void FUN_002285d0(int arg0) {
             }
             g_stringPool[0] = var_v0_2;
         }
-        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], &text_interfacedMeta[0]));
+        var_v0 = (void *)(StringPool_Intern(g_stringPool[0], "_interfacedMeta"));
     }
     sp3C = (void *)(var_v0);
     igMetaField_SetFieldName(temp_s0, &sp3C);
@@ -161,7 +166,7 @@ void FUN_002285d0(int arg0) {
         igObject_Destroy(temp_s0);
     }
     temp_s0_2 = (void *)(igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
-    if (&text_itemList[0] == 0) {
+    if ("_itemList" == 0) {
         var_v0_3 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -171,7 +176,7 @@ void FUN_002285d0(int arg0) {
             }
             g_stringPool[0] = var_v0_4;
         }
-        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], &text_itemList[0]));
+        var_v0_3 = (void *)(StringPool_Intern(g_stringPool[0], "_itemList"));
     }
     sp38 = (void *)(var_v0_3);
     igMetaField_SetFieldName(temp_s0_2, &sp38);
@@ -193,7 +198,7 @@ void FUN_002285d0(int arg0) {
         igObject_Destroy(temp_s0_2);
     }
     temp_s0_3 = (void *)(igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
-    if (&text_itemName[0] == 0) {
+    if ("_itemName" == 0) {
         var_v0_5 = (void *)(0);
     } else {
         if (g_stringPool[0] == 0) {
@@ -203,7 +208,7 @@ void FUN_002285d0(int arg0) {
             }
             g_stringPool[0] = var_v0_6;
         }
-        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], &text_itemName[0]));
+        var_v0_5 = (void *)(StringPool_Intern(g_stringPool[0], "_itemName"));
     }
     sp34 = (void *)(var_v0_5);
     igMetaField_SetFieldName(temp_s0_3, &sp34);

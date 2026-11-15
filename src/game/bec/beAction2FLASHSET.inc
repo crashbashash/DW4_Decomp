@@ -1,9 +1,11 @@
+igMetaObject *g_beAction2FLASHSET_metaObject;
+
 void *FUN_0036ce10(void) {
-    igMetaObject *g = g_beAction2FLASHSET_metaObject[0];
+    igMetaObject *g = g_beAction2FLASHSET_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036cef0();
     }
-    return g_beAction2FLASHSET_metaObject[0];
+    return g_beAction2FLASHSET_metaObject;
 }
 
 int beAction2FLASHSET_GetVTable(void) {
@@ -44,11 +46,11 @@ void *beAction2FLASHSET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2FLASHSET_metaObject,
+        &g_beAction2FLASHSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2FLASHSET_GetMetaObject,
-        beAction2FLASHSET_className,
+        "beAction2FLASHSET",
         0xc, /* instance size */
         beAction2FLASHSET_GetVTable,
         0,

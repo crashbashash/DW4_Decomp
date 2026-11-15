@@ -1,6 +1,6 @@
 igMetaObject *Gap__igPsx2AudioSourceList__vfunc_22(void)
 {
-    return g_igPsx2AudioSourceList_metaObject[0];
+    return g_igPsx2AudioSourceList_metaObject;
 }
 
 #define AUDIO_SOURCE_ENTRY_SIZE 0x24

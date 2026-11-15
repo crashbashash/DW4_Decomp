@@ -1,16 +1,18 @@
+igMetaObject *g_igTextureMatrixAttrPool_metaObject;
+
 igMetaObject *FUN_00199b60(void) {
-    if (g_igTextureMatrixAttrPool_metaObject[0] == 0) {
-        g_igTextureMatrixAttrPool_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTextureMatrixAttrPool_metaObject == 0) {
+        g_igTextureMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTextureMatrixAttrPool_metaObject[0];
+    return g_igTextureMatrixAttrPool_metaObject;
 }
 
 igMetaObject *igTextureMatrixAttrPool_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTextureMatrixAttrPool_metaObject[0];
+    igMetaObject *g = g_igTextureMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00199c40();
-    return g_igTextureMatrixAttrPool_metaObject[0];
+    return g_igTextureMatrixAttrPool_metaObject;
 }
 
 int igTextureMatrixAttrPool_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_00199c40(void)
     igMetaObject_RunStaticInit(igTextureMatrixAttrPool_Register);
 }
 
+static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { FUN_001318f0, 0 };
+
 void igTextureMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igTextureMatrixAttrPool_metaObject),
+        &g_igTextureMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
         thunk_igTextureMatrixAttrPool_GetMetaObject,
-        igTextureMatrixAttrPool_className,
+        "igTextureMatrixAttrPool",
         0x20, /* instance size */
         igTextureMatrixAttrPool_GetVTable,
         0,

@@ -1,14 +1,18 @@
+igMetaObject *g_igCustomStateField_metaObject;
+igMetaField *g_igCustomStateField_stateCollectionHandleMetaField;
+igMetaField *g_igCustomStateField_stateFieldMetaField;
+
 void FUN_0014eae0(int arg0) {
     FUN_0014ecd0();
-    igMetaObject_CreateInstance(*(int *)0x55FE50, arg0);
+    igMetaObject_CreateInstance(g_igCustomStateField_metaObject, arg0);
 }
 
 igMetaObject *igCustomStateField_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCustomStateField_metaObject[0];
+    igMetaObject *g = g_igCustomStateField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ecd0();
-    return g_igCustomStateField_metaObject[0];
+    return g_igCustomStateField_metaObject;
 }
 
 int igCustomStateField_GetVTable(void) {
@@ -75,15 +79,17 @@ void FUN_0014ecd0(void)
     igMetaObject_RunStaticInit(igCustomStateField_Register);
 }
 
+static igMetaObjectCallback g_igCustomStateField_callbackList[] = { igMetaField_EnsureRegistered, 0 };
+
 void igCustomStateField_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCustomStateField_metaObject,
+        &g_igCustomStateField_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igCustomStateField_GetMetaObject,
-        igCustomStateField_className,
+        "igCustomStateField",
         0x14, /* instance size */
         igCustomStateField_GetVTable,
         &igCustomStateField_InitFields,
@@ -96,16 +102,33 @@ void thunk_igCustomStateField_GetMetaObject(void) {
     igCustomStateField_GetMetaObject();
 }
 
-void igCustomStateField_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igCustomStateField_ctorTable[] = {
+    igUnsignedIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igCustomStateField_fieldTable[] = {
+    "_stateCollectionHandle",
+    "_stateField",
+};
+static igMetaField **g_igCustomStateField_fieldHandles[] = {
+    &g_igCustomStateField_stateCollectionHandleMetaField,
+    &g_igCustomStateField_stateFieldMetaField,
+};
+static int g_igCustomStateField_fieldOffsets[] = {
+    12,
+    16,
+};
 
-    temp_s0 = (void *)g_igCustomStateField_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCustomStateField_ctorTable[0], 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+void igCustomStateField_InitFields(void) {
+    int fieldStart;
+    void *temp_s1;
+    igMetaObject *meta;
+
+    meta = g_igCustomStateField_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igCustomStateField_ctorTable, 2);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaField_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &g_igCustomStateField_fieldTable[0], &DAT_00489030[0], &DAT_00489038[0], temp_s2);
+    igMetaObject_NameFields(meta, g_igCustomStateField_fieldTable, g_igCustomStateField_fieldHandles, g_igCustomStateField_fieldOffsets, fieldStart);
 }
 

@@ -1,9 +1,9 @@
 void *igViewerStatisticsManager_GetMetaObject(void) {
-    igMetaObject *g = g_igViewerStatisticsManager_metaObject[0];
+    igMetaObject *g = g_igViewerStatisticsManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_004588e0();
     }
-    return g_igViewerStatisticsManager_metaObject[0];
+    return g_igViewerStatisticsManager_metaObject;
 }
 
 int igViewerStatisticsManager_GetVTable(void) {
@@ -51,15 +51,17 @@ void FUN_004588e0(void)
     igMetaObject_RunStaticInit(igViewerStatisticsManager_Register);
 }
 
+static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { FUN_00458bc0, FUN_0014a0e0, FUN_0045bc10, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+
 void igViewerStatisticsManager_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerStatisticsManager_metaObject,
+        &g_igViewerStatisticsManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igViewerStatisticsManager_GetMetaObject,
-        igViewerStatisticsManager_className,
+        "igViewerStatisticsManager",
         0x48, /* instance size */
         igViewerStatisticsManager_GetVTable,
         &igViewerStatisticsManager_InitFields,
@@ -71,6 +73,75 @@ void igViewerStatisticsManager_Register(void) {
 void thunk_igViewerStatisticsManager_GetMetaObject(void) {
     igViewerStatisticsManager_GetMetaObject();
 }
+
+static FieldFactory g_igViewerStatisticsManager_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_igViewerStatisticsManager_fieldTable[] = {
+    "_items",
+    "_visualContext",
+    "_guiFactory",
+    "_menu",
+    "_boxComponent",
+    "_string",
+    "_recordStatisticMaximum",
+    "_attrMetaObjects",
+    "_extraSgStatistics",
+    "_attrCount",
+    "_displayListAttrCount",
+    "_textureAttrCount",
+    "_geometryAttrCount",
+    "_geometrySetAttrCount",
+    "_mvmAttrCount",
+};
+static igMetaField **g_igViewerStatisticsManager_fieldHandles[] = {
+    &g_igViewerStatisticsManager_itemsMetaField,
+    &g_igViewerStatisticsManager_visualContextMetaField,
+    &g_igViewerStatisticsManager_guiFactoryMetaField,
+    &g_igViewerStatisticsManager_menuMetaField,
+    &g_igViewerStatisticsManager_boxComponentMetaField,
+    &g_igViewerStatisticsManager_stringMetaField,
+    &g_igViewerStatisticsManager_recordStatisticMaximumMetaField,
+    &g_igViewerStatisticsManager_attrMetaObjectsMetaField,
+    &g_igViewerStatisticsManager_extraSgStatisticsMetaField,
+    &g_igViewerStatisticsManager_attrCountMetaField,
+    &g_igViewerStatisticsManager_displayListAttrCountMetaField,
+    &g_igViewerStatisticsManager_textureAttrCountMetaField,
+    &g_igViewerStatisticsManager_geometryAttrCountMetaField,
+    &g_igViewerStatisticsManager_geometrySetAttrCountMetaField,
+    &g_igViewerStatisticsManager_mvmAttrCountMetaField,
+};
+static int g_igViewerStatisticsManager_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+};
 
 void igViewerStatisticsManager_InitFields(void) {
     int temp_s0;
@@ -84,9 +155,9 @@ void igViewerStatisticsManager_InitFields(void) {
     void *temp_s2_8;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igViewerStatisticsManager_metaObject[0];
+    temp_s1 = g_igViewerStatisticsManager_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igViewerStatisticsManager_ctorTable[0], 0xF);
+    igMetaObject_CreateFields(temp_s1, g_igViewerStatisticsManager_ctorTable, 0xF);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00458ae0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -107,6 +178,6 @@ void igViewerStatisticsManager_InitFields(void) {
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igMetaFieldList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igViewerStatisticsManager_fieldTable[0], &DAT_004d0940[0], &DAT_004d0980[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igViewerStatisticsManager_fieldTable, g_igViewerStatisticsManager_fieldHandles, g_igViewerStatisticsManager_fieldOffsets, temp_s0);
 }
 

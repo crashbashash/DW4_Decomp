@@ -1,26 +1,29 @@
+igMetaObject *g_igIntList_metaObject;
+int g_igIntList_dataDescriptorCell;
+
 igMetaObject *igIntList_GetPublishedMetaObject(void) {
-    return g_igIntList_metaObject[0];
+    return g_igIntList_metaObject;
 }
 
 void * igIntList_Create(int allocator) {
     igIntList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586880), (igMemoryPoolView *)allocator));
+    return (void *)(igMetaObject_CreateInstance(g_igIntList_metaObject, (igMemoryPoolView *)allocator));
 }
 
 /* Created with allocation only when missing. */
 int igIntList_GetOrCreateMetaObject(void) {
-    if (((int *)g_igIntList_metaObject)[0] == 0) {
-        ((int *)g_igIntList_metaObject)[0] = (int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if ((int)g_igIntList_metaObject == 0) {
+        g_igIntList_metaObject = (igMetaObject *)(int)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return ((int *)g_igIntList_metaObject)[0];
+    return (int)g_igIntList_metaObject;
 }
 
 igMetaObject *igIntList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIntList_metaObject[0];
+    igMetaObject *g = g_igIntList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igIntList_EnsureRegistered();
-    return g_igIntList_metaObject[0];
+    return g_igIntList_metaObject;
 }
 
 int igIntList_GetVTable(void) {
@@ -28,7 +31,7 @@ int igIntList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igIntList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igIntList_EnsureRegistered(void)
@@ -40,11 +43,11 @@ void *igIntList_Register(void) {
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0,
-        g_igIntList_metaObject,
+        &g_igIntList_metaObject,
         (igMetaObjectRegisterFunction)igDataList_Register,
         (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igIntList_GetMetaObjectFunction,
-        igIntList_className,
+        "igIntList",
         0x14,
         igIntList_GetVTable,
         igIntList_InitFields,
@@ -64,14 +67,15 @@ static inline void releaseDataField(igMemoryRefMetaField *f) {
     }
 }
 
+
 void igIntList_InitFields(void) {
-    igMetaObject *meta = g_igIntList_metaObject[0];
+    igMetaObject *meta = g_igIntList_metaObject;
     igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
     int index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
     field->_memType = igIntMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
-    field->_externalEnumStorage = (int)g_igIntList_dataDescriptorCell;
+    field->_externalEnumStorage = (int)&g_igIntList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
     releaseDataField(field);
 }

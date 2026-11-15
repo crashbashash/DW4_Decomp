@@ -1,3 +1,6 @@
+unsigned char g_arenaBlockListNoticeIgnored;
+unsigned char g_arenaBlockListGrowNoticeIgnored;
+
 void igArenaMemoryPool_UpdateBlockList(igArenaMemoryPool *o, unsigned int lo, int len) {
     ArenaState *r;
     int i;
@@ -15,7 +18,7 @@ void igArenaMemoryPool_UpdateBlockList(igArenaMemoryPool *o, unsigned int lo, in
         if (lo >= a && (h = e + 1, lo <= e[1])) {
             if (found) {
                 if (o->_messageLevel >= 2 && g_arenaBlockListNoticeIgnored == 0) {
-                    int rc = igReportNotice(text_igArenaMemoryPool_E67_Block_list, r->blocks, h, a);
+                    int rc = igReportNotice("igArenaMemoryPool(E67): Block list is invalid.", r->blocks, h, a);
                     if (rc != 1 && rc == 2) g_arenaBlockListNoticeIgnored = 1;
                 }
                 return;
@@ -43,7 +46,7 @@ if (r->blockCount >= cap) {
             void *np;
             ncap = cap + 2;
             if (ncap == 0) ncap = 512;
-            np = g_activeSystemAllocator[0]->Reallocate(r->blocks, ncap * 4);
+            np = g_activeSystemAllocator->Reallocate(r->blocks, ncap * 4);
             if (np != 0) {
                 r->blocks = (int *)np;
                 r->blockCapacity = ncap;
@@ -51,7 +54,7 @@ if (r->blockCount >= cap) {
                 if (o->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, o);
                     if (g_arenaBlockListGrowNoticeIgnored == 0) {
-                        int rc = igReportNotice(text_igArenaMemoryPool_E68_Unable_to);
+                        int rc = igReportNotice("igArenaMemoryPool(E68): Unable to allocate new block list.");
                         if (rc != 1 && rc == 2) g_arenaBlockListGrowNoticeIgnored = 1;
                     }
                 }
@@ -94,22 +97,22 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
     int count = 0;
     bool ok = false;
     if (cur < lo || hi < cur) {
-        igReport_Printf(text_displayOutstandingAllocationsBlock_block_range, index, cur, lo, hi);
+        igReport_Printf("igArenaMemoryPool::displayOutstandingAllocationsBlock: At index %d, block (0x%x) is not in a valid range (0x%x-0x%x).", index, cur, lo, hi);
         igReport_Flush();
         return;
     }
     if (end < lo || hi < end) {
-        igReport_Printf(text_displayOutstandingAllocationsBlock_block_end_range, index, end, lo, hi);
+        igReport_Printf("igArenaMemoryPool::displayOutstandingAllocationsBlock: At index %d, block end (0x%x) is not in a valid range (0x%x-0x%x).", index, end, lo, hi);
         igReport_Flush();
         return;
     }
     if (end < cur) {
-        igReport_Printf(text_displayOutstandingAllocationsBlock_end_before_start, index, end, cur);
+        igReport_Printf("igArenaMemoryPool::displayOutstandingAllocationsBlock: At index %d, the end block (0x%x) is less than the start block (0x%x).", index, end, cur);
         igReport_Flush();
         return;
     }
     if (!((TaggedBlockHeader *)cur)->used) {
-        igReport_Printf(text_displayOutstandingAllocationsBlock_arena_corrupted);
+        igReport_Printf("igArenaMemoryPool::displayOutstandingAllocationsBlock: Arena (0x%x) corrupted.  First block should have had previous in use bit set.");
         igReport_Flush();
         return;
     }
@@ -148,7 +151,7 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
         }
         if ((char *)n != end && n->used) {
             char *allocation = cur + (big == 0 ? 4 : 12);
-            igReport_Printf((const char *)text_Outstanding_allocation_at_0x_percent_08x, allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
+            igReport_Printf((const char *)"    Outstanding allocation at 0x%08x size %d\n", allocation, big == 0 ? h->size : h->size + (h->sizeHigh << 19), sz);
             igReport_Flush();
         }
         cur = (char *)n;
@@ -156,7 +159,7 @@ void igArenaMemoryPool_DisplayOutstandingAllocationsBlock(igArenaMemoryPoolView 
     }
     if (cur != end && !ok) {
 bad:
-        igReport_Printf(text_displayOutstandingAllocationsBlock_chunk_size, cur, index, count, size);
+        igReport_Printf("igArenaMemoryPool::displayOutstandingAllocationsBlock: The block at 0x%x at block index %d chunk index %d has an invalid chunk size 0x%x.", cur, index, count, size);
         igReport_Flush();
         return;
     }

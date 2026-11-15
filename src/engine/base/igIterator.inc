@@ -1,9 +1,11 @@
+igMetaObject *g_igIterator_metaObject;
+
 igMetaObject *igIterator_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIterator_metaObject[0];
+    igMetaObject *g = g_igIterator_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002273d0();
-    return g_igIterator_metaObject[0];
+    return g_igIterator_metaObject;
 }
 
 void FUN_002273d0(void)
@@ -15,11 +17,11 @@ void igIterator_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igIterator_metaObject,
+        &g_igIterator_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igIterator_GetMetaObject,
-        igIterator_className,
+        "igIterator",
         8, /* instance size */
         0,
         0,
@@ -33,6 +35,6 @@ void thunk_igIterator_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00227450(void) {
-    return g_igIterator_metaObject[0];
+    return g_igIterator_metaObject;
 }
 

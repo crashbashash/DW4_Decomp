@@ -1,9 +1,12 @@
+igMetaObject *g_beSwitchCtrlInfo_metaObject;
+igMetaField *g_beSwitchCtrlInfo_switchNodeMetaField;
+
 void *FUN_00343190(void) {
-    igMetaObject *g = g_beSwitchCtrlInfo_metaObject[0];
+    igMetaObject *g = g_beSwitchCtrlInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003432e0();
     }
-    return g_beSwitchCtrlInfo_metaObject[0];
+    return g_beSwitchCtrlInfo_metaObject;
 }
 
 int beSwitchCtrlInfo_GetVTable(void) {
@@ -41,15 +44,17 @@ void FUN_003432e0(void)
     igMetaObject_RunStaticInit(beSwitchCtrlInfo_Register);
 }
 
+static igMetaObjectCallback g_beSwitchCtrlInfo_callbackList[] = { FUN_00196ad0, 0 };
+
 void *beSwitchCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSwitchCtrlInfo_metaObject,
+        &g_beSwitchCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beSwitchCtrlInfo_GetMetaObject,
-        beSwitchCtrlInfo_className,
+        "beSwitchCtrlInfo",
         0x20, /* instance size */
         beSwitchCtrlInfo_GetVTable,
         beSwitchCtrlInfo_InitFields,
@@ -63,23 +68,44 @@ void beSwitchCtrlInfo_GetMetaObject(void)
     FUN_00343190();
 }
 
+static FieldFactory g_beSwitchCtrlInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beSwitchCtrlInfo_fieldTable[] = {
+    "_switchNode",
+};
+static igMetaField **g_beSwitchCtrlInfo_fieldHandles[] = {
+    &g_beSwitchCtrlInfo_switchNodeMetaField,
+};
+static int g_beSwitchCtrlInfo_fieldOffsets[] = {
+    28,
+};
+
 void beSwitchCtrlInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSwitchCtrlInfo_metaObject[0];
+    temp_s0 = (void *)g_beSwitchCtrlInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSwitchCtrlInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beSwitchCtrlInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
-    igMetaObject_NameFields(temp_s0, &g_beSwitchCtrlInfo_fieldTable[0], &DAT_004c3770[0], &DAT_004c3778[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSwitchCtrlInfo_fieldTable, g_beSwitchCtrlInfo_fieldHandles, g_beSwitchCtrlInfo_fieldOffsets, temp_s2);
 }
 
-int beSwitchCtrl_GetMessageEnum(void) {
-    if (DAT_00587df0[0] == 0) {
-        DAT_00587df0[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c3780[0], &DAT_004c3788[0], 2);
+igMetaEnum *g_beSwitchCtrlInfo_msgActionMetaEnum;
+static const char *g_beSwitchCtrlInfo_msgActionNames[] = {
+    "ALLON", "ALLOF",
+};
+static int g_beSwitchCtrlInfo_msgActionValues[] = {
+    0, 1,
+};
+
+igMetaEnum *beSwitchCtrl_GetMessageEnum(void) {
+    if (g_beSwitchCtrlInfo_msgActionMetaEnum == 0) {
+        g_beSwitchCtrlInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beSwitchCtrlInfo_msgActionNames, g_beSwitchCtrlInfo_msgActionValues, 2);
     }
-    return DAT_00587df0[0];
+    return g_beSwitchCtrlInfo_msgActionMetaEnum;
 }
 

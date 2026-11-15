@@ -62,11 +62,11 @@ igMetaObject *igMetaObject_Init(igMetaObject *meta){
     meta->_getMetaObjectFunction=0;
     meta->_requiredAlignment=4;
     meta->_vTablePointer=0;
-    if(g_stringPool[0]==0){
+    if(g_stringPool==0){
         pool=((int)StringPool_Allocate(16));if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool[0]=pool;
+        g_stringPool=pool;
     }
-    emptyToken=(void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
+    emptyToken=(void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
     /* Drop the old pool-name token: owner chunk at -8, reference count at -4. */
     oldName=meta->_poolName;
     if(oldName){oldHeader=(int *)(oldName-8);refCount=*(int *)(oldName-4)-1;*(int *)(oldName-4)=refCount;
@@ -221,14 +221,14 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
     int pool, internedName, oldName, refCount;
     int *oldHeader;
 
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    internedName = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
+    internedName = StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     oldName = meta->_name;
     if (oldName) {
         oldHeader = (int *)(oldName - 8);
@@ -266,7 +266,7 @@ int igMetaObject_GetFieldAt(igMetaObject *self, int index) {
 }
 
 void *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
-    return ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember[0], name);
+    return ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember, name);
 }
 
 void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
@@ -338,7 +338,7 @@ void igMetaObject_FinalizeFieldLayout(igMetaObject *self) {
     self->_requiredAlignment = maxAlignment;
     if (self->_sizeofSize != -1) self->_runTimeSize = -(offset & ~(minAlignment - 1));
     self->_validity |= 4;
-    igObjectSystem_RunRegistrationCallbacks((int *)(((void * *)g_objectSystem)[0]), (int)self);
+    igObjectSystem_RunRegistrationCallbacks((int *)((*(void * *)&g_objectSystem)), (int)self);
 }
 
 int igMetaObject_IsOfType(igMetaObject *self, igMetaObject *type) {
@@ -406,7 +406,7 @@ int igMetaObject_CountTree(igMetaObject *self) {
     return count;
 }
 
-int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem_FindMetaByName((ObjectSystemView *)(((void * *)g_objectSystem)[0]), name);}
+int igObjectSystem_FindMetaByNameDefault(const char *name){return igObjectSystem_FindMetaByName((ObjectSystemView *)((*(void * *)&g_objectSystem)), name);}
 
 /* Read from the field list's `_capacity` slot (+12), not `_count` (+8). */
 int igMetaObject_GetFieldCount(igMetaObject *self) {
@@ -414,11 +414,11 @@ int igMetaObject_GetFieldCount(igMetaObject *self) {
 }
 
 void igMetaObject_AddExitCallback(int callback) {
-    igObjectSystem_AddExitCallback((int *)(((void * *)g_objectSystem)[0]), callback);
+    igObjectSystem_AddExitCallback((int *)((*(void * *)&g_objectSystem)), callback);
 }
 
 void igMetaObject_AddRegistrationCallback(int callback) {
-    igObjectSystem_AddRegistrationCallback((ObjectSystemView *)(((void * *)g_objectSystem)[0]), (int (*)(int))callback);
+    igObjectSystem_AddRegistrationCallback((ObjectSystemView *)((*(void * *)&g_objectSystem)), (int (*)(int))callback);
 }
 
 void igMetaObject_AddField(igMetaObject *self, void *object) {
@@ -489,10 +489,10 @@ int igMetaObject_GetPersistentFieldCount(int self) {
 /* Search the object system's registry; when absent (-1) append the metaobject and search again,
  * since appending can replace the registry. */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
-    meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
+    meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
     if(meta->_index==-1){
-        igObjectSystem_AppendMetaObject(((void * *)g_objectSystem)[0],meta);
-        meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)((void * *)g_objectSystem)[0])->metaRegistry), (int)meta);
+        igObjectSystem_AppendMetaObject((*(void * *)&g_objectSystem),meta);
+        meta->_index=ObjectPointerList_FindIndex((char *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
     }
 }
 
@@ -530,8 +530,6 @@ static inline int hasValidity(const igMetaObject &meta, int bit) {
     return (meta._validity & bit) != 0;
 }
 
-#pragma push
-#pragma readonly_strings on
 CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObject,
     igMetaObjectRegisterFunction registerParent, igMetaObjectGetFunction getParentMetaObject,
     igMetaObjectCallback getMetaObjectFunction, const char *className, int instanceSize,
@@ -577,10 +575,10 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
                 igMetaObject_AssignTypeId(meta);
                 meta->_refCount = meta->_refCount - 1;
                 if ((meta->_refCount & 0x7FFFFF) == 0) igObject_Destroy(meta);
-                ObjectSystemView *system = ((ObjectSystemView **)g_objectSystem)[0];
+                ObjectSystemView *system = (*(ObjectSystemView * *)&g_objectSystem);
                 if (system->copyVTables != 0 && system->fastPool != 0 && system->vtableClassNames != 0 &&
                     igStringTable_Find(system->vtableClassNames, (unsigned int)className) != -1) {
-                    igMetaObject_CopyVTable(meta, ((ObjectSystemView **)g_objectSystem)[0]->fastPool);
+                    igMetaObject_CopyVTable(meta, (*(ObjectSystemView * *)&g_objectSystem)->fastPool);
                 }
             }
             igMetaObject_FinalizeFieldLayout(meta);
@@ -610,4 +608,3 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
     }
     return list;
 }
-#pragma pop

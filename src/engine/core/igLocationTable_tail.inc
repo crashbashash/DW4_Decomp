@@ -255,6 +255,8 @@ done:
     return 1;
 }
 
+int g_locationTableEmptySlot = -1;
+
 void igLocationTable_Rehash(igLocationTableView *self, int capacity) {
     igTDataList<int> *l; int n; int *a; int i; LocationRecord *s1; LocationRecord *s0; LocationRecord *s3;
     igLocationTable_SetHashCapacity((int)self, capacity);

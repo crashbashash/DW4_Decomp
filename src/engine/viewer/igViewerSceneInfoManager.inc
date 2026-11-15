@@ -1,31 +1,84 @@
-int FUN_004592e0(void) {
-    if (DAT_0058c788[0] == 0) {
-        DAT_0058c788[0] = igMetaEnum_Create(&GUI_VISIBILITY[0], &DAT_004d0ae0[0], &DAT_004d0af0[0], 3);
+static const char *g_igViewerSceneInfoManager_GUI_VISIBILITYNames[] = {
+    "ALL_VISIBLE", "ONLY_STATS", "ALL_HIDDEN",
+};
+static int g_igViewerSceneInfoManager_GUI_VISIBILITYValues[] = {
+    0, 1, 2,
+};
+igMetaEnum *g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum;
+igMetaObject *g_igViewerSceneInfoManager_metaObject;
+igMetaField *g_igViewerSceneInfoManager_nameMetaField;
+igMetaField *g_igViewerSceneInfoManager_applicationControllerMetaField;
+igMetaField *g_igViewerSceneInfoManager_parametersMetaField;
+igMetaField *g_igViewerSceneInfoManager_viewerRendererMetaField;
+igMetaField *g_igViewerSceneInfoManager_bboxRendererMetaField;
+igMetaField *g_igViewerSceneInfoManager_normalsRendererMetaField;
+igMetaField *g_igViewerSceneInfoManager_flushRendererMetaField;
+igMetaField *g_igViewerSceneInfoManager_clippingCheckFrameMetaField;
+igMetaField *g_igViewerSceneInfoManager_guiMetaField;
+igMetaField *g_igViewerSceneInfoManager_guiFactoryMetaField;
+igMetaField *g_igViewerSceneInfoManager_rootComponentMetaField;
+igMetaField *g_igViewerSceneInfoManager_menuHolderMetaField;
+igMetaField *g_igViewerSceneInfoManager_operationBoxHolderMetaField;
+igMetaField *g_igViewerSceneInfoManager_operationBoxMetaField;
+igMetaField *g_igViewerSceneInfoManager_timeBoxHolderMetaField;
+igMetaField *g_igViewerSceneInfoManager_timeBoxMetaField;
+igMetaField *g_igViewerSceneInfoManager_menuBarMetaField;
+igMetaField *g_igViewerSceneInfoManager_viewMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_viewportMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_cameraMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_cameraMenuActiverMetaField;
+igMetaField *g_igViewerSceneInfoManager_optionMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_disableMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_statMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_timeMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_alchemyMenuMetaField;
+igMetaField *g_igViewerSceneInfoManager_timeStatisticMetaField;
+igMetaField *g_igViewerSceneInfoManager_speedStatisticMetaField;
+igMetaField *g_igViewerSceneInfoManager_nearPlaneStatisticMetaField;
+igMetaField *g_igViewerSceneInfoManager_farPlaneStatisticMetaField;
+igMetaField *g_igViewerSceneInfoManager_hotKeyReceiverMetaField;
+igMetaField *g_igViewerSceneInfoManager_viewManagerMetaField;
+igMetaField *g_igViewerSceneInfoManager_statManagerMetaField;
+igMetaField *g_igViewerSceneInfoManager_disableComponentsMetaField;
+igMetaField *g_igViewerSceneInfoManager_disableViewsMetaField;
+igMetaField *g_igViewerSceneInfoManager_operationModeGroupMetaField;
+igMetaField *g_igViewerSceneInfoManager_referencesMetaField;
+igMetaField *g_igViewerSceneInfoManager_framesMetaField;
+igMetaField *g_igViewerSceneInfoManager_lastStatTimeMetaField;
+igMetaField *g_igViewerSceneInfoManager_guiVisibilityMetaField;
+igMetaField *g_igViewerSceneInfoManager_textureListMetaField;
+igMetaField *g_igViewerSceneInfoManager_modeChangeMetaField;
+igMetaField *g_igViewerSceneInfoManager_isCapturingBudgetMetaField;
+igMetaField *g_igViewerSceneInfoManager_hideAllStatisticsMenuItemMetaField;
+
+igMetaEnum *FUN_004592e0(void) {
+    if (g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum == 0) {
+        g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum = igMetaEnum_Create("GUI_VISIBILITY", g_igViewerSceneInfoManager_GUI_VISIBILITYNames, g_igViewerSceneInfoManager_GUI_VISIBILITYValues, 3);
     }
-    return DAT_0058c788[0];
+    return g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum;
 }
 
 void FUN_00459340(int arg0) {
     FUN_00459e40();
-    igMetaObject_CreateInstance(*(int *)0x58C790, arg0);
+    igMetaObject_CreateInstance(g_igViewerSceneInfoManager_metaObject, arg0);
 }
 
 igMetaObject *FUN_00459380(void) {
-    if (g_igViewerSceneInfoManager_metaObject[0] == 0) {
-        g_igViewerSceneInfoManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewerSceneInfoManager_metaObject == 0) {
+        g_igViewerSceneInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewerSceneInfoManager_metaObject[0];
+    return g_igViewerSceneInfoManager_metaObject;
 }
 
 void *igViewerSceneInfoManager_GetMetaObject(void) {
     bool ok;
-    if (g_igViewerSceneInfoManager_metaObject[0] == 0) goto make;
-    ok = !!(((MetaObjectFlags *)g_igViewerSceneInfoManager_metaObject[0])->f & 4);
+    if (g_igViewerSceneInfoManager_metaObject == 0) goto make;
+    ok = !!(((MetaObjectFlags *)g_igViewerSceneInfoManager_metaObject)->f & 4);
     if (ok != false) goto done;
 make:
     FUN_00459e40();
 done:;
-    return (void *)g_igViewerSceneInfoManager_metaObject[0];
+    return (void *)g_igViewerSceneInfoManager_metaObject;
 }
 
 int igViewerSceneInfoManager_GetVTable(void) {
@@ -390,15 +443,17 @@ void FUN_00459e40(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManager_Register);
 }
 
+static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { FUN_0045a9a0, FUN_0045b590, FUN_0045b0d0, FUN_0045e050, FUN_0045d9f0, FUN_00233b80, igGuiSystem_RunStaticInit, FUN_0045bc10, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, FUN_00458ec0, igHotKeyEventReceiver_RunStaticInit, FUN_0045d2f0, FUN_004588e0, igGuiComponentList_EnsureRegistered, igObjectList_EnsureRegistered, igRadioGroup_EnsureRegistered, FUN_0013a440, FUN_0045a580, 0 };
+
 void igViewerSceneInfoManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerSceneInfoManager_metaObject,
+        &g_igViewerSceneInfoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
         thunk_igViewerSceneInfoManager_GetMetaObject,
-        igViewerSceneInfoManager_className,
+        "igViewerSceneInfoManager",
         0xC8, /* instance size */
         igViewerSceneInfoManager_GetVTable,
         FUN_00459ee0,                               /* field adder: InitFields, registers the reflected fields */
@@ -410,6 +465,187 @@ void igViewerSceneInfoManager_Register(void) {
 void thunk_igViewerSceneInfoManager_GetMetaObject(void) {
     igViewerSceneInfoManager_GetMetaObject();
 }
+
+static FieldFactory g_igViewerSceneInfoManager_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igLongMetaField_Create,
+    igEnumMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igViewerSceneInfoManager_fieldTable[] = {
+    "_applicationController",
+    "_parameters",
+    "_viewerRenderer",
+    "_bboxRenderer",
+    "_normalsRenderer",
+    "_flushRenderer",
+    "_clippingCheckFrame",
+    "_gui",
+    "_guiFactory",
+    "_rootComponent",
+    "_menuHolder",
+    "_operationBoxHolder",
+    "_operationBox",
+    "_timeBoxHolder",
+    "_timeBox",
+    "_menuBar",
+    "_viewMenu",
+    "_viewportMenu",
+    "_cameraMenu",
+    "_cameraMenuActiver",
+    "_optionMenu",
+    "_disableMenu",
+    "_statMenu",
+    "_timeMenu",
+    "_alchemyMenu",
+    "_timeStatistic",
+    "_speedStatistic",
+    "_nearPlaneStatistic",
+    "_farPlaneStatistic",
+    "_hotKeyReceiver",
+    "_viewManager",
+    "_statManager",
+    "_disableComponents",
+    "_disableViews",
+    "_operationModeGroup",
+    "_references",
+    "_frames",
+    "_lastStatTime",
+    "_guiVisibility",
+    "_textureList",
+    "_modeChange",
+    "_isCapturingBudget",
+    "_hideAllStatisticsMenuItem",
+};
+static igMetaField **g_igViewerSceneInfoManager_fieldHandles[] = {
+    &g_igViewerSceneInfoManager_applicationControllerMetaField,
+    &g_igViewerSceneInfoManager_parametersMetaField,
+    &g_igViewerSceneInfoManager_viewerRendererMetaField,
+    &g_igViewerSceneInfoManager_bboxRendererMetaField,
+    &g_igViewerSceneInfoManager_normalsRendererMetaField,
+    &g_igViewerSceneInfoManager_flushRendererMetaField,
+    &g_igViewerSceneInfoManager_clippingCheckFrameMetaField,
+    &g_igViewerSceneInfoManager_guiMetaField,
+    &g_igViewerSceneInfoManager_guiFactoryMetaField,
+    &g_igViewerSceneInfoManager_rootComponentMetaField,
+    &g_igViewerSceneInfoManager_menuHolderMetaField,
+    &g_igViewerSceneInfoManager_operationBoxHolderMetaField,
+    &g_igViewerSceneInfoManager_operationBoxMetaField,
+    &g_igViewerSceneInfoManager_timeBoxHolderMetaField,
+    &g_igViewerSceneInfoManager_timeBoxMetaField,
+    &g_igViewerSceneInfoManager_menuBarMetaField,
+    &g_igViewerSceneInfoManager_viewMenuMetaField,
+    &g_igViewerSceneInfoManager_viewportMenuMetaField,
+    &g_igViewerSceneInfoManager_cameraMenuMetaField,
+    &g_igViewerSceneInfoManager_cameraMenuActiverMetaField,
+    &g_igViewerSceneInfoManager_optionMenuMetaField,
+    &g_igViewerSceneInfoManager_disableMenuMetaField,
+    &g_igViewerSceneInfoManager_statMenuMetaField,
+    &g_igViewerSceneInfoManager_timeMenuMetaField,
+    &g_igViewerSceneInfoManager_alchemyMenuMetaField,
+    &g_igViewerSceneInfoManager_timeStatisticMetaField,
+    &g_igViewerSceneInfoManager_speedStatisticMetaField,
+    &g_igViewerSceneInfoManager_nearPlaneStatisticMetaField,
+    &g_igViewerSceneInfoManager_farPlaneStatisticMetaField,
+    &g_igViewerSceneInfoManager_hotKeyReceiverMetaField,
+    &g_igViewerSceneInfoManager_viewManagerMetaField,
+    &g_igViewerSceneInfoManager_statManagerMetaField,
+    &g_igViewerSceneInfoManager_disableComponentsMetaField,
+    &g_igViewerSceneInfoManager_disableViewsMetaField,
+    &g_igViewerSceneInfoManager_operationModeGroupMetaField,
+    &g_igViewerSceneInfoManager_referencesMetaField,
+    &g_igViewerSceneInfoManager_framesMetaField,
+    &g_igViewerSceneInfoManager_lastStatTimeMetaField,
+    &g_igViewerSceneInfoManager_guiVisibilityMetaField,
+    &g_igViewerSceneInfoManager_textureListMetaField,
+    &g_igViewerSceneInfoManager_modeChangeMetaField,
+    &g_igViewerSceneInfoManager_isCapturingBudgetMetaField,
+    &g_igViewerSceneInfoManager_hideAllStatisticsMenuItemMetaField,
+};
+static int g_igViewerSceneInfoManager_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112,
+    116,
+    120,
+    124,
+    128,
+    132,
+    136,
+    140,
+    144,
+    148,
+    152,
+    156,
+    160,
+    168,
+    176,
+    180,
+    184,
+    188,
+    192,
+};
 
 void FUN_00459ee0(void) {
     int temp_s2;
@@ -457,14 +693,14 @@ void FUN_00459ee0(void) {
     void *temp_v0_2;
     void *temp_v0_3;
 
-    temp_s1 = (void *)(g_igViewerSceneInfoManager_metaObject[0]);
+    temp_s1 = g_igViewerSceneInfoManager_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igViewerSceneInfoManager_ctorTable[0], 0x2B);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_3[0]));
+    igMetaObject_CreateFields(temp_s1, g_igViewerSceneInfoManager_ctorTable, 0x2B);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &text_Viewer_scene_manager[0]);
-    *(int *)((char *)(temp_v0_2) + 28) = (int)(&DAT_0058c798[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "Viewer scene manager");
+    *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igViewerSceneInfoManager_nameMetaField);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_v0_2) + 4) << 0x29) >> 0x29) == 0) {
@@ -567,6 +803,6 @@ void FUN_00459ee0(void) {
     *(char *)((char *)(temp_s0_37) + 52) = 1;
     temp_s0_38 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 0x2A));
     *(int *)((char *)(temp_s0_38) + 56) = FUN_0044ff40();
-    igMetaObject_NameFields(temp_s1, &g_igViewerSceneInfoManager_fieldTable[0], &DAT_004d0cb0[0], &DAT_004d0d60[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, g_igViewerSceneInfoManager_fieldTable, g_igViewerSceneInfoManager_fieldHandles, g_igViewerSceneInfoManager_fieldOffsets, temp_s2);
 }
 

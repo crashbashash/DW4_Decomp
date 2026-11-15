@@ -1,9 +1,11 @@
+igMetaObject *g_beUnicode_metaObject;
+
 void *FUN_00340f30(void) {
-    igMetaObject *g = g_beUnicode_metaObject[0];
+    igMetaObject *g = g_beUnicode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00340fc0();
     }
-    return g_beUnicode_metaObject[0];
+    return g_beUnicode_metaObject;
 }
 
 int beUnicode_GetVTable(void) {
@@ -23,11 +25,11 @@ void *beUnicode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beUnicode_metaObject,
+        &g_beUnicode_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beUnicode_GetMetaObject,
-        beUnicode_className,
+        "beUnicode",
         8, /* instance size */
         beUnicode_GetVTable,
         0,

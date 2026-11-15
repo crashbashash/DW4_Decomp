@@ -1,25 +1,38 @@
+igMetaObject *g_beNDMWPanelWazaInfoWork_metaObject;
+igMetaField *g_beNDMWPanelWazaInfoWork_pageMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_isWindowGenerateMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_isCursorGenerateMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_panelWazaMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_panelItemMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_panelStatMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_retIsFireMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_retWazaLabelMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_playerWorkMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_textSetListMetaField;
+igMetaField *g_beNDMWPanelWazaInfoWork_textColorListMetaField;
+
 void FUN_003bdb10(int arg0) {
     FUN_003bdf00();
-    igMetaObject_CreateInstance(*(int *)0x58B200, arg0);
+    igMetaObject_CreateInstance(g_beNDMWPanelWazaInfoWork_metaObject, arg0);
 }
 
 igMetaObject *FUN_003bdb50(void) {
-    if (g_beNDMWPanelWazaInfoWork_metaObject[0] == 0) {
-        g_beNDMWPanelWazaInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWPanelWazaInfoWork_metaObject == 0) {
+        g_beNDMWPanelWazaInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWPanelWazaInfoWork_metaObject[0];
+    return g_beNDMWPanelWazaInfoWork_metaObject;
 }
 
 igMetaObject *beNDMWPanelWazaInfoWork_ResolveMetaObject(void)
 {
     unsigned char ready;
-    if (g_beNDMWPanelWazaInfoWork_metaObject[0] != 0) {
-        ready = (g_beNDMWPanelWazaInfoWork_metaObject[0]->_validity & 4) != 0;
+    if (g_beNDMWPanelWazaInfoWork_metaObject != 0) {
+        ready = (g_beNDMWPanelWazaInfoWork_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_003bdf00();
 done:
-    return g_beNDMWPanelWazaInfoWork_metaObject[0];
+    return g_beNDMWPanelWazaInfoWork_metaObject;
 }
 
 int beNDMWPanelWazaInfoWork_GetVTable(void) {
@@ -114,15 +127,17 @@ void FUN_003bdf00(void)
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfoWork_Register);
 }
 
+static igMetaObjectCallback g_beNDMWPanelWazaInfoWork_callbackList[] = { FUN_003bea10, FUN_003be6d0, FUN_003be360, FUN_003c0280, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+
 void *beNDMWPanelWazaInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        ((igMetaObject_3bdf20 * *)g_beNDMWPanelWazaInfoWork_metaObject),
+        &g_beNDMWPanelWazaInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beNDMWPanelWazaInfoWork_GetMetaObject,
-        beNDMWPanelWazaInfoWork_className,
+        "beNDMWPanelWazaInfoWork",
         0x30, /* instance size */
         beNDMWPanelWazaInfoWork_GetVTable,
         beNDMWPanelWazaInfoWork_InitFields,
@@ -136,6 +151,59 @@ void beNDMWPanelWazaInfoWork_GetMetaObject(void)
     beNDMWPanelWazaInfoWork_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWPanelWazaInfoWork_ctorTable[] = {
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWPanelWazaInfoWork_fieldTable[] = {
+    "_page",
+    "_isWindowGenerate",
+    "_isCursorGenerate",
+    "_panelWaza",
+    "_panelItem",
+    "_panelStat",
+    "_retIsFire",
+    "_retWazaLabel",
+    "_playerWork",
+    "_textSetList",
+    "_textColorList",
+};
+static igMetaField **g_beNDMWPanelWazaInfoWork_fieldHandles[] = {
+    &g_beNDMWPanelWazaInfoWork_pageMetaField,
+    &g_beNDMWPanelWazaInfoWork_isWindowGenerateMetaField,
+    &g_beNDMWPanelWazaInfoWork_isCursorGenerateMetaField,
+    &g_beNDMWPanelWazaInfoWork_panelWazaMetaField,
+    &g_beNDMWPanelWazaInfoWork_panelItemMetaField,
+    &g_beNDMWPanelWazaInfoWork_panelStatMetaField,
+    &g_beNDMWPanelWazaInfoWork_retIsFireMetaField,
+    &g_beNDMWPanelWazaInfoWork_retWazaLabelMetaField,
+    &g_beNDMWPanelWazaInfoWork_playerWorkMetaField,
+    &g_beNDMWPanelWazaInfoWork_textSetListMetaField,
+    &g_beNDMWPanelWazaInfoWork_textColorListMetaField,
+};
+static int g_beNDMWPanelWazaInfoWork_fieldOffsets[] = {
+    8,
+    12,
+    13,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+};
+
 void beNDMWPanelWazaInfoWork_InitFields(void) {
     void *temp_s2;
     void *temp_s2_2;
@@ -146,9 +214,11 @@ void beNDMWPanelWazaInfoWork_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_beNDMWPanelWazaInfoWork_metaObject[0];
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (void *)g_beNDMWPanelWazaInfoWork_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beNDMWPanelWazaInfoWork_ctorTable[0], 0xB);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWPanelWazaInfoWork_ctorTable, 0xB);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_003be8e0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -166,6 +236,6 @@ void beNDMWPanelWazaInfoWork_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_beNDMWPanelWazaInfoWork_fieldTable[0], &DAT_004ca500[0], &DAT_004ca530[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWPanelWazaInfoWork_fieldTable, g_beNDMWPanelWazaInfoWork_fieldHandles, g_beNDMWPanelWazaInfoWork_fieldOffsets, temp_s0);
 }
 

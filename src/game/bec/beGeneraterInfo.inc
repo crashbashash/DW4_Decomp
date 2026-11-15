@@ -1,12 +1,15 @@
+igMetaObject *g_beGeneraterInfo_metaObject;
+igMetaField *g_beGeneraterInfo_dataListMetaField;
+
 igMetaObject *FUN_0035f720(void) {
-    igMetaObject *g = g_beGeneraterInfo_metaObject[0];
+    igMetaObject *g = g_beGeneraterInfo_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0035f870();
 done:
-    return g_beGeneraterInfo_metaObject[0];
+    return g_beGeneraterInfo_metaObject;
 }
 
 int beGeneraterInfo_GetVTable(void) {
@@ -49,15 +52,17 @@ void FUN_0035f870(void)
     igMetaObject_RunStaticInit(beGeneraterInfo_Register);
 }
 
+static igMetaObjectCallback g_beGeneraterInfo_callbackList[] = { FUN_0035fab0, 0 };
+
 void *beGeneraterInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beGeneraterInfo_metaObject,
+        &g_beGeneraterInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beGeneraterInfo_GetMetaObject,
-        beGeneraterInfo_className,
+        "beGeneraterInfo",
         0x20, /* instance size */
         beGeneraterInfo_GetVTable,
         beGeneraterInfo_InitFields,
@@ -71,17 +76,30 @@ void beGeneraterInfo_GetMetaObject(void)
     FUN_0035f720();
 }
 
+static FieldFactory g_beGeneraterInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beGeneraterInfo_fieldTable[] = {
+    "_dataList",
+};
+static igMetaField **g_beGeneraterInfo_fieldHandles[] = {
+    &g_beGeneraterInfo_dataListMetaField,
+};
+static int g_beGeneraterInfo_fieldOffsets[] = {
+    28,
+};
+
 void beGeneraterInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beGeneraterInfo_metaObject[0];
+    temp_s0 = (void *)g_beGeneraterInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beGeneraterInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beGeneraterInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035f9d0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beGeneraterInfo_fieldTable[0], &DAT_004c6998[0], &DAT_004c69a0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beGeneraterInfo_fieldTable, g_beGeneraterInfo_fieldHandles, g_beGeneraterInfo_fieldOffsets, temp_s2);
 }
 

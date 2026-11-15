@@ -53,10 +53,10 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         p = v;
         FUN_00456b80((int *)self->_guiSystem, &p.x);
         FUN_00456050(self, model);
-    } else if (type == DAT_0058c3f0[0]) {
+    } else if (type == (int)g_igGuiSystemModel_projectionMatrixMetaField) {
         int result;
         igMatrix44f_Invert(&result, self->_inverseProjectionMatrix, model->_projectionMatrix);
-    } else if (type == DAT_0058c3e0[0]) {
+    } else if (type == (int)g_igGuiSystemModel_mousePressedMetaField) {
         igObject *under;
         int m[4];
         under = (igObject *)model->_componentUnderMouse;
@@ -75,7 +75,7 @@ void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct Gui
         }
         m[0] = 2;
         m[1] = 0;
-        m[2] = DAT_0058c418[0];
+        m[2] = (int)g_igGuiSystemModel_pushedComponentMetaField;
         igModel_NotifyViews((S_4578c0 *)model, (S_4578c0 *)m);
     } else if (msg->handled == 0) {
         int result;
@@ -131,9 +131,9 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
             }
         }
         a->_hitPath = 0;
-        DAT_0058c678[0] = (int)a;
+        g_activeMousePosObserver = (int)a;
         ((IntersectTraversalCalls *)a->_intersectTraversal)->v23(((igGuiComponent *)b->_rootComponent)->_node);
-        DAT_0058c678[0] = 0;
+        g_activeMousePosObserver = 0;
         if (a->_hit != 0) {
             s0 = (igObject *)FUN_00455510((A_455510 *)((void *)a->_hitPath));
         }
@@ -153,7 +153,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     b->_componentUnderMouse = (int)s0;
     sp[0] = 2;
     sp[1] = (int)a;
-    sp[2] = DAT_0058c410[0];
+    sp[2] = (int)g_igGuiSystemModel_componentUnderMouseMetaField;
     igModel_NotifyViews((S_4578c0 *)b, (S_4578c0 *)sp);
 }
 

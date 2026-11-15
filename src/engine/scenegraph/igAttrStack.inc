@@ -1,14 +1,24 @@
 int FUN_001a5a70(int arg0) {
     FUN_001a5b90();
-    return igMetaObject_CreateInstance(*(int *)0x562030, arg0);
+    return igMetaObject_CreateInstance((int)g_igAttrStack_metaObject, arg0);
 }
+
+igMetaObject *g_igAttrStack_metaObject;
+igMetaField *g_igAttrStack_defaultMetaField;
+igMetaField *g_igAttrStack_cachedOverrideMetaField;
+igMetaField *g_igAttrStack_popProcMetaField;
+igMetaField *g_igAttrStack_hasChangedFromLastIncrementalFlushMetaField;
+igMetaField *g_igAttrStack_lastIncrementalFlushedAttrMetaField;
+igMetaField *g_igAttrStack_hasChangedFromRootMetaField;
+igMetaField *g_igAttrStack_lastFlushedAttrMetaField;
+igMetaField *g_igAttrStack_cachedRenderPackageMetaField;
 
 igMetaObject *igAttrStack_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAttrStack_metaObject[0];
+    igMetaObject *g = g_igAttrStack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a5b90();
-    return g_igAttrStack_metaObject[0];
+    return g_igAttrStack_metaObject;
 }
 
 int igAttrStack_GetVTable(void) {
@@ -40,15 +50,17 @@ void FUN_001a5b90(void)
     igMetaObject_RunStaticInit(igAttrStack_Register);
 }
 
+static igMetaObjectCallback g_igAttrStack_callbackList[] = { FUN_0013b110, FUN_0013b110, FUN_00197cc0, 0 };
+
 void igAttrStack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAttrStack_metaObject),
+        &g_igAttrStack_metaObject,
         igNonRefCountedObjectStack_Register,
         igNonRefCountedObjectStack_GetPublishedMetaObject,
         thunk_igAttrStack_GetMetaObject,
-        igAttrStack_className,
+        "igAttrStack",
         0x34, /* instance size */
         igAttrStack_GetVTable,
         &igAttrStack_InitFields,
@@ -61,6 +73,47 @@ void thunk_igAttrStack_GetMetaObject(void) {
     igAttrStack_GetMetaObject();
 }
 
+static FieldFactory g_igAttrStack_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igRawRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igAttrStack_fieldTable[] = {
+    "_default",
+    "_cachedOverride",
+    "_popProc",
+    "_hasChangedFromLastIncrementalFlush",
+    "_lastIncrementalFlushedAttr",
+    "_hasChangedFromRoot",
+    "_lastFlushedAttr",
+    "_cachedRenderPackage",
+};
+static igMetaField **g_igAttrStack_fieldHandles[] = {
+    &g_igAttrStack_defaultMetaField,
+    &g_igAttrStack_cachedOverrideMetaField,
+    &g_igAttrStack_popProcMetaField,
+    &g_igAttrStack_hasChangedFromLastIncrementalFlushMetaField,
+    &g_igAttrStack_lastIncrementalFlushedAttrMetaField,
+    &g_igAttrStack_hasChangedFromRootMetaField,
+    &g_igAttrStack_lastFlushedAttrMetaField,
+    &g_igAttrStack_cachedRenderPackageMetaField,
+};
+static int g_igAttrStack_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+};
+
 void igAttrStack_InitFields(void) {
     int temp_s2;
     void *temp_s1_4;
@@ -69,9 +122,9 @@ void igAttrStack_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAttrStack_metaObject[0];
+    temp_s0 = (void *)g_igAttrStack_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAttrStack_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrStack_ctorTable, 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013b070();
     igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), -1);
@@ -84,6 +137,6 @@ void igAttrStack_InitFields(void) {
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s0, &g_igAttrStack_fieldTable[0], &DAT_0048cdd0[0], &DAT_0048cdf0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAttrStack_fieldTable, g_igAttrStack_fieldHandles, g_igAttrStack_fieldOffsets, temp_s2);
 }
 

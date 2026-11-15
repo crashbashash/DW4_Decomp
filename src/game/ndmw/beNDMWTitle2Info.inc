@@ -1,9 +1,11 @@
+igMetaObject *g_beNDMWTitle2Info_metaObject;
+
 void *FUN_003b20e0(void) {
-    igMetaObject *g = g_beNDMWTitle2Info_metaObject[0];
+    igMetaObject *g = g_beNDMWTitle2Info_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b21a0();
     }
-    return g_beNDMWTitle2Info_metaObject[0];
+    return g_beNDMWTitle2Info_metaObject;
 }
 
 int beNDMWTitle2Info_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beNDMWTitle2Info_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWTitle2Info_metaObject,
+        &g_beNDMWTitle2Info_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWTitle2Info_GetMetaObject,
-        beNDMWTitle2Info_className,
+        "beNDMWTitle2Info",
         0x1c, /* instance size */
         beNDMWTitle2Info_GetVTable,
         0,

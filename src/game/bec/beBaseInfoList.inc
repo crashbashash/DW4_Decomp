@@ -1,19 +1,21 @@
+igMetaObject *g_beBaseInfoList_metaObject;
+
 igMetaObject *FUN_0036aaf0(void) {
-    if (g_beBaseInfoList_metaObject[0] == 0) {
-        g_beBaseInfoList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beBaseInfoList_metaObject == 0) {
+        g_beBaseInfoList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beBaseInfoList_metaObject[0];
+    return g_beBaseInfoList_metaObject;
 }
 
 igMetaObject *FUN_0036ab40(void) {
-    igMetaObject *g = g_beBaseInfoList_metaObject[0];
+    igMetaObject *g = g_beBaseInfoList_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0036abd0();
 done:
-    return g_beBaseInfoList_metaObject[0];
+    return g_beBaseInfoList_metaObject;
 }
 
 int beBaseInfoList_GetVTable(void) {
@@ -29,15 +31,17 @@ void FUN_0036abd0(void)
     igMetaObject_RunStaticInit(beBaseInfoList_Register);
 }
 
+static igMetaObjectCallback g_beBaseInfoList_callbackList[] = { FUN_0036ad20, 0 };
+
 void *beBaseInfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beBaseInfoList_metaObject,
+        &g_beBaseInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beBaseInfoList_GetMetaObject,
-        beBaseInfoList_className,
+        "beBaseInfoList",
         0x14, /* instance size */
         beBaseInfoList_GetVTable,
         0,

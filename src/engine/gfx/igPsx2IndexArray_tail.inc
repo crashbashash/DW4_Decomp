@@ -1,9 +1,9 @@
 igMetaObject *igPsx2IndexArray_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2IndexArray_metaObject[0];
+    igMetaObject *g = g_igPsx2IndexArray_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00153b40();
-    return g_igPsx2IndexArray_metaObject[0];
+    return g_igPsx2IndexArray_metaObject;
 }
 
 int igPsx2IndexArray_GetVTable(void) {
@@ -29,11 +29,11 @@ void igPsx2IndexArray_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2IndexArray_metaObject,
+        &g_igPsx2IndexArray_metaObject,
         igIndexArray_Register,
         igIndexArray_GetPublishedMetaObject,
         thunk_igPsx2IndexArray_GetMetaObject,
-        igPsx2IndexArray_className,
+        "igPsx2IndexArray",
         0x1C, /* instance size */
         igPsx2IndexArray_GetVTable,
         &igPsx2IndexArray_InitFields_00153bd0[0],     /* Field adder. */
@@ -43,10 +43,10 @@ void igPsx2IndexArray_Register(void) {
 }
 
 igMetaObject *FUN_00153bc0(void) {
-    return g_igIndexArray_metaObject[0];
+    return g_igIndexArray_metaObject;
 }
 
 void FUN_00153bd0(void) {
-    *(int *)((char *)(g_igPsx2IndexArray_metaObject[0]) + 64) = (int)(&thunk_igIndexArray_GetMetaObject);
+    *(int *)((char *)(g_igPsx2IndexArray_metaObject) + 64) = (int)(&thunk_igIndexArray_GetMetaObject);
 }
 

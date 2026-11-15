@@ -1,3 +1,5 @@
+MediaRpcShared *g_igPsx2Media_rpcBuffer;
+
 void igPsx2Media_RpcCompletionHandler(MediaRpcCompletion *c) {
     int headSize;
     int tailSize;
@@ -79,14 +81,17 @@ void Gap__Core__igPsx2Media__userConstruct(int self) {
     igMedia_SetDefaultMedia(self);
 }
 
+bool g_igPsx2Media_prefixIsCdrom;
+const char *g_igPsx2Media_devicePrefix;
+
 /* Loads the sound and igFileIO IOP modules, binds the file RPC server, hooks the SIF completion
  * handler and picks the host or cdrom device prefix. */
 void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    if (igPsx2_LoadIopModule((char *)text_libsd_irx, 1, 0, 0) != g_resultSuccess) {
+    if (igPsx2_LoadIopModule((char *)"libsd.irx", 1, 0, 0) != g_resultSuccess) {
         return;
     }
-    if (igPsx2_LoadIopModule((char *)text_igFileIO_irx, 2, 0, 0) != g_resultSuccess) {
+    if (igPsx2_LoadIopModule((char *)"igFileIO.irx", 2, 0, 0) != g_resultSuccess) {
         return;
     }
     self->_initialized = 1;
@@ -97,24 +102,24 @@ void Gap__Core__igPsx2Media__resetFields(igPsx2MediaView *self, int extra1) {
     EIntr();
     g_igPsx2Media_rpcBuffer = (MediaRpcShared *)self;
     self->_sema->Create();
-    if (g_igPsx2_useCdrom[0] == 0) {
+    if (g_igPsx2_useCdrom == 0) {
         g_igPsx2Media_prefixIsCdrom = 0;
         if (g_igPsx2Media_devicePrefix == 0) {
-            g_igPsx2Media_devicePrefix = text_host0;
+            g_igPsx2Media_devicePrefix = "host0:";
         }
     } else {
         g_igPsx2Media_prefixIsCdrom = 1;
-        g_igPsx2Media_devicePrefix = (int *)text_cdrom0;
+        g_igPsx2Media_devicePrefix = "cdrom0:";
     }
 }
 
 void igPsx2Media_SetDevicePrefix(int prefix) {
-    if (strncasecmp(prefix, &text_cdrom[0], 5) == 0) {
+    if (strncasecmp(prefix, "cdrom", 5) == 0) {
         g_igPsx2Media_prefixIsCdrom = 1;
     } else {
         g_igPsx2Media_prefixIsCdrom = 0;
     }
-    ((int *)&g_igPsx2Media_devicePrefix)[0] = prefix;
+    g_igPsx2Media_devicePrefix = (const char *)prefix;
 }
 
 unsigned short igPsx2Media_AllocateHandle(igPsx2MediaView *self) {
@@ -192,7 +197,7 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
         if (isDisc) {
             igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&g_igPsx2Media_devicePrefix)));
             if (**path != '\\' && **path != '/') {
-                appendPath(text_backslash, self->_conversionString);
+                appendPath("\\", self->_conversionString);
             }
             appendPath(*path, self->_conversionString);
             end = strlen(*path) + 6;
@@ -204,13 +209,13 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
                     *p = ((int)_toupper(*p));
                 }
             }
-            appendPath(text_semicolon_1, self->_conversionString);
+            appendPath(";1", self->_conversionString);
         } else {
             igStringObj_Set((int)self->_conversionString, (int)((*(char * *)&g_igPsx2Media_devicePrefix)));
             appendPath(*path, self->_conversionString);
         }
         text = (char *)self->_conversionString->_buffer;
-        text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
+        text = (text == 0) ? (g_stringObjEmptyText) : text;
     } else if (isDisc && strchr(*path, ';') == 0) {
         igStringObj_Set((int)self->_conversionString, (int)(*path));
         stop = strlen(*path);
@@ -222,22 +227,22 @@ void igPsx2Media_MakeDevicePath(igPsx2MediaView *self, int index, char **path) {
                 *p = ((int)_toupper(*p));
             }
         }
-        appendPath(text_semicolon_1, self->_conversionString);
+        appendPath(";1", self->_conversionString);
         text = (char *)self->_conversionString->_buffer;
-        text = (text == 0) ? (*(char * *)g_stringObjEmptyText) : text;
+        text = (text == 0) ? (g_stringObjEmptyText) : text;
     } else {
         text = *path;
     }
     {
         row = &self->_handlePool->rows[index];
-        if ((*(int *)g_stringPool) == 0) {
+        if ((g_stringPool) == 0) {
             pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            (*(int *)g_stringPool) = pool;
+            (g_stringPool) = pool;
         }
-        interned = ((char *)StringPool_Intern((StringPool *)((*(int *)g_stringPool)), (const char *)text));
+        interned = ((char *)StringPool_Intern((StringPool *)((g_stringPool)), (const char *)text));
         if (row->name != 0) {
             int *hdr = (int *)row->name - 2;
             int r = ((int *)row->name)[-1] - 1;

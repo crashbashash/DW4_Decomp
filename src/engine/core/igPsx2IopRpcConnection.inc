@@ -1,28 +1,33 @@
+igMetaObject *g_igPsx2IopRpcConnection_metaObject;
+igMetaField *g_igPsx2IopRpcConnection_sifDataMetaField;
+igMetaField *g_igPsx2IopRpcConnection_dataMemoryMetaField;
+igMetaField *g_igPsx2IopRpcConnection_semaMetaField;
+
 void igPsx2IopRpcConnection_Create(int pool) {
     igPsx2IopRpcConnection_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D48), (igMemoryPoolView *)pool);
+    igMetaObject_CreateInstance(g_igPsx2IopRpcConnection_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2IopRpcConnection_GetOrCreateMetaObject(void) {
-    if (g_igPsx2IopRpcConnection_metaObject[0] == 0) {
-        g_igPsx2IopRpcConnection_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igPsx2IopRpcConnection_metaObject == 0) {
+        g_igPsx2IopRpcConnection_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igPsx2IopRpcConnection_metaObject[0];
+    return g_igPsx2IopRpcConnection_metaObject;
 }
 
 igMetaObject *igPsx2IopRpcConnection_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2IopRpcConnection_metaObject[0];
+    igMetaObject *g = g_igPsx2IopRpcConnection_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPsx2IopRpcConnection_EnsureRegistered();
-    return g_igPsx2IopRpcConnection_metaObject[0];
+    return g_igPsx2IopRpcConnection_metaObject;
 }
 
 int igPsx2IopRpcConnection_GetVTable(void) {
     igPsx2IopRpcConnection connection;
     igObject_InitHeader((igObject *)&connection);
     connection._vtable = (int)&g_igPsx2IopRpcConnection_vtable[0];
-    return *(int *)((char *)&connection + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&connection + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igPsx2IopRpcConnection_EnsureRegistered(void)
@@ -34,11 +39,11 @@ void igPsx2IopRpcConnection_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igPsx2IopRpcConnection_metaObject,
+        &g_igPsx2IopRpcConnection_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igPsx2IopRpcConnection_GetMetaObjectFunction,
-        igPsx2IopRpcConnection_className,
+        "igPsx2IopRpcConnection",
         0x14,
         igPsx2IopRpcConnection_GetVTable,
         igPsx2IopRpcConnection_InitFields,
@@ -51,13 +56,34 @@ void igPsx2IopRpcConnection_GetMetaObjectFunction(void) {
     igPsx2IopRpcConnection_GetMetaObject();
 }
 
+static FieldFactory g_igPsx2IopRpcConnection_ctorTable[] = {
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+};
+static const char *g_igPsx2IopRpcConnection_fieldTable[] = {
+    "_sifData",
+    "_dataMemory",
+    "_sema",
+};
+static igMetaField **g_igPsx2IopRpcConnection_fieldDescriptors[] = {
+    &g_igPsx2IopRpcConnection_sifDataMetaField,
+    &g_igPsx2IopRpcConnection_dataMemoryMetaField,
+    &g_igPsx2IopRpcConnection_semaMetaField,
+};
+static int g_igPsx2IopRpcConnection_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void igPsx2IopRpcConnection_InitFields(void) {
     int first;
     void *meta;
 
-    meta = (void *)g_igPsx2IopRpcConnection_metaObject[0];
+    meta = (void *)g_igPsx2IopRpcConnection_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2IopRpcConnection_ctorTable[0], 3);
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2IopRpcConnection_fieldTable[0], (igMetaField ***)&g_igPsx2IopRpcConnection_fieldDescriptors[0], &g_igPsx2IopRpcConnection_fieldOffsets[0], first);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2IopRpcConnection_ctorTable, 3);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2IopRpcConnection_fieldTable, g_igPsx2IopRpcConnection_fieldDescriptors, g_igPsx2IopRpcConnection_fieldOffsets, first);
 }
 

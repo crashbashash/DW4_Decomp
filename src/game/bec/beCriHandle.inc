@@ -1,21 +1,28 @@
+igMetaObject *g_beCriHandle_metaObject;
+igMetaField *g_beCriHandle_audioMetaField;
+igMetaField *g_beCriHandle_volumeMetaField;
+igMetaField *g_beCriHandle_playIDMetaField;
+igMetaField *g_beCriHandle_typeMetaField;
+igMetaField *g_beCriHandle_priorityMetaField;
+
 void beCriHandle_Create(int arg0) {
     FUN_00366b20();
     igMetaObject_CreateInstance(*(int *)0x5899C8, arg0);
 }
 
 igMetaObject *FUN_00366950(void) {
-    if (g_beCriHandle_metaObject[0] == 0) {
-        g_beCriHandle_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beCriHandle_metaObject == 0) {
+        g_beCriHandle_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beCriHandle_metaObject[0];
+    return g_beCriHandle_metaObject;
 }
 
 void *FUN_003669a0(void) {
-    igMetaObject *g = g_beCriHandle_metaObject[0];
+    igMetaObject *g = g_beCriHandle_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00366b20();
     }
-    return g_beCriHandle_metaObject[0];
+    return g_beCriHandle_metaObject;
 }
 
 int beCriHandle_GetVTable(void) {
@@ -76,15 +83,17 @@ void FUN_00366b20(void)
     igMetaObject_RunStaticInit(beCriHandle_Register);
 }
 
+static igMetaObjectCallback g_beCriHandle_callbackList[] = { FUN_00367320, FUN_00366420, 0 };
+
 void *beCriHandle_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCriHandle_metaObject,
+        &g_beCriHandle_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beCriHandle_GetMetaObject,
-        beCriHandle_className,
+        "beCriHandle",
         0x28, /* instance size */
         beCriHandle_GetVTable,
         beCriHandle_InitFields,
@@ -98,21 +107,50 @@ void beCriHandle_GetMetaObject(void)
     FUN_003669a0();
 }
 
+static FieldFactory g_beCriHandle_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igLongMetaField_Create,
+    igShortMetaField_Create,
+    igShortMetaField_Create,
+};
+static const char *g_beCriHandle_fieldTable[] = {
+    "_audio",
+    "_volume",
+    "_playID",
+    "_type",
+    "_priority",
+};
+static igMetaField **g_beCriHandle_fieldHandles[] = {
+    &g_beCriHandle_audioMetaField,
+    &g_beCriHandle_volumeMetaField,
+    &g_beCriHandle_playIDMetaField,
+    &g_beCriHandle_typeMetaField,
+    &g_beCriHandle_priorityMetaField,
+};
+static int g_beCriHandle_fieldOffsets[] = {
+    12,
+    16,
+    24,
+    32,
+    34,
+};
+
 void beCriHandle_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beCriHandle_metaObject[0];
+    temp_s0 = (void *)g_beCriHandle_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beCriHandle_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s0, g_beCriHandle_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003671a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00366340();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beCriHandle_fieldTable[0], &DAT_004c7470[0], &DAT_004c7490[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beCriHandle_fieldTable, g_beCriHandle_fieldHandles, g_beCriHandle_fieldOffsets, temp_s2);
 }
 

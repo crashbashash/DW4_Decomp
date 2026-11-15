@@ -1,9 +1,11 @@
+igMetaObject *g_beMeterCtrlInfoList_metaObject;
+
 void *FUN_00356f60(void) {
-    igMetaObject *g = g_beMeterCtrlInfoList_metaObject[0];
+    igMetaObject *g = g_beMeterCtrlInfoList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00356ff0();
     }
-    return g_beMeterCtrlInfoList_metaObject[0];
+    return g_beMeterCtrlInfoList_metaObject;
 }
 
 int beMeterCtrlInfoList_GetVTable(void) {
@@ -19,20 +21,22 @@ void FUN_00356ff0(void)
     igMetaObject_RunStaticInit(beMeterCtrlInfoList_Register);
 }
 
+static igMetaObjectCallback g_beMeterCtrlInfoList_callbackList[] = { FUN_00357170, 0 };
+
 void *beMeterCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beMeterCtrlInfoList_metaObject,
+        &g_beMeterCtrlInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beMeterCtrlInfoList_GetMetaObject,
-        beMeterCtrlInfoList_className,
+        "beMeterCtrlInfoList",
         0x14, /* instance size */
         beMeterCtrlInfoList_GetVTable,
         0,
         0, /* extra callback item */
-        pq5 /* callback list */
+        g_beMeterCtrlInfoList_callbackList /* callback list */
     );
 }
 

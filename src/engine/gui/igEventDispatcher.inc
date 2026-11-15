@@ -1,16 +1,20 @@
+igMetaObject *g_igEventDispatcher_metaObject;
+igMetaField *g_igEventDispatcher_receiversMetaField;
+igMetaField *g_igEventDispatcher_controllerManagerMetaField;
+
 igMetaObject *FUN_004513b0(void) {
-    if (g_igEventDispatcher_metaObject[0] == 0) {
-        g_igEventDispatcher_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igEventDispatcher_metaObject == 0) {
+        g_igEventDispatcher_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igEventDispatcher_metaObject[0];
+    return g_igEventDispatcher_metaObject;
 }
 
 igMetaObject *igEventDispatcher_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEventDispatcher_metaObject[0];
+    igMetaObject *g = g_igEventDispatcher_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igEventDispatcher_EnsureRegistered();
-    return g_igEventDispatcher_metaObject[0];
+    return g_igEventDispatcher_metaObject;
 }
 
 int igEventDispatcher_GetVTable(void) {
@@ -67,15 +71,17 @@ void igEventDispatcher_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventDispatcher_Register);
 }
 
+static igMetaObjectCallback g_igEventDispatcher_callbackList[] = { igEventReceiverOrderedList_EnsureRegistered, FUN_00146700, 0 };
+
 void igEventDispatcher_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igEventDispatcher_metaObject,
+        &g_igEventDispatcher_metaObject,
         igInterfaceManager_Register,
         igInterfaceManager_GetPublishedMetaObject,
         thunk_igEventDispatcher_GetMetaObject,
-        igEventDispatcher_className,
+        "igEventDispatcher",
         0x14, /* instance size */
         igEventDispatcher_GetVTable,
         &igEventDispatcher_InitFields,
@@ -88,21 +94,38 @@ void thunk_igEventDispatcher_GetMetaObject(void) {
     igEventDispatcher_GetMetaObject();
 }
 
+static FieldFactory g_igEventDispatcher_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igEventDispatcher_fieldTable[] = {
+    "_receivers",
+    "_controllerManager",
+};
+static igMetaField **g_igEventDispatcher_fieldHandles[] = {
+    &g_igEventDispatcher_receiversMetaField,
+    &g_igEventDispatcher_controllerManagerMetaField,
+};
+static int g_igEventDispatcher_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void igEventDispatcher_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igEventDispatcher_metaObject[0];
+    temp_s0 = (void *)g_igEventDispatcher_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igEventDispatcher_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igEventDispatcher_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00451050();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00146660();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igEventDispatcher_fieldTable[0], &DAT_004d0748[0], &DAT_004d0750[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igEventDispatcher_fieldTable, g_igEventDispatcher_fieldHandles, g_igEventDispatcher_fieldOffsets, temp_s2);
 }
 

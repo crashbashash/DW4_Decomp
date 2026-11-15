@@ -1,16 +1,20 @@
+igMetaObject *g_igObjectStringMap_metaObject;
+igMetaField *g_igObjectStringMap_namesMetaField;
+igMetaField *g_igObjectStringMap_dataMetaField;
+
 igMetaObject *igObjectStringMap_GetOrCreateMetaObject(void) {
-    if (g_igObjectStringMap_metaObject[0] == 0) {
-        g_igObjectStringMap_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igObjectStringMap_metaObject == 0) {
+        g_igObjectStringMap_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igObjectStringMap_metaObject[0];
+    return g_igObjectStringMap_metaObject;
 }
 
 igMetaObject *igObjectStringMap_GetMetaObject(void)
 {
-    igMetaObject *g = g_igObjectStringMap_metaObject[0];
+    igMetaObject *g = g_igObjectStringMap_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igObjectStringMap_EnsureRegistered();
-    return g_igObjectStringMap_metaObject[0];
+    return g_igObjectStringMap_metaObject;
 }
 
 int igObjectStringMap_GetVTable(void) {
@@ -28,7 +32,7 @@ int igObjectStringMap_GetVTable(void) {
     *namesSlot = 0;
     dataSlot = &map._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&map + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&map + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     map._vtable = (int)&g_igObjectStringMap_vtable[0];
     if (dataSlot != 0) {
         object = (igObject *)*dataSlot;
@@ -56,20 +60,22 @@ void igObjectStringMap_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igObjectStringMap_Register);
 }
 
+static igMetaObjectCallback g_igObjectStringMap_callbackList[] = { igNamedObjectList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+
 void igObjectStringMap_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igObjectStringMap_metaObject,
+        &g_igObjectStringMap_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igObjectStringMap_GetMetaObjectFunction,
-        igObjectStringMap_className,
+        "igObjectStringMap",
         0x10,
         igObjectStringMap_GetVTable,
         igObjectStringMap_InitFields,
         0,
-        (igMetaObjectCallback *)g_igObjectStringMap_callbackList
+        g_igObjectStringMap_callbackList
     );
 }
 
@@ -77,21 +83,38 @@ void igObjectStringMap_GetMetaObjectFunction(void) {
     igObjectStringMap_GetMetaObject();
 }
 
+static FieldFactory g_igObjectStringMap_ctorTable[] = {
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igObjectStringMap_fieldTable[] = {
+    "_names",
+    "_data",
+};
+static igMetaField **g_igObjectStringMap_fieldDescriptors[] = {
+    &g_igObjectStringMap_namesMetaField,
+    &g_igObjectStringMap_dataMetaField,
+};
+static int g_igObjectStringMap_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void igObjectStringMap_InitFields(void) {
     int base;
     void *dataField;
     void *namesField;
     void *meta;
 
-    meta = (void *)g_igObjectStringMap_metaObject[0];
+    meta = (void *)g_igObjectStringMap_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igObjectStringMap_ctorTable[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igObjectStringMap_ctorTable, 2);
     namesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igObjectRefMetaField *)namesField)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)namesField)->_construct = 1;
     dataField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)dataField)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataField)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igObjectStringMap_fieldTable[0], (igMetaField ***)&g_igObjectStringMap_fieldDescriptors[0], &g_igObjectStringMap_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igObjectStringMap_fieldTable, g_igObjectStringMap_fieldDescriptors, g_igObjectStringMap_fieldOffsets, base);
 }
 

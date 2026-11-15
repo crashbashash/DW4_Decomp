@@ -28,12 +28,12 @@ igMetaField *igMetaField_Init(igMetaField *field){
     field->_size=0;
     field->_default=0;
     field->_externalEnumStorage=0;
-    if(g_stringPool[0]==0){
+    if(g_stringPool==0){
         pool=((int)StringPool_Allocate(16));
         if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool[0]=pool;
+        g_stringPool=pool;
     }
-    emptyToken=((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
+    emptyToken=((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
     /* Interned strings carry a header in front of the characters: owner chunk at -8, reference
      * count at -4. */
     oldName=field->_fieldName;
@@ -115,10 +115,10 @@ void igMetaField_Destruct(igMetaField *self) {
 }
 
 __internalObjectList *igMetaField_GetMetaFieldList(void) {
-    if (((int *)g_metaFieldList)[0] == 0) {
-        ((int *)g_metaFieldList)[0] = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    if ((*(int *)&g_metaFieldList) == 0) {
+        (*(int *)&g_metaFieldList) = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     }
-    return ((__internalObjectList **)g_metaFieldList)[0];
+    return g_metaFieldList;
 }
 
 /* igMetaField slot +0x6c: a constant leaf returning -1. The receiver is not touched,
@@ -144,14 +144,14 @@ void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField
     if (fieldName == 0) {
         name = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        name = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], fieldName));
+        name = ((char *)StringPool_Intern((StringPool *)g_stringPool, fieldName));
     }
     internedName = name;
     igMetaField_SetFieldName(self, &internedName);
@@ -239,10 +239,12 @@ short igMetaField_GetTypeIndex(igMetaFieldView *self) {
     return self->_typeIndex;
 }
 
+int g_igMetaField_descriptor;
+
 /* Class-handle getter: returns the cached metaobject pointer in the global, the same global the
  * field constructor reads for a field's `_typeIndex`. */
 int igMetaField_GetDescriptor(void) {
-    return g_igMetaField_descriptor[0];
+    return g_igMetaField_descriptor;
 }
 
 void igMetaField_FinalizeDescriptor(igMetaField *field){
@@ -431,14 +433,14 @@ void igMetaField_ValueToString(int *out, void *field) {
     if (name == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name);
+        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
     }
     *out = interned;
 }
@@ -533,10 +535,12 @@ void igMetaField_ZeroValue(void) {
 void igMetaField_ClearValue(void) {
 }
 
+char emptyIndent;
+
 void igMetaField_Print(void *self, int object, int unused, const char *indent) {
     igStringRef text = ((igMetaFieldView *)self)->ValueToString(object + ((igMetaField *)self)->_offset, 0);
     if (indent == 0) indent = &emptyIndent;
-    igReport_Printf(percent_s_percent_s_equals_percent_s_newline, indent, ((igMetaField *)self)->_fieldName, text.p);
+    igReport_Printf("%s%s = %s\n", indent, ((igMetaField *)self)->_fieldName, text.p);
     igReport_Flush();
 }
 
@@ -591,6 +595,9 @@ int igMetaField_IsConstruct(void) {
     return 0;
 }
 
+char *g_metaFieldNamePrefix = "__MF_";
+char *g_metaFieldScopeSeparator = "::";
+
 int igMetaField_GetMangledName(igMetaField *self, void **pool) {
     int fieldName;
     int prefixLength;
@@ -606,15 +613,15 @@ int igMetaField_GetMangledName(igMetaField *self, void **pool) {
         if (pool != 0) {
             fieldName = self->_fieldName;
             className = ((igMetaObject *)self->_parentMetaObject)->_name;
-            prefixLength = strlen(g_metaFieldNamePrefix[0]);
+            prefixLength = strlen(g_metaFieldNamePrefix);
             withField = prefixLength + strlen(fieldName);
-            withSeparator = strlen(g_metaFieldScopeSeparator[0]);
+            withSeparator = strlen(g_metaFieldScopeSeparator);
             withSeparator = withSeparator + withField;
             mangled = strlen(className);
             mangled = (int)((igMemoryPoolView *)(pool))->Allocate(mangled + withSeparator + 1);
-            strcpy(mangled, g_metaFieldNamePrefix[0]);
+            strcpy(mangled, g_metaFieldNamePrefix);
             strcat(mangled, className);
-            strcat(mangled, g_metaFieldScopeSeparator[0]);
+            strcat(mangled, g_metaFieldScopeSeparator);
             strcat(mangled, fieldName);
             goto done;
         }
@@ -625,5 +632,5 @@ done:
     return result;
 }
 
-static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject[0]) != 0) { return o; } return 0; }
+static inline igMetaField *cast0(igMetaField *o) { if (o != 0 && igObject_IsKindOf((void *)o, (igMetaObject *)g_igMetaField_metaObject) != 0) { return o; } return 0; }
 

@@ -1,9 +1,12 @@
+igMetaObject *g_beLightCtrlInfo_metaObject;
+igMetaField *g_beLightCtrlInfo_lightSetListMetaField;
+
 void *FUN_0035bd00(void) {
-    igMetaObject *g = g_beLightCtrlInfo_metaObject[0];
+    igMetaObject *g = g_beLightCtrlInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035be50();
     }
-    return g_beLightCtrlInfo_metaObject[0];
+    return g_beLightCtrlInfo_metaObject;
 }
 
 int beLightCtrlInfo_GetVTable(void) {
@@ -46,15 +49,17 @@ void FUN_0035be50(void)
     igMetaObject_RunStaticInit(beLightCtrlInfo_Register);
 }
 
+static igMetaObjectCallback g_beLightCtrlInfo_callbackList[] = { FUN_0035bc50, 0 };
+
 void *beLightCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLightCtrlInfo_metaObject,
+        &g_beLightCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beLightCtrlInfo_GetMetaObject,
-        beLightCtrlInfo_className,
+        "beLightCtrlInfo",
         0x20, /* instance size */
         beLightCtrlInfo_GetVTable,
         beLightCtrlInfo_InitFields,
@@ -68,24 +73,45 @@ void beLightCtrlInfo_GetMetaObject(void)
     FUN_0035bd00();
 }
 
+static FieldFactory g_beLightCtrlInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beLightCtrlInfo_fieldTable[] = {
+    "_lightSetList",
+};
+static igMetaField **g_beLightCtrlInfo_fieldHandles[] = {
+    &g_beLightCtrlInfo_lightSetListMetaField,
+};
+static int g_beLightCtrlInfo_fieldOffsets[] = {
+    28,
+};
+
 void beLightCtrlInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beLightCtrlInfo_metaObject[0];
+    temp_s0 = (void *)g_beLightCtrlInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beLightCtrlInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beLightCtrlInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0035bb70();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beLightCtrlInfo_fieldTable[0], &DAT_004c6360[0], &DAT_004c6368[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beLightCtrlInfo_fieldTable, g_beLightCtrlInfo_fieldHandles, g_beLightCtrlInfo_fieldOffsets, temp_s2);
 }
 
-int FUN_0035bfb0(void) {
-    if (DAT_00589248[0] == 0) {
-        DAT_00589248[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c6370[0], &DAT_00589250[0], 1);
+igMetaEnum *g_beLightCtrlInfo_msgActionMetaEnum;
+static const char *g_beLightCtrlInfo_msgActionNames[] = {
+    "SETCOLOR",
+};
+static int g_beLightCtrlInfo_msgActionValues[] = {
+    0,
+};
+
+igMetaEnum *FUN_0035bfb0(void) {
+    if (g_beLightCtrlInfo_msgActionMetaEnum == 0) {
+        g_beLightCtrlInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beLightCtrlInfo_msgActionNames, g_beLightCtrlInfo_msgActionValues, 1);
     }
-    return DAT_00589248[0];
+    return g_beLightCtrlInfo_msgActionMetaEnum;
 }
 

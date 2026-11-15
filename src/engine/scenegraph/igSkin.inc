@@ -1,16 +1,20 @@
+igMetaObject *g_igSkin_metaObject;
+igMetaField *g_igSkin_skinnedGraphMetaField;
+igMetaField *g_igSkin_boundMetaField;
+
 igMetaObject *FUN_00197fd0(void) {
-    if (g_igSkin_metaObject[0] == 0) {
-        g_igSkin_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igSkin_metaObject == 0) {
+        g_igSkin_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igSkin_metaObject[0];
+    return g_igSkin_metaObject;
 }
 
 igMetaObject *igSkin_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSkin_metaObject[0];
+    igMetaObject *g = g_igSkin_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00198290();
-    return g_igSkin_metaObject[0];
+    return g_igSkin_metaObject;
 }
 
 int igSkin_GetVTable(void) {
@@ -102,15 +106,17 @@ void FUN_00198290(void)
     igMetaObject_RunStaticInit(igSkin_Register);
 }
 
+static igMetaObjectCallback g_igSkin_callbackList[] = { FUN_0019cf10, FUN_0018a780, 0 };
+
 void igSkin_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igSkin_metaObject),
+        &g_igSkin_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igSkin_GetMetaObject,
-        igSkin_className,
+        "igSkin",
         0x14, /* instance size */
         igSkin_GetVTable,
         &igSkin_InitFields,
@@ -123,19 +129,36 @@ void thunk_igSkin_GetMetaObject(void) {
     igSkin_GetMetaObject();
 }
 
+static FieldFactory g_igSkin_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igSkin_fieldTable[] = {
+    "_skinnedGraph",
+    "_bound",
+};
+static igMetaField **g_igSkin_fieldHandles[] = {
+    &g_igSkin_skinnedGraphMetaField,
+    &g_igSkin_boundMetaField,
+};
+static int g_igSkin_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void igSkin_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSkin_metaObject[0];
+    temp_s0 = (void *)g_igSkin_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSkin_ctorTable[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkin_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0019cd50();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0018a6a0();
-    igMetaObject_NameFields(temp_s0, &g_igSkin_fieldTable[0], &DAT_0048b570[0], &DAT_0048b578[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkin_fieldTable, g_igSkin_fieldHandles, g_igSkin_fieldOffsets, temp_s2);
 }
 

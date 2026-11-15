@@ -1,9 +1,11 @@
+igMetaObject *g_igMessageBase_metaObject;
+
 igMetaObject *igMessageBase_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMessageBase_metaObject[0];
+    igMetaObject *g = g_igMessageBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00226540();
-    return g_igMessageBase_metaObject[0];
+    return g_igMessageBase_metaObject;
 }
 
 int igMessageBase_GetVTable(void) {
@@ -23,11 +25,11 @@ void igMessageBase_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMessageBase_metaObject,
+        &g_igMessageBase_metaObject,
         igBase_Register,
         igBase_GetPublishedMetaObject,
         thunk_igMessageBase_GetMetaObject,
-        igMessageBase_className,
+        "igMessageBase",
         0x20, /* instance size */
         igMessageBase_GetVTable,
         0,
@@ -41,6 +43,6 @@ void thunk_igMessageBase_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_002265d0(void) {
-    return g_igInterfaced_metaObject[0];
+    return g_igInterfaced_metaObject;
 }
 

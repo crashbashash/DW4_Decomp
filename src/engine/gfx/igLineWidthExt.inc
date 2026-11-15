@@ -1,6 +1,9 @@
+igMetaObject *g_igLineWidthExt_metaObject;
+igMetaField *g_igLineWidthExt_fWidthMetaField;
+
 igMetaObject *FUN_0014d680(void)
 {
-    igMetaObject *meta = g_igLineWidthExt_metaObject[0];
+    igMetaObject *meta = g_igLineWidthExt_metaObject;
     bool ready;
 
     if (meta) {
@@ -10,7 +13,7 @@ igMetaObject *FUN_0014d680(void)
     }
     FUN_0014d6d0();
 end:
-    return g_igLineWidthExt_metaObject[0];
+    return g_igLineWidthExt_metaObject;
 }
 
 void FUN_0014d6d0(void)
@@ -22,11 +25,11 @@ void igLineWidthExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igLineWidthExt_metaObject,
+        &g_igLineWidthExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
         thunk_igLineWidthExt_GetMetaObject_0014d750,
-        igLineWidthExt_className,
+        "igLineWidthExt",
         0x18, /* instance size */
         0,
         &igLineWidthExt_InitFields,
@@ -39,14 +42,27 @@ void thunk_FUN_0014d680(void) {
     FUN_0014d680();
 }
 
-void igLineWidthExt_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igLineWidthExt_ctorTable[] = {
+    igFloatMetaField_Create,
+};
+static const char *g_igLineWidthExt_fieldTable[] = {
+    "_fWidth",
+};
+static igMetaField **g_igLineWidthExt_fieldHandles[] = {
+    &g_igLineWidthExt_fWidthMetaField,
+};
+static int g_igLineWidthExt_fieldOffsets[] = {
+    20,
+};
 
-    temp_s0 = (void *)g_igLineWidthExt_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igLineWidthExt_ctorTable[0], 1);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1.0f);
-    igMetaObject_NameFields(temp_s0, &g_igLineWidthExt_fieldTable[0], &DAT_00488d20[0], &DAT_00488d28[0], temp_s1);
+void igLineWidthExt_InitFields(void) {
+    int fieldStart;
+    igMetaObject *meta;
+
+    meta = g_igLineWidthExt_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igLineWidthExt_ctorTable, 1);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart), 1.0f);
+    igMetaObject_NameFields(meta, g_igLineWidthExt_fieldTable, g_igLineWidthExt_fieldHandles, g_igLineWidthExt_fieldOffsets, fieldStart);
 }
 

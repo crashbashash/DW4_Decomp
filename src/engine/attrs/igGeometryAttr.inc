@@ -1,21 +1,32 @@
+igMetaObject *g_igGeometryAttr_metaObject;
+igMetaField *g_igGeometryAttr_vertexArrayMetaField;
+igMetaField *g_igGeometryAttr_indexArrayMetaField;
+igMetaField *g_igGeometryAttr_primTypeMetaField;
+igMetaField *g_igGeometryAttr_numPrimsMetaField;
+igMetaField *g_igGeometryAttr_offsetMetaField;
+igMetaField *g_igGeometryAttr_primLengthsMetaField;
+igMetaField *g_igGeometryAttr_handleMetaField;
+igMetaField *g_igGeometryAttr_dPdsMetaField;
+igMetaField *g_igGeometryAttr_dPdtMetaField;
+
 void igGeometryAttr_Create(int arg0) {
     FUN_001378f0();
     igMetaObject_CreateInstance(*(int *)0x55F170, arg0);
 }
 
 igMetaObject *FUN_00137850(void) {
-    if (g_igGeometryAttr_metaObject[0] == 0) {
-        g_igGeometryAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGeometryAttr_metaObject == 0) {
+        g_igGeometryAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGeometryAttr_metaObject[0];
+    return g_igGeometryAttr_metaObject;
 }
 
 igMetaObject *igGeometryAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGeometryAttr_metaObject[0];
+    igMetaObject *g = g_igGeometryAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001378f0();
-    return g_igGeometryAttr_metaObject[0];
+    return g_igGeometryAttr_metaObject;
 }
 
 void FUN_001378f0(void)
@@ -23,15 +34,17 @@ void FUN_001378f0(void)
     igMetaObject_RunStaticInit(igGeometryAttr_Register);
 }
 
+static igMetaObjectCallback g_igGeometryAttr_callbackList[] = { FUN_0014ba20, FUN_0014d890, igUnsignedIntList_EnsureRegistered, FUN_0018a180, 0 };
+
 void igGeometryAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igGeometryAttr_metaObject,
+        &g_igGeometryAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igGeometryAttr_GetMetaObject,
-        igGeometryAttr_className,
+        "igGeometryAttr",
         0x30, /* instance size */
         0,
         &igGeometryAttr_InitFields,
@@ -44,6 +57,51 @@ void thunk_igGeometryAttr_GetMetaObject(void) {
     igGeometryAttr_GetMetaObject();
 }
 
+static FieldFactory g_igGeometryAttr_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igGeometryAttr_fieldTable[] = {
+    "_vertexArray",
+    "_indexArray",
+    "_primType",
+    "_numPrims",
+    "_offset",
+    "_primLengths",
+    "_handle",
+    "_dPds",
+    "_dPdt",
+};
+static igMetaField **g_igGeometryAttr_fieldHandles[] = {
+    &g_igGeometryAttr_vertexArrayMetaField,
+    &g_igGeometryAttr_indexArrayMetaField,
+    &g_igGeometryAttr_primTypeMetaField,
+    &g_igGeometryAttr_numPrimsMetaField,
+    &g_igGeometryAttr_offsetMetaField,
+    &g_igGeometryAttr_primLengthsMetaField,
+    &g_igGeometryAttr_handleMetaField,
+    &g_igGeometryAttr_dPdsMetaField,
+    &g_igGeometryAttr_dPdtMetaField,
+};
+static int g_igGeometryAttr_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+};
+
 void igGeometryAttr_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -52,11 +110,11 @@ void igGeometryAttr_InitFields(void) {
     void *temp_s2_4;
     void *temp_s2_5;
     void *temp_v0;
-    void *temp_s1;
+    igMetaObject *temp_s1;
 
-    temp_s1 = (void *)(g_igGeometryAttr_metaObject[0]);
+    temp_s1 = g_igGeometryAttr_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igGeometryAttr_ctorTable[0], 9);
+    igMetaObject_CreateFields(temp_s1, g_igGeometryAttr_ctorTable, 9);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0014b980();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -70,7 +128,7 @@ void igGeometryAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0018a0a0();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0018a0a0();
-    igMetaObject_NameFields(temp_s1, &g_igGeometryAttr_fieldTable[0], &DAT_00486600[0], &DAT_00486630[0], temp_s0);
-    *(int *)((char *)(g_igGeometryAttr_metaObject[0]) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
+    igMetaObject_NameFields(temp_s1, g_igGeometryAttr_fieldTable, g_igGeometryAttr_fieldHandles, g_igGeometryAttr_fieldOffsets, temp_s0);
+    *(int *)((char *)(g_igGeometryAttr_metaObject) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
 }
 

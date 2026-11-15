@@ -1,14 +1,24 @@
+igMetaObject *g_igAnimationCombinerBoneInfo_metaObject;
+igMetaField *g_igAnimationCombinerBoneInfo_animationStateMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_transformSourceMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_constantQuaternionMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_constantTranslationMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_priorityMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_useAnimationTranslationMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_lastKeyframeMetaField;
+igMetaField *g_igAnimationCombinerBoneInfo_reflectMetaField;
+
 void FUN_001a80b0(int arg0) {
     FUN_001a8220();
-    igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfo_metaObject[0], arg0);
+    igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfo_metaObject, arg0);
 }
 
 igMetaObject *igAnimationCombinerBoneInfo_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationCombinerBoneInfo_metaObject[0];
+    igMetaObject *g = g_igAnimationCombinerBoneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a8220();
-    return g_igAnimationCombinerBoneInfo_metaObject[0];
+    return g_igAnimationCombinerBoneInfo_metaObject;
 }
 
 int igAnimationCombinerBoneInfo_GetVTable(void) {
@@ -49,15 +59,17 @@ void FUN_001a8220(void)
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfo_Register);
 }
 
+static igMetaObjectCallback g_igAnimationCombinerBoneInfo_callbackList[] = { FUN_001a6dc0, FUN_00194e70, 0 };
+
 void igAnimationCombinerBoneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationCombinerBoneInfo_metaObject),
+        &g_igAnimationCombinerBoneInfo_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igAnimationCombinerBoneInfo_GetMetaObject,
-        igAnimationCombinerBoneInfo_className,
+        "igAnimationCombinerBoneInfo",
         0x3C, /* instance size */
         igAnimationCombinerBoneInfo_GetVTable,
         &igAnimationCombinerBoneInfo_InitFields,
@@ -70,6 +82,47 @@ void thunk_igAnimationCombinerBoneInfo_GetMetaObject(void) {
     igAnimationCombinerBoneInfo_GetMetaObject();
 }
 
+static FieldFactory g_igAnimationCombinerBoneInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_001872a0,
+    FUN_00187890,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igAnimationCombinerBoneInfo_fieldTable[] = {
+    "_animationState",
+    "_transformSource",
+    "_constantQuaternion",
+    "_constantTranslation",
+    "_priority",
+    "_useAnimationTranslation",
+    "_lastKeyframe",
+    "_reflect",
+};
+static igMetaField **g_igAnimationCombinerBoneInfo_fieldHandles[] = {
+    &g_igAnimationCombinerBoneInfo_animationStateMetaField,
+    &g_igAnimationCombinerBoneInfo_transformSourceMetaField,
+    &g_igAnimationCombinerBoneInfo_constantQuaternionMetaField,
+    &g_igAnimationCombinerBoneInfo_constantTranslationMetaField,
+    &g_igAnimationCombinerBoneInfo_priorityMetaField,
+    &g_igAnimationCombinerBoneInfo_useAnimationTranslationMetaField,
+    &g_igAnimationCombinerBoneInfo_lastKeyframeMetaField,
+    &g_igAnimationCombinerBoneInfo_reflectMetaField,
+};
+static int g_igAnimationCombinerBoneInfo_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    36,
+    48,
+    52,
+    8,
+    56,
+};
+
 void igAnimationCombinerBoneInfo_InitFields(void) {
     int temp_s2;
     void *temp_v0;
@@ -77,9 +130,9 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAnimationCombinerBoneInfo_metaObject[0];
+    temp_s0 = (void *)g_igAnimationCombinerBoneInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAnimationCombinerBoneInfo_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationCombinerBoneInfo_ctorTable, 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_001a6bf0();
     *(char *)((char *)(temp_s1) + 36) = 2;
@@ -90,6 +143,6 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     igIntMetaField_SetDefault(temp_v0, 1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7)), -1);
-    igMetaObject_NameFields(temp_s0, &g_igAnimationCombinerBoneInfo_fieldTable[0], &DAT_0048d300[0], &DAT_0048d320[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationCombinerBoneInfo_fieldTable, g_igAnimationCombinerBoneInfo_fieldHandles, g_igAnimationCombinerBoneInfo_fieldOffsets, temp_s2);
 }
 

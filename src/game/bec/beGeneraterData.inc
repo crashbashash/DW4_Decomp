@@ -1,9 +1,23 @@
+igMetaObject *g_beGeneraterData_metaObject;
+igMetaField *g_beGeneraterData_posMetaField;
+igMetaField *g_beGeneraterData_genePosIsGlobalMetaField;
+igMetaField *g_beGeneraterData_genePosListMetaField;
+igMetaField *g_beGeneraterData_geneRotYRadianListMetaField;
+igMetaField *g_beGeneraterData_geneEnemyIdMetaField;
+igMetaField *g_beGeneraterData_geneEnemySeqMetaField;
+igMetaField *g_beGeneraterData_startModeStrMetaField;
+igMetaField *g_beGeneraterData_startDataMetaField;
+igMetaField *g_beGeneraterData_fillModeStrMetaField;
+igMetaField *g_beGeneraterData_fillDataMetaField;
+igMetaField *g_beGeneraterData_callLuaMetaField;
+igMetaField *g_beGeneraterData_playerDataListMetaField;
+
 void *FUN_0035fb60(void) {
-    igMetaObject *g = g_beGeneraterData_metaObject[0];
+    igMetaObject *g = g_beGeneraterData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035fd50();
     }
-    return g_beGeneraterData_metaObject[0];
+    return g_beGeneraterData_metaObject;
 }
 
 int beGeneraterData_GetVTable(void) {
@@ -47,15 +61,17 @@ void FUN_0035fd50(void)
     igMetaObject_RunStaticInit(beGeneraterData_Register);
 }
 
+static igMetaObjectCallback g_beGeneraterData_callbackList[] = { FUN_0018a180, igFloatList_EnsureRegistered, FUN_00360000, 0 };
+
 void *beGeneraterData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beGeneraterData_metaObject,
+        &g_beGeneraterData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beGeneraterData_GetMetaObject,
-        beGeneraterData_className,
+        "beGeneraterData",
         0x44, /* instance size */
         beGeneraterData_GetVTable,
         beGeneraterData_InitFields,
@@ -69,6 +85,63 @@ void beGeneraterData_GetMetaObject(void)
     FUN_0035fb60();
 }
 
+static FieldFactory g_beGeneraterData_ctorTable[] = {
+    FUN_00187890,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igFloatMetaField_Create,
+    igStringMetaField_Create,
+    igFloatMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beGeneraterData_fieldTable[] = {
+    "_pos",
+    "_genePosIsGlobal",
+    "_genePosList",
+    "_geneRotYRadianList",
+    "_geneEnemyId",
+    "_geneEnemySeq",
+    "_startModeStr",
+    "_startData",
+    "_fillModeStr",
+    "_fillData",
+    "_callLua",
+    "_playerDataList",
+};
+static igMetaField **g_beGeneraterData_fieldHandles[] = {
+    &g_beGeneraterData_posMetaField,
+    &g_beGeneraterData_genePosIsGlobalMetaField,
+    &g_beGeneraterData_genePosListMetaField,
+    &g_beGeneraterData_geneRotYRadianListMetaField,
+    &g_beGeneraterData_geneEnemyIdMetaField,
+    &g_beGeneraterData_geneEnemySeqMetaField,
+    &g_beGeneraterData_startModeStrMetaField,
+    &g_beGeneraterData_startDataMetaField,
+    &g_beGeneraterData_fillModeStrMetaField,
+    &g_beGeneraterData_fillDataMetaField,
+    &g_beGeneraterData_callLuaMetaField,
+    &g_beGeneraterData_playerDataListMetaField,
+};
+static int g_beGeneraterData_fieldOffsets[] = {
+    12,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+};
+
 void beGeneraterData_InitFields(void) {
     int temp_s2;
     void *temp_s1;
@@ -76,9 +149,9 @@ void beGeneraterData_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beGeneraterData_metaObject[0];
+    temp_s0 = (void *)g_beGeneraterData_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beGeneraterData_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s0, g_beGeneraterData_ctorTable, 0xC);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0018a0a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -90,6 +163,6 @@ void beGeneraterData_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 0xB));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0035ff20();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beGeneraterData_fieldTable[0], &DAT_004c6a20[0], &DAT_004c6a50[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beGeneraterData_fieldTable, g_beGeneraterData_fieldHandles, g_beGeneraterData_fieldOffsets, temp_s2);
 }
 

@@ -1,9 +1,11 @@
+igMetaObject *g_beNumberCtrlInfoList_metaObject;
+
 void *FUN_0034e050(void) {
-    igMetaObject *g = g_beNumberCtrlInfoList_metaObject[0];
+    igMetaObject *g = g_beNumberCtrlInfoList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034e0e0();
     }
-    return g_beNumberCtrlInfoList_metaObject[0];
+    return g_beNumberCtrlInfoList_metaObject;
 }
 
 int beNumberCtrlInfoList_GetVTable(void) {
@@ -19,15 +21,17 @@ void FUN_0034e0e0(void)
     igMetaObject_RunStaticInit(beNumberCtrlInfoList_Register);
 }
 
+static igMetaObjectCallback g_beNumberCtrlInfoList_callbackList[] = { FUN_0034e250, 0 };
+
 void *beNumberCtrlInfoList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNumberCtrlInfoList_metaObject,
+        &g_beNumberCtrlInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beNumberCtrlInfoList_GetMetaObject,
-        beNumberCtrlInfoList_className,
+        "beNumberCtrlInfoList",
         0x14, /* instance size */
         beNumberCtrlInfoList_GetVTable,
         0,

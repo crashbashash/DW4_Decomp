@@ -1,14 +1,26 @@
+igMetaObject *g_igActorManager_metaObject;
+igMetaField *g_igActorManager_skelOnlysMetaField;
+igMetaField *g_igActorManager_skelAndSkinsMetaField;
+igMetaField *g_igActorManager_actorsMetaField;
+igMetaField *g_igActorManager_paramsMetaField;
+igMetaField *g_igActorManager_travFuncsMetaField;
+igMetaField *g_igActorManager_actorMetasMetaField;
+igMetaField *g_igActorManager_viewportMetaField;
+igMetaField *g_igActorManager_skelViewportMetaField;
+igMetaField *g_igActorManager_vsimMetaField;
+igMetaField *g_igActorManager_referencesMetaField;
+
 void FUN_0045e230(int arg0) {
     FUN_0045e4a0();
-    igMetaObject_CreateInstance(*(int *)0x58CE60, arg0);
+    igMetaObject_CreateInstance(g_igActorManager_metaObject, arg0);
 }
 
 void *igActorManager_GetMetaObject(void) {
-    igMetaObject *g = g_igActorManager_metaObject[0];
+    igMetaObject *g = g_igActorManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045e4a0();
     }
-    return g_igActorManager_metaObject[0];
+    return g_igActorManager_metaObject;
 }
 
 int igActorManager_GetVTable(void) {
@@ -57,15 +69,17 @@ void FUN_0045e4a0(void)
     igMetaObject_RunStaticInit(igActorManager_Register);
 }
 
+static igMetaObjectCallback g_igActorManager_callbackList[] = { FUN_001a60c0, FUN_0019ccc0, FUN_001aa6a0, FUN_0045e830, igPointerList_EnsureRegistered, igMetaObjectList_EnsureRegistered, FUN_00130570, FUN_00459e40, igObjectList_EnsureRegistered, 0 };
+
 void igActorManager_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igActorManager_metaObject,
+        &g_igActorManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
         thunk_igActorManager_GetMetaObject,
-        igActorManager_className,
+        "igActorManager",
         0x38, /* instance size */
         igActorManager_GetVTable,
         &igActorManager_InitFields,
@@ -77,6 +91,55 @@ void igActorManager_Register(void) {
 void thunk_igActorManager_GetMetaObject(void) {
     igActorManager_GetMetaObject();
 }
+
+static FieldFactory g_igActorManager_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igActorManager_fieldTable[] = {
+    "_skelOnlys",
+    "_skelAndSkins",
+    "_actors",
+    "_params",
+    "_travFuncs",
+    "_actorMetas",
+    "_viewport",
+    "_skelViewport",
+    "_vsim",
+    "_references",
+};
+static igMetaField **g_igActorManager_fieldHandles[] = {
+    &g_igActorManager_skelOnlysMetaField,
+    &g_igActorManager_skelAndSkinsMetaField,
+    &g_igActorManager_actorsMetaField,
+    &g_igActorManager_paramsMetaField,
+    &g_igActorManager_travFuncsMetaField,
+    &g_igActorManager_actorMetasMetaField,
+    &g_igActorManager_viewportMetaField,
+    &g_igActorManager_skelViewportMetaField,
+    &g_igActorManager_vsimMetaField,
+    &g_igActorManager_referencesMetaField,
+};
+static int g_igActorManager_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+};
 
 void igActorManager_InitFields(void) {
     int temp_s1;
@@ -92,9 +155,9 @@ void igActorManager_InitFields(void) {
     void *temp_s2_9;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igActorManager_metaObject[0];
+    temp_s0 = g_igActorManager_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igActorManager_ctorTable[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, g_igActorManager_ctorTable, 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001a5fe0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -124,6 +187,6 @@ void igActorManager_InitFields(void) {
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igActorManager_fieldTable[0], &DAT_004d1a50[0], &DAT_004d1a80[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igActorManager_fieldTable, g_igActorManager_fieldHandles, g_igActorManager_fieldOffsets, temp_s1);
 }
 

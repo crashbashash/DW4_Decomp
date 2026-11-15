@@ -45,6 +45,10 @@ for f in $FILES; do
     cp -p "$SRC/$f" "$REPO/data/$f"
     n=$((n + 1))
 done
-
+# the data facts datamap reads (code references, pointer runs, zero gaps) depend on the string dump
+if [ -f "$REPO/orig/SLUS-20836/SLUS_208.36" ]; then
+    python3 "$REPO/scripts/data_layout.py" >/dev/null \
+        && n=$((n + 1)) || echo "sync_data: data_layout skipped" >&2
+fi
 
 echo "sync_data: $n files -> $REPO/data ($(du -sh "$REPO/data" | cut -f1))"

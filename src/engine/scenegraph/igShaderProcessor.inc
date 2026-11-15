@@ -1,14 +1,16 @@
 int FUN_00198b60(int arg0) {
     FUN_00198c30();
-    return igMetaObject_CreateInstance(*(int *)0x5614F8, arg0);
+    return igMetaObject_CreateInstance((int)g_igShaderProcessor_metaObject, arg0);
 }
+
+igMetaObject *g_igShaderProcessor_metaObject;
 
 igMetaObject *igShaderProcessor_GetMetaObject(void)
 {
-    igMetaObject *g = g_igShaderProcessor_metaObject[0];
+    igMetaObject *g = g_igShaderProcessor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00198c30();
-    return g_igShaderProcessor_metaObject[0];
+    return g_igShaderProcessor_metaObject;
 }
 
 int igShaderProcessor_GetVTable(void) {
@@ -27,11 +29,11 @@ void igShaderProcessor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igShaderProcessor_metaObject),
+        &g_igShaderProcessor_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igShaderProcessor_GetMetaObject,
-        igShaderProcessor_className,
+        "igShaderProcessor",
         8, /* instance size */
         igShaderProcessor_GetVTable,
         0,

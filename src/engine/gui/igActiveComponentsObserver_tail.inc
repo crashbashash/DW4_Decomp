@@ -10,7 +10,7 @@ void Gap__Gui__igActiveComponentsObserver__vfunc_24(igActiveComponentsObserver *
     int type;
     type = msg->type;
     model = (igGuiSystemModel *)self->_model;
-    if (type == DAT_0058c410[0]) {
+    if (type == (int)g_igGuiSystemModel_componentUnderMouseMetaField) {
         igObject *under = (igObject *)model->_componentUnderMouse;
         if ((igObject *)self->_oldComponentUnderMouse != under) {
             if (self->_oldComponentUnderMouse != 0) {
@@ -24,7 +24,7 @@ void Gap__Gui__igActiveComponentsObserver__vfunc_24(igActiveComponentsObserver *
             FUN_00456c20(model, (igGuiComponent *)under);
         }
         setComponent_4561e0(&self->_oldComponentUnderMouse, under);
-    } else if (type == DAT_0058c408[0]) {
+    } else if (type == (int)g_igGuiSystemModel_focusedComponentMetaField) {
         igObject *focused = (igObject *)model->_focusedComponent;
         void *common = FUN_004565c0((int)self, focused);
         if (self->_oldFocusedComponent != 0) {
@@ -36,7 +36,7 @@ void Gap__Gui__igActiveComponentsObserver__vfunc_24(igActiveComponentsObserver *
             FUN_00456540((int)self, (N *)focused, (N *)common, 1);
         }
         setComponent_4561e0(&self->_oldFocusedComponent, focused);
-    } else if (type == DAT_0058c418[0]) {
+    } else if (type == (int)g_igGuiSystemModel_pushedComponentMetaField) {
         igObject *pushed = (igObject *)model->_pushedComponent;
         if (self->_oldPushedComponent != 0) {
             FUN_00455610((int *)self->_oldPushedComponent, 0);

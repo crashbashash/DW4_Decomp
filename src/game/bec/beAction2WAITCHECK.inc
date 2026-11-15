@@ -1,9 +1,12 @@
+igMetaObject *g_beAction2WAITCHECK_metaObject;
+igMetaField *g_beAction2WAITCHECK_waitTimeMetaField;
+
 void *FUN_0036cfa0(void) {
-    igMetaObject *g = g_beAction2WAITCHECK_metaObject[0];
+    igMetaObject *g = g_beAction2WAITCHECK_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036d080();
     }
-    return g_beAction2WAITCHECK_metaObject[0];
+    return g_beAction2WAITCHECK_metaObject;
 }
 
 int beAction2WAITCHECK_GetVTable(void) {
@@ -44,11 +47,11 @@ void *beAction2WAITCHECK_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2WAITCHECK_metaObject,
+        &g_beAction2WAITCHECK_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2WAITCHECK_GetMetaObject,
-        beAction2WAITCHECK_className,
+        "beAction2WAITCHECK",
         0x10, /* instance size */
         beAction2WAITCHECK_GetVTable,
         beAction2WAITCHECK_InitFields,
@@ -62,13 +65,26 @@ void beAction2WAITCHECK_GetMetaObject(void)
     FUN_0036cfa0();
 }
 
+static FieldFactory g_beAction2WAITCHECK_ctorTable[] = {
+    igFloatMetaField_Create,
+};
+static const char *g_beAction2WAITCHECK_fieldTable[] = {
+    "_waitTime",
+};
+static igMetaField **g_beAction2WAITCHECK_fieldHandles[] = {
+    &g_beAction2WAITCHECK_waitTimeMetaField,
+};
+static int g_beAction2WAITCHECK_fieldOffsets[] = {
+    12,
+};
+
 void beAction2WAITCHECK_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2WAITCHECK_metaObject[0];
+    temp_s0 = (void *)g_beAction2WAITCHECK_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2WAITCHECK_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beAction2WAITCHECK_fieldTable[0], &DAT_004c8110[0], &DAT_004c8118[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beAction2WAITCHECK_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beAction2WAITCHECK_fieldTable, g_beAction2WAITCHECK_fieldHandles, g_beAction2WAITCHECK_fieldOffsets, temp_s1);
 }
 

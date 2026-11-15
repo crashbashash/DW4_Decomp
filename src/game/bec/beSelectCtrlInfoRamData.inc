@@ -1,9 +1,16 @@
+igMetaObject *g_beSelectCtrlInfoRamData_metaObject;
+int g_beSelectCtrlInfoRamData_nameStorage;
+igMetaField *g_beSelectCtrlInfoRamData_isTateSelectMetaField;
+igMetaField *g_beSelectCtrlInfoRamData_maxSelectMetaField;
+igMetaField *g_beSelectCtrlInfoRamData_selectNoMetaField;
+igMetaField *g_beSelectCtrlInfoRamData_workMetaField;
+
 void *FUN_003452e0(void) {
-    igMetaObject *g = g_beSelectCtrlInfoRamData_metaObject[0];
+    igMetaObject *g = g_beSelectCtrlInfoRamData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00345490();
     }
-    return g_beSelectCtrlInfoRamData_metaObject[0];
+    return g_beSelectCtrlInfoRamData_metaObject;
 }
 
 int beSelectCtrlInfoRamData_GetVTable(void) {
@@ -40,20 +47,22 @@ void FUN_00345490(void)
     igMetaObject_RunStaticInit(beSelectCtrlInfoRamData_Register);
 }
 
+static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { FUN_00345830, 0 };
+
 void *beSelectCtrlInfoRamData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSelectCtrlInfoRamData_metaObject,
+        &g_beSelectCtrlInfoRamData_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beSelectCtrlInfoRamData_GetMetaObject,
-        beSelectCtrlInfoRamData_className,
+        "beSelectCtrlInfoRamData",
         0x20, /* instance size */
         beSelectCtrlInfoRamData_GetVTable,
         beSelectCtrlInfoRamData_InitFields,
         0, /* extra callback item */
-        text_0X4 /* callback list */
+        g_beSelectCtrlInfoRamData_callbackList /* callback list */
     );
 }
 
@@ -61,6 +70,31 @@ void beSelectCtrlInfoRamData_GetMetaObject(void)
 {
     FUN_003452e0();
 }
+
+static FieldFactory g_beSelectCtrlInfoRamData_ctorTable[] = {
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beSelectCtrlInfoRamData_fieldTable[] = {
+    "_isTateSelect",
+    "_maxSelect",
+    "_selectNo",
+    "_work",
+};
+static igMetaField **g_beSelectCtrlInfoRamData_fieldHandles[] = {
+    &g_beSelectCtrlInfoRamData_isTateSelectMetaField,
+    &g_beSelectCtrlInfoRamData_maxSelectMetaField,
+    &g_beSelectCtrlInfoRamData_selectNoMetaField,
+    &g_beSelectCtrlInfoRamData_workMetaField,
+};
+static int g_beSelectCtrlInfoRamData_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+};
 
 void beSelectCtrlInfoRamData_InitFields(void) {
     int temp_s2;
@@ -70,14 +104,14 @@ void beSelectCtrlInfoRamData_InitFields(void) {
     void *temp_s1;
     T_345550 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)g_beSelectCtrlInfoRamData_metaObject)[0]);
+    temp_s1 = (void *)(((void * *)&g_beSelectCtrlInfoRamData_metaObject)[0]);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beSelectCtrlInfoRamData_ctorTable[0], 4);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name[0]));
+    igMetaObject_CreateFields(temp_s1, g_beSelectCtrlInfoRamData_ctorTable, 4);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_345550 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &ONE_8[0]);
-    temp_v0_2->f28 = (int)(&DAT_00587f38[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "ONE");
+    temp_v0_2->f28 = (int)(&g_beSelectCtrlInfoRamData_nameStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->references = temp_v0_2->references - 1;
     if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {
@@ -85,6 +119,6 @@ void beSelectCtrlInfoRamData_InitFields(void) {
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
     *(int *)((char *)(temp_s0) + 56) = (int)FUN_003456c0();
-    igMetaObject_NameFields(temp_s1, &g_beSelectCtrlInfoRamData_fieldTable[0], &DAT_004c3a90[0], &DAT_004c3aa0[0], temp_s2);
+    igMetaObject_NameFields(temp_s1, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, temp_s2);
 }
 

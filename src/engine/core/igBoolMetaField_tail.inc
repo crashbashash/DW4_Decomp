@@ -4,16 +4,16 @@ int igBoolMetaField_ValueFromString(void *self, char *value, int text) {
 
     consumed = 0;
     number = 0;
-    sscanf(text, &percent_d_percent_n[0], &number, &consumed);
+    sscanf(text, "%d%n", &number, &consumed);
     if (consumed > 0) {
         *value = number != 0;
         return consumed;
     }
-    if (strncasecmp(&text_true_2[0], text, 4) == 0) {
+    if (strncasecmp("true", text, 4) == 0) {
         *value = 1;
         return 4;
     }
-    if (strncasecmp(&text_false_2[0], text, 5) == 0) {
+    if (strncasecmp("false", text, 5) == 0) {
         *value = 0;
         return 5;
     }
@@ -27,22 +27,22 @@ void igBoolMetaField_ValueToString(int *result, void *self, unsigned char *value
     int interned;
 
     if (*value != 0) {
-        text = (int *)(&text_true_2[0]);
+        text = (int *)("true");
     } else {
-        text = (int *)(&text_false_2[0]);
+        text = (int *)("false");
     }
     sprintf(buffer, &percent_s[0], text);
     if (buffer == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
     }
     *result = interned;
 }

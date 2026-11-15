@@ -1,16 +1,21 @@
+igMetaObject *g_igGuiComponentAspect_metaObject;
+igMetaField *g_igGuiComponentAspect_nodeMetaField;
+igMetaField *g_igGuiComponentAspect_minSizeMetaField;
+igMetaField *g_igGuiComponentAspect_maxSizeMetaField;
+
 igMetaObject *FUN_0044fbb0(void) {
-    if (g_igGuiComponentAspect_metaObject[0] == 0) {
-        g_igGuiComponentAspect_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGuiComponentAspect_metaObject == 0) {
+        g_igGuiComponentAspect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGuiComponentAspect_metaObject[0];
+    return g_igGuiComponentAspect_metaObject;
 }
 
 igMetaObject *igGuiComponentAspect_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGuiComponentAspect_metaObject[0];
+    igMetaObject *g = g_igGuiComponentAspect_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igGuiComponentAspect_EnsureRegistered();
-    return g_igGuiComponentAspect_metaObject[0];
+    return g_igGuiComponentAspect_metaObject;
 }
 
 void igGuiComponentAspect_EnsureRegistered(void)
@@ -18,15 +23,17 @@ void igGuiComponentAspect_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGuiComponentAspect_Register);
 }
 
+static igMetaObjectCallback g_igGuiComponentAspect_callbackList[] = { igGuiComponentNode_RunStaticInit, 0 };
+
 void igGuiComponentAspect_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igGuiComponentAspect_metaObject,
+        &g_igGuiComponentAspect_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igGuiComponentAspect_GetMetaObject,
-        igGuiComponentAspect_className,
+        "igGuiComponentAspect",
         0x28, /* instance size */
         0,
         &igGuiComponentAspect_InitFields,
@@ -39,6 +46,27 @@ void thunk_igGuiComponentAspect_GetMetaObject(void) {
     igGuiComponentAspect_GetMetaObject();
 }
 
+static FieldFactory g_igGuiComponentAspect_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+};
+static const char *g_igGuiComponentAspect_fieldTable[] = {
+    "_node",
+    "_minSize",
+    "_maxSize",
+};
+static igMetaField **g_igGuiComponentAspect_fieldHandles[] = {
+    &g_igGuiComponentAspect_nodeMetaField,
+    &g_igGuiComponentAspect_minSizeMetaField,
+    &g_igGuiComponentAspect_maxSizeMetaField,
+};
+static int g_igGuiComponentAspect_fieldOffsets[] = {
+    12,
+    16,
+    28,
+};
+
 void igGuiComponentAspect_InitFields(void) {
     float v1[3];
     float v2[4];
@@ -48,9 +76,9 @@ void igGuiComponentAspect_InitFields(void) {
     struct GuiAspectMetaField *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igGuiComponentAspect_metaObject[0];
+    temp_s0 = (void *)g_igGuiComponentAspect_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igGuiComponentAspect_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igGuiComponentAspect_ctorTable, 3);
     temp_s1 = (struct GuiAspectMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     temp_s1->f56 = (int)FUN_0044f540();
     temp_s1->b60 = 0;
@@ -64,6 +92,6 @@ void igGuiComponentAspect_InitFields(void) {
     v2[0] = 3.4028235e+38f;
     v2[1] = 3.4028235e+38f;
     FUN_0018e470(temp_a0_2, v2);
-    igMetaObject_NameFields(temp_s0, &g_igGuiComponentAspect_fieldTable[0], &DAT_004d0558[0], &DAT_004d0568[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igGuiComponentAspect_fieldTable, g_igGuiComponentAspect_fieldHandles, g_igGuiComponentAspect_fieldOffsets, temp_s2);
 }
 

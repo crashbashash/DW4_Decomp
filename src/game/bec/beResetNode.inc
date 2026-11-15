@@ -1,9 +1,13 @@
+igMetaObject *g_beResetNode_metaObject;
+igMetaField *g_beResetNode_isResetTimeMetaField;
+igMetaField *g_beResetNode_isResetRotAndScaleMetaField;
+
 void *FUN_0034b4a0(void) {
-    igMetaObject *g = g_beResetNode_metaObject[0];
+    igMetaObject *g = g_beResetNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034b560();
     }
-    return g_beResetNode_metaObject[0];
+    return g_beResetNode_metaObject;
 }
 
 int beResetNode_GetVTable(void) {
@@ -31,11 +35,11 @@ void *beResetNode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beResetNode_metaObject,
+        &g_beResetNode_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         beResetNode_GetMetaObject,
-        beResetNode_className,
+        "beResetNode",
         0x24, /* instance size */
         beResetNode_GetVTable,
         beResetNode_InitFields,
@@ -49,14 +53,31 @@ void beResetNode_GetMetaObject(void)
     FUN_0034b4a0();
 }
 
+static FieldFactory g_beResetNode_ctorTable[] = {
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beResetNode_fieldTable[] = {
+    "_isResetTime",
+    "_isResetRotAndScale",
+};
+static igMetaField **g_beResetNode_fieldHandles[] = {
+    &g_beResetNode_isResetTimeMetaField,
+    &g_beResetNode_isResetRotAndScaleMetaField,
+};
+static int g_beResetNode_fieldOffsets[] = {
+    32,
+    33,
+};
+
 void beResetNode_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beResetNode_metaObject[0];
+    temp_s0 = (void *)g_beResetNode_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beResetNode_ctorTable[0], 2);
-    igMetaObject_NameFields(temp_s0, &g_beResetNode_fieldTable[0], &DAT_004c4508[0], &DAT_004c4510[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beResetNode_ctorTable, 2);
+    igMetaObject_NameFields(temp_s0, g_beResetNode_fieldTable, g_beResetNode_fieldHandles, g_beResetNode_fieldOffsets, temp_s1);
 }
 
 void FUN_0034b690(void)

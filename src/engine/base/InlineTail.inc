@@ -75,7 +75,7 @@ extern "C" void igInterface_BindInterfaceFields(igMetaTyped *self, igMetaTyped *
         field = cast0_6(field);
         if (field == 0) continue;
         void *type = *(void **)((char *)field + 56);
-        if (type != 0 && igMetaObject_IsOfType(type, g_igInterface_metaObject[0]) != 0
+        if (type != 0 && igMetaObject_IsOfType(type, g_igInterface_metaObject) != 0
             && FUN_002fdef0(other->getMetaObject(), field) != 0) {
             int result;
             FUN_0022bc10(&result, (int)field, (int)self, (int)field, (int)other);
@@ -498,11 +498,11 @@ extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
     int node = FUN_0022ac00(it.get());
     for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
         if (igObject_IsKindOf(node, igSegment_GetMetaObject()) != 0) {
-            log->put(DAT_004e7ec0);
+            log->put("The optimization doesn't support igSegment\n");
             return 0;
         }
         if (*(int *)((char *)node + 20) & 0x40) {
-            log->put(DAT_004e7ef0);
+            log->put("The optimization doesn't support the IS_DYNAMIC flag\n");
             return 0;
         }
     }
@@ -555,7 +555,7 @@ extern "C" bool igOptPass_ApplyToObjects(OptPass *self) {
         NamedObject *object = ((NamedObjectList *)objects.p)->_data[j];
         if (skipped->find(object) < 0 && self->accepts(object)) {
             char *name = object->_name ? object->_name : emptyString;
-            self->log(DAT_004e7f30, ((igMetaObject *)object->getMetaObject())->_name, name);
+            self->log("%s named \"%s\":\n", ((igMetaObject *)object->getMetaObject())->_name, name);
             bool applied = self->applyTo(object);
             ok = ok && applied;
         }
@@ -713,12 +713,12 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
             if (0 != FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0)) found = 1;
         }
     }
-    if (found) arg2->put(DAT_004e7ea8);
+    if (found) arg2->put("\n");
     return 1;
 }
 
 igMetaObject *Gap__igOptInterface__vfunc_22(void) {
-    return g_igOptInterface_metaObject[0];
+    return g_igOptInterface_metaObject;
 }
 
 void Gap__igOptInterface__vfunc_27(void) {
@@ -746,35 +746,35 @@ void Gap__igOptInterface__vfunc_12(void) {
 }
 
 igMetaObject *FUN_0022ca10(void) {
-    return g_igOptBase_metaObject[0];
+    return g_igOptBase_metaObject;
 }
 
 igMetaObject *Gap__igMessageInterface__vfunc_22(void) {
-    return g_igMessageInterface_metaObject[0];
+    return g_igMessageInterface_metaObject;
 }
 
 igMetaObject *Gap__igLogInterface__vfunc_22(void) {
-    return g_igLogInterface_metaObject[0];
+    return g_igLogInterface_metaObject;
 }
 
 igMetaObject *Gap__igLockInterface__vfunc_22(void) {
-    return g_igLockInterface_metaObject[0];
+    return g_igLockInterface_metaObject;
 }
 
 igMetaObject *Gap__igListenerInterface__vfunc_22(void) {
-    return g_igListenerInterface_metaObject[0];
+    return g_igListenerInterface_metaObject;
 }
 
 igMetaObject *Gap__igItemInterface__vfunc_22(void) {
-    return g_igItemInterface_metaObject[0];
+    return g_igItemInterface_metaObject;
 }
 
 igMetaObject *Gap__igFileInfo__vfunc_22(void) {
-    return g_igFileInfo_metaObject[0];
+    return g_igFileInfo_metaObject;
 }
 
 igMetaObject *Gap__igFileInfoList__vfunc_22(void) {
-    return g_igFileInfoList_metaObject[0];
+    return g_igFileInfoList_metaObject;
 }
 
 void Gap__igListenerBase__vfunc_29(void) {
@@ -782,59 +782,59 @@ void Gap__igListenerBase__vfunc_29(void) {
 }
 
 igMetaObject *Gap__igCompoundList__vfunc_22(void) {
-    return g_igCompoundList_metaObject[0];
+    return g_igCompoundList_metaObject;
 }
 
 igMetaObject *Gap__igItemDataBaseField__vfunc_22(void) {
-    return g_igItemDataBaseField_metaObject[0];
+    return g_igItemDataBaseField_metaObject;
 }
 
 int Gap__igItemDataBaseField__vfunc_23(void) {
-    return DAT_0056d9e0[0];
+    return g_igItemDataBaseField_defaultDescriptor;
 }
 
 igMetaObject *Gap__igItemDataBaseList__vfunc_22(void) {
-    return g_igItemDataBaseList_metaObject[0];
+    return g_igItemDataBaseList_metaObject;
 }
 
 igMetaObject *Gap__igIterateDerived__vfunc_22(void) {
-    return g_igIterateDerived_metaObject[0];
+    return g_igIterateDerived_metaObject;
 }
 
 igMetaObject *Gap__igIterateField__vfunc_22(void) {
-    return g_igIterateField_metaObject[0];
+    return g_igIterateField_metaObject;
 }
 
 igMetaObject *Gap__igIterateGraph__vfunc_22(void) {
-    return g_igIterateGraph_metaObject[0];
+    return g_igIterateGraph_metaObject;
 }
 
 igMetaObject *Gap__igListenerList__vfunc_22(void) {
-    return g_igListenerList_metaObject[0];
+    return g_igListenerList_metaObject;
 }
 
 igMetaObject *Gap__igListenerListList__vfunc_22(void) {
-    return g_igListenerListList_metaObject[0];
+    return g_igListenerListList_metaObject;
 }
 
 igMetaObject *Gap__igMessageList__vfunc_22(void) {
-    return g_igMessageList_metaObject[0];
+    return g_igMessageList_metaObject;
 }
 
 igMetaObject *Gap__igOptConfiguration__vfunc_22(void) {
-    return g_igOptConfiguration_metaObject[0];
+    return g_igOptConfiguration_metaObject;
 }
 
 igMetaObject *Gap__igInterface__vfunc_22(void) {
-    return g_igInterface_metaObject[0];
+    return g_igInterface_metaObject;
 }
 
 igMetaObject *Gap__igMessageBase__vfunc_22(void) {
-    return g_igMessageBase_metaObject[0];
+    return g_igMessageBase_metaObject;
 }
 
 igMetaObject *Gap__igListenerBase__vfunc_22(void) {
-    return g_igListenerBase_metaObject[0];
+    return g_igListenerBase_metaObject;
 }
 
 extern "C" int FUN_0022cb80(List *arg0, int **arg1) {
@@ -875,19 +875,19 @@ extern "C" int FUN_0022cb80(List *arg0, int **arg1) {
 }
 
 igMetaObject *Gap__igMessageList__vfunc_24(void) {
-    return g_igMessageBase_metaObject[0];
+    return g_igMessageBase_metaObject;
 }
 
 igMetaObject *Gap__igListenerListList__vfunc_24(void) {
-    return g_igListenerList_metaObject[0];
+    return g_igListenerList_metaObject;
 }
 
 igMetaObject *Gap__igListenerList__vfunc_24(void) {
-    return g_igListenerBase_metaObject[0];
+    return g_igListenerBase_metaObject;
 }
 
 igMetaObject *Gap__igFileInfoList__vfunc_24(void) {
-    return g_igFileInfo_metaObject[0];
+    return g_igFileInfo_metaObject;
 }
 
 int FUN_0022cdb0(void *arg0, int arg1, void *arg2, int arg3, int arg4) {

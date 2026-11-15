@@ -1,19 +1,33 @@
+igMetaObject *g_igStatisticsItem_metaObject;
+igMetaField *g_igStatisticsItem_valueMetaField;
+igMetaField *g_igStatisticsItem_maximumValueMetaField;
+igMetaField *g_igStatisticsItem_useMultiplierMetaField;
+igMetaField *g_igStatisticsItem_textMetaField;
+igMetaField *g_igStatisticsItem_numberFormatMetaField;
+igMetaField *g_igStatisticsItem_visibleMetaField;
+igMetaField *g_igStatisticsItem_displayComponentMetaField;
+igMetaField *g_igStatisticsItem_aspectMetaField;
+igMetaField *g_igStatisticsItem_textElementMetaField;
+igMetaField *g_igStatisticsItem_managerMetaField;
+igMetaField *g_igStatisticsItem_statIdMetaField;
+igMetaField *g_igStatisticsItem_otherIdMetaField;
+
 igMetaObject *FUN_00458c50(void) {
-    if (g_igStatisticsItem_metaObject[0] == 0) {
-        g_igStatisticsItem_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igStatisticsItem_metaObject == 0) {
+        g_igStatisticsItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igStatisticsItem_metaObject[0];
+    return g_igStatisticsItem_metaObject;
 }
 
 void *igStatisticsItem_GetMetaObject(void) {
     unsigned char b;
-    if (((void *)g_igStatisticsItem_metaObject[0]) != 0) {
-        b = (*(int *)((char *)(((void *)g_igStatisticsItem_metaObject[0])) + 36) & 4) != 0;
+    if (((void *)g_igStatisticsItem_metaObject) != 0) {
+        b = (*(int *)((char *)(((void *)g_igStatisticsItem_metaObject)) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00458ec0();
 done:
-    return ((void *)g_igStatisticsItem_metaObject[0]);
+    return ((void *)g_igStatisticsItem_metaObject);
 }
 
 int igStatisticsItem_GetVTable(void) {
@@ -71,15 +85,17 @@ void FUN_00458ec0(void)
     igMetaObject_RunStaticInit(igStatisticsItem_Register);
 }
 
+static igMetaObjectCallback g_igStatisticsItem_callbackList[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, FUN_004588e0, 0 };
+
 void igStatisticsItem_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igStatisticsItem_metaObject,
+        &g_igStatisticsItem_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igStatisticsItem_GetMetaObject,
-        igStatisticsItem_className,
+        "igStatisticsItem",
         0x3C, /* instance size */
         igStatisticsItem_GetVTable,
         &igStatisticsItem_InitFields,
@@ -92,6 +108,65 @@ void thunk_igStatisticsItem_GetMetaObject(void) {
     igStatisticsItem_GetMetaObject();
 }
 
+static FieldFactory g_igStatisticsItem_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igStatisticsItem_fieldTable[] = {
+    "_value",
+    "_maximumValue",
+    "_useMultiplier",
+    "_text",
+    "_numberFormat",
+    "_visible",
+    "_displayComponent",
+    "_aspect",
+    "_textElement",
+    "_manager",
+    "_statId",
+    "_otherId",
+};
+static igMetaField **g_igStatisticsItem_fieldHandles[] = {
+    &g_igStatisticsItem_valueMetaField,
+    &g_igStatisticsItem_maximumValueMetaField,
+    &g_igStatisticsItem_useMultiplierMetaField,
+    &g_igStatisticsItem_textMetaField,
+    &g_igStatisticsItem_numberFormatMetaField,
+    &g_igStatisticsItem_visibleMetaField,
+    &g_igStatisticsItem_displayComponentMetaField,
+    &g_igStatisticsItem_aspectMetaField,
+    &g_igStatisticsItem_textElementMetaField,
+    &g_igStatisticsItem_managerMetaField,
+    &g_igStatisticsItem_statIdMetaField,
+    &g_igStatisticsItem_otherIdMetaField,
+};
+static int g_igStatisticsItem_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+};
+
+int g_igStatisticsItem_statIdDefault = -1;
+
 void igStatisticsItem_InitFields(void) {
     igEnumMetaField *temp_v0;
     igObjectRefMetaField *temp_s2;
@@ -101,9 +176,9 @@ void igStatisticsItem_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_igStatisticsItem_metaObject[0];
+    temp_s1 = g_igStatisticsItem_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igStatisticsItem_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, g_igStatisticsItem_ctorTable, 0xC);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0), 0.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1), -1.0f);
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
@@ -117,9 +192,9 @@ void igStatisticsItem_InitFields(void) {
     temp_s2_4->_metaObject = (int)FUN_004586a0();
     temp_s2_4->_refCounted = 0;
     temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA));
-    igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004d0ab0[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0, &g_igStatisticsItem_statIdDefault);
     temp_v0->_getMetaEnumFunction = (int)(&FUN_00149b60);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB), -1);
-    igMetaObject_NameFields(temp_s1, &g_igStatisticsItem_fieldTable[0], &DAT_004d0a50[0], &DAT_004d0a80[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
 }
 

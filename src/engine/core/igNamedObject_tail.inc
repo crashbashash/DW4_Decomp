@@ -4,14 +4,14 @@ void igNamedObject_SetName(igNamedObject *self, int name) {
     int pool;
     char *previous;
     void *interned;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name)));
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name)));
     previous = (char *)self->_name;
     if (previous != 0) {
         header = (int *)(previous - 8);

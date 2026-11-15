@@ -1,16 +1,24 @@
+igMetaObject *g_beNDMWShinkaCtrl_metaObject;
+igMetaField *g_beNDMWShinkaCtrl_messengerMetaField;
+igMetaField *g_beNDMWShinkaCtrl_gameRamMetaField;
+igMetaField *g_beNDMWShinkaCtrl_playerNoMetaField;
+igMetaField *g_beNDMWShinkaCtrl_playerParameterMetaField;
+igMetaField *g_beNDMWShinkaCtrl_dBShinkaMetaField;
+igMetaField *g_beNDMWShinkaCtrl_listMetaField;
+
 igMetaObject *FUN_003c9480(void) {
-    if (g_beNDMWShinkaCtrl_metaObject[0] == 0) {
-        g_beNDMWShinkaCtrl_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWShinkaCtrl_metaObject == 0) {
+        g_beNDMWShinkaCtrl_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWShinkaCtrl_metaObject[0];
+    return g_beNDMWShinkaCtrl_metaObject;
 }
 
 void *beNDMWShinkaCtrl_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWShinkaCtrl_metaObject[0];
+    igMetaObject *g = g_beNDMWShinkaCtrl_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c9650();
     }
-    return g_beNDMWShinkaCtrl_metaObject[0];
+    return g_beNDMWShinkaCtrl_metaObject;
 }
 
 int beNDMWShinkaCtrl_GetVTable(void) {
@@ -69,15 +77,17 @@ void FUN_003c9650(void)
     igMetaObject_RunStaticInit(beNDMWShinkaCtrl_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShinkaCtrl_callbackList[] = { FUN_00357d10, FUN_003c9f70, FUN_00364170, FUN_00365b00, FUN_003c98f0, 0 };
+
 void *beNDMWShinkaCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShinkaCtrl_metaObject,
+        &g_beNDMWShinkaCtrl_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beNDMWShinkaCtrl_GetMetaObject,
-        beNDMWShinkaCtrl_className,
+        "beNDMWShinkaCtrl",
         0x20, /* instance size */
         beNDMWShinkaCtrl_GetVTable,
         beNDMWShinkaCtrl_InitFields,
@@ -91,6 +101,39 @@ void beNDMWShinkaCtrl_GetMetaObject(void)
     beNDMWShinkaCtrl_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWShinkaCtrl_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWShinkaCtrl_fieldTable[] = {
+    "_messenger",
+    "_gameRam",
+    "_playerNo",
+    "_playerParameter",
+    "_dBShinka",
+    "_list",
+};
+static igMetaField **g_beNDMWShinkaCtrl_fieldHandles[] = {
+    &g_beNDMWShinkaCtrl_messengerMetaField,
+    &g_beNDMWShinkaCtrl_gameRamMetaField,
+    &g_beNDMWShinkaCtrl_playerNoMetaField,
+    &g_beNDMWShinkaCtrl_playerParameterMetaField,
+    &g_beNDMWShinkaCtrl_dBShinkaMetaField,
+    &g_beNDMWShinkaCtrl_listMetaField,
+};
+static int g_beNDMWShinkaCtrl_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+};
+
 void beNDMWShinkaCtrl_InitFields(void) {
     int temp_s2;
     void *temp_s1_5;
@@ -98,11 +141,11 @@ void beNDMWShinkaCtrl_InitFields(void) {
     void *temp_s1_3;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWShinkaCtrl_metaObject[0];
+    temp_s0 = g_beNDMWShinkaCtrl_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWShinkaCtrl_ctorTable[0], 6);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWShinkaCtrl_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00357910();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
@@ -116,6 +159,6 @@ void beNDMWShinkaCtrl_InitFields(void) {
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)FUN_003c9810();
     ((igRefMetaField *)temp_s1_5)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWShinkaCtrl_fieldTable[0], &DAT_004cc1d0[0], &DAT_004cc1f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWShinkaCtrl_fieldTable, g_beNDMWShinkaCtrl_fieldHandles, g_beNDMWShinkaCtrl_fieldOffsets, temp_s2);
 }
 

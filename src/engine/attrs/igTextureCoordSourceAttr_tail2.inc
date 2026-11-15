@@ -1,5 +1,5 @@
 int Gap__Attrs__igTextureCoordSourceAttr__vfunc_22(void) {
-    return (int)g_igTextureCoordSourceAttr_metaObject[0];
+    return (int)g_igTextureCoordSourceAttr_metaObject;
 }
 
 /* Setter for the `_mode` enum field. Companion of vfunc_33, which sets `_texCoordIndex`. */

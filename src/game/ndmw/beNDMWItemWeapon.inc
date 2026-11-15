@@ -1,17 +1,19 @@
+igMetaObject *g_beNDMWItemWeapon_metaObject;
+
 void beNDMWItemWeapon_Create(int arg0) {
     FUN_003c8d60();
-    igMetaObject_CreateInstance(*(int *)0x58BF60, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemWeapon_metaObject, arg0);
 }
 
 void *beNDMWItemWeapon_GetReadyMetaObject(void) {
     unsigned char b;
-    if (g_beNDMWItemWeapon_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beNDMWItemWeapon_metaObject[0]) + 36) & 4) != 0;
+    if (g_beNDMWItemWeapon_metaObject != 0) {
+        b = (*(int *)((char *)(g_beNDMWItemWeapon_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003c8d60();
 done:
-    return g_beNDMWItemWeapon_metaObject[0];
+    return g_beNDMWItemWeapon_metaObject;
 }
 
 int beNDMWItemWeapon_GetVTable(void) {
@@ -31,11 +33,11 @@ void *beNDMWItemWeapon_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWItemWeapon_metaObject,
+        &g_beNDMWItemWeapon_metaObject,
         beNDMWItemRevisionPocketBase_Register,
         beNDMWItemRevisionPocketBase_GetPublishedMetaObject,
         beNDMWItemWeapon_GetMetaObject,
-        beNDMWItemWeapon_className,
+        "beNDMWItemWeapon",
         0x1c, /* instance size */
         beNDMWItemWeapon_GetVTable,
         0,

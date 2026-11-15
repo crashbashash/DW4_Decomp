@@ -1,16 +1,18 @@
+igMetaObject *g_igTransformSource_metaObject;
+
 igMetaObject *FUN_00194dd0(void) {
-    if (g_igTransformSource_metaObject[0] == 0) {
-        g_igTransformSource_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTransformSource_metaObject == 0) {
+        g_igTransformSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTransformSource_metaObject[0];
+    return g_igTransformSource_metaObject;
 }
 
 igMetaObject *igTransformSource_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTransformSource_metaObject[0];
+    igMetaObject *g = g_igTransformSource_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00194e70();
-    return g_igTransformSource_metaObject[0];
+    return g_igTransformSource_metaObject;
 }
 
 void FUN_00194e70(void)
@@ -22,11 +24,11 @@ void igTransformSource_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        ((char *)g_igTransformSource_metaObject),
+        &g_igTransformSource_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igTransformSource_GetMetaObject,
-        igTransformSource_className,
+        "igTransformSource",
         8, /* instance size */
         0,
         0,

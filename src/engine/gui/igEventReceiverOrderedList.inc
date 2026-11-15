@@ -1,16 +1,18 @@
+igMetaObject *g_igEventReceiverOrderedList_metaObject;
+
 igMetaObject *FUN_00451050(void) {
-    if (g_igEventReceiverOrderedList_metaObject[0] == 0) {
-        g_igEventReceiverOrderedList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igEventReceiverOrderedList_metaObject == 0) {
+        g_igEventReceiverOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igEventReceiverOrderedList_metaObject[0];
+    return g_igEventReceiverOrderedList_metaObject;
 }
 
 igMetaObject *igEventReceiverOrderedList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEventReceiverOrderedList_metaObject[0];
+    igMetaObject *g = g_igEventReceiverOrderedList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igEventReceiverOrderedList_EnsureRegistered();
-    return g_igEventReceiverOrderedList_metaObject[0];
+    return g_igEventReceiverOrderedList_metaObject;
 }
 
 int igEventReceiverOrderedList_GetVTable(void) {
@@ -50,15 +52,17 @@ void igEventReceiverOrderedList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventReceiverOrderedList_Register);
 }
 
+static igMetaObjectCallback g_igEventReceiverOrderedList_callbackList[] = { igEventReceiver_EnsureRegistered, 0 };
+
 void igEventReceiverOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igEventReceiverOrderedList_metaObject,
+        &g_igEventReceiverOrderedList_metaObject,
         igDependencyOrderedList_Register,
         igDependencyOrderedList_GetPublishedMetaObject,
         thunk_igEventReceiverOrderedList_GetMetaObject,
-        igEventReceiverOrderedList_className,
+        "igEventReceiverOrderedList",
         0x1C, /* instance size */
         igEventReceiverOrderedList_GetVTable,
         0,

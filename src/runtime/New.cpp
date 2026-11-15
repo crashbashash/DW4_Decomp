@@ -2,6 +2,9 @@
  * operator new[] and the default new handler. */
 #include "dw4/runtime/cxxlib.h"
 
+#pragma push
+#pragma readonly_strings on
+
 /* A constructor or destructor as the compiler calls it for an array element: the element and the
  * constructor's "complete object" flag or the destructor's "delete" flag (-1: destroy only). */
 typedef void (*ConstructorDestructor)(void *object, short flag);
@@ -66,3 +69,4 @@ void *operator new[](size_t size) throw(std::bad_alloc) {
 void std::__default_new_handler() throw(std::bad_alloc) {
     throw std::bad_alloc();
 }
+#pragma pop

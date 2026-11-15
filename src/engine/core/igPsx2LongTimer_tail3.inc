@@ -1,5 +1,5 @@
 igMetaObject *igPsx2LongTimer_GetMeta(void) {
-    return g_igPsx2LongTimer_metaObject[0];
+    return g_igPsx2LongTimer_metaObject;
 }
 
 double igPsx2LongTimer_GetResolutionSeconds(igLongTimerView *self) {

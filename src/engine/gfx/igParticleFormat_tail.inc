@@ -1,5 +1,5 @@
 int Gap__Gfx__igParticleFormat__vfunc_22(void) {
-    return (int)g_igParticleFormat_metaObject[0];
+    return (int)g_igParticleFormat_metaObject;
 }
 
 int FUN_00181070(void) {

@@ -1,9 +1,14 @@
+igMetaObject *g_beAction2JOINTSET_metaObject;
+igMetaField *g_beAction2JOINTSET_startTimeMetaField;
+igMetaField *g_beAction2JOINTSET_endTimeMetaField;
+igMetaField *g_beAction2JOINTSET_loopModeMetaField;
+
 void *FUN_0036d3a0(void) {
-    igMetaObject *g = g_beAction2JOINTSET_metaObject[0];
+    igMetaObject *g = g_beAction2JOINTSET_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0036d4c0();
     }
-    return g_beAction2JOINTSET_metaObject[0];
+    return g_beAction2JOINTSET_metaObject;
 }
 
 int beAction2JOINTSET_GetVTable(void) {
@@ -58,11 +63,11 @@ void *beAction2JOINTSET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2JOINTSET_metaObject,
+        &g_beAction2JOINTSET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2JOINTSET_GetMetaObject,
-        beAction2JOINTSET_className,
+        "beAction2JOINTSET",
         0x18, /* instance size */
         beAction2JOINTSET_GetVTable,
         beAction2JOINTSET_InitFields,
@@ -76,13 +81,34 @@ void beAction2JOINTSET_GetMetaObject(void)
     FUN_0036d3a0();
 }
 
+static FieldFactory g_beAction2JOINTSET_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igStringMetaField_Create,
+};
+static const char *g_beAction2JOINTSET_fieldTable[] = {
+    "_startTime",
+    "_endTime",
+    "_loopMode",
+};
+static igMetaField **g_beAction2JOINTSET_fieldHandles[] = {
+    &g_beAction2JOINTSET_startTimeMetaField,
+    &g_beAction2JOINTSET_endTimeMetaField,
+    &g_beAction2JOINTSET_loopModeMetaField,
+};
+static int g_beAction2JOINTSET_fieldOffsets[] = {
+    12,
+    16,
+    20,
+};
+
 void beAction2JOINTSET_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2JOINTSET_metaObject[0];
+    temp_s0 = (void *)g_beAction2JOINTSET_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2JOINTSET_ctorTable[0], 3);
-    igMetaObject_NameFields(temp_s0, &g_beAction2JOINTSET_fieldTable[0], &DAT_004c8160[0], &DAT_004c8170[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beAction2JOINTSET_ctorTable, 3);
+    igMetaObject_NameFields(temp_s0, g_beAction2JOINTSET_fieldTable, g_beAction2JOINTSET_fieldHandles, g_beAction2JOINTSET_fieldOffsets, temp_s1);
 }
 

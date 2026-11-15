@@ -1,23 +1,51 @@
-int FUN_001388f0(void) {
-    if (DAT_0055f250[0] == 0) {
-        DAT_0055f250[0] = igMetaEnum_Create(&text_CopyType[0], &DAT_00486790[0], &DAT_004867b0[0], 5);
+igMetaEnum *g_igCopyRenderDestinationAttr_copyTypeMetaEnum;
+igMetaObject *g_igCopyRenderDestinationAttr_metaObject;
+igMetaField *g_igCopyRenderDestinationAttr_copyTypeMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_pRDAttrMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_pImageMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_pTextureAttrMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_sourceXMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_sourceYMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_destinationXMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_destinationYMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_sizeWMetaField;
+igMetaField *g_igCopyRenderDestinationAttr_sizeHMetaField;
+
+static const char *g_igCopyRenderDestinationAttr_copyTypeNames[] = {
+    "NOT_SET",
+    "FROM_RENDERDESTINATION_TO_TEXTURE",
+    "FROM_RENDERDESTINATION_TO_MEMORY",
+    "FROM_RENDERDESTINATION_DEPTH_TO_TEXTURE",
+    "FROM_RENDERDESTINATION_DEPTH_TO_MEMORY",
+};
+static int g_igCopyRenderDestinationAttr_copyTypeValues[] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+};
+
+igMetaEnum *FUN_001388f0(void) {
+    if (g_igCopyRenderDestinationAttr_copyTypeMetaEnum == 0) {
+        g_igCopyRenderDestinationAttr_copyTypeMetaEnum = igMetaEnum_Create("CopyType", g_igCopyRenderDestinationAttr_copyTypeNames, g_igCopyRenderDestinationAttr_copyTypeValues, 5);
     }
-    return DAT_0055f250[0];
+    return g_igCopyRenderDestinationAttr_copyTypeMetaEnum;
 }
 
 igMetaObject *FUN_00138950(void) {
-    if (g_igCopyRenderDestinationAttr_metaObject[0] == 0) {
-        g_igCopyRenderDestinationAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCopyRenderDestinationAttr_metaObject == 0) {
+        g_igCopyRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCopyRenderDestinationAttr_metaObject[0];
+    return g_igCopyRenderDestinationAttr_metaObject;
 }
 
 igMetaObject *igCopyRenderDestinationAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCopyRenderDestinationAttr_metaObject[0];
+    igMetaObject *g = g_igCopyRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00138b20();
-    return g_igCopyRenderDestinationAttr_metaObject[0];
+    return g_igCopyRenderDestinationAttr_metaObject;
 }
 
 int igCopyRenderDestinationAttr_GetVTable(void) {
@@ -72,15 +100,17 @@ void FUN_00138b20(void)
     igMetaObject_RunStaticInit(igCopyRenderDestinationAttr_Register);
 }
 
+static igMetaObjectCallback g_igCopyRenderDestinationAttr_callbackList[] = { FUN_00134370, FUN_0014e050, FUN_00132cf0, 0 };
+
 void igCopyRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCopyRenderDestinationAttr_metaObject,
+        &g_igCopyRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igCopyRenderDestinationAttr_GetMetaObject,
-        igCopyRenderDestinationAttr_className,
+        "igCopyRenderDestinationAttr",
         0x34, /* instance size */
         igCopyRenderDestinationAttr_GetVTable,
         &igCopyRenderDestinationAttr_InitFields,
@@ -93,17 +123,66 @@ void thunk_igCopyRenderDestinationAttr_GetMetaObject(void) {
     igCopyRenderDestinationAttr_GetMetaObject();
 }
 
+static FieldFactory g_igCopyRenderDestinationAttr_ctorTable[] = {
+    igEnumMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igCopyRenderDestinationAttr_fieldTable[] = {
+    "_copyType",
+    "_pRDAttr",
+    "_pImage",
+    "_pTextureAttr",
+    "_sourceX",
+    "_sourceY",
+    "_destinationX",
+    "_destinationY",
+    "_sizeW",
+    "_sizeH",
+};
+static igMetaField **g_igCopyRenderDestinationAttr_fieldHandles[] = {
+    &g_igCopyRenderDestinationAttr_copyTypeMetaField,
+    &g_igCopyRenderDestinationAttr_pRDAttrMetaField,
+    &g_igCopyRenderDestinationAttr_pImageMetaField,
+    &g_igCopyRenderDestinationAttr_pTextureAttrMetaField,
+    &g_igCopyRenderDestinationAttr_sourceXMetaField,
+    &g_igCopyRenderDestinationAttr_sourceYMetaField,
+    &g_igCopyRenderDestinationAttr_destinationXMetaField,
+    &g_igCopyRenderDestinationAttr_destinationYMetaField,
+    &g_igCopyRenderDestinationAttr_sizeWMetaField,
+    &g_igCopyRenderDestinationAttr_sizeHMetaField,
+};
+static int g_igCopyRenderDestinationAttr_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+};
+
 void igCopyRenderDestinationAttr_InitFields(void) {
     int temp_s2;
     void *temp_v0;
     void *temp_s1_3;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igCopyRenderDestinationAttr_metaObject[0];
+    temp_s0 = g_igCopyRenderDestinationAttr_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCopyRenderDestinationAttr_ctorTable[0], 0xA);
+    igMetaObject_CreateFields(temp_s0, g_igCopyRenderDestinationAttr_ctorTable, 0xA);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00486898[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001388f0);
@@ -113,6 +192,6 @@ void igCopyRenderDestinationAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0014dfb0();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_00132ba0();
-    igMetaObject_NameFields(temp_s0, &g_igCopyRenderDestinationAttr_fieldTable[0], &DAT_00486840[0], &DAT_00486870[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igCopyRenderDestinationAttr_fieldTable, g_igCopyRenderDestinationAttr_fieldHandles, g_igCopyRenderDestinationAttr_fieldOffsets, temp_s2);
 }
 

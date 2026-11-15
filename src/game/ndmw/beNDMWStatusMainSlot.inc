@@ -1,14 +1,16 @@
+igMetaObject *g_beNDMWStatusMainSlot_metaObject;
+
 void beNDMWStatusMainSlot_Create(int arg0) {
     FUN_003ba850();
-    igMetaObject_CreateInstance(*(int *)0x58AF20, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusMainSlot_metaObject, arg0);
 }
 
 void *FUN_003ba7a0(void) {
-    igMetaObject *g = g_beNDMWStatusMainSlot_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusMainSlot_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003ba850();
     }
-    return g_beNDMWStatusMainSlot_metaObject[0];
+    return g_beNDMWStatusMainSlot_metaObject;
 }
 
 int beNDMWStatusMainSlot_GetVTable(void) {
@@ -32,11 +34,11 @@ void *beNDMWStatusMainSlot_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusMainSlot_metaObject,
+        &g_beNDMWStatusMainSlot_metaObject,
         beNDMWStatusCtrlBaseEquip_Register,
         beNDMWStatusCtrlBaseEquip_GetPublishedMetaObject,
         beNDMWStatusMainSlot_GetMetaObject,
-        beNDMWStatusMainSlot_className,
+        "beNDMWStatusMainSlot",
         0x7c, /* instance size */
         beNDMWStatusMainSlot_GetVTable,
         0,

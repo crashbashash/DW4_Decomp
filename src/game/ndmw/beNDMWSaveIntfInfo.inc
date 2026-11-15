@@ -1,12 +1,14 @@
+igMetaObject *g_beNDMWSaveIntfInfo_metaObject;
+
 igMetaObject *FUN_003bc080(void) {
-    igMetaObject *g = g_beNDMWSaveIntfInfo_metaObject[0];
+    igMetaObject *g = g_beNDMWSaveIntfInfo_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003bc140();
 done:
-    return g_beNDMWSaveIntfInfo_metaObject[0];
+    return g_beNDMWSaveIntfInfo_metaObject;
 }
 
 int beNDMWSaveIntfInfo_GetVTable(void) {
@@ -33,11 +35,11 @@ void *beNDMWSaveIntfInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWSaveIntfInfo_metaObject,
+        &g_beNDMWSaveIntfInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWSaveIntfInfo_GetMetaObject,
-        beNDMWSaveIntfInfo_className,
+        "beNDMWSaveIntfInfo",
         0x1c, /* instance size */
         beNDMWSaveIntfInfo_GetVTable,
         0,

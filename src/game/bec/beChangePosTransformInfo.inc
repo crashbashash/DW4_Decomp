@@ -1,12 +1,14 @@
+igMetaObject *g_beChangePosTransformInfo_metaObject;
+
 igMetaObject *FUN_003685a0(void) {
-    igMetaObject *g = g_beChangePosTransformInfo_metaObject[0];
+    igMetaObject *g = g_beChangePosTransformInfo_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_00368660();
 done:
-    return g_beChangePosTransformInfo_metaObject[0];
+    return g_beChangePosTransformInfo_metaObject;
 }
 
 int beChangePosTransformInfo_GetVTable(void) {
@@ -33,11 +35,11 @@ void *beChangePosTransformInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beChangePosTransformInfo_metaObject,
+        &g_beChangePosTransformInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beChangePosTransformInfo_GetMetaObject,
-        beChangePosTransformInfo_className,
+        "beChangePosTransformInfo",
         0x1c, /* instance size */
         beChangePosTransformInfo_GetVTable,
         0,

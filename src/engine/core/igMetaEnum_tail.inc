@@ -84,12 +84,12 @@ int igMetaEnum_GetValueAt(void *self, int index)
 }
 
 static inline int enumStringPool(void) {
-    if ((*(int *)g_stringPool) == 0) {
+    if ((g_stringPool) == 0) {
         int p = ((int)StringPool_Allocate(0x10));
         if (p != 0) { p = ((int)StringPool_Construct((StringPool *)p)); }
-        (*(int *)g_stringPool) = p;
+        (g_stringPool) = p;
     }
-    return (*(int *)g_stringPool);
+    return (g_stringPool);
 }
 
 static inline void dropEnumNames(igTDataList<char *> *o) {
@@ -102,11 +102,11 @@ static inline void dropValues(igTDataList<int> *o) {
 
 static inline void setValue(igTDataList<int> *l, int i, int *v) { if (l->_count != 0 && i >= 0 && i < l->_count) { l->_data[i] = *v; } }
 
-MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count) {
+MetaEnumView *igMetaEnum_Create(const char *name, const char **names, int *values, int count) {
     MetaEnumView *metaEnum;
     int i;
     char *interned;
-    char *entry;
+    const char *entry;
     char *held;
     char *old;
     igTDataList<char *> *nameList;
@@ -152,7 +152,7 @@ MetaEnumView *igMetaEnum_Create(char *name, char **names, int *values, int count
         releaseString(held);
         setValue(metaEnum->values, i, &values[i]);
     }
-    igObjectSystem_AppendMetaEnum((int *)((*(int *)g_objectSystem)), (int)metaEnum);
+    igObjectSystem_AppendMetaEnum((int *)(((*(int *)&g_objectSystem))), (int)metaEnum);
     metaEnum->_refCount = metaEnum->_refCount - 1;
     if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(metaEnum); }
     return metaEnum;

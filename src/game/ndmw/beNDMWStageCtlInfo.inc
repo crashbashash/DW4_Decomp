@@ -1,10 +1,13 @@
+igMetaObject *g_beNDMWStageCtlInfo_metaObject;
+igMetaEnum *g_beNDMWStageCtlInfo_messageMetaEnum;
+
 igMetaObject *FUN_003bbbd0(void)
 {
-    igMetaObject *g = g_beNDMWStageCtlInfo_metaObject[0];
+    igMetaObject *g = g_beNDMWStageCtlInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003bbc90();
-    return g_beNDMWStageCtlInfo_metaObject[0];
+    return g_beNDMWStageCtlInfo_metaObject;
 }
 
 int beNDMWStageCtlInfo_GetVTable(void) {
@@ -31,11 +34,11 @@ void *beNDMWStageCtlInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStageCtlInfo_metaObject,
+        &g_beNDMWStageCtlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWStageCtlInfo_GetMetaObject,
-        beNDMWStageCtlInfo_className,
+        "beNDMWStageCtlInfo",
         0x1c, /* instance size */
         beNDMWStageCtlInfo_GetVTable,
         0,
@@ -49,10 +52,21 @@ void beNDMWStageCtlInfo_GetMetaObject(void)
     FUN_003bbbd0();
 }
 
-int FUN_003bbd40(void) {
-    if (DAT_0058b058[0] == 0) {
-        DAT_0058b058[0] = igMetaEnum_Create(Message, &DAT_004ca118[0], &DAT_004ca128[0], 3);
+static const char *g_beNDMWStageCtlInfo_messageNames[] = {
+    "NEXTSTAGE",
+    "PADINPUT",
+    "ISRESETSTART",
+};
+static int g_beNDMWStageCtlInfo_messageValues[] = {
+    0,
+    1,
+    2,
+};
+
+igMetaEnum *FUN_003bbd40(void) {
+    if (g_beNDMWStageCtlInfo_messageMetaEnum == 0) {
+        g_beNDMWStageCtlInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWStageCtlInfo_messageNames, g_beNDMWStageCtlInfo_messageValues, 3);
     }
-    return DAT_0058b058[0];
+    return g_beNDMWStageCtlInfo_messageMetaEnum;
 }
 

@@ -1,21 +1,38 @@
+igMetaObject *g_igCollisionGrid_metaObject;
+igMetaField *g_igCollisionGrid_cellsMetaField;
+igMetaField *g_igCollisionGrid_activeCellsMetaField;
+igMetaField *g_igCollisionGrid_processedCellsMetaField;
+igMetaField *g_igCollisionGrid_checkedGroupsMetaField;
+igMetaField *g_igCollisionGrid_dynamicCollisionsMetaField;
+igMetaField *g_igCollisionGrid_staticCollisionsMetaField;
+igMetaField *g_igCollisionGrid_lostGroupsMetaField;
+igMetaField *g_igCollisionGrid_sizeXMetaField;
+igMetaField *g_igCollisionGrid_sizeYMetaField;
+igMetaField *g_igCollisionGrid_sizeZMetaField;
+igMetaField *g_igCollisionGrid_maxRadiusMetaField;
+igMetaField *g_igCollisionGrid_boundMetaField;
+igMetaField *g_igCollisionGrid_deltasMetaField;
+igMetaField *g_igCollisionGrid_rateMetaField;
+igMetaField *g_igCollisionGrid_maxPriorityMetaField;
+
 void FUN_0023a040(int arg0) {
     FUN_0023a340();
-    igMetaObject_CreateInstance(*(int *)0x56DD40, arg0);
+    igMetaObject_CreateInstance((int)g_igCollisionGrid_metaObject, arg0);
 }
 
 igMetaObject *FUN_0023a080(void) {
-    if (g_igCollisionGrid_metaObject[0] == 0) {
-        g_igCollisionGrid_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCollisionGrid_metaObject == 0) {
+        g_igCollisionGrid_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCollisionGrid_metaObject[0];
+    return g_igCollisionGrid_metaObject;
 }
 
 igMetaObject *igCollisionGrid_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCollisionGrid_metaObject[0];
+    igMetaObject *g = g_igCollisionGrid_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0023a340();
-    return g_igCollisionGrid_metaObject[0];
+    return g_igCollisionGrid_metaObject;
 }
 
 int igCollisionGrid_GetVTable(void) {
@@ -88,15 +105,17 @@ void FUN_0023a340(void)
     igMetaObject_RunStaticInit(igCollisionGrid_Register);
 }
 
+static igMetaObjectCallback g_igCollisionGrid_callbackList[] = { FUN_0023a650, FUN_00239b20, FUN_0018a780, 0 };
+
 void igCollisionGrid_Register(void) {
     CollisionLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCollisionGrid_metaObject,
+        &g_igCollisionGrid_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igCollisionGrid_GetMetaObject,
-        igCollisionGrid_className,
+        "igCollisionGrid",
         0x4C, /* instance size */
         igCollisionGrid_GetVTable,
         &igCollisionGrid_InitFields,
@@ -109,6 +128,75 @@ void thunk_igCollisionGrid_GetMetaObject(void) {
     igCollisionGrid_GetMetaObject();
 }
 
+static FieldFactory g_igCollisionGrid_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igFloatMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igCollisionGrid_fieldTable[] = {
+    "_cells",
+    "_activeCells",
+    "_processedCells",
+    "_checkedGroups",
+    "_dynamicCollisions",
+    "_staticCollisions",
+    "_lostGroups",
+    "_sizeX",
+    "_sizeY",
+    "_sizeZ",
+    "_maxRadius",
+    "_bound",
+    "_deltas",
+    "_rate",
+    "_maxPriority",
+};
+static igMetaField **g_igCollisionGrid_fieldHandles[] = {
+    &g_igCollisionGrid_cellsMetaField,
+    &g_igCollisionGrid_activeCellsMetaField,
+    &g_igCollisionGrid_processedCellsMetaField,
+    &g_igCollisionGrid_checkedGroupsMetaField,
+    &g_igCollisionGrid_dynamicCollisionsMetaField,
+    &g_igCollisionGrid_staticCollisionsMetaField,
+    &g_igCollisionGrid_lostGroupsMetaField,
+    &g_igCollisionGrid_sizeXMetaField,
+    &g_igCollisionGrid_sizeYMetaField,
+    &g_igCollisionGrid_sizeZMetaField,
+    &g_igCollisionGrid_maxRadiusMetaField,
+    &g_igCollisionGrid_boundMetaField,
+    &g_igCollisionGrid_deltasMetaField,
+    &g_igCollisionGrid_rateMetaField,
+    &g_igCollisionGrid_maxPriorityMetaField,
+};
+static int g_igCollisionGrid_fieldOffsets[] = {
+    8,
+    12,
+    36,
+    40,
+    44,
+    48,
+    52,
+    16,
+    20,
+    24,
+    28,
+    56,
+    60,
+    72,
+    32,
+};
+
 void igCollisionGrid_InitFields(void) {
     int temp_s1;
     void *temp_s2;
@@ -119,11 +207,11 @@ void igCollisionGrid_InitFields(void) {
     void *temp_s2_6;
     void *temp_s2_7;
     void *temp_s2_8;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igCollisionGrid_metaObject[0];
+    temp_s0 = g_igCollisionGrid_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCollisionGrid_ctorTable[0], 0xF);
+    igMetaObject_CreateFields(temp_s0, g_igCollisionGrid_ctorTable, 0xF);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0023a570();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -149,6 +237,6 @@ void igCollisionGrid_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_0018a6a0();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
-    igMetaObject_NameFields(temp_s0, &g_igCollisionGrid_fieldTable[0], &DAT_00498500[0], &DAT_00498540[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igCollisionGrid_fieldTable, g_igCollisionGrid_fieldHandles, g_igCollisionGrid_fieldOffsets, temp_s1);
 }
 

@@ -1,9 +1,13 @@
+igMetaObject *g_igSerialScheduler_metaObject;
+igMetaField *g_igSerialScheduler_managerListMetaField;
+igMetaField *g_igSerialScheduler_cachedManagerListMetaField;
+
 igMetaObject *igSerialScheduler_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSerialScheduler_metaObject[0];
+    igMetaObject *g = g_igSerialScheduler_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231290();
-    return g_igSerialScheduler_metaObject[0];
+    return g_igSerialScheduler_metaObject;
 }
 
 int igSerialScheduler_GetVTable(void) {
@@ -44,15 +48,17 @@ void FUN_00231290(void)
     igMetaObject_RunStaticInit(igSerialScheduler_Register);
 }
 
+static igMetaObjectCallback g_igSerialScheduler_callbackList[] = { FUN_002336b0, FUN_00233830, 0 };
+
 void igSerialScheduler_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSerialScheduler_metaObject,
+        &g_igSerialScheduler_metaObject,
         igInsightScheduler_Register,
         igInsightScheduler_GetPublishedMetaObject,
         thunk_igSerialScheduler_GetMetaObject,
-        igSerialScheduler_className,
+        "igSerialScheduler",
         0x10, /* instance size */
         igSerialScheduler_GetVTable,
         &igSerialScheduler_InitFields,
@@ -66,24 +72,41 @@ void thunk_igSerialScheduler_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00231330(void) {
-    return g_igInsightScheduler_metaObject[0];
+    return g_igInsightScheduler_metaObject;
 }
+
+static FieldFactory g_igSerialScheduler_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igSerialScheduler_fieldTable[] = {
+    "_managerList",
+    "_cachedManagerList",
+};
+static igMetaField **g_igSerialScheduler_fieldHandles[] = {
+    &g_igSerialScheduler_managerListMetaField,
+    &g_igSerialScheduler_cachedManagerListMetaField,
+};
+static int g_igSerialScheduler_fieldOffsets[] = {
+    8,
+    12,
+};
 
 void igSerialScheduler_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igSerialScheduler_metaObject[0];
+    temp_s0 = g_igSerialScheduler_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSerialScheduler_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igSerialScheduler_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00233480();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00233750();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igSerialScheduler_fieldTable[0], &DAT_00497fa0[0], &DAT_00497fa8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igSerialScheduler_fieldTable, g_igSerialScheduler_fieldHandles, g_igSerialScheduler_fieldOffsets, temp_s2);
 }
 

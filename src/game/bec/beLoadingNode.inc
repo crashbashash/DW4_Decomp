@@ -1,9 +1,13 @@
+igMetaObject *g_beLoadingNode_metaObject;
+igMetaField *g_beLoadingNode_lockTimeMetaField;
+igMetaField *g_beLoadingNode_playLimitTimeMetaField;
+
 void *beLoadingNode_ResolveMetaObject(void) {
-    igMetaObject *g = g_beLoadingNode_metaObject[0];
+    igMetaObject *g = g_beLoadingNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034e710();
     }
-    return g_beLoadingNode_metaObject[0];
+    return g_beLoadingNode_metaObject;
 }
 
 int beLoadingNode_GetVTable(void) {
@@ -46,11 +50,11 @@ void *beLoadingNode_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLoadingNode_metaObject,
+        &g_beLoadingNode_metaObject,
         beNodeAnim_Register,
         beNodeAnim_GetPublishedMetaObject,
         beLoadingNode_GetMetaObject,
-        beLoadingNode_className,
+        "beLoadingNode",
         0x80, /* instance size */
         beLoadingNode_GetVTable,
         beLoadingNode_InitFields,
@@ -65,17 +69,34 @@ void beLoadingNode_GetMetaObject(void)
 }
 
 igMetaObject *FUN_0034e7d0(void) {
-    return g_beNodeAnim_metaObject[0];
+    return g_beNodeAnim_metaObject;
 }
+
+static FieldFactory g_beLoadingNode_ctorTable[] = {
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_beLoadingNode_fieldTable[] = {
+    "_lockTime",
+    "_playLimitTime",
+};
+static igMetaField **g_beLoadingNode_fieldHandles[] = {
+    &g_beLoadingNode_lockTimeMetaField,
+    &g_beLoadingNode_playLimitTimeMetaField,
+};
+static int g_beLoadingNode_fieldOffsets[] = {
+    112,
+    120,
+};
 
 void beLoadingNode_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beLoadingNode_metaObject[0];
+    temp_s0 = (void *)g_beLoadingNode_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beLoadingNode_ctorTable[0], 2);
-    igMetaObject_NameFields(temp_s0, &g_beLoadingNode_fieldTable[0], &DAT_004c4a60[0], &DAT_004c4a68[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beLoadingNode_ctorTable, 2);
+    igMetaObject_NameFields(temp_s0, g_beLoadingNode_fieldTable, g_beLoadingNode_fieldHandles, g_beLoadingNode_fieldOffsets, temp_s1);
 }
 
 void FUN_0034e850(void)

@@ -1,4 +1,9 @@
 #include "src/engine/maths/MathsLibrary.h"
+
+unsigned char g_MathsLibrary_registered;
+
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/maths/LibraryFront.inc"
 #include "src/engine/maths/igVolume.inc"
 #include "src/engine/maths/igVolumeList.inc"
@@ -51,3 +56,4 @@
 #include "src/engine/maths/igVec4f.inc"
 #include "src/engine/maths/InlineTail.inc"
 #include "src/engine/maths/igMathConstants.inc"
+#pragma pop

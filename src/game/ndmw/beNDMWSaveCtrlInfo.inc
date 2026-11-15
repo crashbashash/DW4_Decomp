@@ -1,12 +1,14 @@
+igMetaObject *g_beNDMWSaveCtrlInfo_metaObject;
+
 void *FUN_003bcf40(void) {
     unsigned char b;
-    if (g_beNDMWSaveCtrlInfo_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beNDMWSaveCtrlInfo_metaObject[0]) + 36) & 4) != 0;
+    if (g_beNDMWSaveCtrlInfo_metaObject != 0) {
+        b = (*(int *)((char *)(g_beNDMWSaveCtrlInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_003bd000();
 done:
-    return g_beNDMWSaveCtrlInfo_metaObject[0];
+    return g_beNDMWSaveCtrlInfo_metaObject;
 }
 
 int beNDMWSaveCtrlInfo_GetVTable(void) {
@@ -33,11 +35,11 @@ void *beNDMWSaveCtrlInfo_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWSaveCtrlInfo_metaObject,
+        &g_beNDMWSaveCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beNDMWSaveCtrlInfo_GetMetaObject,
-        beNDMWSaveCtrlInfo_className,
+        "beNDMWSaveCtrlInfo",
         0x1c, /* instance size */
         beNDMWSaveCtrlInfo_GetVTable,
         0,

@@ -1,6 +1,6 @@
 /* Prints `<indent><field> = 0x<value>`: a raw reference is a pointer, shown as its address. */
 void igRawRefMetaField_Print(igRawRefMetaField *self, char *object, int unusedArg, const char *indent) {
-    igReport_Printf(text_s_s_0x_x, indent, self->_fieldName, (int)*(void **)(object + self->_offset));
+    igReport_Printf("%s%s = 0x%x\n", indent, self->_fieldName, (int)*(void **)(object + self->_offset));
     igReport_Flush();
 }
 

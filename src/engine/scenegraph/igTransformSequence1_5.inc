@@ -1,9 +1,21 @@
+igMetaObject *g_igTransformSequence1_5_metaObject;
+igMetaField *g_igTransformSequence1_5_timeListLongMetaField;
+igMetaField *g_igTransformSequence1_5_timeListMetaField;
+igMetaField *g_igTransformSequence1_5_interpolationDataTranslationMetaField;
+igMetaField *g_igTransformSequence1_5_interpolationDataRotationMetaField;
+igMetaField *g_igTransformSequence1_5_interpolationDataScaleMetaField;
+igMetaField *g_igTransformSequence1_5_drivenChannelsMetaField;
+igMetaField *g_igTransformSequence1_5_interpolationMethodMetaField;
+igMetaField *g_igTransformSequence1_5_keyframeTimeOffsetMetaField;
+igMetaField *g_igTransformSequence1_5_animationDurationMetaField;
+igMetaField *g_igTransformSequence1_5_compressedDataObjectMetaField;
+
 igMetaObject *FUN_00194ef0(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igTransformSequence1_5_metaObject)[0];
+    igMetaObject *g = g_igTransformSequence1_5_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00195290();
-    return ((igMetaObject * *)g_igTransformSequence1_5_metaObject)[0];
+    return g_igTransformSequence1_5_metaObject;
 }
 
 int igTransformSequence1_5_GetVTable(void) {
@@ -72,15 +84,17 @@ void FUN_00195290(void)
     igMetaObject_RunStaticInit(igTransformSequence1_5_Register);
 }
 
+static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, FUN_0018a180, FUN_001a2640, 0 };
+
 void igTransformSequence1_5_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igTransformSequence1_5_metaObject,
+        &g_igTransformSequence1_5_metaObject,
         igTransformSequence_Register,
         igTransformSequence_GetPublishedMetaObject,
         thunk_FUN_00194ef0,
-        igTransformSequence1_5_className,
+        "igTransformSequence1_5",
         sizeof(igTransformSequence1_5),                      /* Instance size. */
         igTransformSequence1_5_GetVTable,
         &igTransformSequence1_5_InitFields,

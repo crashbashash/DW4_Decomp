@@ -1,16 +1,19 @@
+igMetaObject *g_igLightSet_metaObject;
+igMetaField *g_igLightSet_lightsMetaField;
+
 igMetaObject *FUN_0019dbb0(void) {
-    if (g_igLightSet_metaObject[0] == 0) {
-        g_igLightSet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igLightSet_metaObject == 0) {
+        g_igLightSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igLightSet_metaObject[0];
+    return g_igLightSet_metaObject;
 }
 
 igMetaObject *igLightSet_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLightSet_metaObject[0];
+    igMetaObject *g = g_igLightSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019dcd0();
-    return g_igLightSet_metaObject[0];
+    return g_igLightSet_metaObject;
 }
 
 int igLightSet_GetVTable(void) {
@@ -34,15 +37,17 @@ void FUN_0019dcd0(void)
     igMetaObject_RunStaticInit(igLightSet_Register);
 }
 
+static igMetaObjectCallback g_igLightSet_callbackList[] = { FUN_001366c0, 0 };
+
 void igLightSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igLightSet_metaObject),
+        &g_igLightSet_metaObject,
         igNode_Register,
         igNode_GetPublishedMetaObject,
         thunk_igLightSet_GetMetaObject,
-        igLightSet_className,
+        "igLightSet",
         0x20, /* instance size */
         igLightSet_GetVTable,
         &igLightSet_InitFields,
@@ -56,31 +61,46 @@ void thunk_igLightSet_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_0019dd70(void) {
-    return g_igNode_metaObject[0];
+    return g_igNode_metaObject;
 }
+
+static FieldFactory g_igLightSet_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igLightSet_fieldTable[] = {
+    "_lights",
+};
+static igMetaField **g_igLightSet_fieldHandles[] = {
+    &g_igLightSet_lightsMetaField,
+};
+static int g_igLightSet_fieldOffsets[] = {
+    28,
+};
 
 void igLightSet_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igLightSet_metaObject[0];
+    temp_s0 = (void *)g_igLightSet_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igLightSet_ctorTable[0], 1);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLightSet_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001365e0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields(temp_s0, &g_igLightSet_fieldTable[0], &DAT_0048bdd0[0], &DAT_0048bdd8[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igLightSet_fieldTable, g_igLightSet_fieldHandles, g_igLightSet_fieldOffsets, temp_s2);
 }
 
 igMetaObject *FUN_0019de30(void) {
-    return g_igTransform_metaObject[0];
+    return g_igTransform_metaObject;
 }
 
+igMetaObject *g_igAnimationSequence_metaObject;
+
 igMetaObject *FUN_0019de40(void) {
-    return g_igAnimationSequence_metaObject[0];
+    return g_igAnimationSequence_metaObject;
 }
 
 void **FUN_0019de50(struct Ref **self, short flag) {

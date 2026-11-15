@@ -101,7 +101,7 @@ Obj_236f80 *igInsightCore_FindManager(Self *arg0, int arg1) {
 }
 
 int FUN_00237010(void) {
-    return (int)g_igInfoManager_metaObject[0];
+    return (int)g_igInfoManager_metaObject;
 }
 
 int igInsightCore_AddRendererOrder(int *p)

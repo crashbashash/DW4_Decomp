@@ -1,15 +1,53 @@
-int FUN_001340f0(void) {
-    if (DAT_0055eec8[0] == 0) {
-        DAT_0055eec8[0] = igMetaEnum_Create(&RENDERDESTINATION_TEXTURE_CREATE[0], &DAT_00485f88[0], &DAT_00485f90[0], 2);
+igMetaEnum *g_igRenderDestinationAttr_textureCreateMetaEnum;
+igMetaEnum *g_igRenderDestinationAttr_createModeMetaEnum;
+igMetaObject *g_igRenderDestinationAttr_metaObject;
+igMetaField *g_igRenderDestinationAttr_iCreateModeMetaField;
+igMetaField *g_igRenderDestinationAttr_iTexCreateModeMetaField;
+igMetaField *g_igRenderDestinationAttr_iRDHandleMetaField;
+igMetaField *g_igRenderDestinationAttr_bEnabledMetaField;
+igMetaField *g_igRenderDestinationAttr_iPrevRDHandleMetaField;
+igMetaField *g_igRenderDestinationAttr_pTexMetaField;
+igMetaField *g_igRenderDestinationAttr_iTypeMetaField;
+igMetaField *g_igRenderDestinationAttr_iSizeXMetaField;
+igMetaField *g_igRenderDestinationAttr_iSizeYMetaField;
+igMetaField *g_igRenderDestinationAttr_iColorBitCountMetaField;
+igMetaField *g_igRenderDestinationAttr_iAlphaBitCountMetaField;
+igMetaField *g_igRenderDestinationAttr_iDepthBitCountMetaField;
+igMetaField *g_igRenderDestinationAttr_iStencilBitCountMetaField;
+igMetaField *g_igRenderDestinationAttr_vcMetaField;
+
+static const char *g_igRenderDestinationAttr_textureCreateNames[] = {
+    "RENDERDESTINATION_TEXTURE_CREATE_MODE_AUTO_CREATE",
+    "RENDERDESTINATION_TEXTURE_CREATE_MODE_USE_SPECIFIED",
+};
+static int g_igRenderDestinationAttr_textureCreateValues[] = {
+    0,
+    1,
+};
+
+igMetaEnum *FUN_001340f0(void) {
+    if (g_igRenderDestinationAttr_textureCreateMetaEnum == 0) {
+        g_igRenderDestinationAttr_textureCreateMetaEnum = igMetaEnum_Create("RENDERDESTINATION_TEXTURE_CREATE_MODE", g_igRenderDestinationAttr_textureCreateNames, g_igRenderDestinationAttr_textureCreateValues, 2);
     }
-    return DAT_0055eec8[0];
+    return g_igRenderDestinationAttr_textureCreateMetaEnum;
 }
 
-int FUN_00134150(void) {
-    if (DAT_0055eed0[0] == 0) {
-        DAT_0055eed0[0] = igMetaEnum_Create(&RENDERDESTINATION_CREATE_MODE[0], &DAT_00485f98[0], &DAT_00485fa8[0], 3);
+static const char *g_igRenderDestinationAttr_createModeNames[] = {
+    "RENDERDESTINATION_CREATE_MODE_INHERIT",
+    "RENDERDESTINATION_CREATE_MODE_AUTONOMOUS",
+    "RENDERDESTINATION_CREATE_MODE_USE_DEFAULT",
+};
+static int g_igRenderDestinationAttr_createModeValues[] = {
+    0,
+    1,
+    2,
+};
+
+igMetaEnum *FUN_00134150(void) {
+    if (g_igRenderDestinationAttr_createModeMetaEnum == 0) {
+        g_igRenderDestinationAttr_createModeMetaEnum = igMetaEnum_Create("RENDERDESTINATION_CREATE_MODE", g_igRenderDestinationAttr_createModeNames, g_igRenderDestinationAttr_createModeValues, 3);
     }
-    return DAT_0055eed0[0];
+    return g_igRenderDestinationAttr_createModeMetaEnum;
 }
 
 int FUN_001341b0(int arg0) {
@@ -18,18 +56,18 @@ int FUN_001341b0(int arg0) {
 }
 
 igMetaObject *FUN_001341f0(void) {
-    if (g_igRenderDestinationAttr_metaObject[0] == 0) {
-        g_igRenderDestinationAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igRenderDestinationAttr_metaObject == 0) {
+        g_igRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igRenderDestinationAttr_metaObject[0];
+    return g_igRenderDestinationAttr_metaObject;
 }
 
 igMetaObject *igRenderDestinationAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRenderDestinationAttr_metaObject[0];
+    igMetaObject *g = g_igRenderDestinationAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00134370();
-    return g_igRenderDestinationAttr_metaObject[0];
+    return g_igRenderDestinationAttr_metaObject;
 }
 
 int igRenderDestinationAttr_GetVTable(void) {
@@ -74,15 +112,17 @@ void FUN_00134370(void)
     igMetaObject_RunStaticInit(igRenderDestinationAttr_Register);
 }
 
+static igMetaObjectCallback g_igRenderDestinationAttr_callbackList[] = { FUN_00132cf0, FUN_0014a0e0, 0 };
+
 void igRenderDestinationAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igRenderDestinationAttr_metaObject,
+        &g_igRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igRenderDestinationAttr_GetMetaObject,
-        igRenderDestinationAttr_className,
+        "igRenderDestinationAttr",
         0x44, /* instance size */
         igRenderDestinationAttr_GetVTable,
         &igRenderDestinationAttr_InitFields,
@@ -94,6 +134,73 @@ void igRenderDestinationAttr_Register(void) {
 void thunk_igRenderDestinationAttr_GetMetaObject(void) {
     igRenderDestinationAttr_GetMetaObject();
 }
+
+static FieldFactory g_igRenderDestinationAttr_ctorTable[] = {
+    igEnumMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igRenderDestinationAttr_fieldTable[] = {
+    "_iCreateMode",
+    "_iTexCreateMode",
+    "_iRDHandle",
+    "_bEnabled",
+    "_iPrevRDHandle",
+    "_pTex",
+    "_iType",
+    "_iSizeX",
+    "_iSizeY",
+    "_iColorBitCount",
+    "_iAlphaBitCount",
+    "_iDepthBitCount",
+    "_iStencilBitCount",
+    "_vc",
+};
+static igMetaField **g_igRenderDestinationAttr_fieldHandles[] = {
+    &g_igRenderDestinationAttr_iCreateModeMetaField,
+    &g_igRenderDestinationAttr_iTexCreateModeMetaField,
+    &g_igRenderDestinationAttr_iRDHandleMetaField,
+    &g_igRenderDestinationAttr_bEnabledMetaField,
+    &g_igRenderDestinationAttr_iPrevRDHandleMetaField,
+    &g_igRenderDestinationAttr_pTexMetaField,
+    &g_igRenderDestinationAttr_iTypeMetaField,
+    &g_igRenderDestinationAttr_iSizeXMetaField,
+    &g_igRenderDestinationAttr_iSizeYMetaField,
+    &g_igRenderDestinationAttr_iColorBitCountMetaField,
+    &g_igRenderDestinationAttr_iAlphaBitCountMetaField,
+    &g_igRenderDestinationAttr_iDepthBitCountMetaField,
+    &g_igRenderDestinationAttr_iStencilBitCountMetaField,
+    &g_igRenderDestinationAttr_vcMetaField,
+};
+static int g_igRenderDestinationAttr_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+};
+
+int g_igRenderDestinationAttr_iTypeDefault = 1;
 
 void igRenderDestinationAttr_InitFields(void) {
     int temp_s0;
@@ -110,11 +217,11 @@ void igRenderDestinationAttr_InitFields(void) {
     void *temp_v0_7;
     void *temp_v0_8;
     void *temp_v0_9;
-    void *temp_s1;
+    igMetaObject *temp_s1;
 
-    temp_s1 = (void *)g_igRenderDestinationAttr_metaObject[0];
+    temp_s1 = g_igRenderDestinationAttr_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igRenderDestinationAttr_ctorTable[0], 0xE);
+    igMetaObject_CreateFields(temp_s1, g_igRenderDestinationAttr_ctorTable, 0xE);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     igEnumMetaField_SetDefaultValue(temp_v0, &DAT_004860c8[0]);
     ((igMetaField *)temp_v0)->_persistent = 0;
@@ -137,7 +244,7 @@ void igRenderDestinationAttr_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00132ba0();
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_v0_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6));
-    igEnumMetaField_SetDefaultValue(temp_v0_5, &DAT_004860d8[0]);
+    igEnumMetaField_SetDefaultValue(temp_v0_5, &g_igRenderDestinationAttr_iTypeDefault);
     ((igEnumMetaField *)temp_v0_5)->_getMetaEnumFunction = (int)(&FUN_00149b00);
     temp_v0_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     igIntMetaField_SetDefault(temp_v0_6, -1);
@@ -163,6 +270,6 @@ void igRenderDestinationAttr_InitFields(void) {
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 1;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 1;
     ((igMetaField *)temp_s2_2)->_isAlikeShallowMethod = 3;
-    igMetaObject_NameFields(temp_s1, &g_igRenderDestinationAttr_fieldTable[0], &DAT_00486050[0], &DAT_00486090[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igRenderDestinationAttr_fieldTable, g_igRenderDestinationAttr_fieldHandles, g_igRenderDestinationAttr_fieldOffsets, temp_s0);
 }
 

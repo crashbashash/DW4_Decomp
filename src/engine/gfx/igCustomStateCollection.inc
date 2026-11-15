@@ -1,14 +1,18 @@
+igMetaObject *g_igCustomStateCollection_metaObject;
+igMetaField *g_igCustomStateCollection_nameMetaField;
+igMetaField *g_igCustomStateCollection_flagsMetaField;
+
 void FUN_0014efb0(int arg0) {
     FUN_0014f0c0();
-    igMetaObject_CreateInstance(*(int *)0x55FE70, arg0);
+    igMetaObject_CreateInstance(g_igCustomStateCollection_metaObject, arg0);
 }
 
 igMetaObject *igCustomStateCollection_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCustomStateCollection_metaObject[0];
+    igMetaObject *g = g_igCustomStateCollection_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014f0c0();
-    return g_igCustomStateCollection_metaObject[0];
+    return g_igCustomStateCollection_metaObject;
 }
 
 int igCustomStateCollection_GetVTable(void) {
@@ -29,15 +33,17 @@ void FUN_0014f0c0(void)
     igMetaObject_RunStaticInit(igCustomStateCollection_Register);
 }
 
+static igMetaObjectCallback g_igCustomStateCollection_callbackList[] = { FUN_0014f240, 0 };
+
 void igCustomStateCollection_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCustomStateCollection_metaObject,
+        &g_igCustomStateCollection_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igCustomStateCollection_GetMetaObject,
-        igCustomStateCollection_className,
+        "igCustomStateCollection",
         0x1C, /* instance size */
         igCustomStateCollection_GetVTable,
         &igCustomStateCollection_InitFields,
@@ -50,14 +56,31 @@ void thunk_igCustomStateCollection_GetMetaObject(void) {
     igCustomStateCollection_GetMetaObject();
 }
 
-void igCustomStateCollection_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igCustomStateCollection_ctorTable[] = {
+    igStringMetaField_Create,
+    igUnsignedIntMetaField_Create,
+};
+static const char *g_igCustomStateCollection_fieldTable[] = {
+    "_name",
+    "_flags",
+};
+static igMetaField **g_igCustomStateCollection_fieldHandles[] = {
+    &g_igCustomStateCollection_nameMetaField,
+    &g_igCustomStateCollection_flagsMetaField,
+};
+static int g_igCustomStateCollection_fieldOffsets[] = {
+    20,
+    24,
+};
 
-    temp_s0 = (void *)g_igCustomStateCollection_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCustomStateCollection_ctorTable[0], 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(temp_s0, temp_s1), &DAT_004dc870[0]);
-    igMetaObject_NameFields(temp_s0, &g_igCustomStateCollection_fieldTable[0], &DAT_00489060[0], &DAT_00489068[0], temp_s1);
+void igCustomStateCollection_InitFields(void) {
+    int fieldStart;
+    igMetaObject *meta;
+
+    meta = g_igCustomStateCollection_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igCustomStateCollection_ctorTable, 2);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, fieldStart), "");
+    igMetaObject_NameFields(meta, g_igCustomStateCollection_fieldTable, g_igCustomStateCollection_fieldHandles, g_igCustomStateCollection_fieldOffsets, fieldStart);
 }
 

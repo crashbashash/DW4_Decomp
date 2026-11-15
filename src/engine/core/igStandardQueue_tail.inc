@@ -1,9 +1,19 @@
+igMetaObject *g_igStandardQueue_metaObject;
+igMetaField *g_igStandardQueue_insertLockMetaField;
+igMetaField *g_igStandardQueue_removeLockMetaField;
+igMetaField *g_igStandardQueue_queueSemaMetaField;
+igMetaField *g_igStandardQueue_capacityMetaField;
+igMetaField *g_igStandardQueue_insertElementMetaField;
+igMetaField *g_igStandardQueue_removeElementMetaField;
+igMetaField *g_igStandardQueue_dataMetaField;
+igMetaField *g_igStandardQueue_maxCapacityMetaField;
+
 igMetaObject *igStandardQueue_GetMetaObject(void)
 {
-    igMetaObject *g = g_igStandardQueue_metaObject[0];
+    igMetaObject *g = g_igStandardQueue_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igStandardQueue_EnsureRegistered();
-    return g_igStandardQueue_metaObject[0];
+    return g_igStandardQueue_metaObject;
 }
 
 int igStandardQueue_GetVTable(void) {
@@ -19,7 +29,7 @@ int igStandardQueue_GetVTable(void) {
     p2 = &queue._removeLock;
     *p2 = 0;
     queue._queueSema = 0;
-    vtable = *(int *)((char *)&queue + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&queue + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     queue._vtable = (int)&g_igStandardQueue_vtable[0];
     igSmartPointer_igSemaphore_Destruct((igObject **)&queue._queueSema, -1);
     igSmartPointer_igSemaphore_Destruct((igObject **)p2, -1);
@@ -56,26 +66,69 @@ void igStandardQueue_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igStandardQueue_Register);
 }
 
+static igMetaObjectCallback g_igStandardQueue_callbackList[] = { igSemaphore_EnsureRegistered, 0 };
+
 void igStandardQueue_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igStandardQueue_metaObject,
+        &g_igStandardQueue_metaObject,
         (igMetaObjectRegisterFunction)igQueue_Register,
         igQueue_GetPublishedMetaObject,
         igStandardQueue_GetMetaObjectFunction,
-        igStandardQueue_className,
+        "igStandardQueue",
         0x2C,
         igStandardQueue_GetVTable,
         igStandardQueue_InitFields,
         0,
-        (igMetaObjectCallback *)g_igStandardQueue_callbackList
+        g_igStandardQueue_callbackList
     );
 }
 
 igMetaObject *igQueue_GetPublishedMetaObject(void) {
-    return g_igQueue_metaObject[0];
+    return g_igQueue_metaObject;
 }
+
+static FieldFactory g_igStandardQueue_ctorTable[] = {
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igUnsignedIntMetaField_Create,
+};
+static const char *g_igStandardQueue_fieldTable[] = {
+    "_insertLock",
+    "_removeLock",
+    "_queueSema",
+    "_capacity",
+    "_insertElement",
+    "_removeElement",
+    "_data",
+    "_maxCapacity",
+};
+static igMetaField **g_igStandardQueue_fieldDescriptors[] = {
+    &g_igStandardQueue_insertLockMetaField,
+    &g_igStandardQueue_removeLockMetaField,
+    &g_igStandardQueue_queueSemaMetaField,
+    &g_igStandardQueue_capacityMetaField,
+    &g_igStandardQueue_insertElementMetaField,
+    &g_igStandardQueue_removeElementMetaField,
+    &g_igStandardQueue_dataMetaField,
+    &g_igStandardQueue_maxCapacityMetaField,
+};
+static int g_igStandardQueue_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
 
 void igStandardQueue_InitFields(void) {
     int base;
@@ -85,9 +138,9 @@ void igStandardQueue_InitFields(void) {
     void *data;
     void *meta;
 
-    meta = (void *)(g_igStandardQueue_metaObject[0]);
+    meta = (void *)(g_igStandardQueue_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igStandardQueue_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igStandardQueue_ctorTable, 8);
     insertLock = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igObjectRefMetaField *)insertLock)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insertLock)->_construct = 1;
@@ -104,7 +157,7 @@ void igStandardQueue_InitFields(void) {
     ((igMemoryRefMetaField *)data)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)data)->_releaseOnReset = 1;
     igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7))), 0x2000);
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igStandardQueue_fieldTable[0], (igMetaField ***)&g_igStandardQueue_fieldDescriptors[0], &g_igStandardQueue_fieldOffsets[0], base);
-    ((igMetaObject *)g_igStandardQueue_metaObject[0])->_writeProxy = (int)igQueue_GetMetaObjectFunction;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igStandardQueue_fieldTable, g_igStandardQueue_fieldDescriptors, g_igStandardQueue_fieldOffsets, base);
+    ((igMetaObject *)g_igStandardQueue_metaObject)->_writeProxy = (int)igQueue_GetMetaObjectFunction;
 }
 

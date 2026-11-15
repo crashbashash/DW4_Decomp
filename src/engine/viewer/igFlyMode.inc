@@ -1,17 +1,30 @@
+igMetaObject *g_igFlyMode_metaObject;
+igMetaField *g_igFlyMode_moveDirectionMetaField;
+igMetaField *g_igFlyMode_joystickTMetaField;
+igMetaField *g_igFlyMode_joystickRMetaField;
+igMetaField *g_igFlyMode_lastTranslationMetaField;
+igMetaField *g_igFlyMode_lastRotationMetaField;
+igMetaField *g_igFlyMode_speedMetaField;
+igMetaField *g_igFlyMode_aimingMetaField;
+igMetaField *g_igFlyMode_windowMetaField;
+igMetaField *g_igFlyMode_mousePosMetaField;
+igMetaField *g_igFlyMode_lastAimMetaField;
+igMetaField *g_igFlyMode_lastAimValidMetaField;
+
 void igFlyMode_Create(int arg0) {
     FUN_0045ca20();
-    igMetaObject_CreateInstance(*(int *)0x58CC80, arg0);
+    igMetaObject_CreateInstance(g_igFlyMode_metaObject, arg0);
 }
 
 igMetaObject *igFlyMode_GetMetaObject(void) {
-    igMetaObject *g = g_igFlyMode_metaObject[0];
+    igMetaObject *g = g_igFlyMode_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_0045ca20();
 done:
-    return g_igFlyMode_metaObject[0];
+    return g_igFlyMode_metaObject;
 }
 
 int igFlyMode_GetVTable(void) {
@@ -42,15 +55,17 @@ void FUN_0045ca20(void)
     igMetaObject_RunStaticInit(igFlyMode_Register);
 }
 
+static igMetaObjectCallback g_igFlyMode_callbackList[] = { FUN_00145de0, 0 };
+
 void igFlyMode_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFlyMode_metaObject,
+        &g_igFlyMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
         thunk_igFlyMode_GetMetaObject,
-        igFlyMode_className,
+        "igFlyMode",
         0xA0, /* instance size */
         igFlyMode_GetVTable,
         &igFlyMode_InitFields,
@@ -62,6 +77,59 @@ void igFlyMode_Register(void) {
 void thunk_igFlyMode_GetMetaObject(void) {
     igFlyMode_GetMetaObject();
 }
+
+static FieldFactory g_igFlyMode_ctorTable[] = {
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187b50,
+    FUN_00187890,
+    FUN_00187b50,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00187b50,
+    FUN_00187b50,
+    igBoolMetaField_Create,
+};
+static const char *g_igFlyMode_fieldTable[] = {
+    "_moveDirection",
+    "_joystickT",
+    "_joystickR",
+    "_lastTranslation",
+    "_lastRotation",
+    "_speed",
+    "_aiming",
+    "_window",
+    "_mousePos",
+    "_lastAim",
+    "_lastAimValid",
+};
+static igMetaField **g_igFlyMode_fieldHandles[] = {
+    &g_igFlyMode_moveDirectionMetaField,
+    &g_igFlyMode_joystickTMetaField,
+    &g_igFlyMode_joystickRMetaField,
+    &g_igFlyMode_lastTranslationMetaField,
+    &g_igFlyMode_lastRotationMetaField,
+    &g_igFlyMode_speedMetaField,
+    &g_igFlyMode_aimingMetaField,
+    &g_igFlyMode_windowMetaField,
+    &g_igFlyMode_mousePosMetaField,
+    &g_igFlyMode_lastAimMetaField,
+    &g_igFlyMode_lastAimValidMetaField,
+};
+static int g_igFlyMode_fieldOffsets[] = {
+    76,
+    88,
+    100,
+    108,
+    120,
+    128,
+    132,
+    136,
+    140,
+    148,
+    156,
+};
 
 void igFlyMode_InitFields(void) {
     int temp_s2;
@@ -82,9 +150,9 @@ void igFlyMode_InitFields(void) {
     struct V2 f;
     struct V2 g;
 
-    temp_s0 = (void *)g_igFlyMode_metaObject[0];
+    temp_s0 = g_igFlyMode_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igFlyMode_ctorTable[0], 0xB);
+    igMetaObject_CreateFields(temp_s0, g_igFlyMode_ctorTable, 0xB);
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     a.x = 0;
     a.y = 0;
@@ -118,6 +186,6 @@ void igFlyMode_InitFields(void) {
     g.x = 0;
     g.y = 0;
     FUN_0018e2f0(temp_a0_7, &g);
-    igMetaObject_NameFields(temp_s0, &g_igFlyMode_fieldTable[0], &DAT_004d15f0[0], &DAT_004d1620[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igFlyMode_fieldTable, g_igFlyMode_fieldHandles, g_igFlyMode_fieldOffsets, temp_s2);
 }
 

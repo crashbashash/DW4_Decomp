@@ -1,10 +1,13 @@
+igMetaObject *g_beDBManagerInfo_metaObject;
+igMetaField *g_beDBManagerInfo_dataBaseMetaField;
+
 igMetaObject *FUN_00365dc0(void)
 {
-    igMetaObject *g = g_beDBManagerInfo_metaObject[0];
+    igMetaObject *g = g_beDBManagerInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00365f10();
-    return g_beDBManagerInfo_metaObject[0];
+    return g_beDBManagerInfo_metaObject;
 }
 
 int beDBManagerInfo_GetVTable(void) {
@@ -40,15 +43,17 @@ void FUN_00365f10(void)
     igMetaObject_RunStaticInit(beDBManagerInfo_Register);
 }
 
+static igMetaObjectCallback g_beDBManagerInfo_callbackList[] = { FUN_00365b00, 0 };
+
 void *beDBManagerInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beDBManagerInfo_metaObject,
+        &g_beDBManagerInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beDBManagerInfo_GetMetaObject,
-        beDBManagerInfo_className,
+        "beDBManagerInfo",
         0x20, /* instance size */
         beDBManagerInfo_GetVTable,
         beDBManagerInfo_InitFields,
@@ -62,24 +67,45 @@ void beDBManagerInfo_GetMetaObject(void)
     FUN_00365dc0();
 }
 
+static FieldFactory g_beDBManagerInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beDBManagerInfo_fieldTable[] = {
+    "_dataBase",
+};
+static igMetaField **g_beDBManagerInfo_fieldHandles[] = {
+    &g_beDBManagerInfo_dataBaseMetaField,
+};
+static int g_beDBManagerInfo_fieldOffsets[] = {
+    28,
+};
+
 void beDBManagerInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beDBManagerInfo_metaObject[0];
+    temp_s0 = (void *)g_beDBManagerInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beDBManagerInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beDBManagerInfo_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003658e0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beDBManagerInfo_fieldTable[0], &DAT_004c7338[0], &DAT_004c7340[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beDBManagerInfo_fieldTable, g_beDBManagerInfo_fieldHandles, g_beDBManagerInfo_fieldOffsets, temp_s2);
 }
 
-int FUN_00366070(void) {
-    if (DAT_00589948[0] == 0) {
-        DAT_00589948[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c7348[0], &DAT_00589950[0], 1);
+igMetaEnum *g_beDBManagerInfo_msgActionMetaEnum;
+static const char *g_beDBManagerInfo_msgActionNames[] = {
+    "GETDATABASE",
+};
+static int g_beDBManagerInfo_msgActionValues[] = {
+    0,
+};
+
+igMetaEnum *FUN_00366070(void) {
+    if (g_beDBManagerInfo_msgActionMetaEnum == 0) {
+        g_beDBManagerInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beDBManagerInfo_msgActionNames, g_beDBManagerInfo_msgActionValues, 1);
     }
-    return DAT_00589948[0];
+    return g_beDBManagerInfo_msgActionMetaEnum;
 }
 

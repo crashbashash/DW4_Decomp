@@ -1,10 +1,16 @@
+igMetaObject *g_beSoundInfo_metaObject;
+igMetaField *g_beSoundInfo_fnameListMetaField;
+igMetaField *g_beSoundInfo_dataTypeMetaField;
+igMetaField *g_beSoundInfo_baseVolumeMetaField;
+igMetaField *g_beSoundInfo_sndfVolumeMetaField;
+
 igMetaObject *FUN_00343d20(void)
 {
-    igMetaObject *g = g_beSoundInfo_metaObject[0];
+    igMetaObject *g = g_beSoundInfo_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00343e00();
-    return g_beSoundInfo_metaObject[0];
+    return g_beSoundInfo_metaObject;
 }
 
 int beSoundInfo_GetVTable(void) {
@@ -33,15 +39,17 @@ void FUN_00343e00(void)
     igMetaObject_RunStaticInit(beSoundInfo_Register);
 }
 
+static igMetaObjectCallback g_beSoundInfo_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
+
 void *beSoundInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSoundInfo_metaObject,
+        &g_beSoundInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beSoundInfo_GetMetaObject,
-        beSoundInfo_className,
+        "beSoundInfo",
         0x28, /* instance size */
         beSoundInfo_GetVTable,
         beSoundInfo_InitFields,
@@ -55,16 +63,41 @@ void beSoundInfo_GetMetaObject(void)
     FUN_00343d20();
 }
 
+static FieldFactory g_beSoundInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igShortMetaField_Create,
+    igShortMetaField_Create,
+};
+static const char *g_beSoundInfo_fieldTable[] = {
+    "_fnameList",
+    "_dataType",
+    "_baseVolume",
+    "_sndfVolume",
+};
+static igMetaField **g_beSoundInfo_fieldHandles[] = {
+    &g_beSoundInfo_fnameListMetaField,
+    &g_beSoundInfo_dataTypeMetaField,
+    &g_beSoundInfo_baseVolumeMetaField,
+    &g_beSoundInfo_sndfVolumeMetaField,
+};
+static int g_beSoundInfo_fieldOffsets[] = {
+    28,
+    32,
+    36,
+    38,
+};
+
 void beSoundInfo_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSoundInfo_metaObject[0];
+    temp_s0 = (void *)g_beSoundInfo_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSoundInfo_ctorTable[0], 4);
+    igMetaObject_CreateFields(temp_s0, g_beSoundInfo_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igNamedObjectList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &g_beSoundInfo_fieldTable[0], &DAT_004c3810[0], &DAT_004c3820[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSoundInfo_fieldTable, g_beSoundInfo_fieldHandles, g_beSoundInfo_fieldOffsets, temp_s2);
 }
 

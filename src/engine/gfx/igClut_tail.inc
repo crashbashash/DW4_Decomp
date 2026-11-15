@@ -158,8 +158,8 @@ int Gap__Gfx__igClut__vfunc_23(int arg0, int arg1) {
 
     temp_v0 = FUN_0015ad50((char *)arg1);
     if (temp_v0 != 0) {
-        if (strcmp(temp_v0, &text_act[0]) != 0) {
-            if (strcmp(temp_v0, &ACT[0]) == 0) {
+        if (strcmp(temp_v0, ".act") != 0) {
+            if (strcmp(temp_v0, ".ACT") == 0) {
                 goto block_4;
             }
             goto block_5;
@@ -181,7 +181,7 @@ int FUN_00154f30(Arr *self, int arg1) {
     { DW4VC_100_2 *x = h.p; --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); }
     if (self->a20 != 0) igObject_FreeMemory(self, self->a20);
     self->a20 = 0;
-    if (h.p->vX(arg1, (int)&DAT_004de6c0[0]) == 0) {
+    if (h.p->vX(arg1, (int)"rb") == 0) {
         return 0;
     }
     self->a20 = (void *)igObject_MallocAligned(self, 0x400, 0x80);

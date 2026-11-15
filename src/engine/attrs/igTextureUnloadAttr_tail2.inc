@@ -1,5 +1,5 @@
 igMetaObject *Gap__Attrs__igTextureUnloadAttr__vfunc_22(void) {
-    return g_igTextureUnloadAttr_metaObject[0];
+    return g_igTextureUnloadAttr_metaObject;
 }
 
 /* Setter for the `_texture` field (the texture to unload). */

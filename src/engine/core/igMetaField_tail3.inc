@@ -1,13 +1,13 @@
 igMetaField *igMetaField_FindByName(int self, char *qualifiedName) {
     igMetaField *found; char *separator; char *fieldName; int n; int i; int j; int fieldCount; igMetaObject *meta; __internalObjectList *list; char *className; igMetaField *field;
     found = 0;
-    if (strncmp(qualifiedName, g_metaFieldNamePrefix[0], strlen(g_metaFieldNamePrefix[0])) == 0) {
-        qualifiedName = qualifiedName + strlen(g_metaFieldNamePrefix[0]);
-        separator = strstr(qualifiedName, g_metaFieldScopeSeparator[0]);
+    if (strncmp(qualifiedName, g_metaFieldNamePrefix, strlen(g_metaFieldNamePrefix)) == 0) {
+        qualifiedName = qualifiedName + strlen(g_metaFieldNamePrefix);
+        separator = strstr(qualifiedName, g_metaFieldScopeSeparator);
         if (separator != 0) {
-            fieldName = separator + strlen(g_metaFieldScopeSeparator[0]);
+            fieldName = separator + strlen(g_metaFieldScopeSeparator);
             i = 0;
-            list = (__internalObjectList *)((ObjectSystemView **)g_objectSystem)[0]->metaRegistry;
+            list = (__internalObjectList *)(*(ObjectSystemView * *)&g_objectSystem)->metaRegistry;
             n = list->_count;
             goto test;
 body:

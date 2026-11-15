@@ -149,7 +149,7 @@ void igPsx2Semaphore_Wait(int *result, igPsx2Semaphore *self, int block) {
     }
     if (interruptsEnabled) {
         if (block) {
-            igPsx2ThreadView *thread = g_threadManager[0]->GetCurrentThread();
+            igPsx2ThreadView *thread = g_threadManager->GetCurrentThread();
             igPsx2Thread_EnterStoppingPoint(thread);
             status = WaitSema(semaphore->_semaID);
             igPsx2Thread_LeaveStoppingPoint(thread);
@@ -190,14 +190,14 @@ void igPsx2Semaphore_IPoll(int *result, igPsx2Semaphore *self) {
 SystemAllocator::SystemAllocator() {}
 
 void SystemAllocator_Activate(void) {
-    if (g_activeSystemAllocator[0] == 0) {
-        g_activeSystemAllocator[0] = &g_systemAllocator;
+    if (g_activeSystemAllocator == 0) {
+        g_activeSystemAllocator = &g_systemAllocator;
     }
 }
 
 void SystemAllocator_Deactivate(void) {
-    if (g_activeSystemAllocator[0] != 0) {
-        g_activeSystemAllocator[0]->ReleasePageTables();
+    if (g_activeSystemAllocator != 0) {
+        g_activeSystemAllocator->ReleasePageTables();
     }
 }
 
@@ -220,7 +220,7 @@ void SystemAllocator_GetStatistics(SystemAllocator *self, SystemMemoryStatistics
     bottom = top - stackSize;
     heapTop = self->GetStackSize();
     if (heapTop == -1) {
-        heapTop = g_rangeEnd[0];
+        heapTop = g_rangeEnd;
     }
     SystemAllocatorBase_GetStatistics(self, (int *)stats);
     stats->totalSystemMemorySize = top;
@@ -278,11 +278,11 @@ void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *re
     e->start = (unsigned)__ctors_start__;
     vtables = __ctors_end__;
     row->size = vtables - __ctors_start__;
-    insertRegion(regions, row, text_Section_Static_Cons, text_Program);
+    insertRegion(regions, row, text_Section_Static_Cons,"Program");
     newRegion(row, (unsigned)vtables, __exception_table_start__ - vtables);
-    insertRegion(regions, row, text_Section_VTables, text_Program);
+    insertRegion(regions, row, text_Section_VTables,"Program");
     newRegion(row, (unsigned)__small_data_start__, (unsigned)__small_data_size__);
-    insertRegion(regions, row, text_Section_Small_Data, text_Program);
+    insertRegion(regions, row, text_Section_Small_Data,"Program");
 }
 
 int SystemAllocator_Sbrk(int self, int size) {

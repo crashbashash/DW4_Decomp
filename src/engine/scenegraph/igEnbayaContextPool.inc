@@ -1,14 +1,19 @@
+igMetaObject *g_igEnbayaContextPool_metaObject;
+igMetaField *g_igEnbayaContextPool_poolListMetaField;
+igMetaField *g_igEnbayaContextPool_boneCountListMetaField;
+igMetaField *g_igEnbayaContextPool_freeIndexListMetaField;
+
 int igEnbayaContextPool_Create(int allocator) {
     igEnbayaContextPool_RunStaticInit();
-    return igMetaObject_CreateInstance(g_igEnbayaContextPool_metaObject[0], allocator);
+    return igMetaObject_CreateInstance(g_igEnbayaContextPool_metaObject, allocator);
 }
 
 igMetaObject *igEnbayaContextPool_GetMetaObject(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igEnbayaContextPool_metaObject)[0];
+    igMetaObject *g = g_igEnbayaContextPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igEnbayaContextPool_RunStaticInit();
-    return ((igMetaObject * *)g_igEnbayaContextPool_metaObject)[0];
+    return g_igEnbayaContextPool_metaObject;
 }
 
 int igEnbayaContextPool_GetVTable(void) {
@@ -63,15 +68,17 @@ void igEnbayaContextPool_RunStaticInit(void)
     igMetaObject_RunStaticInit(igEnbayaContextPool_Register);
 }
 
+static igMetaObjectCallback g_igEnbayaContextPool_callbackList[] = { igPointerListList_EnsureRegistered, igUnsignedIntList_EnsureRegistered, 0 };
+
 void igEnbayaContextPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igEnbayaContextPool_metaObject),
+        &g_igEnbayaContextPool_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igEnbayaContextPool_GetMetaObject,
-        igEnbayaContextPool_className,
+        "igEnbayaContextPool",
         0x14, /* instance size */
         igEnbayaContextPool_GetVTable,
         &igEnbayaContextPool_InitFields,
@@ -84,6 +91,27 @@ void thunk_igEnbayaContextPool_GetMetaObject(void) {
     igEnbayaContextPool_GetMetaObject();
 }
 
+static FieldFactory g_igEnbayaContextPool_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igEnbayaContextPool_fieldTable[] = {
+    "_poolList",
+    "_boneCountList",
+    "_freeIndexList",
+};
+static igMetaField **g_igEnbayaContextPool_fieldHandles[] = {
+    &g_igEnbayaContextPool_poolListMetaField,
+    &g_igEnbayaContextPool_boneCountListMetaField,
+    &g_igEnbayaContextPool_freeIndexListMetaField,
+};
+static int g_igEnbayaContextPool_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void igEnbayaContextPool_InitFields(void) {
     int temp_s2;
     void *temp_s1_3;
@@ -91,9 +119,9 @@ void igEnbayaContextPool_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igEnbayaContextPool_metaObject[0];
+    temp_s0 = (void *)g_igEnbayaContextPool_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igEnbayaContextPool_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaContextPool_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igPointerListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -106,6 +134,6 @@ void igEnbayaContextPool_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igUnsignedIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     ((igMetaField *)temp_s1_3)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igEnbayaContextPool_fieldTable[0], &DAT_0048c320[0], &DAT_0048c330[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaContextPool_fieldTable, g_igEnbayaContextPool_fieldHandles, g_igEnbayaContextPool_fieldOffsets, temp_s2);
 }
 

@@ -1,9 +1,9 @@
 igMetaObject *igPsx2ParticleArray_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2ParticleArray_metaObject[0];
+    igMetaObject *g = g_igPsx2ParticleArray_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00153460();
-    return g_igPsx2ParticleArray_metaObject[0];
+    return g_igPsx2ParticleArray_metaObject;
 }
 
 int igPsx2ParticleArray_GetVTable(void) {
@@ -31,11 +31,11 @@ void igPsx2ParticleArray_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2ParticleArray_metaObject,
+        &g_igPsx2ParticleArray_metaObject,
         igParticleArray_Register,
         igParticleArray_GetPublishedMetaObject,
         thunk_igPsx2ParticleArray_GetMetaObject,
-        igPsx2ParticleArray_className,
+        "igPsx2ParticleArray",
         0x78, /* instance size */
         igPsx2ParticleArray_GetVTable,
         &igPsx2ParticleArray_InitFields,
@@ -45,22 +45,51 @@ void igPsx2ParticleArray_Register(void) {
 }
 
 igMetaObject *FUN_001534e0(void) {
-    return g_igParticleArray_metaObject[0];
+    return g_igParticleArray_metaObject;
 }
 
-void igPsx2ParticleArray_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igPsx2ParticleArray_ctorTable[] = {
+    igBoolMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igRawRefMetaField_Create,
+    igBoolMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_igPsx2ParticleArray_fieldTable[] = {
+    "_hardwareSupport",
+    "_currentEditIndex",
+    "_ps2ParticleFormat",
+    "_bSynchronize",
+    "_lSequence",
+};
+static igMetaField **g_igPsx2ParticleArray_fieldHandles[] = {
+    &g_igPsx2ParticleArray_hardwareSupportMetaField,
+    &g_igPsx2ParticleArray_currentEditIndexMetaField,
+    &g_igPsx2ParticleArray_ps2ParticleFormatMetaField,
+    &g_igPsx2ParticleArray_bSynchronizeMetaField,
+    &g_igPsx2ParticleArray_lSequenceMetaField,
+};
+static int g_igPsx2ParticleArray_fieldOffsets[] = {
+    92,
+    96,
+    100,
+    104,
+    112,
+};
 
-    temp_s0 = (void *)(g_igPsx2ParticleArray_metaObject[0]);
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2ParticleArray_ctorTable[0], 5);
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1)) + 38) = 0;
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)) + 38) = 0;
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2)) + 38) = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4)) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, &g_igPsx2ParticleArray_fieldTable[0], &DAT_00489ef0[0], &DAT_00489f10[0], temp_s1);
-    *(int *)((char *)(g_igPsx2ParticleArray_metaObject[0]) + 64) = (int)(&thunk_igParticleArray_GetMetaObject);
+void igPsx2ParticleArray_InitFields(void) {
+    int fieldStart;
+    igMetaObject *meta;
+
+    meta = g_igPsx2ParticleArray_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPsx2ParticleArray_ctorTable, 5);
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart)) + 38) = 0;
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 2)) + 38) = 0;
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)) + 38) = 0;
+    igMetaObject_NameFields(meta, g_igPsx2ParticleArray_fieldTable, g_igPsx2ParticleArray_fieldHandles, g_igPsx2ParticleArray_fieldOffsets, fieldStart);
+    *(int *)((char *)(g_igPsx2ParticleArray_metaObject) + 64) = (int)(&thunk_igParticleArray_GetMetaObject);
 }
 

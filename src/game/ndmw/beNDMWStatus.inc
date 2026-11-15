@@ -1,21 +1,26 @@
+igMetaObject *g_beNDMWStatus_metaObject;
+igMetaField *g_beNDMWStatus_windowProMetaField;
+igMetaField *g_beNDMWStatus_whoGenerateMetaField;
+igMetaField *g_beNDMWStatus_subWndNoMetaField;
+
 void beNDMWStatus_CreateInstance(int arg0) {
     FUN_003bb8e0();
-    igMetaObject_CreateInstance(*(int *)0x58B028, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatus_metaObject, arg0);
 }
 
 igMetaObject *FUN_003bb7d0(void) {
-    if (g_beNDMWStatus_metaObject[0] == 0) {
-        g_beNDMWStatus_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWStatus_metaObject == 0) {
+        g_beNDMWStatus_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWStatus_metaObject[0];
+    return g_beNDMWStatus_metaObject;
 }
 
 void *FUN_003bb820(void) {
-    igMetaObject *g = g_beNDMWStatus_metaObject[0];
+    igMetaObject *g = g_beNDMWStatus_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003bb8e0();
     }
-    return g_beNDMWStatus_metaObject[0];
+    return g_beNDMWStatus_metaObject;
 }
 
 int beNDMWStatus_GetVTable(void) {
@@ -41,15 +46,17 @@ void FUN_003bb8e0(void)
     igMetaObject_RunStaticInit(beNDMWStatus_Register);
 }
 
+static igMetaObjectCallback g_beNDMWStatus_callbackList[] = { FUN_003b1e70, 0 };
+
 void *beNDMWStatus_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatus_metaObject,
+        &g_beNDMWStatus_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beNDMWStatus_GetMetaObject,
-        beNDMWStatus_className,
+        "beNDMWStatus",
         0x2c, /* instance size */
         beNDMWStatus_GetVTable,
         beNDMWStatus_InitFields,
@@ -63,16 +70,37 @@ void beNDMWStatus_GetMetaObject(void)
     FUN_003bb820();
 }
 
+static FieldFactory g_beNDMWStatus_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWStatus_fieldTable[] = {
+    "_windowPro",
+    "_whoGenerate",
+    "_subWndNo",
+};
+static igMetaField **g_beNDMWStatus_fieldHandles[] = {
+    &g_beNDMWStatus_windowProMetaField,
+    &g_beNDMWStatus_whoGenerateMetaField,
+    &g_beNDMWStatus_subWndNoMetaField,
+};
+static int g_beNDMWStatus_fieldOffsets[] = {
+    32,
+    36,
+    40,
+};
+
 void beNDMWStatus_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStatus_metaObject[0];
+    temp_s0 = g_beNDMWStatus_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatus_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStatus_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003b1dd0();
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStatus_fieldTable[0], &DAT_004ca0f8[0], &DAT_004ca108[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStatus_fieldTable, g_beNDMWStatus_fieldHandles, g_beNDMWStatus_fieldOffsets, temp_s2);
 }
 

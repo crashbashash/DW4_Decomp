@@ -1,14 +1,17 @@
+igMetaObject *g_igFileImagePng_metaObject;
+igMetaField *g_igFileImagePng_fileMetaField;
+
 int FUN_00150390(int arg0) {
     FUN_00150570();
-    return igMetaObject_CreateInstance(*(int *)0x55FF68, arg0);
+    return igMetaObject_CreateInstance(g_igFileImagePng_metaObject, arg0);
 }
 
 igMetaObject *igFileImagePng_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFileImagePng_metaObject[0];
+    igMetaObject *g = g_igFileImagePng_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00150570();
-    return g_igFileImagePng_metaObject[0];
+    return g_igFileImagePng_metaObject;
 }
 
 int igFileImagePng_GetVTable(void) {
@@ -73,15 +76,17 @@ void FUN_00150570(void)
     igMetaObject_RunStaticInit(igFileImagePng_Register);
 }
 
+static igMetaObjectCallback g_igFileImagePng_callbackList[] = { igFile_EnsureRegistered, 0 };
+
 void igFileImagePng_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igFileImagePng_metaObject,
+        &g_igFileImagePng_metaObject,
         igFileImage_Register,
         igFileImage_GetPublishedMetaObject,
         thunk_igFileImagePng_GetMetaObject,
-        igFileImagePng_className,
+        "igFileImagePng",
         0x60, /* instance size */
         igFileImagePng_GetVTable,
         &igFileImagePng_InitFields,
@@ -95,19 +100,32 @@ void thunk_igFileImagePng_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00150610(void) {
-    return g_igFileImage_metaObject[0];
+    return g_igFileImage_metaObject;
 }
 
-void igFileImagePng_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igFileImagePng_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_igFileImagePng_fieldTable[] = {
+    "_file",
+};
+static igMetaField **g_igFileImagePng_fieldHandles[] = {
+    &g_igFileImagePng_fileMetaField,
+};
+static int g_igFileImagePng_fieldOffsets[] = {
+    92,
+};
 
-    temp_s0 = (void *)g_igFileImagePng_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igFileImagePng_ctorTable[0], 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+void igFileImagePng_InitFields(void) {
+    int fieldStart;
+    void *temp_s1;
+    igMetaObject *meta;
+
+    meta = g_igFileImagePng_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igFileImagePng_ctorTable, 1);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igFile_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &g_igFileImagePng_fieldTable[0], &DAT_00489220[0], &DAT_00489228[0], temp_s2);
+    igMetaObject_NameFields(meta, g_igFileImagePng_fieldTable, g_igFileImagePng_fieldHandles, g_igFileImagePng_fieldOffsets, fieldStart);
 }
 

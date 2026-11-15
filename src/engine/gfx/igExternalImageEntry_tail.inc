@@ -26,12 +26,12 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
     if (arg1->vX(arg0->f32) == 0) {
         s1 = arg0->f32;
         n = strlen(arg0->f40);
-        n2 = n + strlen((char *)&DAT_004de6c8[0]);
+        n2 = n + strlen((char *)"/");
         tot = strlen(s1);
         tot = tot + n2;
         buf = igObject_AllocateStorage(arg0, tot + 1);
         strcpy(buf, arg0->f40);
-        strcat(buf, (char *)&DAT_004de6c8[0]);
+        strcat(buf, (char *)"/");
         strcat(buf, arg0->f32);
         if (arg1->vX(buf) == 0) {
             igObject_FreeMemory(arg0, buf);

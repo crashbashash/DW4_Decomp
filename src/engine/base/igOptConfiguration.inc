@@ -1,16 +1,18 @@
+igMetaObject *g_igOptConfiguration_metaObject;
+
 igMetaObject *FUN_00225dc0(void) {
-    if (g_igOptConfiguration_metaObject[0] == 0) {
-        g_igOptConfiguration_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igOptConfiguration_metaObject == 0) {
+        g_igOptConfiguration_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igOptConfiguration_metaObject[0];
+    return g_igOptConfiguration_metaObject;
 }
 
 igMetaObject *igOptConfiguration_GetMetaObject(void)
 {
-    igMetaObject *g = g_igOptConfiguration_metaObject[0];
+    igMetaObject *g = g_igOptConfiguration_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00225ea0();
-    return g_igOptConfiguration_metaObject[0];
+    return g_igOptConfiguration_metaObject;
 }
 
 int igOptConfiguration_GetVTable(void) {
@@ -29,11 +31,11 @@ void igOptConfiguration_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igOptConfiguration_metaObject,
+        &g_igOptConfiguration_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igOptConfiguration_GetMetaObject,
-        igOptConfiguration_className,
+        "igOptConfiguration",
         8, /* instance size */
         igOptConfiguration_GetVTable,
         0,

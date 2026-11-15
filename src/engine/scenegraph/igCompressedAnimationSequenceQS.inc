@@ -1,13 +1,27 @@
+igMetaObject *g_igCompressedAnimationSequenceQS_metaObject;
+igMetaField *g_igCompressedAnimationSequenceQS_compressedTranslationListMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_compressedQuaternionListMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_compressedTimeListMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_translationBaseMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_translationRangeOverMaxUShortMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_quaternionBaseMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_quaternionRangeOverMaxUShortMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_animationDurationMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_playModeMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_lastTimeMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_channelsMetaField;
+igMetaField *g_igCompressedAnimationSequenceQS_interpolationMethodMetaField;
+
 igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igCompressedAnimationSequenceQS_metaObject[0] != 0) {
-        ready = (g_igCompressedAnimationSequenceQS_metaObject[0]->_validity & 4) != 0;
+    if (g_igCompressedAnimationSequenceQS_metaObject != 0) {
+        ready = (g_igCompressedAnimationSequenceQS_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_001a2940();
 done:
-    return g_igCompressedAnimationSequenceQS_metaObject[0];
+    return g_igCompressedAnimationSequenceQS_metaObject;
 }
 
 int igCompressedAnimationSequenceQS_GetVTable(void) {
@@ -62,15 +76,17 @@ void FUN_001a2940(void)
     igMetaObject_RunStaticInit(igCompressedAnimationSequenceQS_Register);
 }
 
+static igMetaObjectCallback g_igCompressedAnimationSequenceQS_callbackList[] = { igUnsignedShortList_EnsureRegistered, 0 };
+
 void igCompressedAnimationSequenceQS_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igCompressedAnimationSequenceQS_metaObject),
+        &g_igCompressedAnimationSequenceQS_metaObject,
         igAnimationSequence_Register,
         igAnimationSequence_GetPublishedMetaObject,
         thunk_igCompressedAnimationSequenceQS_GetMetaObject,
-        igCompressedAnimationSequenceQS_className,
+        "igCompressedAnimationSequenceQS",
         0x40, /* instance size */
         igCompressedAnimationSequenceQS_GetVTable,
         &igCompressedAnimationSequenceQS_InitFields,
@@ -83,6 +99,63 @@ void thunk_igCompressedAnimationSequenceQS_GetMetaObject(void) {
     igCompressedAnimationSequenceQS_GetMetaObject();
 }
 
+static FieldFactory g_igCompressedAnimationSequenceQS_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igUnsignedLongMetaField_Create,
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+    igUnsignedCharMetaField_Create,
+    igUnsignedCharArrayMetaField_Create,
+};
+static const char *g_igCompressedAnimationSequenceQS_fieldTable[] = {
+    "_compressedTranslationList",
+    "_compressedQuaternionList",
+    "_compressedTimeList",
+    "_translationBase",
+    "_translationRangeOverMaxUShort",
+    "_quaternionBase",
+    "_quaternionRangeOverMaxUShort",
+    "_animationDuration",
+    "_playMode",
+    "_lastTime",
+    "_channels",
+    "_interpolationMethod",
+};
+static igMetaField **g_igCompressedAnimationSequenceQS_fieldHandles[] = {
+    &g_igCompressedAnimationSequenceQS_compressedTranslationListMetaField,
+    &g_igCompressedAnimationSequenceQS_compressedQuaternionListMetaField,
+    &g_igCompressedAnimationSequenceQS_compressedTimeListMetaField,
+    &g_igCompressedAnimationSequenceQS_translationBaseMetaField,
+    &g_igCompressedAnimationSequenceQS_translationRangeOverMaxUShortMetaField,
+    &g_igCompressedAnimationSequenceQS_quaternionBaseMetaField,
+    &g_igCompressedAnimationSequenceQS_quaternionRangeOverMaxUShortMetaField,
+    &g_igCompressedAnimationSequenceQS_animationDurationMetaField,
+    &g_igCompressedAnimationSequenceQS_playModeMetaField,
+    &g_igCompressedAnimationSequenceQS_lastTimeMetaField,
+    &g_igCompressedAnimationSequenceQS_channelsMetaField,
+    &g_igCompressedAnimationSequenceQS_interpolationMethodMetaField,
+};
+static int g_igCompressedAnimationSequenceQS_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    40,
+    48,
+    52,
+    56,
+    57,
+};
+
 void igCompressedAnimationSequenceQS_InitFields(void) {
     int temp_s0;
     igMetaObject *temp_s1;
@@ -93,9 +166,9 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     struct Fld_1a29e0 *temp_v0;
     struct Fld_1a29e0 *temp_v0_2;
 
-    temp_s1 = g_igCompressedAnimationSequenceQS_metaObject[0];
+    temp_s1 = g_igCompressedAnimationSequenceQS_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igCompressedAnimationSequenceQS_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, g_igCompressedAnimationSequenceQS_ctorTable, 0xC);
     temp_s2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0));
     temp_s2->f56 = igUnsignedShortList_GetOrCreateMetaObject();
     temp_s2_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -112,7 +185,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     igUnsignedCharMetaField_SetDefaultValue(((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA)), 0);
     temp_s2_4 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     temp_s2_4->f52 = 3;
-    igMetaObject_NameFields(temp_s1, &g_igCompressedAnimationSequenceQS_fieldTable[0], &DAT_0048c540[0], &DAT_0048c570[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igCompressedAnimationSequenceQS_fieldTable, g_igCompressedAnimationSequenceQS_fieldHandles, g_igCompressedAnimationSequenceQS_fieldOffsets, temp_s0);
 }
 
 void **FUN_001a2b40(void **arg0, short arg1) {

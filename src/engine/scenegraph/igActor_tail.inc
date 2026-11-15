@@ -21,7 +21,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
         }
         {
             world = o->_world;
-            rootBone = (char *)o + g_igActor_transformMetaField[0]->_offset;
+            rootBone = (char *)o + g_igActor_transformMetaField->_offset;
             FUN_001904f0(bonesOf(o), rootBone, world);
         }
         status = o->_animationState->update(t, o);

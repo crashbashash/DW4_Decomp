@@ -1,17 +1,24 @@
+igMetaObject *g_beNDMWMdlPlayer2InfoWork_metaObject;
+igMetaField *g_beNDMWMdlPlayer2InfoWork_isPowerOnMetaField;
+igMetaField *g_beNDMWMdlPlayer2InfoWork_timerCountMetaField;
+igMetaField *g_beNDMWMdlPlayer2InfoWork_bitMetaField;
+igMetaField *g_beNDMWMdlPlayer2InfoWork_expMetaField;
+igMetaEnum *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
+
 void FUN_003bf560(int arg0) {
     FUN_003bf700();
-    igMetaObject_CreateInstance(*(int *)0x58B378, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlPlayer2InfoWork_metaObject, arg0);
 }
 
 void *beNDMWMdlPlayer2InfoWork_ResolveMetaObject(void) {
     bool ok;
-    if (g_beNDMWMdlPlayer2InfoWork_metaObject[0] == 0) goto make;
-    ok = !!(g_beNDMWMdlPlayer2InfoWork_metaObject[0]->_validity & 4);
+    if (g_beNDMWMdlPlayer2InfoWork_metaObject == 0) goto make;
+    ok = !!(g_beNDMWMdlPlayer2InfoWork_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_003bf700();
 done:;
-    return g_beNDMWMdlPlayer2InfoWork_metaObject[0];
+    return g_beNDMWMdlPlayer2InfoWork_metaObject;
 }
 
 int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
@@ -69,11 +76,11 @@ void *beNDMWMdlPlayer2InfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlPlayer2InfoWork_metaObject,
+        &g_beNDMWMdlPlayer2InfoWork_metaObject,
         beModelCtrlInfoWork_Register,
         beModelCtrlInfoWork_GetPublishedMetaObject,
         beNDMWMdlPlayer2InfoWork_GetMetaObject,
-        beNDMWMdlPlayer2InfoWork_className,
+        "beNDMWMdlPlayer2InfoWork",
         0xfc, /* instance size */
         beNDMWMdlPlayer2InfoWork_GetVTable,
         beNDMWMdlPlayer2InfoWork_InitFields,
@@ -91,20 +98,64 @@ int FUN_003bf7b0(void) {
     return g_beModelCtrlInfoWork_metaObject[0];
 }
 
+static FieldFactory g_beNDMWMdlPlayer2InfoWork_ctorTable[] = {
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWMdlPlayer2InfoWork_fieldTable[] = {
+    "_isPowerOn",
+    "_timerCount",
+    "_bit",
+    "_exp",
+};
+static igMetaField **g_beNDMWMdlPlayer2InfoWork_fieldHandles[] = {
+    &g_beNDMWMdlPlayer2InfoWork_isPowerOnMetaField,
+    &g_beNDMWMdlPlayer2InfoWork_timerCountMetaField,
+    &g_beNDMWMdlPlayer2InfoWork_bitMetaField,
+    &g_beNDMWMdlPlayer2InfoWork_expMetaField,
+};
+static int g_beNDMWMdlPlayer2InfoWork_fieldOffsets[] = {
+    236,
+    240,
+    244,
+    248,
+};
+
 void beNDMWMdlPlayer2InfoWork_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWMdlPlayer2InfoWork_metaObject[0];
+    temp_s0 = g_beNDMWMdlPlayer2InfoWork_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlPlayer2InfoWork_ctorTable[0], 4);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWMdlPlayer2InfoWork_fieldTable[0], &DAT_004ca800[0], &DAT_004ca810[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlPlayer2InfoWork_ctorTable, 4);
+    igMetaObject_NameFields(temp_s0, g_beNDMWMdlPlayer2InfoWork_fieldTable, g_beNDMWMdlPlayer2InfoWork_fieldHandles, g_beNDMWMdlPlayer2InfoWork_fieldOffsets, temp_s1);
 }
 
-int PanelCloseSeqList_GetMetaEnum(void) {
-    if (DAT_0058b3a0[0] == 0) {
-        DAT_0058b3a0[0] = igMetaEnum_Create(&text_PanelCloseSeqList[0], &DAT_004ca820[0], &DAT_004ca840[0], 7);
+static const char *g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListNames[] = {
+    "SQ_SDMG",
+    "SQ_MDMG",
+    "SQ_LDMG",
+    "SQ_DDMG",
+    "SQ_DEAD",
+    "SQ_SLEP",
+    "SQ_STUN",
+};
+static int g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListValues[] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+};
+
+igMetaEnum *PanelCloseSeqList_GetMetaEnum(void) {
+    if (g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum == 0) {
+        g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum = igMetaEnum_Create("PanelCloseSeqList", g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListNames, g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListValues, 7);
     }
-    return DAT_0058b3a0[0];
+    return g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 }
 

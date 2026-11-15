@@ -1173,102 +1173,48 @@ void **FUN_00164970(void **arg0, long long arg1) {
 }
 
 int *FUN_001649f0(void) {
-    if (DAT_00554b20 == 0) {
-        DAT_00554b20 = 1;
-        DAT_00560670[0] = g_igVec3fList_metaObject[0];
-        DAT_00560674[0] = g_igCharList_metaObject[0];
-        DAT_00560678[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_0056067c[0] = g_igShortList_metaObject[0];
-        DAT_00560680[0] = g_igUnsignedShortList_metaObject[0];
-    }
-    return &DAT_00560670[0];
+    static int listMetaObjects[5] = { g_igVec3fList_metaObject[0], g_igCharList_metaObject[0], g_igUnsignedCharList_metaObject[0], g_igShortList_metaObject[0], g_igUnsignedShortList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164a60(void) {
-    if (DAT_00554b24 == 0) {
-        DAT_00554b24 = 1;
-        DAT_00560688[0] = g_igUnsignedIntList_metaObject[0];
-        DAT_0056068c[0] = g_igVec4ucList_metaObject[0];
-    }
-    return &DAT_00560688[0];
+    static int listMetaObjects[2] = { g_igUnsignedIntList_metaObject[0], g_igVec4ucList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164aa0(void) {
-    if (DAT_00554b28 == 0) {
-        DAT_00554b28 = 1;
-        DAT_005606a0[0] = g_igVec3fList_metaObject[0];
-        DAT_005606a4[0] = g_igCharList_metaObject[0];
-        DAT_005606a8[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_005606ac[0] = g_igShortList_metaObject[0];
-        DAT_005606b0[0] = g_igUnsignedShortList_metaObject[0];
-    }
-    return &DAT_005606a0[0];
+    static int listMetaObjects[5] = { g_igVec3fList_metaObject[0], g_igCharList_metaObject[0], g_igUnsignedCharList_metaObject[0], g_igShortList_metaObject[0], g_igUnsignedShortList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164b10(void) {
-    if (DAT_00554b2c == 0) {
-        DAT_00554b2c = 1;
-        DAT_005606c0[0] = g_igVec2fList_metaObject[0];
-        DAT_005606c4[0] = g_igCharList_metaObject[0];
-        DAT_005606c8[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_005606cc[0] = g_igShortList_metaObject[0];
-        DAT_005606d0[0] = g_igUnsignedShortList_metaObject[0];
-    }
-    return &DAT_005606c0[0];
+    static int listMetaObjects[5] = { g_igVec2fList_metaObject[0], g_igCharList_metaObject[0], g_igUnsignedCharList_metaObject[0], g_igShortList_metaObject[0], g_igUnsignedShortList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164b80(void) {
-    if (GPR_00554b30 == 0) {
-        DAT_005606e0[0] = g_igFloatList_metaObject[0];
-        GPR_00554b30 = 1;
-        DAT_005606e4[0] = g_igVec2fList_metaObject[0];
-        DAT_005606e8[0] = g_igVec3fList_metaObject[0];
-        DAT_005606ec[0] = DAT_005610a8[0];
-        DAT_005606f0[0] = g_igCharList_metaObject[0];
-        DAT_005606f4[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_005606f8[0] = g_igShortList_metaObject[0];
-        DAT_005606fc[0] = g_igUnsignedShortList_metaObject[0];
-    }
-    return &DAT_005606e0[0];
+    static int listMetaObjects[8] = { g_igFloatList_metaObject[0], g_igVec2fList_metaObject[0], g_igVec3fList_metaObject[0], DAT_005610a8[0], g_igCharList_metaObject[0], g_igUnsignedCharList_metaObject[0], g_igShortList_metaObject[0], g_igUnsignedShortList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164c20(void) {
-    if (DAT_00554b34 == 0) {
-        DAT_00554b34 = 1;
-        DAT_00560710[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_00560714[0] = DAT_005610b0[0];
-        DAT_00560718[0] = g_igVec4ucList_metaObject[0];
-    }
-    return &DAT_00560710[0];
+    static int listMetaObjects[3] = { g_igUnsignedCharList_metaObject[0], DAT_005610b0[0], g_igVec4ucList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164c70(void) {
-    if (GPR_00554b38 == 0) {
-        DAT_00560720[0] = g_igVec3fList_metaObject[0];
-        GPR_00554b38 = 1;
-    }
-    return &DAT_00560720[0];
+    static int listMetaObjects[1] = { g_igVec3fList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164ca0(void) {
-    if (GPR_00554b3c == 0) {
-        DAT_00560728[0] = g_igVec3fList_metaObject[0];
-        GPR_00554b3c = 1;
-    }
-    return &DAT_00560728[0];
+    static int listMetaObjects[1] = { g_igVec3fList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164cd0(void) {
-    if (GPR_00554b40 == 0) {
-        DAT_00560730[0] = g_igFloatList_metaObject[0];
-        GPR_00554b40 = 1;
-        DAT_00560734[0] = g_igVec2fList_metaObject[0];
-        DAT_00560738[0] = g_igCharList_metaObject[0];
-        DAT_0056073c[0] = g_igUnsignedCharList_metaObject[0];
-        DAT_00560740[0] = g_igShortList_metaObject[0];
-        DAT_00560744[0] = g_igUnsignedShortList_metaObject[0];
-    }
-    return &DAT_00560730[0];
+    static int listMetaObjects[6] = { g_igFloatList_metaObject[0], g_igVec2fList_metaObject[0], g_igCharList_metaObject[0], g_igUnsignedCharList_metaObject[0], g_igShortList_metaObject[0], g_igUnsignedShortList_metaObject[0] };
+    return listMetaObjects;
 }
 
 int *FUN_00164d50(void) {

@@ -1,9 +1,11 @@
+igMetaObject *g_beStaticInfo_metaObject;
+
 void *FUN_00343a10(void) {
-    igMetaObject *g = g_beStaticInfo_metaObject[0];
+    igMetaObject *g = g_beStaticInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00343ad0();
     }
-    return g_beStaticInfo_metaObject[0];
+    return g_beStaticInfo_metaObject;
 }
 
 int beStaticInfo_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beStaticInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beStaticInfo_metaObject,
+        &g_beStaticInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beStaticInfo_GetMetaObject,
-        beStaticInfo_className,
+        "beStaticInfo",
         0x1c, /* instance size */
         beStaticInfo_GetVTable,
         0,

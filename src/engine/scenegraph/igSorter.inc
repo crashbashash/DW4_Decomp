@@ -1,16 +1,54 @@
+igMetaObject *g_igSorter_metaObject;
+igMetaField *g_igSorter_dlistMetaField;
+igMetaField *g_igSorter_modeMetaField;
+igMetaField *g_igSorter_renderPackagePoolMetaField;
+igMetaField *g_igSorter_tmpAttrsMetaField;
+igMetaField *g_igSorter_transpPackagesMetaField;
+igMetaField *g_igSorter_opaquePackagesMetaField;
+igMetaField *g_igSorter_firstPackagesMetaField;
+igMetaField *g_igSorter_lightAttrsMetaField;
+igMetaField *g_igSorter_firstAttrsMetaField;
+igMetaField *g_igSorter_transpAttrsMetaField;
+igMetaField *g_igSorter_opaqueAttrsMetaField;
+igMetaField *g_igSorter_firstPackageIndicesMetaField;
+igMetaField *g_igSorter_transpPackageIndicesMetaField;
+igMetaField *g_igSorter_opaquePackageIndicesMetaField;
+igMetaField *g_igSorter_depthWriteDisableMetaField;
+igMetaField *g_igSorter_cullFaceFrontMetaField;
+igMetaField *g_igSorter_cullFaceBackMetaField;
+igMetaField *g_igSorter_transparencyDrawModeMetaField;
+igMetaField *g_igSorter_emptyRenderPackageMetaField;
+igMetaField *g_igSorter_emptyRenderPackageListMetaField;
+igMetaField *g_igSorter_emptyRenderPackageIndicesMetaField;
+igMetaField *g_igSorter_lastEmptyRenderPackageAttrsMetaField;
+igMetaField *g_igSorter_firstEmptyRenderPackageAttrsMetaField;
+igMetaField *g_igSorter_emptyGeometryMetaField;
+igMetaField *g_igSorter_curListMetaField;
+igMetaField *g_igSorter_prevListMetaField;
+igMetaField *g_igSorter_isCompoundPackageOpenMetaField;
+igMetaField *g_igSorter_isCompoundPackageTransparentMetaField;
+igMetaField *g_igSorter_isCompoundPackageFirstMetaField;
+igMetaField *g_igSorter_compoundPackageMetaField;
+igMetaField *g_igSorter_compoundPackageNestCountMetaField;
+igMetaField *g_igSorter_cachedPackageMetaField;
+igMetaField *g_igSorter_outputCreatedMetaField;
+igMetaField *g_igSorter_useZSortMetaField;
+igMetaField *g_igSorter_forceNoSeparateMetaField;
+igMetaField *g_igSorter_printOutputStateMetaField;
+
 igMetaObject *FUN_00196c10(void) {
-    if (g_igSorter_metaObject[0] == 0) {
-        g_igSorter_metaObject[0] = ((igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
+    if (g_igSorter_metaObject == 0) {
+        g_igSorter_metaObject = ((igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0])));
     }
-    return g_igSorter_metaObject[0];
+    return g_igSorter_metaObject;
 }
 
 igMetaObject *igSorter_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSorter_metaObject[0];
+    igMetaObject *g = g_igSorter_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00197360();
-    return g_igSorter_metaObject[0];
+    return g_igSorter_metaObject;
 }
 
 int igSorter_GetVTable(void) {
@@ -247,15 +285,17 @@ void FUN_00197360(void)
     igMetaObject_RunStaticInit(igSorter_Register);
 }
 
+static igMetaObjectCallback g_igSorter_callbackList[] = { FUN_00138160, FUN_00197a10, FUN_0013ae20, FUN_001978a0, igIntList_EnsureRegistered, FUN_00138380, FUN_001387b0, FUN_00197cc0, FUN_0019fc00, 0 };
+
 void igSorter_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSorter_metaObject,
+        &g_igSorter_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igSorter_GetMetaObject,
-        igSorter_className,
+        "igSorter",
         0x84, /* instance size */
         igSorter_GetVTable,
         &igSorter_InitFields,
@@ -267,6 +307,159 @@ void igSorter_Register(void) {
 void thunk_igSorter_GetMetaObject(void) {
     igSorter_GetMetaObject();
 }
+
+static FieldFactory g_igSorter_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igSorter_fieldTable[] = {
+    "_dlist",
+    "_mode",
+    "_renderPackagePool",
+    "_tmpAttrs",
+    "_transpPackages",
+    "_opaquePackages",
+    "_firstPackages",
+    "_lightAttrs",
+    "_firstAttrs",
+    "_transpAttrs",
+    "_opaqueAttrs",
+    "_firstPackageIndices",
+    "_transpPackageIndices",
+    "_opaquePackageIndices",
+    "_depthWriteDisable",
+    "_cullFaceFront",
+    "_cullFaceBack",
+    "_transparencyDrawMode",
+    "_emptyRenderPackage",
+    "_emptyRenderPackageList",
+    "_emptyRenderPackageIndices",
+    "_lastEmptyRenderPackageAttrs",
+    "_firstEmptyRenderPackageAttrs",
+    "_emptyGeometry",
+    "_curList",
+    "_prevList",
+    "_isCompoundPackageOpen",
+    "_isCompoundPackageTransparent",
+    "_isCompoundPackageFirst",
+    "_compoundPackage",
+    "_compoundPackageNestCount",
+    "_cachedPackage",
+    "_outputCreated",
+    "_useZSort",
+    "_forceNoSeparate",
+    "_printOutputState",
+};
+static igMetaField **g_igSorter_fieldHandles[] = {
+    &g_igSorter_dlistMetaField,
+    &g_igSorter_modeMetaField,
+    &g_igSorter_renderPackagePoolMetaField,
+    &g_igSorter_tmpAttrsMetaField,
+    &g_igSorter_transpPackagesMetaField,
+    &g_igSorter_opaquePackagesMetaField,
+    &g_igSorter_firstPackagesMetaField,
+    &g_igSorter_lightAttrsMetaField,
+    &g_igSorter_firstAttrsMetaField,
+    &g_igSorter_transpAttrsMetaField,
+    &g_igSorter_opaqueAttrsMetaField,
+    &g_igSorter_firstPackageIndicesMetaField,
+    &g_igSorter_transpPackageIndicesMetaField,
+    &g_igSorter_opaquePackageIndicesMetaField,
+    &g_igSorter_depthWriteDisableMetaField,
+    &g_igSorter_cullFaceFrontMetaField,
+    &g_igSorter_cullFaceBackMetaField,
+    &g_igSorter_transparencyDrawModeMetaField,
+    &g_igSorter_emptyRenderPackageMetaField,
+    &g_igSorter_emptyRenderPackageListMetaField,
+    &g_igSorter_emptyRenderPackageIndicesMetaField,
+    &g_igSorter_lastEmptyRenderPackageAttrsMetaField,
+    &g_igSorter_firstEmptyRenderPackageAttrsMetaField,
+    &g_igSorter_emptyGeometryMetaField,
+    &g_igSorter_curListMetaField,
+    &g_igSorter_prevListMetaField,
+    &g_igSorter_isCompoundPackageOpenMetaField,
+    &g_igSorter_isCompoundPackageTransparentMetaField,
+    &g_igSorter_isCompoundPackageFirstMetaField,
+    &g_igSorter_compoundPackageMetaField,
+    &g_igSorter_compoundPackageNestCountMetaField,
+    &g_igSorter_cachedPackageMetaField,
+    &g_igSorter_outputCreatedMetaField,
+    &g_igSorter_useZSortMetaField,
+    &g_igSorter_forceNoSeparateMetaField,
+    &g_igSorter_printOutputStateMetaField,
+};
+static int g_igSorter_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112,
+    113,
+    114,
+    116,
+    120,
+    124,
+    128,
+    129,
+    130,
+    131,
+};
 
 void igSorter_InitFields(void) {
     int temp_s1;
@@ -298,9 +491,9 @@ void igSorter_InitFields(void) {
     void *temp_s2_9;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSorter_metaObject[0];
+    temp_s0 = (void *)g_igSorter_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSorter_ctorTable[0], 0x24);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSorter_ctorTable, 0x24);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00137fb0();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
@@ -379,6 +572,6 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)FUN_00197af0();
     ((igObjectRefMetaField *)temp_s2_26)->_refCounted = 0;
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x23))) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, &g_igSorter_fieldTable[0], &DAT_0048b390[0], &DAT_0048b420[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSorter_fieldTable, g_igSorter_fieldHandles, g_igSorter_fieldOffsets, temp_s1);
 }
 

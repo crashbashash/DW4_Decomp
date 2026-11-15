@@ -1,21 +1,24 @@
+igMetaObject *g_beWeapon_metaObject;
+igMetaField *g_beWeapon_attachDataListMetaField;
+
 void beWeapon_CreateInstance(int arg0) {
     FUN_0033f750();
     igMetaObject_CreateInstance(*(int *)0x587A68, arg0);
 }
 
 igMetaObject *FUN_0033f450(void) {
-    if (g_beWeapon_metaObject[0] == 0) {
-        g_beWeapon_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beWeapon_metaObject == 0) {
+        g_beWeapon_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beWeapon_metaObject[0];
+    return g_beWeapon_metaObject;
 }
 
 void *FUN_0033f4a0(void) {
-    igMetaObject *g = g_beWeapon_metaObject[0];
+    igMetaObject *g = g_beWeapon_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033f750();
     }
-    return g_beWeapon_metaObject[0];
+    return g_beWeapon_metaObject;
 }
 
 int beWeapon_GetVTable(void) {
@@ -116,15 +119,17 @@ void FUN_0033f750(void)
     igMetaObject_RunStaticInit(beWeapon_Register);
 }
 
+static igMetaObjectCallback g_beWeapon_callbackList[] = { FUN_0033f9d0, 0 };
+
 void *beWeapon_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWeapon_metaObject,
+        &g_beWeapon_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beWeapon_GetMetaObject,
-        beWeapon_className,
+        "beWeapon",
         0x24, /* instance size */
         beWeapon_GetVTable,
         beWeapon_InitFields,
@@ -139,19 +144,32 @@ void beWeapon_GetMetaObject(void)
 }
 
 igMetaObject *FUN_0033f810(void) {
-    return g_beBaseInfoManager_metaObject[0];
+    return g_beBaseInfoManager_metaObject;
 }
+
+static FieldFactory g_beWeapon_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beWeapon_fieldTable[] = {
+    "_attachDataList",
+};
+static igMetaField **g_beWeapon_fieldHandles[] = {
+    &g_beWeapon_attachDataListMetaField,
+};
+static int g_beWeapon_fieldOffsets[] = {
+    32,
+};
 
 void beWeapon_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beWeapon_metaObject[0];
+    temp_s0 = (void *)g_beWeapon_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beWeapon_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beWeapon_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0033f8f0();
-    igMetaObject_NameFields(temp_s0, &g_beWeapon_fieldTable[0], &DAT_004c3030[0], &DAT_004c3038[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beWeapon_fieldTable, g_beWeapon_fieldHandles, g_beWeapon_fieldOffsets, temp_s2);
 }
 

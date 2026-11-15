@@ -1,21 +1,26 @@
+igMetaObject *g_beNDMWLoadSlotPlayer_metaObject;
+igMetaField *g_beNDMWLoadSlotPlayer_connectNOMetaField;
+igMetaField *g_beNDMWLoadSlotPlayer_saveDataListMetaField;
+igMetaField *g_beNDMWLoadSlotPlayer_accessPlListMetaField;
+
 void beNDMWLoadSlotPlayer_Create(int arg0) {
     FUN_003c6520();
-    igMetaObject_CreateInstance(*(int *)0x58BD00, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadSlotPlayer_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c63a0(void) {
-    if (g_beNDMWLoadSlotPlayer_metaObject[0] == 0) {
-        g_beNDMWLoadSlotPlayer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWLoadSlotPlayer_metaObject == 0) {
+        g_beNDMWLoadSlotPlayer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWLoadSlotPlayer_metaObject[0];
+    return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
 void *beNDMWLoadSlotPlayer_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWLoadSlotPlayer_metaObject[0];
+    igMetaObject *g = g_beNDMWLoadSlotPlayer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c6520();
     }
-    return g_beNDMWLoadSlotPlayer_metaObject[0];
+    return g_beNDMWLoadSlotPlayer_metaObject;
 }
 
 int beNDMWLoadSlotPlayer_GetVTable(void) {
@@ -38,15 +43,17 @@ void FUN_003c6520(void)
     igMetaObject_RunStaticInit(beNDMWLoadSlotPlayer_Register);
 }
 
+static igMetaObjectCallback g_beNDMWLoadSlotPlayer_callbackList[] = { FUN_003c6780, igIntList_EnsureRegistered, 0 };
+
 void *beNDMWLoadSlotPlayer_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWLoadSlotPlayer_metaObject,
+        &g_beNDMWLoadSlotPlayer_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beNDMWLoadSlotPlayer_GetMetaObject,
-        beNDMWLoadSlotPlayer_className,
+        "beNDMWLoadSlotPlayer",
         0x14, /* instance size */
         beNDMWLoadSlotPlayer_GetVTable,
         beNDMWLoadSlotPlayer_InitFields,
@@ -60,21 +67,42 @@ void beNDMWLoadSlotPlayer_GetMetaObject(void)
     beNDMWLoadSlotPlayer_GetReadyMetaObject();
 }
 
+static FieldFactory g_beNDMWLoadSlotPlayer_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWLoadSlotPlayer_fieldTable[] = {
+    "_connectNO",
+    "_saveDataList",
+    "_accessPlList",
+};
+static igMetaField **g_beNDMWLoadSlotPlayer_fieldHandles[] = {
+    &g_beNDMWLoadSlotPlayer_connectNOMetaField,
+    &g_beNDMWLoadSlotPlayer_saveDataListMetaField,
+    &g_beNDMWLoadSlotPlayer_accessPlListMetaField,
+};
+static int g_beNDMWLoadSlotPlayer_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void beNDMWLoadSlotPlayer_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWLoadSlotPlayer_metaObject[0];
+    temp_s0 = g_beNDMWLoadSlotPlayer_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWLoadSlotPlayer_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWLoadSlotPlayer_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003c66a0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWLoadSlotPlayer_fieldTable[0], &DAT_004cbc50[0], &DAT_004cbc60[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWLoadSlotPlayer_fieldTable, g_beNDMWLoadSlotPlayer_fieldHandles, g_beNDMWLoadSlotPlayer_fieldOffsets, temp_s2);
 }
 

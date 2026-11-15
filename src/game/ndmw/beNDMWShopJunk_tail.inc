@@ -1,17 +1,24 @@
+igMetaObject *g_beNDMWShopJunk_metaObject;
+igMetaField *g_beNDMWShopJunk_junkMenuMetaField;
+igMetaField *g_beNDMWShopJunk_totalGiftMetaField;
+igMetaField *g_beNDMWShopJunk_junkItemListMetaField;
+
 void FUN_003b64f0(void)
 {
     igMetaObject_RunStaticInit(beNDMWShopJunk_Register);
 }
 
+static igMetaObjectCallback g_beNDMWShopJunk_callbackList[] = { FUN_003c9210, 0 };
+
 void *beNDMWShopJunk_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopJunk_metaObject,
+        &g_beNDMWShopJunk_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopJunk_GetMetaObject,
-        beNDMWShopJunk_className,
+        "beNDMWShopJunk",
         0x60, /* instance size */
         beNDMWShopJunk_GetVTable,
         beNDMWShopJunk_InitFields,

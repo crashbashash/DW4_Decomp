@@ -1,3 +1,6 @@
+igMetaObject *g_igDepthStateAttr_metaObject;
+igMetaField *g_igDepthStateAttr_enabledMetaField;
+
 void FUN_001384a0(int arg0) {
     FUN_00138570();
     igMetaObject_CreateInstance(*(int *)0x55F228, arg0);
@@ -5,10 +8,10 @@ void FUN_001384a0(int arg0) {
 
 igMetaObject *igDepthStateAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igDepthStateAttr_metaObject[0];
+    igMetaObject *g = g_igDepthStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00138570();
-    return g_igDepthStateAttr_metaObject[0];
+    return g_igDepthStateAttr_metaObject;
 }
 
 int igDepthStateAttr_GetVTable(void) {
@@ -27,11 +30,11 @@ void igDepthStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igDepthStateAttr_metaObject,
+        &g_igDepthStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igDepthStateAttr_GetMetaObject,
-        igDepthStateAttr_className,
+        "igDepthStateAttr",
         0x10, /* instance size */
         igDepthStateAttr_GetVTable,
         &igDepthStateAttr_InitFields,
@@ -44,14 +47,27 @@ void thunk_igDepthStateAttr_GetMetaObject(void) {
     igDepthStateAttr_GetMetaObject();
 }
 
+static FieldFactory g_igDepthStateAttr_ctorTable[] = {
+    igBoolMetaField_Create,
+};
+static const char *g_igDepthStateAttr_fieldTable[] = {
+    "_enabled",
+};
+static igMetaField **g_igDepthStateAttr_fieldHandles[] = {
+    &g_igDepthStateAttr_enabledMetaField,
+};
+static int g_igDepthStateAttr_fieldOffsets[] = {
+    12,
+};
+
 void igDepthStateAttr_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igDepthStateAttr_metaObject[0];
+    temp_s0 = g_igDepthStateAttr_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igDepthStateAttr_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igDepthStateAttr_ctorTable, 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, &g_igDepthStateAttr_fieldTable[0], &DAT_00486758[0], &DAT_00486760[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igDepthStateAttr_fieldTable, g_igDepthStateAttr_fieldHandles, g_igDepthStateAttr_fieldOffsets, temp_s1);
 }
 

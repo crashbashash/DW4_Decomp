@@ -41,7 +41,7 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
                 IniEntryList *entries = node->entries;
                 for (j = 0; j < entries->count; j++) {
                     IniEntry *e = entries->data[j];
-                    if (igStringObj_HasFileExtension(e->name, text_file) != 0) {
+                    if (igStringObj_HasFileExtension(e->name, ".file") != 0) {
                         char *s = e->value->text;
                         s = (s == 0) ? g_stringObjEmptyText[0] : s;
                         FUN_001cdbb0((IniFactoryView *)self, s);
@@ -70,7 +70,7 @@ void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
         }
         for (int i = 0; i < igRegistry_GetValueCount(self->f28); i++) {
             IniFactoryEntry *e = igRegistry_GetValueEntry(self->f28, i);
-            if (e != 0 && e->f16 != 0 && e->f12 != 0 && igStringObj_HasFileExtension(e->f16, &text_file[0]) != 0) {
+            if (e != 0 && e->f16 != 0 && e->f12 != 0 && igStringObj_HasFileExtension(e->f16, ".file") != 0) {
                 char *path;
                 if (e->f12->name == 0) path = g_stringObjEmptyText[0]; else path = e->f12->name;
                 FUN_001cdbb0((IniFactoryView *)self, path);
@@ -145,13 +145,13 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
     }
     if (self->mode != 0) {
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, igShaderInfo_className, 0);
+            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, "igShaderInfo", 0);
             IniFieldEntry *entry;
-            if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
+            if (source == 0 || igObject_IsKindOf(source, g_igShaderInfo_metaObject) == 0) {
                 SET_OUT(result);
                 FINISH();
             }
-            entry = ((IniFieldEntry *)FUN_003022c0(source->entries, DAT_005619b0[0], name));
+            entry = ((IniFieldEntry *)FUN_003022c0(source->entries, g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 USE_CACHE(entry->cache);
             } else {
@@ -186,7 +186,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
             loading = parsed;
             text = path->text;
             text = (text == 0) ? g_stringObjEmptyText[0] : text;
-            if (igRegistry_Load(loading, text, DAT_004e4660) == 0) {
+            if (igRegistry_Load(loading, text, "") == 0) {
                 SET_OUT(0);
                 DROP(IniDocument, path);
                 FINISH();
@@ -248,12 +248,12 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
     if (self->mode != 0) {
         IniSectionText *found;
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, igShaderInfo_className, 0);
+            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType(((void *)g_globalContext[0]), text_system, "igShaderInfo", 0);
             IniFieldEntry_1cdbb0 *entry;
-            if (source == 0 || igObject_IsKindOf(source, ((void * *)g_igShaderInfo_metaObject)[0]) == 0) {
+            if (source == 0 || igObject_IsKindOf(source, g_igShaderInfo_metaObject) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
-            entry = ((IniFieldEntry_1cdbb0 *)FUN_003022c0(source->entries, DAT_005619b0[0], name));
+            entry = ((IniFieldEntry_1cdbb0 *)FUN_003022c0(source->entries, g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 cache = entry->cache;
             } else {
@@ -284,7 +284,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             text = path.p->text;
             opening = file.p;
             text = (text == 0) ? g_stringObjEmptyText[0] : text;
-            if (opening->open(text, DAT_004e47a8) == 0) {
+            if (opening->open(text, "rb") == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
             file.p->seek(0, 2);

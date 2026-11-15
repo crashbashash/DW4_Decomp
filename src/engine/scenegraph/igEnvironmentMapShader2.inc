@@ -1,9 +1,32 @@
+igMetaObject *g_igEnvironmentMapShader2_metaObject;
+igMetaField *g_igEnvironmentMapShader2_envMapTextureMetaField;
+igMetaField *g_igEnvironmentMapShader2_diffuseTextureBindMetaField;
+igMetaField *g_igEnvironmentMapShader2_diffuseTextureCoordIndexMetaField;
+igMetaField *g_igEnvironmentMapShader2_reflectionAmountMetaField;
+igMetaField *g_igEnvironmentMapShader2_isTransparentMetaField;
+igMetaField *g_igEnvironmentMapShader2_glossMapTextureMetaField;
+igMetaField *g_igEnvironmentMapShader2_glossTextureCoordIndexMetaField;
+igMetaField *g_igEnvironmentMapShader2_configuredMetaField;
+igMetaField *g_igEnvironmentMapShader2_attrPushListsMetaField;
+igMetaField *g_igEnvironmentMapShader2_attrPopListsMetaField;
+igMetaField *g_igEnvironmentMapShader2_useRenderPackageMetaField;
+igMetaField *g_igEnvironmentMapShader2_discardUnusedImagesMetaField;
+igMetaField *g_igEnvironmentMapShader2_envMapTextureBindMetaField;
+igMetaField *g_igEnvironmentMapShader2_envMapCoordSourceMetaField;
+igMetaField *g_igEnvironmentMapShader2_envMapTextureFuncMetaField;
+igMetaField *g_igEnvironmentMapShader2_diffuseCoordSourceMetaField;
+igMetaField *g_igEnvironmentMapShader2_diffuseTextureFuncMetaField;
+igMetaField *g_igEnvironmentMapShader2_diffuseBlendStateMetaField;
+igMetaField *g_igEnvironmentMapShader2_glossMapTextureBindMetaField;
+igMetaField *g_igEnvironmentMapShader2_glossMapCoordSourceMetaField;
+igMetaField *g_igEnvironmentMapShader2_glossMapTextureFuncMetaField;
+
 igMetaObject *igEnvironmentMapShader2_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEnvironmentMapShader2_metaObject[0];
+    igMetaObject *g = g_igEnvironmentMapShader2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a15a0();
-    return g_igEnvironmentMapShader2_metaObject[0];
+    return g_igEnvironmentMapShader2_metaObject;
 }
 
 void FUN_001a15a0(void)
@@ -11,15 +34,17 @@ void FUN_001a15a0(void)
     igMetaObject_RunStaticInit(igEnvironmentMapShader2_Register);
 }
 
+static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { FUN_00132420, FUN_00132a00, FUN_00132cf0, FUN_0013acb0, FUN_00132a00, FUN_001326c0, FUN_00131d80, FUN_00139720, 0 };
+
 void igEnvironmentMapShader2_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        ((char *)g_igEnvironmentMapShader2_metaObject),
+        &g_igEnvironmentMapShader2_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
         thunk_igEnvironmentMapShader2_GetMetaObject,
-        igEnvironmentMapShader2_className,
+        "igEnvironmentMapShader2",
         0x70, /* instance size */
         0,
         &igEnvironmentMapShader2_InitFields,
@@ -31,6 +56,99 @@ void igEnvironmentMapShader2_Register(void) {
 void thunk_igEnvironmentMapShader2_GetMetaObject(void) {
     igEnvironmentMapShader2_GetMetaObject();
 }
+
+static FieldFactory g_igEnvironmentMapShader2_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igEnvironmentMapShader2_fieldTable[] = {
+    "_envMapTexture",
+    "_diffuseTextureBind",
+    "_diffuseTextureCoordIndex",
+    "_reflectionAmount",
+    "_isTransparent",
+    "_glossMapTexture",
+    "_glossTextureCoordIndex",
+    "_configured",
+    "_attrPushLists",
+    "_attrPopLists",
+    "_useRenderPackage",
+    "_discardUnusedImages",
+    "_envMapTextureBind",
+    "_envMapCoordSource",
+    "_envMapTextureFunc",
+    "_diffuseCoordSource",
+    "_diffuseTextureFunc",
+    "_diffuseBlendState",
+    "_glossMapTextureBind",
+    "_glossMapCoordSource",
+    "_glossMapTextureFunc",
+};
+static igMetaField **g_igEnvironmentMapShader2_fieldHandles[] = {
+    &g_igEnvironmentMapShader2_envMapTextureMetaField,
+    &g_igEnvironmentMapShader2_diffuseTextureBindMetaField,
+    &g_igEnvironmentMapShader2_diffuseTextureCoordIndexMetaField,
+    &g_igEnvironmentMapShader2_reflectionAmountMetaField,
+    &g_igEnvironmentMapShader2_isTransparentMetaField,
+    &g_igEnvironmentMapShader2_glossMapTextureMetaField,
+    &g_igEnvironmentMapShader2_glossTextureCoordIndexMetaField,
+    &g_igEnvironmentMapShader2_configuredMetaField,
+    &g_igEnvironmentMapShader2_attrPushListsMetaField,
+    &g_igEnvironmentMapShader2_attrPopListsMetaField,
+    &g_igEnvironmentMapShader2_useRenderPackageMetaField,
+    &g_igEnvironmentMapShader2_discardUnusedImagesMetaField,
+    &g_igEnvironmentMapShader2_envMapTextureBindMetaField,
+    &g_igEnvironmentMapShader2_envMapCoordSourceMetaField,
+    &g_igEnvironmentMapShader2_envMapTextureFuncMetaField,
+    &g_igEnvironmentMapShader2_diffuseCoordSourceMetaField,
+    &g_igEnvironmentMapShader2_diffuseTextureFuncMetaField,
+    &g_igEnvironmentMapShader2_diffuseBlendStateMetaField,
+    &g_igEnvironmentMapShader2_glossMapTextureBindMetaField,
+    &g_igEnvironmentMapShader2_glossMapCoordSourceMetaField,
+    &g_igEnvironmentMapShader2_glossMapTextureFuncMetaField,
+};
+static int g_igEnvironmentMapShader2_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    73,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+};
 
 void igEnvironmentMapShader2_InitFields(void) {
     int temp_s0;
@@ -50,9 +168,9 @@ void igEnvironmentMapShader2_InitFields(void) {
     void *temp_s2_9;
     void *temp_s1;
 
-    temp_s1 = (void *)(((void * *)g_igEnvironmentMapShader2_metaObject)[0]);
+    temp_s1 = (void *)(g_igEnvironmentMapShader2_metaObject);
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igEnvironmentMapShader2_ctorTable[0], 0x15);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igEnvironmentMapShader2_ctorTable, 0x15);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00131fe0();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -98,7 +216,7 @@ void igEnvironmentMapShader2_InitFields(void) {
     temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0x14)));
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = FUN_00131ca0();
     ((igMetaField *)temp_s2_14)->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &g_igEnvironmentMapShader2_fieldTable[0], &DAT_0048c210[0], &DAT_0048c270[0], temp_s0);
-    ((igMetaObject *)(((void * *)g_igEnvironmentMapShader2_metaObject)[0]))->_abstractProxy = (int)(&thunk_igPsx2EnvironmentMapShader_GetMetaObject);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igEnvironmentMapShader2_fieldTable, g_igEnvironmentMapShader2_fieldHandles, g_igEnvironmentMapShader2_fieldOffsets, temp_s0);
+    ((igMetaObject *)(g_igEnvironmentMapShader2_metaObject))->_abstractProxy = (int)(&thunk_igPsx2EnvironmentMapShader_GetMetaObject);
 }
 

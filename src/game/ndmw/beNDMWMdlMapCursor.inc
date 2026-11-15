@@ -1,21 +1,23 @@
+igMetaObject *g_beNDMWMdlMapCursor_metaObject;
+
 void beNDMWMdlMapCursor_CreateInstance(int arg0) {
     FUN_003c0e80();
-    igMetaObject_CreateInstance(*(int *)0x58B498, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlMapCursor_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c0d80(void) {
-    if (g_beNDMWMdlMapCursor_metaObject[0] == 0) {
-        g_beNDMWMdlMapCursor_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlMapCursor_metaObject == 0) {
+        g_beNDMWMdlMapCursor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlMapCursor_metaObject[0];
+    return g_beNDMWMdlMapCursor_metaObject;
 }
 
 void *beNDMWMdlMapCursor_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlMapCursor_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlMapCursor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c0e80();
     }
-    return g_beNDMWMdlMapCursor_metaObject[0];
+    return g_beNDMWMdlMapCursor_metaObject;
 }
 
 int beNDMWMdlMapCursor_GetVTable(void) {
@@ -41,11 +43,11 @@ void *beNDMWMdlMapCursor_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlMapCursor_metaObject,
+        &g_beNDMWMdlMapCursor_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlMapCursor_GetMetaObject,
-        beNDMWMdlMapCursor_className,
+        "beNDMWMdlMapCursor",
         0x2c, /* instance size */
         beNDMWMdlMapCursor_GetVTable,
         0,

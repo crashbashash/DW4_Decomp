@@ -1,14 +1,19 @@
+igMetaObject *g_igActiveComponentsObserver_metaObject;
+igMetaField *g_igActiveComponentsObserver_oldComponentUnderMouseMetaField;
+igMetaField *g_igActiveComponentsObserver_oldFocusedComponentMetaField;
+igMetaField *g_igActiveComponentsObserver_oldPushedComponentMetaField;
+
 int FUN_0044e990(int arg0) {
     igActiveComponentsObserver_RunStaticInit();
-    return igMetaObject_CreateInstance(*(int *)0x58C360, arg0);
+    return igMetaObject_CreateInstance((int)g_igActiveComponentsObserver_metaObject, arg0);
 }
 
 igMetaObject *igActiveComponentsObserver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igActiveComponentsObserver_metaObject[0];
+    igMetaObject *g = g_igActiveComponentsObserver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igActiveComponentsObserver_RunStaticInit();
-    return g_igActiveComponentsObserver_metaObject[0];
+    return g_igActiveComponentsObserver_metaObject;
 }
 
 int igActiveComponentsObserver_GetVTable(void) {
@@ -65,15 +70,17 @@ void igActiveComponentsObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igActiveComponentsObserver_Register);
 }
 
+static igMetaObjectCallback g_igActiveComponentsObserver_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
+
 void igActiveComponentsObserver_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igActiveComponentsObserver_metaObject,
+        &g_igActiveComponentsObserver_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igActiveComponentsObserver_GetMetaObject,
-        igActiveComponentsObserver_className,
+        "igActiveComponentsObserver",
         0x18, /* instance size */
         igActiveComponentsObserver_GetVTable,
         &igActiveComponentsObserver_InitFields,
@@ -86,6 +93,27 @@ void thunk_igActiveComponentsObserver_GetMetaObject(void) {
     igActiveComponentsObserver_GetMetaObject();
 }
 
+static FieldFactory g_igActiveComponentsObserver_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igActiveComponentsObserver_fieldTable[] = {
+    "_oldComponentUnderMouse",
+    "_oldFocusedComponent",
+    "_oldPushedComponent",
+};
+static igMetaField **g_igActiveComponentsObserver_fieldHandles[] = {
+    &g_igActiveComponentsObserver_oldComponentUnderMouseMetaField,
+    &g_igActiveComponentsObserver_oldFocusedComponentMetaField,
+    &g_igActiveComponentsObserver_oldPushedComponentMetaField,
+};
+static int g_igActiveComponentsObserver_fieldOffsets[] = {
+    12,
+    16,
+    20,
+};
+
 void igActiveComponentsObserver_InitFields(void) {
     int temp_s2;
     void *temp_s1_3;
@@ -93,15 +121,15 @@ void igActiveComponentsObserver_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igActiveComponentsObserver_metaObject[0];
+    temp_s0 = (void *)g_igActiveComponentsObserver_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igActiveComponentsObserver_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igActiveComponentsObserver_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044ff40();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0044ff40();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0044ff40();
-    igMetaObject_NameFields(temp_s0, &g_igActiveComponentsObserver_fieldTable[0], &DAT_004d02e8[0], &DAT_004d02f8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igActiveComponentsObserver_fieldTable, g_igActiveComponentsObserver_fieldHandles, g_igActiveComponentsObserver_fieldOffsets, temp_s2);
 }
 

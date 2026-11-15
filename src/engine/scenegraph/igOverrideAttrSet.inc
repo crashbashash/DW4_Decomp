@@ -1,16 +1,18 @@
+igMetaObject *g_igOverrideAttrSet_metaObject;
+
 igMetaObject *FUN_0019c6a0(void) {
-    if (g_igOverrideAttrSet_metaObject[0] == 0) {
-        g_igOverrideAttrSet_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igOverrideAttrSet_metaObject == 0) {
+        g_igOverrideAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igOverrideAttrSet_metaObject[0];
+    return g_igOverrideAttrSet_metaObject;
 }
 
 igMetaObject *igOverrideAttrSet_GetMetaObject(void)
 {
-    igMetaObject *g = g_igOverrideAttrSet_metaObject[0];
+    igMetaObject *g = g_igOverrideAttrSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019c7b0();
-    return g_igOverrideAttrSet_metaObject[0];
+    return g_igOverrideAttrSet_metaObject;
 }
 
 int igOverrideAttrSet_GetVTable(void) {
@@ -39,11 +41,11 @@ void igOverrideAttrSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igOverrideAttrSet_metaObject),
+        &g_igOverrideAttrSet_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
         thunk_igOverrideAttrSet_GetMetaObject,
-        igOverrideAttrSet_className,
+        "igOverrideAttrSet",
         0x28, /* instance size */
         igOverrideAttrSet_GetVTable,
         0,

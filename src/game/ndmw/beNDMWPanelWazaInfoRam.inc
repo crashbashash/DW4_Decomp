@@ -1,12 +1,15 @@
+igMetaObject *g_beNDMWPanelWazaInfoRam_metaObject;
+igMetaField *g_beNDMWPanelWazaInfoRam_workMetaField;
+
 void *beNDMWPanelWazaInfoRam_ResolveMetaObject(void) {
-    igMetaObject *meta = g_beNDMWPanelWazaInfoRam_metaObject[0];
+    igMetaObject *meta = g_beNDMWPanelWazaInfoRam_metaObject;
     if (meta) {
         bool t;
         if ((t = (meta->_validity & 4) != 0) != false) goto end;
     }
     FUN_003bd9c0();
 end:
-    return g_beNDMWPanelWazaInfoRam_metaObject[0];
+    return g_beNDMWPanelWazaInfoRam_metaObject;
 }
 
 int beNDMWPanelWazaInfoRam_GetVTable(void) {
@@ -73,15 +76,17 @@ void FUN_003bd9c0(void)
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfoRam_Register);
 }
 
+static igMetaObjectCallback g_beNDMWPanelWazaInfoRam_callbackList[] = { FUN_003bdf00, 0 };
+
 void *beNDMWPanelWazaInfoRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWPanelWazaInfoRam_metaObject,
+        &g_beNDMWPanelWazaInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beNDMWPanelWazaInfoRam_GetMetaObject,
-        beNDMWPanelWazaInfoRam_className,
+        "beNDMWPanelWazaInfoRam",
         0x30, /* instance size */
         beNDMWPanelWazaInfoRam_GetVTable,
         beNDMWPanelWazaInfoRam_InitFields,
@@ -95,16 +100,29 @@ void beNDMWPanelWazaInfoRam_GetMetaObject(void)
     beNDMWPanelWazaInfoRam_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWPanelWazaInfoRam_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWPanelWazaInfoRam_fieldTable[] = {
+    "_work",
+};
+static igMetaField **g_beNDMWPanelWazaInfoRam_fieldHandles[] = {
+    &g_beNDMWPanelWazaInfoRam_workMetaField,
+};
+static int g_beNDMWPanelWazaInfoRam_fieldOffsets[] = {
+    44,
+};
+
 void beNDMWPanelWazaInfoRam_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWPanelWazaInfoRam_metaObject[0];
+    temp_s0 = g_beNDMWPanelWazaInfoRam_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWPanelWazaInfoRam_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWPanelWazaInfoRam_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bdb50();
-    igMetaObject_NameFields(temp_s0, &g_beNDMWPanelWazaInfoRam_fieldTable[0], &DAT_004ca470[0], &DAT_004ca478[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWPanelWazaInfoRam_fieldTable, g_beNDMWPanelWazaInfoRam_fieldHandles, g_beNDMWPanelWazaInfoRam_fieldOffsets, temp_s2);
 }
 

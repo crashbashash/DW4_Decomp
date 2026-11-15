@@ -1,9 +1,13 @@
+igMetaObject *g_igEnbayaAnimationState_metaObject;
+igMetaField *g_igEnbayaAnimationState_contextMetaField;
+igMetaField *g_igEnbayaAnimationState_fastCacheDecodingStateMetaField;
+
 igMetaObject *igEnbayaAnimationState_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEnbayaAnimationState_metaObject[0];
+    igMetaObject *g = g_igEnbayaAnimationState_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a2030();
-    return g_igEnbayaAnimationState_metaObject[0];
+    return g_igEnbayaAnimationState_metaObject;
 }
 
 int igEnbayaAnimationState_GetVTable(void) {
@@ -65,11 +69,11 @@ void igEnbayaAnimationState_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igEnbayaAnimationState_metaObject),
+        &g_igEnbayaAnimationState_metaObject,
         igAnimationState_Register,
         igAnimationState_GetPublishedMetaObject,
         thunk_igEnbayaAnimationState_GetMetaObject,
-        igEnbayaAnimationState_className,
+        "igEnbayaAnimationState",
         sizeof(igEnbayaAnimationState),                   /* Instance size. */
         igEnbayaAnimationState_GetVTable,
         &igEnbayaAnimationState_InitFields,
@@ -82,20 +86,65 @@ void thunk_igEnbayaAnimationState_GetMetaObject(void) {
     igEnbayaAnimationState_GetMetaObject();
 }
 
+igMetaObject *g_igAnimationState_metaObject;
+igMetaField *g_igAnimationState_animationMetaField;
+igMetaField *g_igAnimationState_combineModeMetaField;
+igMetaField *g_igAnimationState_transitionModeMetaField;
+igMetaField *g_igAnimationState_statusMetaField;
+igMetaField *g_igAnimationState_baseStateMetaField;
+igMetaField *g_igAnimationState_newMetaField;
+igMetaField *g_igAnimationState_currentBlendRatioMetaField;
+igMetaField *g_igAnimationState_localTimeMetaField;
+igMetaField *g_igAnimationState_baseTransitionTimeMetaField;
+igMetaField *g_igAnimationState_timeScaleMetaField;
+igMetaField *g_igAnimationState_timeBiasMetaField;
+igMetaField *g_igAnimationState_blendStartTimeMetaField;
+igMetaField *g_igAnimationState_blendStartRatioMetaField;
+igMetaField *g_igAnimationState_blendRatioRangeMetaField;
+igMetaField *g_igAnimationState_blendDurationMetaField;
+igMetaField *g_igAnimationState_animationStartTimeMetaField;
+igMetaField *g_igAnimationState_cachedCycleTimeMetaField;
+igMetaField *g_igAnimationState_cachedCycleNumberMetaField;
+igMetaField *g_igAnimationState_cycleMatchTargetStateMetaField;
+igMetaField *g_igAnimationState_isCycleMatchTargetMetaField;
+igMetaField *g_igAnimationState_cycleMatchDisableMetaField;
+igMetaField *g_igAnimationState_manualCycleMatchMetaField;
+igMetaField *g_igAnimationState_cycleMatchBaseDurationMetaField;
+igMetaField *g_igAnimationState_cycleMatchDurationRangeMetaField;
+igMetaField *g_igAnimationState_cycleMatchTargetDurationMetaField;
+igMetaField *g_igAnimationState_timeRequestedMetaField;
+
 igMetaObject *FUN_001a20d0(void) {
-    return g_igAnimationState_metaObject[0];
+    return g_igAnimationState_metaObject;
 }
+
+static FieldFactory g_igEnbayaAnimationState_ctorTable[] = {
+    igRawRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igEnbayaAnimationState_fieldTable[] = {
+    "_context",
+    "_fastCacheDecodingState",
+};
+static igMetaField **g_igEnbayaAnimationState_fieldHandles[] = {
+    &g_igEnbayaAnimationState_contextMetaField,
+    &g_igEnbayaAnimationState_fastCacheDecodingStateMetaField,
+};
+static int g_igEnbayaAnimationState_fieldOffsets[] = {
+    160,
+    164,
+};
 
 void igEnbayaAnimationState_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igEnbayaAnimationState_metaObject[0];
+    temp_s0 = (void *)g_igEnbayaAnimationState_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igEnbayaAnimationState_ctorTable[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_ctorTable, 2);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1))) + 38) = 0;
     igBoolMetaField_SetDefaultValue(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)), 1);
-    igMetaObject_NameFields(temp_s0, &g_igEnbayaAnimationState_fieldTable[0], &DAT_0048c350[0], &DAT_0048c358[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_fieldTable, g_igEnbayaAnimationState_fieldHandles, g_igEnbayaAnimationState_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback(FUN_001a21a0);
 }
 

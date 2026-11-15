@@ -1,21 +1,23 @@
 int FUN_0019a6e0(int arg0) {
     FUN_0019a800();
-    return igMetaObject_CreateInstance(*(int *)0x5615C8, arg0);
+    return igMetaObject_CreateInstance((int)g_igTraversalFunctionList_metaObject, arg0);
 }
 
+igMetaObject *g_igTraversalFunctionList_metaObject;
+
 igMetaObject *FUN_0019a720(void) {
-    if (g_igTraversalFunctionList_metaObject[0] == 0) {
-        g_igTraversalFunctionList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igTraversalFunctionList_metaObject == 0) {
+        g_igTraversalFunctionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igTraversalFunctionList_metaObject[0];
+    return g_igTraversalFunctionList_metaObject;
 }
 
 igMetaObject *igTraversalFunctionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igTraversalFunctionList_metaObject[0];
+    igMetaObject *g = g_igTraversalFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019a800();
-    return g_igTraversalFunctionList_metaObject[0];
+    return g_igTraversalFunctionList_metaObject;
 }
 
 int igTraversalFunctionList_GetVTable(void) {
@@ -35,11 +37,11 @@ void igTraversalFunctionList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igTraversalFunctionList_metaObject),
+        &g_igTraversalFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igTraversalFunctionList_GetMetaObject,
-        igTraversalFunctionList_className,
+        "igTraversalFunctionList",
         0x14, /* instance size */
         igTraversalFunctionList_GetVTable,
         0,

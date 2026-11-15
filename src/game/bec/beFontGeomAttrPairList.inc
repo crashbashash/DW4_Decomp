@@ -1,16 +1,18 @@
+igMetaObject *g_beFontGeomAttrPairList_metaObject;
+
 igMetaObject *FUN_00362360(void) {
-    if (g_beFontGeomAttrPairList_metaObject[0] == 0) {
-        g_beFontGeomAttrPairList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beFontGeomAttrPairList_metaObject == 0) {
+        g_beFontGeomAttrPairList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beFontGeomAttrPairList_metaObject[0];
+    return g_beFontGeomAttrPairList_metaObject;
 }
 
 void *FUN_003623b0(void) {
-    igMetaObject *g = g_beFontGeomAttrPairList_metaObject[0];
+    igMetaObject *g = g_beFontGeomAttrPairList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00362440();
     }
-    return g_beFontGeomAttrPairList_metaObject[0];
+    return g_beFontGeomAttrPairList_metaObject;
 }
 
 int beFontGeomAttrPairList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_00362440(void)
     igMetaObject_RunStaticInit(beFontGeomAttrPairList_Register);
 }
 
+static igMetaObjectCallback g_beFontGeomAttrPairList_callbackList[] = { FUN_00362690, 0 };
+
 void *beFontGeomAttrPairList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beFontGeomAttrPairList_metaObject,
+        &g_beFontGeomAttrPairList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beFontGeomAttrPairList_GetMetaObject,
-        beFontGeomAttrPairList_className,
+        "beFontGeomAttrPairList",
         0x14, /* instance size */
         beFontGeomAttrPairList_GetVTable,
         0,

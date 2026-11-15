@@ -1,9 +1,15 @@
+igMetaObject *g_beSvSlotXbox_metaObject;
+igMetaField *g_beSvSlotXbox_nameMetaField;
+igMetaField *g_beSvSlotXbox_totalBytesMetaField;
+igMetaField *g_beSvSlotXbox_freeBytesMetaField;
+igMetaField *g_beSvSlotXbox_useBytesMetaField;
+
 void *FUN_0034a8c0(void) {
-    igMetaObject *g = g_beSvSlotXbox_metaObject[0];
+    igMetaObject *g = g_beSvSlotXbox_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034a9a0();
     }
-    return g_beSvSlotXbox_metaObject[0];
+    return g_beSvSlotXbox_metaObject;
 }
 
 int beSvSlotXbox_GetVTable(void) {
@@ -43,11 +49,11 @@ void *beSvSlotXbox_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvSlotXbox_metaObject,
+        &g_beSvSlotXbox_metaObject,
         beSvSlotData_Register,
         beSvSlotData_GetPublishedMetaObject,
         beSvSlotXbox_GetMetaObject,
-        beSvSlotXbox_className,
+        "beSvSlotXbox",
         0x38, /* instance size */
         beSvSlotXbox_GetVTable,
         beSvSlotXbox_InitFields,
@@ -61,14 +67,39 @@ void beSvSlotXbox_GetMetaObject(void)
     FUN_0034a8c0();
 }
 
+static FieldFactory g_beSvSlotXbox_ctorTable[] = {
+    igStringMetaField_Create,
+    igUnsignedLongMetaField_Create,
+    igUnsignedLongMetaField_Create,
+    igUnsignedLongMetaField_Create,
+};
+static const char *g_beSvSlotXbox_fieldTable[] = {
+    "_name",
+    "_totalBytes",
+    "_freeBytes",
+    "_useBytes",
+};
+static igMetaField **g_beSvSlotXbox_fieldHandles[] = {
+    &g_beSvSlotXbox_nameMetaField,
+    &g_beSvSlotXbox_totalBytesMetaField,
+    &g_beSvSlotXbox_freeBytesMetaField,
+    &g_beSvSlotXbox_useBytesMetaField,
+};
+static int g_beSvSlotXbox_fieldOffsets[] = {
+    24,
+    32,
+    40,
+    48,
+};
+
 void beSvSlotXbox_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSvSlotXbox_metaObject[0];
+    temp_s0 = (void *)g_beSvSlotXbox_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSvSlotXbox_ctorTable[0], 4);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), &DAT_00502a98[0]);
-    igMetaObject_NameFields(temp_s0, &g_beSvSlotXbox_fieldTable[0], &DAT_004c42d0[0], &DAT_004c42e0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beSvSlotXbox_ctorTable, 4);
+    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1)), "");
+    igMetaObject_NameFields(temp_s0, g_beSvSlotXbox_fieldTable, g_beSvSlotXbox_fieldHandles, g_beSvSlotXbox_fieldOffsets, temp_s1);
 }
 

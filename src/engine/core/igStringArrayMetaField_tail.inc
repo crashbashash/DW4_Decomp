@@ -41,14 +41,14 @@ void igStringArrayMetaField_DestructValue(igStringArrayMetaField *self, int obje
     if (self->_destruct != 0) {
         slot = (int *)(object + self->_offset);
         for (i = 0; i < self->_num; i++) {
-            if (g_stringPool[0] == 0) {
+            if (g_stringPool == 0) {
                 pool = ((int)StringPool_Allocate(0x10));
                 if (pool != 0) {
                     pool = ((int)StringPool_Construct((StringPool *)pool));
                 }
-                g_stringPool[0] = pool;
+                g_stringPool = pool;
             }
-            empty = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0);
+            empty = StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
             previous = *slot;
             if (previous != 0) {
                 header = (int *)(previous - 8);

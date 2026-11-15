@@ -18,14 +18,14 @@ void igStringMetaField_ValueFromString(int self, int objectBase, int text) {
     void *interned;
 
     slot = (void **)objectBase;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text)));
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
     previous = (void *)(*slot);
     if (previous != 0) {
         header = (int *)((char *)previous - 8);
@@ -54,14 +54,14 @@ void igStringMetaField_AssignText(igStringMetaField *self, int object, int *text
     if (text == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text));
+        interned = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text));
     }
     token = interned;
     igStringMetaField_AssignRetainedToken(self, object, &token);
@@ -102,14 +102,14 @@ void igStringMetaField_SetDefaultText(int *self, int text) {
     void *interned;
 
     slot = (void **)self[8];
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text)));
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
     previous = (void *)(*slot);
     if (previous != 0) {
         header = (int *)((char *)previous - 8);
@@ -224,14 +224,14 @@ void igStringMetaField_ResetValue(int *self, int object) {
     if (defaultText == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(16));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = ((char *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)defaultText));
+        interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)defaultText));
     }
     token = interned;
     igStringMetaField_AssignRetainedToken(self, object, &token);
@@ -466,9 +466,9 @@ int igStringObj_ToInt(void *object, int value) {
 
     text = self->_buffer;
     if (text == 0) {
-        text = ((int *)g_stringObjEmptyText)[0];
+        text = (*(int *)&g_stringObjEmptyText);
     }
-    return sscanf(text, &space_percent_i_space[0], value) == 1;
+    return sscanf(text, " %i ", value) == 1;
 }
 
 int igStringObj_ToFloat(void *object, int value) {
@@ -477,9 +477,9 @@ int igStringObj_ToFloat(void *object, int value) {
 
     text = self->_buffer;
     if (text == 0) {
-        text = ((int *)g_stringObjEmptyText)[0];
+        text = (*(int *)&g_stringObjEmptyText);
     }
-    return sscanf(text, &space_percent_f_space[0], value) == 1;
+    return sscanf(text, " %f ", value) == 1;
 }
 
 bool igStringObj_ParseBool(igStringObj *o, char *out) {
@@ -508,17 +508,17 @@ void igStringObj_SetBool(int self, int value, int upperCase) {
 
     if (upperCase != 0) {
         if (value != 0) {
-            upperText = (int *)(&TRUE[0]);
+            upperText = (int *)("TRUE");
         } else {
-            upperText = (int *)(&FALSE[0]);
+            upperText = (int *)("FALSE");
         }
         igStringObj_Set(self, (int)upperText);
         return;
     }
     if (value != 0) {
-        lowerText = (int *)(&text_true_2[0]);
+        lowerText = (int *)("true");
     } else {
-        lowerText = (int *)(&text_false_2[0]);
+        lowerText = (int *)("false");
     }
     igStringObj_Set(self, (int)lowerText);
 }
@@ -553,7 +553,7 @@ void igStringObj_KeepExtension(igStringObj *o) {
     base = (char *)o->_buffer;
     if (base != 0) {
         i = o->_length - 1;
-        e = g_stringObjEmptyText[0];
+        e = g_stringObjEmptyText;
         for (; i != 0; i--) {
             if (pick(base, e)[i] == '.') {
                 /* read _buffer as a char * word: an int-typed read would be merged with base's load,
@@ -580,7 +580,7 @@ void igStringObj_RemovePathFilename(igStringObj *p) {
             }
         }
         if (q == (char *)p->_buffer) {
-            igStringObj_Set((int)p, ((int *)g_stringObjEmptyText)[0]);
+            igStringObj_Set((int)p, (*(int *)&g_stringObjEmptyText));
         }
     }
 }
@@ -611,7 +611,7 @@ int igStringObj_HasFileExtension(igStringObj *self, char *extension) {
     text = (char *)self->_buffer;
     length = self->_length;
     if (text == 0) {
-        text = g_stringObjEmptyText[0];
+        text = g_stringObjEmptyText;
     }
     extensionLength = strlen(extension);
     needsDot = 1;
@@ -677,12 +677,12 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
     int n = list->_count;
     for (int i = 0; i < n; i++) {
         void **slot = (void **)((char *)list->_data + i * 4);
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             int v = ((int)StringPool_Allocate(0x10));
             if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-            g_stringPool[0] = v;
+            g_stringPool = v;
         }
-        void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)0));
+        void *ni = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
         releaseString((const char *)*slot);
         *slot = ni;
     }
@@ -697,12 +697,12 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
             void *s;
             if (p == 0) s = 0;
             else {
-                if (g_stringPool[0] == 0) {
+                if (g_stringPool == 0) {
                     int v = ((int)StringPool_Allocate(0x10));
                     if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-                    g_stringPool[0] = v;
+                    g_stringPool = v;
                 }
-                s = ((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)p));
+                s = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)p));
             }
             void *sp = s;
             StringList_AppendRetained(list, &sp);

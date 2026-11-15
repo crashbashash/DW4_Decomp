@@ -1,9 +1,11 @@
+igMetaObject *g_beModelCtrlJUMP_metaObject;
+
 void *FUN_00355d60(void) {
-    igMetaObject *g = g_beModelCtrlJUMP_metaObject[0];
+    igMetaObject *g = g_beModelCtrlJUMP_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00355e40();
     }
-    return g_beModelCtrlJUMP_metaObject[0];
+    return g_beModelCtrlJUMP_metaObject;
 }
 
 int beModelCtrlJUMP_GetVTable(void) {
@@ -44,11 +46,11 @@ void *beModelCtrlJUMP_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlJUMP_metaObject,
+        &g_beModelCtrlJUMP_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlJUMP_GetMetaObject,
-        beModelCtrlJUMP_className,
+        "beModelCtrlJUMP",
         0xc, /* instance size */
         beModelCtrlJUMP_GetVTable,
         0,

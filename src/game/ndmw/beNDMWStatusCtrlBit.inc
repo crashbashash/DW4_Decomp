@@ -1,14 +1,17 @@
+igMetaObject *g_beNDMWStatusCtrlBit_metaObject;
+igMetaField *g_beNDMWStatusCtrlBit_playerNoListMetaField;
+
 void beNDMWStatusCtrlBit_Create(int arg0) {
     FUN_003b98f0();
-    igMetaObject_CreateInstance(*(int *)0x58AEB0, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusCtrlBit_metaObject, arg0);
 }
 
 void *FUN_003b9810(void) {
-    igMetaObject *g = g_beNDMWStatusCtrlBit_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusCtrlBit_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b98f0();
     }
-    return g_beNDMWStatusCtrlBit_metaObject[0];
+    return g_beNDMWStatusCtrlBit_metaObject;
 }
 
 int beNDMWStatusCtrlBit_GetVTable(void) {
@@ -36,15 +39,17 @@ void FUN_003b98f0(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlBit_Register);
 }
 
+static igMetaObjectCallback g_beNDMWStatusCtrlBit_callbackList[] = { igIntList_EnsureRegistered, 0 };
+
 void *beNDMWStatusCtrlBit_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusCtrlBit_metaObject,
+        &g_beNDMWStatusCtrlBit_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWStatusCtrlBit_GetMetaObject,
-        beNDMWStatusCtrlBit_className,
+        "beNDMWStatusCtrlBit",
         0x58, /* instance size */
         beNDMWStatusCtrlBit_GetVTable,
         beNDMWStatusCtrlBit_InitFields,
@@ -58,17 +63,30 @@ void beNDMWStatusCtrlBit_GetMetaObject(void)
     FUN_003b9810();
 }
 
+static FieldFactory g_beNDMWStatusCtrlBit_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWStatusCtrlBit_fieldTable[] = {
+    "_playerNoList",
+};
+static igMetaField **g_beNDMWStatusCtrlBit_fieldHandles[] = {
+    &g_beNDMWStatusCtrlBit_playerNoListMetaField,
+};
+static int g_beNDMWStatusCtrlBit_fieldOffsets[] = {
+    84,
+};
+
 void beNDMWStatusCtrlBit_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStatusCtrlBit_metaObject[0];
+    temp_s0 = g_beNDMWStatusCtrlBit_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatusCtrlBit_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusCtrlBit_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStatusCtrlBit_fieldTable[0], &DAT_004c9da8[0], &DAT_004c9db0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStatusCtrlBit_fieldTable, g_beNDMWStatusCtrlBit_fieldHandles, g_beNDMWStatusCtrlBit_fieldOffsets, temp_s2);
 }
 

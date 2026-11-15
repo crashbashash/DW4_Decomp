@@ -1,21 +1,35 @@
+igMetaObject *g_beFileListInfoManager_metaObject;
+igMetaField *g_beFileListInfoManager_systemMetaField;
+igMetaField *g_beFileListInfoManager_messengerMetaField;
+igMetaField *g_beFileListInfoManager_sceneInfoManagerMetaField;
+igMetaField *g_beFileListInfoManager_isReadOnetimeMetaField;
+igMetaField *g_beFileListInfoManager_onetimeCountMetaField;
+igMetaField *g_beFileListInfoManager_fnamesMetaField;
+igMetaField *g_beFileListInfoManager_infoListMetaField;
+igMetaField *g_beFileListInfoManager_dirListMetaField;
+igMetaField *g_beFileListInfoManager_readInfoListMetaField;
+igMetaField *g_beFileListInfoManager_importantInfoListMetaField;
+igMetaField *g_beFileListInfoManager_loadedMetaField;
+igMetaField *g_beFileListInfoManager_procMetaField;
+
 void beFileListInfoManager_CreateInstance(int arg0) {
     FUN_003629b0();
     igMetaObject_CreateInstance(*(int *)0x5896F8, arg0);
 }
 
 igMetaObject *FUN_00362830(void) {
-    if (g_beFileListInfoManager_metaObject[0] == 0) {
-        g_beFileListInfoManager_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beFileListInfoManager_metaObject == 0) {
+        g_beFileListInfoManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beFileListInfoManager_metaObject[0];
+    return g_beFileListInfoManager_metaObject;
 }
 
 void *FUN_00362880(void) {
-    igMetaObject *g = g_beFileListInfoManager_metaObject[0];
+    igMetaObject *g = g_beFileListInfoManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003629b0();
     }
-    return g_beFileListInfoManager_metaObject[0];
+    return g_beFileListInfoManager_metaObject;
 }
 
 int beFileListInfoManager_GetVTable(void) {
@@ -46,15 +60,17 @@ void FUN_003629b0(void)
     igMetaObject_RunStaticInit(beFileListInfoManager_Register);
 }
 
+static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { FUN_00342f30, FUN_00357d10, FUN_00459e40, igStringRefList_EnsureRegistered, igInfoList_EnsureRegistered, igDirectoryList_EnsureRegistered, 0 };
+
 void *beFileListInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beFileListInfoManager_metaObject,
+        &g_beFileListInfoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
         beFileListInfoManager_GetMetaObject,
-        beFileListInfoManager_className,
+        "beFileListInfoManager",
         0x40, /* instance size */
         beFileListInfoManager_GetVTable,
         beFileListInfoManager_InitFields,
@@ -68,6 +84,63 @@ void beFileListInfoManager_GetMetaObject(void)
     FUN_00362880();
 }
 
+static FieldFactory g_beFileListInfoManager_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_beFileListInfoManager_fieldTable[] = {
+    "_system",
+    "_messenger",
+    "_sceneInfoManager",
+    "_isReadOnetime",
+    "_onetimeCount",
+    "_fnames",
+    "_infoList",
+    "_dirList",
+    "_readInfoList",
+    "_importantInfoList",
+    "_loaded",
+    "_proc",
+};
+static igMetaField **g_beFileListInfoManager_fieldHandles[] = {
+    &g_beFileListInfoManager_systemMetaField,
+    &g_beFileListInfoManager_messengerMetaField,
+    &g_beFileListInfoManager_sceneInfoManagerMetaField,
+    &g_beFileListInfoManager_isReadOnetimeMetaField,
+    &g_beFileListInfoManager_onetimeCountMetaField,
+    &g_beFileListInfoManager_fnamesMetaField,
+    &g_beFileListInfoManager_infoListMetaField,
+    &g_beFileListInfoManager_dirListMetaField,
+    &g_beFileListInfoManager_readInfoListMetaField,
+    &g_beFileListInfoManager_importantInfoListMetaField,
+    &g_beFileListInfoManager_loadedMetaField,
+    &g_beFileListInfoManager_procMetaField,
+};
+static int g_beFileListInfoManager_fieldOffsets[] = {
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+};
+
 void beFileListInfoManager_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -80,9 +153,9 @@ void beFileListInfoManager_InitFields(void) {
     void *temp_s2_8;
     void *temp_s1;
 
-    temp_s1 = (void *)g_beFileListInfoManager_metaObject[0];
+    temp_s1 = (void *)g_beFileListInfoManager_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beFileListInfoManager_ctorTable[0], 0xC);
+    igMetaObject_CreateFields(temp_s1, g_beFileListInfoManager_ctorTable, 0xC);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00342ce0();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
@@ -108,6 +181,6 @@ void beFileListInfoManager_InitFields(void) {
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_beFileListInfoManager_fieldTable[0], &DAT_004c6ef0[0], &DAT_004c6f20[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_beFileListInfoManager_fieldTable, g_beFileListInfoManager_fieldHandles, g_beFileListInfoManager_fieldOffsets, temp_s0);
 }
 

@@ -1,9 +1,11 @@
+igMetaObject *g_igMessageReceiver_metaObject;
+
 igMetaObject *igMessageReceiver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMessageReceiver_metaObject[0];
+    igMetaObject *g = g_igMessageReceiver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00231950();
-    return g_igMessageReceiver_metaObject[0];
+    return g_igMessageReceiver_metaObject;
 }
 
 void FUN_00231950(void)
@@ -15,11 +17,11 @@ void igMessageReceiver_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igMessageReceiver_metaObject,
+        &g_igMessageReceiver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igMessageReceiver_GetMetaObject,
-        igMessageReceiver_className,
+        "igMessageReceiver",
         8, /* instance size */
         0,
         0,

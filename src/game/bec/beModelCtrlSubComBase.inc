@@ -1,9 +1,14 @@
+igMetaObject *g_beModelCtrlSubComBase_metaObject;
+igMetaField *g_beModelCtrlSubComBase_isOneSetMetaField;
+igMetaField *g_beModelCtrlSubComBase_runFrameMetaField;
+igMetaField *g_beModelCtrlSubComBase_startFrameMetaField;
+
 void *FUN_0034fb70(void) {
-    igMetaObject *g = g_beModelCtrlSubComBase_metaObject[0];
+    igMetaObject *g = g_beModelCtrlSubComBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0034fbc0();
     }
-    return g_beModelCtrlSubComBase_metaObject[0];
+    return g_beModelCtrlSubComBase_metaObject;
 }
 
 void FUN_0034fbc0(void)
@@ -15,11 +20,11 @@ void *beModelCtrlSubComBase_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
-        g_beModelCtrlSubComBase_metaObject,
+        &g_beModelCtrlSubComBase_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beModelCtrlSubComBase_GetMetaObject,
-        beModelCtrlSubComBase_className,
+        "beModelCtrlSubComBase",
         0x14, /* instance size */
         0,
         beModelCtrlSubComBase_InitFields,
@@ -33,14 +38,35 @@ void beModelCtrlSubComBase_GetMetaObject(void)
     FUN_0034fb70();
 }
 
+static FieldFactory g_beModelCtrlSubComBase_ctorTable[] = {
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_beModelCtrlSubComBase_fieldTable[] = {
+    "_isOneSet",
+    "_runFrame",
+    "_startFrame",
+};
+static igMetaField **g_beModelCtrlSubComBase_fieldHandles[] = {
+    &g_beModelCtrlSubComBase_isOneSetMetaField,
+    &g_beModelCtrlSubComBase_runFrameMetaField,
+    &g_beModelCtrlSubComBase_startFrameMetaField,
+};
+static int g_beModelCtrlSubComBase_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void beModelCtrlSubComBase_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlSubComBase_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlSubComBase_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlSubComBase_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlSubComBase_ctorTable, 3);
     igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1))), 0.0f);
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlSubComBase_fieldTable[0], &DAT_004c4d20[0], &DAT_004c4d30[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlSubComBase_fieldTable, g_beModelCtrlSubComBase_fieldHandles, g_beModelCtrlSubComBase_fieldOffsets, temp_s1);
 }
 

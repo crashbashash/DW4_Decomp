@@ -28,7 +28,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float tim
     } else {
         *status = 0;
     }
-    if (DAT_00554b68) {
+    if (g_igPsx2DisableExt_ext12Enabled) {
         *status = 1;
         self->_currentTime = 1.0f + self->_particleLifeEnd;
     }

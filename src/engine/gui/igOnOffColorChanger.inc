@@ -1,16 +1,18 @@
+igMetaObject *g_igOnOffColorChanger_metaObject;
+
 igMetaObject *FUN_00451e40(void) {
-    if (g_igOnOffColorChanger_metaObject[0] == 0) {
-        g_igOnOffColorChanger_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igOnOffColorChanger_metaObject == 0) {
+        g_igOnOffColorChanger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igOnOffColorChanger_metaObject[0];
+    return g_igOnOffColorChanger_metaObject;
 }
 
 igMetaObject *igOnOffColorChanger_GetMetaObject(void)
 {
-    igMetaObject *g = g_igOnOffColorChanger_metaObject[0];
+    igMetaObject *g = g_igOnOffColorChanger_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igOnOffColorChanger_RunStaticInit();
-    return g_igOnOffColorChanger_metaObject[0];
+    return g_igOnOffColorChanger_metaObject;
 }
 
 int igOnOffColorChanger_GetVTable(void) {
@@ -30,11 +32,11 @@ void igOnOffColorChanger_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igOnOffColorChanger_metaObject,
+        &g_igOnOffColorChanger_metaObject,
         igBasicColorChanger_Register,
         igBasicColorChanger_GetPublishedMetaObject,
         thunk_igOnOffColorChanger_GetMetaObject,
-        igOnOffColorChanger_className,
+        "igOnOffColorChanger",
         0x58, /* instance size */
         igOnOffColorChanger_GetVTable,
         0,

@@ -1,14 +1,21 @@
+igMetaObject *g_beNDMWStatusSubMenu_metaObject;
+igMetaField *g_beNDMWStatusSubMenu_selectDeviceMetaField;
+igMetaField *g_beNDMWStatusSubMenu_deviceFolderListMetaField;
+igMetaField *g_beNDMWStatusSubMenu_receiptMetaField;
+igMetaField *g_beNDMWStatusSubMenu_playerNoListMetaField;
+igMetaField *g_beNDMWStatusSubMenu_playerDeviceCntMetaField;
+
 void beNDMWStatusSubMenu_Create(int arg0) {
     FUN_003b9120();
-    igMetaObject_CreateInstance(*(int *)0x58AE38, arg0);
+    igMetaObject_CreateInstance(g_beNDMWStatusSubMenu_metaObject, arg0);
 }
 
 void *FUN_003b8f90(void) {
-    igMetaObject *g = g_beNDMWStatusSubMenu_metaObject[0];
+    igMetaObject *g = g_beNDMWStatusSubMenu_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b9120();
     }
-    return g_beNDMWStatusSubMenu_metaObject[0];
+    return g_beNDMWStatusSubMenu_metaObject;
 }
 
 int beNDMWStatusSubMenu_GetVTable(void) {
@@ -59,15 +66,17 @@ void FUN_003b9120(void)
     igMetaObject_RunStaticInit(beNDMWStatusSubMenu_Register);
 }
 
+static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { FUN_003bb610, igIntList_EnsureRegistered, 0 };
+
 void *beNDMWStatusSubMenu_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWStatusSubMenu_metaObject,
+        &g_beNDMWStatusSubMenu_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWStatusSubMenu_GetMetaObject,
-        beNDMWStatusSubMenu_className,
+        "beNDMWStatusSubMenu",
         0x68, /* instance size */
         beNDMWStatusSubMenu_GetVTable,
         beNDMWStatusSubMenu_InitFields,
@@ -81,16 +90,45 @@ void beNDMWStatusSubMenu_GetMetaObject(void)
     FUN_003b8f90();
 }
 
+static FieldFactory g_beNDMWStatusSubMenu_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWStatusSubMenu_fieldTable[] = {
+    "_selectDevice",
+    "_deviceFolderList",
+    "_receipt",
+    "_playerNoList",
+    "_playerDeviceCnt",
+};
+static igMetaField **g_beNDMWStatusSubMenu_fieldHandles[] = {
+    &g_beNDMWStatusSubMenu_selectDeviceMetaField,
+    &g_beNDMWStatusSubMenu_deviceFolderListMetaField,
+    &g_beNDMWStatusSubMenu_receiptMetaField,
+    &g_beNDMWStatusSubMenu_playerNoListMetaField,
+    &g_beNDMWStatusSubMenu_playerDeviceCntMetaField,
+};
+static int g_beNDMWStatusSubMenu_fieldOffsets[] = {
+    84,
+    88,
+    92,
+    96,
+    100,
+};
+
 void beNDMWStatusSubMenu_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s1_2;
     void *temp_s1_3;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWStatusSubMenu_metaObject[0];
+    temp_s0 = g_beNDMWStatusSubMenu_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWStatusSubMenu_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWStatusSubMenu_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003bb570();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
@@ -99,6 +137,6 @@ void beNDMWStatusSubMenu_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWStatusSubMenu_fieldTable[0], &DAT_004c9cc0[0], &DAT_004c9ce0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWStatusSubMenu_fieldTable, g_beNDMWStatusSubMenu_fieldHandles, g_beNDMWStatusSubMenu_fieldOffsets, temp_s2);
 }
 

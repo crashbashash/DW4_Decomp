@@ -1,15 +1,17 @@
+unsigned char g_igExternalDirEntry_loadFailureWarned;
+
 void igExternalDirEntry_ReadFile(igExternalDirEntryView *self, void *file) {
     int path, pool, old, answer;
     int *hd;
     path = ((igIGBFile *)file)->_basePath;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    path = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)path);
+    path = StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
     old = self->_externalFilePath;
     if (old != 0) {
         hd = (int *)(old - 8);
@@ -22,7 +24,7 @@ void igExternalDirEntry_ReadFile(igExternalDirEntryView *self, void *file) {
     self->_externalFilePath = path;
     self->ResolveDirectory(((igIGBFile *)file)->_userLoadFunction);
     if (self->_ref == 0 && g_igExternalDirEntry_loadFailureWarned == 0) {
-        answer = igReport_Warning(text_igIGBFile_readFile_External_Entr, self->_entryName, self->_externalFilePath);
+        answer = igReport_Warning("igIGBFile::readFile() - External Entry \"%s\" failed to load with base path (\"%s\")\n", self->_entryName, self->_externalFilePath);
         if (answer != 1 && answer == 2) {
             g_igExternalDirEntry_loadFailureWarned = 1;
         }
@@ -36,14 +38,14 @@ void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *self, int name) {
     int pool;
     int *old;
     int *interned;
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name)));
+    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name)));
     old = (int *)self->_directoryName;
     if (old != 0) {
         header = old - 2;
@@ -83,17 +85,17 @@ int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFu
         s1 = (char *)self->_directoryName;
         len = strlen(self->_externalFilePath);
         len = len + strlen(s1);
-        c = strlen(&text_slash[0]);
+        c = strlen("/");
         buf = (char *)igObject_AllocateStorage((int)self, c + len + 1);
         strcpy(buf, self->_externalFilePath);
-        strcat(buf, &text_slash[0]);
+        strcat(buf, "/");
         strcat(buf, self->_directoryName);
         stream.get()->ReadFile(buf);
         igObject_FreeMemory((int)self, (int)buf);
     }
     self->SetRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
     if (self->_ref == 0) {
-        self->SetRef(igDirectory_GetRefByName((int)(stream.get()), (int)&text_root[0]));
+        self->SetRef(igDirectory_GetRefByName((int)(stream.get()), (int)"root"));
     }
     return self->_ref != 0;
 }
@@ -111,7 +113,7 @@ static inline void dropCreationReference(igVirtualObject *object) {
  * then calls `loadFunction`; a resolved entry is cloned into the directory so later lookups find it. */
 int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFunction) {
     igMemoryPoolView *pool;
-    igResource *resource = ((ObjectSystemView *)g_objectSystem[0])->resource;
+    igResource *resource = ((ObjectSystemView *)g_objectSystem)->resource;
     igSmartPointer<igObject> directory = igResource_GetDirectory(resource, self->_directoryName);
     if (directory.get() == 0) {
         pool = igObject_GetAllocator((int)self);

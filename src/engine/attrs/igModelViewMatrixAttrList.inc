@@ -1,16 +1,18 @@
+igMetaObject *g_igModelViewMatrixAttrList_metaObject;
+
 igMetaObject *FUN_00135540(void) {
-    if (g_igModelViewMatrixAttrList_metaObject[0] == 0) {
-        g_igModelViewMatrixAttrList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igModelViewMatrixAttrList_metaObject == 0) {
+        g_igModelViewMatrixAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igModelViewMatrixAttrList_metaObject[0];
+    return g_igModelViewMatrixAttrList_metaObject;
 }
 
 igMetaObject *igModelViewMatrixAttrList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igModelViewMatrixAttrList_metaObject[0];
+    igMetaObject *g = g_igModelViewMatrixAttrList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00135620();
-    return g_igModelViewMatrixAttrList_metaObject[0];
+    return g_igModelViewMatrixAttrList_metaObject;
 }
 
 int igModelViewMatrixAttrList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_00135620(void)
     igMetaObject_RunStaticInit(igModelViewMatrixAttrList_Register);
 }
 
+static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { FUN_001357e0, 0 };
+
 void igModelViewMatrixAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igModelViewMatrixAttrList_metaObject,
+        &g_igModelViewMatrixAttrList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igModelViewMatrixAttrList_GetMetaObject,
-        igModelViewMatrixAttrList_className,
+        "igModelViewMatrixAttrList",
         0x14, /* instance size */
         igModelViewMatrixAttrList_GetVTable,
         0,

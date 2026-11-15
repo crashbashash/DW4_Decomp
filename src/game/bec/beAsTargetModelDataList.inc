@@ -1,19 +1,21 @@
+igMetaObject *g_beAsTargetModelDataList_metaObject;
+
 igMetaObject *FUN_0036b600(void) {
-    if (g_beAsTargetModelDataList_metaObject[0] == 0) {
-        g_beAsTargetModelDataList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beAsTargetModelDataList_metaObject == 0) {
+        g_beAsTargetModelDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beAsTargetModelDataList_metaObject[0];
+    return g_beAsTargetModelDataList_metaObject;
 }
 
 void *FUN_0036b650(void) {
     unsigned char b;
-    if (((void * *)g_beAsTargetModelDataList_metaObject)[0] != 0) {
-        b = (*(int *)((char *)(((void * *)g_beAsTargetModelDataList_metaObject)[0]) + 36) & 4) != 0;
+    if (((void * *)&g_beAsTargetModelDataList_metaObject)[0] != 0) {
+        b = (*(int *)((char *)(((void * *)&g_beAsTargetModelDataList_metaObject)[0]) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_0036b6e0();
 done:
-    return ((void * *)g_beAsTargetModelDataList_metaObject)[0];
+    return ((void * *)&g_beAsTargetModelDataList_metaObject)[0];
 }
 
 int beAsTargetModelDataList_GetVTable(void) {
@@ -29,15 +31,17 @@ void FUN_0036b6e0(void)
     igMetaObject_RunStaticInit(beAsTargetModelDataList_Register);
 }
 
+static igMetaObjectCallback g_beAsTargetModelDataList_callbackList[] = { FUN_0036b8c0, 0 };
+
 void *beAsTargetModelDataList_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAsTargetModelDataList_metaObject,
+        &g_beAsTargetModelDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beAsTargetModelDataList_GetMetaObject,
-        beAsTargetModelDataList_className,
+        "beAsTargetModelDataList",
         0x14, /* instance size */
         beAsTargetModelDataList_GetVTable,
         0,

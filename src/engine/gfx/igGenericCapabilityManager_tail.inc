@@ -198,6 +198,56 @@ static inline const char *nameOf(const KeyedEntry *entry) {
     return entry->name ? entry->name : emptyString;
 }
 
+static NamedValue g_gfxShaderConstantNames[47] = {
+    { "constant.zero", 0 },
+    { "constant.blendhelper", 1 },
+    { "material.ambient", 2 },
+    { "material.diffuse", 3 },
+    { "material.specular", 4 },
+    { "material.emission", 5 },
+    { "material.shininess", 6 },
+    { "light.point.ambient", 7 },
+    { "light.point.diffuse", 8 },
+    { "light.point.specular", 9 },
+    { "light.point.ambientmaterial", 10 },
+    { "light.point.diffusematerial", 11 },
+    { "light.point.specularmaterial", 12 },
+    { "light.point.position", 13 },
+    { "light.point.attenuation", 14 },
+    { "light.directional.ambient", 15 },
+    { "light.directional.diffuse", 16 },
+    { "light.directional.specular", 17 },
+    { "light.directional.direction", 18 },
+    { "light.directional.half", 19 },
+    { "light.directional.ambientmaterial", 20 },
+    { "light.directional.diffusematerial", 21 },
+    { "light.directional.specularmaterial", 22 },
+    { "light.spot.ambient", 23 },
+    { "light.spot.diffuse", 24 },
+    { "light.spot.specular", 25 },
+    { "light.spot.position", 26 },
+    { "light.spot.direction", 27 },
+    { "light.spot.attenuation", 28 },
+    { "light.spot.ambientmaterial", 29 },
+    { "light.spot.diffusematerial", 30 },
+    { "light.spot.specularmaterial", 31 },
+    { "lightmodel.sceneambient", 32 },
+    { "lightmodel.sceneambientmaterial", 33 },
+    { "lightmodel.lightingambient", 34 },
+    { "lightmodel.lightingambientnonspot", 35 },
+    { "fog.color", 36 },
+    { "fog.parameters", 37 },
+    { "point.size", 38 },
+    { "point.attenuation", 39 },
+    { "matrix.model", 40 },
+    { "matrix.view", 41 },
+    { "matrix.modelview", 42 },
+    { "matrix.projection", 43 },
+    { "matrix.mvp", 44 },
+    { "matrix.texture", 45 },
+    { "matrix.blending", 46 },
+};
+
 int FUN_001560b0(KeyedEntryOwner *table, int key) {
     StringRef name = FUN_001554a0(key);
     int i = 0;
@@ -210,8 +260,8 @@ int FUN_001560b0(KeyedEntryOwner *table, int key) {
         }
     }
     for (i = 0; i < 47; i++) {
-        if (strcmp(DAT_0048a260[i].name, name.p) == 0) {
-            return DAT_0048a260[i].value;
+        if (strcmp(g_gfxShaderConstantNames[i].name, name.p) == 0) {
+            return g_gfxShaderConstantNames[i].value;
         }
     }
     return -1;
@@ -233,8 +283,8 @@ int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
 }
 
 void FUN_00156300(void) {
-    igResource_AddAlignment(g_globalContext[0], &text_ImageData[0], 0x10);
-    igMemoryRefMetaField_SetAlignmentType(DAT_0055fde0[0], &text_ImageData[0]);
+    igResource_AddAlignment(g_globalContext[0], "ImageData", 0x10);
+    igMemoryRefMetaField_SetAlignmentType(g_igImage_pImageMetaField, "ImageData");
 }
 
 void FUN_00156340(S0_156340 *arg0, void **arg1) {
@@ -591,7 +641,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
     }
     igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create(igObject_GetAllocator(arg0)));
     int sp3C;
-    if (sp40.p->v23(arg1, &DAT_004de6c0[0]) == 0) {
+    if (sp40.p->v23(arg1, "rb") == 0) {
         return 0;
     }
     sp40.p->v25(&sp3C, 4, 1);

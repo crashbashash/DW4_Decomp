@@ -1,16 +1,20 @@
+igMetaObject *g_igInterpretedShaderData_metaObject;
+igMetaField *g_igInterpretedShaderData_factoryMetaField;
+igMetaField *g_igInterpretedShaderData_objectMappingsMetaField;
+
 igMetaObject *FUN_0019ea00(void) {
-    if (g_igInterpretedShaderData_metaObject[0] == 0) {
-        g_igInterpretedShaderData_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igInterpretedShaderData_metaObject == 0) {
+        g_igInterpretedShaderData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igInterpretedShaderData_metaObject[0];
+    return g_igInterpretedShaderData_metaObject;
 }
 
 igMetaObject *igInterpretedShaderData_GetMetaObject(void)
 {
-    igMetaObject *g = g_igInterpretedShaderData_metaObject[0];
+    igMetaObject *g = g_igInterpretedShaderData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019ebc0();
-    return g_igInterpretedShaderData_metaObject[0];
+    return g_igInterpretedShaderData_metaObject;
 }
 
 int igInterpretedShaderData_GetVTable(void) {
@@ -50,15 +54,17 @@ void FUN_0019ebc0(void)
     igMetaObject_RunStaticInit(igInterpretedShaderData_Register);
 }
 
+static igMetaObjectCallback g_igInterpretedShaderData_callbackList[] = { FUN_001994d0, igObjectStringMap_EnsureRegistered, 0 };
+
 void igInterpretedShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igInterpretedShaderData_metaObject),
+        &g_igInterpretedShaderData_metaObject,
         igTransientShaderData_Register,
         igTransientShaderData_GetPublishedMetaObject,
         thunk_igInterpretedShaderData_GetMetaObject,
-        igInterpretedShaderData_className,
+        "igInterpretedShaderData",
         0x20, /* instance size */
         igInterpretedShaderData_GetVTable,
         &igInterpretedShaderData_InitFields,
@@ -72,8 +78,25 @@ void thunk_igInterpretedShaderData_GetMetaObject(void) {
 }
 
 int FUN_0019ec60(void) {
-    return ((int *)g_igTransientShaderData_metaObject)[0];
+    return ((int)g_igTransientShaderData_metaObject);
 }
+
+static FieldFactory g_igInterpretedShaderData_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igInterpretedShaderData_fieldTable[] = {
+    "_factory",
+    "_objectMappings",
+};
+static igMetaField **g_igInterpretedShaderData_fieldHandles[] = {
+    &g_igInterpretedShaderData_factoryMetaField,
+    &g_igInterpretedShaderData_objectMappingsMetaField,
+};
+static int g_igInterpretedShaderData_fieldOffsets[] = {
+    24,
+    28,
+};
 
 void igInterpretedShaderData_InitFields(void) {
     int temp_s2;
@@ -81,14 +104,14 @@ void igInterpretedShaderData_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igInterpretedShaderData_metaObject[0];
+    temp_s0 = (void *)g_igInterpretedShaderData_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igInterpretedShaderData_ctorTable[0], 2);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igInterpretedShaderData_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00199170();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectStringMap_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igInterpretedShaderData_fieldTable[0], &DAT_0048bef0[0], &DAT_0048bef8[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igInterpretedShaderData_fieldTable, g_igInterpretedShaderData_fieldHandles, g_igInterpretedShaderData_fieldOffsets, temp_s2);
 }
 

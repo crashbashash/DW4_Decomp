@@ -1,16 +1,19 @@
+igMetaObject *g_igMatrix44fList_metaObject;
+int g_igMatrix44fList_externalStorage;
+
 igMetaObject *FUN_001899a0(void) {
-    if (g_igMatrix44fList_metaObject[0] == 0) {
-        g_igMatrix44fList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igMatrix44fList_metaObject == 0) {
+        g_igMatrix44fList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igMatrix44fList_metaObject[0];
+    return g_igMatrix44fList_metaObject;
 }
 
 igMetaObject *igMatrix44fList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMatrix44fList_metaObject[0];
+    igMetaObject *g = g_igMatrix44fList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00189a80();
-    return g_igMatrix44fList_metaObject[0];
+    return g_igMatrix44fList_metaObject;
 }
 
 int igMatrix44fList_GetVTable(void) {
@@ -30,11 +33,11 @@ void igMatrix44fList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMatrix44fList_metaObject,
+        &g_igMatrix44fList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igMatrix44fList_GetMetaObject,
-        igMatrix44fList_className,
+        "igMatrix44fList",
         0x14, /* instance size */
         igMatrix44fList_GetVTable,
         &igMatrix44fList_InitFields_00189b10[0],
@@ -53,13 +56,13 @@ void FUN_00189b10(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(g_igMatrix44fList_metaObject[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_data_2[0]));
+    temp_s1 = (void *)(g_igMatrix44fList_metaObject);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_data"));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = FUN_001888e0();
     *(int *)((char *)(temp_s0) + 56) = 0;
-    *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_00561080[0]);
+    *(int *)((char *)(temp_s0) + 28) = (int)(&g_igMatrix44fList_externalStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {

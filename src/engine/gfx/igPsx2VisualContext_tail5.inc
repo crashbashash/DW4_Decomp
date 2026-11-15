@@ -15,7 +15,7 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
             limit = p2GetDisplayListBlendMatrixCount(arg3);
             if (levels != 0) {
                 enabled = true;
-                if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c
+                if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled
                     && limit >= vc->_blendMatricesCount) {
                     result = 2;
                 } else {
@@ -27,7 +27,7 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
             levels = (unsigned char)(((unsigned int)*((VertexFormat177 *)va)->format() & 0xf0) >> 4);
             if (levels > 0) {
                 enabled = true;
-                if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c) {
+                if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled) {
                     result = 2;
                     p2SetBlendIndexArray(va->f36);
                     p2SetBlendWeightArray(va->f32);
@@ -179,7 +179,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
             }
             limit = vc->_blendMatricesCount;
         }
-        if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !GPR_00554b6c && limit >= vc->_blendMatricesCount) {
+        if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled && limit >= vc->_blendMatricesCount) {
             result = 2;
             if (!prebuilt) {
                 p2SetBlendIndexArray(matrices);
@@ -410,6 +410,10 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_257(void *context, unsigned int capabi
     return supported;
 }
 
+unsigned char g_igPsx2VisualContext_capability31Enabled;
+
+unsigned char g_igPsx2VisualContext_capability34Enabled;
+
 bool Gap__Gfx__igPsx2VisualContext__vfunc_255(igPsx2VisualContextStats *self, unsigned int capability, unsigned char enabled)
 {
     StatNodeView *node;
@@ -417,10 +421,10 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_255(igPsx2VisualContextStats *self, un
     bool supported = self->supports(capability);
     if (supported) {
         if (capability == 31) {
-            DAT_00554b70 = enabled;
+            g_igPsx2VisualContext_capability31Enabled = enabled;
         }
         if (capability == 34) {
-            DAT_00554b74 = enabled;
+            g_igPsx2VisualContext_capability34Enabled = enabled;
         }
         if (capability == 31) {
         } else if (capability == 34) {
@@ -618,8 +622,8 @@ void FUN_00179e00(StatContext *arg0) {
     Ref_1778e0 sp68((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
     s3 = ((G_1778e0 *)g_objectSystem[0])->f56;
     s2 = 0;
-    igStringObj_Set((O_1778e0 *)sp6C, STATISTICS_CAPTURE);
-    igStringObj_SetInt(sp68, 0, DAT_004de6a8);
+    igStringObj_Set((O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
+    igStringObj_SetInt(sp68, 0, "%d");
     { int y = sp68->f12; int x = sp6C->f12;
     a1 = sp68->f8;
     if (a1 == 0) a1 = g_stringObjEmptyText[0];
@@ -629,15 +633,15 @@ void FUN_00179e00(StatContext *arg0) {
         if (n == 0) break;
         n->f16 = 1;
         n->f0 = s2;
-        thunk_igRegistry_GetValueInt(s3, idx, text_numCapture, &n->f4, 1, 0);
-        thunk_igRegistry_GetValueInt(s3, idx, text_startCapture, &n->f8, -1 - n->f4, 0);
+        thunk_igRegistry_GetValueInt(s3, idx, "numCapture", &n->f4, 1, 0);
+        thunk_igRegistry_GetValueInt(s3, idx, "startCapture", &n->f8, -1 - n->f4, 0);
         n->f12 = (O_1778e0 *)((O_1778e0 *)igStringObj_Create(FUN_00165d00((int *)arg0)));
-        thunk_igRegistry_GetValueStringObj(s3, idx, text_stringCapture, &n->f12, DAT_004dc870, 0);
+        thunk_igRegistry_GetValueStringObj(s3, idx, "stringCapture", &n->f12, "", 0);
         s2 += 1;
         n->f952 = arg0->f1552;
         arg0->f1552 = n;
-        igStringObj_SetInt(sp68, s2, DAT_004de6a8);
-        igStringObj_Set((O_1778e0 *)sp6C, STATISTICS_CAPTURE);
+        igStringObj_SetInt(sp68, s2, "%d");
+        igStringObj_Set((O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
         { int y = sp68->f12; int x = sp6C->f12;
         a1 = sp68->f8;
         if (a1 == 0) a1 = g_stringObjEmptyText[0];
@@ -751,7 +755,7 @@ void FUN_0017a300(Self_17a070 *self) {
     T *o;
     int i;
     sp5C = 0x40;
-    thunk_igRegistry_GetValueInt(*(int *)((char *)g_objectSystem[0] + 56), 4, IG_GFX_VC_TEXTURE_ARRAY_SIZE, &sp5C, 0x40, 0);
+    thunk_igRegistry_GetValueInt(*(int *)((char *)g_objectSystem[0] + 56), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &sp5C, 0x40, 0);
     Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, FUN_00165d10((int *)self));
     if (r != 0) {
         bi = (int)r;
@@ -767,7 +771,7 @@ void FUN_0017a300(Self_17a070 *self) {
             if (pool != 0) pool = StringPool_Construct(pool);
             g_stringPool[0] = pool;
         }
-        tok = (int *)StringPool_Intern(g_stringPool[0], IG_GFX_VC_TEXTURE_ARRAY_SIZE);
+        tok = (int *)StringPool_Intern(g_stringPool[0], "IG_GFX_VC_TEXTURE_ARRAY_SIZE");
         old = (int *)b->f8;
         if (old != 0) {
             int *h = old - 2;
@@ -1030,7 +1034,7 @@ bool Gap__Gfx__igPsx2VisualContext__vfunc_127(TexContext *context, int index, in
     clutDirty = false;
     clut = 0;
     enabled = result;
-    if (DAT_00554b78) {
+    if (g_igPsx2DisableExt_ext0Enabled) {
         enabled = false;
     }
     if (!enabled) {

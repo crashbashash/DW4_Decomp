@@ -1,14 +1,17 @@
+igMetaObject *g_beNDMWItemWaza_metaObject;
+igMetaField *g_beNDMWItemWaza_baseNoMetaField;
+
 void beNDMWItemWaza_Create(int arg0) {
     FUN_003c8110();
-    igMetaObject_CreateInstance(*(int *)0x58BF10, arg0);
+    igMetaObject_CreateInstance(g_beNDMWItemWaza_metaObject, arg0);
 }
 
 igMetaObject *beNDMWItemWaza_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWItemWaza_metaObject[0];
+    igMetaObject *g = g_beNDMWItemWaza_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003c8110();
-    return g_beNDMWItemWaza_metaObject[0];
+    return g_beNDMWItemWaza_metaObject;
 }
 
 int beNDMWItemWaza_GetVTable(void) {
@@ -28,11 +31,11 @@ void *beNDMWItemWaza_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWItemWaza_metaObject,
+        &g_beNDMWItemWaza_metaObject,
         beNDMWItemBase_Register,
         beNDMWItemBase_GetPublishedMetaObject,
         beNDMWItemWaza_GetMetaObject,
-        beNDMWItemWaza_className,
+        "beNDMWItemWaza",
         0x18, /* instance size */
         beNDMWItemWaza_GetVTable,
         beNDMWItemWaza_InitFields,
@@ -47,16 +50,29 @@ void beNDMWItemWaza_GetMetaObject(void)
 }
 
 igMetaObject *FUN_003c81c0(void) {
-    return g_beNDMWItemBase_metaObject[0];
+    return g_beNDMWItemBase_metaObject;
 }
+
+static FieldFactory g_beNDMWItemWaza_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWItemWaza_fieldTable[] = {
+    "_baseNo",
+};
+static igMetaField **g_beNDMWItemWaza_fieldHandles[] = {
+    &g_beNDMWItemWaza_baseNoMetaField,
+};
+static int g_beNDMWItemWaza_fieldOffsets[] = {
+    20,
+};
 
 void beNDMWItemWaza_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWItemWaza_metaObject[0];
+    temp_s0 = g_beNDMWItemWaza_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWItemWaza_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWItemWaza_fieldTable[0], &DAT_004cc098[0], &DAT_004cc0a0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWItemWaza_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWItemWaza_fieldTable, g_beNDMWItemWaza_fieldHandles, g_beNDMWItemWaza_fieldOffsets, temp_s1);
 }
 

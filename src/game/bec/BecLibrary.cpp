@@ -1,4 +1,8 @@
 #include "src/game/bec/BecLibrary.h"
+
+#pragma push
+#pragma readonly_strings on
+
 #include "src/game/bec/LibraryFront.inc"
 #include "src/game/bec/libBecRuntimePlugin.inc"
 #include "src/game/bec/beWeaponInfoRam.inc"
@@ -304,3 +308,5 @@
 #include "src/game/bec/ParticleTimer.inc"
 #include "src/game/bec/ParticleInfo.inc"
 #include "src/game/bec/InlineTail.inc"
+
+#pragma pop

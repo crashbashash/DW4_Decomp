@@ -1,9 +1,12 @@
+igMetaObject *g_igBoolObject_metaObject;
+igMetaField *g_igBoolObject_valueMetaField;
+
 igMetaObject *igBoolObject_GetMetaObject(void)
 {
-    igMetaObject *g = g_igBoolObject_metaObject[0];
+    igMetaObject *g = g_igBoolObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001e5ce0();
-    return g_igBoolObject_metaObject[0];
+    return g_igBoolObject_metaObject;
 }
 
 int igBoolObject_GetVTable(void) {
@@ -22,11 +25,11 @@ void igBoolObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igBoolObject_metaObject,
+        &g_igBoolObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igBoolObject_GetMetaObject,
-        igBoolObject_className,
+        "igBoolObject",
         0xC, /* instance size */
         igBoolObject_GetVTable,
         &igBoolObject_InitFields,
@@ -39,14 +42,27 @@ void thunk_igBoolObject_GetMetaObject(void) {
     igBoolObject_GetMetaObject();
 }
 
-void igBoolObject_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igBoolObject_ctorTable[] = {
+    igBoolMetaField_Create,
+};
+static const char *g_igBoolObject_fieldTable[] = {
+    text_value,
+};
+static igMetaField **g_igBoolObject_fieldHandles[] = {
+    &g_igBoolObject_valueMetaField,
+};
+static int g_igBoolObject_fieldOffsets[] = {
+    8,
+};
 
-    temp_s0 = (void *)g_igBoolObject_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igBoolObject_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_igBoolObject_fieldTable[0], &DAT_0048dc78[0], &DAT_0048dc80[0], temp_s1);
+void igBoolObject_InitFields(void) {
+    int firstField;
+    igMetaObject *meta;
+
+    meta = g_igBoolObject_metaObject;
+    firstField = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igBoolObject_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igBoolObject_fieldTable, g_igBoolObject_fieldHandles, g_igBoolObject_fieldOffsets, firstField);
 }
 
 /* matching construct: declaration-order sweep — v, scale, count, i order */

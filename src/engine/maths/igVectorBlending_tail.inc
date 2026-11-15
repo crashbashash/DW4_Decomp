@@ -1,3 +1,6 @@
+int *g_igVectorBlending_blendWeighted;
+int *g_igVectorBlending_blendRigid;
+
 void FUN_0018e8f0(const float *in, unsigned int count, const float *weights, const unsigned char *bone,
                   int boneStride, const float (*matrices)[16], float *out, int outStride) {
     unsigned int i;
@@ -27,7 +30,7 @@ void FUN_0018e8f0(const float *in, unsigned int count, const float *weights, con
 }
 
 void FUN_0018e9b0(void) {
-    DAT_005610f8[0] = (int *)(&FUN_0018e7d0);
-    DAT_00561100[0] = (int *)(&FUN_0018e8f0);
+    g_igVectorBlending_blendWeighted = (int *)(&FUN_0018e7d0);
+    g_igVectorBlending_blendRigid = (int *)(&FUN_0018e8f0);
 }
 

@@ -9,11 +9,11 @@ void igArenaMemoryPool_PrintStatistics(igArenaMemoryPoolView *self, char *title)
     char *flags;
     int named;
     igMemoryPool_PrintStatistics((igMemoryPool *)self, title);
-    named = ((ObjectSystemView *)g_objectSystem[0])->metaEnumList != 0;
-    messageLevel = named ? igMetaEnum_GetValueName(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)emptyString_4;
-    heapCheck = named ? igMetaEnum_GetValueName(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)emptyString_4;
-    flags = named ? igMetaEnum_GetNamesByMask(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)emptyString_4;
-    igReport_Printf(g_igArenaMemoryPool_statisticsFormat, self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->GetLowestAddress(), self->GetHighestAddress(),
+    named = ((ObjectSystemView *)g_objectSystem)->metaEnumList != 0;
+    messageLevel = named ? igMetaEnum_GetValueName(messageLevelText, 64, self->_messageLevel, igArenaMemoryPool_GetMessageLevelMetaEnum()) : (char *)"";
+    heapCheck = named ? igMetaEnum_GetValueName(heapCheckText, 64, self->_heapIntegrityCheckLevel, igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()) : (char *)"";
+    flags = named ? igMetaEnum_GetNamesByMask(flagsText, 256, self->_poolOptionFlags, igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()) : (char *)"";
+    igReport_Printf("    Pre size:                             %d\n    Raw size:                             %d\n    Raw address:                          0x%08x\n    Lowest address:                       0x%08x\n    Highest address:                      0x%08x\n    Arena count:                          %d\n    Arena count high:                     %d\n    Pool index:                           %d\n    Pool flags:                           %s\n    Check level:                          %s\n    Message Level:                        %s\n", self->GetPreSize(), (int)self->GetSize(), self->GetRawMemory(), self->GetLowestAddress(), self->GetHighestAddress(),
                  igArenaMemoryPool_GetArenaCount(self), igArenaMemoryPool_GetArenaHighCount(self), self->GetPoolIndex(), flags, heapCheck, messageLevel);
     igReport_Flush();
 }
@@ -33,7 +33,7 @@ void igArenaMemoryPool_CollectMemoryRegions(igArenaMemoryPoolView *self, igDataL
         if (arena->blockCount) {
             while (i < arena->blockCount) {
                 poolName = (const char *)Memory_GetPoolName((int)self);
-                sprintf(annotation, text_Pool_d_of_d_tot_0x_06x, i / 2 + 1, arena->blockCount / 2, (long long)(int)self->GetSize());
+                sprintf(annotation,"Pool %d of %d tot 0x%06x", i / 2 + 1, arena->blockCount / 2, (long long)(int)self->GetSize());
                 created = DumpRegion_Allocate(sizeof(DumpRegion));
                 if (created != 0) {
                     created = DumpRegion_Init(created);
@@ -64,6 +64,9 @@ void igArenaMemoryPool_VerifyHeap(int *status, igArenaMemoryPoolView *self) {
     *status = r.v;
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE69Notice;
+unsigned char g_igArenaMemoryPool_ignoreE70Notice;
+
 igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     ArenaState *arena = self->_arenaState;
     igResult result;
@@ -78,7 +81,7 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE69Notice == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_checkHeap_E69);
+                r = igReportNotice("igArenaMemoryPool::checkHeap(E69): No arena block list.");
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE69Notice = 1;
                 }
@@ -88,7 +91,7 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     }
     if (arena->blockCount < 0 || arena->blockCapacity < 0 || arena->blockCount > arena->blockCapacity) {
         if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE70Notice == 0) {
-            r = igReportNotice(text_igArenaMemoryPool_checkHeap_E70);
+            r = igReportNotice("igArenaMemoryPool::checkHeap(E70): Arena block list data corrupted.");
             if (r != 1 && r == 2) {
                 g_igArenaMemoryPool_ignoreE70Notice = 1;
             }
@@ -105,6 +108,12 @@ igResult igArenaMemoryPool_CheckHeap(igArenaMemoryPoolView *self) {
     return result;
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE71Notice;
+unsigned char g_igArenaMemoryPool_ignoreE72Notice;
+unsigned char g_igArenaMemoryPool_ignoreE73Notice;
+unsigned char g_igArenaMemoryPool_ignoreE74Notice;
+unsigned char g_igArenaMemoryPool_ignoreE75Notice;
+
 igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
     char *hi = self->GetHighestAddress();
     char *lo = self->GetLowestAddress();
@@ -118,7 +127,7 @@ igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE71Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E71, index, cur, lo, hi);
+                int r = igReportNotice("igArenaMemoryPool::checkHeap(E71): At index %d, block (0x%x) is not in a valid range (0x%x-0x%x).", index, cur, lo, hi);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE71Notice = 1;
                 }
@@ -130,7 +139,7 @@ igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE72Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E72, index, end, lo, hi);
+                int r = igReportNotice("igArenaMemoryPool::checkHeap(E72): At index %d, block end (0x%x) is not in a valid range (0x%x-0x%x).", index, end, lo, hi);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE72Notice = 1;
                 }
@@ -142,7 +151,7 @@ igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE73Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E73, index, end, cur);
+                int r = igReportNotice("igArenaMemoryPool::checkHeap(E73): At index %d, the end block (0x%x) is less than the start block (0x%x).", index, end, cur);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE73Notice = 1;
                 }
@@ -154,7 +163,7 @@ igResult igArenaMemoryPool_CheckHeapBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE74Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E74);
+                int r = igReportNotice("igArenaMemoryPool::checkHeap(E74): Arena (0x%x) corrupted.  First block should have had previous in use bit set.");
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE74Notice = 1;
                 }
@@ -202,7 +211,7 @@ bad:
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE75Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_checkHeap_E75, cur, index, count, size);
+                int r = igReportNotice("igArenaMemoryPool::checkHeap(E75): The block at 0x%x at block index %d chunk index %d has an invalid chunk size 0x%x.", cur, index, count, size);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE75Notice = 1;
                 }
@@ -212,6 +221,12 @@ bad:
     }
     return g_resultSuccess;
 }
+
+unsigned char g_arenaNoticeE102Silenced;
+unsigned char g_arenaNoticeE66Silenced;
+unsigned char g_arenaNoticeE105Silenced;
+unsigned char g_arenaNoticeE106Silenced;
+unsigned char g_arenaNoticeE103Silenced;
 
 /* dlmalloc's sYSMALLOc: the top chunk cannot hold `nb` bytes, so the arena asks the system for
  * more. It first tries to extend the top in place, to the page after the new top plus one smallest
@@ -240,7 +255,7 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
         if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_arenaNoticeE102Silenced == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_E102_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                r = igReportNotice("igArenaMemoryPool(E102): Pre size value of %d bytes reached.  %d bytes already allocated.", self->_preSize, (unsigned int)self->_localNetAllocated);
                 if (r != 1 && r == 2) {
                     g_arenaNoticeE102Silenced = 1;
                 }
@@ -256,7 +271,7 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
         } else if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, oldTop) && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_arenaNoticeE66Silenced == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_s_Possibly_cor, text_igArenaSystemMalloc_E66, oldTop);
+                r = igReportNotice("igArenaMemoryPool::%s - Possibly corrupt memory block at: 0x%x","igArenaSystemMalloc (E66)", oldTop);
                 if (r != 1 && r == 2) {
                     g_arenaNoticeE66Silenced = 1;
                 }
@@ -278,7 +293,7 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
                     if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_arenaNoticeE105Silenced == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_E105_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                            r = igReportNotice("igArenaMemoryPool(E105): Pre size value of %d bytes reached.  %d bytes already allocated.", self->_preSize, (unsigned int)self->_localNetAllocated);
                             if (r != 1 && r == 2) {
                                 g_arenaNoticeE105Silenced = 1;
                             }
@@ -313,7 +328,7 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
                     if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(self->_poolPreSized == 1) && self->_messageLevel > 0) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_arenaNoticeE106Silenced == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_E106_PreSizeReached, self->_preSize, (unsigned int)self->_localNetAllocated);
+                            r = igReportNotice("igArenaMemoryPool(E106): Pre size value of %d bytes reached.  %d bytes already allocated.", self->_preSize, (unsigned int)self->_localNetAllocated);
                             if (r != 1 && r == 2) {
                                 g_arenaNoticeE106Silenced = 1;
                             }
@@ -377,12 +392,12 @@ void *igArenaMemoryPool_SystemMalloc(igArenaMemoryPoolView *self, unsigned int n
         }
         if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
             SystemMemoryStatistics stats;
-            g_activeSystemAllocator[0]->GetStatistics(&stats);
+            g_activeSystemAllocator->GetStatistics(&stats);
             Memory_PrintPoolStatistics(0, self);
             if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && self->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_arenaNoticeE103Silenced == 0) {
-                    r = igReportNotice(text_igArenaMemoryPool_E103_MemoryExhausted, self->_size != 0 ? text_Raw : text_System, self->_poolIndex,
+                    r = igReportNotice("igArenaMemoryPool(E103): %s memory exhausted.\nThis pool's (index %d) statistics:\n    Total allocated:                      %u\n    Total freed:                          %u\n    Net allocated:                        %u\n    Net allocated high:                   %u\n    Total allocated with overhead:        %u\n    Total freed with overhead:            %u\n    Net allocated with overhead:          %u\n    Net allocated high with overhead:     %u\n    Total allocation count:               %u\n    Total free count:                     %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\nThe system pool's statistics:\n    totalSystemMemorySize:                %d\n    allocationSpan:                       %d\n    maximumSpan:                          %d\n    allocatedAndInUse:                    %d\n    allocatedAndAvailable:                %d\n    freeFromTop:                          %d\n", self->_size != 0 ?"Raw" :"System", self->_poolIndex,
                                        (unsigned int)self->getLocalAllocated(), (unsigned int)self->getLocalFreed(), (unsigned int)self->getLocalNetAllocated(),
                                        (unsigned int)self->getLocalNetAllocatedHigh(), (unsigned int)self->getLocalAllocatedWithOverhead(),
                                        (unsigned int)self->getLocalFreedWithOverhead(), (unsigned int)self->getLocalNetAllocatedWithOverhead(),
@@ -439,6 +454,8 @@ int igArenaMemoryPool_SystemTrim(igArenaMemoryPoolView *self, unsigned int pad, 
     return 0;
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE76Notice;
+
 bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     int count;
     int cap;
@@ -455,7 +472,7 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     if (count < 0 || (cap = a->blockCapacity) < 0 || count > cap) {
         if (self->_messageLevel >= 3) {
             if (g_igArenaMemoryPool_ignoreE76Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trim_E76_Arena);
+                int r = igReportNotice("igArenaMemoryPool::trim(E76): Arena block list data corrupted.");
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE76Notice = 1;
                 }
@@ -478,6 +495,12 @@ bool igArenaMemoryPool_Trim(igArenaMemoryPoolView *self, int pad) {
     return trimmed;
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE77Notice;
+unsigned char g_igArenaMemoryPool_ignoreE78Notice;
+unsigned char g_igArenaMemoryPool_ignoreE79Notice;
+unsigned char g_igArenaMemoryPool_ignoreE80Notice;
+unsigned char g_igArenaMemoryPool_ignoreE81Notice;
+
 /* Walks one system block of the arena. When every chunk in it is free it unlinks them, moves the top
  * pointer off the block if it was there, and gives the block's pages back to the system. */
 igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index, char *cur, char *end) {
@@ -494,7 +517,7 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE77Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E77_BlockOutOfRange, index, cur, lo, hi);
+                int r = igReportNotice("igArenaMemoryPool::trimArenaBlock(E77): At index %d, block (0x%x) is not in a valid range (0x%x-0x%x).", index, cur, lo, hi);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE77Notice = 1;
                 }
@@ -506,7 +529,7 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE78Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E78_BlockEndOutOfRange, index, end, lo, hi);
+                int r = igReportNotice("igArenaMemoryPool::trimArenaBlock(E78): At index %d, block end (0x%x) is not in a valid range (0x%x-0x%x).", index, end, lo, hi);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE78Notice = 1;
                 }
@@ -518,7 +541,7 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE79Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E79_EndBeforeStart, index, end, cur);
+                int r = igReportNotice("igArenaMemoryPool::trimArenaBlock(E79): At index %d, the end block (0x%x) is less than the start block (0x%x).", index, end, cur);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE79Notice = 1;
                 }
@@ -530,7 +553,7 @@ igResult igArenaMemoryPool_TrimArenaBlock(igArenaMemoryPoolView *self, int index
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE80Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E80_ArenaCorrupted);
+                int r = igReportNotice("igArenaMemoryPool::trimArenaBlock(E80): Arena (0x%x) corrupted.  First block should have had previous in use bit set.");
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE80Notice = 1;
                 }
@@ -589,7 +612,7 @@ bad:
         if (self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE81Notice == 0) {
-                int r = igReportNotice(text_igArenaMemoryPool_trimArenaBlock_E81_InvalidChunkSize, walk, index, count, size, cur, end);
+                int r = igReportNotice("igArenaMemoryPool::trimArenaBlock(E81): The block at 0x%x at block index %d chunk index %d has an invalid chunk size 0x%x.  Arena start is 0x%x, end is 0x%x", walk, index, count, size, cur, end);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE81Notice = 1;
                 }
@@ -605,7 +628,7 @@ reset:
             ArenaState *state = self->_arenaState;
             state->top = &state->bins[1].header;
         }
-        unsigned int pageMask = g_activeSystemAllocator[0]->GetPageSize() - 1;
+        unsigned int pageMask = g_activeSystemAllocator->GetPageSize() - 1;
         cur = (char *)((unsigned int)cur & ~pageMask);
         end = (char *)(~pageMask & (unsigned int)(end + pageMask));
         self->SystemFree(cur, end - cur);
@@ -641,6 +664,10 @@ void igArenaMemoryPool_RemoveFreeChunksInRange(int *status, igArenaMemoryPoolVie
     }
     *status = g_resultSuccess.v;
 }
+
+unsigned char g_arenaNoticeE59Silenced;
+unsigned char g_arenaNoticeE60Silenced;
+unsigned char g_arenaNoticeE67Silenced;
 
 /* dlmalloc's mALLOc: a fast bin or small bin of the exact size, then the unsorted list (binning what
  * does not fit), the request's large bin, the next non-empty bin by the bin map, and last the top
@@ -835,7 +862,7 @@ void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) 
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(bit != 0) && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
                     if (g_arenaNoticeE59Silenced == 0) {
-                        r = igReportNotice(text_igArenaMemoryPool_s, text_E59_CorruptedControlStructure);
+                        r = igReportNotice("igArenaMemoryPool: %s","(E59) Corrupted control structure.");
                         if (r != 1 && r == 2) {
                             g_arenaNoticeE59Silenced = 1;
                         }
@@ -852,7 +879,7 @@ void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) 
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(size >= nb) && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
                     if (g_arenaNoticeE60Silenced == 0) {
-                        r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, victim, text_E60_CorruptedBlockHeader);
+                        r = igReportNotice("igArenaMemoryPool: Invalid or corrupted block at 0x%x - %s", victim,"(E60) Corrupted block header.");
                         if (r != 1 && r == 2) {
                             g_arenaNoticeE60Silenced = 1;
                         }
@@ -897,7 +924,7 @@ void *igArenaMemoryPool_Malloc(igArenaMemoryPoolView *self, unsigned int bytes) 
             if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !IS_ARENA_CHUNK(self, state->top) && self->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_arenaNoticeE67Silenced == 0) {
-                    r = igReportNotice(text_igArenaMemoryPool_s_Possibly_cor, text_igArena_malloc_E67, state->top);
+                    r = igReportNotice("igArenaMemoryPool::%s - Possibly corrupt memory block at: 0x%x","igArena_malloc (E67)", state->top);
                     if (r != 1 && r == 2) {
                         g_arenaNoticeE67Silenced = 1;
                     }
@@ -1103,6 +1130,10 @@ void igArenaMemoryPool_MallocConsolidate(igArenaMemoryPoolView *self) {
     }
 }
 
+unsigned char g_arenaAssertNcopiesSilenced;
+unsigned char g_arenaAssertNewsizeSilenced;
+unsigned char g_arenaNoticeE104Silenced;
+
 /* dlmalloc's rEALLOc, with the header's size taken into account: a request that moves the chunk
  * between the 4-byte and the 12-byte header keeps the larger header when the chunk already has it,
  * and otherwise moves the payload to its new offset. The chunk is resized in place when it is big
@@ -1219,7 +1250,7 @@ void *igArenaMemoryPool_Realloc(igArenaMemoryPoolView *self, char *oldmem, unsig
                         if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(ncopies >= 3) && self->_messageLevel > 0) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_arenaAssertNcopiesSilenced == 0) {
-                                r = igReportNotice(text_ncopies_3);
+                                r = igReportNotice("ncopies >= 3");
                                 if (r != 1 && r == 2) {
                                     g_arenaAssertNcopiesSilenced = 1;
                                 }
@@ -1255,7 +1286,7 @@ void *igArenaMemoryPool_Realloc(igArenaMemoryPoolView *self, char *oldmem, unsig
             if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(newsize >= nb) && self->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_arenaAssertNewsizeSilenced == 0) {
-                    r = igReportNotice(text_igUnsignedInt_newsize_igUnsignedInt_nb);
+                    r = igReportNotice("(igUnsignedInt)(newsize) >= (igUnsignedInt)(nb)");
                     if (r != 1 && r == 2) {
                         g_arenaAssertNewsizeSilenced = 1;
                     }
@@ -1307,11 +1338,11 @@ void *igArenaMemoryPool_Realloc(igArenaMemoryPoolView *self, char *oldmem, unsig
         if (self->HandleOutOfMemory(bytes, 3) == 0) {
             if (hasPoolOption(self->_poolOptionFlags, 0x80)) {
                 SystemMemoryStatistics stats;
-                g_activeSystemAllocator[0]->GetStatistics(&stats);
+                g_activeSystemAllocator->GetStatistics(&stats);
                 if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && self->_messageLevel > 0) {
                     Memory_PrintPoolStatistics(0, self);
                     if (g_arenaNoticeE104Silenced == 0) {
-                        r = igReportNotice(text_igArenaMemoryPool_E104_MemoryExhausted, self->_size != 0 ? text_Raw : text_System, self->_poolIndex,
+                        r = igReportNotice("igArenaMemoryPool(E104): %s memory exhausted.\nThis pool's (index %d) statistics:\n    Total allocated:                      %u\n    Total freed:                          %u\n    Net allocated:                        %u\n    Net allocated high:                   %u\n    Total allocated with overhead:        %u\n    Total freed with overhead:            %u\n    Net allocated with overhead:          %u\n    Net allocated high with overhead:     %u\n    Total allocation count:               %u\n    Total free count:                     %u\n    Net allocation count:                 %u\n    Net allocation count high:            %u\nThe system pool's statistics:\n    totalSystemMemorySize:                %d\n    allocationSpan:                       %d\n    maximumSpan:                          %d\n    allocatedAndInUse:                    %d\n    allocatedAndAvailable:                %d\n    freeFromTop:                          %d\n", self->_size != 0 ?"Raw" :"System", self->_poolIndex,
                                            (unsigned int)self->getLocalAllocated(), (unsigned int)self->getLocalFreed(),
                                            (unsigned int)self->getLocalNetAllocated(), (unsigned int)self->getLocalNetAllocatedHigh(),
                                            (unsigned int)self->getLocalAllocatedWithOverhead(), (unsigned int)self->getLocalFreedWithOverhead(),
@@ -1330,6 +1361,8 @@ void *igArenaMemoryPool_Realloc(igArenaMemoryPoolView *self, char *oldmem, unsig
         }
     }
 }
+
+unsigned char g_igArenaMemoryPool_ignoreE64Notice;
 
 /* dlmalloc's mEMALIGn: allocates with room to spare, then gives back the part before the aligned
  * address and, when it is big enough to stand as a chunk, the part after the request. */
@@ -1419,14 +1452,14 @@ void *igArenaMemoryPool_MallocAligned(igArenaMemoryPoolView *self, unsigned int 
         if (remainderSize != 0) {
             igArenaMemoryPool_FreeChunk(self, chunkMemory(remainder));
         } else {
-            igReport_Printf(text_remainder_was_empty);
+            igReport_Printf("remainder was empty.\n");
             igReport_Flush();
         }
         p = newp;
         if (self->_heapIntegrityCheckLevel > 0 && self->_messageLevel > 0 && !(newsize >= nb && (unsigned int)chunkMemory(p) % alignment == 0) && self->_messageLevel > 0) {
             Memory_PrintPoolStatistics(0, self);
             if (g_igArenaMemoryPool_ignoreE64Notice == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, p, text_E64_Corrupted_block);
+                r = igReportNotice("igArenaMemoryPool: Invalid or corrupted block at 0x%x - %s", p,"(E64) Corrupted block.");
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE64Notice = 1;
                 }
@@ -1459,41 +1492,41 @@ igResult igArenaMemoryPool_Configure(igArenaMemoryPool *pool, igMemoryPoolInfo *
     const char *messages = igMemoryPoolInfo_messages(info);
     if (options) {
         int flags = 0;
-        if (strstr(options, ((char *)text_Fill))) flags |= 2;
-        if (strstr(options, ((char *)text_Zero))) flags |= 4;
-        if (strstr(options, text_Sentinels)) flags |= 1;
-        if (strstr(options, text_Contiguous)) flags |= 0x10;
-        if (strstr(options, ((char *)text_AutoLock))) flags |= 8;
-        if (strstr(options, ((char *)text_SystemMemoryExhausted))) flags |= 0x80;
-        if (strstr(options, text_PreSizeReached)) flags |= 0x40;
-        if (strstr(options, ((char *)text_MaxSizeReached))) flags |= 0x20;
-        if (pool == (igArenaMemoryPool *)((ObjectSystemView **)g_objectSystem)[0]->bootstrapPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
+        if (strstr(options, ((char *)"Fill"))) flags |= 2;
+        if (strstr(options, ((char *)"Zero"))) flags |= 4;
+        if (strstr(options,"Sentinels")) flags |= 1;
+        if (strstr(options,"Contiguous")) flags |= 0x10;
+        if (strstr(options, ((char *)"AutoLock"))) flags |= 8;
+        if (strstr(options, ((char *)"SystemMemoryExhausted"))) flags |= 0x80;
+        if (strstr(options,"PreSizeReached")) flags |= 0x40;
+        if (strstr(options, ((char *)"MaxSizeReached"))) flags |= 0x20;
+        if (pool == (igArenaMemoryPool *)(*(ObjectSystemView * *)&g_objectSystem)->bootstrapPool && (flags & 1) != (pool->_poolOptionFlags & 1)) {
             flags ^= 1;
         }
         igArenaMemoryPool_SetPoolOptionFlags(pool, flags);
     }
     if (integrityCheck) {
         int level = pool->_heapIntegrityCheckLevel;
-        if (strstr(integrityCheck, text_NoChecking)) {
+        if (strstr(integrityCheck,"NoChecking")) {
             level = 0;
-        } else if (strstr(integrityCheck, text_LightChecking)) {
+        } else if (strstr(integrityCheck,"LightChecking")) {
             level = 1;
-        } else if (strstr(integrityCheck, text_ModerateChecking)) {
+        } else if (strstr(integrityCheck,"ModerateChecking")) {
             level = 2;
-        } else if (strstr(integrityCheck, text_HeavyChecking)) {
+        } else if (strstr(integrityCheck,"HeavyChecking")) {
             level = 3;
         }
         pool->_heapIntegrityCheckLevel = level;
     }
     if (messages) {
         int level = pool->_messageLevel;
-        if (strstr(messages, ((char *)text_NoMessages))) {
+        if (strstr(messages, ((char *)"NoMessages"))) {
             level = 0;
-        } else if (strstr(messages, ((char *)text_ErrorMessages))) {
+        } else if (strstr(messages, ((char *)"ErrorMessages"))) {
             level = 1;
-        } else if (strstr(messages, ((char *)text_WarningMessages))) {
+        } else if (strstr(messages, ((char *)"WarningMessages"))) {
             level = 2;
-        } else if (strstr(messages, ((char *)text_Notifications))) {
+        } else if (strstr(messages, ((char *)"Notifications"))) {
             level = 3;
         }
         pool->_messageLevel = level;
@@ -1834,6 +1867,9 @@ void *igArenaMemoryPool_ReallocateAligned(igArenaMemoryPoolView *self, void *blo
     return self->MemoryOperation(block, size, alignment);
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE98Notice;
+unsigned char g_igArenaMemoryPool_ignoreE100Notice;
+
 /* Gang allocation: one system block carries every requested block. The block starts with its own
  * byte count; each member is a GangRecord followed by a tagged header and the payload. */
 igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, unsigned int *sizes, void **blocks) {
@@ -1932,7 +1968,7 @@ igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, uns
                         if ((unsigned)(total + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE98Notice == 0) {
-                                int r = igReportNotice((const char *)text_igArenaMemoryPool_E98_MaximumSizeReached, (unsigned)self->_maxSize, (int)self->_localNetAllocated);
+                                int r = igReportNotice((const char *)"igArenaMemoryPool(E98): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (unsigned)self->_maxSize, (int)self->_localNetAllocated);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE98Notice = 1;
                                 }
@@ -1941,7 +1977,7 @@ igResult igArenaMemoryPool_GangAlloc(igArenaMemoryPoolView *self, int count, uns
                     }
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE100Notice == 0) {
-                int r = igReportNotice((const char *)text_igMallocMemoryPool_E100_RequestRefused, self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
+                int r = igReportNotice((const char *)"igMallocMemoryPool[%d](E100) - refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->_poolIndex, sizes, (int)self->_localNetAllocated, (int)self->_maxSize);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE100Notice = 1;
                 }
@@ -1980,6 +2016,10 @@ void Gap__Core__igArenaMemoryPool__freeSized(igArenaMemoryPoolView *self, unsign
     self->Free((char *)((int)q - 4) - 4);
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE82Notice;
+unsigned char g_igArenaMemoryPool_ignoreE99Notice;
+unsigned char g_igArenaMemoryPool_ignoreE83Notice;
+
 /* Allocates a block straight from the system allocator on the pool's behalf. The block always takes
  * the 12-byte header, with `extraMarked` set to tell it from an arena chunk. */
 int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) {
@@ -1995,7 +2035,7 @@ int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) 
         if ((unsigned)(size + (int)self->_localNetAllocated) <= self->_maxSize) {
             TaggedBlockHeader *h;
             unsigned total = size + guard;
-            h = (TaggedBlockHeader *)g_activeSystemAllocator[0]->Allocate(guard + (size + 12));
+            h = (TaggedBlockHeader *)g_activeSystemAllocator->Allocate(guard + (size + 12));
             if (h != 0) {
                 initBlockHeader(self, h, total, 0, false, true);
                 if (self->_size == 0 && self->_updateStatistics != 0) {
@@ -2014,7 +2054,7 @@ int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) 
                     *(unsigned *)((char *)h + signedChunkBytes(h) - 4) = 0xBBBBBBBF;
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE82Notice == 0) {
-                int r = igReportNotice((const char *)text_igArenaMemoryPool_E82_MallocFailed, self->_poolIndex, size);
+                int r = igReportNotice((const char *)"igArenaMemoryPool[%d](E82) - malloc failed on request of %d bytes\n", self->_poolIndex, size);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE82Notice = 1;
                 }
@@ -2028,7 +2068,7 @@ int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) 
                         if ((unsigned)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel > 0) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE99Notice == 0) {
-                                int r = igReportNotice((const char *)text_igArenaMemoryPool_E99_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                                int r = igReportNotice((const char *)"igArenaMemoryPool(E99): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (int)self->_maxSize, (int)self->_localNetAllocated);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE99Notice = 1;
                                 }
@@ -2037,7 +2077,7 @@ int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) 
                     }
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE83Notice == 0) {
-                int r = igReportNotice((const char *)text_igMallocMemoryPool_E83_RequestRefused, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+                int r = igReportNotice((const char *)"igMallocMemoryPool[%d](E83) - refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE83Notice = 1;
                 }
@@ -2048,15 +2088,19 @@ int igArenaMemoryPool_AllocateFromSystem(igArenaMemoryPoolView *self, int size) 
     return igArenaMemoryPool_UnlockAndReturn(self, (int)result);
 }
 
+unsigned char g_igArenaMemoryPool_ignoreStateAllocError;
+unsigned char g_igArenaMemoryPool_ignoreBlockListAllocError;
+int g_igArenaMemoryPool_liveCount;
+
 void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     int v;
     igMemoryPool_SetDefaults(self);
     self->_refCount = 0;
     ((igRefCountWord *)&self->_refCount)->bits.count = 1;
     ((char *)self)[7] = 0;
-    self->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
+    self->_arenaState = (ArenaState *)g_activeSystemAllocator->Allocate(0x814);
     if (self->_arenaState == 0 && g_igArenaMemoryPool_ignoreStateAllocError == 0) {
-        v = igReportError(text_Unable_to_allocate_memory_for_ar);
+        v = igReportError("Unable to allocate memory for arena state.");
         if (v != 1) {
             if (v == 2)
                 g_igArenaMemoryPool_ignoreStateAllocError = 1;
@@ -2074,19 +2118,19 @@ void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     releaseRefObject(self->_eventTracker);
     self->_eventTracker = 0;
     self->_isActive = 0;
-    g_igArenaMemoryPool_liveCount[0] = g_igArenaMemoryPool_liveCount[0] + 1;
+    g_igArenaMemoryPool_liveCount = g_igArenaMemoryPool_liveCount + 1;
     releaseRefObject(self->_allocationLock);
     self->_allocationLock = 0;
     self->_poolIndex = 0;
     self->_heapIntegrityCheckLevel = 0;
     self->_messageLevel = 1;
-    self->_poolOptionFlags = g_igArenaMemoryPool_defaultPoolOptionFlags[0] & ~8;
+    self->_poolOptionFlags = g_igArenaMemoryPool_defaultPoolOptionFlags & ~8;
     self->_poolPreSized = 0;
     self->_smallestChunkSize = 16;
     if (self->_arenaState->blocks == 0) {
-        self->_arenaState->blocks = (int *)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
+        self->_arenaState->blocks = (int *)g_activeSystemAllocator->AllocateAligned(0x200, 4);
         if (self->_arenaState->blocks == 0 && g_igArenaMemoryPool_ignoreBlockListAllocError == 0) {
-            v = igReportError(text_Unable_to_allocate_memory_for_ar);
+            v = igReportError("Unable to allocate memory for arena state.");
             if (v != 1) {
                 if (v == 2)
                     g_igArenaMemoryPool_ignoreBlockListAllocError = 1;
@@ -2100,8 +2144,14 @@ void igArenaMemoryPool_SetDefaults(igArenaMemoryPoolView *self) {
     }
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE84Notice;
+unsigned char g_igArenaMemoryPool_ignoreE85Notice;
+unsigned char g_igArenaMemoryPool_ignoreE115Notice;
+unsigned int g_igArenaMemoryPool_shutdownNetAllocated;
+unsigned int g_igArenaMemoryPool_shutdownNetAllocatedWithOverhead;
+
 void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
-    int *name;
+    const char *name;
     int r;
     ArenaState *state;
     int *blocks;
@@ -2110,23 +2160,23 @@ void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
         igArenaMemoryPool_MallocConsolidate(self);
     }
     if ((int)self->_localNetAllocated != 0) {
-        name = ((int *)Memory_GetPoolName((int)self));
+        name = ((const char *)Memory_GetPoolName((int)self));
         self->CheckHeapLocked();
         if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE84Notice == 0)) {
             long long netAllocated = self->_localNetAllocated;
-            name = name ? name : &emptyString_4[0];
-            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E84, name, self->_poolIndex, (int)netAllocated);
+            name = name ? name : "";
+            r = igReportNotice("igArenaMemoryPool[%s index %d](E84) being reset with outstanding memory blocks of %d bytes.\n", name, self->_poolIndex, (int)netAllocated);
             if ((r != 1) && (r == 2)) {
                 g_igArenaMemoryPool_ignoreE84Notice = 1;
             }
         }
         self->DisplayOutstandingAllocations();
     } else if (self->_localNetAllocationCount != 0) {
-        name = ((int *)Memory_GetPoolName((int)self));
+        name = ((const char *)Memory_GetPoolName((int)self));
         if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE85Notice == 0)) {
             long long netAllocationCount = self->_localNetAllocationCount;
-            name = name ? name : &emptyString_4[0];
-            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E85, name, self->_poolIndex, (int)netAllocationCount);
+            name = name ? name : "";
+            r = igReportNotice("igArenaMemoryPool[%s index %d](E85) being reset with %d outstanding allocations.\n", name, self->_poolIndex, (int)netAllocationCount);
             if ((r != 1) && (r == 2)) {
                 g_igArenaMemoryPool_ignoreE85Notice = 1;
             }
@@ -2135,17 +2185,17 @@ void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
     }
     int t = (self->_poolOptionFlags & 0x200) != 0;
     if (!t && igArenaMemoryPool_GetArenaHighCount(self) > 1U) {
-        name = ((int *)Memory_GetPoolName((int)self));
+        name = ((const char *)Memory_GetPoolName((int)self));
         if ((self->_messageLevel >= 3) && (g_igArenaMemoryPool_ignoreE115Notice == 0)) {
-            name = name ? name : &emptyString_4[0];
-            r = igReportNotice(text_igArenaMemoryPool_s_index_d_E115, name, self->_poolIndex, igArenaMemoryPool_GetArenaHighCount(self));
+            name = name ? name : "";
+            r = igReportNotice("igArenaMemoryPool[%s index %d](E115) used a high of %d arenas.  This might mean system memory is fragmenting.\n", name, self->_poolIndex, igArenaMemoryPool_GetArenaHighCount(self));
             if ((r != 1) && (r == 2)) {
                 g_igArenaMemoryPool_ignoreE115Notice = 1;
             }
         }
     }
-    g_igArenaMemoryPool_shutdownNetAllocated[0] += (int)self->_localNetAllocated;
-    g_igArenaMemoryPool_shutdownNetAllocatedWithOverhead[0] += (int)self->_localNetAllocatedWithOverhead;
+    g_igArenaMemoryPool_shutdownNetAllocated += (int)self->_localNetAllocated;
+    g_igArenaMemoryPool_shutdownNetAllocatedWithOverhead += (int)self->_localNetAllocatedWithOverhead;
     if (self->_size == 0) {
         self->Trim(0);
     }
@@ -2153,16 +2203,16 @@ void igArenaMemoryPool_Shutdown(igArenaMemoryPoolView *self) {
     if (state != 0) {
         blocks = state->blocks;
         if (blocks != 0) {
-            g_activeSystemAllocator[0]->Free(blocks);
+            g_activeSystemAllocator->Free(blocks);
             self->_arenaState->blockCapacity = 0;
             self->_arenaState->blockCount = 0;
             self->_arenaState->maxBlockPairs = 0;
         }
-        g_activeSystemAllocator[0]->Free((void *)self->_arenaState);
+        g_activeSystemAllocator->Free((void *)self->_arenaState);
         self->_arenaState = 0;
     }
     self->_arenaState = 0;
-    g_igArenaMemoryPool_liveCount[0] -= 1;
+    g_igArenaMemoryPool_liveCount -= 1;
 }
 
 void *igArenaMemoryPool_Initialize(igArenaMemoryPool *self) {
@@ -2270,6 +2320,8 @@ int igArenaMemoryPool_GetAllocationSize(int self, unsigned char *p) {
     return h->size + (h->sizeHigh << 19);
 }
 
+unsigned char g_igArenaMemoryPool_ignoreE111Notice;
+
 void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
     int r;
     if ((f & 1) != (p->_poolOptionFlags & 1)) {
@@ -2277,7 +2329,7 @@ void igArenaMemoryPool_SetPoolOptionFlags(igArenaMemoryPool *p, int f) {
             if (p->_messageLevel > 0) {
                 Memory_PrintPoolStatistics(0, p);
                 if (g_igArenaMemoryPool_ignoreE111Notice == 0) {
-                    r = igReportNotice(text_igArenaMemoryPool_setPoolOptionFlags_E111);
+                    r = igReportNotice("igArenaMemoryPool::setPoolOptionFlags(E111): You are not allowed to change the kSentinels flag on an activated pool.");
                     if (r != 1) { if (r == 2) { g_igArenaMemoryPool_ignoreE111Notice = 1; } }
                 }
             }
@@ -2391,14 +2443,16 @@ int igArenaMemoryPool_GetAllocationPoolIndex(int self, unsigned char *p) {
     return v * 2;
 }
 
+unsigned char g_igArenaMemoryPool_ignoreFieldsBlockListAllocError;
+
 void Gap__Core__igArenaMemoryPool__constructFields(igArenaMemoryPoolView *self, int flags) {
     int t;
-    self->_arenaState = (ArenaState *)g_activeSystemAllocator[0]->Allocate(0x814);
+    self->_arenaState = (ArenaState *)g_activeSystemAllocator->Allocate(0x814);
     memset(self->_arenaState, 0, 0x814);
     if (self->_arenaState->blocks == 0) {
-        self->_arenaState->blocks = (int *)g_activeSystemAllocator[0]->AllocateAligned(0x200, 4);
+        self->_arenaState->blocks = (int *)g_activeSystemAllocator->AllocateAligned(0x200, 4);
         if (self->_arenaState->blocks == 0 && g_igArenaMemoryPool_ignoreFieldsBlockListAllocError == 0) {
-            t = igReportError(text_Unable_to_allocate_memory_for_ar);
+            t = igReportError("Unable to allocate memory for arena state.");
             if (t != 1 && t == 2) {
                 g_igArenaMemoryPool_ignoreFieldsBlockListAllocError = 1;
             }
@@ -2409,7 +2463,7 @@ void Gap__Core__igArenaMemoryPool__constructFields(igArenaMemoryPoolView *self, 
         self->_arenaState->lowestAddress = -1;
         self->_arenaState->highestAddress = 0;
     }
-    g_igArenaMemoryPool_liveCount[0] += 1;
+    g_igArenaMemoryPool_liveCount += 1;
     Gap__Core__igObject__constructFields((int)self, flags);
 }
 
@@ -2420,8 +2474,26 @@ void Gap__Core__igArenaMemoryPool__destructFields(igArenaMemoryPool *self) {
 
 void Gap__Core__igArenaMemoryPool__resetFields(igArenaMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    self->_poolOptionFlags = (int) g_igArenaMemoryPool_defaultPoolOptionFlags[0];
+    self->_poolOptionFlags = (int) g_igArenaMemoryPool_defaultPoolOptionFlags;
 }
+
+unsigned char g_igArenaMemoryPool_ignoreE110Notice;
+unsigned char g_igArenaMemoryPool_ignoreE88Notice;
+unsigned char g_igArenaMemoryPool_ignoreE89Notice;
+unsigned char g_igArenaMemoryPool_ignoreE107Notice;
+unsigned char g_igArenaMemoryPool_ignoreE108Notice;
+unsigned char g_igArenaMemoryPool_ignoreE112Notice;
+unsigned char g_igArenaMemoryPool_ignoreGangDoubleFreeNotice;
+unsigned char g_igArenaMemoryPool_ignoreE90Notice;
+unsigned char g_igArenaMemoryPool_ignoreE101Notice;
+unsigned char g_igArenaMemoryPool_ignoreE91Notice;
+unsigned char g_igArenaMemoryPool_ignoreE92Notice;
+unsigned char g_igArenaMemoryPool_ignoreE109Notice;
+unsigned char g_igArenaMemoryPool_ignoreE113Notice;
+unsigned char g_igArenaMemoryPool_ignoreE65Notice;
+unsigned char g_igArenaMemoryPool_ignoreE94Notice;
+
+int g_arenaTriggerCheck = 0x30f040;
 
 /* The arena pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the block is
  * (re)allocated from the arena, with the out-of-memory hook given a chance to make room before the
@@ -2454,10 +2526,10 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
     headBytes = 0;
     h = 0;
     moved = false;
-    g_arenaOperationOrdinal[0]++;
+    g_arenaOperationOrdinal++;
     if (hasPoolOption(self->_poolOptionFlags, 0x100)) {
         if (self->_messageLevel >= 2 && g_igArenaMemoryPool_ignoreE110Notice == 0) {
-            r = igReportNotice(text_igArenaMemoryPool_E110_AssertOnMemoryOperation, (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+            r = igReportNotice("igArenaMemoryPool(E110): Assert-on-memory-operation is in effect and %s was requested.", (size == -1 && block == 0) ?"a deallocation" :"an allocation");
             if (r != 1 && r == 2) {
                 g_igArenaMemoryPool_ignoreE110Notice = 1;
             }
@@ -2493,7 +2565,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE88Notice == 0) {
-                                r = igReportNotice(text_igArenaMemoryPool_free_E88_BadTailSentinel, (unsigned)block + 8u, 0xBBBBBBBF, *tail);
+                                r = igReportNotice("igArenaMemoryPool::free(E88): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", (unsigned)block + 8u, 0xBBBBBBBF, *tail);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE88Notice = 1;
                                 }
@@ -2502,7 +2574,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     } else if (self->_messageLevel >= 1) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_igArenaMemoryPool_ignoreE89Notice == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_free_E89_BadHeadSentinel, block, 0xAAAAAAAF, ((unsigned *)block)[-1]);
+                            r = igReportNotice("igArenaMemoryPool::free(E89): Bad head sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block, 0xAAAAAAAF, ((unsigned *)block)[-1]);
                             if (r != 1 && r == 2) {
                                 g_igArenaMemoryPool_ignoreE89Notice = 1;
                             }
@@ -2514,7 +2586,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (self->_messageLevel >= 1) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE107Notice == 0) {
-                                r = igReportNotice(text_igArenaMemoryPool_free_E107_BadHeadSentinelOffset, (unsigned)block + 8u, oldHeadBytes);
+                                r = igReportNotice("igArenaMemoryPool::free(E107): Bad head sentinel off.  Offset 0x%x.", (unsigned)block + 8u, oldHeadBytes);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE107Notice = 1;
                                 }
@@ -2530,7 +2602,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_igArenaMemoryPool_ignoreE108Notice == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_free_E108_BadTailSentinel, (unsigned)block + 8u, 0xBBBBBBBF, *tail);
+                            r = igReportNotice("igArenaMemoryPool::free(E108): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", (unsigned)block + 8u, 0xBBBBBBBF, *tail);
                             if (r != 1 && r == 2) {
                                 g_igArenaMemoryPool_ignoreE108Notice = 1;
                             }
@@ -2546,13 +2618,13 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             if (h != 0) {
                 oldSize = payloadSize(h) - oldSentinelBytes;
                 oldBytes = chunkBytes(h);
-                if (g_arenaTriggerCheck[0] != 0) {
+                if (g_arenaTriggerCheck != 0) {
                     igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 2, (int)block, oldSize);
                 }
                 if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
                     Memory_PrintPoolStatistics(0, self);
                     if (g_igArenaMemoryPool_ignoreE112Notice == 0) {
-                        r = igReportNotice(text_igArenaMemoryPool_free_E112_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                        r = igReportNotice("igArenaMemoryPool::free(E112): Attempt to free user block 0x%08x from pool[%d] with pool[%d].", block, chunkPoolIndex(h), self->_poolIndex);
                         if (r != 1 && r == 2) {
                             g_igArenaMemoryPool_ignoreE112Notice = 1;
                         }
@@ -2562,7 +2634,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     memset(block, 0xFD, oldBytes - (h->big == 0 ? 4 : 12));
                 }
                 if (chunkIsExternal(h)) {
-                    g_activeSystemAllocator[0]->Free(h);
+                    g_activeSystemAllocator->Free(h);
                     if (self->_size == 0) {
                         if (self->_updateStatistics) {
                             self->UpdateStatistics(oldSize, oldBytes, 0);
@@ -2576,7 +2648,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         first = (GangRecord *)((char *)record - offset);
                     }
                     if (first->count == 0 && self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreGangDoubleFreeNotice == 0) {
-                        r = igReportNotice(text_free_call_on_gang_alloced_memory, block);
+                        r = igReportNotice("free() call on gang alloced memory that was already free (0x%08x)", block);
                         if (r != 1 && r == 2) {
                             g_igArenaMemoryPool_ignoreGangDoubleFreeNotice = 1;
                         }
@@ -2597,7 +2669,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     igArenaMemoryPool_FreeChunk(self, block);
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE90Notice == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_free_E90_InvalidBlock, self->_poolIndex, block);
+                r = igReportNotice("igArenaMemoryPool::free(E90) - Invalid memory block 0x%x.\n", self->_poolIndex, block);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE90Notice = 1;
                 }
@@ -2605,7 +2677,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             break;
         }
         if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize) {
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             if (self->HandleOutOfMemory(size, 1) != 0) {
@@ -2617,7 +2689,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if ((unsigned int)(size + (int)self->_localNetAllocated) > self->_maxSize && self->_messageLevel >= 1) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE101Notice == 0) {
-                                r = igReportNotice(text_igArenaMemoryPool_E101_MaximumSizeReached, (int)self->_maxSize, (int)self->_localNetAllocated);
+                                r = igReportNotice("igArenaMemoryPool(E101): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (int)self->_maxSize, (int)self->_localNetAllocated);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE101Notice = 1;
                                 }
@@ -2626,7 +2698,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     }
                 }
             } else if (self->_messageLevel >= 3 && g_igArenaMemoryPool_ignoreE91Notice == 0) {
-                r = igReportNotice(text_igArenaMemoryPool_memoryOperation_E91, self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
+                r = igReportNotice("igArenaMemoryPool::memoryOperation[%d](E91) - Operation refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->_poolIndex, size, (int)self->_localNetAllocated, (int)self->_maxSize);
                 if (r != 1 && r == 2) {
                     g_igArenaMemoryPool_ignoreE91Notice = 1;
                 }
@@ -2646,7 +2718,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     if (*tail != 0xBBBBBBBF && self->_messageLevel >= 1) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_igArenaMemoryPool_ignoreE92Notice == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_realloc_E92_BadTailSentinel, block + oldHeadBytes, 0xBBBBBBBF, *tail);
+                            r = igReportNotice("igArenaMemoryPool::realloc(E92): Bad tail sentinel.  Address 0x%x, expected 0x%x, got 0x%x.", block + oldHeadBytes, 0xBBBBBBBF, *tail);
                             if (r != 1 && r == 2) {
                                 g_igArenaMemoryPool_ignoreE92Notice = 1;
                             }
@@ -2658,7 +2730,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (self->_messageLevel >= 1) {
                             Memory_PrintPoolStatistics(0, self);
                             if (g_igArenaMemoryPool_ignoreE109Notice == 0) {
-                                r = igReportNotice(text_igArenaMemoryPool_realloc_E109_InvalidHeader, block);
+                                r = igReportNotice("igArenaMemoryPool::realloc(E109): Invalid memory block header.  Address 0x%x.", block);
                                 if (r != 1 && r == 2) {
                                     g_igArenaMemoryPool_ignoreE109Notice = 1;
                                 }
@@ -2674,7 +2746,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             if (self->_poolIndex != chunkPoolIndex(h) && self->_messageLevel >= 1) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_igArenaMemoryPool_ignoreE113Notice == 0) {
-                    r = igReportNotice(text_igArenaMemoryPool_free_E113_WrongPool, block, chunkPoolIndex(h), self->_poolIndex);
+                    r = igReportNotice("igArenaMemoryPool::free(E113): Attempt to free user block 0x%08x from pool[%d] with pool[%d].", block, chunkPoolIndex(h), self->_poolIndex);
                     if (r != 1 && r == 2) {
                         g_igArenaMemoryPool_ignoreE113Notice = 1;
                     }
@@ -2682,7 +2754,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
             }
             oldSize = payloadSize(h) - oldSentinelBytes;
             oldBytes = chunkBytes(h);
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)block, oldSize);
             }
             if ((alignment <= 8u || oldSize >= size) && oldSentinelBytes == sentinelBytes && (unsigned)block % alignment == 0) {
@@ -2691,23 +2763,23 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                 fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
                 moved = true;
             }
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 4, (int)fresh, size);
             }
         } else if (alignment > 8u) {
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             fresh = (char *)igArenaMemoryPool_MallocAligned(self, alignment, total);
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         } else {
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, 0, size);
             }
             fresh = (char *)igArenaMemoryPool_Malloc(self, total);
-            if (g_arenaTriggerCheck[0] != 0) {
+            if (g_arenaTriggerCheck != 0) {
                 igArenaMemoryPool_CheckTriggerEvent((igArenaMemoryPool *)self, 1, (int)fresh, size);
             }
         }
@@ -2719,7 +2791,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                     if (total != payloadSize(newHeader) && self->_messageLevel >= 1) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_igArenaMemoryPool_ignoreE65Notice == 0) {
-                            r = igReportNotice(text_igArenaMemoryPool_Invalid_or_cor_2, newHeader, text_E65_UnexpectedBlockSize);
+                            r = igReportNotice("igArenaMemoryPool: Invalid or corrupted block at 0x%x - %s", newHeader,"(E65) Software error - unexpected block size.");
                             if (r != 1 && r == 2) {
                                 g_igArenaMemoryPool_ignoreE65Notice = 1;
                             }
@@ -2737,7 +2809,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
                         if (self->_size == 0 && self->_updateStatistics) {
                             self->UpdateStatistics(oldSize, oldBytes, 0);
                         }
-                        g_activeSystemAllocator[0]->Free(h);
+                        g_activeSystemAllocator->Free(h);
                     } else {
                         if (self->_updateStatistics) {
                             self->UpdateStatistics(oldSize, oldBytes, 0);
@@ -2761,7 +2833,7 @@ void *igArenaMemoryPool_MemoryOperation(igArenaMemoryPoolView *self, char *block
         } else {
             if (self->_messageLevel >= 3) {
                 if (g_igArenaMemoryPool_ignoreE94Notice == 0) {
-                    r = igReportNotice(text_igArenaMemoryPool_memoryOperation_E94, self->_poolIndex, size);
+                    r = igReportNotice("igArenaMemoryPool::memoryOperation[%d](E94) - Operation failed on request of %d bytes\n", self->_poolIndex, size);
                     if (r != 1 && r == 2) {
                         g_igArenaMemoryPool_ignoreE94Notice = 1;
                     }
@@ -2790,7 +2862,7 @@ unsigned int igArenaMemoryPool_SystemAllocate(igArenaMemoryPool *self, int addre
     if (self->_size != 0) {
         return -1U;
     }
-    block = g_activeSystemAllocator[0]->AllocateRange(address, size);
+    block = g_activeSystemAllocator->AllocateRange(address, size);
     if (block != -1U) {
         self->_systemAllocated = self->_systemAllocated + size;
         /* matching construct: hand — the address bounds are stored as ints through an untyped state pointer;
@@ -2821,12 +2893,12 @@ igResult igArenaMemoryPool_SystemFree(void *self, int address, long long size) {
     } else {
         pool->_systemAllocated = 0;
     }
-    return g_activeSystemAllocator[0]->FreeRange(address, size);
+    return g_activeSystemAllocator->FreeRange(address, size);
 }
 
 void igArenaMemoryPool_GetStackSize(igArenaMemoryPoolView *self)
 {
-    g_activeSystemAllocator[0]->GetStackSize();
+    g_activeSystemAllocator->GetStackSize();
 }
 
 void Gap__Core__igArenaMemoryPool__vfunc_108(void) {

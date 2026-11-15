@@ -1,21 +1,31 @@
 int FUN_001a90f0(int arg0) {
     FUN_001a9290();
-    return igMetaObject_CreateInstance(*(int *)0x562370, arg0);
+    return igMetaObject_CreateInstance((int)g_igAnimation_metaObject, arg0);
 }
 
+igMetaObject *g_igAnimation_metaObject;
+igMetaField *g_igAnimation_priorityMetaField;
+igMetaField *g_igAnimation_bindingListMetaField;
+igMetaField *g_igAnimation_trackListMetaField;
+igMetaField *g_igAnimation_transitionListMetaField;
+igMetaField *g_igAnimation_keyFrameTimeOffsetMetaField;
+igMetaField *g_igAnimation_startTimeMetaField;
+igMetaField *g_igAnimation_durationMetaField;
+igMetaField *g_igAnimation_useAnimationTransBoolArrayMetaField;
+
 igMetaObject *FUN_001a9130(void) {
-    if (g_igAnimation_metaObject[0] == 0) {
-        g_igAnimation_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igAnimation_metaObject == 0) {
+        g_igAnimation_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igAnimation_metaObject[0];
+    return g_igAnimation_metaObject;
 }
 
 igMetaObject *igAnimation_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimation_metaObject[0];
+    igMetaObject *g = g_igAnimation_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a9290();
-    return g_igAnimation_metaObject[0];
+    return g_igAnimation_metaObject;
 }
 
 int igAnimation_GetVTable(void) {
@@ -49,15 +59,17 @@ void FUN_001a9290(void)
     igMetaObject_RunStaticInit(igAnimation_Register);
 }
 
+static igMetaObjectCallback g_igAnimation_callbackList[] = { FUN_001a8ba0, FUN_001a9e70, FUN_001a9500, FUN_001a4e70, 0 };
+
 void igAnimation_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimation_metaObject),
+        &g_igAnimation_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igAnimation_GetMetaObject,
-        igAnimation_className,
+        "igAnimation",
         0x40, /* instance size */
         igAnimation_GetVTable,
         &igAnimation_InitFields,
@@ -70,6 +82,47 @@ void thunk_igAnimation_GetMetaObject(void) {
     igAnimation_GetMetaObject();
 }
 
+static FieldFactory g_igAnimation_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igAnimation_fieldTable[] = {
+    "_priority",
+    "_bindingList",
+    "_trackList",
+    "_transitionList",
+    "_keyFrameTimeOffset",
+    "_startTime",
+    "_duration",
+    "_useAnimationTransBoolArray",
+};
+static igMetaField **g_igAnimation_fieldHandles[] = {
+    &g_igAnimation_priorityMetaField,
+    &g_igAnimation_bindingListMetaField,
+    &g_igAnimation_trackListMetaField,
+    &g_igAnimation_transitionListMetaField,
+    &g_igAnimation_keyFrameTimeOffsetMetaField,
+    &g_igAnimation_startTimeMetaField,
+    &g_igAnimation_durationMetaField,
+    &g_igAnimation_useAnimationTransBoolArrayMetaField,
+};
+static int g_igAnimation_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    32,
+    40,
+    48,
+    56,
+};
+
 void igAnimation_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -78,9 +131,9 @@ void igAnimation_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igAnimation_metaObject[0];
+    temp_s1 = (void *)g_igAnimation_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igAnimation_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igAnimation_ctorTable, 8);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a8ac0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -92,6 +145,6 @@ void igAnimation_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a4d90();
-    igMetaObject_NameFields(temp_s1, &g_igAnimation_fieldTable[0], &DAT_0048d550[0], &DAT_0048d570[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAnimation_fieldTable, g_igAnimation_fieldHandles, g_igAnimation_fieldOffsets, temp_s0);
 }
 

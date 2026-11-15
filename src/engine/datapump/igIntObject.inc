@@ -1,9 +1,12 @@
+igMetaObject *g_igIntObject_metaObject;
+igMetaField *g_igIntObject_valueMetaField;
+
 igMetaObject *igIntObject_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIntObject_metaObject[0];
+    igMetaObject *g = g_igIntObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001e4ec0();
-    return g_igIntObject_metaObject[0];
+    return g_igIntObject_metaObject;
 }
 
 int igIntObject_GetVTable(void) {
@@ -22,11 +25,11 @@ void igIntObject_Register(void) {
     DataPumpLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igIntObject_metaObject,
+        &g_igIntObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igIntObject_GetMetaObject,
-        igIntObject_className,
+        "igIntObject",
         0xC, /* instance size */
         igIntObject_GetVTable,
         &igIntObject_InitFields,
@@ -39,13 +42,26 @@ void thunk_igIntObject_GetMetaObject(void) {
     igIntObject_GetMetaObject();
 }
 
-void igIntObject_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+static FieldFactory g_igIntObject_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_igIntObject_fieldTable[] = {
+    text_value,
+};
+static igMetaField **g_igIntObject_fieldHandles[] = {
+    &g_igIntObject_valueMetaField,
+};
+static int g_igIntObject_fieldOffsets[] = {
+    8,
+};
 
-    temp_s0 = (void *)g_igIntObject_metaObject[0];
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igIntObject_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_igIntObject_fieldTable[0], &DAT_0048db50[0], &DAT_0048db58[0], temp_s1);
+void igIntObject_InitFields(void) {
+    int firstField;
+    igMetaObject *meta;
+
+    meta = g_igIntObject_metaObject;
+    firstField = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igIntObject_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igIntObject_fieldTable, g_igIntObject_fieldHandles, g_igIntObject_fieldOffsets, firstField);
 }
 

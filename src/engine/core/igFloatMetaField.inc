@@ -1,14 +1,17 @@
+igMetaObject *g_igFloatMetaField_metaObject;
+void *g_igFloatMetaField_descriptor;
+
 void igFloatMetaField_Create(int allocator) {
     igFloatMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586378), (igMemoryPoolView *)allocator);
+    igMetaObject_CreateInstance(g_igFloatMetaField_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igFloatMetaField_GetMetaObject(void)
 {
-    igMetaObject *g = g_igFloatMetaField_metaObject[0];
+    igMetaObject *g = g_igFloatMetaField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igFloatMetaField_EnsureRegistered();
-    return g_igFloatMetaField_metaObject[0];
+    return g_igFloatMetaField_metaObject;
 }
 
 int igFloatMetaField_GetVTable(void) {
@@ -20,7 +23,7 @@ int igFloatMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&o);
     o._vtable = (int)&g_igFloatMetaField_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    r = *(int *)((char *)&o + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     o._vtable = (int)&g_igMetaField_vtable[0];
     if (&o._fieldName != 0) {
         text = (char *)o._fieldName;
@@ -41,20 +44,22 @@ void igFloatMetaField_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igFloatMetaField_Register);
 }
 
+static igMetaObjectCallback g_igFloatMetaField_callbackList[] = { igFloatMetaField_CreateDefaultDescriptor, 0 };
+
 void igFloatMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igFloatMetaField_metaObject,
+        &g_igFloatMetaField_metaObject,
         (igMetaObjectRegisterFunction)igMetaField_Register,
         (igMetaObjectGetFunction)igMetaField_GetPublishedMetaObject,
         igFloatMetaField_GetMetaObjectFunction,
-        igFloatMetaField_className,
+        "igFloatMetaField",
         0x34,
         igFloatMetaField_GetVTable,
         0,
         0,
-        (igMetaObjectCallback *)g_igFloatMetaField_callbackList
+        g_igFloatMetaField_callbackList
     );
 }
 
@@ -62,31 +67,32 @@ void igFloatMetaField_GetMetaObjectFunction(void) {
     igFloatMetaField_GetMetaObject();
 }
 
+
 void igFloatMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;
 
-    if (g_igFloatMetaField_descriptor[0] == 0) {
-        g_igFloatMetaField_descriptor[0] = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject[0], (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
-        descriptor = (void *)(g_igFloatMetaField_descriptor[0]);
+    if (g_igFloatMetaField_descriptor == 0) {
+        g_igFloatMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatMetaField_metaObject, (igMemoryPoolView *)(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))))));
+        descriptor = (void *)(g_igFloatMetaField_descriptor);
         if (descriptor != 0) {
             MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
             {
-                igObject *held = (igObject *)g_igFloatMetaField_descriptor[0];
+                igObject *held = (igObject *)g_igFloatMetaField_descriptor;
                 held->_refCount = (int)held->_refCount - 1;
                 if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            ((igMetaField *)g_igFloatMetaField_descriptor[0])->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igFloatMetaField_descriptor[0]);
+            ((igMetaField *)g_igFloatMetaField_descriptor)->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
+            igMetaField_FinalizeDescriptor((igMetaField *)g_igFloatMetaField_descriptor);
         }
     }
 }
 
 int igFloatMetaField_GetDefaultDescriptor(void) {
-    if (((int *)g_igFloatMetaField_descriptor)[0] == 0) {
+    if ((*(int *)&g_igFloatMetaField_descriptor) == 0) {
         igFloatMetaField_EnsureRegistered();
     }
-    return ((int *)g_igFloatMetaField_descriptor)[0];
+    return (*(int *)&g_igFloatMetaField_descriptor);
 }
 

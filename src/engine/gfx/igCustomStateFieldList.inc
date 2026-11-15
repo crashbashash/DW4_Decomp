@@ -1,21 +1,23 @@
+igMetaObject *g_igCustomStateFieldList_metaObject;
+
 int FUN_0014e930(int arg0) {
     FUN_0014ea50();
-    return igMetaObject_CreateInstance(*(int *)0x55FE48, arg0);
+    return igMetaObject_CreateInstance(g_igCustomStateFieldList_metaObject, arg0);
 }
 
 igMetaObject *FUN_0014e970(void) {
-    if (g_igCustomStateFieldList_metaObject[0] == 0) {
-        g_igCustomStateFieldList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCustomStateFieldList_metaObject == 0) {
+        g_igCustomStateFieldList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCustomStateFieldList_metaObject[0];
+    return g_igCustomStateFieldList_metaObject;
 }
 
 igMetaObject *igCustomStateFieldList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCustomStateFieldList_metaObject[0];
+    igMetaObject *g = g_igCustomStateFieldList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ea50();
-    return g_igCustomStateFieldList_metaObject[0];
+    return g_igCustomStateFieldList_metaObject;
 }
 
 int igCustomStateFieldList_GetVTable(void) {
@@ -31,15 +33,17 @@ void FUN_0014ea50(void)
     igMetaObject_RunStaticInit(igCustomStateFieldList_Register);
 }
 
+static igMetaObjectCallback g_igCustomStateFieldList_callbackList[] = { FUN_0014ecd0, 0 };
+
 void igCustomStateFieldList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCustomStateFieldList_metaObject,
+        &g_igCustomStateFieldList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igCustomStateFieldList_GetMetaObject,
-        igCustomStateFieldList_className,
+        "igCustomStateFieldList",
         0x14, /* instance size */
         igCustomStateFieldList_GetVTable,
         0,

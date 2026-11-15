@@ -1,16 +1,19 @@
+igMetaObject *g_igCharMetricsList_metaObject;
+int g_igCharMetricsList_externalStorage;
+
 igMetaObject *FUN_00452790(void) {
-    if (g_igCharMetricsList_metaObject[0] == 0) {
-        g_igCharMetricsList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCharMetricsList_metaObject == 0) {
+        g_igCharMetricsList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCharMetricsList_metaObject[0];
+    return g_igCharMetricsList_metaObject;
 }
 
 igMetaObject *igCharMetricsList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCharMetricsList_metaObject[0];
+    igMetaObject *g = g_igCharMetricsList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igCharMetricsList_RunStaticInit();
-    return g_igCharMetricsList_metaObject[0];
+    return g_igCharMetricsList_metaObject;
 }
 
 int igCharMetricsList_GetVTable(void) {
@@ -30,11 +33,11 @@ void igCharMetricsList_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCharMetricsList_metaObject,
+        &g_igCharMetricsList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igCharMetricsList_GetMetaObject,
-        igCharMetricsList_className,
+        "igCharMetricsList",
         0x14, /* instance size */
         igCharMetricsList_GetVTable,
         FUN_00452900,
@@ -53,13 +56,13 @@ void FUN_00452900(void) {
     void *temp_s0;
     void *temp_s1;
 
-    temp_s1 = (void *)(g_igCharMetricsList_metaObject[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_data_5[0]));
+    temp_s1 = (void *)(g_igCharMetricsList_metaObject);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_data"));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     *(int *)((char *)(temp_s0) + 60) = FUN_00452c40();
     *(int *)((char *)(temp_s0) + 56) = 0;
-    *(int *)((char *)(temp_s0) + 28) = (int)(&DAT_0058c640[0]);
+    *(int *)((char *)(temp_s0) + 28) = (int)(&g_igCharMetricsList_externalStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {

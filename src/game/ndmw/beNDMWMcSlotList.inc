@@ -1,16 +1,18 @@
+igMetaObject *g_beNDMWMcSlotList_metaObject;
+
 igMetaObject *FUN_003c5910(void) {
-    if (g_beNDMWMcSlotList_metaObject[0] == 0) {
-        g_beNDMWMcSlotList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMcSlotList_metaObject == 0) {
+        g_beNDMWMcSlotList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMcSlotList_metaObject[0];
+    return g_beNDMWMcSlotList_metaObject;
 }
 
 void *beNDMWMcSlotList_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWMcSlotList_metaObject[0];
+    igMetaObject *g = g_beNDMWMcSlotList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c59f0();
     }
-    return g_beNDMWMcSlotList_metaObject[0];
+    return g_beNDMWMcSlotList_metaObject;
 }
 
 int beNDMWMcSlotList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_003c59f0(void)
     igMetaObject_RunStaticInit(beNDMWMcSlotList_Register);
 }
 
+static igMetaObjectCallback g_beNDMWMcSlotList_callbackList[] = { FUN_003c60b0, 0 };
+
 void *beNDMWMcSlotList_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMcSlotList_metaObject,
+        &g_beNDMWMcSlotList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         beNDMWMcSlotList_GetMetaObject,
-        beNDMWMcSlotList_className,
+        "beNDMWMcSlotList",
         0x14, /* instance size */
         beNDMWMcSlotList_GetVTable,
         0,

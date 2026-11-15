@@ -1,10 +1,13 @@
+igMetaObject *g_beModelCtrlLUACALL_metaObject;
+igMetaField *g_beModelCtrlLUACALL_modeNameMetaField;
+
 igMetaObject *FUN_00356450(void)
 {
-    igMetaObject *g = g_beModelCtrlLUACALL_metaObject[0];
+    igMetaObject *g = g_beModelCtrlLUACALL_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00356570();
-    return g_beModelCtrlLUACALL_metaObject[0];
+    return g_beModelCtrlLUACALL_metaObject;
 }
 
 int beModelCtrlLUACALL_GetVTable(void) {
@@ -32,11 +35,11 @@ void *beModelCtrlLUACALL_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlLUACALL_metaObject,
+        &g_beModelCtrlLUACALL_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlLUACALL_GetMetaObject,
-        beModelCtrlLUACALL_className,
+        "beModelCtrlLUACALL",
         0x10, /* instance size */
         beModelCtrlLUACALL_GetVTable,
         beModelCtrlLUACALL_InitFields,
@@ -50,13 +53,26 @@ void beModelCtrlLUACALL_GetMetaObject(void)
     FUN_00356450();
 }
 
+static FieldFactory g_beModelCtrlLUACALL_ctorTable[] = {
+    igStringMetaField_Create,
+};
+static const char *g_beModelCtrlLUACALL_fieldTable[] = {
+    "_modeName",
+};
+static igMetaField **g_beModelCtrlLUACALL_fieldHandles[] = {
+    &g_beModelCtrlLUACALL_modeNameMetaField,
+};
+static int g_beModelCtrlLUACALL_fieldOffsets[] = {
+    12,
+};
+
 void beModelCtrlLUACALL_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlLUACALL_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlLUACALL_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlLUACALL_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlLUACALL_fieldTable[0], &DAT_004c58a8[0], &DAT_004c58b0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlLUACALL_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlLUACALL_fieldTable, g_beModelCtrlLUACALL_fieldHandles, g_beModelCtrlLUACALL_fieldOffsets, temp_s1);
 }
 

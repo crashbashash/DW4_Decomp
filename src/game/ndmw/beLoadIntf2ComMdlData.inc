@@ -1,14 +1,19 @@
+igMetaObject *g_beLoadIntf2ComMdlData_metaObject;
+igMetaField *g_beLoadIntf2ComMdlData_ramNoMetaField;
+igMetaField *g_beLoadIntf2ComMdlData_openSQMetaField;
+igMetaField *g_beLoadIntf2ComMdlData_infoNameMetaField;
+
 void beLoadIntf2ComMdlData__Create(int allocator) {
     FUN_003c75a0();
-    igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject[0], allocator);
+    igMetaObject_CreateInstance(g_beLoadIntf2ComMdlData_metaObject, allocator);
 }
 
 void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beLoadIntf2ComMdlData_metaObject[0];
+    igMetaObject *g = g_beLoadIntf2ComMdlData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c75a0();
     }
-    return g_beLoadIntf2ComMdlData_metaObject[0];
+    return g_beLoadIntf2ComMdlData_metaObject;
 }
 
 int beLoadIntf2ComMdlData_GetVTable(void) {
@@ -62,11 +67,11 @@ void *beLoadIntf2ComMdlData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLoadIntf2ComMdlData_metaObject,
+        &g_beLoadIntf2ComMdlData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beLoadIntf2ComMdlData_GetMetaObject,
-        beLoadIntf2ComMdlData_className,
+        "beLoadIntf2ComMdlData",
         0x14, /* instance size */
         beLoadIntf2ComMdlData_GetVTable,
         beLoadIntf2ComMdlData_InitFields,
@@ -80,13 +85,34 @@ void beLoadIntf2ComMdlData_GetMetaObject(void)
     beLoadIntf2ComMdlData_GetReadyMetaObject();
 }
 
+static FieldFactory g_beLoadIntf2ComMdlData_ctorTable[] = {
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+};
+static const char *g_beLoadIntf2ComMdlData_fieldTable[] = {
+    "_ramNo",
+    "_openSQ",
+    "_infoName",
+};
+static igMetaField **g_beLoadIntf2ComMdlData_fieldHandles[] = {
+    &g_beLoadIntf2ComMdlData_ramNoMetaField,
+    &g_beLoadIntf2ComMdlData_openSQMetaField,
+    &g_beLoadIntf2ComMdlData_infoNameMetaField,
+};
+static int g_beLoadIntf2ComMdlData_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void beLoadIntf2ComMdlData_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beLoadIntf2ComMdlData_metaObject[0];
+    temp_s0 = g_beLoadIntf2ComMdlData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beLoadIntf2ComMdlData_ctorTable[0], 3);
-    igMetaObject_NameFields(temp_s0, &g_beLoadIntf2ComMdlData_fieldTable[0], &DAT_004cbf48[0], &DAT_004cbf58[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beLoadIntf2ComMdlData_ctorTable, 3);
+    igMetaObject_NameFields(temp_s0, g_beLoadIntf2ComMdlData_fieldTable, g_beLoadIntf2ComMdlData_fieldHandles, g_beLoadIntf2ComMdlData_fieldOffsets, temp_s1);
 }
 

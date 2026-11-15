@@ -24,7 +24,9 @@ data region (config/SLUS-20836/exceptions.txt, tools/exceptions.py,
 verify.STATIC_INITIALIZERS), so the data unit holding them is carved into raw
 fragments around the retail slots and the compiled sections are pinned there: the
 relink then reproduces them from the source instead of orphaning them, and
-linkcheck's byte compare covers them.
+linkcheck's byte compare covers them. The data sections a whole-file unit defines and
+verified equal to retail are carved in the same way, from one `u_<owner>_data.o` per
+unit (verify.isolate_unit_data); a placed section may run across several raw units.
 
 Usage:
   linkgen.py --all          # regenerate everything into build/link/ (slow: ~28k files)
@@ -227,7 +229,8 @@ def main(argv=None):
     # definitions, not by its filename (tools/units.py), so one file may define
     # several functions without any tool assuming `src/<name>.c`.
     src_index = unitfiles.scan(a.src, symbols=a.symbols, unit_objects=a.unit_objects)
-    # a whole-file unit's tables are data rows, compared with retail and left as retail's bytes
+    # a whole-file unit's switch tables are anonymous data: compared with retail and placed with the
+    # unit's other data (isolate_unit_data), not as tables of their owner
     whole_file = {va for g in unitobjects.load(a.unit_objects) if g.whole_file for va in g.addresses}
     for u in units:
         if u[2] == "code" and not a.no_c:
@@ -408,6 +411,38 @@ def main(argv=None):
                 unit_objects_built[key] = compute()
             return unit_objects_built[key]
 
+    def unit_context(va, name, csrc):
+        """(source path, temp copy or None, group, profile) of the compiler unit `name` belongs to."""
+        # A multi-function unit is split to a dot-named sibling so MWCC sees one
+        # function; a single-function unit is compiled where it lies.
+        csrc_path, tmp = unitfiles.standalone(csrc, name, symbols=a.symbols,
+                                              unit_objects=a.unit_objects)
+        group = unitobjects.group_for(va, a.unit_objects)
+        owner = group.owner if group else va
+        # The unit profile (config/SLUS-20836/units.tsv), or the function's provisional override when it has
+        # one: `make check` proved the override is what reproduces the bytes (or reported the row
+        # as stale), so the link builds with it and the function stays foreign-profile debt.
+        try:
+            resolution = unitprofiles.resolve(owner, a.flags, a.mwcc, units=a.units, unit_flags=a.unit_flags,
+                                              unit_compilers=a.unit_compilers, symbols=a.symbols)
+        except ValueError:
+            if tmp:
+                os.remove(tmp)
+            raise
+        profile = unitprofiles.for_source(resolution.override or resolution.profile, csrc_path, a.flags, a.mwcc)
+        return csrc_path, tmp, group, profile
+
+    section_end = units[-1][0] + units[-1][1]
+
+    def data_pins(va, group, records_):
+        """[[address, size, section]] of the data `records_` proved equal to retail inside the linked
+        section, reported by the unit's owner only (its other members share the same data)."""
+        if not group or va != group.owner:
+            return []
+        return sorted([address, size, section]
+                      for section, (address, size, _label, nobits) in records_.data_placements.items()
+                      if not nobits and address + size <= section_end)
+
     def build_one(u):
         va, sz, kind, name, extra = u
         key = None
@@ -417,31 +452,20 @@ def main(argv=None):
         csrc = src_index.get(name) if (kind == "code" and not a.no_c) else None
         if csrc is None:
             return va, build_raw(va, sz, kind, name, obj)
-        undef = []
         table_names = {}
-        placement = {}
         from_group = None
-        # A multi-function unit is split to a dot-named sibling so MWCC sees one
-        # function; a single-function unit is compiled where it lies.
-        csrc_path, tmp = unitfiles.standalone(csrc, name, symbols=a.symbols,
-                                            unit_objects=a.unit_objects)
-        env = dict(os.environ, MWCIncludes=os.path.abspath(a.src))
+        pins = []
         # Compile into /tmp, not straight into build/link: wibo/MWCC writes its
         # output through a freshly-named temp file in the destination directory,
         # and build/link/ holds ~34k objects, so creating a new name there costs
         # ~160 ms against ~5 ms here (measured).  The copy back is a plain write.
         stage = os.path.join(cc.scratch_dir(), "%s_%08x.o" % (TMP_TAG(), va))
-        group = unitobjects.group_for(va, a.unit_objects)
-        owner = group.owner if group else va
-        # The unit profile (config/SLUS-20836/units.tsv), or the function's provisional override when it has
-        # one: `make check` proved the override is what reproduces the bytes (or reported the row
-        # as stale), so the link builds with it and the function stays foreign-profile debt.
         try:
-            resolution = unitprofiles.resolve(owner, a.flags, a.mwcc, units=a.units, unit_flags=a.unit_flags,
-                                              unit_compilers=a.unit_compilers, symbols=a.symbols)
+            csrc_path, tmp, group, profile = unit_context(va, name, csrc)
         except ValueError as error:
             return va, {"fatal": f"{name}: {error}"}
-        profile = unitprofiles.for_source(resolution.override or resolution.profile, csrc_path, a.flags, a.mwcc)
+        env = dict(os.environ, MWCIncludes=os.path.abspath(a.src))
+        owner = group.owner if group else va
         compiler, cflags = profile.compiler, unitprofiles.command_flags(profile)
         if use_cache:
             with open(csrc_path) as fh:
@@ -460,7 +484,8 @@ def main(argv=None):
                     count(hit["exc_status"])
                 return va, {"obj": obj, "undef": hit["undef"], "use_c": True,
                             "tables": {int(k): v for k, v in hit["tables"].items()},
-                            "pinned": hit.get("pinned", {})}
+                            "pinned": hit.get("pinned", {}), "data_pins": hit.get("data_pins", []),
+                            "key": key}
         if group:
             # Every member of a compiler unit compiles the same source and verifies the same
             # bodies (no member is singled out here): a whole-file unit does that once, and each
@@ -505,6 +530,7 @@ def main(argv=None):
                 os.remove(stage)
                 return va, {"fatal": f"{name}: {error}"}
             from_group = group_placement(records_, va)
+            pins = data_pins(va, group, records_)
         if not group:
             _folded, literal_errors = verify.fold_literals(stage, {name: va}, retail_image, retail_gp)
             if literal_errors:
@@ -539,9 +565,9 @@ def main(argv=None):
         if key:
             store.put(key, {"digest": buildcache.fresh_sha(obj), "undef": undef,
                             "tables": {str(k): v for k, v in table_names.items()},
-                            "pinned": placement, "exc_status": exc_status})
+                            "pinned": placement, "exc_status": exc_status, "data_pins": pins})
         return va, {"obj": obj, "undef": undef, "use_c": True,
-                    "tables": table_names, "pinned": placement}
+                    "tables": table_names, "pinned": placement, "data_pins": pins, "key": key}
 
     to_build = units
     if a.unit_range:
@@ -554,37 +580,120 @@ def main(argv=None):
         for va, info in ex.map(build_one, c_units):
             built[va] = info
 
-    # ---- carve the raw data units around the compiled exception metadata and table entries -----
-    data_units = sorted((va, sz) for va, sz, kind, _n, _e in units if kind == "data")
-    data_starts = [va for va, _ in data_units]
-    carve = {}
+    # ---- the data whole-file units proved equal to retail, each address placed from one unit ---------
+    # Units that define one datum (a header's static, a merged string) all verify it at the same address;
+    # the first unit in address order places it and the others reach it by name like any retail datum.
+    claims = sorted((address, size, va, section) for va, info in built.items() if not info.get("fatal")
+                    for address, size, section in info.get("data_pins", ()))
+    chosen, claimed_end, previous = {}, 0, None
+    data_stats = {"sections": 0, "bytes": 0, "shared": 0, "overlap": 0}
+    for address, size, va, section in claims:
+        if address < claimed_end:
+            data_stats["shared" if (address, size) == previous else "overlap"] += 1
+            continue
+        chosen.setdefault(va, {})[section] = (address, size)
+        claimed_end, previous = address + size, (address, size)
+        data_stats["sections"] += 1
+        data_stats["bytes"] += size
+    by_address = {u[0]: u for u in units}
+
+    def build_data(va):
+        """The data object of the unit owned at `va`: the sections of `chosen[va]`, nothing else."""
+        name = by_address[va][3]
+        keep = {section: address for section, (address, _size) in chosen[va].items()}
+        obj = os.path.join(a.out, "u_%08x_data.o" % va)
+        code_key = built[va].get("key")
+        key = buildcache.sha(code_key, "data", sorted(keep.items())) if code_key else None
+        if key:
+            hit = store.get(key)
+            if hit and buildcache.fresh_sha(obj) == hit["digest"]:
+                return va, {"obj": obj, "undef": hit["undef"]}
+        try:
+            csrc_path, tmp, group, profile = unit_context(va, name, src_index[name])
+        except ValueError as error:
+            return va, {"fatal": f"{name}: {error}"}
+        if tmp:
+            os.remove(tmp)
+            return va, {"fatal": f"{name}: data placed from a unit that is not compiled whole"}
+        compiler, cflags = profile.compiler, unitprofiles.command_flags(profile)
+        env = dict(os.environ, MWCIncludes=os.path.abspath(a.src))
+        unit_key = (verify._source_key(csrc_path), compiler, cflags, group, profile)
+        verified, report, records_ = unit_object(unit_key, lambda: verify_unit(
+            group, profile, compiler, cflags, csrc_path, env))
+        if verified is None or records_ is None:
+            return va, {"fatal": f"{name}: data placement: {report or 'compile failed'}"}
+        if any(records_.data_placements.get(section, (None,))[0] != address for section, address in keep.items()):
+            return va, {"fatal": f"{name}: the unit's verified data differs from its cached placement"}
+        try:
+            verify.isolate_unit_data(verified, obj, records_, group, a.symbols, keep)
+        except (ValueError, subprocess.CalledProcessError) as error:
+            return va, {"fatal": f"{name}: {error}"}
+        defined = verify.object_syms(obj)[0]
+        undef = sorted({symbol for _s, _o, _k, symbol, _a in verify.object_relocs(obj)
+                        if defined.get(symbol, ("UND",))[0] == "UND"})
+        if key:
+            store.put(key, {"digest": buildcache.fresh_sha(obj), "undef": undef})
+        return va, {"obj": obj, "undef": undef}
+
+    data_objects = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
+        for va, info in ex.map(build_data, sorted(chosen)):
+            if info.get("fatal"):
+                print("linkgen: " + info["fatal"], file=sys.stderr)
+                return 2
+            data_objects[va] = info
+
+    # ---- carve the raw data units around everything compiled that is pinned inside them --------------
+    # exception metadata, static-initializer table entries and the units' data; a placed section may
+    # run across several raw units (a whole-file unit's switch tables sit in the layout's `jtbl` units)
+    raw = sorted((va, sz) for va, sz, kind, _n, extra in units
+                 if kind == "data" or (kind == "jtbl" and extra not in code_obj))
+    raw_starts = [va for va, _ in raw]
+    raw_size = dict(raw)
+    slots = []
     for va, info in built.items():
         for address, size, section in info.get("pinned", {}).values():
-            i = bisect.bisect_right(data_starts, address) - 1
-            if i < 0 or address + size > data_starts[i] + data_units[i][1]:
-                print(f"linkgen: {section} of 0x{va:x} at 0x{address:x} is not inside one "
-                      "raw data unit", file=sys.stderr)
-                return 2
-            carve.setdefault(data_starts[i], []).append((address, size, info["obj"], section))
+            slots.append((address, size, info["obj"], section))
             if section == ".ctor":
                 exception_stats["ctors"] += 1
                 continue
             exception_stats["placed" if section.startswith(".exceptix") else "tables"] += 1
             exception_stats["bytes"] += size
-    pieces = {}      # data unit va -> [(start, size)] raw fragments between the carved slots
-    for unit_va, slots in carve.items():
-        slots.sort()
-        unit_size = dict(data_units)[unit_va]
-        cursor, fragments = unit_va, []
-        for address, size, _obj, _section in slots:
-            if address < cursor:
-                print(f"linkgen: exception metadata slots overlap at 0x{address:x}", file=sys.stderr)
+    for va, info in data_objects.items():
+        slots += [(address, size, info["obj"], ".dw4_data_%08x" % address)
+                  for address, size in chosen[va].values()]
+    carve, cuts = {}, {}
+    for address, size, obj, section in sorted(slots):
+        i = bisect.bisect_right(raw_starts, address) - 1
+        if i < 0 or address >= raw_starts[i] + raw[i][1]:
+            print(f"linkgen: {section} of {obj} at 0x{address:x} is not inside a raw data unit", file=sys.stderr)
+            return 2
+        carve.setdefault(raw_starts[i], []).append((address, size, obj, section))
+        cursor = address
+        while True:
+            unit_va, unit_size = raw[i]
+            cuts.setdefault(unit_va, []).append((cursor, min(address + size, unit_va + unit_size)))
+            if address + size <= unit_va + unit_size:
+                break
+            i += 1
+            if i == len(raw) or raw[i][0] != unit_va + unit_size:
+                print(f"linkgen: {section} of {obj} at 0x{address:x} runs out of the raw data units",
+                      file=sys.stderr)
                 return 2
-            if address > cursor:
-                fragments.append((cursor, address - cursor))
-            cursor = address + size
-        if cursor < unit_va + unit_size:
-            fragments.append((cursor, unit_va + unit_size - cursor))
+            cursor = raw[i][0]
+    pieces = {}      # raw unit va -> [(start, size)] raw fragments between the placed sections
+    for unit_va, spans in cuts.items():
+        cursor, fragments = unit_va, []
+        for lo, hi in sorted(spans):
+            if lo < cursor:
+                print(f"linkgen: placed sections overlap at 0x{lo:x}", file=sys.stderr)
+                return 2
+            if lo > cursor:
+                fragments.append((cursor, lo - cursor))
+            cursor = hi
+        unit_end = unit_va + raw_size[unit_va]
+        if cursor < unit_end:
+            fragments.append((cursor, unit_end - cursor))
         pieces[unit_va] = fragments
 
     def build_rest(item):
@@ -702,7 +811,8 @@ def main(argv=None):
             # fragments and the owning C objects' sections, each pinned at its
             # retail address; the linker's zero fill reproduces a table's padding.
             parts = [(start, f"{obj}(.text)") for start, obj in info["fragments"].items()]
-            parts += [(address, f"{owner_obj}({section})") for address, _size, owner_obj, section in carve[va]]
+            parts += [(address, f"{owner_obj}({section})")
+                      for address, _size, owner_obj, section in carve.get(va, [])]
             for address, what in sorted(parts):
                 script.append("    . = 0x%x;" % (address - a.section_start))
                 script.append("    " + what)
@@ -724,6 +834,8 @@ def main(argv=None):
         script.append("    . = 0x%x;" % (va - a.section_start))
         script.append("    %s(.text)" % obj)
 
+    for info in data_objects.values():
+        undefined.update(info["undef"])
     script += ["    _section_end = .;",
                "  }",
                "  /DISCARD/ : { *(.comment) *(.reginfo) *(.mwcats) *(.debug) *(.lit4) *(.lit8) }"]
@@ -778,6 +890,10 @@ def main(argv=None):
           % (exception_stats["placed"], exception_stats["tables"], exception_stats["bytes"],
              exception_stats["extra"], exception_stats["missing"], exception_stats["differ"]))
     print("linkgen: static-initializer table %d entries placed from C" % exception_stats["ctors"])
+    print("linkgen: data from C        %6d sections %8d bytes placed at their retail addresses from %d units "
+          "(%d copies of a shared datum left to its first unit, %d overlapping claims refused)"
+          % (data_stats["sections"], data_stats["bytes"], len(data_objects), data_stats["shared"],
+             data_stats["overlap"]))
     return 0
 
 

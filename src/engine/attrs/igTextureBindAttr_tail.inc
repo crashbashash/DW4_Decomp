@@ -1,3 +1,5 @@
+int g_igTextureBindAttr_applySlotFast;
+int g_igTextureBindAttr_applySlotDefault;
 void Gap__Attrs__igTextureBindAttr__vfunc_31(igTextureBindAttrView *self, igVisualContextView *context)
 {
     context->vfunc_21(22);
@@ -61,32 +63,32 @@ void Gap__Attrs__igTextureBindAttr__vfunc_25(int *arg0, int arg1) {
 
 void FUN_00140e90(int arg0) {
     /* matching construct: cxx_sweep — sp10 and sp0 initialised at their declarations, sp0 declared inside the if */
-    V3 sp10 = DAT_00486cb8;
+    V3 sp10 = { 0, 0x60, 0.0f };
     int var_a1;
     int idx;
     int temp_a4;
-    temp_a4 = *(int *)((char *)(g_igTextureBindAttr_metaObject[0]) + 92);
+    temp_a4 = *(int *)((char *)(g_igTextureBindAttr_metaObject) + 92);
     idx = sp10.b;
-    if (GPR_00554b0c == 0) {
-        DAT_0055f510[0] = *(int *)(temp_a4 + idx);
-        V3 sp0 = DAT_00486cc8;
-        DAT_0055f518[0] = *(int *)(temp_a4 + sp0.b);
-        GPR_00554b0c = 1;
+    if (g_igTextureBindAttr_slotsCached == 0) {
+        g_igTextureBindAttr_applySlotDefault = *(int *)(temp_a4 + idx);
+        V3 sp0 = { 0, 0x80, 0.0f };
+        g_igTextureBindAttr_applySlotFast = *(int *)(temp_a4 + sp0.b);
+        g_igTextureBindAttr_slotsCached = 1;
     }
     if (arg0 != 0) {
-        var_a1 = DAT_0055f518[0];
+        var_a1 = g_igTextureBindAttr_applySlotFast;
     } else {
-        var_a1 = DAT_0055f510[0];
+        var_a1 = g_igTextureBindAttr_applySlotDefault;
     }
     *(int *)(temp_a4 + idx) = var_a1;
-    GPR_00554b08 = arg0;
+    g_igTextureBindAttr_fastApplyEnabled = arg0;
 }
 
 void FUN_00140f40(void) {
     unsigned char sp1F;
 
     sp1F = 0;
-    igRegistry_GetValueBool(*(int *)((char *)g_objectSystem[0] + 56), 7, text_enableIgTextureAttrFastApply, &sp1F, 0, 0);
+    igRegistry_GetValueBool(*(int *)((char *)g_objectSystem[0] + 56), 7, "enableIgTextureAttrFastApply", &sp1F, 0, 0);
     FUN_00140e90(sp1F);
 }
 

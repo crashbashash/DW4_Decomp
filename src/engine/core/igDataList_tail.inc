@@ -9,7 +9,7 @@ void List_Reserve(igDataList *list, int capacity, int elementSize) {
         list->_data = 0;
     } else {
         int oldData = list->_data;
-        igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->GetMeta(), g_igDataList_dataField[0]->_internalIndex);
+        igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->GetMeta(), g_igDataList_dataField->_internalIndex);
         unsigned elementCount = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
         igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)igObject_GetAllocator((int)list))));
         if (oldData != 0) {

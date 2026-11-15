@@ -1,40 +1,151 @@
-struct Enum *FightCom_GetMetaEnum(void)
-{
-    if (!g_FightCom_metaEnum[0])
-        g_FightCom_metaEnum[0] = ((struct Enum *)igMetaEnum_Create(FightCom, g_FightCom_commandNames,
-                                          g_FightCom_commandIds, 22));
-    return g_FightCom_metaEnum[0];
+igMetaEnum *g_FightCom_metaEnum;
+igMetaEnum *g_GameRamMessage_metaEnum;
+igMetaObject *g_beNDMWGameRam_metaObject;
+igMetaField *g_beNDMWGameRam_dBShinkaMetaField;
+igMetaField *g_beNDMWGameRam_dBPcTechMetaField;
+igMetaField *g_beNDMWGameRam_dBWeaponMetaField;
+igMetaField *g_beNDMWGameRam_dBArmor1MetaField;
+igMetaField *g_beNDMWGameRam_dBArmor2MetaField;
+igMetaField *g_beNDMWGameRam_dBAbChipMetaField;
+igMetaField *g_beNDMWGameRam_dBEnemyMetaField;
+igMetaField *g_beNDMWGameRam_dBEneatkMetaField;
+igMetaField *g_beNDMWGameRam_commonDataListMetaField;
+igMetaField *g_beNDMWGameRam_playerDataListListMetaField;
+igMetaField *g_beNDMWGameRam_isDispFightDataMetaField;
+
+static const char *g_FightCom_commandNames[] = {
+    "E2PISHITCHECK",
+    "P2EISHITCHECK",
+    "P2EISCRITICAL",
+    "E2PDAMAGE",
+    "E2PDAMAGERANK",
+    "P2EDAMAGE",
+    "P2EEXPUP",
+    "E2PSTUNTIME",
+    "E2PPOISONTIME",
+    "E2PSLEEPTIME",
+    "E2PBINDTIME",
+    "E2PATKDWNTIME",
+    "E2PPOWDWNTIME",
+    "P2ESKILLUP",
+    "P2ESTUNTIME",
+    "P2EPOISONTIME",
+    "P2ESLEEPTIME",
+    "P2EBINDTIME",
+    "P2EATKDWNTIME",
+    "P2EPOWDWNTIME",
+    "P2PKOUKAMAGIC",
+    "GETPATKZOKUSEI",
+};
+static int g_FightCom_commandIds[] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    0xa,
+    0xb,
+    0xc,
+    0xd,
+    0xe,
+    0xf,
+    0x10,
+    0x11,
+    0x12,
+    0x13,
+    0x14,
+    0x15,
+};
+
+igMetaEnum *FightCom_GetMetaEnum(void) {
+    if (g_FightCom_metaEnum == 0) {
+        g_FightCom_metaEnum = igMetaEnum_Create("FightCom", g_FightCom_commandNames, g_FightCom_commandIds, 22);
+    }
+    return g_FightCom_metaEnum;
 }
 
-struct Enum *GameRamMessage_GetMetaEnum(void)
-{
-    if (!g_GameRamMessage_metaEnum[0])
-        g_GameRamMessage_metaEnum[0] = ((struct Enum *)igMetaEnum_Create(Message, g_GameRamMessage_commandNames,
-                                          g_GameRamMessage_commandIds, 22));
-    return g_GameRamMessage_metaEnum[0];
+static const char *g_GameRamMessage_commandNames[] = {
+    "GETCOMMON",
+    "GETPLAYER",
+    "GETPLAYER1",
+    "GETPLAYER2",
+    "GETPLAYER3",
+    "GETPLAYER4",
+    "GAMEDATAINIT",
+    "GAMESTART",
+    "GAMEREMOVE",
+    "ADDHP",
+    "ADDMP",
+    "RECALCPLAYER",
+    "BASE2CURRENT",
+    "CURRENT2BASE",
+    "WEAPONEQUIPCHECK",
+    "WEAPONEQUIPSTRONG",
+    "DEADRESTART",
+    "CTRLITEM",
+    "FIGHTCALC",
+    "DISPFIGHTDATA",
+    "BKCHIPBITEXP",
+    "CTRLPLAYER",
+};
+static int g_GameRamMessage_commandIds[] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    0xa,
+    0xb,
+    0xc,
+    0xd,
+    0xe,
+    0xf,
+    0x10,
+    0x11,
+    0x12,
+    0x13,
+    0x14,
+    0x15,
+};
+
+igMetaEnum *GameRamMessage_GetMetaEnum(void) {
+    if (g_GameRamMessage_metaEnum == 0) {
+        g_GameRamMessage_metaEnum = igMetaEnum_Create("Message", g_GameRamMessage_commandNames, g_GameRamMessage_commandIds, 22);
+    }
+    return g_GameRamMessage_metaEnum;
 }
 
 void beNDMWGameRam_CreateInstance(int arg0) {
     FUN_003c9f70();
-    igMetaObject_CreateInstance(*(int *)0x58C0A0, arg0);
+    igMetaObject_CreateInstance(g_beNDMWGameRam_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c9ce0(void) {
-    if (g_beNDMWGameRam_metaObject[0] == 0) {
-        g_beNDMWGameRam_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWGameRam_metaObject == 0) {
+        g_beNDMWGameRam_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWGameRam_metaObject[0];
+    return g_beNDMWGameRam_metaObject;
 }
 
 igMetaObject *beNDMWGameRam_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWGameRam_metaObject[0];
+    igMetaObject *g = g_beNDMWGameRam_metaObject;
     if (g != 0) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
     FUN_003c9f70();
 done:
-    return g_beNDMWGameRam_metaObject[0];
+    return g_beNDMWGameRam_metaObject;
 }
 
 int beNDMWGameRam_GetVTable(void) {
@@ -93,15 +204,17 @@ void FUN_003c9f70(void)
     igMetaObject_RunStaticInit(beNDMWGameRam_Register);
 }
 
+static igMetaObjectCallback g_beNDMWGameRam_callbackList[] = { FUN_00365b00, FUN_00364170, FUN_00363fa0, 0 };
+
 void *beNDMWGameRam_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWGameRam_metaObject,
+        &g_beNDMWGameRam_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beNDMWGameRam_GetMetaObject,
-        beNDMWGameRam_className,
+        "beNDMWGameRam",
         0x4c, /* instance size */
         beNDMWGameRam_GetVTable,
         beNDMWGameRam_InitFields,
@@ -114,6 +227,59 @@ void beNDMWGameRam_GetMetaObject(void)
 {
     beNDMWGameRam_ResolveMetaObject();
 }
+
+static FieldFactory g_beNDMWGameRam_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_beNDMWGameRam_fieldTable[] = {
+    "_dBShinka",
+    "_dBPcTech",
+    "_dBWeapon",
+    "_dBArmor1",
+    "_dBArmor2",
+    "_dBAbChip",
+    "_dBEnemy",
+    "_dBEneatk",
+    "_commonDataList",
+    "_playerDataListList",
+    "_isDispFightData",
+};
+static igMetaField **g_beNDMWGameRam_fieldHandles[] = {
+    &g_beNDMWGameRam_dBShinkaMetaField,
+    &g_beNDMWGameRam_dBPcTechMetaField,
+    &g_beNDMWGameRam_dBWeaponMetaField,
+    &g_beNDMWGameRam_dBArmor1MetaField,
+    &g_beNDMWGameRam_dBArmor2MetaField,
+    &g_beNDMWGameRam_dBAbChipMetaField,
+    &g_beNDMWGameRam_dBEnemyMetaField,
+    &g_beNDMWGameRam_dBEneatkMetaField,
+    &g_beNDMWGameRam_commonDataListMetaField,
+    &g_beNDMWGameRam_playerDataListListMetaField,
+    &g_beNDMWGameRam_isDispFightDataMetaField,
+};
+static int g_beNDMWGameRam_fieldOffsets[] = {
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+};
 
 void beNDMWGameRam_InitFields(void) {
     void *temp_s2;
@@ -129,9 +295,11 @@ void beNDMWGameRam_InitFields(void) {
     void *temp_s1;
     int temp_s0;
 
-    temp_s1 = (void *)g_beNDMWGameRam_metaObject[0];
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (void *)g_beNDMWGameRam_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beNDMWGameRam_ctorTable[0], 0xB);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWGameRam_ctorTable, 0xB);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_003658e0();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -152,6 +320,6 @@ void beNDMWGameRam_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00364090();
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_00363ec0();
-    igMetaObject_NameFields(temp_s1, &g_beNDMWGameRam_fieldTable[0], &DAT_004cc540[0], &DAT_004cc570[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWGameRam_fieldTable, g_beNDMWGameRam_fieldHandles, g_beNDMWGameRam_fieldOffsets, temp_s0);
 }
 

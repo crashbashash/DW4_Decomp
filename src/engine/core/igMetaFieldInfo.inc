@@ -1,9 +1,9 @@
 igMetaObject *igMetaFieldInfo_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMetaFieldInfo_metaObject[0];
+    igMetaObject *g = g_igMetaFieldInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMetaFieldInfo_EnsureRegistered();
-    return g_igMetaFieldInfo_metaObject[0];
+    return g_igMetaFieldInfo_metaObject;
 }
 
 int igMetaFieldInfo_GetVTable(void) {
@@ -18,7 +18,7 @@ int igMetaFieldInfo_GetVTable(void) {
     *(int *)ps = 0;
     info._vtable = (int)&g_igNamedObject_vtable[0];
     info._vtable = (int)&g_igMetaFieldInfo_vtable[0];
-    s0 = *(int *)((char *)&info + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    s0 = *(int *)((char *)&info + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     info._vtable = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -43,11 +43,11 @@ void igMetaFieldInfo_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igMetaFieldInfo_metaObject,
+        &g_igMetaFieldInfo_metaObject,
         (igMetaObjectRegisterFunction)igInfo_Register,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMetaFieldInfo_GetMetaObjectFunction,
-        igMetaFieldInfo_className,
+        "igMetaFieldInfo",
         0x14,
         igMetaFieldInfo_GetVTable,
         0,
@@ -60,10 +60,18 @@ void igMetaFieldInfo_GetMetaObjectFunction(void) {
     igMetaFieldInfo_GetMetaObject();
 }
 
+static const char *g_igMetaField_resetTypeNames[] = {
+    "kResetByValue", "kResetByValueShallow", "kResetByReference", "kResetByNoReset",
+};
+static int g_igMetaField_resetTypeValues[] = {
+    0, 1, 2, 3,
+};
+
+
 int igMetaField_GetResetTypeMetaEnum(void) {
-    if (g_igMetaField_resetTypeMetaEnum[0] == 0) {
-        g_igMetaField_resetTypeMetaEnum[0] = ((int)igMetaEnum_Create((char *)&text_ResetType[0], (char **)&g_igMetaField_resetTypeNames[0], &g_igMetaField_resetTypeValues[0], 4));
+    if (g_igMetaField_resetTypeMetaEnum == 0) {
+        g_igMetaField_resetTypeMetaEnum = ((int)igMetaEnum_Create((char *)"ResetType", g_igMetaField_resetTypeNames, g_igMetaField_resetTypeValues, 4));
     }
-    return g_igMetaField_resetTypeMetaEnum[0];
+    return g_igMetaField_resetTypeMetaEnum;
 }
 

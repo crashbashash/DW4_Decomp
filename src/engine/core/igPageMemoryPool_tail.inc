@@ -41,7 +41,7 @@ void Gap__Core__igPageMemoryPool__destructFields(igPageMemoryPoolView *self) {
  * follow the reflected fields. */
 void Gap__Core__igPageMemoryPool__resetFields(igPageMemoryPool *self, int extra1) {
     Gap__Core__igObject__resetFields((int)self, extra1);
-    self->_poolOptionFlags = g_igPageMemoryPool_defaultPoolOptionFlags[0];
+    self->_poolOptionFlags = g_igPageMemoryPool_defaultPoolOptionFlags;
     memset(((igPageMemoryPoolView *)self)->pageTables, 0, sizeof(((igPageMemoryPoolView *)self)->pageTables));
 }
 
@@ -53,38 +53,38 @@ igResult igPageMemoryPool_Configure(igPageMemoryPool *self, igMemoryPoolInfo *in
     const char *source = igMemoryPoolInfo_source(info);
     if (options != 0) {
         int flags = 0;
-        if (strstr(options, (char *)text_Fill) != 0) {
+        if (strstr(options, (char *)"Fill") != 0) {
             flags |= 1;
         }
-        if (strstr(options, (char *)text_Zero) != 0) {
+        if (strstr(options, (char *)"Zero") != 0) {
             flags |= 2;
         }
-        if (strstr(options, (char *)text_Physical) != 0) {
+        if (strstr(options, (char *)"Physical") != 0) {
             flags |= 8;
         }
-        if (strstr(options, (char *)text_AutoLock) != 0) {
+        if (strstr(options, (char *)"AutoLock") != 0) {
             flags |= 4;
         }
-        if (strstr(options, (char *)text_SystemMemoryExhausted) != 0) {
+        if (strstr(options, (char *)"SystemMemoryExhausted") != 0) {
             flags |= 0x20;
         }
-        if (strstr(options, (char *)text_MaxSizeReached) != 0) {
+        if (strstr(options, (char *)"MaxSizeReached") != 0) {
             flags |= 0x10;
         }
         igPageMemoryPool_SetPoolOptionFlags(self, flags);
     }
-    if (source != 0 && strstr(source, (char *)text_Physical) != 0) {
+    if (source != 0 && strstr(source, (char *)"Physical") != 0) {
         igPageMemoryPool_SetPoolOptionFlags(self, self->_poolOptionFlags | 8);
     }
     if (messages != 0) {
         int level = self->_messageLevel;
-        if (strstr(messages, (char *)text_NoMessages) != 0) {
+        if (strstr(messages, (char *)"NoMessages") != 0) {
             level = 0;
-        } else if (strstr(messages, (char *)text_ErrorMessages) != 0) {
+        } else if (strstr(messages, (char *)"ErrorMessages") != 0) {
             level = 1;
-        } else if (strstr(messages, (char *)text_WarningMessages) != 0) {
+        } else if (strstr(messages, (char *)"WarningMessages") != 0) {
             level = 2;
-        } else if (strstr(messages, (char *)text_Notifications) != 0) {
+        } else if (strstr(messages, (char *)"Notifications") != 0) {
             level = 3;
         }
         self->_messageLevel = level;
@@ -121,12 +121,15 @@ void igPageMemoryPool_Reset(igPageMemoryPoolView *self) {
     } while (i < 32);
 }
 
+unsigned char g_igPageMemoryPool_ignoreE84Notice;
+unsigned char g_igPageMemoryPool_ignoreE85Notice;
+
 void igPageMemoryPool_Deactivate(igPageMemoryPool *self) {
     int r;
     if (self->_isActive != 0) {
         if ((int)self->_localNetAllocated != 0) {
             if (self->_messageLevel >= 3 && g_igPageMemoryPool_ignoreE84Notice == 0) {
-                r = igReportNotice(text_igPageMemoryPool_d_E84_being_res, self->_poolIndex, (int)self->_localNetAllocated);
+                r = igReportNotice("igPageMemoryPool[%d](E84) being reset with outstanding memory blocks of %d bytes.\n", self->_poolIndex, (int)self->_localNetAllocated);
                 if (r != 1 && r == 2) {
                     g_igPageMemoryPool_ignoreE84Notice = 1;
                 }
@@ -135,7 +138,7 @@ void igPageMemoryPool_Deactivate(igPageMemoryPool *self) {
         } else {
             if (self->_localNetAllocationCount != 0) {
                 if (self->_messageLevel >= 3 && g_igPageMemoryPool_ignoreE85Notice == 0) {
-                    r = igReportNotice(text_igPageMemoryPool_d_E85_being_res, self->_poolIndex, (int)self->_localNetAllocationCount);
+                    r = igReportNotice("igPageMemoryPool[%d](E85) being reset with %d outstanding allocations.\n", self->_poolIndex, (int)self->_localNetAllocationCount);
                     if (r != 1 && r == 2) {
                         g_igPageMemoryPool_ignoreE85Notice = 1;
                     }
@@ -424,6 +427,11 @@ void igPageMemoryPool_SetPoolIndex(igPageMemoryPool *self, int index) {
     self->_poolIndex = index;
 }
 
+unsigned char g_igPageMemoryPool_ignoreE110Notice;
+unsigned char g_igPageMemoryPool_ignoreE101Notice;
+unsigned char g_igPageMemoryPool_ignoreE91Notice;
+unsigned char g_igPageMemoryPool_ignoreE94Notice;
+
 /* The page pool's allocate / reallocate / free core: size -1 frees `block`; otherwise the size is
  * rounded up to whole 4KB pages and the block (re)allocated from the system allocator, with the
  * out-of-memory hook given a chance to make room before the maximum size refuses the request. */
@@ -435,8 +443,8 @@ void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, 
 
     if (hasPageOption(self->poolOptionFlags, 0x40)) {
         if (self->messageLevel >= 2 && g_igPageMemoryPool_ignoreE110Notice == 0) {
-            r = igReportNotice(text_igPageMemoryPool_E110_AssertOnMemoryOperation,
-                               (size == -1 && block == 0) ? text_a_deallocation : text_an_allocation);
+            r = igReportNotice("igPageMemoryPool(E110): Assert-on-memory-operation is in effect and %s was requested.",
+                               (size == -1 && block == 0) ?"a deallocation" :"an allocation");
             if (r != 1 && r == 2) {
                 g_igPageMemoryPool_ignoreE110Notice = 1;
             }
@@ -479,7 +487,7 @@ void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, 
                     if ((unsigned int)(size + (int)self->localNetAllocated) > self->maxSize && self->messageLevel > 0) {
                         Memory_PrintPoolStatistics(0, self);
                         if (g_igPageMemoryPool_ignoreE101Notice == 0) {
-                            r = igReportNotice(text_igPageMemoryPool_E101_MaximumSizeReached, (int)self->maxSize, (int)self->localNetAllocated);
+                            r = igReportNotice("igPageMemoryPool(E101): Maximum memory size limit of %d bytes reached.  %d bytes already allocated.", (int)self->maxSize, (int)self->localNetAllocated);
                             if (r != 1 && r == 2) {
                                 g_igPageMemoryPool_ignoreE101Notice = 1;
                             }
@@ -487,7 +495,7 @@ void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, 
                     }
                 }
             } else if (self->messageLevel >= 3 && g_igPageMemoryPool_ignoreE91Notice == 0) {
-                r = igReportNotice(text_igPageMemoryPool_memoryOperation_E91, self->poolIndex, size, (int)self->localNetAllocated, (int)self->maxSize);
+                r = igReportNotice("igPageMemoryPool::memoryOperation[%d](E91) - Operation refused request of %d bytes\nPool has already allocated %u bytes of maximum %u bytes\n", self->poolIndex, size, (int)self->localNetAllocated, (int)self->maxSize);
                 if (r != 1 && r == 2) {
                     g_igPageMemoryPool_ignoreE91Notice = 1;
                 }
@@ -520,7 +528,7 @@ void *igPageMemoryPool_MemoryOperation(igPageMemoryPoolView *self, void *block, 
             result = pages;
         } else {
             if (self->messageLevel >= 3 && g_igPageMemoryPool_ignoreE94Notice == 0) {
-                r = igReportNotice(text_igPageMemoryPool_memoryOperation_E94, self->poolIndex, size);
+                r = igReportNotice("igPageMemoryPool::memoryOperation[%d](E94) - Operation failed on request of %d bytes\n", self->poolIndex, size);
                 if (r != 1 && r == 2) {
                     g_igPageMemoryPool_ignoreE94Notice = 1;
                 }
@@ -543,9 +551,9 @@ int igPageMemoryPool_AllocatePages(igPageMemoryPoolView *self, int size) {
     int pages;
 
     if (self->poolOptionFlags & 8) {
-        pages = (int)g_activeSystemAllocator[0]->AllocateAligned(size);
+        pages = (int)g_activeSystemAllocator->AllocateAligned(size);
     } else {
-        pages = (int)g_activeSystemAllocator[0]->AllocateSized(size);
+        pages = (int)g_activeSystemAllocator->AllocateSized(size);
     }
     if (pages != 0) {
         self->MarkPages(pages, size, 1);
@@ -556,9 +564,9 @@ int igPageMemoryPool_AllocatePages(igPageMemoryPoolView *self, int size) {
 void igPageMemoryPool_FreePages(igPageMemoryPoolView *self, int block, int size) {
     int physical = (self->poolOptionFlags & 8) != 0; /* The flag test is normalised to 0/1 first; a `bool physical = flags & 8` idiom would drop the sltu. */
     if (physical) {
-        g_activeSystemAllocator[0]->FreeAligned((void *)block, size);
+        g_activeSystemAllocator->FreeAligned((void *)block, size);
     } else {
-        g_activeSystemAllocator[0]->FreeSized((void *)block, size);
+        g_activeSystemAllocator->FreeSized((void *)block, size);
     }
     if (block != 0) {
         self->MarkPages(block, size, 0);
@@ -574,9 +582,9 @@ int igPageMemoryPool_ReallocatePages(igPageMemoryPoolView *self, int block, int 
         self->MarkPages(block, oldSize, 0);
     }
     if (self->poolOptionFlags & 8) {
-        pages = (int)g_activeSystemAllocator[0]->ReallocateAligned((void *)block, size, oldSize);
+        pages = (int)g_activeSystemAllocator->ReallocateAligned((void *)block, size, oldSize);
     } else {
-        pages = (int)g_activeSystemAllocator[0]->ReallocateSized((void *)block, size, oldSize);
+        pages = (int)g_activeSystemAllocator->ReallocateSized((void *)block, size, oldSize);
     }
     if (pages != 0) {
         self->MarkPages(pages, size, 1);
@@ -588,9 +596,9 @@ int igPageMemoryPool_AllocatePagesAligned(igPageMemoryPoolView *self, int alignm
     int pages;
 
     if (self->poolOptionFlags & 8) {
-        pages = (int)g_activeSystemAllocator[0]->AllocateAligned(size);
+        pages = (int)g_activeSystemAllocator->AllocateAligned(size);
     } else {
-        pages = (int)g_activeSystemAllocator[0]->AllocateSized(size);
+        pages = (int)g_activeSystemAllocator->AllocateSized(size);
     }
     if (pages != 0) {
         self->MarkPages(pages, size, 1);
@@ -636,6 +644,8 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
 }
+
+unsigned char g_igPageMemoryPool_ignoreGetBlockSizeNotice;
 
 /* Size of the block that starts at `block`, 0 when no block starts there. A table word holds two
  * bits per page, "first page of a block" (even bits) and "last page of a block" (odd bits,
@@ -692,7 +702,7 @@ unsigned igPageMemoryPool_GetBlockSize(igPageMemoryPoolView *self, void *block) 
             if (self->messageLevel >= 1) {
                 Memory_PrintPoolStatistics(0, self);
                 if (g_igPageMemoryPool_ignoreGetBlockSizeNotice == 0) {
-                    int r = igReportNotice((const char *)text_igPageMemoryPool_getBlockSize_Sh);
+                    int r = igReportNotice((const char *)"igPageMemoryPool::getBlockSize - Should not be reached.");
                     if (r != 1 && r == 2) {
                         g_igPageMemoryPool_ignoreGetBlockSizeNotice = 1;
                     }
@@ -724,7 +734,7 @@ void igPageMemoryPool_DisplayOutstandingAllocations(igPageMemoryPoolView *self) 
                     do {
                         if (*bits & (1 << page)) {
                             address = (page << 12) + (tableBase + (word << 17));
-                            igReport_Printf((const char *)text_Outstanding_allocation_at_0x_percent_08x, address, self->GetBlockSize((void *)address));
+                            igReport_Printf((const char *)"    Outstanding allocation at 0x%08x size %d\n", address, self->GetBlockSize((void *)address));
                             igReport_Flush();
                         }
                         page++;

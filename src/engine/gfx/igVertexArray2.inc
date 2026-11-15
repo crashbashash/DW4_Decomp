@@ -1,21 +1,26 @@
+igMetaObject *g_igVertexArray2_metaObject;
+igMetaField *g_igVertexArray2_objListMetaField;
+igMetaField *g_igVertexArray2_vertexStreamMetaField;
+igMetaField *g_igVertexArray2_internalBufferMetaField;
+
 int FUN_0014a780(int arg0) {
     FUN_0014ab70();
-    return igMetaObject_CreateInstance(*(int *)0x55F9E0, arg0);
+    return igMetaObject_CreateInstance(g_igVertexArray2_metaObject, arg0);
 }
 
 igMetaObject *FUN_0014a7c0(void) {
-    if (g_igVertexArray2_metaObject[0] == 0) {
-        g_igVertexArray2_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igVertexArray2_metaObject == 0) {
+        g_igVertexArray2_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igVertexArray2_metaObject[0];
+    return g_igVertexArray2_metaObject;
 }
 
 igMetaObject *igVertexArray2_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVertexArray2_metaObject[0];
+    igMetaObject *g = g_igVertexArray2_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ab70();
-    return g_igVertexArray2_metaObject[0];
+    return g_igVertexArray2_metaObject;
 }
 
 int igVertexArray2_GetVTable(void) {
@@ -90,15 +95,17 @@ void FUN_0014ab70(void)
     igMetaObject_RunStaticInit(igVertexArray2_Register);
 }
 
+static igMetaObjectCallback g_igVertexArray2_callbackList[] = { igObjectList_EnsureRegistered, FUN_0014af80, igObject_EnsureRegistered, 0 };
+
 void igVertexArray2_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVertexArray2_metaObject,
+        &g_igVertexArray2_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igVertexArray2_GetMetaObject,
-        igVertexArray2_className,
+        "igVertexArray2",
         0x18, /* instance size */
         igVertexArray2_GetVTable,
         &igVertexArray2_InitFields,
@@ -111,26 +118,47 @@ void thunk_igVertexArray2_GetMetaObject(void) {
     igVertexArray2_GetMetaObject();
 }
 
+static FieldFactory g_igVertexArray2_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igVertexArray2_fieldTable[] = {
+    "_objList",
+    "_vertexStream",
+    "_internalBuffer",
+};
+static igMetaField **g_igVertexArray2_fieldHandles[] = {
+    &g_igVertexArray2_objListMetaField,
+    &g_igVertexArray2_vertexStreamMetaField,
+    &g_igVertexArray2_internalBufferMetaField,
+};
+static int g_igVertexArray2_fieldOffsets[] = {
+    16,
+    20,
+    12,
+};
+
 void igVertexArray2_InitFields(void) {
-    int temp_s2;
+    int fieldStart;
     void *temp_v0;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *meta;
 
-    temp_s0 = (void *)(g_igVertexArray2_metaObject[0]);
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igVertexArray2_ctorTable[0], 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    meta = g_igVertexArray2_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexArray2_ctorTable, 3);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0014ae00();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)((int) g_igObject_metaObject[0]);
     ((igMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igVertexArray2_fieldTable[0], &DAT_00488540[0], &DAT_00488550[0], temp_s2);
-    *(int *)((char *)(g_igVertexArray2_metaObject[0]) + 60) = (int)(thunk_FUN_00152200);
+    igMetaObject_NameFields(meta, g_igVertexArray2_fieldTable, g_igVertexArray2_fieldHandles, g_igVertexArray2_fieldOffsets, fieldStart);
+    *(int *)((char *)(g_igVertexArray2_metaObject) + 60) = (int)(thunk_FUN_00152200);
 }
 
 void thunk_FUN_00152200(void) {

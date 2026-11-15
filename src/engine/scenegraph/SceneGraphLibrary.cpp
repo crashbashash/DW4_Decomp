@@ -1,5 +1,8 @@
 #include "src/engine/scenegraph/SceneGraphLibrary.h"
 
+#pragma push
+#pragma readonly_strings on
+
 /* Constructed by __sinit_SceneGraphLibrary.cpp in this order. */
 igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;
 igSmartPointer<igAnimationStatePool> g_igAnimationStatePool_instance;
@@ -208,3 +211,5 @@ igSmartPointer<igBlendFunctionAttr> g_envMapBlendZeroSrcAlphaUnit1(0, kRetainRef
 #include "src/engine/scenegraph/igTraversal_tail.inc"
 #include "src/engine/scenegraph/igPsx2EnvironmentMapShader_tail2.inc"
 #include "src/engine/scenegraph/InlineTail.inc"
+
+#pragma pop

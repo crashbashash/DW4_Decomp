@@ -1,21 +1,26 @@
+igMetaObject *g_beNDMWLoadIntf2TextOrder_metaObject;
+int g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage;
+igMetaField *g_beNDMWLoadIntf2TextOrder_messengerMetaField;
+igMetaField *g_beNDMWLoadIntf2TextOrder_luaMetaField;
+
 void beNDMWLoadIntf2TextOrder_Create(int arg0) {
     FUN_003c7830();
-    igMetaObject_CreateInstance(*(int *)0x58BE90, arg0);
+    igMetaObject_CreateInstance(g_beNDMWLoadIntf2TextOrder_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c7700(void) {
-    if (g_beNDMWLoadIntf2TextOrder_metaObject[0] == 0) {
-        g_beNDMWLoadIntf2TextOrder_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWLoadIntf2TextOrder_metaObject == 0) {
+        g_beNDMWLoadIntf2TextOrder_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWLoadIntf2TextOrder_metaObject[0];
+    return g_beNDMWLoadIntf2TextOrder_metaObject;
 }
 
 void *beNDMWLoadIntf2TextOrder_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWLoadIntf2TextOrder_metaObject[0];
+    igMetaObject *g = g_beNDMWLoadIntf2TextOrder_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003c7830();
     }
-    return g_beNDMWLoadIntf2TextOrder_metaObject[0];
+    return g_beNDMWLoadIntf2TextOrder_metaObject;
 }
 
 int beNDMWLoadIntf2TextOrder_GetVTable(void) {
@@ -52,15 +57,17 @@ void FUN_003c7830(void)
     igMetaObject_RunStaticInit(beNDMWLoadIntf2TextOrder_Register);
 }
 
+static igMetaObjectCallback g_beNDMWLoadIntf2TextOrder_callbackList[] = { FUN_00357d10, FUN_0035b9c0, 0 };
+
 void *beNDMWLoadIntf2TextOrder_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWLoadIntf2TextOrder_metaObject,
+        &g_beNDMWLoadIntf2TextOrder_metaObject,
         beBaseInfoData_Register,
         beBaseInfoData_GetPublishedMetaObject,
         beNDMWLoadIntf2TextOrder_GetMetaObject,
-        beNDMWLoadIntf2TextOrder_className,
+        "beNDMWLoadIntf2TextOrder",
         0x18, /* instance size */
         beNDMWLoadIntf2TextOrder_GetVTable,
         beNDMWLoadIntf2TextOrder_InitFields,
@@ -74,6 +81,23 @@ void beNDMWLoadIntf2TextOrder_GetMetaObject(void)
     beNDMWLoadIntf2TextOrder_GetReadyMetaObject();
 }
 
+static FieldFactory g_beNDMWLoadIntf2TextOrder_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWLoadIntf2TextOrder_fieldTable[] = {
+    "_messenger",
+    "_lua",
+};
+static igMetaField **g_beNDMWLoadIntf2TextOrder_fieldHandles[] = {
+    &g_beNDMWLoadIntf2TextOrder_messengerMetaField,
+    &g_beNDMWLoadIntf2TextOrder_luaMetaField,
+};
+static int g_beNDMWLoadIntf2TextOrder_fieldOffsets[] = {
+    16,
+    20,
+};
+
 void beNDMWLoadIntf2TextOrder_InitFields(void) {
     int temp_s2;
     int temp_s3;
@@ -83,14 +107,16 @@ void beNDMWLoadIntf2TextOrder_InitFields(void) {
     void *temp_s1;
     igStringMetaField *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)g_beNDMWLoadIntf2TextOrder_metaObject)[0]);
+    /* matching construct: variant search - the handle stays a void * (typed igMetaObject * swaps s0/s1) */
+
+    temp_s1 = (void *)(g_beNDMWLoadIntf2TextOrder_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_beNDMWLoadIntf2TextOrder_ctorTable[0], 2);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_name_2[0]));
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2TextOrder_ctorTable, 2);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(((igMetaObject *)temp_s1)->_metaFields, temp_v0);
     temp_v0_2 = (igStringMetaField *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, &TEXTORDER_4[0]);
-    temp_v0_2->_externalEnumStorage = (int)(&DAT_0058be98[0]);
+    igStringMetaField_SetDefaultText(temp_v0_2, "TEXTORDER");
+    temp_v0_2->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
     temp_v0_2->_refCount = temp_v0_2->_refCount - 1;
     if (((unsigned long long)(long long)temp_v0_2->_refCount & 0x7fffffULL) == 0) {
@@ -102,6 +128,6 @@ void beNDMWLoadIntf2TextOrder_InitFields(void) {
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s0_2)->_metaObject = FUN_0035b770();
     ((igObjectRefMetaField *)temp_s0_2)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s1, &g_beNDMWLoadIntf2TextOrder_fieldTable[0], &DAT_004cbf88[0], &DAT_004cbf90[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_beNDMWLoadIntf2TextOrder_fieldTable, g_beNDMWLoadIntf2TextOrder_fieldHandles, g_beNDMWLoadIntf2TextOrder_fieldOffsets, temp_s2);
 }
 

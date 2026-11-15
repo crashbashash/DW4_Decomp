@@ -1,9 +1,14 @@
+igMetaObject *g_igPsx2EnvironmentMapShader_metaObject;
+igMetaField *g_igPsx2EnvironmentMapShader_envMapBlendFuncMetaField;
+igMetaField *g_igPsx2EnvironmentMapShader_envMapTexGenMatrixMetaField;
+igMetaField *g_igPsx2EnvironmentMapShader_multiPassEnableMetaField;
+
 igMetaObject *igPsx2EnvironmentMapShader_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject[0];
+    igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001ab540();
-    return g_igPsx2EnvironmentMapShader_metaObject[0];
+    return g_igPsx2EnvironmentMapShader_metaObject;
 }
 
 int igPsx2EnvironmentMapShader_GetVTable(void) {
@@ -132,15 +137,17 @@ void FUN_001ab540(void)
     igMetaObject_RunStaticInit(igPsx2EnvironmentMapShader_Register);
 }
 
+static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { FUN_0013a040, FUN_00133290, FUN_001352b0, 0 };
+
 void igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igPsx2EnvironmentMapShader_metaObject),
+        &g_igPsx2EnvironmentMapShader_metaObject,
         igEnvironmentMapShader2_Register,
         igEnvironmentMapShader2_GetPublishedMetaObject,
         thunk_igPsx2EnvironmentMapShader_GetMetaObject,
-        igPsx2EnvironmentMapShader_className,
+        "igPsx2EnvironmentMapShader",
         0x7C, /* instance size */
         igPsx2EnvironmentMapShader_GetVTable,
         &igPsx2EnvironmentMapShader_InitFields,
@@ -150,8 +157,29 @@ void igPsx2EnvironmentMapShader_Register(void) {
 }
 
 igMetaObject *FUN_001ab5d0(void) {
-    return g_igEnvironmentMapShader2_metaObject[0];
+    return g_igEnvironmentMapShader2_metaObject;
 }
+
+static FieldFactory g_igPsx2EnvironmentMapShader_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igPsx2EnvironmentMapShader_fieldTable[] = {
+    "_envMapBlendFunc",
+    "_envMapTexGenMatrix",
+    "_multiPassEnable",
+};
+static igMetaField **g_igPsx2EnvironmentMapShader_fieldHandles[] = {
+    &g_igPsx2EnvironmentMapShader_envMapBlendFuncMetaField,
+    &g_igPsx2EnvironmentMapShader_envMapTexGenMatrixMetaField,
+    &g_igPsx2EnvironmentMapShader_multiPassEnableMetaField,
+};
+static int g_igPsx2EnvironmentMapShader_fieldOffsets[] = {
+    112,
+    116,
+    120,
+};
 
 void igPsx2EnvironmentMapShader_InitFields(void) {
     void *temp_s1_2;
@@ -160,9 +188,9 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)(g_igPsx2EnvironmentMapShader_metaObject[0]);
+    temp_s0 = (void *)(g_igPsx2EnvironmentMapShader_metaObject);
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2EnvironmentMapShader_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00139f10();
     ((igMetaField *)temp_s1)->_persistent = 0;
@@ -172,8 +200,8 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, 2 + temp_s2)));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001351d0();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igPsx2EnvironmentMapShader_fieldTable[0], &DAT_0048d8a0[0], &DAT_0048d8b0[0], temp_s2);
-    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject[0]))->_writeProxy = (int)thunk_igEnvironmentMapShader2_GetMetaObject;
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
+    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)thunk_igEnvironmentMapShader2_GetMetaObject;
 }
 
 int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {

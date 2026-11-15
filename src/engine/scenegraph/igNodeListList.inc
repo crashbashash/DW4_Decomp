@@ -1,16 +1,18 @@
+igMetaObject *g_igNodeListList_metaObject;
+
 igMetaObject *FUN_0019ca30(void) {
-    if (g_igNodeListList_metaObject[0] == 0) {
-        g_igNodeListList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igNodeListList_metaObject == 0) {
+        g_igNodeListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igNodeListList_metaObject[0];
+    return g_igNodeListList_metaObject;
 }
 
 igMetaObject *igNodeListList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igNodeListList_metaObject[0];
+    igMetaObject *g = g_igNodeListList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019cb10();
-    return g_igNodeListList_metaObject[0];
+    return g_igNodeListList_metaObject;
 }
 
 int igNodeListList_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_0019cb10(void)
     igMetaObject_RunStaticInit(igNodeListList_Register);
 }
 
+static igMetaObjectCallback g_igNodeListList_callbackList[] = { FUN_0019ccc0, 0 };
+
 void igNodeListList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igNodeListList_metaObject),
+        &g_igNodeListList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igNodeListList_GetMetaObject,
-        igNodeListList_className,
+        "igNodeListList",
         0x14, /* instance size */
         igNodeListList_GetVTable,
         0,

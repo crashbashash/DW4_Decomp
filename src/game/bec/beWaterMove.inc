@@ -1,16 +1,23 @@
+igMetaObject *g_beWaterMove_metaObject;
+igMetaField *g_beWaterMove_baseTimeMetaField;
+igMetaField *g_beWaterMove_elapseTimeMetaField;
+igMetaField *g_beWaterMove_maxTimeMetaField;
+igMetaField *g_beWaterMove_targetDataMetaField;
+igMetaField *g_beWaterMove_dataListMetaField;
+
 igMetaObject *FUN_00340490(void) {
-    if (g_beWaterMove_metaObject[0] == 0) {
-        g_beWaterMove_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beWaterMove_metaObject == 0) {
+        g_beWaterMove_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beWaterMove_metaObject[0];
+    return g_beWaterMove_metaObject;
 }
 
 void *FUN_003404e0(void) {
-    igMetaObject *g = g_beWaterMove_metaObject[0];
+    igMetaObject *g = g_beWaterMove_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003405c0();
     }
-    return g_beWaterMove_metaObject[0];
+    return g_beWaterMove_metaObject;
 }
 
 int beWaterMove_GetVTable(void) {
@@ -32,15 +39,17 @@ void FUN_003405c0(void)
     igMetaObject_RunStaticInit(beWaterMove_Register);
 }
 
+static igMetaObjectCallback g_beWaterMove_callbackList[] = { FUN_00340800, 0 };
+
 void *beWaterMove_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWaterMove_metaObject,
+        &g_beWaterMove_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beWaterMove_GetMetaObject,
-        beWaterMove_className,
+        "beWaterMove",
         0x28, /* instance size */
         beWaterMove_GetVTable,
         beWaterMove_InitFields,
@@ -54,17 +63,46 @@ void beWaterMove_GetMetaObject(void)
     FUN_003404e0();
 }
 
+static FieldFactory g_beWaterMove_ctorTable[] = {
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beWaterMove_fieldTable[] = {
+    "_baseTime",
+    "_elapseTime",
+    "_maxTime",
+    "_targetData",
+    "_dataList",
+};
+static igMetaField **g_beWaterMove_fieldHandles[] = {
+    &g_beWaterMove_baseTimeMetaField,
+    &g_beWaterMove_elapseTimeMetaField,
+    &g_beWaterMove_maxTimeMetaField,
+    &g_beWaterMove_targetDataMetaField,
+    &g_beWaterMove_dataListMetaField,
+};
+static int g_beWaterMove_fieldOffsets[] = {
+    8,
+    16,
+    24,
+    32,
+    36,
+};
+
 void beWaterMove_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beWaterMove_metaObject[0];
+    temp_s0 = (void *)g_beWaterMove_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beWaterMove_ctorTable[0], 5);
+    igMetaObject_CreateFields(temp_s0, g_beWaterMove_ctorTable, 5);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00340720();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beWaterMove_fieldTable[0], &DAT_004c32c0[0], &DAT_004c32e0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beWaterMove_fieldTable, g_beWaterMove_fieldHandles, g_beWaterMove_fieldOffsets, temp_s2);
 }
 

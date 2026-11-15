@@ -1,9 +1,14 @@
+igMetaObject *g_igSkeleton_metaObject;
+igMetaField *g_igSkeleton_boneInfoListMetaField;
+igMetaField *g_igSkeleton_invJointArrayMetaField;
+igMetaField *g_igSkeleton_jointCountMetaField;
+
 igMetaObject *FUN_00198550(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igSkeleton_metaObject)[0];
+    igMetaObject *g = g_igSkeleton_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00198680();
-    return ((igMetaObject * *)g_igSkeleton_metaObject)[0];
+    return g_igSkeleton_metaObject;
 }
 
 int igSkeleton_GetVTable(void) {
@@ -53,15 +58,17 @@ void FUN_00198680(void)
     igMetaObject_RunStaticInit(igSkeleton_Register);
 }
 
+static igMetaObjectCallback g_igSkeleton_callbackList[] = { FUN_001988d0, 0 };
+
 void igSkeleton_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igSkeleton_metaObject,
+        &g_igSkeleton_metaObject,
         igAnimationHierarchy_Register,
         igAnimationHierarchy_GetPublishedMetaObject,
         thunk_FUN_00198550,
-        igSkeleton_className,
+        "igSkeleton",
         sizeof(igSkeleton),                                   /* Instance size. */
         igSkeleton_GetVTable,
         &igSkeleton_InitFields,
@@ -74,9 +81,33 @@ void thunk_FUN_00198550(void) {
     FUN_00198550();
 }
 
+igMetaObject *g_igAnimationHierarchy_metaObject;
+igMetaField *g_igAnimationHierarchy_boneTranslationArrayMetaField;
+
 igMetaObject *FUN_00198720(void) {
-    return g_igAnimationHierarchy_metaObject[0];
+    return g_igAnimationHierarchy_metaObject;
 }
+
+static FieldFactory g_igSkeleton_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igSkeleton_fieldTable[] = {
+    "_boneInfoList",
+    "_invJointArray",
+    "_jointCount",
+};
+static igMetaField **g_igSkeleton_fieldHandles[] = {
+    &g_igSkeleton_boneInfoListMetaField,
+    &g_igSkeleton_invJointArrayMetaField,
+    &g_igSkeleton_jointCountMetaField,
+};
+static int g_igSkeleton_fieldOffsets[] = {
+    16,
+    20,
+    24,
+};
 
 void igSkeleton_InitFields(void) {
     int temp_s2;
@@ -84,9 +115,9 @@ void igSkeleton_InitFields(void) {
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSkeleton_metaObject[0];
+    temp_s0 = (void *)g_igSkeleton_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSkeleton_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkeleton_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001987f0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
@@ -95,6 +126,6 @@ void igSkeleton_InitFields(void) {
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, &g_igSkeleton_fieldTable[0], &DAT_0048b5b0[0], &DAT_0048b5c0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkeleton_fieldTable, g_igSkeleton_fieldHandles, g_igSkeleton_fieldOffsets, temp_s2);
 }
 

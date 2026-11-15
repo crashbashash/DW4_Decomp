@@ -1,16 +1,25 @@
+igMetaObject *g_igViewportAttr_metaObject;
+igMetaField *g_igViewportAttr_xMetaField;
+igMetaField *g_igViewportAttr_yMetaField;
+igMetaField *g_igViewportAttr_wMetaField;
+igMetaField *g_igViewportAttr_hMetaField;
+igMetaField *g_igViewportAttr_scissorExtMetaField;
+igMetaField *g_igViewportAttr_nearZMetaField;
+igMetaField *g_igViewportAttr_farZMetaField;
+
 igMetaObject *FUN_00130440(void) {
-    if (g_igViewportAttr_metaObject[0] == 0) {
-        g_igViewportAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewportAttr_metaObject == 0) {
+        g_igViewportAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewportAttr_metaObject[0];
+    return g_igViewportAttr_metaObject;
 }
 
 igMetaObject *igViewportAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igViewportAttr_metaObject[0];
+    igMetaObject *g = g_igViewportAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00130570();
-    return g_igViewportAttr_metaObject[0];
+    return g_igViewportAttr_metaObject;
 }
 
 int igViewportAttr_GetVTable(void) {
@@ -41,15 +50,17 @@ void FUN_00130570(void)
     igMetaObject_RunStaticInit(igViewportAttr_Register);
 }
 
+static igMetaObjectCallback g_igViewportAttr_callbackList[] = { FUN_0014bd20, 0 };
+
 void igViewportAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewportAttr_metaObject,
+        &g_igViewportAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igViewportAttr_GetMetaObject,
-        igViewportAttr_className,
+        "igViewportAttr",
         0x28, /* instance size */
         igViewportAttr_GetVTable,
         &igViewportAttr_InitFields,
@@ -63,17 +74,54 @@ void thunk_igViewportAttr_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_00130610(void) {
-    return g_igVisualAttribute_metaObject[0];
+    return g_igVisualAttribute_metaObject;
 }
+
+static FieldFactory g_igViewportAttr_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_igViewportAttr_fieldTable[] = {
+    "_x",
+    "_y",
+    "_w",
+    "_h",
+    "_scissorExt",
+    "_nearZ",
+    "_farZ",
+};
+static igMetaField **g_igViewportAttr_fieldHandles[] = {
+    &g_igViewportAttr_xMetaField,
+    &g_igViewportAttr_yMetaField,
+    &g_igViewportAttr_wMetaField,
+    &g_igViewportAttr_hMetaField,
+    &g_igViewportAttr_scissorExtMetaField,
+    &g_igViewportAttr_nearZMetaField,
+    &g_igViewportAttr_farZMetaField,
+};
+static int g_igViewportAttr_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+};
 
 void igViewportAttr_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igViewportAttr_metaObject[0];
+    temp_s0 = g_igViewportAttr_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewportAttr_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s0, g_igViewportAttr_ctorTable, 7);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 0x27F);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 0x1BF);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
@@ -83,7 +131,7 @@ void igViewportAttr_InitFields(void) {
     *(char *)((char *)(temp_s1) + 39) = 1;
     *(char *)((char *)(temp_s1) + 44) = 3;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6), 1.0f);
-    igMetaObject_NameFields(temp_s0, &g_igViewportAttr_fieldTable[0], &DAT_00485980[0], &DAT_004859a0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igViewportAttr_fieldTable, g_igViewportAttr_fieldHandles, g_igViewportAttr_fieldOffsets, temp_s2);
 }
 
 StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage) {

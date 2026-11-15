@@ -1,9 +1,20 @@
+igMetaObject *g_igIniShaderFactory_metaObject;
+igMetaField *g_igIniShaderFactory_implementationNameMetaField;
+igMetaField *g_igIniShaderFactory_fileCacheMetaField;
+igMetaField *g_igIniShaderFactory_implementationMetaField;
+igMetaField *g_igIniShaderFactory_interfaceMetaField;
+igMetaField *g_igIniShaderFactory_interfaceFileNameMetaField;
+igMetaField *g_igIniShaderFactory_interfaceSectionMetaField;
+igMetaField *g_igIniShaderFactory_mpMetaField;
+igMetaField *g_igIniShaderFactory_dataMetaField;
+igMetaField *g_igIniShaderFactory_cachedObjectsMetaField;
+
 igMetaObject *igIniShaderFactory_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIniShaderFactory_metaObject[0];
+    igMetaObject *g = g_igIniShaderFactory_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019efb0();
-    return g_igIniShaderFactory_metaObject[0];
+    return g_igIniShaderFactory_metaObject;
 }
 
 int igIniShaderFactory_GetVTable(void) {
@@ -71,15 +82,17 @@ void FUN_0019efb0(void)
     igMetaObject_RunStaticInit(igIniShaderFactory_Register);
 }
 
+static igMetaObjectCallback g_igIniShaderFactory_callbackList[] = { igObjectStringMap_EnsureRegistered, igRegistry_EnsureRegistered, igMemoryPool_EnsureRegistered, FUN_0019ebc0, 0 };
+
 void igIniShaderFactory_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igIniShaderFactory_metaObject),
+        &g_igIniShaderFactory_metaObject,
         igShaderFactory_Register,
         igShaderFactory_GetPublishedMetaObject,
         thunk_igIniShaderFactory_GetMetaObject,
-        igIniShaderFactory_className,
+        "igIniShaderFactory",
         0x3C, /* instance size */
         igIniShaderFactory_GetVTable,
         &igIniShaderFactory_InitFields,
@@ -93,8 +106,53 @@ void thunk_igIniShaderFactory_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_0019f050(void) {
-    return g_igShaderFactory_metaObject[0];
+    return g_igShaderFactory_metaObject;
 }
+
+static FieldFactory g_igIniShaderFactory_ctorTable[] = {
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igIniShaderFactory_fieldTable[] = {
+    "_implementationName",
+    "_fileCache",
+    "_implementation",
+    "_interface",
+    "_interfaceFileName",
+    "_interfaceSection",
+    "_mp",
+    "_data",
+    "_cachedObjects",
+};
+static igMetaField **g_igIniShaderFactory_fieldHandles[] = {
+    &g_igIniShaderFactory_implementationNameMetaField,
+    &g_igIniShaderFactory_fileCacheMetaField,
+    &g_igIniShaderFactory_implementationMetaField,
+    &g_igIniShaderFactory_interfaceMetaField,
+    &g_igIniShaderFactory_interfaceFileNameMetaField,
+    &g_igIniShaderFactory_interfaceSectionMetaField,
+    &g_igIniShaderFactory_mpMetaField,
+    &g_igIniShaderFactory_dataMetaField,
+    &g_igIniShaderFactory_cachedObjectsMetaField,
+};
+static int g_igIniShaderFactory_fieldOffsets[] = {
+    24,
+    56,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+};
 
 void igIniShaderFactory_InitFields(void) {
     int temp_s0;
@@ -108,9 +166,9 @@ void igIniShaderFactory_InitFields(void) {
     void *temp_v0_2;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igIniShaderFactory_metaObject[0];
+    temp_s1 = (void *)g_igIniShaderFactory_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igIniShaderFactory_ctorTable[0], 9);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igIniShaderFactory_ctorTable, 9);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = igObjectStringMap_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
@@ -136,6 +194,6 @@ void igIniShaderFactory_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igObjectStringMap_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
     ((igObjectRefMetaField *)temp_s2_6)->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &g_igIniShaderFactory_fieldTable[0], &DAT_0048bf80[0], &DAT_0048bfb0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igIniShaderFactory_fieldTable, g_igIniShaderFactory_fieldHandles, g_igIniShaderFactory_fieldOffsets, temp_s0);
 }
 

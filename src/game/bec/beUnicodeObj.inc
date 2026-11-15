@@ -1,14 +1,17 @@
+igMetaObject *g_beUnicodeObj_metaObject;
+igMetaField *g_beUnicodeObj_bufferMetaField;
+
 void beUnicodeObj_Create(int arg0) {
     FUN_00361610();
     igMetaObject_CreateInstance(*(int *)0x589640, arg0);
 }
 
 igMetaObject *FUN_00361530(void) {
-    igMetaObject *g = g_beUnicodeObj_metaObject[0];
+    igMetaObject *g = g_beUnicodeObj_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_00361610();
-    return g_beUnicodeObj_metaObject[0];
+    return g_beUnicodeObj_metaObject;
 }
 
 int beUnicodeObj_GetVTable(void) {
@@ -49,11 +52,11 @@ void *beUnicodeObj_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beUnicodeObj_metaObject,
+        &g_beUnicodeObj_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beUnicodeObj_GetMetaObject,
-        beUnicodeObj_className,
+        "beUnicodeObj",
         0x10, /* instance size */
         beUnicodeObj_GetVTable,
         beUnicodeObj_InitFields,
@@ -67,16 +70,29 @@ void beUnicodeObj_GetMetaObject(void)
     FUN_00361530();
 }
 
+static FieldFactory g_beUnicodeObj_ctorTable[] = {
+    igMemoryRefMetaField_Create,
+};
+static const char *g_beUnicodeObj_fieldTable[] = {
+    "_buffer",
+};
+static igMetaField **g_beUnicodeObj_fieldHandles[] = {
+    &g_beUnicodeObj_bufferMetaField,
+};
+static int g_beUnicodeObj_fieldOffsets[] = {
+    12,
+};
+
 void beUnicodeObj_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beUnicodeObj_metaObject[0];
+    temp_s0 = (void *)g_beUnicodeObj_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beUnicodeObj_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beUnicodeObj_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedShortMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &g_beUnicodeObj_fieldTable[0], &DAT_004c6c88[0], &DAT_004c6c90[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beUnicodeObj_fieldTable, g_beUnicodeObj_fieldHandles, g_beUnicodeObj_fieldOffsets, temp_s2);
 }
 

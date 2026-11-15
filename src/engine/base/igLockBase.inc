@@ -1,9 +1,11 @@
+igMetaObject *g_igLockBase_metaObject;
+
 igMetaObject *igLockBase_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLockBase_metaObject[0];
+    igMetaObject *g = g_igLockBase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00226be0();
-    return g_igLockBase_metaObject[0];
+    return g_igLockBase_metaObject;
 }
 
 void FUN_00226be0(void)
@@ -15,11 +17,11 @@ void igLockBase_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igLockBase_metaObject,
+        &g_igLockBase_metaObject,
         igInterfaced_Register,
         igInterfaced_GetPublishedMetaObject,
         thunk_igLockBase_GetMetaObject,
-        igLockBase_className,
+        "igLockBase",
         0x20, /* instance size */
         0,
         0,

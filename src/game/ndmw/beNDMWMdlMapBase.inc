@@ -1,22 +1,24 @@
+igMetaObject *g_beNDMWMdlMapBase_metaObject;
+
 void beNDMWMdlMapBase_CreateInstance(int arg0) {
     FUN_003c1070();
-    igMetaObject_CreateInstance(*(int *)0x58B4A0, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlMapBase_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c0f70(void) {
-    if (g_beNDMWMdlMapBase_metaObject[0] == 0) {
-        g_beNDMWMdlMapBase_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlMapBase_metaObject == 0) {
+        g_beNDMWMdlMapBase_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlMapBase_metaObject[0];
+    return g_beNDMWMdlMapBase_metaObject;
 }
 
 igMetaObject *beNDMWMdlMapBase_GetReadyMetaObject(void)
 {
-    igMetaObject *g = g_beNDMWMdlMapBase_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlMapBase_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_003c1070();
-    return g_beNDMWMdlMapBase_metaObject[0];
+    return g_beNDMWMdlMapBase_metaObject;
 }
 
 int beNDMWMdlMapBase_GetVTable(void) {
@@ -42,11 +44,11 @@ void *beNDMWMdlMapBase_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlMapBase_metaObject,
+        &g_beNDMWMdlMapBase_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlMapBase_GetMetaObject,
-        beNDMWMdlMapBase_className,
+        "beNDMWMdlMapBase",
         0x2c, /* instance size */
         beNDMWMdlMapBase_GetVTable,
         0,

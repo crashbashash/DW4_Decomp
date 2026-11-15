@@ -547,7 +547,7 @@ void FUN_0016a860(Arg *arg0) {
     int *s3;
     Buf860 *b;
     sp5C = 64;
-    thunk_igRegistry_GetValueInt(*(int *)((char *)(g_objectSystem[0]) + 56), 4, &IG_GFX_VC_CLUT_ARRAY_SIZE[0], &sp5C, 64, 0);
+    thunk_igRegistry_GetValueInt(*(int *)((char *)(g_objectSystem[0]) + 56), 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &sp5C, 64, 0);
     p = (P_1690d0 *)Memory_AllocateBufferDirect(20, FUN_00165d10((int *)arg0));
     if (p != 0) {
         n = sp5C;
@@ -559,7 +559,7 @@ void FUN_0016a860(Arg *arg0) {
             }
             g_stringPool[0] = v;
         }
-        s3 = (int *)StringPool_Intern(g_stringPool[0], &IG_GFX_VC_CLUT_ARRAY_SIZE[0]);
+        s3 = (int *)StringPool_Intern(g_stringPool[0], "IG_GFX_VC_CLUT_ARRAY_SIZE");
         old = p->f8;
         if (old != 0) {
             int *a1 = old - 2;
@@ -1103,11 +1103,11 @@ void FUN_0016cd10(void *arg0) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
-    igDriverDatabase_SetCurrentProperty(arg1, 1, &text_psx2[0]);
-    igDriverDatabase_SetCurrentProperty(arg1, 2, &DAT_004df510[0]);
-    igDriverDatabase_SetCurrentProperty(arg1, 3, &text_sony[0]);
-    igDriverDatabase_SetCurrentProperty(arg1, 4, &text_psx2[0]);
-    igDriverDatabase_SetCurrentProperty(arg1, 5, &DAT_004df510[0]);
+    igDriverDatabase_SetCurrentProperty(arg1, 1, "psx2");
+    igDriverDatabase_SetCurrentProperty(arg1, 2, "1.0");
+    igDriverDatabase_SetCurrentProperty(arg1, 3, "sony");
+    igDriverDatabase_SetCurrentProperty(arg1, 4, "psx2");
+    igDriverDatabase_SetCurrentProperty(arg1, 5, "1.0");
 }
 
 void igPsx2VisualContext_CallDmaChain(int arg0, int arg1, int arg2, int arg3) {

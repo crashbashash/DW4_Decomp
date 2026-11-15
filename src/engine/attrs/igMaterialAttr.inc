@@ -1,9 +1,17 @@
+igMetaObject *g_igMaterialAttr_metaObject;
+igMetaField *g_igMaterialAttr_shininessMetaField;
+igMetaField *g_igMaterialAttr_diffuseMetaField;
+igMetaField *g_igMaterialAttr_ambientMetaField;
+igMetaField *g_igMaterialAttr_emissionMetaField;
+igMetaField *g_igMaterialAttr_specularMetaField;
+igMetaField *g_igMaterialAttr_flagsMetaField;
+
 igMetaObject *igMaterialAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMaterialAttr_metaObject[0];
+    igMetaObject *g = g_igMaterialAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00135c70();
-    return g_igMaterialAttr_metaObject[0];
+    return g_igMaterialAttr_metaObject;
 }
 
 int igMaterialAttr_GetVTable(void) {
@@ -23,11 +31,11 @@ void igMaterialAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igMaterialAttr_metaObject,
+        &g_igMaterialAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igMaterialAttr_GetMetaObject,
-        igMaterialAttr_className,
+        "igMaterialAttr",
         0x54, /* instance size */
         igMaterialAttr_GetVTable,
         &igMaterialAttr_InitFields,
@@ -40,9 +48,42 @@ void thunk_igMaterialAttr_GetMetaObject(void) {
     igMaterialAttr_GetMetaObject();
 }
 
+static FieldFactory g_igMaterialAttr_ctorTable[] = {
+    igFloatMetaField_Create,
+    FUN_001872a0,
+    FUN_001872a0,
+    FUN_001872a0,
+    FUN_001872a0,
+    igUnsignedIntMetaField_Create,
+};
+static const char *g_igMaterialAttr_fieldTable[] = {
+    "_shininess",
+    "_diffuse",
+    "_ambient",
+    "_emission",
+    "_specular",
+    "_flags",
+};
+static igMetaField **g_igMaterialAttr_fieldHandles[] = {
+    &g_igMaterialAttr_shininessMetaField,
+    &g_igMaterialAttr_diffuseMetaField,
+    &g_igMaterialAttr_ambientMetaField,
+    &g_igMaterialAttr_emissionMetaField,
+    &g_igMaterialAttr_specularMetaField,
+    &g_igMaterialAttr_flagsMetaField,
+};
+static int g_igMaterialAttr_fieldOffsets[] = {
+    12,
+    16,
+    32,
+    48,
+    64,
+    80,
+};
+
 void igMaterialAttr_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
     int temp_a0_4;
     int temp_a0_3;
     int temp_a0_2;
@@ -52,9 +93,9 @@ void igMaterialAttr_InitFields(void) {
     struct V v3;
     struct V v4;
 
-    temp_s0 = (void *)g_igMaterialAttr_metaObject[0];
+    temp_s0 = g_igMaterialAttr_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igMaterialAttr_ctorTable[0], 6);
+    igMetaObject_CreateFields(temp_s0, g_igMaterialAttr_ctorTable, 6);
     temp_a0 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     v1.x = 0;
     v1.w = 0x3F800000;
@@ -79,6 +120,6 @@ void igMaterialAttr_InitFields(void) {
     v4.y = 0;
     v4.z = 0;
     FUN_0018e670(temp_a0_4, &v4);
-    igMetaObject_NameFields(temp_s0, &g_igMaterialAttr_fieldTable[0], &DAT_004862b0[0], &DAT_004862d0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igMaterialAttr_fieldTable, g_igMaterialAttr_fieldHandles, g_igMaterialAttr_fieldOffsets, temp_s1);
 }
 

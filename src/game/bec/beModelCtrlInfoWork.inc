@@ -1,21 +1,73 @@
+igMetaObject *g_beModelCtrlInfoWork_metaObject;
+igMetaField *g_beModelCtrlInfoWork_mHpMetaField;
+igMetaField *g_beModelCtrlInfoWork_hpMetaField;
+igMetaField *g_beModelCtrlInfoWork_recNoMetaField;
+igMetaField *g_beModelCtrlInfoWork_seqCodeNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_comDataMetaField;
+igMetaField *g_beModelCtrlInfoWork_comIndexMetaField;
+igMetaField *g_beModelCtrlInfoWork_comLabelCountMetaField;
+igMetaField *g_beModelCtrlInfoWork_labelSeqListMetaField;
+igMetaField *g_beModelCtrlInfoWork_labelNameListMetaField;
+igMetaField *g_beModelCtrlInfoWork_labelOffsetListMetaField;
+igMetaField *g_beModelCtrlInfoWork_luaBHitMetaField;
+igMetaField *g_beModelCtrlInfoWork_luaWHitMetaField;
+igMetaField *g_beModelCtrlInfoWork_luaFHitMetaField;
+igMetaField *g_beModelCtrlInfoWork_ctrlSt0MetaField;
+igMetaField *g_beModelCtrlInfoWork_ctrlSt1MetaField;
+igMetaField *g_beModelCtrlInfoWork_isOnCtrlMetaField;
+igMetaField *g_beModelCtrlInfoWork_isOnFreezeMetaField;
+igMetaField *g_beModelCtrlInfoWork_pdMoveDataListMetaField;
+igMetaField *g_beModelCtrlInfoWork_wCheckNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_aIMetaField;
+igMetaField *g_beModelCtrlInfoWork_aIHOffsetYMetaField;
+igMetaField *g_beModelCtrlInfoWork_targetModeMetaField;
+igMetaField *g_beModelCtrlInfoWork_targetKindMetaField;
+igMetaField *g_beModelCtrlInfoWork_targetSpc1MetaField;
+igMetaField *g_beModelCtrlInfoWork_targetPosMetaField;
+igMetaField *g_beModelCtrlInfoWork_keyInputMetaField;
+igMetaField *g_beModelCtrlInfoWork_keyEventNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_isHitCheckMetaField;
+igMetaField *g_beModelCtrlInfoWork_mutekiCountMetaField;
+igMetaField *g_beModelCtrlInfoWork_targetDirectionMetaField;
+igMetaField *g_beModelCtrlInfoWork_directionLimiterMetaField;
+igMetaField *g_beModelCtrlInfoWork_directionMetaField;
+igMetaField *g_beModelCtrlInfoWork_svLODHighRangeMetaField;
+igMetaField *g_beModelCtrlInfoWork_isPosLockMetaField;
+igMetaField *g_beModelCtrlInfoWork_posLockNodeMetaField;
+igMetaField *g_beModelCtrlInfoWork_posLockTrcMetaField;
+igMetaField *g_beModelCtrlInfoWork_posLockModelNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_posLockBoneNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_posLockOffsetMetaField;
+igMetaField *g_beModelCtrlInfoWork_moveObjectListMetaField;
+igMetaField *g_beModelCtrlInfoWork_rideOnDataMetaField;
+igMetaField *g_beModelCtrlInfoWork_debugHitBoxNodeMetaField;
+igMetaField *g_beModelCtrlInfoWork_hitBodyMetaField;
+igMetaField *g_beModelCtrlInfoWork_isWallCheckMetaField;
+igMetaField *g_beModelCtrlInfoWork_isFloorCheckMetaField;
+igMetaField *g_beModelCtrlInfoWork_isFallCheckMetaField;
+igMetaField *g_beModelCtrlInfoWork_hitParentNameMetaField;
+igMetaField *g_beModelCtrlInfoWork_hitParentRamNoMetaField;
+igMetaField *g_beModelCtrlInfoWork_subCommandMetaField;
+igMetaField *g_beModelCtrlInfoWork_baseAABoxMetaField;
+
 void FUN_00350020(int arg0) {
     FUN_00350fb0();
     igMetaObject_CreateInstance(*(int *)0x588888, arg0);
 }
 
 igMetaObject *FUN_00350060(void) {
-    if (g_beModelCtrlInfoWork_metaObject[0] == 0) {
-        g_beModelCtrlInfoWork_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beModelCtrlInfoWork_metaObject == 0) {
+        g_beModelCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beModelCtrlInfoWork_metaObject[0];
+    return g_beModelCtrlInfoWork_metaObject;
 }
 
 void *FUN_003500b0(void) {
-    igMetaObject *g = g_beModelCtrlInfoWork_metaObject[0];
+    igMetaObject *g = g_beModelCtrlInfoWork_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00350fb0();
     }
-    return g_beModelCtrlInfoWork_metaObject[0];
+    return g_beModelCtrlInfoWork_metaObject;
 }
 
 void *FUN_00350410(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
@@ -245,15 +297,17 @@ void FUN_00350fb0(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoWork_Register);
 }
 
+static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { FUN_00365680, FUN_00356950, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, FUN_003522b0, FUN_0034fe80, FUN_003533c0, FUN_00352890, FUN_00351ff0, FUN_0019f330, FUN_003525e0, FUN_0034f340, FUN_0018a780, 0 };
+
 void *beModelCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beModelCtrlInfoWork_metaObject,
+        &g_beModelCtrlInfoWork_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beModelCtrlInfoWork_GetMetaObject,
-        beModelCtrlInfoWork_className,
+        "beModelCtrlInfoWork",
         0xec, /* instance size */
         beModelCtrlInfoWork_GetVTable,
         beModelCtrlInfoWork_InitFields,
@@ -266,6 +320,215 @@ void beModelCtrlInfoWork_GetMetaObject(void)
 {
     FUN_003500b0();
 }
+
+static FieldFactory g_beModelCtrlInfoWork_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igObjectRefMetaField_Create,
+    igFloatMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    FUN_00187890,
+    igBoolMetaField_Create,
+    igStringMetaField_Create,
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+    FUN_00187890,
+    igFloatMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igStringMetaField_Create,
+    igStringMetaField_Create,
+    FUN_00187890,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igStringMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beModelCtrlInfoWork_fieldTable[] = {
+    "_mHp",
+    "_hp",
+    "_recNo",
+    "_seqCodeName",
+    "_comData",
+    "_comIndex",
+    "_comLabelCount",
+    "_labelSeqList",
+    "_labelNameList",
+    "_labelOffsetList",
+    "_luaBHit",
+    "_luaWHit",
+    "_luaFHit",
+    "_ctrlSt0",
+    "_ctrlSt1",
+    "_isOnCtrl",
+    "_isOnFreeze",
+    "_pdMoveDataList",
+    "_wCheckName",
+    "_aI",
+    "_aIHOffsetY",
+    "_targetMode",
+    "_targetKind",
+    "_targetSpc1",
+    "_targetPos",
+    "_keyInput",
+    "_keyEventName",
+    "_isHitCheck",
+    "_mutekiCount",
+    "_targetDirection",
+    "_directionLimiter",
+    "_direction",
+    "_svLODHighRange",
+    "_isPosLock",
+    "_posLockNode",
+    "_posLockTrc",
+    "_posLockModelName",
+    "_posLockBoneName",
+    "_posLockOffset",
+    "_moveObjectList",
+    "_rideOnData",
+    "_debugHitBoxNode",
+    "_hitBody",
+    "_isWallCheck",
+    "_isFloorCheck",
+    "_isFallCheck",
+    "_hitParentName",
+    "_hitParentRamNo",
+    "_subCommand",
+    "_baseAABox",
+};
+static igMetaField **g_beModelCtrlInfoWork_fieldHandles[] = {
+    &g_beModelCtrlInfoWork_mHpMetaField,
+    &g_beModelCtrlInfoWork_hpMetaField,
+    &g_beModelCtrlInfoWork_recNoMetaField,
+    &g_beModelCtrlInfoWork_seqCodeNameMetaField,
+    &g_beModelCtrlInfoWork_comDataMetaField,
+    &g_beModelCtrlInfoWork_comIndexMetaField,
+    &g_beModelCtrlInfoWork_comLabelCountMetaField,
+    &g_beModelCtrlInfoWork_labelSeqListMetaField,
+    &g_beModelCtrlInfoWork_labelNameListMetaField,
+    &g_beModelCtrlInfoWork_labelOffsetListMetaField,
+    &g_beModelCtrlInfoWork_luaBHitMetaField,
+    &g_beModelCtrlInfoWork_luaWHitMetaField,
+    &g_beModelCtrlInfoWork_luaFHitMetaField,
+    &g_beModelCtrlInfoWork_ctrlSt0MetaField,
+    &g_beModelCtrlInfoWork_ctrlSt1MetaField,
+    &g_beModelCtrlInfoWork_isOnCtrlMetaField,
+    &g_beModelCtrlInfoWork_isOnFreezeMetaField,
+    &g_beModelCtrlInfoWork_pdMoveDataListMetaField,
+    &g_beModelCtrlInfoWork_wCheckNameMetaField,
+    &g_beModelCtrlInfoWork_aIMetaField,
+    &g_beModelCtrlInfoWork_aIHOffsetYMetaField,
+    &g_beModelCtrlInfoWork_targetModeMetaField,
+    &g_beModelCtrlInfoWork_targetKindMetaField,
+    &g_beModelCtrlInfoWork_targetSpc1MetaField,
+    &g_beModelCtrlInfoWork_targetPosMetaField,
+    &g_beModelCtrlInfoWork_keyInputMetaField,
+    &g_beModelCtrlInfoWork_keyEventNameMetaField,
+    &g_beModelCtrlInfoWork_isHitCheckMetaField,
+    &g_beModelCtrlInfoWork_mutekiCountMetaField,
+    &g_beModelCtrlInfoWork_targetDirectionMetaField,
+    &g_beModelCtrlInfoWork_directionLimiterMetaField,
+    &g_beModelCtrlInfoWork_directionMetaField,
+    &g_beModelCtrlInfoWork_svLODHighRangeMetaField,
+    &g_beModelCtrlInfoWork_isPosLockMetaField,
+    &g_beModelCtrlInfoWork_posLockNodeMetaField,
+    &g_beModelCtrlInfoWork_posLockTrcMetaField,
+    &g_beModelCtrlInfoWork_posLockModelNameMetaField,
+    &g_beModelCtrlInfoWork_posLockBoneNameMetaField,
+    &g_beModelCtrlInfoWork_posLockOffsetMetaField,
+    &g_beModelCtrlInfoWork_moveObjectListMetaField,
+    &g_beModelCtrlInfoWork_rideOnDataMetaField,
+    &g_beModelCtrlInfoWork_debugHitBoxNodeMetaField,
+    &g_beModelCtrlInfoWork_hitBodyMetaField,
+    &g_beModelCtrlInfoWork_isWallCheckMetaField,
+    &g_beModelCtrlInfoWork_isFloorCheckMetaField,
+    &g_beModelCtrlInfoWork_isFallCheckMetaField,
+    &g_beModelCtrlInfoWork_hitParentNameMetaField,
+    &g_beModelCtrlInfoWork_hitParentRamNoMetaField,
+    &g_beModelCtrlInfoWork_subCommandMetaField,
+    &g_beModelCtrlInfoWork_baseAABoxMetaField,
+};
+static int g_beModelCtrlInfoWork_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    69,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    112,
+    116,
+    120,
+    124,
+    128,
+    140,
+    152,
+    164,
+    168,
+    172,
+    176,
+    180,
+    184,
+    188,
+    200,
+    204,
+    208,
+    212,
+    216,
+    217,
+    218,
+    220,
+    224,
+    228,
+    232,
+};
 
 void beModelCtrlInfoWork_InitFields(void) {
     void *temp_s2;
@@ -287,9 +550,9 @@ void beModelCtrlInfoWork_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beModelCtrlInfoWork_metaObject[0];
+    temp_s0 = (void *)g_beModelCtrlInfoWork_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beModelCtrlInfoWork_ctorTable[0], 0x32);
+    igMetaObject_CreateFields(temp_s0, g_beModelCtrlInfoWork_ctorTable, 0x32);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00365550();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -343,6 +606,6 @@ void beModelCtrlInfoWork_InitFields(void) {
     ((igRefMetaField *)temp_s2_15)->_construct = 1;
     temp_s2_16 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x31));
     ((igObjectRefMetaField *)temp_s2_16)->_metaObject = FUN_0018a6a0();
-    igMetaObject_NameFields(temp_s0, &g_beModelCtrlInfoWork_fieldTable[0], &DAT_004c4f70[0], &DAT_004c5040[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beModelCtrlInfoWork_fieldTable, g_beModelCtrlInfoWork_fieldHandles, g_beModelCtrlInfoWork_fieldOffsets, temp_s1);
 }
 

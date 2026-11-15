@@ -1,9 +1,11 @@
+igMetaObject *g_beHitLandDelivInfo_metaObject;
+
 void *FUN_0035e9c0(void) {
-    igMetaObject *g = g_beHitLandDelivInfo_metaObject[0];
+    igMetaObject *g = g_beHitLandDelivInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035ea80();
     }
-    return g_beHitLandDelivInfo_metaObject[0];
+    return g_beHitLandDelivInfo_metaObject;
 }
 
 int beHitLandDelivInfo_GetVTable(void) {
@@ -30,11 +32,11 @@ void *beHitLandDelivInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beHitLandDelivInfo_metaObject,
+        &g_beHitLandDelivInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beHitLandDelivInfo_GetMetaObject,
-        beHitLandDelivInfo_className,
+        "beHitLandDelivInfo",
         0x1c, /* instance size */
         beHitLandDelivInfo_GetVTable,
         0,
@@ -48,10 +50,19 @@ void beHitLandDelivInfo_GetMetaObject(void)
     FUN_0035e9c0();
 }
 
-int FUN_0035eb30(void) {
-    if (DAT_00589458[0] == 0) {
-        DAT_00589458[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c6850[0], &DAT_004c6870[0], 5);
+igMetaEnum *g_beHitLandDelivInfo_messageMetaEnum;
+static const char *g_beHitLandDelivInfo_messageNames[] = {
+    "HITWALL", "HITWALLFULL", "HITFLOORCHECK", "HITFLOORADJUST",
+    "HITFLOOR",
+};
+static int g_beHitLandDelivInfo_messageValues[] = {
+    0, 1, 2, 3, 4,
+};
+
+igMetaEnum *FUN_0035eb30(void) {
+    if (g_beHitLandDelivInfo_messageMetaEnum == 0) {
+        g_beHitLandDelivInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beHitLandDelivInfo_messageNames, g_beHitLandDelivInfo_messageValues, 5);
     }
-    return DAT_00589458[0];
+    return g_beHitLandDelivInfo_messageMetaEnum;
 }
 

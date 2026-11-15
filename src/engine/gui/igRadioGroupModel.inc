@@ -1,16 +1,19 @@
+igMetaObject *g_igRadioGroupModel_metaObject;
+igMetaField *g_igRadioGroupModel_selectedMetaField;
+
 igMetaObject *FUN_0044d170(void) {
-    if (g_igRadioGroupModel_metaObject[0] == 0) {
-        g_igRadioGroupModel_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igRadioGroupModel_metaObject == 0) {
+        g_igRadioGroupModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igRadioGroupModel_metaObject[0];
+    return g_igRadioGroupModel_metaObject;
 }
 
 igMetaObject *igRadioGroupModel_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRadioGroupModel_metaObject[0];
+    igMetaObject *g = g_igRadioGroupModel_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igRadioGroupModel_RunStaticInit();
-    return g_igRadioGroupModel_metaObject[0];
+    return g_igRadioGroupModel_metaObject;
 }
 
 int igRadioGroupModel_GetVTable(void) {
@@ -46,11 +49,11 @@ void igRadioGroupModel_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igRadioGroupModel_metaObject,
+        &g_igRadioGroupModel_metaObject,
         igModel_Register,
         igModel_GetPublishedMetaObject,
         thunk_igRadioGroupModel_GetMetaObject,
-        igRadioGroupModel_className,
+        "igRadioGroupModel",
         0x10, /* instance size */
         igRadioGroupModel_GetVTable,
         &igRadioGroupModel_InitFields,
@@ -64,17 +67,30 @@ void thunk_igRadioGroupModel_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_0044d340(void) {
-    return g_igModel_metaObject[0];
+    return g_igModel_metaObject;
 }
+
+static FieldFactory g_igRadioGroupModel_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_igRadioGroupModel_fieldTable[] = {
+    "_selected",
+};
+static igMetaField **g_igRadioGroupModel_fieldHandles[] = {
+    &g_igRadioGroupModel_selectedMetaField,
+};
+static int g_igRadioGroupModel_fieldOffsets[] = {
+    12,
+};
 
 void igRadioGroupModel_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igRadioGroupModel_metaObject[0];
+    temp_s0 = (void *)g_igRadioGroupModel_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igRadioGroupModel_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_igRadioGroupModel_ctorTable, 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1), -1);
-    igMetaObject_NameFields(temp_s0, &g_igRadioGroupModel_fieldTable[0], &DAT_004d00a8[0], &DAT_004d00b0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igRadioGroupModel_fieldTable, g_igRadioGroupModel_fieldHandles, g_igRadioGroupModel_fieldOffsets, temp_s1);
 }
 

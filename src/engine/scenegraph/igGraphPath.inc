@@ -1,21 +1,26 @@
 int igGraphPath_Create(int arg0) {
     FUN_0019f7a0();
-    return igMetaObject_CreateInstance(*(int *)0x561A10, arg0);
+    return igMetaObject_CreateInstance((int)g_igGraphPath_metaObject, arg0);
 }
 
+igMetaObject *g_igGraphPath_metaObject;
+igMetaField *g_igGraphPath_pathMetaField;
+igMetaField *g_igGraphPath_centerMetaField;
+igMetaField *g_igGraphPath_lengthMetaField;
+
 igMetaObject *FUN_0019f670(void) {
-    if (g_igGraphPath_metaObject[0] == 0) {
-        g_igGraphPath_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGraphPath_metaObject == 0) {
+        g_igGraphPath_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGraphPath_metaObject[0];
+    return g_igGraphPath_metaObject;
 }
 
 igMetaObject *igGraphPath_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGraphPath_metaObject[0];
+    igMetaObject *g = g_igGraphPath_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019f7a0();
-    return g_igGraphPath_metaObject[0];
+    return g_igGraphPath_metaObject;
 }
 
 int igGraphPath_GetVTable(void) {
@@ -47,15 +52,17 @@ void FUN_0019f7a0(void)
     igMetaObject_RunStaticInit(igGraphPath_Register);
 }
 
+static igMetaObjectCallback g_igGraphPath_callbackList[] = { FUN_0019ccc0, 0 };
+
 void igGraphPath_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igGraphPath_metaObject),
+        &g_igGraphPath_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igGraphPath_GetMetaObject,
-        igGraphPath_className,
+        "igGraphPath",
         0x1C, /* instance size */
         igGraphPath_GetVTable,
         &igGraphPath_InitFields,
@@ -68,6 +75,27 @@ void thunk_igGraphPath_GetMetaObject(void) {
     igGraphPath_GetMetaObject();
 }
 
+static FieldFactory g_igGraphPath_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+    igFloatMetaField_Create,
+};
+static const char *g_igGraphPath_fieldTable[] = {
+    "_path",
+    "_center",
+    "_length",
+};
+static igMetaField **g_igGraphPath_fieldHandles[] = {
+    &g_igGraphPath_pathMetaField,
+    &g_igGraphPath_centerMetaField,
+    &g_igGraphPath_lengthMetaField,
+};
+static int g_igGraphPath_fieldOffsets[] = {
+    8,
+    12,
+    24,
+};
+
 void igGraphPath_InitFields(void) {
     int temp_s2;
     void *temp_a0;
@@ -75,9 +103,9 @@ void igGraphPath_InitFields(void) {
     void *temp_s0;
     struct { int a; int b; int c; } z;
 
-    temp_s0 = (void *)g_igGraphPath_metaObject[0];
+    temp_s0 = (void *)g_igGraphPath_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igGraphPath_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGraphPath_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     *(int *)((char *)(temp_s1) + 56) = (int)FUN_0019cbe0();
     *(char *)((char *)(temp_s1) + 36) = 3;
@@ -88,6 +116,6 @@ void igGraphPath_InitFields(void) {
     z.c = 0;
     FUN_0018e470(temp_a0, &z);
     igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1.0f);
-    igMetaObject_NameFields(temp_s0, &g_igGraphPath_fieldTable[0], &DAT_0048c030[0], &DAT_0048c040[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, temp_s2);
 }
 

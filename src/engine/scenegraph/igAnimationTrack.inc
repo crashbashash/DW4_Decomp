@@ -1,9 +1,14 @@
+igMetaObject *g_igAnimationTrack_metaObject;
+igMetaField *g_igAnimationTrack_sourceMetaField;
+igMetaField *g_igAnimationTrack_constantQuaternionMetaField;
+igMetaField *g_igAnimationTrack_constantTranslationMetaField;
+
 igMetaObject *igAnimationTrack_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationTrack_metaObject[0];
+    igMetaObject *g = g_igAnimationTrack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001aa030();
-    return g_igAnimationTrack_metaObject[0];
+    return g_igAnimationTrack_metaObject;
 }
 
 int igAnimationTrack_GetVTable(void) {
@@ -52,15 +57,17 @@ void FUN_001aa030(void)
     igMetaObject_RunStaticInit(igAnimationTrack_Register);
 }
 
+static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { FUN_00194e70, 0 };
+
 void igAnimationTrack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationTrack_metaObject),
+        &g_igAnimationTrack_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igAnimationTrack_GetMetaObject,
-        igAnimationTrack_className,
+        "igAnimationTrack",
         0x2C, /* instance size */
         igAnimationTrack_GetVTable,
         &igAnimationTrack_InitFields,
@@ -73,16 +80,37 @@ void thunk_igAnimationTrack_GetMetaObject(void) {
     igAnimationTrack_GetMetaObject();
 }
 
+static FieldFactory g_igAnimationTrack_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    FUN_001872a0,
+    FUN_00187890,
+};
+static const char *g_igAnimationTrack_fieldTable[] = {
+    "_source",
+    "_constantQuaternion",
+    "_constantTranslation",
+};
+static igMetaField **g_igAnimationTrack_fieldHandles[] = {
+    &g_igAnimationTrack_sourceMetaField,
+    &g_igAnimationTrack_constantQuaternionMetaField,
+    &g_igAnimationTrack_constantTranslationMetaField,
+};
+static int g_igAnimationTrack_fieldOffsets[] = {
+    12,
+    16,
+    32,
+};
+
 void igAnimationTrack_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAnimationTrack_metaObject[0];
+    temp_s0 = (void *)g_igAnimationTrack_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAnimationTrack_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTrack_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00194dd0();
-    igMetaObject_NameFields(temp_s0, &g_igAnimationTrack_fieldTable[0], &DAT_0048d690[0], &DAT_0048d6a0[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTrack_fieldTable, g_igAnimationTrack_fieldHandles, g_igAnimationTrack_fieldOffsets, temp_s2);
 }
 

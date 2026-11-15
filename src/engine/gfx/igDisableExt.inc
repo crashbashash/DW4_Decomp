@@ -1,9 +1,11 @@
+igMetaObject *g_igDisableExt_metaObject;
+
 igMetaObject *igDisableExt_GetMetaObject(void)
 {
-    igMetaObject *g = g_igDisableExt_metaObject[0];
+    igMetaObject *g = g_igDisableExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014f810();
-    return g_igDisableExt_metaObject[0];
+    return g_igDisableExt_metaObject;
 }
 
 void FUN_0014f810(void)
@@ -15,11 +17,11 @@ void igDisableExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igDisableExt_metaObject,
+        &g_igDisableExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
         thunk_igDisableExt_GetMetaObject,
-        igDisableExt_className,
+        "igDisableExt",
         0x14, /* instance size */
         0,
         &igDisableExt_SetAbstractProxy_0014f8a0[0],   /* post-init hook */

@@ -1,6 +1,8 @@
+igMetaObject *g_igVectorMorphing_metaObject;
+
 igMetaObject *FUN_00186db0(void)
 {
-    igMetaObject *meta = g_igVectorMorphing_metaObject[0];
+    igMetaObject *meta = g_igVectorMorphing_metaObject;
     bool ready;
 
     if (meta) {
@@ -10,7 +12,7 @@ igMetaObject *FUN_00186db0(void)
     }
     FUN_00186e40();
 end:
-    return g_igVectorMorphing_metaObject[0];
+    return g_igVectorMorphing_metaObject;
 }
 
 int igVectorMorphing_GetVTable(void) {
@@ -29,11 +31,11 @@ void igVectorMorphing_Register(void) {
     FUN_00186a40();  /* Set-once guard (gp-relative byte flag) that chains to sibling registrars. */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVectorMorphing_metaObject,
+        &g_igVectorMorphing_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igVectorMorphing_GetMetaObject_00186ec0,
-        igVectorMorphing_className,
+        "igVectorMorphing",
         8, /* instance size */
         igVectorMorphing_GetVTable,
         0,

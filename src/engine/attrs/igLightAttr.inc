@@ -1,16 +1,34 @@
+igMetaObject *g_igLightAttr_metaObject;
+igMetaField *g_igLightAttr_lightTypeMetaField;
+igMetaField *g_igLightAttr_lightIdMetaField;
+igMetaField *g_igLightAttr_positionMetaField;
+igMetaField *g_igLightAttr_ambientMetaField;
+igMetaField *g_igLightAttr_diffuseMetaField;
+igMetaField *g_igLightAttr_specularMetaField;
+igMetaField *g_igLightAttr_directionMetaField;
+igMetaField *g_igLightAttr_falloffMetaField;
+igMetaField *g_igLightAttr_cutoffMetaField;
+igMetaField *g_igLightAttr_attenuationMetaField;
+igMetaField *g_igLightAttr_shininessMetaField;
+igMetaField *g_igLightAttr_cachedPositionMetaField;
+igMetaField *g_igLightAttr_cachedDirectionMetaField;
+igMetaField *g_igLightAttr_vcMetaField;
+igMetaField *g_igLightAttr_changedMetaField;
+igMetaField *g_igLightAttr_cacheableMetaField;
+
 igMetaObject *FUN_00136750(void) {
-    if (g_igLightAttr_metaObject[0] == 0) {
-        g_igLightAttr_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igLightAttr_metaObject == 0) {
+        g_igLightAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igLightAttr_metaObject[0];
+    return g_igLightAttr_metaObject;
 }
 
 igMetaObject *igLightAttr_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLightAttr_metaObject[0];
+    igMetaObject *g = g_igLightAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00136880();
-    return g_igLightAttr_metaObject[0];
+    return g_igLightAttr_metaObject;
 }
 
 int igLightAttr_GetVTable(void) {
@@ -41,15 +59,17 @@ void FUN_00136880(void)
     igMetaObject_RunStaticInit(igLightAttr_Register);
 }
 
+static igMetaObjectCallback g_igLightAttr_callbackList[] = { FUN_0014a0e0, 0 };
+
 void igLightAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igLightAttr_metaObject,
+        &g_igLightAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
         thunk_igLightAttr_GetMetaObject,
-        igLightAttr_className,
+        "igLightAttr",
         0x94, /* instance size */
         igLightAttr_GetVTable,
         &igLightAttr_InitFields,
@@ -62,6 +82,81 @@ void thunk_igLightAttr_GetMetaObject(void) {
     igLightAttr_GetMetaObject();
 }
 
+static FieldFactory g_igLightAttr_ctorTable[] = {
+    igEnumMetaField_Create,
+    igIntMetaField_Create,
+    FUN_00187890,
+    FUN_001872a0,
+    FUN_001872a0,
+    FUN_001872a0,
+    FUN_00187890,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    igFloatMetaField_Create,
+    FUN_00187890,
+    FUN_00187890,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igLightAttr_fieldTable[] = {
+    "_lightType",
+    "_lightId",
+    "_position",
+    "_ambient",
+    "_diffuse",
+    "_specular",
+    "_direction",
+    "_falloff",
+    "_cutoff",
+    "_attenuation",
+    "_shininess",
+    "_cachedPosition",
+    "_cachedDirection",
+    "_vc",
+    "_changed",
+    "_cacheable",
+};
+static igMetaField **g_igLightAttr_fieldHandles[] = {
+    &g_igLightAttr_lightTypeMetaField,
+    &g_igLightAttr_lightIdMetaField,
+    &g_igLightAttr_positionMetaField,
+    &g_igLightAttr_ambientMetaField,
+    &g_igLightAttr_diffuseMetaField,
+    &g_igLightAttr_specularMetaField,
+    &g_igLightAttr_directionMetaField,
+    &g_igLightAttr_falloffMetaField,
+    &g_igLightAttr_cutoffMetaField,
+    &g_igLightAttr_attenuationMetaField,
+    &g_igLightAttr_shininessMetaField,
+    &g_igLightAttr_cachedPositionMetaField,
+    &g_igLightAttr_cachedDirectionMetaField,
+    &g_igLightAttr_vcMetaField,
+    &g_igLightAttr_changedMetaField,
+    &g_igLightAttr_cacheableMetaField,
+};
+static int g_igLightAttr_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    32,
+    48,
+    64,
+    80,
+    92,
+    96,
+    100,
+    112,
+    116,
+    128,
+    140,
+    144,
+    145,
+};
+
+int g_igLightAttr_lightTypeDefault = 1;
+
 void igLightAttr_InitFields(void) {
     float vh[4];
     float vg[4];
@@ -72,15 +167,15 @@ void igLightAttr_InitFields(void) {
     float vb[4];
     float va[4];
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
     struct LightMetaFieldView *temp_s2;
     struct LightMetaFieldView *tv;
 
-    temp_s0 = (void *)g_igLightAttr_metaObject[0];
+    temp_s0 = g_igLightAttr_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igLightAttr_ctorTable[0], 0x10);
+    igMetaObject_CreateFields(temp_s0, g_igLightAttr_ctorTable, 0x10);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
-    igEnumMetaField_SetDefaultValue(temp_s2, &DAT_00486470[0]);
+    igEnumMetaField_SetDefaultValue(temp_s2, &g_igLightAttr_lightTypeDefault);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2->f52 = (void (*)(void))FUN_00149a40;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
@@ -138,6 +233,6 @@ void igLightAttr_InitFields(void) {
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xF);
     igBoolMetaField_SetDefaultValue(temp_s2, 1);
     temp_s2->f38 = 0;
-    igMetaObject_NameFields(temp_s0, &g_igLightAttr_fieldTable[0], &DAT_004863f0[0], &DAT_00486430[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igLightAttr_fieldTable, g_igLightAttr_fieldHandles, g_igLightAttr_fieldOffsets, temp_s1);
 }
 

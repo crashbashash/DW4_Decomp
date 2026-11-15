@@ -1,9 +1,11 @@
+igMetaObject *g_igEventReceiver_metaObject;
+
 igMetaObject *igEventReceiver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEventReceiver_metaObject[0];
+    igMetaObject *g = g_igEventReceiver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igEventReceiver_EnsureRegistered();
-    return g_igEventReceiver_metaObject[0];
+    return g_igEventReceiver_metaObject;
 }
 
 int igEventReceiver_GetVTable(void) {
@@ -23,11 +25,11 @@ void igEventReceiver_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igEventReceiver_metaObject,
+        &g_igEventReceiver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igEventReceiver_GetMetaObject,
-        igEventReceiver_className,
+        "igEventReceiver",
         8, /* instance size */
         igEventReceiver_GetVTable,
         0,

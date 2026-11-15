@@ -37,6 +37,9 @@ int igRefMetaField_ReadRawFieldMem(void *self, int destination, int *source, int
     return 4;
 }
 
+unsigned char g_igMemoryRefMetaField_unresolvedFieldRefWarned;
+unsigned char g_igMemoryRefMetaField_unresolvedRefWarned;
+
 /* Writes the directory index of the referenced object, or -1 for none. A reference to an object
  * the directory does not hold is reported once per kind of field. */
 int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, void *dest, int directory, int swap) {
@@ -48,13 +51,13 @@ int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, vo
             if (self->_parentMetaObject != 0) {
                 if (!g_igMemoryRefMetaField_unresolvedFieldRefWarned) {
                     igMetaObject *meta = ((igObjectDispatchView *)self)->GetMeta();
-                    int answer = igReportError(text_s_s_s_writeRawFieldMem_0x_x_0_0x, ((igMetaObject *)self->_parentMetaObject)->_name, self->_fieldName, meta->_name, source, (unsigned int)*source);
+                    int answer = igReportError("%s->%s(%s)->writeRawFieldMem()0x%x[0] = 0x%x,Not in directory\nDid you modify the object after adding it to the directory ?\n", ((igMetaObject *)self->_parentMetaObject)->_name, self->_fieldName, meta->_name, source, (unsigned int)*source);
                     if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedFieldRefWarned = 1;
                 }
             } else {
                 if (!g_igMemoryRefMetaField_unresolvedRefWarned) {
                     igMetaObject *meta = ((igObjectDispatchView *)self)->GetMeta();
-                    int answer = igReportError(text_s_writeRawFieldMem_0x_x_0_0x_x_Not, meta->_name, source, (unsigned int)*source);
+                    int answer = igReportError("%s->writeRawFieldMem()0x%x[0] = 0x%x,Not in directory\nDid you modify an object after adding it to the directory ?\n", meta->_name, source, (unsigned int)*source);
                     if (answer != 1 && answer == 2) g_igMemoryRefMetaField_unresolvedRefWarned = 1;
                 }
             }
@@ -74,7 +77,7 @@ int igMemoryRefMetaField_WriteRawFieldMem(igMetaFieldView *self, int *source, vo
 }
 
 int igRefMetaField_GetMeta(void) {
-    return ((int *)g_igRefMetaField_metaObject)[0];
+    return (int)g_igRefMetaField_metaObject;
 }
 
 char *igRefMetaField_SkipPastChar(char *s, char ch) {
@@ -84,6 +87,8 @@ char *igRefMetaField_SkipPastChar(char *s, char ch) {
     if (*s != ch) r = 0;
     return r;
 }
+
+char g_igRefMetaField_defaultArrayPrefix;
 
 int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int count, int directory, char *prefix, int width) {
     char item[256];
@@ -95,7 +100,7 @@ int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int c
 
     if (prefix == 0) prefix = &g_igRefMetaField_defaultArrayPrefix;
     if (width == -1) width = strlen(prefix) + 5;
-    sprintf(itemFormat, percent_percent_minus_percent_ds, width);
+    sprintf(itemFormat,"%%-%ds", width);
     a = ((igMemoryPoolView *)igObject_GetAllocator((int)owner));
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     buf = (char *)a->Allocate(count * (strlen(itemFormat) + 0x80));
@@ -104,24 +109,24 @@ int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int c
         sprintf(item, itemFormat, prefix);
         if (i == 0) {
             if (count > 1) {
-                sprintf(w, percent_s_open_brace_open_brace_space, item);
+                sprintf(w,"%s{{ ", item);
             } else {
                 goto block12;
             }
         } else {
 block12:
-            sprintf(w, percent_s_open_brace_space, item);
+            sprintf(w,"%s{ ", item);
         }
         w = buf + strlen(buf);
         if (directory != 0) {
             igDirEntryView *r = ((igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)directory, (unsigned)(*refs)));
             if (r != 0) {
-                sprintf(w, text_Reference_d, r->_index);
+                sprintf(w,"Reference[ %d ]", r->_index);
             } else {
-                sprintf(w, text_Reference_1);
+                sprintf(w,"Reference[ -1 ]");
             }
         } else {
-            sprintf(w, text_Reference_1);
+            sprintf(w,"Reference[ -1 ]");
         }
     }
     igStringRef text(buf);

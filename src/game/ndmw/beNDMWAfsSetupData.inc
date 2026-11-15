@@ -1,9 +1,12 @@
+igMetaObject *g_beNDMWAfsSetupData_metaObject;
+igMetaField *g_beNDMWAfsSetupData_fileCountMetaField;
+
 void *beNDMWAfsSetupData_ResolveMetaObject(void) {
-    igMetaObject *g = g_beNDMWAfsSetupData_metaObject[0];
+    igMetaObject *g = g_beNDMWAfsSetupData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003caa70();
     }
-    return g_beNDMWAfsSetupData_metaObject[0];
+    return g_beNDMWAfsSetupData_metaObject;
 }
 
 int beNDMWAfsSetupData_GetVTable(void) {
@@ -44,11 +47,11 @@ void *beNDMWAfsSetupData_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWAfsSetupData_metaObject,
+        &g_beNDMWAfsSetupData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beNDMWAfsSetupData_GetMetaObject,
-        beNDMWAfsSetupData_className,
+        "beNDMWAfsSetupData",
         0x10, /* instance size */
         beNDMWAfsSetupData_GetVTable,
         beNDMWAfsSetupData_InitFields,
@@ -62,13 +65,26 @@ void beNDMWAfsSetupData_GetMetaObject(void)
     beNDMWAfsSetupData_ResolveMetaObject();
 }
 
+static FieldFactory g_beNDMWAfsSetupData_ctorTable[] = {
+    igIntMetaField_Create,
+};
+static const char *g_beNDMWAfsSetupData_fieldTable[] = {
+    "_fileCount",
+};
+static igMetaField **g_beNDMWAfsSetupData_fieldHandles[] = {
+    &g_beNDMWAfsSetupData_fileCountMetaField,
+};
+static int g_beNDMWAfsSetupData_fieldOffsets[] = {
+    12,
+};
+
 void beNDMWAfsSetupData_InitFields(void) {
     int temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWAfsSetupData_metaObject[0];
+    temp_s0 = g_beNDMWAfsSetupData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWAfsSetupData_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beNDMWAfsSetupData_fieldTable[0], &DAT_004cc5e8[0], &DAT_004cc5f0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWAfsSetupData_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beNDMWAfsSetupData_fieldTable, g_beNDMWAfsSetupData_fieldHandles, g_beNDMWAfsSetupData_fieldOffsets, temp_s1);
 }
 

@@ -1,16 +1,16 @@
 igMetaObject *FUN_00152e80(void) {
-    if (g_igPsx2ScissorExt_metaObject[0] == 0) {
-        g_igPsx2ScissorExt_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igPsx2ScissorExt_metaObject == 0) {
+        g_igPsx2ScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igPsx2ScissorExt_metaObject[0];
+    return g_igPsx2ScissorExt_metaObject;
 }
 
 igMetaObject *igPsx2ScissorExt_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2ScissorExt_metaObject[0];
+    igMetaObject *g = g_igPsx2ScissorExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00153000();
-    return g_igPsx2ScissorExt_metaObject[0];
+    return g_igPsx2ScissorExt_metaObject;
 }
 
 int igPsx2ScissorExt_GetVTable(void) {
@@ -55,15 +55,17 @@ void FUN_00153000(void)
     igMetaObject_RunStaticInit(igPsx2ScissorExt_Register);
 }
 
+static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { FUN_001511a0, 0 };
+
 void igPsx2ScissorExt_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2ScissorExt_metaObject,
+        &g_igPsx2ScissorExt_metaObject,
         igScissorExt_Register,
         igScissorExt_GetPublishedMetaObject,
         thunk_igPsx2ScissorExt_GetMetaObject,
-        igPsx2ScissorExt_className,
+        "igPsx2ScissorExt",
         0x2C, /* instance size */
         igPsx2ScissorExt_GetVTable,
         &igPsx2ScissorExt_InitFields,
@@ -73,22 +75,55 @@ void igPsx2ScissorExt_Register(void) {
 }
 
 igMetaObject *FUN_00153090(void) {
-    return g_igScissorExt_metaObject[0];
+    return g_igScissorExt_metaObject;
 }
 
-void igPsx2ScissorExt_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+static FieldFactory g_igPsx2ScissorExt_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igPsx2ScissorExt_fieldTable[] = {
+    "_context",
+    "_scissorEnable",
+    "_scissorOrgX",
+    "_scissorOrgY",
+    "_scissorWidth",
+    "_scissorHeight",
+};
+static igMetaField **g_igPsx2ScissorExt_fieldHandles[] = {
+    &g_igPsx2ScissorExt_contextMetaField,
+    &g_igPsx2ScissorExt_scissorEnableMetaField,
+    &g_igPsx2ScissorExt_scissorOrgXMetaField,
+    &g_igPsx2ScissorExt_scissorOrgYMetaField,
+    &g_igPsx2ScissorExt_scissorWidthMetaField,
+    &g_igPsx2ScissorExt_scissorHeightMetaField,
+};
+static int g_igPsx2ScissorExt_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+};
 
-    temp_s0 = (void *)g_igPsx2ScissorExt_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igPsx2ScissorExt_ctorTable[0], 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+void igPsx2ScissorExt_InitFields(void) {
+    int fieldStart;
+    void *temp_s1;
+    igMetaObject *meta;
+
+    meta = g_igPsx2ScissorExt_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPsx2ScissorExt_ctorTable, 6);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4), 0x280);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 0x1C0);
-    igMetaObject_NameFields(temp_s0, &g_igPsx2ScissorExt_fieldTable[0], &DAT_00489e50[0], &DAT_00489e70[0], temp_s2);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x280);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 5), 0x1C0);
+    igMetaObject_NameFields(meta, g_igPsx2ScissorExt_fieldTable, g_igPsx2ScissorExt_fieldHandles, g_igPsx2ScissorExt_fieldOffsets, fieldStart);
 }
 

@@ -1,3 +1,5 @@
+unsigned char g_igMediaFile_openNoticeIgnored;
+
 /* Opens the file in `mode` (0-3 text, 4-7 binary: read, write, append, read-write; 8 read). A relative
  * name is tried under each entry of the search path list until a device opens it. A text file is read
  * whole into the buffer. */
@@ -71,7 +73,7 @@ void igMediaFile_OpenWithMode(int *result, igMediaFileView *file, unsigned int m
     }
     if (status == g_resultFailure.v) {
         if (g_igMediaFile_openNoticeIgnored == 0) {
-            int rc = igReport_Detail(text_Could_not_open_file_s, file->_fileName);
+            int rc = igReport_Detail("Could not open file \"%s\".", file->_fileName);
             if (rc != 1 && rc == 2) {
                 g_igMediaFile_openNoticeIgnored = 1;
             }
@@ -137,42 +139,42 @@ void **igMediaFile_OpenFile(void **self, const char *fileName, int mode) {
     int status;
 
     igFile_SetFileName((int *)self, fileName);
-    if (strcmp(mode, &text_r[0]) == 0) {
+    if (strcmp(mode, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         status = readResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)text_rb) == 0) {
+    if (strcmp(mode, (int *)"rb") == 0) {
         readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
         status = readBinaryResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)((char *)text_w)) == 0) {
+    if (strcmp(mode, (int *)((char *)"w")) == 0) {
         writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
         status = writeResult.v;
         goto opened;
     }
-    if (strcmp(mode, (int *)((char *)text_wb)) == 0) {
+    if (strcmp(mode, (int *)((char *)"wb")) == 0) {
         writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
         status = writeBinaryResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)text_r_plus) == 0) || (strcmp(mode, &text_w_plus[0]) == 0)) {
+    if ((strcmp(mode, (int *)"r+") == 0) || (strcmp(mode, "w+") == 0)) {
         updateResult = ((igFileView *)(self))->OpenWithMode((int)(3));
         status = updateResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)text_r_plus_b) == 0) || (strcmp(mode, &text_w_plus_b[0]) == 0)) {
+    if ((strcmp(mode, (int *)"r+b") == 0) || (strcmp(mode, "w+b") == 0)) {
         updateBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
         status = updateBinaryResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)text_a) == 0) || (strcmp(mode, &text_a_plus[0]) == 0)) {
+    if ((strcmp(mode, (int *)"a") == 0) || (strcmp(mode, "a+") == 0)) {
         appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
         status = appendResult.v;
         goto opened;
     }
-    if ((strcmp(mode, (int *)text_ab) == 0) || (strcmp(mode, &text_a_plus_b[0]) == 0)) {
+    if ((strcmp(mode, (int *)"ab") == 0) || (strcmp(mode, "a+b") == 0)) {
         appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
         status = appendBinaryResult.v;
         goto opened;

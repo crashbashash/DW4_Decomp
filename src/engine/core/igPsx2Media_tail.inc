@@ -1,14 +1,24 @@
+igMetaObject *g_igPsx2Media_metaObject;
+igMetaField *g_igPsx2Media_headAndTailBufferMetaField;
+igMetaField *g_igPsx2Media_connectionMetaField;
+igMetaField *g_igPsx2Media_semaMetaField;
+igMetaField *g_igPsx2Media_commandBufferMetaField;
+igMetaField *g_igPsx2Media_writeBufferMetaField;
+igMetaField *g_igPsx2Media_handlePoolMetaField;
+igMetaField *g_igPsx2Media_conversionStringMetaField;
+igMetaField *g_igPsx2Media_initializedMetaField;
+
 void *igPsx2Media_Create(int pool) {
     igPsx2Media_EnsureRegistered();
-    return (void *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586CF8), (igMemoryPoolView *)pool);
+    return (void *)igMetaObject_CreateInstance(g_igPsx2Media_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igPsx2Media_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2Media_metaObject[0];
+    igMetaObject *g = g_igPsx2Media_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPsx2Media_EnsureRegistered();
-    return g_igPsx2Media_metaObject[0];
+    return g_igPsx2Media_metaObject;
 }
 
 int igPsx2Media_GetVTable(void) {
@@ -25,7 +35,7 @@ int igPsx2Media_GetVTable(void) {
     *(int *)sema = 0;
     conversionString = (igObject *)&media._conversionString;
     *(int *)conversionString = 0;
-    result = *(int *)((char *)&media + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    result = *(int *)((char *)&media + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     media._vtable = (int)(&g_igPsx2Media_vtable[0]);
     if (conversionString != 0) {
         conversionString = *(igObject **)conversionString;
@@ -62,26 +72,69 @@ void igPsx2Media_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igPsx2Media_Register);
 }
 
+static igMetaObjectCallback g_igPsx2Media_callbackList[] = { igPsx2IopRpcConnection_EnsureRegistered, igSemaphore_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+
 void igPsx2Media_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igPsx2Media_metaObject,
+        &g_igPsx2Media_metaObject,
         (igMetaObjectRegisterFunction)igMedia_Register,
         igMedia_GetPublishedMetaObject,
         igPsx2Media_GetMetaObjectFunction,
-        igPsx2Media_className,
+        "igPsx2Media",
         0x28,
         igPsx2Media_GetVTable,
         igPsx2Media_InitFields,
         0,
-        (igMetaObjectCallback *)g_igPsx2Media_callbackList
+        g_igPsx2Media_callbackList
     );
 }
 
 igMetaObject *igMedia_GetPublishedMetaObject(void) {
-    return g_igMedia_metaObject[0];
+    return g_igMedia_metaObject;
 }
+
+static FieldFactory g_igPsx2Media_ctorTable[] = {
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+};
+static const char *g_igPsx2Media_fieldTable[] = {
+    "_headAndTailBuffer",
+    "_connection",
+    "_sema",
+    "_commandBuffer",
+    "_writeBuffer",
+    "_handlePool",
+    "_conversionString",
+    "_initialized",
+};
+static igMetaField **g_igPsx2Media_fieldDescriptors[] = {
+    &g_igPsx2Media_headAndTailBufferMetaField,
+    &g_igPsx2Media_connectionMetaField,
+    &g_igPsx2Media_semaMetaField,
+    &g_igPsx2Media_commandBufferMetaField,
+    &g_igPsx2Media_writeBufferMetaField,
+    &g_igPsx2Media_handlePoolMetaField,
+    &g_igPsx2Media_conversionStringMetaField,
+    &g_igPsx2Media_initializedMetaField,
+};
+static int g_igPsx2Media_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+};
 
 void igPsx2Media_InitFields(void) {
     int base;
@@ -89,9 +142,9 @@ void igPsx2Media_InitFields(void) {
     igRawRefMetaField *handlePoolField;
     void *meta;
 
-    meta = (void *)g_igPsx2Media_metaObject[0];
+    meta = (void *)g_igPsx2Media_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2Media_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2Media_ctorTable, 8);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     ((igMemoryRefMetaField *)field)->_resetMethod = 3;
@@ -121,6 +174,6 @@ void igPsx2Media_InitFields(void) {
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2Media_fieldTable[0], (igMetaField ***)&g_igPsx2Media_fieldDescriptors[0], &g_igPsx2Media_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2Media_fieldTable, g_igPsx2Media_fieldDescriptors, g_igPsx2Media_fieldOffsets, base);
 }
 

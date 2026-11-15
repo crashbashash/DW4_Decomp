@@ -1,16 +1,18 @@
+igMetaObject *g_igProjectionMatrixAttrPool_metaObject;
+
 igMetaObject *FUN_0019a120(void) {
-    if (g_igProjectionMatrixAttrPool_metaObject[0] == 0) {
-        g_igProjectionMatrixAttrPool_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igProjectionMatrixAttrPool_metaObject == 0) {
+        g_igProjectionMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igProjectionMatrixAttrPool_metaObject[0];
+    return g_igProjectionMatrixAttrPool_metaObject;
 }
 
 igMetaObject *igProjectionMatrixAttrPool_GetMetaObject(void)
 {
-    igMetaObject *g = g_igProjectionMatrixAttrPool_metaObject[0];
+    igMetaObject *g = g_igProjectionMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019a200();
-    return g_igProjectionMatrixAttrPool_metaObject[0];
+    return g_igProjectionMatrixAttrPool_metaObject;
 }
 
 int igProjectionMatrixAttrPool_GetVTable(void) {
@@ -26,15 +28,17 @@ void FUN_0019a200(void)
     igMetaObject_RunStaticInit(igProjectionMatrixAttrPool_Register);
 }
 
+static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { FUN_001347c0, 0 };
+
 void igProjectionMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igProjectionMatrixAttrPool_metaObject),
+        &g_igProjectionMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
         thunk_igProjectionMatrixAttrPool_GetMetaObject,
-        igProjectionMatrixAttrPool_className,
+        "igProjectionMatrixAttrPool",
         0x20, /* instance size */
         igProjectionMatrixAttrPool_GetVTable,
         0,

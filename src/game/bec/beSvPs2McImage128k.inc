@@ -1,9 +1,13 @@
+igMetaObject *g_beSvPs2McImage128k_metaObject;
+igMetaField *g_beSvPs2McImage128k_dataSizeMetaField;
+igMetaField *g_beSvPs2McImage128k_dataMetaField;
+
 void *FUN_00347c50(void) {
-    igMetaObject *g = g_beSvPs2McImage128k_metaObject[0];
+    igMetaObject *g = g_beSvPs2McImage128k_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00347ce0();
     }
-    return g_beSvPs2McImage128k_metaObject[0];
+    return g_beSvPs2McImage128k_metaObject;
 }
 
 int beSvPs2McImage128k_GetVTable(void) {
@@ -23,11 +27,11 @@ void *beSvPs2McImage128k_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvPs2McImage128k_metaObject,
+        &g_beSvPs2McImage128k_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         beSvPs2McImage128k_GetMetaObject,
-        beSvPs2McImage128k_className,
+        "beSvPs2McImage128k",
         0x10, /* instance size */
         beSvPs2McImage128k_GetVTable,
         beSvPs2McImage128k_InitFields,
@@ -41,16 +45,33 @@ void beSvPs2McImage128k_GetMetaObject(void)
     FUN_00347c50();
 }
 
+static FieldFactory g_beSvPs2McImage128k_ctorTable[] = {
+    igIntMetaField_Create,
+    igMemoryRefMetaField_Create,
+};
+static const char *g_beSvPs2McImage128k_fieldTable[] = {
+    "_dataSize",
+    "_data",
+};
+static igMetaField **g_beSvPs2McImage128k_fieldHandles[] = {
+    &g_beSvPs2McImage128k_dataSizeMetaField,
+    &g_beSvPs2McImage128k_dataMetaField,
+};
+static int g_beSvPs2McImage128k_fieldOffsets[] = {
+    12,
+    8,
+};
+
 void beSvPs2McImage128k_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beSvPs2McImage128k_metaObject[0];
+    temp_s0 = (void *)g_beSvPs2McImage128k_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beSvPs2McImage128k_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beSvPs2McImage128k_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igMemoryRefMetaField *)temp_s1)->_memType = igCharMetaField_GetDefaultDescriptor();
-    igMetaObject_NameFields(temp_s0, &g_beSvPs2McImage128k_fieldTable[0], &DAT_004c3f18[0], &DAT_004c3f20[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beSvPs2McImage128k_fieldTable, g_beSvPs2McImage128k_fieldHandles, g_beSvPs2McImage128k_fieldOffsets, temp_s2);
 }
 

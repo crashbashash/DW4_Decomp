@@ -2,6 +2,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/ViewerSetup.h"
 
+#pragma push
+#pragma readonly_strings on
+
 extern "C" {
 
 int FUN_002377c0(...);
@@ -479,3 +482,4 @@ int Gap__Viewer__igViewManager__vfunc_22(void) {
 }
 
 }
+#pragma pop

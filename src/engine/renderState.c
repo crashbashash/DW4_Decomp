@@ -6,139 +6,89 @@ extern int FUN_00200980();
 extern int p2LayoutVuBuffers();
 extern int FUN_00204ea0();
 extern int p2DisplayListMode;
-extern int DAT_0056b3b0[4];
-extern int DAT_0056b3b4[4];
-extern int DAT_0056b3b8[4];
-extern int DAT_0056b3c0[4];
-extern int DAT_0056b448[4];
-extern int DAT_0056b480[4];
-extern long long DAT_0056b5a8[4];
-extern long long DAT_0056b5b0[4];
-extern long long DAT_0056b5b8[4];
-extern long long DAT_0056b5c0[4];
-extern long long DAT_0056b5c8[4];
-extern long long DAT_0056b5d0[4];
-extern long long DAT_0056b5d8[4];
-extern long long DAT_0056b5e0[4];
-extern long long DAT_0056b5e8[4];
-extern long long DAT_0056b5f0[4];
-extern int p2LightCalcPending[4];
-extern int DAT_0056ba20[4];
-extern int p2LightingFunctions[4];
-extern int p2StateCacheStatus;
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
-struct E { int w0; int w4; };
-extern long long p2VertexArrayMask[4];
 extern int p2VuPrograms[16];
-extern int DAT_0056b490[4];
 int p2GetVuProgramAddress();
 int p2FindVuProgramVariants(long long, int *, int);
 int p2FindVuProgramByBitCount();
 void *FUN_00203000();
-extern int DAT_004915a8[4];
 extern int DAT_0056ae40[4];
-extern int DAT_0056b078[4];
-extern int DAT_0056b080[4];
-extern int DAT_0056b090[4];
-extern int DAT_0056b098[4];
-extern int DAT_0056b0a0[4];
-extern int DAT_0056b0e0[4];
-extern int DAT_0056b0e8[4];
-extern int DAT_0056b0f0[4];
-extern int DAT_0056b100[4];
-extern int DAT_0056b110[4];
-extern int DAT_0056b130[4];
-extern int DAT_0056b160[4];
-extern int DAT_0056b170[4];
-extern int DAT_0056b1c0[4];
-extern int DAT_0056b220[4];
-extern int DAT_0056b260[4];
-extern int DAT_0056b268[4];
-extern int DAT_0056b270[4];
-extern int DAT_0056b278[4];
-extern int DAT_0056b290[4];
-extern int DAT_0056b2d0[4];
-extern int DAT_0056b2d4[4];
-extern int DAT_0056b2d8[4];
-extern int DAT_0056b2e8[4];
-extern int DAT_0056b2f0[4];
-extern int DAT_0056b2f4[4];
-extern int DAT_0056b2f8[4];
-extern int DAT_0056b308[4];
-extern int DAT_0056b310[4];
-extern int DAT_0056b330[4];
-extern int DAT_0056b334[4];
-extern int DAT_0056b338[4];
-extern int DAT_0056b33c[4];
-extern int DAT_0056b340[4];
-extern int DAT_0056b344[4];
-extern int DAT_0056b348[4];
-extern int DAT_0056b34c[4];
-extern int DAT_0056b350[4];
-extern int DAT_0056b354[4];
-extern int DAT_0056b358[4];
-extern int DAT_0056b35c[4];
-extern int DAT_0056b360[4];
-extern int DAT_0056b364[4];
-extern int DAT_0056b368[4];
-extern int DAT_0056b36c[4];
-extern int DAT_0056b370[4];
-extern int DAT_0056b380[4];
-extern int DAT_0056b3a0[4];
-extern int DAT_0056b3e0[4];
-extern int DAT_0056b400[4];
-extern int DAT_0056b420[4];
-extern int DAT_0056b430[4];
-extern int DAT_0056b440[4];
-extern int DAT_0056b44c[4];
-extern void *DAT_0056b460[8];
-extern int * DAT_0056b4a4[4];
-extern int DAT_0056b4a8[4];
-extern int * DAT_0056b4ac[4];
-extern int DAT_0056b4b0[4];
-extern int * DAT_0056b4b4[4];
-extern int DAT_0056b4b8[4];
-extern int * DAT_0056b4bc[4];
-extern int DAT_0056b4c0[4];
-extern int * DAT_0056b4c4[4];
-extern int DAT_0056b4c8[4];
-extern int * DAT_0056b4cc[4];
-extern int DAT_0056b4d0[4];
-extern int * DAT_0056b4d4[4];
-extern int DAT_0056b4d8[4];
-extern int * DAT_0056b4dc[4];
-extern int * DAT_0056b4e4[4];
-extern int DAT_0056b4e8[4];
-extern int * DAT_0056b4ec[4];
-extern int DAT_0056b500[4];
-extern int * DAT_0056b504[4];
-extern int * DAT_0056b50c[4];
-extern int * DAT_0056b514[4];
-extern int * DAT_0056b51c[4];
-extern int DAT_0056b528[4];
-extern int * DAT_0056b52c[4];
-extern int DAT_0056b540[4];
-extern int * DAT_0056b544[4];
-extern int DAT_0056b550[4];
-extern int * DAT_0056b554[4];
-extern int DAT_0056b558[4];
-extern int * DAT_0056b55c[4];
-extern int DAT_0056b560[4];
-extern int * DAT_0056b564[4];
-extern int DAT_0056b578[4];
-extern int * DAT_0056b57c[4];
-extern int DAT_0056b580[4];
-extern int * DAT_0056b584[4];
-extern int DAT_0056b590[4];
-extern int * DAT_0056b594[4];
-extern int DAT_0056b600[4];
-extern int DAT_0056b604[4];
-extern int DAT_0056b4f8[4];
-extern int DAT_0056b530[4];
-extern int DAT_0056b568[4];
 int Memory_FreeToSelector();
 void *Memory_AllocateAligned16();
 double sqrt(double);
+
+/* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
+ * entry per combination of that feature's settings (-1: none); the slot's programs points at it and
+ * index is the combination the current state selects. */
+typedef struct p2VariantSlot { int index; int *programs; } p2VariantSlot;
+
+/* The compiler emits uninitialised C data last definition first, so these follow retail's address order from the bottom. */
+unsigned int p2VuBufferLayoutNop;
+unsigned int p2FunctionTablePad;
+int p2FunctionTableSizes[3];
+int p2LightingFunctions[6];
+int p2FunctionTables[72];
+int p2SentFunctionTablesQwc;
+__int128 p2SentFunctionTables[19];
+__int128 p2SentLightingFunctions;
+__int128 p2SentLightingFunctionsCode;
+__int128 p2SentGifTags1;
+__int128 p2SentGifTags0;
+__int128 p2SentVuBufferLayout2;
+__int128 p2SentVuBufferLayout1;
+__int128 p2SentVuBufferLayout0;
+__int128 p2SentPassSetup[18];
+int p2StateCacheStatus;
+int p2CachedProgramAddresses[2];
+int p2LightCalcPending;
+long long p2StatPassSetupsSent;
+long long p2StatVuBufferLayoutsSent;
+long long p2StatGsRegistersSent;
+long long p2StatBlendMatricesSent;
+long long p2StatVertexFormatsSent;
+long long p2StatGifTagsSent;
+long long p2StatLightsSent;
+long long p2StatLightingFunctionsSent;
+long long p2StatFunctionTablesSent;
+long long p2StatStateSends;
+p2VariantSlot p2VariantSlots[33];
+int p2VuProgramSpriteBits;
+int p2LightingProgramBits;
+int p2VuProgramLightingBits;
+long long p2VertexArrayMask;
+struct P *p2VariantLists[6];
+int p2VariantsBit30[8];
+int p2VariantsBit31[3];
+int p2VariantsBit21[4];
+int p2VariantsBit16[8];
+int p2VariantsBit10[8];
+int p2VariantsBit29[11];
+int p2VariantsBit28[2];
+int p2VariantsBit27[8];
+int p2VariantsBit26[2];
+int p2VariantsBit25[16];
+int p2VariantsBit23[8];
+int p2VariantsBit22[16];
+int p2VariantsBit19[14];
+int p2VariantsBit24[3];
+int p2VariantsBit20[1];
+int p2VariantsBit17[2];
+int p2VariantsBit18[1];
+int p2VariantsBit15[16];
+int p2VariantsBit14[22];
+int p2VariantsBit8[20];
+int p2VariantsBit13[2];
+int p2VariantsBit7[11];
+int p2VariantsBit2[8];
+int p2VariantsBit12[4];
+int p2VariantsBit11[2];
+int p2VariantsBit9[1];
+int p2VariantsBit6[1];
+int p2VariantsBit5[16];
+int p2VariantsBit4[1];
+int p2VariantsBit3[1];
+int p2VariantsBit1[4];
+int p2VariantsBit0[1];
 
 void FUN_001ff3b0(int arg0) {
     int s;
@@ -146,11 +96,11 @@ void FUN_001ff3b0(int arg0) {
     int n, a;
     s = p2DirtyFlags & arg0;
     if (s != 0) {
-        DAT_0056b5a8[0] += 1;
+        p2StatStateSends += 1;
     }
     if (p2DisplayListMode == 0) {
         if (s & 4) {
-            DAT_0056b5c0[0] += 1;
+            p2StatLightsSent += 1;
             FUN_001f8b50();
             s = p2DirtyFlags & arg0;
         }
@@ -169,33 +119,33 @@ void FUN_001ff3b0(int arg0) {
                 }
                 if (s & 2) {
                     if (p2DisplayListMode == 0) {
-                        f = DAT_0056b480[0];
+                        f = p2VuProgramLightingBits;
                         a = f & 0x10;
                         n = 0;
                         if (a && (f & 0x20)) {
                             n++;
-                            p2LightingFunctions[0] = DAT_0056b3b8[0];
+                            p2LightingFunctions[0] = p2VariantsBit29[2];
                         } else if (f & 0x20) {
                             n++;
-                            p2LightingFunctions[0] = DAT_0056b3b4[0];
+                            p2LightingFunctions[0] = p2VariantsBit29[1];
                         } else if (a) {
                             n++;
-                            p2LightingFunctions[0] = DAT_0056b3b0[0];
+                            p2LightingFunctions[0] = p2VariantsBit29[0];
                         }
                         if (f & 0x40) {
-                            p2LightingFunctions[n] = DAT_0056b3c0[0];
+                            p2LightingFunctions[n] = p2VariantsBit29[4];
                             n++;
                         }
                         if (f & 0x1C00) {
-                            p2LightingFunctions[n] = DAT_0056b3c0[(f & 0x1C00) >> 10];
+                            p2LightingFunctions[n] = p2VariantsBit29[4 + ((f & 0x1C00) >> 10)];
                             n++;
                         }
-                        p2LightingFunctions[n] = DAT_0056b448[0];
-                        DAT_0056ba20[0] = n + 1;
-                        if (DAT_0056ba20[0] > 1) {
-                            p2LightCalcPending[0] = 1;
+                        p2LightingFunctions[n] = p2VariantsBit30[2];
+                        p2FunctionTableSizes[2] = n + 1;
+                        if (p2FunctionTableSizes[2] > 1) {
+                            p2LightCalcPending = 1;
                         } else {
-                            p2LightCalcPending[0] = 0;
+                            p2LightCalcPending = 0;
                         }
                     }
                 }
@@ -204,14 +154,14 @@ void FUN_001ff3b0(int arg0) {
                 }
             }
         }
-        if (s & 1) DAT_0056b5b0[0] += 1;
-        if (s & 2) DAT_0056b5b8[0] += 1;
-        if (s & 0x10) DAT_0056b5d0[0] += 1;
-        if (s & 0x80) DAT_0056b5e8[0] += 1;
-        if (s & 8) DAT_0056b5c8[0] += 1;
-        if (s & 0x100) DAT_0056b5f0[0] += 1;
-        if (s & 0x40) DAT_0056b5e0[0] += 1;
-        if (s & 0x20) DAT_0056b5d8[0] += 1;
+        if (s & 1) p2StatFunctionTablesSent += 1;
+        if (s & 2) p2StatLightingFunctionsSent += 1;
+        if (s & 0x10) p2StatVertexFormatsSent += 1;
+        if (s & 0x80) p2StatVuBufferLayoutsSent += 1;
+        if (s & 8) p2StatGifTagsSent += 1;
+        if (s & 0x100) p2StatPassSetupsSent += 1;
+        if (s & 0x40) p2StatGsRegistersSent += 1;
+        if (s & 0x20) p2StatBlendMatricesSent += 1;
     }
 }
 
@@ -234,10 +184,6 @@ void p2SubmitDmaPacket();
 extern int p2CurrentPrimitive;
 extern int DAT_00490d38;
 extern int DAT_00569308;
-extern unsigned int DAT_004914f0, DAT_004914f4, DAT_004914f8, DAT_004914fc;
-extern VifCode DAT_00491500;
-extern GifTag DAT_00491510, DAT_00491520, DAT_00491530;
-extern __int128 DAT_0056b760, DAT_0056b770;
 
 static inline int remap(int prim) {
     if (prim == 9) {
@@ -269,15 +215,13 @@ enum {
 
 extern p2DmaPacket *p2DmaCurrentPacket[P2_DMA_CHANNEL_COUNT];
 extern int p2LoadVuPrograms();
-extern int p2FunctionTables[];
-extern int p2FunctionTableSizes[3];
-extern unsigned int p2FunctionTablePad;
-extern p2DmaTag p2FunctionTablesTag;
-extern p2VifUnpack p2LightingFunctionsUnpack, p2FunctionTable0Unpack, p2FunctionTable1Unpack;
-extern unsigned int p2FunctionTablesFlush, p2LightingFunctionsStmask;
-extern __int128 p2SentFunctionTables[];
-extern __int128 p2SentLightingFunctionsCode, p2SentLightingFunctions;
-extern int p2SentFunctionTablesQwc;
+
+p2DmaTag p2FunctionTablesTag = {{ 0x10000001, 0, 0, 0 }};
+p2VifUnpack p2LightingFunctionsUnpack = { 0x70004027 };
+p2VifUnpack p2FunctionTable0Unpack = { 0x6100404E };
+p2VifUnpack p2FunctionTable1Unpack = { 0x61004021 };
+unsigned int p2FunctionTablesFlush = 0x10000000;
+unsigned int p2LightingFunctionsStmask = 0x20000000;
 void p2UpdateLights();
 void p2UploadBlendMatrices();
 void p2FlushGsRegisters();
@@ -433,6 +377,12 @@ int p2SendRenderState(int mask) {
     return 0;
 }
 
+p2DmaTag p2GifTagsDmaTag = {{ 0x10000002, 0, 0, 0 }};
+VifCode p2GifTagsUnpack = { 0x68010000 };
+GifTag p2GifTagTexPrim = { 1, 1, 0, 0, 1, 0, 0, 3, 0xFFFFFFFFFFFFF412ULL };
+GifTag p2GifTagPrimColour = { 1, 1, 0, 0, 1, 0, 0, 2, 0xFFFFFFFFFFFFFF41ULL };
+GifTag p2GifTagPrimTextured = { 1, 1, 0, 0, 1, 0, 0, 3, 0xFFFFFFFFFFFFF412ULL };
+
 void p2SendGifTags(void) {
     int texPrim;
     int prim;
@@ -467,34 +417,34 @@ void p2SendGifTags(void) {
         texPrim = 5;
     }
     flag = (p2ProgramFlags[p2CurrentProgram] >> 23) & 1;
-    DAT_00491500.imm = 24;
-    if (DAT_0056b490[0] & 0x100) {
-        tag = &DAT_00491520;
+    p2GifTagsUnpack.imm = 24;
+    if (p2VuProgramSpriteBits & 0x100) {
+        tag = &p2GifTagPrimColour;
     } else {
-        tag = &DAT_00491530;
+        tag = &p2GifTagPrimTextured;
     }
     if (flag) {
         bits = p2CurrentGsRegisters->prmode.half[0] & 0x7F8;
         texPrim |= bits;
         prim |= bits;
     }
-    DAT_00491510.PRIM = texPrim;
+    p2GifTagTexPrim.PRIM = texPrim;
     tag->PRIM = prim;
-    p[0] = DAT_004914f0;
-    p[1] = DAT_004914f4;
-    p[2] = DAT_004914f8;
-    p[3] = DAT_004914fc;
-    p[4] = DAT_00491500.word;
+    p[0] = p2GifTagsDmaTag.word[0];
+    p[1] = p2GifTagsDmaTag.word[1];
+    p[2] = p2GifTagsDmaTag.word[2];
+    p[3] = p2GifTagsDmaTag.word[3];
+    p[4] = p2GifTagsUnpack.word;
     p[5] = ((unsigned int *)tag)[0];
     p[6] = ((unsigned int *)tag)[1];
     p[7] = ((unsigned int *)tag)[2];
-    DAT_00491500.imm++;
-    p[8] = DAT_00491500.word;
-    p[9] = ((unsigned int *)&DAT_00491510)[0];
-    p[10] = ((unsigned int *)&DAT_00491510)[1];
-    p[11] = ((unsigned int *)&DAT_00491510)[2];
-    DAT_0056b760 = ((__int128 *)p)[1];
-    DAT_0056b770 = ((__int128 *)p)[2];
+    p2GifTagsUnpack.imm++;
+    p[8] = p2GifTagsUnpack.word;
+    p[9] = ((unsigned int *)&p2GifTagTexPrim)[0];
+    p[10] = ((unsigned int *)&p2GifTagTexPrim)[1];
+    p[11] = ((unsigned int *)&p2GifTagTexPrim)[2];
+    p2SentGifTags0 = ((__int128 *)p)[1];
+    p2SentGifTags1 = ((__int128 *)p)[2];
     DAT_00568f04->cursor = p + 12;
     if (DAT_00568f04->cursor >= DAT_00568f04->end) {
         if (p2DisplayListMode != 0) {
@@ -506,7 +456,6 @@ void p2SendGifTags(void) {
 }
 
 int FUN_00200830(struct P *p, long long *out) {
-    extern struct E DAT_0056b4a0[16];
     int res = 0;
     long long m;
     int i;
@@ -516,11 +465,11 @@ int FUN_00200830(struct P *p, long long *out) {
     int f;
     int lo;
     int hi;
-    struct E *e;
+    p2VariantSlot *e;
     for (; p != 0; p = p->next) {
         m = p->m0;
-        if (m == (m & p2VertexArrayMask[0])) {
-            if (!(p->m8 & p2VertexArrayMask[0])) {
+        if (m == (m & p2VertexArrayMask)) {
+            if (!(p->m8 & p2VertexArrayMask)) {
                 for (i = 0; i < 32; i++) {
                     if (m & (1LL << i)) break;
                 }
@@ -528,21 +477,21 @@ int FUN_00200830(struct P *p, long long *out) {
                 for (; j > 0; j--) {
                     if (m & (1LL << j)) break;
                 }
-                e = &DAT_0056b4a0[i];
-                w = e->w0 | (DAT_0056b4a0[j].w0 << p->sh);
+                e = &p2VariantSlots[i];
+                w = e->index | (p2VariantSlots[j].index << p->sh);
                 k = p->tab[w];
                 if (k != -1) {
-                    e->w0 = w;
-                    e->w4 = (int)p->tab;
+                    e->index = w;
+                    e->programs = p->tab;
                     *out &= ~p->m0 | (1LL << i);
                     f = *(int *)((char *)p2VuPrograms + (k << 6) + 40);
                     lo = f & 0x30;
                     if (lo != 0) {
-                        DAT_0056b480[0] = (DAT_0056b480[0] & 0x1cc0) | lo;
+                        p2VuProgramLightingBits = (p2VuProgramLightingBits & 0x1cc0) | lo;
                     }
                     hi = f & 0x300;
                     if (hi != 0) {
-                        DAT_0056b490[0] = hi;
+                        p2VuProgramSpriteBits = hi;
                     }
                     res = 1;
                 }
@@ -565,11 +514,12 @@ int p2GetPassProgramAddress();
 #define P2_PALETTE_FLAG_OTHER 0x100
 #define P2_STAGES_BOTH_PALETTED 3
 
-extern p2DmaTag p2PassSetupTag;
-extern p2VifUnpack p2PassSetupUnpack;
-extern unsigned int p2PassSetupFlush, p2PassSetupStmask, p2PaletteFlagUnpack;
+p2DmaTag p2PassSetupTag = {{ 0x10000003, 0, 0, 0 }};
+p2VifUnpack p2PassSetupUnpack = { 0x7C02004E };
+unsigned int p2PassSetupFlush = 0x10000000;
+unsigned int p2PassSetupStmask = 0x20000000;
+unsigned int p2PaletteFlagUnpack = 0x7E010049;
 extern int p2PalettedStages;
-extern __int128 p2SentPassSetup[];
 
 /* Sends the multipass setup when the current program draws in passes: for each pass a vector of
  * its FRAME and ZBUF masks and the address of its VU program, then the palette flag. */
@@ -634,13 +584,14 @@ void p2SendPassSetup(void) {
 }
 
 
-extern unsigned int p2VuBufferLayoutTag[4];
-extern unsigned int p2VuBufferBytesUnpack, p2VuBufferHalvesUnpack, p2VuBufferLayoutFlush;
+unsigned int p2VuBufferLayoutTag[4] = { 0x10000003, 0, 0, 0 };
+unsigned int p2VuBufferBytesUnpack = 0x6E02404A;
+unsigned int p2VuBufferHalvesUnpack = 0x6D01004C;
+unsigned int p2VuBufferLayoutFlush = 0x11000000;
+VifCode p2VuBufferBase = { 0x03000000 };
+VifCode p2VuBufferOffset = { 0x02000000 };
 extern p2VuBufferLayout p2VuBuffers;
-extern VifCode p2VuBufferBase, p2VuBufferOffset;
-extern unsigned int p2VuBufferLayoutNop;
 extern int p2VifOffset, p2VifBase;
-extern __int128 p2SentVuBufferLayout0, p2SentVuBufferLayout1, p2SentVuBufferLayout2;
 
 /* Sends p2VuBuffers: its addresses as bytes and halfwords to the VU1 program's constants, and its
  * double buffer as the VIF BASE and OFFSET, which p2VifBase and p2VifOffset keep for the state cache. */
@@ -691,10 +642,11 @@ void p2SendVuBufferLayout(void) {
     }
 }
 
+int p2VariantsFirstSetup = 1;
+
 void FUN_00202300(void) {
     void *FUN_00202f60(void *, long long);
     int FUN_00202fa0(long long);
-    extern int DAT_0056b4a0[4];
     int *temp_v0;
     int *temp_v0_10;
     int *temp_v0_11;
@@ -755,260 +707,260 @@ void FUN_00202300(void) {
     void *var_v0;
 
     var_a1 = 0;
-    DAT_0056b090[0] = -1;
-    DAT_0056b098[0] = -1;
-    DAT_0056b0e0[0] = -1;
-    DAT_0056b0e8[0] = -1;
+    p2VariantsBit3[0] = -1;
+    p2VariantsBit4[0] = -1;
+    p2VariantsBit6[0] = -1;
+    p2VariantsBit9[0] = -1;
     do {
-        temp_v0 = (int *)(&(&DAT_0056b0f0[0])[var_a1]);
+        temp_v0 = (int *)(&(p2VariantsBit11)[var_a1]);
         *temp_v0 = -1;
         var_a1 += 1;
     } while (var_a1 < 2);
     var_a1_2 = 0;
     do {
-        temp_v0_2 = (int *)(&(&DAT_0056b100[0])[var_a1_2]);
+        temp_v0_2 = (int *)(&(p2VariantsBit12)[var_a1_2]);
         *temp_v0_2 = -1;
         var_a1_2 += 1;
     } while (var_a1_2 < 4);
     var_a1_3 = 0;
-    DAT_0056b078[0] = -1;
+    p2VariantsBit0[0] = -1;
     do {
-        temp_v0_3 = (int *)(&(&DAT_0056b080[0])[var_a1_3]);
+        temp_v0_3 = (int *)(&(p2VariantsBit1)[var_a1_3]);
         *temp_v0_3 = -1;
         var_a1_3 += 1;
     } while (var_a1_3 < 4);
     var_a1_4 = 0;
     do {
-        temp_v0_4 = (int *)(&(&DAT_0056b110[0])[var_a1_4]);
+        temp_v0_4 = (int *)(&(p2VariantsBit2)[var_a1_4]);
         *temp_v0_4 = -1;
         var_a1_4 += 1;
     } while (var_a1_4 < 8);
     var_a1_5 = 0;
     do {
-        temp_v0_5 = (int *)(&(&DAT_0056b160[0])[var_a1_5]);
+        temp_v0_5 = (int *)(&(p2VariantsBit13)[var_a1_5]);
         *temp_v0_5 = -1;
         var_a1_5 += 1;
     } while (var_a1_5 < 2);
     var_a1_6 = 0;
     do {
-        temp_v0_6 = (int *)(&(&DAT_0056b130[0])[var_a1_6]);
+        temp_v0_6 = (int *)(&(p2VariantsBit7)[var_a1_6]);
         *temp_v0_6 = -1;
         var_a1_6 += 1;
     } while (var_a1_6 < 0xB);
     var_a1_7 = 0;
     do {
-        temp_v0_7 = (int *)(&(&DAT_0056b1c0[0])[var_a1_7]);
+        temp_v0_7 = (int *)(&(p2VariantsBit14)[var_a1_7]);
         *temp_v0_7 = -1;
         var_a1_7 += 1;
     } while (var_a1_7 < 0x16);
     var_a1_8 = 0;
     do {
-        temp_v0_8 = (int *)(&(&DAT_0056b170[0])[var_a1_8]);
+        temp_v0_8 = (int *)(&(p2VariantsBit8)[var_a1_8]);
         *temp_v0_8 = -1;
         var_a1_8 += 1;
     } while (var_a1_8 < 0x14);
     var_a1_9 = 0;
     do {
-        temp_v0_9 = (int *)(&(&DAT_0056b220[0])[var_a1_9]);
+        temp_v0_9 = (int *)(&(p2VariantsBit15)[var_a1_9]);
         *temp_v0_9 = -1;
         var_a1_9 += 1;
     } while (var_a1_9 < 0x10);
     var_a1_10 = 0;
-    DAT_0056b260[0] = -1;
+    p2VariantsBit18[0] = -1;
     do {
-        temp_v0_10 = (int *)(&(&DAT_0056b268[0])[var_a1_10]);
+        temp_v0_10 = (int *)(&(p2VariantsBit17)[var_a1_10]);
         *temp_v0_10 = -1;
         var_a1_10 += 1;
     } while (var_a1_10 < 2);
     var_a1_11 = 0;
-    DAT_0056b270[0] = -1;
+    p2VariantsBit20[0] = -1;
     do {
-        temp_v0_11 = (int *)(&(&DAT_0056b278[0])[var_a1_11]);
+        temp_v0_11 = (int *)(&(p2VariantsBit24)[var_a1_11]);
         *temp_v0_11 = -1;
         var_a1_11 += 1;
     } while (var_a1_11 < 3);
     var_a1_12 = 0;
     do {
-        temp_v0_12 = (int *)(&(&DAT_0056b290[0])[var_a1_12]);
+        temp_v0_12 = (int *)(&(p2VariantsBit19)[var_a1_12]);
         *temp_v0_12 = -1;
         var_a1_12 += 1;
     } while (var_a1_12 < 0xE);
     var_a1_13 = 0;
     do {
-        temp_v0_13 = (int *)(&(&DAT_0056b2d0[0])[var_a1_13]);
+        temp_v0_13 = (int *)(&(p2VariantsBit22)[var_a1_13]);
         *temp_v0_13 = -1;
         var_a1_13 += 1;
     } while (var_a1_13 < 0x10);
     var_a1_14 = 0;
     do {
-        temp_v0_14 = (int *)(&(&DAT_0056b310[0])[var_a1_14]);
+        temp_v0_14 = (int *)(&(p2VariantsBit23)[var_a1_14]);
         *temp_v0_14 = -1;
         var_a1_14 += 1;
     } while (var_a1_14 < 8);
     var_a1_15 = 0;
     do {
-        temp_v0_15 = (int *)(&(&DAT_0056b330[0])[var_a1_15]);
+        temp_v0_15 = (int *)(&(p2VariantsBit25)[var_a1_15]);
         *temp_v0_15 = -1;
         var_a1_15 += 1;
     } while (var_a1_15 < 0x10);
     var_a1_16 = 0;
     do {
-        temp_v0_16 = (int *)(&(&DAT_0056b370[0])[var_a1_16]);
+        temp_v0_16 = (int *)(&(p2VariantsBit26)[var_a1_16]);
         *temp_v0_16 = -1;
         var_a1_16 += 1;
     } while (var_a1_16 < 2);
     var_a1_17 = 0;
     do {
-        temp_v0_17 = (int *)(&(&DAT_0056b3a0[0])[var_a1_17]);
+        temp_v0_17 = (int *)(&(p2VariantsBit28)[var_a1_17]);
         *temp_v0_17 = -1;
         var_a1_17 += 1;
     } while (var_a1_17 < 2);
     var_a1_18 = 0;
     do {
-        temp_v0_18 = (int *)(&(&DAT_0056b380[0])[var_a1_18]);
+        temp_v0_18 = (int *)(&(p2VariantsBit27)[var_a1_18]);
         *temp_v0_18 = -1;
         var_a1_18 += 1;
     } while (var_a1_18 < 8);
     var_a1_19 = 0;
     do {
-        temp_v0_19 = (int *)(&(&DAT_0056b3b0[0])[var_a1_19]);
+        temp_v0_19 = (int *)(&(p2VariantsBit29)[var_a1_19]);
         *temp_v0_19 = -1;
         var_a1_19 += 1;
     } while (var_a1_19 < 0xB);
     var_a1_20 = 0;
     do {
-        temp_v0_20 = (int *)(&(&DAT_0056b440[0])[var_a1_20]);
+        temp_v0_20 = (int *)(&(p2VariantsBit30)[var_a1_20]);
         *temp_v0_20 = -1;
         var_a1_20 += 1;
     } while (var_a1_20 < 8);
     var_a1_21 = 0;
     do {
-        temp_v0_21 = (int *)(&(&DAT_0056b3e0[0])[var_a1_21]);
+        temp_v0_21 = (int *)(&(p2VariantsBit10)[var_a1_21]);
         *temp_v0_21 = -1;
         var_a1_21 += 1;
     } while (var_a1_21 < 8);
     var_a1_22 = 0;
     do {
-        temp_v0_22 = (int *)(&(&DAT_0056b400[0])[var_a1_22]);
+        temp_v0_22 = (int *)(&(p2VariantsBit16)[var_a1_22]);
         *temp_v0_22 = -1;
         var_a1_22 += 1;
     } while (var_a1_22 < 8);
     var_a1_23 = 0;
     do {
-        temp_v0_23 = (int *)(&(&DAT_0056b420[0])[var_a1_23]);
+        temp_v0_23 = (int *)(&(p2VariantsBit21)[var_a1_23]);
         *temp_v0_23 = -1;
         var_a1_23 += 1;
     } while (var_a1_23 < 4);
     var_a1_24 = 0;
     do {
-        temp_v0_24 = (int *)(&(&DAT_0056b430[0])[var_a1_24]);
+        temp_v0_24 = (int *)(&(p2VariantsBit31)[var_a1_24]);
         *temp_v0_24 = -1;
         var_a1_24 += 1;
     } while (var_a1_24 < 3);
-    DAT_0056b4d8[0] = 0;
-    DAT_0056b4dc[0] = (int *)(&DAT_0056b130[0]);
-    DAT_0056b50c[0] = (int *)(&DAT_0056b160[0]);
-    DAT_0056b514[0] = (int *)(&DAT_0056b1c0[0]);
-    DAT_0056b4e4[0] = (int *)(&DAT_0056b170[0]);
-    DAT_0056b51c[0] = (int *)(&DAT_0056b220[0]);
-    DAT_0056b4a4[0] = (int *)(&DAT_0056b078[0]);
-    DAT_0056b4ac[0] = (int *)(&DAT_0056b080[0]);
-    DAT_0056b4b4[0] = (int *)(&DAT_0056b110[0]);
-    DAT_0056b4bc[0] = (int *)(&DAT_0056b090[0]);
-    DAT_0056b4c4[0] = (int *)(&DAT_0056b098[0]);
-    DAT_0056b4d4[0] = (int *)(&DAT_0056b0e0[0]);
-    DAT_0056b4ec[0] = (int *)(&DAT_0056b0e8[0]);
-    DAT_0056b504[0] = (int *)(&DAT_0056b100[0]);
-    DAT_0056b52c[0] = (int *)(&DAT_0056b268[0]);
-    DAT_0056b544[0] = (int *)(&DAT_0056b270[0]);
-    DAT_0056b564[0] = (int *)(&DAT_0056b278[0]);
-    DAT_0056b554[0] = (int *)(&DAT_0056b2d0[0]);
-    DAT_0056b55c[0] = (int *)(&DAT_0056b310[0]);
-    DAT_0056b584[0] = (int *)(&DAT_0056b3a0[0]);
-    DAT_0056b57c[0] = (int *)(&DAT_0056b380[0]);
-    DAT_0056b590[0] = 4;
-    DAT_0056b594[0] = (int *)(&DAT_0056b440[0]);
-    DAT_0056b4cc[0] = (int *)(&DAT_0056b0a0[0]);
-    DAT_0056b4a0[0] = 0;
-    DAT_0056b4a8[0] = 0;
-    DAT_0056b4b0[0] = 0;
-    DAT_0056b4b8[0] = 0;
-    DAT_0056b4c0[0] = 0;
-    DAT_0056b4d0[0] = 0;
-    DAT_0056b4e8[0] = 0;
-    DAT_0056b500[0] = 0;
-    DAT_0056b528[0] = 0;
-    DAT_0056b540[0] = 0;
-    DAT_0056b560[0] = 0;
-    DAT_0056b550[0] = 0;
-    DAT_0056b558[0] = 0;
-    DAT_0056b580[0] = 0;
-    DAT_0056b578[0] = 0;
-    DAT_0056b4c8[0] = 0;
-    p2FindVuProgramVariants(1, &DAT_0056b078[0], 1);
-    p2FindVuProgramVariants(2, &DAT_0056b080[0], 4);
-    p2FindVuProgramVariants(4, &DAT_0056b110[0], 8);
-    p2FindVuProgramVariants(8, &DAT_0056b090[0], 1);
-    p2FindVuProgramVariants(0x10, &DAT_0056b098[0], 1);
-    p2FindVuProgramVariants(0x40, &DAT_0056b0e0[0], 1);
-    p2FindVuProgramVariants(0x20, &DAT_0056b0a0[0], 0x10);
-    p2FindVuProgramVariants(0x200, &DAT_0056b0e8[0], 1);
-    p2FindVuProgramVariants(0x800, &DAT_0056b0f0[0], 2);
-    p2FindVuProgramVariants(0x1000, &DAT_0056b100[0], 4);
-    p2FindVuProgramVariants(4, &DAT_0056b110[0], 8);
-    p2FindVuProgramVariants(0x2000, &DAT_0056b160[0], 2);
-    p2FindVuProgramVariants(0x80, &DAT_0056b130[0], 0xB);
-    p2FindVuProgramVariants(0x4000, &DAT_0056b1c0[0], 0x16);
-    p2FindVuProgramVariants(0x100, &DAT_0056b170[0], 0x14);
-    p2FindVuProgramVariants(0x8000, &DAT_0056b220[0], 0x10);
-    p2FindVuProgramVariants(0x40000, &DAT_0056b260[0], 1);
-    p2FindVuProgramVariants(0x20000, &DAT_0056b268[0], 2);
-    p2FindVuProgramVariants(0x100000, &DAT_0056b270[0], 1);
-    p2FindVuProgramVariants(0x01000000, &DAT_0056b278[0], 3);
-    p2FindVuProgramVariants(0x80000, &DAT_0056b290[0], 0xE);
-    p2FindVuProgramVariants(0x400000, &DAT_0056b2d0[0], 0x10);
-    p2FindVuProgramVariants(0x800000, &DAT_0056b310[0], 8);
-    p2FindVuProgramVariants(0x02000000, &DAT_0056b330[0], 0x10);
-    p2FindVuProgramVariants(0x04000000, &DAT_0056b370[0], 2);
-    p2FindVuProgramVariants(0x10000000, &DAT_0056b3a0[0], 2);
-    p2FindVuProgramVariants(0x08000000, &DAT_0056b380[0], 8);
-    p2FindVuProgramVariants(0x20000000, &DAT_0056b3b0[0], 0xB);
-    p2FindVuProgramVariants(0x40000000, &DAT_0056b440[0], 8);
-    p2FindVuProgramVariants(0x400, &DAT_0056b3e0[0], 8);
-    p2FindVuProgramVariants(0x10000, &DAT_0056b400[0], 8);
-    p2FindVuProgramVariants(0x200000, &DAT_0056b420[0], 4);
-    p2FindVuProgramVariants(0x80000000LL, &DAT_0056b430[0], 3);
-    DAT_0056ae40[0] = DAT_0056b440[0];
-    DAT_0056b2f0[0] = DAT_0056b2d0[0];
-    DAT_0056b2f4[0] = DAT_0056b2d4[0];
-    DAT_0056b2f8[0] = DAT_0056b2d8[0];
-    DAT_0056b308[0] = DAT_0056b2e8[0];
-    DAT_0056b360[0] = DAT_0056b350[0] = DAT_0056b340[0] = DAT_0056b330[0];
-    DAT_0056b344[0] = DAT_0056b334[0];
-    DAT_0056b348[0] = DAT_0056b338[0];
-    DAT_0056b34c[0] = DAT_0056b33c[0];
-    DAT_0056b354[0] = DAT_0056b334[0];
-    DAT_0056b364[0] = DAT_0056b334[0];
-    DAT_0056b358[0] = DAT_0056b338[0];
-    DAT_0056b368[0] = DAT_0056b338[0];
-    DAT_0056b35c[0] = DAT_0056b33c[0];
-    DAT_0056b36c[0] = DAT_0056b33c[0];
-    if (DAT_004915a8[0] != 0) {
-        DAT_0056b600[0] = p2GetVuProgramAddress(DAT_0056b448[0], DAT_0056b334[0], DAT_0056b2d0[0], DAT_0056b440[0]);
-        DAT_0056b604[0] = p2GetVuProgramAddress(DAT_0056b44c[0]);
+    p2VariantSlots[7].index = 0;
+    p2VariantSlots[7].programs = p2VariantsBit7;
+    p2VariantSlots[13].programs = p2VariantsBit13;
+    p2VariantSlots[14].programs = p2VariantsBit14;
+    p2VariantSlots[8].programs = p2VariantsBit8;
+    p2VariantSlots[15].programs = p2VariantsBit15;
+    p2VariantSlots[0].programs = p2VariantsBit0;
+    p2VariantSlots[1].programs = p2VariantsBit1;
+    p2VariantSlots[2].programs = p2VariantsBit2;
+    p2VariantSlots[3].programs = p2VariantsBit3;
+    p2VariantSlots[4].programs = p2VariantsBit4;
+    p2VariantSlots[6].programs = p2VariantsBit6;
+    p2VariantSlots[9].programs = p2VariantsBit9;
+    p2VariantSlots[12].programs = p2VariantsBit12;
+    p2VariantSlots[17].programs = p2VariantsBit17;
+    p2VariantSlots[20].programs = p2VariantsBit20;
+    p2VariantSlots[24].programs = p2VariantsBit24;
+    p2VariantSlots[22].programs = p2VariantsBit22;
+    p2VariantSlots[23].programs = p2VariantsBit23;
+    p2VariantSlots[28].programs = p2VariantsBit28;
+    p2VariantSlots[27].programs = p2VariantsBit27;
+    p2VariantSlots[30].index = 4;
+    p2VariantSlots[30].programs = p2VariantsBit30;
+    p2VariantSlots[5].programs = p2VariantsBit5;
+    p2VariantSlots[0].index = 0;
+    p2VariantSlots[1].index = 0;
+    p2VariantSlots[2].index = 0;
+    p2VariantSlots[3].index = 0;
+    p2VariantSlots[4].index = 0;
+    p2VariantSlots[6].index = 0;
+    p2VariantSlots[9].index = 0;
+    p2VariantSlots[12].index = 0;
+    p2VariantSlots[17].index = 0;
+    p2VariantSlots[20].index = 0;
+    p2VariantSlots[24].index = 0;
+    p2VariantSlots[22].index = 0;
+    p2VariantSlots[23].index = 0;
+    p2VariantSlots[28].index = 0;
+    p2VariantSlots[27].index = 0;
+    p2VariantSlots[5].index = 0;
+    p2FindVuProgramVariants(1, p2VariantsBit0, 1);
+    p2FindVuProgramVariants(2, p2VariantsBit1, 4);
+    p2FindVuProgramVariants(4, p2VariantsBit2, 8);
+    p2FindVuProgramVariants(8, p2VariantsBit3, 1);
+    p2FindVuProgramVariants(0x10, p2VariantsBit4, 1);
+    p2FindVuProgramVariants(0x40, p2VariantsBit6, 1);
+    p2FindVuProgramVariants(0x20, p2VariantsBit5, 0x10);
+    p2FindVuProgramVariants(0x200, p2VariantsBit9, 1);
+    p2FindVuProgramVariants(0x800, p2VariantsBit11, 2);
+    p2FindVuProgramVariants(0x1000, p2VariantsBit12, 4);
+    p2FindVuProgramVariants(4, p2VariantsBit2, 8);
+    p2FindVuProgramVariants(0x2000, p2VariantsBit13, 2);
+    p2FindVuProgramVariants(0x80, p2VariantsBit7, 0xB);
+    p2FindVuProgramVariants(0x4000, p2VariantsBit14, 0x16);
+    p2FindVuProgramVariants(0x100, p2VariantsBit8, 0x14);
+    p2FindVuProgramVariants(0x8000, p2VariantsBit15, 0x10);
+    p2FindVuProgramVariants(0x40000, p2VariantsBit18, 1);
+    p2FindVuProgramVariants(0x20000, p2VariantsBit17, 2);
+    p2FindVuProgramVariants(0x100000, p2VariantsBit20, 1);
+    p2FindVuProgramVariants(0x01000000, p2VariantsBit24, 3);
+    p2FindVuProgramVariants(0x80000, p2VariantsBit19, 0xE);
+    p2FindVuProgramVariants(0x400000, p2VariantsBit22, 0x10);
+    p2FindVuProgramVariants(0x800000, p2VariantsBit23, 8);
+    p2FindVuProgramVariants(0x02000000, p2VariantsBit25, 0x10);
+    p2FindVuProgramVariants(0x04000000, p2VariantsBit26, 2);
+    p2FindVuProgramVariants(0x10000000, p2VariantsBit28, 2);
+    p2FindVuProgramVariants(0x08000000, p2VariantsBit27, 8);
+    p2FindVuProgramVariants(0x20000000, p2VariantsBit29, 0xB);
+    p2FindVuProgramVariants(0x40000000, p2VariantsBit30, 8);
+    p2FindVuProgramVariants(0x400, p2VariantsBit10, 8);
+    p2FindVuProgramVariants(0x10000, p2VariantsBit16, 8);
+    p2FindVuProgramVariants(0x200000, p2VariantsBit21, 4);
+    p2FindVuProgramVariants(0x80000000LL, p2VariantsBit31, 3);
+    DAT_0056ae40[0] = p2VariantsBit30[0];
+    p2VariantsBit22[8] = p2VariantsBit22[0];
+    p2VariantsBit22[9] = p2VariantsBit22[1];
+    p2VariantsBit22[10] = p2VariantsBit22[2];
+    p2VariantsBit22[14] = p2VariantsBit22[6];
+    p2VariantsBit25[12] = p2VariantsBit25[8] = p2VariantsBit25[4] = p2VariantsBit25[0];
+    p2VariantsBit25[5] = p2VariantsBit25[1];
+    p2VariantsBit25[6] = p2VariantsBit25[2];
+    p2VariantsBit25[7] = p2VariantsBit25[3];
+    p2VariantsBit25[9] = p2VariantsBit25[1];
+    p2VariantsBit25[13] = p2VariantsBit25[1];
+    p2VariantsBit25[10] = p2VariantsBit25[2];
+    p2VariantsBit25[14] = p2VariantsBit25[2];
+    p2VariantsBit25[11] = p2VariantsBit25[3];
+    p2VariantsBit25[15] = p2VariantsBit25[3];
+    if (p2VariantsFirstSetup != 0) {
+        p2CachedProgramAddresses[0] = p2GetVuProgramAddress(p2VariantsBit30[2], p2VariantsBit25[1], p2VariantsBit22[0], p2VariantsBit30[0]);
+        p2CachedProgramAddresses[1] = p2GetVuProgramAddress(p2VariantsBit30[3]);
         var_a0 = 0;
         do {
-            temp_v0_25 = (int *)((char *)DAT_0056b460 + (var_a0 * 4));
+            temp_v0_25 = (int *)((char *)p2VariantLists + (var_a0 * 4));
             var_a0 += 1;
             *temp_v0_25 = 0;
         } while (var_a0 < 6);
-        DAT_004915a8[0] = 0;
+        p2VariantsFirstSetup = 0;
     }
     var_s3 = 0;
     var_s0 = 0;
     do {
         var_s2 = 0;
-        temp_s1 = (void **)((char *)DAT_0056b460 + (var_s0 * 4));
+        temp_s1 = (void **)((char *)p2VariantLists + (var_s0 * 4));
         while ((var_s3 = p2FindVuProgramByBitCount(var_s0 + 2, var_s3)) != 0) {
             temp_s4 = (char *)p2VuPrograms + (var_s3 << 6);
             temp_s5 = FUN_00202fa0(*(long long *)((char *)(temp_s4) + 0));
@@ -1045,20 +997,20 @@ int p2GetPassProgramAddress(int arg0) {
     temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
     temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
     if (arg0 == 1) {
-        if (p2VertexArrayMask[0] & 0x400) {
-            return p2GetVuProgramAddress(DAT_0056b0f0[DAT_0056b4f8[0]], temp_a1, temp_a2);
+        if (p2VertexArrayMask & 0x400) {
+            return p2GetVuProgramAddress(p2VariantsBit11[p2VariantSlots[11].index], temp_a1, temp_a2);
         }
         goto block_6;
     }
 block_6:
-    if ((arg0 == 1) && (p2VertexArrayMask[0] & 0x10000)) {
-        return p2GetVuProgramAddress(DAT_0056b260[DAT_0056b530[0]], temp_a1, temp_a2);
+    if ((arg0 == 1) && (p2VertexArrayMask & 0x10000)) {
+        return p2GetVuProgramAddress(p2VariantsBit18[p2VariantSlots[18].index], temp_a1, temp_a2);
     }
     if ((temp_a2 != 0) || (temp_a1 != 0)) {
-        return p2GetVuProgramAddress(DAT_0056b2d0[DAT_0056b550[0]], temp_a1, temp_a2);
+        return p2GetVuProgramAddress(p2VariantsBit22[p2VariantSlots[22].index], temp_a1, temp_a2);
     }
-    if (p2VertexArrayMask[0] & 0x210400) {
-        var_v0 = p2GetVuProgramAddress(DAT_0056b330[DAT_0056b568[0]], temp_a1, temp_a2);
+    if (p2VertexArrayMask & 0x210400) {
+        var_v0 = p2GetVuProgramAddress(p2VariantsBit25[p2VariantSlots[25].index], temp_a1, temp_a2);
     }
     return var_v0;
 }
@@ -1166,13 +1118,13 @@ void FUN_00203500(void) {
 
     i = 0;
     do {
-        p = DAT_0056b460[i];
+        p = p2VariantLists[i];
         while (p != 0) {
             next = *(void **)((char *)p + 20);
             Memory_FreeToSelector(p, 0x14);
             p = next;
         }
-        DAT_0056b460[i] = 0;
+        p2VariantLists[i] = 0;
         i += 1;
     } while (i < 6);
 }

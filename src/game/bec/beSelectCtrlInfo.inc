@@ -1,12 +1,14 @@
+igMetaObject *g_beSelectCtrlInfo_metaObject;
+
 void *FUN_00345170(void) {
     unsigned char b;
-    if (g_beSelectCtrlInfo_metaObject[0] != 0) {
-        b = (*(int *)((char *)(g_beSelectCtrlInfo_metaObject[0]) + 36) & 4) != 0;
+    if (g_beSelectCtrlInfo_metaObject != 0) {
+        b = (*(int *)((char *)(g_beSelectCtrlInfo_metaObject) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
     FUN_00345230();
 done:
-    return g_beSelectCtrlInfo_metaObject[0];
+    return g_beSelectCtrlInfo_metaObject;
 }
 
 int beSelectCtrlInfo_GetVTable(void) {
@@ -33,11 +35,11 @@ void *beSelectCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSelectCtrlInfo_metaObject,
+        &g_beSelectCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beSelectCtrlInfo_GetMetaObject,
-        beSelectCtrlInfo_className,
+        "beSelectCtrlInfo",
         0x1c, /* instance size */
         beSelectCtrlInfo_GetVTable,
         0,

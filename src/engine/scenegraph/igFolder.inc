@@ -24,7 +24,7 @@ int FUN_001ce400(IniStringObject **out, char *path) {
         char *text = name.p->text;
         IniFileObject *opener = file.p;
         text = (text == 0) ? g_stringObjEmptyText[0] : text;
-        opened = opener->open(text, DAT_004e47b0);
+        opened = opener->open(text, "r");
     }
     if (opened != 0) {
         void *stringAllocator = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString[0]));

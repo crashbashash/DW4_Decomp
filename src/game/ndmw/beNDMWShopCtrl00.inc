@@ -1,17 +1,19 @@
+igMetaObject *g_beNDMWShopCtrl00_metaObject;
+
 /* Factory used by the SUBWND lifecycle; registers on demand, then creates the instance from the
  * (possibly just published) metadata. */
 void *beNDMWShopCtrl00_Create(void *allocator){
-    beNDMWShopCtrl00_EnsureRegistered();return ((void *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject[0],allocator));
+    beNDMWShopCtrl00_EnsureRegistered();return ((void *)igMetaObject_CreateInstance(g_beNDMWShopCtrl00_metaObject,allocator));
 }
 
 /* Lazy accessor. A null handle, or one whose _validity word lacks bit 4, runs the registrar; the
  * handle is re-read afterwards because the callback may publish a different object. */
 igMetaObject *beNDMWShopCtrl00_ResolveMetaObject(){
-    igMetaObject *meta=g_beNDMWShopCtrl00_metaObject[0];
+    igMetaObject *meta=g_beNDMWShopCtrl00_metaObject;
     if(!meta||((meta->_validity&4)!=0)==false){
         beNDMWShopCtrl00_EnsureRegistered();
     }
-    return g_beNDMWShopCtrl00_metaObject[0];
+    return g_beNDMWShopCtrl00_metaObject;
 }
 
 int beNDMWShopCtrl00_GetVTable(void) {
@@ -38,11 +40,11 @@ void *beNDMWShopCtrl00_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        ((igMetaObject_3b8ec0 * *)g_beNDMWShopCtrl00_metaObject),
+        &g_beNDMWShopCtrl00_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopCtrl00_GetMetaObject,
-        beNDMWShopCtrl00_className,
+        "beNDMWShopCtrl00",
         0x54, /* instance size */
         beNDMWShopCtrl00_GetVTable,
         0,

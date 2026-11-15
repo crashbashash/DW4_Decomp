@@ -1,12 +1,14 @@
+static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { FUN_001a5640, FUN_001960c0, FUN_0014a0e0, FUN_0014fde0, FUN_0013ab50, FUN_0013ae20, FUN_00197360, FUN_0019a4e0, FUN_0019a370, FUN_0019a090, FUN_00199c40, FUN_00199f20, FUN_00199db0, FUN_0019a200, FUN_00135ac0, FUN_00135090, FUN_001e40f0, FUN_001e4a50, FUN_00195de0, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, FUN_0019cb10, FUN_00199ad0, FUN_00131040, 0 };
+
 void igCommonTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCommonTraversal_metaObject,
+        &g_igCommonTraversal_metaObject,
         igTraversal_Register,
         igTraversal_GetPublishedMetaObject,
         &thunk_igCommonTraversal_GetMetaObject,
-        igCommonTraversal_className,
+        "igCommonTraversal",
         0x1D8, /* instance size */
         &igCommonTraversal_GetVTable,
         &igCommonTraversal_InitFields,
@@ -18,6 +20,155 @@ void igCommonTraversal_Register(void) {
 void thunk_igCommonTraversal_GetMetaObject(void) {
     igCommonTraversal_GetMetaObject();
 }
+
+static FieldFactory g_igCommonTraversal_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00188660,
+    FUN_00188660,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igLongMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    FUN_00188660,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    FUN_00188660,
+    FUN_00188660,
+    igBoolMetaField_Create,
+};
+static const char *g_igCommonTraversal_fieldTable[] = {
+    "_attrStack",
+    "_transformStack",
+    "_vc",
+    "_capabilityManager",
+    "_defaultManager",
+    "_flushedAttrs",
+    "_sorter",
+    "_matrixPool",
+    "_timePool",
+    "_blendMatrixPool",
+    "_texMatPool",
+    "_vertexBlendMatListPool",
+    "_matrixObjectPool",
+    "_projectionMatrixPool",
+    "_viewMat",
+    "_viewMatInv",
+    "_modeMask",
+    "_matrixOptimization",
+    "_normalizeNormalsEnable",
+    "_timeStack",
+    "_matrixObjectList",
+    "_timeLongBuf",
+    "_timeBuffered",
+    "_boneMatrixPaletteList",
+    "_blendMatrixPaletteList",
+    "_blendMatrixPaletteLengths",
+    "_segmentOverrideNames",
+    "_segmentOverrideStacks",
+    "_blendMatricesAttrPool",
+    "_projMat",
+    "_defaultTimeAttr",
+    "_jointChainCount",
+    "_jointMvmBase",
+    "_jointMvmInverseBase",
+    "_jointGraphRootTraversed",
+};
+static igMetaField **g_igCommonTraversal_fieldHandles[] = {
+    &g_igCommonTraversal_attrStackMetaField,
+    &g_igCommonTraversal_transformStackMetaField,
+    &g_igCommonTraversal_vcMetaField,
+    &g_igCommonTraversal_capabilityManagerMetaField,
+    &g_igCommonTraversal_defaultManagerMetaField,
+    &g_igCommonTraversal_flushedAttrsMetaField,
+    &g_igCommonTraversal_sorterMetaField,
+    &g_igCommonTraversal_matrixPoolMetaField,
+    &g_igCommonTraversal_timePoolMetaField,
+    &g_igCommonTraversal_blendMatrixPoolMetaField,
+    &g_igCommonTraversal_texMatPoolMetaField,
+    &g_igCommonTraversal_vertexBlendMatListPoolMetaField,
+    &g_igCommonTraversal_matrixObjectPoolMetaField,
+    &g_igCommonTraversal_projectionMatrixPoolMetaField,
+    &g_igCommonTraversal_viewMatMetaField,
+    &g_igCommonTraversal_viewMatInvMetaField,
+    &g_igCommonTraversal_modeMaskMetaField,
+    &g_igCommonTraversal_matrixOptimizationMetaField,
+    &g_igCommonTraversal_normalizeNormalsEnableMetaField,
+    &g_igCommonTraversal_timeStackMetaField,
+    &g_igCommonTraversal_matrixObjectListMetaField,
+    &g_igCommonTraversal_timeLongBufMetaField,
+    &g_igCommonTraversal_timeBufferedMetaField,
+    &g_igCommonTraversal_boneMatrixPaletteListMetaField,
+    &g_igCommonTraversal_blendMatrixPaletteListMetaField,
+    &g_igCommonTraversal_blendMatrixPaletteLengthsMetaField,
+    &g_igCommonTraversal_segmentOverrideNamesMetaField,
+    &g_igCommonTraversal_segmentOverrideStacksMetaField,
+    &g_igCommonTraversal_blendMatricesAttrPoolMetaField,
+    &g_igCommonTraversal_projMatMetaField,
+    &g_igCommonTraversal_defaultTimeAttrMetaField,
+    &g_igCommonTraversal_jointChainCountMetaField,
+    &g_igCommonTraversal_jointMvmBaseMetaField,
+    &g_igCommonTraversal_jointMvmInverseBaseMetaField,
+    &g_igCommonTraversal_jointGraphRootTraversedMetaField,
+};
+static int g_igCommonTraversal_fieldOffsets[] = {
+    52,
+    56,
+    60,
+    32,
+    36,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    164,
+    228,
+    232,
+    236,
+    240,
+    244,
+    40,
+    48,
+    248,
+    252,
+    256,
+    260,
+    264,
+    268,
+    272,
+    336,
+    340,
+    344,
+    408,
+    49,
+};
 
 void igCommonTraversal_InitFields(void) {
     void *temp_v0;
@@ -79,9 +230,9 @@ void igCommonTraversal_InitFields(void) {
     struct V b5c;
     struct V b5d;
 
-    temp_s0 = (void *)g_igCommonTraversal_metaObject[0];
+    temp_s0 = (void *)g_igCommonTraversal_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCommonTraversal_ctorTable[0], 0x23);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCommonTraversal_ctorTable, 0x23);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a5330();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -204,7 +355,7 @@ void igCommonTraversal_InitFields(void) {
     FUN_0018c640(temp_s2_30, &b5o);
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x22)))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, &g_igCommonTraversal_fieldTable[0], &DAT_0048c8f0[0], &DAT_0048c980[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCommonTraversal_fieldTable, g_igCommonTraversal_fieldHandles, g_igCommonTraversal_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback(&thunk_FUN_001b6c50);
 }
 

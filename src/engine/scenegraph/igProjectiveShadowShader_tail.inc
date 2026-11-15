@@ -32,7 +32,7 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1) {
 }
 
 igMetaObject *Gap__Sg__igProjectiveShadowShader__vfunc_22(void) {
-    return g_igProjectiveShadowShader_metaObject[0];
+    return g_igProjectiveShadowShader_metaObject;
 }
 
 void igProjectiveShadowShader_ConfigureSharedAttrs(void) {

@@ -1,21 +1,40 @@
+igMetaObject *g_igVertexData_metaObject;
+igMetaField *g_igVertexData_dataMetaField;
+igMetaField *g_igVertexData_componentTypeMetaField;
+igMetaField *g_igVertexData_componentIndexMetaField;
+igMetaField *g_igVertexData_componentSizeMetaField;
+igMetaField *g_igVertexData_userIDMetaField;
+igMetaField *g_igVertexData_componentFractionMetaField;
+
+static const char *g_igVertexData_vertexComponentTypeNames[] = {
+    "IG_VERTEX_COMPONENT_NONE", "IG_VERTEX_COMPONENT_POSITION", "IG_VERTEX_COMPONENT_COLOR", "IG_VERTEX_COMPONENT_NORMAL",
+    "IG_VERTEX_COMPONENT_TEXCOORD", "IG_VERTEX_COMPONENT_WEIGHT", "IG_VERTEX_COMPONENT_INDEX", "IG_VERTEX_COMPONENT_BINORMAL",
+    "IG_VERTEX_COMPONENT_TANGENT", "IG_VERTEX_COMPONENT_SIZE", "IG_VERTEX_COMPONENT_CUSTOM",
+};
+static int g_igVertexData_vertexComponentTypeValues[] = {
+    0, 1, 2, 3, 4, 5, 6, 7,
+    8, 9, 0xa,
+};
+igMetaEnum *g_igVertexData_vertexComponentTypeMetaEnum;
+
 int FUN_0014b330(void) {
-    if (DAT_0055fa50[0] == 0) {
-        DAT_0055fa50[0] = igMetaEnum_Create(&IG_VERTEX_COMPONENT_TYPE[0], &DAT_00488650[0], &DAT_00488680[0], 0xB);
+    if (g_igVertexData_vertexComponentTypeMetaEnum == 0) {
+        g_igVertexData_vertexComponentTypeMetaEnum = igMetaEnum_Create("IG_VERTEX_COMPONENT_TYPE", g_igVertexData_vertexComponentTypeNames, g_igVertexData_vertexComponentTypeValues, 11);
     }
-    return DAT_0055fa50[0];
+    return (int)g_igVertexData_vertexComponentTypeMetaEnum;
 }
 
 int FUN_0014b390(int arg0) {
     FUN_0014b500();
-    return igMetaObject_CreateInstance(*(int *)0x55FA58, arg0);
+    return igMetaObject_CreateInstance(g_igVertexData_metaObject, arg0);
 }
 
 igMetaObject *igVertexData_GetMetaObject(void)
 {
-    igMetaObject *g = g_igVertexData_metaObject[0];
+    igMetaObject *g = g_igVertexData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014b500();
-    return g_igVertexData_metaObject[0];
+    return g_igVertexData_metaObject;
 }
 
 int igVertexData_GetVTable(void) {
@@ -64,15 +83,17 @@ void FUN_0014b500(void)
     igMetaObject_RunStaticInit(igVertexData_Register);
 }
 
+static igMetaObjectCallback g_igVertexData_callbackList[] = { igDataList_EnsureRegistered, 0 };
+
 void igVertexData_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVertexData_metaObject,
+        &g_igVertexData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igVertexData_GetMetaObject,
-        igVertexData_className,
+        "igVertexData",
         0x24, /* instance size */
         igVertexData_GetVTable,
         &igVertexData_InitFields,
@@ -85,21 +106,54 @@ void thunk_igVertexData_GetMetaObject(void) {
     igVertexData_GetMetaObject();
 }
 
+static FieldFactory g_igVertexData_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+    igIntMetaField_Create,
+    igUnsignedIntMetaField_Create,
+};
+static const char *g_igVertexData_fieldTable[] = {
+    "_data",
+    "_componentType",
+    "_componentIndex",
+    "_componentSize",
+    "_userID",
+    "_componentFraction",
+};
+static igMetaField **g_igVertexData_fieldHandles[] = {
+    &g_igVertexData_dataMetaField,
+    &g_igVertexData_componentTypeMetaField,
+    &g_igVertexData_componentIndexMetaField,
+    &g_igVertexData_componentSizeMetaField,
+    &g_igVertexData_userIDMetaField,
+    &g_igVertexData_componentFractionMetaField,
+};
+static int g_igVertexData_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+};
+
 void igVertexData_InitFields(void) {
-    int temp_s2;
+    int fieldStart;
     void *temp_v0;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *meta;
 
-    temp_s0 = (void *)g_igVertexData_metaObject[0];
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igVertexData_ctorTable[0], 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
+    meta = g_igVertexData_metaObject;
+    fieldStart = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexData_ctorTable, 6);
+    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igDataList_GetOrCreateMetaObject();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
+    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, &DAT_00488738[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014b330);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3), 1);
-    igMetaObject_NameFields(temp_s0, &g_igVertexData_fieldTable[0], &DAT_00488700[0], &DAT_00488720[0], temp_s2);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
+    igMetaObject_NameFields(meta, g_igVertexData_fieldTable, g_igVertexData_fieldHandles, g_igVertexData_fieldOffsets, fieldStart);
 }
 

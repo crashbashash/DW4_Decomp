@@ -1,14 +1,24 @@
 int FUN_001a3590(int arg0) {
     FUN_001a3700();
-    return igMetaObject_CreateInstance(*(int *)0x561D30, arg0);
+    return igMetaObject_CreateInstance((int)g_igCompiledTransform_metaObject, arg0);
 }
+
+igMetaObject *g_igCompiledTransform_metaObject;
+igMetaField *g_igCompiledTransform_parentIdxMetaField;
+igMetaField *g_igCompiledTransform_sourceMetaField;
+igMetaField *g_igCompiledTransform_moIdxMetaField;
+igMetaField *g_igCompiledTransform_invJointMetaField;
+igMetaField *g_igCompiledTransform_nameMetaField;
+igMetaField *g_igCompiledTransform_isNodeMetaField;
+igMetaField *g_igCompiledTransform_isJointChainStartMetaField;
+igMetaField *g_igCompiledTransform_boneIndexMetaField;
 
 igMetaObject *igCompiledTransform_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCompiledTransform_metaObject[0];
+    igMetaObject *g = g_igCompiledTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a3700();
-    return g_igCompiledTransform_metaObject[0];
+    return g_igCompiledTransform_metaObject;
 }
 
 int igCompiledTransform_GetVTable(void) {
@@ -53,15 +63,17 @@ void FUN_001a3700(void)
     igMetaObject_RunStaticInit(igCompiledTransform_Register);
 }
 
+static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { FUN_00194e70, igStringObj_EnsureRegistered, 0 };
+
 void igCompiledTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igCompiledTransform_metaObject),
+        &g_igCompiledTransform_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igCompiledTransform_GetMetaObject,
-        igCompiledTransform_className,
+        "igCompiledTransform",
         0x24, /* instance size */
         igCompiledTransform_GetVTable,
         &igCompiledTransform_InitFields,
@@ -74,6 +86,47 @@ void thunk_igCompiledTransform_GetMetaObject(void) {
     igCompiledTransform_GetMetaObject();
 }
 
+static FieldFactory g_igCompiledTransform_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igRawRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igCompiledTransform_fieldTable[] = {
+    "_parentIdx",
+    "_source",
+    "_moIdx",
+    "_invJoint",
+    "_name",
+    "_isNode",
+    "_isJointChainStart",
+    "_boneIndex",
+};
+static igMetaField **g_igCompiledTransform_fieldHandles[] = {
+    &g_igCompiledTransform_parentIdxMetaField,
+    &g_igCompiledTransform_sourceMetaField,
+    &g_igCompiledTransform_moIdxMetaField,
+    &g_igCompiledTransform_invJointMetaField,
+    &g_igCompiledTransform_nameMetaField,
+    &g_igCompiledTransform_isNodeMetaField,
+    &g_igCompiledTransform_isJointChainStartMetaField,
+    &g_igCompiledTransform_boneIndexMetaField,
+};
+static int g_igCompiledTransform_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    29,
+    32,
+};
+
 void igCompiledTransform_InitFields(void) {
     int temp_s2;
     struct Fld_1a37a0 *temp_v0_2;
@@ -82,9 +135,9 @@ void igCompiledTransform_InitFields(void) {
     struct Fld_1a37a0 *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igCompiledTransform_metaObject[0];
+    temp_s0 = (void *)g_igCompiledTransform_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igCompiledTransform_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompiledTransform_ctorTable, 8);
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2))->f38 = 0;
     temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     temp_s1->f56 = (int)FUN_00194dd0();
@@ -102,6 +155,6 @@ void igCompiledTransform_InitFields(void) {
     temp_v0_2->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6))->f38 = 0;
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7))->f38 = 0;
-    igMetaObject_NameFields(temp_s0, &g_igCompiledTransform_fieldTable[0], &DAT_0048c720[0], &DAT_0048c740[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCompiledTransform_fieldTable, g_igCompiledTransform_fieldHandles, g_igCompiledTransform_fieldOffsets, temp_s2);
 }
 

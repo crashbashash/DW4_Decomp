@@ -1,12 +1,14 @@
+igMetaObject *g_beActionStarterInfoRam_metaObject;
+
 void *FUN_0036b1c0(void) {
     bool ok;
-    if (g_beActionStarterInfoRam_metaObject[0] == 0) goto make;
-    ok = !!(g_beActionStarterInfoRam_metaObject[0]->_validity & 4);
+    if (g_beActionStarterInfoRam_metaObject == 0) goto make;
+    ok = !!(g_beActionStarterInfoRam_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_0036b2b0();
 done:;
-    return g_beActionStarterInfoRam_metaObject[0];
+    return g_beActionStarterInfoRam_metaObject;
 }
 
 int beActionStarterInfoRam_GetVTable(void) {
@@ -32,11 +34,11 @@ void *beActionStarterInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beActionStarterInfoRam_metaObject,
+        &g_beActionStarterInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beActionStarterInfoRam_GetMetaObject,
-        beActionStarterInfoRam_className,
+        "beActionStarterInfoRam",
         0x2c, /* instance size */
         beActionStarterInfoRam_GetVTable,
         0,

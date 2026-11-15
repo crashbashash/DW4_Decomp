@@ -1,20 +1,42 @@
+igMetaObject *g_igViewerRenderer_metaObject;
+igMetaField *g_igViewerRenderer_parametersMetaField;
+igMetaField *g_igViewerRenderer_backFaceCullingAttrMetaField;
+igMetaField *g_igViewerRenderer_alphaTestAttrMetaField;
+igMetaField *g_igViewerRenderer_shadeModelAttrMetaField;
+igMetaField *g_igViewerRenderer_polygonModeAttrMetaField;
+igMetaField *g_igViewerRenderer_lightingAttrMetaField;
+igMetaField *g_igViewerRenderer_headlightAttrMetaField;
+igMetaField *g_igViewerRenderer_headlightStateAttrMetaField;
+igMetaField *g_igViewerRenderer_attrSetMetaField;
+igMetaField *g_igViewerRenderer_attrSetOverrideMetaField;
+igMetaField *g_igViewerRenderer_headlightTransformMetaField;
+igMetaField *g_igViewerRenderer_headlightSetMetaField;
+igMetaField *g_igViewerRenderer_lightListMetaField;
+igMetaField *g_igViewerRenderer_lightStateListMetaField;
+igMetaField *g_igViewerRenderer_lightingStateMetaField;
+igMetaField *g_igViewerRenderer_lightTraversalMetaField;
+igMetaField *g_igViewerRenderer_lightOutputMetaField;
+igMetaField *g_igViewerRenderer_sceneTraversalMetaField;
+igMetaField *g_igViewerRenderer_sceneOutputMetaField;
+igMetaField *g_igViewerRenderer_disableExtensionMetaField;
+
 igMetaObject *FUN_0045aaf0(void) {
-    if (g_igViewerRenderer_metaObject[0] == 0) {
-        g_igViewerRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewerRenderer_metaObject == 0) {
+        g_igViewerRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewerRenderer_metaObject[0];
+    return g_igViewerRenderer_metaObject;
 }
 
 igMetaObject *igViewerRenderer_GetMetaObject(void)
 {
     unsigned char ready;
-    if (g_igViewerRenderer_metaObject[0] != 0) {
-        ready = (g_igViewerRenderer_metaObject[0]->_validity & 4) != 0;
+    if (g_igViewerRenderer_metaObject != 0) {
+        ready = (g_igViewerRenderer_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_0045b0d0();
 done:
-    return g_igViewerRenderer_metaObject[0];
+    return g_igViewerRenderer_metaObject;
 }
 
 int igViewerRenderer_GetVTable(void) {
@@ -218,15 +240,17 @@ void FUN_0045b0d0(void)
     igMetaObject_RunStaticInit(igViewerRenderer_Register);
 }
 
+static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { FUN_0045b590, FUN_001387b0, FUN_0013b390, FUN_00133a30, FUN_00134a20, FUN_00135f40, FUN_00136880, FUN_00136470, FUN_001a5e90, FUN_0019c7b0, FUN_001964d0, FUN_0019dcd0, FUN_001366c0, FUN_00136120, FUN_001a3dd0, FUN_00138160, FUN_0014f810, 0 };
+
 void igViewerRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerRenderer_metaObject,
+        &g_igViewerRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
         thunk_igViewerRenderer_GetMetaObject,
-        igViewerRenderer_className,
+        "igViewerRenderer",
         0x5C, /* instance size */
         igViewerRenderer_GetVTable,
         &igViewerRenderer_InitFields,
@@ -238,6 +262,95 @@ void igViewerRenderer_Register(void) {
 void thunk_igViewerRenderer_GetMetaObject(void) {
     igViewerRenderer_GetMetaObject();
 }
+
+static FieldFactory g_igViewerRenderer_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igViewerRenderer_fieldTable[] = {
+    "_parameters",
+    "_backFaceCullingAttr",
+    "_alphaTestAttr",
+    "_shadeModelAttr",
+    "_polygonModeAttr",
+    "_lightingAttr",
+    "_headlightAttr",
+    "_headlightStateAttr",
+    "_attrSet",
+    "_attrSetOverride",
+    "_headlightTransform",
+    "_headlightSet",
+    "_lightList",
+    "_lightStateList",
+    "_lightingState",
+    "_lightTraversal",
+    "_lightOutput",
+    "_sceneTraversal",
+    "_sceneOutput",
+    "_disableExtension",
+};
+static igMetaField **g_igViewerRenderer_fieldHandles[] = {
+    &g_igViewerRenderer_parametersMetaField,
+    &g_igViewerRenderer_backFaceCullingAttrMetaField,
+    &g_igViewerRenderer_alphaTestAttrMetaField,
+    &g_igViewerRenderer_shadeModelAttrMetaField,
+    &g_igViewerRenderer_polygonModeAttrMetaField,
+    &g_igViewerRenderer_lightingAttrMetaField,
+    &g_igViewerRenderer_headlightAttrMetaField,
+    &g_igViewerRenderer_headlightStateAttrMetaField,
+    &g_igViewerRenderer_attrSetMetaField,
+    &g_igViewerRenderer_attrSetOverrideMetaField,
+    &g_igViewerRenderer_headlightTransformMetaField,
+    &g_igViewerRenderer_headlightSetMetaField,
+    &g_igViewerRenderer_lightListMetaField,
+    &g_igViewerRenderer_lightStateListMetaField,
+    &g_igViewerRenderer_lightingStateMetaField,
+    &g_igViewerRenderer_lightTraversalMetaField,
+    &g_igViewerRenderer_lightOutputMetaField,
+    &g_igViewerRenderer_sceneTraversalMetaField,
+    &g_igViewerRenderer_sceneOutputMetaField,
+    &g_igViewerRenderer_disableExtensionMetaField,
+};
+static int g_igViewerRenderer_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+};
 
 void igViewerRenderer_InitFields(void) {
     void *temp_s2;
@@ -262,9 +375,9 @@ void igViewerRenderer_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igViewerRenderer_metaObject[0];
+    temp_s0 = g_igViewerRenderer_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewerRenderer_ctorTable[0], 0x14);
+    igMetaObject_CreateFields(temp_s0, g_igViewerRenderer_ctorTable, 0x14);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
@@ -317,6 +430,6 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_18)->_metaObject = FUN_00137fb0();
     temp_s2_19 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x13));
     ((igObjectRefMetaField *)temp_s2_19)->_metaObject = FUN_0014f770();
-    igMetaObject_NameFields(temp_s0, &g_igViewerRenderer_fieldTable[0], &DAT_004d0f80[0], &DAT_004d0fd0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igViewerRenderer_fieldTable, g_igViewerRenderer_fieldHandles, g_igViewerRenderer_fieldOffsets, temp_s1);
 }
 

@@ -1,9 +1,11 @@
+igMetaObject *g_igMemoryImage_metaObject;
+
 igMetaObject *igMemoryImage_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMemoryImage_metaObject[0];
+    igMetaObject *g = g_igMemoryImage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014de10();
-    return g_igMemoryImage_metaObject[0];
+    return g_igMemoryImage_metaObject;
 }
 
 void FUN_0014de10(void)
@@ -15,11 +17,11 @@ void igMemoryImage_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igMemoryImage_metaObject,
+        &g_igMemoryImage_metaObject,
         igImage_Register,
         igImage_GetPublishedMetaObject,
         thunk_igMemoryImage_GetMetaObject,
-        igMemoryImage_className,
+        "igMemoryImage",
         0x5C, /* instance size */
         0,
         0,
@@ -33,6 +35,6 @@ void thunk_igMemoryImage_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_0014de90(void) {
-    return g_igImage_metaObject[0];
+    return g_igImage_metaObject;
 }
 

@@ -1,9 +1,12 @@
+igMetaObject *g_beCameraCtrlInfo_metaObject;
+igMetaField *g_beCameraCtrlInfo_dataMetaField;
+
 void *FUN_00368d60(void) {
-    igMetaObject *g = g_beCameraCtrlInfo_metaObject[0];
+    igMetaObject *g = g_beCameraCtrlInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00368e30();
     }
-    return g_beCameraCtrlInfo_metaObject[0];
+    return g_beCameraCtrlInfo_metaObject;
 }
 
 int beCameraCtrlInfo_GetVTable(void) {
@@ -28,15 +31,17 @@ void FUN_00368e30(void)
     igMetaObject_RunStaticInit(beCameraCtrlInfo_Register);
 }
 
+static igMetaObjectCallback g_beCameraCtrlInfo_callbackList[] = { igObject_EnsureRegistered, 0 };
+
 void *beCameraCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beCameraCtrlInfo_metaObject,
+        &g_beCameraCtrlInfo_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beCameraCtrlInfo_GetMetaObject,
-        beCameraCtrlInfo_className,
+        "beCameraCtrlInfo",
         0x20, /* instance size */
         beCameraCtrlInfo_GetVTable,
         beCameraCtrlInfo_InitFields,
@@ -50,16 +55,29 @@ void beCameraCtrlInfo_GetMetaObject(void)
     FUN_00368d60();
 }
 
+static FieldFactory g_beCameraCtrlInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+};
+static const char *g_beCameraCtrlInfo_fieldTable[] = {
+    "_data",
+};
+static igMetaField **g_beCameraCtrlInfo_fieldHandles[] = {
+    &g_beCameraCtrlInfo_dataMetaField,
+};
+static int g_beCameraCtrlInfo_fieldOffsets[] = {
+    28,
+};
+
 void beCameraCtrlInfo_InitFields(void) {
     int temp_s1;
     void *f;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beCameraCtrlInfo_metaObject[0];
+    temp_s0 = (void *)g_beCameraCtrlInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beCameraCtrlInfo_ctorTable[0], 1);
+    igMetaObject_CreateFields(temp_s0, g_beCameraCtrlInfo_ctorTable, 1);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     *(int *)((char *)f + 56) = g_igObject_metaObject[0];
-    igMetaObject_NameFields(temp_s0, &g_beCameraCtrlInfo_fieldTable[0], &DAT_004c7868[0], &DAT_004c7870[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_beCameraCtrlInfo_fieldTable, g_beCameraCtrlInfo_fieldHandles, g_beCameraCtrlInfo_fieldOffsets, temp_s1);
 }
 

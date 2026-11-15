@@ -1,9 +1,11 @@
+igMetaObject *g_igListenerList_metaObject;
+
 igMetaObject *igListenerList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igListenerList_metaObject[0];
+    igMetaObject *g = g_igListenerList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002271d0();
-    return g_igListenerList_metaObject[0];
+    return g_igListenerList_metaObject;
 }
 
 int igListenerList_GetVTable(void) {
@@ -19,15 +21,17 @@ void FUN_002271d0(void)
     igMetaObject_RunStaticInit(igListenerList_Register);
 }
 
+static igMetaObjectCallback g_igListenerList_callbackList[] = { FUN_002272f0, 0 };
+
 void igListenerList_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igListenerList_metaObject,
+        &g_igListenerList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igListenerList_GetMetaObject,
-        igListenerList_className,
+        "igListenerList",
         0x14, /* instance size */
         igListenerList_GetVTable,
         0,

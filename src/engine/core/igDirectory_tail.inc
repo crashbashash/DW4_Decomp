@@ -214,14 +214,14 @@ void igDependencyOrderedList_AddCheckPoint(void *self, int name) {
     if (name == 0) {
         interned = (void *)(0);
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = (void *)(StringPool_Intern((StringPool *)g_stringPool[0], (const char *)name));
+        interned = (void *)(StringPool_Intern((StringPool *)g_stringPool, (const char *)name));
     }
     checkPoint = (void *)(interned);
     StringList_AppendRetained(((igDependencyOrderedListView *)self)->_checkPoints, &checkPoint);

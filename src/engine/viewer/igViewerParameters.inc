@@ -1,13 +1,54 @@
+igMetaObject *g_igViewerParameters_metaObject;
+igMetaField *g_igViewerParameters_sceneMetaField;
+igMetaField *g_igViewerParameters_upVectorMetaField;
+igMetaField *g_igViewerParameters_ratioMetaField;
+igMetaField *g_igViewerParameters_hfovMetaField;
+igMetaField *g_igViewerParameters_nearPlaneMetaField;
+igMetaField *g_igViewerParameters_farPlaneMetaField;
+igMetaField *g_igViewerParameters_projectionMatrixMetaField;
+igMetaField *g_igViewerParameters_viewMatrixMetaField;
+igMetaField *g_igViewerParameters_drawTimeMetaField;
+igMetaField *g_igViewerParameters_sortTextureMetaField;
+igMetaField *g_igViewerParameters_sortTransparentMetaField;
+igMetaField *g_igViewerParameters_sortTransparentDistanceMetaField;
+igMetaField *g_igViewerParameters_transparencyModeMetaField;
+igMetaField *g_igViewerParameters_useSceneLightsMetaField;
+igMetaField *g_igViewerParameters_useHeadLightMetaField;
+igMetaField *g_igViewerParameters_useHeadLightSpecularMetaField;
+igMetaField *g_igViewerParameters_alphaTestMetaField;
+igMetaField *g_igViewerParameters_alphaTestForceMetaField;
+igMetaField *g_igViewerParameters_backFaceCullingMetaField;
+igMetaField *g_igViewerParameters_backFaceCullingForceMetaField;
+igMetaField *g_igViewerParameters_wireframeMetaField;
+igMetaField *g_igViewerParameters_wireframeForceMetaField;
+igMetaField *g_igViewerParameters_flatShadingMetaField;
+igMetaField *g_igViewerParameters_flatShadingForceMetaField;
+igMetaField *g_igViewerParameters_disablesMetaField;
+igMetaField *g_igViewerParameters_showGuiMetaField;
+igMetaField *g_igViewerParameters_showBoundingBoxMetaField;
+igMetaField *g_igViewerParameters_showNormalsMetaField;
+igMetaField *g_igViewerParameters_flushFramesMetaField;
+igMetaField *g_igViewerParameters_operationModeMetaField;
+igMetaField *g_igViewerParameters_firstCameraModeMetaField;
+igMetaField *g_igViewerParameters_camerasMetaField;
+igMetaField *g_igViewerParameters_beginTimeMetaField;
+igMetaField *g_igViewerParameters_endTimeMetaField;
+igMetaField *g_igViewerParameters_selectedObjectMetaField;
+igMetaField *g_igViewerParameters_timeOperationMetaField;
+igMetaField *g_igViewerParameters_loopModeMetaField;
+igMetaField *g_igViewerParameters_speedMetaField;
+igMetaField *g_igViewerParameters_cursorPositionMetaField;
+
 igMetaObject *FUN_0045b420(void) {
-    if (g_igViewerParameters_metaObject[0] == 0) {
-        g_igViewerParameters_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igViewerParameters_metaObject == 0) {
+        g_igViewerParameters_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igViewerParameters_metaObject[0];
+    return g_igViewerParameters_metaObject;
 }
 
 SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void) {
-    if (((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0]) == 0 || !((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0])->ok()) FUN_0045b590();
-    return ((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject[0]);
+    if (((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject) == 0 || !((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject)->ok()) FUN_0045b590();
+    return ((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject);
 }
 
 int igViewerParameters_GetVTable(void) {
@@ -40,15 +81,17 @@ void FUN_0045b590(void)
     igMetaObject_RunStaticInit(igViewerParameters_Register);
 }
 
+static igMetaObjectCallback g_igViewerParameters_callbackList[] = { FUN_0019f330, FUN_001a4e70, FUN_0019f5a0, FUN_0019f7a0, 0 };
+
 void igViewerParameters_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igViewerParameters_metaObject,
+        &g_igViewerParameters_metaObject,
         igModel_Register,
         igModel_GetPublishedMetaObject,
         thunk_igViewerParameters_GetMetaObject,
-        igViewerParameters_className,
+        "igViewerParameters",
         0x108, /* instance size */
         igViewerParameters_GetVTable,
         &igViewerParameters_InitFields,
@@ -60,6 +103,171 @@ void igViewerParameters_Register(void) {
 void thunk_igViewerParameters_GetMetaObject(void) {
     igViewerParameters_GetMetaObject();
 }
+
+static FieldFactory g_igViewerParameters_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00188660,
+    FUN_00188660,
+    igLongMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igFloatMetaField_Create,
+    FUN_00187b50,
+};
+static const char *g_igViewerParameters_fieldTable[] = {
+    "_scene",
+    "_upVector",
+    "_ratio",
+    "_hfov",
+    "_nearPlane",
+    "_farPlane",
+    "_projectionMatrix",
+    "_viewMatrix",
+    "_drawTime",
+    "_sortTexture",
+    "_sortTransparent",
+    "_sortTransparentDistance",
+    "_transparencyMode",
+    "_useSceneLights",
+    "_useHeadLight",
+    "_useHeadLightSpecular",
+    "_alphaTest",
+    "_alphaTestForce",
+    "_backFaceCulling",
+    "_backFaceCullingForce",
+    "_wireframe",
+    "_wireframeForce",
+    "_flatShading",
+    "_flatShadingForce",
+    "_disables",
+    "_showGui",
+    "_showBoundingBox",
+    "_showNormals",
+    "_flushFrames",
+    "_operationMode",
+    "_firstCameraMode",
+    "_cameras",
+    "_beginTime",
+    "_endTime",
+    "_selectedObject",
+    "_timeOperation",
+    "_loopMode",
+    "_speed",
+    "_cursorPosition",
+};
+static igMetaField **g_igViewerParameters_fieldHandles[] = {
+    &g_igViewerParameters_sceneMetaField,
+    &g_igViewerParameters_upVectorMetaField,
+    &g_igViewerParameters_ratioMetaField,
+    &g_igViewerParameters_hfovMetaField,
+    &g_igViewerParameters_nearPlaneMetaField,
+    &g_igViewerParameters_farPlaneMetaField,
+    &g_igViewerParameters_projectionMatrixMetaField,
+    &g_igViewerParameters_viewMatrixMetaField,
+    &g_igViewerParameters_drawTimeMetaField,
+    &g_igViewerParameters_sortTextureMetaField,
+    &g_igViewerParameters_sortTransparentMetaField,
+    &g_igViewerParameters_sortTransparentDistanceMetaField,
+    &g_igViewerParameters_transparencyModeMetaField,
+    &g_igViewerParameters_useSceneLightsMetaField,
+    &g_igViewerParameters_useHeadLightMetaField,
+    &g_igViewerParameters_useHeadLightSpecularMetaField,
+    &g_igViewerParameters_alphaTestMetaField,
+    &g_igViewerParameters_alphaTestForceMetaField,
+    &g_igViewerParameters_backFaceCullingMetaField,
+    &g_igViewerParameters_backFaceCullingForceMetaField,
+    &g_igViewerParameters_wireframeMetaField,
+    &g_igViewerParameters_wireframeForceMetaField,
+    &g_igViewerParameters_flatShadingMetaField,
+    &g_igViewerParameters_flatShadingForceMetaField,
+    &g_igViewerParameters_disablesMetaField,
+    &g_igViewerParameters_showGuiMetaField,
+    &g_igViewerParameters_showBoundingBoxMetaField,
+    &g_igViewerParameters_showNormalsMetaField,
+    &g_igViewerParameters_flushFramesMetaField,
+    &g_igViewerParameters_operationModeMetaField,
+    &g_igViewerParameters_firstCameraModeMetaField,
+    &g_igViewerParameters_camerasMetaField,
+    &g_igViewerParameters_beginTimeMetaField,
+    &g_igViewerParameters_endTimeMetaField,
+    &g_igViewerParameters_selectedObjectMetaField,
+    &g_igViewerParameters_timeOperationMetaField,
+    &g_igViewerParameters_loopModeMetaField,
+    &g_igViewerParameters_speedMetaField,
+    &g_igViewerParameters_cursorPositionMetaField,
+};
+static int g_igViewerParameters_fieldOffsets[] = {
+    12,
+    16,
+    28,
+    32,
+    36,
+    40,
+    44,
+    108,
+    176,
+    184,
+    185,
+    186,
+    188,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    204,
+    208,
+    209,
+    210,
+    211,
+    212,
+    216,
+    220,
+    224,
+    232,
+    240,
+    244,
+    248,
+    252,
+    256,
+};
 
 void igViewerParameters_InitFields(void) {
     struct Fld *temp_s2_4;
@@ -73,9 +281,9 @@ void igViewerParameters_InitFields(void) {
     int sp50[3];
     int sp48[2];
 
-    temp_s0 = (void *)g_igViewerParameters_metaObject[0];
+    temp_s0 = g_igViewerParameters_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igViewerParameters_ctorTable[0], 0x27);
+    igMetaObject_CreateFields(temp_s0, g_igViewerParameters_ctorTable, 0x27);
     temp_s2 = (struct Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s1);
     temp_s2->f56 = FUN_0019f210();
     temp_s2->f52 = 1;
@@ -109,6 +317,6 @@ void igViewerParameters_InitFields(void) {
     sp48[0] = 0;
     sp48[1] = 0;
     FUN_0018e2f0(temp_a0_2, sp48);
-    igMetaObject_NameFields(temp_s0, &g_igViewerParameters_fieldTable[0], &DAT_004d1180[0], &DAT_004d1220[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
 }
 

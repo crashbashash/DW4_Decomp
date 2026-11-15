@@ -99,7 +99,7 @@ int FUN_00145a10(void *arg0, void *voice) {
 
 igMetaObject *Gap__igPsx2AudioContext__vfunc_22(void)
 {
-    return g_igPsx2AudioContext_metaObject[0];
+    return g_igPsx2AudioContext_metaObject;
 }
 
 void Gap__igPsx2AudioContext__vfunc_26(igPsx2AudioContext *self, igObject *window) {

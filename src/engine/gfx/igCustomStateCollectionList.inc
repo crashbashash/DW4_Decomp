@@ -1,21 +1,23 @@
+igMetaObject *g_igCustomStateCollectionList_metaObject;
+
 int FUN_0014ee00(int arg0) {
     FUN_0014ef20();
-    return igMetaObject_CreateInstance(*(int *)0x55FE68, arg0);
+    return igMetaObject_CreateInstance(g_igCustomStateCollectionList_metaObject, arg0);
 }
 
 igMetaObject *FUN_0014ee40(void) {
-    if (g_igCustomStateCollectionList_metaObject[0] == 0) {
-        g_igCustomStateCollectionList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igCustomStateCollectionList_metaObject == 0) {
+        g_igCustomStateCollectionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igCustomStateCollectionList_metaObject[0];
+    return g_igCustomStateCollectionList_metaObject;
 }
 
 igMetaObject *igCustomStateCollectionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igCustomStateCollectionList_metaObject[0];
+    igMetaObject *g = g_igCustomStateCollectionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014ef20();
-    return g_igCustomStateCollectionList_metaObject[0];
+    return g_igCustomStateCollectionList_metaObject;
 }
 
 int igCustomStateCollectionList_GetVTable(void) {
@@ -31,15 +33,17 @@ void FUN_0014ef20(void)
     igMetaObject_RunStaticInit(igCustomStateCollectionList_Register);
 }
 
+static igMetaObjectCallback g_igCustomStateCollectionList_callbackList[] = { FUN_0014f0c0, 0 };
+
 void igCustomStateCollectionList_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igCustomStateCollectionList_metaObject,
+        &g_igCustomStateCollectionList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igCustomStateCollectionList_GetMetaObject,
-        igCustomStateCollectionList_className,
+        "igCustomStateCollectionList",
         0x14, /* instance size */
         igCustomStateCollectionList_GetVTable,
         0,

@@ -1,14 +1,14 @@
 void beNDMWShopJunk_Create(int arg0) {
     FUN_003b64f0();
-    igMetaObject_CreateInstance(*(int *)0x58AC88, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopJunk_metaObject, arg0);
 }
 
 void *FUN_003b6350(void) {
-    igMetaObject *g = g_beNDMWShopJunk_metaObject[0];
+    igMetaObject *g = g_beNDMWShopJunk_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b64f0();
     }
-    return g_beNDMWShopJunk_metaObject[0];
+    return g_beNDMWShopJunk_metaObject;
 }
 
 int beNDMWShopJunk_GetVTable(void) {

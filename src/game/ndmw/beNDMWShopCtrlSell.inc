@@ -1,14 +1,16 @@
+igMetaObject *g_beNDMWShopCtrlSell_metaObject;
+
 void beNDMWShopCtrlSell_Create(int arg0) {
     FUN_003b7470();
-    igMetaObject_CreateInstance(*(int *)0x58AD20, arg0);
+    igMetaObject_CreateInstance(g_beNDMWShopCtrlSell_metaObject, arg0);
 }
 
 void *FUN_003b73a0(void) {
-    igMetaObject *g = g_beNDMWShopCtrlSell_metaObject[0];
+    igMetaObject *g = g_beNDMWShopCtrlSell_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_003b7470();
     }
-    return g_beNDMWShopCtrlSell_metaObject[0];
+    return g_beNDMWShopCtrlSell_metaObject;
 }
 
 int beNDMWShopCtrlSell_GetVTable(void) {
@@ -39,11 +41,11 @@ void *beNDMWShopCtrlSell_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWShopCtrlSell_metaObject,
+        &g_beNDMWShopCtrlSell_metaObject,
         beNDMWWindowCtrl_Register,
         beNDMWWindowCtrl_GetPublishedMetaObject,
         beNDMWShopCtrlSell_GetMetaObject,
-        beNDMWShopCtrlSell_className,
+        "beNDMWShopCtrlSell",
         0x54, /* instance size */
         beNDMWShopCtrlSell_GetVTable,
         0,

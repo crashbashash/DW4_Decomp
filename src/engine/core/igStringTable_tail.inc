@@ -261,6 +261,8 @@ done:
     return 1;
 }
 
+int g_igStringTable_emptyHashSlot = -1;
+
 void igStringTable_SetHashing(igStringTableView *self, int enable) {
     igTDataList<int> *old;
     igTDataList<int> *l;
@@ -301,7 +303,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
         data = l->_data;
         i = 0;
         while (i < n) {
-            data[i] = g_igStringTable_emptyHashSlot[0];
+            data[i] = g_igStringTable_emptyHashSlot;
             i++;
         }
         base = self->_strings->_data;

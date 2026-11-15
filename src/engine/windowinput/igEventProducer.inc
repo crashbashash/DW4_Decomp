@@ -1,9 +1,11 @@
+igMetaObject *g_igEventProducer_metaObject;
+
 igMetaObject *igEventProducer_GetMetaObject(void)
 {
-    igMetaObject *g = g_igEventProducer_metaObject[0];
+    igMetaObject *g = g_igEventProducer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00146270();
-    return g_igEventProducer_metaObject[0];
+    return g_igEventProducer_metaObject;
 }
 
 void FUN_00146270(void)
@@ -15,11 +17,11 @@ void igEventProducer_Register(void) {
     WindowInputLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igEventProducer_metaObject,
+        &g_igEventProducer_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igEventProducer_GetMetaObject,
-        igEventProducer_className,
+        "igEventProducer",
         8, /* instance size */
         0,
         0,

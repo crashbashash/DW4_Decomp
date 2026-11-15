@@ -1,4 +1,6 @@
 #include "src/engine/datapump/DataPumpLibrary.h"
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/datapump/LibraryFront.inc"
 #include "src/engine/datapump/igLongStack.inc"
 #include "src/engine/datapump/igRandomNumber.inc"
@@ -20,3 +22,4 @@
 #include "src/engine/datapump/igDataPump_tail.inc"
 #include "src/engine/datapump/igMersenneTwisterRandomNumber_tail2.inc"
 #include "src/engine/datapump/InlineTail.inc"
+#pragma pop

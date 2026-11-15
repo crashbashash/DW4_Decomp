@@ -1,21 +1,26 @@
+igMetaObject *g_igIterateGraph_metaObject;
+igMetaField *g_igIterateGraph_currentPathMetaField;
+igMetaField *g_igIterateGraph_currentIndicesMetaField;
+igMetaField *g_igIterateGraph_actorSkinIterationStateMetaField;
+
 void *FUN_00227460(int arg0) {
     FUN_00227620();
-    return igMetaObject_CreateInstance(*(int *)0x56D948, arg0);
+    return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, arg0);
 }
 
 igMetaObject *FUN_002274a0(void) {
-    if (g_igIterateGraph_metaObject[0] == 0) {
-        g_igIterateGraph_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igIterateGraph_metaObject == 0) {
+        g_igIterateGraph_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igIterateGraph_metaObject[0];
+    return g_igIterateGraph_metaObject;
 }
 
 igMetaObject *igIterateGraph_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIterateGraph_metaObject[0];
+    igMetaObject *g = g_igIterateGraph_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00227620();
-    return g_igIterateGraph_metaObject[0];
+    return g_igIterateGraph_metaObject;
 }
 
 extern "C" int igIterateGraph_GetVTable(void) {
@@ -38,15 +43,17 @@ void FUN_00227620(void)
     igMetaObject_RunStaticInit(igIterateGraph_Register);
 }
 
+static igMetaObjectCallback g_igIterateGraph_callbackList[] = { FUN_0019c9a0, igIntList_EnsureRegistered, 0 };
+
 void igIterateGraph_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igIterateGraph_metaObject,
+        &g_igIterateGraph_metaObject,
         igIterator_Register,
         igIterator_GetPublishedMetaObject,
         thunk_igIterateGraph_GetMetaObject,
-        igIterateGraph_className,
+        "igIterateGraph",
         0x14, /* instance size */
         igIterateGraph_GetVTable,
         &igIterateGraph_InitFields,
@@ -59,21 +66,42 @@ void thunk_igIterateGraph_GetMetaObject(void) {
     igIterateGraph_GetMetaObject();
 }
 
+static FieldFactory g_igIterateGraph_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igIterateGraph_fieldTable[] = {
+    "_currentPath",
+    "_currentIndices",
+    "_actorSkinIterationState",
+};
+static igMetaField **g_igIterateGraph_fieldHandles[] = {
+    &g_igIterateGraph_currentPathMetaField,
+    &g_igIterateGraph_currentIndicesMetaField,
+    &g_igIterateGraph_actorSkinIterationStateMetaField,
+};
+static int g_igIterateGraph_fieldOffsets[] = {
+    12,
+    16,
+    8,
+};
+
 void igIterateGraph_InitFields(void) {
     int temp_s2;
     void *temp_s1_2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igIterateGraph_metaObject[0];
+    temp_s0 = g_igIterateGraph_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igIterateGraph_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_igIterateGraph_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019c8c0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igIterateGraph_fieldTable[0], &DAT_00497d60[0], &DAT_00497d70[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igIterateGraph_fieldTable, g_igIterateGraph_fieldHandles, g_igIterateGraph_fieldOffsets, temp_s2);
 }
 

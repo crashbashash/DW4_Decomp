@@ -1,14 +1,16 @@
+igMetaObject *g_igRayIntersectionFunctionList_metaObject;
+
 OpTable *FUN_00189420(int arg0) {
     FUN_001894f0();
-    return (OpTable *)igMetaObject_CreateInstance(*(int *)0x561058, arg0);
+    return (OpTable *)igMetaObject_CreateInstance((int)g_igRayIntersectionFunctionList_metaObject, arg0);
 }
 
 igMetaObject *igRayIntersectionFunctionList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRayIntersectionFunctionList_metaObject[0];
+    igMetaObject *g = g_igRayIntersectionFunctionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001894f0();
-    return g_igRayIntersectionFunctionList_metaObject[0];
+    return g_igRayIntersectionFunctionList_metaObject;
 }
 
 int igRayIntersectionFunctionList_GetVTable(void) {
@@ -28,11 +30,11 @@ void igRayIntersectionFunctionList_Register(void) {
     FUN_00186a40();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igRayIntersectionFunctionList_metaObject,
+        &g_igRayIntersectionFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igRayIntersectionFunctionList_GetMetaObject,
-        igRayIntersectionFunctionList_className,
+        "igRayIntersectionFunctionList",
         0x14, /* instance size */
         igRayIntersectionFunctionList_GetVTable,
         0,

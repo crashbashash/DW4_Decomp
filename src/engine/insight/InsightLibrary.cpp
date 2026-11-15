@@ -1,4 +1,6 @@
 #include "src/engine/insight/InsightLibrary.h"
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/insight/LibraryFront.inc"
 #include "src/engine/insight/igSerialScheduler.inc"
 #include "src/engine/insight/igMessenger.inc"
@@ -28,3 +30,4 @@
 #include "src/engine/insight/igFilterMessageDispatcher_tail2.inc"
 #include "src/engine/insight/igSerialScheduler_tail.inc"
 #include "src/engine/insight/InlineTail.inc"
+#pragma pop

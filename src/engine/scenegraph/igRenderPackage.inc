@@ -1,21 +1,29 @@
 void FUN_00197ab0(int arg0) {
     FUN_00197cc0();
-    igMetaObject_CreateInstance(*(int *)0x561450, arg0);
+    igMetaObject_CreateInstance((int)g_igRenderPackage_metaObject, arg0);
 }
 
+igMetaObject *g_igRenderPackage_metaObject;
+igMetaField *g_igRenderPackage_stateAttrsMetaField;
+igMetaField *g_igRenderPackage_cachedStateAttrsMetaField;
+igMetaField *g_igRenderPackage_geomAttrsMetaField;
+igMetaField *g_igRenderPackage_sortingCacheMetaField;
+igMetaField *g_igRenderPackage_distanceMetaField;
+igMetaField *g_igRenderPackage_theMassMetaField;
+
 igMetaObject *FUN_00197af0(void) {
-    if (g_igRenderPackage_metaObject[0] == 0) {
-        g_igRenderPackage_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igRenderPackage_metaObject == 0) {
+        g_igRenderPackage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igRenderPackage_metaObject[0];
+    return g_igRenderPackage_metaObject;
 }
 
 igMetaObject *igRenderPackage_GetMetaObject(void)
 {
-    igMetaObject *g = g_igRenderPackage_metaObject[0];
+    igMetaObject *g = g_igRenderPackage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00197cc0();
-    return g_igRenderPackage_metaObject[0];
+    return g_igRenderPackage_metaObject;
 }
 
 int igRenderPackage_GetVTable(void) {
@@ -70,15 +78,17 @@ void FUN_00197cc0(void)
     igMetaObject_RunStaticInit(igRenderPackage_Register);
 }
 
+static igMetaObjectCallback g_igRenderPackage_callbackList[] = { FUN_0013ae20, FUN_001978a0, 0 };
+
 void igRenderPackage_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igRenderPackage_metaObject),
+        &g_igRenderPackage_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igRenderPackage_GetMetaObject,
-        igRenderPackage_className,
+        "igRenderPackage",
         0x20, /* instance size */
         igRenderPackage_GetVTable,
         &igRenderPackage_InitFields,
@@ -91,6 +101,39 @@ void thunk_igRenderPackage_GetMetaObject(void) {
     igRenderPackage_GetMetaObject();
 }
 
+static FieldFactory g_igRenderPackage_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igRawRefMetaField_Create,
+    igFloatMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igRenderPackage_fieldTable[] = {
+    "_stateAttrs",
+    "_cachedStateAttrs",
+    "_geomAttrs",
+    "_sortingCache",
+    "_distance",
+    "_theMass",
+};
+static igMetaField **g_igRenderPackage_fieldHandles[] = {
+    &g_igRenderPackage_stateAttrsMetaField,
+    &g_igRenderPackage_cachedStateAttrsMetaField,
+    &g_igRenderPackage_geomAttrsMetaField,
+    &g_igRenderPackage_sortingCacheMetaField,
+    &g_igRenderPackage_distanceMetaField,
+    &g_igRenderPackage_theMassMetaField,
+};
+static int g_igRenderPackage_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+};
+
 void igRenderPackage_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -99,9 +142,9 @@ void igRenderPackage_InitFields(void) {
     void *temp_s2_4;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igRenderPackage_metaObject[0];
+    temp_s1 = (void *)g_igRenderPackage_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igRenderPackage_ctorTable[0], 6);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igRenderPackage_ctorTable, 6);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0013ad40();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -114,6 +157,6 @@ void igRenderPackage_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001977c0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igRenderPackage_fieldTable[0], &DAT_0048b510[0], &DAT_0048b530[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igRenderPackage_fieldTable, g_igRenderPackage_fieldHandles, g_igRenderPackage_fieldOffsets, temp_s0);
 }
 

@@ -1,9 +1,11 @@
+igMetaObject *g_igAnimationCombinerBoneInfoList_metaObject;
+
 igMetaObject *igAnimationCombinerBoneInfoList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationCombinerBoneInfoList_metaObject[0];
+    igMetaObject *g = g_igAnimationCombinerBoneInfoList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a8020();
-    return g_igAnimationCombinerBoneInfoList_metaObject[0];
+    return g_igAnimationCombinerBoneInfoList_metaObject;
 }
 
 int igAnimationCombinerBoneInfoList_GetVTable(void) {
@@ -19,15 +21,17 @@ void FUN_001a8020(void)
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoList_Register);
 }
 
+static igMetaObjectCallback g_igAnimationCombinerBoneInfoList_callbackList[] = { FUN_001a8220, 0 };
+
 void igAnimationCombinerBoneInfoList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationCombinerBoneInfoList_metaObject),
+        &g_igAnimationCombinerBoneInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igAnimationCombinerBoneInfoList_GetMetaObject,
-        igAnimationCombinerBoneInfoList_className,
+        "igAnimationCombinerBoneInfoList",
         0x14, /* instance size */
         igAnimationCombinerBoneInfoList_GetVTable,
         0,

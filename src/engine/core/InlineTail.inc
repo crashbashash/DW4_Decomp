@@ -1,14 +1,14 @@
 int igPsx2IopRpcConnection_GetMeta(void)
 {
-    return ((int *)g_igPsx2IopRpcConnection_metaObject)[0];
+    return (int)g_igPsx2IopRpcConnection_metaObject;
 }
 
 igMetaObject *igPsx2Folder_GetMeta(void) {
-    return g_igPsx2Folder_metaObject[0];
+    return g_igPsx2Folder_metaObject;
 }
 
 int igPsx2File_GetMeta(void) {
-    return ((int *)g_igPsx2File_metaObject)[0];
+    return (int)g_igPsx2File_metaObject;
 }
 
 void igPsx2File_InitDefaults(igPsx2File *self) {
@@ -18,15 +18,15 @@ void igPsx2File_InitDefaults(igPsx2File *self) {
     int pool;
     int *old;
     int *interned;
-    prefix = g_igPsx2File_defaultPrefix[0];
-    if (g_stringPool[0] == 0) {
+    prefix = g_igPsx2File_defaultPrefix;
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
             pool = ((int)StringPool_Construct((StringPool *)pool));
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool[0], (const char *)prefix)));
+    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)prefix)));
     old = (int *)self->_prefix;
     if (old != 0) {
         header = old - 2;
@@ -41,7 +41,7 @@ void igPsx2File_InitDefaults(igPsx2File *self) {
 
 int igPsx2CallStackTracer_GetMeta(void)
 {
-    return ((int *)g_igPsx2CallStackTracer_metaObject)[0];
+    return (int)g_igPsx2CallStackTracer_metaObject;
 }
 
 void igUnsignedIntListNoClean_TrimCapacity(void) {
@@ -49,11 +49,11 @@ void igUnsignedIntListNoClean_TrimCapacity(void) {
 }
 
 int igStandardQueue_GetMeta(void) {
-    return ((int *)g_igStandardQueue_metaObject)[0];
+    return (int)g_igStandardQueue_metaObject;
 }
 
 igMetaObject *igStackMemoryPool_GetMeta(void) {
-    return g_igStackMemoryPool_metaObject[0];
+    return g_igStackMemoryPool_metaObject;
 }
 
 unsigned char igStackMemoryPool_IsAlchemyMemory(igStackMemoryPool *self) {
@@ -76,79 +76,79 @@ int Gap__Core__igStackMemoryPool__vfunc_83(void) {
 
 int igProgramFile_GetMeta(void)
 {
-    return ((int *)g_igProgramFile_metaObject)[0];
+    return (int)g_igProgramFile_metaObject;
 }
 
 int igElfFile_GetMeta(void) {
-    return ((int *)g_igElfFile_metaObject)[0];
+    return (int)g_igElfFile_metaObject;
 }
 
 igMetaObject *igVirtualCFuncMetaField_GetMeta(void) {
-    return g_igVirtualCFuncMetaField_metaObject[0];
+    return g_igVirtualCFuncMetaField_metaObject;
 }
 
 int igVirtualCFuncMetaField_GetDescriptor(void) {
-    return ((int *)g_igVirtualCFuncMetaField_descriptor)[0];
+    return (*(int *)&g_igVirtualCFuncMetaField_descriptor);
 }
 
 int igUnsignedShortArrayMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedShortArrayMetaField_metaObject)[0];
+    return (int)g_igUnsignedShortArrayMetaField_metaObject;
 }
 
 int igUnsignedShortArrayMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedShortArrayMetaField_descriptor[0];
+    return (int)g_igUnsignedShortArrayMetaField_descriptor;
 }
 
 int igUnsignedLongArrayMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedLongArrayMetaField_metaObject)[0];
+    return (int)g_igUnsignedLongArrayMetaField_metaObject;
 }
 
 int igUnsignedLongArrayMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedLongArrayMetaField_descriptor[0];
+    return (int)g_igUnsignedLongArrayMetaField_descriptor;
 }
 
 int igUnsignedIntArrayMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedIntArrayMetaField_metaObject)[0];
+    return (int)g_igUnsignedIntArrayMetaField_metaObject;
 }
 
 int igUnsignedIntArrayMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedIntArrayMetaField_descriptor[0];
+    return (int)g_igUnsignedIntArrayMetaField_descriptor;
 }
 
 int igUnsignedCharMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedCharMetaField_metaObject)[0];
+    return (int)g_igUnsignedCharMetaField_metaObject;
 }
 
 int igUnsignedCharMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedCharMetaField_descriptor[0];
+    return (int)g_igUnsignedCharMetaField_descriptor;
 }
 
 int igUnsignedCharArrayMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedCharArrayMetaField_metaObject)[0];
+    return (int)g_igUnsignedCharArrayMetaField_metaObject;
 }
 
 int igUnsignedCharArrayMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedCharArrayMetaField_descriptor[0];
+    return (int)g_igUnsignedCharArrayMetaField_descriptor;
 }
 
 int igSymbolTable_GetMeta(void) {
-    return ((int *)g_igSymbolTable_metaObject)[0];
+    return (int)g_igSymbolTable_metaObject;
 }
 
 int igStructMetaField_GetMeta(void) {
-    return ((int *)g_igStructMetaField_metaObject)[0];
+    return (int)g_igStructMetaField_metaObject;
 }
 
 int igStructMetaField_GetDescriptor(void) {
-    return ((int *)g_igStructMetaField_descriptor)[0];
+    return (*(int *)&g_igStructMetaField_descriptor);
 }
 
 int igStringTable_GetMeta(void) {
-    return ((int *)g_igStringTable_metaObject)[0];
+    return (int)g_igStringTable_metaObject;
 }
 
 igMetaObject *igStringRefList_GetMeta(void) {
-    return g_igStringRefList_metaObject[0];
+    return g_igStringRefList_metaObject;
 }
 
 void igStringRefList_UserPreWrite(igObjectDispatchView *self)
@@ -164,235 +164,236 @@ void igStringRefList_TrimCapacity(igStringRefList *l) {
 }
 
 igMetaObject *igStringArrayMetaField_GetMeta(void) {
-    return g_igStringArrayMetaField_metaObject[0];
+    return g_igStringArrayMetaField_metaObject;
 }
 
 int igStringArrayMetaField_GetDescriptor(void) {
-    return ((int *)g_igStringArrayMetaField_descriptor)[0];
+    return (*(int *)&g_igStringArrayMetaField_descriptor);
 }
 
 int igShortArrayMetaField_GetMeta(void) {
-    return ((int *)g_igShortArrayMetaField_metaObject)[0];
+    return (int)g_igShortArrayMetaField_metaObject;
 }
 
 int igShortArrayMetaField_GetDescriptor(void) {
-    return (int)g_igShortArrayMetaField_descriptor[0];
+    return (int)g_igShortArrayMetaField_descriptor;
 }
 
 int igResource_GetMeta(void) {
-    return ((int *)g_igResource_metaObject)[0];
+    return (int)g_igResource_metaObject;
 }
 
 igMetaObject *igRegistry_GetMeta(void) {
-    return g_igRegistry_metaObject[0];
+    return g_igRegistry_metaObject;
 }
 
 int igRefMetaField_GetDescriptor(void) {
-    return (int)g_igRefMetaField_descriptor[0];
+    return (int)g_igRefMetaField_descriptor;
 }
 
 int igRawRefArrayMetaField_GetMeta(void) {
-    return ((int *)g_igRawRefArrayMetaField_metaObject)[0];
+    return (int)g_igRawRefArrayMetaField_metaObject;
 }
 
 int igRawRefArrayMetaField_GetDescriptor(void) {
-    return (int)g_igRawRefArrayMetaField_descriptor[0];
+    return (int)g_igRawRefArrayMetaField_descriptor;
 }
 
 igMetaObject *igQueue_GetMeta(void) {
-    return g_igQueue_metaObject[0];
+    return g_igQueue_metaObject;
 }
 
 int igPluginHelper_GetMeta(void) {
-    return ((int *)g_igPluginHelper_metaObject)[0];
+    return (int)g_igPluginHelper_metaObject;
 }
 
 igMetaObject *igObjectRefArrayMetaField_GetMeta(void) {
-    return g_igObjectRefArrayMetaField_metaObject[0];
+    return g_igObjectRefArrayMetaField_metaObject;
 }
 
 int igObjectRefArrayMetaField_GetDescriptor(void) {
-    return ((int *)g_igObjectRefArrayMetaField_descriptor)[0];
+    return (*(int *)&g_igObjectRefArrayMetaField_descriptor);
 }
 
 int igNamedObjectInfo_GetMeta(void) {
-    return ((int *)g_igNamedObjectInfo_metaObject)[0];
+    return (int)g_igNamedObjectInfo_metaObject;
 }
 
 igMetaObject *igMetaFieldInfo_GetMeta(void) {
-    return g_igMetaFieldInfo_metaObject[0];
+    return g_igMetaFieldInfo_metaObject;
 }
 
 int igMemoryRefArrayMetaField_GetMeta(void) {
-    return ((int *)g_igMemoryRefArrayMetaField_metaObject)[0];
+    return (int)g_igMemoryRefArrayMetaField_metaObject;
 }
 
 int igMemoryRefArrayMetaField_GetDescriptor(void) {
-    return (int)g_igMemoryRefArrayMetaField_descriptor[0];
+    return (int)g_igMemoryRefArrayMetaField_descriptor;
 }
 
 int igMemoryPoolInfo_GetMeta(void) {
-    return ((int *)g_igMemoryPoolInfo_metaObject)[0];
+    return (int)g_igMemoryPoolInfo_metaObject;
 }
 
 igMetaObject *igMemoryPoolContextInfo_GetMeta(void) {
-    return g_igMemoryPoolContextInfo_metaObject[0];
+    return g_igMemoryPoolContextInfo_metaObject;
 }
 
+
 int MemoryContext_GetMeta(void) {
-    return g_MemoryContext_metaObject[0];
+    return g_MemoryContext_metaObject;
 }
 
 int igMemoryFile_GetMeta(void) {
-    return ((int *)g_igMemoryFile_metaObject)[0];
+    return (int)g_igMemoryFile_metaObject;
 }
 
 int igMemoryDictionary_GetMeta(void) {
-    return ((int *)g_igMemoryDictionary_metaObject)[0];
+    return (int)g_igMemoryDictionary_metaObject;
 }
 
 igMetaObject *igMediaFile_GetMeta(void) {
-    return g_igMediaFile_metaObject[0];
+    return g_igMediaFile_metaObject;
 }
 
 int igLongMetaField_GetMeta(void) {
-    return ((int *)g_igLongMetaField_metaObject)[0];
+    return (int)g_igLongMetaField_metaObject;
 }
 
 int igLongMetaField_GetDescriptor(void) {
-    return (int)g_igLongMetaField_descriptor[0];
+    return (int)g_igLongMetaField_descriptor;
 }
 
 int igLongArrayMetaField_GetMeta(void) {
-    return ((int *)g_igLongArrayMetaField_metaObject)[0];
+    return (int)g_igLongArrayMetaField_metaObject;
 }
 
 int igLongArrayMetaField_GetDescriptor(void) {
-    return (int)g_igLongArrayMetaField_descriptor[0];
+    return (int)g_igLongArrayMetaField_descriptor;
 }
 
 int igLocationTable_GetMeta(void) {
-    return ((int *)g_igLocationTable_metaObject)[0];
+    return (int)g_igLocationTable_metaObject;
 }
 
 igMetaObject *igIntArrayMetaField_GetMeta(void) {
-    return g_igIntArrayMetaField_metaObject[0];
+    return g_igIntArrayMetaField_metaObject;
 }
 
 int igIntArrayMetaField_GetDescriptor(void) {
-    return ((int *)g_igIntArrayMetaField_descriptor)[0];
+    return (*(int *)&g_igIntArrayMetaField_descriptor);
 }
 
 int igIGBFile_GetMeta(void) {
-    return ((int *)g_igIGBFile_metaObject)[0];
+    return (int)g_igIGBFile_metaObject;
 }
 
 igMetaObject *igFolder_GetMeta(void) {
-    return g_igFolder_metaObject[0];
+    return g_igFolder_metaObject;
 }
 
 igMetaObject *igFloatMetaField_GetMeta(void) {
-    return g_igFloatMetaField_metaObject[0];
+    return g_igFloatMetaField_metaObject;
 }
 
 int igFloatMetaField_GetDescriptor(void) {
-    return ((int *)g_igFloatMetaField_descriptor)[0];
+    return (*(int *)&g_igFloatMetaField_descriptor);
 }
 
 int igFloatArrayMetaField_GetMeta(void) {
-    return ((int *)g_igFloatArrayMetaField_metaObject)[0];
+    return (int)g_igFloatArrayMetaField_metaObject;
 }
 
 int igFloatArrayMetaField_GetDescriptor(void) {
-    return (int)g_igFloatArrayMetaField_descriptor[0];
+    return (int)g_igFloatArrayMetaField_descriptor;
 }
 
 igMetaObject *igFile_GetMeta(void) {
-    return g_igFile_metaObject[0];
+    return g_igFile_metaObject;
 }
 
 int igExternalInfoEntry_GetMeta(void) {
-    return ((int *)g_igExternalInfoEntry_metaObject)[0];
+    return (int)g_igExternalInfoEntry_metaObject;
 }
 
 int igExternalIndexedEntry_GetMeta(void) {
-    return ((int *)g_igExternalIndexedEntry_metaObject)[0];
+    return (int)g_igExternalIndexedEntry_metaObject;
 }
 
 int igExternalDirEntry_GetMeta(void) {
-    return ((int *)g_igExternalDirEntry_metaObject)[0];
+    return (int)g_igExternalDirEntry_metaObject;
 }
 
 int igEventTracker_GetMeta(void) {
-    return ((int *)g_igEventTracker_metaObject)[0];
+    return (int)g_igEventTracker_metaObject;
 }
 
 int igEnumArrayMetaField_GetMeta(void) {
-    return ((int *)g_igEnumArrayMetaField_metaObject)[0];
+    return (int)g_igEnumArrayMetaField_metaObject;
 }
 
 int igEnumArrayMetaField_GetDescriptor(void) {
-    return (int)g_igEnumArrayMetaField_descriptor[0];
+    return (int)g_igEnumArrayMetaField_descriptor;
 }
 
 int igDriverDatabase_GetMeta(void) {
-    return ((int *)g_igDriverDatabase_metaObject)[0];
+    return (int)g_igDriverDatabase_metaObject;
 }
 
 igMetaObject *igDoubleMetaField_GetMeta(void) {
-    return g_igDoubleMetaField_metaObject[0];
+    return g_igDoubleMetaField_metaObject;
 }
 
 int igDoubleMetaField_GetDescriptor(void) {
-    return ((int *)g_igDoubleMetaField_descriptor)[0];
+    return (*(int *)&g_igDoubleMetaField_descriptor);
 }
 
 int igDoubleArrayMetaField_GetMeta(void) {
-    return ((int *)g_igDoubleArrayMetaField_metaObject)[0];
+    return (int)g_igDoubleArrayMetaField_metaObject;
 }
 
 int igDoubleArrayMetaField_GetDescriptor(void) {
-    return (int)g_igDoubleArrayMetaField_descriptor[0];
+    return (int)g_igDoubleArrayMetaField_descriptor;
 }
 
 int igDirectory_GetMeta(void) {
-    return ((int *)g_igDirectory_metaObject)[0];
+    return (int)g_igDirectory_metaObject;
 }
 
 int igCharArrayMetaField_GetMeta(void) {
-    return ((int *)g_igCharArrayMetaField_metaObject)[0];
+    return (int)g_igCharArrayMetaField_metaObject;
 }
 
 int igCharArrayMetaField_GetDescriptor(void) {
-    return (int)g_igCharArrayMetaField_descriptor[0];
+    return (int)g_igCharArrayMetaField_descriptor;
 }
 
 int igCallStackTracer_GetMeta(void) {
-    return ((int *)g_igCallStackTracer_metaObject)[0];
+    return (int)g_igCallStackTracer_metaObject;
 }
 
 igMetaObject *igCallStackTable_GetMeta(void) {
-    return g_igCallStackTable_metaObject[0];
+    return g_igCallStackTable_metaObject;
 }
 
 igMetaObject *igBoolArrayMetaField_GetMeta(void) {
-    return g_igBoolArrayMetaField_metaObject[0];
+    return g_igBoolArrayMetaField_metaObject;
 }
 
 int igBoolArrayMetaField_GetDescriptor(void) {
-    return ((int *)g_igBoolArrayMetaField_descriptor)[0];
+    return (*(int *)&g_igBoolArrayMetaField_descriptor);
 }
 
 int igMemoryDescriptorMetaField_GetMeta(void) {
-    return ((int *)g_igMemoryDescriptorMetaField_metaObject)[0];
+    return (int)g_igMemoryDescriptorMetaField_metaObject;
 }
 
 int igMemoryDescriptorMetaField_GetDescriptor(void) {
-    return (int)g_igMemoryDescriptorMetaField_descriptor[0];
+    return (int)g_igMemoryDescriptorMetaField_descriptor;
 }
 
 int igMallocMemoryPool_GetMeta(void) {
-    return ((int *)g_igMallocMemoryPool_metaObject)[0];
+    return (int)g_igMallocMemoryPool_metaObject;
 }
 
 void igMallocMemoryPool_ReleaseDefaults(igMemoryPoolView *self) {
@@ -426,15 +427,15 @@ int igMallocMemoryPool_IsSecondaryAllocator(void) {
 }
 
 int igArenaMemoryPool_GetMeta(void) {
-    return ((int *)g_igArenaMemoryPool_metaObject)[0];
+    return (int)g_igArenaMemoryPool_metaObject;
 }
 
 int igPageMemoryPool_GetMeta(void) {
-    return ((int *)g_igPageMemoryPool_metaObject)[0];
+    return (int)g_igPageMemoryPool_metaObject;
 }
 
 int igAliasMemoryPool_GetMeta(void) {
-    return ((int *)g_igAliasMemoryPool_metaObject)[0];
+    return (int)g_igAliasMemoryPool_metaObject;
 }
 
 int Gap__Core__igAliasMemoryPool__vfunc_83(void) {
@@ -442,47 +443,47 @@ int Gap__Core__igAliasMemoryPool__vfunc_83(void) {
 }
 
 igMetaObject *igBoolMetaField_GetMeta(void) {
-    return g_igBoolMetaField_metaObject[0];
+    return g_igBoolMetaField_metaObject;
 }
 
 int igBoolMetaField_GetDescriptor(void) {
-    return ((int *)g_igBoolMetaField_descriptor)[0];
+    return (*(int *)&g_igBoolMetaField_descriptor);
 }
 
 igMetaObject *igCharMetaField_GetMeta(void) {
-    return g_igCharMetaField_metaObject[0];
+    return g_igCharMetaField_metaObject;
 }
 
 int igCharMetaField_GetDescriptor(void) {
-    return ((int *)g_igCharMetaField_descriptor)[0];
+    return (*(int *)&g_igCharMetaField_descriptor);
 }
 
 igMetaObject *igCompoundMetaField_GetMeta(void) {
-    return g_igCompoundMetaField_metaObject[0];
+    return g_igCompoundMetaField_metaObject;
 }
 
 int igContextList_GetMeta(void) {
-    return ((int *)g_igContextList_metaObject)[0];
+    return (int)g_igContextList_metaObject;
 }
 
 igMetaObject *igContextExtInfo_GetMeta(void) {
-    return g_igContextExtInfo_metaObject[0];
+    return g_igContextExtInfo_metaObject;
 }
 
 igMetaObject *igContextExtInfoList_GetMeta(void) {
-    return g_igContextExtInfoList_metaObject[0];
+    return g_igContextExtInfoList_metaObject;
 }
 
 igMetaObject *igContextExtList_GetMeta(void) {
-    return g_igContextExtList_metaObject[0];
+    return g_igContextExtList_metaObject;
 }
 
 igMetaObject *igBoolList_GetMeta(void) {
-    return g_igBoolList_metaObject[0];
+    return g_igBoolList_metaObject;
 }
 
 igMetaObject *igCharListNoClean_GetMeta(void) {
-    return g_igCharListNoClean_metaObject[0];
+    return g_igCharListNoClean_metaObject;
 }
 
 void igCharListNoClean_TrimCapacity(void) {
@@ -490,11 +491,11 @@ void igCharListNoClean_TrimCapacity(void) {
 }
 
 igMetaObject *igCharList_GetMeta(void) {
-    return g_igCharList_metaObject[0];
+    return g_igCharList_metaObject;
 }
 
 igMetaObject *igIntListNoClean_GetMeta(void) {
-    return g_igIntListNoClean_metaObject[0];
+    return g_igIntListNoClean_metaObject;
 }
 
 void igIntListNoClean_TrimCapacity(void) {
@@ -502,255 +503,255 @@ void igIntListNoClean_TrimCapacity(void) {
 }
 
 int igIntList_GetMetaObject_Virtual(void) {
-    return ((int *)g_igIntList_metaObject)[0];
+    return (int)g_igIntList_metaObject;
 }
 
 igMetaObject *igLongList_GetMeta(void) {
-    return g_igLongList_metaObject[0];
+    return g_igLongList_metaObject;
 }
 
 igMetaObject *igUnsignedIntListNoClean_GetMeta(void) {
-    return g_igUnsignedIntListNoClean_metaObject[0];
+    return g_igUnsignedIntListNoClean_metaObject;
 }
 
 igMetaObject *igUnsignedShortList_GetMeta(void) {
-    return g_igUnsignedShortList_metaObject[0];
+    return g_igUnsignedShortList_metaObject;
 }
 
 igMetaObject *igShortList_GetMeta(void) {
-    return g_igShortList_metaObject[0];
+    return g_igShortList_metaObject;
 }
 
 igMetaObject *igShortListList_GetMeta(void) {
-    return g_igShortListList_metaObject[0];
+    return g_igShortListList_metaObject;
 }
 
 int igUnsignedCharList_GetMeta(void) {
-    return ((int *)g_igUnsignedCharList_metaObject)[0];
+    return (int)g_igUnsignedCharList_metaObject;
 }
 
 igMetaObject *igFloatList_GetMeta(void) {
-    return g_igFloatList_metaObject[0];
+    return g_igFloatList_metaObject;
 }
 
 igMetaObject *igFloatListList_GetMeta(void) {
-    return g_igFloatListList_metaObject[0];
+    return g_igFloatListList_metaObject;
 }
 
 igMetaObject *igPointerList_GetMeta(void) {
-    return g_igPointerList_metaObject[0];
+    return g_igPointerList_metaObject;
 }
 
 igMetaObject *igPointerListList_GetMeta(void) {
-    return g_igPointerListList_metaObject[0];
+    return g_igPointerListList_metaObject;
 }
 
 igMetaObject *igMetaObjectList_GetMeta(void) {
-    return g_igMetaObjectList_metaObject[0];
+    return g_igMetaObjectList_metaObject;
 }
 
 igMetaObject *igMetaObjectListList_GetMeta(void) {
-    return g_igMetaObjectListList_metaObject[0];
+    return g_igMetaObjectListList_metaObject;
 }
 
 igMetaObject *igMetaFieldList_GetMeta(void) {
-    return g_igMetaFieldList_metaObject[0];
+    return g_igMetaFieldList_metaObject;
 }
 
 igMetaObject *igIntListList_GetMeta(void) {
-    return g_igIntListList_metaObject[0];
+    return g_igIntListList_metaObject;
 }
 
 igMetaObject *igObjectListList_GetMeta(void) {
-    return g_igObjectListList_metaObject[0];
+    return g_igObjectListList_metaObject;
 }
 
 igMetaObject *igStringRefListList_GetMeta(void) {
-    return g_igStringRefListList_metaObject[0];
+    return g_igStringRefListList_metaObject;
 }
 
 igMetaObject *igDependencyMetaField_GetMeta(void) {
-    return g_igDependencyMetaField_metaObject[0];
+    return g_igDependencyMetaField_metaObject;
 }
 
 int igDependencyMetaField_GetDescriptor(void) {
-    return ((int *)g_igDependencyMetaField_descriptor)[0];
+    return (*(int *)&g_igDependencyMetaField_descriptor);
 }
 
 int igDependencyList_GetMeta(void) {
-    return ((int *)g_igDependencyList_metaObject)[0];
+    return (int)g_igDependencyList_metaObject;
 }
 
 igMetaObject *igDirectoryList_GetMeta(void) {
-    return g_igDirectoryList_metaObject[0];
+    return g_igDirectoryList_metaObject;
 }
 
 int igEnumMetaField_GetMeta(void) {
-    return ((int *)g_igEnumMetaField_metaObject)[0];
+    return (int)g_igEnumMetaField_metaObject;
 }
 
 int igEnumMetaField_GetDescriptor(void) {
-    return (int)g_igEnumMetaField_descriptor[0];
+    return (int)g_igEnumMetaField_descriptor;
 }
 
 int igErrorHandler_GetMeta(void) {
-    return ((int *)g_igErrorHandler_metaObject)[0];
+    return (int)g_igErrorHandler_metaObject;
 }
 
 int igInfoList_GetMeta(void) {
-    return ((int *)g_igInfoList_metaObject)[0];
+    return (int)g_igInfoList_metaObject;
 }
 
 int igIntMetaField_GetMeta(void) {
-    return ((int *)g_igIntMetaField_metaObject)[0];
+    return (int)g_igIntMetaField_metaObject;
 }
 
 int igIntMetaField_GetDescriptor(void) {
-    return (int)g_igIntMetaField_descriptor[0];
+    return (int)g_igIntMetaField_descriptor;
 }
 
 igMetaObject *__internalNonRefCountedObjectList_GetMeta(void) {
-    return g___internalNonRefCountedObjectList_metaObject[0];
+    return g___internalNonRefCountedObjectList_metaObject;
 }
 
 igMetaObject *__internalObjectList_GetMeta(void) {
-    return g___internalObjectList_metaObject[0];
+    return g___internalObjectList_metaObject;
 }
 
 int igLibraryList_GetMeta(void) {
-    return ((int *)g_igLibraryList_metaObject)[0];
+    return (int)g_igLibraryList_metaObject;
 }
 
 igMetaObject *igMediaList_GetMeta(void) {
-    return g_igMediaList_metaObject[0];
+    return g_igMediaList_metaObject;
 }
 
 igMetaObject *igMemoryFileEntry_GetMeta(void) {
-    return g_igMemoryFileEntry_metaObject[0];
+    return g_igMemoryFileEntry_metaObject;
 }
 
 igMetaObject *igMemoryFileEntryList_GetMeta(void) {
-    return g_igMemoryFileEntryList_metaObject[0];
+    return g_igMemoryFileEntryList_metaObject;
 }
 
 igMetaObject *igMemoryPoolInfoList_GetMeta(void) {
-    return g_igMemoryPoolInfoList_metaObject[0];
+    return g_igMemoryPoolInfoList_metaObject;
 }
 
 int igMemoryRefMetaField_GetMeta(void) {
-    return ((int *)g_igMemoryRefMetaField_metaObject)[0];
+    return (int)g_igMemoryRefMetaField_metaObject;
 }
 
 int igMemoryRefMetaField_GetDescriptor(void) {
-    return ((int *)g_igMemoryRefMetaField_descriptor)[0];
+    return (*(int *)&g_igMemoryRefMetaField_descriptor);
 }
 
 int igMetaEnum_GetMeta(void) {
-    return ((int *)g_igMetaEnum_metaObject)[0];
+    return (int)g_igMetaEnum_metaObject;
 }
 
 igMetaObject *igNamedObjectList_GetMeta(void) {
-    return g_igNamedObjectList_metaObject[0];
+    return g_igNamedObjectList_metaObject;
 }
 
 igMetaObject *igObjectRefMetaField_GetMeta(void) {
-    return g_igObjectRefMetaField_metaObject[0];
+    return g_igObjectRefMetaField_metaObject;
 }
 
 int igObjectRefMetaField_GetDescriptor(void) {
-    return ((int *)g_igObjectRefMetaField_descriptor)[0];
+    return (*(int *)&g_igObjectRefMetaField_descriptor);
 }
 
 int igObjectStringMap_GetMeta(void) {
-    return ((int *)g_igObjectStringMap_metaObject)[0];
+    return (int)g_igObjectStringMap_metaObject;
 }
 
 int igPluginRepository_GetMeta(void) {
-    return ((int *)g_igPluginRepository_metaObject)[0];
+    return (int)g_igPluginRepository_metaObject;
 }
 
 igMetaObject *igPluginRepositoryList_GetMeta(void) {
-    return g_igPluginRepositoryList_metaObject[0];
+    return g_igPluginRepositoryList_metaObject;
 }
 
 int igRawRefMetaField_GetMeta(void) {
-    return ((int *)g_igRawRefMetaField_metaObject)[0];
+    return (int)g_igRawRefMetaField_metaObject;
 }
 
 int igRawRefMetaField_GetDescriptor(void) {
-    return (int)g_igRawRefMetaField_descriptor[0];
+    return (int)g_igRawRefMetaField_descriptor;
 }
 
 int igRegistryValue_GetMeta(void) {
-    return ((int *)g_igRegistryValue_metaObject)[0];
+    return (int)g_igRegistryValue_metaObject;
 }
 
 igMetaObject *igRegistryValueList_GetMeta(void) {
-    return g_igRegistryValueList_metaObject[0];
+    return g_igRegistryValueList_metaObject;
 }
 
 int igShortMetaField_GetMeta(void) {
-    return ((int *)g_igShortMetaField_metaObject)[0];
+    return (int)g_igShortMetaField_metaObject;
 }
 
 int igShortMetaField_GetDescriptor(void) {
-    return (int)g_igShortMetaField_descriptor[0];
+    return (int)g_igShortMetaField_descriptor;
 }
 
 igMetaObject *igStringMetaField_GetMeta(void) {
-    return g_igStringMetaField_metaObject[0];
+    return g_igStringMetaField_metaObject;
 }
 
 int igStringMetaField_GetDescriptor(void) {
-    return ((int *)g_igStringMetaField_descriptor)[0];
+    return (*(int *)&g_igStringMetaField_descriptor);
 }
 
 int igStringObj_GetMeta(void) {
-    return ((int *)g_igStringObj_metaObject)[0];
+    return (int)g_igStringObj_metaObject;
 }
 
 igMetaObject *igStringObjList_GetMeta(void) {
-    return g_igStringObjList_metaObject[0];
+    return g_igStringObjList_metaObject;
 }
 
 igMetaObject *igThreadList_GetMeta(void) {
-    return g_igThreadList_metaObject[0];
+    return g_igThreadList_metaObject;
 }
 
 igMetaObject *igNonRefCountedThreadList_GetMeta(void) {
-    return g_igNonRefCountedThreadList_metaObject[0];
+    return g_igNonRefCountedThreadList_metaObject;
 }
 
 int igUnsignedIntMetaField_GetMeta(void) {
-    return ((int *)g_igUnsignedIntMetaField_metaObject)[0];
+    return (int)g_igUnsignedIntMetaField_metaObject;
 }
 
 int igUnsignedIntMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedIntMetaField_descriptor[0];
+    return (int)g_igUnsignedIntMetaField_descriptor;
 }
 
 igMetaObject *igUnsignedLongMetaField_GetMeta(void) {
-    return g_igUnsignedLongMetaField_metaObject[0];
+    return g_igUnsignedLongMetaField_metaObject;
 }
 
 int igUnsignedLongMetaField_GetDescriptor(void) {
-    return ((int *)g_igUnsignedLongMetaField_descriptor)[0];
+    return (*(int *)&g_igUnsignedLongMetaField_descriptor);
 }
 
 igMetaObject *igUnsignedShortMetaField_GetMeta(void) {
-    return g_igUnsignedShortMetaField_metaObject[0];
+    return g_igUnsignedShortMetaField_metaObject;
 }
 
 int igUnsignedShortMetaField_GetDescriptor(void) {
-    return ((int *)g_igUnsignedShortMetaField_descriptor)[0];
+    return (*(int *)&g_igUnsignedShortMetaField_descriptor);
 }
 
 int igContextList_GetElementMeta(void) {
-    return ((int *)g_igContext_metaObject)[0];
+    return (int)g_igContext_metaObject;
 }
 
 igMetaObject *igNonRefCountedThreadList_GetElementMeta(void) {
-    return g_igThread_metaObject[0];
+    return g_igThread_metaObject;
 }
 
 /* Element size in bytes of the list's items: 8. The same class's TrimCapacity (vfunc_18) re-sizes
@@ -824,96 +825,96 @@ int igStringRefList_GetElementSize(void) {
 }
 
 igMetaObject *igContextExtList_GetElementMeta(void) {
-    return g_igContextExt_metaObject[0];
+    return g_igContextExt_metaObject;
 }
 
 igMetaObject *igContextExtInfoList_GetElementMeta(void) {
-    return g_igContextExtInfo_metaObject[0];
+    return g_igContextExtInfo_metaObject;
 }
 
 igMetaObject *igMediaList_GetElementMeta(void) {
-    return g_igMedia_metaObject[0];
+    return g_igMedia_metaObject;
 }
 
 igMetaObject *igMemoryFileEntryList_GetElementMeta(void) {
-    return g_igMemoryFileEntry_metaObject[0];
+    return g_igMemoryFileEntry_metaObject;
 }
 
 igMetaObject *igMemoryPoolInfoList_GetElementMeta(void) {
-    return g_igMemoryPoolInfo_metaObject[0];
+    return g_igMemoryPoolInfo_metaObject;
 }
 
 int igInfoList_GetElementMeta(void) {
-    return ((int *)g_igInfo_metaObject)[0];
+    return (int)g_igInfo_metaObject;
 }
 
 int igPluginRepositoryList_GetElementMeta(void) {
-    return ((int *)g_igPluginRepository_metaObject)[0];
+    return (int)g_igPluginRepository_metaObject;
 }
 
 igMetaObject *igRegistryValueList_GetElementMeta(void) {
-    return g_igRegistryValue_metaObject[0];
+    return g_igRegistryValue_metaObject;
 }
 
 igMetaObject *igDirectoryList_GetElementMeta(void) {
-    return g_igDirectory_metaObject[0];
+    return g_igDirectory_metaObject;
 }
 
 igMetaObject *igDirectory_GetElementMeta(void) {
-    return g_igDirEntry_metaObject[0];
+    return g_igDirEntry_metaObject;
 }
 
 igMetaObject *igStringObjList_GetElementMeta(void) {
-    return g_igStringObj_metaObject[0];
+    return g_igStringObj_metaObject;
 }
 
 igMetaObject *igThreadList_GetElementMeta(void) {
-    return g_igThread_metaObject[0];
+    return g_igThread_metaObject;
 }
 
 int beDataObjList_GetElementMeta(void)
 {
-    return ((int *)g_igNamedObject_metaObject)[0];
+    return (int)g_igNamedObject_metaObject;
 }
 
 int igLibraryList_GetElementMeta(void) {
-    return ((int *)g_igLibrary_metaObject)[0];
+    return (int)g_igLibrary_metaObject;
 }
 
 igMetaObject *igStringRefListList_GetElementMeta(void) {
-    return g_igStringRefList_metaObject[0];
+    return g_igStringRefList_metaObject;
 }
 
 igMetaObject *igObjectListList_GetElementMeta(void) {
-    return g_igObjectList_metaObject[0];
+    return g_igObjectList_metaObject;
 }
 
 igMetaObject *igIntListList_GetElementMeta(void) {
-    return g_igIntList_metaObject[0];
+    return g_igIntList_metaObject;
 }
 
 igMetaObject *igMetaFieldList_GetElementMeta(void) {
-    return g_igMetaField_metaObject[0];
+    return g_igMetaField_metaObject;
 }
 
 igMetaObject *igMetaObjectListList_GetElementMeta(void) {
-    return g_igMetaObjectList_metaObject[0];
+    return g_igMetaObjectList_metaObject;
 }
 
 igMetaObject *igMetaObjectList_GetElementMeta(void) {
-    return g_igMetaObject_metaObject[0];
+    return g_igMetaObject_metaObject;
 }
 
 igMetaObject *igPointerListList_GetElementMeta(void) {
-    return g_igPointerList_metaObject[0];
+    return g_igPointerList_metaObject;
 }
 
 igMetaObject *igFloatListList_GetElementMeta(void) {
-    return g_igFloatList_metaObject[0];
+    return g_igFloatList_metaObject;
 }
 
 igMetaObject *igShortListList_GetElementMeta(void) {
-    return g_igShortList_metaObject[0];
+    return g_igShortList_metaObject;
 }
 
 void igBoolList_TrimCapacity(igDataList *list) {

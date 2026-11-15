@@ -1,7 +1,21 @@
-int FUN_001869e0(void) {
-    if (DAT_00560f00[0] == 0) {
-        DAT_00560f00[0] = igMetaEnum_Create(&IG_MATH_SPATIAL_REGION[0], &DAT_0048ad10[0], &DAT_0048ad30[0], 8);
-    }
-    return DAT_00560f00[0];
-}
+const char *g_igMathSpatialRegionNames[] = {
+    "IG_MATH_SPATIAL_REGION_XP_YP_ZP",
+    "IG_MATH_SPATIAL_REGION_XP_YP_ZN",
+    "IG_MATH_SPATIAL_REGION_XP_YN_ZP",
+    "IG_MATH_SPATIAL_REGION_XP_YN_ZN",
+    "IG_MATH_SPATIAL_REGION_XN_YP_ZP",
+    "IG_MATH_SPATIAL_REGION_XN_YP_ZN",
+    "IG_MATH_SPATIAL_REGION_XN_YN_ZP",
+    "IG_MATH_SPATIAL_REGION_XN_YN_ZN",
+};
 
+int g_igMathSpatialRegionValues[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+igMetaEnum *g_igMathSpatialRegionMetaEnum;
+
+igMetaEnum *FUN_001869e0(void) {
+    if (g_igMathSpatialRegionMetaEnum == 0) {
+        g_igMathSpatialRegionMetaEnum = igMetaEnum_Create("IG_MATH_SPATIAL_REGION", g_igMathSpatialRegionNames, g_igMathSpatialRegionValues, 8);
+    }
+    return g_igMathSpatialRegionMetaEnum;
+}

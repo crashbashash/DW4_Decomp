@@ -9,6 +9,8 @@ int igPsx2LongTimer_GetResolution(void) {
     return 0x6C;
 }
 
+unsigned char g_igPsx2LongTimer_initialized;
+
 void igPsx2LongTimer_InitTimer(void) {
     g_igPsx2LongTimer_initialized = 1;
     p2InitTimer();

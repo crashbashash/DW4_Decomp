@@ -1,9 +1,25 @@
+igMetaObject *g_igAnimationCombiner_metaObject;
+igMetaField *g_igAnimationCombiner_boneInfoListListMetaField;
+igMetaField *g_igAnimationCombiner_boneInfoListBaseMetaField;
+igMetaField *g_igAnimationCombiner_animationStateListMetaField;
+igMetaField *g_igAnimationCombiner_resultQuaternionArrayMetaField;
+igMetaField *g_igAnimationCombiner_animationCacheMatrixArrayMetaField;
+igMetaField *g_igAnimationCombiner_cacheTimeMetaField;
+igMetaField *g_igAnimationCombiner_cacheValidMetaField;
+igMetaField *g_igAnimationCombiner_hierarchyUpdatedMetaField;
+igMetaField *g_igAnimationCombiner_boneMatrixArrayMetaField;
+igMetaField *g_igAnimationCombiner_blendMatrixArrayMetaField;
+igMetaField *g_igAnimationCombiner_animationStateTimeMetaField;
+igMetaField *g_igAnimationCombiner_lastCleanStatesTimeMetaField;
+igMetaField *g_igAnimationCombiner_cleanStatesTimeThresholdMetaField;
+igMetaField *g_igAnimationCombiner_cleanStatesTransitionMarginMetaField;
+
 igMetaObject *FUN_001a8520(void)
 {
-    igMetaObject *g = ((igMetaObject * *)g_igAnimationCombiner_metaObject)[0];
+    igMetaObject *g = g_igAnimationCombiner_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a8800();
-    return ((igMetaObject * *)g_igAnimationCombiner_metaObject)[0];
+    return g_igAnimationCombiner_metaObject;
 }
 
 int igAnimationCombiner_GetVTable(void) {
@@ -100,15 +116,17 @@ void FUN_001a8800(void)
     igMetaObject_RunStaticInit(igAnimationCombiner_Register);
 }
 
+static igMetaObjectCallback g_igAnimationCombiner_callbackList[] = { FUN_001a7f00, igIntList_EnsureRegistered, FUN_001a6a00, 0 };
+
 void igAnimationCombiner_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationCombiner_metaObject),
+        &g_igAnimationCombiner_metaObject,
         igAnimationSystem_Register,
         igAnimationSystem_GetPublishedMetaObject,
         thunk_FUN_001a8520,
-        igAnimationCombiner_className,
+        "igAnimationCombiner",
         0x60, /* instance size */
         igAnimationCombiner_GetVTable,
         &igAnimationCombiner_InitFields,
@@ -122,8 +140,73 @@ void thunk_FUN_001a8520(void) {
 }
 
 igMetaObject *FUN_001a88a0(void) {
-    return g_igAnimationSystem_metaObject[0];
+    return g_igAnimationSystem_metaObject;
 }
+
+static FieldFactory g_igAnimationCombiner_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igLongMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igMemoryRefMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+};
+static const char *g_igAnimationCombiner_fieldTable[] = {
+    "_boneInfoListList",
+    "_boneInfoListBase",
+    "_animationStateList",
+    "_resultQuaternionArray",
+    "_animationCacheMatrixArray",
+    "_cacheTime",
+    "_cacheValid",
+    "_hierarchyUpdated",
+    "_boneMatrixArray",
+    "_blendMatrixArray",
+    "_animationStateTime",
+    "_lastCleanStatesTime",
+    "_cleanStatesTimeThreshold",
+    "_cleanStatesTransitionMargin",
+};
+static igMetaField **g_igAnimationCombiner_fieldHandles[] = {
+    &g_igAnimationCombiner_boneInfoListListMetaField,
+    &g_igAnimationCombiner_boneInfoListBaseMetaField,
+    &g_igAnimationCombiner_animationStateListMetaField,
+    &g_igAnimationCombiner_resultQuaternionArrayMetaField,
+    &g_igAnimationCombiner_animationCacheMatrixArrayMetaField,
+    &g_igAnimationCombiner_cacheTimeMetaField,
+    &g_igAnimationCombiner_cacheValidMetaField,
+    &g_igAnimationCombiner_hierarchyUpdatedMetaField,
+    &g_igAnimationCombiner_boneMatrixArrayMetaField,
+    &g_igAnimationCombiner_blendMatrixArrayMetaField,
+    &g_igAnimationCombiner_animationStateTimeMetaField,
+    &g_igAnimationCombiner_lastCleanStatesTimeMetaField,
+    &g_igAnimationCombiner_cleanStatesTimeThresholdMetaField,
+    &g_igAnimationCombiner_cleanStatesTransitionMarginMetaField,
+};
+static int g_igAnimationCombiner_fieldOffsets[] = {
+    48,
+    52,
+    56,
+    60,
+    64,
+    72,
+    80,
+    81,
+    84,
+    88,
+    16,
+    24,
+    32,
+    40,
+};
 
 void igAnimationCombiner_InitFields(void) {
     int temp_s1;
@@ -136,9 +219,9 @@ void igAnimationCombiner_InitFields(void) {
     struct Fld_1a88b0 *temp_s2_7;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAnimationCombiner_metaObject[0];
+    temp_s0 = (void *)g_igAnimationCombiner_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAnimationCombiner_ctorTable[0], 0xE);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationCombiner_ctorTable, 0xE);
     temp_s2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1));
     temp_s2->f56 = (int)FUN_001a7e20();
     temp_s2->f52 = 1;
@@ -172,7 +255,7 @@ void igAnimationCombiner_InitFields(void) {
     igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)), -1);
     igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC)), 0x05F5E100);
     igLongMetaField_SetDefault(((struct Fld_1a88b0 *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD)), 0xFED260);
-    igMetaObject_NameFields(temp_s0, &g_igAnimationCombiner_fieldTable[0], &DAT_0048d3e0[0], &DAT_0048d420[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationCombiner_fieldTable, g_igAnimationCombiner_fieldHandles, g_igAnimationCombiner_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback(&thunk_FUN_001abdf0);
 }
 

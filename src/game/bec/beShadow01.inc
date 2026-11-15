@@ -1,21 +1,25 @@
+igMetaObject *g_beShadow01_metaObject;
+igMetaField *g_beShadow01_svInfoListMetaField;
+igMetaField *g_beShadow01_savePosMetaField;
+
 void beShadow01_CreateInstance(int arg0) {
     FUN_00345010();
     igMetaObject_CreateInstance(*(int *)0x587F10, arg0);
 }
 
 igMetaObject *FUN_00344e80(void) {
-    if (g_beShadow01_metaObject[0] == 0) {
-        g_beShadow01_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beShadow01_metaObject == 0) {
+        g_beShadow01_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beShadow01_metaObject[0];
+    return g_beShadow01_metaObject;
 }
 
 void *FUN_00344ed0(void) {
-    igMetaObject *g = g_beShadow01_metaObject[0];
+    igMetaObject *g = g_beShadow01_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_00345010();
     }
-    return g_beShadow01_metaObject[0];
+    return g_beShadow01_metaObject;
 }
 
 int beShadow01_GetVTable(void) {
@@ -57,15 +61,17 @@ void FUN_00345010(void)
     igMetaObject_RunStaticInit(beShadow01_Register);
 }
 
+static igMetaObjectCallback g_beShadow01_callbackList[] = { FUN_00344a90, 0 };
+
 void *beShadow01_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beShadow01_metaObject,
+        &g_beShadow01_metaObject,
         beBaseInfoManager_Register,
         beBaseInfoManager_GetPublishedMetaObject,
         beShadow01_GetMetaObject,
-        beShadow01_className,
+        "beShadow01",
         0x30, /* instance size */
         beShadow01_GetVTable,
         beShadow01_InitFields,
@@ -79,17 +85,34 @@ void beShadow01_GetMetaObject(void)
     FUN_00344ed0();
 }
 
+static FieldFactory g_beShadow01_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    FUN_00187890,
+};
+static const char *g_beShadow01_fieldTable[] = {
+    "_svInfoList",
+    "_savePos",
+};
+static igMetaField **g_beShadow01_fieldHandles[] = {
+    &g_beShadow01_svInfoListMetaField,
+    &g_beShadow01_savePosMetaField,
+};
+static int g_beShadow01_fieldOffsets[] = {
+    32,
+    36,
+};
+
 void beShadow01_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beShadow01_metaObject[0];
+    temp_s0 = (void *)g_beShadow01_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beShadow01_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beShadow01_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_003449b0();
     ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beShadow01_fieldTable[0], &DAT_004c3a58[0], &DAT_004c3a60[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beShadow01_fieldTable, g_beShadow01_fieldHandles, g_beShadow01_fieldOffsets, temp_s2);
 }
 

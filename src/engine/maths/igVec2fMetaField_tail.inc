@@ -11,7 +11,7 @@ void Gap__igVec2fMetaField__vfunc_56(int arg0, int arg1, int arg2) {
 
 void Gap__igVec2fMetaField__vfunc_57(int *out, void *field, const float *value) {
     char text[1024];
-    sprintf(text, DAT_004e0db0, value[0], value[1]);
+    sprintf(text, "%f,%f", value[0], value[1]);
     *out = internString(text);
 }
 

@@ -1,9 +1,9 @@
 igMetaObject *igPsx2Image_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2Image_metaObject[0];
+    igMetaObject *g = g_igPsx2Image_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00153e60();
-    return g_igPsx2Image_metaObject[0];
+    return g_igPsx2Image_metaObject;
 }
 
 int igPsx2Image_GetVTable(void) {
@@ -52,11 +52,11 @@ void igPsx2Image_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2Image_metaObject,
+        &g_igPsx2Image_metaObject,
         igMemoryImage_Register,
         igMemoryImage_GetPublishedMetaObject,
         thunk_igPsx2Image_GetMetaObject,
-        igPsx2Image_className,
+        "igPsx2Image",
         0x5C, /* instance size */
         igPsx2Image_GetVTable,
         &igPsx2Image_InitFields_00153ef0[0],           /* Field adder. */
@@ -66,10 +66,10 @@ void igPsx2Image_Register(void) {
 }
 
 igMetaObject *FUN_00153ee0(void) {
-    return g_igMemoryImage_metaObject[0];
+    return g_igMemoryImage_metaObject;
 }
 
 void FUN_00153ef0(void) {
-    *(int *)((char *)(g_igPsx2Image_metaObject[0]) + 64) = (int)(&thunk_igImage_GetMetaObject);
+    *(int *)((char *)(g_igPsx2Image_metaObject) + 64) = (int)(&thunk_igImage_GetMetaObject);
 }
 

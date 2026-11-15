@@ -1,16 +1,18 @@
+igMetaObject *g_igBoxComponent_metaObject;
+
 igMetaObject *FUN_00452340(void) {
-    if (g_igBoxComponent_metaObject[0] == 0) {
-        g_igBoxComponent_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igBoxComponent_metaObject == 0) {
+        g_igBoxComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igBoxComponent_metaObject[0];
+    return g_igBoxComponent_metaObject;
 }
 
 igMetaObject *igBoxComponent_GetMetaObject(void)
 {
-    igMetaObject *g = g_igBoxComponent_metaObject[0];
+    igMetaObject *g = g_igBoxComponent_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igBoxComponent_RunStaticInit();
-    return g_igBoxComponent_metaObject[0];
+    return g_igBoxComponent_metaObject;
 }
 
 int igBoxComponent_GetVTable(void) {
@@ -38,11 +40,11 @@ void igBoxComponent_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igBoxComponent_metaObject,
+        &g_igBoxComponent_metaObject,
         igGuiComponent_Register,
         igGuiComponent_GetPublishedMetaObject,
         thunk_igBoxComponent_GetMetaObject,
-        igBoxComponent_className,
+        "igBoxComponent",
         0x24, /* instance size */
         igBoxComponent_GetVTable,
         0,
@@ -56,6 +58,6 @@ void thunk_igBoxComponent_GetMetaObject(void) {
 }
 
 igMetaObject *FUN_004524e0(void) {
-    return g_igGuiComponent_metaObject[0];
+    return g_igGuiComponent_metaObject;
 }
 

@@ -1,37 +1,90 @@
-int FUN_0036e880(void) {
-    if (DAT_0058a0c0[0] == 0) {
-        DAT_0058a0c0[0] = igMetaEnum_Create(&IG_PARTICLE_TIME_TYPE[0], &DAT_004c8360[0], &DAT_004c8370[0], 3);
+igMetaEnum *g_ParticleInfo_particleTimeTypeMetaEnum;
+static const char *g_ParticleInfo_particleTimeTypeNames[] = {
+    "IG_PARTICLE_TIME_NORMAL", "IG_PARTICLE_TIME_LOOP", "IG_PARTICLE_TIME_CONTINUOUS",
+};
+static int g_ParticleInfo_particleTimeTypeValues[] = {
+    0, 1, 2,
+};
+
+igMetaEnum *FUN_0036e880(void) {
+    if (g_ParticleInfo_particleTimeTypeMetaEnum == 0) {
+        g_ParticleInfo_particleTimeTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_TIME_TYPE", g_ParticleInfo_particleTimeTypeNames, g_ParticleInfo_particleTimeTypeValues, 3);
     }
-    return DAT_0058a0c0[0];
+    return g_ParticleInfo_particleTimeTypeMetaEnum;
 }
 
-int FUN_0036e8e0(void) {
-    if (DAT_0058a0c8[0] == 0) {
-        DAT_0058a0c8[0] = igMetaEnum_Create(&IG_PARTICLE_ALPHA_FUNCTION[0], &DAT_004c8380[0], &DAT_004c8388[0], 2);
+igMetaEnum *g_ParticleInfo_particleAlphaFunctionMetaEnum;
+static const char *g_ParticleInfo_particleAlphaFunctionNames[] = {
+    "IG_PARTICLE_ALPHA_BLEND", "IG_PARTICLE_ALPHA_ADDITIVE",
+};
+static int g_ParticleInfo_particleAlphaFunctionValues[] = {
+    0, 1,
+};
+
+igMetaEnum *FUN_0036e8e0(void) {
+    if (g_ParticleInfo_particleAlphaFunctionMetaEnum == 0) {
+        g_ParticleInfo_particleAlphaFunctionMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_FUNCTION", g_ParticleInfo_particleAlphaFunctionNames, g_ParticleInfo_particleAlphaFunctionValues, 2);
     }
-    return DAT_0058a0c8[0];
+    return g_ParticleInfo_particleAlphaFunctionMetaEnum;
 }
 
-int FUN_0036e940(void) {
-    if (DAT_0058a0d0[0] == 0) {
-        DAT_0058a0d0[0] = igMetaEnum_Create(&IG_PARTICLE_ALPHA_TYPE[0], &DAT_004c8390[0], &DAT_004c83a0[0], 3);
+igMetaEnum *g_ParticleInfo_particleAlphaTypeMetaEnum;
+static const char *g_ParticleInfo_particleAlphaTypeNames[] = {
+    "IG_PARTICLE_ALPHA_NONE", "IG_PARTICLE_ALPHA_1BIT", "IG_PARTICLE_ALPHA_FULL",
+};
+static int g_ParticleInfo_particleAlphaTypeValues[] = {
+    0, 1, 2,
+};
+
+igMetaEnum *FUN_0036e940(void) {
+    if (g_ParticleInfo_particleAlphaTypeMetaEnum == 0) {
+        g_ParticleInfo_particleAlphaTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_TYPE", g_ParticleInfo_particleAlphaTypeNames, g_ParticleInfo_particleAlphaTypeValues, 3);
     }
-    return DAT_0058a0d0[0];
+    return g_ParticleInfo_particleAlphaTypeMetaEnum;
 }
 
-int FUN_0036e9a0(void) {
-    if (DAT_0058a0d8[0] == 0) {
-        DAT_0058a0d8[0] = igMetaEnum_Create(&IG_PARTICLE_EMITTER_TYPE[0], &DAT_004c83b0[0], &DAT_004c83d0[0], 5);
+igMetaEnum *g_ParticleInfo_particleEmitterTypeMetaEnum;
+static const char *g_ParticleInfo_particleEmitterTypeNames[] = {
+    "IG_PARTICLE_EMITTER_RECTANGLE", "IG_PARTICLE_EMITTER_SPHERE", "IG_PARTICLE_EMITTER_XY_CYLINDER", "IG_PARTICLE_EMITTER_XZ_CYLINDER",
+    "IG_PARTICLE_EMITTER_YZ_CYLINDER",
+};
+static int g_ParticleInfo_particleEmitterTypeValues[] = {
+    0, 1, 2, 3, 4,
+};
+
+igMetaEnum *FUN_0036e9a0(void) {
+    if (g_ParticleInfo_particleEmitterTypeMetaEnum == 0) {
+        g_ParticleInfo_particleEmitterTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_EMITTER_TYPE", g_ParticleInfo_particleEmitterTypeNames, g_ParticleInfo_particleEmitterTypeValues, 5);
     }
-    return DAT_0058a0d8[0];
+    return g_ParticleInfo_particleEmitterTypeMetaEnum;
 }
+
+igMetaObject *g_ParticleInfo_metaObject;
+igMetaField *g_ParticleInfo_pointsMetaField;
+igMetaField *g_ParticleInfo_numControlsMetaField;
+igMetaField *g_ParticleInfo_lifetimeMetaField;
+igMetaField *g_ParticleInfo_countMetaField;
+igMetaField *g_ParticleInfo_textureMetaField;
+igMetaField *g_ParticleInfo_alphaTypeMetaField;
+igMetaField *g_ParticleInfo_alphaFunctionMetaField;
+igMetaField *g_ParticleInfo_sizeLockMetaField;
+igMetaField *g_ParticleInfo_sizeWorldMetaField;
+igMetaField *g_ParticleInfo_timeTypeMetaField;
+igMetaField *g_ParticleInfo_particleSceneMetaField;
+igMetaField *g_ParticleInfo_shapeMetaField;
+igMetaField *g_ParticleInfo_maximizeMetaField;
+igMetaField *g_ParticleInfo_xImageCountMetaField;
+igMetaField *g_ParticleInfo_yImageCountMetaField;
+igMetaField *g_ParticleInfo_resizeCurvesMetaField;
+igMetaField *g_ParticleInfo_startOffsetMetaField;
+igMetaField *g_ParticleInfo_geometryMetaField;
 
 igMetaObject *FUN_0036ea00(void) {
-    igMetaObject *g = g_ParticleInfo_metaObject[0];
+    igMetaObject *g = g_ParticleInfo_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_0036eaf0();
-    return g_ParticleInfo_metaObject[0];
+    return g_ParticleInfo_metaObject;
 }
 
 int ParticleInfo_GetVTable(void) {
@@ -60,15 +113,17 @@ void FUN_0036eaf0(void)
     igMetaObject_RunStaticInit(ParticleInfo_Register);
 }
 
+static igMetaObjectCallback g_ParticleInfo_callbackList[] = { FUN_0014e050, FUN_0019fc00, 0 };
+
 void *ParticleInfo_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_ParticleInfo_metaObject,
+        &g_ParticleInfo_metaObject,
         igSceneInfo_Register,
         igSceneInfo_GetPublishedMetaObject,
         ParticleInfo_GetMetaObject,
-        ParticleInfo_className,
+        "ParticleInfo",
         0x400, /* instance size */
         ParticleInfo_GetVTable,
         ParticleInfo_InitFields,
@@ -86,14 +141,100 @@ int FUN_0036ebb0(void) {
     return g_igSceneInfo_metaObject[0];
 }
 
+static FieldFactory g_ParticleInfo_ctorTable[] = {
+    igFloatArrayMetaField_Create,
+    igIntArrayMetaField_Create,
+    igFloatMetaField_Create,
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igBoolMetaField_Create,
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igEnumMetaField_Create,
+    igBoolMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+    igFloatMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_ParticleInfo_fieldTable[] = {
+    "_points",
+    "_numControls",
+    "_lifetime",
+    "_count",
+    "_texture",
+    "_alphaType",
+    "_alphaFunction",
+    "_sizeLock",
+    "_sizeWorld",
+    "_timeType",
+    "_particleScene",
+    "_shape",
+    "_maximize",
+    "_xImageCount",
+    "_yImageCount",
+    "_resizeCurves",
+    "_startOffset",
+    "_geometry",
+};
+static igMetaField **g_ParticleInfo_fieldHandles[] = {
+    &g_ParticleInfo_pointsMetaField,
+    &g_ParticleInfo_numControlsMetaField,
+    &g_ParticleInfo_lifetimeMetaField,
+    &g_ParticleInfo_countMetaField,
+    &g_ParticleInfo_textureMetaField,
+    &g_ParticleInfo_alphaTypeMetaField,
+    &g_ParticleInfo_alphaFunctionMetaField,
+    &g_ParticleInfo_sizeLockMetaField,
+    &g_ParticleInfo_sizeWorldMetaField,
+    &g_ParticleInfo_timeTypeMetaField,
+    &g_ParticleInfo_particleSceneMetaField,
+    &g_ParticleInfo_shapeMetaField,
+    &g_ParticleInfo_maximizeMetaField,
+    &g_ParticleInfo_xImageCountMetaField,
+    &g_ParticleInfo_yImageCountMetaField,
+    &g_ParticleInfo_resizeCurvesMetaField,
+    &g_ParticleInfo_startOffsetMetaField,
+    &g_ParticleInfo_geometryMetaField,
+};
+static int g_ParticleInfo_fieldOffsets[] = {
+    64,
+    832,
+    960,
+    964,
+    968,
+    972,
+    976,
+    980,
+    981,
+    984,
+    988,
+    992,
+    996,
+    1000,
+    1004,
+    1008,
+    1012,
+    1016,
+};
+
+static int g_ParticleInfo_alphaTypeDefault;
+static int g_ParticleInfo_alphaFunctionDefault;
+static int g_ParticleInfo_timeTypeDefault;
+static int g_ParticleInfo_shapeDefault;
+
 void ParticleInfo_InitFields(void) {
     int temp_s1;
     void *f;
     void *temp_s0;
 
-    temp_s0 = (void *)g_ParticleInfo_metaObject[0];
+    temp_s0 = (void *)g_ParticleInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_ParticleInfo_ctorTable[0], 0x12);
+    igMetaObject_CreateFields(temp_s0, g_ParticleInfo_ctorTable, 0x12);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1);
     ((igFloatArrayMetaField *)f)->_num = 0xC0;
     ((igFloatArrayMetaField *)f)->_resetMethod = 3;
@@ -105,22 +246,22 @@ void ParticleInfo_InitFields(void) {
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
     ((igObjectRefMetaField *)f)->_metaObject = FUN_0014dfb0();
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
-    igEnumMetaField_SetDefaultValue(f, &DAT_004c8538[0]);
+    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_alphaTypeDefault);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e940;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6);
-    igEnumMetaField_SetDefaultValue(f, &DAT_004c8540[0]);
+    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_alphaFunctionDefault);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e8e0;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
-    igEnumMetaField_SetDefaultValue(f, &DAT_004c8548[0]);
+    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_timeTypeDefault);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e880;
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
-    igEnumMetaField_SetDefaultValue(f, &DAT_004c8550[0]);
+    igEnumMetaField_SetDefaultValue(f, &g_ParticleInfo_shapeDefault);
     ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e9a0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE), 1);
     igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x10)), 0.0f);
     f = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x11);
     ((igObjectRefMetaField *)f)->_metaObject = FUN_0019fae0();
-    igMetaObject_NameFields(temp_s0, &g_ParticleInfo_fieldTable[0], &DAT_004c84a0[0], &DAT_004c84f0[0], temp_s1);
+    igMetaObject_NameFields(temp_s0, g_ParticleInfo_fieldTable, g_ParticleInfo_fieldHandles, g_ParticleInfo_fieldOffsets, temp_s1);
 }
 

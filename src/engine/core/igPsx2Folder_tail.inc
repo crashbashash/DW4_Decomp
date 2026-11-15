@@ -1,9 +1,11 @@
+igMetaObject *g_igPsx2Folder_metaObject;
+
 igMetaObject *igPsx2Folder_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2Folder_metaObject[0];
+    igMetaObject *g = g_igPsx2Folder_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPsx2Folder_EnsureRegistered();
-    return g_igPsx2Folder_metaObject[0];
+    return g_igPsx2Folder_metaObject;
 }
 
 int igPsx2Folder_GetVTable(void) {
@@ -18,7 +20,7 @@ int igPsx2Folder_GetVTable(void) {
     *(int *)ps = 0;
     folder._vtable = (int)&g_igFolder_vtable[0];
     folder._vtable = (int)&g_igPsx2Folder_vtable[0];
-    s0 = *(int *)((char *)&folder + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    s0 = *(int *)((char *)&folder + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     folder._vtable = (int)&g_igFolder_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;
@@ -43,11 +45,11 @@ void igPsx2Folder_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igPsx2Folder_metaObject,
+        &g_igPsx2Folder_metaObject,
         (igMetaObjectRegisterFunction)igFolder_Register,
         igFolder_GetPublishedMetaObject,
         igPsx2Folder_GetMetaObjectFunction,
-        igPsx2Folder_className,
+        "igPsx2Folder",
         0xC,
         igPsx2Folder_GetVTable,
         0,
@@ -57,6 +59,6 @@ void igPsx2Folder_Register(void) {
 }
 
 igMetaObject *igFolder_GetPublishedMetaObject(void) {
-    return g_igFolder_metaObject[0];
+    return g_igFolder_metaObject;
 }
 

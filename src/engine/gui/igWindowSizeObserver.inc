@@ -1,14 +1,16 @@
+igMetaObject *g_igWindowSizeObserver_metaObject;
+
 int FUN_0044f0b0(int arg0) {
     igWindowSizeObserver_RunStaticInit();
-    return igMetaObject_CreateInstance(*(int *)0x58C3C0, arg0);
+    return igMetaObject_CreateInstance((int)g_igWindowSizeObserver_metaObject, arg0);
 }
 
 igMetaObject *igWindowSizeObserver_GetMetaObject(void)
 {
-    igMetaObject *g = g_igWindowSizeObserver_metaObject[0];
+    igMetaObject *g = g_igWindowSizeObserver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igWindowSizeObserver_RunStaticInit();
-    return g_igWindowSizeObserver_metaObject[0];
+    return g_igWindowSizeObserver_metaObject;
 }
 
 int igWindowSizeObserver_GetVTable(void) {
@@ -27,11 +29,11 @@ void igWindowSizeObserver_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igWindowSizeObserver_metaObject,
+        &g_igWindowSizeObserver_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
         thunk_igWindowSizeObserver_GetMetaObject,
-        igWindowSizeObserver_className,
+        "igWindowSizeObserver",
         0xC, /* instance size */
         igWindowSizeObserver_GetVTable,
         0,

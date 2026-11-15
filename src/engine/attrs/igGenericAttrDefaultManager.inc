@@ -1,3 +1,5 @@
+igMetaObject *g_igGenericAttrDefaultManager_metaObject;
+
 void FUN_00137ab0(int arg0) {
     FUN_00137b80();
     igMetaObject_CreateInstance(*(int *)0x55F1C0, arg0);
@@ -5,10 +7,10 @@ void FUN_00137ab0(int arg0) {
 
 igMetaObject *igGenericAttrDefaultManager_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGenericAttrDefaultManager_metaObject[0];
+    igMetaObject *g = g_igGenericAttrDefaultManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00137b80();
-    return g_igGenericAttrDefaultManager_metaObject[0];
+    return g_igGenericAttrDefaultManager_metaObject;
 }
 
 int igGenericAttrDefaultManager_GetVTable(void) {
@@ -28,11 +30,11 @@ void igGenericAttrDefaultManager_Register(void) {
     AttrsLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGenericAttrDefaultManager_metaObject,
+        &g_igGenericAttrDefaultManager_metaObject,
         igAttrDefaultManager_Register,
         igAttrDefaultManager_GetPublishedMetaObject,
         thunk_igGenericAttrDefaultManager_GetMetaObject,
-        igGenericAttrDefaultManager_className,
+        "igGenericAttrDefaultManager",
         8, /* instance size */
         igGenericAttrDefaultManager_GetVTable,
         0,

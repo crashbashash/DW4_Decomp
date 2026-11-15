@@ -1,21 +1,25 @@
+igMetaObject *g_beNDMWMdlItem_metaObject;
+igMetaField *g_beNDMWMdlItem_viewerSIManagerMetaField;
+igMetaField *g_beNDMWMdlItem_lockRamListMetaField;
+
 void beNDMWMdlItem_CreateInstance(int arg0) {
     FUN_003c1270();
-    igMetaObject_CreateInstance(*(int *)0x58B4A8, arg0);
+    igMetaObject_CreateInstance(g_beNDMWMdlItem_metaObject, arg0);
 }
 
 igMetaObject *FUN_003c1160(void) {
-    if (g_beNDMWMdlItem_metaObject[0] == 0) {
-        g_beNDMWMdlItem_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_beNDMWMdlItem_metaObject == 0) {
+        g_beNDMWMdlItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_beNDMWMdlItem_metaObject[0];
+    return g_beNDMWMdlItem_metaObject;
 }
 
 igMetaObject *beNDMWMdlItem_GetReadyMetaObject(void) {
-    igMetaObject *g = g_beNDMWMdlItem_metaObject[0];
+    igMetaObject *g = g_beNDMWMdlItem_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
         FUN_003c1270();
-    return g_beNDMWMdlItem_metaObject[0];
+    return g_beNDMWMdlItem_metaObject;
 }
 
 int beNDMWMdlItem_GetVTable(void) {
@@ -38,15 +42,17 @@ void FUN_003c1270(void)
     igMetaObject_RunStaticInit(beNDMWMdlItem_Register);
 }
 
+static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { FUN_00459e40, igObjectList_EnsureRegistered, 0 };
+
 void *beNDMWMdlItem_Register(void) {
     NdmwLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beNDMWMdlItem_metaObject,
+        &g_beNDMWMdlItem_metaObject,
         beModelCtrl_Register,
         beModelCtrl_GetPublishedMetaObject,
         beNDMWMdlItem_GetMetaObject,
-        beNDMWMdlItem_className,
+        "beNDMWMdlItem",
         0x34, /* instance size */
         beNDMWMdlItem_GetVTable,
         beNDMWMdlItem_InitFields,
@@ -60,21 +66,38 @@ void beNDMWMdlItem_GetMetaObject(void)
     beNDMWMdlItem_GetReadyMetaObject();
 }
 
+static FieldFactory g_beNDMWMdlItem_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beNDMWMdlItem_fieldTable[] = {
+    "_viewerSIManager",
+    "_lockRamList",
+};
+static igMetaField **g_beNDMWMdlItem_fieldHandles[] = {
+    &g_beNDMWMdlItem_viewerSIManagerMetaField,
+    &g_beNDMWMdlItem_lockRamListMetaField,
+};
+static int g_beNDMWMdlItem_fieldOffsets[] = {
+    44,
+    48,
+};
+
 void beNDMWMdlItem_InitFields(void) {
     int temp_s2;
     void *temp_s1;
     void *temp_s1_2;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_beNDMWMdlItem_metaObject[0];
+    temp_s0 = g_beNDMWMdlItem_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beNDMWMdlItem_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_beNDMWMdlItem_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00459380();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beNDMWMdlItem_fieldTable[0], &DAT_004cab68[0], &DAT_004cab70[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beNDMWMdlItem_fieldTable, g_beNDMWMdlItem_fieldHandles, g_beNDMWMdlItem_fieldOffsets, temp_s2);
 }
 

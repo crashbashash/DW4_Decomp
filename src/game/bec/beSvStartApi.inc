@@ -1,3 +1,6 @@
+igMetaObject *g_beSvStartApi_metaObject;
+int g_beSvStartApi_orderTypeStorage;
+
 void FUN_00348930(int arg0) {
     FUN_00348b00();
     igMetaObject_CreateInstance(*(int *)0x5881F0, arg0);
@@ -5,11 +8,11 @@ void FUN_00348930(int arg0) {
 
 igMetaObject *FUN_00348970(void)
 {
-    igMetaObject *g = g_beSvStartApi_metaObject[0];
+    igMetaObject *g = g_beSvStartApi_metaObject;
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
         FUN_00348b00();
-    return g_beSvStartApi_metaObject[0];
+    return g_beSvStartApi_metaObject;
 }
 
 int beSvStartApi_GetVTable(void) {
@@ -68,11 +71,11 @@ void *beSvStartApi_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beSvStartApi_metaObject,
+        &g_beSvStartApi_metaObject,
         beSaveApi_Register,
         beSaveApi_GetPublishedMetaObject,
         beSvStartApi_GetMetaObject,
-        beSvStartApi_className,
+        "beSvStartApi",
         0x40, /* instance size */
         beSvStartApi_GetVTable,
         beSvStartApi_InitFields,
@@ -92,12 +95,12 @@ void beSvStartApi_InitFields(void) {
     void **temp_v0;
     T_348bb0 *temp_v0_2;
 
-    temp_s1 = (void *)(((void * *)g_beSvStartApi_metaObject)[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_orderType[0]));
+    temp_s1 = (void *)(((void * *)&g_beSvStartApi_metaObject)[0]);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_orderType"));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (T_348bb0 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     igIntMetaField_SetDefault(temp_v0_2, 0xA);
-    temp_v0_2->f28 = (int)(&DAT_005881f8[0]);
+    temp_v0_2->f28 = (int)(&g_beSvStartApi_orderTypeStorage);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_v0_2);
     temp_v0_2->references = temp_v0_2->references - 1;
     if (((unsigned long long)(long long)temp_v0_2->references & 0x7fffffULL) == 0) {

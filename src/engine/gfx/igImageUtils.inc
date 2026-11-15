@@ -1,9 +1,11 @@
+igMetaObject *g_igImageUtils_metaObject;
+
 igMetaObject *igImageUtils_GetMetaObject(void)
 {
-    igMetaObject *g = g_igImageUtils_metaObject[0];
+    igMetaObject *g = g_igImageUtils_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0014dcc0();
-    return g_igImageUtils_metaObject[0];
+    return g_igImageUtils_metaObject;
 }
 
 void FUN_0014dcc0(void)
@@ -15,11 +17,11 @@ void igImageUtils_Register(void) {
     FUN_00149bc0();
     igMetaObject_RegisterClass(
         1, /* abstract */
-        g_igImageUtils_metaObject,
+        &g_igImageUtils_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igImageUtils_GetMetaObject,
-        igImageUtils_className,
+        "igImageUtils",
         8, /* instance size */
         0,
         0,

@@ -149,8 +149,8 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     properties = ((PropertyRoot *)g_objectSystem[0])->properties;
     showFrameRate = self->showFrameRate;
     commandLineFrame = self->commandLineFrame;
-    thunk_igRegistry_GetValueBool(properties, 4, text_showFrameRate, &showFrameRate, showFrameRate, 1);
-    thunk_igRegistry_GetValueBool(properties, 4, text_commandLineFrameRate, &commandLineFrame, commandLineFrame, 1);
+    thunk_igRegistry_GetValueBool(properties, 4, "showFrameRate", &showFrameRate, showFrameRate, 1);
+    thunk_igRegistry_GetValueBool(properties, 4, "commandLineFrameRate", &commandLineFrame, commandLineFrame, 1);
     self->showFrameRate = showFrameRate;
     self->commandLineFrame = commandLineFrame;
 }
@@ -394,7 +394,7 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_249(1000.0f);
     }
     if (flags & 0x20) {
-        thunk_igRegistry_GetValueInt(settings, 4, text_shadingMode, &shadingMode, 1, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, "shadingMode", &shadingMode, 1, 1);
         hot = -1;
         ctx->vfunc_67(&hot);
         colour.x = 0.0f; colour.y = 0.0f; colour.z = 0.0f; colour.w = 1.0f;
@@ -407,9 +407,9 @@ void FUN_00166400(igVisualContext_166400 *ctx, int flags)
         ctx->vfunc_225(shadingMode);
     }
     if (flags & 0x40) {
-        thunk_igRegistry_GetValueBool(settings, 4, text_cullEnable, &cullEnable, 0, 1);
-        thunk_igRegistry_GetValueInt(settings, 4, text_cullMode, &cullMode, 0, 1);
-        thunk_igRegistry_GetValueInt(settings, 4, text_fillMode, &fillMode, 0, 1);
+        thunk_igRegistry_GetValueBool(settings, 4, "cullEnable", &cullEnable, 0, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, "cullMode", &cullMode, 0, 1);
+        thunk_igRegistry_GetValueInt(settings, 4, "fillMode", &fillMode, 0, 1);
         ctx->vfunc_215(0);
         ctx->vfunc_217(6);
         ctx->vfunc_219(0.0f);
@@ -452,7 +452,7 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
         DAT_005607c0[0] = (1000.0f * DAT_005607a8[0]) / temp_f4;
         temp_s2 = fptodp(1.0f / DAT_00560838[0]);
         temp_s1 = fptodp(1.0f / DAT_0048a470[0]);
-        sprintf((char *)g_gsEventCount, &text_2_0f_2_0f_3_0f_fps_f[0], temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
+        sprintf((char *)g_gsEventCount, "[%2.0f:%2.0f] %3.0f fps/f", temp_s2, temp_s1, fptodp(DAT_005607b8[0]));
         DAT_005607a0[0] = 0.0f;
         DAT_005607a8[0] = 0.0f;
         DAT_005607b0[0] = 0;
@@ -461,7 +461,7 @@ void FUN_00166a70(void *arg0_, float fparg0, float fparg1) {
     }
     if (arg0->f61 != 0) {
         if (DAT_005607b0[0] == 0) {
-            igReport_Printf(&DAT_004df130[0], (char *)g_gsEventCount);
+            igReport_Printf("FRAME RATE:       %s\n", (char *)g_gsEventCount);
             igReport_Flush();
         }
     } else {
@@ -497,7 +497,7 @@ int FUN_00166d40(void) {
     r = 0;
     if (((L_166d40 *)DAT_00560758) != 0) {
         for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (igObject_IsKindOf(((L_166d40 *)DAT_00560758)->items[i], g_igVisualContext_metaObject[0]) != 0) {
+            if (igObject_IsKindOf(((L_166d40 *)DAT_00560758)->items[i], g_igVisualContext_metaObject) != 0) {
                 r = ((L_166d40 *)DAT_00560758)->items[i];
                 break;
             }
@@ -516,7 +516,7 @@ void FUN_00166de0(int value)
     igSmartPointer<igIntList> list(igContextList_Create((void *)(FUN_00165ce0((int *)value))));
     bool found = false;
 
-    igRegistry_GetValueBool(registry, 4, text_ignoreDriverDatabase, &found, 0, 1);
+    igRegistry_GetValueBool(registry, 4, "ignoreDriverDatabase", &found, 0, 1);
     if (found) return;
     igIntList *l = list;
     count = l->_count;
@@ -528,7 +528,7 @@ void FUN_00166de0(int value)
     ((int *)l->_data)[count] = value;
     igDriverDatabase_GatherProperties(builder, list);
     if (igRegistry_IsLoadingEnabled() != 0) {
-        if (igDriverDatabase_Load(builder, (const char *)DAT_004dc870, (const char *)DAT_004dc870) != 0) igDriverDatabase_ApplyToRegistry(builder, registry, 4, 0);
+        if (igDriverDatabase_Load(builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry(builder, registry, 4, 0);
     }
     FUN_002daab0(builder, registry, 4, 0);
 }

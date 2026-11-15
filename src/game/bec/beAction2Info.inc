@@ -1,6 +1,11 @@
+igMetaObject *g_beAction2Info_metaObject;
+igMetaField *g_beAction2Info_switchMetaField;
+igMetaField *g_beAction2Info_animationDatabaseMetaField;
+igMetaField *g_beAction2Info_dataListMetaField;
+
 igMetaObject *FUN_0036cb00(void) {
-    if (g_beAction2Info_metaObject[0] == 0 || !isValid(g_beAction2Info_metaObject[0])) FUN_0036cc80();
-    return g_beAction2Info_metaObject[0];
+    if (g_beAction2Info_metaObject == 0 || !isValid(g_beAction2Info_metaObject)) FUN_0036cc80();
+    return g_beAction2Info_metaObject;
 }
 
 int beAction2Info_GetVTable(void) {
@@ -46,15 +51,17 @@ void FUN_0036cc80(void)
     igMetaObject_RunStaticInit(beAction2Info_Register);
 }
 
+static igMetaObjectCallback g_beAction2Info_callbackList[] = { FUN_00196ad0, FUN_001a7b00, FUN_0036d940, 0 };
+
 void *beAction2Info_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2Info_metaObject,
+        &g_beAction2Info_metaObject,
         beBaseInfo_Register,
         beBaseInfo_GetPublishedMetaObject,
         beAction2Info_GetMetaObject,
-        beAction2Info_className,
+        "beAction2Info",
         0x28, /* instance size */
         beAction2Info_GetVTable,
         beAction2Info_InitFields,
@@ -68,6 +75,27 @@ void beAction2Info_GetMetaObject(void)
     FUN_0036cb00();
 }
 
+static FieldFactory g_beAction2Info_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+};
+static const char *g_beAction2Info_fieldTable[] = {
+    "_switch",
+    "_animationDatabase",
+    "_dataList",
+};
+static igMetaField **g_beAction2Info_fieldHandles[] = {
+    &g_beAction2Info_switchMetaField,
+    &g_beAction2Info_animationDatabaseMetaField,
+    &g_beAction2Info_dataListMetaField,
+};
+static int g_beAction2Info_fieldOffsets[] = {
+    28,
+    32,
+    36,
+};
+
 void beAction2Info_InitFields(void) {
     int temp_s2;
     void *temp_s1;
@@ -75,9 +103,9 @@ void beAction2Info_InitFields(void) {
     void *temp_s1_3;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2Info_metaObject[0];
+    temp_s0 = (void *)g_beAction2Info_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2Info_ctorTable[0], 3);
+    igMetaObject_CreateFields(temp_s0, g_beAction2Info_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00196930();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
@@ -85,6 +113,6 @@ void beAction2Info_InitFields(void) {
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0036d860();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_beAction2Info_fieldTable[0], &DAT_004c80e0[0], &DAT_004c80f0[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_beAction2Info_fieldTable, g_beAction2Info_fieldHandles, g_beAction2Info_fieldOffsets, temp_s2);
 }
 

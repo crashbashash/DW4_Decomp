@@ -1,16 +1,27 @@
+igMetaObject *g_igNormalsRenderer_metaObject;
+igMetaField *g_igNormalsRenderer_parametersMetaField;
+igMetaField *g_igNormalsRenderer_attrListMetaField;
+igMetaField *g_igNormalsRenderer_defaultAttrListMetaField;
+igMetaField *g_igNormalsRenderer_modelViewAttrMetaField;
+igMetaField *g_igNormalsRenderer_colorAttrMetaField;
+igMetaField *g_igNormalsRenderer_normalsMetaField;
+igMetaField *g_igNormalsRenderer_invalidStoredNormalsMetaField;
+igMetaField *g_igNormalsRenderer_pathMetaField;
+igMetaField *g_igNormalsRenderer_drawMetaField;
+
 igMetaObject *FUN_0045d830(void) {
-    if (g_igNormalsRenderer_metaObject[0] == 0) {
-        g_igNormalsRenderer_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igNormalsRenderer_metaObject == 0) {
+        g_igNormalsRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igNormalsRenderer_metaObject[0];
+    return g_igNormalsRenderer_metaObject;
 }
 
 void *igNormalsRenderer_GetMetaObject(void) {
-    igMetaObject *g = g_igNormalsRenderer_metaObject[0];
+    igMetaObject *g = g_igNormalsRenderer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0045d9f0();
     }
-    return g_igNormalsRenderer_metaObject[0];
+    return g_igNormalsRenderer_metaObject;
 }
 
 int igNormalsRenderer_GetVTable(void) {
@@ -44,15 +55,17 @@ void FUN_0045d9f0(void)
     igMetaObject_RunStaticInit(igNormalsRenderer_Register);
 }
 
+static igMetaObjectCallback g_igNormalsRenderer_callbackList[] = { FUN_0045b590, FUN_0013afe0, FUN_001357e0, FUN_00139000, FUN_0013a5b0, FUN_0019f7a0, 0 };
+
 void igNormalsRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igNormalsRenderer_metaObject,
+        &g_igNormalsRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
         thunk_igNormalsRenderer_GetMetaObject,
-        igNormalsRenderer_className,
+        "igNormalsRenderer",
         0x30, /* instance size */
         igNormalsRenderer_GetVTable,
         &igNormalsRenderer_InitFields,
@@ -65,6 +78,51 @@ void thunk_igNormalsRenderer_GetMetaObject(void) {
     igNormalsRenderer_GetMetaObject();
 }
 
+static FieldFactory g_igNormalsRenderer_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igNormalsRenderer_fieldTable[] = {
+    "_parameters",
+    "_attrList",
+    "_defaultAttrList",
+    "_modelViewAttr",
+    "_colorAttr",
+    "_normals",
+    "_invalidStoredNormals",
+    "_path",
+    "_draw",
+};
+static igMetaField **g_igNormalsRenderer_fieldHandles[] = {
+    &g_igNormalsRenderer_parametersMetaField,
+    &g_igNormalsRenderer_attrListMetaField,
+    &g_igNormalsRenderer_defaultAttrListMetaField,
+    &g_igNormalsRenderer_modelViewAttrMetaField,
+    &g_igNormalsRenderer_colorAttrMetaField,
+    &g_igNormalsRenderer_normalsMetaField,
+    &g_igNormalsRenderer_invalidStoredNormalsMetaField,
+    &g_igNormalsRenderer_pathMetaField,
+    &g_igNormalsRenderer_drawMetaField,
+};
+static int g_igNormalsRenderer_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    44,
+};
+
 void igNormalsRenderer_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -76,9 +134,9 @@ void igNormalsRenderer_InitFields(void) {
     void *temp_s2_7;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igNormalsRenderer_metaObject[0];
+    temp_s1 = g_igNormalsRenderer_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igNormalsRenderer_ctorTable[0], 9);
+    igMetaObject_CreateFields(temp_s1, g_igNormalsRenderer_ctorTable, 9);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0045b420();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
@@ -98,6 +156,6 @@ void igNormalsRenderer_InitFields(void) {
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_0019f670();
-    igMetaObject_NameFields(temp_s1, &g_igNormalsRenderer_fieldTable[0], &DAT_004d1870[0], &DAT_004d18a0[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igNormalsRenderer_fieldTable, g_igNormalsRenderer_fieldHandles, g_igNormalsRenderer_fieldOffsets, temp_s0);
 }
 

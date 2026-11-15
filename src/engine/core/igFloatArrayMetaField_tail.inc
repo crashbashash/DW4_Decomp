@@ -16,7 +16,7 @@ int igFloatMetaField_ValueFromString(int self, int value, int text) {
     int consumed;
 
     consumed = 0;
-    sscanf(text, &text_f_n[0], value, &consumed);
+    sscanf(text, "%f%n", value, &consumed);
     return consumed;
 }
 
@@ -25,18 +25,18 @@ void igFloatMetaField_ValueToString(int *result, int self, float *value) {
     int pool;
     int interned;
 
-    sprintf(text, &percent_f[0], fptodp(*value));
+    sprintf(text, "%f", fptodp(*value));
     if (text == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)text);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
     }
     *result = interned;
 }

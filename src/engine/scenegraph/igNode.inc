@@ -1,16 +1,22 @@
+igMetaObject *g_igNode_metaObject;
+igMetaField *g_igNode_boundMetaField;
+igMetaField *g_igNode_parentListMetaField;
+igMetaField *g_igNode_flagsMetaField;
+igMetaField *g_igNode_handleMetaField;
+
 igMetaObject *FUN_0019cd50(void) {
-    if (g_igNode_metaObject[0] == 0) {
-        g_igNode_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igNode_metaObject == 0) {
+        g_igNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igNode_metaObject[0];
+    return g_igNode_metaObject;
 }
 
 igMetaObject *igNode_GetMetaObject(void)
 {
-    igMetaObject *g = g_igNode_metaObject[0];
+    igMetaObject *g = g_igNode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019cf10();
-    return g_igNode_metaObject[0];
+    return g_igNode_metaObject;
 }
 
 int igNode_GetVTable(void) {
@@ -71,15 +77,17 @@ void FUN_0019cf10(void)
     igMetaObject_RunStaticInit(igNode_Register);
 }
 
+static igMetaObjectCallback g_igNode_callbackList[] = { FUN_00186b20, FUN_0019c9a0, 0 };
+
 void igNode_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igNode_metaObject),
+        &g_igNode_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         thunk_igNode_GetMetaObject,
-        igNode_className,
+        "igNode",
         0x1C, /* instance size */
         igNode_GetVTable,
         &igNode_InitFields,
@@ -92,6 +100,31 @@ void thunk_igNode_GetMetaObject(void) {
     igNode_GetMetaObject();
 }
 
+static FieldFactory g_igNode_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igNode_fieldTable[] = {
+    "_bound",
+    "_parentList",
+    "_flags",
+    "_handle",
+};
+static igMetaField **g_igNode_fieldHandles[] = {
+    &g_igNode_boundMetaField,
+    &g_igNode_parentListMetaField,
+    &g_igNode_flagsMetaField,
+    &g_igNode_handleMetaField,
+};
+static int g_igNode_fieldOffsets[] = {
+    12,
+    16,
+    20,
+    24,
+};
+
 void igNode_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -99,9 +132,9 @@ void igNode_InitFields(void) {
     void *temp_v0;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igNode_metaObject[0];
+    temp_s1 = (void *)g_igNode_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igNode_ctorTable[0], 4);
+    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igNode_ctorTable, 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00186a80();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1)));
@@ -115,7 +148,7 @@ void igNode_InitFields(void) {
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
     igIntMetaField_SetDefault(temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s1, &g_igNode_fieldTable[0], &DAT_0048bcb0[0], &DAT_0048bcc0[0], temp_s0);
+    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igNode_fieldTable, g_igNode_fieldHandles, g_igNode_fieldOffsets, temp_s0);
 }
 
 void **FUN_0019d0a0(void **arg0, long long arg1) {
@@ -158,8 +191,12 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
     return arg0;
 }
 
+igMetaObject *g_igGeometry_metaObject;
+igMetaField *g_igGeometry_triggerMetaField;
+igMetaField *g_igGeometry_renderListMetaField;
+
 igMetaObject *FUN_0019d1e0(void) {
-    return g_igGeometry_metaObject[0];
+    return g_igGeometry_metaObject;
 }
 
 int *FUN_0019d1f0(int *p)
@@ -186,10 +223,12 @@ void **FUN_0019d200(void **arg0, int arg1) {
     return arg0;
 }
 
+igMetaObject *g_igModelViewMatrixBoneSelectList_metaObject;
+
 igMetaObject *FUN_0019d280(void) {
-    if (g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] == 0) {
-        g_igModelViewMatrixBoneSelectList_metaObject_00561880[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igModelViewMatrixBoneSelectList_metaObject == 0) {
+        g_igModelViewMatrixBoneSelectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igModelViewMatrixBoneSelectList_metaObject_00561880[0];
+    return g_igModelViewMatrixBoneSelectList_metaObject;
 }
 

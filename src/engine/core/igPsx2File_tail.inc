@@ -1,14 +1,24 @@
+igMetaObject *g_igPsx2File_metaObject;
+igMetaField *g_igPsx2File_fBufMetaField;
+igMetaField *g_igPsx2File_bufSizeMetaField;
+igMetaField *g_igPsx2File_bufPosMetaField;
+igMetaField *g_igPsx2File_fileSizeMetaField;
+igMetaField *g_igPsx2File_isBinaryMetaField;
+igMetaField *g_igPsx2File_isOpenMetaField;
+igMetaField *g_igPsx2File_stringFileMetaField;
+igMetaField *g_igPsx2File_prefixMetaField;
+
 int igPsx2File_Create(int allocator) {
     igPsx2File_EnsureRegistered();
-    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586D70), (igMemoryPoolView *)allocator);
+    return igMetaObject_CreateInstance(g_igPsx2File_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igPsx2File_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2File_metaObject[0];
+    igMetaObject *g = g_igPsx2File_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igPsx2File_EnsureRegistered();
-    return g_igPsx2File_metaObject[0];
+    return g_igPsx2File_metaObject;
 }
 
 int igPsx2File_GetVTable(void) {
@@ -21,7 +31,7 @@ int igPsx2File_GetVTable(void) {
     f._completeFilename = 0;
     f._vtable = (int)&g_igPsx2File_vtable[0];
     f._prefix = 0;
-    vtable = *(int *)((char *)&f + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&f + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     f._vtable = (int)&g_igPsx2File_vtable[0];
     igStringRef_Destruct(&f._prefix, -1);
     igFile_Destroy((igFile *)&f, (short)0);
@@ -37,11 +47,11 @@ void igPsx2File_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igPsx2File_metaObject,
+        &g_igPsx2File_metaObject,
         (igMetaObjectRegisterFunction)igFile_Register,
         igFile_GetPublishedMetaObject,
         igPsx2File_GetMetaObjectFunction,
-        igPsx2File_className,
+        "igPsx2File",
         0x4C,
         igPsx2File_GetVTable,
         igPsx2File_InitFields,
@@ -50,21 +60,62 @@ void igPsx2File_Register(void) {
     );
 }
 
+static FieldFactory g_igPsx2File_ctorTable[] = {
+    (FieldFactory)igMemoryRefMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igRawRefMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+};
+static const char *g_igPsx2File_fieldTable[] = {
+    "_fBuf",
+    "_bufSize",
+    "_bufPos",
+    "_fileSize",
+    "_isBinary",
+    "_isOpen",
+    "_stringFile",
+    "_prefix",
+};
+static igMetaField **g_igPsx2File_fieldDescriptors[] = {
+    &g_igPsx2File_fBufMetaField,
+    &g_igPsx2File_bufSizeMetaField,
+    &g_igPsx2File_bufPosMetaField,
+    &g_igPsx2File_fileSizeMetaField,
+    &g_igPsx2File_isBinaryMetaField,
+    &g_igPsx2File_isOpenMetaField,
+    &g_igPsx2File_stringFileMetaField,
+    &g_igPsx2File_prefixMetaField,
+};
+static int g_igPsx2File_fieldOffsets[] = {
+    44,
+    48,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+};
+
 void igPsx2File_InitFields(void) {
     void *prefixField;
     int base;
     void *bufferField;
     void *meta;
 
-    meta = (void *)(g_igPsx2File_metaObject[0]);
+    meta = (void *)(g_igPsx2File_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igPsx2File_ctorTable[0], 8);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2File_ctorTable, 8);
     bufferField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igMemoryRefMetaField *)bufferField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     prefixField = ((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igMetaField *)prefixField)->_resetMethod = 3;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igPsx2File_fieldTable[0], (igMetaField ***)&g_igPsx2File_fieldDescriptors[0], &g_igPsx2File_fieldOffsets[0], base);
-    ((igMetaObject *)g_igPsx2File_metaObject[0])->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2File_fieldTable, g_igPsx2File_fieldDescriptors, g_igPsx2File_fieldOffsets, base);
+    ((igMetaObject *)g_igPsx2File_metaObject)->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
 }
 
 void igPsx2File_StaticInitCallback(void) {

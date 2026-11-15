@@ -1,9 +1,11 @@
+igMetaObject *g_beLayerInfoRam_metaObject;
+
 void *FUN_0035c280(void) {
-    igMetaObject *g = g_beLayerInfoRam_metaObject[0];
+    igMetaObject *g = g_beLayerInfoRam_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0035c370();
     }
-    return g_beLayerInfoRam_metaObject[0];
+    return g_beLayerInfoRam_metaObject;
 }
 
 int beLayerInfoRam_GetVTable(void) {
@@ -39,11 +41,11 @@ void *beLayerInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beLayerInfoRam_metaObject,
+        &g_beLayerInfoRam_metaObject,
         beBaseInfoRam_Register,
         beBaseInfoRam_GetPublishedMetaObject,
         beLayerInfoRam_GetMetaObject,
-        beLayerInfoRam_className,
+        "beLayerInfoRam",
         0x2c, /* instance size */
         beLayerInfoRam_GetVTable,
         0,

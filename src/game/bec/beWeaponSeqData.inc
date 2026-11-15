@@ -1,9 +1,12 @@
+igMetaObject *g_beWeaponSeqData_metaObject;
+igMetaField *g_beWeaponSeqData_labelMetaField;
+
 void *FUN_0033f170(void) {
-    igMetaObject *g = g_beWeaponSeqData_metaObject[0];
+    igMetaObject *g = g_beWeaponSeqData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
         FUN_0033f290();
     }
-    return g_beWeaponSeqData_metaObject[0];
+    return g_beWeaponSeqData_metaObject;
 }
 
 int beWeaponSeqData_GetVTable(void) {
@@ -31,11 +34,11 @@ void *beWeaponSeqData_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beWeaponSeqData_metaObject,
+        &g_beWeaponSeqData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beWeaponSeqData_GetMetaObject,
-        beWeaponSeqData_className,
+        "beWeaponSeqData",
         0x10, /* instance size */
         beWeaponSeqData_GetVTable,
         beWeaponSeqData_InitFields,
@@ -49,20 +52,41 @@ void beWeaponSeqData_GetMetaObject(void)
     FUN_0033f170();
 }
 
+static FieldFactory g_beWeaponSeqData_ctorTable[] = {
+    igStringMetaField_Create,
+};
+static const char *g_beWeaponSeqData_fieldTable[] = {
+    "_label",
+};
+static igMetaField **g_beWeaponSeqData_fieldHandles[] = {
+    &g_beWeaponSeqData_labelMetaField,
+};
+static int g_beWeaponSeqData_fieldOffsets[] = {
+    12,
+};
+
 void beWeaponSeqData_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beWeaponSeqData_metaObject[0];
+    temp_s0 = (void *)g_beWeaponSeqData_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beWeaponSeqData_ctorTable[0], 1);
-    igMetaObject_NameFields(temp_s0, &g_beWeaponSeqData_fieldTable[0], &DAT_004c2fe8[0], &DAT_004c2ff0[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beWeaponSeqData_ctorTable, 1);
+    igMetaObject_NameFields(temp_s0, g_beWeaponSeqData_fieldTable, g_beWeaponSeqData_fieldHandles, g_beWeaponSeqData_fieldOffsets, temp_s1);
 }
 
-int FUN_0033f3b0(void) {
-    if (DAT_00587a60[0] == 0) {
-        DAT_00587a60[0] = igMetaEnum_Create(&text_MsgAction[0], &DAT_004c2ff8[0], &DAT_004c3008[0], 3);
+igMetaEnum *g_beWeaponSeqData_msgActionMetaEnum;
+static const char *g_beWeaponSeqData_msgActionNames[] = {
+    "GENERATE", "REMOVE", "GETINFONAME",
+};
+static int g_beWeaponSeqData_msgActionValues[] = {
+    0, 1, 2,
+};
+
+igMetaEnum *FUN_0033f3b0(void) {
+    if (g_beWeaponSeqData_msgActionMetaEnum == 0) {
+        g_beWeaponSeqData_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beWeaponSeqData_msgActionNames, g_beWeaponSeqData_msgActionValues, 3);
     }
-    return DAT_00587a60[0];
+    return g_beWeaponSeqData_msgActionMetaEnum;
 }
 

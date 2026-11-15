@@ -1,14 +1,16 @@
+igMetaObject *g_igErrorHandler_metaObject;
+
 int igErrorHandler_Create(int allocator) {
     igErrorHandler_EnsureRegistered();
-    return igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586590), (igMemoryPoolView *)allocator);
+    return igMetaObject_CreateInstance(g_igErrorHandler_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igErrorHandler_GetMetaObject(void)
 {
-    igMetaObject *g = g_igErrorHandler_metaObject[0];
+    igMetaObject *g = g_igErrorHandler_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igErrorHandler_EnsureRegistered();
-    return g_igErrorHandler_metaObject[0];
+    return g_igErrorHandler_metaObject;
 }
 
 int igErrorHandler_GetVTable(void) {
@@ -16,7 +18,7 @@ int igErrorHandler_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&handler);
     handler._vtable = (int)&g_igErrorHandler_vtable[0];
-    return *(int *)((char *)&handler + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&handler + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igErrorHandler_EnsureRegistered(void)
@@ -28,11 +30,11 @@ void igErrorHandler_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
         0,
-        g_igErrorHandler_metaObject,
+        &g_igErrorHandler_metaObject,
         (igMetaObjectRegisterFunction)igObject_Register,
         (igMetaObjectGetFunction)igObject_GetMetaObject_ParentAccessor,
         igErrorHandler_GetMetaObjectFunction,
-        igErrorHandler_className,
+        "igErrorHandler",
         8,
         igErrorHandler_GetVTable,
         igErrorHandler_RegisterExitCallback,

@@ -1,14 +1,16 @@
+igMetaObject *g_igPsx2AudioSourceList_metaObject;
+
 void *FUN_001435c0(int arg0) {
     FUN_00143690();
-    return (void *)igMetaObject_CreateInstance(*(int *)0x55F5A8, arg0);
+    return (void *)igMetaObject_CreateInstance((int)g_igPsx2AudioSourceList_metaObject, arg0);
 }
 
 igMetaObject *igPsx2AudioSourceList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igPsx2AudioSourceList_metaObject[0];
+    igMetaObject *g = g_igPsx2AudioSourceList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00143690();
-    return g_igPsx2AudioSourceList_metaObject[0];
+    return g_igPsx2AudioSourceList_metaObject;
 }
 
 int igPsx2AudioSourceList_GetVTable(void) {
@@ -28,11 +30,11 @@ void igPsx2AudioSourceList_Register(void) {
     AudioLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPsx2AudioSourceList_metaObject,
+        &g_igPsx2AudioSourceList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
         thunk_igPsx2AudioSourceList_GetMetaObject,
-        igPsx2AudioSourceList_className,
+        "igPsx2AudioSourceList",
         0x14, /* instance size */
         igPsx2AudioSourceList_GetVTable,
         0,

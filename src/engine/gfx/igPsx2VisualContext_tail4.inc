@@ -73,7 +73,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_75(S0_1706d0 *arg0, int arg1) {
     if (arg0->f1340 == (arg1 & 0xFF)) {
         DAT_00560848[0] += 1;
     }
-    if (GPR_00554b44 != 0) {
+    if (g_igPsx2DisableExt_ext1Enabled != 0) {
         arg1 = 0;
     }
     arg0->f1340 = arg1;
@@ -1052,7 +1052,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_216(void *a0, int arg1) {
         FUN_0017c880((igPsx2VisualContext *)a0, ((VC596 *)a0)->vX(0), 1);
     }
     if (arg1 & 0x40) {
-        o = (VC104 *)((VC104 *)a0)->vX(&igDecalExt_className[0]);
+        o = (VC104 *)((VC104 *)a0)->vX("igDecalExt");
         if (o != 0) {
             ((VC120 *)o)->vX(0);
         }
@@ -1108,7 +1108,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_211(S_174370 *arg0, int arg1) {
     int var_a1;
 
     var_a1 = arg1;
-    if (GPR_00554b4c != 0) {
+    if (g_igPsx2DisableExt_ext6Enabled != 0) {
         var_a1 = 0;
     }
     if (arg0->f == (var_a1 & 0xFF)) {
@@ -1122,7 +1122,7 @@ unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_212(void *arg0) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_152(struct S_1743c0 *arg0, int arg1) {
-    if (GPR_00554b48 != 0) {
+    if (g_igPsx2DisableExt_ext2Enabled != 0) {
         arg1 = 0;
     }
     if (arg0->f1032 == (arg1 & 0xFF)) {
@@ -1246,7 +1246,7 @@ void FUN_00174640(int arg0, int arg1) {
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigned char enable)
 {
-    if (GPR_00554b50 != 0)
+    if (g_igPsx2DisableExt_ext7Enabled != 0)
         enable = 0;
     if (self->_alphaEnable == enable)
         DAT_0056098c += 1;
@@ -1291,7 +1291,7 @@ void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)
 
 void FUN_00174850(struct S174 *arg0, int arg1) {
     int temp_v1;
-    if (GPR_00554b64 != 0) {
+    if (g_igPsx2DisableExt_ext11Enabled != 0) {
         arg1 = 0;
     }
     temp_v1 = arg1 & 0xFF;
@@ -1312,7 +1312,7 @@ unsigned char FUN_001748c0(int *p)
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_223(O_1748d0 *o, unsigned char a) {
-    if (GPR_00554b54 != 0) a = 0;
+    if (g_igPsx2DisableExt_ext8Enabled != 0) a = 0;
     if (o->v == a) DAT_005608b8[0] += 1;
     o->v = a;
     if (a == 1) p2EnableCapability(6);
@@ -1364,7 +1364,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_228(void *arg0) {
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_229(struct S_174a70 *arg0, int arg1) {
 
-    if (GPR_00554b58 != 0) {
+    if (g_igPsx2DisableExt_ext9Enabled != 0) {
         arg1 = 0;
     }
     if (arg0->f1268 == (arg1 & 0xFF)) {
@@ -1402,7 +1402,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_232(void *arg0) {
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_233(struct S_174bc0 *s, int v) {
     int m;
-    if (GPR_00554b5c != 0) {
+    if (g_igPsx2DisableExt_ext5Enabled != 0) {
         v = 0;
     }
     m = v & 0xFF;
@@ -1566,7 +1566,7 @@ void FUN_00175090(S0_175090 *arg0, int arg1) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_241(struct S_1750c0 *arg0, int arg1) {
-    if (GPR_00554b60 != 0) {
+    if (g_igPsx2DisableExt_ext4Enabled != 0) {
         arg1 = 0;
     }
     if (arg0->mode == (arg1 & 0xFF)) {

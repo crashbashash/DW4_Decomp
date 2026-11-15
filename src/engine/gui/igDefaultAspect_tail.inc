@@ -38,7 +38,7 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
     int msg[3];
     msg[0] = 2;
     msg[1] = 0;
-    msg[2] = DAT_0058c468[0];
+    msg[2] = (int)g_igGuiComponentModel_sizeMetaField;
     igModel_NotifyViews((S_4578c0 *)self->_model, (S_4578c0 *)msg);
 }
 
@@ -65,7 +65,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
     temp_v1->f24 = DAT_004e1060[0];
     sp30[0] = 2;
     sp30[1] = 0;
-    sp30[2] = DAT_0058c468[0];
+    sp30[2] = (int)g_igGuiComponentModel_sizeMetaField;
     igModel_NotifyViews((S_4578c0 *)arg0->f8, (S_4578c0 *)&sp30[0]);
 }
 
@@ -73,11 +73,11 @@ void Gap__Gui__igDefaultAspect__vfunc_27(void *arg0, struct S_454050 *arg1) {
     int temp_a1;
 
     temp_a1 = arg1->f8;
-    if ((temp_a1 == DAT_0058c450[0]) || (temp_a1 == DAT_0058c460[0]) || (temp_a1 == DAT_0058c290[0]) || (temp_a1 == DAT_0058c448[0])) {
+    if ((temp_a1 == (int)g_igGuiComponentModel_hasFocusMetaField) || (temp_a1 == (int)g_igGuiComponentModel_pushedMetaField) || (temp_a1 == (int)g_igOnOffModel_valueMetaField) || (temp_a1 == (int)g_igGuiComponentModel_enabledMetaField)) {
         FUN_004540d0((S_4540d0 *)arg0);
         return;
     }
-    if (temp_a1 == DAT_0058c468[0]) {
+    if (temp_a1 == (int)g_igGuiComponentModel_sizeMetaField) {
         FUN_00454180(arg0);
     }
 }

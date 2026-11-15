@@ -36,7 +36,7 @@ igResult igStandardQueue_Insert(igStandardQueueView *self, int val, int block)
         return igResult(g_resultFailure.v);
     }
     while (((self->IsFull() != 0) ^ 1) == 0 && self->GetCount() > self->_maxCapacity) {
-        g_threadManager[0]->_threadList->_data[0]->Sleep(0x05F5E100);
+        g_threadManager->_threadList->_data[0]->Sleep(0x05F5E100);
     }
     if (self->_insertLock->Wait(block) != g_resultSuccess) {
         return igResult(g_resultFailure.v);

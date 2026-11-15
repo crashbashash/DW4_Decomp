@@ -1,21 +1,21 @@
 void FUN_0018d480(void) {
-    FUN_0018fbc0((void *)g_igSphere_metaObject[0], igAABox_GetMetaObject(), (int)FUN_0018d700);
-    FUN_0018fbc0((void *)g_igSphere_metaObject[0], igPlane_GetMetaObject(), (int)FUN_0018d7b0);
-    FUN_0018fbc0((void *)g_igSphere_metaObject[0], (void *)g_igSphere_metaObject[0], (int)FUN_0018d820);
-    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject[0], (PairKeyedItem *)g_igAABox_metaObject[0], (int)FUN_0018da00);
-    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject[0], (PairKeyedItem *)g_igPlane_metaObject[0], (int)FUN_0018d9b0);
-    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject[0], (PairKeyedItem *)g_igSphere_metaObject[0], (int)FUN_0018db20);
-    FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject[0], (IndexedWordPairKey *)g_igAABox_metaObject[0], (int)FUN_0018dd20);
-    FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject[0], (IndexedWordPairKey *)g_igSphere_metaObject[0], (int)&FUN_0018de10);
-    FUN_0018fd10((int *)g_igSphere_metaObject[0], (int)igSphere_IntersectsRay);
-    FUN_0018fd90((IndexedWordKey *)g_igSphere_metaObject[0], (int)&FUN_0018dbc0);
-    FUN_0018fd50((IndexedSlotKey *)g_igSphere_metaObject[0], (int)&FUN_0018dfc0);
-    FUN_0018fe10((int *)g_igSphere_metaObject[0], (int)FUN_0018dcb0);
-    FUN_0018fdd0(g_igSphere_metaObject[0], (int)FUN_0018e040);
-    FUN_0018fe50((IndexedSlotKey *)g_igSphere_metaObject[0], (int)thunk_FUN_0018d630);
-    FUN_0018fe90((IndexedWordKey *)g_igSphere_metaObject[0], (int)FUN_0018e150);
-    FUN_0018fed0(g_igSphere_metaObject[0], (int)FUN_0018e160);
-    FUN_0018ff10((int *)g_igSphere_metaObject[0], (int)FUN_0018e190);
+    FUN_0018fbc0((void *)g_igSphere_metaObject, igAABox_GetMetaObject(), (int)FUN_0018d700);
+    FUN_0018fbc0((void *)g_igSphere_metaObject, igPlane_GetMetaObject(), (int)FUN_0018d7b0);
+    FUN_0018fbc0((void *)g_igSphere_metaObject, (void *)g_igSphere_metaObject, (int)FUN_0018d820);
+    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject, (PairKeyedItem *)g_igAABox_metaObject, (int)FUN_0018da00);
+    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject, (PairKeyedItem *)g_igPlane_metaObject, (int)FUN_0018d9b0);
+    FUN_0018fca0((PairKeyedItem *)g_igSphere_metaObject, (PairKeyedItem *)g_igSphere_metaObject, (int)FUN_0018db20);
+    FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject, (IndexedWordPairKey *)g_igAABox_metaObject, (int)FUN_0018dd20);
+    FUN_0018fc30((IndexedWordPairKey *)g_igSphere_metaObject, (IndexedWordPairKey *)g_igSphere_metaObject, (int)&FUN_0018de10);
+    FUN_0018fd10((int *)g_igSphere_metaObject, (int)igSphere_IntersectsRay);
+    FUN_0018fd90((IndexedWordKey *)g_igSphere_metaObject, (int)&FUN_0018dbc0);
+    FUN_0018fd50((IndexedSlotKey *)g_igSphere_metaObject, (int)&FUN_0018dfc0);
+    FUN_0018fe10((int *)g_igSphere_metaObject, (int)FUN_0018dcb0);
+    FUN_0018fdd0(g_igSphere_metaObject, (int)FUN_0018e040);
+    FUN_0018fe50((IndexedSlotKey *)g_igSphere_metaObject, (int)thunk_FUN_0018d630);
+    FUN_0018fe90((IndexedWordKey *)g_igSphere_metaObject, (int)FUN_0018e150);
+    FUN_0018fed0(g_igSphere_metaObject, (int)FUN_0018e160);
+    FUN_0018ff10((int *)g_igSphere_metaObject, (int)FUN_0018e190);
 }
 
 int FUN_0018d700(igSphere *sphere, igAABox *box) {

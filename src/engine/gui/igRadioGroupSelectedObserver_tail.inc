@@ -36,7 +36,7 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
             Msg m;
             m.a = 2;
             m.b = 0;
-            m.c = DAT_0058c280[0];
+            m.c = (int)g_igRadioGroupModel_selectedMetaField;
             igModel_NotifyViews((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m);
         }
     } else {
@@ -51,7 +51,7 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
             Msg m2;
             m2.a = 2;
             m2.b = 0;
-            m2.c = DAT_0058c280[0];
+            m2.c = (int)g_igRadioGroupModel_selectedMetaField;
             igModel_NotifyViews((S_4578c0 *)((void *)arg0->_model), (S_4578c0 *)&m2);
         }
     }
@@ -61,7 +61,7 @@ void Gap__Gui__igRadioGroupSelectedObserver__vfunc_24(void *arg0, void *arg1) {
     int temp_a1;
 
     temp_a1 = *(int *)((char *)arg1 + 8);
-    if (temp_a1 == *(int *)0x58C280) {
+    if (temp_a1 == (int)g_igRadioGroupModel_selectedMetaField) {
         FUN_00457a10((RadioGroupView *)*(int *)((char *)arg0 + 12));
     }
 }

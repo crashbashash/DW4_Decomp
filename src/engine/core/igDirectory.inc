@@ -1,21 +1,21 @@
 void * igDirectory_Create(int allocator) {
     igDirectory_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586668), (igMemoryPoolView *)allocator));
+    return (void *)(igMetaObject_CreateInstance(g_igDirectory_metaObject, (igMemoryPoolView *)allocator));
 }
 
 igMetaObject *igDirectory_GetOrCreateMetaObject(void) {
-    if (g_igDirectory_metaObject[0] == 0) {
-        g_igDirectory_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igDirectory_metaObject == 0) {
+        g_igDirectory_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igDirectory_metaObject[0];
+    return g_igDirectory_metaObject;
 }
 
 igMetaObject *igDirectory_GetMetaObject(void)
 {
-    igMetaObject *g = g_igDirectory_metaObject[0];
+    igMetaObject *g = g_igDirectory_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igDirectory_EnsureRegistered();
-    return g_igDirectory_metaObject[0];
+    return g_igDirectory_metaObject;
 }
 
 int igDirectory_GetVTable(void) {
@@ -42,7 +42,7 @@ int igDirectory_GetVTable(void) {
     p188 = (char *)&dir._metaFieldPerObjectIndices;
     *(int *)p188 = 0;
     dir._loadingSemaphore = 0;
-    vtable = *(int *)((char *)&dir + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&dir + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     dir._vtable = (int)&g_igDirectory_vtable[0];
     igSmartPointer_igSemaphore_Destruct((igObject **)&dir._loadingSemaphore, -1);
     igSmartPointer_igShortListList_Destruct((igSmartPointer<igObject> *)p188, -1);
@@ -59,26 +59,109 @@ void igDirectory_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igDirectory_Register);
 }
 
+static igMetaObjectCallback g_igDirectory_callbackList[] = { igDirEntry_EnsureRegistered, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, igPointerList_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+
 void igDirectory_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igDirectory_metaObject,
+        &g_igDirectory_metaObject,
         (igMetaObjectRegisterFunction)igObjectList_Register,
         (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igDirectory_GetMetaObjectFunction,
-        igDirectory_className,
+        "igDirectory",
         0x48,
         igDirectory_GetVTable,
         igDirectory_InitFields,
         igDirectory_StaticInitCallback,
-        (igMetaObjectCallback *)g_igDirectory_callbackList
+        g_igDirectory_callbackList
     );
 }
 
 void igDirectory_GetMetaObjectFunction(void) {
     igDirectory_GetMetaObject();
 }
+
+static FieldFactory g_igDirectory_ctorTable[] = {
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igBoolMetaField_Create,
+    (FieldFactory)igObjectRefMetaField_Create,
+};
+static const char *g_igDirectory_fieldTable[] = {
+    "_name",
+    "_externalDirectoryList",
+    "_infoList",
+    "_managingResource",
+    "_loadPendingState",
+    "_validState",
+    "_compatibleState",
+    "_loadedRefCount",
+    "_metaFieldPerObjectIndices",
+    "_concreteState",
+    "_sharingState",
+    "_trackUniqueEntries",
+    "_uniqueEntryList",
+    "_refList",
+    "_autoWriteFilePreProcessState",
+    "_useMemoryPoolAssignmentsState",
+    "_forceWriteMemoryPoolInfoFromMetaState",
+    "_loadingSemaphore",
+};
+static igMetaField **g_igDirectory_fieldDescriptors[] = {
+    &g_igDirectory_nameField,
+    &g_igDirectory_externalDirectoryListMetaField,
+    &g_igDirectory_infoListMetaField,
+    &g_igDirectory_managingResourceMetaField,
+    &g_igDirectory_loadPendingStateMetaField,
+    &g_igDirectory_validStateMetaField,
+    &g_igDirectory_compatibleStateMetaField,
+    &g_igDirectory_loadedRefCountMetaField,
+    &g_igDirectory_metaFieldPerObjectIndicesMetaField,
+    &g_igDirectory_concreteStateMetaField,
+    &g_igDirectory_sharingStateMetaField,
+    &g_igDirectory_trackUniqueEntriesMetaField,
+    &g_igDirectory_uniqueEntryListMetaField,
+    &g_igDirectory_refListMetaField,
+    &g_igDirectory_autoWriteFilePreProcessStateMetaField,
+    &g_igDirectory_useMemoryPoolAssignmentsStateMetaField,
+    &g_igDirectory_forceWriteMemoryPoolInfoFromMetaStateMetaField,
+    &g_igDirectory_loadingSemaphoreMetaField,
+};
+static int g_igDirectory_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+    48,
+    49,
+    50,
+    52,
+    60,
+    56,
+    36,
+    37,
+    40,
+    44,
+    64,
+    65,
+    66,
+    68,
+};
 
 void igDirectory_InitFields(void) {
     int base;
@@ -92,9 +175,9 @@ void igDirectory_InitFields(void) {
     void *nameField;
     void *meta;
 
-    meta = (void *)g_igDirectory_metaObject[0];
+    meta = (void *)g_igDirectory_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, (igMetaField * (**)(void *))&g_igDirectory_ctorTable[0], 0x12);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igDirectory_ctorTable, 0x12);
     nameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     igStringMetaField_SetDefaultText((int *)nameField, 0);
     ((igStringMetaField *)nameField)->_destruct = 1;
@@ -120,7 +203,7 @@ void igDirectory_InitFields(void) {
     loadingSemaphoreField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11)));
     ((igObjectRefMetaField *)loadingSemaphoreField)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)loadingSemaphoreField)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, (const char **)&g_igDirectory_fieldTable[0], (igMetaField ***)&g_igDirectory_fieldDescriptors[0], &g_igDirectory_fieldOffsets[0], base);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igDirectory_fieldTable, g_igDirectory_fieldDescriptors, g_igDirectory_fieldOffsets, base);
 }
 
 void igDirectory_StaticInitCallback(void) {

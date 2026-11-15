@@ -3,24 +3,21 @@
 
 #include "dw4/reflected.h"
 
+typedef void (*igMetaObjectCallback)();
+typedef igMetaField *(*FieldFactory)(void *);
+
 /* Library front: the register list, its one registrar and the registration latch. */
 extern "C" void thunk_FUN_00238ed0(void);
 extern "C" void FUN_00238ed0(void);
-extern "C" unsigned char g_SceneSearchLibrary_registered;
 extern "C" void SceneSearchLibrary_MarkRegistered(void);
 extern "C" void igMetaObject_RunStaticInit(...);
 extern "C" int igMetaObject_RegisterClass(...);
 
 /* The igSearchSceneGraph enum field's metaenum (3 values), created on first use. */
-extern "C" int DAT_0056dc58[4];
-extern "C" int igMetaEnum_Create(...);
-extern "C" int IG_APPLICATION_FIND_TYPE[4];
-extern "C" int DAT_00498270[4];
-extern "C" int DAT_00498280[4];
+extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" int FUN_00238d70(void);
 
 /* igSearchSceneGraph: an igNamedObject, 0x1C bytes. */
-extern "C" igMetaObject *g_igSearchSceneGraph_metaObject[4];
 extern "C" igMetaObject *igSearchSceneGraph_GetMetaObject(void);
 extern "C" int igSearchSceneGraph_GetVTable(void);
 extern "C" void igSearchSceneGraph_Register(void);
@@ -29,8 +26,6 @@ extern "C" void igSearchSceneGraph_InitFields(void);
 extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
 extern "C" char igNamedObject_Register[];
 extern "C" char igNamedObject_GetPublishedMetaObject[];
-extern "C" char igSearchSceneGraph_className[];
-extern "C" char g_igSearchSceneGraph_callbackList[];
 
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
@@ -51,12 +46,11 @@ extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" int FUN_002274a0(void);
 extern "C" int igMetaObject_GetOrCreateMetaObject(void);
 extern "C" int igEnumMetaField_SetDefaultValue(...);
-extern "C" int g_igSearchSceneGraph_ctorTable[4];
-extern "C" int g_igSearchSceneGraph_fieldTable[4];
-extern "C" int DAT_004982c0[4];
-extern "C" int DAT_004982d0[4];
-extern "C" int DAT_004982e0[4];
-extern "C" int DAT_004e9da0[4];
+extern "C" igMetaField *igObjectRefMetaField_Create(void *);
+extern "C" igMetaField *igStringMetaField_Create(void *);
+extern "C" igMetaField *igEnumMetaField_Create(void *);
+extern "C" void FUN_00227620(void);
+extern "C" void igMetaObject_EnsureRegistered(void);
 
 /* The searched scene and the two matrix arrays sized from it (igActor_SetAnimationSystem). */
 extern "C" int igMatrix44f_SetIdentity(...);

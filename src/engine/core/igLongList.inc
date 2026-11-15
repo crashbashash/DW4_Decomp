@@ -1,16 +1,19 @@
+igMetaObject *g_igLongList_metaObject;
+int g_igLongList_dataDescriptorCell;
+
 igMetaObject *igLongList_GetOrCreateMetaObject(void) {
-    if (g_igLongList_metaObject[0] == 0) {
-        g_igLongList_metaObject[0] = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    if (g_igLongList_metaObject == 0) {
+        g_igLongList_metaObject = (igMetaObject *)igMetaObject_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     }
-    return g_igLongList_metaObject[0];
+    return g_igLongList_metaObject;
 }
 
 igMetaObject *igLongList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igLongList_metaObject[0];
+    igMetaObject *g = g_igLongList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igLongList_EnsureRegistered();
-    return g_igLongList_metaObject[0];
+    return g_igLongList_metaObject;
 }
 
 int igLongList_GetVTable(void) {
@@ -18,7 +21,7 @@ int igLongList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&list);
     list._vtable = (int)&g_igLongList_vtable[0];
-    return *(int *)((char *)&list + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    return *(int *)((char *)&list + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
 }
 
 void igLongList_EnsureRegistered(void)
@@ -30,11 +33,11 @@ void igLongList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igLongList_metaObject,
+        &g_igLongList_metaObject,
         (igMetaObjectRegisterFunction)igDataList_Register,
         (igMetaObjectGetFunction)igDataList_GetPublishedMetaObject,
         igLongList_GetMetaObjectFunction,
-        igLongList_className,
+        "igLongList",
         0x14,
         igLongList_GetVTable,
         igLongList_InitFields,
@@ -47,19 +50,20 @@ void igLongList_GetMetaObjectFunction(void) {
     igLongList_GetMetaObject();
 }
 
+
 void igLongList_InitFields(void) {
     int index;
     void **found;
     igMemoryRefMetaField *field;
     igMetaObject *meta;
 
-    meta = g_igLongList_metaObject[0];
+    meta = g_igLongList_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = igLongMetaField_GetDefaultDescriptor();
     field->_memSize = 0;
-    field->_externalEnumStorage = (int)(&g_igLongList_dataDescriptorCell[0]);
+    field->_externalEnumStorage = (int)(&g_igLongList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
     field->_refCount = (int)((int) (field->_refCount - 1));
     if (((unsigned long long) ((long long) (int) field->_refCount << 0x29) >> 0x29) == 0) {

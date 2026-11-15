@@ -1,3 +1,6 @@
+MemoryContext *g_currentMemoryContext;
+__internalObjectList *g_metaFieldList;
+
 void igObjectSystem_Startup(ObjectSystemView *self) {
     void *m;
     __internalObjectList *l;
@@ -6,12 +9,12 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     self->started = 1;
     SystemAllocator_EnsureCreated();
     self->vtableProbeOffset = 0;
-    if (((MemoryContext * *)g_currentMemoryContext)[0] == 0) {
+    if (g_currentMemoryContext == 0) {
         m = igMemoryPoolContextInfo_Allocate(0x19F4);
         if (m != 0) m = igMemoryPoolContextInfo_Construct((MemoryContext *)m);
-        ((MemoryContext * *)g_currentMemoryContext)[0] = (MemoryContext *)m;
+        g_currentMemoryContext = (MemoryContext *)m;
     }
-    ((MemoryContext * *)g_currentMemoryContext)[0]->CreateDefaultPools();
+    g_currentMemoryContext->CreateDefaultPools();
     self->metaRegistry = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
     l = (__internalObjectList *)self->metaRegistry;
     if (l->_data == 0) n = 0; else n = Memory_GetBufferSize((void *)l->_data) >> 2;
@@ -26,7 +29,7 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     igMetaObject_EnsureRegistered();
     self->active = 1;
     self->bootMetaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
-    self->bootMetaFieldCount = g_metaFieldList[0]->_count;
+    self->bootMetaFieldCount = g_metaFieldList->_count;
     igMetaEnum_EnsureRegistered();
     igMallocMemoryPool_EnsureRegistered();
     igArenaMemoryPool_EnsureRegistered();
@@ -49,8 +52,8 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     igFloatMetaField_EnsureRegistered();
     igLongMetaField_EnsureRegistered();
     igUnsignedCharMetaField_EnsureRegistered();
-    ((int *)g_igRefMetaField_descriptor)[0] = igRawRefMetaField_GetDefaultDescriptor();
-    ((MemoryContext * *)g_currentMemoryContext)[0]->OnStartupComplete();
+    (*(int *)&g_igRefMetaField_descriptor) = igRawRefMetaField_GetDefaultDescriptor();
+    g_currentMemoryContext->OnStartupComplete();
 }
 
 int igObjectSystem_GetRootPath(int *p)
@@ -65,11 +68,13 @@ int igObjectSystem_GetBasePath(int *p)
 
 void igObjectSystem_InitPaths(ObjectSystemView *self) {
     igStringRef env;
-    env = (char *)getenv(IG_ROOT);
+    env = (char *)getenv("IG_ROOT");
     self->rootPath = env;
-    self->basePath = (char *)text_dot;
-    self->basePath = (char *)text_dot_dot;
+    self->basePath = (char *)".";
+    self->basePath = (char *)"..";
 }
+
+unsigned char g_useOwnerAllocator;
 
 /* The current allocator when objects follow their owner's, otherwise the system pool. */
 static inline igMemoryPoolView *ownerOrSystemPool() {
@@ -106,6 +111,14 @@ static inline void setTemporaryMemoryPool(igResource *resource, igObject *pool) 
     resource->_temporaryMemoryPool = (int)pool;
 }
 
+char *g_alchemyVersionString = "Intrinsic Alchemy  v3.2 -0810 (Static/Release) \nBuilt by terada on Tue Aug 10 11:05:06 JST 2004";
+unsigned char g_loadAlchemyIni = 1;
+igResourceView *g_globalContext;
+char *g_alchemyIniText;
+igLongTimerView *g_igIGBFile_loadTimer;
+char *g_alchemyIniPath;
+int g_igPsx2_atfilePrefix;
+
 /* Set the object system up after its classes are registered: read alchemy.ini (from a file, or from the
  * text the game embeds), open the media, create the driver database, the plugin helper and the resource
  * manager with its "system" directory, read the core settings, and cache the vtables the ini lists. */
@@ -117,30 +130,30 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
             igSmartPointer<igObject> file((igObject *)igPsx2File_Create((int)ownerOrSystemPool()));
             clearPrefix(file);
             setRegistryFile(self->configRegistry, file);
-            igRegistry_Load(self->configRegistry, g_alchemyIniPath, (char *)emptyString_4);
+            igRegistry_Load(self->configRegistry, g_alchemyIniPath, (char *)"");
         } else {
             if (g_alchemyIniText != 0) {
                 igSmartPointer<igObject> file((igObject *)igMemoryFile_Create((int)ownerOrSystemPool()));
-                igMemoryFile_AddMemoryFileEntry((int)text_alchemy_ini, (int)g_alchemyIniText, strlen(g_alchemyIniText));
+                igMemoryFile_AddMemoryFileEntry((int)"alchemy.ini", (int)g_alchemyIniText, strlen(g_alchemyIniText));
                 setRegistryFile(self->configRegistry, file);
             }
-            igRegistry_Load(self->configRegistry, (char *)emptyString_4, (char *)emptyString_4);
+            igRegistry_Load(self->configRegistry, (char *)"", (char *)"");
         }
     }
     bool useFileIO = true;
-    igRegistry_GetValueBool((int)self->configRegistry, 2, text_useFileIO, (char *)&useFileIO, 1, 0);
+    igRegistry_GetValueBool((int)self->configRegistry, 2,"useFileIO", (char *)&useFileIO, 1, 0);
     if (useFileIO) {
         igSmartPointer<igObject> media((igObject *)igPsx2Media_Create((int)ownerOrSystemPool()));
         if (((igPsx2Media *)media.p)->_initialized == 1) {
             igMedia_AddMedia((int)media.p);
             igMedia_SetDefaultMedia((int)media.p);
             igMediaFile_EnsureRegistered();
-            g_igFile_metaObject[0]->_abstractProxy = (int)igMediaFile_GetPublishedMetaObject;
+            g_igFile_metaObject->_abstractProxy = (int)igMediaFile_GetPublishedMetaObject;
         }
     } else {
-        igPsx2_LoadIopModule((char *)text_libsd_irx, 1, 0, 0);
+        igPsx2_LoadIopModule((char *)"libsd.irx", 1, 0, 0);
     }
-    if (g_igPsx2_atfilePrefix[0] != 0) {
+    if (g_igPsx2_atfilePrefix != 0) {
         igPsx2_SetupOutputFiles();
     }
     self->driverDatabase = (igDriverDatabase *)igDriverDatabase_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
@@ -148,24 +161,24 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     igIGBFile_EnsureRegistered();
     self->pluginHelper = (igPluginHelper *)igPluginHelper_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     igPluginHelper_LoadPluginsFromRegistry(self->pluginHelper);
-    igPluginHelper_AddRepository(self->pluginHelper, (int)text_Alchemy, (int)text_plugins, 1);
+    igPluginHelper_AddRepository(self->pluginHelper, (int)"Alchemy", (int)"plugins", 1);
     self->metaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
-    self->metaFieldCount = g_metaFieldList[0]->_count;
+    self->metaFieldCount = g_metaFieldList->_count;
     igReport_ReadSettings();
     self->resource = (igResource *)igResource_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     g_globalContext = (igResourceView *)self->resource;
     igSmartPointer<igObject> directory((igObject *)igDirectory_Create((int)ownerOrSystemPool()));
-    setName((igDirectory *)directory.p, (char *)text_system);
+    setName((igDirectory *)directory.p, (char *)"system");
     ((igResourceView *)self->resource)->addDirectory(directory);
     igDirectory_AddLoadedRef((igDirectoryView *)directory.p);
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, (int)text_metafield_info);
+    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, (int)"metafield info");
     igDirectory_AddInfo(directory.p, metaFieldInfo.p);
-    igRegistry_GetValueBool((int)self->configRegistry, 2, text_failOnDllVersionMismatch, (char *)&self->reportHeaderVersionMismatch, 1, 0);
-    igRegistry_GetValueBool((int)self->configRegistry, 2, text_warnOnDllDateMismatch, (char *)&self->warnOnDllDateMismatch, 1, 0);
-    igRegistry_GetValueInt((int)self->configRegistry, 2, text_resourceTempMemoryPoolSize, (int *)&self->resourceTempPoolSize, 0, 0);
-    if (g_currentMemoryContext[0] != 0) {
-        g_currentMemoryContext[0]->Initialize();
+    igRegistry_GetValueBool((int)self->configRegistry, 2,"failOnDllVersionMismatch", (char *)&self->reportHeaderVersionMismatch, 1, 0);
+    igRegistry_GetValueBool((int)self->configRegistry, 2,"warnOnDllDateMismatch", (char *)&self->warnOnDllDateMismatch, 1, 0);
+    igRegistry_GetValueInt((int)self->configRegistry, 2,"resourceTempMemoryPoolSize", (int *)&self->resourceTempPoolSize, 0, 0);
+    if (g_currentMemoryContext != 0) {
+        g_currentMemoryContext->Initialize();
     }
     if (self->resourceTempPoolSize != 0) {
         self->resourceTempPool = (igMemoryPoolView *)igStackMemoryPool_Create(0);
@@ -182,14 +195,14 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         self->resourceTempPool->Activate();
         setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
     }
-    igRegistry_GetValueInt((int)self->configRegistry, 2, text_stringPoolStatisticsLevel, &self->stringPoolStatisticsLevel, 0, 0);
+    igRegistry_GetValueInt((int)self->configRegistry, 2,"stringPoolStatisticsLevel", &self->stringPoolStatisticsLevel, 0, 0);
     igAdxFile_LoadSearchFilePath();
-    g_igIGBFile_loadTimer[0] = (igLongTimerView *)igTimer_Create((int)self->systemPool);
-    g_igIGBFile_loadTimer[0]->Start();
-    igReport_Printf(newline_percent_s_newline_newline, g_alchemyVersionString);
+    g_igIGBFile_loadTimer = (igLongTimerView *)igTimer_Create((int)self->systemPool);
+    g_igIGBFile_loadTimer->Start();
+    igReport_Printf("\n%s\n\n", g_alchemyVersionString);
     igReport_Flush();
     if (self->copyVTables != 0) {
-        int section = igRegistry_GetSectionIndex(self->configRegistry, text_CLASSES_TO_VTABLE_CACHE, 1);
+        int section = igRegistry_GetSectionIndex(self->configRegistry,"CLASSES_TO_VTABLE_CACHE", 1);
         if (section != -1) {
             int count = igRegistry_GetValueCount(self->configRegistry);
             int i;
@@ -219,7 +232,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
 }
 
 igMetaObject *igMediaFile_GetPublishedMetaObject(void) {
-    return g_igMediaFile_metaObject[0];
+    return g_igMediaFile_metaObject;
 }
 
 void igObjectSystem_PreExit(ObjectSystemView *self) {
@@ -229,7 +242,7 @@ void igObjectSystem_PreExit(ObjectSystemView *self) {
     tracker = self->globalEventTracker;
     if (tracker != 0) {
         tracker->PreExit();
-        igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)&text_exitPre[0]);
+        igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)"exitPre");
     }
 }
 
@@ -238,6 +251,9 @@ static inline void releaseObject(igObject *object) {
     object->_refCount = object->_refCount - 1;
     if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object);
 }
+
+AllocatorRegistry *g_primaryAllocatorList;
+AllocatorRegistry *g_secondaryAllocatorList;
 
 /* Undo igObjectSystem_Initialize: stop the resource manager, run the exit callbacks, drop the classes
  * registered since the set-up, and release the configuration registry, the resource manager and the
@@ -262,9 +278,9 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
     igRelease((igObject *)resource->_dataMemoryPool);
     resource->_dataMemoryPool = 0;
     StringTable_SetSynchronization(0);
-    count = g_secondaryAllocatorList[0]->count;
+    count = g_secondaryAllocatorList->count;
     for (i = 0; i < count; i++) {
-        pool = g_secondaryAllocatorList[0]->data[i];
+        pool = g_secondaryAllocatorList->data[i];
         if (pool != 0) {
             pool->EnableAllocationLock(0);
             tracker = (igEventTrackerView *)pool->GetEventTracker();
@@ -273,9 +289,9 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
             }
         }
     }
-    count = g_primaryAllocatorList[0]->count;
+    count = g_primaryAllocatorList->count;
     for (i = 0; i < count; i++) {
-        pool = g_primaryAllocatorList[0]->data[i];
+        pool = g_primaryAllocatorList->data[i];
         if (pool != 0) {
             pool->EnableAllocationLock(0);
             tracker = (igEventTrackerView *)pool->GetEventTracker();
@@ -284,8 +300,8 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
             }
         }
     }
-    if (g_currentMemoryContext[0] != 0) {
-        g_currentMemoryContext[0]->ReleaseContextInfo();
+    if (g_currentMemoryContext != 0) {
+        g_currentMemoryContext->ReleaseContextInfo();
     }
     igObjectSystem_Exit(self);
     self->exitDone = 1;
@@ -296,8 +312,8 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
     self->exitCallbacks = 0;
     igResource_ClearDirectories(self->resource);
     releaseObject((igObject *)self->driverDatabase);
-    releaseObject((igObject *)g_igIGBFile_loadTimer[0]);
-    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList[0], self->metaFieldCount);
+    releaseObject((igObject *)g_igIGBFile_loadTimer);
+    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList, self->metaFieldCount);
     for (i = ((__internalObjectList *)self->metaRegistry)->_count - 1; i >= self->metaObjectCount; i--) {
         InternalObjectList_SetAtRetained((__internalObjectList *)self->metaRegistry, i, (igObject *)0);
     }
@@ -336,10 +352,10 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
 void igObjectSystem_Exit(ObjectSystemView *self) {
     if (self->globalEventTracker != 0) {
         self->globalEventTracker->Exit();
-        igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)(&text_exitIn[0]));
+        igEventTracker_SetEventTag((igEventTrackerView *)self->globalEventTracker, (int)("exitIn"));
     }
-    if (self->saveEventTrackerOnExit != 0 && ((MemoryContext * *)g_currentMemoryContext)[0] != 0) {
-        ((MemoryContext * *)g_currentMemoryContext)[0]->SaveEventTrackers();
+    if (self->saveEventTrackerOnExit != 0 && g_currentMemoryContext != 0) {
+        g_currentMemoryContext->SaveEventTrackers();
     }
 }
 
@@ -353,15 +369,15 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     self->metaEnumList = 0;
     igAdxFile_SetBasePath(0);
     igArray_Destruct((CallbackArray *)self->registrationCallbacks, 1);
-    if (g_currentMemoryContext[0] != 0) {
-        g_currentMemoryContext[0]->RemoveAllAllocators();
+    if (g_currentMemoryContext != 0) {
+        g_currentMemoryContext->RemoveAllAllocators();
     }
-    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList[0], self->bootMetaFieldCount);
+    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList, self->bootMetaFieldCount);
     for (i = self->metaObjectCount - 1; i >= self->bootMetaObjectCount; i--) {
         InternalObjectList_SetAtRetained((__internalObjectList *)self->metaRegistry, i, (igObject *)0);
     }
     self->active = 0;
-    o = (igObject *)g_metaFieldList[0];
+    o = (igObject *)g_metaFieldList;
     o->_refCount = o->_refCount - 1;
     if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
     o = (igObject *)self->metaRegistry;
@@ -372,19 +388,19 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
         o->_refCount = o->_refCount - 1;
         if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
     }
-    if (g_stringPool[0] == 0) {
+    if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool != 0) pool = ((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    StringPool_Destroy((StringPool *)g_stringPool[0], 1);
+    StringPool_Destroy((StringPool *)g_stringPool, 1);
     self->started = 0;
-    if (g_currentMemoryContext[0] != 0) {
-        g_currentMemoryContext[0]->Shutdown();
-        if (g_currentMemoryContext[0] != 0) {
-            g_currentMemoryContext[0]->Destruct(1);
+    if (g_currentMemoryContext != 0) {
+        g_currentMemoryContext->Shutdown();
+        if (g_currentMemoryContext != 0) {
+            g_currentMemoryContext->Destruct(1);
         }
-        g_currentMemoryContext[0] = 0;
+        g_currentMemoryContext = 0;
     }
     SystemAllocator_EnsureDestroyed();
 }
@@ -396,7 +412,7 @@ void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
 
 int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className) {
     if (objectSystem->active != 0) {
-        return (int)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)objectSystem->metaRegistry, g_igMetaObjectNameField[0], className);
+        return (int)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)objectSystem->metaRegistry, g_igMetaObjectNameField, className);
     }
     return 0;
 }
@@ -429,6 +445,8 @@ void igObjectSystem_RunRegistrationCallbacks(int *self, int meta) {
     }
 }
 
+char *g_memoryEventFormat = "ka(s)[i]: p(l)r', %s'";
+
 void igObjectSystem_SetMemoryEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
         strncpy(objectSystem->memoryEventFormat, format, 0x7F);
@@ -437,9 +455,11 @@ void igObjectSystem_SetMemoryEventFormat(ObjectSystemView *objectSystem, char *f
         objectSystem->memoryEventFormat[0] = 0;
     }
     if ((format != 0) && (*format != 0)) {
-        g_memoryEventFormat[0] = objectSystem->memoryEventFormat;
+        g_memoryEventFormat = objectSystem->memoryEventFormat;
     }
 }
+
+char *g_markerEventFormat = "k[i] u v w j ";
 
 void igObjectSystem_SetMarkerEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
@@ -449,9 +469,11 @@ void igObjectSystem_SetMarkerEventFormat(ObjectSystemView *objectSystem, char *f
         objectSystem->markerEventFormat[0] = 0;
     }
     if ((format != 0) && (*format != 0)) {
-        g_markerEventFormat[0] = (void *)objectSystem->markerEventFormat;
+        g_markerEventFormat = (char *)objectSystem->markerEventFormat;
     }
 }
+
+char *g_notificationEventFormat = "p(l)[i]: x: y - zc^s+o'0x%x' : f(l)^'\n    %s'";
 
 void igObjectSystem_SetNotificationEventFormat(ObjectSystemView *objectSystem, char *format) {
     if (format != 0) {
@@ -461,7 +483,7 @@ void igObjectSystem_SetNotificationEventFormat(ObjectSystemView *objectSystem, c
         objectSystem->notificationEventFormat[0] = 0;
     }
     if ((format != 0) && (*format != 0)) {
-        g_notificationEventFormat[0] = objectSystem->notificationEventFormat;
+        g_notificationEventFormat = objectSystem->notificationEventFormat;
     }
 }
 
@@ -506,7 +528,7 @@ int igArray_Append(CallbackArray *array,int item){
     if(array->count==capacity){
         if(capacity==0)array->capacity=4;
         else array->capacity*=((capacity*3)/2);
-        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPoolView *)(((ObjectSystemView * *)g_objectSystem)[0]->systemPool)));
+        if(array->data==0)array->data=(int *)(Memory_AllocateBufferDirect((unsigned int)(array->capacity*4), (igMemoryPoolView *)((*(ObjectSystemView * *)&g_objectSystem)->systemPool)));
         else array->data=(int *)(Memory_ReallocateBuffer(array->data, (unsigned int)(array->capacity*4)));
     }
     array->data[array->count++]=item;

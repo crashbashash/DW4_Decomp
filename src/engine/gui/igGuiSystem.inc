@@ -1,16 +1,25 @@
+igMetaObject *g_igGuiSystem_metaObject;
+igMetaField *g_igGuiSystem_rendererMetaField;
+igMetaField *g_igGuiSystem_modelMetaField;
+igMetaField *g_igGuiSystem_viewListMetaField;
+igMetaField *g_igGuiSystem_rootMetaField;
+igMetaField *g_igGuiSystem_mouseCursorMetaField;
+igMetaField *g_igGuiSystem_mouseCursorTransformMetaField;
+igMetaField *g_igGuiSystem_mouseCursorVisibleMetaField;
+
 igMetaObject *FUN_0044ded0(void) {
-    if (g_igGuiSystem_metaObject[0] == 0) {
-        g_igGuiSystem_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igGuiSystem_metaObject == 0) {
+        g_igGuiSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igGuiSystem_metaObject[0];
+    return g_igGuiSystem_metaObject;
 }
 
 igMetaObject *igGuiSystem_GetMetaObject(void)
 {
-    igMetaObject *g = g_igGuiSystem_metaObject[0];
+    igMetaObject *g = g_igGuiSystem_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igGuiSystem_RunStaticInit();
-    return g_igGuiSystem_metaObject[0];
+    return g_igGuiSystem_metaObject;
 }
 
 int igGuiSystem_GetVTable(void) {
@@ -98,15 +107,17 @@ void igGuiSystem_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystem_Register);
 }
 
+static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, igViewList_EnsureRegistered, FUN_001a5e90, igMouseCursor_RunStaticInit, FUN_001964d0, 0 };
+
 void igGuiSystem_Register(void) {
     GuiLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igGuiSystem_metaObject,
+        &g_igGuiSystem_metaObject,
         igEventReceiver_Register,
         igEventReceiver_GetPublishedMetaObject,
         thunk_igGuiSystem_GetMetaObject,
-        igGuiSystem_className,
+        "igGuiSystem",
         0x24, /* instance size */
         igGuiSystem_GetVTable,
         &igGuiSystem_InitFields,
@@ -119,6 +130,43 @@ void thunk_igGuiSystem_GetMetaObject(void) {
     igGuiSystem_GetMetaObject();
 }
 
+static FieldFactory g_igGuiSystem_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igGuiSystem_fieldTable[] = {
+    "_renderer",
+    "_model",
+    "_viewList",
+    "_root",
+    "_mouseCursor",
+    "_mouseCursorTransform",
+    "_mouseCursorVisible",
+};
+static igMetaField **g_igGuiSystem_fieldHandles[] = {
+    &g_igGuiSystem_rendererMetaField,
+    &g_igGuiSystem_modelMetaField,
+    &g_igGuiSystem_viewListMetaField,
+    &g_igGuiSystem_rootMetaField,
+    &g_igGuiSystem_mouseCursorMetaField,
+    &g_igGuiSystem_mouseCursorTransformMetaField,
+    &g_igGuiSystem_mouseCursorVisibleMetaField,
+};
+static int g_igGuiSystem_fieldOffsets[] = {
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+};
+
 void igGuiSystem_InitFields(void) {
     int temp_s0;
     void *temp_s2;
@@ -129,9 +177,9 @@ void igGuiSystem_InitFields(void) {
     void *temp_s2_6;
     void *temp_s1;
 
-    temp_s1 = (void *)g_igGuiSystem_metaObject[0];
+    temp_s1 = (void *)g_igGuiSystem_metaObject;
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, &g_igGuiSystem_ctorTable[0], 7);
+    igMetaObject_CreateFields(temp_s1, g_igGuiSystem_ctorTable, 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044e6b0();
     ((igRefMetaField *)temp_s2)->_construct = 1;
@@ -149,6 +197,6 @@ void igGuiSystem_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00196190();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, &g_igGuiSystem_fieldTable[0], &DAT_004d01f0[0], &DAT_004d0210[0], temp_s0);
+    igMetaObject_NameFields(temp_s1, g_igGuiSystem_fieldTable, g_igGuiSystem_fieldHandles, g_igGuiSystem_fieldOffsets, temp_s0);
 }
 

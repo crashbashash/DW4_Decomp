@@ -1,16 +1,29 @@
-int FUN_001a7440(void) {
-    if (DAT_005621f8[0] == 0) {
-        DAT_005621f8[0] = igMetaEnum_Create(&text_ModifierType[0], &DAT_0048d190[0], &DAT_0048d1a0[0], 4);
+static const char *g_igAnimationModifier_modifierTypeNames[] = {
+    "kPre", "kPost", "kOverride", "kOverrideOrientation",
+};
+static int g_igAnimationModifier_modifierTypeValues[] = {
+    0, 1, 2, 3,
+};
+igMetaEnum *g_igAnimationModifier_modifierTypeMetaEnum;
+
+igMetaEnum *FUN_001a7440(void) {
+    if (g_igAnimationModifier_modifierTypeMetaEnum == 0) {
+        g_igAnimationModifier_modifierTypeMetaEnum = igMetaEnum_Create("ModifierType", g_igAnimationModifier_modifierTypeNames, g_igAnimationModifier_modifierTypeValues, 4);
     }
-    return DAT_005621f8[0];
+    return g_igAnimationModifier_modifierTypeMetaEnum;
 }
+
+igMetaObject *g_igAnimationModifier_metaObject;
+igMetaField *g_igAnimationModifier_boneIndexMetaField;
+igMetaField *g_igAnimationModifier_transformMetaField;
+igMetaField *g_igAnimationModifier_typeMetaField;
 
 igMetaObject *igAnimationModifier_GetMetaObject(void)
 {
-    igMetaObject *g = g_igAnimationModifier_metaObject[0];
+    igMetaObject *g = g_igAnimationModifier_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001a7600();
-    return g_igAnimationModifier_metaObject[0];
+    return g_igAnimationModifier_metaObject;
 }
 
 int igAnimationModifier_GetVTable(void) {
@@ -48,15 +61,17 @@ void FUN_001a7600(void)
     igMetaObject_RunStaticInit(igAnimationModifier_Register);
 }
 
+static igMetaObjectCallback g_igAnimationModifier_callbackList[] = { FUN_001964d0, 0 };
+
 void igAnimationModifier_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igAnimationModifier_metaObject),
+        &g_igAnimationModifier_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igAnimationModifier_GetMetaObject,
-        igAnimationModifier_className,
+        "igAnimationModifier",
         0x14, /* instance size */
         igAnimationModifier_GetVTable,
         &igAnimationModifier_InitFields,
@@ -69,21 +84,42 @@ void thunk_igAnimationModifier_GetMetaObject(void) {
     igAnimationModifier_GetMetaObject();
 }
 
+static FieldFactory g_igAnimationModifier_ctorTable[] = {
+    igIntMetaField_Create,
+    igObjectRefMetaField_Create,
+    igEnumMetaField_Create,
+};
+static const char *g_igAnimationModifier_fieldTable[] = {
+    "_boneIndex",
+    "_transform",
+    "_type",
+};
+static igMetaField **g_igAnimationModifier_fieldHandles[] = {
+    &g_igAnimationModifier_boneIndexMetaField,
+    &g_igAnimationModifier_transformMetaField,
+    &g_igAnimationModifier_typeMetaField,
+};
+static int g_igAnimationModifier_fieldOffsets[] = {
+    8,
+    12,
+    16,
+};
+
 void igAnimationModifier_InitFields(void) {
     int temp_s2;
     void *temp_v0;
     void *temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igAnimationModifier_metaObject[0];
+    temp_s0 = (void *)g_igAnimationModifier_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igAnimationModifier_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationModifier_ctorTable, 3);
     igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2)), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00196190();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     igEnumMetaField_SetDefaultValue(temp_v0, &DAT_0048d1f8[0]);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);
-    igMetaObject_NameFields(temp_s0, &g_igAnimationModifier_fieldTable[0], &DAT_0048d1d8[0], &DAT_0048d1e8[0], temp_s2);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationModifier_fieldTable, g_igAnimationModifier_fieldHandles, g_igAnimationModifier_fieldOffsets, temp_s2);
 }
 

@@ -1,9 +1,16 @@
+igMetaObject *g_igExternalDirEntry_metaObject;
+igMetaField *g_igExternalDirEntry_refDescriptorCell;
+igMetaField *g_igExternalDirEntry_directoryNameMetaField;
+igMetaField *g_igExternalDirEntry_entryNameMetaField;
+igMetaField *g_igExternalDirEntry_entryIndexMetaField;
+igMetaField *g_igExternalDirEntry_externalFilePathMetaField;
+
 igMetaObject *igExternalDirEntry_GetMetaObject(void)
 {
-    igMetaObject *g = g_igExternalDirEntry_metaObject[0];
+    igMetaObject *g = g_igExternalDirEntry_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igExternalDirEntry_EnsureRegistered();
-    return g_igExternalDirEntry_metaObject[0];
+    return g_igExternalDirEntry_metaObject;
 }
 
 int igExternalDirEntry_GetVTable(void) {
@@ -19,7 +26,7 @@ int igExternalDirEntry_GetVTable(void) {
     entry._directoryName = 0;
     entry._entryName = 0;
     entry._externalFilePath = 0;
-    vtable = *(int *)((char *)&entry + *(int *)((char *)(((void * *)g_objectSystem)[0]) + 916));
+    vtable = *(int *)((char *)&entry + *(int *)((char *)((*(void * *)&g_objectSystem)) + 916));
     entry._vtable = (int)&g_igExternalDirEntry_vtable[0];
     igStringRef_Destruct(&entry._externalFilePath, -1);
     igStringRef_Destruct(&entry._entryName, -1);
@@ -33,20 +40,22 @@ void igExternalDirEntry_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igExternalDirEntry_Register);
 }
 
+static igMetaObjectCallback g_igExternalDirEntry_callbackList[] = { igObject_EnsureRegistered, 0 };
+
 void igExternalDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
         0,
-        g_igExternalDirEntry_metaObject,
+        &g_igExternalDirEntry_metaObject,
         (igMetaObjectRegisterFunction)igDirEntry_Register,
         igDirEntry_GetPublishedMetaObject,
         igExternalDirEntry_GetMetaObjectFunction,
-        igExternalDirEntry_className,
+        "igExternalDirEntry",
         0x2C,
         igExternalDirEntry_GetVTable,
         igExternalDirEntry_InitFields,
         0,
-        (igMetaObjectCallback *)g_igExternalDirEntry_callbackList
+        g_igExternalDirEntry_callbackList
     );
 }
 
@@ -54,27 +63,53 @@ void igExternalDirEntry_GetMetaObjectFunction(void) {
     igExternalDirEntry_GetMetaObject();
 }
 
+static FieldFactory g_igExternalDirEntry_ctorTable[] = {
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+    (FieldFactory)igIntMetaField_Create,
+    (FieldFactory)igStringMetaField_Create,
+};
+static const char *g_igExternalDirEntry_fieldTable[] = {
+    "_directoryName",
+    "_entryName",
+    "_entryIndex",
+    "_externalFilePath",
+};
+static igMetaField **g_igExternalDirEntry_fieldDescriptors[] = {
+    &g_igExternalDirEntry_directoryNameMetaField,
+    &g_igExternalDirEntry_entryNameMetaField,
+    &g_igExternalDirEntry_entryIndexMetaField,
+    &g_igExternalDirEntry_externalFilePathMetaField,
+};
+static int g_igExternalDirEntry_fieldOffsets[] = {
+    28,
+    32,
+    36,
+    40,
+};
+
+
 void igExternalDirEntry_InitFields(void) {
-    igMetaObject *meta = g_igExternalDirEntry_metaObject[0];
+    igMetaObject *meta = g_igExternalDirEntry_metaObject;
     int base = igMetaObject_GetFieldCount(meta);
     igMetaField *field;
     int index;
     int fields;
-    igMetaObject_CreateFields(meta, (FieldFactory *)g_igExternalDirEntry_ctorTable, 4);
+    igMetaObject_CreateFields(meta, g_igExternalDirEntry_ctorTable, 4);
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    igMetaField_Configure(field, (const char *)text_ref, g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
-    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject[0];
+    igMetaField_Configure(field, (const char *)text_ref, &g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
+    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;
     field->_persistent = 0;
-    field->_externalEnumStorage = (int)g_igExternalDirEntry_refDescriptorCell;
+    field->_externalEnumStorage = (int)&g_igExternalDirEntry_refDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base), (int)text_Intrinsic);
-    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base + 1), (int)text_default_2);
+    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base), (int)"Intrinsic");
+    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base + 1), (int)"default");
     field = (igMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
-    igStringMetaField_SetDefaultText((int *)field, (int)emptyString_4);
+    igStringMetaField_SetDefaultText((int *)field, (int)"");
     field->_persistent = 0;
-    igMetaObject_NameFields(meta, (const char **)g_igExternalDirEntry_fieldTable, (igMetaField ***)g_igExternalDirEntry_fieldDescriptors, g_igExternalDirEntry_fieldOffsets, base);
+    igMetaObject_NameFields(meta, g_igExternalDirEntry_fieldTable, g_igExternalDirEntry_fieldDescriptors, g_igExternalDirEntry_fieldOffsets, base);
 }
 

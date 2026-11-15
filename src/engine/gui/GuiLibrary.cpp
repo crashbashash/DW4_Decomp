@@ -1,8 +1,9 @@
 #include "src/engine/gui/GuiLibrary.h"
 
-/* Constructed by __sinit_GuiLibrary.cpp. */
-igSmartPointer<igGraphPath> g_guiGraphPath(0, kRetainReference);
+unsigned char g_GuiLibrary_registered;
 
+#pragma push
+#pragma readonly_strings on
 #include "src/engine/gui/LibraryFront.inc"
 #include "src/engine/gui/igNonRefCountedViewList.inc"
 #include "src/engine/gui/igViewList.inc"
@@ -80,3 +81,8 @@ igSmartPointer<igGraphPath> g_guiGraphPath(0, kRetainReference);
 #include "src/engine/gui/igClearRenderer_tail.inc"
 #include "src/engine/gui/igTextElement_tail.inc"
 #include "src/engine/gui/InlineTail.inc"
+#pragma pop
+
+/* Constructed by __sinit_GuiLibrary.cpp. */
+igSmartPointer<igGraphPath> g_guiGraphPath(0, kRetainReference);
+int g_activeMousePosObserver;

@@ -1,9 +1,14 @@
+igMetaObject *g_igObjectPool_metaObject;
+igMetaField *g_igObjectPool_freeIndexMetaField;
+igMetaField *g_igObjectPool_capabilityIncreaseMetaField;
+igMetaField *g_igObjectPool_resetModeMetaField;
+
 igMetaObject *igObjectPool_GetMetaObject(void)
 {
-    igMetaObject *g = g_igObjectPool_metaObject[0];
+    igMetaObject *g = g_igObjectPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_001967c0();
-    return g_igObjectPool_metaObject[0];
+    return g_igObjectPool_metaObject;
 }
 
 int igObjectPool_GetVTable(void) {
@@ -23,11 +28,11 @@ void igObjectPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igObjectPool_metaObject),
+        &g_igObjectPool_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
         thunk_igObjectPool_GetMetaObject,
-        igObjectPool_className,
+        "igObjectPool",
         0x20, /* instance size */
         igObjectPool_GetVTable,
         &igObjectPool_InitFields,
@@ -40,15 +45,36 @@ void thunk_igObjectPool_GetMetaObject(void) {
     igObjectPool_GetMetaObject();
 }
 
+static FieldFactory g_igObjectPool_ctorTable[] = {
+    igIntMetaField_Create,
+    igIntMetaField_Create,
+    igBoolMetaField_Create,
+};
+static const char *g_igObjectPool_fieldTable[] = {
+    "_freeIndex",
+    "_capabilityIncrease",
+    "_resetMode",
+};
+static igMetaField **g_igObjectPool_fieldHandles[] = {
+    &g_igObjectPool_freeIndexMetaField,
+    &g_igObjectPool_capabilityIncreaseMetaField,
+    &g_igObjectPool_resetModeMetaField,
+};
+static int g_igObjectPool_fieldOffsets[] = {
+    20,
+    24,
+    28,
+};
+
 void igObjectPool_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igObjectPool_metaObject[0];
+    temp_s0 = (void *)g_igObjectPool_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igObjectPool_ctorTable[0], 3);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igObjectPool_ctorTable, 3);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 0x32);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1);
-    igMetaObject_NameFields(temp_s0, &g_igObjectPool_fieldTable[0], &DAT_0048b1f0[0], &DAT_0048b200[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igObjectPool_fieldTable, g_igObjectPool_fieldHandles, g_igObjectPool_fieldOffsets, temp_s1);
 }
 

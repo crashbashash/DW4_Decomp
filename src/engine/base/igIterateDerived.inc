@@ -1,14 +1,18 @@
+igMetaObject *g_igIterateDerived_metaObject;
+igMetaField *g_igIterateDerived_iteratedMetaField;
+igMetaField *g_igIterateDerived_currentMetaField;
+
 void *FUN_002279d0(int arg0) {
     FUN_00227af0();
-    return igMetaObject_CreateInstance(*(int *)0x56D980, arg0);
+    return igMetaObject_CreateInstance(g_igIterateDerived_metaObject, arg0);
 }
 
 igMetaObject *igIterateDerived_GetMetaObject(void)
 {
-    igMetaObject *g = g_igIterateDerived_metaObject[0];
+    igMetaObject *g = g_igIterateDerived_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_00227af0();
-    return g_igIterateDerived_metaObject[0];
+    return g_igIterateDerived_metaObject;
 }
 
 int igIterateDerived_GetVTable(void) {
@@ -40,15 +44,17 @@ void FUN_00227af0(void)
     igMetaObject_RunStaticInit(igIterateDerived_Register);
 }
 
+static igMetaObjectCallback g_igIterateDerived_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
+
 void igIterateDerived_Register(void) {
     BaseLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igIterateDerived_metaObject,
+        &g_igIterateDerived_metaObject,
         igIterator_Register,
         igIterator_GetPublishedMetaObject,
         thunk_igIterateDerived_GetMetaObject,
-        igIterateDerived_className,
+        "igIterateDerived",
         0x10, /* instance size */
         igIterateDerived_GetVTable,
         &igIterateDerived_InitFields,
@@ -61,16 +67,33 @@ void thunk_igIterateDerived_GetMetaObject(void) {
     igIterateDerived_GetMetaObject();
 }
 
+static FieldFactory g_igIterateDerived_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igIntMetaField_Create,
+};
+static const char *g_igIterateDerived_fieldTable[] = {
+    "_iterated",
+    "_current",
+};
+static igMetaField **g_igIterateDerived_fieldHandles[] = {
+    &g_igIterateDerived_iteratedMetaField,
+    &g_igIterateDerived_currentMetaField,
+};
+static int g_igIterateDerived_fieldOffsets[] = {
+    8,
+    12,
+};
+
 void igIterateDerived_InitFields(void) {
     int temp_s2;
     void *temp_s1;
-    void *temp_s0;
+    igMetaObject *temp_s0;
 
-    temp_s0 = (void *)g_igIterateDerived_metaObject[0];
+    temp_s0 = g_igIterateDerived_metaObject;
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igIterateDerived_ctorTable[0], 2);
+    igMetaObject_CreateFields(temp_s0, g_igIterateDerived_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaObject_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, &g_igIterateDerived_fieldTable[0], &DAT_00497dc0[0], &DAT_00497dc8[0], temp_s2);
+    igMetaObject_NameFields(temp_s0, g_igIterateDerived_fieldTable, g_igIterateDerived_fieldHandles, g_igIterateDerived_fieldOffsets, temp_s2);
 }
 

@@ -1,13 +1,15 @@
+igMetaObject *g_igPrimLengthArray1_1_metaObject;
+
 igMetaObject *FUN_0014bde0(void)
 {
     unsigned char ready;
-    if (g_igPrimLengthArray1_1_metaObject[0] != 0) {
-        ready = (g_igPrimLengthArray1_1_metaObject[0]->_validity & 4) != 0;
+    if (g_igPrimLengthArray1_1_metaObject != 0) {
+        ready = (g_igPrimLengthArray1_1_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_0014be70();
 done:
-    return g_igPrimLengthArray1_1_metaObject[0];
+    return g_igPrimLengthArray1_1_metaObject;
 }
 
 int igPrimLengthArray1_1_GetVTable(void) {
@@ -27,11 +29,11 @@ void igPrimLengthArray1_1_Register(void) {
     FUN_00149bc0();  /* Set-once guard that first runs the sibling registrars it chains to. */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igPrimLengthArray1_1_metaObject,
+        &g_igPrimLengthArray1_1_metaObject,
         igPrimLengthArray_Register,
         igPrimLengthArray_GetPublishedMetaObject,
         thunk_FUN_0014bde0,
-        igPrimLengthArray1_1_className,
+        "igPrimLengthArray1_1",
         0x14, /* instance size */
         igPrimLengthArray1_1_GetVTable,
         &igPrimLengthArray1_1_InitFields,
@@ -45,8 +47,10 @@ void thunk_FUN_0014bde0(void) {
 }
 
 igMetaObject *FUN_0014bf00(void) {
-    return g_igPrimLengthArray_metaObject[0];
+    return g_igPrimLengthArray_metaObject;
 }
+
+igMetaField * g_igPrimLengthArray1_1_lengthDataMetaField;
 
 void igPrimLengthArray1_1_InitFields(void) {
     void **temp_v0;
@@ -54,8 +58,8 @@ void igPrimLengthArray1_1_InitFields(void) {
     int temp_s2;
     void *temp_s1;
 
-    temp_s1 = (void *)(g_igPrimLengthArray1_1_metaObject[0]);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, &text_lengthData[0]));
+    temp_s1 = (void *)(g_igPrimLengthArray1_1_metaObject);
+    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_lengthData"));
     temp_s2 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_s0 = ((DW4VC_84_1 *)(temp_v0))->vX(1);
     temp_s0->f60 = igUnsignedIntMetaField_GetDefaultDescriptor();
@@ -64,7 +68,7 @@ void igPrimLengthArray1_1_InitFields(void) {
     temp_s0->f53 = 1;
     temp_s0->f64 = 1;
     temp_s0->f65 = 1;
-    temp_s0->f28 = (int)(&DAT_0055fb08[0]);
+    temp_s0->f28 = (int)(&g_igPrimLengthArray1_1_lengthDataMetaField);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, temp_s0);
     temp_s0->ref -= 1;
     if ((temp_s0->ref & 0x7fffff) == 0) {

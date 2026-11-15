@@ -4,6 +4,9 @@
 #include "dw4/runtime/exception.h"
 #include "dw4/runtime/cxxlib.h"
 
+#pragma push
+#pragma readonly_strings on
+
 /* The numbers of an action record are packed: bit 0 clear, one byte (value << 1); else bit 1 clear, two bytes;
  * else bit 2 clear, three bytes; else four. */
 extern "C" unsigned char *__DecodeUnsignedNumber(unsigned char *p, unsigned int *value) {
@@ -753,3 +756,4 @@ extern "C" void __FindExceptionTable(char *return_address, MWExceptionInfo *info
     }
     info->action_pointer = (unsigned char *)info->exception_record + actions;
 }
+#pragma pop

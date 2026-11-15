@@ -1,6 +1,8 @@
+igMetaObject *g_beFontImage_metaObject;
+
 igMetaObject *FUN_003618e0(void) {
-    if (g_beFontImage_metaObject[0] == 0 || !isValid(g_beFontImage_metaObject[0])) FUN_00361c70();
-    return g_beFontImage_metaObject[0];
+    if (g_beFontImage_metaObject == 0 || !isValid(g_beFontImage_metaObject)) FUN_00361c70();
+    return g_beFontImage_metaObject;
 }
 
 int beFontImage_GetVTable(void) {
@@ -145,11 +147,11 @@ void *beFontImage_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beFontImage_metaObject,
+        &g_beFontImage_metaObject,
         igBitmapFont_Register,
         igBitmapFont_GetPublishedMetaObject,
         beFontImage_GetMetaObject,
-        beFontImage_className,
+        "beFontImage",
         0x24, /* instance size */
         beFontImage_GetVTable,
         0,
@@ -167,24 +169,51 @@ int FUN_00361d20(void) {
     return g_igBitmapFont_metaObject[0];
 }
 
-int beFont_GetAlignEnum(void) {
-    if (DAT_00589660[0] == 0) {
-        DAT_00589660[0] = igMetaEnum_Create(&text_Align[0], &DAT_004c6ca0[0], &DAT_004c6cb0[0], 3);
+igMetaEnum *g_beFontImage_alignMetaEnum;
+static const char *g_beFontImage_alignNames[] = {
+    "LEFT", "RIGHT", "CENTER",
+};
+static int g_beFontImage_alignValues[] = {
+    0, 1, 2,
+};
+
+igMetaEnum *beFont_GetAlignEnum(void) {
+    if (g_beFontImage_alignMetaEnum == 0) {
+        g_beFontImage_alignMetaEnum = igMetaEnum_Create("Align", g_beFontImage_alignNames, g_beFontImage_alignValues, 3);
     }
-    return DAT_00589660[0];
+    return g_beFontImage_alignMetaEnum;
 }
 
-int beFont_GetSwitchEnum(void) {
-    if (DAT_00589668[0] == 0) {
-        DAT_00589668[0] = igMetaEnum_Create(&text_SwtCtl[0], &DAT_004c6cc0[0], &DAT_004c6cd0[0], 4);
+igMetaEnum *g_beFontImage_swtCtlMetaEnum;
+static const char *g_beFontImage_swtCtlNames[] = {
+    "CLR", "SET", "DISPOFF", "DISPON",
+};
+static int g_beFontImage_swtCtlValues[] = {
+    0, 1, 0, 1,
+};
+
+igMetaEnum *beFont_GetSwitchEnum(void) {
+    if (g_beFontImage_swtCtlMetaEnum == 0) {
+        g_beFontImage_swtCtlMetaEnum = igMetaEnum_Create("SwtCtl", g_beFontImage_swtCtlNames, g_beFontImage_swtCtlValues, 4);
     }
-    return DAT_00589668[0];
+    return g_beFontImage_swtCtlMetaEnum;
 }
 
-int beFont_GetMessageEnum(void) {
-    if (DAT_00589670[0] == 0) {
-        DAT_00589670[0] = igMetaEnum_Create(&text_Message[0], &DAT_004c6ce0[0], &DAT_004c6d10[0], 9);
+igMetaEnum *g_beFontImage_messageMetaEnum;
+static const char *g_beFontImage_messageNames[] = {
+    "INITIALIZE", "TEXTSET", "ALIGN", "SWITCH",
+    "SETPOSITION", "COLOR", "DEFAULTCOLOR", "CANCELCOLOR",
+    "REPLACEUNKNOWN",
+};
+static int g_beFontImage_messageValues[] = {
+    0, 1, 2, 3, 4, 5, 6, 7,
+    8,
+};
+
+igMetaEnum *beFont_GetMessageEnum(void) {
+    if (g_beFontImage_messageMetaEnum == 0) {
+        g_beFontImage_messageMetaEnum = igMetaEnum_Create("Message", g_beFontImage_messageNames, g_beFontImage_messageValues, 9);
     }
-    return DAT_00589670[0];
+    return g_beFontImage_messageMetaEnum;
 }
 

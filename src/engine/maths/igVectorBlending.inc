@@ -1,13 +1,15 @@
+igMetaObject *g_igVectorBlending_metaObject;
+
 igMetaObject *FUN_00186ee0(void)
 {
     unsigned char ready;
-    if (g_igVectorBlending_metaObject[0] != 0) {
-        ready = (g_igVectorBlending_metaObject[0]->_validity & 4) != 0;
+    if (g_igVectorBlending_metaObject != 0) {
+        ready = (g_igVectorBlending_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
     FUN_00186f70();
 done:
-    return g_igVectorBlending_metaObject[0];
+    return g_igVectorBlending_metaObject;
 }
 
 int igVectorBlending_GetVTable(void) {
@@ -27,11 +29,11 @@ void igVectorBlending_Register(void) {
     FUN_00186a40();  /* Set-once guard (gp-relative byte flag) that chains to sibling registrars. */
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igVectorBlending_metaObject,
+        &g_igVectorBlending_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igVectorBlending_GetMetaObject_00186ff0,
-        igVectorBlending_className,
+        "igVectorBlending",
         8, /* instance size */
         igVectorBlending_GetVTable,
         0,

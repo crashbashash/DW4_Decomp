@@ -1,14 +1,16 @@
+igMetaObject *g_igMediaList_metaObject;
+
 void * igMediaList_Create(int pool) {
     igMediaList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x586018), (igMemoryPoolView *)pool));
+    return (void *)(igMetaObject_CreateInstance(g_igMediaList_metaObject, (igMemoryPoolView *)pool));
 }
 
 igMetaObject *igMediaList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igMediaList_metaObject[0];
+    igMetaObject *g = g_igMediaList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         igMediaList_EnsureRegistered();
-    return g_igMediaList_metaObject[0];
+    return g_igMediaList_metaObject;
 }
 
 int igMediaList_GetVTable(void) {
@@ -16,7 +18,7 @@ int igMediaList_GetVTable(void) {
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igMediaList_vtable[0];
-    off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
+    off = *(int *)((char *)((*(int * *)&g_objectSystem)) + 916);
     return *(int *)((char *)tmp + off);
 }
 
@@ -25,20 +27,22 @@ void igMediaList_EnsureRegistered(void)
     igMetaObject_RunStaticInit((StaticInitCallbacks * (*)())igMediaList_Register);
 }
 
+static igMetaObjectCallback g_igMediaList_callbackList[] = { igMedia_EnsureRegistered, 0 };
+
 void igMediaList_Register(void) {
     CoreLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0,
-        g_igMediaList_metaObject,
+        &g_igMediaList_metaObject,
         (igMetaObjectRegisterFunction)igObjectList_Register,
         (igMetaObjectGetFunction)igObjectList_GetPublishedMetaObject,
         igMediaList_GetMetaObjectFunction,
-        igMediaList_className,
+        "igMediaList",
         0x14,
         igMediaList_GetVTable,
         0,
         0,
-        (igMetaObjectCallback *)g_igMediaList_callbackList
+        g_igMediaList_callbackList
     );
 }
 

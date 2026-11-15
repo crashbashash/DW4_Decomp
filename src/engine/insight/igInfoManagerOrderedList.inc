@@ -1,16 +1,18 @@
+igMetaObject *g_igInfoManagerOrderedList_metaObject;
+
 igMetaObject *FUN_00233480(void) {
-    if (g_igInfoManagerOrderedList_metaObject[0] == 0) {
-        g_igInfoManagerOrderedList_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igInfoManagerOrderedList_metaObject == 0) {
+        g_igInfoManagerOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igInfoManagerOrderedList_metaObject[0];
+    return g_igInfoManagerOrderedList_metaObject;
 }
 
 igMetaObject *igInfoManagerOrderedList_GetMetaObject(void)
 {
-    igMetaObject *g = g_igInfoManagerOrderedList_metaObject[0];
+    igMetaObject *g = g_igInfoManagerOrderedList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_002336b0();
-    return g_igInfoManagerOrderedList_metaObject[0];
+    return g_igInfoManagerOrderedList_metaObject;
 }
 
 int igInfoManagerOrderedList_GetVTable(void) {
@@ -64,15 +66,17 @@ void FUN_002336b0(void)
     igMetaObject_RunStaticInit(igInfoManagerOrderedList_Register);
 }
 
+static igMetaObjectCallback g_igInfoManagerOrderedList_callbackList[] = { FUN_00233910, 0 };
+
 void igInfoManagerOrderedList_Register(void) {
     InsightLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        g_igInfoManagerOrderedList_metaObject,
+        &g_igInfoManagerOrderedList_metaObject,
         igDependencyOrderedList_Register,
         igDependencyOrderedList_GetPublishedMetaObject,
         thunk_igInfoManagerOrderedList_GetMetaObject,
-        igInfoManagerOrderedList_className,
+        "igInfoManagerOrderedList",
         0x1C, /* instance size */
         igInfoManagerOrderedList_GetVTable,
         0,

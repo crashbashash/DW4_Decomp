@@ -1,12 +1,16 @@
+igMetaObject *g_beAction2FADESET_metaObject;
+igMetaField *g_beAction2FADESET_fadeTimeMetaField;
+igMetaField *g_beAction2FADESET_fadeValueMetaField;
+
 void *FUN_0036d1a0(void) {
     bool ok;
-    if (g_beAction2FADESET_metaObject[0] == 0) goto make;
-    ok = !!(g_beAction2FADESET_metaObject[0]->_validity & 4);
+    if (g_beAction2FADESET_metaObject == 0) goto make;
+    ok = !!(g_beAction2FADESET_metaObject->_validity & 4);
     if (ok != false) goto done;
 make:
     FUN_0036d280();
 done:;
-    return g_beAction2FADESET_metaObject[0];
+    return g_beAction2FADESET_metaObject;
 }
 
 int beAction2FADESET_GetVTable(void) {
@@ -47,11 +51,11 @@ void *beAction2FADESET_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
-        g_beAction2FADESET_metaObject,
+        &g_beAction2FADESET_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
         beAction2FADESET_GetMetaObject,
-        beAction2FADESET_className,
+        "beAction2FADESET",
         0x14, /* instance size */
         beAction2FADESET_GetVTable,
         beAction2FADESET_InitFields,
@@ -65,13 +69,30 @@ void beAction2FADESET_GetMetaObject(void)
     FUN_0036d1a0();
 }
 
+static FieldFactory g_beAction2FADESET_ctorTable[] = {
+    igFloatMetaField_Create,
+    igFloatMetaField_Create,
+};
+static const char *g_beAction2FADESET_fieldTable[] = {
+    "_fadeTime",
+    "_fadeValue",
+};
+static igMetaField **g_beAction2FADESET_fieldHandles[] = {
+    &g_beAction2FADESET_fadeTimeMetaField,
+    &g_beAction2FADESET_fadeValueMetaField,
+};
+static int g_beAction2FADESET_fieldOffsets[] = {
+    12,
+    16,
+};
+
 void beAction2FADESET_InitFields(void) {
     int temp_s1;
     void *temp_s0;
 
-    temp_s0 = (void *)g_beAction2FADESET_metaObject[0];
+    temp_s0 = (void *)g_beAction2FADESET_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_beAction2FADESET_ctorTable[0], 2);
-    igMetaObject_NameFields(temp_s0, &g_beAction2FADESET_fieldTable[0], &DAT_004c8130[0], &DAT_004c8138[0], temp_s1);
+    igMetaObject_CreateFields(temp_s0, g_beAction2FADESET_ctorTable, 2);
+    igMetaObject_NameFields(temp_s0, g_beAction2FADESET_fieldTable, g_beAction2FADESET_fieldHandles, g_beAction2FADESET_fieldOffsets, temp_s1);
 }
 

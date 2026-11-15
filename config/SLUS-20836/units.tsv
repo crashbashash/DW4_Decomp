@@ -99,7 +99,7 @@
 0x00130000	0x00142f10	alchemy-attrs_AttrsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00142f10	0x00145ce0	alchemy-audio_AudioLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00145ce0	0x001493e0	alchemy-window-input_WindowInputLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
-0x001493e0	0x001869e0	alchemy-gfx_GfxLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
+0x001493e0	0x001869e0	alchemy-gfx_GfxLibrary	b52	-O4,s -sdatathreshold 2 -str readonly -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x001869e0	0x00194380	alchemy-maths_MathsLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00194380	0x001e3ff0	alchemy-scene-graph_SceneGraphLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x001e3ff0	0x001e74b0	alchemy-data-pump_DataPumpLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
@@ -122,27 +122,27 @@
 0x0020df00	0x0020e080	engine_p2vu0	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0020e080	0x0020e400	engine_p2vif	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0020e400	0x0020e750	engine_p2watchdog	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
-0x0020e750	0x0020f068	libpng_png	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0020f070	0x0020f340	libpng_pngerror	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0020f340	0x0020f608	libpng_pngget	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0020f610	0x0020f930	libpng_pngmem	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0020f930	0x00210dec	libpng_pngread	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x00210df0	0x00210f14	libpng_pngrio	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x00210f20	0x0021aa28	libpng_pngrtran	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0021aa30	0x0021f0e8	libpng_pngrutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x0021f0f0	0x00220364	libpng_pngset	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x00220370	0x00221668	libpng_pngtrans	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x00221670	0x00221864	libpng_pngwrite	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h	off	-	whole file
-0x00221870	0x00221a0c	zlib_adler32	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00221a10	0x00221bf0	zlib_crc32	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00221bf0	0x00221d04	zlib_deflate	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00221d10	0x00222e88	zlib_infblock	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00222e90	0x00223988	zlib_infcodes	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00223990	0x00223eb4	zlib_inffast	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00223ec0	0x00224778	zlib_inflate	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x00224780	0x002250d8	zlib_inftrees	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x002250e0	0x002252a0	zlib_infutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
-0x002252a0	0x002252d8	zlib_zutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib	off	-	whole file
+0x0020e750	0x0020f068	libpng_png	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0020f070	0x0020f340	libpng_pngerror	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0020f340	0x0020f608	libpng_pngget	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0020f610	0x0020f930	libpng_pngmem	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0020f930	0x00210dec	libpng_pngread	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x00210df0	0x00210f14	libpng_pngrio	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x00210f20	0x0021aa28	libpng_pngrtran	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0021aa30	0x0021f0e8	libpng_pngrutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x0021f0f0	0x00220364	libpng_pngset	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x00220370	0x00221668	libpng_pngtrans	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x00221670	0x00221864	libpng_pngwrite	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -Isrc/third_party/libpng -prefix libpng_prefix.h -str readonly	off	-	whole file
+0x00221870	0x00221a0c	zlib_adler32	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00221a10	0x00221bf0	zlib_crc32	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00221bf0	0x00221d04	zlib_deflate	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00221d10	0x00222e88	zlib_infblock	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00222e90	0x00223988	zlib_infcodes	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00223990	0x00223eb4	zlib_inffast	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00223ec0	0x00224778	zlib_inflate	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x00224780	0x002250d8	zlib_inftrees	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x002250e0	0x002252a0	zlib_infutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
+0x002252a0	0x002252d8	zlib_zutil	combat	-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc -Isrc/third_party/zlib -str readonly	off	-	whole file
 0x002252d8	0x00225764	sony_libmtap	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00225770	0x0022e4b8	alchemy-base_BaseLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude	off	-	whole file
 0x0022e4b8	0x0022f75c	libgcc_22e4b8	ee-gcc	-O2 -G0 -g -Iinclude	off	-	libgcc region (regions.tsv); `sd` prologues (Sony EE GCC); exceptions off: none of 1 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC

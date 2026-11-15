@@ -1,21 +1,30 @@
 void FUN_0019aea0(int arg0) {
     FUN_0019b270();
-    igMetaObject_CreateInstance(*(int *)0x5615E0, arg0);
+    igMetaObject_CreateInstance((int)g_igSceneInfo_metaObject, arg0);
 }
 
+igMetaObject *g_igSceneInfo_metaObject;
+igMetaField *g_igSceneInfo_sceneGraphMetaField;
+igMetaField *g_igSceneInfo_texturesMetaField;
+igMetaField *g_igSceneInfo_camerasMetaField;
+igMetaField *g_igSceneInfo_animationBeginMetaField;
+igMetaField *g_igSceneInfo_animationEndMetaField;
+igMetaField *g_igSceneInfo_upVectorMetaField;
+igMetaField *g_igSceneInfo_sceneGraphListMetaField;
+
 igMetaObject *FUN_0019aee0(void) {
-    if (g_igSceneInfo_metaObject[0] == 0) {
-        g_igSceneInfo_metaObject[0] = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+    if (g_igSceneInfo_metaObject == 0) {
+        g_igSceneInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
     }
-    return g_igSceneInfo_metaObject[0];
+    return g_igSceneInfo_metaObject;
 }
 
 igMetaObject *igSceneInfo_GetMetaObject(void)
 {
-    igMetaObject *g = g_igSceneInfo_metaObject[0];
+    igMetaObject *g = g_igSceneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
         FUN_0019b270();
-    return g_igSceneInfo_metaObject[0];
+    return g_igSceneInfo_metaObject;
 }
 
 int igSceneInfo_GetVTable(void) {
@@ -132,15 +141,17 @@ void FUN_0019b270(void)
     igMetaObject_RunStaticInit(igSceneInfo_Register);
 }
 
+static igMetaObjectCallback g_igSceneInfo_callbackList[] = { FUN_0019cf10, FUN_0013a440, FUN_0019f5a0, FUN_0019ccc0, 0 };
+
 void igSceneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     igMetaObject_RegisterClass(
         0, /* abstract */
-        ((char *)g_igSceneInfo_metaObject),
+        &g_igSceneInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
         thunk_igSceneInfo_GetMetaObject,
-        igSceneInfo_className,
+        "igSceneInfo",
         0x40, /* instance size */
         igSceneInfo_GetVTable,
         &igSceneInfo_InitFields,
@@ -153,6 +164,43 @@ void thunk_igSceneInfo_GetMetaObject(void) {
     igSceneInfo_GetMetaObject();
 }
 
+static FieldFactory g_igSceneInfo_ctorTable[] = {
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igObjectRefMetaField_Create,
+    igLongMetaField_Create,
+    igLongMetaField_Create,
+    FUN_00187890,
+    igObjectRefMetaField_Create,
+};
+static const char *g_igSceneInfo_fieldTable[] = {
+    "_sceneGraph",
+    "_textures",
+    "_cameras",
+    "_animationBegin",
+    "_animationEnd",
+    "_upVector",
+    "_sceneGraphList",
+};
+static igMetaField **g_igSceneInfo_fieldHandles[] = {
+    &g_igSceneInfo_sceneGraphMetaField,
+    &g_igSceneInfo_texturesMetaField,
+    &g_igSceneInfo_camerasMetaField,
+    &g_igSceneInfo_animationBeginMetaField,
+    &g_igSceneInfo_animationEndMetaField,
+    &g_igSceneInfo_upVectorMetaField,
+    &g_igSceneInfo_sceneGraphListMetaField,
+};
+static int g_igSceneInfo_fieldOffsets[] = {
+    20,
+    24,
+    28,
+    32,
+    40,
+    48,
+    60,
+};
+
 void igSceneInfo_InitFields(void) {
     struct V3 v;
     int temp_s1;
@@ -163,9 +211,9 @@ void igSceneInfo_InitFields(void) {
     void *temp_s2_4;
     void *temp_s0;
 
-    temp_s0 = (void *)g_igSceneInfo_metaObject[0];
+    temp_s0 = (void *)g_igSceneInfo_metaObject;
     temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, &g_igSceneInfo_ctorTable[0], 7);
+    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSceneInfo_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0019cd50();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1)));
@@ -186,6 +234,6 @@ void igSceneInfo_InitFields(void) {
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019cbe0();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, &g_igSceneInfo_fieldTable[0], &DAT_0048b7c0[0], &DAT_0048b7e0[0], temp_s1);
+    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSceneInfo_fieldTable, g_igSceneInfo_fieldHandles, g_igSceneInfo_fieldOffsets, temp_s1);
 }
 

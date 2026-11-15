@@ -1,3 +1,4 @@
+int g_igTextureFunctionAttr_multiTextureExt;
 void FUN_00141250(void *arg0) {
     *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 16);
 }
@@ -26,19 +27,19 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_11(void *arg0) {
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_12(void **arg0) {
     if (igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1) == 0) {
-        DAT_0055f520[0] = 0;
+        g_igTextureFunctionAttr_multiTextureExt = 0;
     }
     igObject_ReleaseDefaults(arg0);
 }
 
 igMetaObject *Gap__Attrs__igTextureFunctionAttr__vfunc_22(void) {
-    return g_igTextureFunctionAttr_metaObject[0];
+    return g_igTextureFunctionAttr_metaObject;
 }
 
 void Gap__Attrs__igTextureFunctionAttr__vfunc_26(igTextureFunctionAttr *arg0, void **arg1) {
     arg0->_mode = ((DW4VC_596_1 *)(arg1))->vX((int)(arg0->_unitID));
-    if (DAT_0055f520[0] == 0) {
-        DAT_0055f520[0] = ((DW4VC_104_1 *)(arg1))->vX(&text_igMultiTextureExt[0]);
+    if (g_igTextureFunctionAttr_multiTextureExt == 0) {
+        g_igTextureFunctionAttr_multiTextureExt = ((DW4VC_104_1 *)(arg1))->vX("igMultiTextureExt");
     }
 }
 
@@ -58,16 +59,16 @@ void Gap__Attrs__igTextureFunctionAttr__vfunc_32(igTextureFunctionAttr *self, in
 void Gap__Attrs__igTextureFunctionAttr__vfunc_24(void *arg0x, int arg1) {
     A_141410 *arg0 = (A_141410 *)arg0x;
     int temp_s0;
-    if (DAT_0055f520[0] != 0) {
+    if (g_igTextureFunctionAttr_multiTextureExt != 0) {
         temp_s0 = arg0->f36;
         if (arg0->f32 == 2) {
             Gap__Gfx__igPsx2VisualContext__vfunc_148(arg1, arg0->f16, arg0->f12);
             return;
         }
         if (arg0->f16 > 0) {
-            ((G *)DAT_0055f520[0])->v124(arg0->f16, temp_s0, arg0->f12);
+            ((G *)g_igTextureFunctionAttr_multiTextureExt)->v124(arg0->f16, temp_s0, arg0->f12);
         }
-        ((G *)DAT_0055f520[0])->v120(arg0->f16, temp_s0, arg0->f28);
+        ((G *)g_igTextureFunctionAttr_multiTextureExt)->v120(arg0->f16, temp_s0, arg0->f28);
         return;
     }
     Gap__Gfx__igPsx2VisualContext__vfunc_148(arg1, arg0->f16, arg0->f12);

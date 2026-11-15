@@ -21,8 +21,8 @@ void Gap__Gui__igGuiComponentNode__vfunc_13(Node *self) {
 }
 
 int FUN_00455ad0(int arg0, int arg1, int arg2) {
-    if (DAT_0058c678[0] != 0) {
-        FUN_00455f50((Z *)DAT_0058c678[0], (Y *)arg2);
+    if (g_activeMousePosObserver != 0) {
+        FUN_00455f50((Z *)g_activeMousePosObserver, (Y *)arg2);
     }
     return 0;
 }

@@ -12,12 +12,16 @@ int igObject_OperatorDelete(int extra0)
     return free();
 }
 
+int (*g_outOfMemoryHandler)();
+
 int igMemoryPool_HandleOutOfMemory(int pool, int size, int attempt) {
     if (g_outOfMemoryHandler != 0) {
         return g_outOfMemoryHandler();
     }
     return attempt == 4;
 }
+
+unsigned char g_igMemoryPool_defaultUpdateStatistics = 1;
 
 void igMemoryPool_InitDefaults(void *pool) {
     ((igMemoryPool *)pool)->_updateStatistics = (unsigned char) g_igMemoryPool_defaultUpdateStatistics;
@@ -40,26 +44,28 @@ int Memory_GetNonTrackedAllocator(void) {
     return ((int)Memory_GetAllocatorBySelector(3));
 }
 
+igMemoryDictionaryView *g_memoryDictionary;
+
 void igMemoryDictionary_SetCurrent(void *dictionary) {
     void *current;
 
-    current = (void *)(((void * *)g_memoryDictionary)[0]);
+    current = (void *)((*(void * *)&g_memoryDictionary));
     if (current != dictionary) {
         if (current != 0) {
-            ((void * *)g_memoryDictionary)[0] = (void *)(0);
+            (*(void * *)&g_memoryDictionary) = (void *)(0);
             ((igMemoryDictionaryView *)current)->Clear();
             ((igObject *)current)->_refCount = (int)((int) (((igObject *)current)->_refCount - 1));
             if (((unsigned long long) ((long long) (int) ((igObject *)current)->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(current);
             }
         }
-        ((void * *)g_memoryDictionary)[0] = (void *)(dictionary);
+        (*(void * *)&g_memoryDictionary) = (void *)(dictionary);
     }
 }
 
 igResult Memory_LookupAllocation(int address, int *poolOut) {
     int poolIndex;
-    igMemoryDictionaryView *o = g_memoryDictionary[0];
+    igMemoryDictionaryView *o = g_memoryDictionary;
     if (o != 0) {
         int x = o->GetValue(address, &poolIndex).get(); if (x == g_resultSuccess.v) {
             *poolOut = (int)igAllocator_ResolveEncodedIndex(poolIndex);
@@ -74,19 +80,19 @@ igResult Memory_LookupAllocation(int address, int *poolOut) {
 
 igResult Memory_RegisterAllocation(int address, igMemoryPoolView *pool) {
     int dictionarySize;
-    if (g_memoryDictionary[0] == 0) {
+    if (g_memoryDictionary == 0) {
         dictionarySize = 0x1000;
-        igRegistry_GetValueInt((int)((ObjectSystemView *)g_objectSystem[0])->configRegistry, 2, text_memoryDictionarySize, &dictionarySize, 0x1000, 0);
-        g_memoryDictionary[0] = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
-        g_memoryDictionary[0]->SetCapacity(dictionarySize);
-        g_memoryDictionary[0]->InitEntries();
-        igMemoryDictionary_SetCurrent(g_memoryDictionary[0]);
+        igRegistry_GetValueInt((int)((ObjectSystemView *)g_objectSystem)->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
+        g_memoryDictionary = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
+        g_memoryDictionary->SetCapacity(dictionarySize);
+        g_memoryDictionary->InitEntries();
+        igMemoryDictionary_SetCurrent(g_memoryDictionary);
     }
-    return g_memoryDictionary[0]->Insert(address, pool->GetPoolIndex());
+    return g_memoryDictionary->Insert(address, pool->GetPoolIndex());
 }
 
 igResult Memory_UnregisterAllocation(int address, igMemoryPoolView *pool) {
-    igMemoryDictionaryView *p = g_memoryDictionary[0];
+    igMemoryDictionaryView *p = g_memoryDictionary;
     if (p != 0) {
         return p->Remove(address);
     }
@@ -99,12 +105,12 @@ void igMemoryPool_RegisterPool(void **pool) {
     int flag;
 
     if (((igMemoryPoolView *)pool)->IsSecondaryAllocator() == 0) {
-        list = g_primaryAllocatorList[0];
+        list = g_primaryAllocatorList;
         idx = list->count;
         flag = 0;
     } else {
         flag = 1;
-        list = g_secondaryAllocatorList[0];
+        list = g_secondaryAllocatorList;
         idx = list->count;
     }
     if (idx < 0x1F) {
@@ -126,14 +132,14 @@ void igMemoryPool_UnregisterPool(void **pool) {
     int index;
 
     if (((igMemoryPoolView *)pool)->IsSecondaryAllocator() == 0) {
-        index = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_primaryAllocatorList)[0]), (igMemoryPoolView *)pool);
+        index = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)((*(int * *)&g_primaryAllocatorList)), (igMemoryPoolView *)pool);
         if (index >= 0) {
-            *(int *)(*((int * *)g_primaryAllocatorList)[0] + (index * 4)) = 0;
+            *(int *)(*(*(int * *)&g_primaryAllocatorList) + (index * 4)) = 0;
         }
     } else {
-        index = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)(((int * *)g_secondaryAllocatorList)[0]), (igMemoryPoolView *)pool);
+        index = igMemoryPoolInfoList_IndexOf((AllocatorRegistry *)((*(int * *)&g_secondaryAllocatorList)), (igMemoryPoolView *)pool);
         if (index >= 0) {
-            *(int *)(*((int * *)g_secondaryAllocatorList)[0] + (index * 4)) = 0;
+            *(int *)(*(*(int * *)&g_secondaryAllocatorList) + (index * 4)) = 0;
         }
     }
 }
@@ -144,17 +150,17 @@ void *Memory_FindOwningAllocator(int address) {
     igMemoryPoolView *primary;
     int primaryIndex;
 
-    secondaryIndex = g_secondaryAllocatorList[0]->count - 1;
+    secondaryIndex = g_secondaryAllocatorList->count - 1;
     while (secondaryIndex >= 0) {
-        secondary = (igMemoryPoolView *)g_secondaryAllocatorList[0]->data[secondaryIndex];
+        secondary = (igMemoryPoolView *)g_secondaryAllocatorList->data[secondaryIndex];
         if ((secondary != 0) && (secondary->IsActive() != 0) && (secondary->OwnsAllocation((void *)address) != 0)) {
             return secondary;
         }
         secondaryIndex -= 1;
     }
-    primaryIndex = g_primaryAllocatorList[0]->count - 1;
+    primaryIndex = g_primaryAllocatorList->count - 1;
     while (primaryIndex >= 0) {
-        primary = (igMemoryPoolView *)g_primaryAllocatorList[0]->data[primaryIndex];
+        primary = (igMemoryPoolView *)g_primaryAllocatorList->data[primaryIndex];
         if ((primary != 0) && (primary->IsActive() != 0) && (primary->OwnsAllocation((void *)address) != 0)) {
             return primary;
         }

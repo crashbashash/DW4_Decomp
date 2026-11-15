@@ -2,7 +2,7 @@ int igDoubleMetaField_ValueFromString(int self, int value, int text) {
     int consumed;
 
     consumed = 0;
-    sscanf(text, &text_lg_n[0], value, &consumed);
+    sscanf(text, "%lg%n", value, &consumed);
     return consumed;
 }
 
@@ -11,18 +11,18 @@ void igDoubleMetaField_ValueToString(int *out, int self, long long *value) {
     int pool;
     int interned;
 
-    sprintf(buffer, &percent_g[0], *value);
+    sprintf(buffer, "%g", *value);
     if (buffer == 0) {
         interned = 0;
     } else {
-        if (g_stringPool[0] == 0) {
+        if (g_stringPool == 0) {
             pool = ((int)StringPool_Allocate(0x10));
             if (pool != 0) {
                 pool = ((int)StringPool_Construct((StringPool *)pool));
             }
-            g_stringPool[0] = pool;
+            g_stringPool = pool;
         }
-        interned = StringPool_Intern((StringPool *)g_stringPool[0], (const char *)buffer);
+        interned = StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
     }
     *out = interned;
 }
