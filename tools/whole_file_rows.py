@@ -44,21 +44,33 @@ a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one ret
 a call target tells them apart; two inline destructors of one shape do too, and the one a member
 still reaches becomes a duplicate.
 
+A file with no retail function is data-only when the retail linker kept data of it
+(docs/engine/emitted-functions.md, "Data-only units"): each of its data sections is placed where another
+file's row, of this run or of unit-objects.json, reads a name it defines, and the row is keyed by the first.
+Its `stripped` names are its compiled functions and those of `--reference <stem>=<object>`, its library
+object (an SDK archive member); none may have a copy anywhere in the retail code, relocated words masked.
+A file none of whose data is reached was dropped whole and gets no row. A data-only file's units.tsv row
+covers its first data section and goes after the code rows.
+
 The rows go to stdout as JSON. `--write` merges them into unit-objects.json, replacing the
 whole-file rows inside the range and each row of a function the file now places (a row of a
 function the file leaves out stays), and replaces the units.tsv rows inside the range with one per
-file. `--names` writes a `.tsv` for
+file. The rows are written in address order. `--names` writes a `.tsv` for
 tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
 Usage:
   whole_file_rows.py --src src/third_party/zlib --files adler32 crc32 --range 0x221870 0x2252d8 \\
       --compiler combat --flags "-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc" \\
       --unit zlib [--write] [--names config/SLUS-20836/names/zlib.tsv]
+  whole_file_rows.py --src src/sony/libsdr --files sdr_main sdr_cb --range 0x118fe0 0x1194c0 \\
+      --compiler ee-gcc-2.9 --flags "-O2 -G0 -ffunction-sections -Iinclude" --unit sony_libsdr \\
+      --reference sdr_cb=<the SDK's libsdr.a member sdr_cb.o> [--write]
 """
 import argparse
 import collections
 import json
 import os
+import re
 import struct
 import shutil
 import subprocess
@@ -234,7 +246,7 @@ def locate(functions, retail, starts, placed, dropped=()):
     return found
 
 
-def reach(function_at, retail, syms, headers, obj, functions, records, names, hi, twins=None):
+def reach(function_at, retail, syms, headers, obj, functions, records, names, hi, twins=None, sections=()):
     """(data, duplicates, externals) of one file: what its placed members reach in retail.
 
     The walk starts at each member's body and its retail exception table and follows every
@@ -251,7 +263,8 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
       makes (`operator delete` in an inline destructor) has no member's `jal` to be read from
     A twin is read for its calls and the functions it reaches only: its data are the twin object's,
     compared under that profile. A function an exception table names and nothing in the file
-    defines is table_externals'."""
+    defines is table_externals'. A data-only file has no member: its walk starts at its kept data
+    `sections`, [(retail address, section index)]."""
     tables = exception_tables(syms, headers, obj, functions)
     data, duplicates, externals, seen, work = {}, {}, {}, set(), []
 
@@ -269,6 +282,8 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
 
     for name, va in function_at.items():
         walk_body(name, va, functions[name])
+    for base, index in sections:
+        walk_section(base, index)
     while work:
         base, raw, relocs, mode, key = work.pop()
         if key in seen:
@@ -424,8 +439,85 @@ def unrecovered(missing, defined):
     return names
 
 
+def object_functions(obj):
+    """{name: (bytes, relocated word offsets)} of each sized function of an object's executable sections:
+    a compile's own (one section per function) or a reference library object's (one `.text` for all)."""
+    syms, _ = verify.object_syms(obj)
+    headers = verify.elf_section_headers(obj)
+    out = {}
+    for name, (section, value, size) in syms.items():
+        if not (isinstance(section, int) and 0 < section < len(headers) and headers[section][1][2] & 4 and size):
+            continue
+        raw = verify.object_section(obj, headers[section][0], section)[value:value + size]
+        relocated = {(offset - value) & ~3 for _s, offset, _k, _n, _a in verify.object_relocs(obj, target_section=section)
+                     if value <= offset < value + size}
+        out[name] = (raw, relocated)
+    return out
+
+
+def retail_copies(raw, relocated, retail, lo, hi):
+    """The word-aligned addresses in [lo, hi) whose words are `raw`'s, the words at the `relocated`
+    offsets masked: where retail keeps a copy of a function."""
+    pattern = b"".join(b"...." if at in relocated else re.escape(raw[at:at + 4]) for at in range(0, len(raw), 4))
+    code = verify.va_bytes(retail.image, lo, hi - lo)
+    return [lo + m.start() for m in re.finditer(b"(?=" + pattern + b")", code, re.DOTALL) if m.start() % 4 == 0]
+
+
+def data_only_row(source, obj, syms, headers, functions, retail, addresses, dropped, code, records, known, hi,
+                  src_root=os.path.join(ROOT, "src")):
+    """(key, row, units.tsv span) of a file the retail linker kept data of and no function, or None when
+    no datum it defines has a known retail address (the linker dropped the whole file).
+
+    `addresses` gives the retail address of the names other files' rows read from retail, and each
+    data section holding one is placed there; a section none of them reaches went with the code.
+    `dropped`, [(name, object_functions entry)], holds the file's functions, the compiled ones and those
+    of its library object (`--reference`): none may have a copy anywhere in the retail `code` range,
+    relocated words masked, and the kept data may name none. The rows are keyed by the first kept
+    datum, which must start its section, and the units.tsv span is that section."""
+    placed = {}
+    for name, (section, value, _size) in sorted(syms.items()):
+        if (name in addresses and isinstance(section, int) and 0 < section < len(headers)
+                and headers[section][1][2] & 2 and not headers[section][1][2] & 4):
+            if placed.setdefault(section, addresses[name] - value) != addresses[name] - value:
+                sys.exit("%s: %s reads as 0x%x, against its section's other data" % (source, name, addresses[name]))
+    if not placed:
+        return None
+    if not dropped:
+        sys.exit("%s: a data-only file names the functions the retail linker dropped: give its library object "
+                 "with --reference" % source)
+    for name, (raw, relocated) in dropped:
+        found = retail_copies(raw, relocated, retail, *code)
+        if found:
+            sys.exit("%s: %s has a retail copy at 0x%x: a file the linker kept a function of is not data-only"
+                     % (source, name, found[0]))
+    data, duplicates, _externals = reach({}, retail, syms, headers, obj, functions, records, known, hi,
+                                         sections=sorted((address, section) for section, address in placed.items()))
+    if duplicates:
+        sys.exit("%s: its kept data names %s: the retail linker keeps a function kept data names"
+                 % (source, ", ".join(sorted(duplicates))))
+    for section, address in placed.items():
+        start = sorted(n for n, (s, v, _z) in syms.items()
+                       if s == section and v == 0 and not n.startswith(".") and not unitobjects.is_anonymous(n))
+        if not start:
+            sys.exit("%s: no name starts the data section at 0x%x to key its row" % (source, address))
+        # an ee-gcc section symbol (`@data`) names a whole section; an MWCC datum is its own section
+        data[next((n for n in start if n.startswith("@")), start[0])] = address
+    named, anon = data_rows(data)
+    key = min(placed.values())
+    first = next(section for section, address in placed.items() if address == key)
+    row = {"whole_file": True, "data": named}
+    if anon:
+        row["anon"] = anon
+    row["stripped"] = sorted({name for name, _function in dropped})
+    row["source"] = os.path.relpath(os.path.abspath(source), src_root)
+    if row["source"].startswith(".."):
+        sys.exit("%s: a data-only unit's source is a file under %s" % (source, src_root))
+    return "0x%08x" % key, row, (key, key + headers[first][1][5])
+
+
 def units_rows(path, lo, hi, rows):
-    """units.tsv with `rows` in place of everything inside [lo, hi); a row across `lo` is cut."""
+    """units.tsv with `rows` in place of everything inside [lo, hi); a row across `lo` is cut. Rows past
+    every unit (a data-only unit's span lies in the data) go at the end."""
     out, placed = [], False
     for line in open(path):
         fields = line.split("\t")
@@ -449,6 +541,8 @@ def units_rows(path, lo, hi, rows):
                 fields[0] = "0x%08x" % hi
                 line = "\t".join(fields)
         out.append(line)
+    if not placed:
+        out += rows
     open(path, "w").writelines(out)
 
 
@@ -465,6 +559,19 @@ def merge_rows(overlay, lo, hi, rows):
             del overlay[key]
     overlay.update(rows)
     return overlay
+
+
+def overlay_addresses(path):
+    """{name: retail address} of the data the rows of unit-objects.json name, where every row naming it
+    agrees; a section symbol (`@data`) is each object's own and is left out."""
+    seen = collections.defaultdict(set)
+    with open(path) as fh:
+        rows = json.load(fh)
+    for row in rows.values():
+        for name, address in row.get("data", {}).items():
+            if not name.startswith("@"):
+                seen[name].add(int(address, 0))
+    return {name: addresses.pop() for name, addresses in seen.items() if len(addresses) == 1}
 
 
 def main(argv=None):
@@ -486,6 +593,9 @@ def main(argv=None):
     ap.add_argument("--cxx", action="store_true", help="the object's names are mangled: keep symbols.txt plain")
     ap.add_argument("--partial", action="store_true",
                     help="the file is still being recovered: retail functions it lacks link from retail")
+    ap.add_argument("--reference", action="append", default=[], metavar="STEM=OBJECT",
+                    help="a file's library object (an SDK archive member): its functions are the ones a data-only "
+                         "file lost, each searched for in retail")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--names", help="write the name rows for tools/apply_names.py here")
     a = ap.parse_args(argv)
@@ -504,7 +614,10 @@ def main(argv=None):
     placed = {n: by_name[n][0] for n in by_name if lo <= by_name[n][0] < hi}
     placed.update(forced)
 
-    rows, spans, names, owned = {}, [], {}, {}
+    references = dict(item.split("=", 1) for item in a.reference)
+    # the retail address of each datum other files name, for a file the linker kept the data of only
+    addresses = overlay_addresses(os.path.join(a.config, "unit-objects.json"))
+    rows, spans, data_spans, names, owned = {}, [], [], {}, {}
     with tempfile.TemporaryDirectory(prefix="dw4-whole-file-rows-") as tmp:
         compiled = []
         for stem in a.files:
@@ -535,9 +648,10 @@ def main(argv=None):
         known = dict(((n, v) for n, (v, _s) in by_name.items()))
         if not a.cxx:
             known.update({name: va for va, name in owned.items()})
+        data_only = []
         for stem, obj, syms, headers, functions, at, twins, initializer in compiled:
             if not at:
-                print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
+                data_only.append((stem, obj, syms, headers, functions))
                 continue
             data, duplicates, externals = reach(at, retail, syms, headers, obj, functions, records, known, hi,
                                                 twins)
@@ -571,6 +685,24 @@ def main(argv=None):
             print("%-10s members %3d duplicates %3d stripped %3d data %3d externals %3d"
                   % (stem, len(members), len(duplicates), len(stripped), len(data), len(externals)),
                   file=sys.stderr)
+            addresses.update({name: va for name, va in data.items()
+                              if not name.startswith("@") and not unitobjects.is_anonymous(name)})
+        code = (min(by_va), max(va + size for va, (_name, size) in by_va.items()))
+        for stem, obj, syms, headers, functions in data_only:
+            source = os.path.join(a.src, stem + a.ext)
+            dropped = list(object_functions(obj).items())
+            if stem in references:
+                dropped += list(object_functions(references[stem]).items())
+            found = data_only_row(source, obj, syms, headers, functions, retail, {**addresses, **forced}, dropped,
+                                  code, records, known, hi)
+            if found is None:
+                print("%-10s no retail function: the linker dropped the file" % stem, file=sys.stderr)
+                continue
+            key, row, (start, end) = found
+            rows[key] = row
+            data_spans.append((start, end, stem))
+            print("%-10s data-only: data %3d stripped %3d" % (stem, len(row["data"]) + len(row.get("anon", [])),
+                                                              len(row["stripped"])), file=sys.stderr)
 
     if a.partial and len(spans) == 1:
         # one file still being recovered owns its whole range, the edges it has no source for too
@@ -584,12 +716,14 @@ def main(argv=None):
         path = os.path.join(a.config, "unit-objects.json")
         overlay = merge_rows(json.load(open(path)), lo, hi, rows)
         with open(path, "w") as fh:
-            json.dump(overlay, fh, indent=2)
+            # in address order, a data-only row after the code
+            json.dump(dict(sorted(overlay.items(), key=lambda row: int(row[0], 16))), fh, indent=2)
             fh.write("\n")
-        units_rows(units_path, lo, hi,
-                   ["0x%08x\t0x%08x\t%s_%s\t%s\t%s\t%s\t-\twhole file\n"
-                    % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)
-                    for start, end, stem in sorted(spans)])
+        line = "0x%08x\t0x%08x\t%s_%s\t%s\t%s\t%s\t-\twhole file\n"
+        units_rows(units_path, lo, hi, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)
+                                        for start, end, stem in sorted(spans)])
+        for start, end, stem in data_spans:
+            units_rows(units_path, start, end, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)])
     return 0
 
 

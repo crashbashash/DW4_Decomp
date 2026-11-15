@@ -1221,15 +1221,20 @@ def defined_outside(syms, headers, spans, exempt=()):
     return out
 
 
-def stripped_bodies(obj, headers, syms, group, sections, image, by_va):
+def stripped_bodies(obj, headers, syms, group, sections, image, by_va, by_name=None):
     """{name: section} for the group's `stripped` destructor bodies (config/SLUS-20836/unit-objects.json).
 
     MWCC emits an out-of-line copy of an inline destructor even when every use is
     inlined; the retail linker dead-stripped such a copy, so no retail function holds
     it. A stripped body is accepted only when it is a complete `.text` section of its
     own, no retail function has its bytes (relocated words masked; a retail copy must be
-    named as a duplicate instead; not asked of a whole-file unit) and nothing else in the
-    object references it (checked by `unreferenced`). It is never compared and never linked.
+    named as a duplicate instead; not asked of a whole-file unit with members) and nothing
+    else in the object references it (checked by `unreferenced`). It is never compared and
+    never linked.
+
+    A data-only unit's source carries its data alone, so a dropped function it does not define
+    is accepted when no retail function bears its name (`by_name`) and the object does not refer
+    to it; one it does define is searched for in retail like a destructor copy.
     """
     out = {}
     if not group.stripped:
@@ -1239,13 +1244,21 @@ def stripped_bodies(obj, headers, syms, group, sections, image, by_va):
     retail = va_bytes(image, lo, hi - lo)
     for name in group.stripped:
         section, value, size = syms.get(name, (None, None, None))
+        if group.data_only and not isinstance(section, int):
+            if section is not None:
+                raise ValueError(f"stripped function {name} is referenced by the object's data: the retail "
+                                 "linker keeps what kept data names")
+            if by_name and name in by_name:
+                raise ValueError(f"stripped function {name} is the retail function at 0x{by_name[name][0]:x}: "
+                                 "a file with a kept function is not data-only")
+            continue
         if not isinstance(section, int) or not 0 < section < len(headers):
             raise ValueError(f"stripped body {name} is not defined by the object")
         label, header = headers[section]
         if (label != ".text" or value != 0 or size != header[5] or not size or size % 4
                 or not header[2] & 4 or section in sections or section in out.values()):
             raise ValueError(f"stripped body {name} is not a complete .text section of its own")
-        if group.whole_file:
+        if group.whole_file and not group.data_only:
             # A stock getter is any getter once its relocated words are masked. The name earns
             # no credit and is never linked, so a retail copy just stays its own function.
             out[name] = section
@@ -1598,8 +1611,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     if jumptables is None:
         jumptables = load_jumptables(jumptables_path(symbols))
     try:
-        members = ([(group.symbol or by_va[group.owner][0], group.owner)] + list(group.emitted)
-                   + list(group.duplicates))
+        # a data-only unit has no owner function: its row is keyed by its first datum
+        members = ([] if group.data_only else [(group.symbol or by_va[group.owner][0], group.owner)]) \
+            + list(group.emitted) + list(group.duplicates)
         aliases = dict(group.externals)
         if any(address not in by_va for address in group.members + tuple(aliases.values())):
             raise ValueError("emitted body or external alias has no retail function")
@@ -1651,7 +1665,7 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                 raise ValueError(f"data symbol {name} disagrees with its section's retail address")
             if isinstance(section, int) and value == 0:
                 data_labels.setdefault(section, name)
-        stripped = stripped_bodies(obj, headers, syms, group, sections, image, by_va)
+        stripped = stripped_bodies(obj, headers, syms, group, sections, image, by_va, by_name)
         # Every exception record and table belongs to a member; they are compared with
         # config/SLUS-20836/exceptions.txt below (never a reason to reject before the byte compare).
         # A stripped body's own record and table are dropped with it.
@@ -1693,6 +1707,10 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                 data_addresses[name] = address
                 if data_sections.setdefault(section, address - value) != address - value:
                     raise ValueError(f"anonymous datum {name} disagrees with its section's retail address")
+        if group.data_only and min(data_sections.values(), default=None) != group.owner:
+            raise ValueError("a data-only row is keyed by the retail address of its first datum; the object's data "
+                             "sections start at " + (", ".join(sorted("0x%x" % a for a in data_sections.values()))
+                                                     or "no row's address"))
         allocated = {i for i, (_, h) in enumerate(headers) if h[2] & 2 and h[5] and i not in dropped}
         executable = {i for i, (_, h) in enumerate(headers) if h[2] & 4 and h[5] and i not in dropped}
         named_text = {i for i, (name, h) in enumerate(headers)
@@ -1892,8 +1910,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     # keep retail's bytes for metadata it does not reproduce.
     kind = category(success, dishonest.values(), exc_status)
     token = (f" exc={exc_status}" if exc_status != "-" else "") + f" cat={kind}"
-    report = (("MATCH" if kind == "match" else "DIFFER")
-              + f" emitted object: {len(records)} complete bodies{token}\n")
+    what = (f"data-only unit: {len(data_sections)} data sections, {len(group.stripped)} functions dropped"
+            if group.data_only else f"emitted object: {len(records)} complete bodies")
+    report = ("MATCH" if kind == "match" else "DIFFER") + f" {what}{token}\n"
     result = Records(records)
     result.exception_placements = placements
     result.ctor_placements = ctor_placements
@@ -2296,10 +2315,11 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
     """
     img = read_elf(elf)
     by_name, by_va = load_symbols(symbols)
-    if va not in by_va:
-        return False, f"0x{va:x} is not in {symbols}"
-    name, size = by_va[va]
     group = unitobjects.group_for(va, unit_objects)
+    # a data-only unit is keyed by its first datum: it is verified whole, like any group
+    if va not in by_va and not (group and group.data_only):
+        return False, f"0x{va:x} is not in {symbols}"
+    name, size = by_va.get(va, (group and group.source, 0))
     owner = group.owner if group else va
     try:
         resolution = unitprofiles.resolve(owner, flags, mwcc, units=units, unit_flags=unit_flags,

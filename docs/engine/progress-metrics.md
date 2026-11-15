@@ -42,7 +42,9 @@ writes the compared spans to `data/check-data.tsv` with the owning unit's catego
 declares `extern` at a retail address counts nothing, however well its type is known: data progress is
 moving a definition into the unit. Fully matched has the code headline's meaning, units classified
 `match` or `assembly`; the jump tables of fully matched code count as well, since the compiler
-regenerates them.
+regenerates them. A [data-only unit](emitted-functions.md#data-only-units), a file the retail linker kept
+the data of and none of its functions, counts its data the same way, under its row's key, and adds nothing
+to a function figure.
 
 `tools/datamap.py` labels each data byte, the first kind that claims it winning:
 

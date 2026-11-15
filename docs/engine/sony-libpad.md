@@ -73,3 +73,9 @@ table with priorities and the ready list of every cycle, to `<file>.sched` (befo
   `padPortInit`) are not read on the EE side.
 * The open reply's pointer could as well be read through a reply structure laid over `padRpcBuffer`; the
   bytes are the same, and nothing tells the two spellings apart.
+
+## Neighbours
+
+libpad follows libcdvd's last file ([libcdvd](sony-libcdvd.md)) and is followed by libsdr's `sdr_main.c`
+([the small Sony libraries](sony-small-libraries.md)); its `.data` run ends at the `PsIIlibsdr  2800`
+descriptor of that file.

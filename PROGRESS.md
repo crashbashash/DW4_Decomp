@@ -9,8 +9,8 @@ fully matched (C/C++ and approved assembly)
 code bytes identical (verification debt included; see below)
   functions  ████████████████████████  98.1 %   20,194 / 20,575
   code bytes █████████████████████░░░  88.7 %   3,081,032 / 3,472,708
-fully linked ██████████████████░░░░░░  76.0 %   3,453,036 / 4,541,184 bytes of the section linked from C/C++
-data bytes █████████░░░░░░░░░░░░░░░  37.7 %   489,831 / 1,299,772   (data the source defines, compared with retail by make check)
+fully linked ██████████████████░░░░░░  76.0 %   3,453,076 / 4,541,184 bytes of the section linked from C/C++
+data bytes █████████░░░░░░░░░░░░░░░  37.7 %   489,871 / 1,299,772   (data the source defines, compared with retail by make check)
 data identified ████████████████████████  99.6 %   1,294,789 / 1,299,772   (matched, or classified; 14.3 % of the data only by where a datum starts)
 kernel patches built from source: 4/4   (their bytes match retail in their owner files' .data; 0 of them await owner approval of an asm, volatile or assembly source)
 not counted: 0 asm bodies, 0 code bytes (0.0 %): retail instructions kept as source, in no figure above
@@ -37,7 +37,7 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 | `missing` | 4 | 2,704 | retail keeps an exception record the unit does not produce |
 | `other` | 2 | 5,808 | the unit's first diagnostic line does not name the exception reason (a deferred duplicate, or a table/index line comes first); see its row in data/check-categories.tsv |
 
-**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **88.5 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,032 units / 3,453,036 bytes from C/C++**, of them **379,976 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **391,676 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
+**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **88.5 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,032 units / 3,453,076 bytes from C/C++**, of them **380,016 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **391,676 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
 
 ## Readable
 
@@ -120,18 +120,18 @@ A datum compiled into another section kind than the one retail's region holds (a
 
 | kind | bytes | % of data |
 | --- | ---: | ---: |
-| `source` | 489,831 | 37.7 |
+| `source` | 489,871 | 37.7 |
 | `jtbl` | 640 | 0.0 |
 | `exc` | 73,132 | 5.6 |
 | `literal` | 244 | 0.0 |
 | `vtable` | 124,920 | 9.6 |
-| `str` | 77,129 | 5.9 |
+| `str` | 77,128 | 5.9 |
 | `handle` | 0 | 0.0 |
 | `table` | 22,236 | 1.7 |
 | `region` | 109,384 | 8.4 |
-| `pad` | 211,526 | 16.3 |
+| `pad` | 211,523 | 16.3 |
 | `named` | 86,898 | 6.7 |
-| `ref` | 95,793 | 7.4 |
+| `ref` | 95,757 | 7.4 |
 | `ptr` | 3,056 | 0.2 |
 | `?` | 4,983 | 0.4 |
 

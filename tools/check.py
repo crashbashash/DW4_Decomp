@@ -76,6 +76,13 @@ data/check-data.tsv: every data span a unit compared equal to retail (`va`,
 `size`, `section`, owning `unit`, that unit's `category`), the data figure
 tools/datamap.py and tools/progress.py read.
 
+A data-only unit (docs/engine/emitted-functions.md, "Data-only units": a file
+the retail linker kept the data of and none of its functions) has no function
+to find it by: each such unit-objects row is verified from its `source`, its
+spans join data/check-data.tsv under the row's key, a `data-only:` line counts
+them, and they are in no function figure. `--function <key> --cand <file>`
+checks one.
+
 A whole-tree run ends with the section census of the last relink's objects
 (`sections: N objects, {name: count, ...}, K unknown`): every section name
 must be in tools/verify.py's COMPARED_SECTIONS or DEBT_SECTIONS, and an unknown
@@ -241,14 +248,17 @@ def main(argv=None):
     if a.function:
         va = int(a.function, 0)
         nm = next((n for v, _, n in syms if v == va), None)
-        if nm is None:
+        group = unitobjects.group_for(va, a.unit_objects)
+        if nm is None and not (group and group.data_only):
             print("check: 0x%x not in %s" % (va, a.symbols), file=sys.stderr)
             return 2
         if not a.cand:
             print("check: --function needs --cand <file.c>", file=sys.stderr)
             return 2
         import verify as vfy
-        src, tmp = units.standalone(a.cand, nm, symbols=a.symbols, unit_objects=a.unit_objects)
+        # a data-only unit (keyed by its first datum) has no function to extract: its file compiles whole
+        src, tmp = ((a.cand, None) if nm is None
+                    else units.standalone(a.cand, nm, symbols=a.symbols, unit_objects=a.unit_objects))
         try:
             ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf, symbols=a.symbols,
                                         mwcc=a.mwcc, wibo=a.wibo, unit_flags=a.unit_flags,
@@ -465,6 +475,46 @@ def main(argv=None):
             if exc:
                 exc_status[nm] = exc
 
+    # ---- data-only units: files the retail linker kept the data of and no function --------------------
+    # No function definition reaches them, so each is verified from its row's `source`; its data joins
+    # data/check-data.tsv under the row's key, and it is in no function count.
+    data_only = {}         # owner -> (category, diagnostic, label, data spans)
+
+    def data_only_one(group):
+        label = "data-only 0x%08x %s" % (group.owner, group.source)
+        path = os.path.join(a.src_dir, group.source)
+        if not os.path.exists(path):
+            return group, label, "compile", "its source %s/%s does not exist" % (a.src_dir, group.source), []
+        key = None
+        if use_cache:
+            with open(path) as fh:
+                key = buildcache.sha(cover_fp, "data-only", group.owner, fh.read(),
+                                     buildcache.unit_profile_sha(group.owner, a.flags, a.mwcc, a.unit_objects,
+                                                                 units=a.units, unit_flags=a.unit_flags,
+                                                                 unit_compilers=a.unit_compilers, symbols=a.symbols))
+            hit = cover_store.get(key)
+            if isinstance(hit, dict):
+                return group, label, hit["category"], hit.get("diagnostic", "-"), hit.get("data", [])
+        ok, report = vfy.verify_one(group.owner, path, flags=a.flags, elf=a.elf, symbols=a.symbols, mwcc=a.mwcc,
+                                    wibo=a.wibo, unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
+                                    unit_objects=a.unit_objects, units=a.units)
+        kind, _exc, diagnostic, _override = classify(ok, report)
+        found = data_spans(report)
+        if key and kind != "compile":
+            cover_store.put(key, {"category": kind, "diagnostic": diagnostic, "data": found})
+        return group, label, kind, diagnostic, found
+
+    # the repository's rows checked against another tree (a test's) leave out the files that tree lacks; a
+    # tree its rows belong to must hold every row's source
+    own_rows = a.unit_objects is not None or os.path.abspath(a.src_dir) == os.path.join(ROOT, "src")
+    data_only_groups = [group for group in ([] if a.cover_limit else unitobjects.data_only_units(a.unit_objects))
+                        if own_rows or os.path.exists(os.path.join(a.src_dir, group.source))]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
+        for group, label, kind, diagnostic, found in ex.map(data_only_one, data_only_groups):
+            data_only[group.owner] = (kind, diagnostic, label, found)
+            if kind == "compile":
+                failed.append((label, diagnostic))
+
     cover_store.save(prune=whole_tree_run and not a.cover_limit)
     print(cover_store.summary("functions compiled and compared"))
     print("code  : %d functions, %d bytes laid out in %s" % (total, code_bytes, a.symbols))
@@ -487,6 +537,16 @@ def main(argv=None):
         if kind == "match" or counts[kind]:
             print("%s%-15s %6d  %s" % ("   " if kind in ("match", "assembly") else "!! debt: ", kind, counts[kind],
                                        explain[kind]))
+    if data_only:
+        unmatched = sorted(owner for owner, (kind, _d, _l, _f) in data_only.items() if kind != "match")
+        print("data-only: %d units the retail linker kept the data of and no function, %d match "
+              "(%d bytes of data; in no function count)"
+              % (len(data_only), len(data_only) - len(unmatched),
+                 sum(size for kind, _d, _l, found in data_only.values() if kind == "match" for _s, _a, size in found)))
+        for owner in unmatched:
+            kind, diagnostic, label, _found = data_only[owner]
+            if kind != "compile":       # a compile failure is listed with the others below
+                print("   !! %s: %s: %s" % (label, kind, diagnostic))
     if stale_overrides:
         print("!! stale overrides: %d per-function row(s) the unit profile makes unnecessary (delete them): %s%s"
               % (len(stale_overrides), ", ".join(sorted(stale_overrides)[:8]),
@@ -524,6 +584,10 @@ def main(argv=None):
             for section, address, size in found:
                 spans[(address, size)] = min(spans.get((address, size), (owner, section, category)),
                                              (owner, section, category))
+        for owner, (category, _diagnostic, _label, found) in data_only.items():
+            for section, address, size in found:
+                spans[(address, size)] = min(spans.get((address, size), (owner, section, category)),
+                                             (owner, section, category))
         with open(os.path.join(ROOT, "data", "check-data.tsv"), "w") as fh:
             fh.write("# va\tsize\tsection\tunit\tcategory — GENERATED by tools/check.py (make check) and committed; "
                      "do not edit. Read by tools/datamap.py and tools/progress.py.\n")
@@ -546,7 +610,7 @@ def main(argv=None):
                                                           len(mismatched) - counts["mismatch"]))
     for nm, why in failed[:10]:
         print("   !! %s: %s" % (nm, why))
-    if counts["mismatch"] or failed:
+    if counts["mismatch"] or failed or any(kind == "mismatch" for kind, _d, _l, _f in data_only.values()):
         rc = 1
     if whole_tree:
         rc = max(rc, section_census_line(a))

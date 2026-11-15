@@ -26,7 +26,10 @@ fragments around the retail slots and the compiled sections are pinned there: th
 relink then reproduces them from the source instead of orphaning them, and
 linkcheck's byte compare covers them. The data sections a whole-file unit defines and
 verified equal to retail are carved in the same way, from one `u_<owner>_data.o` per
-unit (verify.isolate_unit_data); a placed section may run across several raw units.
+unit (verify.isolate_unit_data); a placed section may run across several raw units. A
+data-only unit (a file the retail linker kept the data of and no function) has no
+layout unit: it is compiled from its unit-objects row's `source` and its data placed
+the same way, as `u_<key>_data.o`.
 
 Usage:
   linkgen.py --all          # regenerate everything into build/link/ (slow: ~28k files)
@@ -411,6 +414,15 @@ def main(argv=None):
                 unit_objects_built[key] = compute()
             return unit_objects_built[key]
 
+    def unit_profile(va, csrc_path):
+        """The profile the unit owned at `va` builds `csrc_path` with. The unit profile
+        (config/SLUS-20836/units.tsv), or the function's provisional override when it has one: `make check`
+        proved the override is what reproduces the bytes (or reported the row as stale), so the link builds
+        with it and the function stays foreign-profile debt."""
+        resolution = unitprofiles.resolve(va, a.flags, a.mwcc, units=a.units, unit_flags=a.unit_flags,
+                                          unit_compilers=a.unit_compilers, symbols=a.symbols)
+        return unitprofiles.for_source(resolution.override or resolution.profile, csrc_path, a.flags, a.mwcc)
+
     def unit_context(va, name, csrc):
         """(source path, temp copy or None, group, profile) of the compiler unit `name` belongs to."""
         # A multi-function unit is split to a dot-named sibling so MWCC sees one
@@ -418,18 +430,12 @@ def main(argv=None):
         csrc_path, tmp = unitfiles.standalone(csrc, name, symbols=a.symbols,
                                               unit_objects=a.unit_objects)
         group = unitobjects.group_for(va, a.unit_objects)
-        owner = group.owner if group else va
-        # The unit profile (config/SLUS-20836/units.tsv), or the function's provisional override when it has
-        # one: `make check` proved the override is what reproduces the bytes (or reported the row
-        # as stale), so the link builds with it and the function stays foreign-profile debt.
         try:
-            resolution = unitprofiles.resolve(owner, a.flags, a.mwcc, units=a.units, unit_flags=a.unit_flags,
-                                              unit_compilers=a.unit_compilers, symbols=a.symbols)
+            profile = unit_profile(group.owner if group else va, csrc_path)
         except ValueError:
             if tmp:
                 os.remove(tmp)
             raise
-        profile = unitprofiles.for_source(resolution.override or resolution.profile, csrc_path, a.flags, a.mwcc)
         return csrc_path, tmp, group, profile
 
     section_end = units[-1][0] + units[-1][1]
@@ -580,10 +586,57 @@ def main(argv=None):
         for va, info in ex.map(build_one, c_units):
             built[va] = info
 
+    # ---- the data-only units: files the retail linker kept the data of and no function ----------------
+    # No layout unit is theirs, so each is compiled from its row's `source`, verified like any whole file,
+    # and its data joins the claims below under the row's key. A row whose source is not in the tree keeps
+    # retail's bytes, as a function without source does (`make check` fails that row).
+    data_only = {group.owner: group for group in ([] if a.no_c else unitobjects.data_only_units(a.unit_objects))
+                 if (not a.unit_range or lo <= group.owner < hi) and os.path.exists(os.path.join(a.src, group.source))}
+
+    def build_data_only(group):
+        csrc_path = os.path.join(a.src, group.source)
+        try:
+            profile = unit_profile(group.owner, csrc_path)
+        except ValueError as error:
+            return group.owner, {"fatal": f"{group.source}: {error}"}
+        compiler, cflags = profile.compiler, unitprofiles.command_flags(profile)
+        key = None
+        if use_cache:
+            with open(csrc_path) as fh:
+                key = buildcache.sha(link_fp, "data-only", group.owner, cflags, compiler, buildcache.file_sha(compiler),
+                                     buildcache.tools_sha("eegcc_compile.py") if cc.is_eegcc(compiler) else "",
+                                     fh.read(), buildcache.unit_profile_sha(group.owner, a.flags, a.mwcc, a.unit_objects,
+                                                                            units=a.units, unit_flags=a.unit_flags,
+                                                                            unit_compilers=a.unit_compilers,
+                                                                            symbols=a.symbols))
+            hit = store.get(key)
+            if hit and "data_pins" in hit:
+                return group.owner, {"data_pins": hit["data_pins"], "key": key}
+        env = dict(os.environ, MWCIncludes=os.path.abspath(a.src))
+        verified, report, records_ = unit_object((verify._source_key(csrc_path), compiler, cflags, group, profile),
+                                                 lambda: verify_unit(group, profile, compiler, cflags, csrc_path, env))
+        if verified is None:
+            return group.owner, {"fatal": f"compile failed for {group.source}"}
+        if records_ is None:
+            return group.owner, {"fatal": report}
+        pins = data_pins(group.owner, group, records_)
+        if key:
+            store.put(key, {"data_pins": pins})
+        return group.owner, {"data_pins": pins, "key": key}
+
+    data_only_built = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
+        for va, info in ex.map(build_data_only, data_only.values()):
+            if info.get("fatal"):
+                print("linkgen: " + info["fatal"], file=sys.stderr)
+                return 2
+            data_only_built[va] = info
+
     # ---- the data whole-file units proved equal to retail, each address placed from one unit ---------
     # Units that define one datum (a header's static, a merged string) all verify it at the same address;
     # the first unit in address order places it and the others reach it by name like any retail datum.
-    claims = sorted((address, size, va, section) for va, info in built.items() if not info.get("fatal")
+    claims = sorted((address, size, va, section)
+                    for va, info in list(built.items()) + list(data_only_built.items()) if not info.get("fatal")
                     for address, size, section in info.get("data_pins", ()))
     chosen, claimed_end, previous = {}, 0, None
     data_stats = {"sections": 0, "bytes": 0, "shared": 0, "overlap": 0}
@@ -599,22 +652,30 @@ def main(argv=None):
 
     def build_data(va):
         """The data object of the unit owned at `va`: the sections of `chosen[va]`, nothing else."""
-        name = by_address[va][3]
         keep = {section: address for section, (address, _size) in chosen[va].items()}
         obj = os.path.join(a.out, "u_%08x_data.o" % va)
-        code_key = built[va].get("key")
+        code_key = (data_only_built if va in data_only else built)[va].get("key")
         key = buildcache.sha(code_key, "data", sorted(keep.items())) if code_key else None
         if key:
             hit = store.get(key)
             if hit and buildcache.fresh_sha(obj) == hit["digest"]:
                 return va, {"obj": obj, "undef": hit["undef"]}
-        try:
-            csrc_path, tmp, group, profile = unit_context(va, name, src_index[name])
-        except ValueError as error:
-            return va, {"fatal": f"{name}: {error}"}
-        if tmp:
-            os.remove(tmp)
-            return va, {"fatal": f"{name}: data placed from a unit that is not compiled whole"}
+        if va in data_only:
+            group = data_only[va]
+            name, csrc_path = group.source, os.path.join(a.src, group.source)
+            try:
+                profile = unit_profile(va, csrc_path)
+            except ValueError as error:
+                return va, {"fatal": f"{name}: {error}"}
+        else:
+            name = by_address[va][3]
+            try:
+                csrc_path, tmp, group, profile = unit_context(va, name, src_index[name])
+            except ValueError as error:
+                return va, {"fatal": f"{name}: {error}"}
+            if tmp:
+                os.remove(tmp)
+                return va, {"fatal": f"{name}: data placed from a unit that is not compiled whole"}
         compiler, cflags = profile.compiler, unitprofiles.command_flags(profile)
         env = dict(os.environ, MWCIncludes=os.path.abspath(a.src))
         unit_key = (verify._source_key(csrc_path), compiler, cflags, group, profile)

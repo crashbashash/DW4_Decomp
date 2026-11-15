@@ -391,3 +391,4 @@
 0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
 0x004670d0	0x00467120	viewer_igBoundingBoxRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	off	-	whole file
+0x00485158	0x00485180	sony_libsdr_sdr_cb	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file

@@ -174,12 +174,14 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 - [Viewer GUI factory](viewer-gui-factory.md): igViewerGuiFactory's actions and default colour-changer colours; extent and open questions.
 - [Viewer scene-info manager](viewer-scene-info-manager.md): igViewerSceneInfoManager, its controller and hot keys, the igViewerParameters field handles and shared viewer options; open questions.
 - [Sony libdma](sony-libdma.md): libdma as one file; extent from the SDK member, its data.
-- [Sony libmpeg decoding files](sony-libmpeg-decoding.md): libmpeg's mpc, ext and picture files; extents, evidence, the hand-written MMI kernels.
-- [Sony libmpeg output to default handlers](sony-libmpeg-files.md): libmpeg's output, CSC, public-interface (mpeg.c), error, sequence-header and default-handler files.
-- [Sony libkernl klib to deci2](sony-libkernl-files.md): libkernl's klib, glue, cache, intr, thread and deci2 members as whole files; extents, evidence, data.
-- [Sony libkernl SIF](sony-libkernl-sif.md): libkernl's SIF command and RPC files; extents and shared types.
+- [Sony libcdvd](sony-libcdvd.md): the EE client of cdvdman in six whole files; channels, callback thread, why the shared words are volatile and the library builds with the 2.10 assembler.
+- [Sony small libraries](sony-small-libraries.md): libgraph, libipu, libsdr and libmc as whole files named after their SDK objects; what each does, the libsdr callback object's data, open questions.
+- [Sony libmpeg decoding files](sony-libmpeg-decoding.md): libmpeg's mpc, ext and picture files; extents, evidence, the motion-compensation kernels as C functions with asm bodies.
+- [Sony libmpeg output to default handlers](sony-libmpeg-files.md): libmpeg's output, CSC, public-interface (mpeg.c), error, IPU-feed, sequence-header and default-handler files.
+- [Sony libkernl klib to kprintf](sony-libkernl-files.md): libkernl's klib, glue, cache, intr, thread, deci2, tty and kprintf members as whole files; extents, evidence, data.
+- [Sony libkernl SIF](sony-libkernl-sif.md): libkernl's SIF command and RPC files; extents, shared types, the pool-packet union.
 - [Sony libkernl IOP clients](sony-libkernl-iop-clients.md): libkernl's filestub, iopheap and eeloadfile files; extents from the SDK member layout, the shared request buffers.
-- [Sony libkernl system files](sony-libkernl-sys.md): libkernl's IOP reset, kernel patches, timer and alarms as whole files.
+- [Sony libkernl system files](sony-libkernl-sys.md): libkernl's IOP reset, TLB system calls, kernel patches built from source, timer and alarms as whole files.
 - [Sony libpad](sony-libpad.md): libpad as one whole file (the padman.irx RPC clients, pad DMA frames, send_to_iop, port open); extent evidence, why the stores compile in retail's order.
 - [getvtable-fold](getvtable-fold.md): the plain-family `*_GetVTable` stack-offset fold: the measured MWCC wall behind the 983 accessors, what was tried, and the family's generators.
 - [assembly-sources](assembly-sources.md): hand-written `.S` routines the owner approved (`config/assembly-sources.tsv`), the evidence each needs, and the candidates still open.

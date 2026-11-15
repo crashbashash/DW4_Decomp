@@ -1026,15 +1026,15 @@
       "@bss": "0x0055d500",
       "@data": "0x00485140",
       "@rodata": "0x004d2aa8",
-      "_sce_sdr_transIntr0Hdr": "0x00485158",
-      "_sce_sdr_transIntr1Hdr": "0x0048515c",
+      "_sce_sdr_spu2IntrArg": "0x0048516c",
+      "_sce_sdr_spu2IntrGp": "0x00485178",
       "_sce_sdr_spu2IntrHdr": "0x00485160",
       "_sce_sdr_transIntr0Arg": "0x00485164",
-      "_sce_sdr_transIntr1Arg": "0x00485168",
-      "_sce_sdr_spu2IntrArg": "0x0048516c",
       "_sce_sdr_transIntr0Gp": "0x00485170",
+      "_sce_sdr_transIntr0Hdr": "0x00485158",
+      "_sce_sdr_transIntr1Arg": "0x00485168",
       "_sce_sdr_transIntr1Gp": "0x00485174",
-      "_sce_sdr_spu2IntrGp": "0x00485178"
+      "_sce_sdr_transIntr1Hdr": "0x0048515c"
     }
   },
   "0x001194c0": {
@@ -47227,5 +47227,18 @@
       "g_igBoundingBoxRenderer_metaObject": "0x0058ce18"
     },
     "anon": []
+  },
+  "0x00485158": {
+    "whole_file": true,
+    "data": {
+      "@data": "0x00485158"
+    },
+    "stripped": [
+      "_sdrCB",
+      "_sdrCBThread",
+      "sceSdRemoteCallbackInit",
+      "sceSdRemoteCallbackQuit"
+    ],
+    "source": "sony/libsdr/sdr_cb.c"
   }
 }

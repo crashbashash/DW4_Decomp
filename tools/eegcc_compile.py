@@ -103,16 +103,17 @@ def separate_text_sections(path):
 
     A whole-file unit's object carries one `.text` section per function, the shape MWCC writes and
     the shape tools/verify.py and tools/linkgen.py read; `-ffunction-sections` gives gcc's
-    `.text.<function>` names, and objcopy keeps same-named sections separate."""
+    `.text.<function>` names, and objcopy keeps same-named sections separate. Each non-empty data
+    section gets its `@<section>` symbol, a data-only file's (one without a function) too."""
     headers = subprocess.run(["mipsel-linux-gnu-objdump", "-h", path],
                              capture_output=True, text=True, check=True).stdout.split("\n")
     names = [f[1] for f in (line.split() for line in headers)
              if len(f) > 1 and f[1].startswith(".text.")]
-    if names:
+    data = [f[1] for f in (line.split() for line in headers)
+            if len(f) > 2 and f[1] in DATA_SECTIONS and int(f[2], 16)]
+    if names or data:
         # gcc's own `.text` is empty here; drop it so the function sections are the only ones
-        data = [f[1] for f in (line.split() for line in headers)
-                if len(f) > 2 and f[1] in DATA_SECTIONS and int(f[2], 16)]
-        subprocess.run(["mipsel-linux-gnu-objcopy", "--remove-section", ".text",
+        subprocess.run(["mipsel-linux-gnu-objcopy", *(["--remove-section", ".text"] if names else []),
                         *[a for n in names for a in ("--rename-section", n + "=.text")],
                         *[a for d in data for a in ("--add-symbol", "@%s=%s:0,local,object" % (d[1:], d))],
                         path], check=True)

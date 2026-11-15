@@ -20,6 +20,10 @@ weakening that rule (see docs/engine/emitted-functions.md):
 * an ``emitted`` member named ``__sinit_<file>`` is the file's static initializer, compiled
   into `.init` with its static-initializer table entry in `.ctor`; tools/verify.py compares
   both with retail and the link places them. A translation unit has at most one.
+* a **data-only** row is a whole file the retail linker kept no function of, only data: it is
+  keyed by the retail address of its first datum (one of its own ``data`` rows), names the
+  dropped functions in ``stripped`` and its ``source``, the file's path under `src/`, since no function
+  definition can locate the file.
 """
 from dataclasses import dataclass
 from functools import lru_cache
@@ -61,6 +65,14 @@ class Group:
     # are mangled, while the symbol map keeps the plain name that its source and callers use.
     symbol: str = ""
     anon: tuple = ()
+    # A data-only unit's file, its path under `src/`: no function definition locates it.
+    source: str = ""
+
+    @property
+    def data_only(self):
+        """A whole file whose functions the retail linker all dropped while it kept data: the row is
+        keyed by the retail address of its first datum, not by a function."""
+        return self.whole_file and any(address == self.owner for _, address in self.data)
 
     @property
     def addresses(self):
@@ -69,7 +81,8 @@ class Group:
     @property
     def members(self):
         """Every function body of the compiler object, placed or verify-only."""
-        return self.addresses + tuple(address for _, address in self.duplicates)
+        bodies = tuple(address for _, address in self.emitted + self.duplicates)
+        return bodies if self.data_only else (self.owner,) + bodies
 
 
 def resolve_path(path):
@@ -103,7 +116,7 @@ def load(path=None):
     for key, row in data.items():
         if (not isinstance(row, dict)
                 or set(row) - {"emitted", "externals", "duplicates", "exceptions", "stripped",
-                               "whole_file", "data", "anon", "symbol"}
+                               "whole_file", "data", "anon", "symbol", "source"}
                 or not isinstance(row.get("whole_file", False), bool)
                 or not isinstance(row.get("data", {}), dict)
                 or not isinstance(row.get("anon", []), list)
@@ -157,7 +170,19 @@ def load(path=None):
                or any(c.isspace() for c in symbol) for symbol in stripped):
             raise ValueError("a stripped symbol must be a compiler destructor name (__dt__...)")
         group = Group(owner, emitted, externals, duplicates, exceptions, stripped, whole_file, data,
-                      row.get("symbol", ""), anon)
+                      row.get("symbol", ""), anon, row.get("source", ""))
+        if group.data_only:
+            source = row.get("source")
+            if set(row) - {"whole_file", "data", "anon", "stripped", "externals", "source"}:
+                raise ValueError(f"data-only row {key} places no function: it takes no emitted, duplicates, "
+                                 "exceptions or symbol")
+            if not stripped:
+                raise ValueError(f"data-only row {key} names the functions the retail linker dropped in stripped")
+            if (not isinstance(source, str) or Path(source).is_absolute() or ".." in Path(source).parts
+                    or Path(source).suffix not in (".c", ".cpp")):
+                raise ValueError(f"data-only row {key} needs its .c or .cpp source, a path under src/")
+        elif "source" in row:
+            raise ValueError(f"row {key}: only a data-only row names its source; a function locates any other")
         if len(set(group.members)) != len(group.members) or owned.intersection(group.addresses):
             raise ValueError("function belongs to multiple compiler bodies")
         names = [symbol for symbol, _ in emitted + duplicates + externals + data] + list(stripped)
@@ -251,9 +276,17 @@ def special_member(symbol):
     return "%s::%s%s" % (cls, "~" if m.group(1) == "dt" else "", cls)
 
 
+def data_only_units(path=None):
+    """The data-only rows: files the retail linker kept data of and no function. No function
+    definition reaches them, so the tools verify and link them from the row's `source`."""
+    return tuple(group for group in load(path) if group.data_only)
+
+
 def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None):
     _, by_va = names(str(symbols))
     for group in load(path):
+        if group.data_only:
+            continue        # no function of its file is in the index
         owner = by_va[group.owner][0]
         if owner not in index:
             # a C++ owner written as a constructor or destructor is defined under that name, and the

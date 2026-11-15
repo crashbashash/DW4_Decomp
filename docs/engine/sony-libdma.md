@@ -31,3 +31,11 @@ controller environment `sceDmaPutEnv` writes to `D_CTRL`, `D_PCR`, `D_SQWC`, `D_
 * `WaitDma`, `WatchDma` and `sceDmaPause` read the channel through `volatile` word accesses: the
   structure itself is not `volatile`, since the start functions' bit-field stores must stay merged
   read-modify-writes.
+
+## Neighbours
+
+The range starts where the last libgraph file ends (`sceGsSyncV`, `0x102c94`, see
+[the small Sony libraries](sony-small-libraries.md)) and ends where libmpeg's `mpc.c` begins
+([libmpeg decoding](sony-libmpeg-decoding.md)); its `.data` is followed directly by `mpc.c`'s handler tables.
+The DMA controller's registers are `volatile` accesses, as Sony's `eeregs.h` declares them
+([source approvals](source-approvals.md#sony-hardware-registers)).

@@ -14,7 +14,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`gate_stamp.py`](gate_stamp.py) | record the tree id each of `make check`, `make link`, `make typed-check` and `make hygiene` passed on; `.githooks/pre-push` refuses a commit whose tree lacks one (`status [REV]` lists a tree's stamps) |
 | [`make_iso.py`](make_iso.py) | `make iso`: write the built executable into a copy of your disc image, in `build/` |
 | [`layout.py`](layout.py) | turn the symbol map into a DISJOINT, ordered tiling of the section |
-| [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members (a file's static initialiser included, found in the static-initializer table), duplicates (reached by call, vtable or exception table; profile twins included), stripped functions, named data, the addresses of anonymous data (`anon`), externals and the owner's `symbol` |
+| [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members (a file's static initialiser included, found in the static-initializer table), duplicates (reached by call, vtable or exception table; profile twins included), stripped functions, named data, the addresses of anonymous data (`anon`), externals and the owner's `symbol`; a data-only row for a file the linker kept the data of and no function |
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
@@ -99,7 +99,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`, `test_kpatch.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_data_only_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`, `test_kpatch.py`
 
 ## Subfolders
 

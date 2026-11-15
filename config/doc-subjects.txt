@@ -95,6 +95,7 @@ docs/engine/cri-sfd-core.md
 docs/engine/cri-sfh-files.md
 docs/engine/cri-sj-svm.md
 docs/engine/runtime-metrowerks.md
+docs/engine/sony-libcdvd.md
 docs/engine/sony-libdma.md
 docs/engine/sony-libkernl-files.md
 docs/engine/sony-libkernl-iop-clients.md
@@ -102,5 +103,6 @@ docs/engine/sony-libkernl-sif.md
 docs/engine/sony-libkernl-sys.md
 docs/engine/sony-libmpeg-decoding.md
 docs/engine/sony-libmpeg-files.md
+docs/engine/sony-small-libraries.md
 docs/engine/viewer-gui-factory.md
 docs/engine/sony-libpad.md

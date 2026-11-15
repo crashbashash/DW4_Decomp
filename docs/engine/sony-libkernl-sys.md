@@ -48,14 +48,21 @@ it at its run address with `config/kernel-patch.ld` (code closed by a zero doubl
 `tools/cc.py` builds the patches a source includes before compiling it. The patch functions are no image
 functions: `tools/units.py` leaves the directory out of every census, their `asm` and `volatile` need
 approval rows keyed by the patch function's name, and `tools/progress.py` counts the patches on a line of
-their own. A row whose sources are `-` is a patch still named `extern` by its owner.
+their own.
 
 `tlbsrc.c` is compiler output with inline `asm` for the COP0 accesses. Its table at `0x300` maps calls
 `0x55`..`0x59` to `kPutTLBEntry`, `kSetTLBEntry`, `kGetTLBEntry`, `kProbeTLBEntry` and `kExpandScratchPad`,
 and call 3 to `kExecArg`, which `tlbfunc.c` reads back as `_kExecArg = GetEntryAddress(3)`. `kGetEntryAddress`
 replaces call 91 while the patch is installed. `tlbfunc.c`'s `SysEntry_tlbfunc` installs `kCopy` as call 90, the
 patch's lookup as call 91 and `_kExitTLBHandler` as call 84, then each TLB call at the address the lookup
-gives.
+gives. The TLB system calls themselves (`PutTLBEntry` and `iPutTLBEntry`, `SetTLBEntry` and `iSetTLBEntry`,
+`GetTLBEntry` and `iGetTLBEntry`, `ProbeTLBEntry` and `iProbeTLBEntry`, `ExpandScratchPad`) are C functions of
+`tlbfunc.c` whose body is one `asm` statement, `li $3,N; syscall` with a negative number for the interrupt
+side; the compiler supplies the return. SDK 3.0.3's `tlbfunc.o` records them as compiled procedures (frame
+register 29, return register 31, no line records), where the assembled `klib` stubs have register 0 and a
+line table. `SetTLBEntry` itself refuses the entries outside the user range and calls the static
+`_SetTLBEntry`, the call-86 stub. The patch's own `asm` and `volatile` rows are under
+[#sony-libkernl-cop0-and-syscall](source-approvals.md#sony-libkernl-cop0-and-syscall).
 
 `initsys.c` installs `kFindAddress` (call 131) and `kCopy` (call 90), then searches kernel memory for the two
 handler addresses: the table is where both sit at their own slots (`0x20c` and `0x168` above its start).
@@ -68,14 +75,24 @@ new program. The kernel routines it calls are pointers to their boot-ROM address
 `InitPgifHandler` return `int`, which keeps their results' registers as retail has them. The extension calls clip
 `size` in place and copy with a second index that runs while it is below `size + offset`, the sum written in the
 loop test; a separate `amount` and an `end` computed before the loop give the same instructions with other
-registers. `libosd.c` defines its whole `.data` from the include and `SysExecPS2Entry`.
+registers. `libosd.c` defines its whole `.data` from the include and `SysExecPS2Entry`. `ResetPeripherals`
+polls `I_STAT` through a `volatile`: the vblank wait is a repeated hardware read, and without the keyword
+GCC reads the register once before the loop.
 
 `alarm.c` patches only when timer 3's compare interrupt is off, the sign of a kernel without built-in alarms.
 Its patch is `srcfile.c` with `alarmuser.S`, built with the 2.10 assembler, which fills `jr`/`jal` delay slots with
 the timer accesses as retail does. `AddAlarm` fills the new alarm's fields in their declared order. The saved
 `gp` field is the setter's register image, an integer: the scheduler orders the stores by the alias sets of the
-field types, and as a `void *`, sharing `arg`'s set, it moves the `id` store behind the alarm count's. `eenull.S`
-is the user-mode side of a handler call, copied to `0x82000`. `alarm.c` defines its whole `.data` from the two
+field types, and as a `void *`, sharing `arg`'s set, it moves the `id` store behind the alarm count's. The `gp`
+reads and writes are `asm` statements, and the timer-3 and interrupt registers it touches are `volatile`: the
+constant address stays inside the access, which the assembler expands to `lui $at` plus an offset as retail
+does, and a plain access builds the address with `lui/ori` first. `alarmuser.S` holds the routines that
+start and end a user-mode handler: `CallUserHandler` saves `ra` and `sp` through `$k0`, writes EPC, loads the
+handler and its arguments into `$3..$6`, sets Status' UM and EXL bits and leaves through `eret`;
+`ReturnFromUserHandler` (call 8) masks Status with `~0x1b`, then restores `ra` and `sp` and returns. They
+have no prologue and use `$k0`, COP0 and `eret`, so they are approved assembly
+([assembly sources](assembly-sources.md#libkernl-alarm-patch-the-user-mode-dispatcher)). `eenull.S` is the
+user-mode side of a handler call, copied to `0x82000`. `alarm.c` defines its whole `.data` from the two
 includes and `SysEntry_alarm`.
 
 ## The timer
@@ -88,6 +105,18 @@ fields that other code changes behind the compiler (`key`, `uniqueKey`, `usedCou
 `volatile`, which the reloads after each store show. An alarm of `timeralarm.c` returns its id as its own
 16-byte-aligned address shifted up by 4 with the counter id's low byte.
 
+`SetT2` writes a timer-2 register, which user mode cannot reach: it masks interrupts, enters kernel mode
+through the error level (Status' EIE, EXL and ERL bits), makes the store through the uncached address and
+returns with `eret`, all in `asm` statements. `cbTimerHandler`, the timer-2 interrupt handler, runs each alarm
+that is due on the `$gp` it was set with, then reschedules it (a returned gap, at least 100 us), frees it (a
+return of -1) or leaves it unscheduled (0), and sets the next compare; the system time it reads includes the
+overflow `applyOverflow` counts. The helper `readSystemTime` is the inline read of `iGetTimerSystemTime` and
+`GetTimerSystemTime`: Sony's
+commented-out C version makes those two 88 bytes instead of 76, so it stays `asm`. Plain accesses of
+`T2_COUNT`, `T2_MODE` or the overflow count in `applyOverflow` shrink `cbTimerHandler`, so those reads and
+writes are `volatile` ([source approvals](source-approvals.md#sony-timer-state)); Sony's 3.0.3 `ApplyOverflow`
+is assembly (644 bytes against DW4's 672), so DW4's 2.8.0 wrote it in C.
+
 `DIntr`'s disable loop is one `asm` statement holding `di`, `sync.p` and `mfc0`, Sony's `DI()` text joined into
 one. EE GCC pads a loop whose backward branch closes fewer than five counted instructions with `nop`s before the
 branch, and counts an `asm` statement as one instruction however many lines it holds: retail's two pad `nop`s
@@ -97,20 +126,14 @@ fix the loop as one statement, `li` and `and`. The statement's `volatile` keeps 
 
 ## Open questions
 
-* The TLB system-call stubs (`PutTLBEntry`, `iPutTLBEntry`, `iSetTLBEntry`, `GetTLBEntry`, `iGetTLBEntry`,
-  `ProbeTLBEntry`, `iProbeTLBEntry`, `ExpandScratchPad`) are `li $3,N; syscall` pairs like the other helpers but
-  have no source: writing them would add inline assembly. They link from retail.
-* `SetT2` writes the timer from kernel mode through `eret`, and `cbTimerHandler`, the timer interrupt, has no
-  source yet.
-* tlbtrap's three exception entries are assembly with no approved `.S` row.
 * `kPutTLBEntry`'s switch needs a seventh case label above `0x50` for GCC to build retail's compare tree; any of
-  `0x60`, `0x70`, `0x80`, `0x90`, `0xa0` or `0xf0` gives the same bytes. `0x70`, the scratchpad segment, is a guess.
+  `0x60`, `0x70`, `0x80`, `0x90`, `0xa0` or `0xf0` gives the same bytes. The source uses `0x70` (the scratchpad
+  segment) with the `0x50` group, which is a guess: which segment the original tested is not known.
 * `kExecArg`, the first byte past the TLB patch, is named by the link script; the original may have used the
   linker's end symbol.
-* tlbsrc's 16 `asm` statements and 3 `volatile`s await owner approval (the COP0 and TLB instructions have no C
-  spelling; each remaining `volatile` changes the bytes when removed).
-* srcfile's `alarmuser.S` (`CallUserHandler`, `ReturnFromUserHandler`) awaits an assembly-sources row, and its C
-  awaits approval for the four `gp` `asm` statements, the `volatile` on the two `gp` reads and the timer and
-  interrupt register `volatile`s.
-* osdsrc's `ResetPeripherals` reads `I_STAT` through a `volatile` (the vblank poll is a repeated hardware read;
-  without it GCC reads the register once before the loop) and awaits its approval row.
+* The parameter and member names of the patch-local structures (the alarm's fields, `SyscallEntry`'s members)
+  follow what the code stores; Sony's own names are not known beyond the 3.0.3 symbols (`srcfile`, `eenull`,
+  `SysEntry_alarm`, `osdsrc`, `SysExecPS2Entry`).
+* `alarmuser.S`'s two routines and `eenull.S` have no symbols of their own in SDK 3.0.3's `alarm.o`, which
+  holds the bytes inside `srcfile` and `eenull`; their names (`CallUserHandler`, `ReturnFromUserHandler`,
+  `UserModeDispatcher`) come from what they do.

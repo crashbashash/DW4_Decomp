@@ -230,7 +230,7 @@ retail function. Four things differ from an ordinary group:
 - **`stripped` is any function the retail linker dropped**, not only a destructor. It must still be
   a complete `.text` section that nothing kept references. The search for a retail copy is skipped:
   a stock getter matches any getter once its relocated words are masked, and a stripped name earns
-  no credit and is never linked.
+  no credit and is never linked. A [data-only unit](#data-only-units) is the exception.
 - **`data` and `anon` give each datum a retail address.** A named datum is a `data` row: a symbol
   the object defines, or a name it only references. An anonymous datum (`@183`, a string, a switch
   table, a type name) or function-local static (`watchNames$14`, and its guard
@@ -328,6 +328,70 @@ decompiled. Moving a definition into the unit is what the data headline counts. 
   members, not from a pointer table. A block that holds retail code as data (the kernel patch the libkernl
   alarm file copies into the kernel, `regions.tsv`) cannot be written in source, so its GCC unit cannot own
   that block at all.
+
+## Data-only units
+
+The retail linker dropped every function of some files and kept their data, because another file's code
+names it. Such a file is a whole-file unit like any other, with one difference in the row's key: no function
+of it is in retail, so the row is keyed by the retail address of its first datum, one of its own `data` rows.
+That is what marks it data-only (`Group.data_only`). `stripped` names the functions the file had and the
+linker dropped, and `source` the file's path under `src/`, since no function definition can lead a tool to
+it:
+
+```json
+{
+  "0x00485158": {
+    "whole_file": true,
+    "data": {"@data": "0x00485158"},
+    "stripped": ["_sdrCB", "_sdrCBThread", "sceSdRemoteCallbackInit", "sceSdRemoteCallbackQuit"],
+    "source": "sony/libsdr/sdr_cb.c"
+  }
+}
+```
+
+The `config/SLUS-20836/units.tsv` row gives the file's profile and covers its first data section
+(`0x00485158 0x00485180`), so the profile resolves from the key like a function's. The row takes no
+`emitted`, `duplicates`, `exceptions` or `symbol`: it places no function.
+
+- **Verifying.** `verify` compiles the file whole and compares each data section with retail, as for any
+  whole file, and refuses the row unless its key is the lowest address its data starts at. Every compiled
+  function must be `stripped`, or the object holds unowned code. A stripped function the source does not
+  define may not be a retail function of that name, and kept data may not name it, since the linker keeps
+  what kept data names. One the source does define must, besides the stripped-body rules, have no copy in
+  retail, relocated words masked: here the search is not skipped, because the claim the row rests on is
+  that the file kept no function. `check.py --function <key> --cand <file>` verifies one such unit; `make
+  check` verifies every row's `source`, prints `data-only: N units the retail linker kept the data of and
+  no function, M match (B bytes of data; in no function count)`, and adds the compared spans to
+  `data/check-data.tsv` under the key, where `tools/datamap.py` counts them as `source` and
+  `tools/progress.py` as data the link places from C. A data-only unit is in no function figure and has no
+  `data/check-categories.tsv` row. A mismatch fails the run, and a missing source fails it as a compile.
+- **Linking.** `make link` builds the unit's data object, `u_<key>_data.o`, from the verified object
+  exactly as for a whole file with members, and pins each section at its address.
+- **Measuring.** `tools/whole_file_rows.py` measures the row when a listed file has no retail function: a
+  data section is placed where another file's row, in the same run or already in `unit-objects.json`, reads
+  a name the section defines; a section nothing reaches went with the code, and a file none of whose data is
+  reached was dropped whole. `--reference <stem>=<object>` gives the file's library object (an SDK archive
+  member): its functions, and any the source compiles, are searched for in the whole retail code, relocated
+  words masked, and a copy stops the run. They are the `stripped` names. The units.tsv row goes after the
+  code rows.
+
+**A data-only unit carries only its data definitions.** Retail holds no byte of the dropped functions, so
+their C cannot be checked against anything: a wrong spelling has no retail copy either, and the masked
+search that finds none proves the functions were dropped, not that the C is theirs. libsdr is the evidence.
+Searched in retail with relocated words masked, the four functions of SDK 3.0.3 `sdr_cb.o` have no copy,
+nor do its two `.rodata` strings, and its 4,252-byte `.bss` is not in libsdr's block. Every function of
+the same release's `sdr_main.o` matches retail's at its address under the same masking. The `.data` the file kept is
+laid out in definition order whatever functions follow, and `static` data nothing reads is still emitted
+by the Sony EE GCC, so the definitions alone reproduce it, the `static` callback-thread id included. A
+stock file whose text stays upstream's (`src/third_party/`) keeps its functions, which are then
+`stripped` bodies under the rules above. The units that read the data declare it `extern` and keep `data`
+rows for the names, as for any datum another unit defines.
+
+What the SDK 3.0.3 archives and the Metrowerks runtime library show besides: libsdr's callback file is the
+only Sony file whose `.data` another file names while none of its functions is in retail. libcdvd's 7,080
+bytes at `0x483550` are its first file's `.data`, a file retail keeps functions of; that block waits for the
+library's fold, not for a data-only row. In the runtime library every object with data has a function in
+retail.
 
 ## Static initialisers
 
@@ -530,6 +594,13 @@ still verifies against its row with an enum added ahead of it. Against retail, a
 initialiser verifies with its table entry and record and links with them, the rows find it in the table, an
 initialiser whose bytes differ makes the file a mismatch, one the row does not name rejects the file, and a
 row naming two is refused.
+
+Run `python3 tools/test_data_only_units.py` for the data-only rows: the overlay rules (the key, `stripped`,
+`source`, no placed function), and against an EE GCC fixture the data compare, a changed datum, a key that
+is not the first datum, a dropped function that is a retail function or has a retail copy, a function the
+row does not strip, the placed data object, `check.py` on one unit and over a tree (a missing source
+fails it), and the row measurement: the data placed from the names other rows read, a file dropped whole,
+the `--reference` requirement and a reference function with a retail copy.
 
 Implementation: `tools/unitobjects.py`, `tools/units.py`, `tools/verify.py`,
 `tools/check.py` and `tools/linkgen.py`. The full byte-identical retail relink
