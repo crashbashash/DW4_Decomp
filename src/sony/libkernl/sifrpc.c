@@ -29,7 +29,7 @@ typedef struct {
         sceSifRpcCallReq call;
         sceSifRpcOtherDataReq rdata;
         char body[SIF_CMD_PACKET_SIZE - sizeof(sceSifRpcPktHeader)];
-    } u;
+    } req;
 } sceSifRpcPacket;
 
 typedef unsigned int (*AlarmHandler)(int id, unsigned int scheduled, unsigned int actual, void *arg);
@@ -166,8 +166,8 @@ static void _request_end(sceSifRpcRendPkt *rend, sceSifRpcState *state)
         break;
     case SIF_CMD_RPC_BIND:
         client = (sceSifClientData *)rend->client;
-        client->serve = rend->u.bind.serve;
-        client->buff = rend->u.bind.buff;
+        client->serve = rend->req.bind.serve;
+        client->buff = rend->req.bind.buff;
         break;
     case 0x8000000b: /* matching construct: case sweep — an empty third case orders the switch compares */
         break;
@@ -184,8 +184,8 @@ static unsigned int _alarm_rdata(int id, unsigned int scheduled, unsigned int ac
 {
     sceSifRpcRendPkt *rend = arg;
 
-    return isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, (void *)rend->u.rdata.src,
-                          (void *)rend->u.rdata.dest, rend->u.rdata.size)
+    return isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, (void *)rend->req.rdata.src,
+                          (void *)rend->req.rdata.dest, rend->req.rdata.size)
                ? 0
                : RETRY_CLOCK;
 }
@@ -203,9 +203,9 @@ static void _request_rdata(sceSifRpcOtherDataPkt *request, sceSifRpcState *state
     rend->pkt_addr = (unsigned int)request->rpch.pkt_addr;
     rend->client = (unsigned int)request->req.recv;
     rend->cid = SIF_CMD_RPC_RDATA;
-    rend->u.rdata.src = request->req.src;
-    rend->u.rdata.dest = request->req.dest;
-    rend->u.rdata.size = request->req.size;
+    rend->req.rdata.src = request->req.src;
+    rend->req.rdata.dest = request->req.dest;
+    rend->req.rdata.size = request->req.size;
     if (!isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, (void *)request->req.src,
                         (void *)request->req.dest, request->req.size)) {
         iSetTimerAlarm(RETRY_CLOCK, _alarm_rdata, rend);
@@ -223,11 +223,11 @@ int sceSifGetOtherData(sceSifReceiveData *rd, void *src, void *dest, int size, u
     }
     rd->rpcd.paddr = packet;
     rd->rpcd.pid = packet->rpch.rpc_id;
-    packet->u.rdata.src = (unsigned int)src;
-    packet->u.rdata.dest = (unsigned int)dest;
-    packet->u.rdata.size = size;
+    packet->req.rdata.src = (unsigned int)src;
+    packet->req.rdata.dest = (unsigned int)dest;
+    packet->req.rdata.size = size;
     packet->rpch.pkt_addr = packet;
-    packet->u.rdata.recv = rd;
+    packet->req.rdata.recv = rd;
     if (!(mode & SIF_RPCM_NOWAIT)) {
         param.initCount = 0;
         param.maxCount = 1;
@@ -286,11 +286,11 @@ static void _request_bind(sceSifRpcBindPkt *bind, sceSifRpcState *state)
     rend->cid = SIF_CMD_RPC_BIND;
     serve = _search_svdata(bind->req.sid, state);
     if (serve == 0) {
-        rend->u.bind.serve = 0;
-        rend->u.bind.buff = 0;
+        rend->req.bind.serve = 0;
+        rend->req.bind.buff = 0;
     } else {
-        rend->u.bind.serve = serve;
-        rend->u.bind.buff = serve->buff;
+        rend->req.bind.serve = serve;
+        rend->req.bind.buff = serve->buff;
     }
     if (!isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, 0, 0, 0)) {
         iSetTimerAlarm(RETRY_CLOCK, _alarm_bind, rend);
@@ -310,9 +310,9 @@ int sceSifBindRpc(sceSifClientData *client, unsigned int sid, unsigned int mode)
     }
     client->rpcd.paddr = packet;
     client->rpcd.pid = packet->rpch.rpc_id;
-    packet->u.bind.sid = sid;
+    packet->req.bind.sid = sid;
     packet->rpch.pkt_addr = packet;
-    packet->u.bind.client = client;
+    packet->req.bind.client = client;
     if (!(mode & SIF_RPCM_NOWAIT)) {
         param.initCount = 0;
         param.maxCount = 1;
@@ -378,13 +378,13 @@ int sceSifCallRpc(sceSifClientData *client, unsigned int fno, unsigned int mode,
     client->func = end_function;
     client->para = end_param;
     client->gp = GetGp();
-    packet->u.call.fno = fno;
-    packet->u.call.ssize = ssize;
-    packet->u.call.receive = (unsigned int)receive;
-    packet->u.call.rsize = rsize;
+    packet->req.call.fno = fno;
+    packet->req.call.ssize = ssize;
+    packet->req.call.receive = (unsigned int)receive;
+    packet->req.call.rsize = rsize;
     packet->rpch.pkt_addr = packet;
-    packet->u.call.serve = client->serve;
-    packet->u.call.client = client;
+    packet->req.call.serve = client->serve;
+    packet->req.call.client = client;
     if (!(mode & SIF_RPCM_NOWBDC)) {
         if (send == receive) {
             sceSifWriteBackDCache(send, ssize < rsize ? rsize : ssize);
@@ -399,9 +399,9 @@ int sceSifCallRpc(sceSifClientData *client, unsigned int fno, unsigned int mode,
     }
     if (mode & SIF_RPCM_NOWAIT) {
         if (end_function == 0) {
-            packet->u.call.rmode = 0;
+            packet->req.call.rmode = 0;
         } else {
-            packet->u.call.rmode = 1;
+            packet->req.call.rmode = 1;
         }
         client->rpcd.tid = -1;
         if (sceSifSendCmd(SIF_CMD_RPC_CALL, packet, SIF_CMD_PACKET_SIZE, send, client->buff, ssize)) {
@@ -417,7 +417,7 @@ int sceSifCallRpc(sceSifClientData *client, unsigned int fno, unsigned int mode,
         _sceRpcFreePacket(&packet->rpch);
         return -3;
     }
-    packet->u.call.rmode = 1;
+    packet->req.call.rmode = 1;
     if (!sceSifSendCmd(SIF_CMD_RPC_CALL, packet, SIF_CMD_PACKET_SIZE, send, client->buff, ssize)) {
         DeleteSema(client->rpcd.tid);
         _sceRpcFreePacket(&packet->rpch);

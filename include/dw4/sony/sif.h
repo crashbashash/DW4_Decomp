@@ -183,7 +183,7 @@ typedef struct {
             unsigned int dest;
             int size;
         } rdata;
-    } u;
+    } req;
     char pad[SIF_CMD_PACKET_SIZE - 48];
 } sceSifRpcRendPkt;
 

@@ -12,7 +12,7 @@ readable source that rebuilds the retail executable byte for byte.
 | CRI ADX | 140 KB | 91.4 % | 55.2 % |
 | CRI Sofdec | 209 KB | 73.4 % | 30.5 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
-| Sony SDK | 97 KB | 100.0 % | 97.8 % |
+| Sony SDK | 97 KB | 100.0 % | 100.0 % |
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 100.0 % |

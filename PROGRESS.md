@@ -43,17 +43,17 @@ The `code-only` debt by exception-metadata reason (from each unit's diagnostic):
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**8,637** of the 20,173 matched functions are readable: **1,613,236** code bytes, **46.5 %** of the code.
+**8,646** of the 20,173 matched functions are readable: **1,615,452** code bytes, **46.5 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 8,315 | 874,384 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 8,607 | 1,243,616 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,850 | 507,080 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,843 | 505,236 |
 | it sits in its class or module file, not `src/unmatched/` | 83 | 19,628 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 4,886 | 855,048 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 3,331 | 652,216 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,130 | 444,520 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,128 | 444,148 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 786 | 254,136 |
 
 ## Debt

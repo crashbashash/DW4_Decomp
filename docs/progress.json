@@ -472,15 +472,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1613236,
+  "bytes": 1615452,
   "failing": {
    "addresses": {
     "bytes": 1243616,
     "functions": 8607
    },
    "fields": {
-    "bytes": 444520,
-    "functions": 2130
+    "bytes": 444148,
+    "functions": 2128
    },
    "idioms": {
     "bytes": 652216,
@@ -499,15 +499,15 @@
     "functions": 4886
    },
    "types": {
-    "bytes": 507080,
-    "functions": 1850
+    "bytes": 505236,
+    "functions": 1843
    },
    "virtuals": {
     "bytes": 254136,
     "functions": 786
    }
   },
-  "functions": 8637,
+  "functions": 8646,
   "matched_functions": 20173
  },
  "regions": [

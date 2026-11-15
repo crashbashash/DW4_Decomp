@@ -157,7 +157,7 @@ int _send_to_iop(int port, int slot)
     count = command->count + 1;
     dst = padState[port][slot].iopCommand + (count & 1);
     command->count = count;
-    SyncDCache(command, (char *)command + 31);
+    SyncDCache(command, (char *)&command[1] - 1);
     dma[0].addr = (unsigned int)dst;
     dma[0].data = (unsigned int)command;
     dma[0].size = 32;
@@ -287,7 +287,7 @@ PadDmaData *padGetDmaStr(int port, int slot)
     int current;
 
     pad = padState[port][slot].padData;
-    SyncDCache(pad, (char *)pad + 255);
+    SyncDCache(pad, (char *)&pad[2] - 1);
     current = pad[0].frame < pad[1].frame;
     return pad + current;
 }
