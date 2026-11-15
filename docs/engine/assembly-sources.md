@@ -134,6 +134,29 @@ name them (`config/SLUS-20836/names/newlib.tsv`).
 * No upstream text of the file exists. The `.S` is written from the member's symbols and the executable's code, as
   the syscall stubs are, and assembles to the executable's bytes.
 
+### libkernl alarm patch: the user-mode dispatcher
+
+`UserModeDispatcher` (40 bytes of `eenull`, copied by `alarm.c` to `0x82000`): `src/sony/libkernl/kpatch/eenull.S`,
+a kernel patch source (`config/SLUS-20836/kernel-patches.tsv`), not an image function.
+
+* No compiler writes it. The alarm interrupt returns into it in user mode: it sets `sp` to `0x81fc0` with no frame,
+  calls the handler in `$3` with `jalr`, and goes back to the kernel through `syscall` with `$3 = -8`; it never
+  returns.
+* The SDK 3.0.3 `alarm.o` keeps the 40 bytes as its own `eenull` array beside the patch, with no symbol for the
+  routine, and they equal DW4's. The five trailing zero words are the link's: `.p2align 4` and the `QUAD(0)` closing
+  `.text` in `config/kernel-patch.ld`.
+* The file assembles to those bytes under both `ee-as` builds.
+
+`CallUserHandler` and `ReturnFromUserHandler` (`src/sony/libkernl/kpatch/alarmuser.S`, the other half of the
+`srcfile` patch): the kernel side of an alarm handler's trip through user mode.
+
+* No compiler writes them. `CallUserHandler` has no prologue: it keeps `ra` and `sp` through `$k0` in `.bss`,
+  writes EPC with `mtc0`, moves the handler and its arguments into `$3..$6`, sets the Status UM and EXL bits and
+  leaves through `eret`. `ReturnFromUserHandler` is system call 8: it masks Status with `~0x1b`, restores `ra` and
+  `sp` and returns to `CallUserHandler`'s caller. C has no spelling for `$k0`, the COP0 writes or `eret`.
+* The SDK 3.0.3 `alarm.o` holds the bytes inside its `srcfile` array with no symbols of their own, and they equal
+  DW4's. The file assembles to them under the 2.10 `ee-as` that builds the patch.
+
 ## Open questions
 
 * **Which compiler generated the R5900 `.S` files** before they were edited. Their `lui`/`ori` -1

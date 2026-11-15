@@ -11,8 +11,20 @@
 void GetOsdConfigParam(void *param);
 int SetOsdConfigParam(void *param);
 
-extern char osdsrc[OSD_PATCH_SIZE];
-extern SyscallEntry SysExecPS2Entry[3];
+static int kCopy(int *dst, int *src, unsigned int size);
+
+/* the kernel code that replaces the OSD configuration calls and ExecPS2 (src/sony/libkernl/kpatch/osdsrc.c) */
+static unsigned char osdsrc[OSD_PATCH_SIZE] = {
+#include "osdsrc.inc"
+};
+
+/* the calls InitExecPS2 installs: Copy's kernel side, the patch's lookup as call 91, then ExecPS2's hook at
+ * the address the patch's lookup gives */
+static SyscallEntry SysExecPS2Entry[3] = {
+    {0x5a, kCopy},
+    {0x5b, OSD_PATCH_ADDR},
+    {0xffffc402, 0},
+};
 
 /* SetSyscall */
 static void setup(int number, void *handler)

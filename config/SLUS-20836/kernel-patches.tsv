@@ -1,0 +1,9 @@
+# libkernl kernel patches, built from source by tools/kpatch.py and embedded in their owner files' .data
+# (docs/engine/sony-libkernl-sys.md#the-kernel-patches). The patch links at its run address, its .text and
+# .data become build/<GAMEID>/kpatch/<name>.inc, and the owner unit includes that as the initializer of its array.
+# A patch compiles with its owner unit's flags and the owner's compiler, or the units.tsv compiler named here.
+# name	sources (`-` while the owner still names the retail array)	run address	owner unit	compiler	array	size
+tlbsrc	src/sony/libkernl/kpatch/tlbsrc.c	0x80075000	sony_libkernl_tlbfunc	-	tlbsrc	816
+osdsrc	src/sony/libkernl/kpatch/osdsrc.c	0x80074000	sony_libkernl_libosd	-	osdsrc	1960
+srcfile	src/sony/libkernl/kpatch/srcfile.c,src/sony/libkernl/kpatch/alarmuser.S	0x80076000	sony_libkernl_alarm	ee-gcc-2.9-as210	srcfile	1856
+eenull	src/sony/libkernl/kpatch/eenull.S	0x00082000	sony_libkernl_alarm	ee-gcc-2.9-as210	eenull	40

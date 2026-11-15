@@ -17,7 +17,7 @@
 
 int DIntr(void);
 int EIntr(void);
-int scePrintf(const char *format, ...);
+void scePrintf(const char *format, ...);
 void *memset(void *dst, int value, unsigned int size);
 void sceIpuInit(void);
 void sceIpuSync(int mode, int timeout);
@@ -26,7 +26,7 @@ int _sceMpegNextHeader(_sceMpegDecoder *dec);
 int _decPicture(_sceMpegDecoder *dec);
 int _updateRefImage(_sceMpegDecoder *dec, int second);
 void _sceMpegOutputFrame(_sceMpegDecoder *dec, int count, int output);
-int _sendDataToIPU(_sceMpegDecoder *dec, unsigned char *data, int size);
+void _sendDataToIPU(_sceMpegDecoder *dec, unsigned char *data, int size);
 int _sceMpegDefaultStopDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
 int _sceMpegDefaultRestartDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData);
 int sceMpegReset(sceMpeg *mp);

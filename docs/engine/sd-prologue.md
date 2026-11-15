@@ -27,11 +27,14 @@ the first SDK (`ee-gcc2.9-991111-01.tar.xz` in the decomp.me compiler releases, 
 Of the 991111 releases only -01 writes two hazard `nop`s before a `div.s` (`sceTimerBusClock2Freq`).
 
 The libraries were not all assembled the same way. libkernl needs this release's own assembler (`ee/bin/as`),
-which leaves a delay slot unfilled where a store could have moved into it. libmpeg, libgraph and libdma need one
-that fills it: the 2.96 kit's `ee-as` (2.10-ee), which `sceMpegInit`, `sceGsResetPath` and `sceDmaReset` show. Their
-units are pinned as `ee-gcc-2.9-as210`, the same compiler with that assembler; `tools/download_tools.py` builds it
-from the two releases. The other six libraries match the same either way and stay on the release's own assembler.
-It reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
+which leaves a delay slot unfilled where a store could have moved into it. libmpeg, libgraph, libdma and libcdvd need
+one that fills it: the 2.96 kit's `ee-as` (2.10-ee), which `sceMpegInit`, `sceGsResetPath` and `sceDmaReset` show.
+Their units are pinned as `ee-gcc-2.9-as210`, the same compiler with that assembler; `tools/download_tools.py` builds it
+from the two releases. The compiler leaves the delay slot of a call after a `volatile` access to the assembler, and
+only 2.10 moves the access into it: libcdvd's shared semaphore loads show both the unfilled `nop` after `jal PollSema`
+and a load that sits in a `jal SignalSema` slot. The other five libraries match the same either way and stay on the
+release's own assembler. The kernel patch `srcfile` is built with 2.10 too, while the libkernl file that embeds it is not.
+The 2.9-ee compiler reproduces their signs: register saves at 16-byte spacing with `sd`, a frameless sibling `j` for a
 function whose only call is a tail call (which 2.96 cannot produce), a final `jal` with an epilogue
 after other work, unfilled delay slots, real `mult` for small constants, `lwu` zero-extension and
 `__muldf3`-style libcalls. Every function of those libraries that matched under 2.96 still matches
@@ -207,8 +210,8 @@ disabling ASLR change nothing.
 * **newlib's R5900 assembly.** setjmp, longjmp and the string and memory routines come from
   `libc/machine/r5900/*.S` in Sony's `ee001003_1` `libc.a`, and are `.S` sources here
   ([assembly sources](assembly-sources.md)). Which compiler first generated those files is open.
-* **The other Sony libraries' assembler.** Every matched function of libipu, libcdvd, libpad, libsdr, libmc
-  and libmtap matches with either assembler, so which one built them is open.
+* **The other Sony libraries' assembler.** Every matched function of libipu, libpad, libsdr, libmc and libmtap
+  matches with either assembler, so which one built them is open.
 * **libmtap's names.** `sceMtapChangeThreadPriority`'s two arguments are named as mtapman's high and low
   thread priorities by guess. The SIF RPC bind and call routines it uses and the print routine keep
   their address names, shared with every other Sony library.

@@ -29,7 +29,7 @@ void sceSifInitRpc(unsigned int mode);
 int sceSifBindRpc(sceSifClientData *client, unsigned int rpc_number, int mode);
 int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send, int ssize, void *receive,
                  int rsize, void (*end_function)(void *), void *end_param);
-int scePrintf(const char *format, ...);
+void scePrintf(const char *format, ...);
 
 int sceMtapGetModVersion(void);
 

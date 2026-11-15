@@ -162,3 +162,6 @@ _print	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 isceSifDmaStat	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 PSMode	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
 MachineType	src/sony/libkernl/klib.S	#libkernl-syscall-stubs
+UserModeDispatcher	src/sony/libkernl/kpatch/eenull.S	#libkernl-alarm-patch-the-user-mode-dispatcher
+CallUserHandler	src/sony/libkernl/kpatch/alarmuser.S	#libkernl-alarm-patch-the-user-mode-dispatcher
+ReturnFromUserHandler	src/sony/libkernl/kpatch/alarmuser.S	#libkernl-alarm-patch-the-user-mode-dispatcher

@@ -109,7 +109,7 @@ int sceSifCallRpc(sceSifClientData *client, int rpc_number, int mode, void *send
                   int rsize, void (*end_function)(void *), void *end_param);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
-int scePrintf(const char *format, ...);
+void scePrintf(const char *format, ...);
 void SyncDCache(void *start, void *end);
 int DIntr(void);
 int EIntr(void);

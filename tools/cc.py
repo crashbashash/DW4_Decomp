@@ -3,6 +3,9 @@
 MWCC builds run under wibo as `<wibo> <mwccps2.exe> -c <flags> <source> -o <object>`. A unit pinned to
 the Sony EE GCC (`config/SLUS-20836/unit-compilers.tsv` names an `ee-gcc` executable) runs natively through
 tools/eegcc_compile.py instead. Every compile site (verify, check, linkgen) builds its command here.
+
+A source that includes a libkernl kernel patch's bytes (`#include "tlbsrc.inc"`) gets the patch built first
+and its include directory added (tools/kpatch.py).
 """
 import atexit
 import os
@@ -36,7 +39,13 @@ def is_eegcc(compiler):
 
 def compile_argv(wibo, compiler, flags, source, out):
     """argv for one compile; `flags` is the flag string of the unit."""
+    import kpatch
+    extra = []
+    if not source.endswith(".S"):
+        include = kpatch.include_dir_for(source)
+        if include:
+            extra = ["-I" + include]
     if is_eegcc(compiler):
         return [sys.executable, os.path.join(HERE, "eegcc_compile.py"), str(compiler),
-                *flags.split(), source, out]
-    return [wibo, compiler, "-c", *flags.split(), source, "-o", out]
+                *flags.split(), *extra, source, out]
+    return [wibo, compiler, "-c", *flags.split(), *extra, source, "-o", out]

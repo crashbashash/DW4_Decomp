@@ -41,7 +41,7 @@ void sceSifSetReg(unsigned int reg, unsigned int value);
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
 void sceSifWriteBackDCache(void *addr, int size);
 void sceResetttyinit(void);
-int scePrintf(const char *fmt, ...);
+void scePrintf(const char *fmt, ...);
 void sceSifInitRpc(unsigned int mode);
 void sceSifExitRpc(void);
 

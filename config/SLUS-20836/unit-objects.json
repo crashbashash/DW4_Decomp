@@ -209,7 +209,29 @@
   "0x001034e0": {
     "whole_file": true,
     "emitted": {
+      "_getAllRefs": "0x00103730",
+      "_getRef0": "0x00103e38",
+      "_doMC": "0x00104258",
+      "_rix_000": "0x00104478",
+      "_ri0_000": "0x001044f0",
+      "_rix_001": "0x00104588",
+      "_ri0_001": "0x00104640",
+      "_rix_010": "0x00104710",
+      "_ri0_010": "0x001047c0",
+      "_rix_011": "0x00104878",
+      "_ri0_011": "0x00104970",
+      "_rix_100": "0x00104a70",
+      "_ri0_100": "0x00104b10",
+      "_rix_101": "0x00104bc0",
+      "_ri0_101": "0x00104ca0",
+      "_rix_110": "0x00104d88",
+      "_ri0_110": "0x00104e60",
+      "_rix_111": "0x00104f30",
+      "_ri0_111": "0x00105050",
+      "_copyAddRefImage": "0x00105168",
+      "_copyRefImage": "0x001051c8",
       "_ipuSetMpeg1": "0x00105228",
+      "_waitBdec": "0x00105250",
       "_getDmvector": "0x001054e8",
       "_dualPrimeVector": "0x00105508",
       "_getMacroblockAddressIncrement": "0x00105690",
@@ -230,9 +252,8 @@
       "_ipuGetBits": "0x00106c88"
     },
     "data": {
-      "@data": "0x00481cd8",
-      "@rodata": "0x004d1fa0",
-      "invalidMotionTypeMessage": "0x004d1ee0"
+      "@data": "0x00481c98",
+      "@rodata": "0x004d1ee0"
     }
   },
   "0x00106df8": {
@@ -257,7 +278,8 @@
   "0x00107790": {
     "whole_file": true,
     "emitted": {
-      "_sceMpegOutputFrame": "0x00107860"
+      "_sceMpegOutputFrame": "0x00107860",
+      "_updateRefImage": "0x001078f0"
     },
     "data": {
       "@rodata": "0x004d2138"
@@ -277,15 +299,20 @@
       "@rodata": "0x004d2178"
     }
   },
-  "0x001084b0": {
+  "0x00108340": {
     "whole_file": true,
     "emitted": {
+      "_sprClear": "0x001084b0",
       "_doCSC": "0x00108538",
       "_ch3dmaCSC": "0x00108660",
+      "_doCSC2": "0x001087a8",
       "_ch4dma": "0x00108968",
       "_cscStoreImage": "0x00108a40"
     },
-    "data": {},
+    "data": {
+      "@rodata": "0x004d21a8",
+      "@bss": "0x00555080"
+    },
     "externals": {
       "AddDmacHandler2": "0x0010ac00"
     }
@@ -347,10 +374,17 @@
       "@rodata": "0x004d22e8"
     }
   },
+  "0x00109b68": {
+    "whole_file": true,
+    "emitted": {},
+    "data": {}
+  },
   "0x00109c68": {
     "whole_file": true,
     "emitted": {
       "_sequenceHeader": "0x00109c88",
+      "_initSeq": "0x00109db0",
+      "_setFieldPointers": "0x0010a058",
       "_loadQuantMatrix": "0x0010a138",
       "_sequenceExtension": "0x0010a218",
       "_sequenceDisplayExtension": "0x0010a348",
@@ -426,9 +460,10 @@
     },
     "data": {}
   },
-  "0x0010b9c0": {
+  "0x0010b9b0": {
     "whole_file": true,
     "emitted": {
+      "DisableIntc": "0x0010b9c0",
       "EnableIntc": "0x0010ba28",
       "DisableDmac": "0x0010ba90",
       "EnableDmac": "0x0010baf8",
@@ -490,6 +525,24 @@
       "@rodata": "0x004d2448"
     }
   },
+  "0x0010c7b0": {
+    "whole_file": true,
+    "emitted": {
+      "deci2Putchar": "0x0010c7f0",
+      "serialPutchar": "0x0010c8a0",
+      "ftoi": "0x0010c8d8",
+      "printfloat": "0x0010c970",
+      "kvprintf": "0x0010cad8",
+      "kprintf": "0x0010d0d0",
+      "scePrintf": "0x0010d108"
+    },
+    "data": {
+      "@data": "0x00481e60",
+      "@bss": "0x00555e80",
+      "@rodata": "0x004d24c0"
+    },
+    "symbol": "kputchar"
+  },
   "0x0010d168": {
     "whole_file": true,
     "emitted": {
@@ -506,17 +559,12 @@
       "_sceSifSendCmd": "0x0010d590",
       "sceSifSendCmd": "0x0010d6c8",
       "isceSifSendCmd": "0x0010d708",
+      "_sceSifCmdIntrHdlr": "0x0010d748",
       "sceSifWriteBackDCache": "0x0010d890"
     },
     "data": {
-      "_cmd_init_check": "0x00481e68",
-      "_sif_cmd_data": "0x00555fd8",
-      "sif0_handleid": "0x00555fd4",
-      "sifSregs": "0x00556180",
-      "_pckt_buffer": "0x00555f00",
-      "_send_buffer": "0x00555f80",
-      "_csdata": "0x00555fc0",
-      "_sys_buffer": "0x00556000"
+      "@data": "0x00481e68",
+      "@bss": "0x00555f00"
     }
   },
   "0x0010d940": {
@@ -536,6 +584,7 @@
       "_request_bind": "0x0010e008",
       "sceSifBindRpc": "0x0010e0d8",
       "_request_call": "0x0010e218",
+      "sceSifCallRpc": "0x0010e2a8",
       "sceSifCheckStatRpc": "0x0010e4a0",
       "sceSifSetRpcQueue": "0x0010e4e0",
       "sceSifRegisterRpc": "0x0010e578",
@@ -546,11 +595,8 @@
       "sceSifRpcLoop": "0x0010e990"
     },
     "data": {
-      "_free_buffer": "0x00556a00",
-      "_free_buffer2": "0x00557200",
-      "_packet_buffer": "0x00556200",
-      "_sceSifInitCheck": "0x00481e70",
-      "_sif_rpc_data": "0x00557a00"
+      "@data": "0x00481e70",
+      "@bss": "0x00556200"
     }
   },
   "0x0010e9d0": {
@@ -558,15 +604,21 @@
     "emitted": {
       "new_iob": "0x0010ea30",
       "get_iob": "0x0010eab8",
+      "_sceFs_Rcv_Intr": "0x0010eb28",
       "_sceFsSemInit": "0x0010eee0",
       "_sceFsWaitS": "0x0010ef30",
       "_sceFsSigSema": "0x0010ef60",
       "scePowerOffHandler": "0x0010ef70",
+      "_sceFs_Poff_Intr": "0x0010f018",
       "sceFsInit": "0x0010f060",
       "_fs_version": "0x0010f268",
       "sceFsReset": "0x0010f2f8",
       "sceOpen": "0x0010f330",
       "sceClose": "0x0010f5b8",
+      "sceLseek": "0x0010f738",
+      "sceRead": "0x0010f970",
+      "sceWrite": "0x0010fbd0",
+      "sceIoctl": "0x0010fe90",
       "sceIoctl2": "0x00110208",
       "_sceCallCode": "0x001103e8",
       "sceRemove": "0x00110590",
@@ -585,33 +637,21 @@
       "sceSync": "0x001114a8",
       "sceMount": "0x00111640",
       "sceUmount": "0x001118b0",
+      "sceLseek64": "0x001118d0",
       "sceDevctl": "0x00111b08",
       "sceSymlink": "0x00111d40",
       "sceReadlink": "0x00111f20"
     },
     "data": {
-      "__ps2_klibinfo__": "0x00481e40",
-      "_fs_cd": "0x00559180",
-      "_fs_fsq_semid": "0x00481f0c",
-      "_fs_init": "0x00481efc",
-      "_fs_iob_semid": "0x00481f08",
-      "_fs_rcv_bufdbl": "0x00481f00",
-      "_fs_semid": "0x00481f04",
-      "_fsversion": "0x005591a8",
-      "_fswildcard": "0x00481f10",
-      "_iob": "0x00558f80",
-      "_rcv_data_cmd": "0x00558700",
-      "_rcv_data_rpc": "0x005586c0",
-      "_send_data": "0x00557a80",
-      "_sif_FsPoff_Data": "0x00559200",
-      "_sif_FsRcv_Data": "0x005591c0",
-      "rcv_adr": "0x00557a40",
-      "sceCbPoff_Gp": "0x00559240"
+      "@data": "0x00481e78",
+      "@bss": "0x00557a40",
+      "@rodata": "0x004d2620"
     }
   },
-  "0x00112170": {
+  "0x001120e8": {
     "whole_file": true,
     "emitted": {
+      "sceSifAllocIopHeap": "0x00112170",
       "sceSifAllocSysMemory": "0x001121e0",
       "sceSifFreeSysMemory": "0x00112260",
       "sceSifFreeIopHeap": "0x001122d8",
@@ -623,11 +663,8 @@
       "sceSifQueryBlockSize": "0x001125b8"
     },
     "data": {
-      "_ih_bind": "0x00481f18",
-      "_ih_cd": "0x00559280",
-      "_ih_rdata": "0x005592c0",
-      "_ih_sdata": "0x00559300",
-      "_lih_data": "0x00559340"
+      "@data": "0x00481f18",
+      "@bss": "0x00559280"
     }
   },
   "0x00112638": {
@@ -680,12 +717,21 @@
       "GetEntryAddress": "0x001137a8",
       "setup": "0x001137b8",
       "InitTLBFunctions": "0x001137c8",
+      "PutTLBEntry": "0x00113890",
+      "iPutTLBEntry": "0x001138a0",
       "_SetTLBEntry": "0x001138b0",
       "SetTLBEntry": "0x001138c0",
+      "iSetTLBEntry": "0x001138f0",
+      "GetTLBEntry": "0x00113900",
+      "iGetTLBEntry": "0x00113910",
+      "ProbeTLBEntry": "0x00113920",
+      "iProbeTLBEntry": "0x00113930",
+      "ExpandScratchPad": "0x00113940",
       "InitTLB": "0x00113950",
       "InitTLB32MB": "0x00113990"
     },
     "data": {
+      "@data": "0x00481f28",
       "@rodata": "0x004d26d0",
       "SysEntry_tlbfunc": "0x004822a8",
       "TLBInfo": "0x00482558",
@@ -733,6 +779,7 @@
       "InitExecPS2": "0x001142f0"
     },
     "data": {
+      "@data": "0x00482598",
       "SysExecPS2Entry": "0x00482d40",
       "osdsrc": "0x00482598"
     }
@@ -766,6 +813,7 @@
       "InitAlarm": "0x001146a8"
     },
     "data": {
+      "@data": "0x00482d60",
       "SysEntry_alarm": "0x004834c8",
       "eenull": "0x004834a0",
       "srcfile": "0x00482d60"
@@ -842,6 +890,88 @@
       "@bss": "0x0055cd48"
     },
     "anon": []
+  },
+  "0x00116138": {
+    "whole_file": true,
+    "emitted": {
+      "_sceCd_cd_callback": "0x001161a0",
+      "_sceCd_cbLoop": "0x00116240",
+      "sceCdInitEeCB": "0x00116310",
+      "_sceCd_cd_read_intr": "0x001163e0",
+      "cmd_sem_init": "0x00116498",
+      "cdvd_exit": "0x00116550",
+      "sceCdPOffCallback": "0x001165f0",
+      "_sceCd_Poff_Intr": "0x00116670",
+      "PowerOffCB": "0x001166c8",
+      "sceCdLayerSearchFile": "0x00116740",
+      "sceCdSearchFile": "0x00116a58",
+      "_sceCd_ncmd_prechk": "0x00116a78",
+      "sceCdNcmdDiskReady": "0x00116be8",
+      "sceCdSync": "0x00116c80",
+      "sceCdSyncS": "0x00116d20",
+      "_sceCd_scmd_prechk": "0x00116d90",
+      "_sceCdSC": "0x00116f00",
+      "sceCdInit": "0x00116fb0",
+      "sceCdDiskReady_old": "0x00117290",
+      "sceCdDiskReady": "0x00117488"
+    },
+    "data": {
+      "@data": "0x00483540",
+      "@bss": "0x0055cf80",
+      "@rodata": "0x004d2758"
+    }
+  },
+  "0x00117690": {
+    "whole_file": true,
+    "data": {
+      "@rodata": "0x004d2928",
+      "SCE_CD_debug": "0x00483550",
+      "_sceCd_ee_read_mode": "0x00483578",
+      "_sceCd_ncmd_semid": "0x00483568",
+      "_sceCd_c_cb_sem": "0x00483574",
+      "sceCdCbfunc_num": "0x00483598",
+      "_sceCd_ncmdsdata": "0x00483640",
+      "_sceCd_rd_intr_data": "0x00484640",
+      "_sceCd_Read_cur_pos": "0x00484700",
+      "_sceCd_cd_ncmd": "0x00484710"
+    }
+  },
+  "0x00117870": {
+    "whole_file": true,
+    "data": {
+      "_sceCd_ncmd_semid": "0x00483568",
+      "_sceCd_c_cb_sem": "0x00483574",
+      "sceCdCbfunc_num": "0x00483598",
+      "_sceCd_ncmdsdata": "0x00483640",
+      "_sceCd_cd_ncmd": "0x00484710"
+    }
+  },
+  "0x00117940": {
+    "whole_file": true,
+    "data": {
+      "_sceCd_scmd_semid": "0x0048356c",
+      "_sceCd_scmdrdata": "0x00484740",
+      "_sceCd_cd_scmd": "0x004850c0"
+    }
+  },
+  "0x001179d8": {
+    "whole_file": true,
+    "data": {
+      "_sceCd_scmd_semid": "0x0048356c",
+      "sceCdCbfunc_num": "0x00483598",
+      "_sceCd_scmdrdata": "0x00484740",
+      "_sceCd_cd_scmd": "0x004850c0"
+    }
+  },
+  "0x00117a90": {
+    "whole_file": true,
+    "data": {
+      "@data": "0x004850e8",
+      "_sceCd_scmd_semid": "0x0048356c",
+      "_sceCd_scmdrdata": "0x00484740",
+      "_sceCd_scmdsdata": "0x00484b80",
+      "_sceCd_cd_scmd": "0x004850c0"
+    }
   },
   "0x00117b60": {
     "whole_file": true,

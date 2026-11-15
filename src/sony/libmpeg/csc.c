@@ -31,12 +31,47 @@ typedef struct {
 #define D4_CHCR (*(volatile unsigned int *)0x1000B400)
 #define D4_MADR (*(volatile unsigned int *)0x1000B410)
 #define D4_QWC (*(volatile unsigned int *)0x1000B420)
+#define D9_CHCR (*(volatile unsigned int *)0x1000D400)
+#define D9_QWC (*(volatile unsigned int *)0x1000D420)
+#define D9_TADR (*(volatile unsigned int *)0x1000D430)
+#define D9_SADR (*(volatile unsigned int *)0x1000D480)
 #define IPU_CMD (*(volatile unsigned int *)0x10002000)
 #define IPU_CTRL (*(volatile int *)0x10002010)
 
 #define DMA_CHAN_IPU_TO 4
 #define IPU_CTRL_ECD 0x4000
 #define IPU_CTRL_RST 0x40000000
+
+/* Pulls each prediction's reference blocks into the scratchpad with a source-chain transfer of two
+ * 48-quadword pieces per prediction. */
+void _dmaRefImage(_sceMpegDecoder *dec)
+{
+    static unsigned long long _sprtagdata[64] __attribute__((aligned(64)));
+    unsigned long long *tag = (unsigned long long *)(((unsigned int)_sprtagdata & 0x0FFFFFFF) | 0x20000000);
+    int count = dec->spr[dec->mb_buffer].pred_count;
+    int intr = 0;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        unsigned long long addr;
+        unsigned long long id;
+
+        tag[0] = ((unsigned long long)((unsigned int)dec->spr[dec->mb_buffer].block[i] & 0x0FFFFFFF) << 32) | 0x30000030;
+        addr = (unsigned int)dec->spr[dec->mb_buffer].block_right[i] & 0x0FFFFFFF;
+        id = i == count - 1 ? 0 : 3;
+        tag[2] = (addr << 32) | (id << 28) | 48;
+        tag += 4;
+    }
+    intr = DIntr();
+    __asm__("sync");
+    D9_SADR = dec->spr[dec->mb_buffer].src;
+    D9_TADR = (unsigned int)_sprtagdata;
+    D9_QWC = 0;
+    D9_CHCR = 0x105;
+    if (intr) {
+        EIntr();
+    }
+}
 
 /* Clears `size` bytes at `addr` in the scratchpad with an IPU-to-memory transfer. */
 void _sprClear(unsigned int addr, int size) {
@@ -95,6 +130,43 @@ int _ch3dmaCSC(int channel, CscDmaState *state) {
     __asm__("sync");
     __asm__ volatile("ei");
     return 0;
+}
+
+/* Converts more than 1023 macroblocks: channel 3 is started on the first 1023 and its handler sends the rest. */
+void _doCSC2(_sceMpegDecoder *dec, unsigned int addr, int count)
+{
+    sceMpegCbData cbdata;
+    CscDmaState state;
+    int handler;
+    int intr;
+    unsigned int qwc = 1023 * 64; /* matching construct: decomp-permuter — the first chunk's size set up before the wait */
+
+    state.total = count / 1023 + 1;
+    state.done = 0;
+    state.count = 0;
+    state.remain = count;
+    state.addr = (addr + 0xFFC00) & 0x0FFFFFFF;
+    while (IPU_CTRL < 0);
+    handler = AddDmacHandler2(3, _ch3dmaCSC, 0, &state);
+    D_STAT = 8;
+    EnableDmac(3);
+    intr = DIntr();
+    D3_MADR = addr & 0x0FFFFFFF;
+    D3_QWC = qwc;
+    D3_CHCR = 0x100;
+    if (intr) {
+        EIntr();
+    }
+    IPU_CMD = 0x700003FF;
+    cbdata.type = sceMpegCbBackground;
+    _sceMpegDispatchMpegCallback(dec->mp, &cbdata);
+    while (state.count < state.total);
+    if (state.done) {
+        _sceMpegError(dec, "CSC handler error\n");
+    }
+    while (IPU_CTRL < 0);
+    DisableDmac(3);
+    RemoveDmacHandler(3, handler);
 }
 
 int _ch4dma(int channel, DmaChunk *chunk) {

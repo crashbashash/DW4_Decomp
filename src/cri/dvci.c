@@ -95,7 +95,7 @@ void ADXMSG_PrintErr(const char *format, ...);
 void InvalidDCache(void *start, void *end);
 int sceCdSync(int mode);
 int sceCdRead(unsigned int lsn, unsigned int sectors, void *buf, CdReadMode *mode);
-int FUN_00116740(sceCdlFILE *fp, const char *name, int layer);
+int sceCdLayerSearchFile(sceCdlFILE *fp, const char *name, int layer);
 
 SrdObj *FUN_00271670(void);
 void FUN_002716f8(SrdObj *stm);
@@ -137,7 +137,7 @@ int FUN_002739e8(sceCdlFILE *fp, const char *name)
 {
     int result;
     FUN_002725a0(0x8000);
-    result = FUN_00116740(fp, name, dvci_layer);
+    result = sceCdLayerSearchFile(fp, name, dvci_layer);
     FUN_002725a0(0x8001);
     return result;
 }

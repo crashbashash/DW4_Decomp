@@ -1,20 +1,19 @@
-extern char DAT_00484740[];
-int sceSifCallRpc();
-int FUN_00116d90();
-int SignalSema();
-extern int DAT_0048356c[4];
-extern int DAT_004850c0[4];
-int sceCdGetError(void) {
-    int temp_s0;
+/* sceCdGetError.c - sceCdGetError: the last error cdvdman reported. */
+#include "dw4/eekernel.h"
+#include "dw4/sony/libcdvd.h"
 
-    if (FUN_00116d90(3) == 0) {
+int sceCdGetError(void)
+{
+    int error;
+
+    if (_sceCd_scmd_prechk(CD_PRECHK_GET_ERROR) == 0) {
         return -1;
     }
-    if (sceSifCallRpc(&DAT_004850c0[0], 4, 0, 0, 0, DAT_00484740, 4, 0, 0) < 0) {
-        SignalSema(DAT_0048356c[0]);
+    if (sceSifCallRpc(&_sceCd_cd_scmd, CD_SCMD_GET_ERROR, 0, 0, 0, _sceCd_scmdrdata, 4, 0, 0) < 0) {
+        SignalSema(_sceCd_scmd_semid);
         return -1;
     }
-    temp_s0 = *(int *)((int)DAT_00484740 | 0x20000000);
-    SignalSema(DAT_0048356c[0]);
-    return temp_s0;
+    error = UNCACHED_WORD(_sceCd_scmdrdata);
+    SignalSema(_sceCd_scmd_semid);
+    return error;
 }

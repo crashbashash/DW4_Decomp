@@ -2373,17 +2373,17 @@
     },
     {
       "address": 1099992,
-      "name": "FUN_0010c8d8",
+      "name": "ftoi",
       "size": 148,
-      "source": null,
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1100144,
-      "name": "FUN_0010c970",
+      "name": "printfloat",
       "size": 360,
-      "source": "src/unmatched/FUN_0010c970.c",
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1100176,
@@ -2480,9 +2480,9 @@
     },
     {
       "address": 1100504,
-      "name": "FUN_0010cad8",
+      "name": "kvprintf",
       "size": 1524,
-      "source": null,
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1100544,
@@ -2626,7 +2626,7 @@
       "address": 1102032,
       "name": "kprintf",
       "size": 56,
-      "source": "src/unmatched/kprintf.c",
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1102068,
@@ -5929,7 +5929,7 @@
     },
     {
       "address": 1247008,
-      "name": "StringRef_Destruct_00130720",
+      "name": "igStringRef_Destruct",
       "size": 116,
       "source": "src/engine/attrs/AttrsLibrary.cpp",
       "direct": [
@@ -6005,7 +6005,7 @@
     },
     {
       "address": 1380016,
-      "name": "ObjectRef_Destruct_00150eb0",
+      "name": "igSmartPointer_igIntList_Destruct",
       "size": 128,
       "source": "src/engine/gfx/GfxLibrary.cpp",
       "direct": [
@@ -6157,7 +6157,7 @@
     },
     {
       "address": 1860704,
-      "name": "ObjectRef_Destruct_001c6460",
+      "name": "igSmartPointer_igStringRefList_Destruct",
       "size": 128,
       "source": "src/engine/scenegraph/SceneGraphLibrary.cpp",
       "direct": [
@@ -9878,7 +9878,7 @@
     },
     {
       "address": 2855424,
-      "name": "FUN_002b9200",
+      "name": "igStringRefList_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -9914,7 +9914,7 @@
     },
     {
       "address": 2856480,
-      "name": "FUN_002b9620",
+      "name": "igStringObj_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -9988,7 +9988,7 @@
     },
     {
       "address": 2860624,
-      "name": "FUN_002ba650",
+      "name": "igSemaphore_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10009,7 +10009,7 @@
     },
     {
       "address": 2860848,
-      "name": "FUN_002ba730",
+      "name": "igSemaphore_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10024,7 +10024,7 @@
     },
     {
       "address": 2864384,
-      "name": "FUN_002bb500",
+      "name": "igRegistryValue_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10045,7 +10045,7 @@
     },
     {
       "address": 2864752,
-      "name": "FUN_002bb670",
+      "name": "igRegistryValue_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10200,7 +10200,7 @@
     },
     {
       "address": 2873376,
-      "name": "thunk_igObjectList_GetMetaObject",
+      "name": "igObjectList_GetMetaObjectFunction",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10319,7 +10319,7 @@
     },
     {
       "address": 2879456,
-      "name": "FUN_002befe0",
+      "name": "igMetaEnum_CreateInstance",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10340,7 +10340,7 @@
     },
     {
       "address": 2879888,
-      "name": "FUN_002bf190",
+      "name": "igMetaEnum_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10403,7 +10403,7 @@
     },
     {
       "address": 2887792,
-      "name": "FUN_002c1070",
+      "name": "igMemoryDictionary_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10424,7 +10424,7 @@
     },
     {
       "address": 2888080,
-      "name": "FUN_002c1190",
+      "name": "igMemoryDictionary_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10498,7 +10498,7 @@
     },
     {
       "address": 2894272,
-      "name": "FUN_002c29c0",
+      "name": "__internalNonRefCountedObjectList_Create",
       "size": 160,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10542,7 +10542,7 @@
     },
     {
       "address": 2894768,
-      "name": "FUN_002c2bb0",
+      "name": "__internalNonRefCountedObjectList_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10652,7 +10652,7 @@
     },
     {
       "address": 2903424,
-      "name": "FUN_002c4d80",
+      "name": "igFile_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10667,7 +10667,7 @@
     },
     {
       "address": 2905984,
-      "name": "FUN_002c5780",
+      "name": "igEventTracker_Create",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10688,7 +10688,7 @@
     },
     {
       "address": 2906592,
-      "name": "FUN_002c59e0",
+      "name": "igEventTracker_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10769,7 +10769,7 @@
     },
     {
       "address": 2917872,
-      "name": "thunk_igDataList_GetMetaObject",
+      "name": "igDataList_GetMetaObjectFunction",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10910,7 +10910,7 @@
     },
     {
       "address": 2927632,
-      "name": "thunk_igIntList_GetMetaObject",
+      "name": "igIntList_GetMetaObjectFunction",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -10991,7 +10991,7 @@
     },
     {
       "address": 2929136,
-      "name": "FUN_002cb1f0",
+      "name": "igBoolList_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11086,7 +11086,7 @@
     },
     {
       "address": 2950656,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_30",
+      "name": "igAliasMemoryPool_Activate",
       "size": 32,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11094,7 +11094,7 @@
     },
     {
       "address": 2950688,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_31",
+      "name": "igAliasMemoryPool_Reset",
       "size": 24,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11102,7 +11102,7 @@
     },
     {
       "address": 2950720,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_32",
+      "name": "igAliasMemoryPool_Deactivate",
       "size": 48,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11116,7 +11116,7 @@
     },
     {
       "address": 2950768,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_33",
+      "name": "igAliasMemoryPool_IsActive",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11124,7 +11124,7 @@
     },
     {
       "address": 2950784,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_26",
+      "name": "igAliasMemoryPool_GetRawMemory",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11132,7 +11132,7 @@
     },
     {
       "address": 2950800,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_24",
+      "name": "igAliasMemoryPool_SetRawMemory",
       "size": 16,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11140,7 +11140,7 @@
     },
     {
       "address": 2950816,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_25",
+      "name": "igAliasMemoryPool_IsAlchemyMemory",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11148,7 +11148,7 @@
     },
     {
       "address": 2950832,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_29",
+      "name": "igAliasMemoryPool_IsSecondaryAllocator",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11156,7 +11156,7 @@
     },
     {
       "address": 2950848,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_34",
+      "name": "igAliasMemoryPool_EnableAllocationLock",
       "size": 484,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11217,7 +11217,7 @@
     },
     {
       "address": 2951344,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_35",
+      "name": "igAliasMemoryPool_SetSize",
       "size": 16,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11225,7 +11225,7 @@
     },
     {
       "address": 2951360,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_36",
+      "name": "igAliasMemoryPool_GetSize",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11233,7 +11233,7 @@
     },
     {
       "address": 2951376,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_41",
+      "name": "igAliasMemoryPool_SetMaxSize",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11241,7 +11241,7 @@
     },
     {
       "address": 2951408,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_42",
+      "name": "igAliasMemoryPool_GetMaxSize",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11249,7 +11249,7 @@
     },
     {
       "address": 2951424,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_37",
+      "name": "igAliasMemoryPool_SetAlignment",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11257,7 +11257,7 @@
     },
     {
       "address": 2951456,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_38",
+      "name": "igAliasMemoryPool_GetAlignment",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11265,7 +11265,7 @@
     },
     {
       "address": 2951472,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_39",
+      "name": "igAliasMemoryPool_SetElementSize",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11273,7 +11273,7 @@
     },
     {
       "address": 2951504,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_40",
+      "name": "igAliasMemoryPool_GetElementSize",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11281,7 +11281,7 @@
     },
     {
       "address": 2951520,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_45",
+      "name": "igAliasMemoryPool_Configure",
       "size": 48,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11304,7 +11304,7 @@
     },
     {
       "address": 2951584,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_47",
+      "name": "igAliasMemoryPool_GetLocalNetAllocated",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11312,7 +11312,7 @@
     },
     {
       "address": 2951600,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_48",
+      "name": "igAliasMemoryPool_GetLocalNetAllocatedWithOverhead",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11320,7 +11320,7 @@
     },
     {
       "address": 2951616,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_101",
+      "name": "igAliasMemoryPool_GetLocalNetAllocatedHigh",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11328,7 +11328,7 @@
     },
     {
       "address": 2951632,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_102",
+      "name": "igAliasMemoryPool_GetLocalNetAllocatedWithOverheadHigh",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11336,7 +11336,7 @@
     },
     {
       "address": 2951648,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_49",
+      "name": "igAliasMemoryPool_GetFreeSize",
       "size": 16,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11344,7 +11344,7 @@
     },
     {
       "address": 2951664,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_53",
+      "name": "igAliasMemoryPool_AllocateElement",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11400,7 +11400,7 @@
     },
     {
       "address": 2951872,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_54",
+      "name": "igAliasMemoryPool_Allocate",
       "size": 28,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11414,7 +11414,7 @@
     },
     {
       "address": 2951904,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_55",
+      "name": "igAliasMemoryPool_AllocateAligned",
       "size": 32,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11428,7 +11428,7 @@
     },
     {
       "address": 2951936,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_56",
+      "name": "igAliasMemoryPool_Callocate",
       "size": 104,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11449,7 +11449,7 @@
     },
     {
       "address": 2952048,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_57",
+      "name": "igAliasMemoryPool_CallocateAligned",
       "size": 100,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11470,7 +11470,7 @@
     },
     {
       "address": 2952160,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_58",
+      "name": "igAliasMemoryPool_Reallocate",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11484,7 +11484,7 @@
     },
     {
       "address": 2952192,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_59",
+      "name": "igAliasMemoryPool_ReallocateAligned",
       "size": 16,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11498,7 +11498,7 @@
     },
     {
       "address": 2952208,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_65",
+      "name": "igAliasMemoryPool_AllocateFromSystem",
       "size": 188,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11527,7 +11527,7 @@
     },
     {
       "address": 2952400,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_62",
+      "name": "igAliasMemoryPool_GangAlloc",
       "size": 64,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11541,7 +11541,7 @@
     },
     {
       "address": 2952464,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_63",
+      "name": "igAliasMemoryPool_GangAllocAligned",
       "size": 64,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11555,7 +11555,7 @@
     },
     {
       "address": 2952528,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_64",
+      "name": "igAliasMemoryPool_GangFree",
       "size": 48,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -11585,7 +11585,7 @@
       "address": 2952608,
       "name": "igAliasMemoryPool_OwnsAllocation",
       "size": 140,
-      "source": "src/engine/igAliasMemoryPool_OwnsAllocation.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 2952676,
@@ -11937,7 +11937,7 @@
     },
     {
       "address": 2954704,
-      "name": "Gap__Core__igAliasMemoryPool__vfunc_02",
+      "name": "igAliasMemoryPool_Destruct",
       "size": 108,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -11994,7 +11994,7 @@
     },
     {
       "address": 2961584,
-      "name": "FUN_002d30b0",
+      "name": "igObjectSystem_AppendMetaEnum",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12009,7 +12009,7 @@
     },
     {
       "address": 2961744,
-      "name": "FUN_002d3150",
+      "name": "igObjectSystem_RunRegistrationCallbacks",
       "size": 120,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -12201,7 +12201,7 @@
     },
     {
       "address": 3001408,
-      "name": "FUN_002dcc40",
+      "name": "igEventTracker_SetCapacity",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -12660,7 +12660,7 @@
     },
     {
       "address": 3068384,
-      "name": "FUN_002ed1e0",
+      "name": "Memory_AllocateFromPool",
       "size": 20,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -12736,7 +12736,7 @@
     },
     {
       "address": 3068992,
-      "name": "thunk_Memory_ReallocateBuffer",
+      "name": "Memory_ReallocateBufferAlias",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12913,7 +12913,7 @@
     },
     {
       "address": 3080112,
-      "name": "FUN_002effb0",
+      "name": "igMemoryPool_Construct",
       "size": 52,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12928,7 +12928,7 @@
     },
     {
       "address": 3080240,
-      "name": "Gap__Core__igObject__vfunc_00",
+      "name": "igMemoryPool_Destruct",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12943,7 +12943,7 @@
     },
     {
       "address": 3080256,
-      "name": "FUN_002f0040",
+      "name": "igObject_OperatorNew",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12973,7 +12973,7 @@
     },
     {
       "address": 3080432,
-      "name": "FUN_002f00f0",
+      "name": "igMemoryDictionary_SetCurrent",
       "size": 136,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -12994,7 +12994,7 @@
     },
     {
       "address": 3080576,
-      "name": "FUN_002f0180",
+      "name": "Memory_LookupAllocation",
       "size": 156,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -13015,9 +13015,9 @@
     },
     {
       "address": 3080736,
-      "name": "FUN_002f0220",
+      "name": "Memory_RegisterAllocation",
       "size": 248,
-      "source": "src/unmatched/FUN_002f0220.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3080816,
@@ -13069,7 +13069,7 @@
     },
     {
       "address": 3080992,
-      "name": "FUN_002f0320",
+      "name": "Memory_UnregisterAllocation",
       "size": 72,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -13141,13 +13141,13 @@
       "address": 3081984,
       "name": "igAllocator_ResolveEncodedIndex",
       "size": 76,
-      "source": "src/unmatched/igAllocator_ResolveEncodedIndex.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
     {
       "address": 3082368,
-      "name": "FUN_002f0880",
+      "name": "igMemoryPool_Configure",
       "size": 76,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -13287,7 +13287,7 @@
     },
     {
       "address": 3090224,
-      "name": "FUN_002f2730",
+      "name": "igMemoryPoolContextInfo_GetAllocatorBySelector",
       "size": 244,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -13306,7 +13306,7 @@
     },
     {
       "address": 3090480,
-      "name": "FUN_002f2830",
+      "name": "igMemoryPoolContextInfo_GetMemoryPoolByName",
       "size": 156,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -13327,7 +13327,7 @@
     },
     {
       "address": 3090640,
-      "name": "FUN_002f28d0",
+      "name": "igMemoryPoolContextInfo_SetAllocator",
       "size": 184,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -13923,7 +13923,7 @@
     },
     {
       "address": 3115424,
-      "name": "FUN_002f89a0",
+      "name": "Memory_GetPoolName",
       "size": 56,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -15188,7 +15188,7 @@
       "address": 3137536,
       "name": "igMetaObject_NameFields",
       "size": 208,
-      "source": "src/engine/igMetaObject_NameFields.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3137592,
@@ -15308,7 +15308,7 @@
     },
     {
       "address": 3139600,
-      "name": "FUN_002fe810",
+      "name": "igMetaObject_CopyVTable",
       "size": 284,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -15363,7 +15363,7 @@
       "address": 3140032,
       "name": "igMetaObject_RegisterClass",
       "size": 744,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3140112,
@@ -15593,7 +15593,7 @@
     },
     {
       "address": 3141792,
-      "name": "Gap__Core__igObject__vfunc_00__002ff0a0",
+      "name": "igObject_Destruct",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
@@ -15899,7 +15899,7 @@
     },
     {
       "address": 3143696,
-      "name": "thunk_FUN_002ed460__002ff810",
+      "name": "Memory_FreeBufferAliasC",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16118,7 +16118,7 @@
     },
     {
       "address": 3146896,
-      "name": "FUN_00300490",
+      "name": "igObject_Print",
       "size": 364,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16208,9 +16208,9 @@
     },
     {
       "address": 3147264,
-      "name": "FUN_00300600",
+      "name": "igObject_CopyFields",
       "size": 152,
-      "source": "src/engine/FUN_00300600.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3147324,
@@ -16235,9 +16235,9 @@
     },
     {
       "address": 3147424,
-      "name": "FUN_003006a0",
+      "name": "igObject_DeepCopy",
       "size": 208,
-      "source": "src/engine/FUN_003006a0.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3147520,
@@ -16277,9 +16277,9 @@
     },
     {
       "address": 3147632,
-      "name": "FUN_00300770",
+      "name": "igObject_ShallowCopy",
       "size": 172,
-      "source": "src/engine/FUN_00300770.cpp",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3147692,
@@ -16350,7 +16350,7 @@
     },
     {
       "address": 3148800,
-      "name": "FUN_00300c00",
+      "name": "igObject_Copy",
       "size": 92,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16459,7 +16459,7 @@
     },
     {
       "address": 3149312,
-      "name": "FUN_00300e00",
+      "name": "igObject_Callocate",
       "size": 72,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16480,7 +16480,7 @@
     },
     {
       "address": 3149392,
-      "name": "FUN_00300e50",
+      "name": "igObject_Reallocate",
       "size": 72,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16522,7 +16522,7 @@
     },
     {
       "address": 3149648,
-      "name": "FUN_00300f50",
+      "name": "igObject_FreeMemory",
       "size": 68,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16734,7 +16734,7 @@
     },
     {
       "address": 3159680,
-      "name": "Gap__Core__igObjectRefMetaField__vfunc_34",
+      "name": "igObjectRefMetaField_ClearValue",
       "size": 124,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16791,7 +16791,7 @@
     },
     {
       "address": 3163184,
-      "name": "FUN_00304430",
+      "name": "igReport_Printf",
       "size": 100,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16806,7 +16806,7 @@
     },
     {
       "address": 3163296,
-      "name": "FUN_003044a0",
+      "name": "igReport_VPrintf",
       "size": 168,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16839,7 +16839,7 @@
     },
     {
       "address": 3163776,
-      "name": "FUN_00304680",
+      "name": "igReport_Flush",
       "size": 68,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16961,7 +16961,7 @@
     },
     {
       "address": 3171824,
-      "name": "FUN_003065f0",
+      "name": "igRegistry_GetValueInt",
       "size": 184,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -16988,7 +16988,7 @@
     },
     {
       "address": 3176032,
-      "name": "FUN_00307660",
+      "name": "igRegistry_SetValueInt",
       "size": 80,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17009,7 +17009,7 @@
     },
     {
       "address": 3177488,
-      "name": "FUN_00307c10",
+      "name": "igRegistry_FindValue",
       "size": 868,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17208,7 +17208,7 @@
     },
     {
       "address": 3191584,
-      "name": "FUN_0030b320",
+      "name": "igStringObj_SetN",
       "size": 152,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17376,7 +17376,7 @@
     },
     {
       "address": 3192608,
-      "name": "FUN_0030b720",
+      "name": "igStringObj_SetInt",
       "size": 16,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17391,7 +17391,7 @@
     },
     {
       "address": 3192800,
-      "name": "FUN_0030b7e0",
+      "name": "igStringObj_Format",
       "size": 96,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17406,7 +17406,7 @@
     },
     {
       "address": 3192896,
-      "name": "FUN_0030b840",
+      "name": "igStringObj_VFormat",
       "size": 88,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17472,7 +17472,7 @@
     },
     {
       "address": 3194576,
-      "name": "thunk_strcasecmp",
+      "name": "igStrcasecmp",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -17825,7 +17825,7 @@
       "address": 3197824,
       "name": "StringChunk_ReturnBlock",
       "size": 340,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3198016,
@@ -17918,7 +17918,7 @@
     },
     {
       "address": 3199824,
-      "name": "FUN_0030d350",
+      "name": "igStringTable_Find",
       "size": 332,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [

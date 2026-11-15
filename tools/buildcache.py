@@ -196,6 +196,11 @@ def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
     # exception records and the compiler runtime addresses.
     for name in ("jumptables.txt", "layout.txt", "exceptions.txt", "compiler-runtime-symbols.tsv", "data-names.tsv"):
         parts += [name, file_sha(os.path.join(cfg, name))]
+    # libkernl's kernel patches (tools/kpatch.py): their sources are .c files the src-headers digest leaves out,
+    # and their bytes are the owner files' data
+    parts += ["kernel-patches", tree_sha(os.path.join(ROOT, "src", "sony", "libkernl", "kpatch")),
+              file_sha(os.path.join(cfg, "SLUS-20836", "kernel-patches.tsv")),
+              file_sha(os.path.join(cfg, "kernel-patch.ld"))]
     for p in extra_files:
         parts += [os.path.basename(p), file_sha(p)]
     return sha(*parts)

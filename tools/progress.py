@@ -47,6 +47,7 @@ from unitprofiles import asm_body_names
 import asmsources
 import sourceapprovals
 import datamap
+import kpatch
 import srctext
 import re
 import statistics
@@ -324,6 +325,12 @@ def collect():
     # defines and `make check` proved equal to retail (`source`); the other kinds say what the
     # rest is from the recovered metadata. `datamap` explains the classification.
     dm = datamap.summarise(datamap.build())
+    # libkernl's kernel patches are programs the kernel runs, built from src/sony/libkernl/kpatch/ into their
+    # owner files' .data (tools/kpatch.py): their bytes count in the data figures above, their functions in
+    # no function figure, and the patches on a line of their own
+    patches = kpatch.status()
+    kernel_patches = dict(total=len(patches), matched=sum(1 for _p, good, _w in patches if good),
+                          awaiting_approval=sum(1 for _p, good, waiting in patches if good and waiting))
 
     # ---- "fully linked" (what the link step actually emits from source) ----
     # Two numbers are published: *decompiled* (bytes matched) and *fully linked*
@@ -427,6 +434,7 @@ def collect():
                         total=dm["data_bytes"],
                         pct=dm["identified_data_pct"], kinds=dm["kinds"]),
         link=link,
+        kernel_patches=kernel_patches,
         typed=dict(recovered=typed.get("recovered", 0), total=typed.get("total", 0),
                    pct=typed.get("recovered_pct", 0.0),
                    offset_casts=typed.get("offset_casts", 0),
@@ -1059,6 +1067,11 @@ def render_md(d):
     A("data identified %s %5.1f %%   %s / %s   (matched, or classified; %.1f %% of the data only by where a "
       "datum starts)" % (bar(dd["pct"]), dd["pct"], format(dd["identified"], ","), format(dd["total"], ","),
                          dd["start_only_pct"]))
+    kp = d.get("kernel_patches")
+    if kp:
+        A("kernel patches built from source: %d/%d   (their bytes match retail in their owner files' .data; "
+          "%d of them await owner approval of an asm, volatile or assembly source)"
+          % (kp["matched"], kp["total"], kp["awaiting_approval"]))
     A("not counted: %s asm bodies, %s code bytes (%.1f %%): retail instructions kept as source, "
       "in no figure above" % (format(b["functions_asm_body"], ","), format(b["asm_body"], ","),
                               pct(b["asm_body"], b["total"])))

@@ -17,7 +17,7 @@ are not automatically attributed to the hub.
 
 **60 bound APIs**, plus registration/dispatch, reach
 **508 functions / 117,380 bytes** through known direct edges.
-**6 functions / 3,656 bytes** lack source definitions.
+**3 functions / 1,644 bytes** lack source definitions.
 The reached bodies contain **110 unresolved register-transfer sites**.
 
 SD receiver methods, callbacks, model/AI programs, named-chunk ownership,
@@ -34,9 +34,6 @@ Exact script call-site references, message arguments, API roots and native edges
 
 | Address | Symbol | Bytes | Indirect sites |
 | --- | --- | ---: | ---: |
-| `0x0010c8d8` | `FUN_0010c8d8` | 148 | 0 |
-| `0x0010cad8` | `FUN_0010cad8` | 1524 | 16 |
 | `0x0018be80` | `FUN_0018be80` | 1340 | 0 |
 | `0x001908f0` | `igMatrix44f_Copy` | 188 | 0 |
 | `0x0022e440` | `__muldi3` | 116 | 0 |
-| `0x0030cb80` | `StringChunk_ReturnBlock` | 340 | 0 |

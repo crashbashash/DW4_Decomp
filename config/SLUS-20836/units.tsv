@@ -36,7 +36,7 @@
 0x00108340	0x00108cc8	sony_libmpeg_csc	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00108cc8	0x00109ac8	sony_libmpeg_mpeg	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00109ac8	0x00109b68	sony_libmpeg_error	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00109b68	0x00109c68	sony-libmpeg_109b68	ee-gcc-2.9-as210	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x109410-0x10aaa8; `sd` prologues (Sony EE GCC); exceptions off: none of 25 non-leaf functions has a retail index record; 24 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 0/7 members; 7 member(s) keep a provisional override
+0x00109b68	0x00109c68	sony_libmpeg_sendipu	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00109c68	0x0010a418	sony_libmpeg_sequence	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010a418	0x0010a468	sony_libmpeg_defhandler	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010a468	0x0010a7f8	sony_libipu_libipu	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
@@ -48,7 +48,7 @@
 0x0010bbe0	0x0010c030	sony_libkernl_thread	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010c030	0x0010c264	sony_libkernl_deci2	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010c268	0x0010c7ac	sony_libkernl_tty	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x0010c7b0	0x0010d168	sony-sdk_10c1f0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x10c1f0-0x10d168; `sd` prologues (Sony EE GCC); exceptions off: none of 6 non-leaf functions has a retail index record; `sd` prologues: Sony EE GCC
+0x0010c7b0	0x0010d168	sony_libkernl_kprintf2	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010d168	0x0010d940	sony_libkernl_sifcmd	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010d940	0x0010e9d0	sony_libkernl_sifrpc	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x0010e9d0	0x001120e8	sony_libkernl_filestub	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
@@ -65,9 +65,12 @@
 0x00114780	0x00115ae8	sony_libkernl_timer	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00115ae8	0x00115ed8	sony_libkernl_timeralarm	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00115ed8	0x00116138	sony_libkernl_iopnotify	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
-0x00116138	0x00116498	sony-libcdvd_116138	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) outside any mapped run; `sd` prologues (Sony EE GCC); exceptions off: none of 12 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
-0x00116498	0x00116fb0	sony-sdk_116498	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x116498-0x116f00; `sd` prologues (Sony EE GCC); exceptions off: none of 12 non-leaf functions has a retail index record; 11 asm bodies not scored; ee-gcc -O2 -G0 -Iinclude reproduces 1/1 members
-0x00116fb0	0x00117b60	sony-libcdvd_116fb0	ee-gcc-2.9	-O2 -G0 -Iinclude	off	-	sony-sdk block 0x1029f8-0x12fef0 (docs/engine/sd-prologue.md, module-map.md) cut at module-map run 0x116fb0-0x1181d8; `sd` prologues (Sony EE GCC); exceptions off: none of 15 non-leaf functions has a retail index record; no compiled C member yet; `sd` prologues: Sony EE GCC
+0x00116138	0x00117690	sony_libcdvd_cdvd000	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00117690	0x00117870	sony_libcdvd_cdvd005	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00117870	0x00117940	sony_libcdvd_cdvd010	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00117940	0x001179d8	sony_libcdvd_cdvd015	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x001179d8	0x00117a90	sony_libcdvd_cdvd018	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
+0x00117a90	0x00117b60	sony_libcdvd_cdvd036	ee-gcc-2.9-as210	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00117b60	0x00118fe0	sony_libpad	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x00118fe0	0x001194c0	sony_libsdr_sdr_main	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file
 0x001194c0	0x0011acc0	sony_libmc	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude	off	-	whole file

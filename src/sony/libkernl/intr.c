@@ -5,6 +5,7 @@
 typedef unsigned int u_int;
 
 #define STATUS_EIE 0x10000
+#define STATUS_IE 0x1
 
 int DIntr(void);
 int EIntr(void);
@@ -16,6 +17,13 @@ int _iEnableIntc(int cause);
 int _iDisableIntc(int cause);
 int _iEnableDmac(int channel);
 int _iDisableDmac(int channel);
+
+int QueryIntrContext(void)
+{
+    u_int stat;
+    __asm__("mfc0 %0, $12" : "=r"(stat));
+    return !(stat & STATUS_IE);
+}
 
 int DisableIntc(int cause)
 {

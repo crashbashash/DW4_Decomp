@@ -1,22 +1,22 @@
-extern int DAT_004850c0;
-extern int DAT_00484740;
-extern volatile int DAT_0048356c;
-extern volatile int DAT_00483598;
-int FUN_0010af00(int sema);
-int FUN_00116d90(int cmd);
-void sceSifWriteBackDCache(void *p, int size);
-int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
-int sceCdBreak(void) {
-    int r;
-    if (FUN_00116d90(30) == 0) return 0;
-    DAT_00483598 = 8;
-    if (sceSifCallRpc(&DAT_004850c0, 22, 0, 0, 0, &DAT_00484740, 4, 0, 0) < 0) {
-        FUN_0010af00(DAT_0048356c);
-        DAT_00483598 = 0;
+/* sceCdBreak.c - sceCdBreak: aborts the command in flight. */
+#include "dw4/eekernel.h"
+#include "dw4/sony/libcdvd.h"
+
+int sceCdBreak(void)
+{
+    int result;
+
+    if (_sceCd_scmd_prechk(CD_PRECHK_BREAK) == 0) {
         return 0;
     }
-    DAT_00483598 = 0;
-    r = *(int *)((unsigned int)&DAT_00484740 | 0x20000000);
-    FUN_0010af00(DAT_0048356c);
-    return r;
+    sceCdCbfunc_num = SCECdFuncBreak;
+    if (sceSifCallRpc(&_sceCd_cd_scmd, CD_SCMD_BREAK, 0, 0, 0, _sceCd_scmdrdata, 4, 0, 0) < 0) {
+        SignalSema(_sceCd_scmd_semid);
+        sceCdCbfunc_num = 0;
+        return 0;
+    }
+    sceCdCbfunc_num = 0;
+    result = UNCACHED_WORD(_sceCd_scmdrdata);
+    SignalSema(_sceCd_scmd_semid);
+    return result;
 }

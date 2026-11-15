@@ -21,49 +21,75 @@ typedef struct {
     char path[IH_PATH_MAX];
 } IhLoadRequest;
 
+/* the IOP heap server's RPC id */
+#define IH_SERVER 0x80000003
+
+void sceSifInitRpc(unsigned int mode);
+int sceSifBindRpc(sceSifClientData *client, unsigned int sid, unsigned int mode);
+
 /* negative until sceSifInitIopHeap has bound the server */
-extern int _ih_bind;
-extern sceSifClientData _ih_cd;
-extern unsigned int _ih_rdata[16];
-extern unsigned int _ih_sdata[16];
-extern IhLoadRequest _lih_data;
+static int _bind = -1;
+static sceSifClientData cd;
+static unsigned int rdata[16] __attribute__((aligned(64)));
+static unsigned int sdata[16];
+static IhLoadRequest _lih_data __attribute__((aligned(64)));
+
+/* Binds the IOP heap server, retrying until it is registered; negative when the bind fails. */
+int sceSifInitIopHeap(void)
+{
+    int i;
+
+    while (1) {
+        if (sceSifBindRpc(&cd, IH_SERVER, 0) < 0) {
+            return -1;
+        }
+        if (cd.serve != 0) {
+            _bind = 0;
+            break;
+        }
+        i = 0x100000;
+        while (i--)
+            ;
+    }
+    return 0;
+}
 
 void *sceSifAllocIopHeap(unsigned int size)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    _ih_sdata[0] = size;
-    if (sceSifCallRpc(&_ih_cd, IH_ALLOC_HEAP, 0, _ih_sdata, 4, _ih_rdata, 4, 0, 0) < 0) {
+    sdata[0] = size;
+    if (sceSifCallRpc(&cd, IH_ALLOC_HEAP, 0, sdata, 4, rdata, 4, 0, 0) < 0) {
         return 0;
     }
-    return (void *)_ih_rdata[0];
+    return (void *)rdata[0];
 }
 
 void *sceSifAllocSysMemory(int type, unsigned int size, void *addr)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    _ih_sdata[0] = size;
-    _ih_sdata[1] = type;
-    _ih_sdata[2] = (unsigned int)addr;
-    if (sceSifCallRpc(&_ih_cd, IH_ALLOC_SYSMEM, 0, _ih_sdata, 12, _ih_rdata, 4, 0, 0) < 0) {
+    sdata[0] = size;
+    sdata[1] = type;
+    sdata[2] = (unsigned int)addr;
+    if (sceSifCallRpc(&cd, IH_ALLOC_SYSMEM, 0, sdata, 12, rdata, 4, 0, 0) < 0) {
         return 0;
     }
-    return (void *)_ih_rdata[0];
+    return (void *)rdata[0];
 }
 
 int sceSifFreeSysMemory(void *addr)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    _ih_sdata[0] = (unsigned int)addr;
-    if (sceSifCallRpc(&_ih_cd, IH_FREE, 0, _ih_sdata, 4, _ih_rdata, 4, 0, 0) < 0) {
+    sdata[0] = (unsigned int)addr;
+    if (sceSifCallRpc(&cd, IH_FREE, 0, sdata, 4, rdata, 4, 0, 0) < 0) {
         return -1;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 int sceSifFreeIopHeap(void *addr)
@@ -74,7 +100,7 @@ int sceSifFreeIopHeap(void *addr)
 int sceSifLoadIopHeap(const char *path, void *addr)
 {
     int i;
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
     for (i = 0; i < IH_PATH_MAX; i++) {
@@ -88,65 +114,65 @@ int sceSifLoadIopHeap(const char *path, void *addr)
     }
     _lih_data.addr = addr;
     _lih_data.path[IH_PATH_MAX - 1] = 0;
-    if (sceSifCallRpc(&_ih_cd, IH_LOAD_HEAP, 0, &_lih_data, i + 5, _ih_rdata, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd, IH_LOAD_HEAP, 0, &_lih_data, i + 5, rdata, 4, 0, 0) < 0) {
         return -1;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 unsigned int sceSifQueryMemSize(void)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    if (sceSifCallRpc(&_ih_cd, IH_QUERY_MEM_SIZE, 0, 0, 0, _ih_rdata, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd, IH_QUERY_MEM_SIZE, 0, 0, 0, rdata, 4, 0, 0) < 0) {
         return 0xFFFFFFFF;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 unsigned int sceSifQueryMaxFreeMemSize(void)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    if (sceSifCallRpc(&_ih_cd, IH_QUERY_MAX_FREE, 0, 0, 0, _ih_rdata, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd, IH_QUERY_MAX_FREE, 0, 0, 0, rdata, 4, 0, 0) < 0) {
         return 0xFFFFFFFF;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 unsigned int sceSifQueryTotalFreeMemSize(void)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    if (sceSifCallRpc(&_ih_cd, IH_QUERY_TOTAL_FREE, 0, 0, 0, _ih_rdata, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd, IH_QUERY_TOTAL_FREE, 0, 0, 0, rdata, 4, 0, 0) < 0) {
         return 0xFFFFFFFF;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 unsigned int sceSifQueryBlockTopAddress(void *addr)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    _ih_sdata[0] = (unsigned int)addr;
-    if (sceSifCallRpc(&_ih_cd, IH_QUERY_BLOCK_TOP, 0, _ih_sdata, 4, _ih_rdata, 4, 0, 0) < 0) {
+    sdata[0] = (unsigned int)addr;
+    if (sceSifCallRpc(&cd, IH_QUERY_BLOCK_TOP, 0, sdata, 4, rdata, 4, 0, 0) < 0) {
         return 0xFFFFFFFF;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }
 
 unsigned int sceSifQueryBlockSize(void *addr)
 {
-    if (_ih_bind < 0) {
+    if (_bind < 0) {
         return 0;
     }
-    _ih_sdata[0] = (unsigned int)addr;
-    if (sceSifCallRpc(&_ih_cd, IH_QUERY_BLOCK_SIZE, 0, _ih_sdata, 4, _ih_rdata, 4, 0, 0) < 0) {
+    sdata[0] = (unsigned int)addr;
+    if (sceSifCallRpc(&cd, IH_QUERY_BLOCK_SIZE, 0, sdata, 4, rdata, 4, 0, 0) < 0) {
         return 0xFFFFFFFF;
     }
-    return _ih_rdata[0];
+    return rdata[0];
 }

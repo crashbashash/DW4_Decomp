@@ -9,6 +9,10 @@
 /* sceFsSifCallRpc's command numbers: fileio.irx's RPC functions */
 #define FS_OPEN 0
 #define FS_CLOSE 1
+#define FS_READ 2
+#define FS_WRITE 3
+#define FS_LSEEK 4
+#define FS_IOCTL 5
 #define FS_REMOVE 6
 #define FS_MKDIR 7
 #define FS_RMDIR 8
@@ -29,6 +33,7 @@
 #define FS_SYMLINK 24
 #define FS_READLINK 25
 #define FS_IOCTL2 26
+#define FS_LSEEK64 22
 #define FS_POWEROFF 27
 #define FS_INIT 255
 
@@ -45,6 +50,13 @@
 /* what the variadic prologue saves a2 to t3 as, read for the first argument after the named ones */
 #define FIRST_VARARG(last, type) (*(type *)((char *)__builtin_next_arg(last) - 6 * 8))
 
+/* sceOpen flags, and sceIoctl requests */
+#define SCE_NOWAIT 0x8000
+#define SCE_NOWBDC 0x20000000
+#define SCE_FS_EXECUTING 1
+#define FS_IOCTL_RESULT 2
+#define FS_IOCTL_RESULT64 3
+
 /* sce error codes the calls return */
 #define SCE_ENXIO (-6)
 #define SCE_E2BIG (-7)
@@ -56,6 +68,9 @@
 #define SCE_EVERSION (-65540)
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
+
+/* the slots of the table of calls made with SCE_NOWAIT that fileio has not answered yet */
+#define FS_NOWAIT_SLOTS 32
 
 /* One open descriptor: fileio's descriptor and the mode it was opened with (0 = free). */
 typedef struct {
@@ -120,6 +135,50 @@ typedef struct {
     FsStatBlock stat;
     unsigned char name[FS_PATH_MAX];
 } FsChstatRequest;
+
+typedef struct {
+    int sema;
+    int *result;
+    int resultSize;
+    int fd;
+    int offset;
+    int whence;
+    int iob;
+} FsLseekRequest;
+
+typedef struct {
+    int sema;
+    long long *result;
+    int resultSize;
+    int fd;
+    long long offset;
+    int whence;
+    int iob;
+} FsLseek64Request;
+
+typedef struct {
+    int sema;
+    int *result;
+    int resultSize;
+    int fd;
+    void *buf;
+    unsigned int size;
+    int unused;
+    int iob;
+} FsReadRequest;
+
+/* A write sends the bytes up to the first 16-byte boundary of the buffer in the request. */
+typedef struct {
+    int sema;
+    int *result;
+    int resultSize;
+    int fd;
+    const void *buf;
+    unsigned int size;
+    unsigned int headSize;
+    char head[16];
+    int iob;
+} FsWriteRequest;
 
 typedef struct {
     int sema;
@@ -198,12 +257,21 @@ typedef struct {
     unsigned int arglen;
 } FsIoctl2Request;
 
+/* what sceIoctl sends to the device */
+typedef struct {
+    char bytes[FS_PATH_MAX];
+} FsIoctlArg;
+
 typedef void (*scePowerOffFunc)(void *data);
 
 typedef struct {
     scePowerOffFunc func;
     void *data;
 } FsPowerOffData;
+
+typedef struct {
+    char bytes[324];
+} FsDirentBlock;
 
 int DIntr(void);
 int EIntr(void);
@@ -212,28 +280,66 @@ void *memcpy(void *dst, const void *src, unsigned int size);
 void *memset(void *dst, int value, unsigned int size);
 int sceFsInit(void);
 void sceSifInitRpc(unsigned int mode);
-void _sceFs_Rcv_Intr(void *packet);
+void _sceFs_Rcv_Intr(sceSifCmdHdr *packet);
 void _sceFs_Poff_Intr(void *packet, void *harg);
 
+/* What fileio sends back for a call, in one of the two reply buffers: the caller's semaphore (negated
+ * when the call was made with SCE_NOWAIT), the command, where the result goes and its size, the result,
+ * then from offset 20 what the call returns beyond it. The IOP writes it by DMA, so it is read through
+ * the uncached segment, word by word, as nothing in it is aligned. A read returns the parts of the
+ * caller's buffer before and after its 64-byte aligned middle in this form: */
+typedef struct {
+    int headSize;
+    int tailSize;
+    char *head;
+    char *tail;
+    char headData[64];
+    char tailData[64];
+} FsReadReply;
+
 extern char __ps2_klibinfo__[];
-extern int _fs_init;
-extern int _fs_rcv_bufdbl;
-extern int _fs_semid;
-extern int _fs_iob_semid;
-extern int _fs_fsq_semid;
-extern char *_fswildcard;
-extern FsOpenRequest _send_data;
-extern int _rcv_data_rpc[];
-extern char _rcv_data_cmd[2][FS_RCV_SLOT];
-extern _sceFsIob _iob[FS_MAX_IOB];
-extern sceSifClientData _fs_cd;
-extern char _fsversion[];
-extern FsPowerOffData _sif_FsPoff_Data;
-extern void *sceCbPoff_Gp;
-extern char _sif_FsRcv_Data[64];
-extern int rcv_adr[2];
+
+/* The table of calls made with SCE_NOWAIT whose reply fileio still owes (a free slot holds -1). The
+ * reply handler frees slots from interrupt context while callers scan for free ones. */
+volatile int _sceFs_q[FS_NOWAIT_SLOTS] = {[0 ... FS_NOWAIT_SLOTS - 1] = -1};
+/* which of the two reply buffers fileio last wrote */
+static int ee_retbuf_sel = 0;
+static int _fs_init = 0;
+static int _fs_rcv_bufdbl = 0;
+static int _fs_semid = -1;
+static int _fs_iob_semid = -1;
+static int _fs_fsq_semid = -1;
+
+static union {
+    FsOpenRequest open;
+    FsMountRequest mount;
+} _send_data __attribute__((aligned(64)));
+static int _rcv_data_rpc[16] __attribute__((aligned(64)));
+static char _rcv_data_cmd[2][FS_RCV_SLOT];
+static _sceFsIob _iob[FS_MAX_IOB];
+static sceSifClientData _cd;
+static char _fsversion[4];
+static char _sif_FsRcv_Data[64] __attribute__((aligned(64)));
+static FsPowerOffData _sif_FsPoff_Data;
+static void *sceCbPoff_Gp __attribute__((aligned(64)));
+
+/* A NOWAIT call hands its semaphore to the first free slot of the table; the request carries the
+ * semaphore negated so the reply handler looks it up there instead of signalling it directly. */
+#define FS_QUEUE_NOWAIT(req) \
+    { \
+        WaitSema(_fs_fsq_semid); \
+        for (i = 0; i < FS_NOWAIT_SLOTS; i++) { \
+            if (_sceFs_q[i] == -1) { \
+                _sceFs_q[i] = (req)->sema; \
+                (req)->sema = -(req)->sema; \
+                break; \
+            } \
+        } \
+        SignalSema(_fs_fsq_semid); \
+    }
 
 void _sceFsIobSemaMK(void)
+
 {
     struct SemaParam param;
     if (_fs_iob_semid == -1) {
@@ -273,6 +379,83 @@ _sceFsIob *get_iob(unsigned int fd)
     io = &_iob[fd];
     SignalSema(_fs_iob_semid);
     return io;
+}
+
+void _sceFs_Rcv_Intr(sceSifCmdHdr *packet)
+{
+    int sema;
+    int command;
+    int *result;
+    int resultSize;
+    char *buf;
+    void *dst;
+    unsigned int size;
+    int i;
+
+    ee_retbuf_sel = _fs_rcv_bufdbl ? packet->opt : 0;
+    buf = UNCACHED(&_rcv_data_cmd[ee_retbuf_sel]);
+    memcpy(&sema, buf, 4);
+    memcpy(&command, buf + 4, 4);
+    memcpy(&result, buf + 8, 4);
+    memcpy(&resultSize, buf + 12, 4);
+    if (sema >= 0) {
+        memcpy(result, buf + 16, resultSize);
+    }
+    switch (command) {
+    case FS_READ: {
+        /* the bytes the IOP could not DMA into the caller's buffer, written to both of its views */
+        FsReadReply *reply = (FsReadReply *)(buf + 20);
+        char *cached;
+        char *uncached;
+
+        if (reply->headSize > 0) {
+            cached = reply->head;
+            uncached = UNCACHED(cached);
+            for (i = 0; i < reply->headSize; i++) {
+                cached[i] = uncached[i] = reply->headData[i];
+            }
+        }
+        if (reply->tailSize > 0) {
+            cached = reply->tail;
+            uncached = UNCACHED(cached);
+            for (i = 0; i < reply->tailSize; i++) {
+                cached[i] = uncached[i] = reply->tailData[i];
+            }
+        }
+        break;
+    }
+    case FS_DREAD:
+        if (*result > 0) {
+            memcpy(&dst, buf + 20, 4);
+            *(FsDirentBlock *)dst = *(FsDirentBlock *)(buf + 24);
+        }
+        break;
+    case FS_GETSTAT:
+        memcpy(&dst, buf + 20, 4);
+        *(FsStatBlock *)dst = *(FsStatBlock *)(buf + 24);
+        break;
+    case FS_DEVCTL:
+    case FS_READLINK:
+    case FS_IOCTL2:
+        memcpy(&dst, buf + 20, 4);
+        memcpy(&size, buf + 24, 4);
+        if (size > FS_PATH_MAX) {
+            size = FS_PATH_MAX;
+        }
+        memcpy(dst, buf + 28, size);
+        break;
+    }
+    if (sema < 0) {
+        sema = -sema;
+        for (i = 0; i < FS_NOWAIT_SLOTS; i++) {
+            if (_sceFs_q[i] == sema) {
+                _sceFs_q[i] = -1;
+                break;
+            }
+        }
+    } else {
+        iSignalSema(sema);
+    }
 }
 
 void _sceFsSemInit(void)
@@ -320,8 +503,23 @@ scePowerOffFunc scePowerOffHandler(scePowerOffFunc func, void *data)
     return old;
 }
 
+void _sceFs_Poff_Intr(void *packet, void *harg)
+{
+    FsPowerOffData *poff = harg;
+    scePowerOffFunc func = poff->func;
+    void *gp;
+
+    if (func != 0) {
+        __asm__("move %0, $28\n\tlw $28, %1" : "=r"(gp) : "m"(sceCbPoff_Gp) : "memory");
+        func(poff->data);
+        __asm__("move $28, %0" : : "r"(gp));
+    }
+    __asm__("sync.l; ei");
+}
+
 int sceFsInit(void)
 {
+    static int rcv_adr[2];
     int enabled;
     int i;
     int bufferKind;
@@ -338,10 +536,10 @@ int sceFsInit(void)
         EIntr();
     }
     while (1) {
-        if (sceSifBindRpc(&_fs_cd, FS_SERVER, 0) < 0) {
+        if (sceSifBindRpc(&_cd, FS_SERVER, 0) < 0) {
             return -1;
         }
-        if (_fs_cd.serve != 0) {
+        if (_cd.serve != 0) {
             break;
         }
         i = 0x100000;
@@ -355,7 +553,7 @@ int sceFsInit(void)
     SignalSema(_fs_iob_semid);
     rcv_adr[0] = (int)_rcv_data_cmd[0];
     rcv_adr[1] = (int)_rcv_data_cmd[1];
-    if (sceSifCallRpc(&_fs_cd, FS_INIT, 0, rcv_adr, 8, _rcv_data_rpc, 8, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_INIT, 0, rcv_adr, 8, _rcv_data_rpc, 8, 0, 0) < 0) {
         return SCE_EFSINIT;
     }
     memcpy(_fsversion, UNCACHED(_rcv_data_rpc), 4);
@@ -364,6 +562,9 @@ int sceFsInit(void)
     _fs_init = 1;
     return 0;
 }
+
+/* the version a server may report to match any client */
+static char *_fswildcard = "....";
 
 /* Nonzero when fileio's version differs from libkernl's and neither is the wildcard. */
 int _fs_version(void)
@@ -428,7 +629,7 @@ int sceOpen(const char *name, int flag, ...)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_OPEN, 0, &_send_data, sizeof(FsOpenCallRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_OPEN, 0, &_send_data, sizeof(FsOpenCallRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -457,7 +658,7 @@ int sceOpen(const char *name, int flag, ...)
 
 int sceClose(int fd)
 {
-    FsOpenRequest *req = &_send_data;
+    FsOpenRequest *req = &_send_data.open;
     _sceFsIob *io;
     struct SemaParam param;
     int result;
@@ -482,7 +683,7 @@ int sceClose(int fd)
     req->sema = sema;
     req->result = &result;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_CLOSE, 0, req, 20, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_CLOSE, 0, req, 20, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -500,6 +701,272 @@ int sceClose(int fd)
         return result;
     }
     return 0;
+}
+
+int sceLseek(int fd, int offset, int whence)
+{
+    _sceFsIob *io = get_iob(fd);
+    FsLseekRequest *req = (FsLseekRequest *)&_send_data;
+    struct SemaParam param;
+    int result;
+    int sema;
+    int sent;
+    int mode;
+    int i;
+    _sceFsWaitS(FS_LSEEK);
+    if (_fs_init == 0) {
+        _sceFsSigSema();
+        return -1;
+    }
+    if (io == 0 || (mode = io->mode) == 0) {
+        _sceFsSigSema();
+        return SCE_EBADF;
+    }
+    req->fd = io->fd;
+    req->offset = offset;
+    req->whence = whence;
+    req->iob = io - _iob;
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->sema = sema;
+    req->result = &result;
+    req->resultSize = 4;
+    if (mode & SCE_NOWAIT) FS_QUEUE_NOWAIT(req)
+    if (sceSifCallRpc(&_cd, FS_LSEEK, 0, &_send_data, sizeof(FsLseekRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    /* matching construct: manual spelling search — keeps gcse from reusing the first test's result */
+    if ((short)mode & SCE_NOWAIT) {
+        DeleteSema(sema);
+        return 0;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    return result;
+}
+
+int sceRead(int fd, void *buf, int size)
+{
+    _sceFsIob *io = get_iob(fd);
+    FsReadRequest *req = (FsReadRequest *)&_send_data;
+    struct SemaParam param;
+    int result;
+    int sema;
+    int sent;
+    int mode;
+    int i;
+    _sceFsWaitS(FS_READ);
+    if (_fs_init == 0) {
+        _sceFsSigSema();
+        return -1;
+    }
+    if (io == 0 || (mode = io->mode) == 0) {
+        _sceFsSigSema();
+        return SCE_EBADF;
+    }
+    req->fd = io->fd;
+    req->iob = io - _iob;
+    req->buf = buf;
+    req->size = size;
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->sema = sema;
+    req->result = &result;
+    req->resultSize = 4;
+    if (mode & SCE_NOWAIT) FS_QUEUE_NOWAIT(req)
+    if (!(mode & SCE_NOWBDC)) {
+        sceSifWriteBackDCache(buf, size);
+    }
+    sceSifWriteBackDCache(req, sizeof(FsReadRequest));
+    if (sceSifCallRpc(&_cd, FS_READ, 0, &_send_data, sizeof(FsReadRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    /* matching construct: manual spelling search — keeps gcse from reusing the first test's result */
+    if ((short)mode & SCE_NOWAIT) {
+        DeleteSema(sema);
+        return 0;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    return result;
+}
+
+int sceWrite(int fd, const void *buf, int size)
+{
+    _sceFsIob *io = get_iob(fd);
+    FsWriteRequest *req = (FsWriteRequest *)&_send_data;
+    struct SemaParam param;
+    int result;
+    int sema;
+    int sent;
+    int mode;
+    int headSize;
+    int i;
+    int j;
+    _sceFsWaitS(FS_WRITE);
+    if (_fs_init == 0) {
+        _sceFsSigSema();
+        return -1;
+    }
+    if (io == 0 || (mode = io->mode) == 0) {
+        _sceFsSigSema();
+        return SCE_EBADF;
+    }
+    req->fd = io->fd;
+    req->iob = io - _iob;
+    req->size = size;
+    req->buf = buf;
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->sema = sema;
+    req->result = &result;
+    req->resultSize = 4;
+    if (mode & SCE_NOWAIT) FS_QUEUE_NOWAIT(req)
+    if (((unsigned int)buf & 0xf) == 0) {
+        headSize = 0;
+    } else {
+        headSize = (((unsigned int)buf >> 4) << 4) + 16 - (unsigned int)buf;
+    }
+    if (size < headSize) {
+        headSize = size;
+    }
+    if (!(mode & SCE_NOWBDC)) {
+        sceSifWriteBackDCache((void *)buf, size);
+    }
+    buf = UNCACHED(buf);
+    req->headSize = headSize;
+    for (j = 0; j < headSize; j++) {
+        req->head[j] = ((const char *)buf)[j];
+    }
+    if (sceSifCallRpc(&_cd, FS_WRITE, 0, &_send_data, sizeof(FsWriteRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    /* matching construct: manual spelling search — keeps gcse from reusing the first test's result */
+    if ((short)mode & SCE_NOWAIT) {
+        DeleteSema(sema);
+        return 0;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    return result;
+}
+
+int sceIoctl(int fd, int cmd, void *arg)
+{
+    static int *ip0;
+    _sceFsIob *io = get_iob(fd);
+    FsIoctl2Request *req = (FsIoctl2Request *)&_send_data;
+    struct SemaParam param;
+    int result;
+    int sema;
+    int sent;
+    int i;
+    /* sceIoctl has no SCE_NOWAIT form: unlike the read and write calls it always waits for the reply.
+     * matching construct: manual spelling search — the flag's 1 is the register the switch compares
+     * the request against */
+    int wait = 1;
+    _sceFsWaitS(FS_IOCTL);
+    ip0 = arg;
+    if (_fs_init == 0) {
+        sceFsInit();
+    }
+    if (io == 0 || io->mode == 0) {
+        _sceFsSigSema();
+        return SCE_EBADF;
+    }
+    req->buf = 0;
+    req->buflen = 0;
+    switch (cmd) {
+    case SCE_FS_EXECUTING:
+        /* whether any call made with SCE_NOWAIT is still waiting for its reply */
+        WaitSema(_fs_fsq_semid);
+        for (i = 0; i < FS_NOWAIT_SLOTS; i++) {
+            if (_sceFs_q[i] != -1) {
+                break;
+            }
+        }
+        if (i == FS_NOWAIT_SLOTS) {
+            *ip0 = 0;
+        } else {
+            *ip0 = 1;
+        }
+        SignalSema(_fs_fsq_semid);
+        _sceFsSigSema();
+        return 0;
+    case FS_IOCTL_RESULT:
+        /* the result word of the last reply */
+        *(int *)arg = *(int *)UNCACHED(&_rcv_data_cmd[ee_retbuf_sel][16]);
+        _sceFsSigSema();
+        return 0;
+    case FS_IOCTL_RESULT64:
+        *(long long *)arg = *(long long *)UNCACHED(&_rcv_data_cmd[ee_retbuf_sel][16]);
+        _sceFsSigSema();
+        return 0;
+    }
+    req->fd = io->fd;
+    req->cmd = cmd;
+    if (arg == 0) {
+        req->arglen = 0;
+    } else {
+        req->arglen = FS_PATH_MAX;
+        *(FsIoctlArg *)req->arg = *(FsIoctlArg *)arg;
+    }
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->resultSize = 4;
+    req->result = &result;
+    req->sema = sema;
+    sceSifWriteBackDCache(&_send_data, sizeof(FsIoctl2Request));
+    if (sceSifCallRpc(&_cd, FS_IOCTL, 0, &_send_data, sizeof(FsIoctl2Request), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    if (!wait) {
+        DeleteSema(sema);
+        return 0;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    return result;
 }
 
 int sceIoctl2(int fd, int cmd, void *arg, unsigned int arglen, void *buf, unsigned int buflen)
@@ -540,7 +1007,7 @@ int sceIoctl2(int fd, int cmd, void *arg, unsigned int arglen, void *buf, unsign
     req->buf = buf;
     req->sema = sema;
     sceSifWriteBackDCache(&_send_data, sizeof(FsIoctl2Request));
-    if (sceSifCallRpc(&_fs_cd, FS_IOCTL2, 0, &_send_data, sizeof(FsIoctl2Request), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_IOCTL2, 0, &_send_data, sizeof(FsIoctl2Request), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -585,7 +1052,7 @@ static int _sceCallCode(const char *name, int cmd)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, cmd, 0, &_send_data, i + 13, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, cmd, 0, &_send_data, i + 13, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -635,7 +1102,7 @@ int sceMkdir(const char *name, int mode)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_MKDIR, 0, &_send_data, i + 17, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_MKDIR, 0, &_send_data, i + 17, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -704,7 +1171,7 @@ int sceFormat(const char *device, const char *blockdev, const void *arg, int arg
     req->sema = sema;
     req->resultSize = 4;
     sceSifWriteBackDCache(&_send_data, sizeof(FsFormatRequest));
-    if (sceSifCallRpc(&_fs_cd, FS_FORMAT, 0, &_send_data, sizeof(FsFormatRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_FORMAT, 0, &_send_data, sizeof(FsFormatRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -739,7 +1206,7 @@ int sceAddDrv(void *device)
     req->sema = sema;
     req->result = &result;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_ADDDRV, 0, req, sizeof(FsAddDrvRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_ADDDRV, 0, req, sizeof(FsAddDrvRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return -1;
@@ -789,7 +1256,7 @@ int sceDopen(const char *name)
 
 int sceDclose(int fd)
 {
-    FsOpenRequest *req = &_send_data;
+    FsOpenRequest *req = &_send_data.open;
     _sceFsIob *io;
     struct SemaParam param;
     int result;
@@ -813,7 +1280,7 @@ int sceDclose(int fd)
     req->sema = sema;
     req->result = &result;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_DCLOSE, 0, req, 20, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_DCLOSE, 0, req, 20, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -861,7 +1328,7 @@ int sceDread(int fd, void *buf)
     req->result = &result;
     req->resultSize = 4;
     /* Sony's send size covers more than the request; fileio reads only fd and buf. */
-    if (sceSifCallRpc(&_fs_cd, FS_DREAD, 0, req, 32, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_DREAD, 0, req, 32, _rcv_data_rpc, 4, 0, 0) < 0) {
         WaitSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -906,7 +1373,7 @@ int sceGetstat(const char *name, void *stat)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_GETSTAT, 0, &_send_data, i + 17, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_GETSTAT, 0, &_send_data, i + 17, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -953,7 +1420,7 @@ int sceChstat(const char *name, const FsStatBlock *stat, unsigned int mask)
     req->sema = sema;
     req->resultSize = 4;
     sceSifWriteBackDCache(&_send_data, sizeof(FsChstatRequest));
-    if (sceSifCallRpc(&_fs_cd, FS_CHSTAT, 0, &_send_data, i + 81, _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_CHSTAT, 0, &_send_data, i + 81, _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1005,7 +1472,7 @@ int sceRename(const char *from, const char *to)
     req->sema = sema;
     req->resultSize = 4;
     sceSifWriteBackDCache(&_send_data, sizeof(FsRenameRequest));
-    if (sceSifCallRpc(&_fs_cd, FS_RENAME, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_RENAME, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1028,7 +1495,7 @@ int sceChdir(const char *name)
 
 int sceSync(const char *device, int flag)
 {
-    FsOpenRequest *req = &_send_data;
+    FsOpenRequest *req = &_send_data.open;
     struct SemaParam param;
     int result;
     int sema;
@@ -1054,7 +1521,7 @@ int sceSync(const char *device, int flag)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_SYNC, 0, &_send_data, sizeof(FsOpenRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_SYNC, 0, &_send_data, sizeof(FsOpenRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1115,7 +1582,7 @@ int sceMount(const char *device, const char *blockdev, int flag, const void *arg
     req->sema = sema;
     req->resultSize = 4;
     sceSifWriteBackDCache(&_send_data, sizeof(FsMountRequest));
-    if (sceSifCallRpc(&_fs_cd, FS_MOUNT, 0, &_send_data, sizeof(FsMountRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_MOUNT, 0, &_send_data, sizeof(FsMountRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1134,6 +1601,58 @@ int sceMount(const char *device, const char *blockdev, int flag, const void *arg
 int sceUmount(const char *device)
 {
     return _sceCallCode(device, FS_UMOUNT);
+}
+
+long long sceLseek64(int fd, long long offset, int whence)
+{
+    _sceFsIob *io = get_iob(fd);
+    FsLseek64Request *req = (FsLseek64Request *)&_send_data;
+    struct SemaParam param;
+    long long result;
+    int sema;
+    int sent;
+    int mode;
+    int i;
+    _sceFsWaitS(FS_LSEEK64);
+    if (_fs_init == 0) {
+        _sceFsSigSema();
+        return -1;
+    }
+    if (io == 0 || (mode = io->mode) == 0) {
+        _sceFsSigSema();
+        return SCE_EBADF;
+    }
+    req->fd = io->fd;
+    req->offset = offset;
+    req->whence = whence;
+    req->iob = io - _iob;
+    param.maxCount = 1;
+    param.initCount = 0;
+    param.option = 0;
+    sema = CreateSema(&param);
+    req->sema = sema;
+    req->result = &result;
+    req->resultSize = 8;
+    if (mode & SCE_NOWAIT) FS_QUEUE_NOWAIT(req)
+    if (sceSifCallRpc(&_cd, FS_LSEEK64, 0, &_send_data, sizeof(FsLseek64Request), _rcv_data_rpc, 4, 0, 0) < 0) {
+        DeleteSema(sema);
+        _sceFsSigSema();
+        return SCE_EAGAIN;
+    }
+    sent = UNCACHED_WORD(_rcv_data_rpc);
+    _sceFsSigSema();
+    if (sent == 0) {
+        DeleteSema(sema);
+        return SCE_EAGAIN;
+    }
+    /* matching construct: manual spelling search — keeps gcse from reusing the first test's result */
+    if ((short)mode & SCE_NOWAIT) {
+        DeleteSema(sema);
+        return 0;
+    }
+    WaitSema(sema);
+    DeleteSema(sema);
+    return result;
 }
 
 int sceDevctl(const char *name, int cmd, const void *arg, unsigned int arglen, void *buf, unsigned int buflen)
@@ -1175,7 +1694,7 @@ int sceDevctl(const char *name, int cmd, const void *arg, unsigned int arglen, v
     req->buf = buf;
     req->buflen = buflen;
     sceSifWriteBackDCache(&_send_data, sizeof(FsDevctlRequest));
-    if (sceSifCallRpc(&_fs_cd, FS_DEVCTL, 0, &_send_data, sizeof(FsDevctlRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_DEVCTL, 0, &_send_data, sizeof(FsDevctlRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1227,7 +1746,7 @@ int sceSymlink(const char *existing, const char *newname)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_SYMLINK, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_SYMLINK, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;
@@ -1277,7 +1796,7 @@ int sceReadlink(const char *name, void *buf, unsigned int buflen)
     req->result = &result;
     req->sema = sema;
     req->resultSize = 4;
-    if (sceSifCallRpc(&_fs_cd, FS_READLINK, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&_cd, FS_READLINK, 0, &_send_data, sizeof(FsRenameRequest), _rcv_data_rpc, 4, 0, 0) < 0) {
         DeleteSema(sema);
         _sceFsSigSema();
         return SCE_EAGAIN;

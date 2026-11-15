@@ -402,7 +402,7 @@ static inline u_long readSystemTime(void)
         "dsllv %0,%0,$9\n"
         ".set pop"
         : "=&r"(now)
-        : "r"(0x10001000), "m"(g_Timer)
+        : "r"(0x10001000), "m"(g_Timer.overflows)
         : "$8", "$9", "$10", "memory");
     return now;
 }

@@ -30,6 +30,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`inline_asm.py`](inline_asm.py) | counts the `asm` statements inside C for the debt ratchet, leaving out those the owner approved, and `--test` shows which ones a function verifies without |
 | [`target_asm.py`](target_asm.py) | objdiff target assembly: the retail words of a function with their relocations restored (`.reloc` + masked `.word`) |
 | [`eegcc_compile.py`](eegcc_compile.py) | compile one C file with the Sony EE GCC 2.96 (`-S` then the sibling `ee-as`, with the symbol table repaired for GNU ld); used for the Sony-built library units |
+| [`kpatch.py`](kpatch.py) | build libkernl's kernel patches from `src/sony/libkernl/kpatch/` (`config/SLUS-20836/kernel-patches.tsv`): owner profile, linked at the run address, written to `build/<GAMEID>/kpatch/<name>.inc` for the owner file's array; `cc.py` runs it for a source that includes one |
 | [`unitobjects.py`](unitobjects.py) | Explicit ownership of additional functions emitted by a compiler unit |
 | [`regions.py`](regions.py) | read config/SLUS-20836/regions.tsv, the record of what each part of the image is |
 | [`check_regions.py`](check_regions.py) | test that table against the retail image |
@@ -98,7 +99,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`, `test_kpatch.py`
 
 ## Subfolders
 

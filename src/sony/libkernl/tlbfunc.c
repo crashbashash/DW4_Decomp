@@ -35,20 +35,90 @@ typedef struct {
 void *SetVTLBRefillHandler(int cause, void *handler);
 void *SetVCommonHandler(int cause, void *handler);
 void _kTLBException(void);
+void _kExitTLBHandler(void);
 void _kDebugException(void);
 int GetMemorySize(void);
 int _InitTLB(void);
-int kprintf(const char *fmt, ...);
+void kprintf(const char *fmt, ...);
 void Exit(int status);
 
-extern void *_kTLBRefillHandler;
-extern void *_kDebugHandler[16];
-extern char *_kExecArg;
-extern SyscallEntry SysEntry_tlbfunc[8];
-extern char tlbsrc[TLB_PATCH_SIZE];
-extern TlbInfo TLBInfo;
-
+static int kCopy(int *dst, int *src, unsigned int size);
 static int InitTLB32MB(void);
+
+/* the kernel code that adds the TLB system calls (src/sony/libkernl/kpatch/tlbsrc.c) */
+static unsigned char tlbsrc[TLB_PATCH_SIZE] = {
+#include "tlbsrc.inc"
+};
+
+void *_kTLBRefillHandler = 0;
+void *_kDebugHandler[16] = {0};
+char *_kExecArg = 0;
+
+/* the calls InitTLBFunctions installs: Copy's kernel side, the patch's lookup as call 91, the TLB handler's
+ * exit, then the patch's own calls, each at the address the patch's lookup gives */
+static SyscallEntry SysEntry_tlbfunc[8] = {
+    {0x5a, kCopy},
+    {0x5b, TLB_PATCH_ADDR},
+    {0x54, _kExitTLBHandler},
+    {0x55, 0},
+    {0x56, 0},
+    {0x57, 0},
+    {0x58, 0},
+    {0x59, 0},
+};
+
+/* the scratchpad, the kernel's page and the hardware registers: wired */
+static TlbEntry kernelTLB[13] = {
+    {0x00000000, 0x70000000, 0x80000007, 0x00000007},
+    {0x00006000, 0xffff8000, 0x00001e1f, 0x00001f1f},
+    {0x00000000, 0x10000000, 0x00400017, 0x00400053},
+    {0x00000000, 0x10002000, 0x00400097, 0x004000d7},
+    {0x00000000, 0x10004000, 0x00400117, 0x00400157},
+    {0x00000000, 0x10006000, 0x00400197, 0x004001d7},
+    {0x00000000, 0x10008000, 0x00400217, 0x00400257},
+    {0x00000000, 0x1000a000, 0x00400297, 0x004002d7},
+    {0x00000000, 0x1000c000, 0x00400313, 0x00400357},
+    {0x00000000, 0x1000e000, 0x00400397, 0x004003d7},
+    {0x0001e000, 0x11000000, 0x00440017, 0x00440415},
+    {0x0001e000, 0x12000000, 0x00480017, 0x00480415},
+    {0x01ffe000, 0x1e000000, 0x00780017, 0x007c0017},
+};
+
+/* main memory from 0x80000 to 32 MB, cached at 0x00080000 and uncached at 0x20080000 */
+static TlbEntry defaultTLB[18] = {
+    {0x0007e000, 0x00080000, 0x0000201f, 0x0000301f},
+    {0x0007e000, 0x00100000, 0x0000401f, 0x0000501f},
+    {0x0007e000, 0x00180000, 0x0000601f, 0x0000701f},
+    {0x001fe000, 0x00200000, 0x0000801f, 0x0000c01f},
+    {0x001fe000, 0x00400000, 0x0001001f, 0x0001401f},
+    {0x001fe000, 0x00600000, 0x0001801f, 0x0001c01f},
+    {0x007fe000, 0x00800000, 0x0002001f, 0x0003001f},
+    {0x007fe000, 0x01000000, 0x0004001f, 0x0005001f},
+    {0x007fe000, 0x01800000, 0x0006001f, 0x0007001f},
+    {0x0007e000, 0x20080000, 0x00002017, 0x00003017},
+    {0x0007e000, 0x20100000, 0x00004017, 0x00005017},
+    {0x0007e000, 0x20180000, 0x00006017, 0x00007017},
+    {0x001fe000, 0x20200000, 0x00008017, 0x0000c017},
+    {0x001fe000, 0x20400000, 0x00010017, 0x00014017},
+    {0x001fe000, 0x20600000, 0x00018017, 0x0001c017},
+    {0x007fe000, 0x20800000, 0x00020017, 0x00030017},
+    {0x007fe000, 0x21000000, 0x00040017, 0x00050017},
+    {0x007fe000, 0x21800000, 0x00060017, 0x00070017},
+};
+
+/* the same memory uncached accelerated at 0x30100000, mapped by InitTLB32MB */
+static TlbEntry extendTLB[8] = {
+    {0x0007e000, 0x30100000, 0x0000403f, 0x0000503f},
+    {0x0007e000, 0x30180000, 0x0000603f, 0x0000703f},
+    {0x001fe000, 0x30200000, 0x0000803f, 0x0000c03f},
+    {0x001fe000, 0x30400000, 0x0001003f, 0x0001403f},
+    {0x001fe000, 0x30600000, 0x0001803f, 0x0001c03f},
+    {0x007fe000, 0x30800000, 0x0002003f, 0x0003003f},
+    {0x007fe000, 0x31000000, 0x0004003f, 0x0005003f},
+    {0x007fe000, 0x31800000, 0x0006003f, 0x0007003f},
+};
+
+TlbInfo TLBInfo = {13, 18, 8, 0, kernelTLB, defaultTLB, extendTLB};
 
 void *SetTLBHandler(void *handler)
 {
@@ -121,6 +191,16 @@ void InitTLBFunctions(void)
     _kExecArg = GetEntryAddress(3);
 }
 
+int PutTLBEntry(u_int pagemask, u_int hi, u_int lo0, u_int lo1)
+{
+    __asm__("li $3, 85\n\tsyscall");
+}
+
+int iPutTLBEntry(u_int pagemask, u_int hi, u_int lo0, u_int lo1)
+{
+    __asm__("li $3, -85\n\tsyscall");
+}
+
 static int _SetTLBEntry(int index, u_int pagemask, u_int hi, u_int lo0, u_int lo1)
 {
     __asm__("li $3, 86\n\tsyscall");
@@ -136,6 +216,36 @@ int SetTLBEntry(int index, u_int pagemask, u_int hi, u_int lo0, u_int lo1)
         result = _SetTLBEntry(index, pagemask, hi, lo0, lo1);
     }
     return result;
+}
+
+int iSetTLBEntry(int index, u_int pagemask, u_int hi, u_int lo0, u_int lo1)
+{
+    __asm__("li $3, -86\n\tsyscall");
+}
+
+int GetTLBEntry(int index, u_int *pagemask, u_int *hi, u_int *lo0, u_int *lo1)
+{
+    __asm__("li $3, 87\n\tsyscall");
+}
+
+int iGetTLBEntry(int index, u_int *pagemask, u_int *hi, u_int *lo0, u_int *lo1)
+{
+    __asm__("li $3, -87\n\tsyscall");
+}
+
+int ProbeTLBEntry(u_int hi, u_int *pagemask, u_int *lo0, u_int *lo1)
+{
+    __asm__("li $3, 88\n\tsyscall");
+}
+
+int iProbeTLBEntry(u_int hi, u_int *pagemask, u_int *lo0, u_int *lo1)
+{
+    __asm__("li $3, -88\n\tsyscall");
+}
+
+int ExpandScratchPad(u_int page)
+{
+    __asm__("li $3, 89\n\tsyscall");
 }
 
 int InitTLB(void)

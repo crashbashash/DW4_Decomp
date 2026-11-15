@@ -8,6 +8,10 @@ void _sceMpegWaitIpuIdle(_sceMpegDecoder *dec);
 unsigned int _ipuGetBits(_sceMpegDecoder *dec, int n);
 void _extensionAndUserData(_sceMpegDecoder *dec);
 void _initSeq(sceMpeg *mp);
+void _setFieldPointers(_sceMpegPicture *p0, _sceMpegPicture *p1, _sceMpegPicture *p2, _sceMpegPicture *p3,
+                       _sceMpegPicture *p4, _sceMpegPicture *p5, _sceMpegPicture *p6, _sceMpegPicture *p7,
+                       _sceMpegPicture *p8, char *buffer0, char *buffer1, char *buffer2, int width, int height);
+void _sceMpegAlalcFree(_sceMpegAlalc *alalc);
 void _loadQuantMatrix(_sceMpegDecoder *dec, unsigned int command, unsigned char *matrix);
 
 #define IPU_SETIQ_INTRA 0x50000000
@@ -64,6 +68,71 @@ void _sequenceHeader(_sceMpegDecoder *dec) {
     }
     _extensionAndUserData(dec);
     _initSeq(dec->mp);
+}
+
+/* Sizes the pictures for the sequence just parsed and lays the three frame buffers out when they change. */
+void _initSeq(sceMpeg *mp)
+{
+    _sceMpegDecoder *dec = mp->sys;
+    int width, height;
+    unsigned int bytes;
+
+    if (!dec->mpeg2) {
+        dec->progressive_sequence = 1;
+        dec->chroma_format = 1;
+        dec->progressive_frame = 1;
+        dec->picture_structure = MPEG_FRAME_PICTURE;
+        dec->frame_pred_frame_dct = 1;
+        dec->matrix_coefficients = 5;
+    }
+    dec->mb_width = (dec->h_size + 15) >> 4;
+    dec->mb_height = dec->mpeg2 && !dec->progressive_sequence ? (dec->v_size + 31) >> 5 << 1 : (dec->v_size + 15) >> 4;
+    height = dec->mb_height << 4;
+    width = dec->mb_width << 4;
+    if (width == mp->width && height == mp->height) {
+        return;
+    }
+    mp->width = width;
+    mp->height = height;
+    bytes = (unsigned int)(width * 384 * height) >> 8;
+    _sceMpegAlalcFree(&dec->alalc);
+    dec->frame_buffers[0] = _sceMpegAlalcAlloc(dec, &dec->alalc, bytes, 64);
+    dec->frame_buffers[1] = _sceMpegAlalcAlloc(dec, &dec->alalc, bytes, 64);
+    dec->frame_buffers[2] = _sceMpegAlalcAlloc(dec, &dec->alalc, bytes, 64);
+    _setFieldPointers(&dec->pictures[0], &dec->pictures[1], &dec->pictures[2], &dec->pictures[3], &dec->pictures[4],
+                      &dec->pictures[5], &dec->pictures[6], &dec->pictures[7], &dec->pictures[8],
+                      dec->frame_buffers[0], dec->frame_buffers[1], dec->frame_buffers[2], width, height);
+    _setPictureSize(&dec->pictures[0], width, height);
+    _setPictureSize(&dec->pictures[1], width, height);
+    _setPictureSize(&dec->pictures[2], width, height);
+    _setPictureSize(&dec->pictures[3], width, height / 2);
+    _setPictureSize(&dec->pictures[4], width, height / 2);
+    _setPictureSize(&dec->pictures[5], width, height / 2);
+    _setPictureSize(&dec->pictures[6], width, height / 2);
+    _setPictureSize(&dec->pictures[7], width, height / 2);
+    _setPictureSize(&dec->pictures[8], width, height / 2);
+}
+
+/* matching construct: decomp-permuter — an inline helper rather than a macro keeps the three bottom-field
+   offsets as separate multiplies */
+static __inline__ char *_uncached(char *p)
+{
+    return (char *)(((unsigned int)p & 0x0FFFFFFF) | 0x20000000);
+}
+
+void _setFieldPointers(_sceMpegPicture *p0, _sceMpegPicture *p1, _sceMpegPicture *p2, _sceMpegPicture *p3,
+                       _sceMpegPicture *p4, _sceMpegPicture *p5, _sceMpegPicture *p6, _sceMpegPicture *p7,
+                       _sceMpegPicture *p8, char *buffer0, char *buffer1, char *buffer2, int width, int height)
+{
+    p0->base = _uncached(buffer0);
+    p1->base = _uncached(buffer1);
+    p2->base = _uncached(buffer2);
+    p3->base = _uncached(buffer0);
+    p4->base = _uncached(buffer1);
+    p5->base = _uncached(buffer2);
+    p6->base = _uncached(buffer0 + width * height / 512 * 384);
+    p7->base = _uncached(buffer1 + width * height / 512 * 384);
+    p8->base = _uncached(buffer2 + width * height / 512 * 384);
 }
 
 /* Sends a 64-byte matrix to the IPU and loads it with `command`, with the stream's DMA stopped

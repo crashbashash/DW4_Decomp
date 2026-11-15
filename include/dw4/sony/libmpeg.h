@@ -81,8 +81,8 @@ typedef struct {
     long pts;                              /* 24: -1 when the stream gave none */
     long dts;
     int decoded;                           /* 40 */
-    int picture_structure;
     int picture_coding_type;
+    int picture_structure;
     int progressive_sequence;
     int progressive_frame;
     int top_field_first;
@@ -100,13 +100,33 @@ typedef struct {
     _sceMpegPicture *image;
 } _sceMpegPictureSlot;
 
+/* What a motion-compensation kernel reads to build one predicted block: it copies `rows` rows of the reference,
+   then `rows_below` more from the macroblock row below, each row extracted from the quadwords at `left` and
+   `right` from byte `column` on, `pitch` bytes apart. */
+typedef struct {
+    short *dst;                            /* the predicted block's first row in the motion-compensation work area */
+    int column;
+    int rows;
+    int rows_below;
+    int pitch;
+    unsigned char *left;
+    unsigned char *right;
+} _sceMpegMcFetch;
+
+typedef void (*_sceMpegMcKernel)(_sceMpegMcFetch *fetch);
+
 /* One of the two scratchpad halves a macroblock is decoded through. */
 typedef struct {
-    unsigned int src;
+    unsigned int src;                      /* the prediction area: four reference fetches of 1536 bytes */
     unsigned int dst;                      /* coefficients, cleared before BDEC */
-    char pad_8[288];
-    char *dest;                            /* 0x128: where the macroblock lands */
-    int pad_12c;
+    unsigned char *block[4];               /* 8: each prediction's reference block in the picture */
+    unsigned char *block_right[4];         /* 24: and the block of the next macroblock column */
+    _sceMpegMcKernel luma_kernel[4];       /* 40 */
+    _sceMpegMcKernel chroma_kernel[4];     /* 56 */
+    _sceMpegMcFetch luma[4];               /* 72 */
+    _sceMpegMcFetch chroma[4];             /* 184 */
+    char *dest;                            /* 296: where the macroblock lands */
+    int pred_count;                        /* predictions fetched for the macroblock */
     int intra;
     int skipped;
     int predicted;
@@ -206,7 +226,8 @@ typedef struct _sceMpegDecoder {
     int temporal_max;
     int gop_started;
     sceMpeg *mp;                           /* 2160 */
-    char pad_2164[2092];
+    char pad_2164[12];
+    unsigned long long ipu_tags[260];      /* 2176: sceMpegAddBs's channel-4 source chain, two words a tag */
     int abort;                             /* 4256 */
     char pad_4260[28];
 } _sceMpegDecoder;

@@ -18,6 +18,8 @@ dominate `make check`.
 """
 import os
 
+import kpatch
+
 EXTS = (".c", ".cpp")
 
 
@@ -25,10 +27,14 @@ def index(src_dir="src"):
     """{filename-without-extension: path} for every file under `src_dir`.
 
     Deterministic (directories sorted); skips the dot-named one-function splits
-    `tools/units.py` writes.
+    `tools/units.py` writes and the kernel patches' sources (tools/kpatch.py), which
+    are not image units.
     """
     out = {}
     for root, dirs, files in os.walk(src_dir):
+        if kpatch.is_patch_source(root):
+            dirs[:] = []
+            continue
         dirs.sort()
         for f in sorted(files):
             if f.endswith(EXTS) and not f.startswith("dw4u_"):

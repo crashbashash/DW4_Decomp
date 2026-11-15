@@ -15,6 +15,10 @@ approval when another use appears. A call of an MWCC `__I_<mnemonic>` instructio
 instruction it names, so it counts as an `asm` use. `sync` and `ei` need no row, since C cannot spell
 them, and stock source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
 
+The kernel patches' functions (tools/kpatch.py) are no image functions, but their `asm` and `volatile`
+need rows all the same, keyed by the patch function's name (`<name>_<patch>` when several patches define
+one name, tools/kpatch.py `functions`).
+
   python3 tools/sourceapprovals.py --list     # the unapproved queue, for the owner to review
   python3 tools/sourceapprovals.py --stale    # rows whose function no longer uses what they approve
 """
@@ -29,6 +33,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import asmsources  # noqa: E402
+import kpatch  # noqa: E402
 import inline_asm  # noqa: E402
 import units  # noqa: E402
 import unitprofiles  # noqa: E402
@@ -381,9 +386,16 @@ def _covered(path, name, rows, aliases=None):
 
 def _aliases(rows):
     """{(path, definition): symbol} for rows naming a static by the symbol the symbol map gives it
-    (`Copy_tlbfunc` for `tlbfunc.c`'s `Copy`)."""
+    (`Copy_tlbfunc` for `tlbfunc.c`'s `Copy`), and for rows naming a patch function several patches define
+    by its key (`kGetEntryAddress_osdsrc`)."""
     index, out = None, {}
+    patch_functions = kpatch.functions()
     for _kind, symbol in rows:
+        if symbol in patch_functions:
+            path, name = patch_functions[symbol]
+            if name != symbol:
+                out[(os.path.abspath(path), name)] = symbol
+            continue
         name = unitobjects.source_name(symbol)
         if name == symbol:
             continue
@@ -443,8 +455,15 @@ def stale(rows=None, index=None):
     """["kind symbol: reason"] for rows that no longer describe their function."""
     rows = load() if rows is None else rows
     index = _index() if index is None else index
+    patch_functions = kpatch.functions()
     out = []
     for (kind, symbol), (count, _evidence) in sorted(rows.items()):
+        if symbol in patch_functions and symbol not in index:
+            path, name = patch_functions[symbol]
+            found = uses(path, name)[kind]
+            if found != count:
+                out.append("%s %s: the row covers %d, the source has %d" % (kind, symbol, count, found))
+            continue
         path = index.get(symbol) or index.get(unitobjects.source_owner(symbol))
         if path is None:
             out.append("%s %s: no definition in src/" % (kind, symbol))
@@ -456,6 +475,17 @@ def stale(rows=None, index=None):
         found = uses(path, name)[kind]
         if found != count:
             out.append("%s %s: the row covers %d, the source has %d" % (kind, symbol, count, found))
+    return out
+
+
+def patch_problems(rows=None):
+    """[(key, path, reason)] for the kernel patches' functions awaiting approval (tools/kpatch.py)."""
+    rows = load() if rows is None else rows
+    out = []
+    for key, (path, name) in sorted(kpatch.functions().items()):
+        why = problem(path, name, rows, row=None if key == name else key)
+        if why:
+            out.append((key, os.path.relpath(path, ROOT), why))
     return out
 
 
@@ -483,6 +513,8 @@ def main(argv=None):
             if member != name and defines(path, member):
                 waiting.append((name, path, problem(path, member, rows, row=name)))
         waiting = [w for w in waiting if w[2]]
+        # the kernel patches' functions are listed under their keys
+        waiting += patch_problems(rows)
         for name, path, why in waiting:
             print("%s\t%s\t%s" % (name, path, why))
         print("%d functions await approval" % len(waiting))

@@ -109,7 +109,7 @@ void _pictureTimeStamp(_sceMpegDecoder *dec, _sceMpegPicture *picture, long *pts
     *dts = picture->dts;
     *flags = (long)picture->progressive_sequence << 8 | (long)picture->progressive_frame << 7
            | (long)picture->top_field_first << 6 | (long)picture->repeat_first_field << 5
-           | (long)picture->picture_coding_type << 3 | picture->picture_structure;
+           | (long)picture->picture_structure << 3 | picture->picture_coding_type;
 }
 
 void _outputFrame(_sceMpegDecoder *dec, _sceMpegPicture *picture, int frameNo) {

@@ -46,21 +46,24 @@ int DisableDmac(int channel);
 int RemoveDmacHandler(int channel, int id);
 unsigned int sceSifGetReg(unsigned int reg);
 int sceSifSetReg(unsigned int reg, unsigned int value);
-void sceSifSetDChain(void);
+int sceSifSetDChain(void);
 
-extern int _cmd_init_check;
-extern char _pckt_buffer[128];
-extern char _send_buffer[64];
-extern sceSifCmdChangeAddr _csdata;
-extern int sif0_handleid;
-extern sceSifCmdState _sif_cmd_data;
-extern sceSifCmdData _sys_buffer[SIF_SYS_CMD_MAX];
-extern unsigned int sifSregs[32];
+static int _cmd_init_check = 0;
+static char _pckt_buffer[128] __attribute__((aligned(64)));
+static char _send_buffer[64];
+static sceSifCmdChangeAddr _csdata;
+static int sif0_handleid;
+static sceSifCmdState _data_table;
+static sceSifCmdData _sys_buffer[SIF_SYS_CMD_MAX] __attribute__((aligned(64)));
+static unsigned int soft_reg[32];
 
 unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
 unsigned int isceSifSetDma(sceSifDmaData *transfers, int count);
 unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len);
-int _sceSifCmdIntrHdlr(int channel);
+static int _sceSifCmdIntrHdlr(int channel);
+int isceSifSetDChain(void);
+
+typedef int quadword __attribute__((mode(TI)));
 
 static void _set_sreg(sceSifCmdSRegData *packet, sceSifCmdState *state)
 {
@@ -74,18 +77,18 @@ static void _change_addr(sceSifCmdChangeAddr *packet, sceSifCmdState *state)
 
 unsigned int sceSifGetSreg(int reg)
 {
-    return sifSregs[reg];
+    return soft_reg[reg];
 }
 
 unsigned int sceSifSetSreg(int reg, unsigned int value)
 {
-    sifSregs[reg] = value;
+    soft_reg[reg] = value;
     return value;
 }
 
 sceSifCmdState *sceSifGetDataTable(void)
 {
-    return &_sif_cmd_data;
+    return &_data_table;
 }
 
 void sceSifInitCmd(void)
@@ -99,25 +102,25 @@ void sceSifInitCmd(void)
     }
     _cmd_init_check = 1;
     /* matching construct: permutation search — field store order */
-    _sif_cmd_data.pktbuf = UNCACHED(_pckt_buffer);
-    _sif_cmd_data.unused = UNCACHED(_send_buffer);
-    _sif_cmd_data.sysCount = SIF_SYS_CMD_MAX;
-    _sif_cmd_data.iopbuf = 0;
-    _sif_cmd_data.sysTable = _sys_buffer;
-    _sif_cmd_data.userTable = 0;
-    _sif_cmd_data.userCount = 0;
-    _sif_cmd_data.sregs = sifSregs;
+    _data_table.pktbuf = UNCACHED(_pckt_buffer);
+    _data_table.unused = UNCACHED(_send_buffer);
+    _data_table.sysCount = SIF_SYS_CMD_MAX;
+    _data_table.iopbuf = 0;
+    _data_table.sysTable = _sys_buffer;
+    _data_table.userTable = 0;
+    _data_table.userCount = 0;
+    _data_table.sregs = soft_reg;
     for (i = 0; i < SIF_SYS_CMD_MAX; i++) {
         _sys_buffer[i].func = 0;
         _sys_buffer[i].data = 0;
     }
     for (i = 0; i < 32; i++) {
-        sifSregs[i] = 0;
+        soft_reg[i] = 0;
     }
     _sys_buffer[0].func = (sceSifCmdHandler)_change_addr;
-    _sys_buffer[0].data = &_sif_cmd_data;
+    _sys_buffer[0].data = &_data_table;
     _sys_buffer[1].func = (sceSifCmdHandler)_set_sreg;
-    _sys_buffer[1].data = &_sif_cmd_data;
+    _sys_buffer[1].data = &_data_table;
     EIntr();
     FlushCache(0);
     if (D_STAT & D_STAT_CIS_SIF0) {
@@ -128,16 +131,16 @@ void sceSifInitCmd(void)
     }
     sif0_handleid = AddDmacHandler(DMAC_SIF0, _sceSifCmdIntrHdlr, 0);
     EnableDmac(DMAC_SIF0);
-    _sif_cmd_data.iopbuf = (void *)sceSifGetReg(SIF_SYSREG_SUBADDR);
-    if (_sif_cmd_data.iopbuf) {
+    _data_table.iopbuf = (void *)sceSifGetReg(SIF_SYSREG_SUBADDR);
+    if (_data_table.iopbuf) {
         _csdata.iopbuf = _pckt_buffer;
         sceSifSendCmd(SIF_CMD_SYSTEM, &_csdata, sizeof(_csdata), 0, 0, 0);
         return;
     }
     while (!(sceSifGetReg(SIF_REG_SMFLAG) & SIF_STAT_CMDINIT));
-    _sif_cmd_data.iopbuf = (void *)sceSifGetReg(SIF_REG_SUBADDR);
-    sceSifSetReg(SIF_SYSREG_SUBADDR, (unsigned int)_sif_cmd_data.iopbuf);
-    sceSifSetReg(SIF_SYSREG_MAINADDR, (unsigned int)&_sif_cmd_data);
+    _data_table.iopbuf = (void *)sceSifGetReg(SIF_REG_SUBADDR);
+    sceSifSetReg(SIF_SYSREG_SUBADDR, (unsigned int)_data_table.iopbuf);
+    sceSifSetReg(SIF_SYSREG_MAINADDR, (unsigned int)&_data_table);
     _csdata.iopbuf = _pckt_buffer;
     _csdata.hdr.opt = 0;
     sceSifSendCmd(SIF_CMD_INIT_CMD, &_csdata, sizeof(_csdata), 0, 0, 0);
@@ -152,40 +155,40 @@ void sceSifExitCmd(void)
 
 sceSifCmdData *sceSifSetCmdBuffer(sceSifCmdData *table, int count)
 {
-    sceSifCmdData *old = _sif_cmd_data.userTable;
-    _sif_cmd_data.userTable = table;
-    _sif_cmd_data.userCount = count;
+    sceSifCmdData *old = _data_table.userTable;
+    _data_table.userTable = table;
+    _data_table.userCount = count;
     return old;
 }
 
 sceSifCmdData *sceSifSetSysCmdBuffer(sceSifCmdData *table, int count)
 {
-    sceSifCmdData *old = _sif_cmd_data.sysTable;
-    _sif_cmd_data.sysTable = table;
-    _sif_cmd_data.sysCount = count;
+    sceSifCmdData *old = _data_table.sysTable;
+    _data_table.sysTable = table;
+    _data_table.sysCount = count;
     return old;
 }
 
 void sceSifAddCmdHandler(unsigned int cid, sceSifCmdHandler func, void *data)
 {
     if ((int)cid < 0) {
-        _sif_cmd_data.sysTable[cid & ~SIF_CMD_SYSTEM].func = func;
-        _sif_cmd_data.sysTable[cid & ~SIF_CMD_SYSTEM].data = data;
-        _sif_cmd_data.sysTable[cid & ~SIF_CMD_SYSTEM].gp = GetGp();
+        _data_table.sysTable[cid & ~SIF_CMD_SYSTEM].func = func;
+        _data_table.sysTable[cid & ~SIF_CMD_SYSTEM].data = data;
+        _data_table.sysTable[cid & ~SIF_CMD_SYSTEM].gp = GetGp();
     } else {
-        _sif_cmd_data.userTable[cid].func = func;
-        _sif_cmd_data.userTable[cid].data = data;
-        _sif_cmd_data.userTable[cid].gp = GetGp();
+        _data_table.userTable[cid].func = func;
+        _data_table.userTable[cid].data = data;
+        _data_table.userTable[cid].gp = GetGp();
     }
 }
 
 void sceSifRemoveCmdHandler(unsigned int cid)
 {
     if ((int)cid < 0) {
-        _sif_cmd_data.sysTable[cid & ~SIF_CMD_SYSTEM].func = 0;
+        _data_table.sysTable[cid & ~SIF_CMD_SYSTEM].func = 0;
         return;
     }
-    _sif_cmd_data.userTable[cid].func = 0;
+    _data_table.userTable[cid].func = 0;
 }
 
 static unsigned int _sceSifSendCmd(unsigned int cid, int mode, void *packet, int size, void *src,
@@ -215,7 +218,7 @@ static unsigned int _sceSifSendCmd(unsigned int cid, int mode, void *packet, int
         hdr->dest = 0;
     }
     transfers[count].data = (unsigned int)packet;
-    transfers[count].addr = (unsigned int)_sif_cmd_data.iopbuf;
+    transfers[count].addr = (unsigned int)_data_table.iopbuf;
     transfers[count].size = size;
     hdr->cid = cid;
     hdr->psize = size;
@@ -236,6 +239,51 @@ unsigned int sceSifSendCmd(unsigned int cid, void *packet, int size, void *src, 
 unsigned int isceSifSendCmd(unsigned int cid, void *packet, int size, void *src, void *dest, int len)
 {
     return _sceSifSendCmd(cid, 1, packet, size, src, dest, len);
+}
+
+/* The SIF0 DMA-completion handler: copies the command the IOP left in the receive buffer, re-arms the
+ * channel and runs the command's handler on the $gp it was registered with. */
+static int _sceSifCmdIntrHdlr(int channel)
+{
+    quadword packet[SIF_CMD_PACKET_MAX / sizeof(quadword)];
+    sceSifCmdState *state = &_data_table;
+    volatile sceSifCmdHdr *hdr = _data_table.pktbuf;
+    quadword *src;
+    sceSifCmdHandler func;
+    /* matching construct: global-alloc trace — one int holds the packet size, its quadword count and
+     * the command index */
+    int n, i;
+
+    if ((n = hdr->psize) == 0) {
+        return 0;
+    }
+    n = (n + 15) / 16;
+    hdr->psize = 0;
+    src = (quadword *)hdr;
+    for (i = 0; i < n; i++) {
+        packet[i] = *src++;
+    }
+    isceSifSetDChain();
+    hdr = (sceSifCmdHdr *)packet;
+    if (hdr->cid & SIF_CMD_SYSTEM) {
+        n = hdr->cid & ~SIF_CMD_SYSTEM;
+        if (n < state->sysCount && (func = state->sysTable[n].func)) {
+            void *gp = SetGp(state->sysTable[n].gp);
+
+            func(packet, state->sysTable[n].data);
+            SetGp(gp);
+        }
+    } else {
+        n = hdr->cid;
+        if (n < state->userCount && (func = state->userTable[n].func)) {
+            void *gp = SetGp(state->userTable[n].gp);
+
+            func(packet, state->userTable[n].data);
+            SetGp(gp);
+        }
+    }
+    __asm__("sync.l; ei");
+    return 0;
 }
 
 /* Writes back the data cache lines of [ptr, ptr + size), eight lines a pass: Sony's own assembly. */

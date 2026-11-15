@@ -59,7 +59,7 @@ typedef struct {
     Queue *queue;
 } TtyInfo;
 
-int kprintf(const char *format, ...);
+void kprintf(const char *format, ...);
 int sceDeci2Open(unsigned short protocol, void *opt, void (*handler)(int event, int param, void *opt));
 int sceDeci2ReqSend(int s, char dest);
 void sceDeci2Poll(int s);

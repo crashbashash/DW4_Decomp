@@ -126,32 +126,43 @@ typedef struct {
     unsigned int rpc_id;
 } sceSifRpcPktHeader;
 
+/* The words after the RPC header of each request, whichever side sends it. */
 typedef struct {
-    sceSifRpcPktHeader rpch;
     sceSifClientData *client;
     unsigned int sid;
-    char pad[SIF_CMD_PACKET_SIZE - 36];
-} sceSifRpcBindPkt;
+} sceSifRpcBindReq;
 
 typedef struct {
-    sceSifRpcPktHeader rpch;
     void *client;
     unsigned int fno;
     int ssize;
-    unsigned int receive; /* the IOP's buffer for the result */
+    unsigned int receive; /* the caller's buffer for the result */
     int rsize;
     int rmode;
     sceSifServeData *serve;
-    char pad[SIF_CMD_PACKET_SIZE - 56];
-} sceSifRpcCallPkt;
+} sceSifRpcCallReq;
 
 typedef struct {
-    sceSifRpcPktHeader rpch;
     sceSifReceiveData *recv;
     unsigned int src; /* the requester's side */
     unsigned int dest; /* the other side */
     int size;
-    char pad[SIF_CMD_PACKET_SIZE - 44];
+} sceSifRpcOtherDataReq;
+
+/* A request as the other side sends it. */
+typedef struct {
+    sceSifRpcPktHeader rpch;
+    sceSifRpcBindReq req;
+} sceSifRpcBindPkt;
+
+typedef struct {
+    sceSifRpcPktHeader rpch;
+    sceSifRpcCallReq req;
+} sceSifRpcCallPkt;
+
+typedef struct {
+    sceSifRpcPktHeader rpch;
+    sceSifRpcOtherDataReq req;
 } sceSifRpcOtherDataPkt;
 
 /* The reply: RPC_END names the command it ends; the words after it are that command's. */

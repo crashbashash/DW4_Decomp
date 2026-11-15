@@ -12,7 +12,7 @@ Slice and macroblock decoding and the IPU bit reader. `_pictureData` decodes a p
 `_slice0`, which reads each slice header (`_sliceA0`), the macroblock address increments, the
 macroblock modes and motion vectors (`_decMB0`, `_skipMB0`, `_motionVectors`, `_motionVector`,
 `_dualPrimeVector`), starts the IPU's BDEC of the coefficients, and places the macroblock
-(`_motionCompensation`) while the previous one is colour-converted (`_cscMacroblock`). The bit reader
+(`_motionCompensation`) while the previous one is colour-converted (`_doMC`). The bit reader
 (`_ipuVdec`, `_ipuShowBits`, `_ipuFlushBits`, `_ipuGetBits`) issues VDEC/FDEC commands and caches
 IPU_TOP; `_invalidatesBits` says which IPU commands make the cache stale. Every IPU wait polls the abort
 flag and hands control to the stream's no-data callback every 5000 polls.
@@ -22,14 +22,13 @@ flag and hands control to the stream's no-data callback every 5000 polls.
   from `0x4d1ee0` ("Invalid modion type") to `0x4d20af` ("Invalid macroblock_type code: 0") in code
   order. 3.0.3's `mpc.o` holds the same functions (`_motionVectors`, `_sceMpegWaitIpuIdle`, the bit
   reader's successors). The file ends where `ext.c`'s rodata table begins.
-* `"Invalid modion type -- ignored(%d)"` is named (`invalidMotionTypeMessage`) rather than written as
-  a literal: it is the file's first string, and the strings of the functions without source come
-  between it and the rest.
-* Without source, linking from retail: `_formPredictions` (`0x103730`), `FUN_00103e38`,
-  `_cscMacroblock` (`0x104258`), `_waitBdec` (`0x105250`), and `FUN_00104478..FUN_001051c8`. The last
-  group are the motion-compensation kernels the `.data` tables point at; they use 128-bit GPR
-  `lq`/`sq`, `pnor`, `qfsrv` and `mtsab`, which this compiler does not emit: they look hand-written
-  assembly.
+* `_getAllRefs` (with the helper `_getRef0`, 3.0.3's names) fetches the reference
+  blocks of a macroblock into the scratchpad and `_doMC` runs the kernels over them: the sixteen
+  `_rix_*`/`_ri0_*` routines the `.data` tables point at (3.0.3's names, entry for entry; their bodies are
+  3.0.3's with header loads reordered and registers renamed) and the two reference-image copies
+  (`_copyAddRefImage`, `_copyRefImage`) that `_doMC` tail-calls. These eighteen are C functions whose body is
+  one `asm` statement, as 3.0.3's `mpc.o` records them (docs/engine/source-approvals.md,
+  `#sony-libmpeg-motion-compensation`); the strings are literals, and the file's `_ipuWait*` and DMA registers are `volatile` as there.
 
 ## `src/sony/libmpeg/ext.c` (`0x106df8..0x107790`)
 
@@ -49,7 +48,7 @@ lets the IPU load the matrices with SETIQ, `_pictureDisplayExtension`, `_copyrig
 ## `src/sony/libmpeg/picture.c` (`0x107790..0x107ba4`)
 
 `_decPicture` decodes a picture into its frame or field slot, `_sceMpegOutputFrame` hands the due
-picture to output, and `_updateRefImage` (no source yet) rotates the reference pictures.
+picture to output, and `_updateRefImage` rotates the reference pictures.
 
 * Extent: its strings ("odd number of field pictures", "unknown picture sutructure") follow
   `ext.c`'s at `0x4d2138`; output's file begins at `0x107ba8` with its own string at `0x4d2178`. The
@@ -62,4 +61,3 @@ picture to output, and `_updateRefImage` (no source yet) rotates the reference p
 * Whether `picture.c`'s three functions were their own file or the end of `ext.c` in 2.8.0: the
   strings run on without a gap either way. They are kept apart because no `ext` function calls them
   and 3.0.3 puts none of them in `ext.o`.
-* `_formPredictions`, `FUN_00103e38`, `_cscMacroblock`, `_waitBdec` and `_updateRefImage` still lack C.

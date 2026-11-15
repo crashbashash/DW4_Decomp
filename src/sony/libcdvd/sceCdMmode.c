@@ -1,27 +1,26 @@
-extern int DAT_004850c0;
-extern int DAT_00484740;
-extern int DAT_0048356c;
-extern int DAT_00483598;
-int FUN_0010af00(int sema);
-int FUN_00116d90(int cmd);
-void sceSifWriteBackDCache(void *p, int size);
-int sceSifCallRpc(void *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize, void (*end)(void *), void *arg);
-extern int DAT_00484b80;
-extern int DAT_004850e8;
-extern int DAT_004850ec;
-extern int DAT_004850f0;
-int sceCdMmode(int arg) {
-    int r;
-    int *p;
-    p = &DAT_00484b80;
-    if (FUN_00116d90(34) == 0) return 0;
-    *p = arg;
-    sceSifWriteBackDCache(p, 4);
-    if (sceSifCallRpc(&DAT_004850c0, DAT_004850e8, 0, p, DAT_004850ec, &DAT_00484740, DAT_004850f0, 0, 0) < 0) {
-        FUN_0010af00(DAT_0048356c);
+/* sceCdMmode.c - sceCdMmode: selects the media (CD or DVD) the drive reads. */
+#include "dw4/eekernel.h"
+#include "dw4/sony/libcdvd.h"
+
+static int rpc_mmode = 34;
+static int outcnt_mmode = 4;
+static int incnt_mmode = 4;
+
+int sceCdMmode(int media)
+{
+    int *send = _sceCd_scmdsdata;
+    int result;
+
+    if (_sceCd_scmd_prechk(CD_PRECHK_MMODE) == 0) {
         return 0;
     }
-    r = *(int *)((unsigned int)&DAT_00484740 | 0x20000000);
-    FUN_0010af00(DAT_0048356c);
-    return r;
+    send[0] = media;
+    sceSifWriteBackDCache(send, 4);
+    if (sceSifCallRpc(&_sceCd_cd_scmd, rpc_mmode, 0, send, outcnt_mmode, _sceCd_scmdrdata, incnt_mmode, 0, 0) < 0) {
+        SignalSema(_sceCd_scmd_semid);
+        return 0;
+    }
+    result = UNCACHED_WORD(_sceCd_scmdrdata);
+    SignalSema(_sceCd_scmd_semid);
+    return result;
 }

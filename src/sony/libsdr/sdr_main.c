@@ -34,7 +34,7 @@ typedef struct {
 
 unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
 int sceSifDmaStat(unsigned int id);
-int scePrintf(const char *format, ...);
+void scePrintf(const char *format, ...);
 void FlushCache(int mode);
 
 /* the IOP interrupt callbacks and their gp: libsdr's callback-thread file owns them */

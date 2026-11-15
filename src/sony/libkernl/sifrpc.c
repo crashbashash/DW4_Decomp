@@ -11,6 +11,8 @@
 /* the SIF register and the software register that say the IOP's RPC layer is up */
 #define SIF_SYSREG_RPCINIT 0x80000002
 #define SIF_SREG_RPCINIT 0
+/* sceSifCallRpc mode: the caller has already written its buffers back from the data cache */
+#define SIF_RPCM_NOWBDC 0x02
 
 typedef struct {
     unsigned int data;
@@ -19,10 +21,15 @@ typedef struct {
     unsigned int mode;
 } sceSifDmaData;
 
-/* A client packet of the pool; the command it carries decides the rest. */
+/* A packet of the client pool: the RPC header, then the request of whichever command it carries. */
 typedef struct {
     sceSifRpcPktHeader rpch;
-    char body[SIF_CMD_PACKET_SIZE - sizeof(sceSifRpcPktHeader)];
+    union {
+        sceSifRpcBindReq bind;
+        sceSifRpcCallReq call;
+        sceSifRpcOtherDataReq rdata;
+        char body[SIF_CMD_PACKET_SIZE - sizeof(sceSifRpcPktHeader)];
+    } u;
 } sceSifRpcPacket;
 
 typedef unsigned int (*AlarmHandler)(int id, unsigned int scheduled, unsigned int actual, void *arg);
@@ -34,11 +41,11 @@ unsigned int sceSifSetDma(sceSifDmaData *transfers, int count);
 int sceSifGetReg(unsigned int reg);
 int sceSifSetReg(unsigned int reg, int value);
 
-extern int _sceSifInitCheck;
-extern sceSifRpcPacket _packet_buffer[RPC_PACKETS];
-extern sceSifRpcRendPkt _free_buffer[RPC_PACKETS];
-extern sceSifRpcRendPkt _free_buffer2[RPC_PACKETS];
-extern sceSifRpcState _sif_rpc_data;
+static int _sceSifInitCheck = 0;
+static sceSifRpcPacket _packet_buffer[RPC_PACKETS] __attribute__((aligned(64)));
+static sceSifRpcRendPkt _free_buffer[RPC_PACKETS];
+static sceSifRpcRendPkt _free_buffer2[RPC_PACKETS];
+static sceSifRpcState _data_table;
 
 static void _request_end(sceSifRpcRendPkt *rend, sceSifRpcState *state);
 static void _request_bind(sceSifRpcBindPkt *bind, sceSifRpcState *state);
@@ -58,20 +65,20 @@ void sceSifInitRpc(unsigned int mode)
     EIntr();
     sceSifInitCmd();
     DIntr();
-    _sif_rpc_data.pkt_table = UNCACHED(_packet_buffer);
-    _sif_rpc_data.pkt_table_len = RPC_PACKETS;
-    _sif_rpc_data.unused1 = 0;
-    _sif_rpc_data.unused2 = 0;
-    _sif_rpc_data.rdata_table = UNCACHED(_free_buffer);
-    _sif_rpc_data.rdata_table_len = RPC_PACKETS;
-    _sif_rpc_data.client_table = UNCACHED(_free_buffer2);
-    _sif_rpc_data.client_table_len = RPC_PACKETS;
-    _sif_rpc_data.rdata_table_idx = 0;
-    _sif_rpc_data.pid = 1;
-    sceSifAddCmdHandler(SIF_CMD_RPC_END, (sceSifCmdHandler)_request_end, &_sif_rpc_data);
-    sceSifAddCmdHandler(SIF_CMD_RPC_BIND, (sceSifCmdHandler)_request_bind, &_sif_rpc_data);
-    sceSifAddCmdHandler(SIF_CMD_RPC_CALL, (sceSifCmdHandler)_request_call, &_sif_rpc_data);
-    sceSifAddCmdHandler(SIF_CMD_RPC_RDATA, (sceSifCmdHandler)_request_rdata, &_sif_rpc_data);
+    _data_table.pkt_table = UNCACHED(_packet_buffer);
+    _data_table.pkt_table_len = RPC_PACKETS;
+    _data_table.unused1 = 0;
+    _data_table.unused2 = 0;
+    _data_table.rdata_table = UNCACHED(_free_buffer);
+    _data_table.rdata_table_len = RPC_PACKETS;
+    _data_table.client_table = UNCACHED(_free_buffer2);
+    _data_table.client_table_len = RPC_PACKETS;
+    _data_table.rdata_table_idx = 0;
+    _data_table.pid = 1;
+    sceSifAddCmdHandler(SIF_CMD_RPC_END, (sceSifCmdHandler)_request_end, &_data_table);
+    sceSifAddCmdHandler(SIF_CMD_RPC_BIND, (sceSifCmdHandler)_request_bind, &_data_table);
+    sceSifAddCmdHandler(SIF_CMD_RPC_CALL, (sceSifCmdHandler)_request_call, &_data_table);
+    sceSifAddCmdHandler(SIF_CMD_RPC_RDATA, (sceSifCmdHandler)_request_rdata, &_data_table);
     EIntr();
     if (sceSifGetReg(SIF_SYSREG_RPCINIT)) {
         return;
@@ -194,13 +201,13 @@ static void _request_rdata(sceSifRpcOtherDataPkt *request, sceSifRpcState *state
         rend = _sceRpcGetFPacket(state);
     }
     rend->pkt_addr = (unsigned int)request->rpch.pkt_addr;
-    rend->client = (unsigned int)request->recv;
+    rend->client = (unsigned int)request->req.recv;
     rend->cid = SIF_CMD_RPC_RDATA;
-    rend->u.rdata.src = request->src;
-    rend->u.rdata.dest = request->dest;
-    rend->u.rdata.size = request->size;
-    if (!isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, (void *)request->src,
-                        (void *)request->dest, request->size)) {
+    rend->u.rdata.src = request->req.src;
+    rend->u.rdata.dest = request->req.dest;
+    rend->u.rdata.size = request->req.size;
+    if (!isceSifSendCmd(SIF_CMD_RPC_END, rend, SIF_CMD_PACKET_SIZE, (void *)request->req.src,
+                        (void *)request->req.dest, request->req.size)) {
         iSetTimerAlarm(RETRY_CLOCK, _alarm_rdata, rend);
     }
 }
@@ -208,19 +215,19 @@ static void _request_rdata(sceSifRpcOtherDataPkt *request, sceSifRpcState *state
 int sceSifGetOtherData(sceSifReceiveData *rd, void *src, void *dest, int size, unsigned int mode)
 {
     struct SemaParam param;
-    sceSifRpcOtherDataPkt *packet;
+    sceSifRpcPacket *packet;
 
-    packet = _sceRpcGetPacket(&_sif_rpc_data);
+    packet = _sceRpcGetPacket(&_data_table);
     if (packet == 0) {
         return -1;
     }
     rd->rpcd.paddr = packet;
     rd->rpcd.pid = packet->rpch.rpc_id;
-    packet->src = (unsigned int)src;
-    packet->dest = (unsigned int)dest;
-    packet->size = size;
+    packet->u.rdata.src = (unsigned int)src;
+    packet->u.rdata.dest = (unsigned int)dest;
+    packet->u.rdata.size = size;
     packet->rpch.pkt_addr = packet;
-    packet->recv = rd;
+    packet->u.rdata.recv = rd;
     if (!(mode & SIF_RPCM_NOWAIT)) {
         param.initCount = 0;
         param.maxCount = 1;
@@ -275,9 +282,9 @@ static void _request_bind(sceSifRpcBindPkt *bind, sceSifRpcState *state)
 
     rend = _sceRpcGetFPacket(state);
     rend->pkt_addr = (unsigned int)bind->rpch.pkt_addr;
-    rend->client = (unsigned int)bind->client;
+    rend->client = (unsigned int)bind->req.client;
     rend->cid = SIF_CMD_RPC_BIND;
-    serve = _search_svdata(bind->sid, state);
+    serve = _search_svdata(bind->req.sid, state);
     if (serve == 0) {
         rend->u.bind.serve = 0;
         rend->u.bind.buff = 0;
@@ -293,19 +300,19 @@ static void _request_bind(sceSifRpcBindPkt *bind, sceSifRpcState *state)
 int sceSifBindRpc(sceSifClientData *client, unsigned int sid, unsigned int mode)
 {
     struct SemaParam param;
-    sceSifRpcBindPkt *packet;
+    sceSifRpcPacket *packet;
 
     client->command = 0;
     client->serve = 0;
-    packet = _sceRpcGetPacket(&_sif_rpc_data);
+    packet = _sceRpcGetPacket(&_data_table);
     if (packet == 0) {
         return -1;
     }
     client->rpcd.paddr = packet;
     client->rpcd.pid = packet->rpch.rpc_id;
-    packet->sid = sid;
+    packet->u.bind.sid = sid;
     packet->rpch.pkt_addr = packet;
-    packet->client = client;
+    packet->u.bind.client = client;
     if (!(mode & SIF_RPCM_NOWAIT)) {
         param.initCount = 0;
         param.maxCount = 1;
@@ -334,7 +341,7 @@ int sceSifBindRpc(sceSifClientData *client, unsigned int sid, unsigned int mode)
 /* The IOP calls an EE server: queue the request and wake the serving thread if it sleeps. */
 static void _request_call(sceSifRpcCallPkt *call)
 {
-    sceSifServeData *serve = call->serve;
+    sceSifServeData *serve = call->req.serve;
     sceSifQueueData *queue = serve->base;
 
     if (queue->start == 0) {
@@ -344,16 +351,81 @@ static void _request_call(sceSifRpcCallPkt *call)
     }
     queue->end = serve;
     serve->paddr = (unsigned int)call->rpch.pkt_addr;
-    serve->client = call->client;
-    serve->fno = call->fno;
-    serve->size = call->ssize;
-    serve->receive = call->receive;
-    serve->rsize = call->rsize;
-    serve->rmode = call->rmode;
+    serve->client = call->req.client;
+    serve->fno = call->req.fno;
+    serve->size = call->req.ssize;
+    serve->receive = call->req.receive;
+    serve->rsize = call->req.rsize;
+    serve->rmode = call->req.rmode;
     serve->rid = call->rpch.rec_id;
     if (queue->key >= 0 && queue->active == 0) {
         iWakeupThread(queue->key);
     }
+}
+
+int sceSifCallRpc(sceSifClientData *client, unsigned int fno, unsigned int mode, void *send, int ssize,
+                  void *receive, int rsize, sceSifEndFunc end_function, void *end_param)
+{
+    struct SemaParam param;
+    sceSifRpcPacket *packet;
+
+    packet = _sceRpcGetPacket(&_data_table);
+    if (packet == 0) {
+        return -1;
+    }
+    client->rpcd.paddr = packet;
+    client->rpcd.pid = packet->rpch.rpc_id;
+    client->func = end_function;
+    client->para = end_param;
+    client->gp = GetGp();
+    packet->u.call.fno = fno;
+    packet->u.call.ssize = ssize;
+    packet->u.call.receive = (unsigned int)receive;
+    packet->u.call.rsize = rsize;
+    packet->rpch.pkt_addr = packet;
+    packet->u.call.serve = client->serve;
+    packet->u.call.client = client;
+    if (!(mode & SIF_RPCM_NOWBDC)) {
+        if (send == receive) {
+            sceSifWriteBackDCache(send, ssize < rsize ? rsize : ssize);
+        } else {
+            if (ssize > 0) {
+                sceSifWriteBackDCache(send, ssize);
+            }
+            if (rsize > 0) {
+                sceSifWriteBackDCache(receive, rsize);
+            }
+        }
+    }
+    if (mode & SIF_RPCM_NOWAIT) {
+        if (end_function == 0) {
+            packet->u.call.rmode = 0;
+        } else {
+            packet->u.call.rmode = 1;
+        }
+        client->rpcd.tid = -1;
+        if (sceSifSendCmd(SIF_CMD_RPC_CALL, packet, SIF_CMD_PACKET_SIZE, send, client->buff, ssize)) {
+            return 0;
+        }
+        _sceRpcFreePacket(&packet->rpch);
+        return -2;
+    }
+    param.initCount = 0;
+    param.maxCount = 1;
+    client->rpcd.tid = CreateSema(&param);
+    if (client->rpcd.tid < 0) {
+        _sceRpcFreePacket(&packet->rpch);
+        return -3;
+    }
+    packet->u.call.rmode = 1;
+    if (!sceSifSendCmd(SIF_CMD_RPC_CALL, packet, SIF_CMD_PACKET_SIZE, send, client->buff, ssize)) {
+        DeleteSema(client->rpcd.tid);
+        _sceRpcFreePacket(&packet->rpch);
+        return -2;
+    }
+    WaitSema(client->rpcd.tid);
+    DeleteSema(client->rpcd.tid);
+    return 0;
 }
 
 int sceSifCheckStatRpc(sceSifRpcData *rpcd)
@@ -377,10 +449,10 @@ void sceSifSetRpcQueue(sceSifQueueData *queue, int key)
     queue->start = 0;
     queue->end = 0;
     queue->next = 0;
-    if (_sif_rpc_data.active_queue == 0) {
-        _sif_rpc_data.active_queue = queue;
+    if (_data_table.active_queue == 0) {
+        _data_table.active_queue = queue;
     } else {
-        last = _sif_rpc_data.active_queue;
+        last = _data_table.active_queue;
         while (last->next != 0) {
             last = last->next;
         }
@@ -439,8 +511,8 @@ sceSifQueueData *sceSifRemoveRpcQueue(sceSifQueueData *queue)
     sceSifQueueData *q;
 
     DIntr();
-    if ((q = _sif_rpc_data.active_queue) == queue) {
-        _sif_rpc_data.active_queue = q->next;
+    if ((q = _data_table.active_queue) == queue) {
+        _data_table.active_queue = q->next;
     } else {
         while (q != 0) {
             if (q->next == queue) {
@@ -494,9 +566,9 @@ void sceSifExecRequest(sceSifServeData *serve)
     }
     DIntr();
     if (serve->rid & SIF_RPC_PKT_CLIENT) {
-        rend = _sceRpcGetFPacket2(&_sif_rpc_data, serve->rid >> 16);
+        rend = _sceRpcGetFPacket2(&_data_table, serve->rid >> 16);
     } else {
-        rend = _sceRpcGetFPacket(&_sif_rpc_data);
+        rend = _sceRpcGetFPacket(&_data_table);
     }
     EIntr();
     rend->cid = SIF_CMD_RPC_CALL;

@@ -40,7 +40,7 @@ int _iSuspendThread(int thread);
 int RotateThreadReadyQueue(int priority);
 unsigned long sceTimerUSec2BusClock(u_int sec, u_int usec);
 int SetTimerAlarm(unsigned long clock, int (*handler)(int, int, int, int), int arg);
-int kprintf(const char *format, ...);
+void kprintf(const char *format, ...);
 
 extern char _gp[];
 

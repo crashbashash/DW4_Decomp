@@ -22,6 +22,7 @@ import itertools
 import os
 import re
 import asmsources
+import kpatch
 import srctext
 import unitobjects
 
@@ -262,10 +263,14 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
 
     The filename is no longer the symbol once a file holds several functions, so
     this reads the definitions rather than trusting the name. Registered
-    compiler-emitted members share their actual owner's source path.
+    compiler-emitted members share their actual owner's source path. The kernel
+    patches' sources (tools/kpatch.py) are not image units and stay out.
     """
     out, shared = {}, set()
     for root, dirs, files in os.walk(src_dir):
+        if kpatch.is_patch_source(root):
+            dirs[:] = []
+            continue
         dirs.sort()
         for f in sorted(files):
             if not f.endswith(_EXTS) or f.startswith(TMP_PREFIX):

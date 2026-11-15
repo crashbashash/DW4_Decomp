@@ -59,7 +59,7 @@ typedef struct {
 #define D_ENABLE_CPND 0x10000
 #define DMA_CHANNELS 10
 
-int scePrintf(const char *fmt, ...);
+void scePrintf(const char *fmt, ...);
 int DIntr(void);
 int EIntr(void);
 unsigned int sceDmaPause(sceDmaChan *d);

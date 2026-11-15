@@ -361,11 +361,12 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
 * Sony's source text exists for part of it. `delaythread.c` (SDK 3.0.3 source text `r03287`) is `DelayThread`
   statement for statement, including `__asm__ volatile("mfc0 %0, $12" : "=r"(status))`. `eekernel.h` (`r03616`)
   holds the `DI()` and `EI()` macros `sbrk` uses; `include/dw4/eekernel_intr.h` carries that text exactly.
-* The system calls in these files are local functions of C members, not part of the assembled stub file. The
+* The system calls in these files are functions of C members, not part of the assembled stub file. The
   `.mdebug` procedure records of SDK `alarm.o`, `tlbfunc.o` and `initsys.o` give `setup`, `Copy`, `GetEntryAddress`,
-  `FindAddress` and `_SetTLBEntry` frame register 29 and return register 31, as for their C neighbours, while the
-  stubs of `klib.o` have 0 and 0 and carry line numbers. In retail each sits among its member's functions in that
-  member's order. So each is a C function holding one `syscall`.
+  `FindAddress` and `_SetTLBEntry`, and `tlbfunc.o` also the eight global TLB calls listed below, frame register 29
+  and return register 31, as for their C neighbours, while the stubs of `klib.o` have 0 and 0 and carry line
+  numbers. In retail each sits among its member's functions in that member's order. So each is a C function holding
+  one `syscall`.
 * `di` appears in `sbrk`, through `DI()`, and in `DIntr`, whose loop holds `DI()`'s three instructions as one
   statement; the cache and interrupt functions disable interrupts by calling `DIntr`.
 * A `volatile` in a function's own text stays only where stripping it changes the bytes: on the nine
@@ -385,6 +386,14 @@ Sony libkernl functions written in C with instructions C has no spelling for: re
 * The SIF's data-cache write-back is one `asm` block: a loop of `cache 0x18` with `sync`, carrying its own return. It
   sets `.set noreorder` and leaves it on, so the compiler's closing `jr ra` gets no delay-slot `nop`, as in Sony's
   member and the executable.
+* The eight TLB calls `PutTLBEntry`, `iPutTLBEntry`, `iSetTLBEntry`, `GetTLBEntry`, `iGetTLBEntry`, `ProbeTLBEntry`,
+  `iProbeTLBEntry` and `ExpandScratchPad` are global functions of `tlbfunc.o` (frame register 29, return register 31,
+  no line records), each one `li $3, N; syscall` with the compiler's `jr ra; nop`; the `klib.s` stubs have 0 and 0
+  and line tables. Likewise `QueryIntrContext`, the first function of `intr.o`: `mfc0 Status; xori 1; jr ra; andi
+  1`, with no `volatile` (it changes nothing).
+* `src/sony/libkernl/kpatch/tlbsrc.c` is the kernel code `tlbfunc.c` copies to `0x80075000`, built from C and
+  embedded in its `.data`. Its COP0 and TLB instructions (`tlbwi`, `tlbr`, `tlbp`, `mfc0`, `mtc0`) have no C spelling;
+  of its `volatile`s only the ones that change the bytes when removed stay.
 
 ### sony-gp-and-syscall-asm
 
@@ -419,6 +428,26 @@ thread calls and `GetTimerSystemTime`.
   `libtimer.c`'s statement (`r03285`) for loading the `$gp` an alarm was set with, and `__asm__("sync.l; ei")`,
   `ExitHandler()` of `eekernel.h` (`r03616:77`). Neither statement has an output, so the keyword Sony writes on both is
   inert (stripped, the file still matches) and is left out; `sync.l` encodes as `sync`.
+* libcdvd's `_sceCd_cbLoop` and `_sceCd_Poff_Intr` swap `$gp` around the callback they call with one statement,
+  `__asm__ volatile("move %0, $28\n\tlw $28, %1" : "=&r"(gp) : "m"(sceCdCb_Gp))`, and restore it with `move $28, %0`.
+  `filestub`'s `_sceFs_Poff_Intr` has the same swap (with `"memory"`) and `sync.l; ei`. Sony's own IOP samples write
+  the save-and-reload as one statement (`asm volatile ("move %0,$gp; la $gp,_gp" : "=r"(gp) : : "memory")` in
+  `ping.c`, `tracert.c`, `mylib.c`). The header's `GetGp()` plus a separate load comes out four bytes longer in both
+  functions (the `"memory"` clobber reloads the callback pointer), and `SetGp()` adds a word. Stripping the
+  `volatile` or the clobber reorders the swap; `sync` and `ei` need no row. Retail's `_sceCd_Poff_Intr` and
+  `_sceFs_Poff_Intr` share the shape `lui; move s0,gp; lw gp`.
+* `iGetThreadId` is the inline `li v1,-47; syscall` of 3.0.3's `thread.o`, with no relocation to `GetThreadId`; calling
+  `GetThreadId()` makes `iWakeupThread` 156 bytes against 148. `readSystemTime` is Sony's `ReferHardCounter` as
+  `iGetTimerSystemTime` has it: the equivalent C is 88 bytes against 76.
+* srcfile (the alarm kernel patch) holds four `$gp` statements: `move %0,$28` in `AddAlarm` and, in
+  `kAlarmInterrupt`, `move %0,$28`, `move $28,%0` for the handler's `$gp` and the restore. C has no spelling for
+  `$gp`, and a `register ... asm("$28")` variable is the same extension. The `volatile` on the two `move %0,$28`
+  reads stays: stripped, `AddAlarm` changes 57 words and `kAlarmInterrupt` 110. `sync` and `ei` need no row.
+* `sifcmd.c`'s `_sceSifCmdIntrHdlr` swaps `$gp` around each handler it dispatches with the header's `SetGp()`, and
+  `sifrpc.c`'s `sceSifCallRpc` records the caller's `$gp` with `GetGp()`; both are byte-identical to SDK 3.0.3's
+  members. The handler's second `volatile` is its `sceSifCmdHdr` pointer, which first reads the packet the IOP wrote
+  into the receive buffer by DMA (`lbu` then `andi` for the size) and then the local copy, three reads of `cid`;
+  stripped, the function is 79 words against 82.
 
 ### sony-interrupt-shared-state
 
@@ -442,6 +471,15 @@ Sony library state shared between interrupt-time code and thread code. These row
   `QueuePeekWriteDone`, called from the handler, raises it. `writing`, the busy flag the handler clears while
   `sceTtyWrite` polls it, only reorders stores. Each function reaching the block counts all five keywords; the
   three queue helpers count the queue's one.
+* `_doCSC2` is the waiter of the channel-3 handler `_ch3dmaCSC`: its seven register keywords (`IPU_CTRL` twice,
+  `D_STAT`, `D3_MADR`, `D3_QWC`, `D3_CHCR`, `IPU_CMD`) rest on #sony-hardware-registers, and the shared `count` it polls on the
+  existing one.
+* filestub's `_sceFs_q`, the table of calls made with `SCE_NOWAIT`, is freed by `_sceFs_Rcv_Intr` from interrupt
+  context while the callers scan it for a free slot, and is `volatile` in Sony's source for that reason. Only a
+  `volatile` first-slot load keeps `move a2,zero` out of the `bne` delay slot, as retail has it (the compiler's
+  reorg treats a `volatile` reference as conflicting with everything); without it `sceLseek` and `sceLseek64` are
+  143 words with 18 differing, `sceRead` 153 with 19 and `sceWrite` has 14 differing. No plain
+  spelling gives that slot filling. The rows of `sceLseek`, `sceRead`, `sceWrite` and `sceLseek64` count the one use.
 
 ### adxm-thread-flags
 
@@ -503,6 +541,16 @@ although SDK 3.0.3 `eekernel.h` writes `EI()` as `__asm__ volatile("ei")`, by th
   the 2.96 combiner behaviour described under "Testing a `volatile`".
 * `_cscStoreImage` polls and resets `IPU_CTRL` and sets up channel 4 through `D_STAT` and the `D4` registers; its
   keywords are the registers' own, and its row counts the five macros it names.
+* `_sendDataToIPU`, `_dmaRefImage` and `_waitBdec` use channel 3, 4 and 9 and IPU registers through the header's
+  macros. `_waitBdec` is 165 words in retail; stripping one macro's `volatile` at a time changes it to 158-164 words
+  with 86-148 words differing (`D_ENABLEW` loses its enable store as dead, the polled `D3_QWC`, `D4_QWC`, `D4_CHCR`
+  and `IPU_CTRL` reads merge, `IPU_BP` folds into the `IPU_TOP` loads, the reset stores of `D3_CHCR` and
+  `D_ENABLER` collapse); all eight plain give 138 words.
+* srcfile's timer-3 registers (`T3_COUNT`, `T3_MODE`, `T3_COMP`) and `I_STAT`, `volatile` as in `eeregs.h`: with the
+  keyword GCC keeps the constant address inside the access (`lui at` plus offset, as retail), without it builds the
+  address with `lui`/`ori` first. Stripped, `T3_COUNT` changes 54 words of the patch, `T3_MODE` 186, `T3_COMP` 199 and
+  `I_STAT` 25. `StartCompare` and `kReleaseAlarm` rest on this anchor; `AddAlarm` and `kAlarmInterrupt` count these
+  with the `$gp` read under [sony-gp-and-syscall-asm](#sony-gp-and-syscall-asm).
 
 DW4's libraries are SDK release 2.8.0, which is not available, so the text compared is from a later release.
 
@@ -542,6 +590,10 @@ also uses.
   matches exactly. Unlike SDK 3.0.3 it never decrements the used-counter count when it frees an alarm. Its
   `volatile` row counts the record's four members, the `T2_COUNT` and `T2_MODE` macros and the counter's `key`; its
   `asm` row is under [sony-gp-and-syscall-asm](#sony-gp-and-syscall-asm).
+* `readSystemTime` reaches the record's five `volatile` members through `g_Timer`; the statement itself does not
+  depend on them. `applyOverflow` counts its own seven: stripped, `T2_COUNT` takes `cbTimerHandler` from 672 to 652
+  bytes, `T2_MODE` to 668 and `overflows` to 648 (Sony's own asm `ApplyOverflow` gives 644, so DW4's 2.8.0 used the
+  C form).
 
 ### sony-vu-and-gp-asm
 
@@ -561,6 +613,55 @@ also uses.
 * `sceSdCallBack` records `$gp` beside the end function it registers with the same `GetGp()` (`r03289:101-110`),
   and is byte-identical to SDK 3.0.3 `sdr_main.o`. Without the header's `volatile` its two stores trade places;
   `register void *gp asm("$28")` is asm too and drops the `move`.
+
+### sony-libmpeg-motion-compensation
+
+libmpeg's motion-compensation kernels (`_rix_*`, `_ri0_*`) and its two reference-image copies (`_copyAddRefImage`,
+`_copyRefImage`) are C functions whose body is one `asm` statement.
+
+* Sony's SDK 3.0.3 `mpc.o` records them as compiled procedures: frame register 29 and return register 31, no line
+  records, static procedures in an included `mm.c` and in `mpc.c`. Its assembled files (`klib.s`, `tlbtrap.s`) have
+  0 and 0 and line tables. Each kernel starts on the compiler's 8-byte boundary and ends with the compiler's
+  `jr ra; nop`; in `_copyRefImage` that return follows the `_maxval` data the asm ends with, which hand-written
+  assembly would not do. A C function whose only statement is an `asm` gives exactly that: the asm text followed by
+  the compiler's own return (an asm text with a return of its own gives two, eight bytes more).
+* No C spells them. `addi` appears in no other function of the library (the compiler adds with `addu` and `addiu`);
+  `qfsrv`, `mtsab`, `pextlb`/`pextub` and `pcpyld` have no spelling in this compiler, and the registers are fixed,
+  with the argument read as `$4` directly.
+* The table at `0x481c98` is 3.0.3's `_rix` and `_ri0`, entry for entry, so the names are Sony's. DW4's 2.8.0 kernels
+  are 3.0.3's with the header loads reordered and registers renamed by hand (14 have the same instructions in another
+  order, two differ in registers); the two copies are an older version that handles 16 bytes a loop where 3.0.3
+  handles 64, with the same `_maxval` clamp.
+* `.align 4` before `_maxval` cannot be used under the unit's `-ffunction-sections`, where it counts from the
+  function's own section and pads nothing; two `nop`s pad the constant to the 16 bytes `lq` needs. The statements
+  carry no `volatile`: with outputs absent it changes nothing.
+
+### sony-libcdvd-shared-state
+
+libcdvd's channel state: the semaphore ids, the command in flight, the busy flag and the read mode, declared
+`volatile` (`include/dw4/sony/libcdvd.h`). `_sceCd_cd_callback` is the commands' end function, which runs at interrupt
+time (it calls `iSignalSema`), and the callers read what it writes. The `volatile` rows of the file count each
+function's uses of these words, and the `$gp` swaps of `_sceCd_cbLoop` and `_sceCd_Poff_Intr`.
+
+* Two keywords keep real reloads. Without `sceCdCbfunc_num`, `_sceCd_cd_callback` is 148 bytes instead of 160, since
+  retail stores the value and reads it back twice with no call between; `sceCdBreak` is 180 against 184. Without
+  `sceCdCbfunc_number`, `_sceCd_cbLoop` loses the reload for the call argument.
+* The others decide only whether a load or store may stand in a delay slot, or the order of a run of stores. The
+  compiler will not fill a delay slot with a `volatile` access, so retail's `lw a0,_sceCd_ncmd_semid; jal PollSema;
+  nop` is the signature of a `volatile` semaphore id, and `sceCdSeek`'s `jal SignalSema; lw a0,_sceCd_ncmd_semid`
+  shows the 2.10 assembler moving one into a slot the compiler left empty. Stripped, `_sceCd_ncmd_prechk` is two
+  words short and `sceCdLayerSearchFile` three; the `_sceCd_scmd_semid` rows change `_sceCd_scmd_prechk` (360 against
+  368 bytes) and `sceCdBreak`; `_sceCd_rcmd_semid` changes `cdvd_exit` and `sceCdDiskReady`; `_sceCd_c_cb_sem` and
+  `cb_semid` move stores into a branch slot of `_sceCd_cd_callback`; `_sceCd_ee_read_mode` copies `sceCdRead`'s second
+  load into the default case's slot; `sceCdPoffCbfunc_num` reorders three stores of `_sceCd_cbLoop`; `Init_seq`
+  drops one `lui` per store in `sceCdInit` (728 bytes against 736). With every `volatile` removed the two assemblers
+  give identical code: the assembler only matters for these accesses, which is why the six files build with
+  `ee-gcc-2.9-as210`. No plain spelling reproduces them: every keyword stripped, `-fvolatile-global`, a local copy of
+  a semaphore id and the comparison written the other way round were all tried.
+* The rows count these like the approved `VSync2` and timer words, which also decide only a slot. Without them there
+  is no matching source for the six files.
+* SDK 3.0.3 `cdvd000.o` is one source file (`../eecdvd.c`) whose `.mdebug` has no type information, so it records
+  nothing about `volatile`. 15 of the 32 functions are byte-identical to it with relocated words masked.
 
 ### dma-channel-cop0
 

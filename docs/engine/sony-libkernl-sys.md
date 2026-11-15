@@ -30,17 +30,53 @@ caches, and installs or restores the calls of its `SysEntry` table (`SyscallEntr
 Their symbols carry the file as a suffix (`Copy_tlbfunc`, `setup_libosd`); the unit row of a file that begins
 with one names it in `symbol`. `exit.c`'s `kCopy` copies bytes; the others copy words.
 
-The kernel code each file copies is a byte array it declares `extern`: `tlbsrc` (`TLB_PATCH_SIZE`, copied to
-`0x80075000`), `osdsrc` (`OSD_PATCH_SIZE`, `0x80074000`) and `srcfile` (`ALARM_PATCH_SIZE`, `0x80076000`), and
-`alarm.c` also copies `eenull` (`EENULL_SIZE`) to `0x82000`. Their calls and literals point at the addresses
-they run at and nothing in the image calls into them, so the function inventory keeps the three patches as
-data through `data` rows in `config/SLUS-20836/extent-overrides.tsv`.
+The kernel code each file copies is a byte array: `tlbsrc` (`TLB_PATCH_SIZE`, copied to `0x80075000`), `osdsrc`
+(`OSD_PATCH_SIZE`, `0x80074000`) and `srcfile` (`ALARM_PATCH_SIZE`, `0x80076000`), and `alarm.c` also copies
+`eenull` (`EENULL_SIZE`) to `0x82000`. Their calls and literals point at the addresses they run at and nothing
+in the image calls into them, so the function inventory keeps the three patches as data through `data` rows in
+`config/SLUS-20836/extent-overrides.tsv`.
+
+Each patch is a program of its own, and SDK 3.0.3 keeps each array as a `static` first in its file's `.data`,
+ahead of the file's other data. DW4's 2.8.0 patches are byte-identical to 3.0.3's. Their sources sit in
+`src/sony/libkernl/kpatch/`, listed with run address, owner unit, array and size in
+`config/SLUS-20836/kernel-patches.tsv`. `tools/kpatch.py` compiles a patch under its owner unit's profile, links
+it at its run address with `config/kernel-patch.ld` (code closed by a zero doubleword, then data on the next
+128-byte boundary, then `.bss`; `kExecArg` is the first byte past it), keeps `.text` and `.data` and writes them to
+`build/<GAMEID>/kpatch/<name>.inc`. The owner file defines the array from that include and the rest of its
+`.data` with it (GCC puts a file's initialised data in one section, so the whole block is defined at once), so
+`make check` compares the patch bytes with retail as part of the owner's data and no retail byte is committed.
+`tools/cc.py` builds the patches a source includes before compiling it. The patch functions are no image
+functions: `tools/units.py` leaves the directory out of every census, their `asm` and `volatile` need
+approval rows keyed by the patch function's name, and `tools/progress.py` counts the patches on a line of
+their own. A row whose sources are `-` is a patch still named `extern` by its owner.
+
+`tlbsrc.c` is compiler output with inline `asm` for the COP0 accesses. Its table at `0x300` maps calls
+`0x55`..`0x59` to `kPutTLBEntry`, `kSetTLBEntry`, `kGetTLBEntry`, `kProbeTLBEntry` and `kExpandScratchPad`,
+and call 3 to `kExecArg`, which `tlbfunc.c` reads back as `_kExecArg = GetEntryAddress(3)`. `kGetEntryAddress`
+replaces call 91 while the patch is installed. `tlbfunc.c`'s `SysEntry_tlbfunc` installs `kCopy` as call 90, the
+patch's lookup as call 91 and `_kExitTLBHandler` as call 84, then each TLB call at the address the lookup
+gives.
 
 `initsys.c` installs `kFindAddress` (call 131) and `kCopy` (call 90), then searches kernel memory for the two
 handler addresses: the table is where both sit at their own slots (`0x20c` and `0x168` above its start).
 `GetSystemCallEntry` reads a slot of it.
 
+`libosd.c` patches when the kernel drops a value written to the OSD configuration's field at bit 13. Its patch,
+`osdsrc.c`, replaces calls `0x4a`, `0x4b`, `0x6e` and `0x6f` (the OSD configuration and its 128-byte extension)
+and hooks ExecPS2, whose `kExecPS2` clears every other thread and resets the peripherals before starting the
+new program. The kernel routines it calls are pointers to their boot-ROM addresses; `InitSemaphores` and
+`InitPgifHandler` return `int`, which keeps their results' registers as retail has them. The extension calls clip
+`size` in place and copy with a second index that runs while it is below `size + offset`, the sum written in the
+loop test; a separate `amount` and an `end` computed before the loop give the same instructions with other
+registers. `libosd.c` defines its whole `.data` from the include and `SysExecPS2Entry`.
+
 `alarm.c` patches only when timer 3's compare interrupt is off, the sign of a kernel without built-in alarms.
+Its patch is `srcfile.c` with `alarmuser.S`, built with the 2.10 assembler, which fills `jr`/`jal` delay slots with
+the timer accesses as retail does. `AddAlarm` fills the new alarm's fields in their declared order. The saved
+`gp` field is the setter's register image, an integer: the scheduler orders the stores by the alias sets of the
+field types, and as a `void *`, sharing `arg`'s set, it moves the `id` store behind the alarm count's. `eenull.S`
+is the user-mode side of a handler call, copied to `0x82000`. `alarm.c` defines its whole `.data` from the two
+includes and `SysEntry_alarm`.
 
 ## The timer
 
@@ -67,3 +103,14 @@ fix the loop as one statement, `li` and `and`. The statement's `volatile` keeps 
 * `SetT2` writes the timer from kernel mode through `eret`, and `cbTimerHandler`, the timer interrupt, has no
   source yet.
 * tlbtrap's three exception entries are assembly with no approved `.S` row.
+* `kPutTLBEntry`'s switch needs a seventh case label above `0x50` for GCC to build retail's compare tree; any of
+  `0x60`, `0x70`, `0x80`, `0x90`, `0xa0` or `0xf0` gives the same bytes. `0x70`, the scratchpad segment, is a guess.
+* `kExecArg`, the first byte past the TLB patch, is named by the link script; the original may have used the
+  linker's end symbol.
+* tlbsrc's 16 `asm` statements and 3 `volatile`s await owner approval (the COP0 and TLB instructions have no C
+  spelling; each remaining `volatile` changes the bytes when removed).
+* srcfile's `alarmuser.S` (`CallUserHandler`, `ReturnFromUserHandler`) awaits an assembly-sources row, and its C
+  awaits approval for the four `gp` `asm` statements, the `volatile` on the two `gp` reads and the timer and
+  interrupt register `volatile`s.
+* osdsrc's `ResetPeripherals` reads `I_STAT` through a `volatile` (the vblank poll is a repeated hardware read;
+  without it GCC reads the register once before the loop) and awaits its approval row.

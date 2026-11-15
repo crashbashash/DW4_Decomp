@@ -12,11 +12,11 @@ readable source that rebuilds the retail executable byte for byte.
 | CRI ADX | 140 KB | 91.4 % | 55.2 % |
 | CRI Sofdec | 209 KB | 73.4 % | 30.5 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
-| Sony SDK | 97 KB | 77.4 % | 74.6 % |
+| Sony SDK | 97 KB | 100.0 % | 97.8 % |
 | newlib | 84 KB | 100.0 % | 100.0 % |
 | libgcc | 11 KB | 100.0 % | 100.0 % |
 | Metrowerks runtime | 10 KB | 100.0 % | 100.0 % |
-| **Total** | **3391 KB** | **87.6 %** | **45.8 %** |
+| **Total** | **3391 KB** | **88.3 %** | **46.5 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

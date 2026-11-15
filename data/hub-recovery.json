@@ -12225,17 +12225,17 @@
     },
     {
       "address": 1099992,
-      "name": "FUN_0010c8d8",
+      "name": "ftoi",
       "size": 148,
-      "source": null,
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [],
       "indirect": []
     },
     {
       "address": 1100144,
-      "name": "FUN_0010c970",
+      "name": "printfloat",
       "size": 360,
-      "source": "src/unmatched/FUN_0010c970.c",
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1100176,
@@ -12332,9 +12332,9 @@
     },
     {
       "address": 1100504,
-      "name": "FUN_0010cad8",
+      "name": "kvprintf",
       "size": 1524,
-      "source": null,
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1100544,
@@ -12478,7 +12478,7 @@
       "address": 1102032,
       "name": "kprintf",
       "size": 56,
-      "source": "src/unmatched/kprintf.c",
+      "source": "src/sony/libkernl/kprintf2.c",
       "direct": [
         {
           "site": 1102068,
@@ -19260,7 +19260,7 @@
     },
     {
       "address": 2856480,
-      "name": "FUN_002b9620",
+      "name": "igStringObj_EnsureRegistered",
       "size": 12,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -19691,7 +19691,7 @@
     },
     {
       "address": 3068992,
-      "name": "thunk_Memory_ReallocateBuffer",
+      "name": "Memory_ReallocateBufferAlias",
       "size": 8,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -19824,7 +19824,7 @@
       "address": 3081984,
       "name": "igAllocator_ResolveEncodedIndex",
       "size": 76,
-      "source": "src/unmatched/igAllocator_ResolveEncodedIndex.c",
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [],
       "indirect": []
     },
@@ -20368,7 +20368,7 @@
     },
     {
       "address": 3149392,
-      "name": "FUN_00300e50",
+      "name": "igObject_Reallocate",
       "size": 72,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -20389,7 +20389,7 @@
     },
     {
       "address": 3149648,
-      "name": "FUN_00300f50",
+      "name": "igObject_FreeMemory",
       "size": 68,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -20482,7 +20482,7 @@
     },
     {
       "address": 3191584,
-      "name": "FUN_0030b320",
+      "name": "igStringObj_SetN",
       "size": 152,
       "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
@@ -21018,7 +21018,7 @@
       "address": 3197824,
       "name": "StringChunk_ReturnBlock",
       "size": 340,
-      "source": null,
+      "source": "src/engine/core/CoreLibrary.cpp",
       "direct": [
         {
           "site": 3198016,

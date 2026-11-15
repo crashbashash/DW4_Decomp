@@ -204,12 +204,12 @@ decodes them into `data/sdk-bindings.json`.
 
 **One table is still useful.** libdma's fifteen entries are real entry points, and **three of
 them are boundaries a function tiling without the table misses**: `0x104478` and `0x1044f0` sit inside
-the 728 bytes that otherwise read as one `_cscMacroblock` and are actually three functions (every
+the 728 bytes that otherwise read as one `_doMC` and are actually three functions (every
 boundary lands exactly where the
-next begins), and `0x105050` begins exactly at `FUN_00104f30`'s end, with MMI ops rather than a
+next begins), and `0x105050` begins exactly at `_rix_111`'s end, with MMI ops rather than a
 prologue. The descriptor is therefore a **split oracle**, and the tiling carries those three
-boundaries: `_cscMacroblock`, `FUN_00104478` and `FUN_001044f0` are separate functions and `0x105050`
-is `FUN_00105050`.
+boundaries: `_doMC`, `_rix_000` and `_ri0_000` are separate functions and `0x105050`
+is `_ri0_111`.
 
 
 ### How that table is reached (a method warning)
