@@ -12,9 +12,86 @@ int memcmp(const void *a, const void *b, unsigned int size);
 extern char RIFF[];
 extern char WAVE[];
 
-/* The chunk scan that finds "fmt " and "data" and reads the format fields; still retail code. */
+/* The chunk names the header scan looks for. */
+static char *wav_fmt_chunk = "fmt ";
+static char *wav_data_chunk = "data";
+
+/* The "fmt " chunk body */
+typedef struct WavFmt {
+    short format;
+    short nch;
+    int sfreq;
+    int byte_rate;
+    short blkalign;
+    short bps;
+} WavFmt;
+
+/* Finds the "fmt " and "data" chunks, reads the format fields into ADX_DecodeInfo's form, and turns 8-bit and
+ * 4-bit declarations into the sample formats the decode steps take. */
 int ADX_DecodeInfoWav(unsigned char *buf, int len, short *hdrlen, signed char *hdrtype, signed char *fmtbps,
-                    signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl, short *pcmfmt);
+                    signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl, short *pcmfmt)
+{
+    int i;
+    WavFmt *fmt;
+    int size;
+
+    for (i = 0; i < len; i++) {
+        if (memcmp(buf + i, wav_fmt_chunk, 4) == 0) {
+            break;
+        }
+    }
+    if (i == len) {
+        return -1;
+    }
+    if (i & 3) {
+        return -1;
+    }
+    fmt = (WavFmt *)(buf + i + 8);
+    if (fmt->format >= 2) {
+        return -1;
+    }
+    for (i = 0; i < len; i++) {
+        if (memcmp(buf + i, wav_data_chunk, 4) == 0) {
+            break;
+        }
+    }
+    if (i == len) {
+        return -1;
+    }
+    *hdrlen = i + 8;
+    size = *(int *)(buf + i + 4);
+    *hdrtype = -1;
+    *sfreq = fmt->sfreq;
+    *nch = fmt->nch;
+    *fmtbps = fmt->bps;
+    *blklen = fmt->blkalign;
+    *nsmpl = size / *blklen;
+    *blksmpl = 1;
+    if (*fmtbps == 16) {
+        *pcmfmt = ADXB_PCM_16;
+    } else if (*fmtbps == 8) {
+        *pcmfmt = ADXB_PCM_8;
+    } else if (*fmtbps == 4) {
+        *blklen = *nch * 2;
+        *blksmpl = 4;
+        *nsmpl = size / 2 / *nch;
+        *fmtbps = 16;
+        *pcmfmt = ADXB_PCM_4;
+    }
+    if (*fmtbps == 0) {
+        return -1;
+    }
+    if (*blklen == 0) {
+        return -1;
+    }
+    if (*nch != 1 && *nch != 2) {
+        return -1;
+    }
+    if (*sfreq == 0) {
+        return -1;
+    }
+    return 0;
+}
 
 int ADXB_DecodeHeaderWav(AdxbObj *adxb, unsigned char *hdr, int size)
 {

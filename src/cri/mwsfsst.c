@@ -26,6 +26,12 @@ typedef struct MwsfdInputCb {
 } MwsfdInputCb;
 
 extern MwsfdInputCb mwsfd_input_cb_tbl;
+extern char E303111_MWSST_Create_worksize_is_short[];       /* "E303111: MWSST_Create: worksize is short." */
+extern char E303112_MWSST_Create_cant_create_SJ[];          /* "E303112: MWSST_Create: can't create SJ." */
+extern char E303112_MWSST_Create_cant_create_corehn[];      /* "E303112: MWSST_Create: can't create corehn." */
+
+void MWSFSVM_Error(const char *message, ...);
+SfdSj *SJRBF_Create(char *buf, int size, int xsize);
 
 void SFD_SetStmObject(void *sfd, int stmId, SfdSj *sj, int a3, int t0);
 void MWSFSVM_GotoIdleBorder(void);
@@ -269,7 +275,47 @@ int mwsst_Call44(MwsfdSst *sst)
     return result;
 }
 
-/* MWSST_Create (0x299ce8) links from the retail image */
+/* builds the SST input on the work buffer: the external input's work first, then the SJ ring over
+ * the rest, and binds the ring to the SFD as video stream 0xC0 + stmNo. Returns the external
+ * input handle, 0 when the table is not installed or a step fails. */
+int MWSST_Create(MwsfdPly *ply, char *work, int size, int stmNo)
+{
+    MwsfdSst *sst = &ply->sst;
+    void *sfd;
+    int extSize;
+    int ringSize;
+    int ringXSize;
+    int hn; /* matching construct: declaration-order search — hn declared before sj gives retail its saved registers */
+    SfdSj *sj;
+
+    if (mwsst_GetCbTbl() == 0) {
+        return 0;
+    }
+    mwsst_Init();
+    sfd = ply->sfd;
+    sst->workSize = size;
+    sst->work = work;
+    sst->stmNo = stmNo;
+    if (size < mwsst_CalcWork(&extSize, &ringSize, &ringXSize)) {
+        MWSFSVM_Error(E303111_MWSST_Create_worksize_is_short);
+        return 0;
+    }
+    sj = SJRBF_Create(work + extSize, ringSize, ringXSize);
+    if (sj == 0) {
+        MWSFSVM_Error(E303112_MWSST_Create_cant_create_SJ);
+        return 0;
+    }
+    sst->sj = sj;
+    hn = mwsst_CreateExt(work, extSize);
+    if (hn == 0) {
+        MWSFSVM_Error(E303112_MWSST_Create_cant_create_corehn);
+        return 0;
+    }
+    sst->extHn = hn;
+    sst->created = 1;
+    SFD_SetStmObject(sfd, stmNo + 0xC0, sj, 0, 0);
+    return hn;
+}
 
 /* stops the external input, resets the SJ and binds it to the SFD stream again; as retail does,
  * the external handle is what is passed for the input to stop */

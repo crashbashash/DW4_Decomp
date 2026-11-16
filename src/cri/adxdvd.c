@@ -15,11 +15,34 @@ void ADXT_StartFname(void *adxt, const char *fname);
 void ADXT_EntryFname(void *adxt, const char *fname);
 void *ADXF_Open(const char *fname, void *dir);
 
+struct CvFsVtbl *dvCiGetInterface(void);
+
+/* the build string in two parts, read so it is linked */
+extern volatile char adxrt_build[16];
+extern volatile char adxrt_build_ver[29];
 extern int adxt_srd_rmode_sw;
 
 void adxps2_err_dvd(void *obj, const char *msg, int code)
 {
     ADXERR_CallErrFunc1(msg);
+}
+
+void ADXPS2_SetupDvdFs(AdxDvdFsPrm *prm)
+{
+    adxrt_build;
+    adxrt_build_ver;
+    cvFsEntryErrFunc(adxps2_err_dvd, 0);
+    cvFsAddDev("MFS", mfCiGetInterface, 0);
+    cvFsEntryErrFunc(adxps2_err_dvd, 0);
+    cvFsAddDev("CDV", dvCiGetInterface, 0);
+    cvFsSetDefDev("CDV");
+    if (prm != 0) {
+        dvCiSetRdMode(prm->trycount, prm->spindlctrl, prm->datapattern, prm->rdmode);
+        dvCiSetRootDir(prm->rootdir);
+        return;
+    }
+    dvCiSetRdMode(0, 0, 0, 0);
+    dvCiSetRootDir(0);
 }
 
 int ADXPS2_LoadFcacheDvd(AdxFcachePrm *prm)

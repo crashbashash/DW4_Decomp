@@ -11,7 +11,7 @@ int MPS_SetPesSw(MpsHn *mps, int sw) {
     mps->pesSw = sw;
 }
 
-void MPS_SetSysHdFn(MpsHn *mps, MpsCbFn fn, void *obj) {
+void MPS_SetSysHdFn(MpsHn *mps, MpsSysHdFn fn, void *obj) {
     if (MPSLIB_CheckHn(mps) == 0) {
         mps->sysHdFn = fn;
         mps->sysHdObj = obj;

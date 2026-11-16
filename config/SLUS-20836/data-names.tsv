@@ -2537,6 +2537,7 @@
 0x004a7530	adxsje_iirflt_obj	recovered-global
 0x004a75f0	adxsje_prdflt_obj	recovered-global
 0x004a8e10	adxrt_build	recovered-global
+0x004a8e20	adxrt_build_ver	recovered-global
 0x004a8e40	adxt_srd_rmode_sw	recovered-global
 0x004a8e4c	adxt_time_mode	recovered-global
 0x004a8e50	adxt_svr_phase	recovered-global
@@ -2614,6 +2615,7 @@
 0x004bb3f0	cft_ver_str	recovered-global
 0x004bcc50	m2verrinf	recovered-global
 0x004bcc68	mps_work	recovered-global
+0x004bcc70	mpvsc_mbaddr_incr_vlc	recovered-global
 0x004bccd4	mpv_clamp	recovered-global
 0x004bcce0	mpv_clamp_table	recovered-global
 0x004bd0e0	mwply_vtbl	recovered-global
@@ -3604,6 +3606,9 @@
 0x004f17a8	E0100302_PS2RNA_Init_can_t_create_DTX	recovered-global
 0x004f17d0	E02041101_Failed_sceSifAllocIopHeap_d_in_PS2RNA_Init	recovered-global
 0x004f1810	BASE_SFREQ	recovered-global
+0x004f1820	E1072601_not_enough_PSJ_handle	string-literal
+0x004f1848	E0100401_can_t_create_PS2RNA_of_IOP	string-literal
+0x004f1870	E1072602_can_t_create_DTR_handle	string-literal
 0x004f1898	PS2RNA_Start_not_implemented	recovered-global
 0x004f18b8	PS2RNA_ClearBuf_not_implemented	recovered-global
 0x004f18e0	PS2RNA_SetPcmType_not_implemented	recovered-global
@@ -3642,6 +3647,7 @@
 0x004f26a0	SVM_ExecSvrFuncId_illegal_id	recovered-global
 0x004f26c8	SVM_ExecSvrFuncId_illegal_svtype	recovered-global
 0x004f2998	cri_mps_version	recovered-global
+0x004f29e8	mps_endian_mark	recovered-global
 0x004f29f0	mpv_tag_idcprec	recovered-global
 0x004f29f8	mpv_tag_stccode	recovered-global
 0x004f2a00	cri_mpv_version	recovered-global
@@ -3666,6 +3672,7 @@
 0x004f3070	E2053001_MWSFD_Malloc_cnt_over	string-literal
 0x004f30a0	E1122629_mwPlySetFrmSync_inv_hn	recovered-global
 0x004f30d0	E2010801_mwPlyGetFrmSync_inv_hn	recovered-global
+0x004f3130	E201301_mwply_SetFrmInf_GetFps_failed	string-literal
 0x004f3150	mwl_convPtypeFromSFD_Invalid_Ptype	recovered-global
 0x004f3178	E301271_mwsffrm_DecideFrmType_Invalid_Pstruct	recovered-global
 0x004f31b0	mwl_convPtypeToSFD_Invalid_Ptype	recovered-global
@@ -3676,10 +3683,16 @@
 0x004f32d8	E409171_mwPlyGetNumRemainFrm_inv_hn	recovered-global
 0x004f3310	mwsfd_version	recovered-global
 0x004f33a0	mwsfd_sfd_iprm	recovered-global
+0x004f33b0	E1122611_mwPlyInitSfdFx_iprm_is_NULL	string-literal
+0x004f33d8	E2005_mwPlyInitSfdFx_cant_init_GSC	string-literal
+0x004f3400	ERR20010421A_mwPlyInitSfdFx	string-literal
 0x004f3420	mwsfd_sfd_version	recovered-global
 0x004f3428	E011081_mwPlySfdInit_Not_compatible_SFD_Version	recovered-global
 0x004f4410	CRITAGS	recovered-global
 0x004f4418	CRITAGE	recovered-global
+0x004f4988	E303111_MWSST_Create_worksize_is_short	string-literal
+0x004f49b8	E303112_MWSST_Create_cant_create_SJ	string-literal
+0x004f49e0	E303112_MWSST_Create_cant_create_corehn	string-literal
 0x004f4b18	sfadx_handler	recovered-global
 0x004f4b50	sfadx_silent_block	recovered-global
 0x004f4ba8	sfana_frame_rates	recovered-global
@@ -7868,11 +7881,12 @@
 0x00573f00	m2vlib_m2vobj	recovered-global
 0x00573f08	mps_version_ptr	recovered-global
 0x00573f0c	mps_curhn	recovered-global
-0x00573f10	mpv_version_str	recovered-global
+0x00573f10	mpv_version_ptr	recovered-global
 0x00573f18	mpv_lib	recovered-global
 0x00573f74	mpv_cur_hn	recovered-global
 0x00573f78	mpv_lower_work	recovered-global
 0x005777e0	mpv_frm_buf_table	recovered-global
+0x00577820	mwsfd_version_ptr	recovered-global
 0x0057f980	mwsfd_err_msg	recovered-global
 0x0057fa80	mwsfsvr_vint_svr_id	recovered-global
 0x0057fa84	mwsfsvr_vsync_svr_id	recovered-global

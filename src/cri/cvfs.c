@@ -102,6 +102,26 @@ void cvFsError(const char *msg)
     cvFsCallUsrErrFn(&cvfs_errobj, msg, 0);
 }
 
+void cvFsInit(void)
+{
+    extern char *volatile cvfs_build;
+    int i;
+
+    cvfs_build;
+    if (cvfs_init_cnt == 0) {
+        for (i = 0; i < CVFS_MAX_HANDLES; i++) {
+            cvfs_handles[i].vtbl = 0;
+            cvfs_handles[i].fd = 0;
+        }
+        for (i = CVFS_MAX_DEVICES - 1; i >= 0; i--) {
+            cvfs_devices[i].name[0] = 0;
+        }
+        memset(cvfs_defdev, 0, sizeof(cvfs_defdev));
+        cvfs_defdev[0] = 0;
+    }
+    cvfs_init_cnt++;
+}
+
 void cvFsFinish(void)
 {
     int i;

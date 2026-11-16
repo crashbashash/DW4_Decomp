@@ -567,7 +567,38 @@ void mwsfsvr_CallIdle(void)
     }
 }
 
-/* mwsfsvr_ExecServer (0x29ac78) links from the retail image */
+/* one pass of the server: with the server lock taken, runs every player's server step between the
+ * pre and post callbacks, then calls the idle callback when SFD has nothing left to do and no
+ * caller waits. Returns whether SFD still has work. */
+int mwsfsvr_ExecServer(void *obj)
+{
+    MwsfdWork *work;
+    MwsfdPly *ply;
+    int i;
+    int result;
+    int on;
+
+    if (mwsfd_init_flag != 1)
+        return 0;
+    work = mwsflib_GetVersionStr();
+    if (MWSFSVM_Unlock(&work->svrLock) == 0)
+        return 0;
+    ply = work->ply;
+    mwsfsvr_CallPreSvr();
+    for (i = 7; i >= 0; i--) {
+        if (ply != 0) {
+            mwPlyExecSvrHndl(ply);
+        }
+        ply++;
+    }
+    MWSFSVR_SetMwsfdSvrFlg(0);
+    on = 1; /* matching construct: hand search — the 1 both tests compare with is held in a local, which keeps it in a saved register across the calls */
+    result = SFD_IsSvrDone() != on;
+    mwsfsvr_CallPostSvr();
+    if (result == 0 && MWSFD_GetReqSvrBdrLib() != on)
+        mwsfsvr_CallIdle();
+    return result;
+}
 
 /* matching construct: volatile (unapproved, as before the fold): retail reads used after the NULL
  * test, not in its delay slot */

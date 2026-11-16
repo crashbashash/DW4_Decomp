@@ -11,7 +11,7 @@ bridge to the lower-layer hooks and the 64-bit multiply-divide helpers.
 - Extent: `MPV_GetVersionStr` and `MPV_Init` both read `cri_mpv_version`; the file's read-only data runs from the
   version string through `mpv_default_cond` (the 16 default conditions, condition 8 pointing at `MPV_MbCbFn`)
   to `mpv_build_inf` / `mpv_endian_mark` (the `ZZZZ` block `mpvlib_ChkFatal` tests); its `.data` is the
-  saturation table `mpv_clamp_table` and `mpv_clamp`; its `.bss` is `mpv_version_str`, `mpv_lib`, `mpv_cur_hn`
+  saturation table `mpv_clamp_table` and `mpv_clamp`; its `.bss` is `mpv_version_ptr`, `mpv_lib`, `mpv_cur_hn`
   and `mpv_lower_work`. The next file's first string is at `0x4f2b28`, and its `.data`/`.bss` start at
   `0x4bd0e0`/`0x5777b8`.
 - Types (`include/dw4/cri/mpv.h`): `MpvLib` (the work area: default conditions, option flags, the handle table
@@ -52,9 +52,10 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
 
 ## Open questions
 
-- `MPV_Init` links from retail: it stores the version pointer through a `volatile` view that is not approved.
-- Without source: `mwsfcre_CalcWorkFrmBuf`, `mwPlyCalcWorkSfd`, `MWSFCRE_SetSupplySj`,
-  `mwsfcre_MallocTab`, `mwsfcre_CreateSfd`, `mwPlyCreateSofdec` and `mwsfdcre_IsPlayableByHdrInf`: not decompiled yet.
+- `MPV_Init` stores the version pointer through a `char *volatile` word, approved under
+  [build-string stores](source-approvals.md#build-string-stores).
+- Without source: `mwPlyCalcWorkSfd`, `MWSFCRE_SetSupplySj`, `mwsfcre_MallocTab`, `mwsfcre_CreateSfd`,
+  `mwPlyCreateSofdec` and `mwsfdcre_IsPlayableByHdrInf`: not decompiled yet.
 - Most field names in `MpvPicInf` and the outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
   needs the lower layer and the SFD work-size users.
 - `mpv_GetFixedWorkSizes` and `MPV_SetFrameBuffers` keep `mpv` names though they sit in the MWSFD file.

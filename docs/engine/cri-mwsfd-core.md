@@ -78,9 +78,7 @@ Two spellings are what the retail code needs, not style:
 
 ## Open questions
 
-- Without source, linking from retail: `mwPlyGetCurFrm` (`0x2937e0`) and `mwply_SetFrmInf`
-  (`0x293a20`, which fills the frame information and reports `GetFps` failures), `mwply_GetPicInf`
-  (`0x294390`, reads a picture header's items), `mwPlyInitSfdFx` (`0x294a58`) and the SFD error
+- Without source, linking from retail: `mwPlyGetCurFrm` (`0x2937e0`) and the SFD error
   callback `MWSFLIB_SfdErrFunc` (`0x295010`, the `SFD ERROR(%08X)` messages). They were never decompiled.
 - Whether `mwply_SetTimeFn` and `mwply_ExecTime` end `mwsfd.c` or open `mwsfply.c`; CRI's names for
   them would settle it by their prefix.

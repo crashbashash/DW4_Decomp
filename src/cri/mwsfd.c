@@ -14,11 +14,42 @@ extern char mwsfd_version[];        /* "\nMWSFD/PS2EE Ver.3.33s281 Build:..." */
 extern MwsfdWork mwsfd_work;
 extern int mwsfd_init_cnt;           /* init reference count */
 extern int mwsfd_err_mwsfdhn;
+extern int mwsfd_err_sfdhn;
 extern SfdInitPrm mwsfd_sfd_iprm;     /* the default SFD init parameters */
 extern char mwsfd_sfd_version[];    /* "1.946", the SFD version this build needs */
 extern char E011081_mwPlySfdInit_Not_compatible_SFD_Version[];
+extern char E1122611_mwPlyInitSfdFx_iprm_is_NULL[];         /* "E1122611 mwPlyInitSfdFx: iprm is NULL." */
+extern char E2005_mwPlyInitSfdFx_cant_init_GSC[];           /* "E2005 mwPlyInitSfdFx: can't init GSC" */
+extern char ERR20010421A_mwPlyInitSfdFx[];                  /* "ERR20010421A : mwPlyInitSfdFx" */
+extern char mwsfd_errfmt_data[];       /* "DATA ERROR(%08X)" */
+extern char mwsfd_errfmt_dec[];        /* "DEC ERROR(%08X): " */
+extern char mwsfd_errfmt_max_size[];   /* "SFD ERROR(%08X): 'max_width, max_height' of creation parameter is small. ..." */
+extern char mwsfd_errfmt_read_buf[];   /* "SFD ERROR(%08X): Read buffer is small. ..." */
+extern char mwsfd_errfmt_frm_pool[];   /* "SFD ERROR(%08X): Frame pool size is incorrect. ..." */
+extern char mwsfd_errfmt_adxt_num[];   /* "SFD ERROR(%08X): Number of ADXT handles exceeds its maximum number. ..." */
+extern char mwsfd_errfmt_other[];      /* "SFD ERROR(%08X)" */
+extern char *volatile mwsfd_version_ptr;        /* set to mwsfd_version when the library is initialised */
+extern int mwsfd_err_hist[16];         /* the error codes SFD reported, in order (the last slot stays free) */
+extern int mwsfd_err_hist_cnt;
+extern char mwsfd_err_text[];          /* the formatted SFD error report */
+extern int mwsfd_init_flag;
+extern volatile int mwsfsvr_vsync_cnt2; /* bumped by the vsync server */
 
 void *memset(void *dst, int c, unsigned int n);
+int sprintf(char *buf, const char *format, ...);
+char *strncat(char *dst, const char *src, unsigned int n);
+void ADXT_Init(void);
+void SJRBF_Init(void);
+void SJMEM_Init(void);
+void SJUNI_Init(void);
+int MWSTM_InitStatic(void);
+void MWSFD_InitRsc(void);
+void LSC_Init(void);
+void LSC_EntryErrFunc(void (*fn)(void *obj, const char *msg), void *obj);
+void MWSFSFX_Init(void);
+char *SFD_GetSceErrMessage(void *sfd);
+int mwPlySfdInit(int arg);
+void MWSFSVM_Init(void);
 void MWSFSVM_Error(const char *message, ...);
 void MWSFSVR_SetMwsfdSvrFlg(int value);
 void LSC_Finish(void);
@@ -51,8 +82,12 @@ int SFD_SetErrFn(int a, void (*fn)(), int b);
 void SFD_SetExtClockFn(void *sfd, int a, int b, int c);
 void SFD_UpdateTime(void *sfd);
 
-void mwPlyInitSfdFx(void);
-void MWSFLIB_SfdErrFunc();
+void mwPlyInitSfdFx(MwsfdInitPrm *iprm);
+void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
+void mwsflib_LscErrFunc(void *obj, const char *msg);
+void mwsflib_SetSvrFunc(MwsfdInitPrm *iprm);
+void mwsflib_InitLibWork(MwsfdInitPrm *iprm);
+void mwsflib_SetDefCond(MwsfdInitPrm *prm);
 int MWSFD_GetPauseBdr(void);
 int MWSFLIB_SetErrCode(int code);
 int mwPlySfdFinish(void);
@@ -74,7 +109,57 @@ void mwsflib_LscErrFunc(void *obj, const char *msg)
     MWSFSVM_Error(msg);
 }
 
-void mwsflib_SetSvrFunc(void)
+/* starts the library on the first call: the server, the resource and SFD layers and the error
+ * hooks, with the display latency lowered by two frames; later calls only count */
+void mwPlyInitSfdFx(MwsfdInitPrm *iprm)
+{
+    MwsfdInitPrm prm;
+
+    if (iprm == 0) {
+        MWSFSVM_Error(E1122611_mwPlyInitSfdFx_iprm_is_NULL);
+        return;
+    }
+    memset(&prm, 0, sizeof(MwsfdInitPrm));
+    prm.vhz = iprm->vhz;
+    prm.dispCycle = iprm->dispCycle;
+    prm.dispLatency = iprm->dispLatency;
+    prm.decSvr = iprm->decSvr;
+    prm.reserved16[0] = iprm->reserved16[0];
+    prm.reserved16[1] = iprm->reserved16[1];
+    prm.reserved16[2] = iprm->reserved16[2];
+    prm.reserved16[3] = iprm->reserved16[3];
+    mwsfd_version_ptr = mwsfd_version;
+    MWSFSVM_Init();
+    MWSFD_InitRsc();
+    prm.dispLatency -= 2;
+    if (prm.dispLatency < 0) {
+        prm.dispLatency = 0;
+    }
+    if (mwsfd_init_cnt == 0) {
+        ADXT_Init();
+        SJRBF_Init();
+        SJMEM_Init();
+        SJUNI_Init();
+        if (MWSTM_InitStatic() != 0) {
+            MWSFLIB_SetErrCode(-101);
+            MWSFSVM_Error(E2005_mwPlyInitSfdFx_cant_init_GSC);
+        }
+        mwsflib_InitLibWork(&prm);
+        mwsfsvr_vsync_cnt2 = 0;
+        if (mwPlySfdInit((int)(prm.vhz * 1000.0f + 0.5f)) != 0) {
+            MWSFSVM_Error(ERR20010421A_mwPlyInitSfdFx);
+        }
+        mwsfd_init_flag = 1;
+        mwsflib_SetDefCond(&prm);
+        LSC_Init();
+        LSC_EntryErrFunc(mwsflib_LscErrFunc, 0);
+        MWSFSFX_Init();
+        mwsflib_SetSvrFunc(&prm);
+    }
+    mwsfd_init_cnt++;
+}
+
+void mwsflib_SetSvrFunc(MwsfdInitPrm *iprm)
 {
     MWSFSVM_EntryIdVfunc(2, mwsfsvr_VsyncSvr, 0);
     MWSFSVM_EntryMainFunc(mwsfsvr_MainSvr, 0);
@@ -134,11 +219,11 @@ void mwsflib_SetDefCond(MwsfdInitPrm *prm)
     MWSFD_SetCond(0, 7, 1);
 }
 
-void mwPlyResetSfdFx(void)
+void mwPlyResetSfdFx(MwsfdInitPrm *iprm)
 {
     if (mwsfd_init_cnt != 0) {
         mwsfd_init_cnt = 0;
-        mwPlyInitSfdFx();
+        mwPlyInitSfdFx(iprm);
     }
 }
 
@@ -212,6 +297,10 @@ int mwPlySfdFinish(void)
     SFD_Finish();
     return 0;
 }
+
+/* the SFD error callback: keeps the player and SFD handles it was raised for and the code in the history,
+ * then reports the code with the text for it */
+void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
 
 int MWSFD_GetErrMwplyHn(void)
 {

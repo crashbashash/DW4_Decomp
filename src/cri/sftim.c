@@ -281,6 +281,17 @@ void sftim_HnVbIn(SfdHn *hn)
     }
 }
 
+void sftim_CntupHnVbIn(SfdHn *hn)
+{
+    SfdTim *tim = &hn->tim;
+    if (sftim_IsTimeIncre(hn)) {
+        *(volatile int *)&tim->stream_pos += tim->step;
+    }
+    if (sftim_IsVbinStIncre(hn, tim)) {
+        *(volatile int *)&tim->count += tim->step;
+    }
+}
+
 int sftim_IsTimeIncre(SfdHn *hn)
 {
     /* matching construct: manual — taking the sub-block address up front and testing with early returns gives retail's register use */
@@ -292,6 +303,14 @@ int sftim_IsTimeIncre(SfdHn *hn)
         return 0;
     }
     return sub->f28 == 0;
+}
+
+int sftim_IsVbinStIncre(SfdHn *hn, SfdTim *tim)
+{
+    if (*(volatile int *)&tim->count == -1) {
+        return 0;
+    }
+    return hn->f76 == 4;
 }
 
 int SFTIM_IsStagnant(SfdHn *hn)
@@ -666,6 +685,18 @@ void FUN_002af428(SfdHn *hn, unsigned int kind)
         FUN_002af4f0(hn, pos, rate);
         break;
     }
+}
+
+void FUN_002af488(SfdHn *hn, int pos, int rate)
+{
+    SfdTim *tim = &hn->tim;
+    char guard[16];
+    int delta;
+    delta = FUN_002916f8(DAT_004bea90);
+    sfd_Lock(guard);
+    *(volatile int *)&tim->stream_pos += delta;
+    *(volatile int *)&tim->count += delta;
+    sfd_Unlock(guard);
 }
 
 void FUN_002af4f0(SfdHn *hn, int pos, int rate)

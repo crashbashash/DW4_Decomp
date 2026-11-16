@@ -50,7 +50,7 @@ typedef struct MwsfdHdrInf {
     int f24;
     int f28;
     int f32;
-    int frames;
+    int audioFreq;
     int f40;
 } MwsfdHdrInf;
 
@@ -128,7 +128,7 @@ struct MwsfdPly {
     int used;                       /* 4 */
     int stat;                       /* 8: 2 while playing */
     MwsfdCreInf cre;                /* 12 */
-    char pad60[4];
+    int f60;                        /* 60: set to 1 when the player is made */
     void *sfd;                      /* 64: the SFD player handle */
     void *stm;                      /* 68: the MWSTM (ADXSTM) file stream */
     void *adxt;                     /* 72: the ADXT handle, mwPlyGetAdxtHn */
@@ -136,12 +136,12 @@ struct MwsfdPly {
     int compoSet;                   /* 80 */
     int compoMode;                  /* 84 */
     int frmSync;                    /* 88: mwPlySetFrmSync */
-    char pad92[4];
+    int f92;                        /* 92: the input buffer size mwsfcre_CalcMpvWorkSizes gives */
     int waitingSvr;                 /* 96: set while a caller waits for the server */
     int svrBusy;                    /* 100: set by the server around a pass */
     int inSfdExec;                  /* 104: set by the server around its SFD execution */
     int execFlg;                    /* 108: the server pass's used-state */
-    char pad112[4];
+    int f112;                       /* 112: set to 1 when the player is made */
     signed char linkReq;            /* 116: mwPlyLinkStm's switch */
     signed char linkPrev;           /* 117: set on a 1 -> 0 link switch: a term is pending */
     signed char pause;              /* 118: the pause switch, re-applied on start */

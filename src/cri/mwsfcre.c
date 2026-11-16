@@ -28,7 +28,7 @@ typedef struct SfdHdrInf {
     int f36;
     signed char f40;
     char pad41[3];
-    int frames;   /* 44 */
+    int audioFreq; /* 44 */
     int pad48[4];
 } SfdHdrInf;
 
@@ -54,6 +54,104 @@ extern char E2053005_forgot_free[];
 extern char E204161_mwPlyGetHdrInf_NULL_pointer[];
 extern char E204162_mwPlyGetHdrInf_bufsize_error[];
 extern char E2053001_MWSFD_Malloc_cnt_over[];
+
+/* what SFD_Create takes (68 bytes): a name, the decoder work and the sizes of the buffers handed over */
+typedef struct MwsfdSfdPrm {
+    const char *name;  /* 0 */
+    void *mpvWork;     /* 4 */
+    int f1Size;        /* 8 */
+    int xBufSize;      /* 12 */
+    int mpv0Size;      /* 16 */
+    int f20;
+    int f24;
+    int f28;
+    int f32;
+    int f36;
+    int align;         /* 40: mwsfd_option */
+    int nfrm;          /* 44 */
+    int width;         /* 48 */
+    int height;        /* 52 */
+    int bufFmt;        /* 56 */
+    void *fixedWork;   /* 60 */
+    int fixedSize;     /* 64 */
+} MwsfdSfdPrm;
+
+/* the MPV picture conditions: the chroma plane's size, the picture size and the frame count */
+typedef struct MwsfdMpvCond {
+    int chromaWidth;
+    int chromaHeight;
+    int width;
+    int height;
+    int f16;
+    int dispWidth;
+    int dispHeight;
+    int nfrm;
+    int f32;
+} MwsfdMpvCond;
+
+/* the ADX configuration SFD_Create is given for a video-and-audio stream */
+typedef struct MwsfdAdxCfg {
+    int f0;
+    int f4;
+    void *f8;
+    int f12;
+    int f16;
+    int f20;
+    void *f24;
+} MwsfdAdxCfg;
+
+/* where SFD reads its input from (SFD_SetSupplySj's argument) */
+typedef struct SfdSupplyPrm {
+    int type;     /* 0: the player's input ring, 1: a memory buffer, else the caller's */
+    SfdSj *sj;
+    char *buf;
+    int size;
+    int xsize;
+    int f20;
+} SfdSupplyPrm;
+
+extern int mwsfcre_inBufBase;
+extern int mwsfcre_inBufSize;
+extern int mwsfcre_f1Size;
+extern int mwsfcre_xBufSize;
+extern int mwsfcre_mpv0Size;
+extern int mwsfcre_mpv1Size;
+extern int mwsfcre_mpv2Size;
+extern int mwsfcre_frmSize;
+extern int mwsfcre_picBufSize;
+extern MwsfdSfdPrm mwsfcre_sfdPrmType1;
+extern MwsfdSfdPrm mwsfcre_sfdPrmType2;
+extern MwsfdSfdPrm mwsfcre_sfdPrmType3;
+extern MwsfdMpvCond mwsfcre_mpvCond;
+extern MwsfdAdxCfg mwsfcre_adxCfg;
+
+void *SFD_GetTrHn(void *sfd, int index, void **out);
+void *mwsfsfx_Create(char *work, int size, int width, int height);
+void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode);
+struct SjObj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
+int MWSFTAG_SetAinfSj(MwsfdPly *ply);
+void mwsfsfx_ResetAddInf(MwsfdPly *ply);
+void mwply_ResetPicLog(MwsfdPly *ply);
+void mwply_SetPicUsrCb(MwsfdPly *ply);
+void MWSFD_ExecSetSprCbFn(MwsfdPly *ply);
+void MWSFSVR_SetHnMwplySvrFlg(MwsfdPly *ply, int sw);
+void MWSFSVR_SetHnSfdSvrFlg(MwsfdPly *ply, int sw);
+void MWSFPLY_SetFlowLimit(MwsfdPly *ply);
+struct LscObj *LSC_Create(SfdSj *sj);
+void LSC_SetStmHndl(struct LscObj *lsc, void *stm);
+void *MWSTM_Create(SfdSj *sj);
+SfdSj *SJMEM_Create(char *buf, int size);
+int SFD_SetSupplySj(void *sfd, SfdSupplyPrm *prm);
+MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
+void SFD_SetMpvParaTbl(MwsfdMpvCond *cond, MwsfdFrmBufs *bufs, void **frm);
+int FUN_002ab778(MwsfdSfdPrm *prm, int arg);
+void SFD_SetSceMpeg(int enable);
+void SFD_SetAdxtPara(MwsfdAdxCfg *cfg);
+int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
+int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
+void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
+int mwsfcre_MallocCompoWork(MwsfdPly *ply);
+void mwSfdDestroy(MwsfdPly *ply);
 
 void *memset(void *s, int c, unsigned int n);
 void MWSFSVM_Error(const char *msg);
@@ -136,6 +234,37 @@ void mwsfcre_CalcFrmRes(MwsfdCreInf *cprm, int *width, int *height, int *halfWid
     *height = h;
 }
 
+/* the decoder's frame pool, and the picture buffers of nfrmPoolWk frames; both 0 when the caller supplies buffers */
+void mwsfcre_CalcWorkFrmBuf(MwsfdCreInf *cprm, int *frmSize, int *picBufSize) {
+    int width;
+    int height;
+    int halfWidth;
+    int halfHeight;
+    int nfrm;
+    int fmt;
+    int mbWidth;
+    int mbHeight;
+    int size;
+
+    if (mpv_frm_buf_num != 0) {
+        *frmSize = 0;
+        *picBufSize = 0;
+        return;
+    }
+    nfrm = cprm->nfrmPoolWk;
+    mwsfcre_CalcFrmRes(cprm, &width, &height, &halfWidth, &halfHeight);
+    fmt = mwsfcre_ConvBufFmtFromMwsfd(cprm->bufFmt);
+    *frmSize = width * height * 9 / 2 + 551184;
+    mbWidth = width / 16;
+    mbHeight = height / 16;
+    if (fmt == 2) {
+        size = nfrm * (mbWidth * mbHeight * 1024 + 64);
+    } else {
+        size = nfrm * (mbWidth * mbHeight * 384 + 64);
+    }
+    *picBufSize = size;
+}
+
 /* the internal buffer format of a creation parameter's one */
 int mwsfcre_ConvBufFmtFromMwsfd(int format) {
     int result;
@@ -171,6 +300,9 @@ int mwsfcre_GetAlignMargin(void) {
     return 256;
 }
 
+/* the sizes the player's work area is made of: input, MPV work, fixed work and the frame pool */
+int mwPlyCalcWorkSfd(MwsfdCreInf *cprm);
+
 /* the sfx work and, with additional information on, its SJ buffer */
 int mwPlyCalcWorkCompo(MwsfdCreInf *cprm) {
     int size = MWSFSFX_CalcHnWorkSiz(cprm->maxWidth, cprm->maxHeight);
@@ -202,6 +334,9 @@ void MPV_SetFrameBuffers(int num, int size, void **bufs) {
         mpv_frm_buf_table[i] = bufs[i];
 }
 
+/* hands the SFD the SJ it reads from, described by where its buffer is */
+void MWSFCRE_SetSupplySj(MwsfdPly *ply);
+
 /* matching construct: two orders tried: the buffer pointers read into locals first */
 int mwsfcre_MallocRfb(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {
     int ret = 0;
@@ -232,6 +367,10 @@ int mwsfcre_MallocRfb(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {
         ret = -1;
     return ret;
 }
+
+/* The pool of frame buffers for the decoder, the number of frames and the size of each held by the
+ * creation parameters; the caller's table is used when one was registered. */
+int mwsfcre_MallocTab(MwsfdPly *ply, MwsfdCreInf *cprm, void **frm);
 
 /* whether an output format is used as decoded (2 and 3 are converted) */
 int mwsfcre_IsOutFmtDirect(unsigned int format) {
@@ -383,6 +522,11 @@ SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
     return SJRBF_Create(ply->inputBuf, ply->inputBufSize, ply->inputXSize);
 }
 
+/* Creates a player and wires every part of it: the SFD handle, the input SJs, the MWSTM stream, the link
+ * controller, the sfx and the additional-information SJ. Any failure reports it and destroys the half-made
+ * player. */
+MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm);
+
 /* -1 when no work area is given and the malloc/free functions are not both set */
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {
     MwsfdWork *work = mwsflib_GetVersionStr();
@@ -520,7 +664,7 @@ void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     hdr.width = inf.width;
     hdr.height = inf.height;
     hdr.rate = inf.rate;
-    hdr.frames = inf.frames;
+    hdr.audioFreq = inf.audioFreq;
     hdr.f40 = inf.f40;
     mwply_GetPicInf(buf, size, &hdr);
     hdr.valid = mwsfdcre_IsPlayableByHdrInf(&hdr);
@@ -542,6 +686,9 @@ int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf) {
     }
     return kind;
 }
+
+/* a stream the library can play: not audio alone, and with video and audio only the sample rates it mixes */
+int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr);
 
 void mwPlySetMallocFn(void *(*mallocFn)(void *obj, int size), void (*freeFn)(void *obj, void *ptr),
                          void *obj) {

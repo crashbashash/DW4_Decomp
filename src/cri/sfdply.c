@@ -129,6 +129,31 @@ int SFD_GetPaStat(SfdPly *h) {
     return h->pause;
 }
 
+int SFD_Pause(SfdPly *h, int sw) {
+    int mode;
+    int pause;
+    if (SFLIB_CheckHn(h) != 0) {
+        return sfd_ReportError(0, 0xFF000142);
+    }
+    pause = h->pause;
+    mode = 1;
+    if (sw == 0) {
+        if (pause == 0) {
+            return 0;
+        }
+        mode = 0;
+    } else if (pause != 0) {
+        mode = 2;
+    }
+    h->pause = sw;
+    FUN_002aa3d0(h, mode);
+    /* matching construct: permuter-found do-while(0) around the flag store; without it the beqz delay
+       slot takes the error code's ori instead of mode = 1 (2 words) */
+    do {
+        h->pending = 1;
+    } while (0);
+}
+
 long FUN_002aa3d0(SfdPly *h, unsigned int mode) {
     long r = 0;
     switch (mode) {
@@ -250,6 +275,40 @@ void FUN_002aa810(void) {
         }
     }
     SFPLY_DecideSvrStat();
+}
+
+void sfply_ExecOne(SfdPly *h) {
+    int st = h->stat;
+    long start;
+    if (st < 1 || st > 4) return;
+    if (h->pending == 0) return;
+    *(volatile int *)&h->pending = 0;
+    start = FUN_002b5a10();
+    if (st >= 2 && st <= 4) {
+        FUN_002aa980(h);
+    }
+    st = h->stat;
+    switch (st) {
+    case 0:
+        break;
+    case 1:
+        st = sfply_StatStop(h);
+        break;
+    case 2:
+        st = sfply_StatPrep(h);
+        break;
+    case 3:
+        st = sfply_StatStby(h);
+        break;
+    case 4:
+        st = sfply_StatPlay(h);
+        break;
+    case 6:
+        st = sfply_StatFin(h);
+        break;
+    }
+    h->stat = st;
+    FUN_002afbc8(h->tbl.trailer, FUN_002b5a10() - start);
 }
 
 void FUN_002aa980(SfdPly *h) {

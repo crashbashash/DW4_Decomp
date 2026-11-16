@@ -111,6 +111,7 @@ void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
 void sfmpv_RingAddRead(SfdPlayer *player, int n);
+int SFBUF_GetRTot(SfdPlayer *player, int index);
 int sfmpv_InitInf(SfdPlayer *player, SfdMpv *mpv);
 int sfmpv_CheckMpvPara(void);
 void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count);
@@ -512,6 +513,14 @@ void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out) {
         out->addr = info.addr0;
         out->size = info.len0;
     }
+}
+
+void sfmpv_FixedForSeek(SfdPlayer *player) {
+    SfdTimeStamp *stamp = &player->timer.f148;
+    SfdStreams *streams = &player->streams;
+    int index = streams->f16;
+    if (streams->f32 < 0) streams->f32 = SFBUF_GetRTot(player, index) + 4;
+    if (stamp->a < 0) *stamp = player->timer.best;
 }
 
 int sfmpv_Concat(SfdPlayer *player, SfdStream *stream) {
@@ -925,6 +934,35 @@ int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {
         return 1;
     }
     return value == 0;
+}
+
+int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb);
+int MPV_IsEmptyPpic(unsigned char *buf, int nbyte, int nmb);
+
+int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
+    SfdDecodeFlags *dec;
+    SfdPicGeom *geom;
+    int r;
+
+    if (SFSET_GetCond(player, 7) != 0) {
+        return 0;
+    }
+    geom = &player->geom;
+    dec = &player->decode;
+    if (type == 3) {
+        r = MPV_IsEmptyBpic((unsigned char *)chunk->addr, chunk->size, geom->f8 * geom->f12);
+        if (r != 0) {
+            dec->f16++;
+        }
+    } else if (type == 2) {
+        r = MPV_IsEmptyPpic((unsigned char *)chunk->addr, chunk->size, geom->f8 * geom->f12);
+        if (r != 0) {
+            dec->f20++;
+        }
+    } else {
+        r = 0;
+    }
+    return r;
 }
 
 void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second) {

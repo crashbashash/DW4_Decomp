@@ -24,37 +24,69 @@ typedef struct MpsErr {
 /* the fields of the last pack header */
 typedef struct MpsPackHd {
     long long scr;
-    int scrExt;
+    int isMpeg1;      /* the stream is MPEG-1: the first two bits after the start code are 00 */
     int muxRate;      /* in 50-byte units */
 } MpsPackHd;
 
-/* a system header */
+/* a system header: the fields of the last one parsed, one word each */
 typedef struct MpsSysHd {
-    int f0;
-    int f4;
+    int headerLength;
+    int rateBound;       /* in 50-byte units */
     int audioBound;
     int videoBound;
-    int f16;
-    int f20;
-    int f24;
-    int f28;
+    int fixedFlag;
+    int cspsFlag;
+    int audioLockFlag;   /* system_audio_lock_flag */
+    int videoLockFlag;   /* system_video_lock_flag */
 } MpsSysHd;
+
+/* one stream entry of a system header: the P-STD buffer bound of a stream */
+typedef struct MpsSysHdStream {
+    unsigned char streamId;
+    unsigned char bufferBoundScale;
+    unsigned short bufferSizeBound;
+} MpsSysHdStream;
+
+#define MPS_SYSHD_MAX_STREAMS 48
+
+/* what the system-header callback is given: the header fields, narrowed, and its stream entries */
+typedef struct MpsSysHdInf {
+    int rateBound;
+    unsigned char audioBound;
+    unsigned char fixedFlag;
+    unsigned char cspsFlag;
+    unsigned char audioLockFlag;
+    unsigned char videoLockFlag;
+    unsigned char videoBound;
+    unsigned char packetRateRestrictionFlag;
+    unsigned char reserved;
+    int streamCount;
+    MpsSysHdStream stream[MPS_SYSHD_MAX_STREAMS];
+} MpsSysHdInf;
+
+/* stream classes of a PES packet */
+#define MPS_PES_AUDIO 0
+#define MPS_PES_VIDEO 1
+#define MPS_PES_PRIVATE 2
+#define MPS_PES_PADDING 3
+#define MPS_PES_OTHER 4
 
 /* the fields of the last PES packet header */
 typedef struct MpsPesInf {
     long long pts;
     long long dts;
     int streamId;
-    int f20;
-    int f24;
-    int f28;
-    int f32;
-    int f36;
+    int streamKind;      /* MPS_PES_* */
+    int streamNo;        /* the number of the stream within its kind */
+    int packetLength;
+    int stdBufferSize;   /* P-STD buffer size, in bytes */
+    int dataSize;        /* the packet's bytes after the header */
 } MpsPesInf;
 
 typedef struct MpsHn MpsHn;
 typedef int (*MpsDecodeFn)(MpsHn *mps, unsigned char *pos, int n, int *len, int *flags);
 typedef void (*MpsCbFn)(void *obj, int arg);
+typedef void (*MpsSysHdFn)(void *obj, MpsSysHdInf *inf);
 
 /* one 256-byte handle */
 struct MpsHn {
@@ -71,7 +103,7 @@ struct MpsHn {
     int f216;
     int f220;
     int f224;
-    MpsCbFn sysHdFn;          /* 228 */
+    MpsSysHdFn sysHdFn;       /* 228 */
     void *sysHdObj;           /* 232 */
     MpsCbFn auxFn;            /* 236: installed by MPS_SetAuxFn; no MPS code calls it */
     void *auxObj;             /* 240 */
@@ -100,7 +132,7 @@ int mpsdmx_Decode(MpsHn *mps, unsigned char *pos, int n, int *len, int *flags);
 int MPS_GetStartCodeKind(unsigned char *p);
 
 int MPS_SetPesSw(MpsHn *mps, int sw);
-void MPS_SetSysHdFn(MpsHn *mps, MpsCbFn fn, void *obj);
+void MPS_SetSysHdFn(MpsHn *mps, MpsSysHdFn fn, void *obj);
 void MPS_SetAuxFn(MpsHn *mps, MpsCbFn fn, void *obj);
 void MPS_SetPesFn(MpsHn *mps, MpsCbFn fn, void *obj);
 int MPS_DecodeChunk(MpsHn *mps, unsigned char *pos, int n, int *len, int *flags);

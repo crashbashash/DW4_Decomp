@@ -17637,8 +17637,10 @@
   "0x0025bfd0": {
     "whole_file": true,
     "emitted": {
+      "AIFF_GetInfo": "0x0025bc40",
       "ADX_DecodeInfoAiff": "0x0025c038",
       "ADXB_DecodeHeaderAiff": "0x0025c148",
+      "ADXB_ExecOneAiff16": "0x0025c260",
       "ADXB_ExecOneAiff8": "0x0025c3f8",
       "ADXB_ExecOneAiff": "0x0025c578"
     },
@@ -17763,11 +17765,12 @@
   "0x0025ed50": {
     "whole_file": true,
     "emitted": {
+      "ADX_DecodeInfoWav": "0x0025ea20",
+      "ADXB_DecodeHeaderWav": "0x0025ec50",
       "ADXB_ExecOneWav8": "0x0025eec8",
       "ADXB_ExecOneWav4": "0x0025f060",
       "ADXB_CheckWav": "0x0025f200",
-      "ADXB_ExecOneWav": "0x0025f268",
-      "ADXB_DecodeHeaderWav": "0x0025ec50"
+      "ADXB_ExecOneWav": "0x0025f268"
     },
     "data": {
       "RIFF": "0x004ed868",
@@ -18398,6 +18401,7 @@
   "0x0026ac38": {
     "whole_file": true,
     "emitted": {
+      "ADXPS2_SetupDvdFs": "0x0026ac50",
       "ADXPS2_LoadFcacheDvd": "0x0026ad50",
       "ADXPS2_LoadFcacheDvdMem": "0x0026adb0",
       "ADXPS2_SetRdModeDvd": "0x0026ae18",
@@ -18412,8 +18416,10 @@
       "ADXT_GetSrdRmodeSw": "0x0026afe0"
     },
     "data": {
-      "@rodata": "0x004ee4a0",
-      "adxt_srd_rmode_sw": "0x004a8e40"
+      "@rodata": "0x004ee490",
+      "adxt_srd_rmode_sw": "0x004a8e40",
+      "adxrt_build": "0x004a8e10",
+      "adxrt_build_ver": "0x004a8e20"
     }
   },
   "0x0026aff0": {
@@ -18686,6 +18692,7 @@
     "whole_file": true,
     "emitted": {
       "cvFsError": "0x0026f530",
+      "cvFsInit": "0x0026f558",
       "cvFsFinish": "0x0026f620",
       "cvFsAddDev": "0x0026f728",
       "addDevice": "0x0026f7b8",
@@ -19205,9 +19212,11 @@
       "pl2enc_EntryErrFunc": "0x00278680",
       "pl2enc_CallErr": "0x00278698",
       "PL2ENC_Init": "0x002786c8",
+      "pl2enc_Init": "0x002786f8",
       "PL2ENC_Finish": "0x00278738",
       "pl2enc_Finish": "0x00278768",
       "PL2ENC_Create": "0x00278780",
+      "pl2enc_Create": "0x002787c8",
       "PL2ENC_Destroy": "0x002788c8",
       "pl2enc_Destroy": "0x002788f8",
       "PL2ENC_Reset": "0x00278918",
@@ -19229,7 +19238,11 @@
       "pl2enc_err_func": "0x004b0e0c",
       "pl2enc_err_obj": "0x004b0e10",
       "pl2enc_gain_tbl": "0x004f0f08",
-      "pl2enc_init_cnt": "0x004b0e08"
+      "pl2enc_init_cnt": "0x004b0e08",
+      "pl2enc_ver_str": "0x004b0dd8",
+      "E03090101_NULL_pointer_is_specified": "0x004f1308",
+      "E03090102_Work_size_is_too_short": "0x004f1330",
+      "E03091001_Work_size_is_too_short": "0x004f1358"
     }
   },
   "0x00278f20": {
@@ -19261,6 +19274,7 @@
       "ps2rna_get_psj": "0x002796b0",
       "ps2rna_release_psj": "0x00279728",
       "ps2rna_rcvcbf": "0x00279730",
+      "ps2rna_sndcbf": "0x00279790",
       "PS2RNA_Init": "0x00279b00",
       "PS2RNA_SendOutMode": "0x00279dd0",
       "ps2rna_init_port": "0x00279e28",
@@ -19274,6 +19288,7 @@
       "PS2RNA_ClosePort": "0x0027a178",
       "PS2RNA_IsPortOpen": "0x0027a200",
       "PS2RNA_Finish": "0x0027a228",
+      "PS2RNA_Create": "0x0027a2e8",
       "PS2RNA_Destroy": "0x0027a688",
       "PS2RNA_Start": "0x0027a770",
       "PS2RNA_Stop": "0x0027a7b8",
@@ -19287,6 +19302,7 @@
       "PS2RNA_GetTime": "0x0027aa08",
       "PS2RNA_GetNumData": "0x0027aa40",
       "PS2RNA_GetNumRoom": "0x0027aaa8",
+      "ps2rna_exec_one": "0x0027ab08",
       "PS2RNA_ExecServer": "0x0027acc8",
       "PS2RNA_SetStartSmpl": "0x0027ad70",
       "PS2RNA_SetNumChan": "0x0027adb8",
@@ -19355,7 +19371,11 @@
       "ps2rna_psj_buf": "0x004b2120",
       "ps2rna_rna_heap": "0x004b1ddc",
       "ps2rna_sent_outmode": "0x004b1df8",
-      "ps2rna_setup_voice": "0x004b1dc8"
+      "ps2rna_setup_voice": "0x004b1dc8",
+      "ps2rna_vol_tbl": "0x004b0e20",
+      "E1072601_not_enough_PSJ_handle": "0x004f1820",
+      "E0100401_can_t_create_PS2RNA_of_IOP": "0x004f1848",
+      "E1072602_can_t_create_DTR_handle": "0x004f1870"
     }
   },
   "0x0027b250": {
@@ -19831,6 +19851,7 @@
       "MPS_GetSysHd": "0x0028d5c0",
       "MPS_GetPesInf": "0x0028d658",
       "MPS_GetVersionStr": "0x0028d6d8",
+      "MPS_Init": "0x0028d6e8",
       "mpslib_InitLibWork": "0x0028d760",
       "MPS_Finish": "0x0028d7f0",
       "mpslib_InitErr": "0x0028d868",
@@ -19852,7 +19873,9 @@
     "data": {
       "cri_mps_version": "0x004f2998",
       "mps_curhn": "0x00573f0c",
-      "mps_work": "0x004bcc68"
+      "mps_work": "0x004bcc68",
+      "mps_endian_mark": "0x004f29e8",
+      "mps_version_ptr": "0x00573f08"
     }
   },
   "0x0028dc78": {
@@ -19860,9 +19883,13 @@
     "emitted": {
       "MPV_BsearchDelim": "0x0028dd10",
       "MPV_SearchDelim": "0x0028de10",
-      "MPV_CopyStm": "0x0028df18"
+      "MPV_CopyStm": "0x0028df18",
+      "MPV_IsEmptyBpic": "0x0028e028",
+      "MPV_IsEmptyPpic": "0x0028e4d0"
     },
-    "data": {}
+    "data": {
+      "mpvsc_mbaddr_incr_vlc": "0x004bcc70"
+    }
   },
   "0x0028ea10": {
     "whole_file": true,
@@ -19893,10 +19920,13 @@
     "emitted": {
       "MPV_SetPicUsrBuf": "0x0028f0c0",
       "MPV_GetPicUsr": "0x0028f0d8",
+      "MPV_DecodePicAtrSj": "0x0028f100",
       "mpvhdec_GetCurDelim": "0x0028f2f0",
       "MPV_DecodePicAtr": "0x0028f360",
       "mpvhdec_GetCodec": "0x0028f400",
+      "mpvhdec_DecEscSj": "0x00290370",
       "mpvhdec_DecUdscSj": "0x00290430",
+      "mpvhdec_AnalyUd": "0x00290520",
       "mpv_ScanUsrTags": "0x002906e8",
       "MPVHDEC_GoNextDelim": "0x002907f0",
       "MPV_GoNextDelimSj": "0x00290898",
@@ -19914,6 +19944,7 @@
     "whole_file": true,
     "emitted": {
       "MPV_IsConformable": "0x00290b38",
+      "MPV_Init": "0x00290bd0",
       "mpvlib_ChkFatal": "0x00290ca8",
       "mpvlib_ChkCacheMode": "0x00290d20",
       "MPVLIB_ConvIix": "0x00290d28",
@@ -19960,13 +19991,15 @@
       "mpv_default_cond": "0x004f2a50",
       "mpv_endian_mark": "0x004f2aa0",
       "mpv_lib": "0x00573f18",
-      "mpv_lower_work": "0x00573f78"
+      "mpv_lower_work": "0x00573f78",
+      "mpv_version_ptr": "0x00573f10"
     }
   },
   "0x002918c0": {
     "whole_file": true,
     "emitted": {
       "mwsfcre_CalcFrmRes": "0x002919a8",
+      "mwsfcre_CalcWorkFrmBuf": "0x002919f8",
       "mwsfcre_ConvBufFmtFromMwsfd": "0x00291af8",
       "mpv_GetFixedWorkSizes": "0x00291b48",
       "mwsfcre_GetAlignMargin": "0x00291b68",
@@ -20034,6 +20067,7 @@
       "MWSFD_GetFrmSync": "0x002937d8",
       "mwply_UpdateUsrLen": "0x00293958",
       "mwply_ApplyItemType3": "0x002939a8",
+      "mwply_SetFrmInf": "0x00293a20",
       "mwply_GetFrmUsrData": "0x00293bd8",
       "mwply_MulDivMs": "0x00293c70",
       "mwl_convBufFmtFromSFD": "0x00293ca0",
@@ -20055,6 +20089,7 @@
       "mwPlyGetNumSkipDisp": "0x00294308",
       "mwPlyGetCurPicHdrInfo": "0x00294348",
       "mwsffrm_AnalyTotalFrm": "0x00294360",
+      "mwply_GetPicInf": "0x00294390",
       "mwPlyGetCurPicCompoMode": "0x002944b0",
       "mwply_GetPicCompoMode": "0x002944f0",
       "mwply_GetMuxKind1": "0x00294568",
@@ -20083,7 +20118,8 @@
       "E3122201_mwPlyGetNextPicUsr_inv_hn": "0x004f3240",
       "E409171_mwPlyGetNumRemainFrm_inv_hn": "0x004f32d8",
       "mwl_convPtypeFromSFD_Invalid_Ptype": "0x004f3150",
-      "mwl_convPtypeToSFD_Invalid_Ptype": "0x004f31b0"
+      "mwl_convPtypeToSFD_Invalid_Ptype": "0x004f31b0",
+      "E201301_mwply_SetFrmInf_GetFps_failed": "0x004f3130"
     }
   },
   "0x00294a20": {
@@ -20091,6 +20127,7 @@
     "emitted": {
       "mwsflib_GetVersionStr": "0x00294a30",
       "mwsflib_LscErrFunc": "0x00294a40",
+      "mwPlyInitSfdFx": "0x00294a58",
       "mwsflib_SetSvrFunc": "0x00294c10",
       "mwsflib_InitLibWork": "0x00294c58",
       "MWSFD_SetUsePicUsr": "0x00294d00",
@@ -20117,7 +20154,11 @@
       "mwsfd_sfd_iprm": "0x004f33a0",
       "mwsfd_sfd_version": "0x004f3420",
       "mwsfd_version": "0x004f3310",
-      "mwsfd_work": "0x004bd258"
+      "mwsfd_work": "0x004bd258",
+      "E1122611_mwPlyInitSfdFx_iprm_is_NULL": "0x004f33b0",
+      "E2005_mwPlyInitSfdFx_cant_init_GSC": "0x004f33d8",
+      "ERR20010421A_mwPlyInitSfdFx": "0x004f3400",
+      "mwsfd_version_ptr": "0x00577820"
     }
   },
   "0x00295358": {
@@ -20450,6 +20491,7 @@
       "mwsst_Pause": "0x00299bc0",
       "mwsst_Call40": "0x00299c20",
       "mwsst_Call44": "0x00299c80",
+      "MWSST_Create": "0x00299ce8",
       "MWSST_Restart": "0x00299e08",
       "MWSST_Destroy": "0x00299eb8",
       "mwsst_GetCb": "0x00299f58",
@@ -20458,7 +20500,10 @@
       "mwsst_IsActive": "0x00299f88"
     },
     "data": {
-      "mwsfd_input_cb_tbl": "0x004be8a0"
+      "mwsfd_input_cb_tbl": "0x004be8a0",
+      "E303111_MWSST_Create_worksize_is_short": "0x004f4988",
+      "E303112_MWSST_Create_cant_create_SJ": "0x004f49b8",
+      "E303112_MWSST_Create_cant_create_corehn": "0x004f49e0"
     }
   },
   "0x00299fc8": {
@@ -20514,6 +20559,7 @@
       "mwsfsvr_CallPostSvr": "0x0029abe0",
       "mwsfsvr_SetIdleHook": "0x0029ac10",
       "mwsfsvr_CallIdle": "0x0029ac48",
+      "mwsfsvr_ExecServer": "0x0029ac78",
       "mwPlyExecSvrHndl": "0x0029ad40",
       "mwsfd_ExecSvrHndl": "0x0029ade0",
       "MWSFSVR_Vint": "0x0029aea0",
@@ -20591,6 +20637,7 @@
       "sfadxt_GetFreeChunk": "0x0029b820",
       "sfadxt_PutDataChunk": "0x0029b850",
       "sfadxt_CopyData": "0x0029b8d8",
+      "sfadxt_AdjustSync": "0x0029b990",
       "sfadxt_AdjDiscard": "0x0029bbf8",
       "sfadxt_InsertSilence": "0x0029bc80",
       "sfadxt_ExcludeHdr": "0x0029bca0",
@@ -20609,6 +20656,7 @@
       "sfadxt_SetAdxtHd": "0x0029c3b8",
       "sfadxt_IsEndDecinfo": "0x0029c470",
       "FUN_0029c498": "0x0029c498",
+      "sfadxt_InitInf": "0x0029c658",
       "sfadxt_CreateEx": "0x0029c810",
       "sfadxt_RestoreAdxtHn": "0x0029c880",
       "FUN_0029c890": "0x0029c890",
@@ -20708,9 +20756,11 @@
       "SFBUF_GetWTot": "0x0029e2d0",
       "SFBUF_RingGetSj": "0x0029e370",
       "SFBUF_AddRtotSj": "0x0029e3d0",
+      "SFBUF_AringGetWrite": "0x0029e408",
       "SFBUF_AringAddWrite": "0x0029e5b0",
       "SFBUF_AringAddRead": "0x0029e858",
       "SFBUF_VfrmGetWrite": "0x0029e948",
+      "SFBUF_VfrmAddWrite": "0x0029e950",
       "SFBUF_VfrmGetRead": "0x0029e960",
       "SFBUF_VfrmAddRead": "0x0029e9b8",
       "SFBUF_SetPrepFlg": "0x0029ea28",
@@ -20815,6 +20865,7 @@
     "whole_file": true,
     "emitted": {
       "SFD_IsHnSize": "0x002a0998",
+      "SFD_Init": "0x002a09a8",
       "sfd_InitLib": "0x002a0a10",
       "sfd_ClearSvrCnt": "0x002a0ad0",
       "SFD_Finish": "0x002a0ae0",
@@ -20839,7 +20890,9 @@
       "cri_sfd_version": "0x004f4d00",
       "sfd_cond_defaults": "0x004f4ea0",
       "sfd_cur_hn": "0x004be8d0",
-      "sfd_lib": "0x004be8d8"
+      "sfd_lib": "0x004be8d8",
+      "sfd_hn_size": "0x004beafc",
+      "sfd_build_str": "0x00580d58"
     }
   },
   "0x002a0ea0": {
@@ -20961,6 +21014,7 @@
       "sfmpv_CalcDistance": "0x002a40b8",
       "sfmpv_CheckViBufSiz": "0x002a4120",
       "sfmpv_PeekChnk": "0x002a4730",
+      "sfmpv_FixedForSeek": "0x002a4780",
       "sfmpv_Concat": "0x002a4838",
       "sfmpv_ConcatSub": "0x002a4888",
       "FUN_002a4958": "0x002a4958",
@@ -20987,6 +21041,7 @@
       "FUN_002a6368": "0x002a6368",
       "sfmpv_IsSeekSkip": "0x002a6470",
       "sfmpv_IsPtypeSkip": "0x002a64c0",
+      "FUN_002a6510": "0x002a6510",
       "sfmpv_GetDtime": "0x002a6768",
       "sfmpv_SkipFrm": "0x002a6780",
       "sfmpv_SetSkipTtu": "0x002a6870",
@@ -20995,11 +21050,13 @@
       "FUN_002a7040": "0x002a7040",
       "FUN_002a70e8": "0x002a70e8",
       "FUN_002a71d0": "0x002a71d0",
+      "FUN_002a7278": "0x002a7278",
       "FUN_002a73f0": "0x002a73f0",
       "FUN_002a7438": "0x002a7438",
       "sfmpv_RingAddRead": "0x002a7598",
       "FUN_002a75b8": "0x002a75b8",
       "SFMPV_Create": "0x002a7610",
+      "sfmpv_InitInf": "0x002a7770",
       "sfmpv_CheckMpvPara": "0x002a7968",
       "sfmpv_InitFrmObj": "0x002a7a30",
       "sfmpv_InitPicAtr": "0x002a7ad0",
@@ -21028,22 +21085,20 @@
       "SFMPVF_IsTermDec": "0x002a84e0",
       "SFMPVF_SetGopStat": "0x002a84f0",
       "SFMPVF_GetNumFrm": "0x002a8500",
+      "SFMPVF_AllocFrm": "0x002a85a0",
       "SFMPVF_FreeFrm": "0x002a8628",
       "SFMPVF_StbyFrm": "0x002a8638",
       "SFMPVF_RefStbyFrm": "0x002a8650",
       "SFMPVF_EndDrawFrm": "0x002a8668",
       "SFMPVF_EndRefFrm": "0x002a8690",
       "SFMPVF_HoldFrm": "0x002a86b8",
+      "SFD_GetNextPicUsr": "0x002a87a0",
       "SFD_GetNumRemainFrm": "0x002a8800",
       "FUN_002a8878": "0x002a8878",
       "SFD_IsNextFrmReady": "0x002a8940",
       "FUN_002a8998": "0x002a8998",
       "FUN_002a8a30": "0x002a8a30",
-      "sfmpvf_IsChkFirst": "0x002a8b30",
-      "FUN_002a7278": "0x002a7278",
-      "sfmpv_InitInf": "0x002a7770",
-      "SFMPVF_AllocFrm": "0x002a85a0",
-      "SFD_GetNextPicUsr": "0x002a87a0"
+      "sfmpvf_IsChkFirst": "0x002a8b30"
     },
     "data": {
       "DAT_004beb08": "0x004beb08",
@@ -21108,6 +21163,7 @@
   "0x002aa2f0": {
     "whole_file": true,
     "emitted": {
+      "SFD_Pause": "0x002aa340",
       "FUN_002aa3d0": "0x002aa3d0",
       "FUN_002aa460": "0x002aa460",
       "FUN_002aa4c8": "0x002aa4c8",
@@ -21124,6 +21180,7 @@
       "SFD_IsSvrDone": "0x002aa750",
       "SFD_ExecOne": "0x002aa7b8",
       "FUN_002aa810": "0x002aa810",
+      "sfply_ExecOne": "0x002aa868",
       "FUN_002aa980": "0x002aa980",
       "FUN_002aa9a8": "0x002aa9a8",
       "sfply_StatStop": "0x002aa9c0",
@@ -21183,7 +21240,8 @@
       "DAT_004bead4": "0x004bead4",
       "sfply_handles": "0x004beadc",
       "sfply_vbin_nest": "0x004beb24",
-      "DAT_004f5020": "0x004f5020"
+      "DAT_004f5020": "0x004f5020",
+      "@rodata": "0x004f5040"
     }
   },
   "0x002ac6d0": {
@@ -21268,7 +21326,9 @@
       "SFTIM_GetNextItime": "0x002ae358",
       "FUN_002ae398": "0x002ae398",
       "sftim_HnVbIn": "0x002ae408",
+      "sftim_CntupHnVbIn": "0x002ae458",
       "sftim_IsTimeIncre": "0x002ae4c8",
+      "sftim_IsVbinStIncre": "0x002ae500",
       "SFTIM_IsStagnant": "0x002ae608",
       "sftim_IsAudioStagnant": "0x002ae648",
       "FUN_002ae6c8": "0x002ae6c8",
@@ -21302,6 +21362,7 @@
       "sftim_Tc2Time23D": "0x002af248",
       "FUN_002af2e8": "0x002af2e8",
       "FUN_002af428": "0x002af428",
+      "FUN_002af488": "0x002af488",
       "FUN_002af4f0": "0x002af4f0",
       "SFTIM_GetTimeOneFrmVideo": "0x002af540",
       "SFD_GetFps": "0x002af580",

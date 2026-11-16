@@ -35,8 +35,8 @@ handle as these six files see it are in `include/dw4/cri/sfdhn.h`. The MPS types
 
 ## Open questions
 
-- Functions without source, linking from retail: `SFD_GetTimePerFile` and `SFD_Init` (a value kept in a register
-  before the store that no spelling tried reproduces), `sfcre_AnalyAudio` (the loop's test placed after its body),
+- Functions without source, linking from retail: `SFD_GetTimePerFile`,
+  `sfcre_AnalyAudio` (the loop's test placed after its body),
   `sfcre_AnalyMpv` (register choice for the unpacked sequence-header bytes), `SFHDS_SetHdr` and `sfhdr_SetHdr`
   (register choice), `sfmps_IsPrepEnd` (the condition array's address is kept in a register), and
   `sfmps_DemuxChunk`, `sfmps_PutPes`, `sfmps_CopyAudio`, `sfmps_CopyVideo`, `sfmps_ChkEnd`, which have no draft yet.

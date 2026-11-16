@@ -3,6 +3,7 @@
 #include "dw4/cri/mpv.h"
 
 extern char cri_mpv_version[];
+extern char *volatile mpv_version_ptr;
 extern MpvBuildInf mpv_build_inf;
 extern unsigned char mpv_endian_mark[4]; /* 4, 3, 2, 1 */
 extern int mpv_default_cond[MPV_COND_MAX];
@@ -18,7 +19,7 @@ int mpv_ReportError(void *hn, int error);
 void UTY_MemcpyDword(void *dst, const void *src, int words);
 void UTY_MemsetDword(void *dst, int value, int size);
 void mpv_ResetErr(MpvErrObj *err);
-void MPV_SetUsrSj(MpvHn *hn, int index, int a, int b, int c);
+void MPV_SetUsrSj(MpvHn *hn, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
 void MPV_SetPicUsrBuf(MpvHn *hn, int a, int b);
 int mpvhook_IsInstalled(void);
 void mpvhook_Init(int n, void *work, int size);
@@ -27,7 +28,7 @@ void mpvhook_Finish(void);
 int mpvhook_Create(MpvHn *hn);
 void mpvhook_Destroy(int lower);
 void mpvhook_SetCond(int lower, int no, int value);
-void mpvhook_SetBufEnt(int lower, int index, int addr, int a, int b);
+void mpvhook_SetBufEnt(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
 void mpvhook_SetSize(int lower, int width, int height);
 void mpvhook_SetFlagPtr(int lower, int zero, int *flag);
 int mpvhook_Start(int lower, int arg);
@@ -54,6 +55,17 @@ void mpvlib_SetCondAll(int no, int value);
 void mpv_SetLowerCond(MpvHn *hn, int no, int value);
 void mpv_GetLowerInf(MpvHn *hn);
 int UTY_MulDiv(int a, int b, int c);
+
+void mpvapi_Init(void);
+void mpv_InitLower(void);
+int MPVLIB_ConvOix(int flags);
+void mpvlib_ChkCacheMode(void);
+void mpv_InitClampTable(unsigned char *copy);
+void mpvlib_InitObjTbl(void);
+void mpv_InitHw(MpvLib *pool);
+void mpvlib_InitWork(int nhn, char *work);
+int mpvlib_ChkFatal(void);
+void mpv_InitLibErr(void);
 
 char *MPV_GetVersionStr(void) {
     return cri_mpv_version;
@@ -85,6 +97,31 @@ int MPV_IsConformable(unsigned char *data, int size) {
     return 1;
 }
 
+int MPV_Init(int count, void *work) {
+    int result;
+    char *pool;
+
+    mpv_version_ptr = cri_mpv_version;
+    result = mpvlib_ChkFatal();
+    if (result != 0) {
+        if (result != 0xFF03FF05) {
+            for (;;) {
+            }
+        }
+        return result;
+    }
+    mpvlib_ChkCacheMode();
+    mpvlib_InitWork(count, (char *)MPVLIB_ConvOix((int)work));
+    pool = mpv_lib.pool;
+    mpv_InitLibErr();
+    mpvapi_Init();
+    mpv_InitClampTable((unsigned char *)pool + 6112);
+    mpvlib_InitObjTbl();
+    mpv_InitHw((MpvLib *)pool);
+    mpv_InitLower();
+    return 0;
+}
+
 int mpvlib_ChkFatal(void) {
     if (mpv_build_inf.magic != 0x5a5a5a5a) {
         return mpv_ReportError(0, 0xff03ff02);
@@ -97,7 +134,7 @@ int mpvlib_ChkFatal(void) {
     return 0;
 }
 
-void mpvlib_ChkCacheMode(int status) {
+void mpvlib_ChkCacheMode(void) {
 }
 
 int MPVLIB_ConvIix(int flags) {
@@ -182,26 +219,26 @@ void mpvlib_InitWork(int nhn, char *work) {
 }
 
 void mpv_ResetPicInf(MpvPicInf *inf) {
-    inf->f0 = 0;
-    inf->f4 = 0;
-    inf->f8 = 0;
-    inf->f12 = 0;
-    inf->f16 = 0;
-    inf->f20 = 0;
-    inf->f24 = 0;
-    inf->f28 = 0;
-    inf->f32 = 0;
-    inf->f36 = 0;
-    inf->f40 = 0;
-    inf->f44 = 0;
-    inf->f48 = 0;
-    inf->f52 = 0;
+    inf->horizontalSize = 0;
+    inf->verticalSize = 0;
+    inf->mbWidth = 0;
+    inf->mbHeight = 0;
+    inf->frameRateCode = 0;
+    inf->temporalReference = 0;
+    inf->pictureCodingType = 0;
+    inf->dropFrameFlag = 0;
+    inf->hours = 0;
+    inf->minutes = 0;
+    inf->seconds = 0;
+    inf->pictures = 0;
+    inf->gopCount = 0;
+    inf->seqCount = 0;
     inf->f56 = 3;
     inf->f60 = 1;
     inf->f64 = 1;
     inf->f68 = 1;
-    inf->f72 = 0;
-    inf->f76 = 0;
+    inf->bitRate = 0;
+    inf->vbvBufferSize = 0;
     inf->f80 = -1;
     inf->f82 = -1;
     inf->f84 = 0;
@@ -209,8 +246,8 @@ void mpv_ResetPicInf(MpvPicInf *inf) {
     inf->f86 = -1;
     inf->f87 = -1;
     inf->f88 = 0;
-    inf->f89 = 1;
-    inf->f90 = 0;
+    inf->pelAspectRatio = 1;
+    inf->constrainedParams = 0;
     inf->f91 = 0;
     inf->f92 = 0;
     inf->f93 = -1;
@@ -401,7 +438,7 @@ int mpv_StartLower(MpvHn *hn, int arg) {
 
     if (mpvhook_IsInstalled() != 0) {
         for (i = 0, ent = hn->bufEnt; i < 4; i++) {
-            mpvhook_SetBufEnt(hn->lower, i, ent->addr, ent->f4, ent->f8);
+            mpvhook_SetBufEnt(hn->lower, i, ent->sj, ent->fn, ent->obj);
             ent++;
         }
         mpvhook_SetSize(hn->lower, hn->low.width, hn->low.height);
@@ -427,11 +464,11 @@ void mpv_GetLowerInf(MpvHn *hn) {
     mpvhook_GetRate(hn->lower, &b, &c, &d);
     mpvhook_GetDispSize(hn->lower, &e, &f);
     hn->picInf = inf;
-    hn->lowInf0 = a;
-    hn->lowInf1 = b / 2048;
-    hn->lowInf2 = c;
-    hn->lowInf3 = e;
-    hn->lowInf4 = f;
+    hn->bitRate = a;
+    hn->vbvBufferSize = b / 2048;
+    hn->vbvDelay = c;
+    hn->closedGop = e;
+    hn->brokenLink = f;
 }
 
 int mpv_MulDiv(int a, int b, int c) {

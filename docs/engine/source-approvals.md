@@ -246,12 +246,45 @@ declarations; every other combination differs by 39 to 41 bytes. The owner appro
 ### build-string-stores
 
 A module's init stores the address of its version string in a word that nothing else reads or points to, in the
-`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Seven inits do it: ADXT
-(`0x56dfa8`), SUD (`0x5856a8`), SFX (`0x5856a0`), CFT (`0x573ea8`), SFD (`0x580d58`), MPS (`0x573f08`) and CFG
-(`0x56dfd0`). In each the store is the word's only access in the executable, and stripping changes only the address
-form and where the store sits, never whether it happens. The owner approved the stores in the CFG init and in the
-functions at `0x283058` (CFT), `0x2b3788` (SFX) and `0x2b50e8` (SUD), the same kind of store as `ADXT_Init`'s
-approved `0x56dfa8` word. `SFD_Init` and `MPS_Init` have no row (see [Open questions](#open-questions)).
+`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Nine inits do it: ADXT
+(`0x56dfa8`), SUD (`0x5856a8`), SFX (`0x5856a0`), CFT (`0x573ea8`), SFD (`0x580d58`), MPS (`0x573f08`), MPV
+(`0x573f10`), MWSFD (`0x577820`) and CFG (`0x56dfd0`). In each the store is the word's only access in the
+executable, and stripping changes only the address form and where the store sits, never whether it happens. The
+owner approved the stores in the CFG init and in the functions at `0x283058` (CFT), `0x2b3788` (SFX) and `0x2b50e8`
+(SUD), the same kind of store as `ADXT_Init`'s approved `0x56dfa8` word, and later those of `SFD_Init`, `MPS_Init`,
+`MPV_Init` and `mwPlyInitSfdFx`, on the evidence below.
+
+* CRI's own 2002 SDK objects (`libmwsfde.a` in [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri))
+  keep a file-local `.bss` word in sixteen files (`*_version_dummy`, `*_dummy`, `cri_verstr_ptr`), and each is stored
+  in the same unfolded single-use form. Compiled with this project's ee-gcc 2.96, the SDK's `MPS_Init` (`mps_lib.o`)
+  and `DCT_GetVerStr` (`dct_ver.o`, the same shape as DW4's: a constant string address, a lone store, a leaf) are
+  reproduced byte for byte only by `static char *volatile`; plain C and five other spellings fold the address into
+  `%lo`. The SDK is one build that matches the retail form; it does not decide every file, since its `CFT_Init`
+  is also matched by a plain pointer local, and ee-gcc 2.96 drops the qualifier from its stabs.
+* The declaration is `char *volatile` on the word, as for [build-string-reads](#build-string-reads).
+* `mwPlyInitSfdFx` has two keywords: the version word `mwsfd_version_ptr` and `mwsfsvr_vsync_cnt2`, the V-sync
+  count already approved under [mwsfsvr-vsync-count](#mwsfsvr-vsync-count); stripped, the function differs by 15
+  and 10 words. The table holds one row per kind and function, so its row cites this anchor and counts both.
+
+### sfd-play-pending
+
+The SFD player's `pending` word (`+68`), a request flag. The API calls (`SFD_Start`, `SFD_Stop`, `SFD_Pause`,
+`SFD_TermSupply`) set it on the game thread, and the per-handle execution step `sfply_ExecOne` clears it. That step
+runs from `SFD_ExecOne` inside the MWSFD server pass, which the player registers as server callbacks that ADXM runs
+on its own threads, so the word is written from two threads. The keyword is on the clearing store only: stripped, the
+delay-slot filler moves the store into the call's delay slot where retail has a `nop`. The owner approved the row.
+
+### sfd-time-counts
+
+The SFD timer's stream position (`+680`) and tick count (`+716`), shared between the V-sync callback chain and the
+game thread. The V-sync server reaches them through `sftim_HnVbIn`, which calls `sftim_CntupHnVbIn` (adds the step
+to both) and `sftim_IsVbinStIncre` (reads the count); the timer adjustment at `0x2af488` changes both from the game
+thread, between the library's lock and unlock calls, while the V-sync path writes them too. Stripped,
+`sftim_IsVbinStIncre` differs by five words, the count update in `sftim_CntupHnVbIn` by one and either store in
+the adjustment by nine; the stream position's keyword in `sftim_CntupHnVbIn` changes no byte and keeps the two
+words' accesses alike. They are written as `volatile` casts at the access, so the other functions that touch the
+words keep their plain accesses. The rows are approved under the owner's standing rule for words a vsync callback
+and another thread share.
 
 ### adxt-ready-count
 
@@ -315,8 +348,12 @@ the value.
   The source keeps the `char *volatile` spelling of the other CRI files.
 * `mfCiGetInterface` reads the MFCI word and discards it in all three builds (GameCube from `.rodata` after its
   string, Xbox from `.rdata` before it), the ADXF pattern; stripped or `const`, the read goes. The owner approved
-  its row on that. `cvFsInit` has the same PS2 shape, but the GameCube and Xbox builds read the CVFS word only in
-  `cvFsAddDev`, never in `cvFsInit`, so its row was declined and it links from the retail image.
+  its row on that. `cvFsInit` has the same PS2 shape and the GameCube and Xbox builds read the CVFS word only in
+  `cvFsAddDev`, never in `cvFsInit`; CRI's own 2002 SDK object `cri_cvfs.o` (in the SDK archives of
+  [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) is the second build that
+  reads the word inside `cvFsInit`: its `cvFsInit` equals DW4's apart from relocated fields (13 words differ, all
+  immediates), including the discarded `lw` of `cvfs_build`. Plain, DW4's function is 180 bytes against retail's 196.
+  The owner approved the row on that.
 * `PS2RNA_Init` reads the word holding its version string (`ps2rna_ver_ptr`, `"PS2RNA Ver 1.30"`) as its first
   statement and `ADXM_SetupThrd` reads the word of its own (`adxps2_build`, `"ADXPS2 Ver.2.57 Build:..."`), and
   neither uses the value. Stripped or `const`, the read goes and the functions are 700 bytes against 716 and 392
@@ -328,11 +365,20 @@ the value.
   word before its first-use block; the Xbox RNA init reads its word, which sits before its string, and discards it
   twice. The Xbox ADX manager has no build word at all (its string is read only by its version getter), which is an
   absence, not a read in another function. So the other builds put the read in the same function, the standard
-  `mfCiGetInterface` met and `cvFsInit` did not.
+  `mfCiGetInterface` met.
 * `ADXM_SetupThrd`'s count of three is the build word and two declarations approved elsewhere: `adxm_vsync_waiting`
   ([adxm-thread-flags](#adxm-thread-flags); stripped, its store folds into `%lo` and moves into the delay slot) and
   `adxm_main_thid` ([adxm-thread-ids](#adxm-thread-ids); stripped, the load after the store is forwarded). The table
   holds one row per kind and function, so the row cites this anchor and counts all three.
+* **A char array read.** `pl2enc_Init`, `pl2enc_Create` and `ADXPS2_SetupDvdFs` read a version string held as an array
+  (`pl2enc_ver_str`, `adxrt_build`, `adxrt_build_ver`) with an expression statement that discards the value, declared
+  `extern volatile char name[N];`. ee-gcc compiles a read of a `volatile` char array as `memcmp(x, x, n)`, comparing
+  the array with itself, where `n` is the array's size in bits: 360 bits for the 45-byte `PL2ENC` string, and 128 and
+  232 bits for the 16-byte and 29-byte `ADXRT` words. No other construct emits a `memcmp` of a buffer with itself.
+  Stripped, the read goes: `pl2enc_Init` is 24 bytes against 60, `pl2enc_Create` 224 against 256 and
+  `ADXPS2_SetupDvdFs` 208 against 256. The 3rd Strike decompilation writes the same reads in its `ADXPS2_SetupDvdFs`
+  (`Char8 volatile adxps2_rt_ver0[12]` and so on). The owner approved the three rows; `ADXPS2_SetupDvdFs` counts
+  two, one per array.
 * `ADXM_SetupThrdEx` reads the same build word (`adxps2_build`) and sets `adxm_main_thid`, so its count of two is the
   build word and that declaration, approved under [adxm-thread-ids](#adxm-thread-ids). Its set-up count and
   thread parameters are plain.
@@ -889,20 +935,14 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
 
 ## Open questions
 
-* **Revoked CRI rows.** Four CRI functions match only with a `volatile` whose keyword keeps no memory access
+* **Revoked CRI rows.** Two CRI functions match only with a `volatile` whose keyword keeps no memory access
   and guards no state another context touches. Their rows were revoked, and they stay `unapproved` until there is
   evidence that the original declared the words `volatile`, such as an upstream CRI source or a second build:
   * the ADXM server thread body `adxm_usridle_thrd`: its tick count is plain, but its busy flag
     `adxm_usridle_busy` is touched by its own thread only, and its keyword only keeps the store out of the
     delay slot of the call that follows;
   * the function at `0x273128`, a DTX word whose single store is its only access; the keyword moves it out of a
-    call's delay slot, and the 3rd Strike decompilation declares the matching `dtx_proc_init_flag` plain;
-  * the build-string stores `SFD_Init` (`0x580d58`) and `MPS_Init` (`0x573f08`): each store is its word's only
-    access, and the keyword, as a declaration or as a cast on the store, changes only its address form and
-    position (a plain store folds into `%lo` and is scheduled elsewhere; `MPS_Init`'s folded store also shifts the
-    alignment of the infinite loop that follows). The GameCube and Xbox builds store the same words whatever the
-    qualifier (an immediate store on Xbox, a folded `stw` on GameCube), and the 3rd Strike decompilation holds
-    neither module, so no build can decide a store.
+    call's delay slot, and the 3rd Strike decompilation declares the matching `dtx_proc_init_flag` plain.
 
 * **libcdvd's semaphore ids.** Two command pre-checks and `sceCdBreak` match only with a `volatile` on the command
   semaphore ids (`0x483568`, `0x48356c`), which keeps a load out of a call's delay slot and gains or loses no
@@ -940,7 +980,3 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
   "memory")`, then the call, `__asm__("move $28, %0" : : "r"(gp))`, `sync` and `ei`, which is text nobody has shown
   Sony wrote; the SDK's `filestub.o` only shows the function is C. It stays out of `src/sony/libkernl/filestub.c`
   until a form that Sony's header and `libtimer.c` support matches.
-
-* **`cvFsInit`.** The function reads the CVFS build-string word and discards it, as `mfCiGetInterface` does, but the
-  GameCube and Xbox builds read that word only in `cvFsAddDev`, never in the init, so there is no second build
-  for its read (see [build-string-reads](#build-string-reads)). It links from the retail image.

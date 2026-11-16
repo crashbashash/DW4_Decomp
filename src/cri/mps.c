@@ -3,6 +3,8 @@
 
 extern char cri_mps_version[];          /* "\nCRI MPS/PS2EE Ver.1.924 Build:..." */
 extern MpsHn *mps_curhn;
+extern unsigned char mps_endian_mark[4];
+extern char *volatile mps_version_ptr;
 extern MpsWork *mps_work;
 
 /* matching construct: hand search — returns the validation result on the success path (keeps it live in v0,
@@ -54,6 +56,24 @@ int MPS_GetPesInf(MpsHn *mps, MpsPesInf *out) {
 
 char *MPS_GetVersionStr(void) {
     return cri_mps_version;
+}
+
+int MPS_Init(int nhn, MpsWork *work) {
+    int result;
+
+    mps_version_ptr = cri_mps_version;
+    if (mps_endian_mark[0] != 4) {
+        for (;;) {
+            ((void (*)(void))-1)();
+        }
+    }
+    result = mpslib_InitLibWork(nhn, work);
+    if (result != 0) {
+        return result;
+    }
+    mpsutl_Init();
+    mpsdmx_Init();
+    return 0;
 }
 
 int mpslib_InitLibWork(int nhn, MpsWork *work);
@@ -223,30 +243,30 @@ MpsHn *mpslib_InitHn(MpsHn *mps) {
 
 void mps_ResetPackHd(MpsPackHd *pack) {
     pack->scr = -1;
-    pack->scrExt = -1;
+    pack->isMpeg1 = -1;
     pack->muxRate = -1;
 }
 
 void mpslib_InitSys(MpsSysHd *sysHd) {
-    sysHd->f0 = -1;
-    sysHd->f4 = -1;
+    sysHd->headerLength = -1;
+    sysHd->rateBound = -1;
     sysHd->audioBound = -1;
     sysHd->videoBound = -1;
-    sysHd->f16 = -1;
-    sysHd->f20 = -1;
-    sysHd->f24 = -1;
-    sysHd->f28 = -1;
+    sysHd->fixedFlag = -1;
+    sysHd->cspsFlag = -1;
+    sysHd->audioLockFlag = -1;
+    sysHd->videoLockFlag = -1;
 }
 
 void mps_ResetPesInf(MpsPesInf *pes) {
     pes->pts = -1;
     pes->dts = -1;
     pes->streamId = -1;
-    pes->f20 = -1;
-    pes->f24 = -1;
-    pes->f28 = -1;
-    pes->f32 = -1;
-    pes->f36 = -1;
+    pes->streamKind = -1;
+    pes->streamNo = -1;
+    pes->packetLength = -1;
+    pes->stdBufferSize = -1;
+    pes->dataSize = -1;
 }
 
 int MPS_Destroy(MpsHn *mps) {

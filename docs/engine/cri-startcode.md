@@ -20,6 +20,6 @@ in the same file, because the call is then known not to throw, which decides how
 ## Open questions
 
 - The file's CRI name and its functions' names.
-- The two slice checks at `0x28e028` and `0x28e4d0` have no source: they read the bitstream a byte at a time
-  through an expanded bit-reader and look codes up in the table, and link from the retail image after the
-  file's other members.
+- `MPV_IsEmptyBpic` and `MPV_IsEmptyPpic` (`0x28e028`, `0x28e4d0`) match with the bit reader of
+  `include/dw4/cri/mpvbits.h`; the first ends at `0x28e4cc`, so its symbol is 1188 bytes and the alignment word
+  after it is not part of it.

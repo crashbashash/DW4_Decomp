@@ -347,3 +347,15 @@ volatile	CRICFG_Init	1	#build-string-stores
 volatile	FUN_00283058	1	#build-string-stores
 volatile	SFX_Init	1	#build-string-stores
 volatile	SUD_Init	1	#build-string-stores
+volatile	pl2enc_Init	1	#build-string-reads
+volatile	pl2enc_Create	1	#build-string-reads
+volatile	ADXPS2_SetupDvdFs	2	#build-string-reads
+volatile	cvFsInit	1	#build-string-reads
+volatile	MPS_Init	1	#build-string-stores
+volatile	MPV_Init	1	#build-string-stores
+volatile	SFD_Init	1	#build-string-stores
+volatile	mwPlyInitSfdFx	2	#build-string-stores
+volatile	sfply_ExecOne	1	#sfd-play-pending
+volatile	sftim_CntupHnVbIn	2	#sfd-time-counts
+volatile	sftim_IsVbinStIncre	1	#sfd-time-counts
+volatile	FUN_002af488	2	#sfd-time-counts

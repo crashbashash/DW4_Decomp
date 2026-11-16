@@ -22,6 +22,7 @@ enum { SJ_LIN_FREE = 0 };
 
 /* DTX remote procedures on the IOP side */
 enum {
+    PS2RNA_RPC_CREATE = 8,
     PS2RNA_RPC_DESTROY = 9,
     PS2RNA_RPC_OUTMODE = 11,
     PS2RNA_RPC_INIT_PORT = 12,
@@ -52,9 +53,11 @@ typedef struct Ps2Rna {
     int maxnch;                         /* 0x04 */
     Ps2RnaPsj *psj[PS2RNA_MAX_NCH];     /* 0x08 */
     DtrObj *dtr[PS2RNA_MAX_NCH];        /* 0x10 */
-    int pad24[2];
-    int id;                             /* 0x20: the IOP handle */
-    int pad36[3];
+    SfdSj *sjo[PS2RNA_MAX_NCH];         /* 0x18: the caller's EE joints, one per channel */
+    void *id;                           /* 0x20: the IOP handle */
+    int pad36;
+    int ring_size;                      /* 0x28: the first joint's data and room at creation */
+    int psj_bufsize;                    /* 0x2c: a voice's whole IOP buffer, free */
     int sfreq;                          /* 0x30 */
     int sent_sfreq;
     int outvol;                         /* 0x38: dB/10, -999 to 0 */
@@ -110,6 +113,7 @@ extern int ps2rna_nste;
 extern int ps2rna_nmono;
 extern int ps2rna_aux_on;
 extern int ps2rna_outmode;
+extern int ps2rna_vol_tbl[];
 extern int ps2rna_sent_outmode;
 extern int ps2rna_port_on[2];
 extern int ps2rna_port_mode;
@@ -138,6 +142,12 @@ void DTX_SetRcvCbf(void *dtx, void (*func)(void *obj, int *reply), void *obj);
 void DTX_SetSndCbf(void *dtx, void (*func)(void *obj, int *buf), void *obj);
 void ps2rna_sndcbf(void *obj, int *buf);
 void ps2rna_init_port(void);
+int DTR_GetStat(DtrObj *dtr);
+DtrObj *DTR_Create(SfdSj *sjs, SfdSj *sjd);
+extern char E1072601_not_enough_PSJ_handle[];
+extern char E0100401_can_t_create_PS2RNA_of_IOP[];
+extern char E1072602_can_t_create_DTR_handle[];
+void DTR_Start(DtrObj *dtr);
 extern char PS2RNA_SetupVoice_Illigal_parameter_nste_d[];
 extern char PS2RNA_SetupVoice_Illigal_parameter_nmono_d[];
 extern char PS2RNA_SetupVoice_The_set_up_value_exceeded_maximum_MAX_d[];
@@ -319,6 +329,166 @@ void ps2rna_rcvcbf(void *obj, int *reply)
 #define PS2RNA_DTX_HEAPSIZE 2256
 #define PS2RNA_DTX_BSIZE 2176
 #define PS2RNA_RPC_INIT 10
+
+/* The commands the send callback queues for the IOP, one per setting that differs from what it was last told. */
+enum {
+    PS2RNA_CMD_PLAY = 2,
+    PS2RNA_CMD_NCH = 3,
+    PS2RNA_CMD_SFREQ = 4,
+    PS2RNA_CMD_OUTVOL = 5,
+    PS2RNA_CMD_STOPFLAG = 8,
+    PS2RNA_CMD_OUTPAN = 9,
+    PS2RNA_CMD_AUXSW = 10,
+    PS2RNA_CMD_OUTMODE = 11,
+    PS2RNA_CMD_DUALSW = 12,
+    PS2RNA_CMD_OUTBALANCE = 13
+};
+
+/* One DTX command: the opcode is a halfword, then the IOP handle and up to two arguments. */
+typedef struct Ps2RnaCmd {
+    short op;
+    void *id;
+    int val;
+    int val2;
+} Ps2RnaCmd;
+
+void ps2rna_sndcbf(void *obj, int *buf)
+{
+    Ps2Rna *rna;
+    int i;
+    int j;
+    int k;
+    Ps2RnaCmd *cmd;
+
+    cmd = (Ps2RnaCmd *)(buf + 4);
+    j = 0;
+    for (i = 0; i < PS2RNA_MAX_OBJ; i++) {
+        rna = &ps2rna_obj[i];
+        if (rna->used != 1) {
+            continue;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (ps2rna_outmode != ps2rna_sent_outmode) {
+            cmd[j].op = PS2RNA_CMD_OUTMODE;
+            cmd[j].id = 0;
+            cmd[j].val = ps2rna_outmode;
+            ps2rna_sent_outmode = ps2rna_outmode;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->stopflag != rna->sent_stopflag) {
+            cmd[j].op = PS2RNA_CMD_STOPFLAG;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->stopflag;
+            rna->sent_stopflag = rna->stopflag;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->playsw == 0 && rna->sent_playsw == 1) {
+            cmd[j].op = PS2RNA_CMD_PLAY;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->playsw;
+            rna->sent_playsw = rna->playsw;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->auxsw != rna->sent_auxsw) {
+            cmd[j].op = PS2RNA_CMD_AUXSW;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->auxsw;
+            rna->sent_auxsw = rna->auxsw;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->dualsw != rna->sent_dualsw) {
+            cmd[j].op = PS2RNA_CMD_DUALSW;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->dualsw;
+            rna->sent_dualsw = rna->dualsw;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->nch != rna->sent_nch) {
+            cmd[j].op = PS2RNA_CMD_NCH;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->nch;
+            rna->sent_nch = rna->nch;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->sfreq != rna->sent_sfreq) {
+            cmd[j].op = PS2RNA_CMD_SFREQ;
+            cmd[j].val = rna->sfreq;
+            rna->sent_sfreq = rna->sfreq;
+            cmd[j].id = rna->id;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->outvol != rna->sent_outvol) {
+            int vol = ps2rna_vol_tbl[-rna->outvol];
+            cmd[j].op = PS2RNA_CMD_OUTVOL;
+            cmd[j].id = rna->id;
+            cmd[j].val = 0;
+            cmd[j].val2 = vol;
+            rna->sent_outvol = rna->outvol;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (j == 127) {
+            goto end;
+        }
+        for (k = 0; k < rna->nch; k++) {
+            if (rna->outpan[k] != rna->sent_outpan[k]) {
+                cmd[j].op = PS2RNA_CMD_OUTPAN;
+                cmd[j].id = rna->id;
+                cmd[j].val = k;
+                cmd[j].val2 = rna->outpan[k];
+                rna->sent_outpan[k] = rna->outpan[k];
+                j++;
+            }
+        }
+        if (rna->outbalance != rna->sent_outbalance) {
+            cmd[j].op = PS2RNA_CMD_OUTBALANCE;
+            cmd[j].val = rna->outbalance;
+            rna->sent_outbalance = rna->outbalance;
+            cmd[j].id = rna->id;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+        if (rna->playsw == 1 && rna->sent_playsw == 0) {
+            cmd[j].op = PS2RNA_CMD_PLAY;
+            cmd[j].id = rna->id;
+            cmd[j].val = rna->playsw;
+            rna->sent_playsw = rna->playsw;
+            j++;
+        }
+        if (j == 128) {
+            goto end;
+        }
+    }
+end:
+    *buf = j;
+}
 
 void PS2RNA_Init(void)
 {
@@ -532,6 +702,106 @@ int PS2RNA_Finish(void)
     }
 }
 
+Ps2Rna *PS2RNA_Create(SfdSj **sjo, int nch)
+{
+    int arg[4];
+    int reply;
+    Ps2RnaPsj *psj;
+    int i;
+    int j;
+    int k;
+    Ps2Rna *rna;
+    int sv;
+
+    for (i = 0; i < PS2RNA_MAX_OBJ; i++) {
+        rna = &ps2rna_obj[i];
+        if (rna->used == 0) {
+            break;
+        }
+    }
+    if (i == PS2RNA_MAX_OBJ) {
+        return 0;
+    }
+    sv = ps2rna_setup_voice;
+    if (sv == 1 && ps2rna_nvoice <= 0) {
+        rna->used = sv;
+        return rna;
+    }
+    memset(rna, 0, sizeof(*rna));
+    rna->maxnch = nch;
+    for (i = 0; i < nch; i++) {
+        psj = ps2rna_get_psj();
+        rna->psj[i] = psj;
+        if (psj == 0) {
+            ADXMSG_PrintErr(E1072601_not_enough_PSJ_handle);
+            for (j = 0; j < nch; j++) {
+                psj = rna->psj[j];
+                if (psj != 0) {
+                    ps2rna_release_psj(psj);
+                }
+            }
+            return 0;
+        }
+    }
+    arg[0] = nch;
+    arg[1] = 0;
+    for (i = 0; i < nch; i++) {
+        arg[2 + i] = (int)rna->psj[i]->sjrmt;
+    }
+    rna->id = (void *)DTX_CallUrpc(PS2RNA_RPC_CREATE, arg, 4, &reply, 1);
+    if (rna->id == 0) {
+        ADXMSG_PrintErr(E0100401_can_t_create_PS2RNA_of_IOP);
+        return 0;
+    }
+    for (i = 0; i < nch; i++) {
+        rna->dtr[i] = DTR_Create(sjo[i], rna->psj[i]->sjuni);
+        if (rna->dtr[i] == 0) {
+            ADXMSG_PrintErr(E1072602_can_t_create_DTR_handle);
+            for (k = 0; k < nch; k++) {
+                if (rna->dtr[k] != 0) {
+                    DTR_Destroy(rna->dtr[k]);
+                }
+                if (rna->id != 0) {
+                    arg[0] = (int)rna->id;
+                    DTX_CallUrpc(PS2RNA_RPC_DESTROY, arg, 1, 0, 0);
+                }
+                if (rna->psj[k] != 0) {
+                    ps2rna_release_psj(rna->psj[k]);
+                }
+            }
+            return 0;
+        }
+    }
+    for (i = 0; i < nch; i++) {
+        rna->sjo[i] = sjo[i];
+    }
+    rna->playsw = 0;
+    rna->sent_playsw = 0;
+    rna->nch = nch;
+    rna->sent_nch = nch;
+    rna->auxsw = 0;
+    rna->sent_auxsw = 0;
+    rna->outvol = 0;
+    rna->sent_outvol = 0;
+    rna->dualsw = ps2rna_port_mode;
+    rna->sent_dualsw = ps2rna_port_mode;
+    rna->stopflag = 0;
+    rna->sent_stopflag = 0;
+    for (i = 0; i < nch; i++) {
+        rna->outpan[i] = 0;
+        rna->sent_outpan[i] = 0;
+    }
+    rna->transsw = 0;
+    rna->trans_stopped = 1;
+    rna->outbalance = 0;
+    rna->sent_outbalance = 0;
+    rna->pad36 = 0;
+    rna->ring_size = sjo[0]->vtbl->getNumData(sjo[0], 1) + sjo[0]->vtbl->getNumData(sjo[0], 0);
+    rna->psj_bufsize = PS2RNA_PSJ_BUFSIZE;
+    rna->used = 1;
+    return rna;
+}
+
 void PS2RNA_Destroy(Ps2Rna *rna)
 {
     int arg[4];
@@ -543,7 +813,7 @@ void PS2RNA_Destroy(Ps2Rna *rna)
                 DTR_Destroy(rna->dtr[i]);
             }
         }
-        arg[0] = rna->id;
+        arg[0] = (int)rna->id;
         DTX_CallUrpc(PS2RNA_RPC_DESTROY, arg, 1, 0, 0);
         for (i = 0; i < rna->maxnch; i++) {
             if (rna->psj[i] != 0) {
@@ -663,6 +933,44 @@ int PS2RNA_GetNumRoom(Ps2Rna *rna)
     }
     sjuni = rna->psj[0]->sjuni;
     return sjuni->vtbl->getNumData(sjuni, SJ_LIN_FREE) / 2;
+}
+
+void ps2rna_exec_one(Ps2Rna *rna)
+{
+    SfdSjChunk ck;
+    int nfree;
+    int i;
+
+    if (rna->transsw != 1) {
+        return;
+    }
+    nfree = 0;
+    for (i = 0; i < rna->nch; i++) {
+        if (DTR_GetStat(rna->dtr[i]) != 1) {
+            if (rna->psj[i]->sjuni->vtbl->getNumData(rna->psj[i]->sjuni, SJ_LIN_FREE) == rna->psj_bufsize) {
+                nfree++;
+            }
+        }
+    }
+    if (nfree != rna->nch) {
+        return;
+    }
+    i = 0;
+    if (nfree <= 0) {
+        return;
+    }
+    for (i = 0; i < rna->nch; i++) {
+        rna->psj[i]->sjuni->vtbl->getChunk(rna->psj[i]->sjuni, SJ_LIN_FREE, 0x7fffffff, &ck);
+        rna->psj[i]->sjuni->vtbl->putChunk(rna->psj[i]->sjuni, SJ_LIN_FREE, &ck);
+        rna->psj[i]->sjuni->vtbl->getChunk(rna->psj[i]->sjuni, SJ_LIN_FREE, 0x7fffffff, &ck);
+        if (ck.len != rna->psj_bufsize) {
+            for (;;) {
+            }
+        }
+        rna->psj[i]->sjuni->vtbl->putChunk(rna->psj[i]->sjuni, SJ_LIN_FREE, &ck);
+        rna->stopflag = 0;
+        DTR_Start(rna->dtr[i]);
+    }
 }
 
 void PS2RNA_ExecServer(void)

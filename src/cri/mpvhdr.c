@@ -1,6 +1,7 @@
 /* MPV header decoding: walks a video elementary stream through a stream joint, start code by start code,
  * and decodes the sequence, group and picture headers and the user data in front of a picture. */
 #include "dw4/cri/mpv.h"
+#include "dw4/cri/mpvbits.h"
 
 int MPVLIB_CheckHn(MpvHn *mpv);
 int mpv_ReportError(MpvHn *mpv, int code);
@@ -14,12 +15,12 @@ int strncmp(const char *a, const char *b, unsigned int n);
 extern char mpv_tag_idcprec[];  /* "IDCPREC" */
 extern char mpv_tag_stccode[];  /* "STCCODE" */
 
-void MPV_SetUsrSj(MpvHn *mpv, int index, int addr, int f4, int f8) {
+void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
     MpvBufEnt *ent = &mpv->bufEnt[index];
 
-    ent->addr = addr;
-    ent->f4 = f4;
-    ent->f8 = f8;
+    ent->sj = sj;
+    ent->fn = fn;
+    ent->obj = obj;
 }
 
 void MPV_SetPicUsrBuf(MpvHn *mpv, int width, int height) {
@@ -41,6 +42,68 @@ void MPV_GetPicUsr(MpvHn *mpv, int *width, int *flag) {
     }
 }
 
+int mpv_StartLower(MpvHn *mpv, SfdSj *sj);
+int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf);
+int mpvhdec_GetCurDelim(SfdSj *sj);
+int mpvhdec_RecoverSj(MpvHn *mpv, int mask, SfdSj *sj);
+int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj);
+int mpvhdec_DecGscSj(MpvHn *mpv, SfdSj *sj);
+int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj);
+int mpvhdec_DecEscSj(MpvHn *mpv, SfdSj *sj, int type);
+int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj, int type);
+
+/* Decodes the headers at the head of the stream joint, start code by start code, up to the first slice. */
+int MPV_DecodePicAtrSj(MpvHn *mpv, SfdSj *sj) {
+    SfdSjChunk ck;
+    SfdSjChunk head;
+    int type;
+    int kind;
+    int err;
+
+    if (MPVLIB_CheckHn(mpv) != 0) {
+        return mpv_ReportError(0, 0xFF03020C);
+    }
+    mpv->low.flag = 0;
+    sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, &ck);
+    sj->vtbl->ungetChunk(sj, 1, &ck);
+    head.data = ck.data;
+    head.len = ck.len;
+    if (mpvhdec_GetCodec(mpv, &head) == 2) {
+        return mpv_StartLower(mpv, sj);
+    }
+    type = 0;
+    for (;;) {
+        err = mpvhdec_RecoverSj(mpv, -1, sj);
+        if (err != 0) {
+            return mpv_ReportError(mpv, err);
+        }
+        kind = mpvhdec_GetCurDelim(sj);
+        if (kind == 0 || (kind & 3) != 0) {
+            break;
+        }
+        switch (kind) {
+        case 64:
+            type = 64;
+            mpv_DecSeqHdr(mpv, sj);
+            break;
+        case 8:
+            type = 8;
+            mpvhdec_DecGscSj(mpv, sj);
+            break;
+        case 4:
+            type = 4;
+            mpv_DecPicHdr(mpv, sj);
+            break;
+        case 16:
+            mpvhdec_DecEscSj(mpv, sj, type);
+            break;
+        case 32:
+            mpvhdec_DecUdscSj(mpv, sj, type);
+            break;
+        }
+    }
+    return 0;
+}
 /* Classifies the start code at the head of the stream joint without taking any data. */
 int mpvhdec_GetCurDelim(SfdSj *sj) {
     SfdSjChunk ck;
@@ -52,8 +115,6 @@ int mpvhdec_GetCurDelim(SfdSj *sj) {
     }
     return MPV_CheckDelim((unsigned char *)ck.data);
 }
-
-int MPV_DecodePicAtrSj(MpvHn *mpv, SfdSj *sj);
 
 /* MPV_DecodePicAtrSj on a buffer, through a temporary memory stream joint; *used gets the bytes taken. */
 int MPV_DecodePicAtr(MpvHn *mpv, SfdSjChunk *buf, int *used) {
@@ -97,11 +158,32 @@ int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf) {
     return mpv->strmType;
 }
 
-int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len);
+/* the extension data after a header is skipped */
+int mpvhdec_DecEscSj(MpvHn *mpv, SfdSj *sj, int type) {
+    SfdSjChunk *ck = &mpv->chunk;
+    SfdSjChunk rest;
+    char *base;
+    int bits;
+
+    sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
+    base = (char *)((int)ck->data & ~3);
+    bits = (ck->data - base) * 8;
+    base += bits >> 3;
+    base += 4;
+    SJ_SplitChunk(ck, base - ck->data, ck, &rest);
+    sj->vtbl->putChunk(sj, 0, ck);
+    sj->vtbl->ungetChunk(sj, 1, &rest);
+    MPV_GoNextDelimSj(sj);
+    return 0;
+}
+
 int MPV_GoNextDelimSj(SfdSj *sj);
+int mpv_ScanUsrTags(MpvHn *mpv, char *buf, int size);
+int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len);
+extern void *memcpy(void *dst, const void *src, unsigned int n);
 
 /* Decodes the user data at the head of the stream joint and moves past it. */
-int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj) {
+int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj, int type) {
     SfdSjChunk *ck = &mpv->chunk;
     SfdSjChunk rest;
     char *base;
@@ -121,6 +203,61 @@ int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj) {
     sj->vtbl->ungetChunk(sj, 1, &rest);
     MPV_GoNextDelimSj(sj);
     return ret;
+}
+
+/* Copies the user data in data[0..len) into the stream joint registered for the current level, calls
+ * that level's callback, and keeps the CRI tags. Returns the tag scan's result, or -1 when the data holds no
+ * complete start-code-terminated block. */
+int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len) {
+    int result = 0;
+    int level = mpv->usrDatLevel;
+    int i;
+    int incomplete;
+    SfdSjChunk ck;
+    SfdSjChunk ck2;
+    SfdSj *sj;
+    int n;
+
+    for (i = 4; i < len - 3; i++) {
+        if (MPV_CheckDelim((unsigned char *)(data + i)) != 0) {
+            break;
+        }
+    }
+    incomplete = -1;
+    if (i != len - 3) {
+        incomplete = 0;
+    }
+    if (level == 1) {
+        result = mpv_ScanUsrTags(mpv, data, i);
+    }
+    sj = mpv->bufEnt[level].sj;
+    if (sj != 0) {
+        sj->vtbl->getChunk(sj, 0, i, &ck);
+        memcpy(ck.data, data, ck.len);
+        sj->vtbl->putChunk(sj, 1, &ck);
+        if (ck.len < i) {
+            sj->vtbl->getChunk(sj, 0, i - ck.len, &ck2);
+            memcpy(ck2.data, data + ck.len, ck2.len);
+            sj->vtbl->putChunk(sj, 1, &ck2);
+        }
+        if (mpv->bufEnt[level].fn != 0) {
+            mpv->bufEnt[level].fn(mpv->bufEnt[level].obj, level);
+        }
+    }
+    if (level == 3) {
+        if (mpv->low.width != 0) {
+            n = mpv->low.height;
+            if (i < n) {
+                n = i;
+            }
+            mpv->low.flag = n;
+            memcpy((void *)mpv->low.width, data, n);
+        }
+    }
+    if (result != 0) {
+        return result;
+    }
+    return incomplete;
 }
 
 /* Reads the CRI tags in user data: "IDCPREC" sets the IDCT precision, "STCCODE" the time code. */

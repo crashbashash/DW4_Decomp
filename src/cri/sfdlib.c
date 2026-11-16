@@ -57,7 +57,7 @@ void sfd_ClearErr(SfdErrInf *err);
 void sfd_RecordError(SfdErrInf *err, int code);
 void sfd_SetErrFn(SfdErrInf *err, void (*func)(void *obj, int code), void *obj);
 int SFLIB_CheckHn(SfdHandle *hn);
-void sfd_InitSj(void);
+void sfd_InitSj(int size);
 void sfd_FinishSj(void);
 void sfd_InitModules(void);
 void sfd_FinishModules(void);
@@ -70,6 +70,27 @@ char *SFD_GetVersionStr(void) {
 
 int SFD_IsHnSize(void *work, int size) {
     return size == SFD_HN_SIZE;
+}
+
+/* SFD_Init records the build string's address; the word is the string's only reference (build-string store). */
+extern char *volatile sfd_build_str;
+extern int sfd_hn_size;
+
+long SFD_Init(SfdInitPrm *prm) {
+    long ret;
+
+    sfd_build_str = cri_sfd_version;
+    sfd_hn_size = SFD_HN_SIZE;
+    /* matching construct: manual — the loop notes keep the argument load and the prm copy after the size store, so the size shares a0 */
+    do { } while (0);
+    sfd_InitSj(sfd_hn_size);
+    ret = sfd_InitLib(prm);
+    if (ret != 0) {
+        return ret;
+    }
+    sfd_InitModules();
+    sfd_InitOther();
+    return 0;
 }
 
 /* matching construct: manual — a long result returned from the int-valued SFTRN_Init keeps the final call a jal, not a sibling call */
@@ -204,7 +225,7 @@ int SFLIB_CheckHn(SfdHandle *hn) {
     return hn->stat != 0 ? 0 : -1;
 }
 
-void sfd_InitSj(void) {
+void sfd_InitSj(int size) {
     SJRBF_Init();
 }
 

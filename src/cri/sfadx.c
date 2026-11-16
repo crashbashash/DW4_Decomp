@@ -187,6 +187,9 @@ void sfadxt_PutDataChunk(SfdSj *sj, int len, SfdSjChunk *ck);
 void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out);
 void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used);
 int sfadxt_AdjDiscard(char *records, int length, int *found);
+int FUN_002ae6c8();
+int SFTIM_GetVideoStartSample();
+void SFTIM_SetStartTime();
 int sfadxt_InsertSilence(SfdAdxHn *h, int nch, int size);
 void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used);
 char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size);
@@ -205,6 +208,7 @@ void sfadxt_SetAdxtHd(SfdAdxHn *h);
 int sfadxt_IsEndDecinfo(int adxt);
 void FUN_0029c498(SfdAdxHn *h);
 int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx);
+int SFADXT_Create(SfdAdxHn *h);
 int sfadxt_CreateEx(SfdAdxCfg *cfg);
 int sfadxt_RestoreAdxtHn(void);
 void FUN_0029c890(SfdAdxHn *h);
@@ -393,6 +397,76 @@ void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out) {
     sfadxt_PutDataChunk(sj, n, &ck);
     ctx->total += n;
     *out = n;
+}
+
+/* the ADX step that keeps the decode position in step with the ring: feeds up to the whole 18-byte
+ * records the ring still lacks, backs off when it is ahead, and hands over to the plain copy step at the
+ * end of the stream */
+void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used) {
+    SfdAdxD28 *ring = &h->d28;
+    SfdAdxCtx *ctx;
+    int nch;
+    int rate;
+    int atEnd;
+    int found;
+    int footer;
+    int lo;
+    int hi;
+    int diff;
+    int result;
+    int total;
+    int chunk;
+    int back;
+    int r;
+    *used = 0;
+    ctx = (SfdAdxCtx *)h->sub.ctx;
+    if (sfadxt_GetNchSfreq(h, &nch, &rate) != 0) {
+        ctx->step = sfadxt_CopyData;
+        return;
+    }
+    lo = FUN_002ae6c8(ring, rate);
+    if (lo < 0)
+        return;
+    if (SFSET_GetCond(h, 5) == 0) {
+        SFTIM_SetStartTime(ring, lo, rate);
+        ctx->step = sfadxt_CopyData;
+        return;
+    }
+    hi = SFTIM_GetVideoStartSample(ring, rate, &atEnd);
+    if (hi < 0)
+        return;
+    result = 0;
+    SFTIM_SetStartTime(ring, hi, rate);
+    diff = hi - lo - ctx->pos;
+    if (diff >= 0) {
+        total = (diff >> 5) * nch * 18;
+        found = 0;
+        if (total > 0) {
+            chunk = size / (nch * 18) * nch * 18;
+            chunk = chunk < total ? chunk : total;
+            result = sfadxt_AdjDiscard(buf, chunk, &found);
+            ctx->pos += result / (nch * 18) << 5;
+            total -= chunk;
+        }
+        if (total <= 0 && atEnd != 0) {
+            ctx->step = sfadxt_CopyData;
+            found = ADXT_IsEndcode(buf, size, &footer);
+        }
+        if (found != 0)
+            SFSET_SetCond(h, 6, 0);
+    } else if (atEnd != 0) {
+        back = -diff;
+        back = back / 32 * 32;
+        if (back > 0) {
+            r = sfadxt_InsertSilence(h, nch, back);
+            ctx->pos -= r;
+            back -= r;
+        }
+        if (back <= 0)
+            ctx->step = sfadxt_CopyData;
+    }
+    *used = result;
+    h->total += result;
 }
 
 int sfadxt_AdjDiscard(char *records, int length, int *found) {
@@ -627,6 +701,45 @@ void FUN_0029c498(SfdAdxHn *h) {
         ctx->opt27 = value;
         ADXT_SetSvrFreq(adxt, value);
     }
+}
+
+int SFADXT_Create(SfdAdxHn *h);
+
+int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
+    SfdAdxPair pair[4];
+    if (sfadxt_para.f8 == 0 || sfadxt_para.f24 == 0)
+        return sfd_ReportError(0, 0xFF000C06);
+    ctx->cfg = sfadxt_para;
+    ctx->adxt = 0;
+    ctx->sj = 0;
+    ctx->time = -1;
+    ctx->unit = 1;
+    ctx->f44 = 0;
+    ctx->carry = 0;
+    ctx->started = 0;
+    ctx->pos = 0;
+    ctx->step = sfadxt_CopyData;
+    ctx->f64 = 0;
+    ctx->opt27 = -1;
+    ctx->total = 0;
+    ctx->f76 = 0;
+    pair[0].a = SFSET_GetCond(h, 63);
+    pair[0].b = 1000000;
+    pair[1].a = SFSET_GetCond(h, 64);
+    pair[1].b = 1000000;
+    pair[2].a = SFSET_GetCond(h, 65);
+    pair[2].b = 1000000;
+    pair[3].a = SFSET_GetCond(h, 66);
+    pair[3].b = 1000000;
+    SFTST_Create(h->blk4120);
+    FUN_002b0528(h->blk4120, SFSET_GetCond(h, 72));
+    SFTST_SetTolerance(h->blk4120, &pair[0]);
+    SFTST_SetExcessErr(h->blk4120, &pair[1]);
+    SFTST_SetAdjStart(h->blk4120, &pair[2]);
+    SFTST_SetAdjPoff(h->blk4120, &pair[3]);
+    SFTST_SetMovaveRange(h->blk4120, SFSET_GetCond(h, 62));
+    FUN_002b5848(SFSET_GetCond(h, 61));
+    return 0;
 }
 
 int sfadxt_CreateEx(SfdAdxCfg *cfg) {

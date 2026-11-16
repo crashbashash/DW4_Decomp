@@ -180,7 +180,7 @@ int sfmps_ExecServerSub(SfdHandle *hn) {
 
 void sfmps_SetSysHdFn(SfdHandle *hn) {
     MpsHn *mps = hn->mps.prm->mps;
-    MpsCbFn fn = (MpsCbFn)SFSET_GetCond(hn, SFD_COND_SYSHD_FN);
+    MpsSysHdFn fn = (MpsSysHdFn)SFSET_GetCond(hn, SFD_COND_SYSHD_FN);
 
     MPS_SetSysHdFn(mps, fn, (void *)SFSET_GetCond(hn, SFD_COND_SYSHD_FN_OBJ));
 }
@@ -642,8 +642,8 @@ void sfmps_SetMvInf(SfdHandle *hn) {
         video->muxRate = pack.muxRate;
     }
     MPS_GetSysHdOfKind(mps, &sys, 1);
-    if (sys.f16 != -1) {
-        video->f28 = sys.f16;
+    if (sys.fixedFlag != -1) {
+        video->f28 = sys.fixedFlag;
     }
     if (video->audioBound == -1) {
         video->audioBound = prm->audioBound;

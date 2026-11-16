@@ -157,7 +157,7 @@ int MPV_GetBitRate(MpvHn *mpv, int *bitRate) {
     if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020D);
     }
-    *bitRate = mpv->lowInf0;
+    *bitRate = mpv->bitRate;
     return 0;
 }
 
@@ -167,12 +167,12 @@ int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes) {
     if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020F);
     }
-    *size = mpv->lowInf1 << 11;
-    *delay = mpv->lowInf2;
-    if (mpv->lowInf0 == 0x3FFFF) {
+    *size = mpv->vbvBufferSize << 11;
+    *delay = mpv->vbvDelay;
+    if (mpv->bitRate == 0x3FFFF) {
         *bytes = -1;
     } else {
-        *bytes = mpv->lowInf2 * mpv->lowInf0 / 1800;
+        *bytes = mpv->vbvDelay * mpv->bitRate / 1800;
     }
     return 0;
 }
@@ -181,8 +181,8 @@ int MPV_GetLinkFlg(MpvHn *mpv, int *inf3, int *inf4) {
     if (MPVLIB_CheckHn(mpv) != 0) {
         return mpv_ReportError(0, 0xFF03020E);
     }
-    *inf3 = mpv->lowInf3;
-    *inf4 = mpv->lowInf4;
+    *inf3 = mpv->closedGop;
+    *inf4 = mpv->brokenLink;
     return 0;
 }
 

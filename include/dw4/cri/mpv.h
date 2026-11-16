@@ -13,23 +13,43 @@
 
 /* the picture information reset by mpv_ResetPicInf and filled from the lower layer by mpv_GetLowerInf */
 typedef struct MpvPicInf {
-    int f0, f4, f8, f12, f16, f20, f24, f28, f32, f36, f40, f44, f48, f52;
+    int horizontalSize;     /* 0 */
+    int verticalSize;       /* 4 */
+    int mbWidth;            /* 8 */
+    int mbHeight;           /* 12 */
+    int frameRateCode;      /* 16: picture_rate */
+    int temporalReference;  /* 20 */
+    int pictureCodingType;  /* 24: 1 I, 2 P, 3 B */
+    int dropFrameFlag;      /* 28: the group's time code */
+    int hours;              /* 32 */
+    int minutes;            /* 36 */
+    int seconds;            /* 40 */
+    int pictures;           /* 44 */
+    int gopCount;           /* 48: group headers decoded */
+    int seqCount;           /* 52: sequence headers decoded */
     int f56;    /* 3 after a reset */
     int f60;    /* 1 after a reset */
     int f64;    /* 1 after a reset */
     int f68;    /* 1 after a reset */
-    int f72, f76;
+    int bitRate;            /* 72 */
+    int vbvBufferSize;      /* 76 */
     short f80, f82;
-    signed char f84, f85, f86, f87, f88, f89, f90, f91, f92, f93;
+    signed char f84, f85, f86, f87, f88;
+    signed char pelAspectRatio;      /* 89: aspect_ratio_information */
+    signed char constrainedParams;   /* 90 */
+    signed char f91, f92, f93;
     signed char f94, f95, f96, f97, f98, f99, f100;
     char pad101[128 - 101];
 } MpvPicInf;
 
-/* one of the four reference-buffer entries the lower layer gets */
+/* called with the level after user data was written to a sink */
+typedef void (*MpvUsrDatFn)(void *obj, int level);
+
+/* where the user data of one level goes: a stream joint to write it to, and a callback told when it was */
 typedef struct MpvBufEnt {
-    int addr;
-    int f4;
-    int f8;
+    SfdSj *sj;
+    MpvUsrDatFn fn;
+    void *obj;
 } MpvBufEnt;
 
 /* the sequence header values of a handle */
@@ -45,6 +65,14 @@ typedef struct MpvLowSize {
     int height;
     int flag;
 } MpvLowSize;
+
+/* the motion vector range of one direction of a P or B picture */
+typedef struct MpvMotionRange {
+    int fullPel;     /* full_pel_forward_vector, or the backward one */
+    int rSize;       /* f_code - 1 */
+    int shift;       /* 27 - rSize */
+    int f;           /* 1 << rSize */
+} MpvMotionRange;
 
 /* the error object a handle reports through: code is stored, then fn(arg) is called */
 typedef struct MpvErrObj {
@@ -73,14 +101,25 @@ typedef struct MpvHn {
     int cond[MPV_COND_MAX];   /* 400: conditions, copied from the library defaults */
     MpvPicInf picInf;         /* 464 */
     MpvErrObj err;            /* 592: reset by FUN_0028ea30 */
-    char pad612[68];
-    int lowInf0;              /* 680 */
-    int lowInf1;              /* 684: in 2048-byte units */
-    int f688;
-    int lowInf3;              /* 692 */
-    int lowInf4;              /* 696 */
-    int lowInf2;              /* 700 */
-    char pad704[152];
+    char pad612[64];
+    int pelAspectRatio;       /* 676 */
+    int bitRate;              /* 680: bit_rate_value */
+    int vbvBufferSize;        /* 684: vbv_buffer_size_value, in 2048-byte units */
+    int constrainedParams;    /* 688: constrained_parameters_flag */
+    int closedGop;            /* 692 */
+    int brokenLink;           /* 696 */
+    int vbvDelay;             /* 700 */
+    char pad704[20];
+    int f724;
+    char pad728[4];
+    int f732;
+    char pad736[12];
+    MpvMotionRange fwd;       /* 748: forward_f_code and full_pel_forward_vector */
+    char pad764[20];
+    MpvMotionRange bwd;       /* 784 */
+    char pad800[32];
+    int lastMbAddr;           /* 832: macroblocks in a picture, less one */
+    char pad836[20];
     int strmType;             /* 856: 0 unknown, 1 MPEG-1, 2 MPEG-2 */
     int f860, f864, f868;
     char pad872[24];
@@ -93,8 +132,8 @@ typedef struct MpvHn {
     int maxCount;             /* 932: from condition 7 */
     char pad936[8];
     int lower;                /* 944: the lower-layer decoder handle */
-    char pad948[4];
-    MpvBufEnt bufEnt[4];      /* 952 */
+    int usrDatLevel;          /* 948: the level the next user data belongs to */
+    MpvBufEnt bufEnt[4];      /* 952: the user-data sink of each level */
     MpvLowSize low;           /* 1000 */
     char pad1012[MPV_HN_SIZE - 1012];
     char pad1016[1024 - MPV_HN_SIZE];

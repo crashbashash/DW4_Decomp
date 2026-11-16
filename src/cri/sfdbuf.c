@@ -48,6 +48,17 @@ typedef struct SfdBufHn {
     SfdBufRec rec[16];   /* 5800 */
 } SfdBufHn;
 
+/* an audio ring's two free areas, each with a pointer per channel (written by SFBUF_AringGetWrite) */
+typedef struct SfdBufAring {
+    char *buf;          /* 0 */
+    int size;           /* 4: up to 8 the samples are bytes, else halfwords */
+    int xsize;          /* 8 */
+    int len[2];         /* 12: the two areas' lengths in samples */
+    char *ptr[2][2];    /* 20: [area][channel] */
+    int wtot;           /* 36 */
+    int rtot;           /* 40 */
+} SfdBufAring;
+
 typedef struct SfdBufCrePrm {
     int f0;
     char *work;       /* 4 */
@@ -413,6 +424,8 @@ void SFBUF_RingAddRead(SfdBufHn *h, int index, int len) {
     sfbuf_RingAddSub(h, index, len, 1);
 }
 
+int sfbuf_RingAddSub(SfdBufHn *h, int index, int len, int id);
+
 void sfbuf_ResetConti(SfdBufBody *body) {
     SfdBufCur *cur = &body->cur;
     SfdSjChunk first;
@@ -543,6 +556,69 @@ int SFBUF_AringAddWrite(SfdBufHn *h, int index, int n) {
     return ret;
 }
 
+int SFBUF_AringGetWrite(SfdBufHn *h, int index, SfdBufAring *ar) {
+    SfdBufEnt *ents = h->ent;
+    SfdBufEnt *ent = &ents[index];
+    SfdBufBody *body;
+    int lock;
+    char *buf;
+    char *ch0;
+    char *ch1;
+    int size;
+    int xsize;
+    int len;
+    int wpos;
+    int rpos;
+    int wtot;
+    int rtot;
+    if (ent->valid == 0) {
+        return sfd_ReportError(h, 0xFF000401);
+    }
+    body = &ent->body;
+    sfd_Lock(&lock);
+    buf = body->inf.buf;
+    size = body->inf.size;
+    xsize = body->inf.xsize;
+    ch0 = body->inf.p0;
+    ch1 = body->cur.pos;
+    len = body->cur.len;
+    wpos = body->f32;
+    rpos = body->f36;
+    wtot = body->f40;
+    rtot = body->f44;
+    sfd_Unlock(&lock);
+    ar->buf = buf;
+    ar->size = size;
+    ar->xsize = xsize;
+    ar->wtot = wtot;
+    ar->rtot = rtot;
+    if (wtot >= rtot + len) {
+        ar->len[0] = 0;
+        ar->ptr[0][0] = 0;
+        ar->ptr[0][1] = 0;
+        ar->len[1] = 0;
+        ar->ptr[1][0] = 0;
+        ar->ptr[1][1] = 0;
+    } else if (wpos < rpos) {
+        ar->len[0] = rpos - wpos;
+        ar->ptr[0][0] = (size < 9) ? ch0 + wpos : ch0 + wpos * 2;
+        ar->ptr[0][1] = (size < 9) ? ch1 + wpos : ch1 + wpos * 2;
+        ar->len[1] = 0;
+        ar->ptr[1][0] = 0;
+        ar->ptr[1][1] = 0;
+    } else {
+        ar->len[0] = len - wpos;
+        ar->ptr[0][0] = (size < 9) ? ch0 + wpos : ch0 + wpos * 2;
+        ar->ptr[0][1] = (size < 9) ? ch1 + wpos : ch1 + wpos * 2;
+        ar->len[1] = rpos;
+        ar->ptr[1][0] = ch0;
+        ar->ptr[1][1] = ch1;
+    }
+    return 0;
+}
+
+int SFBUF_AringGetRead(SfdBufHn *h, int index, SfdBufAring *ar);
+
 int SFBUF_AringAddRead(SfdBufHn *h, int index, int n) {
     SfdBufEnt *ents = h->ent;
     SfdBufEnt *ent = &ents[index];
@@ -570,6 +646,14 @@ int SFBUF_AringAddRead(SfdBufHn *h, int index, int n) {
 }
 
 int SFBUF_VfrmGetWrite(void) {
+    return 0;
+}
+
+int SFBUF_VfrmAddWrite(SfdBufHn *h, int index, int len) {
+    /* matching construct: hand search — the store in a do-while(0) statement keeps it ahead of the return value's set */
+    do {
+        h->dirty = 1;
+    } while (0);
     return 0;
 }
 

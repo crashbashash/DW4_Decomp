@@ -6,16 +6,22 @@ void SVM_Lock(void);
 void SVM_Unlock(void);
 void *memset(void *dst, int value, unsigned int size);
 
+
 extern int pl2enc_init_cnt;
+extern volatile char pl2enc_ver_str[45];   /* the build string, read so it is linked */
 extern Pl2EncErrFunc pl2enc_err_func;
 extern void *pl2enc_err_obj;
 extern int pl2enc_gain_tbl[];   /* 4.12 fixed point, by gain index */
+extern char E03090101_NULL_pointer_is_specified[];
+extern char E03090102_Work_size_is_too_short[];
+extern char E03091001_Work_size_is_too_short[];
 extern char E03090306_NULL_pointer_is_specified[];
 extern char E03090307_Illegal_parameter_is_specified[];
 extern char E03091601_NULL_pointer_is_specified[];
 extern char E03091602_Illegal_parameter_is_specified[];
 
 void pl2enc_Reset(Pl2Enc *pl2);
+void pl2enc_CallErr(const char *message);
 
 #define PL2ENC_POS_MAX 127
 
@@ -66,6 +72,12 @@ void PL2ENC_Init(int reserved)
 
 void pl2enc_Init(int reserved);
 
+void pl2enc_Init(int reserved)
+{
+    pl2enc_ver_str;
+    pl2enc_init_cnt++;
+}
+
 void pl2enc_Finish(int reserved);
 
 void PL2ENC_Finish(int reserved)
@@ -89,6 +101,42 @@ Pl2Enc *PL2ENC_Create(void *work, int wksize)
     pl2enc_Lock();
     pl2 = pl2enc_Create(work, wksize);
     pl2enc_Unlock();
+    return pl2;
+}
+
+Pl2Enc *pl2enc_Create(void *work, int wksize)
+{
+    Pl2Enc *pl2;
+    unsigned int p;
+
+    pl2enc_ver_str;
+    if (work == 0) {
+        pl2enc_CallErr(E03090101_NULL_pointer_is_specified);
+        return 0;
+    }
+    if (wksize < 1024) {
+        pl2enc_CallErr(E03090102_Work_size_is_too_short);
+        return 0;
+    }
+    p = (unsigned int)work;
+    if (p & 3) {
+        p = p - (p & 3) + 4;
+    }
+    pl2 = (Pl2Enc *)p;
+    memset(pl2, 0, sizeof(*pl2));
+    pl2->work = work;
+    pl2->wksize = wksize;
+    p = (unsigned int)(pl2 + 1);
+    if (p & 3) {
+        p = p - (p & 3) + 4;
+    }
+    pl2->dly_l = (int *)p;
+    pl2->dly_r = (int *)(p + PL2ENC_MAX_DELAY * sizeof(int));
+    pl2enc_Reset(pl2);
+    if (p + 2 * PL2ENC_MAX_DELAY * sizeof(int) > (unsigned int)work + wksize) {
+        pl2enc_CallErr(E03091001_Work_size_is_too_short);
+        return 0;
+    }
     return pl2;
 }
 
