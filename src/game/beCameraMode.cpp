@@ -31,7 +31,7 @@ void beCameraMode_OnDetach(beCameraMode *self) {
 
     camera = (igCameraDispatchView *)(self->_camera);
     if (camera != 0) {
-        camera->vfunc_36();
+        camera->Deactivate();
     }
 }
 
@@ -45,7 +45,7 @@ void beCameraMode_OnAttach(beCameraMode *self) {
     igViewModel *model;
 
     if (self->_camera != 0) {
-        ((igCameraDispatchView *)self->_camera)->vfunc_35();
+        ((igCameraDispatchView *)self->_camera)->Activate();
         model = (igViewModel *)self->_model;
         camera = (igCamera *)self->_camera;
         farPlane = camera->_farPlane;

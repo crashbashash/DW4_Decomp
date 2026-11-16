@@ -641,11 +641,11 @@ igMetaObject *Gap__Sg__igCamera__vfunc_22(void) {
     return g_igCamera_metaObject;
 }
 
-void Gap__Sg__igCamera__vfunc_35(void) {
+void igCamera_Activate(void) {
 
 }
 
-void Gap__Sg__igCamera__vfunc_36(void) {
+void igCamera_Deactivate(void) {
 
 }
 

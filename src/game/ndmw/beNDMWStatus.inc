@@ -36,7 +36,7 @@ int beNDMWStatus_GetVTable(void) {
     *windowProRef = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
-    beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)windowProRef, -1);
+    beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)windowProRef, -1);
     beBaseInfoManager_Destroy(&obj, 0);
     return vtable;
 }

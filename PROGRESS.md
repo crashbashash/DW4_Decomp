@@ -35,18 +35,18 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,228** of the 20,222 matched functions are readable: **2,304,068** code bytes, **66.3 %** of the code.
+**13,234** of the 20,222 matched functions are readable: **2,304,724** code bytes, **66.4 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 5,482 | 603,800 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 5,480 | 603,784 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 4,935 | 745,116 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,216 | 304,316 |
 | it sits in its class or module file, not `src/unmatched/` | 83 | 19,628 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 2,324 | 503,912 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,224 | 392,336 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,697 | 320,504 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 550 | 136,180 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 546 | 135,540 |
 
 ## Debt
 
@@ -183,7 +183,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | | |
 | --- | --- |
 | functions with a recovered name (any: role names included) | 16,536 of 20,575 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,053 of 20,575 (10,786 of them matched) |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 11,055 of 20,575 (10,788 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |

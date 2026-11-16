@@ -63,7 +63,7 @@ void *beNDMWWindow_Destroy(beNDMWWindowCtrl *self, short flags) {
     return self;
 }
 
-igSmartPointer<igObject> *beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -99,7 +99,7 @@ beNDMWWindowTitle *beNDMWWindowTitle_Destroy(beNDMWWindowTitle *self, short flag
             igSmartPointer_igStringRefList_Destruct(&self->_modelCloseInfoNameList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_textCloseNameList, -1);
             igSmartPointer_igStringRefList_Destruct(&self->_textCloseTypeList, -1);
-            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&self->_mother, -1);
+            beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&self->_mother, -1);
             igSmartPointer_beNDMWWindowList_Destruct((igSmartPointer<igObject> *)&self->_subWindow, -1);
         }
         if (flags > 0) {

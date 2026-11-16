@@ -217,7 +217,7 @@ extern "C" void beNDMWShopTitle03_Create(int allocator);
 extern "C" void *beNDMWShopTitle03_GetMetaObject(void);
 extern "C" int beNDMWShopTitle03_GetVTable(void);
 extern "C" int Memory_FreeBufferAliasC(...);
-extern "C" igSmartPointer<igObject> *beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage);
+extern "C" igSmartPointer<igObject> *beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWWindowList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" int igSmartPointer_igStringRefList_Destruct(...);
 extern "C" int igSmartPointer_igIntList_Destruct(...);

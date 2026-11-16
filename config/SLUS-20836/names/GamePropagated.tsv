@@ -177,6 +177,8 @@
 0x001aa6a0	igActorList_EnsureRegistered	engine	high	retail instructions: j igMetaObject_RunStaticInit with &igActorList_Register; Core convention <C>_EnsureRegistered
 0x001aaa50	igActor_EnsureRegistered	engine	high	retail instructions: j igMetaObject_RunStaticInit with &igActor_Register; Core convention <C>_EnsureRegistered
 0x001e2d80	igTransform_SetMatrix	engine	high	igTransform/35 = SetMatrix: igTransform's default (0x1e2d80) is `j igMatrix44f_Copy` into _m (+32); beTransformSync copies and forwards to every synced transform's slot 35; beModelCtrl sets its node matrix through it; held by 4 vtable(s)
+0x001e3760	igCamera_Activate	engine	medium	igCamera/33 = Activate: igCameraMode/beCameraMode OnAttach call the mode's camera's slot 33 (lw t9,140) when the mode is added to the view model, before copying its fov/near/far into it; igCamera's own body is empty and no PS2 class overrides it; the GameCube and Xbox builds' igDOFCamera overrides it to switch its _shader (igDOFShader) on (_bEnabled) and load it with the camera's _blurriness, _focusDistance, field of view and clip planes. Alternative: Enable; held by 1 vtable(s)
+0x001e3770	igCamera_Deactivate	engine	medium	igCamera/34 = Deactivate: igCameraMode/beCameraMode OnDetach call the mode's camera's slot 34 (lw t9,144) when the mode is removed from the view model; igCamera's own body is empty and no PS2 class overrides it; the GameCube and Xbox builds' igDOFCamera overrides it to switch its _shader (igDOFShader) off (_bEnabled cleared). Alternative: Disable; held by 1 vtable(s)
 0x001e4240	igRandomNumber_GetOrCreateMetaObject	engine	high	retail instructions: creates the class handle 0x562b70 with igMetaObject_Create on first use; Core convention <C>_GetOrCreateMetaObject
 0x001e42e0	igRandomNumber_EnsureRegistered	engine	high	retail instructions: j igMetaObject_RunStaticInit with &igRandomNumber_Register; Core convention <C>_EnsureRegistered
 0x00232840	igInsightCore_GetOrCreateMetaObject	engine	high	retail instructions: creates the class handle 0x56db60 with igMetaObject_Create on first use; Core convention <C>_GetOrCreateMetaObject
@@ -274,7 +276,7 @@
 0x00336200	igMovieInfo_Create	movie	high	ensures igMovieInfo is registered, then igMetaObject_CreateInstance(g_igMovieInfo_metaObject, allocator); Core convention <C>_Create (CoreNames.tsv)
 0x00336240	igMovieInfo_GetMetaObject	movie	high	validity-checked accessor of g_igMovieInfo_metaObject that runs igMovieInfo registration when the class is not valid; Core convention <C>_GetMetaObject (CoreNames.tsv)
 0x003363c0	igSmartPointer_igTextureBindAttrList_Destruct	movie	high	compiler-emitted __dt__39igSmartPointer<21igTextureBindAttrList>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct
-0x00336440	igSmartPointer_igMovieCodecView_Destruct	movie	high	compiler-emitted __dt__34igSmartPointer<16igMovieCodecView>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct
+0x00336440	igSmartPointer_igMovieCodec_Destruct	movie	high	compiler-emitted __dt__42igSmartPointer<24igMovieCodecDispatchView>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct
 0x003364c0	igMovieInfo_EnsureRegistered	movie	high	runs igMetaObject_RunStaticInit(igMovieInfo_Register); Core convention <C>_EnsureRegistered (CoreNames.tsv)
 0x00336560	igMovieInfo_GetMetaObjectFunction	movie	high	registrar argument 4 (t0) stub that only calls igMovieInfo_GetMetaObject (0x336240); Core convention <C>_GetMetaObjectFunction
 0x00336860	igMovieRenderer_GetOrCreateMetaObject	movie	high	creates g_igMovieRenderer_metaObject on first use and returns it; Core convention <C>_GetOrCreateMetaObject (CoreNames.tsv)
@@ -352,7 +354,7 @@
 0x0033f320	beWeaponSeqData_GetMetaObjectFunction	game	high	registrar argument 4 (t0) stub that only calls beWeaponSeqData_GetMetaObject (0x33f170); Core convention <C>_GetMetaObjectFunction
 0x0033f450	beWeapon_GetOrCreateMetaObject	game	high	creates g_beWeapon_metaObject on first use and returns it; Core convention <C>_GetOrCreateMetaObject (CoreNames.tsv)
 0x0033f4a0	beWeapon_GetMetaObject	game	high	validity-checked accessor of g_beWeapon_metaObject that runs beWeapon registration when the class is not valid; Core convention <C>_GetMetaObject (CoreNames.tsv)
-0x0033f6d0	beWeapon_igSmartPointer_igObject_Destruct	game	high	compiler-emitted __dt__25igSmartPointer<8igObject>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct; 9 copies of this instance, so the class of the function it follows, beWeapon, is added
+0x0033f6d0	beBaseInfoManager_igSmartPointer_igObject_Destruct	game	high	compiler-emitted __dt__25igSmartPointer<8igObject>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct; 9 copies of this instance, so the class of the function it follows, beBaseInfoManager, is added
 0x0033f750	beWeapon_EnsureRegistered	game	high	runs igMetaObject_RunStaticInit(beWeapon_Register); Core convention <C>_EnsureRegistered (CoreNames.tsv)
 0x0033f7f0	beWeapon_GetMetaObjectFunction	game	high	registrar argument 4 (t0) stub that only calls beWeapon_GetMetaObject (0x33f4a0); Core convention <C>_GetMetaObjectFunction
 0x0033f810	beBaseInfoManager_GetPublishedMetaObject	game	high	12-byte leaf returning g_beBaseInfoManager_metaObject; Core convention <C>_GetPublishedMetaObject (CoreNames.tsv)
@@ -2115,7 +2117,7 @@
 0x003b2a90	beNDMWTitle2_EnsureRegistered	game	high	runs igMetaObject_RunStaticInit(beNDMWTitle2_Register); Core convention <C>_EnsureRegistered (CoreNames.tsv)
 0x003b2b30	beNDMWTitle2_GetMetaObjectFunction	game	high	registrar argument 4 (t0) stub that only calls beNDMWTitle2_GetMetaObject (0x3b2930); Core convention <C>_GetMetaObjectFunction
 0x003b2c40	beNDMWShopTitle03_GetMetaObject	game	high	validity-checked accessor of g_beNDMWShopTitle03_metaObject that runs beNDMWShopTitle03 registration when the class is not valid; Core convention <C>_GetMetaObject (CoreNames.tsv)
-0x003b2f30	beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct	game	high	compiler-emitted __dt__30igSmartPointer<12beNDMWWindow>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct; 2 copies of this instance, so the class of the function it follows, beNDMWShopTitle03, is added
+0x003b2f30	beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct	game	high	compiler-emitted __dt__30igSmartPointer<12beNDMWWindow>Fv (unit-objects.json); Core convention igSmartPointer_<T>_Destruct; 2 copies of this instance, so the class of the function it follows, beNDMWWindow, is added
 0x003b30f0	beNDMWShopTitle03_EnsureRegistered	game	high	runs igMetaObject_RunStaticInit(beNDMWShopTitle03_Register); Core convention <C>_EnsureRegistered (CoreNames.tsv)
 0x003b3180	beNDMWShopTitle03_GetMetaObjectFunction	game	high	registrar argument 4 (t0) stub that only calls beNDMWShopTitle03_GetMetaObject (0x3b2c40); Core convention <C>_GetMetaObjectFunction
 0x003b31a0	beNDMWWindowTitle_GetPublishedMetaObject	game	high	12-byte leaf returning g_beNDMWWindowTitle_metaObject; Core convention <C>_GetPublishedMetaObject (CoreNames.tsv)

@@ -377,8 +377,8 @@
   "fully_verified": 20060,
   "matched": 20074,
   "named": 16536,
-  "named_semantic": 11053,
-  "named_semantic_matched": 10786,
+  "named_semantic": 11055,
+  "named_semantic_matched": 10788,
   "total": 20575
  },
  "kernel_patches": {
@@ -472,7 +472,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2304068,
+  "bytes": 2304724,
   "failing": {
    "addresses": {
     "bytes": 745116,
@@ -487,8 +487,8 @@
     "functions": 2224
    },
    "name": {
-    "bytes": 603800,
-    "functions": 5482
+    "bytes": 603784,
+    "functions": 5480
    },
    "placed": {
     "bytes": 19628,
@@ -503,11 +503,11 @@
     "functions": 1216
    },
    "virtuals": {
-    "bytes": 136180,
-    "functions": 550
+    "bytes": 135540,
+    "functions": 546
    }
   },
-  "functions": 13228,
+  "functions": 13234,
   "matched_functions": 20222
  },
  "regions": [

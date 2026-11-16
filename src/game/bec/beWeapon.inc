@@ -32,7 +32,7 @@ int beWeapon_GetVTable(void) {
     obj._attachDataList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beWeapon_vtable[0];
-    beWeapon_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)(&obj._attachDataList), (short)(-1));
+    beBaseInfoManager_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)(&obj._attachDataList), (short)(-1));
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
@@ -69,7 +69,7 @@ beBaseInfoManager *beBaseInfoManager_Destroy(beBaseInfoManager *self, short dele
     return self;
 }
 
-igSmartPointer<igObject> *beWeapon_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *beBaseInfoManager_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

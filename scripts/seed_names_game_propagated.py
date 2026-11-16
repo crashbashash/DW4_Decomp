@@ -495,8 +495,18 @@ for va, n in sym.items():
 
 
 # ---------------------------------------------------------------- route: emitted smart-pointer destructors
+def view_class(t):
+    """The class an ABI view stands for: `<Class>DispatchView`, or a `<Class>View` whose header is in
+    include/dw4, is the class itself; any other T is returned unchanged."""
+    if t.endswith("DispatchView"):
+        return t[:-len("DispatchView")]
+    if t.endswith("View") and os.path.exists(os.path.join("include", "dw4", t + ".h")):
+        return t[:-len("View")]
+    return t
+
+
 def instances(names):
-    return {m.group(1) for m in map(SMART_POINTER_DTOR.fullmatch, names) if m}
+    return {view_class(m.group(1)) for m in map(SMART_POINTER_DTOR.fullmatch, names) if m}
 
 
 own_names, dup_names = collections.defaultdict(set), collections.defaultdict(set)

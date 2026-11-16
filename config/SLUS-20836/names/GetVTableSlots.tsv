@@ -973,8 +973,6 @@
 0x001e3730	Gap::Sg::igBlendMatrixSelect::vfunc_22	engine
 0x001e3740	Gap::Sg::igBoundingBoxesMaker::vfunc_22	engine
 0x001e3750	Gap::Sg::igCamera::vfunc_22	engine
-0x001e3760	Gap::Sg::igCamera::vfunc_35	engine
-0x001e3770	Gap::Sg::igCamera::vfunc_36	engine
 0x001e3780	Gap::Sg::igCompiledTransform::vfunc_22	engine
 0x001e3790	Gap::Sg::igCompiledTransformList::vfunc_22	engine
 0x001e37a0	Gap::Sg::igBlendListRecord::vfunc_22	engine

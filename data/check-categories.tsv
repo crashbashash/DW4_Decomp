@@ -5505,8 +5505,8 @@
 001e3730	Gap__Sg__igBlendMatrixSelect__vfunc_22	match	-
 001e3740	Gap__Sg__igBoundingBoxesMaker__vfunc_22	match	-
 001e3750	Gap__Sg__igCamera__vfunc_22	match	-
-001e3760	Gap__Sg__igCamera__vfunc_35	match	-
-001e3770	Gap__Sg__igCamera__vfunc_36	match	-
+001e3760	igCamera_Activate	match	-
+001e3770	igCamera_Deactivate	match	-
 001e3780	Gap__Sg__igCompiledTransform__vfunc_22	match	-
 001e3790	Gap__Sg__igCompiledTransformList__vfunc_22	match	-
 001e37a0	Gap__Sg__igBlendListRecord__vfunc_22	match	-
@@ -13850,7 +13850,7 @@
 00336240	igMovieInfo_GetMetaObject	match	-
 00336290	igMovieInfo_GetVTable	match	-
 003363c0	igSmartPointer_igTextureBindAttrList_Destruct	match	-
-00336440	igSmartPointer_igMovieCodecView_Destruct	match	-
+00336440	igSmartPointer_igMovieCodec_Destruct	match	-
 003364c0	igMovieInfo_EnsureRegistered	match	-
 003364e0	igMovieInfo_Register	match	-
 00336560	igMovieInfo_GetMetaObjectFunction	match	-
@@ -14082,7 +14082,7 @@
 0033f4f0	beWeapon_GetVTable	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f560	igSmartPointer_beBaseInfoList_Destruct	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f5e0	beBaseInfoManager_Destroy	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
-0033f6d0	beWeapon_igSmartPointer_igObject_Destruct	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
+0033f6d0	beBaseInfoManager_igSmartPointer_igObject_Destruct	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f750	beWeapon_EnsureRegistered	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f770	beWeapon_Register	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
 0033f7f0	beWeapon_GetMetaObjectFunction	match	DEFERRED duplicate 0x130720 __dt__14ModelNameFieldFv 120B (compared under the profile of its retail unit)
@@ -17380,7 +17380,7 @@
 003b2c40	beNDMWShopTitle03_GetMetaObject	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
 003b2c90	beNDMWShopTitle03_GetVTable	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
 003b2d10	beNDMWWindow_Destroy	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
-003b2f30	beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
+003b2f30	beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
 003b2fb0	igSmartPointer_beNDMWWindowList_Destruct	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
 003b3030	beNDMWWindowTitle_Destroy	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)
 003b30f0	beNDMWShopTitle03_EnsureRegistered	match	DEFERRED duplicate 0x130720 __dt__13HeldStringRefFv 120B (compared under the profile of its retail unit)

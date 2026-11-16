@@ -100,6 +100,12 @@ stores an `igGraphPath` as `_cameraPath` and its last node (`igGraphPath_GetTail
 
 - `beCameraCtrl_EnableDebugZoom` and `igViewerSceneInfoManager_DebugZoomOut` are empty in retail; their names come from
   the DBGZOOM messages that call them.
+- `igCamera` slots 33 and 34 are `igCamera_Activate` and `igCamera_Deactivate` (medium confidence): the camera
+  modes' attach handlers call 33 and their detach handlers call 34. Both are empty on PS2 (`0x1e3760`,
+  `0x1e3770`, no override). The GameCube and Xbox builds have an `igDOFCamera` subclass whose `_shader` is an
+  `igDOFShader`; it overrides 33 to set the shader's `_bEnabled` and load it with the camera's `_blurriness`,
+  `_focusDistance`, field of view and clip planes, and 34 to clear `_bEnabled`. The spelling is inferred from
+  that behaviour; `Enable`/`Disable` would fit it equally.
 - `igViewerSceneInfoManager_ResetOperationMode` sets the viewer parameters' `_operationMode` to 1 and posts a change;
   what mode 1 is has not been traced.
 - `Quaternion_Lerp` has no square root or trigonometry; whether it normalises its result is not checked.

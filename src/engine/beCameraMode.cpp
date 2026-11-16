@@ -270,7 +270,7 @@ void igCameraMode_OnDetach(igCameraMode *self) {
 
     camera = (igCameraDispatchView *)self->_camera;
     if (camera != 0) {
-        camera->vfunc_36();
+        camera->Deactivate();
     }
 }
 
@@ -284,7 +284,7 @@ void igCameraMode_OnAttach(igCameraMode *self) {
     igViewModel *model;
 
     if (self->_camera != 0) {
-        ((igCameraDispatchView *)self->_camera)->vfunc_35();
+        ((igCameraDispatchView *)self->_camera)->Activate();
         model = (igViewModel *)self->_model;
         camera = (igCamera *)self->_camera;
         farPlane = camera->_farPlane;

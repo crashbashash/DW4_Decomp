@@ -168,7 +168,7 @@ extern "C" int igSmartPointer_igObject_Destruct(int *, int);
 extern "C" int igStringRef_Destruct(int *, int);
 extern "C" int igMovieInfo_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodecView_Destruct(igSmartPointer<igObject> *self, short flag);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieInfo_EnsureRegistered(void);
 extern "C" void *igInfo_Register(void);
 extern "C" void *igMovieInfo_Register(void);
@@ -1551,7 +1551,7 @@ int igMovieInfo_GetVTable(void) {
     igSmartPointer_igTextureList_Destruct(&obj._runtimeTextures, -1);
     igSmartPointer_igImage_Destruct(&obj._runtimeImage, -1);
     igSmartPointer_igSceneInfo_Destruct(&obj._sceneInfo, -1);
-    igSmartPointer_igMovieCodecView_Destruct((igSmartPointer<igObject> *)&obj._codec, -1);
+    igSmartPointer_igMovieCodec_Destruct((igSmartPointer<igObject> *)&obj._codec, -1);
     igStringRef_Destruct(&obj._codecType, -1);
     igSmartPointer_igTextureBindAttrList_Destruct((igSmartPointer<igObject> *)&obj._videoTextures, -1);
     igStringRef_Destruct(&obj._path, -1);
@@ -1572,7 +1572,7 @@ igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartP
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igMovieCodecView_Destruct(igSmartPointer<igObject> *self, short flag) {
+igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
         if (object != 0) {

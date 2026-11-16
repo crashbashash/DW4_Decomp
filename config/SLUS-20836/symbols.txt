@@ -5644,8 +5644,8 @@
 001e3730 00000c Gap__Sg__igBlendMatrixSelect__vfunc_22 Gap::Sg::igBlendMatrixSelect::vfunc_22
 001e3740 00000c Gap__Sg__igBoundingBoxesMaker__vfunc_22 Gap::Sg::igBoundingBoxesMaker::vfunc_22
 001e3750 00000c Gap__Sg__igCamera__vfunc_22 Gap::Sg::igCamera::vfunc_22
-001e3760 000008 Gap__Sg__igCamera__vfunc_35 Gap::Sg::igCamera::vfunc_35
-001e3770 000008 Gap__Sg__igCamera__vfunc_36 Gap::Sg::igCamera::vfunc_36
+001e3760 000008 igCamera_Activate
+001e3770 000008 igCamera_Deactivate
 001e3780 00000c Gap__Sg__igCompiledTransform__vfunc_22 Gap::Sg::igCompiledTransform::vfunc_22
 001e3790 00000c Gap__Sg__igCompiledTransformList__vfunc_22 Gap::Sg::igCompiledTransformList::vfunc_22
 001e37a0 00000c Gap__Sg__igBlendListRecord__vfunc_22 Gap::Sg::igBlendListRecord::vfunc_22
@@ -14183,7 +14183,7 @@
 00336240 00004c igMovieInfo_GetMetaObject
 00336290 000130 igMovieInfo_GetVTable
 003363c0 000080 igSmartPointer_igTextureBindAttrList_Destruct
-00336440 000080 igSmartPointer_igMovieCodecView_Destruct
+00336440 000080 igSmartPointer_igMovieCodec_Destruct
 003364c0 000020 igMovieInfo_EnsureRegistered
 003364e0 000074 igMovieInfo_Register
 00336560 00001c igMovieInfo_GetMetaObjectFunction
@@ -14415,7 +14415,7 @@
 0033f4f0 000070 beWeapon_GetVTable
 0033f560 000080 igSmartPointer_beBaseInfoList_Destruct
 0033f5e0 0000e8 beBaseInfoManager_Destroy
-0033f6d0 000080 beWeapon_igSmartPointer_igObject_Destruct
+0033f6d0 000080 beBaseInfoManager_igSmartPointer_igObject_Destruct
 0033f750 000020 beWeapon_EnsureRegistered
 0033f770 000074 beWeapon_Register
 0033f7f0 00001c beWeapon_GetMetaObjectFunction
@@ -17713,7 +17713,7 @@
 003b2c40 00004c beNDMWShopTitle03_GetMetaObject
 003b2c90 000074 beNDMWShopTitle03_GetVTable
 003b2d10 000218 beNDMWWindow_Destroy
-003b2f30 000080 beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct
+003b2f30 000080 beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct
 003b2fb0 000080 igSmartPointer_beNDMWWindowList_Destruct
 003b3030 0000c0 beNDMWWindowTitle_Destroy
 003b30f0 000020 beNDMWShopTitle03_EnsureRegistered

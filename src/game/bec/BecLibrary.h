@@ -244,7 +244,7 @@ extern "C" igMetaObject *beWeapon_GetOrCreateMetaObject(void);
 extern "C" void *beWeapon_GetMetaObject(void);
 extern "C" int beWeapon_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beBaseInfoList_Destruct(igSmartPointer<igObject> *self, int delete_storage);
-extern "C" igSmartPointer<igObject> *beWeapon_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short delete_storage);
+extern "C" igSmartPointer<igObject> *beBaseInfoManager_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" void beWeapon_EnsureRegistered(void);
 extern "C" void *beWeapon_Register(void);
 extern "C" void beWeapon_GetMetaObjectFunction(void);

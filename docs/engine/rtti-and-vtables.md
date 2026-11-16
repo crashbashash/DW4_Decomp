@@ -363,7 +363,8 @@ chain) dispatches the word at `+0x08 + 4*k`**. A virtual is named by what the ca
   for what its body does, spelled as the engine's own views spell it.
 - `vfunc_N`, N being the implementing symbol's own number, while neither is known. That number is
   the symbol's (`<Class>::vfunc_N` in `config/SLUS-20836/names/Vtables.tsv`), not the position, and
-  the declaration carries the slot in a comment (`virtual void vfunc_35(); /* slot 33 */`).
+  the declaration carries the slot in a comment (`virtual void vfunc_41(); /* slot 39 */`, a form no view in
+  the tree uses at present: every slot a view calls has a name).
 
 A slot's name in a view is the name of its slot family
 (see [naming](naming.md#what-counts-as-a-name), game slot families), so a view and the overlay
