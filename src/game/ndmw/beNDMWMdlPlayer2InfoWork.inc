@@ -22,15 +22,15 @@ done:;
 }
 
 int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
-    struct W_3bf5f0 o;
-    int r;
+    beNDMWMdlPlayer2InfoWork obj;
+    int vtable;
 
-    beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&o);
-    o.vt = g_beNDMWMdlPlayer2InfoWork_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWMdlPlayer2InfoWork_vtable;
-    FUN_00350410(&o, 0);
-    return r;
+    beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&obj);
+    *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
+    beModelCtrlInfoWork_Destroy((beModelCtrlInfoWork *)&obj, 0);
+    return vtable;
 }
 
 void *beModelCtrlInfoWork_Construct(beModelCtrlInfoWork *self) {

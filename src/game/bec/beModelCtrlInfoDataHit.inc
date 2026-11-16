@@ -14,45 +14,23 @@ void *beModelCtrlInfoDataHit_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoDataHit_GetVTable(void) {
-    union U_353920 u;
-    int temp_s1;
-    void **q2;
-    igObject *q5;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beModelCtrlInfoDataHit obj;
+    int vtable;
+    igObject **hitBulletAABoxListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q2 = &u.p[2];
-    *q2 = 0;
-    u.w[0] = (int)(&g_beModelCtrlInfoDataHit_vtable[0]);
-    q5 = (igObject *)&u.p[5];
-    *(int *)q5 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beModelCtrlInfoDataHit_vtable[0]);
-    if (q5 != 0) {
-        q5 = *(igObject **)q5;
-        if (q5 != 0) {
-            q5->_refCount = (int)q5->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q5->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q5);
-            }
-        }
-    }
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q2 != 0) {
-        temp_v1 = *q2;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
+    hitBulletAABoxListSlot = (igObject **)&obj._hitBulletAABoxList;
+    *hitBulletAABoxListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
+    igObjectRef_Release(hitBulletAABoxListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoDataHit_EnsureRegistered(void)
@@ -122,7 +100,7 @@ void beModelCtrlInfoDataHit_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataHit_ctorTable, 4);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "HIT");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

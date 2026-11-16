@@ -6,7 +6,7 @@ extern "C" int igInsightCore_FindManager(int, int);
 extern "C" int beBaseInfoManager_Start(...);
 extern "C" int beNDMWMdlPlayer2_GetMeta(void);
 extern "C" int strcmp(const char *, const char *);
-extern "C" int beNDMWMdlPlayer2_IsKind(int dummy0, int arg1);
+extern "C" int beNDMWMdlPlayer2_IsKind(int dummy0, int kind);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int igObject_GetAllocator(...);
@@ -32,8 +32,7 @@ extern "C" igObject *beBaseInfoDataList_Create(int);
 extern "C" igObject *beNDMWMdlPlayer2InfoWork_Create(int);
 extern "C" beDataObjStringList *igProperty_GetRecordStringList(int record, const char *name);
 extern "C" beDataObjFloatList *igProperty_GetRecordFloatList(...);
-struct PropertyRecordView { char p[16]; int f16; igObject *f20; };
-extern "C" PropertyRecordView * igProperty_FindByName(...);
+extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" char ONE_13[];
 extern "C" char GAMERAM_15[];
 extern "C" char GETCOMMON_7[];
@@ -68,7 +67,7 @@ struct Str { static inline int *intern(int s) {
 static inline void release(int *q) {
     if (q) { int *hd = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*hd, hd); }
 } };
-struct V3 { float x, y, z; };
+struct Vec3Float { float x, y, z; };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
 
@@ -109,11 +108,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)s0;
     }
 } };
-extern "C" void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1);
-/* Player work record: byte at +236, int at +240. */
-struct PlayerWorkTail { char p[236]; unsigned char f236; char p2[3]; int f240; };
-/* property record: pointer to the work record at +20 */
-struct PropertyRecord { char p[16]; int f16; PlayerWorkTail *q; };
+extern "C" void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram);
 extern "C" char PLAYER_8[];
 extern "C" char NEAR_3[];
 extern "C" char SQ_SWON[];
@@ -122,9 +117,9 @@ extern "C" int text_end_g_000bcaps_lua[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
-/* matching construct: dummy-virtual class gives arg0 a vtable so v35 dispatches through slot 35 */
-class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();  virtual void v35(beBaseInfoRam *, const char *); char p[28]; int f32; char p2[8]; int f44; };
-extern "C" void beNDMWMdlPlayer2_UpdateControl(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1);
+/* matching construct: dummy-virtual class gives self a vtable so OnMessageText dispatches through the retail slot 33 */
+class MdlPlayer2VirtualShim { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void OnMessageText(beBaseInfoRam *, const char *); };
+extern "C" void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram);
 
 /* After the shared igObject slot 23 body, caches the pad manager registered with the insight core
  * (_padManager), found by its class metaObject; the same binding step as the other managers' slot
@@ -134,8 +129,8 @@ void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self) {
     self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
 }
 
-int beNDMWMdlPlayer2_IsKind(int dummy0, int arg1) {
-    return strcmp((const char *)arg1, KIND_PLAYER2) == 0;
+int beNDMWMdlPlayer2_IsKind(int dummy0, int kind) {
+    return strcmp((const char *)kind, KIND_PLAYER2) == 0;
 }
 
 void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2)
@@ -143,18 +138,18 @@ void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2)
     beMessenger_RegisterReceiverFromInfo(p0->_messenger, p1, PLAYER2_2);
 }
 
-void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
-    V3 t;
-    PropertyRecordView *r;
+void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
+    Vec3Float t;
+    beModelCtrlInfoRamData *r;
     beDataObjStringList *s4;
     beDataObjFloatList *s3;
     int s2;
     int *e;
     int s1;
-    RamDataList::Ensure(arg1);
-    r = igProperty_FindByName((igObject *)arg1->_dataList, g_propertyNameField[0], ONE_13);
+    RamDataList::Ensure(ram);
+    r = igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13);
     {
-        int alloc = igObject_GetAllocator(arg0);
+        int alloc = igObject_GetAllocator(self);
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -166,20 +161,20 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
         if (n != 0) {
             n->_refCount++;
         }
-        Rel::go(r->f20);
-        r->f20 = n;
+        Rel::go((igObject *)r->_work);
+        r->_work = (int)n;
     }
-    beModelCtrl__OnGenerate(arg0, arg1);
-    beMessenger_SendGroup(arg0->_messenger, GAMERAM_15, GETCOMMON_7);
+    beModelCtrl__OnGenerate(self, ram);
+    beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
     {
-        int o = beMessenger_GetObject(arg0->_messenger, 0);
+        int o = beMessenger_GetObject(self->_messenger, 0);
         s4 = igProperty_GetRecordStringList(o, BKCHIPSTAGE);
         s3 = igProperty_GetRecordFloatList(o, BKCHIPPOS);
     }
     /* matching construct: cast from the 4-byte _system reference */
-    beSystem *cfg = (beSystem *)arg0->_system;
+    beSystem *cfg = (beSystem *)self->_system;
     s2 = cfg->_stageName;
-    s1 = arg1->_ramNo;
+    s1 = ram->_ramNo;
     {
         int *tok = Str::intern(s2);
         StringRef name(tok);
@@ -193,7 +188,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
             *e = (int)name.p;
         }
     }
-    igMatrix44f_GetTranslation(r->f16 + 32, &t);
+    igMatrix44f_GetTranslation((char *)r->_node + 32, &t);
     {
         float *v = &t.x;
         igFloatList *l = (igFloatList *)s3->_data;
@@ -223,12 +218,12 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *arg0, beBaseInfoRam *arg1) {
     }
 }
 
-void beNDMWMdlPlayer2_UpdateControl(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *arg1) {
-    PropertyRecord *prop;
-    PlayerWorkTail *q;
+void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
+    beModelCtrlInfoRamData *prop;
+    beNDMWMdlPlayer2InfoWork *q;
     float f;
-    if (arg1->_dataList == 0) {
-        int alloc = igObject_GetAllocator(arg1);
+    if (ram->_dataList == 0) {
+        int alloc = igObject_GetAllocator(ram);
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -240,32 +235,32 @@ void beNDMWMdlPlayer2_UpdateControl(MdlPlayer2VirtualShim *arg0, beBaseInfoRam *
         if (s0 != 0) {
             s0->_refCount++;
         }
-        igObject *old = (igObject *)arg1->_dataList;
+        igObject *old = (igObject *)ram->_dataList;
         if (old != 0) {
             --old->_refCount;
             if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
         }
-        arg1->_dataList = (int)s0;
+        ram->_dataList = (int)s0;
     }
-    prop = ((PropertyRecord *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], ONE_13));
-    q = prop->q;
-    if (q->f240 < 10) {
-        q->f240 = q->f240 + 1;
+    prop = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], ONE_13);
+    q = (beNDMWMdlPlayer2InfoWork *)prop->_work;
+    if (q->_timerCount < 10) {
+        q->_timerCount = q->_timerCount + 1;
     }
-    bePadManager_GetPadForPlayer(((beNDMWMdlPlayer2 *)arg0)->_padManager, arg1->_ramNo);
-    if (beTargetObj_SelectTarget(prop->f16 + 32, PLAYER_8, NEAR_3) != 0) {
+    bePadManager_GetPadForPlayer(self->_padManager, ram->_ramNo);
+    if (beTargetObj_SelectTarget(prop->_node + 32, PLAYER_8, NEAR_3) != 0) {
         f = beTargetObj_GetTargetDistanceSq();
-        if (q->f236 == 0) {
+        if (q->_isPowerOn == 0) {
             if (f < 900.0f) {
-                q->f236 = 1;
-                arg0->v35(arg1, SQ_SWON);
+                q->_isPowerOn = 1;
+                ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, SQ_SWON);
             }
         } else if (!(f <= 900.0f)) {
-            q->f236 = 0;
-            arg0->v35(arg1, SQ_SWOF);
+            q->_isPowerOn = 0;
+            ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, SQ_SWOF);
         }
     } else {
-        beLua__RunNamedChunk(((beNDMWMdlPlayer2 *)arg0)->_luaManager, text_end_g_000bcaps_lua, 0);
+        beLua__RunNamedChunk(self->_luaManager, text_end_g_000bcaps_lua, 0);
     }
 }
 
@@ -333,7 +328,7 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
 {
     if (strcmp(command, GENERATE_15) == 0) {
         if (ram->_isRun != 0)
-            ((MdlPlayer2VirtualShim *)self)->v35(ram, REMOVE_6);
+            ((MdlPlayer2VirtualShim *)self)->OnMessageText(ram, REMOVE_6);
     } else if (strcmp(command, GENESTAGE) == 0) {
         beMessenger_SendGroup(self->_messenger, GAMERAM_15, GETCOMMON_7);
         int common = beMessenger_GetObject(self->_messenger, 0);
@@ -359,7 +354,7 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
         return 1;
     } else if (strcmp(command, RAISE_2) == 0) {
         RamDataList::Ensure(ram);
-        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13)->f20;
+        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)igProperty_FindByName((igObject *)ram->_dataList, g_propertyNameField[0], ONE_13)->_work;
         if (work->_timerCount < 10)
             return 1;
         float matrix[16];

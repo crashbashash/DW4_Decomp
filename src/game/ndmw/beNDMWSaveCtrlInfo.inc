@@ -3,7 +3,7 @@ igMetaObject *g_beNDMWSaveCtrlInfo_metaObject;
 void *beNDMWSaveCtrlInfo_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWSaveCtrlInfo_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWSaveCtrlInfo_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWSaveCtrlInfo_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWSaveCtrlInfo_EnsureRegistered();
@@ -12,18 +12,18 @@ done:
 }
 
 int beNDMWSaveCtrlInfo_GetVTable(void) {
-    Obj_3bcf90 o;
-    int r;
+    beNDMWSaveCtrlInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f20 = 0;
-    o.f24 = 0;
-    o.vt = &g_beNDMWSaveCtrlInfo_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWSaveCtrlInfo_vtable[0];
-    FUN_0033ec80(&o, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    *(int **)&obj._vtable = &g_beNDMWSaveCtrlInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWSaveCtrlInfo_vtable[0];
+    beBaseInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWSaveCtrlInfo_EnsureRegistered(void)

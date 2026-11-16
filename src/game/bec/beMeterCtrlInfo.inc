@@ -24,8 +24,8 @@ int beMeterCtrlInfo_GetVTable(void) {
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beMeterCtrlInfo_vtable[0];
-    FUN_00199450(&o.s, -1);
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
+    igSmartPointer_igNamedObjectList_Destruct(&o.s, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 

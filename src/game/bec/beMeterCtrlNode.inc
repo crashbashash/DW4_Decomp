@@ -19,21 +19,21 @@ void *beMeterCtrlNode_ResolveMetaObject(void) {
 }
 
 int beMeterCtrlNode_GetVTable(void) {
-    struct Obj_356d60 obj;
-    int t;
+    beMeterCtrlNode obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w7 = 0;
-    obj.vt = &g_beMeterCtrlNode_vtable[0];
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMeterCtrlNode_vtable[0];
-    FUN_00195190(&obj.w9, -1);
-    FUN_00195a90(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beMeterCtrlNode_vtable[0];
+    obj._timeList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMeterCtrlNode_vtable[0];
+    igSmartPointer_igLongList_Destruct(&obj._timeList, -1);
+    igGroup_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beMeterCtrlNode_EnsureRegistered(void)
@@ -55,7 +55,7 @@ void *beMeterCtrlNode_Register(void) {
         0x34, /* instance size */
         beMeterCtrlNode_GetVTable,
         beMeterCtrlNode_InitFields,
-        FUN_00356f40, /* extra callback item */
+        beMeterCtrlNode_StaticInitCallback, /* extra callback item */
         g_beMeterCtrlNode_callbackList /* callback list */
     );
 }
@@ -68,7 +68,7 @@ void beMeterCtrlNode_GetMetaObject(void)
 static FieldFactory g_beMeterCtrlNode_ctorTable[] = {
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beMeterCtrlNode_fieldTable[] = {
     "_isMeter",
@@ -100,7 +100,7 @@ void beMeterCtrlNode_InitFields(void) {
     igMetaObject_NameFields(meta, g_beMeterCtrlNode_fieldTable, g_beMeterCtrlNode_fieldHandles, g_beMeterCtrlNode_fieldOffsets, base);
 }
 
-void FUN_00356f40(void)
+void beMeterCtrlNode_StaticInitCallback(void)
 {
     beMeterCtrlNode_RegisterTraversalFunction();
 }

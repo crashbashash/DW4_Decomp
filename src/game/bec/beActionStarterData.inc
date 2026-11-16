@@ -15,18 +15,18 @@ void *beActionStarterData_GetMetaObject(void) {
 
 int beActionStarterData_GetVTable(void) {
     Obj_36be40 obj;
-    int r;
+    int vtable;
 
     igObject_InitHeader(&obj);
     obj._name = 0;
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     obj._message = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     obj.rel12();
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj.rel8();
-    return r;
+    return vtable;
 }
 
 void beActionStarterData_EnsureRegistered(void)
@@ -59,7 +59,7 @@ void beActionStarterData_GetMetaObjectFunction(void)
 static FieldFactory g_beActionStarterData_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
 };

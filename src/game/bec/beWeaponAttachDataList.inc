@@ -22,11 +22,11 @@ igMetaObject *beWeaponAttachDataList_GetMetaObject(void)
 }
 
 int beWeaponAttachDataList_GetVTable(void) {
-    int obj[8];
+    beWeaponAttachDataList obj;
 
-    igObject_InitHeader(obj);
-    obj[0] = (int)&g_beWeaponAttachDataList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beWeaponAttachDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void beWeaponAttachDataList_EnsureRegistered(void)

@@ -18,39 +18,23 @@ void *beHitLandDelivInfoRam_GetMetaObject(void) {
 }
 
 int beHitLandDelivInfoRam_GetVTable(void) {
-    union U_35e6b0 u;
-    int temp_s0;
-    igObject *q0;
-    igObject *q1;
+    beHitLandDelivInfoRam obj;
+    int vtable;
+    igObject **transformSlot;
+    igObject **dataListSlot;
 
-    igObject_InitHeader(u.b);
-    q1 = (igObject *)&u.b[40];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_beHitLandDelivInfoRam_vtable[0];
-    q0 = (igObject *)&u.b[44];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beHitLandDelivInfoRam_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
+    transformSlot = (igObject **)&obj._transform;
+    *transformSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
+    igObjectRef_Release(transformSlot);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beHitLandDelivInfoRam_EnsureRegistered(void)
@@ -88,9 +72,9 @@ static FieldFactory g_beHitLandDelivInfoRam_ctorTable[] = {
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
 };
 static const char *g_beHitLandDelivInfoRam_fieldTable[] = {
@@ -150,17 +134,17 @@ void beHitLandDelivInfoRam_InitFields(void) {
     va[0] = 0;
     va[1] = 0;
     va[2] = 0;
-    FUN_0018e470(pos, va);
+    igVec3fMetaField_SetDefault(pos, va);
     oldPos = (void *)(igMetaObject_GetFieldAt(meta, 6 + base));
     vb[0] = 0;
     vb[1] = 0;
     vb[2] = 0;
-    FUN_0018e470(oldPos, vb);
+    igVec3fMetaField_SetDefault(oldPos, vb);
     landPos = (void *)(igMetaObject_GetFieldAt(meta, 7 + base));
     vc[0] = 0;
     vc[1] = 0;
     vc[2] = 0;
-    FUN_0018e470(landPos, vc);
+    igVec3fMetaField_SetDefault(landPos, vc);
     igMetaObject_NameFields(meta, g_beHitLandDelivInfoRam_fieldTable, g_beHitLandDelivInfoRam_fieldHandles, g_beHitLandDelivInfoRam_fieldOffsets, base);
 }
 

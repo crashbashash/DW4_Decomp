@@ -18,10 +18,10 @@ void *beLuaDataObject_GetMetaObject(void) {
 }
 
 int beLuaDataObject_GetVTable(void) {
-    struct Obj_35b5b0 obj;
+    beLuaDataObject obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beLuaDataObject_vtable[0];
+    obj._vtable = (int)&g_beLuaDataObject_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -12,27 +12,27 @@ void *beMatCtrlInfo_GetMetaObject(void) {
 }
 
 int beMatCtrlInfo_GetVTable(void) {
-    struct Obj_359b20 obj;
-    int t;
+    beMatCtrlInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[4] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beMatCtrlInfo_vtable[0];
-    obj.w[6] = 0;
-    obj.w[7] = 0;
-    obj.w[8] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMatCtrlInfo_vtable[0];
-    FUN_00359c50((igSmartPointer<igObject> *)(&obj.w[8]), (short)(-1));
-    FUN_00359bd0((igSmartPointer<igObject> *)(&obj.w[7]), (long long)(-1));
-    FUN_00343260((igSmartPointer<igObject> *)(&obj.w[6]), -1);
-    FUN_0033ec80((struct S_33ec80 *)((int *)&obj), (short)0);
-    return t;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beMatCtrlInfo_vtable[0];
+    obj._switchgraph = 0;
+    obj._dataList_ = 0;
+    obj._search = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMatCtrlInfo_vtable[0];
+    igSmartPointer_beMatCtrlSearchList_Destruct((igSmartPointer<igObject> *)(&obj._search), (short)(-1));
+    igSmartPointer_beMatCtrlDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchgraph), -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)((int *)&obj), (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00359bd0(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMatCtrlDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -45,7 +45,7 @@ igSmartPointer<igObject> *FUN_00359bd0(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00359c50(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMatCtrlSearchList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

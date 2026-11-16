@@ -21,25 +21,18 @@ void *beMatCtrlSearch_GetMetaObject(void) {
 }
 
 int beMatCtrlSearch_GetVTable(void) {
-    struct Obj_35a090 obj;
-    char *o;
-    int t;
+    beMatCtrlSearch obj;
+    int vtable;
+    igObject **memberListSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMatCtrlSearch_vtable[0];
-    obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMatCtrlSearch_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    return t;
+    obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
+    memberListSlot = (igObject **)&obj._memberList;
+    *memberListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
+    igObjectRef_Release(memberListSlot);
+    return vtable;
 }
 
 void beMatCtrlSearch_EnsureRegistered(void)

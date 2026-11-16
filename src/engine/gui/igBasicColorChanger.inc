@@ -60,7 +60,7 @@ igMetaObject *FUN_00452130(void) {
 
 static FieldFactory g_igBasicColorChanger_ctorTable[] = {
     FUN_00187560,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
 };
 static const char *g_igBasicColorChanger_fieldTable[] = {
     "_colors",

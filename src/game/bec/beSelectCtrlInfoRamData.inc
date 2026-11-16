@@ -14,22 +14,26 @@ void *beSelectCtrlInfoRamData_GetMetaObject(void) {
 }
 
 int beSelectCtrlInfoRamData_GetVTable(void) {
-    Obj_345330 obj;
-    int r;
+    beSelectCtrlInfoRamData obj;
+    int vtable;
+    igObject **workSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.r1 = 0;
-    obj.vt = &g_beSelectCtrlInfoRamData_vtable[0];
-    obj.r6 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSelectCtrlInfoRamData_vtable[0];
-    obj.rel6();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel1();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beSelectCtrlInfoRamData_vtable[0];
+    workSlot = (igObject **)&obj._work;
+    *workSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSelectCtrlInfoRamData_vtable[0];
+    igObjectRef_Release(workSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00345410(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSelectCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -109,7 +113,7 @@ void beSelectCtrlInfoRamData_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beSelectCtrlInfoRamData_ctorTable, 4);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "ONE");
     clone->_externalEnumStorage = (int)(&g_beSelectCtrlInfoRamData_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

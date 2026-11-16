@@ -33,55 +33,26 @@ done:;
 }
 
 int beHitLandModelOrder_GetVTable(void) {
-    union U_35df70 u;
-    int temp_s0;
-    igObject *q0;
-    igObject *q1;
-    char *q2;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beHitLandModelOrder obj;
+    int vtable;
+    igObject **hitdataListSlot;
+    igObject **rayListSlot;
+    char **infoNameSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beHitLandModelOrder_vtable[0];
-    q2 = &u.b[32];
-    *(int *)q2 = 0;
-    q1 = (igObject *)&u.b[48];
-    *(int *)q1 = 0;
-    q0 = (igObject *)&u.b[56];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beHitLandModelOrder_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    if (q2 != 0) {
-        temp_v1 = *(int **)q2;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beHitLandModelOrder_vtable[0];
+    infoNameSlot = (char **)&obj._infoName;
+    *infoNameSlot = 0;
+    rayListSlot = (igObject **)&obj._rayList;
+    *rayListSlot = 0;
+    hitdataListSlot = (igObject **)&obj._hitdataList;
+    *hitdataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beHitLandModelOrder_vtable[0];
+    igObjectRef_Release(hitdataListSlot);
+    igObjectRef_Release(rayListSlot);
+    igStringRef_Release(infoNameSlot);
+    return vtable;
 }
 
 void beHitLandModelOrder_EnsureRegistered(void)
@@ -117,8 +88,8 @@ static FieldFactory g_beHitLandModelOrder_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igObjectRefMetaField_Create,
     igIntMetaField_Create,
@@ -176,12 +147,12 @@ void beHitLandModelOrder_InitFields(void) {
     rayMaxDefault[0] = 0;
     rayMaxDefault[1] = 0;
     rayMaxDefault[2] = 0;
-    FUN_0018e470(raymax, rayMaxDefault);
+    igVec3fMetaField_SetDefault(raymax, rayMaxDefault);
     raymin = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     rayMinDefault[0] = 0;
     rayMinDefault[1] = 0;
     rayMinDefault[2] = 0;
-    FUN_0018e470(raymin, rayMinDefault);
+    igVec3fMetaField_SetDefault(raymin, rayMinDefault);
     rayList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)rayList)->_metaObject = igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)rayList)->_construct = 1;

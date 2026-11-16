@@ -1136,7 +1136,7 @@ ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-struct R **FUN_001648f0(struct R **arg0, short arg1) {
+struct R **igSmartPointer_igShortList_Destruct(struct R **arg0, short arg1) {
     struct R *temp_a0;
 
     if (arg0 != 0) {
@@ -1154,7 +1154,7 @@ struct R **FUN_001648f0(struct R **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_00164970(void **arg0, long long arg1) {
+void **igSmartPointer_igCharList_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {

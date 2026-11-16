@@ -28,32 +28,21 @@ done:;
 }
 
 int beNDMWTitle2Option_GetVTable(void) {
-    union U_3b22e0 u;
-    int temp_s0;
-    int temp_v0;
-    int *temp_a1;
-    int *temp_v1;
-    char *q0;
+    beNDMWTitle2Option obj;
+    int vtable;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    q0 = &u.b[8];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_beNDMWTitle2Option_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q0 != 0) {
-        temp_v1 = *(int **)q0;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWTitle2Option_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWTitle2Option_EnsureRegistered(void)
@@ -149,7 +138,7 @@ void beNDMWTitle2Option_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWTitle2Option_ctorTable, 0xA);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "OPTION");
     nameField->_externalEnumStorage = (int)(&g_beNDMWTitle2Option_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);
@@ -158,8 +147,8 @@ void beNDMWTitle2Option_InitFields(void) {
         igObject_Destroy(nameField);
     }
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
-    *(int *)((char *)(messenger) + 56) = beMessenger_GetOrCreateMetaObject();
-    *(char *)((char *)(messenger) + 60) = 0;
+    ((igObjectRefMetaField *)messenger)->_metaObject = beMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWTitle2Option_fieldTable, g_beNDMWTitle2Option_fieldHandles, g_beNDMWTitle2Option_fieldOffsets, base);
 }
 

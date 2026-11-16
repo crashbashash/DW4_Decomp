@@ -26,44 +26,22 @@ void *beSelectCtrlInfoWork_GetMetaObject(void) {
 }
 
 int beSelectCtrlInfoWork_GetVTable(void) {
-    union U_345760 u;
-    int temp_s1;
-    void **q7;
-    igObject *q8;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beSelectCtrlInfoWork obj;
+    int vtable;
+    igObject **decideListSlot;
+    char **svSeqNameSlot;
 
-    igObject_InitHeader(u.b);
-    q7 = &u.p[7];
-    q8 = (igObject *)&u.p[8];
-    u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
-    *q7 = 0;
-    *(int *)q8 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beSelectCtrlInfoWork_vtable[0]);
-    if (q8 != 0) {
-        q8 = *(igObject **)q8;
-        if (q8 != 0) {
-            q8->_refCount = (int)q8->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q8->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q8);
-            }
-        }
-    }
-    if (q7 != 0) {
-        temp_v1 = *q7;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    svSeqNameSlot = (char **)&obj._svSeqName;
+    decideListSlot = (igObject **)&obj._decideList;
+    obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
+    *svSeqNameSlot = 0;
+    *decideListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
+    igObjectRef_Release(decideListSlot);
+    igStringRef_Release(svSeqNameSlot);
+    return vtable;
 }
 
 void beSelectCtrlInfoWork_EnsureRegistered(void)
@@ -96,7 +74,7 @@ void beSelectCtrlInfoWork_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beSelectCtrlInfoWork_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igBoolMetaField_Create,
     igStringMetaField_Create,

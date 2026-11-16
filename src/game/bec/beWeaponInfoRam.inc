@@ -9,30 +9,22 @@ void *beWeaponInfoRam_GetMetaObject(void) {
 }
 
 int beWeaponInfoRam_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    igObject *p;
+    beWeaponInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    p = (igObject *)&u.b[40];
-    *(int *)p = 0;
-    u.vt = (int)&g_beWeaponInfoRam_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (p != 0) {
-        p = *(igObject **)p;
-        if (p != 0) {
-            p->_refCount = (int)p->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beWeaponInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
-void *FUN_0033e920(S *arg0, long long arg1) {
+void *beBaseInfoRam_Destroy(S *arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -53,7 +45,7 @@ void *FUN_0033e920(S *arg0, long long arg1) {
     return arg0;
 }
 
-igSmartPointer<igObject> *ObjectRef_Destruct_0033e9c0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *beWeaponInfoRam_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

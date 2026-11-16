@@ -9,18 +9,18 @@ void *beNDMWLogoInfo_GetReadyMetaObject(void) {
 }
 
 int beNDMWLogoInfo_GetVTable(void) {
-    struct W_3c1ee0 o;
-    int r;
+    beNDMWLogoInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[4] = 0;
-    o.f[5] = 0;
-    o.vt = g_beNDMWLogoInfo_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWLogoInfo_vtable;
-    FUN_0033ec80(&o, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    *(int **)&obj._vtable = &g_beNDMWLogoInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLogoInfo_vtable[0];
+    beBaseInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWLogoInfo_EnsureRegistered(void)

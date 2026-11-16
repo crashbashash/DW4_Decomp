@@ -19,7 +19,7 @@ igMetaField *g_igInsightCore_traversalTimeMetaField;
 igMetaField *g_igInsightCore_outputTimeMetaField;
 igMetaField *g_igInsightCore_pluginsMetaField;
 
-void FUN_00232800(int arg0) {
+void igInsightCore_CreateInstance(int arg0) {
     igInsightCore_EnsureRegistered();
     igMetaObject_CreateInstance(*(int *)0x56DB60, arg0);
 }
@@ -64,8 +64,8 @@ int igInsightCore_GetVTable(void) {
     FUN_00232c60((void **)&obj.w10, -1);
     FUN_00232be0((ObjectRefWord *)&obj.w9, -1);
     FUN_00232b60((void **)&obj.w8, -1);
-    FUN_00232ae0((ObjectRefWord *)&obj.w7, -1);
-    FUN_00130140(&obj.w6, -1);
+    igSmartPointer_igRendererOrderedList_Destruct((ObjectRefWord *)&obj.w7, -1);
+    igSmartPointer_igVisualContext_Destruct(&obj.w6, -1);
     FUN_00143350(&obj.w5, -1);
     igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
     FUN_00232a60((O *)&obj.w3, -1);
@@ -82,7 +82,7 @@ O *FUN_00232a60(O *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_00232ae0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igRendererOrderedList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

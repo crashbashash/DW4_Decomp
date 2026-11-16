@@ -33,26 +33,26 @@ void *beFileListInfoManager_GetMetaObject(void) {
 }
 
 int beFileListInfoManager_GetVTable(void) {
-    struct Obj_3628d0 obj;
-    int t;
+    beFileListInfoManager obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beFileListInfoManager_vtable[0];
-    obj.w9 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.w13 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beFileListInfoManager_vtable[0];
-    igSmartPointer_igInfoList_Destruct(&obj.w13, -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w12, -1);
-    igSmartPointer_igDirectoryList_Destruct(&obj.w11, -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w10, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj.w9, -1);
-    FUN_00231030(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beFileListInfoManager_vtable[0];
+    obj._fnames = 0;
+    obj._infoList = 0;
+    obj._dirList = 0;
+    obj._readInfoList = 0;
+    obj._importantInfoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFileListInfoManager_vtable[0];
+    igSmartPointer_igInfoList_Destruct(&obj._importantInfoList, -1);
+    igSmartPointer_igInfoList_Destruct(&obj._readInfoList, -1);
+    igSmartPointer_igDirectoryList_Destruct(&obj._dirList, -1);
+    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._fnames, -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beFileListInfoManager_EnsureRegistered(void)

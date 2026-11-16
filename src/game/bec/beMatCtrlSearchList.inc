@@ -19,10 +19,10 @@ done:
 }
 
 int beMatCtrlSearchList_GetVTable(void) {
-    struct Obj_359f00 obj;
+    beMatCtrlSearchList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMatCtrlSearchList_vtable[0];
+    obj._vtable = (int)&g_beMatCtrlSearchList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

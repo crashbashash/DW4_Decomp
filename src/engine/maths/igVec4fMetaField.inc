@@ -1,7 +1,7 @@
 igMetaObject *g_igVec4fMetaField_metaObject;
 int g_igVec4fMetaField_descriptor;
 
-void FUN_001872a0(int arg0) {
+void igVec4fMetaField_CreateInstance(int arg0) {
     igVec4fMetaField_EnsureRegistered();
     igMetaObject_CreateInstance((int)g_igVec4fMetaField_metaObject, arg0);
 }

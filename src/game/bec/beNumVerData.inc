@@ -11,25 +11,18 @@ void *beNumVerData_GetMetaObject(void) {
 }
 
 int beNumVerData_GetVTable(void) {
-    struct Obj_34dad0 obj;
-    char *o;
-    int t;
+    beNumVerData obj;
+    int vtable;
+    igObject **verDataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNumVerData_vtable[0];
-    obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNumVerData_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    return t;
+    obj._vtable = (int)&g_beNumVerData_vtable[0];
+    verDataListSlot = (igObject **)&obj._verDataList;
+    *verDataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beNumVerData_vtable[0];
+    igObjectRef_Release(verDataListSlot);
+    return vtable;
 }
 
 void beNumVerData_EnsureRegistered(void)

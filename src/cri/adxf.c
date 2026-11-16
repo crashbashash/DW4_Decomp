@@ -886,7 +886,7 @@ void FUN_00262398(void) {
     ADXCRS_Unlock();
 }
 
-int FUN_002623f8(AdxfHandle *adxf, int ofst, int whence)
+int ADXF_Seek(AdxfHandle *adxf, int ofst, int whence)
 {
     FUN_00260c20(6, 0, (int)adxf, ofst, whence);
     if (adxf == 0) {
@@ -915,7 +915,7 @@ int FUN_002623f8(AdxfHandle *adxf, int ofst, int whence)
     return adxf->ofst;
 }
 
-int FUN_00262510(AdxfHandle *adxf) {
+int ADXF_Tell(AdxfHandle *adxf) {
     if (adxf == 0) {
         ADXERR_CallErrFunc1("E9040827:'adxf' is NULL.(ADXF_Tell)");
         return -3;
@@ -925,7 +925,7 @@ int FUN_00262510(AdxfHandle *adxf) {
 
 int FUN_00262580(AdxfHandle *adxf);
 
-int FUN_00262540(AdxfHandle *adxf) {
+int ADXF_GetFsizeSct(AdxfHandle *adxf) {
     return adxf->fsize_sct = (FUN_00262580(adxf) + 2047) / 2048;
 }
 

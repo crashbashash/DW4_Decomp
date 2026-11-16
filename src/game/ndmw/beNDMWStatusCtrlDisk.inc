@@ -21,31 +21,31 @@ igMetaObject *beNDMWStatusCtrlDisk_GetMetaObject(void)
 }
 
 int beNDMWStatusCtrlDisk_GetVTable(void) {
-    struct Obj_3b9ae0 obj;
-    int t;
+    beNDMWStatusCtrlDisk obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[12] = 0;
-    obj.w[13] = 0;
-    obj.w[14] = 0;
-    obj.w[15] = 0;
-    obj.w[16] = 0;
-    obj.w[17] = 0;
-    obj.w[18] = 0;
-    obj.vt = &g_beNDMWStatusCtrlDisk_vtable[0];
-    obj.w[21] = 0;
-    obj.w[23] = 0;
-    obj.w[24] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWStatusCtrlDisk_vtable[0];
-    FUN_003b9ba0((igSmartPointer<igObject> *)(&obj.w[24]), -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[23]), -1);
-    igSmartPointer_igIntList_Destruct(&obj.w[21], -1);
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)((int *)&obj), (long long)0);
-    return t;
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlDisk_vtable[0];
+    obj._playerNoList = 0;
+    obj._diskList = 0;
+    obj._sendDisk = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlDisk_vtable[0];
+    igSmartPointer_beNDMWItemDisk_Destruct((igSmartPointer<igObject> *)&obj._sendDisk, -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._diskList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003b9ba0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWItemDisk_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

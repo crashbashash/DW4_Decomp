@@ -23,18 +23,19 @@ igMetaObject *beNDMWMdlItem_GetReadyMetaObject(void) {
 }
 
 int beNDMWMdlItem_GetVTable(void) {
-    struct Obj_3c1200 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f24 = 0;
-    o.vt = &g_beNDMWMdlItem_vtable[0];
-    o.f48 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWMdlItem_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&o.f48, -1);
-    FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
-    return r;
+    beNDMWMdlItem obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
+    obj._lockRamList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
+    igSmartPointer_igObjectList_Destruct(&obj._lockRamList, -1);
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlItem_EnsureRegistered(void)

@@ -26,38 +26,22 @@ done:;
 }
 
 int beTextureCtrlWork_GetVTable(void) {
-    union U_342710 u;
-    int temp_s0;
-    igObject *q0;
-    igObject *q1;
+    beTextureCtrlWork obj;
+    int vtable;
+    igObject **attributeListSlot;
+    igObject **textureListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beTextureCtrlWork_vtable[0];
-    q1 = (igObject *)&u.b[8];
-    *(int *)q1 = 0;
-    q0 = (igObject *)&u.b[12];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beTextureCtrlWork_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beTextureCtrlWork_vtable[0];
+    textureListSlot = (igObject **)&obj._textureList;
+    *textureListSlot = 0;
+    attributeListSlot = (igObject **)&obj._attributeList;
+    *attributeListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beTextureCtrlWork_vtable[0];
+    igObjectRef_Release(attributeListSlot);
+    igObjectRef_Release(textureListSlot);
+    return vtable;
 }
 
 void beTextureCtrlWork_EnsureRegistered(void)

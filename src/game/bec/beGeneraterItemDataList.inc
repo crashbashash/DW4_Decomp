@@ -16,10 +16,10 @@ void *beGeneraterItemDataList_GetMetaObject(void) {
 }
 
 int beGeneraterItemDataList_GetVTable(void) {
-    struct Obj_360400 obj;
+    beGeneraterItemDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beGeneraterItemDataList_vtable[0];
+    obj._vtable = (int)&g_beGeneraterItemDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

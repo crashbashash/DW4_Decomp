@@ -22,10 +22,10 @@ igMetaObject *beSaveMemoryObj_GetMetaObject(void) {
 }
 
 int beSaveMemoryObj_GetVTable(void) {
-    struct Obj_34ad30 obj;
+    beSaveMemoryObj obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSaveMemoryObj_vtable[0];
+    obj._vtable = (int)&g_beSaveMemoryObj_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

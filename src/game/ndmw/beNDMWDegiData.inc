@@ -33,45 +33,26 @@ end:
 }
 
 int beNDMWDegiData_GetVTable(void) {
-    union U_3c68c0 u;
-    int temp_s0;
-    char *q0;
-    char *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beNDMWDegiData obj;
+    int vtable;
+    int *dmNameRef;
+    int *dmkindRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beNDMWDegiData_vtable[0];
-    q1 = &u.b[48];
-    *(int *)q1 = 0;
-    q0 = &u.b[52];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWDegiData_vtable[0];
-    if (q0 != 0) {
-        temp_v1 = *(int **)q0;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWDegiData_vtable[0];
+    dmkindRef = &obj._dmkind;
+    *dmkindRef = 0;
+    dmNameRef = &obj._dmName;
+    *dmNameRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWDegiData_vtable[0];
+    if (dmNameRef != 0) {
+        releaseString((const char *)*dmNameRef);
     }
-    if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
+    if (dmkindRef != 0) {
+        releaseString((const char *)*dmkindRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWDegiData_RunStaticInit(void)
@@ -175,12 +156,12 @@ void beNDMWDegiData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWDegiData_ctorTable, 0xD);
     insight = (void *)(igMetaObject_GetFieldAt(meta, base));
-    *(int *)((char *)(insight) + 56) = igInsightCore_GetOrCreateMetaObject();
-    *(char *)((char *)(insight) + 60) = 0;
+    ((igObjectRefMetaField *)insight)->_metaObject = igInsightCore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insight)->_refCounted = 0;
     dmNameUni = igMetaObject_GetFieldAt(meta, base + 5);
-    *(int *)((char *)(dmNameUni) + 52) = 0xA;
+    ((igUnsignedShortArrayMetaField *)dmNameUni)->_num = 0xA;
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    *(int *)((char *)(data) + 60) = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
     igMetaObject_NameFields(meta, g_beNDMWDegiData_fieldTable, g_beNDMWDegiData_fieldHandles, g_beNDMWDegiData_fieldOffsets, base);
 }
 

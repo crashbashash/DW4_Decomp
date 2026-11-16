@@ -19,11 +19,11 @@ done:
 }
 
 int igAppearanceListList_GetVTable(void) {
-    Obj_33fe10 o;
+    igAppearanceListList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_igAppearanceListList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_igAppearanceListList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igAppearanceListList_EnsureRegistered(void)

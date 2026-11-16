@@ -10,45 +10,23 @@ void *beAsTargetModelData_GetMetaObject(void) {
 }
 
 int beAsTargetModelData_GetVTable(void) {
-    union U_36b7e0 u;
-    int t;
-    char *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
-    int *q8;
-    int *q12;
+    beAsTargetModelData obj;
+    int vtable;
+    igObject **dataListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q8 = (int *)&u.b[8];
-    *q8 = 0;
-    u.vt = (int)&g_beAsTargetModelData_vtable[0];
-    q12 = (int *)&u.b[12];
-    *q12 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beAsTargetModelData_vtable[0];
-    if (q12 != 0) {
-        o = (char *)*q12;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q8 != 0) {
-        temp_v1 = (int *)*q8;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beAsTargetModelData_vtable[0];
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beAsTargetModelData_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beAsTargetModelData_EnsureRegistered(void)

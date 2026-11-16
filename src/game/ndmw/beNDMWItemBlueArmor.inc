@@ -14,10 +14,10 @@ void *beNDMWItemBlueArmor_GetReadyMetaObject(void) {
 }
 
 int beNDMWItemBlueArmor_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemBlueArmor obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemBlueArmor_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemBlueArmor_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

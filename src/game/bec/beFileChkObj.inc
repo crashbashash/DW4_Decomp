@@ -15,27 +15,18 @@ void *beFileChkObj_GetMetaObject(void) {
 }
 
 int beFileChkObj_GetVTable(void) {
-    struct F_363020 f;
-    int **pr;
-    int temp_s0;
-    int *o;
+    beFileChkObj obj;
+    int vtable;
+    igObject **fdSlot;
 
-    igObject_InitHeader(&f);
-    f.vt = &g_beFileChkObj_vtable[0];
-    pr = &f.ref;
-    *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beFileChkObj_vtable[0];
-    if (pr != 0) {
-        if (*pr != 0) {
-            o = *pr;
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beFileChkObj_vtable[0];
+    fdSlot = (igObject **)&obj._fd;
+    *fdSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFileChkObj_vtable[0];
+    igObjectRef_Release(fdSlot);
+    return vtable;
 }
 
 void beFileChkObj_EnsureRegistered(void)

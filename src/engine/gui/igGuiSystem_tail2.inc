@@ -206,7 +206,7 @@ void igHotKeyEventReceiver_AddBinding(AttrEntryOwner *owner, int a, int b, igObj
     ObjectList_AppendRetained(owner->entries, entry.get());
 }
 
-void FUN_004574f0(T_4574f0 *arg0, int arg1) {
+void igHotKeyEventReceiver_RemoveBinding(T_4574f0 *arg0, int arg1) {
     E_4574f0 *temp_a0;
     int var_s1;
     LST *temp_s0;

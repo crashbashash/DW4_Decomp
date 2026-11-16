@@ -15,44 +15,44 @@ igMetaObject *beTimerData_GetMetaObject(void)
 
 int beTimerData_GetVTable(void) {
     beTimerData obj;
-    int *q1;
-    int *q2;
-    char *o;
-    int *a1;
-    int v0;
-    int t;
+    int *resetConditionSlot;
+    int *callLuaFileSlot;
+    char *text;
+    int *header;
+    int refCount;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    q1 = &obj._resetCondition;
-    q2 = &obj._callLuaFile;
+    resetConditionSlot = &obj._resetCondition;
+    callLuaFileSlot = &obj._callLuaFile;
     obj._vtable = (int)&g_beTimerData_vtable[0];
     obj._resetCondition = 0;
     obj._callLuaFile = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beTimerData_vtable[0];
-    if (q2 != 0) {
-        o = (char *)*q2;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+    if (callLuaFileSlot != 0) {
+        text = (char *)*callLuaFileSlot;
+        if (text != 0) {
+            header = (int *)(text - 8);
+            refCount = *(int *)(text - 4) - 1;
+            *(int *)(text - 4) = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader(*header, header);
             }
         }
     }
-    if (q1 != 0) {
-        o = (char *)*q1;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+    if (resetConditionSlot != 0) {
+        text = (char *)*resetConditionSlot;
+        if (text != 0) {
+            header = (int *)(text - 8);
+            refCount = *(int *)(text - 4) - 1;
+            *(int *)(text - 4) = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader(*header, header);
             }
         }
     }
-    return t;
+    return vtable;
 }
 
 void beTimerData_EnsureRegistered(void)

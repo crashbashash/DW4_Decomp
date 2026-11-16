@@ -21,17 +21,17 @@ void *beNDMWMdlPBullet_GetReadyMetaObject(void) {
 }
 
 int beNDMWMdlPBullet_GetVTable(void) {
-    struct F_3c0a40 f;
-    int temp_s0;
+    beNDMWMdlPBullet obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.w[5] = 0;
-    f.vt = &g_beNDMWMdlPBullet_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beNDMWMdlPBullet_vtable[0];
-    FUN_003bf2f0((struct NamedRefObject *)&f, (long long)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlPBullet_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlPBullet_vtable[0];
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlPBullet_EnsureRegistered(void)

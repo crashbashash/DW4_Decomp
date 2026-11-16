@@ -21,33 +21,33 @@ void *beGeneraterData_GetMetaObject(void) {
 }
 
 int beGeneraterData_GetVTable(void) {
-    struct Obj_35fbb0 obj;
-    int t;
+    beGeneraterData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beGeneraterData_vtable[0];
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    obj.w13 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beGeneraterData_vtable[0];
-    FUN_0035fcd0((igSmartPointer<igObject> *)&obj.w16, (short)(-1));
-    igStringRef_Destruct(&obj.w15, -1);
-    igStringRef_Destruct(&obj.w13, -1);
-    igStringRef_Destruct(&obj.w11, -1);
-    igStringRef_Destruct(&obj.w10, -1);
-    FUN_001354b0(&obj.w8, -1);
-    FUN_001374b0(&obj.w7, -1);
-    FUN_00131bc0(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beGeneraterData_vtable[0];
+    obj._genePosList = 0;
+    obj._geneRotYRadianList = 0;
+    obj._geneEnemySeq = 0;
+    obj._startModeStr = 0;
+    obj._fillModeStr = 0;
+    obj._callLua = 0;
+    obj._playerDataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGeneraterData_vtable[0];
+    igSmartPointer_beGeneraterPlayerDataList_Destruct((igSmartPointer<igObject> *)&obj._playerDataList, (short)(-1));
+    igStringRef_Destruct(&obj._callLua, -1);
+    igStringRef_Destruct(&obj._fillModeStr, -1);
+    igStringRef_Destruct(&obj._startModeStr, -1);
+    igStringRef_Destruct(&obj._geneEnemySeq, -1);
+    igSmartPointer_igFloatList_Destruct(&obj._geneRotYRadianList, -1);
+    igSmartPointer_igVec3fList_Destruct(&obj._genePosList, -1);
+    igNamedObject_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035fcd0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beGeneraterPlayerDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -90,7 +90,7 @@ void beGeneraterData_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beGeneraterData_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,

@@ -16,11 +16,11 @@ void *beModelCtrlAIDataList_GetMetaObject(void) {
 }
 
 int beModelCtrlAIDataList_GetVTable(void) {
-    union U_354770 u;
+    beModelCtrlAIDataList obj;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beModelCtrlAIDataList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beModelCtrlAIDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beModelCtrlAIDataList_EnsureRegistered(void)

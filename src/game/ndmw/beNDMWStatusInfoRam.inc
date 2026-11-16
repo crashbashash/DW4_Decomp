@@ -10,42 +10,27 @@ void *beNDMWStatusInfoRam_GetMetaObject(void) {
 }
 
 int beNDMWStatusInfoRam_GetVTable(void) {
-    union U_3b5c00 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
-    char *p58;
-    char *p5C;
+    beNDMWStatusInfoRam obj;
+    int vtable;
+    int *dataListRef;
+    int *workRef;
 
-    igObject_InitHeader(u.b);
-    p58 = &u.b[40];
-    *(int *)p58 = 0;
-    u.vt = (int)&g_beNDMWStatusInfoRam_vtable[0];
-    p5C = &u.b[44];
-    *(int *)p5C = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWStatusInfoRam_vtable[0];
-    if (p5C != 0) {
-        v1 = *(int **)p5C;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    dataListRef = &obj._dataList;
+    *dataListRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusInfoRam_vtable[0];
+    workRef = &obj._work;
+    *workRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusInfoRam_vtable[0];
+    if (workRef != 0) {
+        igRelease((igObject *)*workRef);
     }
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (p58 != 0) {
-        v1 = *(int **)p58;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
-            }
-        }
+    *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
+    if (dataListRef != 0) {
+        igRelease((igObject *)*dataListRef);
     }
-    return r;
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWStatusInfoWork_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

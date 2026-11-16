@@ -16,18 +16,22 @@ igMetaObject *beWeaponAttachData_GetMetaObject(void) {
 }
 
 int beWeaponAttachData_GetVTable(void) {
-    Obj_33fb10 obj;
-    int r;
+    beWeaponAttachData obj;
+    int vtable;
+    igObject **appearanceListListSlot;
+    igObject **boneSelectListSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beWeaponAttachData_vtable[0];
-    obj.m8 = 0;
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beWeaponAttachData_vtable[0];
-    obj.rel12();
-    obj.rel8();
-    return r;
+    obj._vtable = (int)&g_beWeaponAttachData_vtable[0];
+    boneSelectListSlot = (igObject **)&obj._boneSelectList;
+    *boneSelectListSlot = 0;
+    appearanceListListSlot = (igObject **)&obj._appearanceListList;
+    *appearanceListListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beWeaponAttachData_vtable[0];
+    igObjectRef_Release(appearanceListListSlot);
+    igObjectRef_Release(boneSelectListSlot);
+    return vtable;
 }
 
 void beWeaponAttachData_EnsureRegistered(void)

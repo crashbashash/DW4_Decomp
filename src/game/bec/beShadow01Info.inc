@@ -15,31 +15,27 @@ done:;
 }
 
 int beShadow01Info_GetVTable(void) {
-    union U u;
-    int t;
-    char *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beShadow01Info obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beShadow01Info_vtable[0];
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[32] = 0;
-    *(int *)&u.b[36] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beShadow01Info_vtable[0];
-    FUN_00344c40((igSmartPointer<igObject> *)(&u.b[36]), -1);
-    FUN_00198210(&u.b[32], -1);
-    FUN_00198210(&u.b[28], -1);
-    FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beShadow01Info_vtable[0];
+    obj._receiverNode = 0;
+    obj._casterNode = 0;
+    obj._projShadowShader = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beShadow01Info_vtable[0];
+    igSmartPointer_igProjectiveShadowShader_Destruct((igSmartPointer<igObject> *)(&obj._projShadowShader), -1);
+    igSmartPointer_igNode_Destruct(&obj._casterNode, -1);
+    igSmartPointer_igNode_Destruct(&obj._receiverNode, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00344c40(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igProjectiveShadowShader_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

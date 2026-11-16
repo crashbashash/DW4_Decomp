@@ -68,7 +68,7 @@ void thunk_igMouseCursor_GetMetaObject(void) {
 
 static FieldFactory g_igMouseCursor_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
 };
 static const char *g_igMouseCursor_fieldTable[] = {
     "_geometryElement",
@@ -98,7 +98,7 @@ void igMouseCursor_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;
-    FUN_0018e2f0(temp_a0, buf);
+    igVec2fMetaField_SetDefault(temp_a0, buf);
     igMetaObject_NameFields(temp_s0, g_igMouseCursor_fieldTable, g_igMouseCursor_fieldHandles, g_igMouseCursor_fieldOffsets, temp_s2);
 }
 

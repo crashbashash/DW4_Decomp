@@ -16,10 +16,10 @@ void *beFontGeomAttrPairList_GetMetaObject(void) {
 }
 
 int beFontGeomAttrPairList_GetVTable(void) {
-    struct Obj_362400 obj;
+    beFontGeomAttrPairList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beFontGeomAttrPairList_vtable[0];
+    obj._vtable = (int)&g_beFontGeomAttrPairList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

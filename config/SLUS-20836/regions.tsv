@@ -32,8 +32,8 @@
 0x00225770	0x0022e4b8	alchemy-base	Alchemy Base	Alchemy	mwcc	-	BaseLibrary_MarkRegistered	high	latch, 27 registrars around `igBase` and `igInterfaced` (the Item, Lock, Listener, Message and Opt families); the name describes the classes
 0x0022e4b8	0x00230f50	libgcc	libgcc	libgcc	gcc	-	__divdi3	high	`__divdi3`, `__moddi3`, `__umoddi3`, `__floatdidf`, `__pack_d`; every library calls it
 0x00230f50	0x00238d40	alchemy-insight	Alchemy Insight	Alchemy	mwcc	Insight	InsightLibrary_MarkRegistered	high	latch, 20 registrars; RTTI `Gap::Insight`
-0x00238d40	0x00239390	alchemy-scene-search	Alchemy SceneSearch	Alchemy	mwcc	-	thunk_FUN_00238ed0	high	register list then latch, 1 registrar (`igSearchSceneGraph`); `main` runs the list; the name describes the class
-0x00239390	0x0023c440	alchemy-collision	Alchemy Collision	Alchemy	mwcc	-	FUN_00239390	high	register list then latch, 9 registrars (`igCollisionGrid`, `igCollisionCell`); `main` runs the list; the name describes the classes
+0x00238d40	0x00239390	alchemy-scene-search	Alchemy SceneSearch	Alchemy	mwcc	-	SceneSearchLibrary_RegisterClasses	high	register list then latch, 1 registrar (`igSearchSceneGraph`); `main` runs the list; the name describes the class
+0x00239390	0x0023c440	alchemy-collision	Alchemy Collision	Alchemy	mwcc	-	CollisionLibrary_RegisterClasses	high	register list then latch, 9 registrars (`igCollisionGrid`, `igCollisionCell`); `main` runs the list; the name describes the classes
 0x0023c440	0x00246d30	alchemy-lua	Alchemy Lua bindings	Alchemy	mwcc	Lua	LuaLibrary_MarkRegistered	high	latch; RTTI `Gap::Lua`; `igLuaState`, `Cannot find field "%s" on class "%s"`
 0x00246d30	0x002590c0	lua	Lua 4.0.1	Lua	mwcc	-	luaA_index	high	stock source compiles to retail (src/third_party/)
 0x002590c0	0x0025b248	game-main	The game's `main`	Game	mwcc	-	-	high	`entry` calls `main` at 0x2595e0; `ndmw.igb`, `IOPRP280.IMG`; runs the Collision, AdxMovie, Bec and Ndmw register lists
@@ -42,8 +42,8 @@
 0x00280b98	0x002b5d50	cri-sofdec	CRI Sofdec and MPEG	CRI Sofdec	gcc	-	-	high	GCC prologues; `CRI CFT`, `CRI M2V`, `CRI MPS`, `CRI MPV`, `MWSFD`, `CRI SFD`, `CRI SFH`, `CRI SFX`, `CRI SUD` version strings; built Oct 6 2004 11:36:10-11:36:36, `Append: GCC2096 SCE2810`; `SNDF Ver.2.09c` of Oct 4 2004 is its first module: 0x280b98 reads the pointer at 0x4bb10c
 0x002b5d50	0x00331f30	alchemy-core	Alchemy Core	Alchemy	mwcc	Core	CoreLibrary_MarkRegistered	high	RTTI `Gap::Core`; latch 0x2b5d50 called by 130 of its 152 registrars; `Intrinsic Alchemy  v3.2 -0810`; the library compiles as one unit, ending after the inline holder destructor behind its getter run; `Built by` stamp Tue Aug 10 11:05:06 JST 2004
 0x00331f30	0x0033bf50	adx-movie	AdxMovie	Game	mwcc	-	-	medium	latch, 17 registrars (`igAdx*`, `igMovie*`) directly in `Gap::`; wraps CRI; the game's `_GetMetaObject` macro; built `-O3,p` like Bec and Ndmw; `main` runs its register list; counted with the game; the name describes the classes; starts at `igAdxAudio`'s methods, where the Core unit ends
-0x0033bf50	0x003b04e0	bec	Bec, the game framework	Game	mwcc	Bec	FUN_0033bf50	high	register list of 303 classes then latch; `libBecRuntimePlugin`; RTTI `Gap::Bec`
-0x003b04e0	0x0044b860	ndmw	Ndmw, the game	Game	mwcc	Bec	FUN_003b04e0	high	register list of 163 classes then latch; `libNdmwRuntimePlugin`; `MODELCTRL`, `GAMERAM`, `STAGECTL`
+0x0033bf50	0x003b04e0	bec	Bec, the game framework	Game	mwcc	Bec	BecLibrary_RegisterClasses	high	register list of 303 classes then latch; `libBecRuntimePlugin`; RTTI `Gap::Bec`
+0x003b04e0	0x0044b860	ndmw	Ndmw, the game	Game	mwcc	Bec	NdmwLibrary_RegisterClasses	high	register list of 163 classes then latch; `libNdmwRuntimePlugin`; `MODELCTRL`, `GAMERAM`, `STAGECTL`
 0x0044b860	0x004583f0	alchemy-gui	Alchemy Gui	Alchemy	mwcc	Gui	GuiLibrary_MarkRegistered	high	latch, 49 registrars; RTTI `Gap::Gui`
 0x004583f0	0x00467120	alchemy-viewer	Alchemy Viewer	Alchemy	mwcc	Viewer	-	high	latch, 24 registrars; RTTI `Gap::Viewer`; `Actor manager`, `Scenes done`; ViewerLibrary_MarkRegistered at 0x458680 follows the library's out-of-line holder destructors at 0x4583f0, which only Viewer calls and which match only Viewer's -O4,p
 0x00467120	0x00481c00	vu-microcode	VU1 microcode	-	data	-	-	high	the 109,184 bytes `UCODE_END` gives, from 0x467178 to 0x481bf8; VU nops, no EE prologues

@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/beBaseInfoManagerVirtuals.h"
 
 extern "C" int beBaseInfoManager_Stop(...);
 extern "C" int igInsightCore_FindManager(int, int);
@@ -7,7 +8,7 @@ extern "C" void beStaticInfoCtl_UpdateRam(void);
 extern "C" int beStaticInfoCtl_GetMeta(void);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int beMessenger_RegisterReceiver(...);
-extern "C" int FUN_00343700(...);
+extern "C" int beStaticInfoCtl_GetMessageEnum(...);
 extern "C" int beMessenger_AppendObject(int, int);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" void igObject_Destroy(igObject *);
@@ -19,62 +20,58 @@ struct ReleaseRefInline { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *arg0);
+extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *self);
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *arg0);
+extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *self);
 extern "C" int g_beStaticInfoCtl_metaObject[4];
 extern "C" int g_beStaticInfo_metaObject[4];
 extern "C" int emptyString[4];
 extern "C" int STATICINFO_2[4];
-struct A;
-class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void v136(); };
-/* matching construct: dummy-virtual base so arg0->v136() dispatches through the vtable entry at byte offset 136 */
-struct A : VC {};
-extern "C" void beStaticInfoCtl_OnAddRam(A *arg0, beBaseInfoRam *arg1);
-extern "C" int beStaticInfoCtl_OnMessage(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2);
+extern "C" void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram);
+extern "C" int beStaticInfoCtl_OnMessage(beStaticInfoCtl *self, beBaseInfoRam *ram, beMessengerWork *work);
 
-void beStaticInfoCtl_Stop(beStaticInfoCtl *arg0) {
-    igDataList *l = (igDataList *)arg0->_staticInfoList;
-    int n = l->_count;
+void beStaticInfoCtl_Stop(beStaticInfoCtl *self) {
+    igDataList *infos = (igDataList *)self->_staticInfoList;
+    int count = infos->_count;
     int i = 0;
-    if (0 < n) {
+    if (0 < count) {
         do {
-            ReleaseRefInline::go(((igObject **)l->_data)[i]);
+            ReleaseRefInline::go(((igObject **)infos->_data)[i]);
             i++;
-        } while (i < n);
+        } while (i < count);
     }
-    int n2 = l->_count;
+    int clearCount = infos->_count;
     int v = 0;
-    if (0 < n2) {
-        int lim;
-        if (n2 > 8) {
-            lim = n2 - 8;
+    if (0 < clearCount) {
+        int unrolledEnd;
+        if (clearCount > 8) {
+            unrolledEnd = clearCount - 8;
             do {
-                ((int *)l->_data)[v] = 0;
-                ((int *)l->_data)[v + 1] = 0;
-                ((int *)l->_data)[v + 2] = 0;
-                ((int *)l->_data)[v + 3] = 0;
-                ((int *)l->_data)[v + 4] = 0;
-                ((int *)l->_data)[v + 5] = 0;
-                ((int *)l->_data)[v + 6] = 0;
-                ((int *)l->_data)[v + 7] = 0;
+                ((int *)infos->_data)[v] = 0;
+                ((int *)infos->_data)[v + 1] = 0;
+                ((int *)infos->_data)[v + 2] = 0;
+                ((int *)infos->_data)[v + 3] = 0;
+                ((int *)infos->_data)[v + 4] = 0;
+                ((int *)infos->_data)[v + 5] = 0;
+                ((int *)infos->_data)[v + 6] = 0;
+                ((int *)infos->_data)[v + 7] = 0;
                 v += 8;
-            } while (v < lim);
+            } while (v < unrolledEnd);
         }
-        if (v < n2) {
+        if (v < clearCount) {
             do {
-                ((int *)l->_data)[v] = 0;
+                ((int *)infos->_data)[v] = 0;
                 v++;
-            } while (v < n2);
+            } while (v < clearCount);
         }
     }
-    l->_count = 0;
-    beBaseInfoManager_Stop(arg0);
+    infos->_count = 0;
+    beBaseInfoManager_Stop(self);
 }
 
-void beStaticInfoCtl_Prepare(beStaticInfoCtl *arg0) {
-    if (arg0->_messenger == 0) {
-        arg0->_messenger = igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]);
+void beStaticInfoCtl_Prepare(beStaticInfoCtl *self) {
+    if (self->_messenger == 0) {
+        self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
     }
 }
 
@@ -87,24 +84,34 @@ void beStaticInfoCtl_UpdateRam(void)
 {
 }
 
-void beStaticInfoCtl_OnAddRam(A *arg0, beBaseInfoRam *arg1) {
-    /* matching construct: a typed view of the receiver declared first; casting arg0 at each use makes the compiler hoist the field address into an extra saved register */
-    beStaticInfoCtl *self = (beStaticInfoCtl *)arg0; int a0; beBaseInfo *s0; int *a3; int z; int t0;
-    a0 = self->_messenger;
-    s0 = (beBaseInfo *)arg1->_parentInfo;
-    z = ((a0 != 0) ^ 1);
-    if (z) { do { arg0->v136(); a0 = self->_messenger; z = ((a0 != 0) ^ 1); } while (z); }
-    a3 = (int *)s0->_name;
-    t0 = arg1->_ramNo;
-    a3 = a3 != 0 ? a3 : &emptyString[0];
-    beMessenger_RegisterReceiver(a0, arg1, &STATICINFO_2[0], a3, t0);
-    ObjectList_AppendRetained(self->_staticInfoList, s0);
+void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
+    int messenger;
+    beBaseInfo *info;
+    int *name;
+    int ramNo;
+    int unresolved;
+    /* matching construct: hand search — the unresolved flag is computed as (messenger != 0) ^ 1 and tested twice, as retail does */
+    messenger = self->_messenger;
+    info = (beBaseInfo *)ram->_parentInfo;
+    unresolved = ((messenger != 0) ^ 1);
+    if (unresolved) {
+        do {
+            ((beBaseInfoManagerVirtuals *)self)->prepare();
+            messenger = self->_messenger;
+            unresolved = ((messenger != 0) ^ 1);
+        } while (unresolved);
+    }
+    name = (int *)info->_name;
+    ramNo = ram->_ramNo;
+    name = name != 0 ? name : &emptyString[0];
+    beMessenger_RegisterReceiver(messenger, ram, &STATICINFO_2[0], name, ramNo);
+    ObjectList_AppendRetained(self->_staticInfoList, info);
 }
 
-int beStaticInfoCtl_OnMessage(beStaticInfoCtl *arg0, beBaseInfoRam *arg1, beMessengerWork *arg2) {
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00343700(), arg2->_message)) {
+int beStaticInfoCtl_OnMessage(beStaticInfoCtl *self, beBaseInfoRam *ram, beMessengerWork *work) {
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beStaticInfoCtl_GetMessageEnum(), work->_message)) {
     case 0:
-        beMessenger_AppendObject(arg0->_messenger, arg0->_staticInfoList);
+        beMessenger_AppendObject(self->_messenger, self->_staticInfoList);
         goto one;
     default:
         return 0;

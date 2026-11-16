@@ -21,10 +21,10 @@ done:
 }
 
 int beSaveDataDeliver_GetVTable(void) {
-    struct Obj_34af50 obj;
+    beSaveDataDeliver obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSaveDataDeliver_vtable[0];
+    obj._vtable = (int)&g_beSaveDataDeliver_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

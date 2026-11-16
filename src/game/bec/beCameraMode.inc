@@ -29,36 +29,23 @@ void *beCameraMode_GetMetaObject(void) {
 }
 
 int beCameraMode_GetVTable(void) {
-    struct Obj_368ad0 o;
+    beCameraMode obj;
     int r;
-    int *t;
+    igObject **cameraSlot;
+    igObject **cameraPathSlot;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_igViewMode_vtable[0];
-    igMatrix44f_SetIdentity(o.sub);
-    o.vt = &g_beCameraMode_vtable[0];
-    o.r1 = 0;
-    o.r2 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beCameraMode_vtable[0];
-    if (&o.r2 != 0) {
-        t = o.r2;
-        if (t != 0) {
-            t[1] = t[1] - 1;
-            if ((t[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
-    if (&o.r1 != 0) {
-        t = o.r1;
-        if (t != 0) {
-            t[1] = t[1] - 1;
-            if ((t[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_igViewMode_vtable[0];
+    igMatrix44f_SetIdentity((int *)obj._inverseMatrix);
+    obj._vtable = (int)&g_beCameraMode_vtable[0];
+    cameraPathSlot = (igObject **)&obj._cameraPath;
+    *cameraPathSlot = 0;
+    cameraSlot = (igObject **)&obj._camera;
+    *cameraSlot = 0;
+    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCameraMode_vtable[0];
+    igObjectRef_Release(cameraSlot);
+    igObjectRef_Release(cameraPathSlot);
     return r;
 }
 

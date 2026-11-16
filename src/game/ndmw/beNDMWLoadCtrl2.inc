@@ -25,19 +25,19 @@ igMetaObject *beNDMWLoadCtrl2_GetReadyMetaObject(void)
 }
 
 int beNDMWLoadCtrl2_GetVTable(void) {
-    struct Obj_3c7e80 obj;
-    int r;
+    beNDMWLoadCtrl2 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beNDMWLoadCtrl2_vtable[0];
-    obj.w[7] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWLoadCtrl2_vtable[0];
-    FUN_0033dda0(&obj.w[7], -1);
-    FUN_0033f5e0(&obj, 0);
-    return r;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2_vtable[0];
+    obj._padManager = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2_vtable[0];
+    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWLoadCtrl2_EnsureRegistered(void)

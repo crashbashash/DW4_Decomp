@@ -11,28 +11,28 @@ void *beLoadingNode_ResolveMetaObject(void) {
 }
 
 int beLoadingNode_GetVTable(void) {
-    struct Obj_34e620 obj;
-    int temp_s0;
+    beLoadingNode obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.fC = 0;
-    obj.f10 = 0;
-    obj.f1C = 0;
-    obj.vt = (&g_beLoadingNode_vtable[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beLoadingNode_vtable[0]);
-    FUN_0034e690((int **)&obj, (long long)0);
-    return temp_s0;
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beLoadingNode_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLoadingNode_vtable[0];
+    beNodeAnim_Destroy((int **)&obj, (long long)0);
+    return vtable;
 }
 
-int **FUN_0034e690(int **arg0, long long arg1) {
+int **beNodeAnim_Destroy(int **arg0, long long arg1) {
     if (arg0 != 0) {
         *arg0 = &g_beNodeAnim_vtable[0];
         if (arg0 != 0) {
             *arg0 = &g_igGroup_vtable[0];
-            FUN_001958f0((char *)arg0 + 0x1C, -1);
-            FUN_00195970(arg0, 0);
+            igSmartPointer_igNodeList_Destruct((char *)arg0 + 0x1C, -1);
+            igNode_Destroy(arg0, 0);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -58,7 +58,7 @@ void *beLoadingNode_Register(void) {
         0x80, /* instance size */
         beLoadingNode_GetVTable,
         beLoadingNode_InitFields,
-        FUN_0034e850, /* extra callback item */
+        beLoadingNode_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -99,7 +99,7 @@ void beLoadingNode_InitFields(void) {
     igMetaObject_NameFields(meta, g_beLoadingNode_fieldTable, g_beLoadingNode_fieldHandles, g_beLoadingNode_fieldOffsets, base);
 }
 
-void FUN_0034e850(void)
+void beLoadingNode_StaticInitCallback(void)
 {
     beLoadingNode_RegisterTraversalFunction();
 }

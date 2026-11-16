@@ -4,7 +4,7 @@ igObjectPointer Gap__Attrs__igAttrDefaultManager__vfunc_23(DefaultSource *source
     return wrapped;
 }
 
-void **FUN_0013bfe0(void **arg0, short arg1) {
+void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

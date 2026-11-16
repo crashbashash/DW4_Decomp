@@ -17,10 +17,10 @@ done:
 }
 
 int beNDMWItemImportant_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemImportant obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemImportant_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemImportant_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

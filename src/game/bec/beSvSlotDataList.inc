@@ -16,10 +16,10 @@ void *beSvSlotDataList_GetMetaObject(void) {
 }
 
 int beSvSlotDataList_GetVTable(void) {
-    struct Obj_34a540 obj;
+    beSvSlotDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSvSlotDataList_vtable[0];
+    obj._vtable = (int)&g_beSvSlotDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -40,27 +40,27 @@ done:
 }
 
 int beNDMWLoadCtrl2CommonIntf_GetVTable(void) {
-    struct Obj_3c4cc0 obj;
-    int temp_s3;
+    beNDMWLoadCtrl2CommonIntf obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.vt = (&g_beNDMWLoadCtrl2CommonIntf_vtable[0]);
-    obj.f20 = 0;
-    obj.f24 = 0;
-    obj.f28 = 0;
-    obj.f34 = 0;
-    temp_s3 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beNDMWLoadCtrl2CommonIntf_vtable[0]);
-    FUN_003b2a10((igSmartPointer<igObject> *)&obj.f34, -1);
-    FUN_003c4e80((igSmartPointer<igObject> *)&obj.f28, -1);
-    FUN_003c4e00((igSmartPointer<igObject> *)&obj.f24, -1);
-    FUN_003c4d80((igSmartPointer<igObject> *)&obj.f20, -1);
-    FUN_00344030(&obj, 0);
-    return temp_s3;
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2CommonIntf_vtable[0];
+    obj._slotSaveData = 0;
+    obj._gameUseData = 0;
+    obj._flagWork = 0;
+    obj._mcUtilCtrl = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2CommonIntf_vtable[0];
+    igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
+    igSmartPointer_beNDMWLoadSavePlWorkList_Destruct((igSmartPointer<igObject> *)&obj._flagWork, -1);
+    igSmartPointer_beNDMWDegiDataList_Destruct((igSmartPointer<igObject> *)&obj._gameUseData, -1);
+    igSmartPointer_beNDMWLoadSlotPlayerList_Destruct((igSmartPointer<igObject> *)&obj._slotSaveData, -1);
+    beBaseInfoData_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003c4d80(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadSlotPlayerList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -73,7 +73,7 @@ igSmartPointer<igObject> *FUN_003c4d80(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003c4e00(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWDegiDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -86,7 +86,7 @@ igSmartPointer<igObject> *FUN_003c4e00(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003c4e80(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadSavePlWorkList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -207,7 +207,7 @@ void beNDMWLoadCtrl2CommonIntf_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CommonIntf_ctorTable, 0xE);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "COMMONINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CommonIntf_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

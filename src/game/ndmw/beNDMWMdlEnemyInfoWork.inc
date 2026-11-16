@@ -14,15 +14,15 @@ void *beNDMWMdlEnemyInfoWork_GetReadyMetaObject(void) {
 }
 
 int beNDMWMdlEnemyInfoWork_GetVTable(void) {
-    Obj_3c19a0 o;
-    int r;
+    beNDMWMdlEnemyInfoWork obj;
+    int vtable;
 
-    beNDMWMdlPEBaseInfoWork_Construct(&o);
-    o.vt = &g_beNDMWMdlEnemyInfoWork_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWMdlEnemyInfoWork_vtable[0];
-    FUN_003bfde0((Obj_3bfde0 *)&o, (short)0);
-    return r;
+    beNDMWMdlPEBaseInfoWork_Construct((beNDMWMdlPEBaseInfoWork *)&obj);
+    *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
+    beNDMWMdlPEBaseInfoWork_Destroy((beNDMWMdlPEBaseInfoWork *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlEnemyInfoWork_EnsureRegistered(void)

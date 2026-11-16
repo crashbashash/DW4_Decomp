@@ -10,19 +10,23 @@ void *beWeaponSeqData_GetMetaObject(void) {
 }
 
 int beWeaponSeqData_GetVTable(void) {
-    Obj_33f1c0 obj;
-    int r;
+    beWeaponSeqData obj;
+    int vtable;
+    char **nameSlot;
+    char **labelSlot;
 
     igObject_InitHeader(&obj);
-    obj.r1 = 0;
-    obj.vt = &g_beWeaponSeqData_vtable[0];
-    obj.r2 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beWeaponSeqData_vtable[0];
-    obj.rel2();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel1();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
+    labelSlot = (char **)&obj._label;
+    *labelSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
+    igStringRef_Release(labelSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beWeaponSeqData_EnsureRegistered(void)

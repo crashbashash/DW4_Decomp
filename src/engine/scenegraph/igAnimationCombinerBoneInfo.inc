@@ -85,8 +85,8 @@ void thunk_igAnimationCombinerBoneInfo_GetMetaObject(void) {
 static FieldFactory g_igAnimationCombinerBoneInfo_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_001872a0,
-    FUN_00187890,
+    igVec4fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igBoolMetaField_Create,
     igIntMetaField_Create,

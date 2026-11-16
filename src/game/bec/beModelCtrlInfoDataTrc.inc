@@ -18,45 +18,23 @@ void *beModelCtrlInfoDataTrc_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoDataTrc_GetVTable(void) {
-    union U_3532e0 u;
-    int temp_s1;
-    void ** q0;
-    igObject * q1;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beModelCtrlInfoDataTrc obj;
+    int vtable;
+    igObject **recorderNodeSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q0 = (void **)&u.b[8];
-    *q0 = 0;
-    u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
-    q1 = (igObject *)&u.b[16];
-    *(int *)q1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&g_beModelCtrlInfoDataTrc_vtable[0]);
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    u.vt = (int)(&g_igNamedObject_vtable[0]);
-    if (q0 != 0) {
-        temp_v1 = *q0;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlInfoDataTrc_vtable[0];
+    recorderNodeSlot = (igObject **)&obj._recorderNode;
+    *recorderNodeSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoDataTrc_vtable[0];
+    igObjectRef_Release(recorderNodeSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoDataTrc_EnsureRegistered(void)
@@ -114,7 +92,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataTrc_ctorTable, 1);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "TRC");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

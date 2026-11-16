@@ -1,38 +1,37 @@
+#include "dw4/reflected.h"
 
-struct R { char pad[4]; int f4; char pad2[12]; char f20; };
-struct S { char pad[8]; struct R *f8; };
-extern "C" int igInsightCore_AddManager(int, struct R *);
-extern "C" struct R *igMovieManager_CreateInstance(int);
-extern "C" int Memory_GetAllocatorBySelector(int);
-extern "C" int igObject_Destroy(struct R *);
-extern "C" int igObject_GetAllocator(struct S *);
+extern "C" int igInsightCore_AddManager(int insight, igMovieManager *manager);
+extern "C" igMovieManager *igMovieManager_CreateInstance(int allocator);
+extern "C" int Memory_GetAllocatorBySelector(int selector);
+extern "C" int igObject_Destroy(igObject *object);
+extern "C" int igObject_GetAllocator(igMoviePlugin *object);
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void igMoviePlugin_Attach(struct S *arg0, int arg1);
-extern "C" int igInsightCore_RemoveManager(int, int);
-extern "C" void igMoviePlugin_Detach(void *arg0, int arg1);
+extern "C" void igMoviePlugin_Attach(igMoviePlugin *self, int insight);
+extern "C" int igInsightCore_RemoveManager(int insight, int manager);
+extern "C" void igMoviePlugin_Detach(igMoviePlugin *self, int insight);
 extern "C" int g_igMoviePlugin_metaObject[4];
 extern "C" int igMoviePlugin_GetMeta(void);
 
-void igMoviePlugin_Attach(struct S *arg0, int arg1) {
-    int var_v0;
-    struct R *temp_a0;
-    var_v0 = igObject_GetAllocator(arg0);
-    var_v0 = g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
-    temp_a0 = arg0->f8;
-    if (temp_a0 != 0) {
-        temp_a0->f4 = temp_a0->f4 - 1;
-        if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
+void igMoviePlugin_Attach(igMoviePlugin *self, int insight) {
+    int allocator;
+    igMovieManager *old;
+    allocator = igObject_GetAllocator(self);
+    allocator = g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
+    old = (igMovieManager *)self->_movieManager;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0->f8 = igMovieManager_CreateInstance(var_v0);
-    arg0->f8->f20 = 1;
-    igInsightCore_AddManager(arg1, arg0->f8);
+    self->_movieManager = (int)igMovieManager_CreateInstance(allocator);
+    ((igMovieManager *)self->_movieManager)->_audioDisabled = 1;
+    igInsightCore_AddManager(insight, (igMovieManager *)self->_movieManager);
 }
 
-void igMoviePlugin_Detach(void *arg0, int arg1) {
-    igInsightCore_RemoveManager(arg1, *(int *)((char *)(arg0) + 8));
+void igMoviePlugin_Detach(igMoviePlugin *self, int insight) {
+    igInsightCore_RemoveManager(insight, self->_movieManager);
 }
 
 int igMoviePlugin_GetMeta(void)

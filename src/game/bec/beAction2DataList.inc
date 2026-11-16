@@ -16,10 +16,10 @@ void *beAction2DataList_GetMetaObject(void) {
 }
 
 int beAction2DataList_GetVTable(void) {
-    struct Obj_36d900 obj;
+    beAction2DataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beAction2DataList_vtable[0];
+    obj._vtable = (int)&g_beAction2DataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

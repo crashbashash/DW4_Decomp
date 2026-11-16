@@ -14,18 +14,18 @@ void *beNDMWGameRamInfo_ResolveMetaObject(void) {
 }
 
 int beNDMWGameRamInfo_GetVTable(void) {
-    struct F_3ca410 f;
-    int temp_s0;
+    beNDMWGameRamInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.w[4] = 0;
-    f.w[5] = 0;
-    f.vt = &g_beNDMWGameRamInfo_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beNDMWGameRamInfo_vtable[0];
-    FUN_0033ec80(&f, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    *(int **)&obj._vtable = &g_beNDMWGameRamInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWGameRamInfo_vtable[0];
+    beBaseInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWGameRamInfo_EnsureRegistered(void)

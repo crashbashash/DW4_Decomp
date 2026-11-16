@@ -19,10 +19,10 @@ done:;
 }
 
 int beNumVerInsideData_GetVTable(void) {
-    struct Obj_34def0 obj;
+    beNumVerInsideData obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNumVerInsideData_vtable[0];
+    obj._vtable = (int)&g_beNumVerInsideData_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

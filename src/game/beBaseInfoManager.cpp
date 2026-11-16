@@ -1,4 +1,6 @@
 #include "dw4/reflected.h"
+#include "dw4/beBaseInfoManagerVirtuals.h"
+#include "dw4/igobject_release.h"
 
 extern "C" void beBaseInfoManager_Activate(void);
 extern "C" void beBaseInfoManager_Deactivate(void);
@@ -12,56 +14,12 @@ extern "C" int List_Reserve(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int beSystem_IsRunning(...);
 extern "C" int beBaseInfoManager_GetMeta(void);
-class V136 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual int vX(); };
-struct A { char pad[12]; int fc; int f10; int f14; };
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
-extern "C" void beBaseInfoManager_Start(A *arg0);
-struct Obj;
-struct Obj {
-    virtual void a0();
-    virtual void a1();
-    virtual void a2();
-    virtual void a3();
-    virtual void a4();
-    virtual void a5();
-    virtual void a6();
-    virtual void a7();
-    virtual void a8();
-    virtual void a9();
-    virtual void a10();
-    virtual void a11();
-    virtual void a12();
-    virtual void a13();
-    virtual void a14();
-    virtual void a15();
-    virtual void a16();
-    virtual void a17();
-    virtual void a18();
-    virtual void a19();
-    virtual int v88();
-    virtual void b0();
-    virtual void b1();
-    virtual void b2();
-    virtual void b3();
-    virtual void b4();
-    virtual void b5();
-    virtual void b6();
-    virtual void v120(Obj *);
-    virtual void v124(beBaseInfoRam *);
-    virtual int v128();
-};
-extern "C" int beBaseInfoManager_AddInfo(Obj *arg0, Obj *arg1);
-/* matching construct: dummy-virtual view so ->v32() dispatches through the vtable slot;
- * beBaseInfoManager receiver is a hypothesis */
-class O { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void v32(); };
-extern "C" void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *arg0);
-struct X { char pad[46]; unsigned char f46; };
-struct L { char pad0[8]; int f8; char padC[4]; void **f16; };
-struct Item { char pad[24]; L *f24; };
-struct L2 { char pad0[8]; int f8; char padC[4]; Item **f16; };
-class Self { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v31(void *); char p4[12]; X *f16; char p20[4]; L2 *f24; unsigned char f28; };
-extern "C" void beBaseInfoManager_Update(Self *arg0);
+extern "C" void beBaseInfoManager_Start(beBaseInfoManager *self);
+extern "C" int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info);
+extern "C" void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self);
+extern "C" void beBaseInfoManager_Update(beBaseInfoManager *self);
 extern "C" int g_beBaseInfoManager_metaObject[4];
 
 void beBaseInfoManager_Activate(void)
@@ -73,10 +31,10 @@ void beBaseInfoManager_Deactivate(void)
 {
 }
 
-void beBaseInfoManager_Start(A *arg0) {
-    ((V136 *)arg0)->vX();
-    arg0->f10 = igInsightCore_FindManager(arg0->fc, g_beSystem_metaObject[0]);
-    arg0->f14 = igInsightCore_FindManager(arg0->fc, g_beMessenger_metaObject[0]);
+void beBaseInfoManager_Start(beBaseInfoManager *self) {
+    ((beBaseInfoManagerVirtuals *)self)->prepare();
+    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    self->_messenger = igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
 }
 
 /* Slot 24 default: empty. */
@@ -84,29 +42,28 @@ void beBaseInfoManager_Stop(void)
 {
 }
 
-int beBaseInfoManager_AddInfo(Obj *arg0, Obj *arg1) {
-    beBaseInfoManager *mgr = (beBaseInfoManager *)arg0;
-    beBaseInfo *info = (beBaseInfo *)arg1;
-    int s0 = arg0->v128();
-    if (s0 == arg1->v88()) {
-        int n;
+int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
+    beBaseInfoManagerVirtuals *manager = (beBaseInfoManagerVirtuals *)self;
+    int infoMeta = manager->getInfoMeta();
+    if (infoMeta == ((igObjectVirtuals *)info)->getMeta()) {
+        int count;
         int i;
-        ObjectList_AppendRetained(mgr->_infoList, arg1);
-        arg0->v120(arg1);
-        n = ((beBaseInfoRamList *)info->_ramList)->_count;
-        for (i = 0; i < n; i++) {
-            beBaseInfoRam *it = ((beBaseInfoRam **)((beBaseInfoRamList *)info->_ramList)->_data)[i];
-            it->_st0 = 0;
-            it->_st3 = 0;
-            it->_st2 = 0;
-            it->_st1 = 0;
-            it->_parentManager = (int)arg0;
-            it->_parentInfo = (int)arg1;
-            it->_ramNo = i;
-            arg0->v124(it);
+        ObjectList_AppendRetained(self->_infoList, info);
+        manager->onAddInfo(info);
+        count = ((beBaseInfoRamList *)info->_ramList)->_count;
+        for (i = 0; i < count; i++) {
+            beBaseInfoRam *ram = ((beBaseInfoRam **)((beBaseInfoRamList *)info->_ramList)->_data)[i];
+            ram->_st0 = 0;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
+            ram->_parentManager = (int)self;
+            ram->_parentInfo = (int)info;
+            ram->_ramNo = i;
+            manager->onAddRam(ram);
         }
-        igInsightCore_AddToScheduler(mgr->_insight, arg0);
-        mgr->_isUpdateRun = 1;
+        igInsightCore_AddToScheduler(self->_insight, self);
+        self->_isUpdateRun = 1;
         return 1;
     }
     return 0;
@@ -116,69 +73,64 @@ void beBaseInfoManager_OnAddRam(void)
 {
 }
 
-void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *arg0) {
-    int n1;
-    beBaseInfoList *S;
-    int i1;
-    beBaseInfoList *L;
-    beBaseInfoRamList *M;
-    int n3;
-    int n2;
-    int n4;
-    int j2;
-    int i4;
-    int i3;
+void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self) {
+    int infoCount;
+    beBaseInfoList *infosForRelease;
+    int infoIndex;
+    beBaseInfoList *infos;
+    beBaseInfoRamList *rams;
+    int releaseCount;
+    int ramCount;
+    int clearCount;
+    int ramIndex;
+    int clearIndex;
+    int releaseIndex;
 
-    ((O *)arg0)->v32();
-    L = (beBaseInfoList *)arg0->_infoList;
-    n1 = L->_count;
-    for (i1 = 0; i1 < n1; i1++) {
-        M = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)arg0->_infoList)->_data)[i1]->_ramList;
-        n2 = M->_count;
-        for (j2 = 0; j2 < n2; j2++) {
-            beBaseInfoRam *e = ((beBaseInfoRam **)M->_data)[j2];
-            e->_parentManager = 0;
-            e->_parentInfo = 0;
+    ((beBaseInfoManagerVirtuals *)self)->prepare();
+    infos = (beBaseInfoList *)self->_infoList;
+    infoCount = infos->_count;
+    for (infoIndex = 0; infoIndex < infoCount; infoIndex++) {
+        rams = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)self->_infoList)->_data)[infoIndex]->_ramList;
+        ramCount = rams->_count;
+        for (ramIndex = 0; ramIndex < ramCount; ramIndex++) {
+            beBaseInfoRam *ram = ((beBaseInfoRam **)rams->_data)[ramIndex];
+            ram->_parentManager = 0;
+            ram->_parentInfo = 0;
         }
     }
-    S = (beBaseInfoList *)arg0->_infoList;
-    n3 = S->_count;
-    for (i3 = 0; i3 < n3; i3++) {
-        igObject *p = ((igObject **)S->_data)[i3];
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
+    infosForRelease = (beBaseInfoList *)self->_infoList;
+    releaseCount = infosForRelease->_count;
+    for (releaseIndex = 0; releaseIndex < releaseCount; releaseIndex++) {
+        igObject *info = ((igObject **)infosForRelease->_data)[releaseIndex];
+        IG_OBJECT_RELEASE(info);
     }
-    n4 = S->_count;
-    for (i4 = 0; i4 < n4; i4++) {
-        ((void **)S->_data)[i4] = 0;
+    clearCount = infosForRelease->_count;
+    for (clearIndex = 0; clearIndex < clearCount; clearIndex++) {
+        ((void **)infosForRelease->_data)[clearIndex] = 0;
     }
-    S->_count = 0;
-    S = (beBaseInfoList *)arg0->_infoList;
-    int ok = S->_count > 0;
+    infosForRelease->_count = 0;
+    infosForRelease = (beBaseInfoList *)self->_infoList;
+    int ok = infosForRelease->_count > 0;
     if (ok == 0) {
-        List_Reserve(S, 0, 4);
+        List_Reserve(infosForRelease, 0, 4);
     }
-    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
-    arg0->_isUpdateRun = 0;
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
+    self->_isUpdateRun = 0;
 }
 
-void beBaseInfoManager_Update(Self *arg0) {
-    int temp_s5;
-    int var_s4;
-    int temp_s3;
-    int var_s2;
-    L *temp_s7;
-    if (beSystem_IsRunning(arg0->f16) != 0 && arg0->f28 != 0 && arg0->f16->f46 == 0) {
-        temp_s5 = arg0->f24->f8;
-        for (var_s4 = 0; var_s4 < temp_s5; var_s4++) {
-            temp_s7 = arg0->f24->f16[var_s4]->f24;
-            temp_s3 = temp_s7->f8;
-            for (var_s2 = 0; var_s2 < temp_s3; var_s2++) {
-                arg0->v31(temp_s7->f16[var_s2]);
+void beBaseInfoManager_Update(beBaseInfoManager *self) {
+    int infoCount;
+    int infoIndex;
+    int ramCount;
+    int ramIndex;
+    beBaseInfoRamList *rams;
+    if (beSystem_IsRunning(self->_system) != 0 && self->_isUpdateRun != 0 && ((beSystem *)self->_system)->_isFrameSkip == 0) {
+        infoCount = ((beBaseInfoList *)self->_infoList)->_count;
+        for (infoIndex = 0; infoIndex < infoCount; infoIndex++) {
+            rams = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)self->_infoList)->_data)[infoIndex]->_ramList;
+            ramCount = rams->_count;
+            for (ramIndex = 0; ramIndex < ramCount; ramIndex++) {
+                ((beBaseInfoManagerVirtuals *)self)->updateRam(((beBaseInfoRam **)rams->_data)[ramIndex]);
             }
         }
     }

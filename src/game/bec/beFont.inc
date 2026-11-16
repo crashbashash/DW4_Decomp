@@ -31,36 +31,36 @@ void *beFont_GetMetaObject(void) {
 }
 
 int beFont_GetVTable(void) {
-    struct Obj_361f30 obj;
-    int t;
+    beFont obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beFont_vtable[0];
-    obj.w8 = 0;
-    obj.w9 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beFont_vtable[0];
-    igStringRef_Destruct(&obj.w16, -1);
-    igStringRef_Destruct(&obj.w15, -1);
-    igSmartPointer_igStringObj_Destruct(&obj.w14, -1);
-    FUN_001354b0(&obj.w13, -1);
-    igSmartPointer_igIntList_Destruct(&obj.w12, -1);
-    FUN_003620f0((igSmartPointer<igObject> *)&obj.w11, (short)(-1));
-    FUN_00362070((igSmartPointer<igObject> *)&obj.w9, -1);
-    FUN_001d97f0(&obj.w8, -1);
-    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beFont_vtable[0];
+    obj._root = 0;
+    obj._fonts = 0;
+    obj._gaPairList = 0;
+    obj._lineFeedList = 0;
+    obj._alignList = 0;
+    obj._convertData = 0;
+    obj._condition00 = 0;
+    obj._condition01 = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFont_vtable[0];
+    igStringRef_Destruct(&obj._condition01, -1);
+    igStringRef_Destruct(&obj._condition00, -1);
+    igSmartPointer_igStringObj_Destruct(&obj._convertData, -1);
+    igSmartPointer_igFloatList_Destruct(&obj._alignList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._lineFeedList, -1);
+    igSmartPointer_beFontGeomAttrPairList_Destruct((igSmartPointer<igObject> *)&obj._gaPairList, (short)(-1));
+    igSmartPointer_beFontImageList_Destruct((igSmartPointer<igObject> *)&obj._fonts, -1);
+    igSmartPointer_igAttrSet_Destruct(&obj._root, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00362070(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beFontImageList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -73,7 +73,7 @@ igSmartPointer<igObject> *FUN_00362070(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003620f0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beFontGeomAttrPairList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

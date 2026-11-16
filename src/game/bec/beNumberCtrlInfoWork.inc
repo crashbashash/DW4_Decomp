@@ -24,11 +24,11 @@ igMetaObject *beNumberCtrlInfoWork_GetMetaObject(void) {
 }
 
 int beNumberCtrlInfoWork_GetVTable(void) {
-    int obj[8];
+    beNumberCtrlInfoWork obj;
 
-    igObject_InitHeader(obj);
-    obj[0] = (int)&g_beNumberCtrlInfoWork_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beNumberCtrlInfoWork_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void beNumberCtrlInfoWork_EnsureRegistered(void)

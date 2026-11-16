@@ -16,27 +16,27 @@ done:;
 }
 
 int beCriFxInfo_GetVTable(void) {
-    struct Obj obj;
-    int r;
-    int *pb;
-    int *pa;
+    beCriFxInfo obj;
+    int vtable;
+    int *xbFxParamSlot;
+    int *targetSlot;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.vt = &g_beCriFxInfo_vtable[0];
-    pa = &obj.f14;
-    *pa = 0;
-    pb = &obj.f20;
-    *pb = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beCriFxInfo_vtable[0];
-    FUN_00366d80((igSmartPointer<igObject> *)pb, -1);
-    igStringRef_Destruct(pa, -1);
+    obj._name = 0;
+    obj._vtable = (int)&g_beCriFxInfo_vtable[0];
+    targetSlot = &obj._target;
+    *targetSlot = 0;
+    xbFxParamSlot = &obj._xbFxParam;
+    *xbFxParamSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCriFxInfo_vtable[0];
+    igSmartPointer_beCriFxXbData_Destruct((igSmartPointer<igObject> *)xbFxParamSlot, -1);
+    igStringRef_Destruct(targetSlot, -1);
     igInfo_Destroy(&obj, 0);
-    return r;
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00366d80(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beCriFxXbData_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

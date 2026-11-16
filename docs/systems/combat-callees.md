@@ -54,8 +54,8 @@ register-colouring lessons above and needs inline assembly to reproduce, which i
   retail loads `lq a2,0 / a3,16 / t0,32 / t1,48` and stores `sq a2 / a3 / t0`, branches, then `sq t1`; the best C (`__int128` temporaries,
   all 576 load/store orders, struct copies, pointer increments, volatile, pragmas, 2.3.3 to 3.0 builds) loads the first-stored quad last
   into `v1`. The compiler colours in virtual-register order and tries `v1` and `a1` first; retail's `a2, a3, t0, t1` only appears if the
-  quads stay live across the alignment test, and then the loads hoist above the branch. The neighbouring `FUN_001904f0` and
-  `FUN_001906d0` are plainly hand-written (VU0 macro mode, `mtsab`/`qfsrv`), and the register choice looks human-picked too.
+  quads stay live across the alignment test, and then the loads hoist above the branch. The neighbouring `igMatrix44f_Multiply` and
+  `igMatrix44f_PreMultiply` are plainly hand-written (VU0 macro mode, `mtsab`/`qfsrv`), and the register choice looks human-picked too.
   Only a candidate with an `asm` block reproduces it.
 
 The dispatcher itself (`0x3fca10`, 41,864 bytes), which contains the 22 FIGHTCALC commands, is

@@ -23,10 +23,10 @@ igMetaObject *beModelCtrlMoveObject_GetMetaObject(void) {
 }
 
 int beModelCtrlMoveObject_GetVTable(void) {
-    struct Obj_3529d0 obj;
+    beModelCtrlMoveObject obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beModelCtrlMoveObject_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlMoveObject_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

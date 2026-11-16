@@ -38,7 +38,7 @@ int beCameraCtrl_GetVTable(void) {
     return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_003699a0(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beCameraMode_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -84,14 +84,14 @@ static FieldFactory g_beCameraCtrl_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igFloatMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igBoolMetaField_Create,
 };

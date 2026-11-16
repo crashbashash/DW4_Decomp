@@ -351,23 +351,23 @@ void FUN_001d7630(void *arg0, float *arg1) {
     t->f96->vX(m2);
     s2 = (float *)(t->f100 + g_igTextureMatrixAttr_mField[0]->_offset);
     FUN_001908f0(s2, arg1);
-    FUN_001904f0(s2, s2, m1);
-    FUN_001904f0(s2, s2, m2);
+    igMatrix44f_Multiply(s2, s2, m1);
+    igMatrix44f_Multiply(s2, s2, m2);
     igMatrix44f_SetIdentity(m3);
     v2[0] = 0.5f; v2[2] = 0.0f; v2[1] = -0.5f;
     FUN_00190c60(m3, v2);
     v3[0] = 0.5f; v3[1] = 0.5f; v3[2] = 0.0f;
     FUN_00190a10(m3, v3);
-    FUN_001904f0(s2, s2, m3);
+    igMatrix44f_Multiply(s2, s2, m3);
     s0 = (float *)(t->f196 + DAT_0055ee30[0]->f8);
     s4 = (float *)(t->f200 + DAT_0055ee30[0]->f8);
     FUN_001908f0(s4, arg1);
-    FUN_001904f0(s4, s4, m1);
+    igMatrix44f_Multiply(s4, s4, m1);
     f20 = t->f68 - t->f64;
     FUN_001908f0(m4, DAT_004e0f30);
     m4[11] = 128.0f / f20;
     m4[15] = 128.0f + (128.0f * (t->f108 + t->f64)) / f20;
-    FUN_001904f0(s4, s4, m4);
+    igMatrix44f_Multiply(s4, s4, m4);
     m4[11] = -128.0f / f20;
     m4[15] = (128.0f * -t->f64) / f20;
     FUN_001908f0(s0, m4);
@@ -383,8 +383,8 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    igObject_Copy(((void *)DAT_005628e0[0]), ((void *)DAT_00562640[0]), 1);
-    igObject_Copy(((void *)DAT_005628e8[0]), ((void *)DAT_00562640[0]), 1);
+    igObject_Copy(((void *)DAT_005628e0[0]), ((void *)g_igCommonTraversal_travProcs[0]), 1);
+    igObject_Copy(((void *)DAT_005628e8[0]), ((void *)g_igCommonTraversal_travProcs[0]), 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
@@ -452,8 +452,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         arg0->b32 = 1;
     }
     FUN_001d7630((void *)arg0, (float *)((char *)arg1 + 164));
-    temp_s4 = DAT_00562640[0];
-    DAT_00562640[0] = DAT_005628e0[0];
+    temp_s4 = g_igCommonTraversal_travProcs[0];
+    g_igCommonTraversal_travProcs[0] = DAT_005628e0[0];
     if (arg0->b140 != 0) {
         temp_s2 = arg1->f52;
         FUN_001dc500((A_1dc500 *)arg1->f68, 0, 1);
@@ -472,7 +472,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         FUN_001b1030((igAttrStackManager *)temp_s2, (igAttr *)arg0->f228);
         temp_s5 = arg0->f84->n;
         for (var_s3 = 0; var_s3 < temp_s5; var_s3++) {
-            FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f84->arr[var_s3]);
+            igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f84->arr[var_s3]);
         }
         FUN_001b1100((struct A_1b1100 *)temp_s2, (struct B_1b1100 *)arg0->f228);
         FUN_001b1100((struct A_1b1100 *)temp_s2, (struct B_1b1100 *)arg0->f96);
@@ -486,7 +486,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s2, (struct B_1b13d0 *)arg0->f148);
         FUN_001dc610(arg1->f68);
     }
-    DAT_00562640[0] = DAT_005628e8[0];
+    g_igCommonTraversal_travProcs[0] = DAT_005628e8[0];
     temp_s3 = arg1->f52;
     FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
     temp_v0 = arg0->f28;
@@ -495,7 +495,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         var_s5 = temp_v0->n;
     }
     for (var_s2 = 0; var_s2 < var_s5; var_s2++) {
-        FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->arr[var_s2]);
+        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->arr[var_s2]);
     }
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c0)[0]);
@@ -513,8 +513,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s2_2, (struct B_1b13d0 *)((int *)DAT_005629b0)[0]);
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s2_2, (struct B_1b13d0 *)((int *)DAT_005629a8)[0]);
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)((int *)DAT_005629c8)[0]);
-    temp_s2_3 = DAT_00562640[0];
-    DAT_00562640[0] = DAT_005628e0[0];
+    temp_s2_3 = g_igCommonTraversal_travProcs[0];
+    g_igCommonTraversal_travProcs[0] = DAT_005628e0[0];
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562908)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562938)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)arg0->f156);
@@ -528,7 +528,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         var_s6 = temp_v0_2->n;
     }
     for (var_s5_2 = 0; var_s5_2 < var_s6; var_s5_2++) {
-        FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->arr[var_s5_2]);
+        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->arr[var_s5_2]);
     }
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)arg0->f200);
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)((int *)DAT_00562968)[0]);
@@ -563,9 +563,9 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)((int *)DAT_005628f8)[0]);
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PopOverrideAttr((struct A_1b13d0 *)temp_s3, (struct B_1b13d0 *)((int *)DAT_005629c0)[0]);
-    DAT_00562640[0] = temp_s2_3;
+    g_igCommonTraversal_travProcs[0] = temp_s2_3;
     FUN_001dc610(arg1->f68);
-    DAT_00562640[0] = temp_s4;
+    g_igCommonTraversal_travProcs[0] = temp_s4;
 }
 
 char g_disableBumpDotProduct;

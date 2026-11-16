@@ -9,31 +9,31 @@ igMetaObject *beAction2Info_GetMetaObject(void) {
 }
 
 int beAction2Info_GetVTable(void) {
-    struct W o;
-    int *p16;
-    int r;
-    int *p17;
+    beAction2Info obj;
+    int *switchSlot;
+    int vtable;
+    int *animationDatabaseSlot;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[4] = 0;
-    o.f[5] = 0;
-    o.vt = &g_beAction2Info_vtable[0];
-    p16 = &o.f[6];
-    *p16 = 0;
-    p17 = &o.f[7];
-    *p17 = 0;
-    o.f[8] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beAction2Info_vtable[0];
-    FUN_0036cc00((igSmartPointer<igObject> *)(&o.f[8]), -1);
-    FUN_001aa390(p17, -1);
-    FUN_00343260((igSmartPointer<igObject> *)p16, -1);
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beAction2Info_vtable[0];
+    switchSlot = &obj._switch;
+    *switchSlot = 0;
+    animationDatabaseSlot = &obj._animationDatabase;
+    *animationDatabaseSlot = 0;
+    obj._dataList_ = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beAction2Info_vtable[0];
+    igSmartPointer_beAction2DataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), -1);
+    igSmartPointer_igAnimationDatabase_Destruct(animationDatabaseSlot, -1);
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)switchSlot, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0036cc00(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beAction2DataList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

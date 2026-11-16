@@ -106,7 +106,7 @@ Related: game systems and data are in [`../systems/`](../systems); the analysis 
 [`../../scripts/`](../../scripts), and the build tooling in [`../../tools/`](../../tools).
 
 | [`platform-seam.md`](platform-seam.md) | The platform seam as an inventory: 32 `igPsx2*` classes, 31 of them under 30 generic interfaces with 153 fields (`igPsx2IopRpcConnection` derives from `igObject`; it is the RPC seam and is deleted), recovered from the class hierarchy + reflection |
-| [`engine-boot.md`](engine-boot.md) | **The boot chain**: the CRT entry (`_start`, `0x100008`) → the game's `main` (`0x002595e0`) → the managers and the frame loop (`FUN_0025a580`/`FUN_0025a8c0`) |
+| [`engine-boot.md`](engine-boot.md) | **The boot chain**: the CRT entry (`_start`, `0x100008`) → the game's `main` (`0x002595e0`) → the managers and the frame loop (`GameMain_RunGame`/`GameMain_RunBenchmark`) |
 | [`front-end-boot.md`](front-end-boot.md) | **The front-end boot, power-on to the title menu**: the logos → opening FMV → title → menu sequence is a chain of `NDMW.AFS` stage entries (800…814) that drive the scene stages `stagIS08/09/10/12`, switched by the Lua `STAGECTL NEXTSTAGE` API; and the controllers (`beNDMWStageCtl`, `beNDMWLoadCtrl2`, `beNDMWTitle2`, `beNDMWLogo`) |
 | [`common-model-controller.md`](common-model-controller.md) | Common-model submission, reference lifetime and newest-first completion queues |
 | [`title-menu-controller.md`](title-menu-controller.md) | Title runtime: nine functions, scoped references, three switch tables and exception metadata; remaining frontend modules |

@@ -38,7 +38,7 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S_141e10 *arg0, in
     if (arg0->f12 == 0) {
         for (i = 0; i < n; i++) {
             int o = arg0->f24->d[i];
-            FUN_001904f0(arg0->f16 + (i << 6), (char *)arg0 + 0x1C, o + DAT_00562bc8[0]->f8);
+            igMatrix44f_Multiply(arg0->f16 + (i << 6), (char *)arg0 + 0x1C, o + DAT_00562bc8[0]->f8);
         }
     } else {
         for (i = 0; i < n; i++) {

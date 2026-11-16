@@ -17,45 +17,23 @@ void *beAction2Data_GetMetaObject(void) {
 }
 
 int beAction2Data_GetVTable(void) {
-    union U_36da90 u;
-    int temp_s1;
-    void **q2;
-    igObject *q3;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beAction2Data obj;
+    int vtable;
+    igObject **comListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q2 = &u.p[2];
-    *q2 = 0;
-    u.w[0] = (int)(&g_beAction2Data_vtable[0]);
-    q3 = (igObject *)&u.p[3];
-    *(int *)q3 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beAction2Data_vtable[0]);
-    if (q3 != 0) {
-        q3 = *(igObject **)q3;
-        if (q3 != 0) {
-            q3->_refCount = (int)q3->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q3->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q3);
-            }
-        }
-    }
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q2 != 0) {
-        temp_v1 = *q2;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beAction2Data_vtable[0];
+    comListSlot = (igObject **)&obj._comList;
+    *comListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beAction2Data_vtable[0];
+    igObjectRef_Release(comListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beAction2Data_EnsureRegistered(void)

@@ -43,7 +43,7 @@ void beNDMWWindowSelect_GetMetaObjectFunction(void)
 static FieldFactory g_beNDMWWindowSelect_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,

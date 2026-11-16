@@ -12,27 +12,27 @@ void *beWeaponInfo_GetMetaObject(void) {
 }
 
 int beWeaponInfo_GetVTable(void) {
-    struct Obj obj;
-    int temp_s2;
+    beWeaponInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f14 = 0;
-    obj.f18 = 0;
-    obj.vt = (&g_beWeaponInfo_vtable[0]);
-    obj.f1C = 0;
-    obj.f20 = 0;
-    obj.f24 = 0;
-    temp_s2 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beWeaponInfo_vtable[0]);
-    FUN_0033edb0((igSmartPointer<igObject> *)&obj.f24, (short)(-1));
-    FUN_00199450(&obj.f20, -1);
-    FUN_001958f0(&obj.f1C, -1);
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return temp_s2;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beWeaponInfo_vtable[0];
+    obj._nodeList = 0;
+    obj._boneNameList = 0;
+    obj._seqDataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beWeaponInfo_vtable[0];
+    igSmartPointer_beWeaponSeqDataList_Destruct((igSmartPointer<igObject> *)&obj._seqDataList, (short)(-1));
+    igSmartPointer_igNamedObjectList_Destruct(&obj._boneNameList, -1);
+    igSmartPointer_igNodeList_Destruct(&obj._nodeList, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0033ec00(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beBaseInfoRamList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -45,7 +45,7 @@ igSmartPointer<igObject> *FUN_0033ec00(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
+void *beBaseInfo_Destroy(struct S_33ec80 *arg0, short arg1) {
     struct R_33ec80 *p;
     int *h;
     int *a1;
@@ -95,7 +95,7 @@ void *FUN_0033ec80(struct S_33ec80 *arg0, short arg1) {
     return arg0;
 }
 
-igSmartPointer<igObject> *FUN_0033edb0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beWeaponSeqDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

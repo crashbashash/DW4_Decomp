@@ -52,7 +52,7 @@ void FUN_001e0470(void) {
     }
 }
 
-int FUN_001e04c0(S_1e04c0 *arg0, V_1e04c0 *arg1) {
+int igTraversal_TraverseNode(S_1e04c0 *arg0, V_1e04c0 *arg1) {
     int temp_v0;
     int temp_s0;
     if (arg0->f8 != 0) {
@@ -125,7 +125,7 @@ int igTraversal_TraverseChildren(int arg0, S_1e07a0 *arg1) {
         var_s0 = temp_v0->arr;
         temp_s2 = var_s0 + temp_v0->n;
         for (; var_s0 < temp_s2; var_s0++) {
-            r = FUN_001e04c0((S_1e04c0 *)arg0, (V_1e04c0 *)(*var_s0));
+            r = igTraversal_TraverseNode((S_1e04c0 *)arg0, (V_1e04c0 *)(*var_s0));
             if (r == 1) return 0;
             if (r == 2) return 2;
         }

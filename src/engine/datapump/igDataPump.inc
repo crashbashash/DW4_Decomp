@@ -34,7 +34,7 @@ int igDataPump_GetVTable(void) {
     igStringRef_Destruct(&obj.w5, -1);
     igStringRef_Destruct(&obj.w4, -1);
     igSmartPointer_igMetaField_Destruct(&obj.w3, -1);
-    ObjectRef_Destruct_001363f0(&obj.w2, -1);
+    igSmartPointer_igObject_Destruct(&obj.w2, -1);
     return t;
 }
 

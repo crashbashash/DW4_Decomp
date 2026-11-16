@@ -23,27 +23,18 @@ void *beDemoManagerWork_GetMetaObject(void) {
 }
 
 int beDemoManagerWork_GetVTable(void) {
-    union U_3638a0 u;
-    int temp_s0;
-    char *ps;
-    int *temp_a0;
+    beDemoManagerWork obj;
+    int vtable;
+    igObject **keepMesListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beDemoManagerWork_vtable[0];
-    ps = &u.b[12];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beDemoManagerWork_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *(int **)ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
+    keepMesListSlot = (igObject **)&obj._keepMesList;
+    *keepMesListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
+    igObjectRef_Release(keepMesListSlot);
+    return vtable;
 }
 
 void beDemoManagerWork_EnsureRegistered(void)

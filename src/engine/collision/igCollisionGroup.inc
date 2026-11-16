@@ -31,8 +31,8 @@ int igCollisionGroup_GetVTable(void) {
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igCollisionGroup_vtable[0];
-    FUN_001a7580(p, -1);
-    FUN_00195a90(u.b, 0);
+    igSmartPointer_igTransform_Destruct(p, -1);
+    igGroup_Destroy(u.b, 0);
     return temp_s0;
 }
 
@@ -66,10 +66,10 @@ void thunk_igCollisionGroup_GetMetaObject(void) {
 
 static FieldFactory g_igCollisionGroup_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igIntMetaField_Create,

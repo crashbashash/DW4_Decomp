@@ -18,29 +18,29 @@ done:
 }
 
 int beNumberCtrlInfoRam_GetVTable(void) {
-    struct W_34d590 o;
-    int *p16;
-    int r;
-    int *p17;
+    beNumberCtrlInfoRam obj;
+    int *geometrySlot;
+    int vtable;
+    int *numListSlot;
 
-    igObject_InitHeader(&o);
-    o.f[9] = 0;
-    o.vt = &g_beNumberCtrlInfoRam_vtable[0];
-    p16 = &o.f[10];
-    *p16 = 0;
-    p17 = &o.f[14];
-    *p17 = 0;
-    o.f[15] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNumberCtrlInfoRam_vtable[0];
-    igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&o.f[15]), -1);
-    FUN_0034d640((igSmartPointer<igObject> *)p17, (long long)(-1));
-    FUN_001971e0(p16, -1);
-    FUN_0033e920((S *)&o, (long long)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._dataList = 0;
+    obj._vtable = (int)&g_beNumberCtrlInfoRam_vtable[0];
+    geometrySlot = &obj._geometry;
+    *geometrySlot = 0;
+    numListSlot = &obj._numList;
+    *numListSlot = 0;
+    obj._work = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beNumberCtrlInfoRam_vtable[0];
+    igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), -1);
+    igSmartPointer_beNumVerDataList_Destruct((igSmartPointer<igObject> *)numListSlot, (long long)(-1));
+    igSmartPointer_igGeometry_Destruct(geometrySlot, -1);
+    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0034d640(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNumVerDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

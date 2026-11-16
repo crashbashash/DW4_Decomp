@@ -102,7 +102,7 @@ void igShaderData_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igShaderData_fieldTable, g_igShaderData_fieldHandles, g_igShaderData_fieldOffsets, temp_s0);
 }
 
-ObjectRefWord *FUN_001998f0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igMatrix44fList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

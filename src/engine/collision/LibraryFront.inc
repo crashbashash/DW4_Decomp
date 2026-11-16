@@ -1,4 +1,4 @@
-void FUN_00239390(void) {
+void CollisionLibrary_RegisterClasses(void) {
     FUN_002395b0();
     FUN_00239910();
     FUN_00239c80();

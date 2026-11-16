@@ -26,25 +26,25 @@ void *bePadManager_GetMetaObject(void) {
 }
 
 int bePadManager_GetVTable(void) {
-    struct Obj_34c980 obj;
-    int t;
+    bePadManager obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_bePadManager_vtable[0];
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_bePadManager_vtable[0];
-    FUN_0034cab0((igSmartPointer<igObject> *)&obj.w6, (short)(-1));
-    FUN_0034ca30((igSmartPointer<igObject> *)&obj.w5, -1);
-    FUN_0033dc20((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)&obj.w4)), (short)(-1));
-    FUN_00231030(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_bePadManager_vtable[0];
+    obj._system = 0;
+    obj._padList = 0;
+    obj._kbReceiver = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_bePadManager_vtable[0];
+    igSmartPointer_beKeyboardReceiver_Destruct((igSmartPointer<igObject> *)&obj._kbReceiver, (short)(-1));
+    igSmartPointer_bePadDataList_Destruct((igSmartPointer<igObject> *)&obj._padList, -1);
+    igSmartPointer_beSystem_Destruct((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)&obj._system)), (short)(-1));
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0034ca30(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_bePadDataList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -57,7 +57,7 @@ igSmartPointer<igObject> *FUN_0034ca30(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0034cab0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beKeyboardReceiver_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

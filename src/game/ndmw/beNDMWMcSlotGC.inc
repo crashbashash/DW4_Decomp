@@ -16,11 +16,11 @@ igMetaObject *beNDMWMcSlotGC_GetReadyMetaObject(void) {
 }
 
 int beNDMWMcSlotGC_GetVTable(void) {
-    Obj_3c5d80 o;
+    beNDMWMcSlotGC obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_beNDMWMcSlotGC_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWMcSlotGC_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beNDMWMcSlotGC_EnsureRegistered(void)

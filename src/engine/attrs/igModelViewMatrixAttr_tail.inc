@@ -11,7 +11,7 @@ igModelViewMatrixAttr *FUN_0013f680(void) {
     if (g_igModelViewMatrixAttr_instance == 0) {
         if (g_useOwnerAllocator != 0) { int owner = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]); allocator = owner; } else { int fallback = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute[0]); allocator = fallback; }
         g_igModelViewMatrixAttr_instance.release();
-        g_igModelViewMatrixAttr_instance.p = (igModelViewMatrixAttr *)FUN_001356b0(allocator);
+        g_igModelViewMatrixAttr_instance.p = (igModelViewMatrixAttr *)igModelViewMatrixAttr_CreateInstance(allocator);
     }
     return g_igModelViewMatrixAttr_instance;
 }

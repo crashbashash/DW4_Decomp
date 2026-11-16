@@ -18,24 +18,24 @@ void *beNDMWStatusCtrlSendBit_GetMetaObject(void) {
 }
 
 int beNDMWStatusCtrlSendBit_GetVTable(void) {
-    struct F_3b95f0 f;
-    int temp_s0;
+    beNDMWStatusCtrlSendBit obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[12] = 0;
-    f.w[13] = 0;
-    f.w[14] = 0;
-    f.w[15] = 0;
-    f.w[16] = 0;
-    f.w[17] = 0;
-    f.w[18] = 0;
-    f.vt = &g_beNDMWStatusCtrlSendBit_vtable[0];
-    f.w[22] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beNDMWStatusCtrlSendBit_vtable[0];
-    FUN_00150eb0(&f.w[22], -1);
-    FUN_003b6430(&f, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlSendBit_vtable[0];
+    obj._playerNoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlSendBit_vtable[0];
+    FUN_00150eb0(&obj._playerNoList, -1);
+    FUN_003b6430(&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusCtrlSendBit_EnsureRegistered(void)

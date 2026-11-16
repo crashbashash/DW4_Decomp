@@ -26,27 +26,18 @@ done:
 }
 
 int beParticleCtrl2InfoWork_GetVTable(void) {
-    union U_34c120 u;
-    int temp_s0;
-    char *ps;
-    int *temp_a0;
+    beParticleCtrl2InfoWork obj;
+    int vtable;
+    igObject **positionLockNodeSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beParticleCtrl2InfoWork_vtable[0];
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beParticleCtrl2InfoWork_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *(int **)ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
+    positionLockNodeSlot = (igObject **)&obj._positionLockNode;
+    *positionLockNodeSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
+    igObjectRef_Release(positionLockNodeSlot);
+    return vtable;
 }
 
 void beParticleCtrl2InfoWork_EnsureRegistered(void)
@@ -80,7 +71,7 @@ void beParticleCtrl2InfoWork_GetMetaObjectFunction(void)
 
 static FieldFactory g_beParticleCtrl2InfoWork_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beParticleCtrl2InfoWork_fieldTable[] = {
     "_positionLockNode",

@@ -10,19 +10,23 @@ void *beSeInfoData_GetMetaObject(void) {
 }
 
 int beSeInfoData_GetVTable(void) {
-    Obj_345ef0 obj;
-    int r;
+    beSeInfoData obj;
+    int vtable;
+    igObject **actionListSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.m8 = 0;
-    obj.vt = &g_beSeInfoData_vtable[0];
-    obj.m16 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSeInfoData_vtable[0];
-    obj.rel16();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel8();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beSeInfoData_vtable[0];
+    actionListSlot = (igObject **)&obj._actionList;
+    *actionListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSeInfoData_vtable[0];
+    igObjectRef_Release(actionListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beSeInfoData_EnsureRegistered(void)

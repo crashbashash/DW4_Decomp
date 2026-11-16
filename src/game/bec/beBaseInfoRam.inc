@@ -25,26 +25,18 @@ void *beBaseInfoRam_GetMetaObject(void) {
 }
 
 int beBaseInfoRam_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    igObject *p;
+    beBaseInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
 
-    igObject_InitHeader(u.b);
-    p = (igObject *)&u.b[40];
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (p != 0) {
-        p = *(igObject **)p;
-        if (p != 0) {
-            p->_refCount = (int)p->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    dataListSlot = (igObject **)&obj._dataList;
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    *dataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beBaseInfoRam_EnsureRegistered(void)

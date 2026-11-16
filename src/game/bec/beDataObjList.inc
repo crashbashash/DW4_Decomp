@@ -18,10 +18,10 @@ igMetaObject *beDataObjList_GetMetaObject(void) {
 }
 
 int beDataObjList_GetVTable(void) {
-    struct Obj_364130 obj;
+    beDataObjList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beDataObjList_vtable[0];
+    obj._vtable = (int)&g_beDataObjList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

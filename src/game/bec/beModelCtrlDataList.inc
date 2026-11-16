@@ -9,13 +9,13 @@ igMetaObject *beModelCtrlDataList_GetMetaObject(void) {
 }
 
 int beModelCtrlDataList_GetVTable(void) {
-    int tmp[8];
+    beModelCtrlDataList obj;
     int off;
 
-    igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&g_beModelCtrlDataList_vtable[0];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beModelCtrlDataList_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
-    return *(int *)((char *)tmp + off);
+    return *(int *)((char *)&obj + off);
 }
 
 void beModelCtrlDataList_EnsureRegistered(void)

@@ -48,7 +48,7 @@ void beModelCtrlInfoRideOn2_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beModelCtrlInfoRideOn2_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beModelCtrlInfoRideOn2_fieldTable[] = {
     "_vector",
@@ -72,7 +72,7 @@ void beModelCtrlInfoRideOn2_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoRideOn2_ctorTable, 1);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_modelRamNo"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 0x66);
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRideOn2_modelRamNoStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

@@ -4,7 +4,7 @@ extern "C" void beMeterCtrl_Prepare(void);
 extern "C" int beMeterCtrl_GetInfoMeta(void);
 extern "C" int beMeterCtrl_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
-extern "C" int FUN_00357600(...);
+extern "C" int beMeterCtrl_GetMsgActionEnum(...);
 extern "C" int beMessenger_AppendFloat(int, float);
 extern "C" float beMessenger_GetFloat(int, int);
 extern "C" int beMessenger_GetInt(int, int);
@@ -77,7 +77,7 @@ int beMeterCtrl_OnMessageText(beMeterCtrl *arg0, beBaseInfoRam *arg1, int arg2) 
     igObject *o;
     l = (igObjectList *)((beMeterCtrlInfo *)arg1->_parentInfo)->_oneDataList;
     s1 = ((beMeterCtrlOneData **)l->_data)[arg1->_ramNo];
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00357600(l), arg2)) {
+    switch (beMessenger_ResolveEnumValue(arg0->_messenger, beMeterCtrl_GetMsgActionEnum(l), arg2)) {
     case 0:
         beMessenger_AppendFloat(arg0->_messenger, s1->_nowValueF);
         return 1;

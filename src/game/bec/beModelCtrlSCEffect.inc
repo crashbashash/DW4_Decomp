@@ -22,43 +22,21 @@ void *beModelCtrlSCEffect_GetMetaObject(void) {
 
 int beModelCtrlSCEffect_GetVTable(void) {
     beModelCtrlSCEffect obj;
-    char *o;
-    int *a1;
-    int v0;
-    int t;
-    int *p0, *p1;
+    int vtable;
+    char **seqNameSlot;
+    char **modelNameSlot;
 
     igObject_InitHeader(&obj);
-    p0 = &obj._modelName;
-    p1 = &obj._seqName;
+    modelNameSlot = (char **)&obj._modelName;
+    seqNameSlot = (char **)&obj._seqName;
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
-    *p0 = 0;
-    *p1 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *modelNameSlot = 0;
+    *seqNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
-    if (p1 != 0) {
-        o = (char *)*p1;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    if (p0 != 0) {
-        o = (char *)*p0;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    return t;
+    igStringRef_Release(seqNameSlot);
+    igStringRef_Release(modelNameSlot);
+    return vtable;
 }
 
 void beModelCtrlSCEffect_EnsureRegistered(void)
@@ -92,8 +70,8 @@ static FieldFactory g_beModelCtrlSCEffect_ctorTable[] = {
     igIntMetaField_Create,
     igStringMetaField_Create,
     igStringMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
 };

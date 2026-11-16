@@ -9,7 +9,7 @@ void beNDMWShopCtrlEvolve_Create(int allocator) {
 void *beNDMWShopCtrlEvolve_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWShopCtrlEvolve_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWShopCtrlEvolve_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWShopCtrlEvolve_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWShopCtrlEvolve_EnsureRegistered();
@@ -18,29 +18,29 @@ done:
 }
 
 int beNDMWShopCtrlEvolve_GetVTable(void) {
-    union U_3b88f0 u;
-    int temp_s0;
-    int *p;
+    beNDMWShopCtrlEvolve obj;
+    int vtable;
+    int *shinkaCtrlRef;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[52] = 0;
-    *(int *)&u.b[56] = 0;
-    *(int *)&u.b[60] = 0;
-    *(int *)&u.b[64] = 0;
-    *(int *)&u.b[68] = 0;
-    *(int *)&u.b[72] = 0;
-    *(int *)&u.b[76] = 0;
-    u.vt = (int)&g_beNDMWShopCtrlEvolve_vtable[0];
-    p = (int *)&u.b[96];
-    *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWShopCtrlEvolve_vtable[0];
-    FUN_003b8980((igSmartPointer<igObject> *)p, -1);
-    FUN_003b6770((int **)u.b, (long long)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
+    shinkaCtrlRef = &obj._shinkaCtrl;
+    *shinkaCtrlRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
+    igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003b8980(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWShinkaCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

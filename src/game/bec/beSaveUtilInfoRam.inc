@@ -8,38 +8,23 @@ igMetaObject *beSaveUtilInfoRam_GetMetaObject(void) {
 }
 
 int beSaveUtilInfoRam_GetVTable(void) {
-    struct Obj_346860 obj;
-    igObject *o;
-    int *a1;
-    int v0;
-    int t;
+    beSaveUtilInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
+    igObject **deliverSlot;
 
     igObject_InitHeader(&obj);
-    obj.w10 = 0;
-    obj.vt = &g_beSaveUtilInfoRam_vtable[0];
-    obj.w12 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSaveUtilInfoRam_vtable[0];
-    if (&obj.w12 != 0) {
-        o = (igObject *)obj.w12;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    if (&obj.w10 != 0) {
-        o = (igObject *)obj.w10;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    return t;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beSaveUtilInfoRam_vtable[0];
+    deliverSlot = (igObject **)&obj._deliver;
+    *deliverSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveUtilInfoRam_vtable[0];
+    igObjectRef_Release(deliverSlot);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beSaveUtilInfoRam_EnsureRegistered(void)

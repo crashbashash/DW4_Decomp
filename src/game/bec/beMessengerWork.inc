@@ -18,7 +18,7 @@ void *beMessengerWork_GetMetaObject(void) {
 
 int beMessengerWork_GetVTable(void) {
     beMessengerWork obj;
-    int t;
+    int vtable;
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
@@ -27,14 +27,14 @@ int beMessengerWork_GetVTable(void) {
     obj._message = 0;
     obj._findRamNoList = 0;
     obj._findRamList = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
-    FUN_0033ec00((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
+    igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
     igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
     igStringRef_Destruct(&obj._message, -1);
     igStringRef_Destruct(&obj._infoName, -1);
     igStringRef_Destruct(&obj._groupName, -1);
-    return t;
+    return vtable;
 }
 
 void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWork_Register);}

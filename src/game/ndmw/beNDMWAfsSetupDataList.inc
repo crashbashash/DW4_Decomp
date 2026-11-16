@@ -19,11 +19,11 @@ done:;
 }
 
 int beNDMWAfsSetupDataList_GetVTable(void) {
-    Obj_3ca8a0 o;
+    beNDMWAfsSetupDataList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_beNDMWAfsSetupDataList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWAfsSetupDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beNDMWAfsSetupDataList_EnsureRegistered(void)

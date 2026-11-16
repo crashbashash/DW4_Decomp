@@ -37,7 +37,7 @@ int libNdmwRuntimePlugin_GetVTable(void) {
     return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_003b0ce0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -50,7 +50,7 @@ igSmartPointer<igObject> *FUN_003b0ce0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0d60(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -63,7 +63,7 @@ igSmartPointer<igObject> *FUN_003b0d60(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0de0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -76,7 +76,7 @@ igSmartPointer<igObject> *FUN_003b0de0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0e60(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWLogo_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -89,7 +89,7 @@ igSmartPointer<igObject> *FUN_003b0e60(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0ee0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWTitle2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -102,7 +102,7 @@ igSmartPointer<igObject> *FUN_003b0ee0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0f60(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadCtrl2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -115,7 +115,7 @@ igSmartPointer<igObject> *FUN_003b0f60(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b0fe0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadIntf2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -128,7 +128,7 @@ igSmartPointer<igObject> *FUN_003b0fe0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1060(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWSaveCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -141,7 +141,7 @@ igSmartPointer<igObject> *FUN_003b1060(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b10e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWSaveIntf_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -154,7 +154,7 @@ igSmartPointer<igObject> *FUN_003b10e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1160(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWGameRam_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -167,7 +167,7 @@ igSmartPointer<igObject> *FUN_003b1160(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b11e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWStatus_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -180,7 +180,7 @@ igSmartPointer<igObject> *FUN_003b11e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1260(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -193,7 +193,7 @@ igSmartPointer<igObject> *FUN_003b1260(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b12e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -206,7 +206,7 @@ igSmartPointer<igObject> *FUN_003b12e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1360(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPBullet_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -219,7 +219,7 @@ igSmartPointer<igObject> *FUN_003b1360(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b13e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEnemy_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -232,7 +232,7 @@ igSmartPointer<igObject> *FUN_003b13e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1460(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEBullet_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -245,7 +245,7 @@ igSmartPointer<igObject> *FUN_003b1460(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b14e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlObject_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -258,7 +258,7 @@ igSmartPointer<igObject> *FUN_003b14e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1560(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlItem_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -271,7 +271,7 @@ igSmartPointer<igObject> *FUN_003b1560(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b15e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEffect_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -284,7 +284,7 @@ igSmartPointer<igObject> *FUN_003b15e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b1660(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapBase_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -297,7 +297,7 @@ igSmartPointer<igObject> *FUN_003b1660(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003b16e0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapCursor_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -310,130 +310,130 @@ igSmartPointer<igObject> *FUN_003b16e0(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-int *FUN_003b1760(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapCursor_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1770(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapBase_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1780(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEffect_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1790(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlItem_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17a0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlObject_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17b0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEBullet_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17c0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEnemy_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17d0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPBullet_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17e0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b17f0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1800(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWStatus_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1810(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWGameRam_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1820(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWSaveIntf_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1830(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWSaveCtrl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1840(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadIntf2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1850(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWLoadCtrl2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1860(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWTitle2_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1870(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWLogo_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1880(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b1890(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
-int *FUN_003b18a0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
 void libNdmwRuntimePlugin_EnsureRegistered(void)

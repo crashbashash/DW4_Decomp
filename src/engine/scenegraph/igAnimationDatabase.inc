@@ -42,7 +42,7 @@ int igAnimationDatabase_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igAnimationDatabase_vtable[0];
     FUN_001a7a80((void * *)&o.f[8], -1);
-    FUN_001a7a00((ObjectRefWord *)p19, -1);
+    igSmartPointer_igAppearanceList_Destruct((ObjectRefWord *)p19, -1);
     FUN_001a6350((struct Ref * *)p18, -1);
     FUN_001a7980((void * *)p17, -1);
     FUN_001a7900((ObjectRefWord *)p16, -1);
@@ -81,7 +81,7 @@ void **FUN_001a7980(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a7a00(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igAppearanceList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

@@ -10,19 +10,23 @@ igMetaObject *beChangePosTransformInfoRam_GetMetaObject(void) {
 }
 
 int beChangePosTransformInfoRam_GetVTable(void) {
-    Obj_368360 obj;
-    int r;
+    beChangePosTransformInfoRam obj;
+    int vtable;
+    igObject **transformSlot;
+    igObject **dataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.m40 = 0;
-    obj.vt = &g_beChangePosTransformInfoRam_vtable[0];
-    obj.m44 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beChangePosTransformInfoRam_vtable[0];
-    obj.rel44();
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.rel40();
-    return r;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beChangePosTransformInfoRam_vtable[0];
+    transformSlot = (igObject **)&obj._transform;
+    *transformSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beChangePosTransformInfoRam_vtable[0];
+    igObjectRef_Release(transformSlot);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beChangePosTransformInfoRam_EnsureRegistered(void)

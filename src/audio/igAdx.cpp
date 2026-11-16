@@ -126,7 +126,7 @@ public:
 };
 extern "C" int g_igAdx_metaObject[4];
 extern "C" int SNDF_Init(int *config);
-extern "C" char g_iopResetPending;
+extern "C" char g_igPsx2_resetIopServices;
 extern "C" int g_stringPool[4];
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
  * p[-2]); releases the token on scope exit. */
@@ -452,7 +452,7 @@ int igAdx_SetupIop(void) {
         sceCdMmode(2);
         break;
     }
-    g_iopResetPending = 0;
+    g_igPsx2_resetIopServices = 0;
     igPsx2_LoadIopModule(&sdrdrvResult, "sdrdrv.irx", 1, 0, 0);
     sceSdRemoteInit();
     sceSdRemote(1, 0x8000, 0);

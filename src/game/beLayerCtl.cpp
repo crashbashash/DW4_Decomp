@@ -1,4 +1,6 @@
 #include "dw4/reflected.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/igObjectVirtuals.h"
 #include "dw4/igobject_release.h"
 #pragma push
 #pragma readonly_strings on
@@ -60,26 +62,7 @@ extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 
-/* A scene-graph node seen through its vtable: slot 20 is igObject::getMeta. */
-class igNodeView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int getMeta();
-};
-#define META_OF(node) (((igNodeView *)(node))->getMeta())
-
-/* Holds a new layer group's reference for the rest of ORDER. */
-struct Ref {
-    igNamedObject *p;
-    Ref(igNamedObject *o) : p(o) {}
-    ~Ref() {
-        igNamedObject *object = p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
-    }
-};
+#define META_OF(node) (((igObjectVirtuals *)(node))->getMeta())
 
 extern "C" void beLayerCtl_Prepare(beLayerCtl *self);
 extern "C" void beLayerCtl_OnAddRam(beLayerCtl *self, int receiver);
@@ -162,13 +145,13 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         for (g = 0; g < groups->_count; g++) {
             void *allocator;
             PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser1[0])
-            Ref layer((igNamedObject *)igGroup_CreateInstance(allocator));
+            igSmartPointer<igNamedObject> layer((igNamedObject *)igGroup_CreateInstance(allocator));
             igNamedObject_SetName(layer.p, NAME_OF(NODE_AT(groups, g)));
             igSwitch_AppendChild(LAYER_SWITCH(self), layer.p);
         }
         void *noneAllocator;
         PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1[0])
-        Ref none((igNamedObject *)igGroup_CreateInstance(noneAllocator));
+        igSmartPointer<igNamedObject> none((igNamedObject *)igGroup_CreateInstance(noneAllocator));
         igNamedObject_SetName(none.p, "NONE");
         igSwitch_AppendChild(LAYER_SWITCH(self), none.p);
         int index;

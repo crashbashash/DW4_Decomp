@@ -83,12 +83,12 @@ void thunk_igRotateMode_GetMetaObject(void) {
 
 static FieldFactory g_igRotateMode_ctorTable[] = {
     igFloatMetaField_Create,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
-    FUN_00187b50,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igEnumMetaField_Create,
     igBoolMetaField_Create,
@@ -97,7 +97,7 @@ static FieldFactory g_igRotateMode_ctorTable[] = {
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_igRotateMode_fieldTable[] = {
     "_distance",
@@ -174,15 +174,15 @@ void igRotateMode_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     spA[0] = 0;
     spA[1] = 0;
-    FUN_0018e2f0(temp_a0, spA);
+    igVec2fMetaField_SetDefault(temp_a0, spA);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5));
     spB[0] = 0;
     spB[1] = 0;
-    FUN_0018e2f0(temp_a0_2, spB);
+    igVec2fMetaField_SetDefault(temp_a0_2, spB);
     temp_a0_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     spC[0] = 0;
     spC[1] = 0;
-    FUN_0018e2f0(temp_a0_3, spC);
+    igVec2fMetaField_SetDefault(temp_a0_3, spC);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_0045c540);
@@ -195,7 +195,7 @@ void igRotateMode_InitFields(void) {
     spD[0] = 0;
     spD[1] = 0;
     spD[2] = 0;
-    FUN_0018e470(temp_a0_4, spD);
+    igVec3fMetaField_SetDefault(temp_a0_4, spD);
     igMetaObject_NameFields(temp_s0, g_igRotateMode_fieldTable, g_igRotateMode_fieldHandles, g_igRotateMode_fieldOffsets, temp_s2);
 }
 

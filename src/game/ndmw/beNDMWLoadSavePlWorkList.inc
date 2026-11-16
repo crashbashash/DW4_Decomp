@@ -16,10 +16,10 @@ void *beNDMWLoadSavePlWorkList_ResolveMetaObject(void) {
 }
 
 int beNDMWLoadSavePlWorkList_GetVTable(void) {
-    struct Obj obj;
+    beNDMWLoadSavePlWorkList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWLoadSavePlWorkList_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWLoadSavePlWorkList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

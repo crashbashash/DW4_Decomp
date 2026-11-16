@@ -10,23 +10,23 @@ void *beSwitchCtrlInfo_GetMetaObject(void) {
 }
 
 int beSwitchCtrlInfo_GetVTable(void) {
-    struct Obj_3431e0 obj;
-    int r;
+    beSwitchCtrlInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[4] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beSwitchCtrlInfo_vtable[0];
-    obj.w[6] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSwitchCtrlInfo_vtable[0];
-    FUN_00343260((igSmartPointer<igObject> *)(&obj.w[6]), -1);
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return r;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
+    obj._switchNode = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchNode), -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00343260(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igSwitch_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

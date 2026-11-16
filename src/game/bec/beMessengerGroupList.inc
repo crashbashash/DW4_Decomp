@@ -16,10 +16,10 @@ void *beMessengerGroupList_GetMetaObject(void) {
 }
 
 int beMessengerGroupList_GetVTable(void) {
-    struct Obj_3583f0 obj;
+    beMessengerGroupList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMessengerGroupList_vtable[0];
+    obj._vtable = (int)&g_beMessengerGroupList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

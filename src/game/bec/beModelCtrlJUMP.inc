@@ -9,32 +9,19 @@ void *beModelCtrlJUMP_GetMetaObject(void) {
 }
 
 int beModelCtrlJUMP_GetVTable(void) {
-    union U_355db0 u;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
+    beModelCtrlJUMP obj;
+    int vtable;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&g_beModelCtrlJUMP_vtable[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    return s0;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlJUMP_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlJUMP_EnsureRegistered(void)

@@ -14,39 +14,23 @@ void *beSvPlatDataXbox_GetMetaObject(void) {
 }
 
 int beSvPlatDataXbox_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    igObject *q0;
-    igObject *q1;
+    beSvPlatDataXbox obj;
+    int vtable;
+    igObject **imageSlot;
+    igObject **slotListSlot;
 
-    igObject_InitHeader(u.b);
-    q1 = (igObject *)&u.b[12];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_beSvPlatDataXbox_vtable[0];
-    q0 = (igObject *)&u.b[36];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beSvPlatDataXbox_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    slotListSlot = (igObject **)&obj._slotList;
+    *slotListSlot = 0;
+    obj._vtable = (int)&g_beSvPlatDataXbox_vtable[0];
+    imageSlot = (igObject **)&obj._image;
+    *imageSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvPlatDataXbox_vtable[0];
+    igObjectRef_Release(imageSlot);
+    obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
+    igObjectRef_Release(slotListSlot);
+    return vtable;
 }
 
 void beSvPlatDataXbox_EnsureRegistered(void)
@@ -117,7 +101,7 @@ void beSvPlatDataXbox_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beSvPlatDataXbox_ctorTable, 4);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 9);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataXbox_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

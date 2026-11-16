@@ -24,11 +24,11 @@ done:
 }
 
 int beDataObjListList_GetVTable(void) {
-    Obj_363f60 o;
+    beDataObjListList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_beDataObjListList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beDataObjListList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beDataObjListList_EnsureRegistered(void)

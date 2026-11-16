@@ -10,20 +10,20 @@ void *beCameraCtrlInfo_GetMetaObject(void) {
 }
 
 int beCameraCtrlInfo_GetVTable(void) {
-    struct Obj_368db0 obj;
-    int temp_s0;
+    beCameraCtrlInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f14 = 0;
-    obj.f18 = 0;
-    obj.vt = (&g_beCameraCtrlInfo_vtable[0]);
-    obj.f1C = 0;
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beCameraCtrlInfo_vtable[0]);
-    ObjectRef_Destruct_001363f0(&obj.f1C, -1);
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return temp_s0;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
+    obj._data = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
+    igSmartPointer_igObject_Destruct(&obj._data, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beCameraCtrlInfo_EnsureRegistered(void)

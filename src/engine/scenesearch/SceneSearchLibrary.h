@@ -7,8 +7,8 @@ typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
 
 /* Library front: the register list, its one registrar and the registration latch. */
-extern "C" void thunk_FUN_00238ed0(void);
-extern "C" void FUN_00238ed0(void);
+extern "C" void SceneSearchLibrary_RegisterClasses(void);
+extern "C" void igSearchSceneGraph_EnsureRegistered(void);
 extern "C" void SceneSearchLibrary_MarkRegistered(void);
 extern "C" void igMetaObject_RunStaticInit(...);
 extern "C" int igMetaObject_RegisterClass(...);
@@ -32,7 +32,7 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 extern "C" int igObject_InitHeader(...);
 extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_002293d0(...);
-extern "C" int FUN_00131bc0(...);
+extern "C" int igNamedObject_Destroy(...);
 extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 extern "C" void *g_objectSystem[4];
@@ -75,7 +75,7 @@ public:
 };
 extern "C" void igActor_SetAnimationSystem(int *self, RefCounted *scene);
 
-extern "C" void **FUN_00239200(void **ref, short flags);
+extern "C" void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags);
 extern "C" void **FUN_00239280(void **ref, short flags);
 extern "C" void **FUN_00239300(void **ref, short flags);
 

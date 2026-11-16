@@ -22,22 +22,22 @@ done:
 }
 
 int beNDMWPanelObjectWaza_GetVTable(void) {
-    struct Obj_3be980 obj;
-    int t;
+    beNDMWPanelObjectWaza obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w9 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.vt = &g_beNDMWPanelObjectWaza_vtable[0];
-    obj.w15 = 0;
-    obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWPanelObjectWaza_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj.w16, -1);
-    igSmartPointer_igObjectList_Destruct(&obj.w15, -1);
-    FUN_003be240((Obj_3be240 *)&obj, (short)0);
-    return t;
+    obj._playerDataList = 0;
+    obj._textSetList = 0;
+    obj._textColorList = 0;
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectWaza_vtable[0];
+    obj._listFolder = 0;
+    obj._listColor = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectWaza_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
+    igSmartPointer_igObjectList_Destruct(&obj._listFolder, -1);
+    beNDMWPanelObject_Destroy((beNDMWPanelObject *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWPanelObjectWaza_EnsureRegistered(void)
@@ -102,7 +102,7 @@ void beNDMWPanelObjectWaza_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectWaza_ctorTable, 2);
     inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
     pageIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedPage);
-    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
     igIntMetaField_SetDefault(pageField, 0);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectWaza_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);

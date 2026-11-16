@@ -22,11 +22,11 @@ end:
 }
 
 int beBaseInfoRamList_GetVTable(void) {
-    union U_36a140 u;
+    beBaseInfoRamList obj;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoRamList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoRamList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beBaseInfoRamList_EnsureRegistered(void)

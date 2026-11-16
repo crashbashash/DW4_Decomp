@@ -51,7 +51,7 @@ void thunk_igViewMode_GetMetaObject(void) {
 }
 
 static FieldFactory g_igViewMode_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igViewMode_fieldTable[] = {
     "_inverseMatrix",

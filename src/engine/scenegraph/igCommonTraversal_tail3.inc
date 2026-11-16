@@ -135,7 +135,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
     int idx;
     V128 *e;
     if (l->count >= l->cap) {
-        igObjectPool_Grow((List_1dca40 *)l, (Obj_1dca40 * (*)(int))&FUN_001356b0);
+        igObjectPool_Grow((List_1dca40 *)l, (Obj_1dca40 * (*)(int))&igModelViewMatrixAttr_CreateInstance);
     }
     idx = l->count;
     l->count = idx + 1;
@@ -330,7 +330,7 @@ int FUN_001b7b90(void *t, void *arg) {
     for (i = 0; i < count; i++) {
         int m = 1 << (i & 31);
         if (m & ((int *)mask->_data)[(unsigned int)i >> 5]) {
-            r = FUN_001e04c0((S_1e04c0 *)t, (V_1e04c0 *)(((int *)n->_childList->_data)[i]));
+            r = igTraversal_TraverseNode((S_1e04c0 *)t, (V_1e04c0 *)(((int *)n->_childList->_data)[i]));
             if (r == 1) break;
             if (r == 2) return 2;
         }
@@ -343,7 +343,7 @@ int FUN_001b7c70(void **arg0, void *arg1) {
         return 0;
     }
     FUN_001d1550((void *)arg1, ((DW4VC_104_0 *)(arg0))->vX());
-    return FUN_001b9530(arg0, arg1);
+    return igCommonTraversal_TraverseGeometry(arg0, arg1);
 }
 
 int FUN_001b7ce0(C_1b7ce0 *arg0, A_1b7ce0 *arg1) {
@@ -354,7 +354,7 @@ int FUN_001b7ce0(C_1b7ce0 *arg0, A_1b7ce0 *arg1) {
     }
     FUN_001d1760((void *)arg1, arg0->vX());
     FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f236);
-    temp_s0 = FUN_001b9530(arg0, arg1);
+    temp_s0 = igCommonTraversal_TraverseGeometry(arg0, arg1);
     FUN_001b1100((struct A_1b1100 *)arg0->f52, (struct B_1b1100 *)arg0->f236);
     return temp_s0;
 }
@@ -418,7 +418,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
             }
         }
     }
-    return FUN_001b9530(arg0, arg1);
+    return igCommonTraversal_TraverseGeometry(arg0, arg1);
 }
 
 static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *attr) {
@@ -467,9 +467,9 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         if (top != 0) {
             parent = top->_m;
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_matrixPool, (void *)FUN_001356b0);
+        attr = (MatrixAttrView *)takePooled(traversal->_matrixPool, (void *)igModelViewMatrixAttr_CreateInstance);
         if (parent != 0) {
-            FUN_001904f0(attr->_m, self->_m, parent);
+            igMatrix44f_Multiply(attr->_m, self->_m, parent);
         } else {
             attr->setMatrix(self->_m);
         }
@@ -487,7 +487,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         ((TextureMatrixAttrView *)attr)->_isProjective = 0;
         attr->setUnitID((short)unit);
         if (parent != 0) {
-            FUN_001904f0((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset, self->_m, parent);
+            igMatrix44f_Multiply((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset, self->_m, parent);
         } else {
             attr->setMatrix(self->_m);
         }
@@ -503,7 +503,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)FUN_00130c10);
         attr->setUnitID((short)blendIndex);
         if (parent != 0) {
-            FUN_001904f0((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset, self->_m, parent);
+            igMatrix44f_Multiply((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset, self->_m, parent);
         } else {
             attr->setMatrix(self->_m);
         }

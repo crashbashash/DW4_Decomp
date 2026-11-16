@@ -16,11 +16,11 @@ igMetaObject *beLuaDataList_GetMetaObject(void) {
 }
 
 int beLuaDataList_GetVTable(void) {
-    Obj_35b060 o;
+    beLuaDataList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_beLuaDataList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beLuaDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beLuaDataList_EnsureRegistered(void)

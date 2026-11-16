@@ -36,7 +36,7 @@ int igFileInfo_GetVTable(void) {
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);
     igSmartPointer_igInfoList_Destruct(&obj.w[3], -1);
     igSmartPointer_igDirectory_Destruct(&obj.w[2], -1);
-    FUN_00131bc0(&obj, 0);
+    igNamedObject_Destroy(&obj, 0);
     return r;
 }
 

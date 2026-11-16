@@ -11,23 +11,23 @@ igMetaObject *beNDMWSaveIntfComMdlCtrl_GetMetaObject(void) {
 }
 
 int beNDMWSaveIntfComMdlCtrl_GetVTable(void) {
-    struct Obj_3bc240 obj;
-    int t;
+    beNDMWSaveIntfComMdlCtrl obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
-    obj.w5 = 0;
-    obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
-    FUN_003bc2d0((igSmartPointer<igObject> *)&obj.w6, -1);
-    FUN_003bc2d0((igSmartPointer<igObject> *)&obj.w5, -1);
-    FUN_00344030(&obj, 0);
-    return t;
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
+    obj._openDataList = 0;
+    obj._closeDataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
+    igSmartPointer_beSaveIntfComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._closeDataList, -1);
+    igSmartPointer_beSaveIntfComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._openDataList, -1);
+    beBaseInfoData_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003bc2d0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSaveIntfComMdlDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -73,7 +73,7 @@ static FieldFactory g_beNDMWSaveIntfComMdlCtrl_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beNDMWSaveIntfComMdlCtrl_fieldTable[] = {
     "_messenger",
@@ -111,7 +111,7 @@ void beNDMWSaveIntfComMdlCtrl_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWSaveIntfComMdlCtrl_ctorTable, 4);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "COMMDLCTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWSaveIntfComMdlCtrl_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

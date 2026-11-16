@@ -165,7 +165,7 @@ int FUN_00229e20(struct L *arg0, int *arg1) {
     while (lo < hi) {
         mid = (lo + hi) >> 1;
         base = FUN_0022a030((int *)arg0);
-        FUN_00229fb0((void **)&h, (void **)(base + mid * 4));
+        igStringRef_Assign((void **)&h, (void **)(base + mid * 4));
         if (FUN_00229f90(&h, arg1) != 0) { lo = mid + 1; continue; }
         if (FUN_00229f70(&h, arg1) != 0) { hi = mid - 1; continue; }
         igStringRef_Destruct(&h, -1);
@@ -177,7 +177,7 @@ int FUN_00229e20(struct L *arg0, int *arg1) {
         res = -1;
     } else {
         base = FUN_0022a030((int *)arg0);
-        FUN_00229fb0((void **)&h, (void **)(base + lo * 4));
+        igStringRef_Assign((void **)&h, (void **)(base + lo * 4));
         if (FUN_00229f90(arg1, &h) != 0 || FUN_00229f70(arg1, &h) != 0) {
             igStringRef_Destruct(&h, -1);
             res = -1;
@@ -199,7 +199,7 @@ int FUN_00229f90(int *arg0, int *arg1) {
     return (unsigned int) (*arg0 - 8) < (unsigned int) (*arg1 - 8);
 }
 
-void **FUN_00229fb0(void **arg0, void **arg1) {
+void **igStringRef_Assign(void **arg0, void **arg1) {
     int *temp_a1;
     int temp_v0;
     void *temp_v1;
@@ -412,7 +412,7 @@ void FUN_0022b0a0(int arg0, int *arg1) {
     for (i = 0; i < n; i++) {
         o = ((struct TransformObjectList *)arg1[3])->data[i];
         if (igObject_IsKindOf(o, g_igTransform_metaObject[0]) != 0) {
-            FUN_001904f0(sp60, (int)o + 0x20, sp60);
+            igMatrix44f_Multiply(sp60, (int)o + 0x20, sp60);
         }
     }
     igMatrix44f_Copy(arg0, sp60);

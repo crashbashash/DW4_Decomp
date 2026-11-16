@@ -21,37 +21,43 @@ igMetaObject *beNDMWPanelObjectStat_ResolveMetaObject(void)
 }
 
 int beNDMWPanelObjectStat_GetVTable(void) {
-    union U_3be190 u;
-    int temp_s2;
+    beNDMWPanelObjectStat obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[9] = 0;
-    u.w[11] = 0;
-    u.w[12] = 0;
-    u.w[0] = (int)(&g_beNDMWPanelObjectStat_vtable[0]);
-    u.w[15] = 0;
-    u.w[16] = 0;
-    u.w[17] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beNDMWPanelObjectStat_vtable[0]);
-    FUN_003bde80((igSmartPointer<igObject> *)(&u.w[17]), -1);
-    igSmartPointer_igIntList_Destruct(&u.w[16], -1);
-    igSmartPointer_igStringRefList_Destruct(&u.w[15], -1);
-    FUN_003be240((Obj_3be240 *)u.b, (short)0);
-    return temp_s2;
+    igObject_InitHeader(&obj);
+    obj._playerDataList = 0;
+    obj._textSetList = 0;
+    obj._textColorList = 0;
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectStat_vtable[0];
+    obj._listFolder = 0;
+    obj._listColor = 0;
+    obj._playerWork = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectStat_vtable[0];
+    igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct((igSmartPointer<igObject> *)&obj._playerWork, -1);
+    igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._listFolder, -1);
+    beNDMWPanelObject_Destroy((beNDMWPanelObject *)&obj, 0);
+    return vtable;
 }
 
-Obj_3be240 *FUN_003be240(Obj_3be240 *arg0, short arg1) {
-    if (arg0) {
-        arg0->vt = &g_beNDMWPanelObject_vtable[0];
-        arg0->rel(&arg0->m48);
-        arg0->rel(&arg0->m44);
-        arg0->rel(&arg0->m36);
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+beNDMWPanelObject *beNDMWPanelObject_Destroy(beNDMWPanelObject *self, short flags) {
+    if (self) {
+        *(int **)&self->_vtable = &g_beNDMWPanelObject_vtable[0];
+        if (&self->_textColorList != 0) {
+            igRelease((igObject *)self->_textColorList);
+        }
+        if (&self->_textSetList != 0) {
+            igRelease((igObject *)self->_textSetList);
+        }
+        if (&self->_playerDataList != 0) {
+            igRelease((igObject *)self->_playerDataList);
+        }
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWPanelObjectStat_EnsureRegistered(void)
@@ -125,7 +131,7 @@ void beNDMWPanelObjectStat_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectStat_ctorTable, 3);
     inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
     pageIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedPage);
-    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
     igIntMetaField_SetDefault(pageField, 2);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectStat_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);

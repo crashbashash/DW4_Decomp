@@ -20,21 +20,21 @@ igMetaObject *ParticleTimer_GetMetaObject(void)
 }
 
 int ParticleTimer_GetVTable(void) {
-    struct Obj_36e660 obj;
-    int t;
+    ParticleTimer obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w10 = 0;
-    obj.vt = &g_ParticleTimer_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_ParticleTimer_vtable[0];
-    FUN_0019d120(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._attributes = 0;
+    obj._renderList = 0;
+    obj._vtable = (int)&g_ParticleTimer_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_ParticleTimer_vtable[0];
+    igGeometry_Destroy((igGeometry *)&obj, 0);
+    return vtable;
 }
 
 void ParticleTimer_EnsureRegistered(void)
@@ -54,7 +54,7 @@ void *ParticleTimer_Register(void) {
         0x40, /* instance size */
         ParticleTimer_GetVTable,
         ParticleTimer_InitFields,
-        FUN_0036e860, /* extra callback item */
+        ParticleTimer_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -104,8 +104,8 @@ void ParticleTimer_InitFields(void) {
     igMetaObject_NameFields(meta, g_ParticleTimer_fieldTable, g_ParticleTimer_fieldHandles, g_ParticleTimer_fieldOffsets, base);
 }
 
-void FUN_0036e860(void)
+void ParticleTimer_StaticInitCallback(void)
 {
-    FUN_003a3900();
+    ParticleTimer_RegisterTraversalFunction();
 }
 

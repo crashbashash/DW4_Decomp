@@ -12,18 +12,18 @@ igMetaObject *beSeData_GetMetaObject(void) {
 
 int beSeData_GetVTable(void) {
     SeDataLocal obj;
-    int r;
+    int vtable;
 
     igObject_InitHeader(&obj);
     obj._name = 0;
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj._sound = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj.relSound();
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj.relName();
-    return r;
+    return vtable;
 }
 
 void beSeData_EnsureRegistered(void)

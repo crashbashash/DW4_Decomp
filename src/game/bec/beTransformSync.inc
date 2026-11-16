@@ -14,7 +14,7 @@ int beTransformSync_GetVTable(void) {
     return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_00341160(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

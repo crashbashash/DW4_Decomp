@@ -31,7 +31,7 @@ extern "C" int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info);
 extern "C" int igInsightCore_RemoveFromScheduler(int, beNDMWAfsSetup *);
 extern "C" int List_Reserve(igDataList *, int, int);
 extern "C" int igObject_Destroy(igObject *);
-extern "C" void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0);
+extern "C" void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self);
 extern "C" int g_beNDMWAfsStageLoad_metaObject[4];
 
 /* Empty virtual slot 21 */
@@ -91,7 +91,7 @@ int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
     return 0;
 }
 
-void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0) {
+void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self) {
     igDataList *l;
     int n;
     int n2;
@@ -99,7 +99,7 @@ void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0) {
     int j;
     igObject *p;
 
-    l = (igDataList *)arg0->_infoList;
+    l = (igDataList *)self->_infoList;
     n = l->_count;
     for (i = 0; i < n; i++) {
         p = ((igObject **)l->_data)[i];
@@ -115,10 +115,10 @@ void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *arg0) {
         ((igObject **)l->_data)[j] = 0;
     }
     l->_count = 0;
-    if (!(0 < ((igDataList *)arg0->_infoList)->_count)) {
-        List_Reserve((igDataList *)arg0->_infoList, 0, 4);
+    if (!(0 < ((igDataList *)self->_infoList)->_count)) {
+        List_Reserve((igDataList *)self->_infoList, 0, 4);
     }
-    igInsightCore_RemoveFromScheduler(arg0->_insight, arg0);
+    igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
 /* Empty virtual slot 27 */

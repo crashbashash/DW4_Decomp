@@ -22,25 +22,25 @@ void *beHitLandModelTraversal_GetMetaObject(void) {
 }
 
 int beHitLandModelTraversal_GetVTable(void) {
-    union U_35dcb0 u;
-    int t;
-    char *ps;
+    beHitLandModelTraversal obj;
+    int vtable;
+    char *orderSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[32] = 0;
-    *(int *)&u.b[36] = 0;
-    *(int *)&u.b[40] = 0;
-    *(int *)&u.b[52] = 0;
-    *(int *)&u.b[56] = 0;
-    u.vt = (int)&g_beHitLandModelTraversal_vtable[0];
-    ps = &u.b[64];
-    *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beHitLandModelTraversal_vtable[0];
-    FUN_0035d930((igSmartPointer<igObject> *)ps, -1);
-    FUN_0019e150(u.b, 0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._travProcs = 0;
+    obj._matStack = 0;
+    obj._nodeStack = 0;
+    obj._probe = 0;
+    obj._volumes = 0;
+    obj._ray = 0;
+    obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
+    orderSlot = (char *)&obj._order;
+    *(int *)orderSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
+    igSmartPointer_beHitLandModelOrder_Destruct((igSmartPointer<igObject> *)orderSlot, -1);
+    igIntersectTraversal_Destroy((igIntersectTraversal *)&obj, 0);
+    return vtable;
 }
 
 void beHitLandModelTraversal_EnsureRegistered(void)

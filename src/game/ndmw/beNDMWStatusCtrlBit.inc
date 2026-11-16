@@ -15,23 +15,24 @@ void *beNDMWStatusCtrlBit_GetMetaObject(void) {
 }
 
 int beNDMWStatusCtrlBit_GetVTable(void) {
-    struct Obj_3b9860 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f52 = 0;
-    o.f56 = 0;
-    o.f60 = 0;
-    o.f64 = 0;
-    o.f68 = 0;
-    o.f72 = 0;
-    o.f76 = 0;
-    o.vt = &g_beNDMWStatusCtrlBit_vtable[0];
-    o.f84 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWStatusCtrlBit_vtable[0];
-    igSmartPointer_igIntList_Destruct(&o.f84, -1);
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
-    return r;
+    beNDMWStatusCtrlBit obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlBit_vtable[0];
+    obj._playerNoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlBit_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 void beNDMWStatusCtrlBit_EnsureRegistered(void)

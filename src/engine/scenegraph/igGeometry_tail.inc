@@ -243,8 +243,8 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     SceneTransformNode *child;
     self->setContext(context);
     igMatrix44f_SetIdentity(&world);
-    FUN_001904f0(&world, &self->local, parent);
-    FUN_001904f0(self->block + DAT_00562bc8->offset, &self->bind, &world);
+    igMatrix44f_Multiply(&world, &self->local, parent);
+    igMatrix44f_Multiply(self->block + DAT_00562bc8->offset, &self->bind, &world);
     count = 0;
     if (self->children != 0) {
         count = self->children->count;
@@ -258,13 +258,13 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
         } else {
             pool = renderer->pool;
             if (!(pool->used < pool->capacity)) {
-                igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)FUN_001356b0));
+                igObjectPool_Grow((List_1dca40 *)pool, (Obj_1dca40 * (*)(int))((void *)igModelViewMatrixAttr_CreateInstance));
             }
             item = pool->data[pool->used++];
             item->setMatrix(&world);
             state = renderer->state;
             FUN_001b1030((igAttrStackManager *)state, (igAttr *)item);
-            FUN_001e04c0((S_1e04c0 *)renderer, (V_1e04c0 *)child);
+            igTraversal_TraverseNode((S_1e04c0 *)renderer, (V_1e04c0 *)child);
             FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)item);
         }
     }

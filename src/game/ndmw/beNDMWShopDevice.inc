@@ -9,7 +9,7 @@ void beNDMWShopDevice_Create(int allocator) {
 void *beNDMWShopDevice_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWShopDevice_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWShopDevice_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWShopDevice_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWShopDevice_EnsureRegistered();
@@ -18,38 +18,38 @@ done:
 }
 
 int beNDMWShopDevice_GetVTable(void) {
-    struct Obj_3b66e0 obj;
-    int t;
+    beNDMWShopDevice obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopDevice_vtable[0];
-    obj.w24 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopDevice_vtable[0];
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj.w24, -1);
-    FUN_003b6770((int **)&obj, (long long)0);
-    return t;
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopDevice_vtable[0];
+    obj._salesList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopDevice_vtable[0];
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._salesList, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
-int **FUN_003b6770(int **arg0, long long arg1) {
-    if (arg0 != 0) {
-        *arg0 = &g_beNDMWListCtrl_vtable[0];
-        if (arg0 != 0) {
-            *arg0 = &g_beNDMWWindowCtrl_vtable[0];
-            FUN_003b2d10((beNDMWWindowCtrl *)arg0, (short)0);
+beNDMWListCtrl *beNDMWListCtrl_Destroy(beNDMWListCtrl *self, short flags) {
+    if (self != 0) {
+        *(int **)&self->_vtable = &g_beNDMWListCtrl_vtable[0];
+        if (self != 0) {
+            *(int **)&self->_vtable = &g_beNDMWWindowCtrl_vtable[0];
+            beNDMWWindow_Destroy((beNDMWWindowCtrl *)self, 0);
         }
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWShopDevice_EnsureRegistered(void)

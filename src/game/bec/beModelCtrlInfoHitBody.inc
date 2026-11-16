@@ -28,50 +28,26 @@ void *beModelCtrlInfoHitBody_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoHitBody_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    igObject *q0;
-    igObject *q1;
-    igObject *q2;
+    beModelCtrlInfoHitBody obj;
+    int vtable;
+    igObject **AABoxListSlot;
+    igObject **AABoxMaxListSlot;
+    igObject **AABoxMinListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beModelCtrlInfoHitBody_vtable[0];
-    q2 = (igObject *)&u.b[32];
-    *(int *)q2 = 0;
-    q1 = (igObject *)&u.b[36];
-    *(int *)q1 = 0;
-    q0 = (igObject *)&u.b[40];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beModelCtrlInfoHitBody_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)q1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
-    }
-    if (q2 != 0) {
-        q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)q2->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beModelCtrlInfoHitBody_vtable[0];
+    AABoxMinListSlot = (igObject **)&obj._AABoxMinList;
+    *AABoxMinListSlot = 0;
+    AABoxMaxListSlot = (igObject **)&obj._AABoxMaxList;
+    *AABoxMaxListSlot = 0;
+    AABoxListSlot = (igObject **)&obj._AABoxList;
+    *AABoxListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoHitBody_vtable[0];
+    igObjectRef_Release(AABoxListSlot);
+    igObjectRef_Release(AABoxMaxListSlot);
+    igObjectRef_Release(AABoxMinListSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoHitBody_EnsureRegistered(void)

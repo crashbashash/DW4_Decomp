@@ -50,7 +50,7 @@ void thunk_igPlane_GetMetaObject(void) {
 }
 
 static FieldFactory g_igPlane_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igEnumMetaField_Create,
 };

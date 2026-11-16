@@ -19,10 +19,10 @@ done:;
 }
 
 int igLightSetList_GetVTable(void) {
-    struct Obj_35bc10 obj;
+    igLightSetList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igLightSetList_vtable[0];
+    obj._vtable = (int)&g_igLightSetList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

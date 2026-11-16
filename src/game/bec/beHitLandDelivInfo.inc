@@ -19,7 +19,7 @@ int beHitLandDelivInfo_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beHitLandDelivInfo_vtable[0];
     
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
+    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 

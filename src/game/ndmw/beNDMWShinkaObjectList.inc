@@ -17,10 +17,10 @@ igMetaObject *beNDMWShinkaObjectList_ResolveMetaObject(void)
 }
 
 int beNDMWShinkaObjectList_GetVTable(void) {
-    struct Obj obj;
+    beNDMWShinkaObjectList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWShinkaObjectList_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWShinkaObjectList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

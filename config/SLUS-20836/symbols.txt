@@ -941,7 +941,7 @@
 00130020 000034 FUN_00130020
 00130060 000048 igVisualContextAttrDefaultManager_GetMetaObject
 001300b0 00008c igVisualContextAttrDefaultManager_GetVTable
-00130140 000080 FUN_00130140
+00130140 000080 igSmartPointer_igVisualContext_Destruct
 001301c0 00000c FUN_001301c0
 001301d0 000074 igVisualContextAttrDefaultManager_Register
 00130250 000008 thunk_igVisualContextAttrDefaultManager_GetMetaObject
@@ -983,7 +983,7 @@
 00130d00 00006c igVertexBlendMatrixAttr_Register
 00130d70 000008 thunk_igVertexBlendMatrixAttr_GetMetaObject
 00130d80 000108 igVertexBlendMatrixAttr_InitFields
-00130e90 000084 FUN_00130e90
+00130e90 000084 igMatrix44f_FromRows
 00130f20 000034 igTimeAttr_CreateInstance
 00130f60 000048 FUN_00130f60
 00130fb0 000048 igTimeAttr_GetMetaObject
@@ -1022,9 +1022,9 @@
 00131900 00006c igTextureMatrixAttr_Register
 00131970 000008 thunk_igTextureMatrixAttr_GetMetaObject
 00131980 000120 igTextureMatrixAttr_InitFields
-00131aa0 000080 FUN_00131aa0
+00131aa0 000080 igSmartPointer_igTextureList_Destruct
 00131b20 000098 igInfo_Destroy
-00131bc0 000088 FUN_00131bc0
+00131bc0 000088 igNamedObject_Destroy
 00131c50 00000c FUN_00131c50
 00131c60 000034 FUN_00131c60
 00131ca0 000048 FUN_00131ca0
@@ -1042,7 +1042,7 @@
 00132130 000080 FUN_00132130
 001321b0 000080 FUN_001321b0
 00132230 000154 FUN_00132230
-00132390 000080 FUN_00132390
+00132390 000080 igSmartPointer_igImage_Destruct
 00132410 00000c FUN_00132410
 00132420 00000c FUN_00132420
 00132430 000074 igTextureCubeAttr_Register
@@ -1103,7 +1103,7 @@
 001336f0 00006c igStencilFunctionAttr_Register
 00133760 000008 thunk_igStencilFunctionAttr_GetMetaObject
 00133770 000158 igStencilFunctionAttr_InitFields
-001338d0 000080 FUN_001338d0
+001338d0 000080 igSmartPointer_igVertexArray_Destruct
 00133950 000048 FUN_00133950
 001339a0 000048 igShadeModelAttr_GetMetaObject
 001339f0 00003c igShadeModelAttr_GetVTable
@@ -1181,7 +1181,7 @@
 00135340 000070 igMultiPassStateAttr_InitFields
 001353b0 000080 FUN_001353b0
 00135430 000080 igSmartPointer_igPointerList_Destruct
-001354b0 000080 FUN_001354b0
+001354b0 000080 igSmartPointer_igFloatList_Destruct
 00135530 00000c igObject_GetMetaObject_ParentAccessor
 00135540 000048 FUN_00135540
 00135590 000048 igModelViewMatrixAttrList_GetMetaObject
@@ -1189,7 +1189,7 @@
 00135620 00000c FUN_00135620
 00135630 00006c igModelViewMatrixAttrList_Register
 001356a0 000008 thunk_igModelViewMatrixAttrList_GetMetaObject
-001356b0 000034 FUN_001356b0
+001356b0 000034 igModelViewMatrixAttr_CreateInstance
 001356f0 000048 FUN_001356f0
 00135740 000048 igModelViewMatrixAttr_GetMetaObject
 00135790 000044 igModelViewMatrixAttr_GetVTable
@@ -1232,7 +1232,7 @@
 00136240 000048 igLightStateAttr_GetMetaObject
 00136290 0000d8 igLightStateAttr_GetVTable
 00136370 000080 FUN_00136370
-001363f0 000080 ObjectRef_Destruct_001363f0
+001363f0 000080 igSmartPointer_igObject_Destruct
 00136470 00000c igLightStateAttr_EnsureRegistered
 00136480 000074 igLightStateAttr_Register
 00136500 000008 thunk_igLightStateAttr_GetMetaObject
@@ -1270,7 +1270,7 @@
 00137360 000080 FUN_00137360
 001373e0 000048 igGeometryAttr1_5_GetMetaObject
 00137430 00007c igGeometryAttr1_5_GetVTable
-001374b0 000080 FUN_001374b0
+001374b0 000080 igSmartPointer_igVec3fList_Destruct
 00137530 000194 FUN_00137530
 001376d0 00000c igGeometryAttr1_5_EnsureRegistered
 001376e0 000074 igGeometryAttr1_5_Register
@@ -1493,7 +1493,7 @@
 0013b8a0 000054 FUN_0013b8a0
 0013b900 00012c Gap__Attrs__igAttrDefaultManager__vfunc_23 Gap::Attrs::igAttrDefaultManager::vfunc_23
 0013ba30 0005a8 FUN_0013ba30
-0013bfe0 000080 FUN_0013bfe0
+0013bfe0 000080 igSmartPointer_igAttrList_Destruct
 0013c060 0000a8 FUN_0013c060
 0013c110 000054 FUN_0013c110
 0013c170 000008 FUN_0013c170
@@ -2131,8 +2131,8 @@
 00149860 000054 FUN_00149860
 001498c0 000054 FUN_001498c0
 00149920 000054 FUN_00149920
-00149980 000054 FUN_00149980
-001499e0 000054 FUN_001499e0
+00149980 000054 IG_GFX_TEXTURE_FILTER_GetMetaEnum
+001499e0 000054 IG_GFX_TEXTURE_FORMAT_GetMetaEnum
 00149a40 000054 FUN_00149a40
 00149aa0 000054 FUN_00149aa0
 00149b00 000054 FUN_00149b00
@@ -2267,7 +2267,7 @@
 0014c980 000048 FUN_0014c980
 0014c9d0 000048 igParticleArray_GetMetaObject
 0014ca20 0000cc igParticleArray_GetVTable
-0014caf0 000194 FUN_0014caf0
+0014caf0 000194 igParticleArray_Destroy
 0014cc90 000080 FUN_0014cc90
 0014cd10 000080 FUN_0014cd10
 0014cd90 00000c FUN_0014cd90
@@ -2703,7 +2703,7 @@
 0015c830 000008 Gap__Bec__ParticleArray__vfunc_30 Gap::Bec::ParticleArray::vfunc_30
 0015c840 000008 Gap__Bec__ParticleArray__vfunc_29 Gap::Bec::ParticleArray::vfunc_29
 0015c850 000094 Gap__Bec__ParticleArray__vfunc_10 Gap::Bec::ParticleArray::vfunc_10
-0015c8f0 000008 Gap__Gfx__igParticleArray__vfunc_13 Gap::Gfx::igParticleArray::vfunc_13
+0015c8f0 000008 Gap__Gfx__igParticleArray__resetFields Gap::Gfx::igParticleArray::resetFields
 0015c900 000050 Gap__Bec__ParticleArray__vfunc_15 Gap::Bec::ParticleArray::vfunc_15
 0015c950 0000e8 FUN_0015c950
 0015ca40 000108 Gap__Bec__ParticleArray__vfunc_36 Gap::Bec::ParticleArray::vfunc_36
@@ -2817,8 +2817,8 @@
 00163800 000010 FUN_00163800
 00163810 001060 Gap__Gfx__igVertexArray2Helper__vfunc_61 Gap::Gfx::igVertexArray2Helper::vfunc_61
 00164870 000080 FUN_00164870
-001648f0 000080 FUN_001648f0
-00164970 000080 FUN_00164970
+001648f0 000080 igSmartPointer_igShortList_Destruct
+00164970 000080 igSmartPointer_igCharList_Destruct
 001649f0 000070 FUN_001649f0
 00164a60 000040 FUN_00164a60
 00164aa0 000070 FUN_00164aa0
@@ -2841,7 +2841,7 @@
 00165cf0 000008 FUN_00165cf0
 00165d00 000008 FUN_00165d00
 00165d10 000008 FUN_00165d10
-00165d20 00000c FUN_00165d20
+00165d20 00000c igVisualContext_SetImageMemoryPool
 00165d30 000108 FUN_00165d30
 00165e40 000008 FUN_00165e40
 00165e50 0005b0 FUN_00165e50
@@ -3485,7 +3485,7 @@
 00187180 00000c FUN_00187180
 00187190 0000c8 FUN_00187190
 00187260 000034 FUN_00187260
-001872a0 000034 FUN_001872a0
+001872a0 000034 igVec4fMetaField_CreateInstance
 001872e0 000048 igVec4fMetaField_GetMetaObject
 00187330 000084 igVec4fMetaField_GetVTable
 001873c0 00000c igVec4fMetaField_EnsureRegistered
@@ -3502,7 +3502,7 @@
 00187720 00000c FUN_00187720
 00187730 000088 igVec4fArrayMetaField_InitFields
 001877c0 0000c8 FUN_001877c0
-00187890 000034 FUN_00187890
+00187890 000034 igVec3fMetaField_CreateInstance
 001878d0 000048 igVec3fMetaField_GetMetaObject
 00187920 000084 igVec3fMetaField_GetVTable
 001879b0 00000c igVec3fMetaField_EnsureRegistered
@@ -3510,7 +3510,7 @@
 00187a30 000008 thunk_igVec3fMetaField_GetMetaObject
 00187a40 0000c8 FUN_00187a40
 00187b10 000034 FUN_00187b10
-00187b50 000034 FUN_00187b50
+00187b50 000034 igVec2fMetaField_CreateInstance
 00187b90 000048 igVec2fMetaField_GetMetaObject
 00187be0 000084 igVec2fMetaField_GetVTable
 00187c70 00000c igVec2fMetaField_EnsureRegistered
@@ -3534,11 +3534,11 @@
 00188190 00000c igRayList_EnsureRegistered
 001881a0 00006c igRayList_Register
 00188210 000008 thunk_igRayList_GetMetaObject
-00188220 000034 FUN_00188220
+00188220 000034 igRay_CreateInstance
 00188260 000048 FUN_00188260
 001882b0 000048 igRay_GetMetaObject
 00188300 00003c igRay_GetVTable
-00188340 00000c FUN_00188340
+00188340 00000c igRay_EnsureRegistered
 00188350 00006c igRay_Register
 001883c0 000008 thunk_igRay_GetMetaObject
 001883d0 0000bc igRay_InitFields
@@ -3549,7 +3549,7 @@
 001885b0 000008 thunk_igPlane_GetMetaObject
 001885c0 000088 igPlane_InitFields
 00188650 000008 thunk_FUN_0018c660
-00188660 000034 FUN_00188660
+00188660 000034 igMatrix44fMetaField_CreateInstance
 001886a0 000048 igMatrix44fMetaField_GetMetaObject
 001886f0 000084 igMatrix44fMetaField_GetVTable
 00188780 00000c igMatrix44fMetaField_EnsureRegistered
@@ -3686,7 +3686,7 @@
 0018ab70 000108 igAABox_GetCorner
 0018ac80 000320 igAABox_Transform
 0018afa0 0000ac FUN_0018afa0
-0018b050 0000c0 FUN_0018b050
+0018b050 0000c0 igAABox_IntersectBox
 0018b110 000060 FUN_0018b110
 0018b170 000190 FUN_0018b170
 0018b300 000048 FUN_0018b300
@@ -3701,7 +3701,7 @@
 0018b930 000008 thunk_igAABox_Transform
 0018b940 000024 FUN_0018b940
 0018b970 000020 FUN_0018b970
-0018b990 00004c FUN_0018b990
+0018b990 00004c igAABox_GetCenter
 0018b9e0 000498 FUN_0018b9e0
 0018be80 00053c FUN_0018be80
 0018c3c0 00005c igMatrix44fMetaField_SwapBytes
@@ -3755,13 +3755,13 @@
 0018e210 000014 Gap__igVec2fMetaField__vfunc_56 Gap::igVec2fMetaField::vfunc_56
 0018e230 0000b0 Gap__igVec2fMetaField__vfunc_57 Gap::igVec2fMetaField::vfunc_57
 0018e2e0 000008 igVec2fMetaField_GetSize
-0018e2f0 000010 FUN_0018e2f0
+0018e2f0 000010 igVec2fMetaField_SetDefault
 0018e300 000008 Gap__igVec2fMetaField__vfunc_27 Gap::igVec2fMetaField::vfunc_27
 0018e310 00005c igVec3fMetaField_SwapBytes
 0018e370 000014 Gap__igVec3fMetaField__vfunc_56 Gap::igVec3fMetaField::vfunc_56
 0018e390 0000c8 Gap__igVec3fMetaField__vfunc_57 Gap::igVec3fMetaField::vfunc_57
 0018e460 000008 igVec3fMetaField_GetSize
-0018e470 000010 FUN_0018e470
+0018e470 000010 igVec3fMetaField_SetDefault
 0018e480 000008 Gap__igVec3fMetaField__vfunc_27 Gap::igVec3fMetaField::vfunc_27
 0018e490 000058 igVec4fArrayMetaField_SwapBytes
 0018e4f0 000010 igVec4fArrayMetaField_GetSize
@@ -3769,7 +3769,7 @@
 0018e560 000014 Gap__igVec4fMetaField__vfunc_56 Gap::igVec4fMetaField::vfunc_56
 0018e580 0000e0 Gap__igVec4fMetaField__vfunc_57 Gap::igVec4fMetaField::vfunc_57
 0018e660 000008 igVec4fMetaField_GetSize
-0018e670 000010 FUN_0018e670
+0018e670 000010 igVec4fMetaField_SetDefault
 0018e680 000008 Gap__igVec4fMetaField__vfunc_27 Gap::igVec4fMetaField::vfunc_27
 0018e690 000058 igVec4ucMetaField_SwapBytes
 0018e6f0 000014 Gap__igVec4ucMetaField__vfunc_56 Gap::igVec4ucMetaField::vfunc_56
@@ -3827,15 +3827,15 @@
 00190120 000090 FUN_00190120
 001901b0 00004c FUN_001901b0
 00190200 00004c FUN_00190200
-00190250 00004c FUN_00190250
+00190250 00004c igMatrix44d_SetIdentity
 001902a0 000084 FUN_001902a0
 00190330 000034 FUN_00190330
 00190370 000008 FUN_00190370
 00190380 000048 igMatrix44f_SetIdentity
 001903d0 00009c FUN_001903d0
 00190470 000074 FUN_00190470
-001904f0 0001e0 FUN_001904f0
-001906d0 000214 FUN_001906d0
+001904f0 0001e0 igMatrix44f_Multiply
+001906d0 000214 igMatrix44f_PreMultiply
 001908f0 0000bc igMatrix44f_Copy
 001909b0 000054 igMatrix44f_FromTranslation
 00190a10 00001c igMatrix44f_SetTranslation
@@ -3848,9 +3848,9 @@
 00190e50 000078 FUN_00190e50
 00190ed0 000078 igMatrix44f_MakeEulerRotation
 00190f50 00016c FUN_00190f50
-001910c0 000164 FUN_001910c0
+001910c0 000164 igMatrix44f_SetEulerRotation
 00191230 00043c igMatrix44f_GetEulerAngles
-00191670 000034 FUN_00191670
+00191670 000034 igMatrix44f_PreRotateAxisAngle
 001916b0 000038 FUN_001916b0
 001916f0 000078 FUN_001916f0
 00191770 0000ec igMatrix44f_SetQuaternion
@@ -3872,7 +3872,7 @@
 00192ab0 00020c FUN_00192ab0
 00192cc0 00010c Quaternion_Lerp
 00192dd0 000040 FUN_00192dd0
-00192e10 000040 FUN_00192e10
+00192e10 000040 Vec3f_CrossInPlace
 00192e50 0000ac Vec3_GetOctant
 00192f00 00004c Vec3_Lerp
 00192f50 000070 Vec3f_TransformDirection
@@ -3983,7 +3983,7 @@
 00194ef0 000048 FUN_00194ef0
 00194f40 0000e8 igTransformSequence1_5_GetVTable
 00195030 000154 FUN_00195030
-00195190 000080 FUN_00195190
+00195190 000080 igSmartPointer_igLongList_Destruct
 00195210 000080 FUN_00195210
 00195290 00000c igTransformSequence1_5_EnsureRegistered
 001952a0 00007c igTransformSequence1_5_Register
@@ -4000,9 +4000,9 @@
 001957c0 000048 igTransformRecorder_GetOrCreateMetaObject
 00195810 000048 igTransformRecorder_GetMetaObject
 00195860 000084 igTransformRecorder_GetVTable
-001958f0 000080 FUN_001958f0
-00195970 000118 FUN_00195970
-00195a90 000164 FUN_00195a90
+001958f0 000080 igSmartPointer_igNodeList_Destruct
+00195970 000118 igNode_Destroy
+00195a90 000164 igGroup_Destroy
 00195c00 00000c igTransformRecorder_EnsureRegistered
 00195c10 00006c igTransformRecorder_Register
 00195c80 000008 thunk_igTransformRecorder_GetMetaObject
@@ -4060,7 +4060,7 @@
 00197060 000080 FUN_00197060
 001970e0 000080 FUN_001970e0
 00197160 000080 FUN_00197160
-001971e0 000080 FUN_001971e0
+001971e0 000080 igSmartPointer_igGeometry_Destruct
 00197260 000080 FUN_00197260
 001972e0 00000c FUN_001972e0
 001972f0 00000c FUN_001972f0
@@ -4104,8 +4104,8 @@
 00197fd0 000048 FUN_00197fd0
 00198020 000048 igSkin_GetMetaObject
 00198070 000120 igSkin_GetVTable
-00198190 000080 FUN_00198190
-00198210 000080 FUN_00198210
+00198190 000080 igSmartPointer_igAABox_Destruct
+00198210 000080 igSmartPointer_igNode_Destruct
 00198290 00000c igSkin_EnsureRegistered
 001982a0 000074 igSkin_Register
 00198320 000008 thunk_igSkin_GetMetaObject
@@ -4161,7 +4161,7 @@
 001991c0 000048 igShaderFactory_GetMetaObject
 00199210 000120 igShaderFactory_GetVTable
 00199330 000118 FUN_00199330
-00199450 000080 FUN_00199450
+00199450 000080 igSmartPointer_igNamedObjectList_Destruct
 001994d0 00000c FUN_001994d0
 001994e0 000074 igShaderFactory_Register
 00199560 000008 thunk_igShaderFactory_GetMetaObject
@@ -4172,7 +4172,7 @@
 00199770 000074 igShaderData_Register
 001997f0 000008 thunk_igShaderData_GetMetaObject
 00199800 0000f0 igShaderData_InitFields
-001998f0 000080 FUN_001998f0
+001998f0 000080 igSmartPointer_igMatrix44fList_Destruct
 00199970 000080 FUN_00199970
 001999f0 000048 FUN_001999f0
 00199a40 000048 igBlendMatricesAttrPool_GetMetaObject
@@ -4240,7 +4240,7 @@
 0019a990 000080 FUN_0019a990
 0019aa10 000080 FUN_0019aa10
 0019aa90 000080 FUN_0019aa90
-0019ab10 000080 FUN_0019ab10
+0019ab10 000080 igSmartPointer_igColorAttr_Destruct
 0019ab90 000080 FUN_0019ab90
 0019ac10 00000c FUN_0019ac10
 0019ac20 00000c FUN_0019ac20
@@ -4266,7 +4266,7 @@
 0019aee0 000048 igSceneInfo_GetOrCreateMetaObject
 0019af30 000048 igSceneInfo_GetMetaObject
 0019af80 0000c0 igSceneInfo_GetVTable
-0019b040 0001a8 FUN_0019b040
+0019b040 0001a8 igSceneInfo_Destroy
 0019b1f0 000080 FUN_0019b1f0
 0019b270 00000c igSceneInfo_EnsureRegistered
 0019b280 000074 igSceneInfo_Register
@@ -4285,7 +4285,7 @@
 0019bf50 000188 igPlanarShadowShader_GetVTable
 0019c0e0 0000c0 FUN_0019c0e0
 0019c1a0 000080 FUN_0019c1a0
-0019c220 000080 FUN_0019c220
+0019c220 000080 igSmartPointer_igGeometryList_Destruct
 0019c2a0 000080 FUN_0019c2a0
 0019c320 00000c FUN_0019c320
 0019c330 00000c FUN_0019c330
@@ -4333,14 +4333,14 @@
 0019cfa0 000008 thunk_igNode_GetMetaObject
 0019cfb0 0000ec igNode_InitFields
 0019d0a0 000080 FUN_0019d0a0
-0019d120 0000c0 FUN_0019d120
+0019d120 0000c0 igGeometry_Destroy
 0019d1e0 00000c FUN_0019d1e0
 0019d1f0 00000c FUN_0019d1f0
-0019d200 000080 FUN_0019d200
+0019d200 000080 igSmartPointer_igIntListList_Destruct
 0019d280 000048 FUN_0019d280
 0019d2d0 000048 igModelViewMatrixBoneSelectList_561880_GetMetaObject
 0019d320 00003c igModelViewMatrixBoneSelectList_561880_GetVTable
-0019d360 00000c FUN_0019d360
+0019d360 00000c igModelViewMatrixBoneSelectList_561880_EnsureRegistered
 0019d370 00006c igModelViewMatrixBoneSelectList_561880_Register
 0019d3e0 000008 thunk_igModelViewMatrixBoneSelectList_561880_GetMetaObject
 0019d3f0 000034 igModelViewMatrixBoneSelect_CreateInstance
@@ -4379,7 +4379,7 @@
 0019dfd0 000048 FUN_0019dfd0
 0019e020 000048 igIntersectTraversal_GetMetaObject
 0019e070 0000dc igIntersectTraversal_GetVTable
-0019e150 0001e4 FUN_0019e150
+0019e150 0001e4 igIntersectTraversal_Destroy
 0019e340 000080 FUN_0019e340
 0019e3c0 000080 FUN_0019e3c0
 0019e440 00000c FUN_0019e440
@@ -4752,7 +4752,7 @@
 001a7440 000054 FUN_001a7440
 001a74a0 000048 igAnimationModifier_GetMetaObject
 001a74f0 00008c igAnimationModifier_GetVTable
-001a7580 000080 FUN_001a7580
+001a7580 000080 igSmartPointer_igTransform_Destruct
 001a7600 00000c FUN_001a7600
 001a7610 000074 igAnimationModifier_Register
 001a7690 000008 thunk_igAnimationModifier_GetMetaObject
@@ -4762,7 +4762,7 @@
 001a7820 0000dc igAnimationDatabase_GetVTable
 001a7900 000080 FUN_001a7900
 001a7980 000080 FUN_001a7980
-001a7a00 000080 FUN_001a7a00
+001a7a00 000080 igSmartPointer_igAppearanceList_Destruct
 001a7a80 000080 FUN_001a7a80
 001a7b00 00000c igAnimationDatabase_EnsureRegistered
 001a7b10 000074 igAnimationDatabase_Register
@@ -4883,8 +4883,8 @@
 001aa160 000048 igActorInfo_GetMetaObject
 001aa1b0 0000dc igActorInfo_GetVTable
 001aa290 000080 FUN_001aa290
-001aa310 000080 FUN_001aa310
-001aa390 000080 FUN_001aa390
+001aa310 000080 igSmartPointer_igActorList_Destruct
+001aa390 000080 igSmartPointer_igAnimationDatabase_Destruct
 001aa410 00000c FUN_001aa410
 001aa420 000074 igActorInfo_Register
 001aa4a0 000008 thunk_igActorInfo_GetMetaObject
@@ -4907,9 +4907,9 @@
 001aaaf0 000300 igActor_InitFields
 001aadf0 000048 igPsx2EnvironmentMapShader_GetMetaObject
 001aae40 0000b8 igPsx2EnvironmentMapShader_GetVTable
-001aaf00 000080 FUN_001aaf00
+001aaf00 000080 igSmartPointer_igBlendStateAttr_Destruct
 001aaf80 000400 FUN_001aaf80
-001ab380 000080 FUN_001ab380
+001ab380 000080 igSmartPointer_igBlendFunctionAttr_Destruct
 001ab400 000080 FUN_001ab400
 001ab480 00000c FUN_001ab480
 001ab490 00000c FUN_001ab490
@@ -4971,8 +4971,8 @@
 001af600 000008 Gap__Sg__igAnimationState__vfunc_25 Gap::Sg::igAnimationState::vfunc_25
 001af610 000008 Gap__Sg__igAnimationState__vfunc_26 Gap::Sg::igAnimationState::vfunc_26
 001af620 000174 FUN_001af620
-001af7a0 000008 FUN_001af7a0
-001af7b0 000024 FUN_001af7b0
+001af7a0 000008 igAppearance_AttachGraph
+001af7b0 000024 igAppearance_DetachGraph
 001af7e0 000074 Gap__Sg__igAttrSet__vfunc_31 Gap::Sg::igAttrSet::vfunc_31
 001af860 000024 FUN_001af860
 001af890 00008c Gap__Sg__igAttrStackManager__vfunc_23 Gap::Sg::igAttrStackManager::vfunc_23
@@ -5070,7 +5070,7 @@
 001b8f20 0001b4 FUN_001b8f20
 001b90e0 000240 igCommonTraversal_TraverseOverrideAttrSet
 001b9320 000210 igCommonTraversal_TraverseAttrSet
-001b9530 000494 FUN_001b9530
+001b9530 000494 igCommonTraversal_TraverseGeometry
 001b99d0 000370 FUN_001b99d0
 001b9d40 000048 FUN_001b9d40
 001b9d90 000170 FUN_001b9d90
@@ -5223,7 +5223,7 @@
 001c5030 0000f4 FUN_001c5030
 001c5130 000024 FUN_001c5130
 001c5160 000050 FUN_001c5160
-001c51b0 000018 FUN_001c51b0
+001c51b0 000018 igFrustCullTraversal_ClassifyBox
 001c51d0 000138 FUN_001c51d0
 001c5310 000068 Gap__Bec__ParticleTimer__vfunc_15 Gap::Bec::ParticleTimer::vfunc_15
 001c5380 00004c Gap__Bec__ParticleTimer__vfunc_27 Gap::Bec::ParticleTimer::vfunc_27
@@ -5331,7 +5331,7 @@
 001d1a80 000008 FUN_001d1a80
 001d1a90 000304 FUN_001d1a90
 001d1da0 000404 FUN_001d1da0
-001d21b0 000080 FUN_001d21b0
+001d21b0 000080 igSmartPointer_igTextureStateAttr_Destruct
 001d2230 000170 FUN_001d2230
 001d23a0 000cf0 FUN_001d23a0
 001d3090 000080 FUN_001d3090
@@ -5345,10 +5345,10 @@
 001d33a0 000060 Gap__Sg__igNode__vfunc_09 Gap::Sg::igNode::vfunc_09
 001d3400 000008 FUN_001d3400
 001d3410 00013c FUN_001d3410
-001d3550 00003c FUN_001d3550
+001d3550 00003c Gap__Sg__igNode__resetFields
 001d3590 00003c Gap__Sg__igNode__vfunc_17 Gap::Sg::igNode::vfunc_17
 001d35d0 000080 igSmartPointer_igInfoList_Destruct
-001d3650 000080 FUN_001d3650
+001d3650 000080 igSmartPointer_igSceneInfo_Destruct
 001d36d0 000080 igSmartPointer_igDirectory_Destruct
 001d3750 000248 Gap__Sg__igPlanarShadowShader__vfunc_09 Gap::Sg::igPlanarShadowShader::vfunc_09
 001d39a0 00000c Gap__Sg__igPlanarShadowShader__vfunc_22 Gap::Sg::igPlanarShadowShader::vfunc_22
@@ -5423,7 +5423,7 @@
 001d96d0 000070 Gap__Sg__igSkeleton__vfunc_30 Gap::Sg::igSkeleton::vfunc_30
 001d9740 00002c FUN_001d9740
 001d9770 000080 FUN_001d9770
-001d97f0 000080 FUN_001d97f0
+001d97f0 000080 igSmartPointer_igAttrSet_Destruct
 001d9870 000080 FUN_001d9870
 001d98f0 000074 Gap__Bec__ParticleTimer__vfunc_35 Gap::Bec::ParticleTimer::vfunc_35
 001d9970 000054 FUN_001d9970
@@ -5499,7 +5499,7 @@
 001e0380 000088 Gap__Sg__igTraversal__vfunc_09 Gap::Sg::igTraversal::vfunc_09
 001e0410 000058 FUN_001e0410
 001e0470 00004c FUN_001e0470
-001e04c0 0000cc FUN_001e04c0
+001e04c0 0000cc igTraversal_TraverseNode
 001e0590 000008 Gap__Sg__igTraversal__vfunc_23 Gap::Sg::igTraversal::vfunc_23
 001e05a0 000008 Gap__Sg__igTraversal__vfunc_24 Gap::Sg::igTraversal::vfunc_24
 001e05b0 000110 Gap__Bec__beHitLandModelTraversal__vfunc_23 Gap::Bec::beHitLandModelTraversal::vfunc_23
@@ -6437,7 +6437,7 @@
 002267c0 000048 FUN_002267c0
 00226810 000048 igLockInterface_GetMetaObject
 00226860 000124 igLockInterface_GetVTable
-00226990 000080 FUN_00226990
+00226990 000080 igSmartPointer_igBoolList_Destruct
 00226a10 00000c FUN_00226a10
 00226a20 000074 igLockInterface_Register
 00226aa0 000008 thunk_igLockInterface_GetMetaObject
@@ -6561,7 +6561,7 @@
 002292d0 00000c FUN_002292d0
 002292e0 000060 igBase_Register
 00229340 000008 thunk_igBase_GetMetaObject
-00229350 000080 FUN_00229350
+00229350 000080 igSmartPointer_igGroup_Destruct
 002293d0 000080 FUN_002293d0
 00229450 000008 Gap__igOptInterface__vfunc_29 Gap::igOptInterface::vfunc_29
 00229460 000080 FUN_00229460
@@ -6582,7 +6582,7 @@
 00229e20 00014c FUN_00229e20
 00229f70 000018 FUN_00229f70
 00229f90 000018 FUN_00229f90
-00229fb0 000074 FUN_00229fb0
+00229fb0 000074 igStringRef_Assign
 0022a030 000008 FUN_0022a030
 0022a040 00019c FUN_0022a040
 0022a1e0 000184 Gap__igItemInterface__vfunc_27 Gap::igItemInterface::vfunc_27
@@ -6723,7 +6723,7 @@
 00230f70 000094 FUN_00230f70
 00231010 00000c FUN_00231010
 00231020 00000c FUN_00231020
-00231030 000098 FUN_00231030
+00231030 000098 igInfoManager_Destroy
 002310d0 00000c FUN_002310d0
 002310e0 000048 igSerialScheduler_GetMetaObject
 00231130 0000d8 igSerialScheduler_GetVTable
@@ -6805,12 +6805,12 @@
 00232780 00000c FUN_00232780
 00232790 000060 igInsightPlugin_Register
 002327f0 000008 thunk_igInsightPlugin_GetMetaObject
-00232800 000034 FUN_00232800
+00232800 000034 igInsightCore_CreateInstance
 00232840 000048 igInsightCore_GetOrCreateMetaObject
 00232890 000048 igInsightCore_GetMetaObject
 002328e0 000178 igInsightCore_GetVTable
 00232a60 000080 FUN_00232a60
-00232ae0 000080 FUN_00232ae0
+00232ae0 000080 igSmartPointer_igRendererOrderedList_Destruct
 00232b60 000080 FUN_00232b60
 00232be0 000080 FUN_00232be0
 00232c60 000080 FUN_00232c60
@@ -6881,7 +6881,7 @@
 00234900 00028c FUN_00234900
 00234b90 000104 FUN_00234b90
 00234ca0 0000c4 ViewerOptions_ReleaseShared
-00234d70 000164 FUN_00234d70
+00234d70 000164 ViewerOptions_ParseCommandLine
 00234ee0 000490 FUN_00234ee0
 00235370 000dac FUN_00235370
 00236120 000014 Gap__Insight__igFlushRenderer__vfunc_26 Gap::Insight::igFlushRenderer::vfunc_26
@@ -6970,21 +6970,21 @@
 00238d10 00000c Gap__Insight__igMessageFilterList__vfunc_24 Gap::Insight::igMessageFilterList::vfunc_24
 00238d20 00000c Gap__Insight__igInfoManagerList__vfunc_24 Gap::Insight::igInfoManagerList::vfunc_24
 00238d30 00000c Gap__Insight__igMessageReceiverList__vfunc_24 Gap::Insight::igMessageReceiverList::vfunc_24
-00238d40 000008 thunk_FUN_00238ed0
+00238d40 000008 SceneSearchLibrary_RegisterClasses
 00238d50 000018 SceneSearchLibrary_MarkRegistered
 00238d70 000054 FUN_00238d70
 00238dd0 000048 igSearchSceneGraph_GetMetaObject
 00238e20 0000a4 igSearchSceneGraph_GetVTable
-00238ed0 00000c FUN_00238ed0
+00238ed0 00000c igSearchSceneGraph_EnsureRegistered
 00238ee0 000074 igSearchSceneGraph_Register
 00238f60 000008 thunk_igSearchSceneGraph_GetMetaObject
 00238f70 0000f8 igSearchSceneGraph_InitFields
 00239070 000188 igActor_SetAnimationSystem
-00239200 000080 FUN_00239200
+00239200 000080 igSmartPointer_igLightingStateAttr_Destruct
 00239280 000080 FUN_00239280
 00239300 000080 FUN_00239300
 00239380 00000c Gap__igSearchSceneGraph__vfunc_22 Gap::igSearchSceneGraph::vfunc_22
-00239390 00005c FUN_00239390
+00239390 00005c CollisionLibrary_RegisterClasses
 002393f0 000018 CollisionLibrary_MarkRegistered
 00239410 000048 igCreateCollisionDatabase_GetMetaObject
 00239460 0000c4 igCreateCollisionDatabase_GetVTable
@@ -7691,30 +7691,30 @@
 00258f90 000008 zmfilbuf
 00258fa0 000038 luaZ_mopen
 00258fe0 0000d4 luaZ_read
-002590c0 00051c FUN_002590c0
+002590c0 00051c GameMain_RegisterEngineClasses
 002595e0 0003d0 main
-002599b0 000058 FUN_002599b0
-00259a10 00000c FUN_00259a10
-00259a20 000034 FUN_00259a20
-00259a60 0000f4 FUN_00259a60
-00259b60 000088 FUN_00259b60
+002599b0 000058 ObjectSystemGuard_Destroy
+00259a10 00000c GameMain_GetIniText
+00259a20 000034 GameMain_ApplyIniText
+00259a60 0000f4 GameMain_AtstreamThread
+00259b60 000088 GameMain_StartAtstreamThread
 00259bf0 0000d8 igPsx2Thread_SetStackSize
-00259cd0 00003c FUN_00259cd0
-00259d10 00002c FUN_00259d10
-00259d40 000080 FUN_00259d40
-00259dc0 0001b4 FUN_00259dc0
+00259cd0 00003c GameMain_SetAtfilePrefix
+00259d10 00002c GameMain_InitAtstream
+00259d40 000080 GameMain_PollAtstream
+00259dc0 0001b4 GameMain_ReplaceSceneFile
 00259f80 000010 FUN_00259f80
-00259f90 0000d4 FUN_00259f90
-0025a070 0001c0 FUN_0025a070
+00259f90 0000d4 GameMain_SetViewerFileLists
+0025a070 0001c0 GameMain_ConstructViewer
 0025a230 000080 igSmartPointer_igViewerLoadingFileMessage_Destruct
 0025a2b0 000080 GameMain_igSmartPointer_igObject_Destruct
-0025a330 000220 FUN_0025a330
-0025a550 00002c FUN_0025a550
-0025a580 000340 FUN_0025a580
-0025a8c0 0003a0 FUN_0025a8c0
-0025ac60 000344 FUN_0025ac60
+0025a330 000220 GameMain_DestroyViewer
+0025a550 00002c GameMain_ReloadScene
+0025a580 000340 GameMain_RunGame
+0025a8c0 0003a0 GameMain_RunBenchmark
+0025ac60 000344 GameMain_ListIgbFiles
 0025afb0 000028 igFolder_ListEntries
-0025afe0 000264 FUN_0025afe0
+0025afe0 000264 GameMain_ClearScene
 0025b248 00004c ADXAMP_Init
 0025b298 00004c ADXAMP_Finish
 0025b2e8 00012c ADXAMP_Create
@@ -7902,9 +7902,9 @@
 00262208 0000c4 FUN_00262208
 002622d0 0000c8 FUN_002622d0
 00262398 000060 FUN_00262398
-002623f8 000114 FUN_002623f8
-00262510 000030 FUN_00262510
-00262540 000040 FUN_00262540
+002623f8 000114 ADXF_Seek
+00262510 000030 ADXF_Tell
+00262540 000040 ADXF_GetFsizeSct
 00262580 000078 FUN_00262580
 002625f8 00004c FUN_002625f8
 00262648 000030 FUN_00262648
@@ -14083,7 +14083,7 @@
 00334330 00002c igAdxFile_Tell
 00334360 000008 igAdxFile_UngetChar
 00334370 000030 igAdxFile_GetFileSize
-003343a0 00009c FUN_003343a0
+003343a0 00009c AdxMovieLibrary_RegisterClasses
 00334440 000018 AdxMovieLibrary_MarkRegistered
 00334460 00004c igAdx_GetMetaObject
 003344b0 00003c igAdx_GetVTable
@@ -14091,8 +14091,8 @@
 00334510 000074 igAdx_Register
 00334590 00001c igAdx_GetMetaObjectFunction
 003345b0 000020 igAdx_InitFields
-003345d0 00001c FUN_003345d0
-003345f0 00001c FUN_003345f0
+003345d0 00001c igAdx_StaticInitCallback
+003345f0 00001c igAdx_ExitCallback
 00334610 000044 igAdxAfsFileList_GetOrCreateMetaObject
 00334660 00004c igAdxAfsFileList_GetMetaObject
 003346b0 00003c igAdxAfsFileList_GetVTable
@@ -14124,8 +14124,8 @@
 00334ee0 000074 igAdxFile_Register
 00334f60 00001c igAdxFile_GetMetaObjectFunction
 00334f80 000124 igAdxFile_InitFields
-003350b0 00001c FUN_003350b0
-003350d0 00001c FUN_003350d0
+003350b0 00001c igAdxFile_StaticInitCallback
+003350d0 00001c igAdxFile_ExitCallback
 003350f0 000034 igAdxAudio_Create
 00335130 000044 igAdxAudio_GetOrCreateMetaObject
 00335180 00004c igAdxAudio_GetMetaObject
@@ -14144,13 +14144,13 @@
 003355d0 000044 igMovieCodec_GetOrCreateMetaObject
 00335620 00004c igMovieCodec_GetMetaObject
 00335670 00008c igMovieCodec_GetVTable
-00335700 000098 FUN_00335700
+00335700 000098 igMovieCodec_Destroy
 003357a0 000020 igMovieCodec_EnsureRegistered
 003357c0 000064 igMovieCodec_Register
 00335830 00001c igMovieCodec_GetMetaObjectFunction
 00335850 00004c igCriMovieCodec_GetMetaObject
 003358a0 000088 igCriMovieCodec_GetVTable
-00335930 000080 FUN_00335930
+00335930 000080 igSmartPointer_igAudioContext_Destruct
 003359b0 000020 igCriMovieCodec_EnsureRegistered
 003359d0 000074 igCriMovieCodec_Register
 00335a50 00001c igCriMovieCodec_GetMetaObjectFunction
@@ -14177,8 +14177,8 @@
 00336090 000020 igTextureBindAttrList_EnsureRegistered
 003360b0 00006c igTextureBindAttrList_Register
 00336120 00001c igTextureBindAttrList_GetMetaObjectFunction
-00336140 000054 FUN_00336140
-003361a0 000054 FUN_003361a0
+00336140 000054 igMovieInfo_GetMovieStateMetaEnum
+003361a0 000054 igMovieInfo_GetMovieTypeMetaEnum
 00336200 000034 igMovieInfo_Create
 00336240 00004c igMovieInfo_GetMetaObject
 00336290 000130 igMovieInfo_GetVTable
@@ -14191,7 +14191,7 @@
 00336860 000044 igMovieRenderer_GetOrCreateMetaObject
 003368b0 00004c igMovieRenderer_GetMetaObject
 00336900 0000e8 igMovieRenderer_GetVTable
-003369f0 000080 FUN_003369f0
+003369f0 000080 igSmartPointer_igMovieManager_Destruct
 00336a70 000020 igMovieRenderer_EnsureRegistered
 00336a90 000074 igMovieRenderer_Register
 00336b10 00001c igMovieRenderer_GetMetaObjectFunction
@@ -14200,9 +14200,9 @@
 00336c10 000044 igMovieManager_GetOrCreateMetaObject
 00336c60 00004c igMovieManager_GetMetaObject
 00336cb0 0000dc igMovieManager_GetVTable
-00336d90 000080 FUN_00336d90
-00336e10 000080 FUN_00336e10
-00336e90 000080 FUN_00336e90
+00336d90 000080 igSmartPointer_igMovieInfoList_Destruct
+00336e10 000080 igSmartPointer_igMovieCodecList_Destruct
+00336e90 000080 igSmartPointer_igMovieRenderer_Destruct
 00336f10 000020 igMovieManager_EnsureRegistered
 00336f30 000074 igMovieManager_Register
 00336fb0 00001c igMovieManager_GetMetaObjectFunction
@@ -14291,106 +14291,106 @@
 0033be60 0000ac igMoviePlugin_Attach
 0033bf10 000024 igMoviePlugin_Detach
 0033bf40 00000c igMoviePlugin_GetMeta
-0033bf50 00098c FUN_0033bf50
+0033bf50 00098c BecLibrary_RegisterClasses
 0033c8e0 000018 BecLibrary_MarkRegistered
 0033c900 00004c libBecRuntimePlugin_GetMetaObject
 0033c950 0003c4 libBecRuntimePlugin_GetVTable
-0033cd20 000080 FUN_0033cd20
-0033cda0 000080 FUN_0033cda0
-0033ce20 000080 FUN_0033ce20
-0033cea0 000080 FUN_0033cea0
-0033cf20 000080 FUN_0033cf20
-0033cfa0 000080 FUN_0033cfa0
-0033d020 000080 FUN_0033d020
-0033d0a0 000080 FUN_0033d0a0
-0033d120 000080 FUN_0033d120
-0033d1a0 000080 FUN_0033d1a0
-0033d220 000080 FUN_0033d220
-0033d2a0 000080 FUN_0033d2a0
-0033d320 000080 FUN_0033d320
-0033d3a0 000080 FUN_0033d3a0
-0033d420 000080 FUN_0033d420
-0033d4a0 000080 FUN_0033d4a0
-0033d520 000080 FUN_0033d520
-0033d5a0 000080 FUN_0033d5a0
-0033d620 000080 FUN_0033d620
-0033d6a0 000080 FUN_0033d6a0
-0033d720 000080 FUN_0033d720
-0033d7a0 000080 FUN_0033d7a0
-0033d820 000080 FUN_0033d820
-0033d8a0 000080 FUN_0033d8a0
-0033d920 000080 FUN_0033d920
-0033d9a0 000080 FUN_0033d9a0
-0033da20 000080 FUN_0033da20
-0033daa0 000080 FUN_0033daa0
-0033db20 000080 FUN_0033db20
-0033dba0 000080 FUN_0033dba0
-0033dc20 000080 FUN_0033dc20
-0033dca0 000080 FUN_0033dca0
-0033dd20 000080 FUN_0033dd20
-0033dda0 000080 FUN_0033dda0
-0033de20 000080 FUN_0033de20
-0033dea0 000080 FUN_0033dea0
-0033df20 000080 FUN_0033df20
-0033dfa0 000080 FUN_0033dfa0
-0033e020 000080 FUN_0033e020
-0033e0a0 00000c FUN_0033e0a0
-0033e0b0 00000c FUN_0033e0b0
-0033e0c0 00000c FUN_0033e0c0
-0033e0d0 00000c FUN_0033e0d0
-0033e0e0 00000c FUN_0033e0e0
-0033e0f0 00000c FUN_0033e0f0
-0033e100 00000c FUN_0033e100
-0033e110 00000c FUN_0033e110
-0033e120 00000c FUN_0033e120
-0033e130 00000c FUN_0033e130
-0033e140 00000c FUN_0033e140
-0033e150 00000c FUN_0033e150
-0033e160 00000c FUN_0033e160
-0033e170 00000c FUN_0033e170
-0033e180 00000c FUN_0033e180
-0033e190 00000c FUN_0033e190
-0033e1a0 00000c FUN_0033e1a0
-0033e1b0 00000c FUN_0033e1b0
-0033e1c0 00000c FUN_0033e1c0
-0033e1d0 00000c FUN_0033e1d0
-0033e1e0 00000c FUN_0033e1e0
-0033e1f0 00000c FUN_0033e1f0
-0033e200 00000c FUN_0033e200
-0033e210 00000c FUN_0033e210
-0033e220 00000c FUN_0033e220
-0033e230 00000c FUN_0033e230
-0033e240 00000c FUN_0033e240
-0033e250 00000c FUN_0033e250
-0033e260 00000c FUN_0033e260
-0033e270 00000c FUN_0033e270
-0033e280 00000c FUN_0033e280
-0033e290 00000c FUN_0033e290
-0033e2a0 00000c FUN_0033e2a0
-0033e2b0 00000c FUN_0033e2b0
-0033e2c0 00000c FUN_0033e2c0
-0033e2d0 00000c FUN_0033e2d0
-0033e2e0 00000c FUN_0033e2e0
-0033e2f0 00000c FUN_0033e2f0
-0033e300 00000c FUN_0033e300
-0033e310 000034 FUN_0033e310
+0033cd20 000080 igSmartPointer_beParticleCtrl2_Destruct
+0033cda0 000080 igSmartPointer_beLua_Destruct
+0033ce20 000080 igSmartPointer_beMatCtrl_Destruct
+0033cea0 000080 igSmartPointer_beSelectCtrl_Destruct
+0033cf20 000080 igSmartPointer_beWaterPlain_Destruct
+0033cfa0 000080 igSmartPointer_beAction2_Destruct
+0033d020 000080 igSmartPointer_beMeterCtrl_Destruct
+0033d0a0 000080 igSmartPointer_beTargetObj_Destruct
+0033d120 000080 igSmartPointer_beWeapon_Destruct
+0033d1a0 000080 igSmartPointer_beCameraCtrl_Destruct
+0033d220 000080 igSmartPointer_bePoint01_Destruct
+0033d2a0 000080 igSmartPointer_beBkColor_Destruct
+0033d320 000080 igSmartPointer_beChangePosTransform_Destruct
+0033d3a0 000080 igSmartPointer_beShadow01_Destruct
+0033d420 000080 igSmartPointer_beGenerater_Destruct
+0033d4a0 000080 igSmartPointer_beHitLandModel_Destruct
+0033d520 000080 igSmartPointer_beHitLandDeliv_Destruct
+0033d5a0 000080 igSmartPointer_beSound_Destruct
+0033d620 000080 igSmartPointer_beSeCtl_Destruct
+0033d6a0 000080 igSmartPointer_beActionStarter_Destruct
+0033d720 000080 igSmartPointer_beLayerCtl_Destruct
+0033d7a0 000080 igSmartPointer_beFont_Destruct
+0033d820 000080 igSmartPointer_beSwitchCtrl_Destruct
+0033d8a0 000080 igSmartPointer_beLightCtrl_Destruct
+0033d920 000080 igSmartPointer_beNumberCtrl_Destruct
+0033d9a0 000080 igSmartPointer_beStaticInfoCtl_Destruct
+0033da20 000080 igSmartPointer_beMovie_Destruct
+0033daa0 000080 igSmartPointer_beDBManager_Destruct
+0033db20 000080 igSmartPointer_beSaveUtil_Destruct
+0033dba0 000080 igSmartPointer_beTextureCtrl_Destruct
+0033dc20 000080 igSmartPointer_beSystem_Destruct
+0033dca0 000080 igSmartPointer_beMessenger_Destruct
+0033dd20 000080 igSmartPointer_beFileListInfoManager_Destruct
+0033dda0 000080 igSmartPointer_bePadManager_Destruct
+0033de20 000080 igSmartPointer_beCri_Destruct
+0033dea0 000080 igSmartPointer_be_Destruct
+0033df20 000080 igSmartPointer_beDemoManager_Destruct
+0033dfa0 000080 igSmartPointer_beTimer_Destruct
+0033e020 000080 igSmartPointer_beMemory_Destruct
+0033e0a0 00000c igSmartPointer_beMemory_Construct
+0033e0b0 00000c igSmartPointer_beTimer_Construct
+0033e0c0 00000c igSmartPointer_beDemoManager_Construct
+0033e0d0 00000c igSmartPointer_be_Construct
+0033e0e0 00000c igSmartPointer_beCri_Construct
+0033e0f0 00000c igSmartPointer_bePadManager_Construct
+0033e100 00000c igSmartPointer_beFileListInfoManager_Construct
+0033e110 00000c igSmartPointer_beMessenger_Construct
+0033e120 00000c igSmartPointer_beSystem_Construct
+0033e130 00000c igSmartPointer_beTextureCtrl_Construct
+0033e140 00000c igSmartPointer_beSaveUtil_Construct
+0033e150 00000c igSmartPointer_beDBManager_Construct
+0033e160 00000c igSmartPointer_beMovie_Construct
+0033e170 00000c igSmartPointer_beStaticInfoCtl_Construct
+0033e180 00000c igSmartPointer_beNumberCtrl_Construct
+0033e190 00000c igSmartPointer_beLightCtrl_Construct
+0033e1a0 00000c igSmartPointer_beSwitchCtrl_Construct
+0033e1b0 00000c igSmartPointer_beFont_Construct
+0033e1c0 00000c igSmartPointer_beLayerCtl_Construct
+0033e1d0 00000c igSmartPointer_beActionStarter_Construct
+0033e1e0 00000c igSmartPointer_beSeCtl_Construct
+0033e1f0 00000c igSmartPointer_beSound_Construct
+0033e200 00000c igSmartPointer_beHitLandDeliv_Construct
+0033e210 00000c igSmartPointer_beHitLandModel_Construct
+0033e220 00000c igSmartPointer_beGenerater_Construct
+0033e230 00000c igSmartPointer_beShadow01_Construct
+0033e240 00000c igSmartPointer_beChangePosTransform_Construct
+0033e250 00000c igSmartPointer_beBkColor_Construct
+0033e260 00000c igSmartPointer_bePoint01_Construct
+0033e270 00000c igSmartPointer_beCameraCtrl_Construct
+0033e280 00000c igSmartPointer_beWeapon_Construct
+0033e290 00000c igSmartPointer_beTargetObj_Construct
+0033e2a0 00000c igSmartPointer_beMeterCtrl_Construct
+0033e2b0 00000c igSmartPointer_beAction2_Construct
+0033e2c0 00000c igSmartPointer_beWaterPlain_Construct
+0033e2d0 00000c igSmartPointer_beSelectCtrl_Construct
+0033e2e0 00000c igSmartPointer_beMatCtrl_Construct
+0033e2f0 00000c igSmartPointer_beLua_Construct
+0033e300 00000c igSmartPointer_beParticleCtrl2_Construct
+0033e310 000034 igInsightPlugin_Construct
 0033e350 000020 libBecRuntimePlugin_EnsureRegistered
 0033e370 000074 libBecRuntimePlugin_Register
 0033e3f0 00001c libBecRuntimePlugin_GetMetaObjectFunction
 0033e410 000420 libBecRuntimePlugin_InitFields
 0033e830 00004c beWeaponInfoRam_GetMetaObject
 0033e880 000094 beWeaponInfoRam_GetVTable
-0033e920 000098 FUN_0033e920
-0033e9c0 000080 ObjectRef_Destruct_0033e9c0
+0033e920 000098 beBaseInfoRam_Destroy
+0033e9c0 000080 beWeaponInfoRam_igSmartPointer_igObject_Destruct
 0033ea40 000020 beWeaponInfoRam_EnsureRegistered
 0033ea60 000064 beWeaponInfoRam_Register
 0033ead0 00001c beWeaponInfoRam_GetMetaObjectFunction
 0033eaf0 00000c beBaseInfoRam_GetPublishedMetaObject
 0033eb00 00004c beWeaponInfo_GetMetaObject
 0033eb50 0000ac beWeaponInfo_GetVTable
-0033ec00 000080 FUN_0033ec00
-0033ec80 000128 FUN_0033ec80
-0033edb0 000080 FUN_0033edb0
+0033ec00 000080 igSmartPointer_beBaseInfoRamList_Destruct
+0033ec80 000128 beBaseInfo_Destroy
+0033edb0 000080 igSmartPointer_beWeaponSeqDataList_Destruct
 0033ee30 000020 beWeaponInfo_EnsureRegistered
 0033ee50 000074 beWeaponInfo_Register
 0033eed0 00001c beWeaponInfo_GetMetaObjectFunction
@@ -14413,8 +14413,8 @@
 0033f450 000044 beWeapon_GetOrCreateMetaObject
 0033f4a0 00004c beWeapon_GetMetaObject
 0033f4f0 000070 beWeapon_GetVTable
-0033f560 000080 FUN_0033f560
-0033f5e0 0000e8 FUN_0033f5e0
+0033f560 000080 igSmartPointer_beBaseInfoList_Destruct
+0033f5e0 0000e8 beBaseInfoManager_Destroy
 0033f6d0 000080 beWeapon_igSmartPointer_igObject_Destruct
 0033f750 000020 beWeapon_EnsureRegistered
 0033f770 000074 beWeapon_Register
@@ -14449,8 +14449,8 @@
 00340070 00001c igModelViewMatrixBoneSelectListBec_GetMetaObjectFunction
 00340090 00004c beWaterPlainInfoRam_GetMetaObject
 003400e0 0000dc beWaterPlainInfoRam_GetVTable
-003401c0 000080 FUN_003401c0
-00340240 000080 FUN_00340240
+003401c0 000080 igSmartPointer_igFloatListList_Destruct
+00340240 000080 igSmartPointer_beWaterMove_Destruct
 003402c0 000020 beWaterPlainInfoRam_EnsureRegistered
 003402e0 000074 beWaterPlainInfoRam_Register
 00340360 00001c beWaterPlainInfoRam_GetMetaObjectFunction
@@ -14494,7 +14494,7 @@
 00341050 00001c beUnicode_GetMetaObjectFunction
 00341070 00004c beTransformSync_GetMetaObject
 003410c0 000098 beTransformSync_GetVTable
-00341160 000080 FUN_00341160
+00341160 000080 igSmartPointer_igTransformList_Destruct
 003411e0 000020 beTransformSync_EnsureRegistered
 00341200 000074 beTransformSync_Register
 00341280 00001c beTransformSync_GetMetaObjectFunction
@@ -14546,7 +14546,7 @@
 00342350 000044 beTextureCtrl_GetOrCreateMetaObject
 003423a0 00004c beTextureCtrl_GetMetaObject
 003423f0 000070 beTextureCtrl_GetVTable
-00342460 000080 FUN_00342460
+00342460 000080 igSmartPointer_beTextureCtrlWork_Destruct
 003424e0 000020 beTextureCtrl_EnsureRegistered
 00342500 000074 beTextureCtrl_Register
 00342580 00001c beTextureCtrl_GetMetaObjectFunction
@@ -14571,14 +14571,14 @@
 00342ce0 000044 beSystem_GetOrCreateMetaObject
 00342d30 00004c beSystem_GetMetaObject
 00342d80 000130 beSystem_GetVTable
-00342eb0 000080 FUN_00342eb0
+00342eb0 000080 igSmartPointer_igRandomNumber_Destruct
 00342f30 000020 beSystem_EnsureRegistered
 00342f50 000074 beSystem_Register
 00342fd0 00001c beSystem_GetMetaObjectFunction
 00342ff0 000198 beSystem_InitFields
 00343190 00004c beSwitchCtrlInfo_GetMetaObject
 003431e0 000074 beSwitchCtrlInfo_GetVTable
-00343260 000080 FUN_00343260
+00343260 000080 igSmartPointer_igSwitch_Destruct
 003432e0 000020 beSwitchCtrlInfo_EnsureRegistered
 00343300 000074 beSwitchCtrlInfo_Register
 00343380 00001c beSwitchCtrlInfo_GetMetaObjectFunction
@@ -14591,7 +14591,7 @@
 00343650 000020 beSwitchCtrl_EnsureRegistered
 00343670 000064 beSwitchCtrl_Register
 003436e0 00001c beSwitchCtrl_GetMetaObjectFunction
-00343700 000054 FUN_00343700
+00343700 000054 beStaticInfoCtl_GetMessageEnum
 00343760 000034 beStaticInfoCtl_CreateInstance
 003437a0 000044 beStaticInfoCtl_GetOrCreateMetaObject
 003437f0 00004c beStaticInfoCtl_GetMetaObject
@@ -14619,7 +14619,7 @@
 00343ec0 000090 beSoundInfo_InitFields
 00343f50 00004c beSoundData_GetMetaObject
 00343fa0 00008c beSoundData_GetVTable
-00344030 000098 FUN_00344030
+00344030 000098 beBaseInfoData_Destroy
 003440d0 000020 beSoundData_EnsureRegistered
 003440f0 00006c beSoundData_Register
 00344160 00001c beSoundData_GetMetaObjectFunction
@@ -14629,7 +14629,7 @@
 003442f0 000044 beSound_GetOrCreateMetaObject
 00344340 00004c beSound_GetMetaObject
 00344390 0000a8 beSound_GetVTable
-00344440 000080 FUN_00344440
+00344440 000080 igSmartPointer_bePlaySEList_Destruct
 003444c0 000020 beSound_EnsureRegistered
 003444e0 000074 beSound_Register
 00344560 00001c beSound_GetMetaObjectFunction
@@ -14655,7 +14655,7 @@
 00344b20 00001c beShadow01InfoList_GetMetaObjectFunction
 00344b40 00004c beShadow01Info_GetMetaObject
 00344b90 0000ac beShadow01Info_GetVTable
-00344c40 000080 FUN_00344c40
+00344c40 000080 igSmartPointer_igProjectiveShadowShader_Destruct
 00344cc0 000020 beShadow01Info_EnsureRegistered
 00344ce0 000074 beShadow01Info_Register
 00344d60 00001c beShadow01Info_GetMetaObjectFunction
@@ -14664,7 +14664,7 @@
 00344e80 000044 beShadow01_GetOrCreateMetaObject
 00344ed0 00004c beShadow01_GetMetaObject
 00344f20 000070 beShadow01_GetVTable
-00344f90 000080 FUN_00344f90
+00344f90 000080 igSmartPointer_beShadow01InfoList_Destruct
 00345010 000020 beShadow01_EnsureRegistered
 00345030 000074 beShadow01_Register
 003450b0 00001c beShadow01_GetMetaObjectFunction
@@ -14676,7 +14676,7 @@
 003452c0 00001c beSelectCtrlInfo_GetMetaObjectFunction
 003452e0 00004c beSelectCtrlInfoRamData_GetMetaObject
 00345330 0000d8 beSelectCtrlInfoRamData_GetVTable
-00345410 000080 FUN_00345410
+00345410 000080 igSmartPointer_beSelectCtrlInfoWork_Destruct
 00345490 000020 beSelectCtrlInfoRamData_EnsureRegistered
 003454b0 000074 beSelectCtrlInfoRamData_Register
 00345530 00001c beSelectCtrlInfoRamData_GetMetaObjectFunction
@@ -14740,20 +14740,20 @@
 00346b70 000020 beSaveUtilInfo_EnsureRegistered
 00346b90 000064 beSaveUtilInfo_Register
 00346c00 00001c beSaveUtilInfo_GetMetaObjectFunction
-00346c20 000054 FUN_00346c20
+00346c20 000054 beSaveUtil_GetMessageEnum
 00346c80 000034 beSaveUtil_CreateInstance
 00346cc0 000044 beSaveUtil_GetOrCreateMetaObject
 00346d10 00004c beSaveUtil_GetMetaObject
 00346d60 00008c beSaveUtil_GetVTable
-00346df0 000080 FUN_00346df0
-00346e70 000080 FUN_00346e70
+00346df0 000080 igSmartPointer_beSaveApi_Destruct
+00346e70 000080 igSmartPointer_beSvConnectCheck_Destruct
 00346ef0 000020 beSaveUtil_EnsureRegistered
 00346f10 000074 beSaveUtil_Register
 00346f90 00001c beSaveUtil_GetMetaObjectFunction
 00346fb0 0000a8 beSaveUtil_InitFields
 00347060 00004c beSvPlatDataPC_GetMetaObject
 003470b0 000094 beSvPlatDataPC_GetVTable
-00347150 000098 FUN_00347150
+00347150 000098 beSvPlatBaseData_Destroy
 003471f0 000020 beSvPlatDataPC_EnsureRegistered
 00347210 000064 beSvPlatDataPC_Register
 00347280 00001c beSvPlatDataPC_GetMetaObjectFunction
@@ -14793,7 +14793,7 @@
 003481b0 000044 beSvConnectCheck_GetOrCreateMetaObject
 00348200 00004c beSvConnectCheck_GetMetaObject
 00348250 000134 beSvConnectCheck_GetVTable
-00348390 000118 FUN_00348390
+00348390 000118 beSaveApi_Destroy
 003484b0 000080 igSmartPointer_beSaveMemoryObj_Destruct
 00348530 000020 beSvConnectCheck_EnsureRegistered
 00348550 000064 beSvConnectCheck_Register
@@ -14823,7 +14823,7 @@
 00348f60 000034 beSvWriteMediaApi_Create
 00348fa0 00004c beSvWriteMediaApi_GetMetaObject
 00348ff0 000090 beSvWriteMediaApi_GetVTable
-00349080 000080 FUN_00349080
+00349080 000080 igSmartPointer_beSvPlatBaseData_Destruct
 00349100 000020 beSvWriteMediaApi_EnsureRegistered
 00349120 000074 beSvWriteMediaApi_Register
 003491a0 00001c beSvWriteMediaApi_GetMetaObjectFunction
@@ -14831,7 +14831,7 @@
 00349270 000034 beSvReadMediaApi_Create
 003492b0 00004c beSvReadMediaApi_GetMetaObject
 00349300 0000ac beSvReadMediaApi_GetVTable
-003493b0 000080 FUN_003493b0
+003493b0 000080 igSmartPointer_beSaveDataDeliver_Destruct
 00349430 000020 beSvReadMediaApi_EnsureRegistered
 00349450 000074 beSvReadMediaApi_Register
 003494d0 00001c beSvReadMediaApi_GetMetaObjectFunction
@@ -14930,15 +14930,15 @@
 0034b580 000074 beResetNode_Register
 0034b600 00001c beResetNode_GetMetaObjectFunction
 0034b620 000070 beResetNode_InitFields
-0034b690 00001c FUN_0034b690
+0034b690 00001c beResetNode_StaticInitCallback
 0034b6b0 00004c bePoint01Info_GetMetaObject
 0034b700 000090 bePoint01Info_GetVTable
-0034b790 000080 FUN_0034b790
+0034b790 000080 igSmartPointer_beGroupKeepList_Destruct
 0034b810 000020 bePoint01Info_EnsureRegistered
 0034b830 000074 bePoint01Info_Register
 0034b8b0 00001c bePoint01Info_GetMetaObjectFunction
 0034b8d0 0000b0 bePoint01Info_InitFields
-0034b980 000054 FUN_0034b980
+0034b980 000054 bePoint01_GetMsgActionEnum
 0034b9e0 000034 bePoint01_CreateInstance
 0034ba20 000044 bePoint01_GetOrCreateMetaObject
 0034ba70 00004c bePoint01_GetMetaObject
@@ -14949,7 +14949,7 @@
 0034bc50 000070 bePoint01_InitFields
 0034bcc0 00004c beParticleCtrl2InfoRam_GetMetaObject
 0034bd10 0000a4 beParticleCtrl2InfoRam_GetVTable
-0034bdc0 000080 FUN_0034bdc0
+0034bdc0 000080 igSmartPointer_ParticleTimer_Destruct
 0034be40 000080 igSmartPointer_beParticleCtrl2InfoWork_Destruct
 0034bec0 000020 beParticleCtrl2InfoRam_EnsureRegistered
 0034bee0 000074 beParticleCtrl2InfoRam_Register
@@ -14959,7 +14959,7 @@
 0034c080 000044 beParticleCtrl2InfoWork_GetOrCreateMetaObject
 0034c0d0 00004c beParticleCtrl2InfoWork_GetMetaObject
 0034c120 00008c beParticleCtrl2InfoWork_GetVTable
-0034c1b0 000080 FUN_0034c1b0
+0034c1b0 000080 igSmartPointer_beModelCtrlNode2_Destruct
 0034c230 000020 beParticleCtrl2InfoWork_EnsureRegistered
 0034c250 000074 beParticleCtrl2InfoWork_Register
 0034c2d0 00001c beParticleCtrl2InfoWork_GetMetaObjectFunction
@@ -14970,7 +14970,7 @@
 0034c480 000074 beParticleCtrl2Info_Register
 0034c500 00001c beParticleCtrl2Info_GetMetaObjectFunction
 0034c520 0000a8 beParticleCtrl2Info_InitFields
-0034c5d0 000054 FUN_0034c5d0
+0034c5d0 000054 beParticleCtrl2_GetMessageEnum
 0034c630 000034 beParticleCtrl2_CreateInstance
 0034c670 000044 beParticleCtrl2_GetOrCreateMetaObject
 0034c6c0 00004c beParticleCtrl2_GetMetaObject
@@ -14982,8 +14982,8 @@
 0034c8e0 000044 bePadManager_GetOrCreateMetaObject
 0034c930 00004c bePadManager_GetMetaObject
 0034c980 0000a4 bePadManager_GetVTable
-0034ca30 000080 FUN_0034ca30
-0034cab0 000080 FUN_0034cab0
+0034ca30 000080 igSmartPointer_bePadDataList_Destruct
+0034cab0 000080 igSmartPointer_beKeyboardReceiver_Destruct
 0034cb30 000020 bePadManager_EnsureRegistered
 0034cb50 000074 bePadManager_Register
 0034cbd0 00001c bePadManager_GetMetaObjectFunction
@@ -15017,7 +15017,7 @@
 0034d480 0000b8 beNumberCtrlInfoWork_InitFields
 0034d540 00004c beNumberCtrlInfoRam_GetMetaObject
 0034d590 0000a4 beNumberCtrlInfoRam_GetVTable
-0034d640 000080 FUN_0034d640
+0034d640 000080 igSmartPointer_beNumVerDataList_Destruct
 0034d6c0 000080 igSmartPointer_beNumberCtrlInfoWork_Destruct
 0034d740 000020 beNumberCtrlInfoRam_EnsureRegistered
 0034d760 000074 beNumberCtrlInfoRam_Register
@@ -15068,20 +15068,20 @@
 0034e5b0 00001c beNumberCtrl_GetMetaObjectFunction
 0034e5d0 00004c beLoadingNode_ResolveMetaObject
 0034e620 000068 beLoadingNode_GetVTable
-0034e690 000080 FUN_0034e690
+0034e690 000080 beNodeAnim_Destroy
 0034e710 000020 beLoadingNode_EnsureRegistered
 0034e730 000074 beLoadingNode_Register
 0034e7b0 00001c beLoadingNode_GetMetaObject
 0034e7d0 00000c beNodeAnim_GetPublishedMetaObject
 0034e7e0 000070 beLoadingNode_InitFields
-0034e850 00001c FUN_0034e850
+0034e850 00001c beLoadingNode_StaticInitCallback
 0034e870 00004c beNodeAnim_ResolveMetaObject
 0034e8c0 000068 beNodeAnim_GetVTable
 0034e930 000020 beNodeAnim_EnsureRegistered
 0034e950 000074 beNodeAnim_Register
 0034e9d0 00001c beNodeAnim_GetMetaObject
 0034e9f0 000100 beNodeAnim_InitFields
-0034eaf0 00001c FUN_0034eaf0
+0034eaf0 00001c beNodeAnim_StaticInitCallback
 0034eb10 00004c beMovieInfo_GetMetaObject
 0034eb60 000064 beMovieInfo_GetVTable
 0034ebd0 000020 beMovieInfo_EnsureRegistered
@@ -15093,7 +15093,7 @@
 0034eda0 000074 beMovieInfoData_Register
 0034ee20 00001c beMovieInfoData_GetMetaObjectFunction
 0034ee40 000090 beMovieInfoData_InitFields
-0034eed0 000054 FUN_0034eed0
+0034eed0 000054 beMovie_GetMessageEnum
 0034ef30 000034 beMovie_CreateInstance
 0034ef70 000044 beMovie_GetOrCreateMetaObject
 0034efc0 00004c beMovie_GetMetaObject
@@ -15144,30 +15144,30 @@
 0034fea0 00007c beModelCtrlNode2_Register
 0034ff20 00001c beModelCtrlNode2_GetMetaObject
 0034ff40 0000b8 beModelCtrlNode2_InitFields
-00350000 00001c FUN_00350000
+00350000 00001c beModelCtrlNode2_StaticInitCallback
 00350020 000034 beModelCtrlInfoWork_Create
 00350060 000044 beModelCtrlInfoWork_GetOrCreateMetaObject
 003500b0 00004c beModelCtrlInfoWork_GetMetaObject
 00350100 000310 beModelCtrlInfoWork_GetVTable
-00350410 0006f8 FUN_00350410
+00350410 0006f8 beModelCtrlInfoWork_Destroy
 00350b10 000080 igSmartPointer_beDataObjInt_Destruct
-00350b90 000080 FUN_00350b90
-00350c10 000080 FUN_00350c10
-00350c90 000080 FUN_00350c90
-00350d10 000080 FUN_00350d10
-00350d90 000080 FUN_00350d90
-00350e10 000080 FUN_00350e10
-00350e90 000080 FUN_00350e90
-00350f10 00000c FUN_00350f10
-00350f20 00000c FUN_00350f20
-00350f30 00000c FUN_00350f30
-00350f40 00000c FUN_00350f40
-00350f50 00000c FUN_00350f50
-00350f60 00000c FUN_00350f60
-00350f70 00000c FUN_00350f70
-00350f80 00000c FUN_00350f80
-00350f90 00000c FUN_00350f90
-00350fa0 00000c FUN_00350fa0
+00350b90 000080 igSmartPointer_beModelCtrlData_Destruct
+00350c10 000080 igSmartPointer_beModelCtrlInfoAI_Destruct
+00350c90 000080 igSmartPointer_beModelCtrlInfoDataTrc_Destruct
+00350d10 000080 igSmartPointer_beModelCtrlMoveObjectList_Destruct
+00350d90 000080 igSmartPointer_beModelCtrlInfoRideOn_Destruct
+00350e10 000080 igSmartPointer_beModelCtrlInfoHitBody_Destruct
+00350e90 000080 igSmartPointer_beModelCtrlSubCom_Destruct
+00350f10 00000c igSmartPointer_beModelCtrlSubCom_Construct
+00350f20 00000c igSmartPointer_beModelCtrlInfoHitBody_Construct
+00350f30 00000c igSmartPointer_igGroup_Construct
+00350f40 00000c igSmartPointer_beModelCtrlInfoRideOn_Construct
+00350f50 00000c igSmartPointer_beModelCtrlMoveObjectList_Construct
+00350f60 00000c igSmartPointer_beModelCtrlInfoDataTrc_Construct
+00350f70 00000c igSmartPointer_beModelCtrlNode2_Construct
+00350f80 00000c igSmartPointer_beModelCtrlInfoAI_Construct
+00350f90 00000c igSmartPointer_beModelCtrlData_Construct
+00350fa0 00000c igSmartPointer_beDataObjInt_Construct
 00350fb0 000020 beModelCtrlInfoWork_EnsureRegistered
 00350fd0 000074 beModelCtrlInfoWork_Register
 00351050 00001c beModelCtrlInfoWork_GetMetaObjectFunction
@@ -15244,7 +15244,7 @@
 00352e50 000088 beModelCtrlInfo_InitFields
 00352ee0 00004c beModelCtrlInfoRamData_GetMetaObject
 00352f30 000088 beModelCtrlInfoRamData_GetVTable
-00352fc0 000080 FUN_00352fc0
+00352fc0 000080 igSmartPointer_beModelCtrlInfoWork_Destruct
 00353040 000020 beModelCtrlInfoRamData_EnsureRegistered
 00353060 000074 beModelCtrlInfoRamData_Register
 003530e0 00001c beModelCtrlInfoRamData_GetMetaObjectFunction
@@ -15288,7 +15288,7 @@
 00354320 00001c beModelCtrlAIMapList_GetMetaObjectFunction
 00354340 00004c beModelCtrlAIMap_GetMetaObject
 00354390 0000f8 beModelCtrlAIMap_GetVTable
-00354490 000080 FUN_00354490
+00354490 000080 igSmartPointer_beModelCtrlAIDataList_Destruct
 00354510 000020 beModelCtrlAIMap_EnsureRegistered
 00354530 000074 beModelCtrlAIMap_Register
 003545b0 00001c beModelCtrlAIMap_GetMetaObjectFunction
@@ -15414,7 +15414,7 @@
 00356e00 00007c beMeterCtrlNode_Register
 00356e80 00001c beMeterCtrlNode_GetMetaObject
 00356ea0 000098 beMeterCtrlNode_InitFields
-00356f40 00001c FUN_00356f40
+00356f40 00001c beMeterCtrlNode_StaticInitCallback
 00356f60 00004c beMeterCtrlInfoList_GetMetaObject
 00356fb0 00003c beMeterCtrlInfoList_GetVTable
 00356ff0 000020 beMeterCtrlInfoList_EnsureRegistered
@@ -15428,12 +15428,12 @@
 00357230 000098 beMeterCtrlInfo_InitFields
 003572d0 00004c beMeterCtrlOneData_GetMetaObject
 00357320 0000a4 beMeterCtrlOneData_GetVTable
-003573d0 000080 FUN_003573d0
+003573d0 000080 igSmartPointer_beMeterCtrlNode_Destruct
 00357450 000020 beMeterCtrlOneData_EnsureRegistered
 00357470 000074 beMeterCtrlOneData_Register
 003574f0 00001c beMeterCtrlOneData_GetMetaObjectFunction
 00357510 0000f0 beMeterCtrlOneData_InitFields
-00357600 000054 FUN_00357600
+00357600 000054 beMeterCtrl_GetMsgActionEnum
 00357660 000034 beMeterCtrl_CreateInstance
 003576a0 000044 beMeterCtrl_GetOrCreateMetaObject
 003576f0 00004c beMeterCtrl_GetMetaObject
@@ -15445,11 +15445,11 @@
 00357910 000044 beMessenger_GetOrCreateMetaObject
 00357960 00004c beMessenger_GetMetaObject
 003579b0 0000dc beMessenger_GetVTable
-00357a90 000080 FUN_00357a90
-00357b10 000080 FUN_00357b10
-00357b90 000080 FUN_00357b90
-00357c10 000080 FUN_00357c10
-00357c90 000080 FUN_00357c90
+00357a90 000080 igSmartPointer_beMessengerArgData_Destruct
+00357b10 000080 igSmartPointer_beMessengerGroupList_Destruct
+00357b90 000080 igSmartPointer_beMessengerWorkList_Destruct
+00357c10 000080 igSmartPointer_beMessengerDelayList_Destruct
+00357c90 000080 igSmartPointer_beMessengerArgDataList_Destruct
 00357d10 000020 beMessenger_EnsureRegistered
 00357d30 000074 beMessenger_Register
 00357db0 00001c beMessenger_GetMetaObjectFunction
@@ -15531,8 +15531,8 @@
 00359a40 000090 beMatCtrlInfoRam_InitFields
 00359ad0 00004c beMatCtrlInfo_GetMetaObject
 00359b20 0000ac beMatCtrlInfo_GetVTable
-00359bd0 000080 FUN_00359bd0
-00359c50 000080 FUN_00359c50
+00359bd0 000080 igSmartPointer_beMatCtrlDataList_Destruct
+00359c50 000080 igSmartPointer_beMatCtrlSearchList_Destruct
 00359cd0 000020 beMatCtrlInfo_EnsureRegistered
 00359cf0 000074 beMatCtrlInfo_Register
 00359d70 00001c beMatCtrlInfo_GetMetaObjectFunction
@@ -15582,7 +15582,7 @@
 0035aca0 000070 beLuaState_InitFields
 0035ad10 00004c beLuaInfo_GetMetaObject
 0035ad60 000074 beLuaInfo_GetVTable
-0035ade0 000080 FUN_0035ade0
+0035ade0 000080 igSmartPointer_beLuaDataList_Destruct
 0035ae60 000020 beLuaInfo_EnsureRegistered
 0035ae80 000074 beLuaInfo_Register
 0035af00 00001c beLuaInfo_GetMetaObjectFunction
@@ -15615,8 +15615,8 @@
 0035b770 000044 beLua_GetOrCreateMetaObject
 0035b7c0 00004c beLua_GetMetaObject
 0035b810 0000a4 beLua_GetVTable
-0035b8c0 000080 FUN_0035b8c0
-0035b940 000080 FUN_0035b940
+0035b8c0 000080 igSmartPointer_beLuaState_Destruct
+0035b940 000080 igSmartPointer_igLuaGlue_Destruct
 0035b9c0 000020 beLua_EnsureRegistered
 0035b9e0 000074 beLua_Register
 0035ba60 00001c beLua_GetMetaObjectFunction
@@ -15629,12 +15629,12 @@
 0035bce0 00001c igLightSetList_GetMetaObjectFunction
 0035bd00 00004c beLightCtrlInfo_GetMetaObject
 0035bd50 000074 beLightCtrlInfo_GetVTable
-0035bdd0 000080 FUN_0035bdd0
+0035bdd0 000080 igSmartPointer_igLightSetList_Destruct
 0035be50 000020 beLightCtrlInfo_EnsureRegistered
 0035be70 000074 beLightCtrlInfo_Register
 0035bef0 00001c beLightCtrlInfo_GetMetaObjectFunction
 0035bf10 000098 beLightCtrlInfo_InitFields
-0035bfb0 000054 FUN_0035bfb0
+0035bfb0 000054 beLightCtrl_GetMsgActionEnum
 0035c010 000034 beLightCtrl_CreateInstance
 0035c050 000044 beLightCtrl_GetOrCreateMetaObject
 0035c0a0 00004c beLightCtrl_GetMetaObject
@@ -15649,7 +15649,7 @@
 0035c400 00001c beLayerInfoRam_GetMetaObjectFunction
 0035c420 00004c beLayerInfo_GetMetaObject
 0035c470 000074 beLayerInfo_GetVTable
-0035c4f0 000080 FUN_0035c4f0
+0035c4f0 000080 igSmartPointer_beLayerGroupList_Destruct
 0035c570 000020 beLayerInfo_EnsureRegistered
 0035c590 000074 beLayerInfo_Register
 0035c610 00001c beLayerInfo_GetMetaObjectFunction
@@ -15681,7 +15681,7 @@
 0035ce80 00007c beLOA_Register
 0035cf00 00001c beLOA_GetMetaObjectFunction
 0035cf20 000124 beLOA_InitFields
-0035d050 00001c FUN_0035d050
+0035d050 00001c beLOA_StaticInitCallback
 0035d070 000044 beKeyboardReceiver_GetOrCreateMetaObject
 0035d0c0 00004c beKeyboardReceiver_GetMetaObject
 0035d110 00008c beKeyboardReceiver_GetVTable
@@ -15700,13 +15700,13 @@
 0035d5c0 000074 beHitLandModelInfo_Register
 0035d640 00001c beHitLandModelInfo_GetMetaObjectFunction
 0035d660 0000c0 beHitLandModelInfo_InitFields
-0035d720 000054 FUN_0035d720
+0035d720 000054 beHitLandModel_GetMessageEnum
 0035d780 000034 beHitLandModel_CreateInstance
 0035d7c0 000044 beHitLandModel_GetOrCreateMetaObject
 0035d810 00004c beHitLandModel_GetMetaObject
 0035d860 0000c8 beHitLandModel_GetVTable
-0035d930 000080 FUN_0035d930
-0035d9b0 000080 FUN_0035d9b0
+0035d930 000080 igSmartPointer_beHitLandModelOrder_Destruct
+0035d9b0 000080 igSmartPointer_beHitLandModelTraversal_Destruct
 0035da30 000020 beHitLandModel_EnsureRegistered
 0035da50 000074 beHitLandModel_Register
 0035dad0 00001c beHitLandModel_GetMetaObjectFunction
@@ -15781,14 +15781,14 @@
 0035f370 000098 beGeneraterInfoWork_InitFields
 0035f410 00004c beGeneraterInfoRam_GetMetaObject
 0035f460 0000e8 beGeneraterInfoRam_GetVTable
-0035f550 000080 FUN_0035f550
+0035f550 000080 igSmartPointer_beGeneraterInfoWork_Destruct
 0035f5d0 000020 beGeneraterInfoRam_EnsureRegistered
 0035f5f0 000074 beGeneraterInfoRam_Register
 0035f670 00001c beGeneraterInfoRam_GetMetaObjectFunction
 0035f690 000090 beGeneraterInfoRam_InitFields
 0035f720 00004c beGeneraterInfo_GetMetaObject
 0035f770 000074 beGeneraterInfo_GetVTable
-0035f7f0 000080 FUN_0035f7f0
+0035f7f0 000080 igSmartPointer_beGeneraterDataList_Destruct
 0035f870 000020 beGeneraterInfo_EnsureRegistered
 0035f890 000074 beGeneraterInfo_Register
 0035f910 00001c beGeneraterInfo_GetMetaObjectFunction
@@ -15801,7 +15801,7 @@
 0035fb40 00001c beGeneraterDataList_GetMetaObjectFunction
 0035fb60 00004c beGeneraterData_GetMetaObject
 0035fbb0 000114 beGeneraterData_GetVTable
-0035fcd0 000080 FUN_0035fcd0
+0035fcd0 000080 igSmartPointer_beGeneraterPlayerDataList_Destruct
 0035fd50 000020 beGeneraterData_EnsureRegistered
 0035fd70 000074 beGeneraterData_Register
 0035fdf0 00001c beGeneraterData_GetMetaObjectFunction
@@ -15842,7 +15842,7 @@
 00360a10 00006c beGeneraterItemDataOne_Register
 00360a80 00001c beGeneraterItemDataOne_GetMetaObjectFunction
 00360aa0 000070 beGeneraterItemDataOne_InitFields
-00360b10 000054 FUN_00360b10
+00360b10 000054 beGenerater_GetMsgActionEnum
 00360b70 000034 beGenerater_CreateInstance
 00360bb0 000044 beGenerater_GetOrCreateMetaObject
 00360c00 00004c beGenerater_GetMetaObject
@@ -15853,7 +15853,7 @@
 00360df0 000094 beGenerater_InitFields
 00360e90 00004c beFontInfo_GetMetaObject
 00360ee0 000074 beFontInfo_GetVTable
-00360f60 000080 FUN_00360f60
+00360f60 000080 igSmartPointer_beUnicodeObjList_Destruct
 00360fe0 000020 beFontInfo_EnsureRegistered
 00361000 000074 beFontInfo_Register
 00361080 00001c beFontInfo_GetMetaObjectFunction
@@ -15885,9 +15885,9 @@
 003618c0 00001c beFontImageList_GetMetaObjectFunction
 003618e0 00004c beFontImage_GetMetaObject
 00361930 000068 beFontImage_GetVTable
-003619a0 000080 FUN_003619a0
-00361a20 0000d8 FUN_00361a20
-00361b00 000168 FUN_00361b00
+003619a0 000080 igSmartPointer_FUN_00452790_Destruct
+00361a20 0000d8 igFont_Destroy
+00361b00 000168 igBitmapFont_Destroy
 00361c70 000020 beFontImage_EnsureRegistered
 00361c90 000064 beFontImage_Register
 00361d00 00001c beFontImage_GetMetaObjectFunction
@@ -15899,8 +15899,8 @@
 00361e90 000044 beFont_GetOrCreateMetaObject
 00361ee0 00004c beFont_GetMetaObject
 00361f30 000134 beFont_GetVTable
-00362070 000080 FUN_00362070
-003620f0 000080 FUN_003620f0
+00362070 000080 igSmartPointer_beFontImageList_Destruct
+003620f0 000080 igSmartPointer_beFontGeomAttrPairList_Destruct
 00362170 000020 beFont_EnsureRegistered
 00362190 000074 beFont_Register
 00362210 00001c beFont_GetMetaObjectFunction
@@ -15948,8 +15948,8 @@
 00363250 000044 beDemoManager_GetOrCreateMetaObject
 003632a0 00004c beDemoManager_GetMetaObject
 003632f0 000088 beDemoManager_GetVTable
-00363380 000080 FUN_00363380
-00363400 000080 FUN_00363400
+00363380 000080 igSmartPointer_beDemoManagerWork_Destruct
+00363400 000080 igSmartPointer_beDemoManagerWorkList_Destruct
 00363480 000020 beDemoManager_EnsureRegistered
 003634a0 000074 beDemoManager_Register
 00363520 00001c beDemoManager_GetMetaObjectFunction
@@ -16066,12 +16066,12 @@
 00365bc0 0001f8 beDataBase_InitFields
 00365dc0 00004c beDBManagerInfo_GetMetaObject
 00365e10 000074 beDBManagerInfo_GetVTable
-00365e90 000080 FUN_00365e90
+00365e90 000080 igSmartPointer_beDataBase_Destruct
 00365f10 000020 beDBManagerInfo_EnsureRegistered
 00365f30 000074 beDBManagerInfo_Register
 00365fb0 00001c beDBManagerInfo_GetMetaObjectFunction
 00365fd0 000098 beDBManagerInfo_InitFields
-00366070 000054 FUN_00366070
+00366070 000054 beDBManager_GetMsgActionEnum
 003660d0 000034 beDBManager_CreateInstance
 00366110 000044 beDBManager_GetOrCreateMetaObject
 00366160 00004c beDBManager_GetMetaObject
@@ -16093,7 +16093,7 @@
 003666c0 00001c beCriSfpData_GetMetaObjectFunction
 003666e0 00000c beBinDataObject_GetPublishedMetaObject
 003666f0 000070 beCriSfpData_InitFields
-00366760 00001c FUN_00366760
+00366760 00001c beCriSfpData_StaticInitCallback
 00366780 000044 beCriHandleList_GetOrCreateMetaObject
 003667d0 00004c beCriHandleList_GetMetaObject
 00366820 00003c beCriHandleList_GetVTable
@@ -16110,7 +16110,7 @@
 00366be0 0000b8 beCriHandle_InitFields
 00366ca0 00004c beCriFxInfo_GetMetaObject
 00366cf0 000088 beCriFxInfo_GetVTable
-00366d80 000080 FUN_00366d80
+00366d80 000080 igSmartPointer_beCriFxXbData_Destruct
 00366e00 000020 beCriFxInfo_EnsureRegistered
 00366e20 000074 beCriFxInfo_Register
 00366ea0 00001c beCriFxInfo_GetMetaObjectFunction
@@ -16147,7 +16147,7 @@
 003678f0 00004c beCri_GetMetaObject
 00367940 0000dc beCri_GetVTable
 00367a20 000080 igSmartPointer_beCriHandle_Destruct
-00367aa0 000080 FUN_00367aa0
+00367aa0 000080 igSmartPointer_beCriHandleList_Destruct
 00367b20 000020 beCri_EnsureRegistered
 00367b40 000074 beCri_Register
 00367bc0 00001c beCri_GetMetaObjectFunction
@@ -16163,14 +16163,14 @@
 00367f60 00007c beCopyTransform_Register
 00367fe0 00001c beCopyTransform_GetMetaObjectFunction
 00368000 000090 beCopyTransform_InitFields
-00368090 00001c FUN_00368090
+00368090 00001c beCopyTransform_StaticInitCallback
 003680b0 00004c beCopyModelCtrl2_GetMetaObject
 00368100 000098 beCopyModelCtrl2_GetVTable
 003681a0 000020 beCopyModelCtrl2_EnsureRegistered
 003681c0 00007c beCopyModelCtrl2_Register
 00368240 00001c beCopyModelCtrl2_GetMetaObjectFunction
 00368260 000090 beCopyModelCtrl2_InitFields
-003682f0 00001c FUN_003682f0
+003682f0 00001c beCopyModelCtrl2_StaticInitCallback
 00368310 00004c beChangePosTransformInfoRam_GetMetaObject
 00368360 0000e8 beChangePosTransformInfoRam_GetVTable
 00368450 000020 beChangePosTransformInfoRam_EnsureRegistered
@@ -16229,7 +16229,7 @@
 00369860 000044 beCameraCtrl_GetOrCreateMetaObject
 003698b0 00004c beCameraCtrl_GetMetaObject
 00369900 000098 beCameraCtrl_GetVTable
-003699a0 000080 FUN_003699a0
+003699a0 000080 igSmartPointer_beCameraMode_Destruct
 00369a20 000020 beCameraCtrl_EnsureRegistered
 00369a40 000074 beCameraCtrl_Register
 00369ac0 00001c beCameraCtrl_GetMetaObjectFunction
@@ -16310,7 +16310,7 @@
 0036b340 00001c beActionStarterInfoRam_GetMetaObjectFunction
 0036b360 00004c beActionStarterInfo_GetMetaObject
 0036b3b0 000074 beActionStarterInfo_GetVTable
-0036b430 000080 FUN_0036b430
+0036b430 000080 igSmartPointer_beAsTargetModelDataList_Destruct
 0036b4b0 000020 beActionStarterInfo_EnsureRegistered
 0036b4d0 000074 beActionStarterInfo_Register
 0036b550 00001c beActionStarterInfo_GetMetaObjectFunction
@@ -16357,14 +16357,14 @@
 0036c2e0 000044 beAction2InfoWork_GetOrCreateMetaObject
 0036c330 00004c beAction2InfoWork_GetMetaObject
 0036c380 0000cc beAction2InfoWork_GetVTable
-0036c450 000080 FUN_0036c450
+0036c450 000080 igSmartPointer_beAction2Data_Destruct
 0036c4d0 000020 beAction2InfoWork_EnsureRegistered
 0036c4f0 000074 beAction2InfoWork_Register
 0036c570 00001c beAction2InfoWork_GetMetaObjectFunction
 0036c590 0000f0 beAction2InfoWork_InitFields
 0036c680 00004c beAction2InfoRam_GetMetaObject
 0036c6d0 0000c0 beAction2InfoRam_GetVTable
-0036c790 000080 FUN_0036c790
+0036c790 000080 igSmartPointer_beAction2InfoWork_Destruct
 0036c810 000020 beAction2InfoRam_EnsureRegistered
 0036c830 000074 beAction2InfoRam_Register
 0036c8b0 00001c beAction2InfoRam_GetMetaObjectFunction
@@ -16376,7 +16376,7 @@
 0036cae0 00001c beAction2InfoList_GetMetaObjectFunction
 0036cb00 00004c beAction2Info_GetMetaObject
 0036cb50 0000ac beAction2Info_GetVTable
-0036cc00 000080 FUN_0036cc00
+0036cc00 000080 igSmartPointer_beAction2DataList_Destruct
 0036cc80 000020 beAction2Info_EnsureRegistered
 0036cca0 000074 beAction2Info_Register
 0036cd20 00001c beAction2Info_GetMetaObjectFunction
@@ -16452,11 +16452,11 @@
 0036e6f0 000074 ParticleTimer_Register
 0036e770 00001c ParticleTimer_GetMetaObjectFunction
 0036e790 0000d0 ParticleTimer_InitFields
-0036e860 00001c FUN_0036e860
-0036e880 000054 FUN_0036e880
-0036e8e0 000054 FUN_0036e8e0
-0036e940 000054 FUN_0036e940
-0036e9a0 000054 FUN_0036e9a0
+0036e860 00001c ParticleTimer_StaticInitCallback
+0036e880 000054 ParticleInfo_GetParticleTimeTypeMetaEnum
+0036e8e0 000054 ParticleInfo_GetParticleAlphaFunctionMetaEnum
+0036e940 000054 ParticleInfo_GetParticleAlphaTypeMetaEnum
+0036e9a0 000054 ParticleInfo_GetParticleEmitterTypeMetaEnum
 0036ea00 00004c ParticleInfo_GetMetaObject
 0036ea50 000098 ParticleInfo_GetVTable
 0036eaf0 000020 ParticleInfo_EnsureRegistered
@@ -16639,7 +16639,7 @@
 0036f950 00000c beNumVerInsideDataList_GetMeta
 0036f960 00000c beNumVerData_GetMeta
 0036f970 0000e4 beNumVerData_userConstruct
-0036fa60 000080 FUN_0036fa60
+0036fa60 000080 igSmartPointer_beNumVerInsideData_Destruct
 0036fae0 00019c beNumVerData_userDestruct
 0036fc80 00000c beNumVerDataList_GetMeta
 0036fc90 00000c beNumberCtrlInfoRam_GetMeta
@@ -16950,7 +16950,7 @@
 00379a90 0001ac beCameraCtrl_UpdateDemoCamera
 00379c40 000094 beCameraCtrl_UpdateRam
 00379ce0 000920 beCameraCtrl_OnMessageText
-0037a600 000080 FUN_0037a600
+0037a600 000080 igSmartPointer_beCameraCtrlInfoRamShake_Destruct
 0037a680 00000c beCameraCtrl_GetMeta
 0037a690 000114 beCameraMode_SetCameraPath
 0037a7b0 000034 beCameraMode_OnDetach
@@ -17020,7 +17020,7 @@
 0037eb80 0001e8 beDemoManager_RemoveAllInfo
 0037ed70 000428 beDemoManager_Update
 0037f1a0 00000c beDemoManager_GetMetaObject_Virtual
-0037f1b0 000068 FUN_0037f1b0
+0037f1b0 000068 beFileChkObj_FileExists
 0037f220 000020 beFileListInfoManager_Activate
 0037f240 000020 beFileListInfoManager_Deactivate
 0037f260 00005c beFileListInfoManager_Start
@@ -17029,7 +17029,7 @@
 0037f3f0 000634 beFileListInfoManager_RemoveAllInfo
 0037fa30 001690 beFileListInfoManager_Update
 003810c0 000710 beFileListInfoManager_LoadNextFile
-003817d0 0001bc FUN_003817d0
+003817d0 0001bc beFileListInfoManager_AddReadInfos
 00381990 00000c beFileListInfoManager_GetMeta
 003819a0 00001c beFont_Start
 003819c0 000174 beFont_Stop
@@ -17100,9 +17100,9 @@
 00389b80 00000c beLayerCtl__GetMeta beLayerCtl::GetMeta
 00389b90 000024 beLOA_TraversalFunction
 00389bc0 0003e8 beLOA_Traverse
-00389fb0 000034 FUN_00389fb0
+00389fb0 000034 beLOA_RegisterTraversalFunction
 00389ff0 0002dc beLua__RunNamedChunk beLua::RunNamedChunk
-0038a2d0 000088 FUN_0038a2d0
+0038a2d0 000088 beLua_ResetLuaState
 0038a360 000020 beLua_Activate
 0038a380 000020 beLua_Deactivate
 0038a3a0 00006c beLua_Start
@@ -17114,7 +17114,7 @@
 0038a660 000060 beLuaState_userDestruct
 0038a6c0 00001c beLuaState_RunString
 0038a6e0 000490 beLuaState_RunFile
-0038ab70 000080 FUN_0038ab70
+0038ab70 000080 igSmartPointer_igAdxFile_Destruct
 0038abf0 000080 beLuaState_igSmartPointer_igObject_Destruct
 0038ac70 00001c beLuaState_RunBuffer
 0038ac90 00000c beLuaState_GetMeta
@@ -17134,7 +17134,7 @@
 0038bed0 00000c beMatCtrl_GetMeta
 0038bee0 0004ac beMessenger_InitializeMemory
 0038c390 000080 igSmartPointer_beMessengerDelay_Destruct
-0038c410 000080 FUN_0038c410
+0038c410 000080 igSmartPointer_beMessengerWork_Destruct
 0038c490 0005ac beMessenger_ResetMemory
 0038ca40 000430 beMessengerArgData_Clear
 0038ce70 000180 beMessengerDelay_Clear
@@ -17152,7 +17152,7 @@
 0038d820 00003c beMessenger_RegisterReceiverFromInfo
 0038d860 0007f4 beMessenger_SelectReceivers
 0038e060 0004cc beMessenger_DispatchSelected
-0038e530 000080 FUN_0038e530
+0038e530 000080 igSmartPointer_beBaseInfoRam_Destruct
 0038e5b0 000020 beMessenger_SelectGroupRam
 0038e5d0 000020 beMessenger_SelectGroup
 0038e5f0 00003c beMessenger_SendNamed
@@ -17233,7 +17233,7 @@
 00392e10 000184 beModelCtrlMoveObject_Step
 00392fa0 0002b4 beModelCtrl_ApplyMoves
 00393260 000840 beModelCtrl_RunMove
-00393aa0 000080 FUN_00393aa0
+00393aa0 000080 igSmartPointer_beModelCtrlMoveObject_Destruct
 00393b20 000158 beModelCtrl_RunPdMove
 00393c80 000738 beModelCtrlInfoWork_SetSeqLabel
 003943c0 000040 beModelCtrl_RunLabelCtrl
@@ -17257,9 +17257,9 @@
 00396740 000200 beModelCtrl__OnGenerate beModelCtrl::OnGenerate
 00396940 00013c beModelCtrl_UpdateBound
 00396a80 00219c beModelCtrl_OnMessageText
-00398c20 000080 FUN_00398c20
-00398ca0 000080 FUN_00398ca0
-00398d20 000080 FUN_00398d20
+00398c20 000080 igSmartPointer_beModelCtrlInfoRideOn4_Destruct
+00398ca0 000080 igSmartPointer_beModelCtrlInfoRideOn3_Destruct
+00398d20 000080 igSmartPointer_beModelCtrlInfoRideOn2_Destruct
 00398da0 000008 beModelCtrl_OnAction1
 00398db0 000008 beModelCtrl_OnSequenceChange
 00398dc0 000008 beModelCtrl_OnErase
@@ -17313,7 +17313,7 @@
 0039b2e0 000020 bePadManager_Activate
 0039b300 000020 bePadManager_Deactivate
 0039b320 0001c0 bePadManager_Start
-0039b4e0 000080 FUN_0039b4e0
+0039b4e0 000080 bePadManager_igSmartPointer_igObject_Destruct
 0039b560 00004c bePadManager_Stop
 0039b5b0 000008 bePadManager_AddInfo
 0039b5c0 000008 bePadManager_RemoveAllInfo
@@ -17330,12 +17330,12 @@
 0039c170 00000c bePoint01_GetInfoMeta
 0039c180 000024 bePoint01_OnAddRam
 0039c1b0 000008 bePoint01_UpdateRam
-0039c1c0 0000a0 FUN_0039c1c0
+0039c1c0 0000a0 bePoint01_GetMatrix
 0039c260 0001b8 bePoint01_OnMessage
 0039c420 00000c bePoint01_GetMeta
-0039c430 000024 FUN_0039c430
-0039c460 000454 FUN_0039c460
-0039c8c0 000034 FUN_0039c8c0
+0039c430 000024 beResetNode_TraverseCallback
+0039c460 000454 beResetNode_Traverse
+0039c8c0 000034 beResetNode_RegisterTraversal
 0039c900 000040 beSeCtl_Prepare
 0039c940 00002c beSeCtl_OnAddRam
 0039c970 00000c beSeCtl_GetInfoMeta
@@ -17393,17 +17393,17 @@
 003a17c0 00005c beWeapon_Prepare
 003a1820 00000c beWeapon_GetInfoMeta
 003a1830 00019c beWeapon_OnAddRam
-003a19d0 000080 FUN_003a19d0
+003a19d0 000080 igSmartPointer_beWeaponAttachData_Destruct
 003a1a50 000008 beWeapon_UpdateRam
 003a1a60 0006b8 beWeapon_OnMessageText
 003a2120 00000c beWeapon_GetMeta
 003a2130 001340 libBecRuntimePlugin_Attach
 003a3470 0003cc libBecRuntimePlugin_Detach
 003a3840 00000c libBecRuntimePlugin_GetMeta
-003a3850 0000b0 FUN_003a3850
-003a3900 000034 FUN_003a3900
+003a3850 0000b0 ParticleTimer_TraversalFunction
+003a3900 000034 ParticleTimer_RegisterTraversalFunction
 003a3940 00001c ParticleTimer_resetFields
-003a3960 000244 FUN_003a3960
+003a3960 000244 ParticleTimer_Traverse
 003a3bb0 000038 ParticleArray_resetFields
 003a3bf0 000020 ParticleArray_UsesBaseUpdate
 003a3c10 000cfc ParticleArray_Update
@@ -17423,7 +17423,7 @@
 003a5320 000008 beTimer_Stop
 003a5330 000008 beTimer_AddInfo
 003a5340 000160 beTimer_RemoveAllInfo
-003a54a0 00007c FUN_003a54a0
+003a54a0 00007c beTimer_HasPadInput
 003a5520 00017c beTimer_Update
 003a56a0 00000c beTimer_GetMeta
 003a56b0 000174 beStaticInfoCtl_Stop
@@ -17473,7 +17473,7 @@
 003a7890 00010c beCriVolume_StepAdxLevel
 003a79a0 00007c beCriVolume_StepSndfLevel
 003a7a20 0002e0 beBaseInfoRam_StartTimer
-003a7d00 000080 FUN_003a7d00
+003a7d00 000080 igSmartPointer_beBaseInfoRamTimer_Destruct
 003a7d80 000110 beBaseInfoRam_HasTimer
 003a7e90 000138 beBaseInfoRam_IsTimerExpired
 003a7fd0 00016c beBaseInfoRam_GetTimerElapsed
@@ -17581,7 +17581,7 @@
 003ae5b0 000070 beSvFileMakeApi_userDestruct
 003ae620 00001c beSaveApi_userDestruct
 003ae640 000040 beSaveMemoryObj_userConstruct
-003ae680 0000f0 FUN_003ae680
+003ae680 0000f0 beSaveUtil_StartApi
 003ae770 00004c beSaveUtil_PollConnectCheck
 003ae7c0 0000b0 beSaveUtil_Prepare
 003ae870 000798 beSaveUtil_UpdateRam
@@ -17590,13 +17590,13 @@
 003af110 00000c beSaveUtil_GetInfoMeta
 003af120 000024 beSaveUtil_OnAddRam
 003af150 000998 beSaveUtil_OnMessage
-003afaf0 000080 FUN_003afaf0
-003afb70 000080 FUN_003afb70
-003afbf0 000080 FUN_003afbf0
-003afc70 000080 FUN_003afc70
-003afcf0 000080 FUN_003afcf0
-003afd70 000080 FUN_003afd70
-003afdf0 000080 FUN_003afdf0
+003afaf0 000080 igSmartPointer_beSvReadMediaApi_Destruct
+003afb70 000080 igSmartPointer_beSvWriteMediaApi_Destruct
+003afbf0 000080 igSmartPointer_beSvFormatApi_Destruct
+003afc70 000080 igSmartPointer_beSvFileMakeApi_Destruct
+003afcf0 000080 igSmartPointer_beSvGetFreeSizeApi_Destruct
+003afd70 000080 igSmartPointer_beSvUseCheckApi_Destruct
+003afdf0 000080 igSmartPointer_beSvFileFindApi_Destruct
 003afe70 00000c beSaveUtil_GetMeta
 003afe80 000008 beMemory_Activate
 003afe90 000008 beMemory_Deactivate
@@ -17617,52 +17617,52 @@
 003b0160 000160 beTextureCtrl_OnAddRam
 003b02c0 000210 beTextureCtrl_UpdateRam
 003b04d0 00000c beTextureCtrl_GetMeta
-003b04e0 00052c FUN_003b04e0
+003b04e0 00052c NdmwLibrary_RegisterClasses
 003b0a10 000018 NdmwLibrary_MarkRegistered
 003b0a30 00004c libNdmwRuntimePlugin_GetMetaObject
 003b0a80 00025c libNdmwRuntimePlugin_GetVTable
-003b0ce0 000080 FUN_003b0ce0
-003b0d60 000080 FUN_003b0d60
-003b0de0 000080 FUN_003b0de0
-003b0e60 000080 FUN_003b0e60
-003b0ee0 000080 FUN_003b0ee0
-003b0f60 000080 FUN_003b0f60
-003b0fe0 000080 FUN_003b0fe0
-003b1060 000080 FUN_003b1060
-003b10e0 000080 FUN_003b10e0
-003b1160 000080 FUN_003b1160
-003b11e0 000080 FUN_003b11e0
-003b1260 000080 FUN_003b1260
-003b12e0 000080 FUN_003b12e0
-003b1360 000080 FUN_003b1360
-003b13e0 000080 FUN_003b13e0
-003b1460 000080 FUN_003b1460
-003b14e0 000080 FUN_003b14e0
-003b1560 000080 FUN_003b1560
-003b15e0 000080 FUN_003b15e0
-003b1660 000080 FUN_003b1660
-003b16e0 000080 FUN_003b16e0
-003b1760 00000c FUN_003b1760
-003b1770 00000c FUN_003b1770
-003b1780 00000c FUN_003b1780
-003b1790 00000c FUN_003b1790
-003b17a0 00000c FUN_003b17a0
-003b17b0 00000c FUN_003b17b0
-003b17c0 00000c FUN_003b17c0
-003b17d0 00000c FUN_003b17d0
-003b17e0 00000c FUN_003b17e0
-003b17f0 00000c FUN_003b17f0
-003b1800 00000c FUN_003b1800
-003b1810 00000c FUN_003b1810
-003b1820 00000c FUN_003b1820
-003b1830 00000c FUN_003b1830
-003b1840 00000c FUN_003b1840
-003b1850 00000c FUN_003b1850
-003b1860 00000c FUN_003b1860
-003b1870 00000c FUN_003b1870
-003b1880 00000c FUN_003b1880
-003b1890 00000c FUN_003b1890
-003b18a0 00000c FUN_003b18a0
+003b0ce0 000080 igSmartPointer_beNDMWAfsSetup_Destruct
+003b0d60 000080 igSmartPointer_beNDMWStageCtl_Destruct
+003b0de0 000080 igSmartPointer_beNDMWPanelWaza_Destruct
+003b0e60 000080 igSmartPointer_beNDMWLogo_Destruct
+003b0ee0 000080 igSmartPointer_beNDMWTitle2_Destruct
+003b0f60 000080 igSmartPointer_beNDMWLoadCtrl2_Destruct
+003b0fe0 000080 igSmartPointer_beNDMWLoadIntf2_Destruct
+003b1060 000080 igSmartPointer_beNDMWSaveCtrl_Destruct
+003b10e0 000080 igSmartPointer_beNDMWSaveIntf_Destruct
+003b1160 000080 igSmartPointer_beNDMWGameRam_Destruct
+003b11e0 000080 igSmartPointer_beNDMWStatus_Destruct
+003b1260 000080 igSmartPointer_beNDMWMdlPlayer_Destruct
+003b12e0 000080 igSmartPointer_beNDMWMdlPlayer2_Destruct
+003b1360 000080 igSmartPointer_beNDMWMdlPBullet_Destruct
+003b13e0 000080 igSmartPointer_beNDMWMdlEnemy_Destruct
+003b1460 000080 igSmartPointer_beNDMWMdlEBullet_Destruct
+003b14e0 000080 igSmartPointer_beNDMWMdlObject_Destruct
+003b1560 000080 igSmartPointer_beNDMWMdlItem_Destruct
+003b15e0 000080 igSmartPointer_beNDMWMdlEffect_Destruct
+003b1660 000080 igSmartPointer_beNDMWMdlMapBase_Destruct
+003b16e0 000080 igSmartPointer_beNDMWMdlMapCursor_Destruct
+003b1760 00000c igSmartPointer_beNDMWMdlMapCursor_Construct
+003b1770 00000c igSmartPointer_beNDMWMdlMapBase_Construct
+003b1780 00000c igSmartPointer_beNDMWMdlEffect_Construct
+003b1790 00000c igSmartPointer_beNDMWMdlItem_Construct
+003b17a0 00000c igSmartPointer_beNDMWMdlObject_Construct
+003b17b0 00000c igSmartPointer_beNDMWMdlEBullet_Construct
+003b17c0 00000c igSmartPointer_beNDMWMdlEnemy_Construct
+003b17d0 00000c igSmartPointer_beNDMWMdlPBullet_Construct
+003b17e0 00000c igSmartPointer_beNDMWMdlPlayer2_Construct
+003b17f0 00000c igSmartPointer_beNDMWMdlPlayer_Construct
+003b1800 00000c igSmartPointer_beNDMWStatus_Construct
+003b1810 00000c igSmartPointer_beNDMWGameRam_Construct
+003b1820 00000c igSmartPointer_beNDMWSaveIntf_Construct
+003b1830 00000c igSmartPointer_beNDMWSaveCtrl_Construct
+003b1840 00000c igSmartPointer_beNDMWLoadIntf2_Construct
+003b1850 00000c igSmartPointer_beNDMWLoadCtrl2_Construct
+003b1860 00000c igSmartPointer_beNDMWTitle2_Construct
+003b1870 00000c igSmartPointer_beNDMWLogo_Construct
+003b1880 00000c igSmartPointer_beNDMWPanelWaza_Construct
+003b1890 00000c igSmartPointer_beNDMWStageCtl_Construct
+003b18a0 00000c igSmartPointer_beNDMWAfsSetup_Construct
 003b18b0 000020 libNdmwRuntimePlugin_EnsureRegistered
 003b18d0 000074 libNdmwRuntimePlugin_Register
 003b1950 00001c libNdmwRuntimePlugin_GetMetaObjectFunction
@@ -17699,12 +17699,12 @@
 003b26a0 00006c beNDMWTitle2CtrlData_Register
 003b2710 00001c beNDMWTitle2CtrlData_GetMetaObjectFunction
 003b2730 000110 beNDMWTitle2CtrlData_InitFields
-003b2840 000054 FUN_003b2840
+003b2840 000054 beNDMWTitle2CtrlData_GetMessageEnum
 003b28a0 000034 beNDMWTitle2_CreateInstance
 003b28e0 000044 beNDMWTitle2_GetOrCreateMetaObject
 003b2930 00004c beNDMWTitle2_GetMetaObject
 003b2980 00008c beNDMWTitle2_GetVTable
-003b2a10 000080 FUN_003b2a10
+003b2a10 000080 igSmartPointer_beNDMWMcUtilCtrl_Destruct
 003b2a90 000020 beNDMWTitle2_EnsureRegistered
 003b2ab0 000074 beNDMWTitle2_Register
 003b2b30 00001c beNDMWTitle2_GetMetaObjectFunction
@@ -17712,10 +17712,10 @@
 003b2c00 000034 beNDMWShopTitle03_Create
 003b2c40 00004c beNDMWShopTitle03_GetMetaObject
 003b2c90 000074 beNDMWShopTitle03_GetVTable
-003b2d10 000218 FUN_003b2d10
+003b2d10 000218 beNDMWWindow_Destroy
 003b2f30 000080 beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct
-003b2fb0 000080 FUN_003b2fb0
-003b3030 0000c0 FUN_003b3030
+003b2fb0 000080 igSmartPointer_beNDMWWindowList_Destruct
+003b3030 0000c0 beNDMWWindowTitle_Destroy
 003b30f0 000020 beNDMWShopTitle03_EnsureRegistered
 003b3110 000064 beNDMWShopTitle03_Register
 003b3180 00001c beNDMWShopTitle03_GetMetaObjectFunction
@@ -17771,7 +17771,7 @@
 003b3f40 000034 beNDMWShopSelectB0_Create
 003b3f80 00004c beNDMWShopSelectB0_GetMetaObject
 003b3fd0 00007c beNDMWShopSelectB0_GetVTable
-003b4050 000138 FUN_003b4050
+003b4050 000138 beNDMWWindowSelect_Destroy
 003b4190 000020 beNDMWShopSelectB0_EnsureRegistered
 003b41b0 000064 beNDMWShopSelectB0_Register
 003b4220 00001c beNDMWShopSelectB0_GetMetaObjectFunction
@@ -17888,7 +17888,7 @@
 003b6650 000034 beNDMWShopDevice_Create
 003b6690 00004c beNDMWShopDevice_GetMetaObject
 003b66e0 000084 beNDMWShopDevice_GetVTable
-003b6770 000070 FUN_003b6770
+003b6770 000070 beNDMWListCtrl_Destroy
 003b67e0 000020 beNDMWShopDevice_EnsureRegistered
 003b6800 000074 beNDMWShopDevice_Register
 003b6880 00001c beNDMWShopDevice_GetMetaObjectFunction
@@ -17987,7 +17987,7 @@
 003b8860 000034 beNDMWShopCtrlEvolve_Create
 003b88a0 00004c beNDMWShopCtrlEvolve_GetMetaObject
 003b88f0 000084 beNDMWShopCtrlEvolve_GetVTable
-003b8980 000080 FUN_003b8980
+003b8980 000080 igSmartPointer_beNDMWShinkaCtrl_Destruct
 003b8a00 000020 beNDMWShopCtrlEvolve_EnsureRegistered
 003b8a20 000074 beNDMWShopCtrlEvolve_Register
 003b8aa0 00001c beNDMWShopCtrlEvolve_GetMetaObjectFunction
@@ -18037,7 +18037,7 @@
 003b9a50 000034 beNDMWStatusCtrlDisk_Create
 003b9a90 00004c beNDMWStatusCtrlDisk_GetMetaObject
 003b9ae0 0000bc beNDMWStatusCtrlDisk_GetVTable
-003b9ba0 000080 FUN_003b9ba0
+003b9ba0 000080 igSmartPointer_beNDMWItemDisk_Destruct
 003b9c20 000020 beNDMWStatusCtrlDisk_EnsureRegistered
 003b9c40 000074 beNDMWStatusCtrlDisk_Register
 003b9cc0 00001c beNDMWStatusCtrlDisk_GetMetaObjectFunction
@@ -18060,7 +18060,7 @@
 003ba2a0 00004c beNDMWStatusSubSlot_GetMetaObject
 003ba2f0 000058 beNDMWStatusSubSlot_GetVTable
 003ba350 000080 beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct
-003ba3d0 000238 FUN_003ba3d0
+003ba3d0 000238 beNDMWStatusCtrlBaseEquip_Destroy
 003ba610 000084 beNDMWStatusCtrlBaseEquip_Construct
 003ba6a0 000020 beNDMWStatusSubSlot_EnsureRegistered
 003ba6c0 000064 beNDMWStatusSubSlot_Register
@@ -18134,7 +18134,7 @@
 003bbc90 000020 beNDMWStageCtlInfo_EnsureRegistered
 003bbcb0 000064 beNDMWStageCtlInfo_Register
 003bbd20 00001c beNDMWStageCtlInfo_GetMetaObjectFunction
-003bbd40 000054 FUN_003bbd40
+003bbd40 000054 beNDMWStageCtlInfo_GetMessageEnum
 003bbda0 000034 beNDMWStageCtl_CreateInstance
 003bbde0 000044 beNDMWStageCtl_GetOrCreateMetaObject
 003bbe30 00004c beNDMWStageCtl_GetMetaObject
@@ -18150,7 +18150,7 @@
 003bc1d0 00001c beNDMWSaveIntfInfo_GetMetaObjectFunction
 003bc1f0 00004c beNDMWSaveIntfComMdlCtrl_GetMetaObject
 003bc240 000088 beNDMWSaveIntfComMdlCtrl_GetVTable
-003bc2d0 000080 FUN_003bc2d0
+003bc2d0 000080 igSmartPointer_beSaveIntfComMdlDataList_Destruct
 003bc350 000020 beNDMWSaveIntfComMdlCtrl_EnsureRegistered
 003bc370 000074 beNDMWSaveIntfComMdlCtrl_Register
 003bc3f0 00001c beNDMWSaveIntfComMdlCtrl_GetMetaObjectFunction
@@ -18220,10 +18220,10 @@
 003bdb50 000044 beNDMWPanelWazaInfoWork_GetOrCreateMetaObject
 003bdba0 00004c beNDMWPanelWazaInfoWork_ResolveMetaObject
 003bdbf0 000104 beNDMWPanelWazaInfoWork_GetVTable
-003bdd00 000080 FUN_003bdd00
-003bdd80 000080 FUN_003bdd80
-003bde00 000080 FUN_003bde00
-003bde80 000080 FUN_003bde80
+003bdd00 000080 igSmartPointer_beNDMWPanelObjectWaza_Destruct
+003bdd80 000080 igSmartPointer_beNDMWPanelObjectItem_Destruct
+003bde00 000080 igSmartPointer_beNDMWPanelObjectStat_Destruct
+003bde80 000080 igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct
 003bdf00 000020 beNDMWPanelWazaInfoWork_EnsureRegistered
 003bdf20 000074 beNDMWPanelWazaInfoWork_Register
 003bdfa0 00001c beNDMWPanelWazaInfoWork_GetMetaObject
@@ -18231,7 +18231,7 @@
 003be0f0 000044 beNDMWPanelObjectStat_GetOrCreateMetaObject
 003be140 00004c beNDMWPanelObjectStat_ResolveMetaObject
 003be190 0000ac beNDMWPanelObjectStat_GetVTable
-003be240 000118 FUN_003be240
+003be240 000118 beNDMWPanelObject_Destroy
 003be360 000020 beNDMWPanelObjectStat_EnsureRegistered
 003be380 000074 beNDMWPanelObjectStat_Register
 003be400 00001c beNDMWPanelObjectStat_GetMetaObject
@@ -18256,7 +18256,7 @@
 003bec90 000070 beNDMWPanelObject_Register
 003bed00 00001c beNDMWPanelObject_GetMetaObject
 003bed20 000110 beNDMWPanelObject_InitFields
-003bee30 000054 FUN_003bee30
+003bee30 000054 beNDMWPanelObject_GetMessageEnum
 003bee90 000034 beNDMWPanelWaza_CreateInstance
 003beed0 000044 beNDMWPanelWaza_GetOrCreateMetaObject
 003bef20 00004c beNDMWPanelWaza_ResolveMetaObject
@@ -18269,7 +18269,7 @@
 003bf1f0 000044 beNDMWMdlPlayer2_GetOrCreateMetaObject
 003bf240 00004c beNDMWMdlPlayer2_ResolveMetaObject
 003bf290 000060 beNDMWMdlPlayer2_GetVTable
-003bf2f0 0000f8 FUN_003bf2f0
+003bf2f0 0000f8 beModelCtrl_Destroy
 003bf3f0 000020 beNDMWMdlPlayer2_EnsureRegistered
 003bf410 000074 beNDMWMdlPlayer2_Register
 003bf490 00001c beNDMWMdlPlayer2_GetMetaObject
@@ -18289,7 +18289,7 @@
 003bf8d0 000044 beNDMWMdlPlayer_GetOrCreateMetaObject
 003bf920 00004c beNDMWMdlPlayer_ResolveMetaObject
 003bf970 000060 beNDMWMdlPlayer_GetVTable
-003bf9d0 000108 FUN_003bf9d0
+003bf9d0 000108 beNDMWMdlPEBase_Destroy
 003bfae0 000020 beNDMWMdlPlayer_EnsureRegistered
 003bfb00 000074 beNDMWMdlPlayer_Register
 003bfb80 00001c beNDMWMdlPlayer_GetMetaObject
@@ -18299,7 +18299,7 @@
 003bfcc0 000044 beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject
 003bfd10 00004c beNDMWMdlPlayerInfoWork_ResolveMetaObject
 003bfd60 000078 beNDMWMdlPlayerInfoWork_GetVTable
-003bfde0 000338 FUN_003bfde0
+003bfde0 000338 beNDMWMdlPEBaseInfoWork_Destroy
 003c0120 000160 beNDMWMdlPEBaseInfoWork_Construct
 003c0280 000020 beNDMWMdlPlayerInfoWork_EnsureRegistered
 003c02a0 000074 beNDMWMdlPlayerInfoWork_Register
@@ -18315,7 +18315,7 @@
 003c05d0 00001c beNDMWMdlPEBase_GetMetaObject
 003c05f0 00004c beNDMWMdlPEBaseInfoWork_ResolveMetaObject
 003c0640 000118 beNDMWMdlPEBaseInfoWork_GetVTable
-003c0760 00000c FUN_003c0760
+003c0760 00000c igSmartPointer_igBoolList_Construct
 003c0770 000020 beNDMWMdlPEBaseInfoWork_EnsureRegistered
 003c0790 000074 beNDMWMdlPEBaseInfoWork_Register
 003c0810 00001c beNDMWMdlPEBaseInfoWork_GetMetaObject
@@ -18359,8 +18359,8 @@
 003c13f0 000034 beNDMWMdlItemInfoWork_Create
 003c1430 00004c beNDMWMdlItemInfoWork_GetReadyMetaObject
 003c1480 000098 beNDMWMdlItemInfoWork_GetVTable
-003c1520 000080 FUN_003c1520
-003c15a0 00000c FUN_003c15a0
+003c1520 000080 igSmartPointer_beNDMWItemBase_Destruct
+003c15a0 00000c igSmartPointer_beNDMWItemBase_Construct
 003c15b0 000020 beNDMWMdlItemInfoWork_EnsureRegistered
 003c15d0 000074 beNDMWMdlItemInfoWork_Register
 003c1650 00001c beNDMWMdlItemInfoWork_GetMetaObject
@@ -18506,9 +18506,9 @@
 003c4c20 000044 beNDMWLoadCtrl2CommonIntf_GetOrCreateMetaObject
 003c4c70 00004c beNDMWLoadCtrl2CommonIntf_ResolveMetaObject
 003c4cc0 0000c0 beNDMWLoadCtrl2CommonIntf_GetVTable
-003c4d80 000080 FUN_003c4d80
-003c4e00 000080 FUN_003c4e00
-003c4e80 000080 FUN_003c4e80
+003c4d80 000080 igSmartPointer_beNDMWLoadSlotPlayerList_Destruct
+003c4e00 000080 igSmartPointer_beNDMWDegiDataList_Destruct
+003c4e80 000080 igSmartPointer_beNDMWLoadSavePlWorkList_Destruct
 003c4f00 000020 beNDMWLoadCtrl2CommonIntf_EnsureRegistered
 003c4f20 000074 beNDMWLoadCtrl2CommonIntf_Register
 003c4fa0 00001c beNDMWLoadCtrl2CommonIntf_GetMetaObject
@@ -18605,7 +18605,7 @@
 003c6ee0 000044 beNDMWLoadIntf2ComMdlCtrl_GetOrCreateMetaObject
 003c6f30 00004c beNDMWLoadIntf2ComMdlCtrl_GetReadyMetaObject
 003c6f80 000088 beNDMWLoadIntf2ComMdlCtrl_GetVTable
-003c7010 000080 FUN_003c7010
+003c7010 000080 igSmartPointer_beLoadIntf2ComMdlDataList_Destruct
 003c7090 000020 beNDMWLoadIntf2ComMdlCtrl_EnsureRegistered
 003c70b0 000074 beNDMWLoadIntf2ComMdlCtrl_Register
 003c7130 00001c beNDMWLoadIntf2ComMdlCtrl_GetMetaObject
@@ -18751,7 +18751,7 @@
 003c9ce0 000044 beNDMWGameRam_GetOrCreateMetaObject
 003c9d30 00004c beNDMWGameRam_ResolveMetaObject
 003c9d80 000164 beNDMWGameRam_GetVTable
-003c9ef0 000080 FUN_003c9ef0
+003c9ef0 000080 igSmartPointer_beDataObjListList_Destruct
 003c9f70 000020 beNDMWGameRam_EnsureRegistered
 003c9f90 000074 beNDMWGameRam_Register
 003ca010 00001c beNDMWGameRam_GetMetaObject
@@ -18770,7 +18770,7 @@
 003ca510 00001c beNDMWGameRamInfo_GetMetaObject
 003ca530 00004c beNDMWAfsSetupInfo_ResolveMetaObject
 003ca580 000088 beNDMWAfsSetupInfo_GetVTable
-003ca610 000080 FUN_003ca610
+003ca610 000080 igSmartPointer_beNDMWAfsSetupDataList_Destruct
 003ca690 000020 beNDMWAfsSetupInfo_EnsureRegistered
 003ca6b0 000074 beNDMWAfsSetupInfo_Register
 003ca730 00001c beNDMWAfsSetupInfo_GetMetaObject
@@ -18798,7 +18798,7 @@
 003cae40 000044 beNDMWAfsSetup_GetOrCreateMetaObject
 003cae90 00004c beNDMWAfsSetup_ResolveMetaObject
 003caee0 0000c0 beNDMWAfsSetup_GetVTable
-003cafa0 000080 FUN_003cafa0
+003cafa0 000080 igSmartPointer_igGuiComponent_Destruct
 003cb020 000020 beNDMWAfsSetup_EnsureRegistered
 003cb040 000074 beNDMWAfsSetup_Register
 003cb0c0 00001c beNDMWAfsSetup_GetMetaObject
@@ -18865,11 +18865,11 @@
 003cbed0 000174 beNDMWPanelObjectStat_TrimCapacity
 003cc050 0001b4 beNDMWPanelObjectItem_TrimCapacity
 003cc210 0001b4 beNDMWPanelObjectWaza_TrimCapacity
-003cc3d0 0000b0 FUN_003cc3d0
-003cc480 000008 FUN_003cc480
-003cc490 0000a4 FUN_003cc490
-003cc540 000008 FUN_003cc540
-003cc550 000084 FUN_003cc550
+003cc3d0 0000b0 beNDMWPanelWazaInfoWork_igIntList_SetAll
+003cc480 000008 beNDMWPanelWazaInfoWork_GetTextColorList
+003cc490 0000a4 beNDMWPanelWazaInfoWork_igStringRefList_SetAll
+003cc540 000008 beNDMWPanelWazaInfoWork_GetTextSetList
+003cc550 000084 beNDMWPanelWazaInfoWork_igStringRef_ConstructFromText
 003cc5e0 00000c beNDMWPanelWazaInfoRam_GetMeta
 003cc5f0 00000c beNDMWPanelWazaInfo_GetMeta
 003cc600 00000c beNDMWSaveCtrlCtrlData_GetMeta
@@ -18922,11 +18922,11 @@
 003cdee0 00000c beNDMWAfsSetup_GetMeta
 003cdef0 0005cc beNDMWPanelObject_SetCellText
 003ce4c0 000038 beNDMWPanelObject_GetBasePosition
-003ce500 0000b0 FUN_003ce500
-003ce5b0 000150 FUN_003ce5b0
-003ce700 0000d8 FUN_003ce700
-003ce7e0 0000b0 FUN_003ce7e0
-003ce890 0000d0 FUN_003ce890
+003ce500 0000b0 beNDMWPanelObject_SendModelCommand
+003ce5b0 000150 beNDMWPanelObject_Open
+003ce700 0000d8 beNDMWPanelObject_Close
+003ce7e0 0000b0 beNDMWPanelObject_MoveCursorUp
+003ce890 0000d0 beNDMWPanelObject_MoveCursorDown
 003ce960 000568 beNDMWPanelObjectWaza_Refresh
 003ceed0 00027c beNDMWPanelObjectWaza_Fire
 003cf150 000544 beNDMWPanelObjectItem_Refresh
@@ -18936,9 +18936,9 @@
 003cfe00 00000c beNDMWPanelWaza_GetInfoMeta
 003cfe10 00003c beNDMWPanelWaza_OnAddRam
 003cfe50 000910 beNDMWPanelWaza_UpdateRam
-003d0760 000188 FUN_003d0760
-003d08f0 000198 FUN_003d08f0
-003d0a90 000130 FUN_003d0a90
+003d0760 000188 beNDMWPanelWaza_FindEmergencyHealDisk
+003d08f0 000198 beNDMWPanelWaza_FindEmergencyHealWaza
+003d0a90 000130 beNDMWPanelWaza_OpenPanel
 003d0bc0 000864 beNDMWPanelWaza_OnMessage
 003d1430 00000c beNDMWPanelWaza_GetMeta
 003d1440 00000c beNDMWPanelObjectStat_GetMeta
@@ -18956,7 +18956,7 @@
 003d1900 00002c beNDMWMdlEnemy_IsKind
 003d1930 000024 beNDMWMdlEnemy_RegisterReceiver
 003d1960 0002fc beNDMWMdlEnemy_OnGenerate
-003d1c60 000080 FUN_003d1c60
+003d1c60 000080 igSmartPointer_beNDMWMdlEnemyInfoWork_Destruct
 003d1ce0 00001c beNDMWMdlEnemy_OnSequenceChange
 003d1d00 00000c beNDMWMdlEnemy__GetMeta beNDMWMdlEnemy::GetMeta
 003d1d10 00002c beNDMWMdlObject_IsKind
@@ -18971,7 +18971,7 @@
 003d2290 00002c beNDMWMdlPlayer_IsKind
 003d22c0 000024 beNDMWMdlPlayer_RegisterReceiver
 003d22f0 000e74 beNDMWMdlPlayer_UpdateControl
-003d3170 000080 FUN_003d3170
+003d3170 000080 igSmartPointer_beModelCtrlHITBOX_Destruct
 003d31f0 000450 beNDMWMdlPlayer_OnWaitCheck
 003d3640 000ab0 beNDMWMdlPlayer_OnGenerate
 003d40f0 000148 beNDMWMdlPlayer_OnControlOff
@@ -18984,7 +18984,7 @@
 003d49c0 00002c beNDMWMdlPlayer2_IsKind
 003d49f0 000024 beNDMWMdlPlayer2_RegisterReceiver
 003d4a20 000400 beNDMWMdlPlayer2_OnGenerate
-003d4e20 000080 FUN_003d4e20
+003d4e20 000080 igSmartPointer_beNDMWMdlPlayer2InfoWork_Destruct
 003d4ea0 00021c beNDMWMdlPlayer2_UpdateControl
 003d50c0 000818 beNDMWMdlPlayer2_OnPreMessage
 003d58e0 00000c beNDMWMdlPlayer2_GetMeta
@@ -18994,10 +18994,10 @@
 003d59b0 000728 beNDMWStatus_UpdateRam
 003d60e0 00265c beNDMWStatus_OnMessage
 003d8740 001490 beNDMWStatus__PrepareWork beNDMWStatus::PrepareWork
-003d9bd0 000080 ObjectRef_Destruct_003d9bd0
-003d9c50 000080 ObjectRef_Destruct_003d9c50
-003d9cd0 000080 ObjectRef_Destruct_003d9cd0
-003d9d50 000080 ObjectRef_Destruct_003d9d50
+003d9bd0 000080 igSmartPointer_beNDMWItemAbilityChip_Destruct
+003d9c50 000080 igSmartPointer_beNDMWItemYellowArmor_Destruct
+003d9cd0 000080 igSmartPointer_beNDMWItemBlueArmor_Destruct
+003d9d50 000080 igSmartPointer_beNDMWItemWeapon_Destruct
 003d9dd0 00000c beNDMWStatus__GetMeta beNDMWStatus::GetMeta
 003d9de0 000030 beNDMWLoadIntf2DegiState__Init beNDMWLoadIntf2DegiState::Init
 003d9e10 000024 beNDMWLoadIntf2DegiState__RequestOpen beNDMWLoadIntf2DegiState::RequestOpen
@@ -19046,24 +19046,24 @@
 003e44f0 0001b4 beNDMWLoadIntf2ComMdlCtrl__Poll beNDMWLoadIntf2ComMdlCtrl::Poll
 003e46b0 00009c beNDMWLoadIntf2_Prepare
 003e4750 0048b8 beNDMWLoadIntf2_UpdateRam
-003e9010 000080 ObjectRef_Destruct_003e9010
-003e9090 000008 DataList_GetData_003e9090
+003e9010 000080 igSmartPointer_beNDMWDegiData_Destruct
+003e9090 000008 beNDMWLoadIntf2_igIntList_GetData
 003e90a0 000008 beNDMWLoadSavePlWork__SetIsCtrl beNDMWLoadSavePlWork::SetIsCtrl
 003e90b0 000008 beNDMWLoadSavePlWork__GetIsRdy beNDMWLoadSavePlWork::GetIsRdy
 003e90c0 000008 beNDMWLoadSavePlWork__GetIsEntry beNDMWLoadSavePlWork::GetIsEntry
-003e90d0 000020 ObjectRef_Retain_003e90d0
-003e90f0 000014 DataList_GetWordAt_003e90f0
-003e9110 000044 ObjectRef_Release_003e9110
-003e9160 0000bc ObjectList_SetAtRetained_003e9160
+003e90d0 000020 beNDMWLoadIntf2_igObject_Retain
+003e90f0 000014 beNDMWLoadIntf2_beNDMWDegiDataList_Get
+003e9110 000044 beNDMWLoadIntf2_igObject_Release
+003e9160 0000bc beNDMWLoadIntf2_igObjectList_Set
 003e9220 00001c Vec3f_Copy
-003e9240 000014 DataList_GetWordAt_003e9240
-003e9260 000014 ObjectList_GetAt_003e9260
-003e9280 00001c DataList_FindProperty_003e9280
+003e9240 000014 beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get
+003e9260 000014 beNDMWLoadIntf2_igObjectList_Get
+003e9280 00001c beNDMWLoadIntf2_beBaseInfoDataList_FindProperty
 003e92a0 000008 ObjectRef_Get_003e92a0
-003e92b0 00007c ObjectRef_Assign_003e92b0
-003e9330 000030 FUN_003e9330
-003e9360 000008 AllocatorValue_Make_003e9360
-003e9370 000038 Memory_SelectAllocator_003e9370
+003e92b0 00007c beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign
+003e9330 000030 beNDMWLoadIntf2_CreateDataListRef
+003e9360 000008 beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue
+003e9370 000038 beNDMWLoadIntf2_Memory_SelectAllocator
 003e93b0 000008 ObjectRef_Get_003e93b0
 003e93c0 00000c beNDMWLoadIntf2__GetInfoMeta beNDMWLoadIntf2::GetInfoMeta
 003e93d0 000058 beNDMWLoadIntf2_OnAddRam
@@ -19105,7 +19105,7 @@
 003ed050 000284 beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard beNDMWLoadCtrl2CommonIntf::StepCheckMemoryCard
 003ed2e0 000368 beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile beNDMWLoadCtrl2CommonIntf::StepCreateSaveFile
 003ed650 00054c beNDMWLoadCtrl2CommonIntf__StepReadMedia beNDMWLoadCtrl2CommonIntf::StepReadMedia
-003edba0 000080 FUN_003edba0
+003edba0 000080 igSmartPointer_beNDMWLoadSlotPlayer_Destruct
 003edc20 00033c beNDMWLoadCtrl2CommonIntf__StepWriteSaveData beNDMWLoadCtrl2CommonIntf::StepWriteSaveData
 003edf60 00022c beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard beNDMWLoadCtrl2CommonIntf::StepFormatMemoryCard
 003ee190 0000b8 beNDMWLoadCtrl2CommonIntf__GiveCtrlTo beNDMWLoadCtrl2CommonIntf::GiveCtrlTo
@@ -19120,9 +19120,9 @@
 003f0d60 0000d0 beNDMWLoadSlotPlayer__WriteToBuffer beNDMWLoadSlotPlayer::WriteToBuffer
 003f0e30 000094 beNDMWLoadSlotPlayer__ReadFromBuffer beNDMWLoadSlotPlayer::ReadFromBuffer
 003f0ed0 00021c beNDMWMcUtilCtrl__Init beNDMWMcUtilCtrl::Init
-003f10f0 000080 FUN_003f10f0
-003f1170 000080 FUN_003f1170
-003f11f0 000080 FUN_003f11f0
+003f10f0 000080 igSmartPointer_beNDMWMcSlotXbox_Destruct
+003f1170 000080 igSmartPointer_beNDMWMcSlotGC_Destruct
+003f11f0 000080 igSmartPointer_beNDMWMcSlotPS2_Destruct
 003f1270 000078 beNDMWMcUtilCtrl__Generate beNDMWMcUtilCtrl::Generate
 003f12f0 000090 beNDMWMcUtilCtrl__CheckReady beNDMWMcUtilCtrl::CheckReady
 003f1380 000044 beNDMWMcUtilCtrl__Remove beNDMWMcUtilCtrl::Remove
@@ -19134,15 +19134,15 @@
 003f2450 00000c beNDMWLoadCtrl2__GetInfoMeta beNDMWLoadCtrl2::GetInfoMeta
 003f2460 000024 beNDMWLoadCtrl2_OnAddRam
 003f2490 000728 beNDMWLoadCtrl2_OnMessage
-003f2bc0 000080 FUN_003f2bc0
-003f2c40 000080 FUN_003f2c40
-003f2cc0 000080 FUN_003f2cc0
+003f2bc0 000080 igSmartPointer_beNDMWLoadSavePlWork_Destruct
+003f2c40 000080 igSmartPointer_beNDMWLoadCtrl2CommonIntf_Destruct
+003f2cc0 000080 igSmartPointer_beNDMWLoadCtrl2CtrlData_Destruct
 003f2d40 00000c beNDMWLoadCtrl2__GetMeta beNDMWLoadCtrl2::GetMeta
 003f2d50 0000ac beNDMWTitle2Option_InitSettings
 003f2e00 0000e4 beNDMWTitle2_Prepare
 003f2ef0 002320 beNDMWTitle2_UpdateRam
-003f5210 000080 FUN_003f5210
-003f5290 000080 FUN_003f5290
+003f5210 000080 igSmartPointer_beNDMWTitle2Option_Destruct
+003f5290 000080 igSmartPointer_beNDMWTitle2CtrlData_Destruct
 003f5310 00000c beNDMWTitle2_GetInfoMeta
 003f5320 000024 beNDMWTitle2_OnAddRam
 003f5350 0000a8 beNDMWTitle2_OnMessage
@@ -19174,7 +19174,7 @@
 003f7980 0002d0 beNDMWGameRam_Stop
 003f7c50 0001e4 beNDMWGameRam_Prepare
 003f7e40 000184 beNDMWGameRam_AddInfo
-003f7fd0 000080 ObjectRef_Destruct_003f7fd0
+003f7fd0 000080 igSmartPointer_beNDMWGameRamInfoRam_Destruct
 003f8050 000080 igSmartPointer_beNDMWGameRamInfo_Destruct
 003f80d0 000008 beNDMWGameRam_UpdateRam
 003f80e0 0001bc beNDMWGameRam_FindSpecies
@@ -19197,36 +19197,36 @@
 003fa3b0 0004a0 beNDMWGameRam_CalcMaxPoints
 003fa850 000340 beNDMWGameRam_CalcAttribute
 003fab90 001ad8 beNDMWGameRam_RecomputeStats
-003fc670 000080 ObjectRef_Destruct_003fc670
+003fc670 000080 igSmartPointer_beNDMWItemWaza_Destruct
 003fc6f0 000084 beNDMWGameRam_FindTechniqueRow
 003fc780 00028c beNDMWGameRam_CollectNearbyNonzeroHp
 003fca10 00a388 beNDMWGameRam_OnMessage
-00406da0 000008 DataList_GetData_00406da0
-00406db0 000008 PropertyRecord_GetValue_00406db0
+00406da0 000008 beNDMWGameRam_igStringRefList_GetData
+00406db0 000008 beNDMWGameRam_beDataObjStringList_GetData
 00406dc0 000008 ObjectRef_Get_00406dc0
 00406dd0 000014 DataList_GetWordAt_00406dd0
 00406df0 000008 ObjectRef_Get_00406df0
 00406e00 000008 ObjectRef_Get_00406e00
-00406e10 000030 DataListRef_Construct_00406e10
-00406e40 000008 PropertyRecord_GetValue_00406e40
-00406e50 000008 ObjectRef_Get_00406e50
-00406e60 00007c ObjectRef_AssignObject_00406e60
-00406ee0 000008 ObjectRef_Get_00406ee0
-00406ef0 000008 ObjectRef_Get_00406ef0
-00406f00 000008 DataList_GetData_00406f00
-00406f10 000008 ObjectRef_Get_00406f10
-00406f20 00001c ObjectList_RemoveAt_00406f20
-00406f40 000008 AllocatorValue_Make_00406f40
-00406f50 000008 AllocatorValue_Make_00406f50
-00406f60 000008 AllocatorValue_Make_00406f60
-00406f70 000008 AllocatorValue_Make_00406f70
-00406f80 000008 ObjectRef_Get_00406f80
-00406f90 000008 DataObjInt_GetValue_00406f90
-00406fa0 00003c StringRef_Release_00406fa0
+00406e10 000030 beNDMWGameRam_CreateDataListRef
+00406e40 000008 beNDMWGameRam_beDataObjIntList_GetData
+00406e50 000008 beNDMWGameRam_igSmartPointer_igRandomNumber_Get
+00406e60 00007c beNDMWGameRam_igSmartPointer_beDataBase_Assign
+00406ee0 000008 beNDMWGameRam_igSmartPointer_beDataBase_Get
+00406ef0 000008 beNDMWGameRam_igSmartPointer_igIntList_Get
+00406f00 000008 beNDMWGameRam_igBoolList_GetData
+00406f10 000008 beNDMWGameRam_igSmartPointer_igBoolList_Get
+00406f20 00001c beNDMWGameRam_igObjectList_Remove
+00406f40 000008 beNDMWGameRam_beNDMWItemAbilityChip_MakeAllocatorValue
+00406f50 000008 beNDMWGameRam_beNDMWItemYellowArmor_MakeAllocatorValue
+00406f60 000008 beNDMWGameRam_beNDMWItemBlueArmor_MakeAllocatorValue
+00406f70 000008 beNDMWGameRam_beNDMWItemWeapon_MakeAllocatorValue
+00406f80 000008 beNDMWGameRam_igSmartPointer_igObjectList_Get
+00406f90 000008 beNDMWGameRam_beDataObjInt_GetData
+00406fa0 00003c beNDMWGameRam_igStringRef_Release
 00406fe0 00004c StringPool_GetInstance
-00407030 000008 ObjectRef_Get_00407030
-00407040 000008 ObjectRef_Get_00407040
-00407050 000008 ObjectRef_Get_00407050
+00407030 000008 beNDMWGameRam_igSmartPointer_beDataObjListList_Get
+00407040 000008 beNDMWGameRam_igSmartPointer_beDataObjList_Get
+00407050 000008 beNDMWGameRam_igStringRef_Get
 00407060 00000c beNDMWGameRam_GetMeta
 00407070 000008 beNDMWGameRam_GetInfoMeta
 00407080 00009c beNDMWSaveCtrl_Prepare
@@ -19234,15 +19234,15 @@
 00407a60 00000c beNDMWSaveCtrl_GetInfoMeta
 00407a70 000024 beNDMWSaveCtrl_OnAddRam
 00407aa0 0005cc beNDMWSaveCtrl_OnMessage
-00408070 000080 FUN_00408070
+00408070 000080 igSmartPointer_beNDMWSaveCtrlCtrlData_Destruct
 004080f0 00000c beNDMWSaveCtrl_GetMeta
 00408100 00009c beNDMWSaveIntf_Prepare
 004081a0 003fe0 beNDMWSaveIntf_UpdateRam
-0040c180 000030 NewDataListRef_Construct_0040c180
+0040c180 000030 beNDMWSaveIntf_CreateDataListRef
 0040c1b0 00000c beNDMWSaveIntf_GetInfoMeta
 0040c1c0 000058 beNDMWSaveIntf_OnAddRam
 0040c220 001828 beNDMWSaveIntf_OnMessage
-0040da50 000080 CtrlDataRef_Destruct_0040da50
+0040da50 000080 igSmartPointer_beNDMWSaveIntfCtrlData_Destruct
 0040dad0 00000c beNDMWSaveIntf_GetMeta
 0040dae0 000104 beNDMWListCtrl_PresentPageArrows
 0040dbf0 000140 beNDMWListCtrl_PrevPage
@@ -19506,8 +19506,8 @@
 00441410 000038 beNDMWMdlItem_Start
 00441450 000160 beNDMWMdlItem_Prepare
 004415b0 00095c beNDMWMdlItem_OnGenerate
-00441f10 000080 FUN_00441f10
-00441f90 000080 FUN_00441f90
+00441f10 000080 igSmartPointer_beNDMWItemImportant_Destruct
+00441f90 000080 igSmartPointer_beNDMWItemInstant_Destruct
 00442010 000080 igSmartPointer_beNDMWMdlItemInfoWork_Destruct
 00442090 00093c beNDMWMdlItem_UpdateControl
 004429d0 000200 beNDMWMdlItem_OnErase
@@ -19971,7 +19971,7 @@
 00454290 00000c igEventDispatcher_AddReceiver
 004542a0 000028 igEventDispatcher_RemoveReceiver
 004542d0 000008 igEventDispatcher_AddReceiverOrder
-004542e0 00002c FUN_004542e0
+004542e0 00002c igEventDispatcher_RemoveReceiverOrder
 00454310 0001c0 Gap__Gui__igEventDispatcher__vfunc_26 Gap::Gui::igEventDispatcher::vfunc_26
 004544d0 000098 Gap__Gui__igEventDispatcher__vfunc_27 Gap::Gui::igEventDispatcher::vfunc_27
 00454570 000098 Gap__Gui__igEventDispatcher__vfunc_28 Gap::Gui::igEventDispatcher::vfunc_28
@@ -20055,7 +20055,7 @@
 004573c0 00000c igHotKeyEventReceiver_AddKey
 004573d0 000014 igHotKeyEventReceiver_AddButton
 004573f0 0000f4 igHotKeyEventReceiver_AddBinding
-004574f0 0000dc FUN_004574f0
+004574f0 0000dc igHotKeyEventReceiver_RemoveBinding
 004575d0 000078 igHotKeyEventReceiver_OnKeyEvent
 00457650 000078 Gap__Gui__igHotKeyEventReceiver__vfunc_27 Gap::Gui::igHotKeyEventReceiver::vfunc_27
 004576d0 000114 FUN_004576d0
@@ -20218,10 +20218,10 @@
 0045a590 00006c igViewerModeChangeMessage_Register
 0045a600 000008 thunk_igViewerModeChangeMessage_GetMetaObject
 0045a610 000070 igViewerModeChangeMessage_InitFields
-0045a680 000034 FUN_0045a680
+0045a680 000034 igViewerLoadingFileMessage_Create
 0045a6c0 00004c igViewerLoadingFileMessage_GetMetaObject
 0045a710 000084 igViewerLoadingFileMessage_GetVTable
-0045a7a0 00000c FUN_0045a7a0
+0045a7a0 00000c igViewerLoadingFileMessage_EnsureRegistered
 0045a7b0 00006c igViewerLoadingFileMessage_Register
 0045a820 000008 thunk_igViewerLoadingFileMessage_GetMetaObject
 0045a830 00008c igViewerLoadingFileMessage_InitFields

@@ -16,10 +16,10 @@ void *beDemoManagerWorkList_GetMetaObject(void) {
 }
 
 int beDemoManagerWorkList_GetVTable(void) {
-    struct Obj_3636d0 obj;
+    beDemoManagerWorkList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beDemoManagerWorkList_vtable[0];
+    obj._vtable = (int)&g_beDemoManagerWorkList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

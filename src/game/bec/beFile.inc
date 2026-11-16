@@ -9,10 +9,10 @@ void *beFile_GetMetaObject(void) {
 }
 
 int beFile_GetVTable(void) {
-    struct Obj_362ea0 obj;
+    beFile obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beFile_vtable[0];
+    obj._vtable = (int)&g_beFile_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

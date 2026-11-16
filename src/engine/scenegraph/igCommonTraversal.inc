@@ -71,7 +71,7 @@ int igCommonTraversal_GetVTable(void) {
     FUN_001a0190((void * *)q7, -1);
     FUN_001a0110((struct Ref * *)q8, -1);
     FUN_001380e0((char*)&o + 64, -1);
-    FUN_00130140((char*)&o + 60, -1);
+    igSmartPointer_igVisualContext_Destruct((char*)&o + 60, -1);
     FUN_001a0090((void * *)((char*)&o + 56), -1);
     FUN_001a0010((void * *)((char*)&o + 52), -1);
     FUN_0019ff90((struct T_19fde0 * *)((char*)&o + 36), -1);

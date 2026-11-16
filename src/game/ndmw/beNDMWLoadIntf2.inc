@@ -25,19 +25,19 @@ void *beNDMWLoadIntf2_ResolveMetaObject(void) {
 }
 
 int beNDMWLoadIntf2_GetVTable(void) {
-    struct Obj_3c47e0 obj;
-    int r;
+    beNDMWLoadIntf2 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beNDMWLoadIntf2_vtable[0];
-    obj.w[8] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWLoadIntf2_vtable[0];
-    FUN_0033dda0(&obj.w[8], -1);
-    FUN_0033f5e0(&obj, 0);
-    return r;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2_vtable[0];
+    obj._padManager = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2_vtable[0];
+    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWLoadIntf2_EnsureRegistered(void)

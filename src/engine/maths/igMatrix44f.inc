@@ -128,7 +128,7 @@ void FUN_00190e50(void *arg0, float *arg1, float fparg0) {
 }
 
 void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
-    FUN_001910c0((float *)arg0, x, y, z);
+    igMatrix44f_SetEulerRotation((float *)arg0, x, y, z);
     *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
     *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
@@ -195,7 +195,7 @@ void FUN_00190f50(float *arg0, float *arg1, float fparg0) {
     arg0[10] = c + f2c * arg1[2];
 }
 
-void FUN_001910c0(float *m, float x, float y, float z) {
+void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z) {
     float sx;
     float sxy;
     float sy;
@@ -242,17 +242,17 @@ void FUN_001910c0(float *m, float x, float y, float z) {
     m[10] = cx * cy;
 }
 
-void FUN_00191670(int arg0, float *arg1, float fparg0) {
+void igMatrix44f_PreRotateAxisAngle(int arg0, float *arg1, float fparg0) {
     int buf[16];
 
     FUN_00190e50(buf, arg1, fparg0);
-    FUN_001906d0(arg0, buf);
+    igMatrix44f_PreMultiply(arg0, buf);
 }
 
 void FUN_001916b0(int arg0, float *arg1, float fparg0) {
     int sp20[14];
     FUN_00190e50(sp20, arg1, fparg0);
-    FUN_001904f0(arg0, arg0, sp20);
+    igMatrix44f_Multiply(arg0, arg0, sp20);
 }
 
 void FUN_001916f0(void *arg0, float *arg1) {
@@ -675,7 +675,7 @@ void FUN_00192dd0(float *arg0, float *arg1, float *arg2) {
     arg0[2] = a0 * b1 - a1 * b0;
 }
 
-void FUN_00192e10(float *arg0, float *arg1) {
+void Vec3f_CrossInPlace(float *arg0, float *arg1) {
     float b0; float a0; float b1; float a2; float b2; float a1;
     b2 = arg1[2]; a1 = arg0[1]; a0 = arg0[0]; b1 = arg1[1]; a2 = arg0[2]; b0 = arg1[0];
     arg0[0] = a1 * b2 - a2 * b1;

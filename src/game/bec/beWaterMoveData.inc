@@ -12,29 +12,18 @@ void *beWaterMoveData_GetMetaObject(void) {
 }
 
 int beWaterMoveData_GetVTable(void) {
-    union U_340900 u;
-    int temp_s0;
-    char *ps;
-    int *p;
-    int v;
+    beWaterMoveData obj;
+    int vtable;
+    igObject **posListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beWaterMoveData_vtable[0];
-    ps = &u.b[20];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beWaterMoveData_vtable[0];
-    if (ps != 0) {
-        p = *(int **)ps;
-        if (p != 0) {
-            v = p[1] - 1;
-            p[1] = v;
-            if ((p[1] & 0x7fffff) == 0) {
-                igObject_Destroy(p);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beWaterMoveData_vtable[0];
+    posListSlot = (igObject **)&obj._posList;
+    *posListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beWaterMoveData_vtable[0];
+    igObjectRef_Release(posListSlot);
+    return vtable;
 }
 
 void beWaterMoveData_EnsureRegistered(void)

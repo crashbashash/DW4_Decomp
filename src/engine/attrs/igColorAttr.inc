@@ -57,7 +57,7 @@ void thunk_igColorAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igColorAttr_ctorTable[] = {
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
     igUnsignedIntMetaField_Create,
 };
 static const char *g_igColorAttr_fieldTable[] = {
@@ -90,7 +90,7 @@ void igColorAttr_InitFields(void) {
     sp40[1] = 0x3F800000;
     sp40[2] = 0x3F800000;
     sp40[3] = 0x3F800000;
-    FUN_0018e670(temp_a0, sp40);
+    igVec4fMetaField_SetDefault(temp_a0, sp40);
     *(int *)((char *)(temp_s1) + 48) = (int)(&FUN_0013c870);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);

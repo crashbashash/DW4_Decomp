@@ -11,43 +11,23 @@ void *beModelCtrlInfoDataAIM_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoDataAIM_GetVTable(void) {
-    union U_353ee0 u;
-    int t;
-    char *o;
-    int *a1;
-    int v0;
-    igObject *p0, *p1;
+    beModelCtrlInfoDataAIM obj;
+    int vtable;
+    igObject **aIMapListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    p0 = (igObject *)&u.b[8];
-    *(int *)p0 = 0;
-    u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
-    p1 = (igObject *)&u.b[16];
-    *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
-    if (p1 != 0) {
-        p1 = *(igObject **)p1;
-        if (p1 != 0) {
-            p1->_refCount = (int)p1->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)p1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p1);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (p0 != 0) {
-        o = *(char **)p0;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
+    aIMapListSlot = (igObject **)&obj._aIMapList;
+    *aIMapListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoDataAIM_vtable[0];
+    igObjectRef_Release(aIMapListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoDataAIM_EnsureRegistered(void)
@@ -105,7 +85,7 @@ void beModelCtrlInfoDataAIM_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataAIM_ctorTable, 1);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "AIM");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIM_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

@@ -58,7 +58,7 @@ void FUN_0045c330(void)
     igMetaObject_RunStaticInit(igPickMode_Register);
 }
 
-static igMetaObjectCallback g_igPickMode_callbackList[] = { igViewerParameters_EnsureRegistered, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, FUN_00188340, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPickMode_callbackList[] = { igViewerParameters_EnsureRegistered, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, igRay_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 void igPickMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -92,8 +92,8 @@ static FieldFactory g_igPickMode_ctorTable[] = {
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00188660,
-    FUN_00187b50,
+    igMatrix44fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
 };
 static const char *g_igPickMode_fieldTable[] = {
     "_parameters",
@@ -174,7 +174,7 @@ void igPickMode_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     sp48[0] = 0;
     sp48[1] = 0;
-    FUN_0018e2f0(temp_a0, sp48);
+    igVec2fMetaField_SetDefault(temp_a0, sp48);
     igMetaObject_NameFields(temp_s1, g_igPickMode_fieldTable, g_igPickMode_fieldHandles, g_igPickMode_fieldOffsets, temp_s0);
 }
 

@@ -23,22 +23,22 @@ void *beShadow01_GetMetaObject(void) {
 }
 
 int beShadow01_GetVTable(void) {
-    struct W o;
-    int r;
+    beShadow01 obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[5] = 0;
-    o.vt = g_beShadow01_vtable;
-    o.f[7] = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beShadow01_vtable;
-    FUN_00344f90((igSmartPointer<igObject> *)(&o.f[7]), (short)(-1));
-    FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beShadow01_vtable[0];
+    obj._svInfoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beShadow01_vtable[0];
+    igSmartPointer_beShadow01InfoList_Destruct((igSmartPointer<igObject> *)(&obj._svInfoList), (short)(-1));
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00344f90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beShadow01InfoList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -82,7 +82,7 @@ void beShadow01_GetMetaObjectFunction(void)
 
 static FieldFactory g_beShadow01_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beShadow01_fieldTable[] = {
     "_svInfoList",

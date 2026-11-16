@@ -19,24 +19,24 @@ void *beNDMWShopCtrlDiskSell_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlDiskSell_GetVTable(void) {
-    union U_3b6ef0 u;
-    int temp_s0;
+    beNDMWShopCtrlDiskSell obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[13] = 0;
-    u.w[14] = 0;
-    u.w[15] = 0;
-    u.w[16] = 0;
-    u.w[17] = 0;
-    u.w[18] = 0;
-    u.w[19] = 0;
-    u.w[0] = (int)(&g_beNDMWShopCtrlDiskSell_vtable[0]);
-    u.w[21] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beNDMWShopCtrlDiskSell_vtable[0]);
-    igSmartPointer_igIntList_Destruct(&u.w[21], -1);
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)(&u.w[0]), (long long)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDiskSell_vtable[0];
+    obj._diskIdList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDiskSell_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._diskIdList, -1);
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 void beNDMWShopCtrlDiskSell_EnsureRegistered(void)

@@ -9,32 +9,19 @@ void *beModelCtrlLABEL_GetMetaObject(void) {
 }
 
 int beModelCtrlLABEL_GetVTable(void) {
-    union U_356310 u;
-    int temp_s0;
-    char *ps;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beModelCtrlLABEL obj;
+    int vtable;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&g_beModelCtrlLABEL_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        temp_v1 = *(int **)ps;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlLABEL_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlLABEL_EnsureRegistered(void)

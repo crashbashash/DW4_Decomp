@@ -22,10 +22,10 @@ void *beNDMWItemDisk_GetReadyMetaObject(void) {
 }
 
 int beNDMWItemDisk_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemDisk obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemDisk_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemDisk_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

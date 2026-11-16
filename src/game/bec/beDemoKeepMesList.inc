@@ -17,10 +17,10 @@ igMetaObject *beDemoKeepMesList_GetMetaObject(void)
 }
 
 int beDemoKeepMesList_GetVTable(void) {
-    struct Obj_363b30 obj;
+    beDemoKeepMesList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beDemoKeepMesList_vtable[0];
+    obj._vtable = (int)&g_beDemoKeepMesList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

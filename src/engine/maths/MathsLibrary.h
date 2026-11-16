@@ -46,7 +46,7 @@ igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values,
 igMetaField *igEnumMetaField_Create(void *);
 igMetaField *igFloatMetaField_Create(void *);
 igMetaField *igIntMetaField_Create(void *);
-igMetaField *FUN_00187890(void *);
+igMetaField *igVec3fMetaField_CreateInstance(void *);
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -228,7 +228,7 @@ void thunk_FUN_0018d480(void);
 
 
 void igSphere_InitFields(void);
-void FUN_0018e470(igVec3fMetaFieldView *self, const float *value);
+void igVec3fMetaField_SetDefault(igVec3fMetaFieldView *self, const float *value);
 
 int igFloatMetaField_SetDefault(int, float);
 
@@ -244,7 +244,7 @@ void igRayList_Register(void);
 void thunk_igRayList_GetMetaObject(void);
 
 
-void FUN_00188340(void);
+void igRay_EnsureRegistered(void);
 
 
 igMetaObject *igRay_GetMetaObject(void);
@@ -495,7 +495,7 @@ void igAABox_InitFields(void);
 
 void FUN_0018a8f0(void);
 int FUN_0018afa0(igAABox *box, igSphere *sphere);
-int FUN_0018b050(struct B *arg0, struct B *arg1);
+int igAABox_IntersectBox(struct B *arg0, struct B *arg1);
 int FUN_0018b110(void *arg0, void *arg1);
 int FUN_0018b170(...);
 int FUN_0018b300(igAABox *box, void *other);
@@ -508,7 +508,7 @@ void igAABox_ExtendByRay(igAABox *box, igRay *ray);
 
 void FUN_0018b890(struct Box *arg0, float *arg1);
 int thunk_igAABox_Transform();
-void FUN_0018b990(float *arg0, float *arg1);
+void igAABox_GetCenter(float *arg0, float *arg1);
 void FUN_0018b730(igAABox *box, igAABox *other);
 void FUN_0018b7d0(igAABox *box, igSphere *sphere);
 void FUN_0018b940(igAABox *box);
@@ -904,14 +904,14 @@ extern const igVec4f g_vec4YAxis;
 extern const igVec4f g_vec4ZAxis;
 extern const igVec4f g_vec4WAxis;
 
-void FUN_001910c0(float *m, float x, float y, float z);
+void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z);
 
 typedef union U5 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U5;
 float cosf(float);
 float sinf(float);
 
-int FUN_001906d0(...);
-int FUN_001904f0(...);
+int igMatrix44f_PreMultiply(...);
+int igMatrix44f_Multiply(...);
 void igMatrix44f_SetQuaternion(float *m, float *q);
 
 float atanf(float);

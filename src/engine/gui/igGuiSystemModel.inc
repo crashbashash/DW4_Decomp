@@ -42,10 +42,10 @@ int igGuiSystemModel_GetVTable(void) {
     ((struct igGuiSystemModel *)p)->_pushedComponent = 0;
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
     *(int **)&s._vtable = &g_igGuiSystemModel_vtable[0];
-    FUN_003cafa0(&s._pushedComponent, -1);
-    FUN_003cafa0(&s._componentUnderMouse, -1);
-    FUN_003cafa0(&s._focusedComponent, -1);
-    FUN_003cafa0(&s._rootComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct(&s._pushedComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct(&s._componentUnderMouse, -1);
+    igSmartPointer_igGuiComponent_Destruct(&s._focusedComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct(&s._rootComponent, -1);
     FUN_0044c110((S *)&s, 0);
     return r;
 }
@@ -79,11 +79,11 @@ void thunk_igGuiSystemModel_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGuiSystemModel_ctorTable[] = {
-    FUN_00187b50,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
     igBoolMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -149,11 +149,11 @@ void igGuiSystemModel_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
     sp48[0] = 0;
     sp48[1] = 0;
-    FUN_0018e2f0(temp_a0, sp48);
+    igVec2fMetaField_SetDefault(temp_a0, sp48);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     sp40[0] = 0;
     sp40[1] = 0;
-    FUN_0018e2f0(temp_a0_2, sp40);
+    igVec2fMetaField_SetDefault(temp_a0_2, sp40);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
     *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();

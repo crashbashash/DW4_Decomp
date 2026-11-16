@@ -59,7 +59,7 @@ int igAttrStackManager_GetVTable(void) {
     igSmartPointer_igIntList_Destruct(&obj.w8, -1);
     igSmartPointer_igIntList_Destruct(&obj.w7, -1);
     igSmartPointer_igIntList_Destruct(&obj.w6, -1);
-    FUN_0013bfe0(&obj.w5, -1);
+    igSmartPointer_igAttrList_Destruct(&obj.w5, -1);
     FUN_001a5540((void * *)&obj.w4, -1);
     return t;
 }

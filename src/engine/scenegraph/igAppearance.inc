@@ -33,12 +33,12 @@ int igAppearance_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igAppearance_vtable[0];
-    FUN_001958f0((void * *)&obj.w7, -1);
+    igSmartPointer_igNodeList_Destruct((void * *)&obj.w7, -1);
     igSmartPointer_igStringObjList_Destruct((void * *)&obj.w6, -1);
     FUN_001a63d0((void * *)&obj.w5, -1);
     FUN_001a6350((struct Ref * *)&obj.w4, -1);
     FUN_001a62d0((void * *)&obj.w3, -1);
-    FUN_00131bc0(&obj, 0);
+    igNamedObject_Destroy(&obj, 0);
     return t;
 }
 
@@ -96,7 +96,7 @@ void igAppearance_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAppearance_Register);
 }
 
-static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, FUN_0019d360, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, igModelViewMatrixBoneSelectList_561880_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
 
 void igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();

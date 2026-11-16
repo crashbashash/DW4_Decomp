@@ -10,50 +10,24 @@ void *beActionStarterData2_GetMetaObject(void) {
 }
 
 int beActionStarterData2_GetVTable(void) {
-    union U_36ba60 u;
-    int temp_s1;
-    void **q2;
-    void **q3;
-    int *temp_a1;
-    int *temp_a1_2;
-    int temp_v0;
-    int temp_v0_2;
-    void *temp_v1;
-    void *temp_v1_2;
+    beActionStarterData2 obj;
+    int vtable;
+    char **messageSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q2 = &u.p[2];
-    *q2 = 0;
-    u.w[0] = (int)(&g_beActionStarterData_vtable[0]);
-    q3 = &u.p[3];
-    *q3 = 0;
-    u.w[0] = (int)(&g_beActionStarterData2_vtable[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beActionStarterData_vtable[0]);
-    if (q3 != 0) {
-        temp_v1 = *q3;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q2 != 0) {
-        temp_v1_2 = *q2;
-        if (temp_v1_2 != 0) {
-            temp_a1_2 = (int *)((char *)temp_v1_2 - 8);
-            temp_v0_2 = *(int *)((char *)(temp_v1_2) - 4) - 1;
-            *(int *)((char *)(temp_v1_2) - 4) = temp_v0_2;
-            if (temp_v0_2 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beActionStarterData_vtable[0];
+    messageSlot = (char **)&obj._message;
+    *messageSlot = 0;
+    obj._vtable = (int)&g_beActionStarterData2_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beActionStarterData_vtable[0];
+    igStringRef_Release(messageSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beActionStarterData2_EnsureRegistered(void)
@@ -88,7 +62,7 @@ igMetaObject *beActionStarterData_GetPublishedMetaObject(void) {
 }
 
 static FieldFactory g_beActionStarterData2_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_beActionStarterData2_fieldTable[] = {
     "_rotation",

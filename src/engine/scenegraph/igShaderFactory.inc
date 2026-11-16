@@ -131,7 +131,7 @@ void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
     return arg0;
 }
 
-void **FUN_00199450(void **arg0, short arg1) {
+void **igSmartPointer_igNamedObjectList_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

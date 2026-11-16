@@ -15,22 +15,22 @@ void *beNDMWShopCtrl30_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrl30_GetVTable(void) {
-    struct F_3b86c0 f;
-    int temp_s0;
+    beNDMWShopCtrl30 obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[12] = 0;
-    f.w[13] = 0;
-    f.w[14] = 0;
-    f.w[15] = 0;
-    f.w[16] = 0;
-    f.w[17] = 0;
-    f.w[18] = 0;
-    f.vt = &g_beNDMWShopCtrl30_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beNDMWShopCtrl30_vtable[0];
-    FUN_003b6430(&f, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrl30_vtable[0];
+    FUN_003b6430(&obj, 0);
+    return vtable;
 }
 
 void beNDMWShopCtrl30_EnsureRegistered(void)

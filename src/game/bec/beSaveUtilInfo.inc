@@ -19,7 +19,7 @@ int beSaveUtilInfo_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beSaveUtilInfo_vtable[0];
     
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
+    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
@@ -50,24 +50,24 @@ void beSaveUtilInfo_GetMetaObjectFunction(void)
     beSaveUtilInfo_GetMetaObject();
 }
 
-igMetaEnum *g_beSaveUtilInfo_messageMetaEnum;
-static const char *g_beSaveUtilInfo_messageNames[] = {
+igMetaEnum *g_beSaveUtil_messageMetaEnum;
+static const char *g_beSaveUtil_messageNames[] = {
     "GENERATE", "REMOVE", "REQUEST_FILEMAKE", "REQUEST_FILEFIND",
     "REQUEST_FORMAT", "REQUEST_USE_CHECK", "REQUEST_READ_MEDIA", "REQUEST_WRITE_MEDIA",
     "REQUEST_GETFREESIZE", "GETDELIVER", "REPORT", "ISBUSY",
     "GETRESULT", "ISRDY", "CHECKMEM", "GETOPERATE",
     "ISUSESAVEPOINT", "XBOX_HD_CAPACHK",
 };
-static int g_beSaveUtilInfo_messageValues[] = {
+static int g_beSaveUtil_messageValues[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf,
     0x10, 0x11,
 };
 
-igMetaEnum *FUN_00346c20(void) {
-    if (g_beSaveUtilInfo_messageMetaEnum == 0) {
-        g_beSaveUtilInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beSaveUtilInfo_messageNames, g_beSaveUtilInfo_messageValues, 0x12);
+igMetaEnum *beSaveUtil_GetMessageEnum(void) {
+    if (g_beSaveUtil_messageMetaEnum == 0) {
+        g_beSaveUtil_messageMetaEnum = igMetaEnum_Create("Message", g_beSaveUtil_messageNames, g_beSaveUtil_messageValues, 0x12);
     }
-    return g_beSaveUtilInfo_messageMetaEnum;
+    return g_beSaveUtil_messageMetaEnum;
 }
 

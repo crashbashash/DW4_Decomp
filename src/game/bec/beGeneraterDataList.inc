@@ -13,10 +13,10 @@ igMetaObject *beGeneraterDataList_GetMetaObject(void) {
 }
 
 int beGeneraterDataList_GetVTable(void) {
-    struct Obj_35fa70 obj;
+    beGeneraterDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beGeneraterDataList_vtable[0];
+    obj._vtable = (int)&g_beGeneraterDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

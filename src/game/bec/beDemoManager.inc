@@ -37,13 +37,13 @@ int beDemoManager_GetVTable(void) {
     o.f28 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beDemoManager_vtable[0];
-    FUN_00363400((igSmartPointer<igObject> *)&o.f28, (short)(-1));
-    FUN_00363380((igSmartPointer<igObject> *)&o.f24, -1);
-    FUN_00231030(&o, 0);
+    igSmartPointer_beDemoManagerWorkList_Destruct((igSmartPointer<igObject> *)&o.f28, (short)(-1));
+    igSmartPointer_beDemoManagerWork_Destruct((igSmartPointer<igObject> *)&o.f24, -1);
+    igInfoManager_Destroy(&o, 0);
     return r;
 }
 
-igSmartPointer<igObject> *FUN_00363380(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDemoManagerWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -56,7 +56,7 @@ igSmartPointer<igObject> *FUN_00363380(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00363400(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDemoManagerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

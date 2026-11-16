@@ -30,31 +30,21 @@ done:
 }
 
 int beNDMWLoadIntf2ChrDataSel_GetVTable(void) {
-    union U_3c2b90 u;
-    int temp_s0;
-    char *q1;
-    int *tv1, *ta1;
-    int tc1;
+    beNDMWLoadIntf2ChrDataSel obj;
+    int vtable;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    u.w[0] = (int)(&g_beNDMWLoadIntf2ChrDataSel_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q1 != 0) {
-        tv1 = *(int **)q1;
-        if (tv1 != 0) {
-            ta1 = tv1 - 2;
-            tc1 = tv1[-1] - 1;
-            tv1[-1] = tc1;
-            if (tc1 == 0) {
-                StringChunk_ReleaseHeader(*ta1, ta1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2ChrDataSel_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWLoadIntf2ChrDataSel_EnsureRegistered(void)
@@ -177,7 +167,7 @@ void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2ChrDataSel_ctorTable, 0x10);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "CHRDATASEL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

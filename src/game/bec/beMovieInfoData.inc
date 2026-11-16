@@ -12,22 +12,22 @@ void *beMovieInfoData_GetMetaObject(void) {
 }
 
 int beMovieInfoData_GetVTable(void) {
-    struct Obj_34ecd0 obj;
-    int t;
+    beMovieInfoData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beMovieInfoData_vtable[0];
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMovieInfoData_vtable[0];
-    FUN_001d3650(&obj.w6, -1);
-    FUN_00130720(&obj.w5, -1);
-    FUN_00130720(&obj.w4, -1);
-    FUN_00344030((struct W_344030 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beMovieInfoData_vtable[0];
+    obj._parentLayer = 0;
+    obj._callLuaName = 0;
+    obj._sceneInfo = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMovieInfoData_vtable[0];
+    igSmartPointer_igSceneInfo_Destruct(&obj._sceneInfo, -1);
+    FUN_00130720(&obj._callLuaName, -1);
+    FUN_00130720(&obj._parentLayer, -1);
+    beBaseInfoData_Destroy((struct W_344030 *)&obj, (short)0);
+    return vtable;
 }
 
 void beMovieInfoData_EnsureRegistered(void)
@@ -101,7 +101,7 @@ static int g_beMovieInfoData_messageValues[] = {
     0, 1, 2, 3,
 };
 
-igMetaEnum *FUN_0034eed0(void) {
+igMetaEnum *beMovie_GetMessageEnum(void) {
     if (g_beMovieInfoData_messageMetaEnum == 0) {
         g_beMovieInfoData_messageMetaEnum = igMetaEnum_Create("Message", g_beMovieInfoData_messageNames, g_beMovieInfoData_messageValues, 4);
     }

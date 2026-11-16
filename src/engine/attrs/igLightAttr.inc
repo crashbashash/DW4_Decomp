@@ -85,17 +85,17 @@ void thunk_igLightAttr_GetMetaObject(void) {
 static FieldFactory g_igLightAttr_ctorTable[] = {
     igEnumMetaField_Create,
     igIntMetaField_Create,
-    FUN_00187890,
-    FUN_001872a0,
-    FUN_001872a0,
-    FUN_001872a0,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec4fMetaField_CreateInstance,
+    igVec4fMetaField_CreateInstance,
+    igVec4fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
@@ -186,23 +186,23 @@ void igLightAttr_InitFields(void) {
     temp_s2->f44 = 3;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);
     vh[0] = 0; vh[1] = 0; vh[2] = 0;
-    FUN_0018e470(temp_s2, vh);
+    igVec3fMetaField_SetDefault(temp_s2, vh);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3);
     vc[3] = 1.0f; vc[0] = 0.6f; vc[1] = 0.6f; vc[2] = 0.6f;
-    FUN_0018e670(temp_s2, vc);
+    igVec4fMetaField_SetDefault(temp_s2, vc);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
     vb[0] = 1.0f; vb[1] = 1.0f; vb[2] = 1.0f; vb[3] = 1.0f;
-    FUN_0018e670(temp_s2, vb);
+    igVec4fMetaField_SetDefault(temp_s2, vb);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5);
     va[3] = 1.0f; va[0] = 0; va[1] = 0; va[2] = 0;
-    FUN_0018e670(temp_s2, va);
+    igVec4fMetaField_SetDefault(temp_s2, va);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6);
     vg[2] = 1.0f; vg[0] = 0; vg[1] = 0;
-    FUN_0018e470(temp_s2, vg);
+    igVec3fMetaField_SetDefault(temp_s2, vg);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     tv = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7);
     tv->f48 = (void (*)())FUN_0013ef20;
@@ -211,16 +211,16 @@ void igLightAttr_InitFields(void) {
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 9);
     vf[0] = 1.0f; vf[1] = 0; vf[2] = 0;
-    FUN_0018e470(temp_s2, vf);
+    igVec3fMetaField_SetDefault(temp_s2, vf);
     temp_s2->f48 = (void (*)())FUN_0013ef20;
     tv = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA);
     tv->f48 = (void (*)())FUN_0013ef20;
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB);
     ve[0] = 0; ve[1] = 0; ve[2] = 0;
-    FUN_0018e470(temp_s2, ve);
+    igVec3fMetaField_SetDefault(temp_s2, ve);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC);
     vd[0] = 0; vd[2] = -1.0f; vd[1] = 0;
-    FUN_0018e470(temp_s2, vd);
+    igVec3fMetaField_SetDefault(temp_s2, vd);
     temp_s2 = (LightMetaFieldView *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD);
     temp_s2->f56 = igVisualContext_GetOrCreateMetaObject();
     temp_s2->f38 = 0;

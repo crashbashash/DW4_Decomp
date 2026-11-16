@@ -20,33 +20,33 @@ igMetaObject *beLOA_GetMetaObject(void)
 }
 
 int beLOA_GetVTable(void) {
-    struct W_35cd90 o;
-    int *p18;
-    int *p17;
-    int *p16;
-    int r;
+    beLOA obj;
+    int *blendFunctionAttrSlot;
+    int *blendStateAttrSlot;
+    int *overrideAttrListSlot;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[2] = 0;
-    o.f[3] = 0;
-    o.f[6] = 0;
-    o.vt = &g_beLOA_vtable[0];
-    p16 = &o.f[18];
-    *p16 = 0;
-    p17 = &o.f[19];
-    *p17 = 0;
-    p18 = &o.f[20];
-    *p18 = 0;
-    o.f[21] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beLOA_vtable[0];
-    FUN_0019ab10(&o.f[21], -1);
-    FUN_001ab380(p18, -1);
-    FUN_001aaf00(p17, -1);
-    FUN_0013bfe0(p16, -1);
-    FUN_00195a90(&o, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beLOA_vtable[0];
+    overrideAttrListSlot = &obj._overrideAttrList;
+    *overrideAttrListSlot = 0;
+    blendStateAttrSlot = &obj._blendStateAttr;
+    *blendStateAttrSlot = 0;
+    blendFunctionAttrSlot = &obj._blendFunctionAttr;
+    *blendFunctionAttrSlot = 0;
+    obj._colorAttr = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLOA_vtable[0];
+    igSmartPointer_igColorAttr_Destruct(&obj._colorAttr, -1);
+    igSmartPointer_igBlendFunctionAttr_Destruct(blendFunctionAttrSlot, -1);
+    igSmartPointer_igBlendStateAttr_Destruct(blendStateAttrSlot, -1);
+    igSmartPointer_igAttrList_Destruct(overrideAttrListSlot, -1);
+    igGroup_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beLOA_EnsureRegistered(void)
@@ -68,7 +68,7 @@ void *beLOA_Register(void) {
         0x60, /* instance size */
         beLOA_GetVTable,
         beLOA_InitFields,
-        FUN_0035d050, /* extra callback item */
+        beLOA_StaticInitCallback, /* extra callback item */
         g_beLOA_callbackList /* callback list */
     );
 }
@@ -84,7 +84,7 @@ static FieldFactory g_beLOA_ctorTable[] = {
     igFloatMetaField_Create,
     igLongMetaField_Create,
     igIntMetaField_Create,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -145,7 +145,7 @@ void beLOA_InitFields(void) {
     colorDefault[1] = 0x3F800000;
     colorDefault[2] = 0x3F800000;
     colorDefault[3] = 0x3F800000;
-    FUN_0018e670(color, colorDefault);
+    igVec4fMetaField_SetDefault(color, colorDefault);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)overrideAttrList)->_metaObject = igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;
@@ -161,8 +161,8 @@ void beLOA_InitFields(void) {
     igMetaObject_NameFields(meta, g_beLOA_fieldTable, g_beLOA_fieldHandles, g_beLOA_fieldOffsets, base);
 }
 
-void FUN_0035d050(void)
+void beLOA_StaticInitCallback(void)
 {
-    FUN_00389fb0();
+    beLOA_RegisterTraversalFunction();
 }
 

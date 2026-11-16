@@ -23,10 +23,10 @@ int beNDMWMdlPEBaseInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-int *FUN_003c0760(int *p)
+igSmartPointer<igObject> *igSmartPointer_igBoolList_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
 void beNDMWMdlPEBaseInfoWork_EnsureRegistered(void)

@@ -28,7 +28,7 @@ extern "C" int beMessenger_GetBool(int, int);
 extern "C" void igObject_Destroy(void *);
 extern "C" void Vec3f_Copy(void *destination, void *source);
 extern "C" void *igProperty_FindByName(int list, int nameField, const void *name);
-extern "C" void *DataList_FindProperty_003e9280(int list, int nameField, const void *name);
+extern "C" void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name);
 extern "C" int ObjectRef_Get_003e92a0(int *reference);
 extern "C" int beBaseInfoDataList_Create(int);
 /* An allocator handle returned by value. */
@@ -37,8 +37,8 @@ struct AllocatorValue {
   AllocatorValue(int value) : allocator(value) {}
   AllocatorValue(const AllocatorValue &o) : allocator(o.allocator) {}
 };
-extern "C" AllocatorValue AllocatorValue_Make_003e9360(int allocator);
-extern "C" int Memory_SelectAllocator_003e9370(const int *selector, int ownAllocator);
+extern "C" AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocator);
+extern "C" int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator);
 extern "C" int ObjectRef_Get_003e93b0(int *reference);
 extern "C" int beNDMWLoadIntf2__GetInfoMeta(void);
 extern "C" int beNDMWLoadIntf2__GetMeta(void);
@@ -60,8 +60,6 @@ struct PlayerModelRow {
     const char *faceSequence;
 };
 extern "C" PlayerModelRow g_playerModelRow[16];
-struct Ob { char p[28]; float v28; float v32; float v36; };
-struct V3 { float x; float y; float z; };
 extern "C" unsigned char beNDMWLoadIntf2DegiState__Update(beNDMWLoadIntf2DegiState *self);
 extern "C" void beNDMWLoadIntf2DataSelIntf__Init(beNDMWLoadIntf2DataSelIntf *self, int player, int kind);
 extern "C" void beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(beNDMWLoadIntf2DataSelIntf *self, int level);
@@ -192,16 +190,16 @@ extern "C" igObject *igInsightCore_FindManager(int, int);
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
-extern "C" int DataList_GetData_003e9090(igDataList *list);
+extern "C" int beNDMWLoadIntf2_igIntList_GetData(igDataList *list);
 extern "C" void beNDMWLoadSavePlWork__SetIsCtrl(beNDMWLoadSavePlWork *work, int isCtrl);
 extern "C" unsigned char beNDMWLoadSavePlWork__GetIsRdy(beNDMWLoadSavePlWork *work);
 extern "C" unsigned char beNDMWLoadSavePlWork__GetIsEntry(beNDMWLoadSavePlWork *work);
-extern "C" void ObjectRef_Retain_003e90d0(ObjectRefTarget *object);
-extern "C" int DataList_GetWordAt_003e90f0(igDataList *list, int index);
-extern "C" void ObjectList_SetAtRetained_003e9160(igDataList *list, int index, ObjectRefTarget *replacement);
-extern "C" int DataList_GetWordAt_003e9240(igDataList *list, int index);
-extern "C" int ObjectList_GetAt_003e9260(igDataList *list, int index);
-extern "C" ObjectRefTarget **ObjectRef_Assign_003e92b0(ObjectRefTarget **destination,ObjectRefTarget **source);
+extern "C" void beNDMWLoadIntf2_igObject_Retain(ObjectRefTarget *object);
+extern "C" int beNDMWLoadIntf2_beNDMWDegiDataList_Get(igDataList *list, int index);
+extern "C" void beNDMWLoadIntf2_igObjectList_Set(igDataList *list, int index, ObjectRefTarget *replacement);
+extern "C" int beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(igDataList *list, int index);
+extern "C" int beNDMWLoadIntf2_igObjectList_Get(igDataList *list, int index);
+extern "C" ObjectRefTarget **beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(ObjectRefTarget **destination,ObjectRefTarget **source);
 extern "C" int g_beNDMWLoadIntf2Info_metaObject[4];
 extern "C" int g_beNDMWLoadIntf2_metaObject[4];
 extern "C" int beMessenger_RegisterReceiver(int, beBaseInfoRam *, const void *, int, int);
@@ -381,7 +379,7 @@ extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beFont_metaObject[4];
 extern "C" int g_mdlEntity[4];
 /* Owning reference to a newly created data list, built from the allocator handle passed by value;
- * its out-of-line destructor releases it once ObjectRef_Assign_003e92b0 has taken its own reference. */
+ * its out-of-line destructor releases it once beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign has taken its own reference. */
 class NewDataListRef {
 public:
   void *value;
@@ -392,8 +390,8 @@ public:
 struct FreshDataList {
   static ObjectRefTarget **Assign(void *slot, int allocator) {
     NewDataListRef created(
-        AllocatorValue_Make_003e9360(Memory_SelectAllocator_003e9370(kIGMemoryPoolHandleUser1, allocator)));
-    return ObjectRef_Assign_003e92b0((ObjectRefTarget **)slot, (ObjectRefTarget **)&created);
+        beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(beNDMWLoadIntf2_Memory_SelectAllocator(kIGMemoryPoolHandleUser1, allocator)));
+    return beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign((ObjectRefTarget **)slot, (ObjectRefTarget **)&created);
   }
 };
 /* Stack reference to a Digimon record while it is stored into the in-game data list: optionally
@@ -404,7 +402,7 @@ public:
   DegiDataRef(void *data) : value(data) {}
   DegiDataRef(void *data, bool retain) : value(data) {
     if (retain)
-      ObjectRef_Retain_003e90d0((ObjectRefTarget *)value);
+      beNDMWLoadIntf2_igObject_Retain((ObjectRefTarget *)value);
   }
   ~DegiDataRef() { igRelease((igObject *)value); }
 };
@@ -531,7 +529,7 @@ static inline void ExitStarterModel(beNDMWLoadIntf2 *self, beBaseInfoRam *host,
 }
 /* The first entry of the Digimon status list. */
 static inline beNDMWLoadIntf2DegiState *FirstDegiState(beNDMWLoadIntf2DegiStateCtrl *status) {
-  return (beNDMWLoadIntf2DegiState *)ObjectList_GetAt_003e9260((igDataList *)status->_statDataList, 0);
+  return (beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)status->_statDataList, 0);
 }
 /* Sends a GAMERAM request about this player (the player number is its only argument). */
 static inline void RequestGameRam(beNDMWLoadIntf2 *self, beBaseInfoRam *host, const void *request) {
@@ -545,11 +543,11 @@ static inline void OpenDegiState(beNDMWLoadIntf2DegiStateCtrl *status, int kind,
 }
 /* A player's work record in _flagWork. */
 static inline beNDMWLoadSavePlWork *WorkAt(beNDMWLoadCtrl2CommonIntf *common, int player) {
-  return (beNDMWLoadSavePlWork *)DataList_GetWordAt_003e9240((igDataList *)common->_flagWork, player);
+  return (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, player);
 }
 /* The player's Digimon record in the in-game data list (_gameUseData). */
 static inline beNDMWDegiData *PlayerDegiData(beNDMWLoadCtrl2CommonIntf *common, beBaseInfoRam *host) {
-  return (beNDMWDegiData *)ObjectList_GetAt_003e9260((igDataList *)common->_gameUseData, host->_ramNo);
+  return (beNDMWDegiData *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_gameUseData, host->_ramNo);
 }
 /* The per-card slot-player list held by the _slotSaveData reference. */
 static inline beNDMWLoadSlotPlayerList *SlotSaveData(beNDMWLoadCtrl2CommonIntf *common) {
@@ -560,13 +558,13 @@ static inline int IntListCount(const igIntList *list) { return list->_count; }
  * the player's work record. */
 static inline void *PlayerSaveData(beNDMWLoadCtrl2CommonIntf *common, int player, int saveIndex) {
   beNDMWLoadSavePlWork *work =
-      (beNDMWLoadSavePlWork *)DataList_GetWordAt_003e9240((igDataList *)common->_flagWork, player);
-  return (void *)DataList_GetWordAt_003e90f0((igDataList *)(((beNDMWLoadSlotPlayer *)work->_haveSaveData)->_saveDataList), saveIndex);
+      (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, player);
+  return (void *)beNDMWLoadIntf2_beNDMWDegiDataList_Get((igDataList *)(((beNDMWLoadSlotPlayer *)work->_haveSaveData)->_saveDataList), saveIndex);
 }
 /* The host player's work record in _flagWork (as an object-list entry). */
 static inline beNDMWLoadSavePlWork *HostWork(beNDMWLoadCtrl2CommonIntf *common, beBaseInfoRam *host) {
   int player = host->_ramNo;
-  return (beNDMWLoadSavePlWork *)ObjectList_GetAt_003e9260((igDataList *)common->_flagWork, player);
+  return (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, player);
 }
 static inline beNDMWMcUtilCtrl *McUtil(beNDMWLoadCtrl2CommonIntf *common) {
   return (beNDMWMcUtilCtrl *)common->_mcUtilCtrl;
@@ -610,11 +608,11 @@ static inline void CopyTypedName(unsigned short *destination, beNDMWLoadIntf2Nam
 }
 /* One named object of the player's working set (host->_dataList). */
 static inline void *FindWorkObject(beBaseInfoRam *host, const void *name) {
-  return DataList_FindProperty_003e9280(ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0], name);
+  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(ObjectRef_Get_003e92a0(&host->_dataList), g_propertyNameField[0], name);
 }
 /* The memory-card slot picked on the slot screen. */
 static inline beNDMWMcSlot *SelectedCardSlot(beNDMWLoadCtrl2CommonIntf *common, beNDMWLoadIntf2SelSlot *slots) {
-  return (beNDMWMcSlot *)ObjectList_GetAt_003e9260((igDataList *)McUtil(common)->_slot, slots->_mcSelPoint);
+  return (beNDMWMcSlot *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)McUtil(common)->_slot, slots->_mcSelPoint);
 }
 /* Allows or blocks the console reset around a memory-card operation (the soft reset only when not
  * reached from the title). */
@@ -631,10 +629,10 @@ static inline int AllEntriesReady(beNDMWLoadCtrl2CommonIntf *common) {
   int readyCount = 0;
   int index;
   for (index = 0; index < igDataList_GetCount(works); index++) {
-    if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)DataList_GetWordAt_003e9240((igDataList *)works, index)) & 0xFF) == 1) {
+    if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
       entryCount += 1;
     }
-    if ((beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)DataList_GetWordAt_003e9240((igDataList *)works, index)) & 0xFF) == 1) {
+    if ((beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
       readyCount += 1;
     }
   }
@@ -647,7 +645,7 @@ static inline void EndInterface(beNDMWLoadCtrl2CommonIntf *common) {
   common->_intfStat = 3;
   works = (void *)common->_flagWork;
   for (; index < igDataList_GetCount(works); index++) {
-    beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)DataList_GetWordAt_003e9240((igDataList *)works, index), 0);
+    beNDMWLoadSavePlWork__SetIsCtrl((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index), 0);
   }
 }
 /* Per-frame master update of the Game Start interface for one player (`host`): looks up the named
@@ -1411,7 +1409,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
             {
               DegiDataRef freshData(beNDMWDegiData_Create(allocator));
-              ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
+              beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
             }
             EnterState(control, LOAD_SCREEN_SLOT);
           }
@@ -1460,7 +1458,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
                 void *savedData = PlayerSaveData(common, host->_ramNo, dataSelection->_svDataSelPoint);
                 {
                   DegiDataRef savedDataRef(savedData, true);
-                  ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)savedDataRef.value);
+                  beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)savedDataRef.value);
                   beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(common, host->_ramNo);
                 }
                 RequestGameRam(self, host, "GETPLAYER");
@@ -1517,7 +1515,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
                 int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
                 {
                   DegiDataRef freshData(beNDMWDegiData_Create(allocator));
-                  ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
+                  beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
                 }
                 HostWork(common, host)->_isRdy = 0;
                 EnterState(control, LOAD_SCREEN_SLOT);
@@ -1621,7 +1619,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
               int allocator = SelectAllocator(kIGMemoryPoolHandleUser1, igObject_GetAllocator(self));
               {
                 DegiDataRef freshData(beNDMWDegiData_Create(allocator));
-                ObjectList_SetAtRetained_003e9160((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
+                beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
               }
               EnterState(control, LOAD_SCREEN_SLOT);
             }
@@ -1914,9 +1912,9 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
       case CARD_STEP_ATTACH: {
         beNDMWLoadSlotPlayer *slotPlayer = 0;
         for (listIndex = 0; listIndex < SlotSaveData(common)->_count; listIndex++) {
-          int connection = ((beNDMWLoadSlotPlayer *)ObjectList_GetAt_003e9260((igDataList *)common->_slotSaveData, listIndex))->_connectNO;
+          int connection = ((beNDMWLoadSlotPlayer *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_slotSaveData, listIndex))->_connectNO;
           if (connection == slots->_mcSelPoint) {
-            slotPlayer = (beNDMWLoadSlotPlayer *)ObjectList_GetAt_003e9260((igDataList *)common->_slotSaveData, listIndex);
+            slotPlayer = (beNDMWLoadSlotPlayer *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_slotSaveData, listIndex);
             break;
           }
         }
@@ -1933,7 +1931,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           } else {
             List_Resize(accessList, accessCount + 1, 4);
           }
-          ((int *)DataList_GetData_003e9090((igDataList *)accessList))[accessCount] = accessPlayer;
+          ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[accessCount] = accessPlayer;
           cardWork->_haveSaveData = (int)slotPlayer;
           EnterPlayerStage(cardWork, LOAD_STAGE_UTIL_DONE);
           cardWork->_utilReturn = 0;
@@ -4634,7 +4632,7 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
     const char *infoToken;
     const char *sequenceToken;
     beLoadIntf2ComMdlData *request;
-    struct { float x, y, z; } at;
+    igVec3f at;
 
     beMessenger_SelectReceivers(self->_messenger, "MODELCTRL", (int)infoName, ramNo);
     at.x = position[0];
@@ -4775,7 +4773,7 @@ void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self) {
     }
 }
 
-int DataList_GetData_003e9090(igDataList *list)
+int beNDMWLoadIntf2_igIntList_GetData(igDataList *list)
 {
     return list->_data;
 }
@@ -4795,20 +4793,20 @@ unsigned char beNDMWLoadSavePlWork__GetIsEntry(beNDMWLoadSavePlWork *work)
     return work->_isEntry;
 }
 
-void ObjectRef_Retain_003e90d0(ObjectRefTarget *object)
+void beNDMWLoadIntf2_igObject_Retain(ObjectRefTarget *object)
 {
     if (object) ++object->references;
 }
 
 /* The word at `index` of a list, unchecked. */
-int DataList_GetWordAt_003e90f0(igDataList *list, int index)
+int beNDMWLoadIntf2_beNDMWDegiDataList_Get(igDataList *list, int index)
 {
     return ((int *)list->_data)[index];
 }
 
 /* Stores `replacement` at `index` of an object list: retains it, releases the object it replaces,
  * and writes the slot only when the index is in range. */
-void ObjectList_SetAtRetained_003e9160(igDataList *list, int index, ObjectRefTarget *replacement)
+void beNDMWLoadIntf2_igObjectList_Set(igDataList *list, int index, ObjectRefTarget *replacement)
 {
     ObjectRefTarget *previous;
 
@@ -4831,19 +4829,19 @@ void Vec3f_Copy(void *destination, void *source)
 }
 
 /* The word at `index` of a list, unchecked. */
-int DataList_GetWordAt_003e9240(igDataList *list, int index)
+int beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get(igDataList *list, int index)
 {
     return ((int *)list->_data)[index];
 }
 
 /* The object at `index` of an object list, unchecked. */
-int ObjectList_GetAt_003e9260(igDataList *list, int index)
+int beNDMWLoadIntf2_igObjectList_Get(igDataList *list, int index)
 {
     return ((int *)list->_data)[index];
 }
 
 /* The child of `list` whose name field (`nameField`) is `name`. */
-void *DataList_FindProperty_003e9280(int list, int nameField, const void *name)
+void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name)
 {
     return igProperty_FindByName(list, nameField, name);
 }
@@ -4854,7 +4852,7 @@ int ObjectRef_Get_003e92a0(int *reference)
 }
 
 /* Assigns an object reference: retains the incoming object, releases the outgoing one. */
-ObjectRefTarget **ObjectRef_Assign_003e92b0(ObjectRefTarget **destination, ObjectRefTarget **source)
+ObjectRefTarget **beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Assign(ObjectRefTarget **destination, ObjectRefTarget **source)
 {
     ObjectRefTarget *incoming = *source;
     ObjectRefTarget *outgoing;
@@ -4866,13 +4864,13 @@ ObjectRefTarget **ObjectRef_Assign_003e92b0(ObjectRefTarget **destination, Objec
     return destination;
 }
 
-AllocatorValue AllocatorValue_Make_003e9360(int allocator)
+AllocatorValue beNDMWLoadIntf2_beBaseInfoDataList_MakeAllocatorValue(int allocator)
 {
     return AllocatorValue(allocator);
 }
 
 /* The owner's allocator when g_useOwnerAllocator is set, else the selector's. */
-int Memory_SelectAllocator_003e9370(const int *selector, int ownAllocator)
+int beNDMWLoadIntf2_Memory_SelectAllocator(const int *selector, int ownAllocator)
 {
     if (g_useOwnerAllocator)
         return ownAllocator;

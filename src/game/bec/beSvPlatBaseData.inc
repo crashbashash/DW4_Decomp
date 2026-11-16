@@ -20,27 +20,18 @@ void *beSvPlatBaseData_GetMetaObject(void) {
 }
 
 int beSvPlatBaseData_GetVTable(void) {
-    struct F_34a2b0 f;
-    int **pr;
-    int temp_s0;
-    int *o;
+    beSvPlatBaseData obj;
+    int vtable;
+    igObject **slotListSlot;
 
-    igObject_InitHeader(&f);
-    f.vt = &g_beSvPlatBaseData_vtable[0];
-    pr = &f.ref;
-    *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beSvPlatBaseData_vtable[0];
-    if (pr != 0) {
-        if (*pr != 0) {
-            o = *pr;
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
+    slotListSlot = (igObject **)&obj._slotList;
+    *slotListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
+    igObjectRef_Release(slotListSlot);
+    return vtable;
 }
 
 void beSvPlatBaseData_EnsureRegistered(void)

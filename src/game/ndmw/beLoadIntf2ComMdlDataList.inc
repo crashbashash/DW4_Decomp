@@ -16,10 +16,10 @@ void *beLoadIntf2ComMdlDataList_GetReadyMetaObject(void) {
 }
 
 int beLoadIntf2ComMdlDataList_GetVTable(void) {
-    struct Obj obj;
+    beLoadIntf2ComMdlDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beLoadIntf2ComMdlDataList_vtable[0];
+    *(int **)&obj._vtable = &g_beLoadIntf2ComMdlDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -16,13 +16,13 @@ void *bePlaySE_GetMetaObject(void) {
 }
 
 int bePlaySE_GetVTable(void) {
-    int tmp[8];
+    bePlaySE obj;
     int off;
 
-    igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&g_bePlaySE_vtable[0];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_bePlaySE_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
-    return *(int *)((char *)tmp + off);
+    return *(int *)((char *)&obj + off);
 }
 
 void bePlaySE_EnsureRegistered(void)

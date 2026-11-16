@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igFileVirtuals.h"
 #define CLEAR(T, src) { \
     T *l = (T *)(src); \
     int n = l->_count; \
@@ -28,12 +29,7 @@ extern "C" int List_Reserve(void *, int, int);
 extern "C" int StringChunk_ReleaseHeader(int, int *);
 extern "C" int StringPool_Construct(int);
 extern "C" int StringPool_Intern(int, int);
-extern "C" int DAT_0050e558[4];
-struct S;
-class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); };
-class VB { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vY(); };
-struct S { int pad[2]; void *o; };
-extern "C" int FUN_0037f1b0(S *arg0, int arg1);
+extern "C" int beFileChkObj_FileExists(beFileChkObj *checker, int fileName);
 extern "C" void igInsightCore_AddToScheduler(int, beFileListInfoManager *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, beFileListInfoManager *);
 extern "C" void beFileListInfoManager_Activate(beFileListInfoManager *self, int unusedArg);
@@ -41,7 +37,7 @@ extern "C" void beFileListInfoManager_Deactivate(beFileListInfoManager *self, in
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_beMessenger_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
-extern "C" void beFileListInfoManager_Start(beFileListInfoManager *arg0);
+extern "C" void beFileListInfoManager_Start(beFileListInfoManager *self);
 extern "C" int g_beFileListInfoManager_metaObject[4];
 extern "C" void beFont_AddFontImages(void *, igObject *);
 extern "C" void ObjectList_AppendRetained(igObjectList *, igObject *);
@@ -52,9 +48,9 @@ class MetaVt { public: virtual void d0(); virtual void d1(); virtual void d2(); 
 extern "C" int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info);
 extern "C" int g_stringPool[4];
 extern "C" int igObject_Destroy(igObject *);
-extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0);
+extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self);
 extern "C" int igInsightCore_AddInfo(int, igObject *);
-extern "C" int FUN_003817d0(beFileListInfoManager *arg0);
+extern "C" int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self);
 extern "C" int igObject_IsKindOf(igObject *object, int meta);
 extern "C" int igResource_IsDirectoryLoaded(int resource, igDirectory *directory);
 extern "C" void igResource_UnloadDirectory(int resource, int name);
@@ -102,9 +98,9 @@ static inline void insertReadInfo(beFileListInfoManager *self, int at, const Inf
     List_InsertWords((void *)list, at, 1, (void *)word);
 }
 
-int FUN_0037f1b0(S *arg0, int arg1) {
-    if (((VA *)arg0->o)->vX(arg1, (int)&DAT_0050e558[0]) != 0) {
-        ((VB *)arg0->o)->vY();
+int beFileChkObj_FileExists(beFileChkObj *checker, int fileName) {
+    if (((igFileVirtuals *)checker->_fd)->openFile(fileName, "rb") != 0) {
+        ((igFileVirtuals *)checker->_fd)->closeFile();
         return 1;
     }
     return 0;
@@ -127,10 +123,10 @@ void beFileListInfoManager_Deactivate(beFileListInfoManager *self, int unusedArg
     igInsightCore_RemoveFromScheduler(self->_insight, self);
 }
 
-void beFileListInfoManager_Start(beFileListInfoManager *arg0) {
-    arg0->_system = ((int)igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]));
-    arg0->_messenger = ((int)igInsightCore_FindManager(arg0->_insight, g_beMessenger_metaObject[0]));
-    arg0->_sceneInfoManager = ((int)igInsightCore_FindManager(arg0->_insight, g_igViewerSceneInfoManager_metaObject[0]));
+void beFileListInfoManager_Start(beFileListInfoManager *self) {
+    self->_system = ((int)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]));
+    self->_messenger = ((int)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]));
+    self->_sceneInfoManager = ((int)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]));
 }
 
 void beFileListInfoManager_Stop(void)
@@ -168,7 +164,7 @@ int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info) {
     return 0;
 }
 
-void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0) {
+void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
     igStringRefList *s5;
     int s4;
     int i;
@@ -177,9 +173,9 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0) {
     int off;
     int *old;
     int v;
-    CLEAR(igInfoList, arg0->_infoList)
-    CLEAR(igDirectoryList, arg0->_dirList)
-    s5 = (igStringRefList *)arg0->_fnames;
+    CLEAR(igInfoList, self->_infoList)
+    CLEAR(igDirectoryList, self->_dirList)
+    s5 = (igStringRefList *)self->_fnames;
     s4 = s5->_count;
     i = 0;
     if (0 < s4) {
@@ -209,33 +205,33 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *arg0) {
         } while (i < s4);
     }
     s5->_count = 0;
-    CLEAR(igInfoList, arg0->_importantInfoList)
-    CLEAR(igInfoList, arg0->_readInfoList)
+    CLEAR(igInfoList, self->_importantInfoList)
+    CLEAR(igInfoList, self->_readInfoList)
     {
-        igInfoList *l2 = (igInfoList *)arg0->_infoList;
+        igInfoList *l2 = (igInfoList *)self->_infoList;
         if (!(0 < l2->_count)) {
             List_Reserve(l2, 0, 4);
         }
     }
     {
-        igDirectoryList *l2 = (igDirectoryList *)arg0->_dirList;
+        igDirectoryList *l2 = (igDirectoryList *)self->_dirList;
         if (!(0 < l2->_count)) {
             List_Reserve(l2, 0, 4);
         }
     }
     {
-        igInfoList *l2 = (igInfoList *)arg0->_importantInfoList;
+        igInfoList *l2 = (igInfoList *)self->_importantInfoList;
         if (!(0 < l2->_count)) {
             List_Reserve(l2, 0, 4);
         }
     }
     {
-        igInfoList *l2 = (igInfoList *)arg0->_readInfoList;
+        igInfoList *l2 = (igInfoList *)self->_readInfoList;
         if (!(0 < l2->_count)) {
             List_Reserve(l2, 0, 4);
         }
     }
-    arg0->_loaded = 0;
+    self->_loaded = 0;
 }
 
 /* Points one pool of the global context at the allocator `selector` names (the owner's allocator
@@ -366,22 +362,22 @@ int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefL
     return 0;
 }
 
-int FUN_003817d0(beFileListInfoManager *arg0) {
+int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self) {
     int i;
     igObjectList *l;
     int n;
     int k;
     int j;
     igObject *o;
-    l = (igObjectList *)arg0->_readInfoList;
+    l = (igObjectList *)self->_readInfoList;
     for (i = 0; i < l->_count; i++) {
         o = ((igObject **)l->_data)[i];
         if (o != 0) {
-            igInsightCore_AddInfo(arg0->_insight, o);
+            igInsightCore_AddInfo(self->_insight, o);
         }
-        l = (igObjectList *)arg0->_readInfoList;
+        l = (igObjectList *)self->_readInfoList;
     }
-    n = ((igObjectList *)arg0->_readInfoList)->_count;
+    n = ((igObjectList *)self->_readInfoList)->_count;
     for (k = 0; k < n; k++) {
         o = ((igObject **)l->_data)[k];
         if (o != 0) {

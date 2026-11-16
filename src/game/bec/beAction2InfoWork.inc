@@ -43,35 +43,35 @@ igMetaObject *beAction2InfoWork_GetMetaObject(void)
 }
 
 int beAction2InfoWork_GetVTable(void) {
-    union U_36c380 u;
-    int temp_s;
-    char *p184;
-    char *p180;
-    char *p176;
-    char *p104;
+    beAction2InfoWork obj;
+    int vtable;
+    char *textureStateAttrSlot;
+    char *blendStateAttrSlot;
+    char *colorAttrSlot;
+    char *comDataSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beAction2InfoWork_vtable[0];
-    p104 = &u.b[8];
-    *(int *)p104 = 0;
-    p176 = &u.b[80];
-    *(int *)p176 = 0;
-    p180 = &u.b[84];
-    *(int *)p180 = 0;
-    p184 = &u.b[88];
-    *(int *)p184 = 0;
-    *(int *)&u.b[92] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beAction2InfoWork_vtable[0];
-    FUN_00239200(&u.b[92], -1);
-    FUN_001d21b0(p184, -1);
-    FUN_001aaf00(p180, -1);
-    FUN_0019ab10(p176, -1);
-    FUN_0036c450((igSmartPointer<igObject> *)p104, (short)(-1));
-    return temp_s;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
+    comDataSlot = (char *)&obj._comData;
+    *(int *)comDataSlot = 0;
+    colorAttrSlot = (char *)&obj._colorAttr;
+    *(int *)colorAttrSlot = 0;
+    blendStateAttrSlot = (char *)&obj._blendStateAttr;
+    *(int *)blendStateAttrSlot = 0;
+    textureStateAttrSlot = (char *)&obj._textureStateAttr;
+    *(int *)textureStateAttrSlot = 0;
+    obj._lightingStateAttr = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
+    igSmartPointer_igLightingStateAttr_Destruct(&obj._lightingStateAttr, -1);
+    igSmartPointer_igTextureStateAttr_Destruct(textureStateAttrSlot, -1);
+    igSmartPointer_igBlendStateAttr_Destruct(blendStateAttrSlot, -1);
+    igSmartPointer_igColorAttr_Destruct(colorAttrSlot, -1);
+    igSmartPointer_beAction2Data_Destruct((igSmartPointer<igObject> *)comDataSlot, (short)(-1));
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0036c450(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beAction2Data_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

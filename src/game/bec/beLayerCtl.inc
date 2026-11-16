@@ -23,21 +23,21 @@ void *beLayerCtl_GetMetaObject(void) {
 }
 
 int beLayerCtl_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    int *p;
+    beLayerCtl obj;
+    int vtable;
+    int *layerSwtSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beLayerCtl_vtable[0];
-    p = (int *)&u.b[36];
-    *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beLayerCtl_vtable[0];
-    FUN_00343260((igSmartPointer<igObject> *)p, -1);
-    FUN_0033f5e0((O_33f5e0 *)u.b, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beLayerCtl_vtable[0];
+    layerSwtSlot = (int *)&obj._layerSwt;
+    *layerSwtSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLayerCtl_vtable[0];
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)layerSwtSlot, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
 void beLayerCtl_EnsureRegistered(void)

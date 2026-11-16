@@ -48,10 +48,10 @@ int igActorManager_GetVTable(void) {
     igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
     igSmartPointer_igPointerList_Destruct(&obj.w8, -1);
     FUN_0045e420((O *)&obj.w7, -1);
-    FUN_001aa310(&obj.w6, -1);
-    FUN_001958f0(&obj.w5, -1);
-    FUN_001a7a00(&obj.w4, -1);
-    FUN_00231030(&obj, 0);
+    igSmartPointer_igActorList_Destruct(&obj.w6, -1);
+    igSmartPointer_igNodeList_Destruct(&obj.w5, -1);
+    igSmartPointer_igAppearanceList_Destruct(&obj.w4, -1);
+    igInfoManager_Destroy(&obj, 0);
     return t;
 }
 

@@ -9,10 +9,10 @@ void *beSvSlotGC_GetMetaObject(void) {
 }
 
 int beSvSlotGC_GetVTable(void) {
-    struct Obj_34a7d0 obj;
+    beSvSlotGC obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSvSlotGC_vtable[0];
+    obj._vtable = (int)&g_beSvSlotGC_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

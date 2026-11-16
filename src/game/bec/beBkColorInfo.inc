@@ -10,18 +10,18 @@ void *beBkColorInfo_GetMetaObject(void) {
 }
 
 int beBkColorInfo_GetVTable(void) {
-    struct Obj_369c30 obj;
-    int t;
+    beBkColorInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beBkColorInfo_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beBkColorInfo_vtable[0];
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beBkColorInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBkColorInfo_vtable[0];
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beBkColorInfo_EnsureRegistered(void)
@@ -52,7 +52,7 @@ void beBkColorInfo_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beBkColorInfo_ctorTable[] = {
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
 };
 static const char *g_beBkColorInfo_fieldTable[] = {
     "_rgba",

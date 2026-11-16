@@ -14,24 +14,24 @@ done:
 }
 
 int beFileListInfo_GetVTable(void) {
-    union U_362c50 u;
-    int temp_s1;
-    char *p2;
-    char *p1;
+    beFileListInfo obj;
+    int vtable;
+    char *sectionSlot;
+    char *fnamesSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&g_beFileListInfo_vtable[0];
-    p2 = &u.b[20];
-    *(int *)p2 = 0;
-    p1 = &u.b[24];
-    *(int *)p1 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beFileListInfo_vtable[0];
-    FUN_00199450(p1, -1);
-    igStringRef_Destruct(p2, -1);
-    igInfo_Destroy(u.b, 0);
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beFileListInfo_vtable[0];
+    sectionSlot = (char *)&obj._section;
+    *(int *)sectionSlot = 0;
+    fnamesSlot = (char *)&obj._fnames;
+    *(int *)fnamesSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFileListInfo_vtable[0];
+    igSmartPointer_igNamedObjectList_Destruct(fnamesSlot, -1);
+    igStringRef_Destruct(sectionSlot, -1);
+    igInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beFileListInfo_EnsureRegistered(void)

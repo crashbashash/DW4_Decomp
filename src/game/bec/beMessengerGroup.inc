@@ -14,22 +14,22 @@ void *beMessengerGroup_GetMetaObject(void) {
 }
 
 int beMessengerGroup_GetVTable(void) {
-    struct Obj_358570 obj;
-    int t;
+    beMessengerGroup obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beMessengerGroup_vtable[0];
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMessengerGroup_vtable[0];
-    FUN_0033ec00((igSmartPointer<igObject> *)&obj.w5, (short)(-1));
-    igSmartPointer_igIntList_Destruct(&obj.w4, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj.w3, -1);
-    FUN_00131bc0(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beMessengerGroup_vtable[0];
+    obj._infoNameList = 0;
+    obj._ramNoList = 0;
+    obj._ramList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMessengerGroup_vtable[0];
+    igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._ramList, (short)(-1));
+    igSmartPointer_igIntList_Destruct(&obj._ramNoList, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._infoNameList, -1);
+    igNamedObject_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beMessengerGroup_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerGroup_Register);}

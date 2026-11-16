@@ -9,27 +9,21 @@ void *beNDMWStageCtlInfoRam_GetMetaObject(void) {
 }
 
 int beNDMWStageCtlInfoRam_GetVTable(void) {
-    union U_3bba80 u;
-    int temp_s0;
-    S_ref *q1;
+    beNDMWStageCtlInfoRam obj;
+    int vtable;
+    int *dataListRef;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beBaseInfoRam_vtable[0]);
-    q1 = (S_ref *)&u.b[40];
-    *(int *)q1 = 0;
-    u.w[0] = (int)(&g_beNDMWStageCtlInfoRam_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beBaseInfoRam_vtable[0]);
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
+    dataListRef = &obj._dataList;
+    *dataListRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWStageCtlInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
+    if (dataListRef != 0) {
+        igRelease((igObject *)*dataListRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWStageCtlInfoRam_EnsureRegistered(void)

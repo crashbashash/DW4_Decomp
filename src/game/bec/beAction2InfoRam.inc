@@ -13,31 +13,27 @@ igMetaObject *beAction2InfoRam_GetMetaObject(void) {
 }
 
 int beAction2InfoRam_GetVTable(void) {
-    union U_36c6d0 u;
-    int t;
-    char *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beAction2InfoRam obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[40] = 0;
-    u.vt = (int)&g_beAction2InfoRam_vtable[0];
-    *(int *)&u.b[44] = 0;
-    *(int *)&u.b[48] = 0;
-    *(int *)&u.b[52] = 0;
-    *(int *)&u.b[56] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beAction2InfoRam_vtable[0];
-    FUN_0036c790((igSmartPointer<igObject> *)(&u.b[56]), (short)(-1));
-    FUN_001aa310(&u.b[52], -1);
-    FUN_001a7a00(&u.b[48], -1);
-    FUN_0034c1b0((void **)(&u.b[44]), (short)(-1));
-    FUN_0033e920((S *)u.b, (long long)0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._dataList = 0;
+    obj._vtable = (int)&g_beAction2InfoRam_vtable[0];
+    obj._node = 0;
+    obj._appearanceList = 0;
+    obj._actorList = 0;
+    obj._work = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beAction2InfoRam_vtable[0];
+    igSmartPointer_beAction2InfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), (short)(-1));
+    igSmartPointer_igActorList_Destruct(&obj._actorList, -1);
+    igSmartPointer_igAppearanceList_Destruct(&obj._appearanceList, -1);
+    igSmartPointer_beModelCtrlNode2_Destruct((void **)(&obj._node), (short)(-1));
+    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0036c790(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beAction2InfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

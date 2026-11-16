@@ -427,7 +427,7 @@ joined by `/`, against the lower-cased name.
 `igAdx_Initialize` runs `igAdx_SetupIop` once (`g_adxIopReady`): SIF and CD initialisation in `g_adxMediaMode`, the
 `sdrdrv`, `cri_adxi` and `sndfi` IOP modules (from `g_adxModulePath`, else the CRI default path), SNDF, the host file
 system rooted at `g_adxHostRootPath` (`igAdx_SetHostRootPath`), the `cdvd.fic` file-info caches when
-`g_adxUseFileInfoCache` is set, and the V-blank handler that runs `ADXM_ExecVint`. It clears `g_iopResetPending`
+`g_adxUseFileInfoCache` is set, and the V-blank handler that runs `ADXM_ExecVint`. It clears `g_igPsx2_resetIopServices`
 (0x5549b8), which `main` sets and the IOP reset at `0x32d080` reads, so the loaded modules are not reset away. Then it
 starts the ADXM threads with the empty `igAdx_ErrorCallback`, `ADXT_Init` and `SNDF_Start`. `igAdx_ExecServer` runs
 `ADXM_ExecMain` and `SNDF_ExecServer`. `igAdx_Shutdown`, the release hook `igAdx_InitFields` registers, undoes all of

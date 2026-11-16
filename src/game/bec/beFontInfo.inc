@@ -10,25 +10,25 @@ void *beFontInfo_GetMetaObject(void) {
 }
 
 int beFontInfo_GetVTable(void) {
-    union U_360ee0 u;
-    int temp_s0;
-    char *ps;
+    beFontInfo obj;
+    int vtable;
+    char *unicodeListSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beFontInfo_vtable[0];
-    ps = &u.b[28];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beFontInfo_vtable[0];
-    FUN_00360f60((igSmartPointer<igObject> *)ps, -1);
-    FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beFontInfo_vtable[0];
+    unicodeListSlot = (char *)&obj._unicodeList;
+    *(int *)unicodeListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFontInfo_vtable[0];
+    igSmartPointer_beUnicodeObjList_Destruct((igSmartPointer<igObject> *)unicodeListSlot, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00360f60(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beUnicodeObjList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

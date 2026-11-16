@@ -24,20 +24,24 @@ done:
 }
 
 int beMeterCtrl_GetVTable(void) {
-    Obj_357740 obj;
-    int r;
+    beMeterCtrl obj;
+    int vtable;
+    igObject **infoListSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beBaseInfoManager_vtable[0];
-    obj.r1 = 0;
-    obj.r2 = 0;
-    obj.vt = &g_beMeterCtrl_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beBaseInfoManager_vtable[0];
-    obj.rel2();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel1();
-    return r;
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    infoListSlot = (igObject **)&obj._infoList;
+    *infoListSlot = 0;
+    obj._vtable = (int)&g_beMeterCtrl_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    igObjectRef_Release(infoListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beMeterCtrl_EnsureRegistered(void)

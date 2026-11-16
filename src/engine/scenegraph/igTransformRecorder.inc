@@ -21,9 +21,9 @@ int igTransformRecorder_GetVTable(void) { struct Obj_195860 o; int *p = (int *)&
  igObject_InitHeader((struct Obj_195860 *)p); o.vt = &g_igTransformRecorder_vtable[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0;
  igMatrix44f_SetIdentity(o.sub1); igMatrix44f_SetIdentity(p + 24);
  t = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
- o.vt = &g_igTransformRecorder_vtable[0]; FUN_00195a90((struct T_195a90 *)((struct Obj_195860 *)p), 0); return t; }
+ o.vt = &g_igTransformRecorder_vtable[0]; igGroup_Destroy((struct T_195a90 *)((struct Obj_195860 *)p), 0); return t; }
 
-void **FUN_001958f0(void **arg0, short arg1) {
+void **igSmartPointer_igNodeList_Destruct(void **arg0, short arg1) {
     S_temp_a0_1958f0 *temp_a0;
 
     if (arg0 != 0) {
@@ -41,7 +41,7 @@ void **FUN_001958f0(void **arg0, short arg1) {
     return arg0;
 }
 
-void *FUN_00195970(struct T_195970 *arg0, long long arg1) {
+void *igNode_Destroy(struct T_195970 *arg0, long long arg1) {
     struct Rc *o;
     int *a1;
     int v0;
@@ -86,7 +86,7 @@ void *FUN_00195970(struct T_195970 *arg0, long long arg1) {
     return arg0;
 }
 
-void *FUN_00195a90(struct T_195a90 *arg0, long long arg1) {
+void *igGroup_Destroy(struct T_195a90 *arg0, long long arg1) {
     struct Rc *o;
     int *a1;
     int v0;
@@ -170,8 +170,8 @@ void thunk_igTransformRecorder_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTransformRecorder_ctorTable[] = {
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igTransformRecorder_fieldTable[] = {
     "_m",

@@ -16,10 +16,10 @@ void *beModelCtrlAIMapList_GetMetaObject(void) {
 }
 
 int beModelCtrlAIMapList_GetVTable(void) {
-    struct Obj_354250 obj;
+    beModelCtrlAIMapList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beModelCtrlAIMapList_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlAIMapList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -11,10 +11,10 @@ void *beSvPs2McImage128k_GetMetaObject(void) {
 }
 
 int beSvPs2McImage128k_GetVTable(void) {
-    struct Obj_347ca0 obj;
+    beSvPs2McImage128k obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSvPs2McImage128k_vtable[0];
+    obj._vtable = (int)&g_beSvPs2McImage128k_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

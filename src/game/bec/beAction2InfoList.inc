@@ -12,10 +12,10 @@ done:
 }
 
 int beAction2InfoList_GetVTable(void) {
-    struct Obj_36ca10 obj;
+    beAction2InfoList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beAction2InfoList_vtable[0];
+    obj._vtable = (int)&g_beAction2InfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

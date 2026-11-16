@@ -6,22 +6,22 @@ igMetaObject *beFontImage_GetMetaObject(void) {
 }
 
 int beFontImage_GetVTable(void) {
-    struct Obj_361930 obj;
-    int r;
+    beFontImage obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[4] = 0;
-    obj.w[6] = 0;
-    obj.w[7] = 0;
-    obj.vt = &g_beFontImage_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beFontImage_vtable[0];
-    FUN_00361b00((O_361b00 *)&obj, (short)0);
-    return r;
+    obj._name = 0;
+    obj._attrList = 0;
+    obj._charMetricsList = 0;
+    obj._textureBind = 0;
+    obj._vtable = (int)&g_beFontImage_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFontImage_vtable[0];
+    igBitmapFont_Destroy((O_361b00 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003619a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_FUN_00452790_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -34,7 +34,7 @@ igSmartPointer<igObject> *FUN_003619a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-O_361a20 *FUN_00361a20(O_361a20 *arg0, short arg1) {
+O_361a20 *igFont_Destroy(O_361a20 *arg0, short arg1) {
     int *temp_a1;
     int temp_v0;
     R_361a20 *temp_a0;
@@ -72,7 +72,7 @@ O_361a20 *FUN_00361a20(O_361a20 *arg0, short arg1) {
     return arg0;
 }
 
-O_361b00 *FUN_00361b00(O_361b00 *arg0, short arg1) {
+O_361b00 *igBitmapFont_Destroy(O_361b00 *arg0, short arg1) {
     int *temp_a1;
     int temp_v0;
     R_361b00 *temp_a0;

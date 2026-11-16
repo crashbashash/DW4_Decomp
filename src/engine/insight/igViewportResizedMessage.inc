@@ -50,8 +50,8 @@ void thunk_igViewportResizedMessage_GetMetaObject(void) {
 }
 
 static FieldFactory g_igViewportResizedMessage_ctorTable[] = {
-    FUN_00187b50,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
 };
 static const char *g_igViewportResizedMessage_fieldTable[] = {
     "_origin",

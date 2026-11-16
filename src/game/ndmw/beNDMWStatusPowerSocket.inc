@@ -14,15 +14,15 @@ void *beNDMWStatusPowerSocket_GetMetaObject(void) {
 }
 
 int beNDMWStatusPowerSocket_GetVTable(void) {
-    union U_3ba990 u;
-    int temp_s0;
+    beNDMWStatusPowerSocket obj;
+    int vtable;
 
-    beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
-    u.vt = (int)&g_beNDMWStatusPowerSocket_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWStatusPowerSocket_vtable[0];
-    FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
-    return temp_s0;
+    beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
+    *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
+    beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusPowerSocket_EnsureRegistered(void)

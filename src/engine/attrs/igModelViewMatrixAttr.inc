@@ -1,7 +1,7 @@
 igMetaObject *g_igModelViewMatrixAttr_metaObject;
 igMetaField *g_igModelViewMatrixAttr_mMetaField;
 
-int FUN_001356b0(int arg0) {
+int igModelViewMatrixAttr_CreateInstance(int arg0) {
     igModelViewMatrixAttr_EnsureRegistered();
     return igMetaObject_CreateInstance(*(int *)0x55EFE8, arg0);
 }
@@ -56,7 +56,7 @@ void thunk_igModelViewMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igModelViewMatrixAttr_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igModelViewMatrixAttr_fieldTable[] = {
     "_m",
@@ -98,7 +98,7 @@ void igModelViewMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     igMetaObject_NameFields(temp_s0, g_igModelViewMatrixAttr_fieldTable, g_igModelViewMatrixAttr_fieldHandles, g_igModelViewMatrixAttr_fieldOffsets, temp_s2);
     igMetaObject_AddExitCallback(&thunk_FUN_0013f730);

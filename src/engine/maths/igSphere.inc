@@ -60,7 +60,7 @@ igMetaObject *FUN_00187fd0(void) {
 }
 
 static FieldFactory g_igSphere_ctorTable[] = {
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
 };
 
@@ -92,7 +92,7 @@ void igSphere_InitFields(void) {
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    FUN_0018e470((igVec3fMetaFieldView *)temp_a0, (const float *)v);
+    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, (const float *)v);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), -1.0f);
     igMetaObject_NameFields(temp_s0, g_igSphere_fieldTable, g_igSphere_fieldHandles, g_igSphere_fieldOffsets, temp_s1);
 }

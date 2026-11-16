@@ -12,10 +12,10 @@ igMetaObject *beNDMWItemInstant_GetReadyMetaObject(void) {
 }
 
 int beNDMWItemInstant_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemInstant obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemInstant_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemInstant_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

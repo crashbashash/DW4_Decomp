@@ -21,45 +21,24 @@ void *beSwitchCtrl_GetMetaObject(void) {
 }
 
 int beSwitchCtrl_GetVTable(void) {
-    union U_343570 u;
-    int temp_s0;
-    igObject *q0;
-    char *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beSwitchCtrl obj;
+    int vtable;
+    igObject **infoListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    q0 = (igObject *)&u.b[24];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_beSwitchCtrl_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    infoListSlot = (igObject **)&obj._infoList;
+    *infoListSlot = 0;
+    obj._vtable = (int)&g_beSwitchCtrl_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    igObjectRef_Release(infoListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beSwitchCtrl_EnsureRegistered(void)
@@ -89,18 +68,18 @@ void beSwitchCtrl_GetMetaObjectFunction(void)
     beSwitchCtrl_GetMetaObject();
 }
 
-igMetaEnum *g_beSwitchCtrl_messageMetaEnum;
-static const char *g_beSwitchCtrl_messageNames[] = {
+igMetaEnum *g_beStaticInfoCtl_messageMetaEnum;
+static const char *g_beStaticInfoCtl_messageNames[] = {
     "GETINFOLIST",
 };
-static int g_beSwitchCtrl_messageValues[] = {
+static int g_beStaticInfoCtl_messageValues[] = {
     0,
 };
 
-igMetaEnum *FUN_00343700(void) {
-    if (g_beSwitchCtrl_messageMetaEnum == 0) {
-        g_beSwitchCtrl_messageMetaEnum = igMetaEnum_Create("Message", g_beSwitchCtrl_messageNames, g_beSwitchCtrl_messageValues, 1);
+igMetaEnum *beStaticInfoCtl_GetMessageEnum(void) {
+    if (g_beStaticInfoCtl_messageMetaEnum == 0) {
+        g_beStaticInfoCtl_messageMetaEnum = igMetaEnum_Create("Message", g_beStaticInfoCtl_messageNames, g_beStaticInfoCtl_messageValues, 1);
     }
-    return g_beSwitchCtrl_messageMetaEnum;
+    return g_beStaticInfoCtl_messageMetaEnum;
 }
 

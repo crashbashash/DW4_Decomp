@@ -14,69 +14,50 @@ void *beNDMWShopSelectB0_GetMetaObject(void) {
 }
 
 int beNDMWShopSelectB0_GetVTable(void) {
-    struct W_3b3fd0 o;
-    int r;
+    beNDMWShopSelectB0 obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[12] = 0;
-    o.w[13] = 0;
-    o.w[14] = 0;
-    o.w[15] = 0;
-    o.w[16] = 0;
-    o.w[17] = 0;
-    o.w[18] = 0;
-    o.w[19] = 0;
-    o.w[26] = 0;
-    o.vt = g_beNDMWShopSelectB0_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWShopSelectB0_vtable;
-    FUN_003b4050((struct S_3b4050 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    obj._infoName = 0;
+    obj._decideList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopSelectB0_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopSelectB0_vtable[0];
+    beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
+    return vtable;
 }
 
-void *FUN_003b4050(struct S_3b4050 *arg0, short arg1) {
-    struct R_3b4050 *p;
-    int *h;
-    int *a1;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &g_beNDMWWindowSelect_vtable[0];
-        if (&arg0->f108) {
-            p = arg0->f108;
-            if (p != 0) {
-                p->rc = p->rc - 1;
-                if ((p->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy(p);
-                }
-            }
+void *beNDMWWindowSelect_Destroy(beNDMWWindowSelect *self, short flags) {
+    if (self != 0) {
+        *(int **)&self->_vtable = &g_beNDMWWindowSelect_vtable[0];
+        if (&self->_decideList != 0) {
+            igRelease((igObject *)self->_decideList);
         }
-        if (&arg0->f80) {
-            h = arg0->f80;
-            if (h != 0) {
-                a1 = h - 2;
-                rc = h[-1] - 1;
-                h[-1] = rc;
-                if (rc == 0) {
-                    StringChunk_ReleaseHeader(*a1, a1);
-                }
-            }
+        if (&self->_infoName != 0) {
+            releaseString((const char *)self->_infoName);
         }
-        if (arg0 != 0) {
-            arg0->f0 = &g_beNDMWWindow_vtable[0];
-            igSmartPointer_igStringRefList_Destruct(&arg0->f76, -1);
-            igSmartPointer_igIntList_Destruct(&arg0->f72, -1);
-            igSmartPointer_igStringRefList_Destruct(&arg0->f68, -1);
-            igSmartPointer_igStringRefList_Destruct(&arg0->f64, -1);
-            igSmartPointer_igStringRefList_Destruct(&arg0->f60, -1);
-            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&arg0->f56, -1);
-            FUN_003b2fb0((igSmartPointer<igObject> *)&arg0->f52, -1);
+        if (self != 0) {
+            *(int **)&self->_vtable = &g_beNDMWWindow_vtable[0];
+            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseSeqNameList, -1);
+            igSmartPointer_igIntList_Destruct(&self->_modelCloseRamNoList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseInfoNameList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_textCloseNameList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_textCloseTypeList, -1);
+            beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&self->_mother, -1);
+            igSmartPointer_beNDMWWindowList_Destruct((igSmartPointer<igObject> *)&self->_subWindow, -1);
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWShopSelectB0_EnsureRegistered(void)

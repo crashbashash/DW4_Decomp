@@ -17,22 +17,22 @@ done:
 }
 
 int beNDMWShopCtrlA2_GetVTable(void) {
-    struct Obj_3b7ad0 obj;
-    int t;
+    beNDMWShopCtrlA2 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopCtrlA2_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopCtrlA2_vtable[0];
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA2_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA2_vtable[0];
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
-    return t;
+    return vtable;
 }
 
 void beNDMWShopCtrlA2_EnsureRegistered(void)

@@ -34,7 +34,7 @@ igMetaObject *beNDMWLoadIntf2MesWin_GetOrCreateMetaObject(void) {
 void *beNDMWLoadIntf2MesWin_GetReadyMetaObject(void) {
     unsigned char b;
     if (g_beNDMWLoadIntf2MesWin_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWLoadIntf2MesWin_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWLoadIntf2MesWin_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWLoadIntf2MesWin_EnsureRegistered();
@@ -43,32 +43,21 @@ done:
 }
 
 int beNDMWLoadIntf2MesWin_GetVTable(void) {
-    union U_3c6be0 u;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
+    beNDMWLoadIntf2MesWin obj;
+    int vtable;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&g_beNDMWLoadIntf2MesWin_vtable[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2MesWin_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return s0;
+    return vtable;
 }
 
 void beNDMWLoadIntf2MesWin_EnsureRegistered(void)
@@ -198,7 +187,7 @@ void beNDMWLoadIntf2MesWin_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2MesWin_ctorTable, 0x12);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "MESWIN");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2MesWin_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

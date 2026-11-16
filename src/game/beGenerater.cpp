@@ -49,7 +49,7 @@ extern "C" int List_RemoveWordAt(void *list, int index);
 extern "C" char *g_itemDropCategories[];
 extern "C" void beGenerater_DropItemsForDead(beGenerater *self, beBaseInfoRam *ram, bool lastWave);
 extern "C" void igObject_Destroy(void *object);
-extern "C" igMetaEnum *FUN_00360b10(void);
+extern "C" igMetaEnum *beGenerater_GetMsgActionEnum(void);
 extern "C" int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message);
 extern "C" int beMessenger_GetStringCount(int messenger);
 extern "C" const char *beMessenger_GetString(int messenger, int index);
@@ -279,7 +279,7 @@ int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message
             return 1;
         }
     }
-    switch (beMessenger_ResolveEnumValue(self->_messenger, FUN_00360b10(), message)) {
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beGenerater_GetMsgActionEnum(), message)) {
     case MSG_STOP:
         if (work != 0) {
             work->_isFreeze = 1;

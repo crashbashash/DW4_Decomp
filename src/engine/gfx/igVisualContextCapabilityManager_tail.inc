@@ -214,7 +214,7 @@ int FUN_00165d10(int *p)
     return *(int *)((char *)p + 52);
 }
 
-void FUN_00165d20(int arg0) {
+void igVisualContext_SetImageMemoryPool(int arg0) {
     *(int *)0x560780 = arg0;
 }
 

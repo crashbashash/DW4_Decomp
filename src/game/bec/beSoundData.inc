@@ -15,34 +15,22 @@ igMetaObject *beSoundData_GetMetaObject(void) {
 }
 
 int beSoundData_GetVTable(void) {
-    union U_343fa0 u;
-    int temp_s0;
-    char *q1;
-    int *tv1, *ta1;
-    int tc1;
+    beSoundData obj;
+    int vtable;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    u.w[0] = (int)(&g_beSoundData_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q1 != 0) {
-        tv1 = *(int **)q1;
-        if (tv1 != 0) {
-            ta1 = tv1 - 2;
-            tc1 = tv1[-1] - 1;
-            tv1[-1] = tc1;
-            if (tc1 == 0) {
-                StringChunk_ReleaseHeader(*ta1, ta1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beSoundData_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
-struct W_344030 *FUN_00344030(struct W_344030 *arg0, short arg1) {
+struct W_344030 *beBaseInfoData_Destroy(struct W_344030 *arg0, short arg1) {
     int *temp_a1;
     int temp_v0;
     int *temp_v1;

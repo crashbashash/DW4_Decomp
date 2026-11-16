@@ -53,7 +53,7 @@ int igCollisionGrid_GetVTable(void) {
     *(int *)&u.b[56] = 0;
     r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igCollisionGrid_vtable[0];
-    FUN_00198190(&u.b[56], -1);
+    igSmartPointer_igAABox_Destruct(&u.b[56], -1);
     FUN_0023a2c0((void **)&u.b[52], -1);
     FUN_0023a2c0((void **)&u.b[48], -1);
     FUN_0023a2c0((void **)&u.b[44], -1);
@@ -141,7 +141,7 @@ static FieldFactory g_igCollisionGrid_ctorTable[] = {
     igIntMetaField_Create,
     igFloatMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
 };

@@ -26,7 +26,7 @@ void FUN_001d3410(NodeSlots *o, void *with) {
     release_1d3410((int *)&held);
 }
 
-void FUN_001d3550(void *arg0) {
+void Gap__Sg__igNode__resetFields(void *arg0) {
     Gap__Core__igObject__resetFields();
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
@@ -49,7 +49,7 @@ void **igSmartPointer_igInfoList_Destruct(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001d3650(void **arg0, long long arg1) {
+void **igSmartPointer_igSceneInfo_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {

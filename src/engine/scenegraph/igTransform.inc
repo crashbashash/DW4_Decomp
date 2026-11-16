@@ -41,7 +41,7 @@ int igTransform_GetVTable(void) {
     o.vt = &g_igTransform_vtable[0];
     FUN_00196450((void * *)&o.f[25], -1);
     FUN_001963d0((ObjectRefWord *)&o.f[24], -1);
-    FUN_00195a90((struct T_195a90 *)&o, 0);
+    igGroup_Destroy((struct T_195a90 *)&o, 0);
     return r;
 }
 
@@ -73,8 +73,8 @@ void *FUN_001962d0(struct S_1962d0 *arg0, short arg1) {
         }
         if (arg0 != 0) {
             arg0->f0 = &g_igGroup_vtable[0];
-            FUN_001958f0((void * *)((char *)arg0 + 0x1C), -1);
-            FUN_00195970((struct T_195970 *)arg0, 0);
+            igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 0x1C), -1);
+            igNode_Destroy((struct T_195970 *)arg0, 0);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -142,7 +142,7 @@ void thunk_igTransform_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTransform_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igIntMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -198,7 +198,7 @@ void igTransform_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     igIntMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1)), 0);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));

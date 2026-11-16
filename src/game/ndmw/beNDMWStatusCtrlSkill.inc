@@ -17,28 +17,28 @@ void *beNDMWStatusCtrlSkill_GetMetaObject(void) {
 }
 
 int beNDMWStatusCtrlSkill_GetVTable(void) {
-    union U_3b9340 u;
-    int temp_s1;
-    char *p1;
+    beNDMWStatusCtrlSkill obj;
+    int vtable;
+    int *shinkaCtrlRef;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[52] = 0;
-    *(int *)&u.b[56] = 0;
-    *(int *)&u.b[60] = 0;
-    *(int *)&u.b[64] = 0;
-    *(int *)&u.b[68] = 0;
-    *(int *)&u.b[72] = 0;
-    *(int *)&u.b[76] = 0;
-    u.vt = (int)&g_beNDMWStatusCtrlSkill_vtable[0];
-    p1 = &u.b[100];
-    *(int *)p1 = 0;
-    *(int *)&u.b[104] = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWStatusCtrlSkill_vtable[0];
-    igSmartPointer_igIntList_Destruct(&u.b[104], -1);
-    FUN_003b8980((igSmartPointer<igObject> *)p1, -1);
-    FUN_003b6770((int **)u.b, (long long)0);
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlSkill_vtable[0];
+    shinkaCtrlRef = &obj._shinkaCtrl;
+    *shinkaCtrlRef = 0;
+    obj._skillList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlSkill_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._skillList, -1);
+    igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusCtrlSkill_EnsureRegistered(void)

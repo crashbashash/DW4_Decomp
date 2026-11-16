@@ -11,25 +11,25 @@ void *bePoint01Info_GetMetaObject(void) {
 }
 
 int bePoint01Info_GetVTable(void) {
-    struct Obj obj;
-    int temp_s1;
+    bePoint01Info obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f14 = 0;
-    obj.f18 = 0;
-    obj.vt = (&g_bePoint01Info_vtable[0]);
-    obj.f1C = 0;
-    obj.f20 = 0;
-    temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_bePoint01Info_vtable[0]);
-    FUN_0034b790((igSmartPointer<igObject> *)&obj.f20, -1);
-    FUN_00343260((igSmartPointer<igObject> *)&obj.f1C, -1);
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return temp_s1;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_bePoint01Info_vtable[0];
+    obj._switch = 0;
+    obj._dataList_ = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_bePoint01Info_vtable[0];
+    igSmartPointer_beGroupKeepList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switch, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0034b790(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beGroupKeepList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -114,7 +114,7 @@ static int g_bePoint01Info_msgActionValues[] = {
     0, 1, 2, 3, 4, 5, 6,
 };
 
-igMetaEnum *FUN_0034b980(void) {
+igMetaEnum *bePoint01_GetMsgActionEnum(void) {
     if (g_bePoint01Info_msgActionMetaEnum == 0) {
         g_bePoint01Info_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_bePoint01Info_msgActionNames, g_bePoint01Info_msgActionValues, 7);
     }

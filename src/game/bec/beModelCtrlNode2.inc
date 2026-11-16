@@ -51,7 +51,7 @@ void *beModelCtrlNode2_Register(void) {
         0x90, /* instance size */
         beModelCtrlNode2_GetVTable,
         beModelCtrlNode2_InitFields,
-        FUN_00350000, /* extra callback item */
+        beModelCtrlNode2_StaticInitCallback, /* extra callback item */
         g_beModelCtrlNode2_callbackList /* callback list */
     );
 }
@@ -101,7 +101,7 @@ void beModelCtrlNode2_InitFields(void) {
     igMetaObject_NameFields(meta, g_beModelCtrlNode2_fieldTable, g_beModelCtrlNode2_fieldHandles, g_beModelCtrlNode2_fieldOffsets, base);
 }
 
-void FUN_00350000(void)
+void beModelCtrlNode2_StaticInitCallback(void)
 {
     beModelCtrlNode2_RegisterTraversalFunction();
 }

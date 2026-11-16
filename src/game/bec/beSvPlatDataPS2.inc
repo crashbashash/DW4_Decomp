@@ -32,32 +32,28 @@ void *beSvPlatDataPS2_GetMetaObject(void) {
 }
 
 int beSvPlatDataPS2_GetVTable(void) {
-    union U_347870 u;
-    int t;
-    char *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beSvPlatDataPS2 obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[12] = 0;
-    u.vt = (int)&g_beSvPlatDataPS2_vtable[0];
-    *(int *)&u.b[24] = 0;
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[184] = 0;
-    *(int *)&u.b[188] = 0;
-    *(int *)&u.b[192] = 0;
-    *(int *)&u.b[212] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beSvPlatDataPS2_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&u.b[212], -1);
-    igStringRef_Destruct(&u.b[192], -1);
-    igStringRef_Destruct(&u.b[188], -1);
-    igStringRef_Destruct(&u.b[184], -1);
-    igStringRef_Destruct(&u.b[28], -1);
-    igStringRef_Destruct(&u.b[24], -1);
-    FUN_00347150((O_347150 *)u.b, (short)0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._slotList = 0;
+    obj._vtable = (int)&g_beSvPlatDataPS2_vtable[0];
+    obj._dirName = 0;
+    obj._title = 0;
+    obj._fnameIcon0 = 0;
+    obj._fnameIcon1 = 0;
+    obj._fnameIcon2 = 0;
+    obj._image = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvPlatDataPS2_vtable[0];
+    igSmartPointer_igObjectList_Destruct(&obj._image, -1);
+    igStringRef_Destruct(&obj._fnameIcon2, -1);
+    igStringRef_Destruct(&obj._fnameIcon1, -1);
+    igStringRef_Destruct(&obj._fnameIcon0, -1);
+    igStringRef_Destruct(&obj._title, -1);
+    igStringRef_Destruct(&obj._dirName, -1);
+    beSvPlatBaseData_Destroy((O_347150 *)&obj, (short)0);
+    return vtable;
 }
 
 void beSvPlatDataPS2_EnsureRegistered(void)
@@ -199,7 +195,7 @@ void beSvPlatDataPS2_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beSvPlatDataPS2_ctorTable, 0x16);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_connectMax"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 5);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataPS2_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

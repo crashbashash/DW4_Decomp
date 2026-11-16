@@ -17,10 +17,10 @@ igMetaObject *beModelCtrlSCHitBox_GetMetaObject(void) {
 }
 
 int beModelCtrlSCHitBox_GetVTable(void) {
-    struct Obj_34f780 obj;
+    beModelCtrlSCHitBox obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beModelCtrlSCHitBox_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlSCHitBox_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -55,8 +55,8 @@ static FieldFactory g_beModelCtrlSCHitBox_ctorTable[] = {
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
 };
 static const char *g_beModelCtrlSCHitBox_fieldTable[] = {

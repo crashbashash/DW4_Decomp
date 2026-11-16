@@ -75,7 +75,7 @@ int beModelCtrlInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-void *FUN_00350410(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
+void *beModelCtrlInfoWork_Destroy(beNDMWMdlPlayer2InfoWork *arg0, long long arg1) {
     void *p;
     igObject *o;
     int *h;
@@ -131,7 +131,7 @@ igSmartPointer<igObject> *igSmartPointer_beDataObjInt_Destruct(igSmartPointer<ig
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350b90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlData_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -144,7 +144,7 @@ igSmartPointer<igObject> *FUN_00350b90(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350c10(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoAI_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -157,7 +157,7 @@ igSmartPointer<igObject> *FUN_00350c10(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350c90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoDataTrc_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -170,7 +170,7 @@ igSmartPointer<igObject> *FUN_00350c90(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350d10(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -183,7 +183,7 @@ igSmartPointer<igObject> *FUN_00350d10(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350d90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -196,7 +196,7 @@ igSmartPointer<igObject> *FUN_00350d90(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350e10(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoHitBody_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -209,7 +209,7 @@ igSmartPointer<igObject> *FUN_00350e10(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00350e90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -222,61 +222,61 @@ igSmartPointer<igObject> *FUN_00350e90(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-int *FUN_00350f10(int *p)
+int *igSmartPointer_beModelCtrlSubCom_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350f20(int *p)
+int *igSmartPointer_beModelCtrlInfoHitBody_Construct(int *p)
 {
     *p = 0;
     return p;
 }
 
-int *FUN_00350f30(int *p)
+int *igSmartPointer_igGroup_Construct(int *p)
 {
     *p = 0;
     return p;
 }
 
-int *FUN_00350f40(int *p)
+int *igSmartPointer_beModelCtrlInfoRideOn_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350f50(int *p)
+int *igSmartPointer_beModelCtrlMoveObjectList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350f60(int *p)
+int *igSmartPointer_beModelCtrlInfoDataTrc_Construct(int *p)
 {
     *p = 0;
     return p;
 }
 
-int *FUN_00350f70(int *p)
+int *igSmartPointer_beModelCtrlNode2_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350f80(int *p)
+int *igSmartPointer_beModelCtrlInfoAI_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350f90(int *p)
+int *igSmartPointer_beModelCtrlData_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_00350fa0(int *p)
+int *igSmartPointer_beDataObjInt_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
@@ -336,21 +336,21 @@ static FieldFactory g_beModelCtrlInfoWork_ctorTable[] = {
     igStringMetaField_Create,
     igStringMetaField_Create,
     igStringMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igStringMetaField_Create,
     igBoolMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igStringMetaField_Create,
     igStringMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,

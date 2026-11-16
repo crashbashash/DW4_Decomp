@@ -16,7 +16,7 @@ void beNDMWStatusCtrlD0_Create(int allocator) {
 void *beNDMWStatusCtrlD0_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWStatusCtrlD0_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWStatusCtrlD0_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWStatusCtrlD0_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWStatusCtrlD0_EnsureRegistered();
@@ -25,26 +25,26 @@ done:
 }
 
 int beNDMWStatusCtrlD0_GetVTable(void) {
-    struct Obj_3bafa0 obj;
-    int temp_s1;
+    beNDMWStatusCtrlD0 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f34 = 0;
-    obj.f38 = 0;
-    obj.f3C = 0;
-    obj.f40 = 0;
-    obj.f44 = 0;
-    obj.f48 = 0;
-    obj.f4C = 0;
-    obj.vt = (&g_beNDMWStatusCtrlD0_vtable[0]);
-    obj.f64 = 0;
-    obj.f70 = 0;
-    temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beNDMWStatusCtrlD0_vtable[0]);
-    FUN_00226990(&obj.f70, -1);
-    igSmartPointer_igIntList_Destruct(&obj.f64, -1);
-    FUN_003b6770((int **)&obj, (long long)0);
-    return temp_s1;
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlD0_vtable[0];
+    obj._kindList = 0;
+    obj._decideList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlD0_vtable[0];
+    igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._kindList, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusCtrlD0_EnsureRegistered(void)

@@ -26,10 +26,10 @@ are, in retail order:
 
 The other members of the compiler object are copies the compiler emits out of line:
 the `igSmartPointer<beLoadIntf2ComMdlData>` destructor (`0x003e3d80`) after `Start`;
-after the update, the owned-reference destructor (`ObjectRef_Destruct_003e9010`), the
-small accessors `DataList_GetData_003e9090` … `ObjectRef_Get_003e93b0`
+after the update, the owned-reference destructor (`igSmartPointer_beNDMWDegiData_Destruct`), the
+small accessors `beNDMWLoadIntf2_igIntList_GetData` … `ObjectRef_Get_003e93b0`
 (with `beNDMWLoadSavePlWork__SetIsCtrl`/`__GetIsRdy`/`__GetIsEntry`,
-`ObjectRef_Release_003e9110`, `Vec3f_Copy` and the new-list constructor at
+`beNDMWLoadIntf2_igObject_Release`, `Vec3f_Copy` and the new-list constructor at
 `0x003e9330`); and after the message handler, one `igSmartPointer<…>` destructor per
 child class it creates (`0x003eb480`–`0x003eb980`). The accessor copies keep
 address-suffixed symbols because other units (`beNDMWSaveIntf`) call these copies,
@@ -363,7 +363,7 @@ The title's two character flows:
 
 ## Open questions
 
-- **Address-suffixed accessor copies.** `DataList_GetData_003e9090` …
+- **Address-suffixed accessor copies.** `beNDMWLoadIntf2_igIntList_GetData` …
   `ObjectRef_Get_003e93b0` are this unit's out-of-line copies of shared inline
   accessors; other units call them, and their names keep the address until the
   shared inlines have one name each.

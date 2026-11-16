@@ -26,29 +26,18 @@ void *beModelCtrlInfoAI_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoAI_GetVTable(void) {
-    struct F_352220 f;
-    int **pr;
-    int temp_s0;
-    int *temp_a1;
-    int temp_v0;
+    beModelCtrlInfoAI obj;
+    int vtable;
+    char **seqNameSlot;
 
-    igObject_InitHeader(&f);
-    f.vt = &g_beModelCtrlInfoAI_vtable[0];
-    pr = &f.ref;
-    *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beModelCtrlInfoAI_vtable[0];
-    if (pr != 0) {
-        if (*pr != 0) {
-            temp_a1 = *pr - 2;
-            temp_v0 = (*pr)[-1] - 1;
-            (*pr)[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
+    seqNameSlot = (char **)&obj._seqName;
+    *seqNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
+    igStringRef_Release(seqNameSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoAI_EnsureRegistered(void)
@@ -81,7 +70,7 @@ void beModelCtrlInfoAI_GetMetaObjectFunction(void)
 static FieldFactory g_beModelCtrlInfoAI_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
 };

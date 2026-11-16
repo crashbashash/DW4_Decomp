@@ -17,10 +17,10 @@ igMetaObject *beUnicodeObjList_GetMetaObject(void)
 }
 
 int beUnicodeObjList_GetVTable(void) {
-    struct Obj_361400 obj;
+    beUnicodeObjList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beUnicodeObjList_vtable[0];
+    obj._vtable = (int)&g_beUnicodeObjList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

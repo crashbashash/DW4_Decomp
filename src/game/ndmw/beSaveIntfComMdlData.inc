@@ -12,18 +12,22 @@ void *beSaveIntfComMdlData_GetMetaObject(void) {
 }
 
 int beSaveIntfComMdlData_GetVTable(void) {
-    Obj_3bc760 obj;
-    int r;
+    beSaveIntfComMdlData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSaveIntfComMdlData_vtable[0];
+    *(int **)&obj._vtable = &g_beSaveIntfComMdlData_vtable[0];
     obj._openSQ = 0;
     obj._infoName = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj._vtable = (int)&g_beSaveIntfComMdlData_vtable[0];
-    obj.rel16();
-    obj.rel12();
-    return r;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beSaveIntfComMdlData_vtable[0];
+    if (&obj._infoName != 0) {
+        releaseString((const char *)obj._infoName);
+    }
+    if (&obj._openSQ != 0) {
+        releaseString((const char *)obj._openSQ);
+    }
+    return vtable;
 }
 
 void beSaveIntfComMdlData_EnsureRegistered(void)

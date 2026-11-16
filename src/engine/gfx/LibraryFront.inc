@@ -241,7 +241,7 @@ static int g_gfxTextureFilterValues[] = {
 };
 igMetaEnum *g_gfxTextureFilterMetaEnum;
 
-int FUN_00149980(void) {
+int IG_GFX_TEXTURE_FILTER_GetMetaEnum(void) {
     if (g_gfxTextureFilterMetaEnum == 0) {
         g_gfxTextureFilterMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_FILTER", g_gfxTextureFilterNames, g_gfxTextureFilterValues, 6);
     }
@@ -277,7 +277,7 @@ static int g_gfxTextureFormatValues[] = {
 };
 igMetaEnum *g_gfxTextureFormatMetaEnum;
 
-int FUN_001499e0(void) {
+int IG_GFX_TEXTURE_FORMAT_GetMetaEnum(void) {
     if (g_gfxTextureFormatMetaEnum == 0) {
         g_gfxTextureFormatMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_FORMAT", g_gfxTextureFormatNames, g_gfxTextureFormatValues, 59);
     }

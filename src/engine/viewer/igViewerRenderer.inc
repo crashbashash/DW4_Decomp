@@ -73,12 +73,12 @@ int igViewerRenderer_GetVTable(void) {
     FUN_0019d9e0(&u.b[64], -1);
     FUN_0019c1a0(&u.b[60], -1);
     FUN_00239280(&u.b[56], -1);
-    FUN_001a7580(&u.b[52], -1);
+    igSmartPointer_igTransform_Destruct(&u.b[52], -1);
     FUN_0045aed0((void **)&u.b[48], -1);
-    FUN_001d97f0(&u.b[44], -1);
+    igSmartPointer_igAttrSet_Destruct(&u.b[44], -1);
     FUN_00229460(&u.b[40], -1);
     FUN_00136370(&u.b[36], -1);
-    FUN_00239200(&u.b[32], -1);
+    igSmartPointer_igLightingStateAttr_Destruct(&u.b[32], -1);
     FUN_0045ae50((struct R **)&u.b[28], -1);
     FUN_0045add0((ObjectRefWord *)&u.b[24], -1);
     FUN_001d3090(&u.b[20], -1);
@@ -230,7 +230,7 @@ int *FUN_0045b080(int *p)
 
 void *FUN_0045b090(void *arg0) {
     igObject_InitHeader();
-    *(int *)((char *)(arg0) + 0) = (int)(&DAT_0052d060[0]);
+    *(int *)((char *)(arg0) + 0) = (int)(&g_igRenderer_vtable[0]);
     *(int *)((char *)(arg0) + 8) = 0;
     return arg0;
 }

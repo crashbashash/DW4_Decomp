@@ -70,7 +70,7 @@ int igSkin_GetVTable(void) {
     return temp_s2;
 }
 
-void **FUN_00198190(void **arg0, short arg1) {
+void **igSmartPointer_igAABox_Destruct(void **arg0, short arg1) {
     S_temp_a0_198190 *temp_a0;
 
     if (arg0 != 0) {
@@ -88,7 +88,7 @@ void **FUN_00198190(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_00198210(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igNode_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

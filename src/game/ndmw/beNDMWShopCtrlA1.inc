@@ -13,26 +13,26 @@ igMetaObject *beNDMWShopCtrlA1_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlA1_GetVTable(void) {
-    struct Obj_3b7c90 obj;
-    int t;
+    beNDMWShopCtrlA1 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopCtrlA1_vtable[0];
-    obj.w21 = 0;
-    obj.w22 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopCtrlA1_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj.w22, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj.w21, -1);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA1_vtable[0];
+    obj._cardInfoList = 0;
+    obj._cardRamNoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA1_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._cardRamNoList, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._cardInfoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
-    return t;
+    return vtable;
 }
 
 void beNDMWShopCtrlA1_EnsureRegistered(void)

@@ -27,7 +27,7 @@ int igViewerStatisticsManager_GetVTable(void) {
     GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
     GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
     FUN_004583f0(&obj.w4, -1);
-    FUN_00130140(&obj.w3, -1);
+    igSmartPointer_igVisualContext_Destruct(&obj.w3, -1);
     FUN_00458860((ObjectRefWord *)&obj.w2, -1);
     return t;
 }

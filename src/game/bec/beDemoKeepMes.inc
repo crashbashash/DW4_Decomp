@@ -21,25 +21,22 @@ igMetaObject *beDemoKeepMes_GetMetaObject(void) {
 }
 
 int beDemoKeepMes_GetVTable(void) {
-    union U u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
+    beDemoKeepMes obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beDemoKeepMes_vtable[0];
-    *(int *)&u.b[24] = 0;
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[36] = 0;
-    *(int *)&u.b[40] = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beDemoKeepMes_vtable[0];
-    igStringRef_Destruct(&u.b[40], -1);
-    igStringRef_Destruct(&u.b[36], -1);
-    igStringRef_Destruct(&u.b[28], -1);
-    igStringRef_Destruct(&u.b[24], -1);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beDemoKeepMes_vtable[0];
+    obj._groupName = 0;
+    obj._infoName = 0;
+    obj._message = 0;
+    obj._mesParam = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDemoKeepMes_vtable[0];
+    igStringRef_Destruct(&obj._mesParam, -1);
+    igStringRef_Destruct(&obj._message, -1);
+    igStringRef_Destruct(&obj._infoName, -1);
+    igStringRef_Destruct(&obj._groupName, -1);
+    return vtable;
 }
 
 void beDemoKeepMes_EnsureRegistered(void)

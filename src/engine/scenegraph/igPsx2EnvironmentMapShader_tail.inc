@@ -29,12 +29,12 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);
-    FUN_001ab380((void * *)p0, -1);
+    igSmartPointer_igBlendFunctionAttr_Destruct((void * *)p0, -1);
     FUN_001aaf80((Obj_1aaf80 *)u.b, 0);
     return temp_s2;
 }
 
-void **FUN_001aaf00(void **arg0, long long arg1) {
+void **igSmartPointer_igBlendStateAttr_Destruct(void **arg0, long long arg1) {
     char *o;
     if (arg0 != 0) {
         o = (char *)*arg0;
@@ -70,8 +70,8 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
         arg0->rel(&arg0->m32);
         if (arg0) {
             arg0->vt = g_igGroup_vtable;
-            FUN_001958f0((void * *)((char *)arg0 + 28), -1);
-            FUN_00195970((struct T_195970 *)arg0, 0);
+            igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 28), -1);
+            igNode_Destroy((struct T_195970 *)arg0, 0);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);

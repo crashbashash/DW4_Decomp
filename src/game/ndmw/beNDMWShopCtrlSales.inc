@@ -16,26 +16,26 @@ void *beNDMWShopCtrlSales_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlSales_GetVTable(void) {
-    struct Obj_3b6c50 obj;
-    int t;
+    beNDMWShopCtrlSales obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopCtrlSales_vtable[0];
-    obj.w24 = 0;
-    obj.w25 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopCtrlSales_vtable[0];
-    FUN_00226990(&obj.w25, -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj.w24, -1);
-    FUN_003b6770((int **)&obj, (long long)0);
-    return t;
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
+    obj._salesItemList = 0;
+    obj._decideList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
+    igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._salesItemList, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWShopCtrlSales_EnsureRegistered(void)

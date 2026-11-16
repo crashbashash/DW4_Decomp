@@ -35,10 +35,10 @@ int igTransformSequence1_5_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igTransformSequence1_5_vtable[0];
     FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
-    FUN_001374b0(&obj.w[16], -1);
-    FUN_001374b0(&obj.w[15], -1);
-    FUN_001374b0(&obj.w[14], -1);
-    FUN_00195190((O *)&obj.w[13], -1);
+    igSmartPointer_igVec3fList_Destruct(&obj.w[16], -1);
+    igSmartPointer_igVec3fList_Destruct(&obj.w[15], -1);
+    igSmartPointer_igVec3fList_Destruct(&obj.w[14], -1);
+    igSmartPointer_igLongList_Destruct((O *)&obj.w[13], -1);
     FUN_00195030((Obj_195030 *)((int *)&obj), 0);
     return t;
 }
@@ -57,7 +57,7 @@ Obj_195030 *FUN_00195030(Obj_195030 *arg0, short arg1) {
     return arg0;
 }
 
-O *FUN_00195190(O *arg0, short arg1) {
+O *igSmartPointer_igLongList_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }

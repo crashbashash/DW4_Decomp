@@ -19,31 +19,18 @@ done:
 }
 
 int beHitLandResultData_GetVTable(void) {
-    union U_35e490 u;
-    int temp_s0;
-    char *ps;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beHitLandResultData obj;
+    int vtable;
+    char **infoNameSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beHitLandResultData_vtable[0];
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beHitLandResultData_vtable[0];
-    if (ps != 0) {
-        temp_v1 = *(int **)ps;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beHitLandResultData_vtable[0];
+    infoNameSlot = (char **)&obj._infoName;
+    *infoNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beHitLandResultData_vtable[0];
+    igStringRef_Release(infoNameSlot);
+    return vtable;
 }
 
 void beHitLandResultData_EnsureRegistered(void)

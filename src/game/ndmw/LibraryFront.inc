@@ -1,4 +1,4 @@
-void FUN_003b04e0(void) {
+void NdmwLibrary_RegisterClasses(void) {
     libNdmwRuntimePlugin_EnsureRegistered();
     beNDMWWindow_EnsureRegistered();
     beNDMWWindowList_EnsureRegistered();

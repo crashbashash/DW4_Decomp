@@ -6,7 +6,7 @@ static int g_ParticleInfo_particleTimeTypeValues[] = {
     0, 1, 2,
 };
 
-igMetaEnum *FUN_0036e880(void) {
+igMetaEnum *ParticleInfo_GetParticleTimeTypeMetaEnum(void) {
     if (g_ParticleInfo_particleTimeTypeMetaEnum == 0) {
         g_ParticleInfo_particleTimeTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_TIME_TYPE", g_ParticleInfo_particleTimeTypeNames, g_ParticleInfo_particleTimeTypeValues, 3);
     }
@@ -21,7 +21,7 @@ static int g_ParticleInfo_particleAlphaFunctionValues[] = {
     0, 1,
 };
 
-igMetaEnum *FUN_0036e8e0(void) {
+igMetaEnum *ParticleInfo_GetParticleAlphaFunctionMetaEnum(void) {
     if (g_ParticleInfo_particleAlphaFunctionMetaEnum == 0) {
         g_ParticleInfo_particleAlphaFunctionMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_FUNCTION", g_ParticleInfo_particleAlphaFunctionNames, g_ParticleInfo_particleAlphaFunctionValues, 2);
     }
@@ -36,7 +36,7 @@ static int g_ParticleInfo_particleAlphaTypeValues[] = {
     0, 1, 2,
 };
 
-igMetaEnum *FUN_0036e940(void) {
+igMetaEnum *ParticleInfo_GetParticleAlphaTypeMetaEnum(void) {
     if (g_ParticleInfo_particleAlphaTypeMetaEnum == 0) {
         g_ParticleInfo_particleAlphaTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_TYPE", g_ParticleInfo_particleAlphaTypeNames, g_ParticleInfo_particleAlphaTypeValues, 3);
     }
@@ -52,7 +52,7 @@ static int g_ParticleInfo_particleEmitterTypeValues[] = {
     0, 1, 2, 3, 4,
 };
 
-igMetaEnum *FUN_0036e9a0(void) {
+igMetaEnum *ParticleInfo_GetParticleEmitterTypeMetaEnum(void) {
     if (g_ParticleInfo_particleEmitterTypeMetaEnum == 0) {
         g_ParticleInfo_particleEmitterTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_EMITTER_TYPE", g_ParticleInfo_particleEmitterTypeNames, g_ParticleInfo_particleEmitterTypeValues, 5);
     }
@@ -88,24 +88,24 @@ igMetaObject *ParticleInfo_GetMetaObject(void) {
 }
 
 int ParticleInfo_GetVTable(void) {
-    struct Obj_36ea50 obj;
-    int t;
+    ParticleInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w15 = 0;
-    obj.vt = &g_ParticleInfo_vtable[0];
-    obj.w242 = 0;
-    obj.w254 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_ParticleInfo_vtable[0];
-    FUN_001971e0(&obj.w254, -1);
-    FUN_00132390(&obj.w242, -1);
-    FUN_0019b040(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._sceneGraph = 0;
+    obj._textures = 0;
+    obj._cameras = 0;
+    obj._sceneGraphList = 0;
+    obj._vtable = (int)&g_ParticleInfo_vtable[0];
+    obj._texture = 0;
+    obj._geometry = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_ParticleInfo_vtable[0];
+    igSmartPointer_igGeometry_Destruct(&obj._geometry, -1);
+    igSmartPointer_igImage_Destruct(&obj._texture, -1);
+    igSceneInfo_Destroy((igSceneInfo *)&obj, 0);
+    return vtable;
 }
 
 void ParticleInfo_EnsureRegistered(void)
@@ -243,16 +243,16 @@ void ParticleInfo_InitFields(void) {
     ((igObjectRefMetaField *)f)->_metaObject = igImage_GetOrCreateMetaObject();
     f = igMetaObject_GetFieldAt(meta, base + 5);
     igEnumMetaField_SetDefaultValue(f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e940;
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&ParticleInfo_GetParticleAlphaTypeMetaEnum;
     f = igMetaObject_GetFieldAt(meta, base + 6);
     igEnumMetaField_SetDefaultValue(f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e8e0;
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&ParticleInfo_GetParticleAlphaFunctionMetaEnum;
     f = igMetaObject_GetFieldAt(meta, base + 9);
     igEnumMetaField_SetDefaultValue(f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e880;
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&ParticleInfo_GetParticleTimeTypeMetaEnum;
     f = igMetaObject_GetFieldAt(meta, base + 0xB);
     igEnumMetaField_SetDefaultValue(f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_0036e9a0;
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&ParticleInfo_GetParticleEmitterTypeMetaEnum;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xD), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xE), 1);
     igFloatMetaField_SetDefault((void *)((int)igMetaObject_GetFieldAt(meta, base + 0x10)), 0.0f);

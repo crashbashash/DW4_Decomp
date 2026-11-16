@@ -21,10 +21,10 @@ void *beNDMWItemBaseList_GetReadyMetaObject(void) {
 }
 
 int beNDMWItemBaseList_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemBaseList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemBaseList_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemBaseList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -20,24 +20,24 @@ void *ParticleArray_GetMetaObject(void) {
 }
 
 int ParticleArray_GetVTable(void) {
-    struct Obj_36e310 obj;
-    int t;
+    ParticleArray obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.w17 = 0;
-    obj.vt = &g_ParticleArray_vtable[0];
-    obj.w28 = 0;
-    obj.w29 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_ParticleArray_vtable[0];
-    FUN_001338d0(&obj.w29, -1);
-    FUN_001338d0(&obj.w28, -1);
-    FUN_0014caf0(&obj, 0);
-    return t;
+    obj._particleFormat = 0;
+    obj._internalVertexArray = 0;
+    obj._context = 0;
+    obj._pointSpriteInterface = 0;
+    obj._primLengthArray = 0;
+    obj._vtable = (int)&g_ParticleArray_vtable[0];
+    obj._vertexArray1 = 0;
+    obj._vertexArray2 = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_ParticleArray_vtable[0];
+    igSmartPointer_igVertexArray_Destruct(&obj._vertexArray2, -1);
+    igSmartPointer_igVertexArray_Destruct(&obj._vertexArray1, -1);
+    igParticleArray_Destroy((igParticleArray *)&obj, 0);
+    return vtable;
 }
 
 void ParticleArray_EnsureRegistered(void)

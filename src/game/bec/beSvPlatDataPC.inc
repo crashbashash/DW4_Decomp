@@ -12,33 +12,22 @@ done:;
 }
 
 int beSvPlatDataPC_GetVTable(void) {
-    union U_3470b0 u;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
+    beSvPlatDataPC obj;
+    int vtable;
+    igObject **slotListSlot;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[12];
-    *(int *)ps = 0;
-    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
-    u.vt = (int)&g_beSvPlatDataPC_vtable[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beSvPlatBaseData_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
-            }
-        }
-    }
-    return s0;
+    igObject_InitHeader(&obj);
+    slotListSlot = (igObject **)&obj._slotList;
+    *slotListSlot = 0;
+    obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
+    obj._vtable = (int)&g_beSvPlatDataPC_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
+    igObjectRef_Release(slotListSlot);
+    return vtable;
 }
 
-O_347150 *FUN_00347150(O_347150 *arg0, short arg1) {
+O_347150 *beSvPlatBaseData_Destroy(O_347150 *arg0, short arg1) {
     Q *t;
 
     if (arg0 != 0) {

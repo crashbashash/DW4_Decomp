@@ -15,22 +15,22 @@ igMetaObject *beNDMWStatusTitle02_GetMetaObject(void)
 }
 
 int beNDMWStatusTitle02_GetVTable(void) {
-    struct W o;
-    int r;
+    beNDMWStatusTitle02 obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[12] = 0;
-    o.f[13] = 0;
-    o.f[14] = 0;
-    o.f[15] = 0;
-    o.f[16] = 0;
-    o.f[17] = 0;
-    o.f[18] = 0;
-    o.vt = g_beNDMWStatusTitle02_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWStatusTitle02_vtable;
-    FUN_003b3030((int **)&o, (long long)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusTitle02_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusTitle02_vtable[0];
+    beNDMWWindowTitle_Destroy((beNDMWWindowTitle *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusTitle02_EnsureRegistered(void)

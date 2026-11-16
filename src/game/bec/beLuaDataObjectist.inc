@@ -6,10 +6,10 @@ igMetaObject *beLuaDataObjectist_GetMetaObject(void) {
 }
 
 int beLuaDataObjectist_GetVTable(void) {
-    struct Obj_35b420 obj;
+    beLuaDataObjectist obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beLuaDataObjectist_vtable[0];
+    obj._vtable = (int)&g_beLuaDataObjectist_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

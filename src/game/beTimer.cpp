@@ -15,14 +15,12 @@ extern "C" int g_beTimer_metaObject[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_bePadManager_metaObject[4];
 extern "C" int g_beLua_metaObject[4];
-extern "C" void beTimer_Start(beTimer *arg0);
-extern "C" void beTimer_RemoveAllInfo(beTimer *arg0);
-struct Pad { char pad[36]; int f36; char p2[28]; int f68; };
-struct O { char pad[20]; int f20; };
-extern "C" struct Pad *bePadManager_GetPadForPlayer(int, int);
-extern "C" int FUN_003a54a0(struct O *arg0);
+extern "C" void beTimer_Start(beTimer *self);
+extern "C" void beTimer_RemoveAllInfo(beTimer *self);
+extern "C" bePadData *bePadManager_GetPadForPlayer(int padManager, int player);
+extern "C" int beTimer_HasPadInput(beTimer *self);
 extern "C" int NOPADDATA[4];
-extern "C" void beTimer_Update(beTimer *arg0);
+extern "C" void beTimer_Update(beTimer *self);
 
 void beTimer_Activate(void)
 {
@@ -32,10 +30,10 @@ void beTimer_Deactivate(void)
 {
 }
 
-void beTimer_Start(beTimer *arg0) {
-    arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
-    arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
-    arg0->_luaManager = igInsightCore_FindManager(arg0->_insight, g_beLua_metaObject[0]);
+void beTimer_Start(beTimer *self) {
+    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
+    self->_luaManager = igInsightCore_FindManager(self->_insight, g_beLua_metaObject[0]);
 }
 
 void beTimer_Stop(void)
@@ -46,8 +44,8 @@ int beTimer_AddInfo(void) {
     return 0;
 }
 
-void beTimer_RemoveAllInfo(beTimer *arg0) {
-    igObjectList *l = (igObjectList *)arg0->_dataList;
+void beTimer_RemoveAllInfo(beTimer *self) {
+    igObjectList *l = (igObjectList *)self->_dataList;
     int n = l->_count;
     int i;
     igObject *o;
@@ -71,42 +69,41 @@ void beTimer_RemoveAllInfo(beTimer *arg0) {
     l->_count = 0;
 }
 
-int FUN_003a54a0(struct O *arg0) {
+int beTimer_HasPadInput(beTimer *self) {
     int i = 0;
-    struct Pad *p;
-    int z;
+    bePadData *pad;
     do {
-        p = bePadManager_GetPadForPlayer(arg0->f20, i);
+        pad = bePadManager_GetPadForPlayer(self->_padManager, i);
         /* matching construct: the double negation keeps the retail sltu/xori normalisation of the first test
          * without the bool truncation the C++ front end adds to a `!= 0` comparison */
-        if (!!p->f36) { return 1; }
-        if (p->f68 != 0) { return 1; }
+        if (!!pad->_lStk) { return 1; }
+        if (pad->_button != 0) { return 1; }
         i++;
     } while (i < 4);
     return 0;
 }
 
-void beTimer_Update(beTimer *arg0) {
+void beTimer_Update(beTimer *self) {
     long long old, now, delta, nv;
     int n, i, off;
     beTimerData *it;
     beTimerDataList *l;
     bool b;
     igObject *o;
-    if (((beTimerDataList *)arg0->_dataList)->_count != 0) {
-        old = arg0->_oldWorldTime;
-        now = ((igInsightCore *)arg0->_insight)->_worldTime;
+    if (((beTimerDataList *)self->_dataList)->_count != 0) {
+        old = self->_oldWorldTime;
+        now = ((igInsightCore *)self->_insight)->_worldTime;
         delta = now - old;
-        arg0->_oldWorldTime = now;
-        if (beSystem_IsRunning(arg0->_system) & 0xFF) {
-            n = ((beTimerDataList *)arg0->_dataList)->_count;
+        self->_oldWorldTime = now;
+        if (beSystem_IsRunning(self->_system) & 0xFF) {
+            n = ((beTimerDataList *)self->_dataList)->_count;
             i = 0;
             if (n > 0) {
                 do {
                     off = i * 4;
-                    it = ((beTimerData **)((beTimerDataList *)arg0->_dataList)->_data)[i];
+                    it = ((beTimerData **)((beTimerDataList *)self->_dataList)->_data)[i];
                     if (it->_resetCondition != 0) {
-                        b = strcmp(it->_resetCondition, &NOPADDATA[0]) == 0 && FUN_003a54a0((O *)arg0) != 0;
+                        b = strcmp(it->_resetCondition, &NOPADDATA[0]) == 0 && beTimer_HasPadInput(self) != 0;
                         if (b) {
                             it->_downTimer = it->_startTime;
                         }
@@ -114,8 +111,8 @@ void beTimer_Update(beTimer *arg0) {
                     nv = it->_downTimer - delta;
                     it->_downTimer = nv;
                     if (nv < 0) {
-                        beLua__RunNamedChunk(arg0->_luaManager, it->_callLuaFile, 0);
-                        l = (beTimerDataList *)arg0->_dataList;
+                        beLua__RunNamedChunk(self->_luaManager, it->_callLuaFile, 0);
+                        l = (beTimerDataList *)self->_dataList;
                         o = ((igObject **)l->_data)[i];
                         if (o != 0) {
                             o->_refCount = o->_refCount - 1;

@@ -20,32 +20,19 @@ void *beBaseInfoRamTimer_GetMetaObject(void) {
 }
 
 int beBaseInfoRamTimer_GetVTable(void) {
-    struct Obj_36a5a0 o;
-    int temp_s0;
-    void **q;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_v1;
+    beBaseInfoRamTimer obj;
+    int vtable;
+    char **nameSlot;
 
-    igObject_InitHeader(&o);
-    q = &o.s;
-    *q = 0;
-    o.vt = &g_igNamedObject_vtable[0];
-    o.vt = &g_beBaseInfoRamTimer_vtable[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_igNamedObject_vtable[0];
-    if (q != 0) {
-        temp_v1 = *q;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    obj._vtable = (int)&g_beBaseInfoRamTimer_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beBaseInfoRamTimer_EnsureRegistered(void)

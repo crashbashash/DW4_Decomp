@@ -36,31 +36,31 @@ done:
 }
 
 int beNDMWPanelWazaInfoWork_GetVTable(void) {
-    struct Obj_3bdbf0 obj;
-    int temp_s5;
+    beNDMWPanelWazaInfoWork obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = (&g_beNDMWPanelWazaInfoWork_vtable[0]);
-    obj.f10 = 0;
-    obj.f14 = 0;
-    obj.f18 = 0;
-    obj.f20 = 0;
-    obj.f24 = 0;
-    obj.f28 = 0;
-    obj.f2C = 0;
-    temp_s5 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beNDMWPanelWazaInfoWork_vtable[0]);
-    igSmartPointer_igIntList_Destruct(&obj.f2C, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj.f28, -1);
-    FUN_003bde80((igSmartPointer<igObject> *)&obj.f24, -1);
-    igStringRef_Destruct(&obj.f20, -1);
-    FUN_003bde00((igSmartPointer<igObject> *)&obj.f18, -1);
-    FUN_003bdd80((igSmartPointer<igObject> *)&obj.f14, -1);
-    FUN_003bdd00((igSmartPointer<igObject> *)&obj.f10, -1);
-    return temp_s5;
+    *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoWork_vtable[0];
+    obj._panelWaza = 0;
+    obj._panelItem = 0;
+    obj._panelStat = 0;
+    obj._retWazaLabel = 0;
+    obj._playerWork = 0;
+    obj._textSetList = 0;
+    obj._textColorList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoWork_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._textColorList, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._textSetList, -1);
+    igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct((igSmartPointer<igObject> *)&obj._playerWork, -1);
+    igStringRef_Destruct(&obj._retWazaLabel, -1);
+    igSmartPointer_beNDMWPanelObjectStat_Destruct((igSmartPointer<igObject> *)&obj._panelStat, -1);
+    igSmartPointer_beNDMWPanelObjectItem_Destruct((igSmartPointer<igObject> *)&obj._panelItem, -1);
+    igSmartPointer_beNDMWPanelObjectWaza_Destruct((igSmartPointer<igObject> *)&obj._panelWaza, -1);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003bdd00(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWPanelObjectWaza_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -73,7 +73,7 @@ igSmartPointer<igObject> *FUN_003bdd00(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003bdd80(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWPanelObjectItem_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -86,7 +86,7 @@ igSmartPointer<igObject> *FUN_003bdd80(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003bde00(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWPanelObjectStat_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -99,7 +99,7 @@ igSmartPointer<igObject> *FUN_003bde00(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-igSmartPointer<igObject> *FUN_003bde80(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

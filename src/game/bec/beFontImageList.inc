@@ -19,10 +19,10 @@ done:
 }
 
 int beFontImageList_GetVTable(void) {
-    struct Obj_3617f0 obj;
+    beFontImageList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beFontImageList_vtable[0];
+    obj._vtable = (int)&g_beFontImageList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

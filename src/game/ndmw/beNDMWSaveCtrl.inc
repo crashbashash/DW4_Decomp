@@ -22,21 +22,21 @@ void *beNDMWSaveCtrl_ResolveMetaObject(void) {
 }
 
 int beNDMWSaveCtrl_GetVTable(void) {
-    union U_3bd4d0 u;
-    int temp_s0;
-    char *ps;
+    beNDMWSaveCtrl obj;
+    int vtable;
+    int *padManagerRef;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beNDMWSaveCtrl_vtable[0];
-    ps = &u.b[32];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWSaveCtrl_vtable[0];
-    FUN_0033dda0(ps, -1);
-    FUN_0033f5e0(u.b, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWSaveCtrl_vtable[0];
+    padManagerRef = &obj._padManager;
+    *padManagerRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWSaveCtrl_vtable[0];
+    igSmartPointer_bePadManager_Destruct(padManagerRef, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWSaveCtrl_EnsureRegistered(void)

@@ -17,24 +17,18 @@ igMetaObject *beModelCtrlSubCom_GetMetaObject(void) {
 }
 
 int beModelCtrlSubCom_GetVTable(void) {
-    struct Obj_34f2b0 o;
-    struct R *t;
-    int r;
-    igObject_InitHeader(&o);
-    o.vt = &g_beModelCtrlSubCom_vtable[0];
-    o.p = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beModelCtrlSubCom_vtable[0];
-    if (&o.p != 0) {
-        t = o.p;
-        if (t != 0) {
-            t->rc = t->rc - 1;
-            if ((t->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
-    return r;
+    beModelCtrlSubCom obj;
+    int vtable;
+    igObject **comListSlot;
+
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beModelCtrlSubCom_vtable[0];
+    comListSlot = (igObject **)&obj._comList;
+    *comListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlSubCom_vtable[0];
+    igObjectRef_Release(comListSlot);
+    return vtable;
 }
 
 void beModelCtrlSubCom_EnsureRegistered(void)

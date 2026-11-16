@@ -12,23 +12,23 @@ void *beModelCtrlInfoRamData_GetMetaObject(void) {
 }
 
 int beModelCtrlInfoRamData_GetVTable(void) {
-    struct Obj_352f30 obj;
-    int t;
+    beModelCtrlInfoRamData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beModelCtrlInfoRamData_vtable[0];
-    obj.w4 = 0;
-    obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beModelCtrlInfoRamData_vtable[0];
-    FUN_00352fc0((igSmartPointer<igObject> *)&obj.w5, -1);
-    FUN_0034c1b0((void **)&obj.w4, (short)(-1));
-    FUN_00344030((struct W_344030 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beModelCtrlInfoRamData_vtable[0];
+    obj._node = 0;
+    obj._work = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoRamData_vtable[0];
+    igSmartPointer_beModelCtrlInfoWork_Destruct((igSmartPointer<igObject> *)&obj._work, -1);
+    igSmartPointer_beModelCtrlNode2_Destruct((void **)&obj._node, (short)(-1));
+    beBaseInfoData_Destroy((struct W_344030 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00352fc0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -101,7 +101,7 @@ void beModelCtrlInfoRamData_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoRamData_ctorTable, 2);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "ONE");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRamData_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

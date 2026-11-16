@@ -53,11 +53,10 @@ extern "C" void *bePadManager_GetPadForPlayer(...);
 extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void *igProperty_FindByName(...);
-extern "C" int FUN_002ff820(...);
 extern "C" int beMessenger_RegisterReceiverFromInfo(int, int, const void *);
 extern "C" int beNDMWTitle2_GetInfoMeta(void);
 extern "C" int beNDMWTitle2_GetMeta(void);
-extern "C" int FUN_003b2840(...);
+extern "C" int beNDMWTitle2CtrlData_GetMessageEnum(...);
 extern "C" int beMessenger_ResolveEnumValue(int, int, int);
 extern "C" void beNDMWTitle2Option_InitSettings(beNDMWTitle2Option *self, int messenger);
 extern "C" int g_propertyNameField[4];
@@ -116,7 +115,7 @@ template <int Tag> struct TitleRef {
 extern "C" void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
 extern "C" void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info);
 extern "C" char GPR_00554e70;
-extern "C" int beNDMWTitle2_OnMessage(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2);
+extern "C" int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWork *message);
 
 /* Bind the messenger and load the Options settings. Once the title settings are valid, the saved
  * camera and light modes are read back from the GAMERAM GETCOMMON property group (property record
@@ -171,7 +170,7 @@ void beNDMWTitle2_Prepare(beNDMWTitle2 *self) {
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if ((held->_refCount & 0x7fffff) == 0) {
-                FUN_002ff820();
+                igObject_Destroy(held);
             }
         }
         self->_padManager = (int)padManager;
@@ -181,7 +180,7 @@ void beNDMWTitle2_Prepare(beNDMWTitle2 *self) {
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if ((held->_refCount & 0x7fffff) == 0) {
-                FUN_002ff820();
+                igObject_Destroy(held);
             }
         }
         self->_mcUtilCtrl = 0;
@@ -1086,19 +1085,19 @@ void beNDMWTitle2_OnAddRam(beNDMWTitle2 *self, int info)
     beMessenger_RegisterReceiverFromInfo(self->_messenger, info, "TITLE2");
 }
 
-int beNDMWTitle2_OnMessage(beNDMWTitle2 *arg0, beBaseInfoRam *arg1, void *arg2) {
-    int temp_v0;
+int beNDMWTitle2_OnMessage(beNDMWTitle2 *self, beBaseInfoRam *ram, beMessengerWork *message) {
+    int command;
 
-    if (arg1->_dataList == 0) {
+    if (ram->_dataList == 0) {
         return 1;
     }
-    temp_v0 = beMessenger_ResolveEnumValue(arg0->_messenger, FUN_003b2840(), *(int *)((char *)(arg2) + 20));
-    switch (temp_v0) {
+    command = beMessenger_ResolveEnumValue(self->_messenger, beNDMWTitle2CtrlData_GetMessageEnum(), message->_message);
+    switch (command) {
     case 0:
-        arg1->_st0 = 1;
-        arg1->_st3 = 0;
-        arg1->_st2 = 0;
-        arg1->_st1 = 0;
+        ram->_st0 = 1;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
         break;
     case 1:
         GPR_00554e70 = 1;

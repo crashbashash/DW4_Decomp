@@ -14,15 +14,15 @@ void *beNDMWStatusMainSlot_GetMetaObject(void) {
 }
 
 int beNDMWStatusMainSlot_GetVTable(void) {
-    struct Obj_3ba7f0 obj;
-    int t;
+    beNDMWStatusMainSlot obj;
+    int vtable;
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
-    obj.vt = &g_beNDMWStatusMainSlot_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWStatusMainSlot_vtable[0];
-    FUN_003ba3d0((S_arg0 *)&obj, (long long)0);
-    return t;
+    *(int **)&obj._vtable = &g_beNDMWStatusMainSlot_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusMainSlot_vtable[0];
+    beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusMainSlot_EnsureRegistered(void)

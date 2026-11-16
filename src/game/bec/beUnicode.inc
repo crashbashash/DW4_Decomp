@@ -9,11 +9,11 @@ void *beUnicode_GetMetaObject(void) {
 }
 
 int beUnicode_GetVTable(void) {
-    union U_340f80 u;
+    beUnicode obj;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beUnicode_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beUnicode_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beUnicode_EnsureRegistered(void)

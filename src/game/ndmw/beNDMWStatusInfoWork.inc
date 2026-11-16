@@ -31,26 +31,26 @@ done:;
 }
 
 int beNDMWStatusInfoWork_GetVTable(void) {
-    struct Obj_3b5fa0 obj;
-    int r;
+    beNDMWStatusInfoWork obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWStatusInfoWork_vtable[0];
-    obj.w[1] = 0;
-    obj.w[2] = 0;
-    obj.w[3] = 0;
-    obj.w[4] = 0;
-    obj.w[5] = 0;
-    obj.w[6] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWStatusInfoWork_vtable[0];
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[6]), -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[5]), -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[4]), -1);
-    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)(&obj.w[3]), -1);
-    igSmartPointer_igIntList_Destruct(&obj.w[2], -1);
-    igSmartPointer_igIntList_Destruct(&obj.w[1], -1);
-    return r;
+    *(int **)&obj._vtable = &g_beNDMWStatusInfoWork_vtable[0];
+    obj._parameter = 0;
+    obj._preview = 0;
+    obj._weaponSalesList = 0;
+    obj._armorSalesList = 0;
+    obj._chipSalesList = 0;
+    obj._junkSalesList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusInfoWork_vtable[0];
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._junkSalesList, -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._chipSalesList, -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._armorSalesList, -1);
+    igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._weaponSalesList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._preview, -1);
+    igSmartPointer_igIntList_Destruct(&obj._parameter, -1);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWItemBaseList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

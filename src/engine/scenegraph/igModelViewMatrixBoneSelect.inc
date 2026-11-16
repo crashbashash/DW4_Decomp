@@ -26,7 +26,7 @@ int igModelViewMatrixBoneSelect_GetVTable(void) {
     u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
-    FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
+    igGroup_Destroy((struct T_195a90 *)&u.w[0], 0);
     return temp_s0;
 }
 

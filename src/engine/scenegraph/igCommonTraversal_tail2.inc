@@ -226,7 +226,7 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
 
 void FUN_001b42c0(TravFlattenView *self, int root) {
     int saved[32];
-    TravFunctionTable *table = ((TravFunctionTable *)DAT_00562640[0]);
+    TravFunctionTable *table = ((TravFunctionTable *)g_igCommonTraversal_travProcs[0]);
     int meta = (int)g_igGeometry_metaObject;
     int n = igMetaObject_CountTree(meta);
     int i;
@@ -269,7 +269,7 @@ int FUN_001b4bb0(igCommonTraversal *arg0, int arg1) {
 }
 
 void FUN_001b68b0(int arg0) {
-    FUN_001b68c0(((TravFunctionTable *)DAT_00562640[0]), (void *)arg0);
+    FUN_001b68c0(((TravFunctionTable *)g_igCommonTraversal_travProcs[0]), (void *)arg0);
 }
 
 void FUN_001b68c0(void *self, void *meta) {
@@ -327,7 +327,7 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
 
     Gap__Sg__igTraversal__vfunc_09((A_1e0380 *)arg0, arg1);
     if (arg1 == 0) {
-        s0 = (igObject *)((TravFunctionTable *)DAT_00562640[0]);
+        s0 = (igObject *)((TravFunctionTable *)g_igCommonTraversal_travProcs[0]);
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;
         }

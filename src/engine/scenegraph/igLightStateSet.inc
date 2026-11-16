@@ -23,7 +23,7 @@ int igLightStateSet_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igLightStateSet_vtable[0];
     FUN_0019d9e0((void * *)&obj.w[7], -1);
-    FUN_00195a90((struct T_195a90 *)&obj, 0);
+    igGroup_Destroy((struct T_195a90 *)&obj, 0);
     return r;
 }
 

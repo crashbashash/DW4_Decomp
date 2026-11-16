@@ -15,27 +15,18 @@ void *beDataObjBool_GetMetaObject(void) {
 }
 
 int beDataObjBool_GetVTable(void) {
-    struct F_365090 o;
+    beDataObjBool obj;
     int r;
-    int *s;
-    int *h;
-    int c;
+    char **nameSlot;
 
-    igObject_InitHeader(&o);
-    o.vt = g_igNamedObject_vtable;
-    o.str = 0;
-    o.vt = g_beDataObjBool_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_igNamedObject_vtable;
-    if (&o.str != 0) {
-        s = o.str;
-        if (s != 0) {
-            h = s - 2;
-            c = s[-1] - 1;
-            s[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader(*h, h);
-        }
-    }
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beDataObjBool_vtable[0];
+    r = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
     return r;
 }
 

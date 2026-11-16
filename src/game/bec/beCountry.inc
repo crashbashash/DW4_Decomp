@@ -9,10 +9,10 @@ void *beCountry_GetMetaObject(void) {
 }
 
 int beCountry_GetVTable(void) {
-    struct Obj_367d60 obj;
+    beCountry obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beCountry_vtable[0];
+    obj._vtable = (int)&g_beCountry_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

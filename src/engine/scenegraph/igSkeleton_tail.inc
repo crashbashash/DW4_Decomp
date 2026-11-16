@@ -47,21 +47,21 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
                     igMatrix44f_Copy(&m, src);
                     igMatrix44f_SetTranslation(&m, translation);
                 } else if (ov->_mode == 0) {
-                    FUN_001906d0(&m, src);
+                    igMatrix44f_PreMultiply(&m, src);
                 } else if (ov->_mode == 1) {
-                    FUN_001904f0(&m, &m, src);
+                    igMatrix44f_Multiply(&m, &m, src);
                 }
             }
         }
         if (info->_parentIdx != 0) {
             g = (SkeletonMatrix *)((char *)global + off);
-            FUN_001904f0(g, &m, &global[info->_parentIdx]);
+            igMatrix44f_Multiply(g, &m, &global[info->_parentIdx]);
         } else {
             g = (SkeletonMatrix *)((char *)global + off);
             igMatrix44f_Copy(g, &m);
         }
         if (info->_bmIdx != -1) {
-            FUN_001904f0(&out[info->_bmIdx], inv, g);
+            igMatrix44f_Multiply(&out[info->_bmIdx], inv, g);
             inv++;
         }
     }
@@ -139,7 +139,7 @@ int FUN_001d9740(void *arg0, int arg1) {
     temp_v1 = *(int *)((char *)arg0 + 12);
     var_v0 = 0;
     if (temp_v1 != 0) {
-        var_v0 = FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)temp_v1);
+        var_v0 = igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)temp_v1);
     }
     return var_v0;
 }
@@ -162,7 +162,7 @@ void **FUN_001d9770(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001d97f0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igAttrSet_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

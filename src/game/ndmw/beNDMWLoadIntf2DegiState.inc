@@ -30,10 +30,11 @@ void *beNDMWLoadIntf2DegiState_ResolveMetaObject(void) {
 }
 
 int beNDMWLoadIntf2DegiState_GetVTable(void) {
-    struct Obj_3c3ed0 o;
-    igObject_InitHeader(&o);
-    o.vt = &g_beNDMWLoadIntf2DegiState_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    beNDMWLoadIntf2DegiState obj;
+
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiState_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beNDMWLoadIntf2DegiState_EnsureRegistered(void)

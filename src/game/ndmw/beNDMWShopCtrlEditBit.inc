@@ -17,22 +17,22 @@ igMetaObject *beNDMWShopCtrlEditBit_GetMetaObject(void)
 }
 
 int beNDMWShopCtrlEditBit_GetVTable(void) {
-    Obj_3b75b0 o;
-    int r;
+    beNDMWShopCtrlEditBit obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[12] = 0;
-    o.w[13] = 0;
-    o.w[14] = 0;
-    o.w[15] = 0;
-    o.w[16] = 0;
-    o.w[17] = 0;
-    o.w[18] = 0;
-    o.vt = &g_beNDMWShopCtrlEditBit_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWShopCtrlEditBit_vtable[0];
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlEditBit_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlEditBit_vtable[0];
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 void beNDMWShopCtrlEditBit_EnsureRegistered(void)

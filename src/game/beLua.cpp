@@ -1,10 +1,11 @@
 #include "dw4/reflected.h"
+#include "dw4/igobject_release.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
 extern "C" int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int beLOA_GetMetaObject(...);
-extern "C" void FUN_00389fb0(void);
+extern "C" void beLOA_RegisterTraversalFunction(void);
 extern "C" int sprintf(char *, const char *, ...);
 extern "C" int StringPool_Allocate(int);
 extern "C" int StringPool_Construct(int);
@@ -21,7 +22,7 @@ extern "C" void beLua_Update(void);
 extern "C" int beLua_GetMeta(void);
 extern "C" int igObject_IsKindOf(int, int);
 extern "C" int ObjectList_AppendRetained(int, int);
-extern "C" int DAT_00562640[4];
+extern "C" int g_igCommonTraversal_travProcs[4];
 /* Resolves a script name through the interned-string pool (the given name, or "<stage>/lua" when none
  * is given), walks every beLuaInfo in the receiver's info list and every beLuaData in that info's data
  * list, and runs the first data object whose name equals `name` through the Lua state's buffer-run
@@ -61,7 +62,7 @@ public:
 };
 extern "C" int g_stringPool[4];
 extern "C" char text_s_lua[];
-extern "C" char DAT_0050ec88[];
+extern "C" char percent_s_slash_percent_s_2[];
 extern "C" char emptyString[];
 /* stack holder for the interned name: the destructor drops one reference to the pooled string and frees its chunk at zero */
 class LuaStrRef {
@@ -75,19 +76,15 @@ extern "C" igObject *beLuaState_Create(int);
 extern "C" int igObject_GetAllocator(beLua *);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void FUN_0038a2d0(beLua *arg0);
+extern "C" void beLua_ResetLuaState(beLua *self);
 extern "C" void beLua_Activate(beLua *self, int unusedArg);
 extern "C" void beLua_Deactivate(beLua *self, int unusedArg);
-/* reference-counted engine object header: refcount word at +4 */
-typedef struct RefCountedHeader { char pad4[4]; int f4; } RefCountedHeader;
 extern "C" int g_beSystem_metaObject[4];
-extern "C" void beLua_Start(beLua *arg0);
+extern "C" void beLua_Start(beLua *self);
 extern "C" int g_beLua_metaObject[4];
 extern "C" int g_beLuaInfo_metaObject[4];
-extern "C" int beLua_AddInfo(beLua *arg0, int arg1);
-/* Reference count at +4 of an igObject. */
-typedef struct RefCountedObject { char pad[4]; int f4; } RefCountedObject;
-extern "C" void beLua_RemoveAllInfo(beLua *arg0);
+extern "C" int beLua_AddInfo(beLua *self, int info);
+extern "C" void beLua_RemoveAllInfo(beLua *self);
 
 int beLOA_TraversalFunction(igCommonTraversal *traversal, beLOA *node) {
     return beLOA_Traverse(node, traversal);
@@ -228,8 +225,8 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     return 0;
 }
 
-void FUN_00389fb0(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], beLOA_GetMetaObject(), (void (*)())beLOA_TraversalFunction);
+void beLOA_RegisterTraversalFunction(void) {
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beLOA_GetMetaObject(), (void (*)())beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
@@ -293,31 +290,31 @@ int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)
         }
     }
     if (result == -1) {
-        sprintf(buf2, DAT_0050ec88, ref.value, name);
+        sprintf(buf2, percent_s_slash_percent_s_2, ref.value, name);
         result = ((LuaStateVt *)self->_luaState)->Run(buf2);
     }
     return result;
 }
 
-void FUN_0038a2d0(beLua *arg0) {
-    int var_v0;
-    int alloc;
-    igObject *temp_a0;
+void beLua_ResetLuaState(beLua *self) {
+    int allocator;
+    int ownerAllocator;
+    igObject *luaState;
 
-    alloc = igObject_GetAllocator(arg0);
+    ownerAllocator = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
-        var_v0 = alloc;
+        allocator = ownerAllocator;
     } else {
-        var_v0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     }
-    temp_a0 = (igObject *)arg0->_luaState;
-    if (temp_a0 != 0) {
-        --temp_a0->_refCount;
-        if (((unsigned long long)(long long)temp_a0->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(temp_a0);
+    luaState = (igObject *)self->_luaState;
+    if (luaState != 0) {
+        --luaState->_refCount;
+        if (((unsigned long long)(long long)luaState->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy(luaState);
         }
     }
-    arg0->_luaState = (int)beLuaState_Create(var_v0);
+    self->_luaState = (int)beLuaState_Create(allocator);
 }
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
@@ -337,61 +334,46 @@ void beLua_Deactivate(beLua *self, int unusedArg)
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
-void beLua_Start(beLua *arg0) {
-    RefCountedHeader *temp_a0;
-    arg0->_system = igInsightCore_FindManager(arg0->_insight, g_beSystem_metaObject[0]);
-    temp_a0 = (RefCountedHeader *)(arg0->_luaState);
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
-        }
-    }
-    arg0->_luaState = 0;
+void beLua_Start(beLua *self) {
+    igObject *luaState;
+    self->_system = igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    luaState = (igObject *)(self->_luaState);
+    IG_OBJECT_RELEASE(luaState);
+    self->_luaState = 0;
 }
 
 void beLua_Stop(void)
 {
 }
 
-int beLua_AddInfo(beLua *arg0, int arg1) {
-    if (igObject_IsKindOf(arg1, g_beLuaInfo_metaObject[0]) != 0) {
-        ObjectList_AppendRetained(arg0->_infoList, arg1);
+int beLua_AddInfo(beLua *self, int info) {
+    if (igObject_IsKindOf(info, g_beLuaInfo_metaObject[0]) != 0) {
+        ObjectList_AppendRetained(self->_infoList, info);
         return 1;
     }
     return 0;
 }
 
-void beLua_RemoveAllInfo(beLua *arg0) {
-    igInfoList *temp_s3;
-    int temp_s2;
+void beLua_RemoveAllInfo(beLua *self) {
+    igInfoList *infos;
+    int infoCount;
     int i;
-    int n;
-    RefCountedObject *t;
-    temp_s3 = (igInfoList *)arg0->_infoList;
-    temp_s2 = temp_s3->_count;
-    for (i = 0; i < temp_s2; i++) {
-        t = ((RefCountedObject **)temp_s3->_data)[i];
-        if (t != 0) {
-            t->f4 = t->f4 - 1;
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
+    int clearCount;
+    igObject *object;
+    infos = (igInfoList *)self->_infoList;
+    infoCount = infos->_count;
+    for (i = 0; i < infoCount; i++) {
+        object = ((igObject **)infos->_data)[i];
+        IG_OBJECT_RELEASE(object);
     }
-    n = temp_s3->_count;
-    for (i = 0; i < n; i++) {
-        ((int *)temp_s3->_data)[i] = 0;
+    clearCount = infos->_count;
+    for (i = 0; i < clearCount; i++) {
+        ((int *)infos->_data)[i] = 0;
     }
-    temp_s3->_count = 0;
-    t = (RefCountedObject *)arg0->_luaState;
-    if (t != 0) {
-        t->f4 = t->f4 - 1;
-        if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(t);
-        }
-    }
-    arg0->_luaState = 0;
+    infos->_count = 0;
+    object = (igObject *)self->_luaState;
+    IG_OBJECT_RELEASE(object);
+    self->_luaState = 0;
 }
 
 void beLua_Update(void)

@@ -61,7 +61,7 @@ void thunk_igTexGenMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTexGenMatrixAttr_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igIntMetaField_Create,
 };
 static const char *g_igTexGenMatrixAttr_fieldTable[] = {
@@ -108,7 +108,7 @@ void igTexGenMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_001404f0;

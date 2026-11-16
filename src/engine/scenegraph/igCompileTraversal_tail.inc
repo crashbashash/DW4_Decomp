@@ -127,7 +127,7 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
         ((VC104 *)(stack->f16->f16[stack->f68[g_igClearAttr_metaObject[0]->f8]]->f20))->vX(a1, (int)stack);
     }
     {
-    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)FUN_001356b0(igObject_GetAllocator(self))));
+    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)igModelViewMatrixAttr_CreateInstance(igObject_GetAllocator(self))));
     igSmartPointer<T_1bb880> info((T_1bb880 *)((void *)FUN_001a3590(igObject_GetAllocator(self))));
     T_1bb880 **slot = &info->f12;
     T_1bb880 *old = *slot;
@@ -254,7 +254,7 @@ int FUN_001bce40(A_1bce40 *arg0, int *arg1) {
     int temp_s1;
     temp_s0 = arg0->f52;
     *(char *)((char *)arg0 + 496) = 1;
-    temp_s2 = ((X_1bce40 *)FUN_001356b0(igObject_GetAllocator()));
+    temp_s2 = ((X_1bce40 *)igModelViewMatrixAttr_CreateInstance(igObject_GetAllocator()));
     temp_v0 = ((X_1bce40 *)FUN_001a3590(igObject_GetAllocator(arg0)));
     temp_v0->f8 = arg1[8];
     ObjectList_AppendRetained(arg0->f472, temp_s2);

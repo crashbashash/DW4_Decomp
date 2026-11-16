@@ -24,13 +24,13 @@ void *beCriSndf_GetMetaObject(void) {
 }
 
 int beCriSndf_GetVTable(void) {
-    int tmp[8];
+    beCriSndf obj;
     int off;
 
-    igObject_InitHeader(&tmp[0]);
-    tmp[0] = (int)&g_beCriSndf_vtable[0];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beCriSndf_vtable[0];
     off = *(int *)((char *)(((int * *)g_objectSystem)[0]) + 916);
-    return *(int *)((char *)tmp + off);
+    return *(int *)((char *)&obj + off);
 }
 
 void beCriSndf_EnsureRegistered(void)

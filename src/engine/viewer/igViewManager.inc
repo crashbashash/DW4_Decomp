@@ -100,7 +100,7 @@ static FieldFactory g_igViewManager_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igViewManager_fieldTable[] = {
     "_viewMode",

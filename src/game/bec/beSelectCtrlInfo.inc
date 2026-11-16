@@ -12,18 +12,18 @@ done:
 }
 
 int beSelectCtrlInfo_GetVTable(void) {
-    struct F f;
-    int temp_s0;
+    beSelectCtrlInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.w[4] = 0;
-    f.w[5] = 0;
-    f.vt = &g_beSelectCtrlInfo_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beSelectCtrlInfo_vtable[0];
-    FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beSelectCtrlInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSelectCtrlInfo_vtable[0];
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beSelectCtrlInfo_EnsureRegistered(void)

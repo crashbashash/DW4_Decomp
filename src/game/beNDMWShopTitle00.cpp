@@ -1,3 +1,4 @@
+#include "dw4/reflected.h"
 #define INTERN_APPEND(field, text) { \
     const char *tok; \
     if ((text) == 0) { \
@@ -14,7 +15,7 @@
     StringList_AppendRetained(field, &held); }
 
 extern "C" int beNDMWWindow_PresentModelAtOrigin(...);
-extern "C" void beNDMWShopTitle00_Setup(int *arg0);
+extern "C" void beNDMWShopTitle00_Setup(beNDMWShopTitle00 *self);
 extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
 extern "C" const char *StringPool_Intern(void *, const char *);
@@ -42,22 +43,21 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader(*h, h); } }
 };
 extern "C" int StringList_AppendRetained(int, StringRef *);
-struct Sh { char p[44]; unsigned f44; char q[12]; int f60; int f64; };
-extern "C" void beNDMWShopTitle01_Setup(Sh *arg0);
+extern "C" void beNDMWShopTitle01_Setup(beNDMWShopTitle01 *self);
 extern "C" char text_i_messwn[];
 extern "C" int g_beNDMWShopTitle03_metaObject[4];
 extern "C" int g_beNDMWShopTitle01_metaObject[4];
 extern "C" int g_beNDMWShopTitle00_metaObject[4];
 
-void beNDMWShopTitle00_Setup(int *arg0) {
-    beNDMWWindow_PresentModelAtOrigin(arg0, &text_j_shback[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
-    beNDMWWindow_PresentModelAtOrigin(arg0, &text_i_bgclear[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
+void beNDMWShopTitle00_Setup(beNDMWShopTitle00 *self) {
+    beNDMWWindow_PresentModelAtOrigin(self, &text_j_shback[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
+    beNDMWWindow_PresentModelAtOrigin(self, &text_i_bgclear[0], 0, &SQ_OPEN_10[0], &SQ_CLOSE_12[0]);
 }
 
-void beNDMWShopTitle01_Setup(Sh *arg0) {
+void beNDMWShopTitle01_Setup(beNDMWShopTitle01 *self) {
     int s;
-    beNDMWWindow_PresentModelAtOrigin(arg0, text_i_sttitle, 0, SQ_OPEN_10, SQ_CLOSE_12);
-    switch (arg0->f44) {
+    beNDMWWindow_PresentModelAtOrigin(self, text_i_sttitle, 0, SQ_OPEN_10, SQ_CLOSE_12);
+    switch (self->_entCode) {
     case 1: s = 1100; break;
     case 2: s = 1200; break;
     case 3: s = 1300; break;
@@ -69,9 +69,9 @@ void beNDMWShopTitle01_Setup(Sh *arg0) {
     case 9: s = 1900; break;
     case 10: s = 2000; break;
     }
-    INTERN_APPEND(arg0->f60, STWINFONT12_3)
-    INTERN_APPEND(arg0->f64, text_font000)
-    beNDMWWindow_RunMessageScript(arg0, text_txt_shop_lua, s);
+    INTERN_APPEND(self->_textCloseTypeList, STWINFONT12_3)
+    INTERN_APPEND(self->_textCloseNameList, text_font000)
+    beNDMWWindow_RunMessageScript(self, text_txt_shop_lua, s);
 }
 
 void beNDMWShopTitle03_Setup(int p0, char * p1, int p2, char * p3, char * p4)

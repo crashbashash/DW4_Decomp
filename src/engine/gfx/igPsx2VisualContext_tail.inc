@@ -309,7 +309,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     igEnumArrayMetaField_Create,
     igEnumArrayMetaField_Create,
     igIntArrayMetaField_Create,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
@@ -320,7 +320,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     igMemoryRefMetaField_Create,
     igRawRefMetaField_Create,
     igIntMetaField_Create,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igUnsignedIntMetaField_Create,
     igUnsignedIntMetaField_Create,
@@ -387,7 +387,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     igBoolMetaField_Create,
     igFloatMetaField_Create,
     igEnumMetaField_Create,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igRawRefMetaField_Create,
@@ -410,7 +410,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     igIntMetaField_Create,
     igBoolMetaField_Create,
     igEnumMetaField_Create,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
@@ -1006,7 +1006,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp60[1] = 0;
     sp60[2] = 0;
     sp60[3] = 0;
-    FUN_0018e670(temp_a0, sp60);
+    igVec4fMetaField_SetDefault(temp_a0, sp60);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x1E), 1.0f);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x26), 0x280);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x27), 0x1C0);
@@ -1106,7 +1106,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp50[1] = 0;
     sp50[2] = 0;
     sp50[3] = 0;
-    FUN_0018e670(temp_a0_2, sp50);
+    igVec4fMetaField_SetDefault(temp_a0_2, sp50);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x61), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x62), 10000.0f);
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x66); ((igMetaField *)q)->_size = 0x18; }
@@ -1134,7 +1134,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp40[0] = 0.501960754f;
     sp40[1] = 0.501960754f;
     sp40[2] = 0.501960754f;
-    FUN_0018e670(temp_a0_3, sp40);
+    igVec4fMetaField_SetDefault(temp_a0_3, sp40);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0x79), 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0x7A), 1);
     temp_v0_24 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7B);
@@ -1171,11 +1171,11 @@ void igPsx2VisualContext_InitFields(void) {
     temp_v0_31 = igMetaObject_GetFieldAt(meta, fieldStart + 0x89);
     igEnumMetaField_SetDefaultValue(temp_v0_31, 0);
     ((igMetaField *)temp_v0_31)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_31)->_getMetaEnumFunction = FUN_00149980;
+    *(int (**)())&((igEnumMetaField *)temp_v0_31)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_32 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8A);
     igEnumMetaField_SetDefaultValue(temp_v0_32, 0);
     ((igMetaField *)temp_v0_32)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_32)->_getMetaEnumFunction = FUN_00149980;
+    *(int (**)())&((igEnumMetaField *)temp_v0_32)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_33 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8B);
     igEnumMetaField_SetDefaultValue(temp_v0_33, 0);
     ((igMetaField *)temp_v0_33)->_persistent = 0;

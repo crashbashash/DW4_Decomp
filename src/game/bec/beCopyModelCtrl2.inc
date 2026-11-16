@@ -34,7 +34,7 @@ void *beCopyModelCtrl2_Register(void) {
         0x70, /* instance size */
         beCopyModelCtrl2_GetVTable,
         beCopyModelCtrl2_InitFields,
-        FUN_003682f0, /* extra callback item */
+        beCopyModelCtrl2_StaticInitCallback, /* extra callback item */
         g_beCopyModelCtrl2_callbackList /* callback list */
     );
 }
@@ -70,7 +70,7 @@ void beCopyModelCtrl2_InitFields(void) {
     igMetaObject_NameFields(meta, g_beCopyModelCtrl2_fieldTable, g_beCopyModelCtrl2_fieldHandles, g_beCopyModelCtrl2_fieldOffsets, base);
 }
 
-void FUN_003682f0(void)
+void beCopyModelCtrl2_StaticInitCallback(void)
 {
     beCopyModelCtrl2_RegisterTraversal();
 }

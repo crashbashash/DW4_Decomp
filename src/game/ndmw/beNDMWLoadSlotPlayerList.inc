@@ -16,10 +16,10 @@ void *beNDMWLoadSlotPlayerList_GetReadyMetaObject(void) {
 }
 
 int beNDMWLoadSlotPlayerList_GetVTable(void) {
-    struct Obj obj;
+    beNDMWLoadSlotPlayerList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWLoadSlotPlayerList_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayerList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

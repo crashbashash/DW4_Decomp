@@ -15,11 +15,11 @@ in the functions [load-intf2](load-intf2.md) describes.
 |---|---:|---|---|
 | `0x00408100` | 156 | `beNDMWSaveIntf_Prepare` | takes the insight's `bePadManager` into `_padManager` when it is not set (slot 32) |
 | `0x004081a0` | 16,352 | `beNDMWSaveIntf_UpdateRam` | per-frame update of one player's record (slot 31) |
-| `0x0040c180` | 48 | `NewDataListRef_Construct_0040c180` | the inline constructor of the fresh data-list reference, emitted out of line |
+| `0x0040c180` | 48 | `beNDMWSaveIntf_CreateDataListRef` | the inline constructor of the fresh data-list reference, emitted out of line |
 | `0x0040c1b0` | 12 | `beNDMWSaveIntf_GetInfoMeta` | returns the `beNDMWSaveIntfInfo` meta object (slot 30) |
 | `0x0040c1c0` | 88 | `beNDMWSaveIntf_OnAddRam` | registers the record as receiver of `SAVEINTF_ALL` and of `SAVEINTF` for its player (slot 29) |
 | `0x0040c220` | 6,184 | `beNDMWSaveIntf_OnMessage` | message handler (slot 34) |
-| `0x0040da50` | 128 | `CtrlDataRef_Destruct_0040da50` | destructor of the stack reference to the new control data |
+| `0x0040da50` | 128 | `igSmartPointer_beNDMWSaveIntfCtrlData_Destruct` | destructor of the stack reference to the new control data |
 | `0x0040dad0` | 12 | `beNDMWSaveIntf_GetMeta` | returns the `beNDMWSaveIntf` meta object (slot 20) |
 
 The other stack-reference destructors the unit instantiates are kept from other units

@@ -19,31 +19,31 @@ void *beModelCtrlAIMap_GetMetaObject(void) {
 }
 
 int beModelCtrlAIMap_GetVTable(void) {
-    union U_354390 u;
-    int temp_s5;
+    beModelCtrlAIMap obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[2] = 0;
-    u.w[0] = (int)(&g_beModelCtrlAIMap_vtable[0]);
-    u.w[7] = 0;
-    u.w[8] = 0;
-    u.w[9] = 0;
-    u.w[10] = 0;
-    u.w[11] = 0;
-    u.w[12] = 0;
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beModelCtrlAIMap_vtable[0]);
-    igStringRef_Destruct(&u.w[12], -1);
-    igStringRef_Destruct(&u.w[11], -1);
-    FUN_00354490((igSmartPointer<igObject> *)(&u.w[10]), (short)(-1));
-    FUN_00354490((igSmartPointer<igObject> *)(&u.w[9]), (short)(-1));
-    FUN_00354490((igSmartPointer<igObject> *)(&u.w[8]), (short)(-1));
-    FUN_00354490((igSmartPointer<igObject> *)(&u.w[7]), (short)(-1));
-    FUN_00131bc0(u.b, 0);
-    return temp_s5;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beModelCtrlAIMap_vtable[0];
+    obj._zoneA = 0;
+    obj._zoneB = 0;
+    obj._zoneC = 0;
+    obj._zoneD = 0;
+    obj._targetType = 0;
+    obj._targetMode = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlAIMap_vtable[0];
+    igStringRef_Destruct(&obj._targetMode, -1);
+    igStringRef_Destruct(&obj._targetType, -1);
+    igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneD), (short)(-1));
+    igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneC), (short)(-1));
+    igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneB), (short)(-1));
+    igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneA), (short)(-1));
+    igNamedObject_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00354490(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beModelCtrlAIDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

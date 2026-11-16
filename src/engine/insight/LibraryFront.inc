@@ -11,7 +11,7 @@ void *FUN_00230f70(struct S *arg0, short arg1) {
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_0052d060[0];
+        arg0->f0 = &g_igRenderer_vtable[0];
         if (&arg0->f8) {
             p = arg0->f8;
             if (p != 0) {
@@ -37,13 +37,13 @@ igMetaObject *FUN_00231020(void) {
     return g_igMessage_metaObject;
 }
 
-void *FUN_00231030(struct S *arg0, short arg1) {
+void *igInfoManager_Destroy(struct S *arg0, short arg1) {
     void *p;
     int *h;
     int rc;
 
     if (arg0 != 0) {
-        arg0->f0 = &DAT_0052cf80[0];
+        arg0->f0 = &g_igInfoManager_vtable[0];
         if (arg0 != 0) {
             arg0->f0 = &g_igNamedObject_vtable[0];
             if (&arg0->f8) {

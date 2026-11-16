@@ -38,32 +38,21 @@ igMetaObject *beNDMWLoadIntf2DataSelIntf_ResolveMetaObject(void) {
 }
 
 int beNDMWLoadIntf2DataSelIntf_GetVTable(void) {
-    union U_3c35f0 u;
-    int temp_s0;
-    char *ps;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beNDMWLoadIntf2DataSelIntf obj;
+    int vtable;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&g_beNDMWLoadIntf2DataSelIntf_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        temp_v1 = *(int **)ps;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2DataSelIntf_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWLoadIntf2DataSelIntf_EnsureRegistered(void)
@@ -216,7 +205,7 @@ void beNDMWLoadIntf2DataSelIntf_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2DataSelIntf_ctorTable, 0x17);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "DATASELINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DataSelIntf_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

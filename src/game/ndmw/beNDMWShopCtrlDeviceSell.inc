@@ -15,24 +15,24 @@ void *beNDMWShopCtrlDeviceSell_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlDeviceSell_GetVTable(void) {
-    Obj_3b7170 o;
-    int r;
+    beNDMWShopCtrlDeviceSell obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[12] = 0;
-    o.w[13] = 0;
-    o.w[14] = 0;
-    o.w[15] = 0;
-    o.w[16] = 0;
-    o.w[17] = 0;
-    o.w[18] = 0;
-    o.vt = &g_beNDMWShopCtrlDeviceSell_vtable[0];
-    o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWShopCtrlDeviceSell_vtable[0];
-    FUN_00226990(&o.s, -1);
-    FUN_003b6770((int **)&o, (long long)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDeviceSell_vtable[0];
+    obj._decideList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDeviceSell_vtable[0];
+    igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
+    beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWShopCtrlDeviceSell_EnsureRegistered(void)

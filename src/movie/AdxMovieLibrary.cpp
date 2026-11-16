@@ -26,7 +26,7 @@ extern "C" void igObject_EnsureRegistered(void);
 extern "C" void igNamedObjectList_EnsureRegistered(void);
 extern "C" void igRendererOrderedList_EnsureRegistered(void);
 
-extern "C" void FUN_003343a0(void);
+extern "C" void AdxMovieLibrary_RegisterClasses(void);
 extern "C" void AdxMovieLibrary_MarkRegistered(void);
 extern "C" void *igAdx_GetMetaObject(void);
 extern "C" int igObject_InitHeader(...);
@@ -40,9 +40,9 @@ extern "C" void igAdx_GetMetaObjectFunction(void);
 extern "C" void igMetaObject_AddExitCallback(...);
 extern "C" void igAdx_InitFields(void);
 extern "C" void igAdx_CreateScratchString(void);
-extern "C" void FUN_003345d0(void);
+extern "C" void igAdx_StaticInitCallback(void);
 extern "C" void igAdx_Shutdown(void);
-extern "C" void FUN_003345f0(void);
+extern "C" void igAdx_ExitCallback(void);
 extern "C" int Memory_GetAllocatorBySelector(int);
 extern "C" igMetaObject *igMetaObject_Create(int);
 extern "C" igMetaObject *igAdxAfsFileList_GetOrCreateMetaObject(void);
@@ -54,6 +54,18 @@ extern "C" void *igAdxAfsFileList_Register(void);
 extern "C" void igAdxAfsFileList_GetMetaObjectFunction(void);
 extern "C" void *igAdxAfsFile_GetMetaObject(void);
 extern "C" int StringChunk_ReleaseHeader(...);
+/* Header stored in front of every interned string token. */
+struct StringTokenHeader { int owner; int refCount; };
+static inline void releaseString(const char *string) {
+    if (string != 0) {
+        StringTokenHeader *header = (StringTokenHeader *)string - 1;
+        int count = header->refCount - 1;
+        header->refCount = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader(header->owner, (int)header);
+        }
+    }
+}
 extern "C" int igAdxAfsFile_GetVTable(void);
 extern "C" void igAdxAfsFile_EnsureRegistered(void);
 extern "C" void *igAdxAfsFile_Register(void);
@@ -91,9 +103,9 @@ extern "C" int igUnsignedLongMetaField_SetDefaultValue(int, int);
 extern "C" int igFile_GetMetaObjectFunction(void);
 extern "C" void igAdxFile_InitFields(void);
 extern "C" void igAdxFile_StaticInitialize(void);
-extern "C" void FUN_003350b0(void);
+extern "C" void igAdxFile_StaticInitCallback(void);
 extern "C" void igAdxFile_StaticFinalize(void);
-extern "C" void FUN_003350d0(void);
+extern "C" void igAdxFile_ExitCallback(void);
 extern "C" void igAdxAudio_Create(int allocator);
 extern "C" igMetaObject *igAdxAudio_GetOrCreateMetaObject(void);
 extern "C" void *igAdxAudio_GetMetaObject(void);
@@ -116,7 +128,7 @@ extern "C" int igMovieCodec_GetVTable(void);
 extern "C" void igMovieCodec_EnsureRegistered(void);
 extern "C" void *igMovieCodec_Register(void);
 extern "C" void igMovieCodec_GetMetaObjectFunction(void);
-extern "C" int FUN_00130140(int *, int);
+extern "C" int igSmartPointer_igVisualContext_Destruct(int *, int);
 extern "C" int igCriMovieCodec_GetVTable(void);
 extern "C" int __dl__FPv(...);
 extern "C" void igCriMovieCodec_EnsureRegistered(void);
@@ -145,18 +157,18 @@ extern "C" void igTextureBindAttrList_EnsureRegistered(void);
 extern "C" void *igTextureBindAttrList_Register(void);
 extern "C" void igTextureBindAttrList_GetMetaObjectFunction(void);
 extern "C" igMetaEnum *igMetaEnum_Create(const char *, const char **, int *, int);
-extern "C" igMetaEnum *FUN_00336140(void);
-extern "C" igMetaEnum *FUN_003361a0(void);
+extern "C" igMetaEnum *igMovieInfo_GetMovieStateMetaEnum(void);
+extern "C" igMetaEnum *igMovieInfo_GetMovieTypeMetaEnum(void);
 extern "C" void igMovieInfo_Create(int allocator);
 extern "C" void *igMovieInfo_GetMetaObject(void);
-extern "C" int FUN_00131aa0(int *, int);
-extern "C" int FUN_00132390(int *, int);
-extern "C" int FUN_001d3650(int *, int);
-extern "C" int ObjectRef_Destruct_001363f0(int *, int);
+extern "C" int igSmartPointer_igTextureList_Destruct(int *, int);
+extern "C" int igSmartPointer_igImage_Destruct(int *, int);
+extern "C" int igSmartPointer_igSceneInfo_Destruct(int *, int);
+extern "C" int igSmartPointer_igObject_Destruct(int *, int);
 extern "C" int igStringRef_Destruct(int *, int);
 extern "C" int igMovieInfo_GetVTable(void);
-extern "C" void **igSmartPointer_igTextureBindAttrList_Destruct(void **arg0, long long arg1);
-extern "C" void **igSmartPointer_igMovieCodecView_Destruct(void **arg0, int arg1);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodecView_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieInfo_EnsureRegistered(void);
 extern "C" void *igInfo_Register(void);
 extern "C" void *igMovieInfo_Register(void);
@@ -165,13 +177,13 @@ extern "C" int igTextureList_GetOrCreateMetaObject(void);
 extern "C" int igImage_GetOrCreateMetaObject(void);
 extern "C" int igSceneInfo_GetOrCreateMetaObject(void);
 extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
-extern "C" void FUN_00149980(void);
-extern "C" void FUN_001499e0(void);
+extern "C" void IG_GFX_TEXTURE_FILTER_GetMetaEnum(void);
+extern "C" void IG_GFX_TEXTURE_FORMAT_GetMetaEnum(void);
 extern "C" void igMovieInfo_InitFields(void);
 extern "C" igMetaObject *igMovieRenderer_GetOrCreateMetaObject(void);
 extern "C" void *igMovieRenderer_GetMetaObject(void);
 extern "C" int igMovieRenderer_GetVTable(void);
-extern "C" void **FUN_003369f0(void **arg0, short arg1);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieRenderer_EnsureRegistered(void);
 extern "C" void *igRenderer_Register(void);
 extern "C" void *igMovieRenderer_Register(void);
@@ -180,10 +192,10 @@ extern "C" void igMovieRenderer_InitFields(void);
 extern "C" void igMovieManager_CreateInstance(int allocator);
 extern "C" igMetaObject *igMovieManager_GetOrCreateMetaObject(void);
 extern "C" void *igMovieManager_GetMetaObject(void);
-extern "C" int FUN_00231030(char *, int);
-extern "C" int FUN_00232ae0(int *, int);
+extern "C" int igInfoManager_Destroy(igInfoManager *, int);
+extern "C" int igSmartPointer_igRendererOrderedList_Destruct(int *, int);
 extern "C" int igMovieManager_GetVTable(void);
-extern "C" void **FUN_00336e10(void **arg0, long long arg1);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieManager_EnsureRegistered(void);
 extern "C" void *igInfoManager_Register(void);
 extern "C" void *igMovieManager_Register(void);
@@ -214,53 +226,41 @@ extern "C" igMetaObject *igAdxAfsFileList_GetMeta(void);
 extern "C" igMetaObject *igAdxAfsFileList_GetElementMeta(void);
 extern "C" unsigned char g_AdxMovieLibrary_registered;
 extern "C" igMetaObject *g_igAdx_metaObject;
-struct Obj { int *vt; char pad[4]; };
 extern "C" int g_igAdx_vtable[4];
 extern "C" void * g_objectSystem[4];
 struct igMetaObject_334510;
 extern "C" igMetaObject_334510 * igObject_GetMetaObject_ParentAccessor(...);
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 extern "C" igMetaObject *g_igAdxAfsFileList_metaObject;
-struct Obj_3346b0 { int *vt; char pad[28]; };
 extern "C" int g_igAdxAfsFileList_vtable[4];
 struct igMetaObject_334710;
 extern "C" igMetaObject_334710 * igObjectList_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_igAdxAfsFile_metaObject;
-typedef struct S_ref { char pad4[4]; int f4; } S_ref;
-union U_3347f0 { int vt; char b[32]; };
 extern "C" int g_igNamedObject_vtable[4];
 extern "C" int g_igAdxAfsFile_vtable[4];
 extern "C" int g_igFileName_vtable[4];
 extern "C" igMetaObject *g_igFileNameList_metaObject;
 extern "C" int g_igFileNameList_vtable[4];
 extern "C" igMetaObject *g_igFileName_metaObject;
-union U_334b90 { int vt; char b[16]; };
 struct igMetaObject_334c90;
 extern "C" igMetaObject_334c90 * igNamedObject_GetPublishedMetaObject(...);
 extern "C" igMetaObject *g_igAdxFile_metaObject;
-struct Obj_334e50 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
-extern "C" int igFile_Destroy(struct Obj_334e50 *, int);
+extern "C" int igFile_Destroy(igFile *, int);
 extern "C" int g_igAdxFile_vtable[4];
 struct igMetaObject_334ee0;
 extern "C" igMetaObject_334ee0 *igFile_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_igAdxAudio_metaObject;
-struct W { int *vt; int f[11]; };
 extern "C" int g_igAdxAudio_vtable[4];
 extern "C" igMetaObject *g_igMovieCodecList_metaObject;
 extern "C" int g_igMovieCodecList_vtable[4];
 extern "C" igMetaObject *g_igMovieCodec_metaObject;
-union U_335670 { int vt; char b[16]; };
 extern "C" int g_igMovieCodec_vtable[4];
-extern "C" int Memory_FreeBufferAliasC(struct O *);
-typedef struct O { int vt; int pad; int f8; } O;
-extern "C" O *FUN_00335700(O *arg0, long long arg1);
+extern "C" int Memory_FreeBufferAliasC(void *);
+extern "C" igMovieCodec *igMovieCodec_Destroy(igMovieCodec *self, short flags);
 extern "C" igMetaObject *g_igCriMovieCodec_metaObject;
 extern "C" igMetaObject *igCriMovieCodec_GetMetaObject(void);
-struct Obj_3358a0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
 extern "C" int g_igCriMovieCodec_vtable[4];
-struct R { int vt; unsigned int rc; };
-extern "C" struct R **FUN_00335930(struct R **arg0, short arg1);
-struct F { char pad[38]; unsigned char b38; char pad2[17]; int f56; };
+extern "C" igSmartPointer<igObject> *igSmartPointer_igAudioContext_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igMetaObject *g_igCriMovieData_metaObject;
 extern "C" igMetaObject *igCriMovieData_GetMetaObject(void);
 extern "C" int g_igCriMovieData_vtable[4];
@@ -270,66 +270,32 @@ extern "C" int g_igMovieInfoList_vtable[4];
 extern "C" igMetaObject *g_igTextureBindAttrList_metaObject;
 extern "C" igMetaObject *igTextureBindAttrList_GetMetaObject(void);
 /* Stack object, vtable slot read through the object plus a runtime offset. */
-typedef struct { int *vt; int pad[7]; } Obj_336050;
 extern "C" int g_igTextureBindAttrList_vtable[4];
 extern "C" igMetaObject *g_igMovieInfo_metaObject;
-extern "C" int igInfo_Destroy(struct Obj_334e50 *, int);
+extern "C" int igInfo_Destroy(igInfo *, int);
 extern "C" int g_igMovieInfo_vtable[4];
 struct igMetaObject_3364e0;
 extern "C" igMetaObject_3364e0 *igInfo_GetPublishedMetaObject(void);
-struct MovieInfoFieldView { char pad0[38]; char f38; char pad1[13]; int f52; int f56; };
 extern "C" int g_igObject_metaObject[4];
 extern "C" igMetaObject *g_igMovieRenderer_metaObject;
-struct T_336900 { int word0; int references; };
-extern "C" int DAT_0052d060[4];
+extern "C" int g_igRenderer_vtable[4];
 extern "C" int g_igMovieRenderer_vtable[4];
-struct Obj_336900 {
-    int *vt; char p4[4]; T_336900 *m8; T_336900 *m12;
-    inline void rel8() {
-        T_336900 **self = &m8;
-        if (self) {
-            T_336900 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-    inline void rel12() {
-        T_336900 **self = &m12;
-        if (self) {
-            T_336900 *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy(object);
-            }
-        }
-    }
-};
 struct igMetaObject_336a90;
 extern "C" igMetaObject_336a90 *igRenderer_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_igMovieManager_metaObject;
-union U_336cb0 { int vt; int w[12]; void *p[12]; char b[48]; };
 extern "C" int g_igMovieManager_vtable[4];
-extern "C" igSmartPointer<igObject> *FUN_00336d90(igSmartPointer<igObject> *self, short flag);
-struct S_temp_a0 { char pad4[4]; int f4; };
-struct O_336e90 { S_temp_a0 *m; };
-extern "C" O_336e90 *FUN_00336e90(O_336e90 *arg0, short arg1);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag);
+extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag);
 struct igMetaObject_336f30;
 extern "C" igMetaObject_336f30 *igInfoManager_GetPublishedMetaObject(void);
-struct Fld { char p0[38]; char f38; char p1[13]; char f52; int f56; };
 extern "C" igMetaObject *g_igMoviePlugin_metaObject;
-typedef struct Q { char pad4[4]; int f4; } Q;
-typedef struct { int *vt; int w[1]; Q *s; } Obj_337140;
 extern "C" int g_igMoviePlugin_vtable[4];
 extern "C" int g_igInsightPlugin_metaObject[4];
 extern "C" int g_igTextureBindAttr_metaObject[4];
 
 unsigned char g_AdxMovieLibrary_registered;
 
-void FUN_003343a0(void) {
+void AdxMovieLibrary_RegisterClasses(void) {
     igFileName_EnsureRegistered();
     igFileNameList_EnsureRegistered();
     igAdxAfsFile_EnsureRegistered();
@@ -366,10 +332,10 @@ void *igAdx_GetMetaObject(void) {
 }
 
 int igAdx_GetVTable(void) {
-    struct Obj obj;
+    igObject obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igAdx_vtable[0];
+    *(int **)&obj._vtable = &g_igAdx_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -390,7 +356,7 @@ void *igAdx_Register(void) {
         8, /* instance size */
         igAdx_GetVTable,
         igAdx_InitFields,
-        FUN_003345d0, /* extra callback item */
+        igAdx_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -402,15 +368,15 @@ void igAdx_GetMetaObjectFunction(void)
 
 void igAdx_InitFields(void)
 {
-    igMetaObject_AddExitCallback(FUN_003345f0);
+    igMetaObject_AddExitCallback(igAdx_ExitCallback);
 }
 
-void FUN_003345d0(void)
+void igAdx_StaticInitCallback(void)
 {
     igAdx_CreateScratchString();
 }
 
-void FUN_003345f0(void)
+void igAdx_ExitCallback(void)
 {
     igAdx_Shutdown();
 }
@@ -436,10 +402,10 @@ done:;
 }
 
 int igAdxAfsFileList_GetVTable(void) {
-    struct Obj_3346b0 obj;
+    igAdxAfsFileList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igAdxAfsFileList_vtable[0];
+    *(int **)&obj._vtable = &g_igAdxAfsFileList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -485,45 +451,28 @@ void *igAdxAfsFile_GetMetaObject(void) {
 }
 
 int igAdxAfsFile_GetVTable(void) {
-    union U_3347f0 u;
-    int temp_s0;
-    S_ref *q0;
-    char *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    igAdxAfsFile obj;
+    int vtable;
+    int *pathListRef;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_igFileName_vtable[0];
-    q0 = (S_ref *)&u.b[12];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_igAdxAfsFile_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igFileName_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_igFileName_vtable[0];
+    pathListRef = &obj._pathList;
+    *pathListRef = 0;
+    *(int **)&obj._vtable = &g_igAdxAfsFile_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igFileName_vtable[0];
+    if (pathListRef != 0) {
+        igRelease((igObject *)*pathListRef);
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void igAdxAfsFile_EnsureRegistered(void)
@@ -598,10 +547,10 @@ done:
 }
 
 int igFileNameList_GetVTable(void) {
-    struct Obj_3346b0 obj;
+    igFileNameList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igFileNameList_vtable[0];
+    *(int **)&obj._vtable = &g_igFileNameList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -646,43 +595,27 @@ void *igFileName_GetMetaObject(void) {
 }
 
 int igFileName_GetVTable(void) {
-    union U_334b90 u;
-    int t;
-    char *o;
-    int *a1;
-    int v0;
-    S_ref *p0, *p1;
+    igFileName obj;
+    int vtable;
+    int *nameRef;
+    int *pathListRef;
 
-    igObject_InitHeader(u.b);
-    p0 = (S_ref *)&u.b[8];
-    *(int *)p0 = 0;
-    u.vt = (int)&g_igFileName_vtable[0];
-    p1 = (S_ref *)&u.b[12];
-    *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igFileName_vtable[0];
-    if (p1 != 0) {
-        p1 = *(S_ref **)p1;
-        if (p1 != 0) {
-            p1->f4 = (int)((int) (p1->f4 - 1));
-            if (((unsigned long long) ((long long) p1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_igFileName_vtable[0];
+    pathListRef = &obj._pathList;
+    *pathListRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igFileName_vtable[0];
+    if (pathListRef != 0) {
+        igRelease((igObject *)*pathListRef);
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (p0 != 0) {
-        o = *(char **)p0;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return t;
+    return vtable;
 }
 
 void igFileName_EnsureRegistered(void)
@@ -770,18 +703,18 @@ void *igAdxFile_GetMetaObject(void) {
 }
 
 int igAdxFile_GetVTable(void) {
-    struct Obj_334e50 obj;
-    int t;
+    igAdxFile obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w10 = 0;
-    obj.vt = &g_igAdxFile_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_igAdxFile_vtable[0];
-    igFile_Destroy(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._fileName = 0;
+    obj._completeFilename = 0;
+    *(int **)&obj._vtable = &g_igAdxFile_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igAdxFile_vtable[0];
+    igFile_Destroy((igFile *)&obj, 0);
+    return vtable;
 }
 
 void igAdxFile_EnsureRegistered(void)
@@ -801,7 +734,7 @@ void *igAdxFile_Register(void) {
         0x68, /* instance size */
         igAdxFile_GetVTable,
         igAdxFile_InitFields,
-        FUN_003350b0, /* extra callback item */
+        igAdxFile_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -891,15 +824,15 @@ void igAdxFile_InitFields(void) {
     igUnsignedLongMetaField_SetDefaultValue(((int)igMetaObject_GetFieldAt(meta, firstField + 0xD)), 0xFE502A);
     igMetaObject_NameFields(meta, g_igAdxFile_fieldTable, g_igAdxFile_fieldHandles, g_igAdxFile_fieldOffsets, firstField);
     g_igAdxFile_metaObject->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
-    igMetaObject_AddExitCallback(&FUN_003350d0);
+    igMetaObject_AddExitCallback(&igAdxFile_ExitCallback);
 }
 
-void FUN_003350b0(void)
+void igAdxFile_StaticInitCallback(void)
 {
     igAdxFile_StaticInitialize();
 }
 
-void FUN_003350d0(void)
+void igAdxFile_ExitCallback(void)
 {
     igAdxFile_StaticFinalize();
 }
@@ -936,17 +869,18 @@ void *igAdxAudio_GetMetaObject(void) {
 }
 
 int igAdxAudio_GetVTable(void) {
-    struct W o;
-    int r;
+    igAdxAudio obj;
+    int vtable;
 
-    int *p; int *a1; int t;
-    igObject_InitHeader(&o);
-    o.vt = g_igAdxAudio_vtable;
-    *(int *)((char *)&o + 40) = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_igAdxAudio_vtable;
-    if (&*(int *)((char *)&o + 40) != 0) { p = *(int **)((char *)&o + 40); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
-    return r;
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igAdxAudio_vtable[0];
+    obj._filename = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igAdxAudio_vtable[0];
+    if (&obj._filename != 0) {
+        releaseString((const char *)obj._filename);
+    }
+    return vtable;
 }
 
 void igAdxAudio_EnsureRegistered(void)
@@ -1115,60 +1049,37 @@ void *igMovieCodec_GetMetaObject(void) {
 }
 
 int igMovieCodec_GetVTable(void) {
-    union U_335670 u;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
+    igMovieCodec obj;
+    int vtable;
+    int *nameRef;
 
-    igObject_InitHeader(u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    u.vt = (int)&g_igMovieCodec_vtable[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    *(int **)&obj._vtable = &g_igMovieCodec_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return s0;
+    return vtable;
 }
 
-O *FUN_00335700(O *arg0, long long arg1) {
-    int *temp_a1;
-    int temp_v0;
-    void *temp_v1;
-
-    if (arg0 != 0) {
-        arg0->vt = (int)(&g_igMovieCodec_vtable[0]);
-        if (arg0 != 0) {
-            arg0->vt = (int)(&g_igNamedObject_vtable[0]);
-            if (&arg0->f8 != 0) {
-                temp_v1 = (void *)(arg0->f8);
-                if (temp_v1 != 0) {
-                    temp_a1 = (int *)((char *)temp_v1 - 8);
-                    temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-                    *(int *)((char *)(temp_v1) - 4) = temp_v0;
-                    if (temp_v0 == 0) {
-                        StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-                    }
-                }
+igMovieCodec *igMovieCodec_Destroy(igMovieCodec *self, short flags) {
+    if (self != 0) {
+        *(int **)&self->_vtable = &g_igMovieCodec_vtable[0];
+        if (self != 0) {
+            *(int **)&self->_vtable = &g_igNamedObject_vtable[0];
+            if (&self->_name != 0) {
+                releaseString((const char *)self->_name);
             }
         }
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void igMovieCodec_EnsureRegistered(void)
@@ -1213,38 +1124,33 @@ igMetaObject *igCriMovieCodec_GetMetaObject(void)
 }
 
 int igCriMovieCodec_GetVTable(void) {
-    struct Obj_3358a0 obj;
-    int t;
+    igCriMovieCodec obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_igCriMovieCodec_vtable[0];
-    obj.w4 = 0;
-    obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_igCriMovieCodec_vtable[0];
-    FUN_00335930((struct R **)&obj.w5, (short)(-1));
-    FUN_00130140(&obj.w4, -1);
-    FUN_00335700((O *)&obj, (long long)0);
-    return t;
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_igCriMovieCodec_vtable[0];
+    obj._visualContext = 0;
+    obj._audioContext = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igCriMovieCodec_vtable[0];
+    igSmartPointer_igAudioContext_Destruct((igSmartPointer<igObject> *)&obj._audioContext, (short)(-1));
+    igSmartPointer_igVisualContext_Destruct(&obj._visualContext, -1);
+    igMovieCodec_Destroy((igMovieCodec *)&obj, (long long)0);
+    return vtable;
 }
 
-struct R **FUN_00335930(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igAudioContext_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void igCriMovieCodec_EnsureRegistered(void)
@@ -1343,10 +1249,10 @@ igMetaObject *igCriMovieData_GetMetaObject(void) {
 }
 
 int igCriMovieData_GetVTable(void) {
-    struct Obj_3346b0 obj;
+    igCriMovieData obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igCriMovieData_vtable[0];
+    *(int **)&obj._vtable = &g_igCriMovieData_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -1456,10 +1362,10 @@ done:
 }
 
 int igMovieInfoList_GetVTable(void) {
-    struct Obj_3346b0 obj;
+    igMovieInfoList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igMovieInfoList_vtable[0];
+    *(int **)&obj._vtable = &g_igMovieInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -1512,11 +1418,11 @@ igMetaObject *igTextureBindAttrList_GetMetaObject(void) {
 }
 
 int igTextureBindAttrList_GetVTable(void) {
-    Obj_336050 o;
+    igTextureBindAttrList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_igTextureBindAttrList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igTextureBindAttrList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void igTextureBindAttrList_EnsureRegistered(void)
@@ -1560,7 +1466,7 @@ static int g_igMovieInfo_movieStateValues[] = {
 };
 igMetaEnum *g_igMovieInfo_movieStateMetaEnum;
 
-igMetaEnum *FUN_00336140(void) {
+igMetaEnum *igMovieInfo_GetMovieStateMetaEnum(void) {
     if (g_igMovieInfo_movieStateMetaEnum == 0) {
         g_igMovieInfo_movieStateMetaEnum = igMetaEnum_Create("IG_MOVIE_STATE", g_igMovieInfo_movieStateNames, g_igMovieInfo_movieStateValues, 3);
     }
@@ -1581,7 +1487,7 @@ static int g_igMovieInfo_movieTypeValues[] = {
 };
 igMetaEnum *g_igMovieInfo_movieTypeMetaEnum;
 
-igMetaEnum *FUN_003361a0(void) {
+igMetaEnum *igMovieInfo_GetMovieTypeMetaEnum(void) {
     if (g_igMovieInfo_movieTypeMetaEnum == 0) {
         g_igMovieInfo_movieTypeMetaEnum = igMetaEnum_Create("IG_MOVIE_TYPE", g_igMovieInfo_movieTypeNames, g_igMovieInfo_movieTypeValues, 4);
     }
@@ -1625,68 +1531,58 @@ void *igMovieInfo_GetMetaObject(void) {
 }
 
 int igMovieInfo_GetVTable(void) {
-    struct Obj_334e50 obj;
-    int t;
+    igMovieInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_igMovieInfo_vtable[0];
-    obj.w5 = 0;
-    obj.w12 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w20 = 0;
-    obj.w21 = 0;
-    obj.w22 = 0;
-    obj.w24 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_igMovieInfo_vtable[0];
-    ObjectRef_Destruct_001363f0(&obj.w24, -1);
-    FUN_00131aa0(&obj.w22, -1);
-    FUN_00132390(&obj.w21, -1);
-    FUN_001d3650(&obj.w20, -1);
-    igSmartPointer_igMovieCodecView_Destruct((void **)&obj.w18, -1);
-    igStringRef_Destruct(&obj.w17, -1);
-    igSmartPointer_igTextureBindAttrList_Destruct((void **)&obj.w12, (long long)(-1));
-    igStringRef_Destruct(&obj.w5, -1);
-    igInfo_Destroy(&obj, 0);
-    return t;
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_igMovieInfo_vtable[0];
+    obj._path = 0;
+    obj._videoTextures = 0;
+    obj._codecType = 0;
+    obj._codec = 0;
+    obj._sceneInfo = 0;
+    obj._runtimeImage = 0;
+    obj._runtimeTextures = 0;
+    obj._userdata = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igMovieInfo_vtable[0];
+    igSmartPointer_igObject_Destruct(&obj._userdata, -1);
+    igSmartPointer_igTextureList_Destruct(&obj._runtimeTextures, -1);
+    igSmartPointer_igImage_Destruct(&obj._runtimeImage, -1);
+    igSmartPointer_igSceneInfo_Destruct(&obj._sceneInfo, -1);
+    igSmartPointer_igMovieCodecView_Destruct((igSmartPointer<igObject> *)&obj._codec, -1);
+    igStringRef_Destruct(&obj._codecType, -1);
+    igSmartPointer_igTextureBindAttrList_Destruct((igSmartPointer<igObject> *)&obj._videoTextures, -1);
+    igStringRef_Destruct(&obj._path, -1);
+    igInfo_Destroy((igInfo *)&obj, 0);
+    return vtable;
 }
 
-void **igSmartPointer_igTextureBindAttrList_Destruct(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-void **igSmartPointer_igMovieCodecView_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igMovieCodecView_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void igMovieInfo_EnsureRegistered(void)
@@ -1832,7 +1728,7 @@ void igMovieInfo_InitFields(void) {
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, firstField)), 0);
     typeField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 1);
     igEnumMetaField_SetDefaultValue(typeField, 0);
-    typeField->_getMetaEnumFunction = (int)FUN_003361a0;
+    typeField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieTypeMetaEnum;
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 3)), -1);
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 4)), -1);
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 5)), -1);
@@ -1842,10 +1738,10 @@ void igMovieInfo_InitFields(void) {
     minificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 8);
     igEnumMetaField_SetDefaultValue(minificationFilterField, 0);
     /* matching construct: a function-pointer store; an int store pools the getter addresses in .data */
-    *(void (**)(void))&minificationFilterField->_getMetaEnumFunction = FUN_00149980;
+    *(void (**)(void))&minificationFilterField->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     magnificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 9);
     igEnumMetaField_SetDefaultValue(magnificationFilterField, 0);
-    *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = FUN_00149980;
+    *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0xA)), -1);
     igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, firstField + 0xB)), -1);
     igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, firstField + 0xC)), 0);
@@ -1854,7 +1750,7 @@ void igMovieInfo_InitFields(void) {
     codecField->_persistent = 0;
     stateField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0xE);
     igEnumMetaField_SetDefaultValue(stateField, 1);
-    stateField->_getMetaEnumFunction = (int)FUN_00336140;
+    stateField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieStateMetaEnum;
     sceneInfoField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0xF);
     sceneInfoField->_metaObject = igSceneInfo_GetOrCreateMetaObject();
     sceneInfoField->_persistent = 0;
@@ -1867,7 +1763,7 @@ void igMovieInfo_InitFields(void) {
     imageFormatField = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x12);
     igEnumMetaField_SetDefaultValue(imageFormatField, 7);
     imageFormatField->_persistent = 0;
-    imageFormatField->_getMetaEnumFunction = (int)FUN_001499e0;
+    imageFormatField->_getMetaEnumFunction = (int)IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, firstField + 0x13);
     userdataField->_metaObject = (int)((int)g_igObject_metaObject[0]);
     userdataField->_persistent = 0;
@@ -1894,37 +1790,36 @@ void *igMovieRenderer_GetMetaObject(void) {
 }
 
 int igMovieRenderer_GetVTable(void) {
-    Obj_336900 obj;
-    int r;
+    igMovieRenderer obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.m8 = 0;
-    obj.vt = &g_igMovieRenderer_vtable[0];
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_igMovieRenderer_vtable[0];
-    obj.rel12();
-    obj.vt = &DAT_0052d060[0];
-    obj.rel8();
-    return r;
+    obj._visualContext = 0;
+    *(int **)&obj._vtable = &g_igMovieRenderer_vtable[0];
+    obj._movieManager = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igMovieRenderer_vtable[0];
+    if (&obj._movieManager != 0) {
+        igRelease((igObject *)obj._movieManager);
+    }
+    *(int **)&obj._vtable = &g_igRenderer_vtable[0];
+    if (&obj._visualContext != 0) {
+        igRelease((igObject *)obj._visualContext);
+    }
+    return vtable;
 }
 
-void **FUN_003369f0(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void igMovieRenderer_EnsureRegistered(void)
@@ -2015,29 +1910,29 @@ done:;
 }
 
 int igMovieManager_GetVTable(void) {
-    union U_336cb0 u;
-    int temp_s4;
+    igMovieManager obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[2] = 0;
-    u.w[0] = (int)(&g_igMovieManager_vtable[0]);
-    u.w[4] = 0;
-    u.w[6] = 0;
-    u.w[7] = 0;
-    u.w[8] = 0;
-    u.w[9] = 0;
-    temp_s4 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_igMovieManager_vtable[0]);
-    FUN_00232ae0(&u.w[9], -1);
-    FUN_00336e90((O_336e90 *)(&u.w[8]), (short)(-1));
-    FUN_00336e10((void **)(&u.w[7]), (long long)(-1));
-    FUN_00335930((struct R **)(&u.w[6]), (short)(-1));
-    FUN_00336d90((igSmartPointer<igObject> *)(&u.w[4]), (short)(-1));
-    FUN_00231030(u.b, 0);
-    return temp_s4;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_igMovieManager_vtable[0];
+    obj._movieList = 0;
+    obj._audio = 0;
+    obj._codecList = 0;
+    obj._movieRenderer = 0;
+    obj._rendererList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igMovieManager_vtable[0];
+    igSmartPointer_igRendererOrderedList_Destruct(&obj._rendererList, -1);
+    igSmartPointer_igMovieRenderer_Destruct((igSmartPointer<igObject> *)&obj._movieRenderer, (short)(-1));
+    igSmartPointer_igMovieCodecList_Destruct((igSmartPointer<igObject> *)&obj._codecList, (long long)(-1));
+    igSmartPointer_igAudioContext_Destruct((igSmartPointer<igObject> *)&obj._audio, (short)(-1));
+    igSmartPointer_igMovieInfoList_Destruct((igSmartPointer<igObject> *)&obj._movieList, (short)(-1));
+    igInfoManager_Destroy((igInfoManager *)&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00336d90(igSmartPointer<igObject> *self, short flag) {
+igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
         if (object != 0) {
@@ -2050,31 +1945,30 @@ igSmartPointer<igObject> *FUN_00336d90(igSmartPointer<igObject> *self, short fla
     return self;
 }
 
-void **FUN_00336e10(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            __dl__FPv(arg0);
-        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
-O_336e90 *FUN_00336e90(O_336e90 *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }
-        if (arg1 > 0) __dl__FPv(arg0);
+igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag) {
+    if (self != 0) {
+        igObject *object = self->p;
+        if (object != 0) {
+            --object->_refCount;
+            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
+                igObject_Destroy(object);
+        }
+        if (flag > 0) __dl__FPv(self);
     }
-    return arg0;
+    return self;
 }
 
 void igMovieManager_EnsureRegistered(void)
@@ -2181,25 +2075,18 @@ void *igMoviePlugin_GetMetaObject(void) {
 }
 
 int igMoviePlugin_GetVTable(void) {
-    Obj_337140 o;
-    int r;
-    Q *q;
+    igMoviePlugin obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_igMoviePlugin_vtable[0];
-    o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_igMoviePlugin_vtable[0];
-    if (&o.s != 0) {
-        q = o.s;
-        if (q != 0) {
-            q->f4 -= 1;
-            if ((q->f4 & 0x7fffff) == 0) {
-                igObject_Destroy(q);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igMoviePlugin_vtable[0];
+    obj._movieManager = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igMoviePlugin_vtable[0];
+    if (&obj._movieManager != 0) {
+        igRelease((igObject *)obj._movieManager);
     }
-    return r;
+    return vtable;
 }
 
 void igMoviePlugin_EnsureRegistered(void)

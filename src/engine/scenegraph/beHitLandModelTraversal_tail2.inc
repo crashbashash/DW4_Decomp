@@ -77,7 +77,7 @@ void igIntersectTraversal_ResetStacks(TraversalMatrixState *self) {
     } else {
         List_Resize(m, idx + 1, 64);
     }
-    igMatrix44f_Copy(m->data + idx, DAT_004e0ef0);
+    igMatrix44f_Copy(m->data + idx, g_matrix44Identity);
     o = self->objs;
     n = o->n;
     for (i = 0; i < n; i++) {

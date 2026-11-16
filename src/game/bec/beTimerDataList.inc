@@ -16,10 +16,10 @@ void *beTimerDataList_GetMetaObject(void) {
 }
 
 int beTimerDataList_GetVTable(void) {
-    struct Obj_341750 obj;
+    beTimerDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beTimerDataList_vtable[0];
+    obj._vtable = (int)&g_beTimerDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

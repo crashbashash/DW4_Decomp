@@ -9,27 +9,19 @@ void *beLayerInfoRam_GetMetaObject(void) {
 }
 
 int beLayerInfoRam_GetVTable(void) {
-    union U u;
-    igObject *q0;
-    int temp_s0;
+    beLayerInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    q0 = (igObject *)&u.b[40];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_beLayerInfoRam_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (q0 != 0) {
-        q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)q0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beLayerInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beLayerInfoRam_EnsureRegistered(void)

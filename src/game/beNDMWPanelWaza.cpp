@@ -15,7 +15,7 @@ extern "C" int beMessenger_DispatchSelected(...);
 extern "C" int beMessenger_SelectGroup(...);
 extern "C" int strcmp(...);
 extern "C" int beMessenger_SelectReceivers(int, const void *, int, int);
-extern "C" void FUN_003ce700(int *arg0);
+extern "C" void beNDMWPanelObject_Close(beNDMWPanelObject *panel);
 extern "C" void igObject_Destroy(void *);
 extern "C" int sprintf(...);
 extern "C" int List_Reserve(...);
@@ -35,11 +35,11 @@ extern "C" int beNDMWPanelWaza_GetMeta(void);
 extern "C" int beMessenger_RegisterReceiver(int, void *, const void *, int, int);
 extern "C" int beBaseInfoRam_StartTimer(...);
 extern "C" int beBaseInfoRam_IsTimerExpired(void *, const char *);
-extern "C" int FUN_003cc3d0(int, int *);
-extern "C" int FUN_003cc480(void *);
-extern "C" int FUN_003cc540(void *);
+extern "C" int beNDMWPanelWazaInfoWork_igIntList_SetAll(int, int *);
+extern "C" int beNDMWPanelWazaInfoWork_GetTextColorList(void *);
+extern "C" int beNDMWPanelWazaInfoWork_GetTextSetList(void *);
 extern "C" void *beNDMWPanelWazaInfoWork_Create(void *);
-extern "C" int FUN_003bee30(...);
+extern "C" int beNDMWPanelObject_GetMessageEnum(...);
 extern "C" void *Memory_GetAllocatorBySelector(int);
 extern "C" void *igObject_GetAllocator(void *);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, int);
@@ -81,13 +81,11 @@ extern "C" RecoveryString StringList_CopyRetained(void *, int);
 struct SetOp { static inline void go(igStringRefList *L, int idx, const RecoveryString &r) { int cnt; int *slot; int *t; int *a1; int c; cnt = L->_count; if (cnt != 0 && idx >= 0 && idx < cnt) { slot = (int *)L->_data + idx; t = (int *)r.p; if (t != 0) t[-1] = t[-1] + 1; t = (int *)(*slot); if (t != 0) { a1 = t - 2; c = t[-1] - 1; t[-1] = c; if (c == 0) StringChunk_ReleaseHeader(*a1, a1); } *slot = (int)r.p; } } };
 extern "C" void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *name, int val);
 struct PanelPosition { float x; float y; float z; };
-extern "C" void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *arg0, struct PanelPosition *arg1);
-typedef struct A { char pad[12]; int f12; char pad16[4]; int f20; } A;
-extern "C" void FUN_003ce500(A *arg0, const void *arg1, const void *arg2, float *arg3, int arg4);
-extern "C" void FUN_003ce5b0(beNDMWPanelObject *arg0, int arg1, int arg2);
-extern "C" void FUN_003ce7e0(beNDMWPanelObject *arg0);
-typedef struct O { char p0[12]; int f12; char p1[8]; int f24; int f28; char p2[20]; int f52; } O;
-extern "C" void FUN_003ce890(O *arg0);
+extern "C" void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, struct PanelPosition *position);
+extern "C" void beNDMWPanelObject_SendModelCommand(beNDMWPanelObject *panel, const void *target, const void *message, float *position, int sequence);
+extern "C" void beNDMWPanelObject_Open(beNDMWPanelObject *panel, int generate, int silent);
+extern "C" void beNDMWPanelObject_MoveCursorUp(beNDMWPanelObject *panel);
+extern "C" void beNDMWPanelObject_MoveCursorDown(beNDMWPanelObject *panel);
 /* An igProperty record: its value is the word at +12. */
 struct PropertyRecord { char header[12]; int value; };
 extern "C" PropertyRecord * igProperty_GetRecord(...);
@@ -99,15 +97,13 @@ struct Rel { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *arg0);
-/* Property record: integer value at +12. */
-struct PropertyRecordInt { char p[12]; int value; };
-extern "C" void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2);
+extern "C" void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self);
+extern "C" void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *self, int *label, long long *wait);
 extern "C" int g_bePadManager_metaObject[4];
-extern "C" void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *arg0);
+extern "C" void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *self);
 extern "C" int g_beNDMWPanelWazaInfo_metaObject[4];
 extern "C" int g_beNDMWPanelWaza_metaObject[4];
-extern "C" void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *arg0, void *arg1);
+extern "C" void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
 extern "C" bePadData *bePadManager_GetPadForPlayer(int, int);
 class StringRef {
 public:
@@ -115,7 +111,7 @@ public:
     StringRef(const char *text);
     ~StringRef();
 };
-extern "C" int FUN_003cc490(int, StringRef *);
+extern "C" int beNDMWPanelWazaInfoWork_igStringRefList_SetAll(int, StringRef *);
 /* matching construct: dummy-virtual panel object; slot 21 refreshes, slot 22 asks for a fire request */
 class PanelVt { public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
@@ -127,7 +123,7 @@ class WorkVt { public:
  virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
  virtual void Finished();
 };
-struct H {
+struct InfoWorkOps {
 static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
 {
     int pool;
@@ -157,46 +153,12 @@ static void SetLabel(beNDMWPanelWazaInfoWork *w, int str)
 }
 };
 extern "C" void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
-/* matching construct: dummy-virtual view of beNDMWPanelObjectItem so the call
- * through slot 21 compiles to the retail vtable load; the data fields are
- * reached through the reflected struct. */
-class ItemPanelShim {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void v21();
-};
-/* property record returned by the igProperty lookup (no reflected class) */
-struct Rec_3d0760 { int p[3]; igObjectList *f12; };
-extern "C" int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1);
-/* matching construct: dummy-virtual view of beNDMWPanelObjectWaza so the call
- * through slot 21 (beNDMWPanelObjectWaza_Refresh) compiles to the
- * retail vtable load; the data fields are reached through the reflected struct. */
-class WazaPanelShim {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void v21();
-};
-/* property records returned by the igProperty lookups (no reflected class) */
-struct Rec_3d08f0 { int p[3]; igObjectList *f12; };
-struct Fld { int p[3]; int f12; };
-extern "C" int FUN_003d08f0(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1);
-struct Rel_3d0a90 { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
-} };
-extern "C" void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *arg3);
+extern "C" int beNDMWPanelWaza_FindEmergencyHealDisk(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
+extern "C" int beNDMWPanelWaza_FindEmergencyHealWaza(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
+extern "C" void beNDMWPanelWaza_OpenPanel(int self, beNDMWPanelWazaInfoRam *ram, int page, igObject *player);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2);
+extern "C" int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *message);
 extern "C" int g_beNDMWPanelObjectStat_metaObject[4];
 extern "C" int g_beNDMWPanelObjectItem_metaObject[4];
 extern "C" int g_beNDMWPanelObjectWaza_metaObject[4];
@@ -307,161 +269,161 @@ void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *n
     }
 }
 
-void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *arg0, struct PanelPosition *arg1) {
-    arg1->x = 150.0f * (float) arg0->_playerNo - 260.0f;
-    arg1->y = -160.0f;
-    arg1->z = 0.0f;
+void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, struct PanelPosition *position) {
+    position->x = 150.0f * (float) panel->_playerNo - 260.0f;
+    position->y = -160.0f;
+    position->z = 0.0f;
 }
 
-void FUN_003ce500(A *arg0, const void *arg1, const void *arg2, float *arg3, int arg4) {
-    float sp50[4];
+void beNDMWPanelObject_SendModelCommand(beNDMWPanelObject *panel, const void *target, const void *message, float *position, int sequence) {
+    float spawnPosition[4];
 
-    beMessenger_SelectReceivers(arg0->f12, "MODELCTRL", (int)arg1, arg0->f20);
-    if (arg3 != 0) {
-        sp50[0] = arg3[0];
-        sp50[1] = arg3[1];
-        sp50[2] = arg3[2];
-        beMessenger_AppendVec3(arg0->f12, &sp50[0]);
+    beMessenger_SelectReceivers(panel->_messenger, "MODELCTRL", (int)target, panel->_playerNo);
+    if (position != 0) {
+        spawnPosition[0] = position[0];
+        spawnPosition[1] = position[1];
+        spawnPosition[2] = position[2];
+        beMessenger_AppendVec3(panel->_messenger, &spawnPosition[0]);
     }
-    if (arg4 != 0) {
-        beMessenger_AppendString(arg0->f12, arg4);
+    if (sequence != 0) {
+        beMessenger_AppendString(panel->_messenger, sequence);
     }
-    beMessenger_DispatchSelected(arg0->f12, (int)arg2);
+    beMessenger_DispatchSelected(panel->_messenger, (int)message);
 }
 
-void FUN_003ce5b0(beNDMWPanelObject *arg0, int arg1, int arg2) {
-    int sp40[3];
-    int v;
+void beNDMWPanelObject_Open(beNDMWPanelObject *panel, int generate, int silent) {
+    int origin[3];
+    int lineMode;
     int k;
 
-    switch (arg0->_listKazu) {
+    switch (panel->_listKazu) {
     case 0:
     case 1:
     case 2:
-        v = 2;
+        lineMode = 2;
         break;
     case 3:
-        v = 1;
+        lineMode = 1;
         break;
     default:
-        v = 0;
+        lineMode = 0;
         break;
     }
-    arg0->_lineMode = v;
-    if (arg1 != 0) {
-        beNDMWPanelObject_GetBasePosition(arg0, (struct PanelPosition *)sp40);
-        FUN_003ce500((A *)arg0, "i_wzslbase00", "GENERATE", (float *)sp40, (int)g_panelPageSeqs[arg0->_page][v]);
+    panel->_lineMode = lineMode;
+    if (generate != 0) {
+        beNDMWPanelObject_GetBasePosition(panel, (struct PanelPosition *)origin);
+        beNDMWPanelObject_SendModelCommand(panel, "i_wzslbase00", "GENERATE", (float *)origin, (int)g_panelPageSeqs[panel->_page][lineMode]);
     } else {
-        FUN_003ce500((A *)arg0, "i_wzslbase00", (int *)(int)g_panelPageSeqs[arg0->_page][v], (float *)0, 0);
+        beNDMWPanelObject_SendModelCommand(panel, "i_wzslbase00", g_panelPageSeqs[panel->_page][lineMode], (float *)0, 0);
     }
-    if (!(arg2 & 0xFF)) {
-        beMessenger_SelectGroup(arg0->_messenger, "SOUND");
-        beMessenger_AppendString(arg0->_messenger, "WINDOW_OPEN");
-        beMessenger_DispatchSelected(arg0->_messenger, "PLAY");
+    if (!(silent & 0xFF)) {
+        beMessenger_SelectGroup(panel->_messenger, "SOUND");
+        beMessenger_AppendString(panel->_messenger, "WINDOW_OPEN");
+        beMessenger_DispatchSelected(panel->_messenger, "PLAY");
     }
 }
 
-void FUN_003ce700(int *arg0) {
+void beNDMWPanelObject_Close(beNDMWPanelObject *panel) {
     int i;
     int t;
 
-    FUN_003ce500((A *)arg0, "i_wzslbase00", (int *)(g_panelPageSeqs[arg0[4]][3]), (float *)0, 0);
+    beNDMWPanelObject_SendModelCommand(panel, "i_wzslbase00", g_panelPageSeqs[panel->_page][3], (float *)0, 0);
     i = 0;
     do {
-        t = i + arg0[5] * 4;
-        beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 0, t, (int *)0, 0);
-        beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 2, t, (int *)0, 0);
+        t = i + panel->_playerNo * 4;
+        beNDMWPanelObject_SetCellText(panel, 0, t, (int *)0, 0);
+        beNDMWPanelObject_SetCellText(panel, 2, t, (int *)0, 0);
         if (i == 0) {
-            beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 1, t / 4, (int *)0, 0);
+            beNDMWPanelObject_SetCellText(panel, 1, t / 4, (int *)0, 0);
         }
         i += 1;
     } while (i < 4);
 }
 
-void FUN_003ce7e0(beNDMWPanelObject *arg0) {
-    int temp_v1;
-    int temp_v1_2;
-    temp_v1 = arg0->_cursor;
-    if (temp_v1 != 0) {
-        arg0->_cursor = temp_v1 - 1;
-        beMessenger_SelectGroup(arg0->_messenger, "SOUND");
-        beMessenger_AppendString(arg0->_messenger, "CURSOR_MOVE");
-        beMessenger_DispatchSelected(arg0->_messenger, "PLAY");
+void beNDMWPanelObject_MoveCursorUp(beNDMWPanelObject *panel) {
+    int cursor;
+    int offset;
+    cursor = panel->_cursor;
+    if (cursor != 0) {
+        panel->_cursor = cursor - 1;
+        beMessenger_SelectGroup(panel->_messenger, "SOUND");
+        beMessenger_AppendString(panel->_messenger, "CURSOR_MOVE");
+        beMessenger_DispatchSelected(panel->_messenger, "PLAY");
         return;
     }
-    temp_v1_2 = arg0->_offset;
-    if (temp_v1_2 != 0) {
-        arg0->_offset = temp_v1_2 - 1;
-        beMessenger_SelectGroup(arg0->_messenger, "SOUND");
-        beMessenger_AppendString(arg0->_messenger, "CURSOR_MOVE");
-        beMessenger_DispatchSelected(arg0->_messenger, "PLAY");
+    offset = panel->_offset;
+    if (offset != 0) {
+        panel->_offset = offset - 1;
+        beMessenger_SelectGroup(panel->_messenger, "SOUND");
+        beMessenger_AppendString(panel->_messenger, "CURSOR_MOVE");
+        beMessenger_DispatchSelected(panel->_messenger, "PLAY");
     }
 }
 
-void FUN_003ce890(O *arg0) {
+void beNDMWPanelObject_MoveCursorDown(beNDMWPanelObject *panel) {
     int n;
     int cur;
     int t;
-    n = arg0->f52;
-    if (n != 0 && (cur = arg0->f24, cur != (n - 1))) {
+    n = panel->_listKazu;
+    if (n != 0 && (cur = panel->_cursor, cur != (n - 1))) {
         if (cur != 3) {
-            arg0->f24 = cur + 1;
-            beMessenger_SelectGroup(arg0->f12, "SOUND");
-            beMessenger_AppendString(arg0->f12, "CURSOR_MOVE");
-            beMessenger_DispatchSelected(arg0->f12, "PLAY");
+            panel->_cursor = cur + 1;
+            beMessenger_SelectGroup(panel->_messenger, "SOUND");
+            beMessenger_AppendString(panel->_messenger, "CURSOR_MOVE");
+            beMessenger_DispatchSelected(panel->_messenger, "PLAY");
             return;
         }
-        t = arg0->f28;
+        t = panel->_offset;
         if ((t + 4) < n) {
-            arg0->f28 = t + 1;
-            beMessenger_SelectGroup(arg0->f12, "SOUND");
-            beMessenger_AppendString(arg0->f12, "CURSOR_MOVE");
-            beMessenger_DispatchSelected(arg0->f12, "PLAY");
+            panel->_offset = t + 1;
+            beMessenger_SelectGroup(panel->_messenger, "SOUND");
+            beMessenger_AppendString(panel->_messenger, "CURSOR_MOVE");
+            beMessenger_DispatchSelected(panel->_messenger, "PLAY");
         }
     }
 }
 
 static inline int countOf(const igIntList *l) { return l->_count; }
 
-void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *arg0) {
-    int spB0[3];
-    int spA8[2];
-    if (arg0->_playerDataList == 0) {
-        beMessenger_SelectGroup(arg0->_messenger, "GAMERAM");
-        beMessenger_AppendInt(arg0->_messenger, arg0->_playerNo);
-        beMessenger_DispatchSelected(arg0->_messenger, "GETPLAYER");
-        igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
+void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self) {
+    int pos[3];
+    int mpText[2];
+    if (self->_playerDataList == 0) {
+        beMessenger_SelectGroup(self->_messenger, "GAMERAM");
+        beMessenger_AppendInt(self->_messenger, self->_playerNo);
+        beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
+        igObject *o = (igObject *)beMessenger_GetObject(self->_messenger, 0);
         if (o != 0) {
             o->_refCount = o->_refCount + 1;
         }
-        Rel::go((igObject *)arg0->_playerDataList);
-        arg0->_playerDataList = (int)o;
+        Rel::go((igObject *)self->_playerDataList);
+        self->_playerDataList = (int)o;
     }
-    igObjectList *fl = (igObjectList *)igProperty_GetRecordFolder(arg0->_playerDataList, "WAZALIST")->value;
-    igObjectList *l = (igObjectList *)arg0->_listFolder;
-    int n1 = l->_count;
+    igObjectList *wazaFolder = (igObjectList *)igProperty_GetRecordFolder(self->_playerDataList, "WAZALIST")->value;
+    igObjectList *list = (igObjectList *)self->_listFolder;
+    int n1 = list->_count;
     int i1 = 0;
     if (0 < n1) {
         do {
-            Rel::go(((igObject **)l->_data)[i1]);
+            Rel::go(((igObject **)list->_data)[i1]);
             i1++;
         } while (i1 < n1);
     }
-    int m = l->_count;
+    int m = list->_count;
     for (int j = 0; j < m; j++) {
-        ((igObject **)l->_data)[j] = 0;
+        ((igObject **)list->_data)[j] = 0;
     }
-    l->_count = 0;
-    int n2 = fl->_count;
+    list->_count = 0;
+    int n2 = wazaFolder->_count;
     for (int k = 0; k < n2; k++) {
-        ObjectList_AppendRetained(arg0->_listFolder, (int)((igObject **)fl->_data)[k]);
+        ObjectList_AppendRetained(self->_listFolder, (int)((igObject **)wazaFolder->_data)[k]);
     }
-    int cnt = ((igObjectList *)arg0->_listFolder)->_count;
-    igIntList *d = (igIntList *)arg0->_listColor;
+    int cnt = ((igObjectList *)self->_listFolder)->_count;
+    igIntList *d = (igIntList *)self->_listColor;
     if (d->_count < cnt) {
         if (!(cnt < countOf(d))) List_Reserve(d, cnt, 4);
     }
-    d = (igIntList *)arg0->_listColor;
+    d = (igIntList *)self->_listColor;
     if (cnt >= 0) {
         if (cnt <= d->_capacity) {
             d->_count = cnt;
@@ -469,99 +431,98 @@ void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *arg0) {
             List_Resize(d, cnt, 4);
         }
     }
-    int c2 = ((igObjectList *)arg0->_listFolder)->_count;
-    if (c2 != arg0->_listKazu) {
-        arg0->_cursor = 0;
-        arg0->_offset = 0;
-        arg0->_listKazu = c2;
+    int c2 = ((igObjectList *)self->_listFolder)->_count;
+    if (c2 != self->_listKazu) {
+        self->_cursor = 0;
+        self->_offset = 0;
+        self->_listKazu = c2;
     }
-    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)arg0, (struct PanelPosition *)spB0);
+    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (struct PanelPosition *)pos);
     int i = 0;
     do {
-        int s3 = i + arg0->_playerNo * 4;
-        int a = arg0->_lineMode;
-        int s2 = (i + arg0->_offset) - a;
+        int slot = i + self->_playerNo * 4;
+        int a = self->_lineMode;
+        int row = (i + self->_offset) - a;
         if (a <= i) {
-            igObjectList *v1 = (igObjectList *)arg0->_listFolder;
-            if (s2 < v1->_count) {
-                int s6 = s2 * 4;
-                int s1 = 0;
-                beNDMWItemBase *s0 = ((beNDMWItemBase **)v1->_data)[s2];
-                int *s7 = beNDMWItemBase_GetRecordString(s0, arg0->_manager, "NAME");
-                int s8 = igProperty_GetRecord(arg0->_playerDataList, "MP")->value;
-                if (s8 < beNDMWItemBase_GetRecordInt(s0, arg0->_manager, "MP")) {
-                    s1 = 1;
+            igObjectList *folder = (igObjectList *)self->_listFolder;
+            if (row < folder->_count) {
+                int color = 0;
+                beNDMWItemBase *waza = ((beNDMWItemBase **)folder->_data)[row];
+                int *name = beNDMWItemBase_GetRecordString(waza, self->_manager, "NAME");
+                int mp = igProperty_GetRecord(self->_playerDataList, "MP")->value;
+                if (mp < beNDMWItemBase_GetRecordInt(waza, self->_manager, "MP")) {
+                    color = 1;
                 }
-                if (arg0->_isNoHealing != 0) {
-                    int t = s0->_recNo;
-                    if (t >= 40 && t < 50) s1 = 2;
+                if (self->_isNoHealing != 0) {
+                    int t = waza->_recNo;
+                    if (t >= 40 && t < 50) color = 2;
                 }
-                if (arg0->_isNoParaUp != 0) {
-                    int t = s0->_recNo;
-                    if (t >= 65 && t < 70) s1 = 2;
-                    else if (t >= 75 && t < 85) s1 = 2;
+                if (self->_isNoParaUp != 0) {
+                    int t = waza->_recNo;
+                    if (t >= 65 && t < 70) color = 2;
+                    else if (t >= 75 && t < 85) color = 2;
                 }
-                if (arg0->_isNoCureling != 0) {
-                    int t = s0->_recNo;
-                    if (t >= 50 && t < 65) s1 = 2;
+                if (self->_isNoCureling != 0) {
+                    int t = waza->_recNo;
+                    if (t >= 50 && t < 65) color = 2;
                 }
-                igIntList *w = (igIntList *)arg0->_listColor;
-                int nn = w->_count;
-                if (nn != 0 && s2 >= 0 && s2 < nn) {
-                    ((int *)w->_data)[s2] = s1;
+                igIntList *colors = (igIntList *)self->_listColor;
+                int nn = colors->_count;
+                if (nn != 0 && row >= 0 && row < nn) {
+                    ((int *)colors->_data)[row] = color;
                 }
-                beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 0, (int)s3, (int *)s7, (int)s1);
+                beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 0, slot, name, color);
             } else {
-                beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 0, (int)s3, (int *)0, 0);
+                beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 0, slot, (int *)0, 0);
             }
         } else {
-            beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 0, (int)s3, (int *)0, 0);
+            beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 0, slot, (int *)0, 0);
         }
-        beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 2, (int)s3, (int *)0, 0);
+        beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 2, slot, (int *)0, 0);
         if (i == 0) {
-            sprintf(spA8, "%d", beNDMWItemBase_GetRecordInt(((beNDMWItemBase **)((igObjectList *)arg0->_listFolder)->_data)[arg0->_cursor + arg0->_offset], arg0->_manager, "MP"));
-            beNDMWPanelObject_SetCellText((beNDMWPanelObject *)arg0, 1, (int)(s3 / 4), (int *)spA8, 0);
+            sprintf(mpText, "%d", beNDMWItemBase_GetRecordInt(((beNDMWItemBase **)((igObjectList *)self->_listFolder)->_data)[self->_cursor + self->_offset], self->_manager, "MP"));
+            beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 1, slot / 4, (int *)mpText, 0);
         }
         i++;
     } while (i < 4);
 }
 
-void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *arg0, int *arg1, long long *arg2) {
-    int temp_s2;
-    struct PropertyRecordInt *temp_s1;
-    int temp_s0;
-    int temp_v1;
-    int temp_v0;
+void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *self, int *label, long long *wait) {
+    int waza;
+    PropertyRecord *mp;
+    int maxMp;
+    int index;
+    int mpCost;
 
-    *arg2 = 0;
-    *arg1 = 0;
-    temp_v1 = arg0->_cursor + arg0->_offset;
-    if (((int *)((igDataList *)arg0->_listColor)->_data)[temp_v1] == 0) {
-        temp_s2 = ((int *)((igObjectList *)arg0->_listFolder)->_data)[temp_v1];
-        temp_s1 = (struct PropertyRecordInt *)igProperty_GetRecord(arg0->_playerDataList, "MP");
-        temp_v0 = beNDMWItemBase_GetRecordInt(temp_s2, arg0->_manager, "MP");
-        if (temp_s1->value >= temp_v0) {
-            *arg2 = (long long)beNDMWItemBase_GetRecordInt(temp_s2, arg0->_manager, "DELAY");
-            *arg2 = __divdi3(*arg2 * 0x3B9ACA00LL, 0x3C);
-            *arg1 = ((int)beNDMWItemBase_GetRecordString(temp_s2, arg0->_manager, "LABEL"));
-            temp_s1->value = temp_s1->value - temp_v0;
-            temp_s0 = ((struct PropertyRecordInt *)((void *)igProperty_GetRecord(arg0->_playerDataList, "MMP")))->value;
-            beMessenger_PrepareDelayedSelection(arg0->_messenger, "METERCTRL", "mpmt", arg0->_playerNo);
-            beMessenger_AppendFloat(arg0->_messenger, (float)(temp_s1->value * 100 / temp_s0));
-            beMessenger_EnqueueSelected(arg0->_messenger, "SETPERCENT", 1);
-            beMessenger_PrepareDelayedSelection(arg0->_messenger, "NUMBERCTRL", "mpnm", arg0->_playerNo);
-            beMessenger_AppendInt(arg0->_messenger, temp_s1->value);
-            beMessenger_EnqueueSelected(arg0->_messenger, "SETVALUE", 1);
+    *wait = 0;
+    *label = 0;
+    index = self->_cursor + self->_offset;
+    if (((int *)((igDataList *)self->_listColor)->_data)[index] == 0) {
+        waza = ((int *)((igObjectList *)self->_listFolder)->_data)[index];
+        mp = igProperty_GetRecord(self->_playerDataList, "MP");
+        mpCost = beNDMWItemBase_GetRecordInt(waza, self->_manager, "MP");
+        if (mp->value >= mpCost) {
+            *wait = (long long)beNDMWItemBase_GetRecordInt(waza, self->_manager, "DELAY");
+            *wait = __divdi3(*wait * 0x3B9ACA00LL, 0x3C);
+            *label = ((int)beNDMWItemBase_GetRecordString(waza, self->_manager, "LABEL"));
+            mp->value = mp->value - mpCost;
+            maxMp = igProperty_GetRecord(self->_playerDataList, "MMP")->value;
+            beMessenger_PrepareDelayedSelection(self->_messenger, "METERCTRL", "mpmt", self->_playerNo);
+            beMessenger_AppendFloat(self->_messenger, (float)(mp->value * 100 / maxMp));
+            beMessenger_EnqueueSelected(self->_messenger, "SETPERCENT", 1);
+            beMessenger_PrepareDelayedSelection(self->_messenger, "NUMBERCTRL", "mpnm", self->_playerNo);
+            beMessenger_AppendInt(self->_messenger, mp->value);
+            beMessenger_EnqueueSelected(self->_messenger, "SETVALUE", 1);
             return;
         }
-        beMessenger_SelectGroup(arg0->_messenger, "SOUND");
-        beMessenger_AppendString(arg0->_messenger, "CURSOR_NG");
-        beMessenger_DispatchSelected(arg0->_messenger, "PLAY");
+        beMessenger_SelectGroup(self->_messenger, "SOUND");
+        beMessenger_AppendString(self->_messenger, "CURSOR_NG");
+        beMessenger_DispatchSelected(self->_messenger, "PLAY");
         return;
     }
-    beMessenger_SelectGroup(arg0->_messenger, "SOUND");
-    beMessenger_AppendString(arg0->_messenger, "CURSOR_NG");
-    beMessenger_DispatchSelected(arg0->_messenger, "PLAY");
+    beMessenger_SelectGroup(self->_messenger, "SOUND");
+    beMessenger_AppendString(self->_messenger, "CURSOR_NG");
+    beMessenger_DispatchSelected(self->_messenger, "PLAY");
 }
 
 void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self) {
@@ -840,9 +801,9 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
     } while (i < 4);
 }
 
-void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *arg0) {
-    if (arg0->_padManager == 0) {
-        arg0->_padManager = igInsightCore_FindManager(arg0->_insight, g_bePadManager_metaObject[0]);
+void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *self) {
+    if (self->_padManager == 0) {
+        self->_padManager = igInsightCore_FindManager(self->_insight, g_bePadManager_metaObject[0]);
     }
 }
 
@@ -851,9 +812,9 @@ int beNDMWPanelWaza_GetInfoMeta(void)
     return g_beNDMWPanelWazaInfo_metaObject[0];
 }
 
-void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *arg0, void *arg1) {
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, "NDMWPANEL", 0, *(int *)((char *)(arg1) + 8));
-    *(char *)((char *)(arg1) + 20) = 0;
+void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram) {
+    beMessenger_RegisterReceiver(self->_messenger, ram, "NDMWPANEL", 0, ram->_ramNo);
+    ram->_isRun = 0;
 }
 
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
@@ -871,7 +832,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
     int prevKazu;
     int vec[4];
     long long ret;
-    int *obj;
+    igObjectList *moveList;
     unsigned char emg;
     bePadData *pad;
     unsigned char decide;
@@ -913,18 +874,18 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
         prevCursor = panel->_cursor;
         prevKazu = panel->_listKazu;
         idx = prevCursor + panel->_lineMode;
-        obj = (int *)*(int *)(work->_playerWork + 200);
+        moveList = (igObjectList *)((beNDMWMdlPlayerInfoWork *)work->_playerWork)->_moveObjectList;
         blocked = 0;
-        if (obj[2] != 0 && *(unsigned char *)(*(int *)(obj[4] + 4) + 8) != 0) {
+        if (moveList->_count != 0 && *(unsigned char *)(*(int *)((int)moveList->_data + 4) + 8) != 0) {
             blocked = 1;
         }
         switch (ramState->_st0) {
         case 0:
             {
                 StringRef empty(0);
-                FUN_003cc490(FUN_003cc540(work), &empty);
+                beNDMWPanelWazaInfoWork_igStringRefList_SetAll(beNDMWPanelWazaInfoWork_GetTextSetList(work), &empty);
             }
-            FUN_003cc3d0(FUN_003cc480(work), &g_textColorNoneReset);
+            beNDMWPanelWazaInfoWork_igIntList_SetAll(beNDMWPanelWazaInfoWork_GetTextColorList(work), &g_textColorNoneReset);
             prevKazu = idx = -1;
             ramState->_st0 = ramState->_st0 + 1;
             ramState->_st3 = 0;
@@ -941,7 +902,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                         if (ramState->_st3 >= 2) {
                             ((PanelVt *)panel)->GetFireRequest(&refStr, &ret);
                             if (0 < ret) {
-                                H::SetLabel(work, refStr);
+                                InfoWorkOps::SetLabel(work, refStr);
                                 work->_retIsFire = 1;
                                 beBaseInfoRam_StartTimer(ramState, "FIRE", ret);
                                 ramState->_st1 = ramState->_st1 + 1;
@@ -961,9 +922,9 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                             }
                         }
                     } else if (decide) {
-                        FUN_003ce7e0((beNDMWPanelObject *)panel);
+                        beNDMWPanelObject_MoveCursorUp(panel);
                     } else if (cancel) {
-                        FUN_003ce890((O *)panel);
+                        beNDMWPanelObject_MoveCursorDown(panel);
                     } else if (trig & 0x800) {
                         if (work->_page != 0) {
                             work->_page = 0;
@@ -972,7 +933,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
                         } else {
-                            H::SetLabel(work, 0);
+                            InfoWorkOps::SetLabel(work, 0);
                             ramState->_st0 = 2;
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
@@ -989,7 +950,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
                         } else {
-                            H::SetLabel(work, 0);
+                            InfoWorkOps::SetLabel(work, 0);
                             ramState->_st0 = 2;
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
@@ -1006,7 +967,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                             ramState->_st2 = 0;
                             ramState->_st1 = 0;
                         } else {
-                            H::SetLabel(work, 0);
+                            InfoWorkOps::SetLabel(work, 0);
                             ramState->_st0 = 2;
                             ramState->_st3 = 0;
                             ramState->_st2 = 0;
@@ -1032,9 +993,9 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             ((PanelVt *)panel)->Refresh();
             if (prevKazu != panel->_listKazu) {
                 if (panel->_isEmg != 0 && emg) {
-                    FUN_003ce5b0((beNDMWPanelObject *)panel, work->_isWindowGenerate, 1);
+                    beNDMWPanelObject_Open(panel, work->_isWindowGenerate, 1);
                 } else {
-                    FUN_003ce5b0((beNDMWPanelObject *)panel, work->_isWindowGenerate, 0);
+                    beNDMWPanelObject_Open(panel, work->_isWindowGenerate, 0);
                 }
                 work->_isWindowGenerate = 0;
             }
@@ -1049,17 +1010,17 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             if (show) {
                 sel = panel->_cursor + panel->_lineMode;
                 if (work->_isCursorGenerate == 0) {
-                    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)panel, (struct PanelPosition *)vec);
-                    FUN_003ce500((A *)panel, (int *)("i_wzslcursel"), (int *)("GENERATE"), (float *)vec, (int)g_panelLineSelectSeqs[sel]);
+                    beNDMWPanelObject_GetBasePosition(panel, (struct PanelPosition *)vec);
+                    beNDMWPanelObject_SendModelCommand(panel, "i_wzslcursel", "GENERATE", (float *)vec, (int)g_panelLineSelectSeqs[sel]);
                     work->_isCursorGenerate = 1;
                     return;
                 }
                 if (idx != sel) {
-                    FUN_003ce500((A *)panel, (int *)("i_wzslcursel"), (int *)((void *)g_panelLineSelectSeqs[sel]), (float *)0, 0);
+                    beNDMWPanelObject_SendModelCommand(panel, "i_wzslcursel", g_panelLineSelectSeqs[sel], (float *)0, 0);
                     return;
                 }
             } else if (work->_isCursorGenerate != 0) {
-                FUN_003ce500((A *)panel, (int *)("i_wzslcursel"), (int *)("SQ_CLOSE"), (float *)0, 0);
+                beNDMWPanelObject_SendModelCommand(panel, "i_wzslcursel", "SQ_CLOSE", (float *)0, 0);
                 work->_isCursorGenerate = 0;
                 return;
             }
@@ -1068,9 +1029,9 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             beMessenger_SelectGroup(self->_messenger, "SOUND");
             beMessenger_AppendString(self->_messenger, "WINDOW_CLOSE");
             beMessenger_DispatchSelected(self->_messenger, "PLAY");
-            FUN_003ce700((int *)panel);
+            beNDMWPanelObject_Close(panel);
             if (work->_isCursorGenerate != 0) {
-                FUN_003ce500((A *)panel, (int *)("i_wzslcursel"), (int *)("SQ_CLOSE"), (float *)0, 0);
+                beNDMWPanelObject_SendModelCommand(panel, "i_wzslcursel", "SQ_CLOSE", (float *)0, 0);
             }
             ramState->_st0 = 3;
             ramState->_st3 = 0;
@@ -1085,19 +1046,19 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
     }
 }
 
-int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
+int beNDMWPanelWaza_FindEmergencyHealDisk(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram) {
     int len;
     int start;
-    beNDMWPanelWazaInfoWork *s2;
-    s2 = (beNDMWPanelWazaInfoWork *)arg1->_work;
-    if (((beNDMWPanelObjectItem *)s2->_panelItem)->_isNoHealing != 0) {
+    beNDMWPanelWazaInfoWork *work;
+    work = (beNDMWPanelWazaInfoWork *)ram->_work;
+    if (((beNDMWPanelObjectItem *)work->_panelItem)->_isNoHealing != 0) {
         return 0;
     }
-    beMessenger_SelectGroup(arg0->_messenger, "GAMERAM");
-    beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-    beMessenger_DispatchSelected(arg0->_messenger, "GETPLAYER");
-    int o = ((int)beMessenger_GetObject(arg0->_messenger, 0));
-    igObjectList *arr = ((Rec_3d0760 *)igProperty_GetRecordFolder(o, "DISKFOLDER"))->f12;
+    beMessenger_SelectGroup(self->_messenger, "GAMERAM");
+    beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+    beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
+    int o = ((int)beMessenger_GetObject(self->_messenger, 0));
+    igObjectList *arr = (igObjectList *)igProperty_GetRecordFolder(o, "DISKFOLDER")->value;
     int best = -1;
     int idx = 0;
     int n = arr->_count - 2;
@@ -1128,32 +1089,32 @@ int FUN_003d0760(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
         } while (j < n);
     }
     if (best != -1) {
-        ((ItemPanelShim *)s2->_panelItem)->v21();
-        ((beNDMWPanelObjectItem *)s2->_panelItem)->_cursor = start;
-        ((beNDMWPanelObjectItem *)s2->_panelItem)->_offset = len;
-        ((beNDMWPanelObjectItem *)s2->_panelItem)->_isEmg = 1;
+        ((PanelVt *)work->_panelItem)->Refresh();
+        ((beNDMWPanelObjectItem *)work->_panelItem)->_cursor = start;
+        ((beNDMWPanelObjectItem *)work->_panelItem)->_offset = len;
+        ((beNDMWPanelObjectItem *)work->_panelItem)->_isEmg = 1;
         return 1;
     }
     return 0;
 }
 
-int FUN_003d08f0(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
+int beNDMWPanelWaza_FindEmergencyHealWaza(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram) {
     igObjectList *s5 = 0;
     int s4 = 0;
     int s3 = 0;
-    beNDMWPanelWazaInfoWork *s2 = 0;
+    beNDMWPanelWazaInfoWork *work = 0;
     int s1 = 0;
     int s0 = 0;
-    s2 = (beNDMWPanelWazaInfoWork *)arg1->_work;
-    if (((beNDMWPanelObjectWaza *)s2->_panelWaza)->_isNoHealing != 0) {
+    work = (beNDMWPanelWazaInfoWork *)ram->_work;
+    if (((beNDMWPanelObjectWaza *)work->_panelWaza)->_isNoHealing != 0) {
         return 0;
     }
-    beMessenger_SelectGroup(arg0->_messenger, "GAMERAM");
-    beMessenger_AppendInt(arg0->_messenger, arg1->_ramNo);
-    beMessenger_DispatchSelected(arg0->_messenger, "GETPLAYER");
-    int o = ((int)beMessenger_GetObject(arg0->_messenger, 0));
-    s1 = ((Fld *)igProperty_GetRecord(o, "MP"))->f12;
-    s5 = ((Rec_3d08f0 *)igProperty_GetRecordFolder(o, "WAZALIST"))->f12;
+    beMessenger_SelectGroup(self->_messenger, "GAMERAM");
+    beMessenger_AppendInt(self->_messenger, ram->_ramNo);
+    beMessenger_DispatchSelected(self->_messenger, "GETPLAYER");
+    int o = ((int)beMessenger_GetObject(self->_messenger, 0));
+    s1 = igProperty_GetRecord(o, "MP")->value;
+    s5 = (igObjectList *)igProperty_GetRecordFolder(o, "WAZALIST")->value;
     s4 = s5->_count;
     s3 = s4 - 1;
     s0 = s3 * 4;
@@ -1162,17 +1123,17 @@ int FUN_003d08f0(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
             beNDMWItemBase *it = ((beNDMWItemBase **)(s5->_data + s0))[0];
             int t = it->_recNo;
             s4 -= 1;
-            if (t >= 40 && t < 50 && s1 >= beNDMWItemBase_GetRecordInt(it, arg0, "MP")) {
+            if (t >= 40 && t < 50 && s1 >= beNDMWItemBase_GetRecordInt(it, self, "MP")) {
                 int r = s4 - 3;
                 if (r < 0) {
                     r = 0;
                 } else {
                     s4 -= r;
                 }
-                ((WazaPanelShim *)s2->_panelWaza)->v21();
-                ((beNDMWPanelObjectWaza *)s2->_panelWaza)->_cursor = s4;
-                ((beNDMWPanelObjectWaza *)s2->_panelWaza)->_offset = r;
-                ((beNDMWPanelObjectWaza *)s2->_panelWaza)->_isEmg = 1;
+                ((PanelVt *)work->_panelWaza)->Refresh();
+                ((beNDMWPanelObjectWaza *)work->_panelWaza)->_cursor = s4;
+                ((beNDMWPanelObjectWaza *)work->_panelWaza)->_offset = r;
+                ((beNDMWPanelObjectWaza *)work->_panelWaza)->_isEmg = 1;
                 return 1;
             }
             s3 -= 1;
@@ -1182,41 +1143,41 @@ int FUN_003d08f0(beNDMWPanelWaza *arg0, beNDMWPanelWazaInfoRam *arg1) {
     return 0;
 }
 
-void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *arg3) {
-    beNDMWPanelWazaInfoWork *s0 = (beNDMWPanelWazaInfoWork *)arg1->_work;
-    beNDMWPanelObjectStat *c;
-    if (arg1->_isRun != 0) {
-        if (arg1->_st0 == 3) {
-            arg1->_isRun = 1;
-            s0->_isWindowGenerate = 1;
-            s0->_isCursorGenerate = 0;
+void beNDMWPanelWaza_OpenPanel(int self, beNDMWPanelWazaInfoRam *ram, int page, igObject *player) {
+    beNDMWPanelWazaInfoWork *work = (beNDMWPanelWazaInfoWork *)ram->_work;
+    beNDMWPanelObjectStat *stat;
+    if (ram->_isRun != 0) {
+        if (ram->_st0 == 3) {
+            ram->_isRun = 1;
+            work->_isWindowGenerate = 1;
+            work->_isCursorGenerate = 0;
         }
-        arg1->_st0 = 0;
-        arg1->_st3 = 0;
-        arg1->_st2 = 0;
-        arg1->_st1 = 0;
+        ram->_st0 = 0;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
     } else {
-        arg1->_isRun = 1;
-        s0->_isWindowGenerate = 1;
-        s0->_isCursorGenerate = 0;
-        arg1->_st0 = 0;
-        arg1->_st3 = 0;
-        arg1->_st2 = 0;
-        arg1->_st1 = 0;
+        ram->_isRun = 1;
+        work->_isWindowGenerate = 1;
+        work->_isCursorGenerate = 0;
+        ram->_st0 = 0;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
     }
-    s0->_page = arg2;
-    s0->_retIsFire = 0;
-    if (arg3 != 0) {
-        arg3->_refCount = arg3->_refCount + 1;
+    work->_page = page;
+    work->_retIsFire = 0;
+    if (player != 0) {
+        player->_refCount = player->_refCount + 1;
     }
-    Rel_3d0a90::go((igObject *)s0->_playerWork);
-    s0->_playerWork = (int)arg3;
-    c = (beNDMWPanelObjectStat *)s0->_panelStat;
-    if (arg3 != 0) {
-        arg3->_refCount = arg3->_refCount + 1;
+    Rel::go((igObject *)work->_playerWork);
+    work->_playerWork = (int)player;
+    stat = (beNDMWPanelObjectStat *)work->_panelStat;
+    if (player != 0) {
+        player->_refCount = player->_refCount + 1;
     }
-    Rel_3d0a90::go((igObject *)c->_playerWork);
-    c->_playerWork = (int)arg3;
+    Rel::go((igObject *)stat->_playerWork);
+    stat->_playerWork = (int)player;
 }
 
 /* Owning stack reference to the freshly created panel work; released on scope exit (reference
@@ -1228,13 +1189,13 @@ void FUN_003d0a90(int arg0, beNDMWPanelWazaInfoRam *arg1, int arg2, igObject *ar
 
 /* matching constructs: ok is a C++ bool (daddiu); the AppendBool/SetBool bool arguments are unsigned char so
  * the byte load is scheduled like retail. */
-int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *arg2) {
+int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram, beMessengerWork *message) {
     unsigned int kind;
     beNDMWPanelWazaInfoWork *work;
     bool ok;
     void *alloc;
     void *obj;
-    kind = beMessenger_ResolveEnumValue(self->_messenger, FUN_003bee30(), arg2->_message);
+    kind = beMessenger_ResolveEnumValue(self->_messenger, beNDMWPanelObject_GetMessageEnum(), message->_message);
     work = (beNDMWPanelWazaInfoWork *)ram->_work;
     if (work == 0) {
         alloc = igObject_GetAllocator(self);
@@ -1274,13 +1235,13 @@ int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram
         obj = beMessenger_GetObject(self->_messenger, 0);
         switch (kind) {
         case 1:
-            FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
+            beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
             break;
         case 0:
-            FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
+            beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
             break;
         case 2:
-            FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 2, (igObject *)obj);
+            beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 2, (igObject *)obj);
             break;
         }
         ((beNDMWPanelObjectWaza *)work->_panelWaza)->_isEmg = 0;
@@ -1290,10 +1251,10 @@ int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram
         return 1;
     case 3:
         obj = beMessenger_GetObject(self->_messenger, 0);
-        if (FUN_003d0760((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
-            FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
-        } else if (FUN_003d08f0((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
-            FUN_003d0a90((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
+        if (beNDMWPanelWaza_FindEmergencyHealDisk((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
+            beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
+        } else if (beNDMWPanelWaza_FindEmergencyHealWaza((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
+            beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
         } else if (beBaseInfoRam_IsTimerExpired(ram, (const char *)"EMGHEAL") != 0) {
             beMessenger_PushArgContext(self->_messenger);
             beMessenger_SelectGroup(self->_messenger, "SOUND");

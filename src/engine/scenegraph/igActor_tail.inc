@@ -22,7 +22,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
         {
             world = o->_world;
             rootBone = (char *)o + g_igActor_transformMetaField->_offset;
-            FUN_001904f0(bonesOf(o), rootBone, world);
+            igMatrix44f_Multiply(bonesOf(o), rootBone, world);
         }
         status = o->_animationState->update(t, o);
         if (o->_useCached == 0) {
@@ -160,7 +160,7 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
         LB *lb = arg0->l72;
         int b = a + ((G_1b8de0 * *)DAT_00561918)[0]->f8;
         V128_1b8de0 *o;
-        if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
+        if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
         o = lb->data[lb->count++];
         o->vY(b);
         FUN_001b1030((igAttrStackManager *)s4, (igAttr *)o);
@@ -188,13 +188,13 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
     n = a->count;
     if (n == 0) v = 0; else v = *(int *)((char *)a->data + (n - 1) * 4);
     if (v != 0) {
-        FUN_001904f0(sp40, v + 12, s0);
+        igMatrix44f_Multiply(sp40, v + 12, s0);
         FUN_001b1aa0(arg1, sp80, sp40, s0);
     } else {
-        FUN_001b1aa0(arg1, sp80, ((char *)DAT_004e0ef0), s0);
+        FUN_001b1aa0(arg1, sp80, ((char *)g_matrix44Identity), s0);
     }
     lb = arg0->l72;
-    if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&FUN_001356b0));
+    if (lb->count >= lb->cap) igObjectPool_Grow((List_1dca40 *)lb, (Obj_1dca40 * (*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
     o = lb->data[lb->count++];
     if (o != 0) o->refs++;
     old = arg1->f60;
@@ -203,7 +203,7 @@ int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
         if (!(old->refs & 0x7fffff)) igObject_Destroy((void *)old);
     }
     arg1->f60 = o;
-    FUN_001904f0((char *)o + 12, sp80, arg0->v100);
+    igMatrix44f_Multiply((char *)o + 12, sp80, arg0->v100);
     FUN_001b1030((igAttrStackManager *)arg0->x, (igAttr *)o);
     r = igTraversal_TraverseChildren((int)arg0, (S_1e07a0 *)arg1);
     FUN_001b1100((struct A_1b1100 *)arg0->x, (struct B_1b1100 *)o);
@@ -365,7 +365,7 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
             src = ((void *)FUN_001d82f0((void *)g, i));
             if (base != 0) {
                 igMatrix44f_SetIdentity(m);
-                FUN_001904f0(m, src, base);
+                igMatrix44f_Multiply(m, src, base);
                 attr->setMatrix(m);
             } else {
                 attr->setMatrix(src);
@@ -379,11 +379,11 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
         }
         switch (g->_mode) {
         case 0:
-            FUN_001e04c0((S_1e04c0 *)o, (V_1e04c0 *)(g->_children->_data[i % nChild]));
+            igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)(g->_children->_data[i % nChild]));
             break;
         case 1:
             for (j = 0; j < nChild; j++) {
-                FUN_001e04c0((S_1e04c0 *)o, (V_1e04c0 *)g->_children->_data[j]);
+                igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)g->_children->_data[j]);
             }
             break;
         }
@@ -424,7 +424,7 @@ int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
     float matrix[16];
     int i;
     FUN_001dc400((igSorter *)o->_collector, (igGroup *)scene, (igAttrStackManager *)o->_state);
-    FUN_001904f0(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]))->_matrix, o->_view);
+    igMatrix44f_Multiply(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta * *)g_igModelViewMatrixAttr_metaObject)[0]))->_matrix, o->_view);
     for (i = 0; i < scene->_lights->_count; i++) {
         LightView *light = scene->_lights->_data[i];
         Vec3f_TransformProjective(&position, (char *)light + DAT_0055f0a0[0]->_offset, matrix);
@@ -491,7 +491,7 @@ int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
     Vec3f_TransformProjective(&out, &center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
-        if (FUN_001e04c0((S_1e04c0 *)o, (V_1e04c0 *)child) == 2) return 2;
+        if (igTraversal_TraverseNode((S_1e04c0 *)o, (V_1e04c0 *)child) == 2) return 2;
         return 0;
     }
     return 0;
@@ -585,7 +585,7 @@ int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
             v = l->_default;
         }
     }
-    FUN_001904f0(sp30, v + 0xC, arg0->_viewMatInv);
+    igMatrix44f_Multiply(sp30, v + 0xC, arg0->_viewMatInv);
     ((VC0 *)arg1)->vX(sp30);
     l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject[0]->_id]];
     i = l->_cachedOverride;

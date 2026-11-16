@@ -20,19 +20,23 @@ done:
 }
 
 int beModelCtrlData_GetVTable(void) {
-    Obj_356870 obj;
-    int r;
+    beModelCtrlData obj;
+    int vtable;
+    igObject **comListSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.s = 0;
-    obj.vt = &g_beModelCtrlData_vtable[0];
-    obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beModelCtrlData_vtable[0];
-    obj.releaseRef();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.releaseStr();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlData_vtable[0];
+    comListSlot = (igObject **)&obj._comList;
+    *comListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlData_vtable[0];
+    igObjectRef_Release(comListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlData_EnsureRegistered(void)

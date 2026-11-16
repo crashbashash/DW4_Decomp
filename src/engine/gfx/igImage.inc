@@ -179,7 +179,7 @@ void igImage_InitFields(void) {
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x64);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
     igEnumMetaField_SetDefaultValue(temp_v0, g_igImage_pfmtDefault);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001499e0);
+    *(int *)((char *)(temp_v0) + 52) = (int)(&IG_GFX_TEXTURE_FORMAT_GetMetaEnum);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0xA), -2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
     *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();

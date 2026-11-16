@@ -2,7 +2,7 @@ igMetaObject *igModelViewMatrixBoneSelectList_561880_GetMetaObject(void)
 {
     igMetaObject *g = g_igModelViewMatrixBoneSelectList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019d360();
+        igModelViewMatrixBoneSelectList_561880_EnsureRegistered();
     return g_igModelViewMatrixBoneSelectList_metaObject;
 }
 
@@ -13,7 +13,7 @@ int igModelViewMatrixBoneSelectList_561880_GetVTable(void) {
     return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
 }
 
-void FUN_0019d360(void)
+void igModelViewMatrixBoneSelectList_561880_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igModelViewMatrixBoneSelectList_561880_Register);
 }

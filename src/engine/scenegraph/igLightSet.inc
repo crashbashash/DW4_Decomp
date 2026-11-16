@@ -28,7 +28,7 @@ int igLightSet_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igLightSet_vtable[0];
     FUN_0019c1a0((ObjectRefWord *)&o.f28, -1);
-    FUN_00195970((struct T_195970 *)&o, 0);
+    igNode_Destroy((struct T_195970 *)&o, 0);
     return r;
 }
 

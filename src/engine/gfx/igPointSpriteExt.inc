@@ -64,7 +64,7 @@ int igPointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 296));
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igPointSpriteExt_vtable[0];
-    FUN_001338d0(&o.f24, -1);
+    igSmartPointer_igVertexArray_Destruct(&o.f24, -1);
     FUN_0014c580((O_14c580 *)&o, 0);
     return r;
 }
@@ -148,11 +148,11 @@ static FieldFactory g_igPointSpriteExt_ctorTable[] = {
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igEnumMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
-    FUN_00188660,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,

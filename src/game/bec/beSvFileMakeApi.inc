@@ -16,22 +16,22 @@ void *beSvFileMakeApi_GetMetaObject(void) {
 }
 
 int beSvFileMakeApi_GetVTable(void) {
-    struct Obj_349e00 obj;
-    int r;
+    beSvFileMakeApi obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[11] = 0;
-    obj.w[12] = 0;
-    obj.w[13] = 0;
-    obj.vt = &g_beSvFileMakeApi_vtable[0];
-    obj.w[15] = 0;
-    obj.w[16] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSvFileMakeApi_vtable[0];
-    igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)(&obj.w[16]), (short)(-1));
-    FUN_00349080((igSmartPointer<igObject> *)(&obj.w[15]), (long long)(-1));
-    FUN_00348390((struct S_348390 *)&obj, (short)0);
-    return r;
+    obj._imageWork = 0;
+    obj._mountWork = 0;
+    obj._iconWork = 0;
+    obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
+    obj._earlyGamedata = 0;
+    obj._saveWork = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
+    igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)(&obj._saveWork), (short)(-1));
+    igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._earlyGamedata), (long long)(-1));
+    beSaveApi_Destroy((struct S_348390 *)&obj, (short)0);
+    return vtable;
 }
 
 void beSvFileMakeApi_EnsureRegistered(void)

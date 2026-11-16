@@ -1,4 +1,8 @@
 #include "dw4/reflected.h"
+#include "dw4/igMath.h"
+#include "dw4/igSmartPointer.h"
+#include "dw4/igobject_release.h"
+#include "dw4/igControllerVirtuals.h"
 
 extern "C" void igInsightCore_AddToScheduler(int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, char *);
@@ -6,49 +10,30 @@ extern "C" void *igInsightCore_FindManager(...);
 extern "C" void *bePadData_Create(...);
 extern "C" int igEventDispatcher_AddReceiver(...);
 extern "C" int igEventDispatcher_AddReceiverOrder(...);
-extern "C" int FUN_004574f0(...);
+extern "C" int igHotKeyEventReceiver_RemoveBinding(...);
 extern "C" int igViewerSceneInfoManager_CycleGuiVisibility(...);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
-extern "C" int igObject_Destroy(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int igEventDispatcher_RemoveReceiver(int, int);
-extern "C" int FUN_004542e0(int, int, int);
+extern "C" int igEventDispatcher_RemoveReceiverOrder(int, int, int);
 extern "C" int bePadManager_AddInfo(void);
 extern "C" void bePadManager_RemoveAllInfo(void);
 extern "C" int bePadManager_GetMeta(void);
 extern "C" int bePadData_UpdateButtons(...);
 extern "C" void bePadManager_Activate(bePadManager *self, int unusedArg);
 extern "C" void bePadManager_Deactivate(bePadManager *self, int unusedArg);
-struct Rc { int vt; int rc; };
 extern "C" int kIGMemoryPoolHandleUser0[4];
 extern "C" int g_beSystem_metaObject[4];
 extern "C" int g_igViewerSceneInfoManager_metaObject[4];
 extern "C" unsigned char g_useOwnerAllocator;
-struct Ref {
-    Rc *p;
-    Ref(Rc *x) : p(x) {}
-    ~Ref() {
-        Rc *object = p;
-        if (object) {
-            --object->rc;
-            if (((unsigned long long)(long long)object->rc & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
-    }
-};
-struct M { char p[32]; int f32; int f36; };
-struct O { char p[12]; M *f12; Rc *f16; int f20; int f24; };
-extern "C" void bePadManager_Start(O *o);
-extern "C" void bePadManager_Stop(bePadManager *arg0);
+extern "C" void bePadManager_Start(bePadManager *self);
+extern "C" void bePadManager_Stop(bePadManager *self);
 extern "C" int g_bePadManager_metaObject[4];
-/* matching construct: dummy-virtual pad device class; real slots are v28 (+120), v29 (+124), v30 (+128), v32 (+136) */
-class Pad { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int v28(); virtual int v29(int, float *, float *); virtual int v30(); virtual void d31(); virtual int v32(); };
-struct Vec2 { float x, y; };
-extern "C" int bePadData_UpdateLeftStick(bePadData *, Vec2 *);
-extern "C" int bePadData_UpdateRightStick(bePadData *, Vec2 *);
-extern "C" void bePadManager_Update(bePadManager *arg0);
-extern "C" int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1);
+extern "C" int bePadData_UpdateLeftStick(bePadData *, igVec2f *);
+extern "C" int bePadData_UpdateRightStick(bePadData *, igVec2f *);
+extern "C" void bePadManager_Update(bePadManager *self);
+extern "C" int bePadManager_GetPadForPlayer(bePadManager *self, int player);
 
 /* Hands the object to the insight core's helper igInsightCore_AddToScheduler, which asks the scheduler at +12 of
  * the insight object (_insight) whether it already has the object (scheduler slot 26) and, if not,
@@ -67,47 +52,44 @@ void bePadManager_Deactivate(bePadManager *self, int unusedArg)
     igInsightCore_RemoveFromScheduler(self->_insight, (char *)self);
 }
 
-void bePadManager_Start(O *o) {
-    Rc *t0 = (Rc *)igInsightCore_FindManager(o->f12, g_beSystem_metaObject[0]);
-    if (t0 != 0) t0->rc = t0->rc + 1;
+void bePadManager_Start(bePadManager *self) {
+    igObject *system = (igObject *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
+    if (system != 0) system->_refCount = system->_refCount + 1;
     {
-        Rc *a0 = o->f16;
-        if (a0 != 0) {
-            a0->rc = a0->rc - 1;
-            if (((unsigned long long)((long long)a0->rc << 0x29) >> 0x29) == 0) igObject_Destroy(a0);
-        }
+        igObject *old = (igObject *)self->_system;
+        IG_OBJECT_RELEASE(old);
     }
-    o->f16 = t0;
+    self->_system = (int)system;
     for (int i = 0; i < 5; i++) {
-        int v0 = igObject_GetAllocator(o);
-        Ref sp3C((Rc *)bePadData_Create(g_useOwnerAllocator != 0 ? v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])));
-        ObjectList_AppendRetained(o->f20, sp3C.p);
+        int ownerAllocator = igObject_GetAllocator(self);
+        igSmartPointer<igObject> padData((igObject *)bePadData_Create(g_useOwnerAllocator != 0 ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0])));
+        ObjectList_AppendRetained(self->_padList, padData.p);
     }
-    M *m = o->f12;
-    int s0 = m->f32;
-    igEventDispatcher_AddReceiverOrder(s0, o->f24, m->f36);
-    igEventDispatcher_AddReceiver(s0, o->f24);
-    char *v = (char *)igInsightCore_FindManager(o->f12, g_igViewerSceneInfoManager_metaObject[0]);
-    int s = *(int *)(v + 132);
-    FUN_004574f0(s, 15);
-    FUN_004574f0(s, 3);
-    FUN_004574f0(s, 0);
-    FUN_004574f0(s, 10);
-    FUN_004574f0(s, 11);
-    FUN_004574f0(s, 1);
-    FUN_004574f0(s, 2);
-    FUN_004574f0(s, 12);
-    igViewerSceneInfoManager_CycleGuiVisibility(v);
+    igInsightCore *insight = (igInsightCore *)self->_insight;
+    int dispatcher = insight->_dispatcher;
+    igEventDispatcher_AddReceiverOrder(dispatcher, self->_kbReceiver, insight->_windowResizeReceiver);
+    igEventDispatcher_AddReceiver(dispatcher, self->_kbReceiver);
+    igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager(self->_insight, g_igViewerSceneInfoManager_metaObject[0]);
+    int hotKeys = viewer->_hotKeyReceiver;
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 15);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 3);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 0);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 10);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 11);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 1);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 2);
+    igHotKeyEventReceiver_RemoveBinding(hotKeys, 12);
+    igViewerSceneInfoManager_CycleGuiVisibility(viewer);
 }
 
-void bePadManager_Stop(bePadManager *arg0) {
-    int temp_s0;
-    void *temp_v0;
+void bePadManager_Stop(bePadManager *self) {
+    igInsightCore *insight;
+    int dispatcher;
 
-    temp_v0 = (void *)arg0->_insight;
-    temp_s0 = *(int *)((char *)(temp_v0) + 32);
-    FUN_004542e0(temp_s0, arg0->_kbReceiver, *(int *)((char *)(temp_v0) + 36));
-    igEventDispatcher_RemoveReceiver(temp_s0, arg0->_kbReceiver);
+    insight = (igInsightCore *)self->_insight;
+    dispatcher = insight->_dispatcher;
+    igEventDispatcher_RemoveReceiverOrder(dispatcher, self->_kbReceiver, insight->_windowResizeReceiver);
+    igEventDispatcher_RemoveReceiver(dispatcher, self->_kbReceiver);
 }
 
 int bePadManager_AddInfo(void) {
@@ -118,52 +100,52 @@ void bePadManager_RemoveAllInfo(void)
 {
 }
 
-void bePadManager_Update(bePadManager *arg0) {
-    int b;
-    bool flag;
+void bePadManager_Update(bePadManager *self) {
+    int connected;
+    bool keyboardTaken;
     int i;
-    unsigned short st;
+    unsigned short id;
     igControllerList *list;
-    Pad *pad;
+    igControllerVirtuals *pad;
     bePadData *slot;
-    Vec2 out;
-    Vec2 t1;
-    Vec2 t2;
-    Vec2 t3;
-    Vec2 t4;
-    if (((beSystem *)arg0->_system)->_isFrameSkip == 0) {
-        flag = false;
-        list = (igControllerList *)((igControllerManager *)((igEventDispatcher *)((igInsightCore *)arg0->_insight)->_dispatcher)->_controllerManager)->_controllers;
+    igVec2f stick;
+    igVec2f left;
+    igVec2f right;
+    igVec2f noLeft;
+    igVec2f noRight;
+    if (((beSystem *)self->_system)->_isFrameSkip == 0) {
+        keyboardTaken = false;
+        list = (igControllerList *)((igControllerManager *)((igEventDispatcher *)((igInsightCore *)self->_insight)->_dispatcher)->_controllerManager)->_controllers;
         for (i = 0; i < list->_count; i++) {
-            pad = ((Pad **)list->_data)[i];
-            st = pad->v30();
-            b = (unsigned char)pad->v32();
-            if (st == 2) {
-                if (b == 0) continue;
-                flag = true;
+            pad = ((igControllerVirtuals **)list->_data)[i];
+            id = pad->getId();
+            connected = (unsigned char)pad->isConnected();
+            if (id == 2) {
+                if (connected == 0) continue;
+                keyboardTaken = true;
             }
-            if (st == 1) {
-                if (flag) continue;
-                flag = true;
-                st = 2;
+            if (id == 1) {
+                if (keyboardTaken) continue;
+                keyboardTaken = true;
+                id = 2;
             }
-            if ((unsigned short)((unsigned)st >> 1) < 4) {
-                bePadDataList *pads = (bePadDataList *)arg0->_padList;
-                slot = ((bePadData **)pads->_data)[(unsigned short)((unsigned)st >> 1)];
-                slot->_isConnect = b;
-                if (b != 0) {
-                    pad->v29(0, &out.x, &out.y);
-                    t1.x = out.x; t1.y = out.y;
-                    bePadData_UpdateLeftStick(slot, &t1);
-                    pad->v29(1, &out.x, &out.y);
-                    t2.x = out.x; t2.y = out.y;
-                    bePadData_UpdateRightStick(slot, &t2);
-                    bePadData_UpdateButtons(slot, pad->v28());
+            if ((unsigned short)((unsigned)id >> 1) < 4) {
+                bePadDataList *pads = (bePadDataList *)self->_padList;
+                slot = ((bePadData **)pads->_data)[(unsigned short)((unsigned)id >> 1)];
+                slot->_isConnect = connected;
+                if (connected != 0) {
+                    pad->getStick(0, &stick.x, &stick.y);
+                    left.x = stick.x; left.y = stick.y;
+                    bePadData_UpdateLeftStick(slot, &left);
+                    pad->getStick(1, &stick.x, &stick.y);
+                    right.x = stick.x; right.y = stick.y;
+                    bePadData_UpdateRightStick(slot, &right);
+                    bePadData_UpdateButtons(slot, pad->getButtons());
                 } else {
-                    t3.x = 0; t3.y = 0;
-                    bePadData_UpdateLeftStick(slot, &t3);
-                    t4.x = 0; t4.y = 0;
-                    bePadData_UpdateRightStick(slot, &t4);
+                    noLeft.x = 0; noLeft.y = 0;
+                    bePadData_UpdateLeftStick(slot, &noLeft);
+                    noRight.x = 0; noRight.y = 0;
+                    bePadData_UpdateRightStick(slot, &noRight);
                     bePadData_UpdateButtons(slot, 0);
                 }
             }
@@ -172,14 +154,14 @@ void bePadManager_Update(bePadManager *arg0) {
 }
 
 /* _padList is a bePadDataList whose backing array (_data) holds the pad record pointers */
-int bePadManager_GetPadForPlayer(bePadManager *arg0, int arg1) {
-    if (arg0->_isPadDisable != 0) {
-        return *(int *)(((bePadDataList *)arg0->_padList)->_data + 16);
+int bePadManager_GetPadForPlayer(bePadManager *self, int player) {
+    if (self->_isPadDisable != 0) {
+        return *(int *)(((bePadDataList *)self->_padList)->_data + 16);
     }
-    if (arg1 < 4) {
-        return *(int *)(((bePadDataList *)arg0->_padList)->_data + (arg1 * 4));
+    if (player < 4) {
+        return *(int *)(((bePadDataList *)self->_padList)->_data + (player * 4));
     }
-    return *(int *)(((bePadDataList *)arg0->_padList)->_data + 16);
+    return *(int *)(((bePadDataList *)self->_padList)->_data + 16);
 }
 
 int bePadManager_GetMeta(void)

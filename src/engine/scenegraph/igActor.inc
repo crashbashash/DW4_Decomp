@@ -108,11 +108,11 @@ static FieldFactory g_igActor_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
 };
@@ -210,7 +210,7 @@ void igActor_InitFields(void) {
     a4.x = 0; a4.y = 0; a4.z = 0x3F800000; a4.w = 0;
     a3.x = 0; a3.y = 0x3F800000; a3.z = 0; a3.w = 0;
     a2.x = 0x3F800000; a2.y = 0; a2.z = 0; a2.w = 0;
-    FUN_00130e90(&a1, &a2, &a3, &a4, &a5);
+    igMatrix44f_FromRows(&a1, &a2, &a3, &a4, &a5);
     FUN_0018c640(temp_s2_7, &a1);
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8)))->_persistent = 0;
@@ -219,7 +219,7 @@ void igActor_InitFields(void) {
     b4.x = 0; b4.y = 0; b4.z = 0x3F800000; b4.w = 0;
     b3.x = 0; b3.y = 0x3F800000; b3.z = 0; b3.w = 0;
     b2.x = 0x3F800000; b2.y = 0; b2.z = 0; b2.w = 0;
-    FUN_00130e90(&b1, &b2, &b3, &b4, &b5);
+    igMatrix44f_FromRows(&b1, &b2, &b3, &b4, &b5);
     FUN_0018c640(temp_s2_8, &b1);
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA)));
@@ -227,7 +227,7 @@ void igActor_InitFields(void) {
     c4.x = 0; c4.y = 0; c4.z = 0x3F800000; c4.w = 0;
     c3.x = 0; c3.y = 0x3F800000; c3.z = 0; c3.w = 0;
     c2.x = 0x3F800000; c2.y = 0; c2.z = 0; c2.w = 0;
-    FUN_00130e90(&c1, &c2, &c3, &c4, &c5);
+    igMatrix44f_FromRows(&c1, &c2, &c3, &c4, &c5);
     FUN_0018c640(temp_s2_9, &c1);
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB)));

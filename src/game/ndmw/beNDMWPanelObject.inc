@@ -183,7 +183,7 @@ static int g_beNDMWPanelObject_messageValues[] = {
     0xa,
 };
 
-igMetaEnum *FUN_003bee30(void) {
+igMetaEnum *beNDMWPanelObject_GetMessageEnum(void) {
     if (g_beNDMWPanelObject_messageMetaEnum == 0) {
         g_beNDMWPanelObject_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWPanelObject_messageNames, g_beNDMWPanelObject_messageValues, 11);
     }

@@ -30,7 +30,7 @@ int beHitLandModel_GetVTable(void) {
     return *(int *)((char *)&model + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_0035d930(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beHitLandModelOrder_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -43,7 +43,7 @@ igSmartPointer<igObject> *FUN_0035d930(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0035d9b0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beHitLandModelTraversal_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -90,7 +90,7 @@ static FieldFactory g_beHitLandModel_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igBoolMetaField_Create,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_beHitLandModel_fieldTable[] = {
     "_order",

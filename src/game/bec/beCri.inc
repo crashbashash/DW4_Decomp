@@ -33,26 +33,26 @@ void *beCri_GetMetaObject(void) {
 }
 
 int beCri_GetVTable(void) {
-    struct Obj_367940 obj;
-    int r;
+    beCri obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.vt = &g_beCri_vtable[0];
-    obj.w[7] = 0;
-    obj.w[8] = 0;
-    obj.w[9] = 0;
-    obj.w[10] = 0;
-    obj.w[11] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beCri_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&obj.w[11], -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w[10], -1);
-    FUN_00367aa0((igSmartPointer<igObject> *)(&obj.w[9]), (short)(-1));
-    igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj.w[8]), (short)(-1));
-    igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj.w[7]), (short)(-1));
-    FUN_00231030(&obj, 0);
-    return r;
+    obj._name = 0;
+    obj._vtable = (int)&g_beCri_vtable[0];
+    obj._hdBGM = 0;
+    obj._hdENV = 0;
+    obj._hdSEs = 0;
+    obj._infoList = 0;
+    obj._lsBinObjs = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCri_vtable[0];
+    igSmartPointer_igObjectList_Destruct(&obj._lsBinObjs, -1);
+    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
+    igSmartPointer_beCriHandleList_Destruct((igSmartPointer<igObject> *)(&obj._hdSEs), (short)(-1));
+    igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdENV), (short)(-1));
+    igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdBGM), (short)(-1));
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beCriHandle_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
@@ -68,7 +68,7 @@ igSmartPointer<igObject> *igSmartPointer_beCriHandle_Destruct(igSmartPointer<igO
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00367aa0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beCriHandleList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

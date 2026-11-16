@@ -11,28 +11,21 @@ igMetaObject *beNDMWGameRamInfoRam_ResolveMetaObject(void) {
 }
 
 int beNDMWGameRamInfoRam_GetVTable(void) {
-    union U_3ca230 u;
-    int temp_s0;
-    char *q1;
-    int *a0;
+    beNDMWGameRamInfoRam obj;
+    int vtable;
+    int *dataListRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    q1 = &u.b[40];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_beNDMWGameRamInfoRam_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoRam_vtable[0];
-    if (q1 != 0) {
-        a0 = *(int **)q1;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
+    dataListRef = &obj._dataList;
+    *dataListRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWGameRamInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
+    if (dataListRef != 0) {
+        igRelease((igObject *)*dataListRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWGameRamInfoRam_EnsureRegistered(void)

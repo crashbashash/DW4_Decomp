@@ -21,12 +21,12 @@ int beDBManagerInfo_GetVTable(void) {
     o.f28 = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beDBManagerInfo_vtable[0];
-    FUN_00365e90((igSmartPointer<igObject> *)&o.f28, (long long)(-1));
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
+    igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&o.f28, (long long)(-1));
+    beBaseInfo_Destroy((struct S_33ec80 *)&o, (short)0);
     return r;
 }
 
-igSmartPointer<igObject> *FUN_00365e90(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDataBase_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -103,7 +103,7 @@ static int g_beDBManagerInfo_msgActionValues[] = {
     0,
 };
 
-igMetaEnum *FUN_00366070(void) {
+igMetaEnum *beDBManager_GetMsgActionEnum(void) {
     if (g_beDBManagerInfo_msgActionMetaEnum == 0) {
         g_beDBManagerInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beDBManagerInfo_msgActionNames, g_beDBManagerInfo_msgActionValues, 1);
     }

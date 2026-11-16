@@ -26,44 +26,27 @@ done:
 }
 
 int beNDMWLoadIntf2DegiStateCtrl_GetVTable(void) {
-    union U_3c39e0 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
-    char *p38;
-    char *p40;
+    beNDMWLoadIntf2DegiStateCtrl obj;
+    int vtable;
+    int *nameRef;
+    int *statDataListRef;
 
-    igObject_InitHeader(u.b);
-    p38 = &u.b[8];
-    *(int *)p38 = 0;
-    u.vt = (int)&g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
-    p40 = &u.b[16];
-    *(int *)p40 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
-    if (p40 != 0) {
-        v1 = *(int **)p40;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    nameRef = &obj._name;
+    *nameRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
+    statDataListRef = &obj._statDataList;
+    *statDataListRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
+    if (statDataListRef != 0) {
+        igRelease((igObject *)*statDataListRef);
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (p38 != 0) {
-        v1 = *(int **)p38;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return r;
+    return vtable;
 }
 
 void beNDMWLoadIntf2DegiStateCtrl_EnsureRegistered(void)
@@ -123,7 +106,7 @@ void beNDMWLoadIntf2DegiStateCtrl_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2DegiStateCtrl_ctorTable, 1);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(meta->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "DEGISTATECTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

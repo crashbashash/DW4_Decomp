@@ -4,7 +4,7 @@
 #include "dw4/igMath.h"
 
 extern "C" {
-void FUN_00190250(long long *matrix);
+void igMatrix44d_SetIdentity(long long *matrix);
 void *memcpy(void *dest, const void *src, unsigned int size);
 }
 
@@ -12,7 +12,7 @@ void *memcpy(void *dest, const void *src, unsigned int size);
 struct igMatrix44d {
     igVec4d rows[4];
 
-    igMatrix44d() { FUN_00190250((long long *)rows); }
+    igMatrix44d() { igMatrix44d_SetIdentity((long long *)rows); }
     igMatrix44d(const igVec4d &row0, const igVec4d &row1, const igVec4d &row2, const igVec4d &row3) {
         memcpy(&rows[0], &row0, sizeof(igVec4d));
         memcpy(&rows[1], &row1, sizeof(igVec4d));

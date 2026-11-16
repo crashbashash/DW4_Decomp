@@ -68,9 +68,9 @@ int ViewerOptions_Construct(...);
 int FUN_00464170(...);
 int StringChunk_ReleaseHeader(...);
 
-extern int DAT_0058cd48[4];
-extern int DAT_0058cd50[4];
-extern int DAT_0058cd58[4];
+extern int g_igViewModel_hfovMetaField[4];
+extern int g_igViewModel_nearPlaneMetaField[4];
+extern int g_igViewModel_farPlaneMetaField[4];
 typedef struct Obj { char p[80]; float f80; float f84; float f88; } Obj;
 typedef struct Arg { char p[12]; Obj *o; } Arg;
 typedef struct Rec { int t; int z; int v; } Rec;
@@ -151,10 +151,10 @@ struct StringRef {
     ~StringRef() { releaseString(p); }
 };
 
-InsightCore *FUN_00232800(int);
+InsightCore *igInsightCore_CreateInstance(int);
 
 ViewerSetup::ViewerSetup(igObject *w)
-    : core(FUN_00232800(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
+    : core(igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
       actors(FUN_0045e230(0), AdoptReference()), dataPump(FUN_0045be30(0), AdoptReference()), showLogo(1),
       logo(FUN_0045dbe0(0), AdoptReference()), window(w, kRetainReference) {
     igObject *next = window.p;
@@ -337,16 +337,16 @@ void igViewManager_ApplyOptions(Arg *arg0, int arg1) {
     }
     r1.z = 0;
     r1.t = 2;
-    r1.v = DAT_0058cd50[0];
+    r1.v = g_igViewModel_nearPlaneMetaField[0];
     igModel_NotifyViews(arg0->o, &r1);
     r2.t = 2;
     r2.z = 0;
-    r2.v = DAT_0058cd58[0];
+    r2.v = g_igViewModel_farPlaneMetaField[0];
     igModel_NotifyViews(arg0->o, &r2);
     arg0->o->f80 = s0->f64;
     r3.t = 2;
     r3.z = 0;
-    r3.v = DAT_0058cd48[0];
+    r3.v = g_igViewModel_hfovMetaField[0];
     igModel_NotifyViews(arg0->o, &r3);
     if (g_sharedViewerOptions[0] != 0) {
         if (--g_sharedViewerOptions[0]->f232 <= 0) {

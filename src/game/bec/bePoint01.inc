@@ -25,22 +25,22 @@ done:;
 }
 
 int bePoint01_GetVTable(void) {
-    union U u;
-    int r;
+    bePoint01 obj;
+    int vtable;
 
-    int *v1; int *a1; int v0; int *a0;
-    char *pr; char *ps;
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    pr = &u.b[24];
-    *(int *)pr = 0;
-    u.vt = (int)&g_bePoint01_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    if (pr != 0) {
-        a0 = *(int **)pr;
+    int *text; int *header; int refCount; int *a0;
+    char *infoListSlot; char *nameSlot;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    nameSlot = (char *)&obj._name;
+    *(int *)nameSlot = 0;
+    infoListSlot = (char *)&obj._infoList;
+    *(int *)infoListSlot = 0;
+    obj._vtable = (int)&g_bePoint01_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    if (infoListSlot != 0) {
+        a0 = *(int **)infoListSlot;
         if (a0 != 0) {
             a0[1] = a0[1] - 1;
             if ((a0[1] & 0x7FFFFF) == 0) {
@@ -48,19 +48,19 @@ int bePoint01_GetVTable(void) {
             }
         }
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    if (nameSlot != 0) {
+        text = *(int **)nameSlot;
+        if (text != 0) {
+            header = text - 2;
+            refCount = text[-1] - 1;
+            text[-1] = refCount;
+            if (refCount == 0) {
+                StringChunk_ReleaseHeader(*header, header);
             }
         }
     }
-    return r;
+    return vtable;
 }
 
 void bePoint01_EnsureRegistered(void)

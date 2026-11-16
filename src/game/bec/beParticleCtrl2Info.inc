@@ -13,22 +13,22 @@ void *beParticleCtrl2Info_GetMetaObject(void) {
 }
 
 int beParticleCtrl2Info_GetVTable(void) {
-    struct Obj_34c3d0 o;
-    int r;
+    beParticleCtrl2Info obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f14 = 0;
-    o.f18 = 0;
-    o.vt = &g_beParticleCtrl2Info_vtable[0];
-    o.f1c = 0;
-    o.f20 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beParticleCtrl2Info_vtable[0];
-    FUN_00343260((igSmartPointer<igObject> *)&o.f20, -1);
-    FUN_00343260((igSmartPointer<igObject> *)&o.f1c, -1);
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
+    obj._mainSwitch = 0;
+    obj._subSwitch = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._subSwitch, -1);
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._mainSwitch, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beParticleCtrl2Info_EnsureRegistered(void)
@@ -110,7 +110,7 @@ static int g_beParticleCtrl2Info_messageValues[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
 };
 
-igMetaEnum *FUN_0034c5d0(void) {
+igMetaEnum *beParticleCtrl2_GetMessageEnum(void) {
     if (g_beParticleCtrl2Info_messageMetaEnum == 0) {
         g_beParticleCtrl2Info_messageMetaEnum = igMetaEnum_Create("Message", g_beParticleCtrl2Info_messageNames, g_beParticleCtrl2Info_messageValues, 8);
     }

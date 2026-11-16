@@ -1,7 +1,7 @@
 igMetaObject *g_igMatrix44fMetaField_metaObject;
 int g_igMatrix44fMetaField_descriptor;
 
-void FUN_00188660(int arg0) {
+void igMatrix44fMetaField_CreateInstance(int arg0) {
     igMatrix44fMetaField_EnsureRegistered();
     igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, arg0);
 }

@@ -11,19 +11,19 @@ void *beResetNode_GetMetaObject(void) {
 }
 
 int beResetNode_GetVTable(void) {
-    struct W_34b4f0 o;
-    int r;
+    beResetNode obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[1] = 0;
-    o.w[2] = 0;
-    o.w[3] = 0;
-    o.w[6] = 0;
-    o.vt = g_beResetNode_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beResetNode_vtable;
-    FUN_00195a90(&o, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beResetNode_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beResetNode_vtable[0];
+    igGroup_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beResetNode_EnsureRegistered(void)
@@ -43,7 +43,7 @@ void *beResetNode_Register(void) {
         0x24, /* instance size */
         beResetNode_GetVTable,
         beResetNode_InitFields,
-        FUN_0034b690, /* extra callback item */
+        beResetNode_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -80,8 +80,8 @@ void beResetNode_InitFields(void) {
     igMetaObject_NameFields(meta, g_beResetNode_fieldTable, g_beResetNode_fieldHandles, g_beResetNode_fieldOffsets, base);
 }
 
-void FUN_0034b690(void)
+void beResetNode_StaticInitCallback(void)
 {
-    FUN_0039c8c0();
+    beResetNode_RegisterTraversal();
 }
 

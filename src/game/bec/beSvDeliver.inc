@@ -31,26 +31,26 @@ igMetaObject *beSvDeliver_GetMetaObject(void) {
 }
 
 int beSvDeliver_GetVTable(void) {
-    union U_34b170 u;
-    int temp_s5;
+    beSvDeliver obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beSvDeliver_vtable[0]);
-    u.w[3] = 0;
-    u.w[12] = 0;
-    u.w[13] = 0;
-    u.w[14] = 0;
-    u.w[15] = 0;
-    u.w[16] = 0;
-    temp_s5 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beSvDeliver_vtable[0]);
-    FUN_00349080((igSmartPointer<igObject> *)(&u.w[16]), (long long)(-1));
-    igSmartPointer_igIntList_Destruct(&u.w[15], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[14], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[13], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[12], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[3], -1);
-    return temp_s5;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beSvDeliver_vtable[0];
+    obj._actConnect = 0;
+    obj._freeSizeList = 0;
+    obj._freeFileList = 0;
+    obj._formatList = 0;
+    obj._totalSizeList = 0;
+    obj._platformData = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvDeliver_vtable[0];
+    igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._platformData), (long long)(-1));
+    igSmartPointer_igIntList_Destruct(&obj._totalSizeList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._formatList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._freeFileList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._freeSizeList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._actConnect, -1);
+    return vtable;
 }
 
 void beSvDeliver_EnsureRegistered(void)

@@ -15,21 +15,27 @@ void *beSvEndApi_GetMetaObject(void) {
 }
 
 int beSvEndApi_GetVTable(void) {
-    Obj_348680 obj;
-    int r;
+    beSvEndApi obj;
+    int vtable;
+    igObject **iconWorkSlot;
+    igObject **mountWorkSlot;
+    igObject **imageWorkSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSaveApi_vtable[0];
-    obj.r1 = 0;
-    obj.r2 = 0;
-    obj.r3 = 0;
-    obj.vt = &g_beSvEndApi_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSaveApi_vtable[0];
-    obj.rel(&obj.r3);
-    obj.rel(&obj.r2);
-    obj.rel(&obj.r1);
-    return r;
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    imageWorkSlot = (igObject **)&obj._imageWork;
+    *imageWorkSlot = 0;
+    mountWorkSlot = (igObject **)&obj._mountWork;
+    *mountWorkSlot = 0;
+    iconWorkSlot = (igObject **)&obj._iconWork;
+    *iconWorkSlot = 0;
+    obj._vtable = (int)&g_beSvEndApi_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    igObjectRef_Release(iconWorkSlot);
+    igObjectRef_Release(mountWorkSlot);
+    igObjectRef_Release(imageWorkSlot);
+    return vtable;
 }
 
 void beSvEndApi_EnsureRegistered(void)
@@ -68,7 +74,7 @@ void beSvEndApi_InitFields(void) {
     meta = (void *)g_beSvEndApi_metaObject;
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 0xB);
     clone->_externalEnumStorage = (int)(&g_beSvEndApi_orderTypeStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

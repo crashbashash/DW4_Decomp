@@ -22,19 +22,23 @@ void *be_GetMetaObject(void) {
 }
 
 int be_GetVTable(void) {
-    Obj_36e080 obj;
-    int r;
+    be obj;
+    int vtable;
+    igObject **stringRefListSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.s = 0;
-    obj.vt = &g_be_vtable[0];
-    obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_be_vtable[0];
-    obj.releaseRef();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.releaseStr();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_be_vtable[0];
+    stringRefListSlot = (igObject **)&obj._stringRefList;
+    *stringRefListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_be_vtable[0];
+    igObjectRef_Release(stringRefListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void be_EnsureRegistered(void)

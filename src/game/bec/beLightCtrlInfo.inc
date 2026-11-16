@@ -10,23 +10,23 @@ void *beLightCtrlInfo_GetMetaObject(void) {
 }
 
 int beLightCtrlInfo_GetVTable(void) {
-    struct W_35bd50 o;
-    int r;
+    beLightCtrlInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[4] = 0;
-    o.f[5] = 0;
-    o.vt = g_beLightCtrlInfo_vtable;
-    o.f[6] = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beLightCtrlInfo_vtable;
-    FUN_0035bdd0((igSmartPointer<igObject> *)(&o.f[6]), (short)(-1));
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beLightCtrlInfo_vtable[0];
+    obj._lightSetList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beLightCtrlInfo_vtable[0];
+    igSmartPointer_igLightSetList_Destruct((igSmartPointer<igObject> *)(&obj._lightSetList), (short)(-1));
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035bdd0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igLightSetList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -103,7 +103,7 @@ static int g_beLightCtrlInfo_msgActionValues[] = {
     0,
 };
 
-igMetaEnum *FUN_0035bfb0(void) {
+igMetaEnum *beLightCtrl_GetMsgActionEnum(void) {
     if (g_beLightCtrlInfo_msgActionMetaEnum == 0) {
         g_beLightCtrlInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beLightCtrlInfo_msgActionNames, g_beLightCtrlInfo_msgActionValues, 1);
     }

@@ -29,32 +29,29 @@ void *beMessenger_GetMetaObject(void) {
 }
 
 int beMessenger_GetVTable(void) {
-    union U_3579b0 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
+    beMessenger obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&g_beMessenger_vtable[0];
-    *(int *)&u.b[16] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    *(int *)&u.b[28] = 0;
-    *(int *)&u.b[32] = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beMessenger_vtable[0];
-    FUN_00357c90((igSmartPointer<igObject> *)(&u.b[32]), (long long)(-1));
-    FUN_00357c10((igSmartPointer<igObject> *)(&u.b[28]), (short)(-1));
-    FUN_00357b90((igSmartPointer<igObject> *)(&u.b[24]), (short)(-1));
-    FUN_00357b10((igSmartPointer<igObject> *)(&u.b[20]), -1);
-    FUN_00357a90((igSmartPointer<igObject> *)&u.b[16], -1);
-    FUN_00231030(u.b, 0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beMessenger_vtable[0];
+    obj._argData = 0;
+    obj._groupList = 0;
+    obj._workStack = 0;
+    obj._delayStack = 0;
+    obj._pushPopStack = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMessenger_vtable[0];
+    igSmartPointer_beMessengerArgDataList_Destruct((igSmartPointer<igObject> *)(&obj._pushPopStack), (long long)(-1));
+    igSmartPointer_beMessengerDelayList_Destruct((igSmartPointer<igObject> *)(&obj._delayStack), (short)(-1));
+    igSmartPointer_beMessengerWorkList_Destruct((igSmartPointer<igObject> *)(&obj._workStack), (short)(-1));
+    igSmartPointer_beMessengerGroupList_Destruct((igSmartPointer<igObject> *)(&obj._groupList), -1);
+    igSmartPointer_beMessengerArgData_Destruct((igSmartPointer<igObject> *)&obj._argData, -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00357a90(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -67,7 +64,7 @@ igSmartPointer<igObject> *FUN_00357a90(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00357b10(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -80,7 +77,7 @@ igSmartPointer<igObject> *FUN_00357b10(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00357b90(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessengerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -93,7 +90,7 @@ igSmartPointer<igObject> *FUN_00357b90(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00357c10(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessengerDelayList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -106,7 +103,7 @@ igSmartPointer<igObject> *FUN_00357c10(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00357c90(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessengerArgDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

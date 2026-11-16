@@ -12,25 +12,25 @@ void *beParticleCtrl2InfoRam_GetMetaObject(void) {
 }
 
 int beParticleCtrl2InfoRam_GetVTable(void) {
-    struct Obj_34bd10 obj;
-    int t;
+    beParticleCtrl2InfoRam obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[9] = 0;
-    obj.vt = &g_beParticleCtrl2InfoRam_vtable[0];
-    obj.w[10] = 0;
-    obj.w[11] = 0;
-    obj.w[12] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beParticleCtrl2InfoRam_vtable[0];
-    igSmartPointer_beParticleCtrl2InfoWork_Destruct((igSmartPointer<igObject> *)(&obj.w[12]), -1);
-    FUN_0034bdc0((igSmartPointer<igObject> *)(&obj.w[11]), (short)(-1));
-    FUN_001a7580(&obj.w[10], -1);
-    FUN_0033e920((S *)((int *)&obj), (long long)0);
-    return t;
+    obj._dataList = 0;
+    obj._vtable = (int)&g_beParticleCtrl2InfoRam_vtable[0];
+    obj._transform = 0;
+    obj._particleTimer = 0;
+    obj._work = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beParticleCtrl2InfoRam_vtable[0];
+    igSmartPointer_beParticleCtrl2InfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), -1);
+    igSmartPointer_ParticleTimer_Destruct((igSmartPointer<igObject> *)(&obj._particleTimer), (short)(-1));
+    igSmartPointer_igTransform_Destruct(&obj._transform, -1);
+    beBaseInfoRam_Destroy((S *)((int *)&obj), (long long)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0034bdc0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_ParticleTimer_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

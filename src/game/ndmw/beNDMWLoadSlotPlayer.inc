@@ -24,18 +24,22 @@ void *beNDMWLoadSlotPlayer_GetReadyMetaObject(void) {
 }
 
 int beNDMWLoadSlotPlayer_GetVTable(void) {
-    Obj_3c6440 obj;
-    int r;
+    beNDMWLoadSlotPlayer obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWLoadSlotPlayer_vtable[0];
-    obj.m12 = 0;
-    obj.m16 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWLoadSlotPlayer_vtable[0];
-    obj.rel16();
-    obj.rel12();
-    return r;
+    *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
+    obj._saveDataList = 0;
+    obj._accessPlList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
+    if (&obj._accessPlList != 0) {
+        igRelease((igObject *)obj._accessPlList);
+    }
+    if (&obj._saveDataList != 0) {
+        igRelease((igObject *)obj._saveDataList);
+    }
+    return vtable;
 }
 
 void beNDMWLoadSlotPlayer_EnsureRegistered(void)

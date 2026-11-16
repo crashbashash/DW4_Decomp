@@ -10,22 +10,26 @@ igMetaObject *beGeneraterInfoRam_GetMetaObject(void) {
 }
 
 int beGeneraterInfoRam_GetVTable(void) {
-    Obj_35f460 obj;
-    int r;
+    beGeneraterInfoRam obj;
+    int vtable;
+    igObject **workSlot;
+    igObject **dataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.m40 = 0;
-    obj.vt = &g_beGeneraterInfoRam_vtable[0];
-    obj.m44 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beGeneraterInfoRam_vtable[0];
-    obj.rel44();
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.rel40();
-    return r;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beGeneraterInfoRam_vtable[0];
+    workSlot = (igObject **)&obj._work;
+    *workSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGeneraterInfoRam_vtable[0];
+    igObjectRef_Release(workSlot);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035f550(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beGeneraterInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

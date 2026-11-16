@@ -10,46 +10,23 @@ void *beModelCtrlLABELCTRL_GetMetaObject(void) {
 }
 
 int beModelCtrlLABELCTRL_GetVTable(void) {
-    union U_3560d0 u;
-    int temp_s0;
-    char *q0;
-    char *q1;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+    beModelCtrlLABELCTRL obj;
+    int vtable;
+    char **seqNameSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    u.vt = (int)&g_beModelCtrlLABELCTRL_vtable[0];
-    q0 = &u.b[12];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beModelCtrlLABELCTRL_vtable[0];
-    if (q0 != 0) {
-        temp_v1 = *(int **)q0;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q1 != 0) {
-        temp_v1 = *(int **)q1;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
+    seqNameSlot = (char **)&obj._seqName;
+    *seqNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
+    igStringRef_Release(seqNameSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlLABELCTRL_EnsureRegistered(void)

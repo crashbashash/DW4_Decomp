@@ -17,45 +17,26 @@ void *beLoadIntf2ComMdlData_GetReadyMetaObject(void) {
 }
 
 int beLoadIntf2ComMdlData_GetVTable(void) {
-    union U_3c74e0 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
-    char *p3C;
-    char *p40;
+    beLoadIntf2ComMdlData obj;
+    int vtable;
+    int *openSQRef;
+    int *infoNameRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beLoadIntf2ComMdlData_vtable[0];
-    p3C = &u.b[12];
-    *(int *)p3C = 0;
-    p40 = &u.b[16];
-    *(int *)p40 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beLoadIntf2ComMdlData_vtable[0];
-    if (p40 != 0) {
-        v1 = *(int **)p40;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beLoadIntf2ComMdlData_vtable[0];
+    openSQRef = &obj._openSQ;
+    *openSQRef = 0;
+    infoNameRef = &obj._infoName;
+    *infoNameRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beLoadIntf2ComMdlData_vtable[0];
+    if (infoNameRef != 0) {
+        releaseString((const char *)*infoNameRef);
     }
-    if (p3C != 0) {
-        v1 = *(int **)p3C;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    if (openSQRef != 0) {
+        releaseString((const char *)*openSQRef);
     }
-    return r;
+    return vtable;
 }
 
 void beLoadIntf2ComMdlData_EnsureRegistered(void)

@@ -16,26 +16,26 @@ void *beNDMWShopCtrlA0_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlA0_GetVTable(void) {
-    struct Obj_3b7f40 obj;
-    int t;
+    beNDMWShopCtrlA0 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopCtrlA0_vtable[0];
-    obj.w21 = 0;
-    obj.w22 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopCtrlA0_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj.w22, -1);
-    igSmartPointer_beNDMWStatusTitle03_Destruct((igSmartPointer<igObject> *)&obj.w21, -1);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA0_vtable[0];
+    obj._account = 0;
+    obj._playerNoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlA0_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    igSmartPointer_beNDMWStatusTitle03_Destruct((igSmartPointer<igObject> *)&obj._account, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
-    return t;
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWStatusTitle03_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

@@ -32,28 +32,19 @@ igMetaObject *beNDMWLoadIntf2Diffselect_ResolveMetaObject(void)
 }
 
 int beNDMWLoadIntf2Diffselect_GetVTable(void) {
-    struct F_3c3270 o;
-    int r;
-    int *s;
-    int *h;
-    int c;
+    beNDMWLoadIntf2Diffselect obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.vt = g_igNamedObject_vtable;
-    o.str = 0;
-    o.vt = g_beNDMWLoadIntf2Diffselect_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_igNamedObject_vtable;
-    if (&o.str != 0) {
-        s = o.str;
-        if (s != 0) {
-            h = s - 2;
-            c = s[-1] - 1;
-            s[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader(*h, h);
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadIntf2Diffselect_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (&obj._name != 0) {
+        releaseString((const char *)obj._name);
     }
-    return r;
+    return vtable;
 }
 
 void beNDMWLoadIntf2Diffselect_EnsureRegistered(void)
@@ -177,7 +168,7 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2Diffselect_ctorTable, 0x10);
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedName);
-    nameField = (igStringMetaField *)(((DW4VC_84_1 *)(inheritedName))->vX((int)(1)));
+    nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     igStringMetaField_SetDefaultText(nameField, "DIFFSELECT");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2Diffselect_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, nameField);

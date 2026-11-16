@@ -22,54 +22,32 @@ void *beNDMWShinkaCtrl_ResolveMetaObject(void) {
 }
 
 int beNDMWShinkaCtrl_GetVTable(void) {
-    union U_3c9520 u;
-    int temp_s2;
-    S_ref * q1;
-    S_ref * q0;
-    S_ref * q2;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beNDMWShinkaCtrl obj;
+    int vtable;
+    int *dBShinkaRef;
+    int *playerParameterRef;
+    int *listRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)(&g_beNDMWShinkaCtrl_vtable[0]);
-    q0 = (S_ref *)&u.b[20];
-    *(int *)q0 = 0;
-    q1 = (S_ref *)&u.b[24];
-    *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[28];
-    *(int *)q2 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&g_beNDMWShinkaCtrl_vtable[0]);
-    if (q2 != 0) {
-        q2 = *(S_ref **)q2;
-        if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWShinkaCtrl_vtable[0];
+    playerParameterRef = &obj._playerParameter;
+    *playerParameterRef = 0;
+    dBShinkaRef = &obj._dBShinka;
+    *dBShinkaRef = 0;
+    listRef = &obj._list;
+    *listRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShinkaCtrl_vtable[0];
+    if (listRef != 0) {
+        igRelease((igObject *)*listRef);
     }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
+    if (dBShinkaRef != 0) {
+        igRelease((igObject *)*dBShinkaRef);
     }
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
+    if (playerParameterRef != 0) {
+        igRelease((igObject *)*playerParameterRef);
     }
-    return temp_s2;
+    return vtable;
 }
 
 void beNDMWShinkaCtrl_EnsureRegistered(void)

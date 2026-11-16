@@ -16,10 +16,10 @@ void *beCriHandleList_GetMetaObject(void) {
 }
 
 int beCriHandleList_GetVTable(void) {
-    struct Obj_366820 obj;
+    beCriHandleList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beCriHandleList_vtable[0];
+    obj._vtable = (int)&g_beCriHandleList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

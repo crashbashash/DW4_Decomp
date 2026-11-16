@@ -149,40 +149,40 @@ done:
 }
 
 int beNDMWGameRam_GetVTable(void) {
-    struct Obj_3c9d80 obj;
-    int t;
+    beNDMWGameRam obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beNDMWGameRam_vtable[0];
-    obj.w8 = 0;
-    obj.w9 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWGameRam_vtable[0];
-    FUN_003c9ef0((igSmartPointer<igObject> *)&obj.w17, -1);
-    beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w16, -1);
-    FUN_00365e90(&obj.w15, -1);
-    FUN_00365e90(&obj.w14, -1);
-    FUN_00365e90(&obj.w13, -1);
-    FUN_00365e90(&obj.w12, -1);
-    FUN_00365e90(&obj.w11, -1);
-    FUN_00365e90(&obj.w10, -1);
-    FUN_00365e90(&obj.w9, -1);
-    FUN_00365e90(&obj.w8, -1);
-    FUN_0033f5e0(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWGameRam_vtable[0];
+    obj._dBShinka = 0;
+    obj._dBPcTech = 0;
+    obj._dBWeapon = 0;
+    obj._dBArmor1 = 0;
+    obj._dBArmor2 = 0;
+    obj._dBAbChip = 0;
+    obj._dBEnemy = 0;
+    obj._dBEneatk = 0;
+    obj._commonDataList = 0;
+    obj._playerDataListList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWGameRam_vtable[0];
+    igSmartPointer_beDataObjListList_Destruct((igSmartPointer<igObject> *)&obj._playerDataListList, -1);
+    beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._commonDataList, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBEneatk, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBEnemy, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBAbChip, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBArmor2, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBArmor1, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBWeapon, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBPcTech, -1);
+    igSmartPointer_beDataBase_Destruct(&obj._dBShinka, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003c9ef0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDataObjListList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

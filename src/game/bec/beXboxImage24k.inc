@@ -21,10 +21,10 @@ done:
 }
 
 int beXboxImage24k_GetVTable(void) {
-    struct Obj_3476a0 obj;
+    beXboxImage24k obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beXboxImage24k_vtable[0];
+    obj._vtable = (int)&g_beXboxImage24k_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

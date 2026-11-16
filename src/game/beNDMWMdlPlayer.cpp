@@ -228,9 +228,9 @@ struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPo
 static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); setDataList(ram, list); }
 };
 
-/* matching construct: dummy-virtual view; the 33 fillers put vfunc_33 at beModelCtrl::vfunc_33,
- * the message handler. */
-struct MdlPlayerSlots { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void vfunc_33(beBaseInfoRam *, const void *);};
+/* matching construct: dummy-virtual view; the 33 fillers put OnMessageText at its retail slot 33,
+ * the message-text handler. */
+struct MdlPlayerSlots { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void OnMessageText(beBaseInfoRam *, const void *);};
 
 void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self) {
     beBaseInfoManager_Start();
@@ -520,14 +520,14 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
                     beModelCtrl_RunCommands(self, info, ram, work);
                     return;
                 }
-                ((MdlPlayerSlots *)self)->vfunc_33(ram, "SQ_WAIT");
+                ((MdlPlayerSlots *)self)->OnMessageText(ram, "SQ_WAIT");
                 return;
             }
             break;
         }
     } else if (strcmp(work->_wCheckName, "Atck02") == 0) {
         if (!(held & 0x4000)) {
-            ((MdlPlayerSlots *)self)->vfunc_33(ram, "SQ_WAIT");
+            ((MdlPlayerSlots *)self)->OnMessageText(ram, "SQ_WAIT");
         }
         infoName = (int *)info->_name;
         ramNo = ram->_ramNo;

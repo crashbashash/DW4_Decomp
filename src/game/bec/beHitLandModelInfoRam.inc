@@ -12,17 +12,19 @@ done:
 }
 
 int beHitLandModelInfoRam_GetVTable(void) {
-    Obj_35d350 obj;
-    int r;
+    beHitLandModelInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.ref = 0;
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.vt = &g_beHitLandModelInfoRam_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.releaseRef();
-    return r;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    obj._vtable = (int)&g_beHitLandModelInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beHitLandModelInfoRam_EnsureRegistered(void)

@@ -19,10 +19,10 @@ done:
 }
 
 int beMessengerArgDataList_GetVTable(void) {
-    struct Obj_358c90 obj;
+    beMessengerArgDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMessengerArgDataList_vtable[0];
+    obj._vtable = (int)&g_beMessengerArgDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

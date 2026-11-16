@@ -6,9 +6,9 @@
 
 extern "C" {
 void *igInsightCore_FindManager(int insight, int metaObject);
-void FUN_001906d0(float *matrix, const float *by);
-int FUN_001c51b0(const float *boxMin, const float *boxMax, const float *matrix);
-void FUN_00192e10(float *a, float *b);
+void igMatrix44f_PreMultiply(float *matrix, const float *by);
+int igFrustCullTraversal_ClassifyBox(const float *boxMin, const float *boxMax, const float *matrix);
+void Vec3f_CrossInPlace(float *a, float *b);
 float sqrtf(float);
 int igVertexArrayLock_Init(igVertexArrayLock *lock);
 void igMatrix44f_GetTranslation(const float *matrix, float *translation);
@@ -74,8 +74,8 @@ bool beWaterPlain_IsBoxVisible(beWaterPlain *self, const float *boxMin, const fl
     m[13] = parameters->_projectionMatrix[13];
     m[14] = parameters->_projectionMatrix[14];
     m[15] = parameters->_projectionMatrix[15];
-    FUN_001906d0(viewProjection.m, parameters->_viewMatrix);
-    switch (FUN_001c51b0(boxMin, boxMax, viewProjection.m)) {
+    igMatrix44f_PreMultiply(viewProjection.m, parameters->_viewMatrix);
+    switch (igFrustCullTraversal_ClassifyBox(boxMin, boxMax, viewProjection.m)) {
     case 1: case 3: case 4: case 5: visible = true; break;
     case 2: break;
     }
@@ -154,7 +154,7 @@ void beWaterPlain_StepWaves(beWaterPlain *self, beWaterPlainInfoRam *ram, igFloa
             bitangent[0] = px - px;
             bitangent[1] = above - below;
             bitangent[2] = (float)(y - 1) * cell - (float)(y + 1) * cell;
-            FUN_00192e10(tangent, bitangent);
+            Vec3f_CrossInPlace(tangent, bitangent);
             float inverseLength = 1.0f / sqrtf(tangent[0] * tangent[0] + tangent[1] * tangent[1] + tangent[2] * tangent[2]);
             tangent[0] *= inverseLength;
             tangent[1] *= inverseLength;

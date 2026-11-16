@@ -9,15 +9,15 @@ igMetaObject *beNDMWStatusSubSlot_GetMetaObject(void) {
 }
 
 int beNDMWStatusSubSlot_GetVTable(void) {
-    union U_3ba2f0 u;
-    int t;
+    beNDMWStatusSubSlot obj;
+    int vtable;
 
-    beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)u.b);
-    u.vt = (int)&g_beNDMWStatusSubSlot_vtable[0];
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWStatusSubSlot_vtable[0];
-    FUN_003ba3d0((S_arg0 *)u.b, (long long)0);
-    return t;
+    beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
+    *(int **)&obj._vtable = &g_beNDMWStatusSubSlot_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusSubSlot_vtable[0];
+    beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
@@ -33,88 +33,38 @@ igSmartPointer<igObject> *beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct(i
     return self;
 }
 
-void *FUN_003ba3d0(S_arg0 *arg0, long long arg1) {
-    S_temp_a0_3ba3d0 *temp_a0;
-    S_temp_a0_2 *temp_a0_2;
-    S_temp_a0_3 *temp_a0_3;
-    S_temp_a0_4 *temp_a0_4;
-    S_temp_a0_5 *temp_a0_5;
-    S_temp_a0_6 *temp_a0_6;
-    S_temp_a0_7 *temp_a0_7;
-
-    if (arg0 != 0) {
-        arg0->f0 = (int)(&g_beNDMWStatusCtrlBaseEquip_vtable[0]);
-        if (((char *)arg0 + 0x78) != 0) {
-            temp_a0 = (S_temp_a0_3ba3d0 *)(arg0->f120);
-            if (temp_a0 != 0) {
-                temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0);
-                }
-            }
+void *beNDMWStatusCtrlBaseEquip_Destroy(beNDMWStatusCtrlBaseEquip *self, short flags) {
+    if (self != 0) {
+        *(int **)&self->_vtable = &g_beNDMWStatusCtrlBaseEquip_vtable[0];
+        if (&self->_deviceFolder != 0) {
+            igRelease((igObject *)self->_deviceFolder);
         }
-        if (((char *)arg0 + 0x74) != 0) {
-            temp_a0_2 = (S_temp_a0_2 *)(arg0->f116);
-            if (temp_a0_2 != 0) {
-                temp_a0_2->f4 = (int)((int) (temp_a0_2->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_2->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_2);
-                }
-            }
+        if (&self->_apuPocket != 0) {
+            igRelease((igObject *)self->_apuPocket);
         }
-        if (((char *)arg0 + 0x70) != 0) {
-            temp_a0_3 = (S_temp_a0_3 *)(arg0->f112);
-            if (temp_a0_3 != 0) {
-                temp_a0_3->f4 = (int)((int) (temp_a0_3->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_3->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_3);
-                }
-            }
+        if (&self->_wpuPocket != 0) {
+            igRelease((igObject *)self->_wpuPocket);
         }
-        if (((char *)arg0 + 0x6C) != 0) {
-            temp_a0_4 = (S_temp_a0_4 *)(arg0->f108);
-            if (temp_a0_4 != 0) {
-                temp_a0_4->f4 = (int)((int) (temp_a0_4->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_4->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_4);
-                }
-            }
+        if (&self->_subSlot != 0) {
+            igRelease((igObject *)self->_subSlot);
         }
-        if (((char *)arg0 + 0x68) != 0) {
-            temp_a0_5 = (S_temp_a0_5 *)(arg0->f104);
-            if (temp_a0_5 != 0) {
-                temp_a0_5->f4 = (int)((int) (temp_a0_5->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_5->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_5);
-                }
-            }
+        if (&self->_mainSlot != 0) {
+            igRelease((igObject *)self->_mainSlot);
         }
-        if (((char *)arg0 + 0x64) != 0) {
-            temp_a0_6 = (S_temp_a0_6 *)(arg0->f100);
-            if (temp_a0_6 != 0) {
-                temp_a0_6->f4 = (int)((int) (temp_a0_6->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_6->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_6);
-                }
-            }
+        if (&self->_powerSocket != 0) {
+            igRelease((igObject *)self->_powerSocket);
         }
-        if (((char *)arg0 + 0x60) != 0) {
-            temp_a0_7 = (S_temp_a0_7 *)(arg0->f96);
-            if (temp_a0_7 != 0) {
-                temp_a0_7->f4 = (int)((int) (temp_a0_7->f4 - 1));
-                if (((unsigned long long) ((long long) temp_a0_7->f4 << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(temp_a0_7);
-                }
-            }
+        if (&self->_playerList != 0) {
+            igRelease((igObject *)self->_playerList);
         }
-        if (arg0 != 0) {
-            arg0->f0 = (int)(&g_beNDMWWindowCtrl_vtable[0]);
-            FUN_003b2d10((beNDMWWindowCtrl *)arg0, (short)0);
+        if (self != 0) {
+            *(int **)&self->_vtable = &g_beNDMWWindowCtrl_vtable[0];
+            beNDMWWindow_Destroy((beNDMWWindowCtrl *)self, 0);
         }
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 

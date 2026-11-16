@@ -11,22 +11,23 @@ void *beNDMWAfsSetupInfo_ResolveMetaObject(void) {
 }
 
 int beNDMWAfsSetupInfo_GetVTable(void) {
-    struct W_3ca580 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.vt = g_beNDMWAfsSetupInfo_vtable;
-    o.f[1] = 0;
-    o.f[4] = 0;
-    o.f[5] = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWAfsSetupInfo_vtable;
-    FUN_003ca610((igSmartPointer<igObject> *)(&o.f[5]), -1);
-    igSmartPointer_igAdxAfsFileList_Destruct(&o.f[4], -1);
-    igInfo_Destroy(&o, 0);
-    return r;
+    beNDMWAfsSetupInfo obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWAfsSetupInfo_vtable[0];
+    obj._name = 0;
+    obj._insideFiles = 0;
+    obj._dataList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWAfsSetupInfo_vtable[0];
+    igSmartPointer_beNDMWAfsSetupDataList_Destruct((igSmartPointer<igObject> *)&obj._dataList, -1);
+    igSmartPointer_igAdxAfsFileList_Destruct(&obj._insideFiles, -1);
+    igInfo_Destroy((igInfo *)&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003ca610(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetupDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

@@ -16,10 +16,10 @@ void *beLayerGroupList_GetMetaObject(void) {
 }
 
 int beLayerGroupList_GetVTable(void) {
-    struct Obj_35c760 obj;
+    beLayerGroupList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beLayerGroupList_vtable[0];
+    obj._vtable = (int)&g_beLayerGroupList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -16,7 +16,7 @@ void *beNDMWStatusCtrl00_GetMetaObject(void) {
 
 int beNDMWStatusCtrl00_GetVTable(void) {
     beNDMWStatusCtrl00 obj;
-    int temp_s0;
+    int vtable;
 
     igObject_InitHeader(&obj);
     obj._subWindow = 0;
@@ -27,10 +27,10 @@ int beNDMWStatusCtrl00_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     obj._vtable = (int)(&g_beNDMWStatusCtrl00_vtable[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)(&g_beNDMWStatusCtrl00_vtable[0]);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWStatusCtrl00_EnsureRegistered(void)

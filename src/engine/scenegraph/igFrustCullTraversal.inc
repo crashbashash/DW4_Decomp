@@ -31,7 +31,7 @@ int igFrustCullTraversal_GetVTable(void) {
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem[0]) + 916));
     s.vt = &g_igFrustCullTraversal_vtable[0];
     FUN_001a1000((void **)&s.c, -1);
-    FUN_00198190((void * *)&s.a, -1);
+    igSmartPointer_igAABox_Destruct((void * *)&s.a, -1);
     FUN_001a0910((Obj_19fde0 *)&s, 0);
     return r;
 }
@@ -505,7 +505,7 @@ igMetaObject *FUN_001a1210(void) {
 }
 
 static FieldFactory g_igFrustCullTraversal_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igRawRefMetaField_Create,
     igRawRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -573,7 +573,7 @@ void igFrustCullTraversal_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s2, &o1);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00139170();

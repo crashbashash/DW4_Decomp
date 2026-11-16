@@ -17,17 +17,18 @@ igMetaObject *beKeyboardReceiver_GetMetaObject(void) {
 }
 
 int beKeyboardReceiver_GetVTable(void) {
-    struct W_35d110 o;
-    int r;
-    igObject *p;
+    beKeyboardReceiver obj;
+    int vtable;
+    igObject **keyboardSlot;
 
-    igObject_InitHeader(&o);
-    o.vt = g_beKeyboardReceiver_vtable;
-    *(int *)((char *)&o + 8) = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beKeyboardReceiver_vtable;
-    if (&*(int *)((char *)&o + 8) != 0) { p = *(igObject **)((char *)&o + 8); if (p != 0) { p->_refCount = (int)p->_refCount - 1; if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p); } }
-    return r;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
+    keyboardSlot = (igObject **)&obj._keyboard;
+    *keyboardSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
+    igObjectRef_Release(keyboardSlot);
+    return vtable;
 }
 
 void beKeyboardReceiver_EnsureRegistered(void)

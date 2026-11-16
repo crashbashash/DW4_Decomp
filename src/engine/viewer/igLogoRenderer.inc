@@ -25,8 +25,8 @@ int igLogoRenderer_GetVTable(void) {
     obj.w8 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem[0])) + 916));
     obj.vt = &g_igLogoRenderer_vtable[0];
-    FUN_0013bfe0(&obj.w8, -1);
-    FUN_0019ab10(&obj.w7, -1);
+    igSmartPointer_igAttrList_Destruct(&obj.w8, -1);
+    igSmartPointer_igColorAttr_Destruct(&obj.w7, -1);
     FUN_001353b0(&obj.w6, -1);
     FUN_00230f70(&obj, 0);
     return t;

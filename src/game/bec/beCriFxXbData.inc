@@ -28,11 +28,11 @@ void *beCriFxXbData_GetMetaObject(void) {
 }
 
 int beCriFxXbData_GetVTable(void) {
-    union U_367040 u;
+    beCriFxXbData obj;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beCriFxXbData_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beCriFxXbData_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beCriFxXbData_EnsureRegistered(void)

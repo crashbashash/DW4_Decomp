@@ -23,42 +23,22 @@ done:
 }
 
 int beCriAudio_GetVTable(void) {
-    union U_367240 u;
-    int t;
-    struct Rc *a;
-    int *a1;
-    int v0;
-    char *c;
-    void **q38;
-    void **q3c;
+    beCriAudio obj;
+    int vtable;
+    igObject **sndfSlot;
+    igObject **adxtSlot;
 
-    igObject_InitHeader(u.b);
-    q38 = &u.p[2];
-    q3c = &u.p[3];
-    u.w[0] = (int)(&g_beCriAudio_vtable[0]);
-    *q38 = 0;
-    *q3c = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beCriAudio_vtable[0]);
-    if (q3c != 0) {
-        a = (struct Rc *)*q3c;
-        if (a != 0) {
-            a->rc = a->rc - 1;
-            if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
-            }
-        }
-    }
-    if (q38 != 0) {
-        a = (struct Rc *)*q38;
-        if (a != 0) {
-            a->rc = a->rc - 1;
-            if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    adxtSlot = (igObject **)&obj._adxt;
+    sndfSlot = (igObject **)&obj._sndf;
+    obj._vtable = (int)&g_beCriAudio_vtable[0];
+    *adxtSlot = 0;
+    *sndfSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCriAudio_vtable[0];
+    igObjectRef_Release(sndfSlot);
+    igObjectRef_Release(adxtSlot);
+    return vtable;
 }
 
 void beCriAudio_EnsureRegistered(void)

@@ -13,10 +13,10 @@ igMetaObject *bePlaySEList_GetMetaObject(void) {
 }
 
 int bePlaySEList_GetVTable(void) {
-    struct Obj_3446d0 obj;
+    bePlaySEList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_bePlaySEList_vtable[0];
+    obj._vtable = (int)&g_bePlaySEList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

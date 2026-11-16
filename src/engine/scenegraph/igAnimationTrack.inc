@@ -82,8 +82,8 @@ void thunk_igAnimationTrack_GetMetaObject(void) {
 
 static FieldFactory g_igAnimationTrack_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_001872a0,
-    FUN_00187890,
+    igVec4fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_igAnimationTrack_fieldTable[] = {
     "_source",

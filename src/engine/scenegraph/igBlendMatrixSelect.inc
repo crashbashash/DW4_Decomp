@@ -47,8 +47,8 @@ void thunk_igBlendMatrixSelect_GetMetaObject(void) {
 
 static FieldFactory g_igBlendMatrixSelect_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igBlendMatrixSelect_fieldTable[] = {
     "_blendMatrixIndices",

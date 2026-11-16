@@ -2,8 +2,8 @@ igMetaObject *g_igViewerLoadingFileMessage_metaObject;
 igMetaField *g_igViewerLoadingFileMessage_currentMetaField;
 igMetaField *g_igViewerLoadingFileMessage_filenameMetaField;
 
-void FUN_0045a680(int arg0) {
-    FUN_0045a7a0();
+void igViewerLoadingFileMessage_Create(int arg0) {
+    igViewerLoadingFileMessage_EnsureRegistered();
     igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void) {
     igMetaObject *g = g_igViewerLoadingFileMessage_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0045a7a0();
+        igViewerLoadingFileMessage_EnsureRegistered();
     return g_igViewerLoadingFileMessage_metaObject;
 }
 
@@ -40,7 +40,7 @@ int igViewerLoadingFileMessage_GetVTable(void) {
     return t;
 }
 
-void FUN_0045a7a0(void)
+void igViewerLoadingFileMessage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewerLoadingFileMessage_Register);
 }

@@ -15,27 +15,20 @@ done:
 }
 
 int beNDMWAfsStageLoad_GetVTable(void) {
-    union U_3cabe0 u;
-    int temp_s0;
-    char *ps;
-    int *temp_a0;
+    beNDMWAfsStageLoad obj;
+    int vtable;
+    int *stageRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beNDMWAfsStageLoad_vtable[0];
-    ps = &u.b[12];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWAfsStageLoad_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *(int **)ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(temp_a0);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
+    stageRef = &obj._stage;
+    *stageRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
+    if (stageRef != 0) {
+        igRelease((igObject *)*stageRef);
     }
-    return temp_s0;
+    return vtable;
 }
 
 void beNDMWAfsStageLoad_EnsureRegistered(void)

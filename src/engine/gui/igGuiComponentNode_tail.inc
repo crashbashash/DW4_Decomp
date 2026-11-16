@@ -1,6 +1,6 @@
 void Gap__Gui__igGuiComponentNode__vfunc_13(Node *self) {
     Vec3 origin;
-    FUN_001d3550(self);
+    Gap__Sg__igNode__resetFields(self);
     igSmartPointer<igObject> transform(igAABox_CreateInstance(igObject_GetAllocator(self)));
     origin.x = 0;
     origin.y = 0;

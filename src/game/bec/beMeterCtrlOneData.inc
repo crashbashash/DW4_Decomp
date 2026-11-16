@@ -23,25 +23,25 @@ void *beMeterCtrlOneData_GetMetaObject(void) {
 }
 
 int beMeterCtrlOneData_GetVTable(void) {
-    struct Obj_357320 obj;
-    int t;
+    beMeterCtrlOneData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beMeterCtrlOneData_vtable[0];
-    obj.w3 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMeterCtrlOneData_vtable[0];
-    igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj.w17, (short)(-1));
-    igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj.w16, (short)(-1));
-    FUN_003573d0((igSmartPointer<igObject> *)&obj.w3, (long long)(-1));
-    FUN_00131bc0(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beMeterCtrlOneData_vtable[0];
+    obj._node = 0;
+    obj._hp = 0;
+    obj._mHp = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMeterCtrlOneData_vtable[0];
+    igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._mHp, (short)(-1));
+    igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._hp, (short)(-1));
+    igSmartPointer_beMeterCtrlNode_Destruct((igSmartPointer<igObject> *)&obj._node, (long long)(-1));
+    igNamedObject_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003573d0(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMeterCtrlNode_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -178,7 +178,7 @@ static int g_beMeterCtrlOneData_msgActionValues[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
 };
 
-igMetaEnum *FUN_00357600(void) {
+igMetaEnum *beMeterCtrl_GetMsgActionEnum(void) {
     if (g_beMeterCtrlOneData_msgActionMetaEnum == 0) {
         g_beMeterCtrlOneData_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beMeterCtrlOneData_msgActionNames, g_beMeterCtrlOneData_msgActionValues, 8);
     }

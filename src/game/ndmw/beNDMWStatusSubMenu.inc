@@ -19,28 +19,28 @@ void *beNDMWStatusSubMenu_GetMetaObject(void) {
 }
 
 int beNDMWStatusSubMenu_GetVTable(void) {
-    union U_3b8fe0 u;
-    int temp_s2;
+    beNDMWStatusSubMenu obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[13] = 0;
-    u.w[14] = 0;
-    u.w[15] = 0;
-    u.w[16] = 0;
-    u.w[17] = 0;
-    u.w[18] = 0;
-    u.w[19] = 0;
-    u.w[0] = (int)(&g_beNDMWStatusSubMenu_vtable[0]);
-    u.w[22] = 0;
-    u.w[24] = 0;
-    u.w[25] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beNDMWStatusSubMenu_vtable[0]);
-    igSmartPointer_igIntList_Destruct(&u.w[25], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[24], -1);
-    beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)(&u.w[22]), -1);
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)u.b, (long long)0);
-    return temp_s2;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusSubMenu_vtable[0];
+    obj._deviceFolderList = 0;
+    obj._playerNoList = 0;
+    obj._playerDeviceCnt = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusSubMenu_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._playerDeviceCnt, -1);
+    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&obj._deviceFolderList, -1);
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 igSmartPointer<igObject> *beNDMWStatusSubMenu_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

@@ -14,24 +14,24 @@ void *beNDMWShopSelect03_GetMetaObject(void) {
 }
 
 int beNDMWShopSelect03_GetVTable(void) {
-    union U_3b49e0 u;
-    int temp_s0;
+    beNDMWShopSelect03 obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[52] = 0;
-    *(int *)&u.b[56] = 0;
-    *(int *)&u.b[60] = 0;
-    *(int *)&u.b[64] = 0;
-    *(int *)&u.b[68] = 0;
-    *(int *)&u.b[72] = 0;
-    *(int *)&u.b[76] = 0;
-    *(int *)&u.b[80] = 0;
-    *(int *)&u.b[108] = 0;
-    u.vt = (int)&g_beNDMWShopSelect03_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWShopSelect03_vtable[0];
-    FUN_003b4050((struct S_3b4050 *)u.b, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    obj._infoName = 0;
+    obj._decideList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopSelect03_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopSelect03_vtable[0];
+    beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWShopSelect03_EnsureRegistered(void)

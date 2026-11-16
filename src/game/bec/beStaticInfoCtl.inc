@@ -22,19 +22,19 @@ void *beStaticInfoCtl_GetMetaObject(void) {
 }
 
 int beStaticInfoCtl_GetVTable(void) {
-    struct Obj_343840 obj;
-    int t;
+    beStaticInfoCtl obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beStaticInfoCtl_vtable[0];
-    obj.w8 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beStaticInfoCtl_vtable[0];
-    FUN_0033f560((igSmartPointer<igObject> *)&obj.w8, -1);
-    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beStaticInfoCtl_vtable[0];
+    obj._staticInfoList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beStaticInfoCtl_vtable[0];
+    igSmartPointer_beBaseInfoList_Destruct((igSmartPointer<igObject> *)&obj._staticInfoList, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
 void beStaticInfoCtl_EnsureRegistered(void)

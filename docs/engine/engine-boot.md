@@ -77,14 +77,14 @@ All six are C (`config/SLUS-20836/names/Managers.tsv`, `src/engine/`).  At the s
 `igMetaObject_CreateInstance`: allocate the class's reflected size (0x20),
 run `igObject_InitHeader`, stamp the vtable.
 
-## The frame functions (`FUN_0025a580` / `FUN_0025a8c0`)
+## The frame functions (`GameMain_RunGame` / `GameMain_RunBenchmark`)
 
 Both take the parameter block `main` builds as `arg0`, branch on its `+0x18` and set per-frame
 state on the frame object.  The frame object global is `*(0x56dc50)` and the app pointer
 `*(0x56df80)` (`lui at,0x57` with a negative offset).
 
 The frame object is 0xF0 bytes, created on demand.  `+0xe8` is its context reference count, not a
-frame counter.  `main` holds one count across the call to the frame function, and `FUN_0025a580`
+frame counter.  `main` holds one count across the call to the frame function, and `GameMain_RunGame`
 takes another around the per-frame fields.  Each holder decrements it and at <= 0 releases the `+0xec`
 and `+0` references (refcount at -4, handle at -8), frees the object through `__dl__FPv` and clears
 the global.
@@ -93,12 +93,12 @@ the global.
 The [clock scheduling recovery](system-clock.md#executable-lifecycle-and-scheduling-contracts)
 shows that `0x25a8c0` can repeat render passes without sampling the world clock
 again; these bodies are not single-frame callbacks.
-The disassembly of `FUN_0025a580` carries the whole sequence (the same subsystem calls the text
+The disassembly of `GameMain_RunGame` carries the whole sequence (the same subsystem calls the text
 below used to attribute to `0x25a8c0`), so they are two variants `main` chooses between, and the
 README's earlier split into a "non-windowed" and a "windowed/drawing" path read the flag as a
 pipeline split rather than as a variant selector.
 
-* `FUN_0025a580` (`0x25a580`, 832 B) requires `arg0+24 != 0`, writes the app pointer to
+* `GameMain_RunGame` (`0x25a580`, 832 B) requires `arg0+24 != 0`, writes the app pointer to
   `*(0x56df80)`, lazily creates `*(0x56dc50)` (`0x1007e0`/`0x238110`), increments `+0xe8`, then
   runs the per-frame field setup: byte `+0xb4 = 0`,
   byte `+0xd5 = 0`, byte `+5 = 0`, float `+0x94`/`+0x98`/`+0x9c = 0.1f`, float `+0xa0 = 1.0f`,
@@ -110,7 +110,7 @@ pipeline split rather than as a variant selector.
   `s0+60` and stores `0x2eaf60(*(0x586f20), &0x4ecf60)`; calls the app's vtable `+152` and then the
   returned object's `+708` with a stack vector; and polls `app+44` / `s0+16` / `s0+64` / `s0+60`
   around `0x259d40`, `0x463bc0`, `0x463bb0`, `0x25afe0` and `0x463b70`.
-* `FUN_0025a8c0` (`0x25a8c0`, 928 B) repeats that opening sequence (`0x239390`, `0x238d40`,
+* `GameMain_RunBenchmark` (`0x25a8c0`, 928 B) repeats that opening sequence (`0x239390`, `0x238d40`,
   `0x463b30(app)`, `0x259f80(app)`, `0x463c70(app)`) and adds a set of `0x4578c0` state setups,
   its own lazy frame-object create/release, and further present-side calls
   (`0x463bc0`/`0x463bb0`/`0x22fd70`/`0x230298`/`0x3082b0`/`0x463b70`/`0x2ff820`).
@@ -118,7 +118,7 @@ pipeline split rather than as a variant selector.
 `main` calls one of them around `0x2598c0`/`0x2598d0`, chosen by byte `+0xd8` of the frame
 object; the update loop itself is inside the body.
 
-`FUN_0025a580` is in `src/game/GameMain.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
+`GameMain_RunGame` is in `src/game/GameMain.cpp`.  Retail saves `s0`–`s2` in an 80-byte frame, keeps `arg0` in
 `s1` and reloads `24(s1)` for the later virtual call.  This allocation is source-driven, not a compiler
 flag effect: in a minimal MWCC test a two-parameter function with a `short` second parameter gets
 `s1` = arg0, `s0` = arg1 only when the first call in the body takes no argument, and passing a pointer

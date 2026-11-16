@@ -80,7 +80,7 @@ static FieldFactory g_igGuiComponentModel_ctorTable[] = {
     igBoolMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igBoolMetaField_Create,
 };
 static const char *g_igGuiComponentModel_fieldTable[] = {
@@ -129,7 +129,7 @@ void igGuiComponentModel_InitFields(void) {
     z.a = 0;
     z.b = 0;
     z.c = 0;
-    FUN_0018e470(temp_a0, &z);
+    igVec3fMetaField_SetDefault(temp_a0, &z);
     igMetaObject_NameFields(temp_s0, g_igGuiComponentModel_fieldTable, g_igGuiComponentModel_fieldHandles, g_igGuiComponentModel_fieldOffsets, temp_s2);
 }
 

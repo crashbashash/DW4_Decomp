@@ -25,10 +25,10 @@ done:
 }
 
 int beCriVolume_GetVTable(void) {
-    struct Obj_3663e0 obj;
+    beCriVolume obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beCriVolume_vtable[0];
+    obj._vtable = (int)&g_beCriVolume_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

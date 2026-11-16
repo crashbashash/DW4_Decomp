@@ -108,7 +108,7 @@ The original code requires nonempty work/delay stacks and parallel registry list
 it has no bounds checks or fallback behaviour for them. Registry, list, intern,
 allocator/delete, argument clearing, object factories and virtual receiver handlers
 lie outside this block. Lower list/string services are described in
-[list services](list-services.md) and [result channels](messenger-results.md). `FUN_0038e530` is the holder
+[list services](list-services.md) and [result channels](messenger-results.md). `igSmartPointer_beBaseInfoRam_Destruct` is the holder
 destructor the file emits directly after `beMessenger_DispatchSelected`, its first user.
 
 The reviewed Ghidra address sets contain holes: occupied byte counts truncated

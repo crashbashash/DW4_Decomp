@@ -16,18 +16,22 @@ done:;
 }
 
 int beGeneraterPlayerData_GetVTable(void) {
-    Obj_360100 obj;
-    int r;
+    beGeneraterPlayerData obj;
+    int vtable;
+    igObject **itemLastDataListSlot;
+    igObject **itemDataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beGeneraterPlayerData_vtable[0];
-    obj.r3 = 0;
-    obj.r4 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beGeneraterPlayerData_vtable[0];
-    obj.rel4();
-    obj.rel3();
-    return r;
+    obj._vtable = (int)&g_beGeneraterPlayerData_vtable[0];
+    itemDataListSlot = (igObject **)&obj._itemDataList;
+    *itemDataListSlot = 0;
+    itemLastDataListSlot = (igObject **)&obj._itemLastDataList;
+    *itemLastDataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGeneraterPlayerData_vtable[0];
+    igObjectRef_Release(itemLastDataListSlot);
+    igObjectRef_Release(itemDataListSlot);
+    return vtable;
 }
 
 void beGeneraterPlayerData_EnsureRegistered(void)

@@ -60,7 +60,7 @@ void thunk_igTextureMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igTextureMatrixAttr_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igIntMetaField_Create,
     igShortMetaField_Create,
     igBoolMetaField_Create,
@@ -115,7 +115,7 @@ void igTextureMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     fld->f48 = (int)FUN_00141520;
@@ -123,7 +123,7 @@ void igTextureMatrixAttr_InitFields(void) {
     igMetaObject_NameFields(temp_s0, g_igTextureMatrixAttr_fieldTable, g_igTextureMatrixAttr_fieldHandles, g_igTextureMatrixAttr_fieldOffsets, temp_s2);
 }
 
-void **FUN_00131aa0(void **arg0, short arg1) {
+void **igSmartPointer_igTextureList_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -169,7 +169,7 @@ void *igInfo_Destroy(struct S *arg0, short arg1) {
     return arg0;
 }
 
-void *FUN_00131bc0(struct S_131bc0 *arg0, short arg1) {
+void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1) {
     void *p;
     int *h;
     int rc;

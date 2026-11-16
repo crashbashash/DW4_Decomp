@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igVec3f.h"
+#include "dw4/igLightAttrVirtuals.h"
 
 extern "C" void igObject_Destroy(...);
 extern "C" int List_Reserve(...);
@@ -13,7 +14,7 @@ struct ReleaseRef { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-extern "C" void beShadow01_Prepare(beShadow01 *arg0);
+extern "C" void beShadow01_Prepare(beShadow01 *self);
 extern "C" int g_beShadow01Info_metaObject[4];
 extern "C" int g_beShadow01_metaObject[4];
 extern "C" int igGroup_AppendChild(igProjectiveShadowShader *group, int child);
@@ -21,11 +22,11 @@ extern "C" void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *
 extern "C" int igObject_IsKindOf(beShadow01Info *, int);
 extern "C" int beBaseInfoManager_AddInfo(beShadow01 *, beShadow01Info *);
 extern "C" int g_beShadow01Info_metaObject[4];
-extern "C" int beShadow01_AddInfo(beShadow01 *arg0, beShadow01Info *arg1);
+extern "C" int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info);
 
-void beShadow01_Prepare(beShadow01 *arg0) {
+void beShadow01_Prepare(beShadow01 *self) {
     /* matching construct: the int-indexed ((int *)...)[0] stores below spell the raw word stores of retail; they are list-backing-store writes, not game logic. */
-    igDataList *l = (igDataList *)arg0->_svInfoList;
+    igDataList *l = (igDataList *)self->_svInfoList;
     int n = l->_count;
     int i = 0;
     int off;
@@ -70,12 +71,12 @@ void beShadow01_Prepare(beShadow01 *arg0) {
         }
     }
     l->_count = 0;
-    if (!(0 < ((igDataList *)arg0->_svInfoList)->_count)) {
-        List_Reserve((igDataList *)arg0->_svInfoList, 0, 4);
+    if (!(0 < ((igDataList *)self->_svInfoList)->_count)) {
+        List_Reserve((igDataList *)self->_svInfoList, 0, 4);
     }
-    arg0->_savePos[0] = 0.0f;
-    arg0->_savePos[1] = 0.0f;
-    arg0->_savePos[2] = 0.0f;
+    self->_savePos[0] = 0.0f;
+    self->_savePos[1] = 0.0f;
+    self->_savePos[2] = 0.0f;
 }
 
 int beShadow01_GetInfoMeta(void)
@@ -133,26 +134,26 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
     if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) List_Reserve(self->_svInfoList, 0, 4);
 }
 
-int beShadow01_AddInfo(beShadow01 *arg0, beShadow01Info *arg1) {
-    igProjectiveShadowShader *t;
+int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {
+    igProjectiveShadowShader *shader;
 
-    if (igObject_IsKindOf(arg1, g_beShadow01Info_metaObject[0]) != 0) {
-        t = (igProjectiveShadowShader *)arg1->_projShadowShader;
-        if (t != 0) {
-            t->_drawReceiver = 0;
-            t->_useOrthographic = 1;
-            t->_blurState = 0;
-            t->_cutoff = 22.5f;
-            if (t->_top == 5.0f) {
-                t->_top = 100.0f;
-                t->_bottom = -100.0f;
-                t->_right = 100.0f;
-                t->_left = -100.0f;
+    if (igObject_IsKindOf(info, g_beShadow01Info_metaObject[0]) != 0) {
+        shader = (igProjectiveShadowShader *)info->_projShadowShader;
+        if (shader != 0) {
+            shader->_drawReceiver = 0;
+            shader->_useOrthographic = 1;
+            shader->_blurState = 0;
+            shader->_cutoff = 22.5f;
+            if (shader->_top == 5.0f) {
+                shader->_top = 100.0f;
+                shader->_bottom = -100.0f;
+                shader->_right = 100.0f;
+                shader->_left = -100.0f;
             }
-            beShadow01_AttachPendingInfos(arg0, arg1);
-            beBaseInfoManager_AddInfo(arg0, arg1);
+            beShadow01_AttachPendingInfos(self, info);
+            beBaseInfoManager_AddInfo(self, info);
         } else {
-            ObjectList_AppendRetained(arg0->_svInfoList, arg1);
+            ObjectList_AppendRetained(self->_svInfoList, info);
         }
         return 1;
     }
@@ -167,19 +168,6 @@ extern "C" void igProjectiveShadowShader_Initialize(igProjectiveShadowShader *sh
 extern "C" igTextureFunctionAttr *g_shadowTextureFunctionAttr0[4];
 /* The igLightAttr meta-field of the light's direction; its _offset locates the field. */
 extern "C" igMetaField *g_igLightAttr_directionMetaField[4];
-/* igLightAttr with its vtable as a real vptr: slot 33 (vtable +140) sets the light position. */
-class LightAttrVirtual {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
-    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
-    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void d30(); virtual void d31(); virtual void d32();
-    virtual void setPosition(float *position);
-};
-
 /* True when the vectors differ in any component. */
 static inline bool Vec3Differs(const igVec3f &a, const igVec3f &b) {
     return a.x != b.x || a.y != b.y || a.z != b.z;
@@ -224,7 +212,7 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
         if (Vec3Differs(centre, saved)) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
             float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField[0]->_offset);
-            ((LightAttrVirtual *)light)->setPosition(&centre.x);
+            ((igLightAttrVirtuals *)light)->setPosition(&centre.x);
             Vec3Copy(light->_cachedPosition, &centre.x);
             Vec3Copy(light->_cachedDirection, direction);
             Vec3Copy(self->_savePos, &centre.x);

@@ -17,10 +17,10 @@ done:;
 }
 
 int beNDMWItemYellowArmor_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemYellowArmor obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemYellowArmor_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemYellowArmor_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

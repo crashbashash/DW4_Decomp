@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igObjectVirtuals.h"
 
 extern "C" int beCameraMode_GetMeta(void);
 extern "C" void igViewMode_OnKeyEvent(void);
@@ -6,13 +7,18 @@ extern "C" void igViewMode_OnMouseMove(void);
 extern "C" void igViewMode_OnMouseButton(void);
 extern "C" void igViewMode_OnStickEvent(void);
 extern "C" void igViewMode_OnButtonEvent(void);
-class DW4VC_144_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int vX(); };
-extern "C" void beCameraMode_OnDetach(beCameraMode *arg0);
+extern "C" void beCameraMode_OnDetach(beCameraMode *self);
 extern "C" void igModel_NotifyViews(igViewModel *, int *);
-extern "C" int DAT_0058cd48[4];
-extern "C" int DAT_0058cd50[4];
-extern "C" int DAT_0058cd58[4];
-class CameraVt { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual int update(); };
+extern "C" int g_igViewModel_hfovMetaField[4];
+extern "C" int g_igViewModel_nearPlaneMetaField[4];
+extern "C" int g_igViewModel_farPlaneMetaField[4];
+/* The camera seen through its vtable: slot 33 refreshes it and slot 34 is the detach hook. */
+class igCameraVirtuals : public igObjectVirtuals {
+public:
+    DW4_SLOTS_5(t) DW4_SLOTS_5(u) DW4_SLOTS_1(v0) DW4_SLOTS_1(v1)
+    virtual int update();
+    virtual void detach();
+};
 extern "C" void beCameraMode_OnAttach(beCameraMode *self);
 typedef struct CameraMatrix { float m[16]; } CameraMatrix;
 typedef struct CameraVector4 { float v[4]; } CameraVector4;
@@ -23,16 +29,16 @@ extern "C" void igMatrix44f_InvertOrthonormal(void *, void *, CameraMatrix *);
 extern "C" void igGraphPath_GetTransform(int, CameraMatrix *, long long);
 extern "C" void igMatrix44f_GetTranslation(CameraMatrix *, CameraVector4 *);
 extern "C" void igMatrix44f_SetTranslation(CameraMatrix *, CameraVector4 *);
-extern "C" int DAT_0058cd38[4];
+extern "C" int g_igViewModel_viewMatrixMetaField[4];
 extern "C" void beCameraMode_Update(beCameraMode *self);
 extern "C" int g_beCameraMode_metaObject[4];
 
-void beCameraMode_OnDetach(beCameraMode *arg0) {
-    void **temp_a0;
+void beCameraMode_OnDetach(beCameraMode *self) {
+    igCameraVirtuals *camera;
 
-    temp_a0 = (void **)(arg0->_camera);
-    if (temp_a0 != 0) {
-        ((DW4VC_144_0 *)(temp_a0))->vX();
+    camera = (igCameraVirtuals *)(self->_camera);
+    if (camera != 0) {
+        camera->detach();
     }
 }
 
@@ -46,7 +52,7 @@ void beCameraMode_OnAttach(beCameraMode *self) {
     igViewModel *model;
 
     if (self->_camera != 0) {
-        ((CameraVt *)self->_camera)->update();
+        ((igCameraVirtuals *)self->_camera)->update();
         model = (igViewModel *)self->_model;
         camera = (igCamera *)self->_camera;
         farPlane = camera->_farPlane;
@@ -54,18 +60,18 @@ void beCameraMode_OnAttach(beCameraMode *self) {
         model->_hfov = camera->_horizontalFieldOfView;
         hfovChanged[0] = 2;
         hfovChanged[1] = 0;
-        hfovChanged[2] = DAT_0058cd48[0];
+        hfovChanged[2] = g_igViewModel_hfovMetaField[0];
         igModel_NotifyViews(model, hfovChanged);
         model->_farPlane = farPlane;
         farChanged[0] = 2;
         farChanged[1] = 0;
-        farChanged[2] = DAT_0058cd58[0];
+        farChanged[2] = g_igViewModel_farPlaneMetaField[0];
         igModel_NotifyViews(model, farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
         nearChanged[0] = 2;
         nearChanged[1] = 0;
-        nearChanged[2] = DAT_0058cd50[0];
+        nearChanged[2] = g_igViewModel_nearPlaneMetaField[0];
         igModel_NotifyViews(model, nearChanged);
     }
 }
@@ -105,7 +111,7 @@ void beCameraMode_Update(beCameraMode *self) {
         igMatrix44f_InvertOrthonormal(&composed, model->_viewMatrix, &matrix);
         changed[0] = 2;
         changed[1] = 0;
-        changed[2] = DAT_0058cd38[0];
+        changed[2] = g_igViewModel_viewMatrixMetaField[0];
         igModel_NotifyViews(model, changed);
     }
 }

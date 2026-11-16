@@ -30,7 +30,7 @@ int beNodeAnim_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beNodeAnim_vtable[0];
     
-    FUN_00195a90(&o, 0);
+    igGroup_Destroy(&o, 0);
     return r;
 }
 
@@ -51,7 +51,7 @@ void *beNodeAnim_Register(void) {
         0x70, /* instance size */
         beNodeAnim_GetVTable,
         beNodeAnim_InitFields,
-        FUN_0034eaf0, /* extra callback item */
+        beNodeAnim_StaticInitCallback, /* extra callback item */
         0 /* callback list */
     );
 }
@@ -125,7 +125,7 @@ void beNodeAnim_InitFields(void) {
     igMetaObject_NameFields(meta, g_beNodeAnim_fieldTable, g_beNodeAnim_fieldHandles, g_beNodeAnim_fieldOffsets, base);
 }
 
-void FUN_0034eaf0(void)
+void beNodeAnim_StaticInitCallback(void)
 {
     beNodeAnim_RegisterTraversalFunction();
 }

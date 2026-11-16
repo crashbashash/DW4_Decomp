@@ -50,7 +50,7 @@ void thunk_igVertexBlendMatrixAttr_GetMetaObject(void) {
 }
 
 static FieldFactory g_igVertexBlendMatrixAttr_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
     igUnsignedShortMetaField_Create,
 };
 static const char *g_igVertexBlendMatrixAttr_fieldTable[] = {
@@ -97,14 +97,14 @@ void igVertexBlendMatrixAttr_InitFields(void) {
     o2.y = 0;
     o2.z = 0;
     o2.w = 0;
-    FUN_00130e90(&o1, &o2, &o3, &o4, &o5);
+    igMatrix44f_FromRows(&o1, &o2, &o3, &o4, &o5);
     FUN_0018c640(temp_s1, &o1);
     tf = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
     *(int *)((char *)tf + 48) = (int)&FUN_00141900;
     igMetaObject_NameFields(temp_s0, g_igVertexBlendMatrixAttr_fieldTable, g_igVertexBlendMatrixAttr_fieldHandles, g_igVertexBlendMatrixAttr_fieldOffsets, temp_s2);
 }
 
-void FUN_00130e90(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4) {
+void igMatrix44f_FromRows(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4) {
     *(float *)((char *)(arg0) + 0) = (float) *(float *)((char *)(arg1) + 0);
     *(float *)((char *)(arg0) + 4) = (float) *(float *)((char *)(arg1) + 4);
     *(float *)((char *)(arg0) + 8) = (float) *(float *)((char *)(arg1) + 8);

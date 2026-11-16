@@ -16,20 +16,20 @@ void *beFontInfoData_GetMetaObject(void) {
 }
 
 int beFontInfoData_GetVTable(void) {
-    struct F_361180 f;
-    int temp_s0;
+    beFontInfoData obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.vt = &g_beFontInfoData_vtable[0];
-    f.w[3] = 0;
-    f.w[9] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beFontInfoData_vtable[0];
-    FUN_00130720(&f.w[9], -1);
-    FUN_001d97f0(&f.w[3], -1);
-    FUN_00344030((struct W_344030 *)&f, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beFontInfoData_vtable[0];
+    obj._attrSet = 0;
+    obj._kind = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFontInfoData_vtable[0];
+    FUN_00130720(&obj._kind, -1);
+    igSmartPointer_igAttrSet_Destruct(&obj._attrSet, -1);
+    beBaseInfoData_Destroy((struct W_344030 *)&obj, (short)0);
+    return vtable;
 }
 
 void beFontInfoData_EnsureRegistered(void)

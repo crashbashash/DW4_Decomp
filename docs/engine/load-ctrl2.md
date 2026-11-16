@@ -39,7 +39,7 @@ through.
 | `0x003ed050` | 644 | `beNDMWLoadCtrl2CommonIntf__StepCheckMemoryCard` | step: `REQUEST_USE_CHECK`, then `REQUEST_FILEFIND` |
 | `0x003ed2e0` | 872 | `beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile` | step: message, `REQUEST_GETFREESIZE`, then `REQUEST_FILEMAKE` with the `MakeDataTime` timer |
 | `0x003ed650` | 1,356 | `beNDMWLoadCtrl2CommonIntf__StepReadMedia` | step: `REQUEST_READ_MEDIA`; on success builds the slot player with four Digimon records from the delivered save and converts their names |
-| `0x003edba0` | 128 | `FUN_003edba0` | out-of-line holder destructor |
+| `0x003edba0` | 128 | `igSmartPointer_beNDMWLoadSlotPlayer_Destruct` | out-of-line holder destructor |
 | `0x003edc20` | 828 | `beNDMWLoadCtrl2CommonIntf__StepWriteSaveData` | step: packs the slot player's records (one replaced by the game's) and `REQUEST_WRITE_MEDIA` with the `SaveDataTime` timer |
 | `0x003edf60` | 556 | `beNDMWLoadCtrl2CommonIntf__StepFormatMemoryCard` | step: `REQUEST_FORMAT` |
 | `0x003ee190` | 184 | `beNDMWLoadCtrl2CommonIntf__GiveCtrlTo` | gives control to one player and parks the others |
@@ -54,9 +54,9 @@ through.
 | `0x003f0d60` | 208 | `beNDMWLoadSlotPlayer__WriteToBuffer` | packs the save blocks into the delivery buffer |
 | `0x003f0e30` | 148 | `beNDMWLoadSlotPlayer__ReadFromBuffer` | unpacks them |
 | `0x003f0ed0` | 540 | `beNDMWMcUtilCtrl__Init` | sets the messenger and creates the card slots for the hardware (5 PS2, 2 GameCube or 9 Xbox) |
-| `0x003f10f0` | 128 | `FUN_003f10f0` | out-of-line holder destructor |
-| `0x003f1170` | 128 | `FUN_003f1170` | out-of-line holder destructor |
-| `0x003f11f0` | 128 | `FUN_003f11f0` | out-of-line holder destructor |
+| `0x003f10f0` | 128 | `igSmartPointer_beNDMWMcSlotXbox_Destruct` | out-of-line holder destructor |
+| `0x003f1170` | 128 | `igSmartPointer_beNDMWMcSlotGC_Destruct` | out-of-line holder destructor |
+| `0x003f11f0` | 128 | `igSmartPointer_beNDMWMcSlotPS2_Destruct` | out-of-line holder destructor |
 | `0x003f1270` | 120 | `beNDMWMcUtilCtrl__Generate` | `SAVEUTILITY GENERATE`; notes whether the utility exists |
 | `0x003f12f0` | 144 | `beNDMWMcUtilCtrl__CheckReady` | `ISRDY` |
 | `0x003f1380` | 68 | `beNDMWMcUtilCtrl__Remove` | `SAVEUTILITY REMOVE` |
@@ -68,9 +68,9 @@ through.
 | `0x003f2450` | 12 | `beNDMWLoadCtrl2__GetInfoMeta` | returns the `beNDMWLoadCtrl2Info` meta object (slot 30) |
 | `0x003f2460` | 36 | `beNDMWLoadCtrl2_OnAddRam` | registers the controller as receiver `LOADCTRL2` (slot 29) |
 | `0x003f2490` | 1,832 | `beNDMWLoadCtrl2_OnMessage` | message handler (slot 34): creates the `CTRL` and `COMMONINTF` records, initialises the game data, answers `COMMONINTF` queries |
-| `0x003f2bc0` | 128 | `FUN_003f2bc0` | out-of-line holder destructor |
-| `0x003f2c40` | 128 | `FUN_003f2c40` | out-of-line holder destructor |
-| `0x003f2cc0` | 128 | `FUN_003f2cc0` | out-of-line holder destructor |
+| `0x003f2bc0` | 128 | `igSmartPointer_beNDMWLoadSavePlWork_Destruct` | out-of-line holder destructor |
+| `0x003f2c40` | 128 | `igSmartPointer_beNDMWLoadCtrl2CommonIntf_Destruct` | out-of-line holder destructor |
+| `0x003f2cc0` | 128 | `igSmartPointer_beNDMWLoadCtrl2CtrlData_Destruct` | out-of-line holder destructor |
 | `0x003f2d40` | 12 | `beNDMWLoadCtrl2__GetMeta` | returns the `beNDMWLoadCtrl2` meta object (slot 20) |
 
 ## Per-player steps

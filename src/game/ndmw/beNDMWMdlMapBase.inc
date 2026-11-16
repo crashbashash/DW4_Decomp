@@ -22,17 +22,17 @@ igMetaObject *beNDMWMdlMapBase_GetReadyMetaObject(void)
 }
 
 int beNDMWMdlMapBase_GetVTable(void) {
-    struct Obj_3c1010 obj;
-    int temp_s0;
+    beNDMWMdlMapBase obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f18 = 0;
-    obj.vt = (&g_beNDMWMdlMapBase_vtable[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beNDMWMdlMapBase_vtable[0]);
-    FUN_003bf2f0((struct NamedRefObject *)&obj, (long long)0);
-    return temp_s0;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlMapBase_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlMapBase_vtable[0];
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlMapBase_EnsureRegistered(void)

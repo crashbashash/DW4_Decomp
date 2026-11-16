@@ -6,23 +6,20 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igTraversalView.h"
 #pragma push
 #pragma readonly_strings on
 
 extern "C" {
 /* scene graph */
-int igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
 int igTraversal_TraverseChildren(igCommonTraversal *traversal, void *node);
 int igTraversal_RegisterFunction(int table, igMetaObject *meta, void (*function)());
-int igObjectPool_Grow(igObjectPool *pool, void *create);
-int FUN_001356b0(...);
-int igTimeAttr_CreateInstance(...);
 int igMatrix44f_SetIdentity(void *matrix);
-int FUN_001904f0(void *result, void *left, void *right);
+int igMatrix44f_Multiply(void *result, void *left, void *right);
 int igMatrix44f_Copy(void *to, void *from);
 igMetaObject *beCopyModelCtrl2_GetMetaObject(void);
 igMetaObject *beCopyTransform_GetMetaObject(void);
-extern int DAT_00562640[4];
+extern int g_igCommonTraversal_travProcs[4];
 extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 
 /* object system */
@@ -119,29 +116,6 @@ int g_sfpTransferState[32];
 }
 
 /* The classes whose virtual functions this file calls, seen through the slots it calls. */
-/* igModelViewMatrixAttr: slot 30 stores the matrix. */
-class ModelViewMatrixAttrView {
-public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
-    virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29();
-    virtual void setMatrix(void *matrix);
-};
-/* igCommonTraversal: slot 30 takes the time a subtree runs at, slot 31 drops it again. */
-class CommonTraversalView {
-public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
-    virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29();
-    virtual void pushTime(long long time);
-    virtual void popTime();
-};
 /* igObject: slot 20 returns the object's meta object. */
 class MetaObjectView {
 public:
@@ -152,8 +126,6 @@ public:
     virtual int getMetaObject();
 };
 
-typedef void (*AttrPopProc)(void *attr, int data);
-struct Matrix { float m[16]; };
 /* The registry the object system reads its ini settings into. */
 struct ObjectSystemView { char pad[56]; int registry; };
 extern "C" ObjectSystemView *g_objectSystem[4];
@@ -215,29 +187,6 @@ static inline void *HandleAllocator(beCri *self) {
     return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0[0]);
 }
 
-/* The next free object of a traversal's pool, which `create` grows when it is used up. */
-static inline void *TakePooled(igObjectPool *pool, void *create) {
-    if (pool->_freeIndex >= pool->_count) {
-        igObjectPool_Grow(pool, create);
-    }
-    int slot = pool->_freeIndex;
-    pool->_freeIndex = slot + 1;
-    return ((void **)pool->_data)[slot];
-}
-
-/* Pops the top attribute of the attribute stack at `index`, through the stack's pop procedure. */
-static inline void PopAttr(igAttrStackManager *attrs, int index) {
-    igAttrStack *top = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[index];
-    int last = top->_count - 1;
-    AttrPopProc pop = (AttrPopProc)top->_popProc;
-    void *popped = ((void **)top->_data)[last];
-    if (pop != 0) {
-        pop(popped, attrs->_popProcData);
-    }
-    top->_count = top->_count - 1;
-    igAttrStackManager_MarkStackChanged(attrs, top, index);
-}
-
 /* Releases every object of a retained list and leaves it empty. */
 static inline void ReleaseAll(igObjectList *list) {
     int count = list->_count;
@@ -272,8 +221,8 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 {
     igAttrStackManager *attrs;
     int timeIndex;
-    Matrix modelView;
-    Matrix identity;
+    float modelView[16];
+    float identity[16];
     long long time;
     igObjectPool *matrixPool;
     igObjectPool *timePool;
@@ -294,17 +243,17 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
     igMatrix44f_Copy(node->_m, ((beModelCtrlNode2 *)node->_srcNode)->_m);
     time = ((beModelCtrlNode2 *)node->_srcNode)->_time;
-    igMatrix44f_SetIdentity(&modelView);
+    igMatrix44f_SetIdentity(modelView);
     if (stack->_count != 0) {
         depth = stack->_count - 1;
-        FUN_001904f0(&modelView, node->_m, (char *)((void **)stack->_data)[depth] + 12);
+        igMatrix44f_Multiply(modelView, node->_m, (char *)((void **)stack->_data)[depth] + 12);
     } else {
-        igMatrix44f_SetIdentity(&identity);
-        FUN_001904f0(&modelView, node->_m, &identity);
+        igMatrix44f_SetIdentity(identity);
+        igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&FUN_001356b0);
-    matrixAttr->setMatrix(&modelView);
+    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr->setMatrix(modelView);
     timePool = (igObjectPool *)traversal->_timePool;
     timeAttr = (igTimeAttr *)TakePooled(timePool, (void *)&igTimeAttr_CreateInstance);
     timeAttr->_time = time;
@@ -332,7 +281,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 }
 
 void beCopyModelCtrl2_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], beCopyModelCtrl2_GetMetaObject(), (void (*)())beCopyModelCtrl2_TraverseCallback);
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beCopyModelCtrl2_GetMetaObject(), (void (*)())beCopyModelCtrl2_TraverseCallback);
 }
 
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node)
@@ -344,8 +293,8 @@ int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransfo
 int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal)
 {
     igAttrStackManager *attrs;
-    Matrix modelView;
-    Matrix identity;
+    float modelView[16];
+    float identity[16];
     igObjectPool *matrixPool;
     ModelViewMatrixAttrView *matrixAttr;
     igAttrStack *stack;
@@ -361,17 +310,17 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     attrId = g_igModelViewMatrixAttr_metaObject[0]->_id;
     matrices = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
     igMatrix44f_Copy(node->_m, ((igTransform *)node->_srcTransform)->_m);
-    igMatrix44f_SetIdentity(&modelView);
+    igMatrix44f_SetIdentity(modelView);
     if (matrices->_count != 0) {
         depth = matrices->_count - 1;
-        FUN_001904f0(&modelView, node->_m, (char *)((void **)matrices->_data)[depth] + 12);
+        igMatrix44f_Multiply(modelView, node->_m, (char *)((void **)matrices->_data)[depth] + 12);
     } else {
-        igMatrix44f_SetIdentity(&identity);
-        FUN_001904f0(&modelView, node->_m, &identity);
+        igMatrix44f_SetIdentity(identity);
+        igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&FUN_001356b0);
-    matrixAttr->setMatrix(&modelView);
+    matrixAttr = (ModelViewMatrixAttrView *)TakePooled(matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    matrixAttr->setMatrix(modelView);
     attrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
     unitID = &((igAttr *)matrixAttr)->_cachedUnitID;
     stack = (igAttrStack *)attrs->_attrStacks;
@@ -389,7 +338,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
 }
 
 void beCopyTransform_RegisterTraversal(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], beCopyTransform_GetMetaObject(), (void (*)())beCopyTransform_TraverseCallback);
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beCopyTransform_GetMetaObject(), (void (*)())beCopyTransform_TraverseCallback);
 }
 
 /* Attach: registers with the insight, reads the IOP module path from the BECRUNTIME ini section (else

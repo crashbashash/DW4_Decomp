@@ -21,17 +21,17 @@ void *beNDMWMdlEffect_GetReadyMetaObject(void) {
 }
 
 int beNDMWMdlEffect_GetVTable(void) {
-    struct Obj_3c1b90 obj;
-    int r;
+    beNDMWMdlEffect obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beNDMWMdlEffect_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWMdlEffect_vtable[0];
-    FUN_003bf2f0((struct NamedRefObject *)&obj, (long long)0);
-    return r;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlEffect_EnsureRegistered(void)

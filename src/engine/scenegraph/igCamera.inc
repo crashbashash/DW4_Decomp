@@ -38,7 +38,7 @@ int igCamera_GetVTable(void) {
     o.vt = &g_igCamera_vtable[0];
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igCamera_vtable[0];
-    FUN_00195970((struct T_195970 *)&o, 0);
+    igNode_Destroy((struct T_195970 *)&o, 0);
     return r;
 }
 

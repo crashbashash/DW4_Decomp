@@ -15,19 +15,23 @@ void *beDataObjObjectList_GetMetaObject(void) {
 }
 
 int beDataObjObjectList_GetVTable(void) {
-    Obj_364580 obj;
-    int r;
+    beDataObjObjectList obj;
+    int vtable;
+    igObject **dataSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.r1 = 0;
-    obj.vt = &g_beDataObjObjectList_vtable[0];
-    obj.r2 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beDataObjObjectList_vtable[0];
-    obj.rel2();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel1();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beDataObjObjectList_vtable[0];
+    dataSlot = (igObject **)&obj._data;
+    *dataSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDataObjObjectList_vtable[0];
+    igObjectRef_Release(dataSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beDataObjObjectList_EnsureRegistered(void)

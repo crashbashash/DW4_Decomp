@@ -19,10 +19,10 @@ done:;
 }
 
 int beNDMWDegiDataList_GetVTable(void) {
-    struct Obj obj;
+    beNDMWDegiDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWDegiDataList_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWDegiDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

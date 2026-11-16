@@ -61,7 +61,7 @@ void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self, int arg1) 
 }
 
 void FUN_001c47a0(void *arg0, int arg1, int arg2) {
-    FUN_001904f0((char *)arg0 + 0x1DC);
+    igMatrix44f_Multiply((char *)arg0 + 0x1DC);
     *(int *)((char *)(arg0) + 540) = arg1;
     *(int *)((char *)(arg0) + 544) = arg2;
 }
@@ -103,18 +103,18 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
         }
     }
     unsigned sel = arg1->_handle;
-    ((void (*)(igFrustCullTraversal *, igNode *))DAT_00562640[0]->_data[sel])(arg0, arg1);
+    ((void (*)(igFrustCullTraversal *, igNode *))g_igCommonTraversal_travProcs[0]->_data[sel])(arg0, arg1);
 }
 
 int FUN_001c5130(void *arg0, TraversalNodeView *arg1) {
-    return ((int (*)(void *, TraversalNodeView *))((TravFunctionTable *)DAT_00562640[0])->_data[arg1->_id])(arg0, arg1);
+    return ((int (*)(void *, TraversalNodeView *))((TravFunctionTable *)g_igCommonTraversal_travProcs[0])->_data[arg1->_id])(arg0, arg1);
 }
 
 int FUN_001c5160(S0_1c5160 *arg0, float fparg0) {
     if (fparg0 < arg0->f556 && !(fparg0 < 1.0f)) { arg0->f552 = fparg0; DAT_0048da28[0] = 1.0f / fparg0; return 1; } return 0;
 }
 
-void FUN_001c51b0(int arg0, int arg1, int arg2) {
+void igFrustCullTraversal_ClassifyBox(int arg0, int arg1, int arg2) {
     FUN_001c47f0(arg2, arg0, arg1);
 }
 

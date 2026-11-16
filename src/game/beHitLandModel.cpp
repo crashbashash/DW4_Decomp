@@ -4,14 +4,13 @@
 #include "dw4/igVec3f.h"
 #include "dw4/igMatrix44f.h"
 
-extern "C" int beHitLandModel_HitProc(void *arg0, int arg1, int arg2);
 extern "C" int igMatrix44f_MakeEulerRotation(void *, float, float, float);
 extern "C" int beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
 extern "C" int beHitLandModel_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
-extern "C" void beHitLandModel_UpdateBound(beHitLandModel *self, float *arg1, float *arg2, int arg3);
-extern "C" bool beHitLandModel_BoundsOverlapXZ(int arg0, float *arg1, float *arg2, float *arg3, float *arg4);
+extern "C" void beHitLandModel_UpdateBound(beHitLandModel *self, float *bound, float *value, int isMin);
+extern "C" bool beHitLandModel_BoundsOverlapXZ(beHitLandModel *self, float *boundMax, float *rayMax, float *boundMin, float *rayMin);
 extern "C" void Vec3f_TransformDirection(float *, float *, void *);
 extern "C" void *StringPool_Allocate(int);
 extern "C" void *StringPool_Construct(void *);
@@ -20,14 +19,13 @@ extern "C" void StringChunk_ReleaseHeader(int, int *);
 extern "C" void ObjectList_AppendRetained(...);
 extern "C" void * Memory_GetAllocatorBySelector(...);
 extern "C" void * igObject_GetAllocator(...);
-extern "C" void *FUN_00388e60(void *arg0, void *arg1);
 extern "C" int igRay_SetFromPoints(int, int, int);
 extern "C" int beHitLandModelOrder_GetMeta(void);
 extern "C" int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, beMessengerWork *work);
 extern "C" igObject *beHitLandModelOrder_Create(int allocator);
 extern "C" igObject *beHitLandModelTraversal_Create(int allocator);
 extern "C" igObject *igProbe_Create(int allocator);
-extern "C" igMetaEnum *FUN_0035d720(void);
+extern "C" igMetaEnum *beHitLandModel_GetMessageEnum(void);
 extern "C" unsigned int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *messages, int message);
 extern "C" void igSwitch_EnableChild(int switchNode, int child);
 extern "C" void igSwitch_DisableChild(int switchNode, int child);
@@ -39,23 +37,34 @@ extern "C" int g_igStringObjList_metaObject[4];
 extern "C" int g_igNamedObjectList_metaObject[4];
 extern "C" char *g_stringObjEmptyText;
 extern "C" int emptyString[4];
-class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
-typedef struct { char vtable[4]; int refs; } RefCountedObject;
-extern "C" void beHitLandModel_Prepare(beHitLandModel *arg0);
+extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
 extern "C" int g_beHitLandModelInfo_metaObject[4];
 extern "C" int g_beHitLandModel_metaObject[4];
 extern "C" char HITLANDMODEL[];
-extern "C" void beHitLandModel_OnAddRam(beHitLandModel * p0, int p1, char * p2, int p3, int p4);
+extern "C" void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int);
 extern "C" beHitLandResultData *beHitLandResultData_Create(void *);
 extern "C" void *g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
 /* The intersect traversal's hit as the hit callback hands it over: the distance along the ray, the
  * hit point and the face normal (in the matrix's space until the order transforms it). */
-struct HitRecord { char pad[12]; void *matrix; char pad16[4]; float distance; float point[3]; char pad36[12]; igVec3f normal; char pad60[12]; };
+struct HitRecord {
+    int unknown0;
+    int unknown4;
+    int nodes;
+    void *matrix;
+    int unknown16;
+    float distance;
+    float point[3];
+    float unknown36[3];
+    igVec3f normal;
+    int unknown60[3];
+    HitRecord &operator=(const HitRecord &other);
+};
 struct ResultRecord { char header[16]; HitRecord hit; };
 extern "C" void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit);
-extern "C" igObject *FUN_00188220(int);
+extern "C" int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int unused, HitRecord *hit);
+extern "C" igObject *igRay_CreateInstance(int);
 extern "C" void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2);
 extern "C" void beHitLandModelOrder_Reset(beHitLandModelOrder *order);
 extern "C" int g_beHitLandModelOrder_metaObject[4];
@@ -92,6 +101,7 @@ public:
     virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
     virtual void slot20();
     virtual void AddRay(igVec3f *start, igVec3f *end);
+    virtual void AddHitResult(HitRecord *hit);
 };
 
 /* beHitLandModelOrder::_hitdataList as the object list it is, with the list's inline accessors. */
@@ -101,51 +111,33 @@ struct HitResultList : igObjectList {
 };
 typedef igSmartPointer<HitResultList> HitResultListRef;
 
-int beHitLandModel_HitProc(void *arg0, int arg1, int arg2) {
-    void **temp_a0;
-
-    temp_a0 = (void **)(*(int *)((char *)(arg0) + 64));
-    ((DW4VC_96_1 *)(temp_a0))->vX((int)(arg2));
+int beHitLandModel_HitProc(beHitLandModelTraversal *traversal, int unused, HitRecord *hit) {
+    ((beHitLandModelOrderMethods *)traversal->_order)->AddHitResult(hit);
     return 0;
 }
 
-void beHitLandModel_Prepare(beHitLandModel *arg0) {
-    RefCountedObject *t;
-    t = (RefCountedObject *)arg0->_order;
-    if (t != 0) {
+void beHitLandModel_Prepare(beHitLandModel *self) {
+    igObject *held;
+    held = (igObject *)self->_order;
+    if (held != 0) {
         /* matching construct: redundant inner null test is present in the retail code */
-        if (t != 0) {
-            t->refs = t->refs - 1;
-            if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-        arg0->_order = 0;
+        IG_OBJECT_RELEASE(held);
+        self->_order = 0;
     }
-    t = (RefCountedObject *)arg0->_hitTraversal;
-    if (t != 0) {
+    held = (igObject *)self->_hitTraversal;
+    if (held != 0) {
         /* matching construct: redundant inner null test is present in the retail code */
-        if (t != 0) {
-            t->refs = t->refs - 1;
-            if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-        arg0->_hitTraversal = 0;
+        IG_OBJECT_RELEASE(held);
+        self->_hitTraversal = 0;
     }
-    t = (RefCountedObject *)arg0->_probe;
-    if (t != 0) {
+    held = (igObject *)self->_probe;
+    if (held != 0) {
         /* matching construct: redundant inner null test is present in the retail code */
-        if (t != 0) {
-            t->refs = t->refs - 1;
-            if (((unsigned long long)((long long)t->refs << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-        arg0->_probe = 0;
+        IG_OBJECT_RELEASE(held);
+        self->_probe = 0;
     }
-    arg0->_isHitWall = 1;
-    igMatrix44f_MakeEulerRotation((char *)arg0 + 0x30, 0.0f, 1.5707964f, 0.0f);
+    self->_isHitWall = 1;
+    igMatrix44f_MakeEulerRotation(self->_mat90, 0.0f, 1.5707964f, 0.0f);
 }
 
 int beHitLandModel_GetInfoMeta(void)
@@ -153,9 +145,9 @@ int beHitLandModel_GetInfoMeta(void)
     return g_beHitLandModelInfo_metaObject[0];
 }
 
-void beHitLandModel_OnAddRam(beHitLandModel * p0, int p1, char * p2, int p3, int p4)
+void beHitLandModel_OnAddRam(beHitLandModel *self, int info, char *, int, int)
 {
-    beMessenger_RegisterReceiver(p0->_messenger, p1, HITLANDMODEL, 0, -1);
+    beMessenger_RegisterReceiver(self->_messenger, info, HITLANDMODEL, 0, -1);
 }
 
 void beHitLandModel_UpdateRam(void)
@@ -225,7 +217,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         self->_probe = (int)igProbe_Create(allocator);
     }
     info = (beHitLandModelInfo *)ram->_parentInfo;
-    switch (beMessenger_ResolveEnumValue(self->_messenger, FUN_0035d720(), work->_message)) {
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beHitLandModel_GetMessageEnum(), work->_message)) {
     case MESSAGE_CHECKWALL:
         if (self->_isHitWall) {
             beHitLandModel_CheckWall(self);
@@ -824,26 +816,26 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     beMessenger_AppendVec3(self->_messenger, position);
 }
 
-void beHitLandModel_UpdateBound(beHitLandModel *self, float *arg1, float *arg2, int arg3) {
+void beHitLandModel_UpdateBound(beHitLandModel *self, float *bound, float *value, int isMin) {
     float b;
     float a;
-    b = *arg2;
-    a = *arg1;
+    b = *value;
+    a = *bound;
     if (a < b) {
-        if (arg3 == 0) {
-            *arg1 = b;
+        if (isMin == 0) {
+            *bound = b;
         }
-    } else if (!(a <= b) && (arg3 == 1)) {
-        *arg1 = b;
+    } else if (!(a <= b) && (isMin == 1)) {
+        *bound = b;
     }
 }
 
-bool beHitLandModel_BoundsOverlapXZ(int arg0, float *arg1, float *arg2, float *arg3, float *arg4) {
-    bool r = false;
-    if (!(arg1[0] < arg4[0]) && (arg3[0] <= arg2[0]) && !(arg1[2] < arg4[2]) && (arg3[2] <= arg2[2])) {
-        r = true;
+bool beHitLandModel_BoundsOverlapXZ(beHitLandModel *self, float *boundMax, float *rayMax, float *boundMin, float *rayMin) {
+    bool overlaps = false;
+    if (!(boundMax[0] < rayMin[0]) && (boundMin[0] <= rayMax[0]) && !(boundMax[2] < rayMin[2]) && (boundMin[2] <= rayMax[2])) {
+        overlaps = true;
     }
-    return r;
+    return overlaps;
 }
 
 /* An int list with its inline count. */
@@ -964,7 +956,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
                             boundMin = *(igVec3f *)bound->_min;
                             Translate(boundMax, translation);
                             Translate(boundMin, translation);
-                            if (beHitLandModel_BoundsOverlapXZ((int)self, (float *)&boundMax, (float *)&rayMax, (float *)&boundMin, (float *)&rayMin)) {
+                            if (beHitLandModel_BoundsOverlapXZ(self, (float *)&boundMax, (float *)&rayMax, (float *)&boundMin, (float *)&rayMin)) {
                                 ((TraversalMethods *)self->_hitTraversal)->traverse(part);
                             }
                         }
@@ -976,7 +968,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
                             igNode *part = ((igNode **)((igObjectList *)parts->_childList)->_data)[j];
                             igAABox *bound = (igAABox *)part->_bound;
                             if (bound != 0) {
-                                if (beHitLandModel_BoundsOverlapXZ((int)self, bound->_max, (float *)&rayMax, bound->_min, (float *)&rayMin)) {
+                                if (beHitLandModel_BoundsOverlapXZ(self, bound->_max, (float *)&rayMax, bound->_min, (float *)&rayMin)) {
                                     ((TraversalMethods *)self->_hitTraversal)->traverse(((igNode **)((igObjectList *)parts->_childList)->_data)[j]);
                                 }
                             } else {
@@ -1003,7 +995,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
         ObjectList_AppendRetained(self->_hitdataList, (beHitLandResultData *)created);
     }
     Vec3f_TransformDirection(&hit->normal.x, &hit->normal.x, hit->matrix);
-    FUN_00388e60(&((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit, hit);
+    ((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit = *hit;
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
     if (g_stringPool[0] == 0) {
@@ -1024,26 +1016,26 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
     self->_hitdataCount++;
 }
 
-void *FUN_00388e60(void *arg0, void *arg1) {
-    *(int *)((char *)(arg0) + 0) = (int)((int) *(int *)((char *)(arg1) + 0));
-    *(int *)((char *)(arg0) + 4) = (int)((int) *(int *)((char *)(arg1) + 4));
-    *(int *)((char *)(arg0) + 8) = (int)((int) *(int *)((char *)(arg1) + 8));
-    *(int *)((char *)(arg0) + 12) = (int)((int) *(int *)((char *)(arg1) + 12));
-    *(int *)((char *)(arg0) + 16) = (int)((int) *(int *)((char *)(arg1) + 16));
-    *(float *)((char *)(arg0) + 20) = (float) *(float *)((char *)(arg1) + 20);
-    *(float *)((char *)(arg0) + 24) = (float) *(float *)((char *)(arg1) + 24);
-    *(float *)((char *)(arg0) + 28) = (float) *(float *)((char *)(arg1) + 28);
-    *(float *)((char *)(arg0) + 32) = (float) *(float *)((char *)(arg1) + 32);
-    *(float *)((char *)(arg0) + 36) = (float) *(float *)((char *)(arg1) + 36);
-    *(float *)((char *)(arg0) + 40) = (float) *(float *)((char *)(arg1) + 40);
-    *(float *)((char *)(arg0) + 44) = (float) *(float *)((char *)(arg1) + 44);
-    *(float *)((char *)(arg0) + 48) = (float) *(float *)((char *)(arg1) + 48);
-    *(float *)((char *)(arg0) + 52) = (float) *(float *)((char *)(arg1) + 52);
-    *(float *)((char *)(arg0) + 56) = (float) *(float *)((char *)(arg1) + 56);
-    *(int *)((char *)(arg0) + 60) = (int)((int) *(int *)((char *)(arg1) + 60));
-    *(int *)((char *)(arg0) + 64) = (int)((int) *(int *)((char *)(arg1) + 64));
-    *(int *)((char *)(arg0) + 68) = (int)((int) *(int *)((char *)(arg1) + 68));
-    return arg0;
+HitRecord &HitRecord::operator=(const HitRecord &other) {
+    unknown0 = other.unknown0;
+    unknown4 = other.unknown4;
+    nodes = other.nodes;
+    matrix = other.matrix;
+    unknown16 = other.unknown16;
+    distance = other.distance;
+    point[0] = other.point[0];
+    point[1] = other.point[1];
+    point[2] = other.point[2];
+    unknown36[0] = other.unknown36[0];
+    unknown36[1] = other.unknown36[1];
+    unknown36[2] = other.unknown36[2];
+    normal.x = other.normal.x;
+    normal.y = other.normal.y;
+    normal.z = other.normal.z;
+    unknown60[0] = other.unknown60[0];
+    unknown60[1] = other.unknown60[1];
+    unknown60[2] = other.unknown60[2];
+    return *this;
 }
 
 /* Owning stack reference to the newly created ray, released on scope exit (reference count in the
@@ -1052,7 +1044,7 @@ void *FUN_00388e60(void *arg0, void *arg1) {
 void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
     if (self->_rayCount >= ((igRayList *)self->_rayList)->_count) {
         int a = ((int)igObject_GetAllocator(self));
-        igSmartPointer<igObject> ray(FUN_00188220(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]))));
+        igSmartPointer<igObject> ray(igRay_CreateInstance(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]))));
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
         ObjectList_AppendRetained((void *)(long)self->_rayList, ray.p);
     }

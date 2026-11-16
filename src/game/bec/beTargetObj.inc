@@ -24,22 +24,22 @@ void *beTargetObj_GetMetaObject(void) {
 }
 
 int beTargetObj_GetVTable(void) {
-    union U_342a50 u;
-    int temp_s2;
+    beTargetObj obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[2] = 0;
-    u.w[0] = (int)(&g_beTargetObj_vtable[0]);
-    u.w[4] = 0;
-    u.w[5] = 0;
-    u.w[6] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beTargetObj_vtable[0]);
-    FUN_001374b0(&u.w[6], -1);
-    igSmartPointer_igIntList_Destruct(&u.w[5], -1);
-    FUN_001374b0(&u.w[4], -1);
-    FUN_00231030(u.b, 0);
-    return temp_s2;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._vtable = (int)&g_beTargetObj_vtable[0];
+    obj._playerPosList = 0;
+    obj._playerRamNoList = 0;
+    obj._enemyPosList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beTargetObj_vtable[0];
+    igSmartPointer_igVec3fList_Destruct(&obj._enemyPosList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._playerRamNoList, -1);
+    igSmartPointer_igVec3fList_Destruct(&obj._playerPosList, -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beTargetObj_EnsureRegistered(void)

@@ -9,10 +9,10 @@ igMetaObject *beTextureCtrlInfoList_GetMetaObject(void) {
 }
 
 int beTextureCtrlInfoList_GetVTable(void) {
-    struct Obj_341af0 obj;
+    beTextureCtrlInfoList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beTextureCtrlInfoList_vtable[0];
+    obj._vtable = (int)&g_beTextureCtrlInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

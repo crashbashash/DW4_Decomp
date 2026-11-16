@@ -19,10 +19,10 @@ done:;
 }
 
 int beWaterMoveDataList_GetVTable(void) {
-    struct Obj_3407c0 obj;
+    beWaterMoveDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beWaterMoveDataList_vtable[0];
+    obj._vtable = (int)&g_beWaterMoveDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

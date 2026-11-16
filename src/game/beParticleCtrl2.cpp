@@ -1,5 +1,8 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igVec3f.h"
+#include "dw4/igTransformVirtuals.h"
+#include "dw4/igRandomNumberDispatch.h"
 
 extern "C" void igSwitch_DisableAllChildren(int);
 extern "C" void igSwitch_EnableChild(void *, unsigned int);
@@ -9,9 +12,9 @@ extern "C" void igObject_Destroy(void *);
 extern "C" int beParticleCtrl2_GetInfoMeta(void);
 extern "C" int beParticleCtrl2_GetMeta(void);
 extern "C" int igMatrix44f_SetIdentity(...);
-extern "C" void FUN_00191670(void *, void *, float);
+extern "C" void igMatrix44f_PreRotateAxisAngle(void *, void *, float);
 extern "C" void *beParticleCtrl2InfoWork_Create(...);
-extern "C" int FUN_0034c5d0(...);
+extern "C" int beParticleCtrl2_GetMessageEnum(...);
 extern "C" void igMatrix44f_TranslateLocal(void *, void *);
 extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int beMessenger_AppendBool(int, unsigned char);
@@ -28,18 +31,14 @@ extern "C" unsigned int beMessenger_ResolveEnumValue(int, int, void *);
 extern "C" int beMessenger_SendNamed(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
-extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0);
+extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *self);
 extern "C" int g_beParticleCtrl2Info_metaObject[4];
 extern "C" int g_beParticleCtrl2_metaObject[4];
-typedef struct NameHolder { char pad[8]; int *f8; } NameHolder;
-typedef struct RamInfoArg { char pad[8]; int f8; NameHolder *fc; char pad2[4]; unsigned char f14; char pad3[31]; igObject *f34; } RamInfoArg;
-extern "C" int beMessenger_RegisterReceiver(int, RamInfoArg *, int *, int *, int);
+extern "C" int beMessenger_RegisterReceiver(int messenger, beParticleCtrl2InfoRam *ram, int *receiver, int *name, int ramNo);
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_12[4];
-extern "C" void beParticleCtrl2_OnAddRam(beParticleCtrl2 *arg0, RamInfoArg *arg1);
+extern "C" void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
 extern "C" float g_vec3Zero[4];
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
 extern "C" int g_vec3XAxis[4];
 extern "C" int g_vec3YAxis[4];
 extern "C" int g_vec3ZAxis[4];
@@ -55,118 +54,49 @@ struct Rel { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-struct V3 { float x; float y; float z; };
-/* Owning stack reference to the new particle work record; released on scope exit (reference count
- * in the low 23 bits of _refCount). */
+extern "C" int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram, beMessengerWork *work);
 
-/* matching construct: dummy virtual slots so t() dispatches through retail vtable slot 22 (the beSystem _random source) */
-struct Clk {
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual unsigned int t();
-};
-/* matching construct: dummy virtual slots so setMatrix() dispatches through igTransform's vtable slot 35 */
-struct igTransformSlots {
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual void d22();
-    virtual void d23();
-    virtual void d24();
-    virtual void d25();
-    virtual void d26();
-    virtual void d27();
-    virtual void d28();
-    virtual void d29();
-    virtual void d30();
-    virtual void d31();
-    virtual void d32();
-    virtual void d33();
-    virtual void d34();
-    virtual void setMatrix(void *matrix);
-};
-extern "C" int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2);
-
-void beParticleCtrl2_Prepare(beParticleCtrl2 *arg0) {
-    int n1;
+void beParticleCtrl2_Prepare(beParticleCtrl2 *self) {
+    int infoCount;
     int i;
-    int n2;
+    int ramCount;
     int j;
-    beParticleCtrl2InfoRam *it;
-    beParticleCtrl2Info *g;
-    int o1;
-    int o2;
-    igObject *r;
-    n1 = ((igObjectList *)arg0->_infoList)->_count;
+    beParticleCtrl2InfoRam *ram;
+    beParticleCtrl2Info *info;
+    int infoOffset;
+    int ramOffset;
+    igObject *work;
+    infoCount = ((igObjectList *)self->_infoList)->_count;
     i = 0;
-    if (0 < n1) {
-        o1 = 0;
+    if (0 < infoCount) {
+        infoOffset = 0;
         do {
-            g = *(beParticleCtrl2Info **)((char *)((igObjectList *)arg0->_infoList)->_data + o1);
-            igSwitch_DisableAllChildren(g->_mainSwitch);
-            igSwitch_DisableAllChildren(g->_subSwitch);
-            n2 = ((igObjectList *)g->_ramList)->_count;
+            info = *(beParticleCtrl2Info **)((char *)((igObjectList *)self->_infoList)->_data + infoOffset);
+            igSwitch_DisableAllChildren(info->_mainSwitch);
+            igSwitch_DisableAllChildren(info->_subSwitch);
+            ramCount = ((igObjectList *)info->_ramList)->_count;
             j = 0;
-            if (0 < n2) {
-                o2 = 0;
+            if (0 < ramCount) {
+                ramOffset = 0;
                 do {
-                    it = *(beParticleCtrl2InfoRam **)((char *)((igObjectList *)g->_ramList)->_data + o2);
-                    it->_isRun = 0;
-                    r = (igObject *)it->_work;
-                    if (r != 0) {
-                        --r->_refCount;
-                        if (((unsigned long long)(long long)r->_refCount & 0x7fffffULL) == 0) {
-                            igObject_Destroy((void *)r);
+                    ram = *(beParticleCtrl2InfoRam **)((char *)((igObjectList *)info->_ramList)->_data + ramOffset);
+                    ram->_isRun = 0;
+                    work = (igObject *)ram->_work;
+                    if (work != 0) {
+                        --work->_refCount;
+                        if (((unsigned long long)(long long)work->_refCount & 0x7fffffULL) == 0) {
+                            igObject_Destroy((void *)work);
                         }
                     }
-                    it->_work = 0;
+                    ram->_work = 0;
                     j++;
-                    o2 += 4;
-                    ((ParticleTimer *)it->_particleTimer)->_timeRunning = 0;
-                } while (j < n2);
+                    ramOffset += 4;
+                    ((ParticleTimer *)ram->_particleTimer)->_timeRunning = 0;
+                } while (j < ramCount);
             }
             i++;
-            o1 += 4;
-        } while (i < n1);
+            infoOffset += 4;
+        } while (i < infoCount);
     }
 }
 
@@ -198,7 +128,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
             igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
-            ((igTransformSlots *)ram->_transform)->setMatrix(matrix);
+            ((igTransformVirtuals *)ram->_transform)->setMatrix(matrix);
         }
         switch (StateOf(ram)) {
         case PARTICLE_START:
@@ -244,126 +174,126 @@ int beParticleCtrl2_GetInfoMeta(void)
     return g_beParticleCtrl2Info_metaObject[0];
 }
 
-void beParticleCtrl2_OnAddRam(beParticleCtrl2 *arg0, RamInfoArg *arg1) {
-    int *var_a3;
-    int t0;
-    igObject *temp_a0;
+void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram) {
+    int *name;
+    int ramNo;
+    igObject *work;
 
-    t0 = arg1->f8;
-    var_a3 = arg1->fc->f8;
-    var_a3 = (var_a3 != 0) ? var_a3 : (int *)(&emptyString[0]);
-    beMessenger_RegisterReceiver(arg0->_messenger, arg1, &MODELCTRL_12[0], var_a3, t0);
-    arg1->f14 = 0;
-    temp_a0 = arg1->f34;
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = (int)temp_a0->_refCount - 1;
-        if (((unsigned long long) ((long long) (int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
+    ramNo = ram->_ramNo;
+    name = (int *)((beParticleCtrl2Info *)ram->_parentInfo)->_name;
+    name = (name != 0) ? name : (int *)(&emptyString[0]);
+    beMessenger_RegisterReceiver(self->_messenger, ram, &MODELCTRL_12[0], name, ramNo);
+    ram->_isRun = 0;
+    work = (igObject *)ram->_work;
+    if (work != 0) {
+        work->_refCount = (int)work->_refCount - 1;
+        if (((unsigned long long) ((long long) (int)work->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy((void *)work);
         }
     }
-    arg1->f34 = 0;
+    ram->_work = 0;
 }
 
-int beParticleCtrl2_OnMessage(beParticleCtrl2 *arg0, beParticleCtrl2InfoRam *arg1, beMessengerWork *arg2) {
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_0034c5d0(), (void *)arg2->_message)) {
+int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram, beMessengerWork *work) {
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beParticleCtrl2_GetMessageEnum(), (void *)work->_message)) {
     case 0:
-        if (beMessenger_GetStringCount(arg0->_messenger) != 0) {
-            V3 sp100;
-            V3 spF0;
-            int spB0[16];
-            float f22, f21, f20;
-            int s3 = beMessenger_GetString(arg0->_messenger, 0);
-            int s2 = beMessenger_GetInt(arg0->_messenger, 0);
-            beMessenger_GetVec3(&sp100, arg0->_messenger, 0);
-            unsigned char s1 = beMessenger_GetBool(arg0->_messenger, 0);
-            if (beMessenger_GetVec3Count(arg0->_messenger) == 2) {
-                beMessenger_GetVec3(&spF0, arg0->_messenger, 1);
-                f21 = spF0.y;
-                f22 = spF0.x;
-                f20 = spF0.z;
-                if (!(f21 <= 6.2831855f)) {
-                    f21 = (float)(((Clk *)((beSystem *)arg0->_system)->_random)->t() % 6144U) / 1000.0f;
+        if (beMessenger_GetStringCount(self->_messenger) != 0) {
+            igVec3f offset;
+            igVec3f rotation;
+            float matrix[16];
+            float rotationX, rotationY, rotationZ;
+            int modelName = beMessenger_GetString(self->_messenger, 0);
+            int ramNo = beMessenger_GetInt(self->_messenger, 0);
+            beMessenger_GetVec3(&offset, self->_messenger, 0);
+            unsigned char lockToNode = beMessenger_GetBool(self->_messenger, 0);
+            if (beMessenger_GetVec3Count(self->_messenger) == 2) {
+                beMessenger_GetVec3(&rotation, self->_messenger, 1);
+                rotationY = rotation.y;
+                rotationX = rotation.x;
+                rotationZ = rotation.z;
+                if (!(rotationY <= 6.2831855f)) {
+                    rotationY = (float)(((RandomNumberDispatch *)((beSystem *)self->_system)->_random)->genrand() % 6144U) / 1000.0f;
                 }
             } else {
-                f22 = g_vec3Zero[0];
-                f21 = DAT_004e105c[0];
-                f20 = DAT_004e1060[0];
+                rotationX = g_vec3Zero[0];
+                rotationY = g_vec3Zero[1];
+                rotationZ = g_vec3Zero[2];
             }
-            beMessenger_SendNamed(arg0->_messenger, MODELCTRL_12, s3, s2, GETMATRIX_5);
-            beMessenger_GetMatrix(spB0, arg0->_messenger, 0);
-            if (s1) {
-                int alloc = igObject_GetAllocator(arg0);
+            beMessenger_SendNamed(self->_messenger, MODELCTRL_12, modelName, ramNo, GETMATRIX_5);
+            beMessenger_GetMatrix(matrix, self->_messenger, 0);
+            if (lockToNode) {
+                int alloc = igObject_GetAllocator(self);
                 int a;
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;
                 } else {
                     a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
                 }
-                igSmartPointer<beParticleCtrl2InfoWork> work((beParticleCtrl2InfoWork *)beParticleCtrl2InfoWork_Create(a));
-                igObject *o = (igObject *)beMessenger_GetObject(arg0->_messenger, 0);
-                beParticleCtrl2InfoWork *r = work.p;
-                if (o != 0) {
-                    o->_refCount = o->_refCount + 1;
+                igSmartPointer<beParticleCtrl2InfoWork> lockWork((beParticleCtrl2InfoWork *)beParticleCtrl2InfoWork_Create(a));
+                igObject *node = (igObject *)beMessenger_GetObject(self->_messenger, 0);
+                beParticleCtrl2InfoWork *held = lockWork.p;
+                if (node != 0) {
+                    node->_refCount = node->_refCount + 1;
                 }
-                Rel::go((igObject *)r->_positionLockNode);
-                r->_positionLockNode = (int)o;
-                beParticleCtrl2InfoWork *d = work.p;
-                V3 *dv = (V3 *)&d->_positionLockOffset;
-                dv->x = sp100.x;
-                dv->y = sp100.y;
-                dv->z = sp100.z;
-                r = work.p;
-                if (r != 0) {
-                    r->_refCount = r->_refCount + 1;
+                Rel::go((igObject *)held->_positionLockNode);
+                held->_positionLockNode = (int)node;
+                beParticleCtrl2InfoWork *target = lockWork.p;
+                igVec3f *lockOffset = (igVec3f *)&target->_positionLockOffset;
+                lockOffset->x = offset.x;
+                lockOffset->y = offset.y;
+                lockOffset->z = offset.z;
+                held = lockWork.p;
+                if (held != 0) {
+                    held->_refCount = held->_refCount + 1;
                 }
-                Rel::go((igObject *)arg1->_work);
-                arg1->_work = (int)r;
+                Rel::go((igObject *)ram->_work);
+                ram->_work = (int)held;
             }
-            igMatrix44f_TranslateLocal(spB0, &sp100);
-            if (f22 != 0.0f) {
-                FUN_00191670(spB0, g_vec3XAxis, f22);
+            igMatrix44f_TranslateLocal(matrix, &offset);
+            if (rotationX != 0.0f) {
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3XAxis, rotationX);
             }
-            if (f21 != 0.0f) {
-                FUN_00191670(spB0, g_vec3YAxis, f21);
+            if (rotationY != 0.0f) {
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3YAxis, rotationY);
             }
-            if (f20 != 0.0f) {
-                FUN_00191670(spB0, g_vec3ZAxis, f20);
+            if (rotationZ != 0.0f) {
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3ZAxis, rotationZ);
             }
-            ((igTransformSlots *)arg1->_transform)->setMatrix(spB0);
+            ((igTransformVirtuals *)ram->_transform)->setMatrix(matrix);
         } else {
-            int sp70[16];
-            igMatrix44f_SetIdentity(sp70);
-            ((igTransformSlots *)arg1->_transform)->setMatrix(sp70);
+            float identity[16];
+            igMatrix44f_SetIdentity(identity);
+            ((igTransformVirtuals *)ram->_transform)->setMatrix(identity);
         }
-        arg1->_isRun = 1;
-        arg1->_st0 = 0;
-        arg1->_st3 = 0;
-        arg1->_st2 = 0;
-        arg1->_st1 = 0;
+        ram->_isRun = 1;
+        ram->_st0 = 0;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
         break;
     case 2:
-        arg1->_st0 = 2;
-        arg1->_st3 = 0;
-        arg1->_st2 = 0;
-        arg1->_st1 = 0;
+        ram->_st0 = 2;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
         break;
     case 1:
-        beMessenger_AppendBool(arg0->_messenger, arg1->_isRun);
+        beMessenger_AppendBool(self->_messenger, ram->_isRun);
         break;
     case 6:
-        if (arg1->_isRun != 0) {
-            ((ParticleTimer *)arg1->_particleTimer)->_timeRunning = 0;
+        if (ram->_isRun != 0) {
+            ((ParticleTimer *)ram->_particleTimer)->_timeRunning = 0;
         }
         break;
     case 7:
-        if (arg1->_isRun != 0) {
-            ((ParticleTimer *)arg1->_particleTimer)->_timeRunning = 1;
+        if (ram->_isRun != 0) {
+            ((ParticleTimer *)ram->_particleTimer)->_timeRunning = 1;
         }
         break;
     case 3:
-        beMessenger_AppendString(arg0->_messenger, GENERATE_9);
-        beMessenger_AppendString(arg0->_messenger, GENERATE_9);
-        beMessenger_AppendString(arg0->_messenger, SQ_ERAS_3);
+        beMessenger_AppendString(self->_messenger, GENERATE_9);
+        beMessenger_AppendString(self->_messenger, GENERATE_9);
+        beMessenger_AppendString(self->_messenger, SQ_ERAS_3);
         break;
     }
     return 1;

@@ -16,11 +16,11 @@ void *beGeneraterItemDataOneList_GetMetaObject(void) {
 }
 
 int beGeneraterItemDataOneList_GetVTable(void) {
-    int obj[8];
+    beGeneraterItemDataOneList obj;
 
-    igObject_InitHeader(obj);
-    obj[0] = (int)&g_beGeneraterItemDataOneList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beGeneraterItemDataOneList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void beGeneraterItemDataOneList_EnsureRegistered(void)

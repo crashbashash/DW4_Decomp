@@ -77,7 +77,7 @@ void thunk_igGraphPath_GetMetaObject(void) {
 
 static FieldFactory g_igGraphPath_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
 };
 static const char *g_igGraphPath_fieldTable[] = {
@@ -114,7 +114,7 @@ void igGraphPath_InitFields(void) {
     z.a = 0;
     z.b = 0;
     z.c = 0;
-    FUN_0018e470(temp_a0, &z);
+    igVec3fMetaField_SetDefault(temp_a0, &z);
     igFloatMetaField_SetDefault(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)), 1.0f);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, temp_s2);
 }

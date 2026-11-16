@@ -21,19 +21,12 @@ extern "C" int igMatrix44f_GetTranslation(...);
 extern "C" int igMatrix44f_SetTranslation(...);
 extern "C" int beNDMWMdlMapCursor_GetMeta(void);
 extern "C" igObject *beBaseInfoDataList_Create(int);
-struct CursorValue;
-extern "C" CursorValue *beModelCtrlInfoWork_Create(int);
-struct PropertyEntry;
-extern "C" PropertyEntry * igProperty_FindByName(...);
+extern "C" beModelCtrlInfoWork *beModelCtrlInfoWork_Create(int);
+extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" int g_propertyNameField[4];
 extern "C" int g_stringPool[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-/* The value object beModelCtrlInfoWork_Create creates: an igObject whose string token sits at +220 and whose
- * integer at +224. */
-struct CursorValue { igObject base; char pad[212]; int *f220; int f224; };
-/* igObject is 8 bytes */
-struct PropertyEntry { char pad[20]; CursorValue *f20; };
 /* matching construct: inline retain/release helpers reproduce the retail inlined refcount code */
 struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCount = o->_refCount + 1; }
  static inline void release(igObject *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
@@ -43,9 +36,9 @@ struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCo
 /* Owning stack reference to the new property value object; released on scope exit. */
 class ValueRef {
 public:
-    CursorValue *p;
-    ValueRef(CursorValue *o) : p(o) {}
-    ~ValueRef() { igObject *o = &p->base; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    beModelCtrlInfoWork *p;
+    ValueRef(beModelCtrlInfoWork *o) : p(o) {}
+    ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -61,12 +54,9 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)t;
     }
 } };
-extern "C" void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
-struct PropertyEntry_44b520 { char p[16]; int f16; };
+extern "C" void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
 extern "C" int emptyString[4];
 extern "C" float g_vec3Zero[4];
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
 /* matching construct: inline release helper reproduces the retail inlined release of the previous data list */
 struct RefRelease { static inline void go(igObject *object) {
     if (object) {
@@ -76,7 +66,7 @@ struct RefRelease { static inline void go(igObject *object) {
     }
 } };
 struct Vec3f { float x, y, z; };
-extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
 extern "C" int g_beNDMWMdlMapCursor_metaObject[4];
 
 #pragma push
@@ -86,27 +76,27 @@ int beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind) {
     return strcmp(kind, "KIND_MAPCURSOR") == 0;
 }
 
-void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
-    CursorValue *t;
+void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram) {
+    beModelCtrlInfoWork *t;
     void *nw;
-    CursorValue *t2;
+    beModelCtrlInfoWork *t2;
     int al;
-    PropertyEntry *pr;
+    beModelCtrlInfoRamData *pr;
     int s;
-    RamDataList::Ensure(arg1);
-    pr = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE");
-    al = igObject_GetAllocator(arg0);
+    RamDataList::Ensure(ram);
+    pr = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    al = igObject_GetAllocator(self);
     al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
     {
     /* The new value object is owned by the stack reference while it replaces the record's value and
      * takes the messenger's reply; released at the block end, before the model refresh. */
     ValueRef value(beModelCtrlInfoWork_Create(al));
     t = value.p;
-    RefCount::addref(&t->base);
-    RefCount::release(&pr->f20->base);
-    pr->f20 = t;
-    if (beMessenger_GetIntCount(arg0->_messenger) != 0) {
-        s = beMessenger_GetString(arg0->_messenger, 0);
+    RefCount::addref(t);
+    RefCount::release((igObject *)pr->_work);
+    pr->_work = (int)t;
+    if (beMessenger_GetIntCount(self->_messenger) != 0) {
+        s = beMessenger_GetString(self->_messenger, 0);
         t2 = value.p;
         if (g_stringPool[0] == 0) {
             int pool = StringPool_Allocate(16);
@@ -114,24 +104,24 @@ void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1
             g_stringPool[0] = pool;
         }
         nw = StringPool_Intern(g_stringPool[0], s);
-        int *oldstr = t2->f220;
+        int *oldstr = (int *)t2->_hitParentName;
         if (oldstr != 0) {
             int *hdr = oldstr - 2;
             int c = oldstr[-1] - 1;
             oldstr[-1] = c;
             if (c == 0) StringChunk_ReleaseHeader(*hdr, hdr);
         }
-        t2->f220 = (int *)nw;
-        value.p->f224 = beMessenger_GetInt(arg0->_messenger, 0);
+        t2->_hitParentName = (int)nw;
+        value.p->_hitParentRamNo = beMessenger_GetInt(self->_messenger, 0);
     }
     }
-    beModelCtrl__OnGenerate(arg0, arg1);
+    beModelCtrl__OnGenerate(self, ram);
 }
 
-void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram) {
     static const char *openSequences[] = { "SQ_OPEN00", "SQ_OPEN01", "SQ_OPEN02", "SQ_OPEN03" };
     igObject *s0;
-    PropertyEntry_44b520 *r;
+    beModelCtrlInfoRamData *r;
     int m1[16];
     int m2[16];
     Vec3f sum;
@@ -142,53 +132,53 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg
     float *pz = &sum.z;
     s2 = false;
     sum.x = g_vec3Zero[0];
-    *py = DAT_004e105c[0];
-    *pz = DAT_004e1060[0];
+    *py = g_vec3Zero[1];
+    *pz = g_vec3Zero[2];
     s1 = false;
-    beMessenger_SendRam(arg0->_messenger, "PLAYER", arg1->_ramNo, "GETMATRIX");
-    if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
-        beMessenger_GetMatrix(m1, arg0->_messenger, 0);
+    beMessenger_SendRam(self->_messenger, "PLAYER", ram->_ramNo, "GETMATRIX");
+    if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
+        beMessenger_GetMatrix(m1, self->_messenger, 0);
         igMatrix44f_GetTranslation(m1, &sum);
         s2 = true;
     }
-    switch (arg1->_st0) {
+    switch (ram->_st0) {
     case 0:
         if (s2) {
-            int a2 = ((beBaseInfo *)arg1->_parentInfo)->_name;
-            int a3 = arg1->_ramNo;
+            int a2 = ((beBaseInfo *)ram->_parentInfo)->_name;
+            int a3 = ram->_ramNo;
             a2 = a2 ? a2 : (int)emptyString;
-            beMessenger_SendNamed(arg0->_messenger, "MODELCTRL", a2, a3, openSequences[a3]);
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL", a2, a3, openSequences[a3]);
             s1 = true;
-            arg1->_st0 = 1;
-            arg1->_st3 = 0;
-            arg1->_st2 = 0;
-            arg1->_st1 = 0;
+            ram->_st0 = 1;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
         }
         break;
     case 1:
         if (!(s2 & 0xFF)) {
-            int a2 = ((beBaseInfo *)arg1->_parentInfo)->_name;
-            int a3 = arg1->_ramNo;
+            int a2 = ((beBaseInfo *)ram->_parentInfo)->_name;
+            int a3 = ram->_ramNo;
             a2 = a2 ? a2 : (int)emptyString;
-            beMessenger_SendNamed(arg0->_messenger, "MODELCTRL", a2, a3, "SQ_CLOSE");
-            arg1->_st0 = 0;
-            arg1->_st3 = 0;
-            arg1->_st2 = 0;
-            arg1->_st1 = 0;
+            beMessenger_SendNamed(self->_messenger, "MODELCTRL", a2, a3, "SQ_CLOSE");
+            ram->_st0 = 0;
+            ram->_st3 = 0;
+            ram->_st2 = 0;
+            ram->_st1 = 0;
         }
         s1 = true;
         break;
     }
     if (s1) {
-        beMessenger_SendGroup(arg0->_messenger, "MAPBASE", "GETMATRIX");
-        if (beMessenger_GetMatrixCount(arg0->_messenger) != 0) {
-            beMessenger_GetMatrix(m2, arg0->_messenger, 0);
+        beMessenger_SendGroup(self->_messenger, "MAPBASE", "GETMATRIX");
+        if (beMessenger_GetMatrixCount(self->_messenger) != 0) {
+            beMessenger_GetMatrix(m2, self->_messenger, 0);
             igMatrix44f_GetTranslation(m2, &t);
             sum.x += t.x;
             *py += t.y;
             *pz += t.z;
-            if (arg1->_dataList == 0) {
-                int alloc = igObject_GetAllocator(arg1);
+            if (ram->_dataList == 0) {
+                int alloc = igObject_GetAllocator(ram);
                 int a;
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;
@@ -200,12 +190,12 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *arg0, beBaseInfoRam *arg
                 if (s0 != 0) {
                     s0->_refCount++;
                 }
-                RefRelease::go((igObject *)arg1->_dataList);
-                arg1->_dataList = (int)s0;
+                RefRelease::go((igObject *)ram->_dataList);
+                ram->_dataList = (int)s0;
             }
-            r = ((PropertyEntry_44b520 *)igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE"));
+            r = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
             *py = 0.0f;
-            igMatrix44f_SetTranslation(r->f16 + 32, &sum);
+            igMatrix44f_SetTranslation((char *)r->_node + 32, &sum);
         }
     }
 }

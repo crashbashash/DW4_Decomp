@@ -12,17 +12,19 @@ done:;
 }
 
 int beActionStarterInfoRam_GetVTable(void) {
-    Obj_36b210 obj;
-    int r;
+    beActionStarterInfoRam obj;
+    int vtable;
+    igObject **dataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.ref = 0;
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.vt = &g_beActionStarterInfoRam_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.releaseRef();
-    return r;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    obj._vtable = (int)&g_beActionStarterInfoRam_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beActionStarterInfoRam_EnsureRegistered(void)

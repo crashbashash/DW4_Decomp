@@ -36,10 +36,10 @@ void *bePadData_GetMetaObject(void) {
 }
 
 int bePadData_GetVTable(void) {
-    struct Obj_34cee0 obj;
+    bePadData obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_bePadData_vtable[0];
+    obj._vtable = (int)&g_bePadData_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
@@ -72,8 +72,8 @@ void bePadData_GetMetaObjectFunction(void)
 
 static FieldFactory g_bePadData_ctorTable[] = {
     igBoolMetaField_Create,
-    FUN_00187b50,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
     igIntMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
@@ -181,11 +181,11 @@ void bePadData_InitFields(void) {
     LStick = ((int)igMetaObject_GetFieldAt(meta, base + 1));
     lStickDefault[0] = 0;
     lStickDefault[1] = 0;
-    FUN_0018e2f0(LStick, lStickDefault);
+    igVec2fMetaField_SetDefault(LStick, lStickDefault);
     RStick = ((int)igMetaObject_GetFieldAt(meta, base + 2));
     rStickDefault[0] = 0;
     rStickDefault[1] = 0;
-    FUN_0018e2f0(RStick, rStickDefault);
+    igVec2fMetaField_SetDefault(RStick, rStickDefault);
     igMetaObject_NameFields(meta, g_bePadData_fieldTable, g_bePadData_fieldHandles, g_bePadData_fieldOffsets, base);
 }
 

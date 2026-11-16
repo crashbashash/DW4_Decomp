@@ -49,7 +49,7 @@ void thunk_igMatrixObject_GetMetaObject(void) {
 }
 
 static FieldFactory g_igMatrixObject_ctorTable[] = {
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igMatrixObject_fieldTable[] = {
     "_m",

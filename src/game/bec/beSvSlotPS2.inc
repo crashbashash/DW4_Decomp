@@ -9,10 +9,10 @@ void *beSvSlotPS2_GetMetaObject(void) {
 }
 
 int beSvSlotPS2_GetVTable(void) {
-    struct Obj_34a680 obj;
+    beSvSlotPS2 obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beSvSlotPS2_vtable[0];
+    obj._vtable = (int)&g_beSvSlotPS2_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

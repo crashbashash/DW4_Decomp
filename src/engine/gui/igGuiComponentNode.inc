@@ -27,7 +27,7 @@ int igGuiComponentNode_GetVTable(void) {
     obj.vt = &g_igGuiComponentNode_vtable[0];
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igGuiComponentNode_vtable[0];
-    FUN_00195a90(&obj, 0);
+    igGroup_Destroy(&obj, 0);
     return t;
 }
 

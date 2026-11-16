@@ -1009,22 +1009,22 @@ igMetaObject *beSaveDataDeliver_GetMeta(void)
     return g_beSaveDataDeliver_metaObject;
 }
 
-void beSaveDataDeliver_userConstruct(void **arg0) {
+void beSaveDataDeliver_userConstruct(beSaveDataDeliver *self) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
-void beSaveDataDeliver_userDestruct(DW4VC_88_0_36fd80 *arg0) {
-    int temp_a0;
+void beSaveDataDeliver_userDestruct(beSaveDataDeliver *self) {
+    int data;
 
-    temp_a0 = arg0->f8;
-    if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+    data = self->_data;
+    if (data != 0) {
+        Memory_FreeBuffer(data);
     }
-    arg0->f8 = 0;
-    arg0->f12 = 0;
-    igMetaObject_CountInstances(arg0->vX(), 1);
-    Gap__Core__igObject__userDestruct(arg0);
+    self->_data = 0;
+    self->_size = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beSvSlotXbox_GetMeta(void)
@@ -1052,22 +1052,22 @@ igMetaObject *beSvPlatDataGC_GetMeta(void)
     return g_beSvPlatDataGC_metaObject;
 }
 
-void beSvPlatDataGC_userConstruct(void **arg0) {
+void beSvPlatDataGC_userConstruct(beSvPlatDataGC *self) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(arg0))->vX(), 1);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
 }
 
-void beSvPlatDataGC_userDestruct(beSvPlatDataGC *arg0) {
-    if (arg0->_banTplData != 0) {
-        Memory_FreeBuffer(arg0->_banTplData);
+void beSvPlatDataGC_userDestruct(beSvPlatDataGC *self) {
+    if (self->_banTplData != 0) {
+        Memory_FreeBuffer(self->_banTplData);
     }
-    if (arg0->_iconTplData != 0) {
-        Memory_FreeBuffer(arg0->_iconTplData);
+    if (self->_iconTplData != 0) {
+        Memory_FreeBuffer(self->_iconTplData);
     }
-    arg0->_banTplData = 0;
-    arg0->_iconTplData = 0;
-    igMetaObject_CountInstances(((SvPlatDataGCVirtualSlots *)arg0)->vX(), 1);
-    Gap__Core__igObject__userDestruct(arg0);
+    self->_banTplData = 0;
+    self->_iconTplData = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beSvPs2McImage128k_GetMeta(void)
@@ -1075,22 +1075,21 @@ igMetaObject *beSvPs2McImage128k_GetMeta(void)
     return g_beSvPs2McImage128k_metaObject;
 }
 
-void beSvPs2McImage128k_userConstruct(beSvPs2McImage128k *arg0, int arg1) {
+void beSvPs2McImage128k_userConstruct(beSvPs2McImage128k *self, int flag) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
-    if (!(arg1 & 0xFF)) {
-        arg0->_data = Memory_AllocateDefaultBuffer(0x20000);
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    if (!(flag & 0xFF)) {
+        self->_data = Memory_AllocateDefaultBuffer(0x20000);
     }
 }
 
-void beSvPs2McImage128k_userDestruct(void *arg0) {
-    beSvPs2McImage128k *o = (beSvPs2McImage128k *)arg0;
-    if (o->_data != 0) {
-        Memory_FreeBuffer(o->_data);
+void beSvPs2McImage128k_userDestruct(beSvPs2McImage128k *self) {
+    if (self->_data != 0) {
+        Memory_FreeBuffer(self->_data);
     }
-    o->_data = 0;
-    igMetaObject_CountInstances(((SvPs2McImageVirtualSlots *)(((char *)(arg0) + 0)))->vX(), 1);
-    Gap__Core__igObject__userDestruct(arg0);
+    self->_data = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beSvPlatDataPS2_GetMeta(void)
@@ -1103,25 +1102,25 @@ igMetaObject *beXboxImage24k_GetMeta(void)
     return g_beXboxImage24k_metaObject;
 }
 
-void beXboxImage24k_userConstruct(beXboxImage24k *arg0, int arg1) {
+void beXboxImage24k_userConstruct(beXboxImage24k *self, int flag) {
     Gap__Core__igObject__userConstruct();
-    igMetaObject_CountInstances(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX(), 1);
-    if (!(arg1 & 0xFF)) {
-        arg0->_data = Memory_AllocateDefaultBuffer(0x6000);
-        arg0->_dataSize = 0x6000;
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    if (!(flag & 0xFF)) {
+        self->_data = Memory_AllocateDefaultBuffer(0x6000);
+        self->_dataSize = 0x6000;
     }
 }
 
-void beXboxImage24k_userDestruct(DW4VC_88_0_370070 *arg0) {
-    int temp_a0;
+void beXboxImage24k_userDestruct(beXboxImage24k *self) {
+    int data;
 
-    temp_a0 = arg0->f8;
-    if (temp_a0 != 0) {
-        Memory_FreeBuffer(temp_a0);
+    data = self->_data;
+    if (data != 0) {
+        Memory_FreeBuffer(data);
     }
-    arg0->f8 = 0;
-    igMetaObject_CountInstances(arg0->vX(), 1);
-    Gap__Core__igObject__userDestruct(arg0);
+    self->_data = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct(self);
 }
 
 igMetaObject *beSvPlatDataXbox_GetMeta(void)
@@ -1269,20 +1268,22 @@ igMetaObject *beTransformSync_GetMeta(void)
     return g_beTransformSync_metaObject;
 }
 
-void beTransformSync_SetMatrix(beTransformSync *arg0, int arg1) {
-    int temp_s2; int var_s1; int var_s0;
+void beTransformSync_SetMatrix(beTransformSync *self, int matrix) {
+    int count;
+    int index;
+    int offset;
 
-    igMatrix44f_Copy((char *)arg0 + 0x20, arg1);
-    temp_s2 = ((igObjectList *)arg0->_syncTransformList)->_count;
-    var_s1 = 0;
-    if (0 < temp_s2) {
-        var_s0 = 0;
+    igMatrix44f_Copy((char *)self + 0x20, matrix);
+    count = ((igObjectList *)self->_syncTransformList)->_count;
+    index = 0;
+    if (0 < count) {
+        offset = 0;
         do {
-            TransformSyncChildVirtualSlots *o = *(TransformSyncChildVirtualSlots **)((char *)((igObjectList *)arg0->_syncTransformList)->_data + var_s0);
-            o->vX(arg1);
-            var_s1 += 1;
-            var_s0 += 4;
-        } while (var_s1 < temp_s2);
+            igTransformDispatchView *child = *(igTransformDispatchView **)((char *)((igObjectList *)self->_syncTransformList)->_data + offset);
+            child->SetMatrix(matrix);
+            index += 1;
+            offset += 4;
+        } while (index < count);
     }
 }
 

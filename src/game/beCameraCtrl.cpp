@@ -1,4 +1,5 @@
 #include "dw4/reflected.h"
+#include "dw4/igObjectVirtuals.h"
 #include "dw4/beTime.h"
 #pragma push
 #pragma readonly_strings on
@@ -26,13 +27,6 @@ enum beCameraCtrlMessage {
     MSG_DBGZOOMCLEAR,
     MSG_DBGZOOMIN,
     MSG_DBGZOOMOUT,
-};
-
-/* any igObject: slot 20 returns its meta object */
-class igObjectSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual int vfunc_20();
 };
 
 extern "C" {
@@ -180,15 +174,15 @@ void beCameraCtrl_Prepare(beCameraCtrl *self) {
 }
 
 int beCameraCtrl_IsBoxCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
-    igObjectSlots *data = (igObjectSlots *)info->_data;
+    igObjectVirtuals *data = (igObjectVirtuals *)info->_data;
     int boxMeta = g_beCameraBoxData_metaObject[0];
-    return boxMeta == data->vfunc_20();
+    return boxMeta == data->getMeta();
 }
 
 int beCameraCtrl_IsDemoCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
-    igObjectSlots *data = (igObjectSlots *)info->_data;
+    igObjectVirtuals *data = (igObjectVirtuals *)info->_data;
     int demoMeta = g_beCameraDemoData_metaObject[0];
-    return demoMeta == data->vfunc_20();
+    return demoMeta == data->getMeta();
 }
 
 void beCameraCtrl_EnableDebugZoom(beCameraCtrl *self, beBaseInfoRam *ram, int on)

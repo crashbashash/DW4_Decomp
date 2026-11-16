@@ -51,7 +51,7 @@ static FieldFactory g_igFogAttr_ctorTable[] = {
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
 };
 static const char *g_igFogAttr_fieldTable[] = {
     "_mode",
@@ -96,7 +96,7 @@ void igFogAttr_InitFields(void) {
     sp[3] = 1.0f;
     sp[1] = 0.0f;
     sp[2] = 0.0f;
-    FUN_0018e670(temp_a0, sp);
+    igVec4fMetaField_SetDefault(temp_a0, sp);
     igMetaObject_NameFields(temp_s0, g_igFogAttr_fieldTable, g_igFogAttr_fieldHandles, g_igFogAttr_fieldOffsets, temp_s2);
 }
 

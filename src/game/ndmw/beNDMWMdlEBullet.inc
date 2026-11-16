@@ -24,17 +24,17 @@ done:;
 }
 
 int beNDMWMdlEBullet_GetVTable(void) {
-    union U_3c1d80 u;
-    int temp_s0;
+    beNDMWMdlEBullet obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beNDMWMdlEBullet_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWMdlEBullet_vtable[0];
-    FUN_003bf2f0((struct NamedRefObject *)u.b, (long long)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlEBullet_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlEBullet_vtable[0];
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlEBullet_EnsureRegistered(void)

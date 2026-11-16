@@ -16,11 +16,11 @@ void *beShadow01InfoList_GetMetaObject(void) {
 }
 
 int beShadow01InfoList_GetVTable(void) {
-    Obj_344a50 o;
+    beShadow01InfoList obj;
 
-    igObject_InitHeader(&o);
-    o.vt = &g_beShadow01InfoList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beShadow01InfoList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beShadow01InfoList_EnsureRegistered(void)

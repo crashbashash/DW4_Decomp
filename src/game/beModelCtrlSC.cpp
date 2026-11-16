@@ -1,23 +1,19 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igTraversalView.h"
 #pragma push
 #pragma readonly_strings on
 
 typedef void (*TraversalFunction)(void);
-typedef int (*PopProc)(int attr, int data);
 
 extern "C" {
 long long __fixsfdi(float);
 int igMatrix44f_SetIdentity(...);
-int FUN_001904f0(...);
-int igObjectPool_Grow(...);
-int igAttrStackManager_MarkStackChanged(...);
+int igMatrix44f_Multiply(...);
 int igAttrStackManager_PushOverrideAttr(...);
 int igAttrStackManager_PopOverrideAttr(...);
 int igTraversal_TraverseChildren(...);
-int FUN_001356b0(...);
-int igTimeAttr_CreateInstance(...);
 int igTraversal_RegisterFunction(int, int, TraversalFunction);
 int beModelCtrlNode2_ResolveMetaObject(...);
 int beModelCtrl_DrawDebugHitBox(...);
@@ -59,7 +55,7 @@ extern igMetaObject *g_igModelViewMatrixAttr_metaObject[4];
 extern int g_beModelCtrlSCSound_metaObject[4];
 extern int g_beModelCtrlSCEffect_metaObject[4];
 extern int g_beModelCtrlSCHitBox_metaObject[4];
-extern int DAT_00562640[4];
+extern int g_igCommonTraversal_travProcs[4];
 extern int g_propertyNameField[4];
 extern int kIGMemoryPoolHandleUser1[4];
 extern int g_stringPool[4];
@@ -93,10 +89,6 @@ int beModelCtrlSCHitBox_GetMeta(void);
 
 #define CLOCK_TICK_SHIFT 18
 
-/* Virtual slot 30: the matrix attribute takes its matrix. */
-class MatrixAttrVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setMatrix(float *m); };
-/* Virtual slots 24, 30 and 31: the traversal reads its time, sets a node time and ends it. */
-class TraversalVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual long long getTime(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void setTime(long long t); virtual void endTime(); };
 /* The sub-command slots: 20 meta object, 21 start, 22 update, 23 stop. */
 class SubCommandVT { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int metaObject(); virtual unsigned char start(beBaseInfoRam *ram, int frames); virtual unsigned char update(beBaseInfoRam *ram, int frames); virtual void stop(beBaseInfoRam *ram); };
 typedef igTDataList<igAttr *> AttrList;
@@ -144,7 +136,6 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     int metaId;
     int matSlot;
     int timeSlot;
-    int i;
     int j;
     int l;
     int jo;
@@ -161,34 +152,22 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     mgr = (igAttrStackManager *)trav->_attrStack;
     metaId = g_igModelViewMatrixAttr_metaObject[0]->_id;
     mvStack = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[metaId]];
-    time = beModelCtrlNode2_LocalTime(node, ((TraversalVT *)trav)->getTime());
+    time = beModelCtrlNode2_LocalTime(node, ((CommonTraversalView *)trav)->getTime());
     node->_time = time;
     igMatrix44f_SetIdentity(m);
     if (mvStack->_count != 0) {
         last = mvStack->_count - 1;
         entries = (int *)mvStack->_data;
-        FUN_001904f0(m, node->_m, ((igModelViewMatrixAttr *)entries[last])->_m);
+        igMatrix44f_Multiply(m, node->_m, ((igModelViewMatrixAttr *)entries[last])->_m);
     } else {
         igMatrix44f_SetIdentity(identity);
-        FUN_001904f0(m, node->_m, identity);
+        igMatrix44f_Multiply(m, node->_m, identity);
     }
-    {
-        igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
-        if (pool->_freeIndex >= pool->_count) igObjectPool_Grow(pool, FUN_001356b0);
-        i = pool->_freeIndex;
-        pool->_freeIndex = i + 1;
-        matAttr = ((igModelViewMatrixAttr **)pool->_data)[i];
-    }
-    ((MatrixAttrVT *)matAttr)->setMatrix(m);
-    {
-        igObjectPool *pool = (igObjectPool *)trav->_timePool;
-        if (pool->_freeIndex >= pool->_count) igObjectPool_Grow(pool, igTimeAttr_CreateInstance);
-        i = pool->_freeIndex;
-        pool->_freeIndex = i + 1;
-        timeAttr = ((igTimeAttr **)pool->_data)[i];
-    }
+    matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (void *)&igModelViewMatrixAttr_CreateInstance);
+    ((ModelViewMatrixAttrView *)matAttr)->setMatrix(m);
+    timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (void *)&igTimeAttr_CreateInstance);
     timeAttr->_time = time;
-    ((TraversalVT *)trav)->setTime(time);
+    ((CommonTraversalView *)trav)->pushTime(time);
 
     matUnitID = &matAttr->_cachedUnitID;
     matAttrIndex = &matAttr->_cachedAttrIndex;
@@ -218,35 +197,15 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
         igAttrStackManager_PopOverrideAttr(mgr, *(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
         lo -= 4;
     }
-    {
-        int slot = *timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[slot];
-        int top = st->_count - 1;
-        int *data = (int *)st->_data;
-        int attr = data[top];
-        PopProc popProc = (PopProc)st->_popProc;
-        if (popProc != 0) popProc(attr, mgr->_popProcData);
-        st->_count = st->_count - 1;
-        igAttrStackManager_MarkStackChanged(mgr, st, slot);
-    }
-    {
-        int slot = *matUnitID + ((int *)mgr->_attrStackIndexTable)[*matAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[slot];
-        int top = st->_count - 1;
-        int *data = (int *)st->_data;
-        int attr = data[top];
-        PopProc popProc = (PopProc)st->_popProc;
-        if (popProc != 0) popProc(attr, mgr->_popProcData);
-        st->_count = st->_count - 1;
-        igAttrStackManager_MarkStackChanged(mgr, st, slot);
-    }
-    ((TraversalVT *)trav)->endTime();
+    PopAttr(mgr, *timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex]);
+    PopAttr(mgr, *matUnitID + ((int *)mgr->_attrStackIndexTable)[*matAttrIndex]);
+    ((CommonTraversalView *)trav)->popTime();
     if (result == 2) return 2;
     return 0;
 }
 
 void beModelCtrlNode2_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], beModelCtrlNode2_ResolveMetaObject(), (TraversalFunction)beModelCtrlNode2_TraversalFunction);
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beModelCtrlNode2_ResolveMetaObject(), (TraversalFunction)beModelCtrlNode2_TraversalFunction);
 }
 
 /* Start: builds the hit box around the owner's node (offset, sized by _boxSize, moved into the node's

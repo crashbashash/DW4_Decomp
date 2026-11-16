@@ -16,10 +16,10 @@ void *beGroupKeepList_GetMetaObject(void) {
 }
 
 int beGroupKeepList_GetVTable(void) {
-    struct Obj_35eea0 obj;
+    beGroupKeepList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beGroupKeepList_vtable[0];
+    obj._vtable = (int)&g_beGroupKeepList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

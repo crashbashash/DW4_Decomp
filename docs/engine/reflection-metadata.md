@@ -419,7 +419,7 @@ Two bodies need more than the unit profile:
   the default compiler's double-passing is the open question: a `tools/unitprofiles` review item,
   not a source shape.
 * `igMovieInfo_InitFields` (0x336580, combat `-O3,p`): the code reproduces under the unit profile but
-  needs **two symbols at 0x149980**, `FUN_00149980` and the data-named `DAT_00149980`, because
+  needs **two symbols at 0x149980**, `IG_GFX_TEXTURE_FILTER_GetMetaEnum` and the data-named `DAT_00149980`, because
   retail loads the address twice; with one name the compiler keeps it in a saved register and the
   frame grows. With one name in `config/SLUS-20836/symbols.txt` the file verifies `name-defect` and needs its
   override.

@@ -50,7 +50,7 @@ int igAnimation_GetVTable(void) {
     FUN_0019de50((struct Ref * *)p104, -1);
     FUN_0019ded0((void * *)p100, -1);
     FUN_0019df50((O *)p96, -1);
-    FUN_00131bc0(u.b, 0);
+    igNamedObject_Destroy(u.b, 0);
     return temp_s;
 }
 

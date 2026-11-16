@@ -151,7 +151,7 @@ void FUN_0015ce90(OO *arg0) {
     }
     arg0->f24 = temp_v0;
     ((DW4VC_832_2 *)(arg0->f20))->vX(1, (char *)arg0 + 0x28);
-    ((DW4VC_812_2 *)(arg0->f20))->vX(1, (char *)&DAT_004e0ef0[0]);
+    ((DW4VC_812_2 *)(arg0->f20))->vX(1, (char *)&g_matrix44Identity[0]);
     if (arg0->f36 == 1) {
         ((DW4VC_832_2 *)(arg0->f20))->vX(0, (char *)arg0 + 0x68);
         FUN_0015d4d0((S4d0 *)arg0);
@@ -235,7 +235,7 @@ void FUN_0015d4d0(S4d0 *s)
     v[1] = 0.5f * (float)sh;
     FUN_00190d80((char*)s + 0x128, v, 0x3f800000);
   }
-  FUN_001904f0((char*)s + 0xE8, (char*)s + 0x28, (char*)s + 0x128);
+  igMatrix44f_Multiply((char*)s + 0xE8, (char*)s + 0x28, (char*)s + 0x128);
 }
 
 void FUN_0015d6c0(void *arg0, int arg1, void *arg2) {

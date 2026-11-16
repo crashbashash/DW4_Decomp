@@ -36,29 +36,29 @@ void *beWaterPlainInfoRam_GetMetaObject(void) {
 }
 
 int beWaterPlainInfoRam_GetVTable(void) {
-    struct Obj_3400e0 obj;
-    int t;
+    beWaterPlainInfoRam obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w10 = 0;
-    obj.vt = &g_beWaterPlainInfoRam_vtable[0];
-    obj.w21 = 0;
-    obj.w22 = 0;
-    obj.w23 = 0;
-    obj.w38 = 0;
-    obj.w44 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beWaterPlainInfoRam_vtable[0];
-    FUN_00340240((igSmartPointer<igObject> *)&obj.w44, (long long)(-1));
-    FUN_003401c0((igSmartPointer<igObject> *)&obj.w38, (short)(-1));
-    igSmartPointer_igIntList_Destruct(&obj.w23, -1);
-    FUN_001354b0(&obj.w22, -1);
-    FUN_001338d0(&obj.w21, -1);
-    FUN_0033e920((S *)&obj, (long long)0);
-    return t;
+    obj._dataList = 0;
+    obj._vtable = (int)&g_beWaterPlainInfoRam_vtable[0];
+    obj._vertexArray = 0;
+    obj._dampeningGrid = 0;
+    obj._dplist2VertexNO = 0;
+    obj._gridLists = 0;
+    obj._waterMove = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beWaterPlainInfoRam_vtable[0];
+    igSmartPointer_beWaterMove_Destruct((igSmartPointer<igObject> *)&obj._waterMove, (long long)(-1));
+    igSmartPointer_igFloatListList_Destruct((igSmartPointer<igObject> *)&obj._gridLists, (short)(-1));
+    igSmartPointer_igIntList_Destruct(&obj._dplist2VertexNO, -1);
+    igSmartPointer_igFloatList_Destruct(&obj._dampeningGrid, -1);
+    igSmartPointer_igVertexArray_Destruct(&obj._vertexArray, -1);
+    beBaseInfoRam_Destroy((S *)&obj, (long long)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003401c0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igFloatListList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -71,7 +71,7 @@ igSmartPointer<igObject> *FUN_003401c0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00340240(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beWaterMove_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -129,9 +129,9 @@ static FieldFactory g_beWaterPlainInfoRam_ctorTable[] = {
     igObjectRefMetaField_Create,
     igUnsignedIntMetaField_Create,
     igUnsignedIntMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,

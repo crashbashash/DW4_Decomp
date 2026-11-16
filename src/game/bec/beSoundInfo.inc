@@ -14,24 +14,24 @@ igMetaObject *beSoundInfo_GetMetaObject(void)
 }
 
 int beSoundInfo_GetVTable(void) {
-    union U u;
-    int temp_s1;
-    char *p1;
+    beSoundInfo obj;
+    int vtable;
+    char *fnameListSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beSoundInfo_vtable[0];
-    p1 = &u.b[28];
-    *(int *)p1 = 0;
-    *(int *)&u.b[32] = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beSoundInfo_vtable[0];
-    igStringRef_Destruct(&u.b[32], -1);
-    FUN_00199450(p1, -1);
-    FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beSoundInfo_vtable[0];
+    fnameListSlot = (char *)&obj._fnameList;
+    *(int *)fnameListSlot = 0;
+    obj._dataType = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSoundInfo_vtable[0];
+    igStringRef_Destruct(&obj._dataType, -1);
+    igSmartPointer_igNamedObjectList_Destruct(fnameListSlot, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beSoundInfo_EnsureRegistered(void)

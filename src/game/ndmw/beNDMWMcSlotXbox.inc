@@ -16,17 +16,18 @@ igMetaObject *beNDMWMcSlotXbox_GetReadyMetaObject(void)
 }
 
 int beNDMWMcSlotXbox_GetVTable(void) {
-    struct W_3c5b30 o;
-    int r;
+    beNDMWMcSlotXbox obj;
+    int vtable;
 
-    int *p; int *a1; int t;
-    igObject_InitHeader(&o);
-    o.vt = g_beNDMWMcSlotXbox_vtable;
-    *(int *)((char *)&o + 24) = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWMcSlotXbox_vtable;
-    if (&*(int *)((char *)&o + 24) != 0) { p = *(int **)((char *)&o + 24); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader(*a1, a1); } }
-    return r;
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
+    obj._mName = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
+    if (&obj._mName != 0) {
+        releaseString((const char *)obj._mName);
+    }
+    return vtable;
 }
 
 void beNDMWMcSlotXbox_EnsureRegistered(void)

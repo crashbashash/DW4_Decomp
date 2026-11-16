@@ -76,7 +76,7 @@ int igGeometryAttr1_5_GetVTable(void) {
     return r;
 }
 
-O *FUN_001374b0(O *arg0, short arg1) {
+O *igSmartPointer_igVec3fList_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }

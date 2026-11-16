@@ -195,7 +195,7 @@ int FUN_001e68e0(Lst *arg0, int arg1) {
             d = arg0->data;
             igMatrix44f_Copy(d + var_s0, d + (var_s0 - 1));
         }
-        FUN_001906d0(arg0->data + (arg0->count - 1), arg1);
+        igMatrix44f_PreMultiply(arg0->data + (arg0->count - 1), arg1);
     }
     return var_s0;
 }
@@ -230,18 +230,18 @@ int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
             igMatrix44f_Copy(temp_a1 + (var_s0 << 6), temp_a1 + ((var_s0 - 1) << 6));
         }
         temp_a0 = arg0->f16 + ((arg0->f8 - 1) << 6);
-        FUN_001904f0(temp_a0, temp_a0, arg1);
+        igMatrix44f_Multiply(temp_a0, temp_a0, arg1);
     }
     return var_s0;
 }
 
 void FUN_001e6ae0(struct S1e *arg0) {
-    FUN_001906d0(arg0->base + (arg0->cnt - 1) * 64);
+    igMatrix44f_PreMultiply(arg0->base + (arg0->cnt - 1) * 64);
 }
 
 void FUN_001e6b00(void *arg0, int arg1) {
     int p;
     p = *(int *)((char *)(arg0) + 16) + ((*(int *)((char *)(arg0) + 8) - 1) << 6);
-    FUN_001904f0(p, p, arg1);
+    igMatrix44f_Multiply(p, p, arg1);
 }
 

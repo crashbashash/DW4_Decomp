@@ -75,8 +75,8 @@ void thunk_igVertexBlendMatrixListAttr_GetMetaObject(void) {
 
 static FieldFactory g_igVertexBlendMatrixListAttr_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igRawRefMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,

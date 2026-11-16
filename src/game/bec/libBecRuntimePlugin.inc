@@ -55,7 +55,7 @@ int libBecRuntimePlugin_GetVTable(void) {
     return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_0033cd20(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -68,7 +68,7 @@ igSmartPointer<igObject> *FUN_0033cd20(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033cda0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beLua_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -81,7 +81,7 @@ igSmartPointer<igObject> *FUN_0033cda0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033ce20(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMatCtrl_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -94,7 +94,7 @@ igSmartPointer<igObject> *FUN_0033ce20(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033cea0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSelectCtrl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -107,7 +107,7 @@ igSmartPointer<igObject> *FUN_0033cea0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033cf20(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beWaterPlain_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -120,7 +120,7 @@ igSmartPointer<igObject> *FUN_0033cf20(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033cfa0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beAction2_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -133,7 +133,7 @@ igSmartPointer<igObject> *FUN_0033cfa0(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d020(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMeterCtrl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -146,7 +146,7 @@ igSmartPointer<igObject> *FUN_0033d020(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d0a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beTargetObj_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -159,7 +159,7 @@ igSmartPointer<igObject> *FUN_0033d0a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d120(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beWeapon_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -172,7 +172,7 @@ igSmartPointer<igObject> *FUN_0033d120(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d1a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beCameraCtrl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -185,7 +185,7 @@ igSmartPointer<igObject> *FUN_0033d1a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d220(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_bePoint01_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -198,7 +198,7 @@ igSmartPointer<igObject> *FUN_0033d220(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d2a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beBkColor_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -211,7 +211,7 @@ igSmartPointer<igObject> *FUN_0033d2a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d320(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beChangePosTransform_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -224,7 +224,7 @@ igSmartPointer<igObject> *FUN_0033d320(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d3a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beShadow01_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -237,7 +237,7 @@ igSmartPointer<igObject> *FUN_0033d3a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d420(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beGenerater_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -250,7 +250,7 @@ igSmartPointer<igObject> *FUN_0033d420(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d4a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beHitLandModel_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -263,7 +263,7 @@ igSmartPointer<igObject> *FUN_0033d4a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d520(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beHitLandDeliv_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -276,7 +276,7 @@ igSmartPointer<igObject> *FUN_0033d520(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d5a0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSound_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -289,7 +289,7 @@ igSmartPointer<igObject> *FUN_0033d5a0(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d620(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSeCtl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -302,7 +302,7 @@ igSmartPointer<igObject> *FUN_0033d620(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d6a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beActionStarter_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -315,7 +315,7 @@ igSmartPointer<igObject> *FUN_0033d6a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d720(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beLayerCtl_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -328,7 +328,7 @@ igSmartPointer<igObject> *FUN_0033d720(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d7a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beFont_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -341,7 +341,7 @@ igSmartPointer<igObject> *FUN_0033d7a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d820(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSwitchCtrl_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -354,7 +354,7 @@ igSmartPointer<igObject> *FUN_0033d820(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d8a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beLightCtrl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -367,7 +367,7 @@ igSmartPointer<igObject> *FUN_0033d8a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d920(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNumberCtrl_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -380,7 +380,7 @@ igSmartPointer<igObject> *FUN_0033d920(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033d9a0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beStaticInfoCtl_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -393,7 +393,7 @@ igSmartPointer<igObject> *FUN_0033d9a0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033da20(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMovie_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -406,7 +406,7 @@ igSmartPointer<igObject> *FUN_0033da20(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033daa0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDBManager_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -419,7 +419,7 @@ igSmartPointer<igObject> *FUN_0033daa0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033db20(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSaveUtil_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -432,7 +432,7 @@ igSmartPointer<igObject> *FUN_0033db20(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dba0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beTextureCtrl_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -445,7 +445,7 @@ igSmartPointer<igObject> *FUN_0033dba0(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dc20(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSystem_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -458,7 +458,7 @@ igSmartPointer<igObject> *FUN_0033dc20(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dca0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMessenger_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -471,7 +471,7 @@ igSmartPointer<igObject> *FUN_0033dca0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dd20(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beFileListInfoManager_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -484,7 +484,7 @@ igSmartPointer<igObject> *FUN_0033dd20(igSmartPointer<igObject> *self, long long
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dda0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_bePadManager_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -497,7 +497,7 @@ igSmartPointer<igObject> *FUN_0033dda0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033de20(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beCri_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -510,7 +510,7 @@ igSmartPointer<igObject> *FUN_0033de20(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dea0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_be_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -523,7 +523,7 @@ igSmartPointer<igObject> *FUN_0033dea0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033df20(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beDemoManager_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -536,7 +536,7 @@ igSmartPointer<igObject> *FUN_0033df20(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033dfa0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beTimer_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -549,7 +549,7 @@ igSmartPointer<igObject> *FUN_0033dfa0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0033e020(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beMemory_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -562,241 +562,241 @@ igSmartPointer<igObject> *FUN_0033e020(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-int *FUN_0033e0a0(int *p)
+int *igSmartPointer_beMemory_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e0b0(int *p)
+int *igSmartPointer_beTimer_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e0c0(int *p)
+int *igSmartPointer_beDemoManager_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e0d0(int *p)
+int *igSmartPointer_be_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e0e0(int *p)
+int *igSmartPointer_beCri_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e0f0(int *p)
+int *igSmartPointer_bePadManager_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e100(int *p)
+int *igSmartPointer_beFileListInfoManager_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e110(int *p)
+int *igSmartPointer_beMessenger_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e120(int *p)
+int *igSmartPointer_beSystem_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e130(int *p)
+int *igSmartPointer_beTextureCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e140(int *p)
+int *igSmartPointer_beSaveUtil_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e150(int *p)
+int *igSmartPointer_beDBManager_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e160(int *p)
+int *igSmartPointer_beMovie_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e170(int *p)
+int *igSmartPointer_beStaticInfoCtl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e180(int *p)
+int *igSmartPointer_beNumberCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e190(int *p)
+int *igSmartPointer_beLightCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1a0(int *p)
+int *igSmartPointer_beSwitchCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1b0(int *p)
+int *igSmartPointer_beFont_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1c0(int *p)
+int *igSmartPointer_beLayerCtl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1d0(int *p)
+int *igSmartPointer_beActionStarter_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1e0(int *p)
+int *igSmartPointer_beSeCtl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e1f0(int *p)
+int *igSmartPointer_beSound_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e200(int *p)
+int *igSmartPointer_beHitLandDeliv_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e210(int *p)
+int *igSmartPointer_beHitLandModel_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e220(int *p)
+int *igSmartPointer_beGenerater_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e230(int *p)
+int *igSmartPointer_beShadow01_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e240(int *p)
+int *igSmartPointer_beChangePosTransform_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e250(int *p)
+int *igSmartPointer_beBkColor_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e260(int *p)
+int *igSmartPointer_bePoint01_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e270(int *p)
+int *igSmartPointer_beCameraCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e280(int *p)
+int *igSmartPointer_beWeapon_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e290(int *p)
+int *igSmartPointer_beTargetObj_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2a0(int *p)
+int *igSmartPointer_beMeterCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2b0(int *p)
+int *igSmartPointer_beAction2_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2c0(int *p)
+int *igSmartPointer_beWaterPlain_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2d0(int *p)
+int *igSmartPointer_beSelectCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2e0(int *p)
+int *igSmartPointer_beMatCtrl_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e2f0(int *p)
+int *igSmartPointer_beLua_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int *FUN_0033e300(int *p)
+int *igSmartPointer_beParticleCtrl2_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
 }
 
-int **FUN_0033e310(int **arg0) {
+int **igInsightPlugin_Construct(int **arg0) {
     igObject_InitHeader();
     *arg0 = &g_igInsightPlugin_vtable[0];
     return arg0;

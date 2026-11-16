@@ -11,19 +11,23 @@ igMetaObject *beModelCtrlLUACALL_GetMetaObject(void)
 }
 
 int beModelCtrlLUACALL_GetVTable(void) {
-    Obj_3564a0 obj;
-    int r;
+    beModelCtrlLUACALL obj;
+    int vtable;
+    char **modeNameSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.m8 = 0;
-    obj.vt = &g_beModelCtrlLUACALL_vtable[0];
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beModelCtrlLUACALL_vtable[0];
-    obj.rel12();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel8();
-    return r;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlLUACALL_vtable[0];
+    modeNameSlot = (char **)&obj._modeName;
+    *modeNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlLUACALL_vtable[0];
+    igStringRef_Release(modeNameSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlLUACALL_EnsureRegistered(void)

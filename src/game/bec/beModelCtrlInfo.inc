@@ -7,20 +7,20 @@ igMetaObject *beModelCtrlInfo_GetMetaObject(void) {
 }
 
 int beModelCtrlInfo_GetVTable(void) {
-    union U_352d20 u;
-    int temp_s0;
+    beModelCtrlInfo obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[2] = 0;
-    u.w[5] = 0;
-    u.w[6] = 0;
-    u.w[0] = (int)(&g_beModelCtrlInfo_vtable[0]);
-    u.w[7] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beModelCtrlInfo_vtable[0]);
-    igStringRef_Destruct(&u.w[7], -1);
-    FUN_0033ec80((struct S_33ec80 *)(&u.w[0]), (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beModelCtrlInfo_vtable[0];
+    obj._kindString = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfo_vtable[0];
+    igStringRef_Destruct(&obj._kindString, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)(&obj._vtable), (short)0);
+    return vtable;
 }
 
 void beModelCtrlInfo_EnsureRegistered(void)

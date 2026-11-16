@@ -47,7 +47,7 @@ int FUN_001af620(igAppearanceView *a, void *t) {
         FUN_001d9740((void *)a->_attachedSkins->_data[i], (int)(t));
     }
     for (i = 0; i < a->_attachedGraphs->_count; i++) {
-        FUN_001e04c0((S_1e04c0 *)t, (V_1e04c0 *)a->_attachedGraphs->_data[i]);
+        igTraversal_TraverseNode((S_1e04c0 *)t, (V_1e04c0 *)a->_attachedGraphs->_data[i]);
     }
     for (i = 0; i < n; i++) {
         FUN_001b7920((igCommonTraversal *)t, overrideName(a, i));
@@ -55,12 +55,12 @@ int FUN_001af620(igAppearanceView *a, void *t) {
     return result;
 }
 
-int FUN_001af7a0(int *p)
+int igAppearance_AttachGraph(int *p)
 {
     return ObjectList_AppendRetained(*(int *)((char *)p + 20));
 }
 
-int FUN_001af7b0(void *arg0, int arg1) {
+int igAppearance_DetachGraph(void *arg0, int arg1) {
     return ObjectList_RemoveAllRetained(*(int *)((char *)(arg0) + 20), arg1, 0) > 0;
 }
 

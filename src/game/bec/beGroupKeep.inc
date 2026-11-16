@@ -9,19 +9,19 @@ void *beGroupKeep_GetMetaObject(void) {
 }
 
 int beGroupKeep_GetVTable(void) {
-    struct Obj_35efe0 obj;
-    int t;
+    beGroupKeep obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w7 = 0;
-    obj.vt = &g_beGroupKeep_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beGroupKeep_vtable[0];
-    FUN_00195a90(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._bound = 0;
+    obj._parentList = 0;
+    obj._childList = 0;
+    obj._vtable = (int)&g_beGroupKeep_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGroupKeep_vtable[0];
+    igGroup_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beGroupKeep_EnsureRegistered(void)

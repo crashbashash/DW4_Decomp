@@ -336,7 +336,7 @@ void FUN_001d5e60(struct A_1d5e60 *arg0, int arg1) {
         n = 0;
     }
     for (i = 0; i < n; i++) {
-        FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->data[i]);
+        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f28->data[i]);
     }
 }
 
@@ -346,7 +346,7 @@ void FUN_001d5ef0(struct S60 *arg0, int arg1) {
 
     n = arg0->f60->count;
     for (i = 0; i < n; i++) {
-        FUN_001e04c0((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f60->data[i]);
+        igTraversal_TraverseNode((S_1e04c0 *)arg1, (V_1e04c0 *)arg0->f60->data[i]);
     }
 }
 
@@ -356,8 +356,8 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     int sp50[16];
 
     igMatrix44f_Copy(arg4);
-    FUN_001904f0(arg4, arg4, arg2);
-    FUN_001904f0(arg4, arg4, arg3);
+    igMatrix44f_Multiply(arg4, arg4, arg2);
+    igMatrix44f_Multiply(arg4, arg4, arg3);
     igMatrix44f_SetIdentity(&sp50[0]);
     spA0[0] = 0x3F000000;
     spA0[2] = 0;
@@ -368,9 +368,9 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     sp90[1] = 0x3F000000;
     igMatrix44f_SetTranslation(&sp50[0], &sp90[0]);
     if (arg0->f208 != 0) {
-        FUN_001904f0(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
+        igMatrix44f_Multiply(&sp50[0], &sp50[0], g_projectiveShadowViewportMatrix.m);
     }
-    FUN_001904f0(arg4, arg4, &sp50[0]);
+    igMatrix44f_Multiply(arg4, arg4, &sp50[0]);
 }
 
 void FUN_001d6060(O_1d6060 *arg0, char *arg1) {

@@ -20,58 +20,26 @@ done:;
 }
 
 int beFontGeomAttrPair_GetVTable(void) {
-    union U_362580 u;
-    int temp_s2;
-    void ** q1;
-    void ** q0;
-    igObject * q2;
-    int *temp_a1;
-    int temp_v0;
-    void *temp_a0;
-    void *temp_v1;
+    beFontGeomAttrPair obj;
+    int vtable;
+    igObject **geomAttrsSlot;
+    char **panelSlot;
+    char **categorySlot;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)(&g_beFontGeomAttrPair_vtable[0]);
-    q0 = (void **)&u.b[8];
-    *q0 = 0;
-    q1 = (void **)&u.b[12];
-    *q1 = 0;
-    q2 = (igObject *)&u.b[16];
-    *(int *)q2 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)(&g_beFontGeomAttrPair_vtable[0]);
-    if (q2 != 0) {
-        q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)q2->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
-    }
-    if (q1 != 0) {
-        temp_v1 = *q1;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    if (q0 != 0) {
-        temp_v1 = *q0;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return temp_s2;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beFontGeomAttrPair_vtable[0];
+    categorySlot = (char **)&obj._category;
+    *categorySlot = 0;
+    panelSlot = (char **)&obj._panel;
+    *panelSlot = 0;
+    geomAttrsSlot = (igObject **)&obj._geomAttrs;
+    *geomAttrsSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beFontGeomAttrPair_vtable[0];
+    igObjectRef_Release(geomAttrsSlot);
+    igStringRef_Release(panelSlot);
+    igStringRef_Release(categorySlot);
+    return vtable;
 }
 
 void beFontGeomAttrPair_EnsureRegistered(void)

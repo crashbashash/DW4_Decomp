@@ -9,18 +9,18 @@ void *beMovieInfo_GetMetaObject(void) {
 }
 
 int beMovieInfo_GetVTable(void) {
-    struct W_34eb60 o;
-    int r;
+    beMovieInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[1] = 0;
-    o.w[4] = 0;
-    o.w[5] = 0;
-    o.vt = g_beMovieInfo_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beMovieInfo_vtable;
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beMovieInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beMovieInfo_vtable[0];
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beMovieInfo_EnsureRegistered(void)

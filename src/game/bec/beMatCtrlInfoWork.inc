@@ -23,18 +23,22 @@ void *beMatCtrlInfoWork_GetMetaObject(void) {
 }
 
 int beMatCtrlInfoWork_GetVTable(void) {
-    Obj_359560 obj;
-    int r;
+    beMatCtrlInfoWork obj;
+    int vtable;
+    igObject **matOnPlListsSlot;
+    igObject **runFlagListSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMatCtrlInfoWork_vtable[0];
-    obj.m8 = 0;
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMatCtrlInfoWork_vtable[0];
-    obj.rel12();
-    obj.rel8();
-    return r;
+    obj._vtable = (int)&g_beMatCtrlInfoWork_vtable[0];
+    runFlagListSlot = (igObject **)&obj._runFlagList;
+    *runFlagListSlot = 0;
+    matOnPlListsSlot = (igObject **)&obj._matOnPlLists;
+    *matOnPlListsSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMatCtrlInfoWork_vtable[0];
+    igObjectRef_Release(matOnPlListsSlot);
+    igObjectRef_Release(runFlagListSlot);
+    return vtable;
 }
 
 void beMatCtrlInfoWork_EnsureRegistered(void)

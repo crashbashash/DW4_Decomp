@@ -25,32 +25,32 @@ igMetaObject *beMessengerArgData_GetMetaObject(void) {
 }
 
 int beMessengerArgData_GetVTable(void) {
-    struct Obj_358e60 obj;
-    int t;
+    beMessengerArgData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beMessengerArgData_vtable[0];
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w9 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMessengerArgData_vtable[0];
-    igSmartPointer_igStringRefList_Destruct(&obj.w11, -1);
-    igSmartPointer_igObjectList_Destruct(&obj.w10, -1);
-    FUN_001998f0(&obj.w9, -1);
-    FUN_001374b0(&obj.w8, -1);
-    FUN_00195190(&obj.w7, -1);
-    FUN_001354b0(&obj.w6, -1);
-    igSmartPointer_igIntList_Destruct(&obj.w5, -1);
-    FUN_00226990(&obj.w4, -1);
-    igStringRef_Destruct(&obj.w3, -1);
-    return t;
+    obj._vtable = (int)&g_beMessengerArgData_vtable[0];
+    obj._debugString = 0;
+    obj._boolList = 0;
+    obj._intList = 0;
+    obj._floatList = 0;
+    obj._longList = 0;
+    obj._vec3fList = 0;
+    obj._matrix44fList = 0;
+    obj._objectList = 0;
+    obj._stringList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMessengerArgData_vtable[0];
+    igSmartPointer_igStringRefList_Destruct(&obj._stringList, -1);
+    igSmartPointer_igObjectList_Destruct(&obj._objectList, -1);
+    igSmartPointer_igMatrix44fList_Destruct(&obj._matrix44fList, -1);
+    igSmartPointer_igVec3fList_Destruct(&obj._vec3fList, -1);
+    igSmartPointer_igLongList_Destruct(&obj._longList, -1);
+    igSmartPointer_igFloatList_Destruct(&obj._floatList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._intList, -1);
+    igSmartPointer_igBoolList_Destruct(&obj._boolList, -1);
+    igStringRef_Destruct(&obj._debugString, -1);
+    return vtable;
 }
 
 void beMessengerArgData_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerArgData_Register);}

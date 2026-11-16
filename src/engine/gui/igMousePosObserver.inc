@@ -77,7 +77,7 @@ void igMousePosObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igMousePosObserver_Register);
 }
 
-static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, FUN_0019e440, FUN_00188340, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, FUN_0019e440, igRay_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 void igMousePosObserver_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ static FieldFactory g_igMousePosObserver_ctorTable[] = {
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
 };
 static const char *g_igMousePosObserver_fieldTable[] = {
     "_guiSystem",

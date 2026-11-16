@@ -16,10 +16,10 @@ void *beNumVerInsideDataList_GetMetaObject(void) {
 }
 
 int beNumVerInsideDataList_GetVTable(void) {
-    struct Obj_34dd70 obj;
+    beNumVerInsideDataList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNumVerInsideDataList_vtable[0];
+    obj._vtable = (int)&g_beNumVerInsideDataList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

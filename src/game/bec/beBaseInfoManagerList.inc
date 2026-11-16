@@ -10,11 +10,11 @@ igMetaObject *beBaseInfoManagerList_GetMetaObject(void)
 }
 
 int beBaseInfoManagerList_GetVTable(void) {
-    int obj[8];
+    beBaseInfoManagerList obj;
 
-    igObject_InitHeader(obj);
-    obj[0] = (int)&g_beBaseInfoManagerList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoManagerList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void beBaseInfoManagerList_EnsureRegistered(void)

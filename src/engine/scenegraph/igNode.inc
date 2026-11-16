@@ -163,7 +163,7 @@ void **FUN_0019d0a0(void **arg0, long long arg1) {
     return arg0;
 }
 
-void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
+void *igGeometry_Destroy(struct S_19d120 *arg0, short arg1) {
     void *p;
     int rc;
 
@@ -181,8 +181,8 @@ void *FUN_0019d120(struct S_19d120 *arg0, short arg1) {
         }
         if (arg0 != 0) {
             arg0->f0 = &g_igAttrSet_vtable[0];
-            FUN_0013bfe0((char *)arg0 + 0x20, -1);
-            FUN_00195a90((struct T_195a90 *)arg0, 0);
+            igSmartPointer_igAttrList_Destruct((char *)arg0 + 0x20, -1);
+            igGroup_Destroy((struct T_195a90 *)arg0, 0);
         }
         if (arg1 > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -205,7 +205,7 @@ int *FUN_0019d1f0(int *p)
     return p;
 }
 
-void **FUN_0019d200(void **arg0, int arg1) {
+void **igSmartPointer_igIntListList_Destruct(void **arg0, int arg1) {
     int *o;
 
     if (arg0 != 0) {

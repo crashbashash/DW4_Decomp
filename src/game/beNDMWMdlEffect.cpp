@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int beNDMWMdlEffect_IsKind(int dummy0, int arg1);
+extern "C" int beNDMWMdlEffect_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlEffect_RegisterReceiver(void);
 extern "C" int beNDMWMdlEffect_GetMeta(void);
 extern "C" int beModelCtrl__OnGenerateFromParent(...);
@@ -11,9 +11,7 @@ extern "C" int KIND_EFFECT[4];
 extern "C" int g_beNDMWMdlEffect_metaObject[4];
 extern "C" igObject *beModelCtrlInfoWork_Create(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
-/* Property record: reference at +20. */
-struct PropertyRecordRef { char p[20]; igObject *f20; };
-extern "C" PropertyRecordRef *igProperty_FindByName(...);
+extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -51,37 +49,35 @@ struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPoin
 }
 static inline void create(beBaseInfoRam *ram, int a) { igSmartPointer<igObject> list(beBaseInfoDataList_Create(a)); store(ram, list); }
 };
-/* matching construct: opaque receiver; arg0 is only forwarded */
-struct EffectReceiverShim { int dummy; };
-extern "C" void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram);
 
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEffect_IsKind(int dummy0, int arg1) {
-    return strcmp(arg1, &KIND_EFFECT[0]) == 0;
+int beNDMWMdlEffect_IsKind(int dummy0, int kind) {
+    return strcmp(kind, &KIND_EFFECT[0]) == 0;
 }
 
 void beNDMWMdlEffect_RegisterReceiver(void)
 {
 }
 
-void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram) {
     igObject *s0;
-    PropertyRecordRef *s1;
+    beModelCtrlInfoRamData *s1;
     int alloc;
     int a;
-    if (arg1->_dataList == 0) {
-        alloc = igObject_GetAllocator(arg1);
+    if (ram->_dataList == 0) {
+        alloc = igObject_GetAllocator(ram);
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
             a = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
-        DataList::create(arg1, a);
+        DataList::create(ram, a);
     }
-    s1 = igProperty_FindByName(arg1->_dataList, g_propertyNameField[0], "ONE");
-    alloc = igObject_GetAllocator(arg0);
+    s1 = igProperty_FindByName(ram->_dataList, g_propertyNameField[0], "ONE");
+    alloc = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
@@ -94,9 +90,9 @@ void beNDMWMdlEffect_OnGenerate(EffectReceiverShim *arg0, beBaseInfoRam *arg1) {
     if (s0 != 0) {
         s0->_refCount++;
     }
-    ReleaseRef::go(s1->f20);
-    s1->f20 = s0;
-    beModelCtrl__OnGenerateFromParent(arg0, arg1);
+    ReleaseRef::go((igObject *)s1->_work);
+    s1->_work = (int)s0;
+    beModelCtrl__OnGenerateFromParent(self, ram);
 }
 
 int beNDMWMdlEffect_GetMeta(void)

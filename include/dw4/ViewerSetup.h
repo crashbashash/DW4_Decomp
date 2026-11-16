@@ -2,7 +2,7 @@
 #define DW4_VIEWERSETUP_H
 #include "dw4/igSmartPointer.h"
 
-/* The igInsightCore that FUN_00232800 creates, with its window field (+20) as the reference holder
+/* The igInsightCore that igInsightCore_CreateInstance creates, with its window field (+20) as the reference holder
    it is. */
 struct InsightCore : igObject {
     char pad8[12];

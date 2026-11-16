@@ -14,51 +14,27 @@ void *beSvUseCheckApi_GetMetaObject(void) {
 }
 
 int beSvUseCheckApi_GetVTable(void) {
-    union U_349680 u;
-    int temp_s2;
-    igObject *qb;
-    igObject *qa;
-    igObject *qc;
+    beSvUseCheckApi obj;
+    int vtable;
+    igObject **iconWorkSlot;
+    igObject **mountWorkSlot;
+    igObject **imageWorkSlot;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beSaveApi_vtable[0]);
-    qa = (igObject *)&u.b[48];
-    *(int *)qa = 0;
-    qb = (igObject *)&u.b[52];
-    *(int *)qb = 0;
-    qc = (igObject *)&u.b[56];
-    *(int *)qc = 0;
-    u.w[0] = (int)(&g_beSvUseCheckApi_vtable[0]);
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beSaveApi_vtable[0]);
-    if (qc != 0) {
-        qc = *(igObject **)qc;
-        if (qc != 0) {
-            qc->_refCount = (int)qc->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)qc->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(qc);
-            }
-        }
-    }
-    if (qb != 0) {
-        qb = *(igObject **)qb;
-        if (qb != 0) {
-            qb->_refCount = (int)qb->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)qb->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(qb);
-            }
-        }
-    }
-    if (qa != 0) {
-        qa = *(igObject **)qa;
-        if (qa != 0) {
-            qa->_refCount = (int)qa->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)qa->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(qa);
-            }
-        }
-    }
-    return temp_s2;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    imageWorkSlot = (igObject **)&obj._imageWork;
+    *imageWorkSlot = 0;
+    mountWorkSlot = (igObject **)&obj._mountWork;
+    *mountWorkSlot = 0;
+    iconWorkSlot = (igObject **)&obj._iconWork;
+    *iconWorkSlot = 0;
+    obj._vtable = (int)&g_beSvUseCheckApi_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    igObjectRef_Release(iconWorkSlot);
+    igObjectRef_Release(mountWorkSlot);
+    igObjectRef_Release(imageWorkSlot);
+    return vtable;
 }
 
 void beSvUseCheckApi_EnsureRegistered(void)

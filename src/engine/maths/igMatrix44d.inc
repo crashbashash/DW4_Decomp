@@ -1,4 +1,4 @@
-void FUN_00190250(long long *arg0) {
+void igMatrix44d_SetIdentity(long long *arg0) {
     long long temp_v1;
     temp_v1 = 0x3FF00000LL << 0x20;
     arg0[0] = temp_v1;

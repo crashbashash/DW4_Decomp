@@ -13,23 +13,23 @@ done:
 }
 
 int beGeneraterInfo_GetVTable(void) {
-    struct F f;
-    int temp_s0;
+    beGeneraterInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.w[4] = 0;
-    f.w[5] = 0;
-    f.vt = &g_beGeneraterInfo_vtable[0];
-    f.w[6] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beGeneraterInfo_vtable[0];
-    FUN_0035f7f0((igSmartPointer<igObject> *)(&f.w[6]), (long long)(-1));
-    FUN_0033ec80((struct S_33ec80 *)&f, (short)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beGeneraterInfo_vtable[0];
+    obj._dataList_ = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGeneraterInfo_vtable[0];
+    igSmartPointer_beGeneraterDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035f7f0(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beGeneraterDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

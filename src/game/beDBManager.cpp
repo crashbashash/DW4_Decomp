@@ -15,9 +15,9 @@ extern "C" int beDBManager_GetInfoMeta(void);
 extern "C" int beDBManager_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
 extern "C" void igInsightCore_RemoveFromScheduler(int, void *);
-extern "C" int FUN_00366070(...);
+extern "C" int beDBManager_GetMsgActionEnum(...);
 extern "C" int beMessenger_AppendObject(int, int);
-extern "C" int beMessenger_ResolveEnumValue(int, int, int);
+extern "C" int beMessenger_ResolveEnumValue(int messenger, int values, const char *name);
 extern "C" int g_propertyNameField[4];
 // clang-format off
 /* beDataBase record lookup and row count, 0x003a93a0..0x003a9708. A beDataBase is a table of
@@ -45,7 +45,7 @@ extern "C" int g_beDBManager_metaObject[4];
 extern "C" char DATABASE_9[];
 extern "C" void beDBManager_OnAddRam(beDBManager *p0, int p1, char *p2);
 extern "C" void beDBManager_UpdateRam(beDBManager *p0, int p1);
-extern "C" int beDBManager_OnMessageText(beDBManager *arg0, beBaseInfoRam *arg1, int arg2);
+extern "C" int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, const char *message);
 
 int igProperty_GetRecord(int container, char *key, int unused)
 {
@@ -193,19 +193,19 @@ void beDBManager_UpdateRam(beDBManager *p0, int p1)
     igInsightCore_RemoveFromScheduler(p0->_insight, p0);
 }
 
-int beDBManager_OnMessageText(beDBManager *arg0, beBaseInfoRam *arg1, int arg2) {
-    beBaseInfoRam *p = (beBaseInfoRam *)arg1->_parentInfo;
-    int r;
-    switch (beMessenger_ResolveEnumValue(arg0->_messenger, FUN_00366070(), arg2)) {
+int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, const char *message) {
+    beDBManagerInfo *info = (beDBManagerInfo *)ram->_parentInfo;
+    int result;
+    switch (beMessenger_ResolveEnumValue(self->_messenger, beDBManager_GetMsgActionEnum(), message)) {
     case 0:
-        beMessenger_AppendObject(arg0->_messenger, p->_st1);
-        r = 1;
+        beMessenger_AppendObject(self->_messenger, info->_dataBase);
+        result = 1;
         break;
     default:
-        r = 0;
+        result = 0;
         break;
     }
-    return r;
+    return result;
 }
 
 int beDBManager_GetMeta(void)

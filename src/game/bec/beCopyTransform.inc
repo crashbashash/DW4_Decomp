@@ -33,7 +33,7 @@ void *beCopyTransform_Register(void) {
         0x70, /* instance size */
         beCopyTransform_GetVTable,
         beCopyTransform_InitFields,
-        FUN_00368090, /* extra callback item */
+        beCopyTransform_StaticInitCallback, /* extra callback item */
         g_beCopyTransform_callbackList /* callback list */
     );
 }
@@ -69,7 +69,7 @@ void beCopyTransform_InitFields(void) {
     igMetaObject_NameFields(meta, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, base);
 }
 
-void FUN_00368090(void)
+void beCopyTransform_StaticInitCallback(void)
 {
     beCopyTransform_RegisterTraversal();
 }

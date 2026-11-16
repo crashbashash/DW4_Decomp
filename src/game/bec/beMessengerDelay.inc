@@ -18,22 +18,22 @@ igMetaObject *beMessengerDelay_GetMetaObject(void) {
 }
 
 int beMessengerDelay_GetVTable(void) {
-    union U_3589e0 u;
-    int temp_s3;
+    beMessengerDelay obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beMessengerDelay_vtable[0]);
-    u.w[6] = 0;
-    u.w[7] = 0;
-    u.w[9] = 0;
-    u.w[10] = 0;
-    temp_s3 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beMessengerDelay_vtable[0]);
-    FUN_00357a90((igSmartPointer<igObject> *)&u.w[10], -1);
-    igStringRef_Destruct(&u.w[9], -1);
-    igStringRef_Destruct(&u.w[7], -1);
-    igStringRef_Destruct(&u.w[6], -1);
-    return temp_s3;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beMessengerDelay_vtable[0];
+    obj._groupName = 0;
+    obj._infoName = 0;
+    obj._message = 0;
+    obj._argData = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMessengerDelay_vtable[0];
+    igSmartPointer_beMessengerArgData_Destruct((igSmartPointer<igObject> *)&obj._argData, -1);
+    igStringRef_Destruct(&obj._message, -1);
+    igStringRef_Destruct(&obj._infoName, -1);
+    igStringRef_Destruct(&obj._groupName, -1);
+    return vtable;
 }
 
 void beMessengerDelay_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerDelay_Register);}

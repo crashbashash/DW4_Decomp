@@ -22,38 +22,24 @@ igMetaObject *beNDMWStageCtl_GetMetaObject(void) {
 }
 
 int beNDMWStageCtl_GetVTable(void) {
-    struct F_3bbe80 o;
-    int r;
-    int *s;
-    int *h;
-    int c;
-    struct T_3bbe80 *a;
+    beNDMWStageCtl obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.vt = g_beBaseInfoManager_vtable;
-    o.str = 0;
-    o.ref = 0;
-    o.vt = g_beNDMWStageCtl_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beBaseInfoManager_vtable;
-    if (&o.ref != 0) {
-        a = o.ref;
-        if (a != 0) {
-            a->references = a->references - 1;
-            if ((((unsigned long long)((long long)a->references << 0x29)) >> 0x29) == 0) igObject_Destroy(a);
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStageCtl_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
+    if (&obj._infoList != 0) {
+        igRelease((igObject *)obj._infoList);
     }
-    o.vt = g_igNamedObject_vtable;
-    if (&o.str != 0) {
-        s = o.str;
-        if (s != 0) {
-            h = s - 2;
-            c = s[-1] - 1;
-            s[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader(*h, h);
-        }
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (&obj._name != 0) {
+        releaseString((const char *)obj._name);
     }
-    return r;
+    return vtable;
 }
 
 void beNDMWStageCtl_EnsureRegistered(void)

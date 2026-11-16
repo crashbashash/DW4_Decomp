@@ -24,21 +24,21 @@ void *beNDMWStatus_GetMetaObject(void) {
 }
 
 int beNDMWStatus_GetVTable(void) {
-    union U_3bb870 u;
-    int t;
-    char *ps;
+    beNDMWStatus obj;
+    int vtable;
+    int *windowProRef;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beNDMWStatus_vtable[0];
-    ps = &u.b[32];
-    *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWStatus_vtable[0];
-    beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)ps, -1);
-    FUN_0033f5e0(u.b, 0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
+    windowProRef = &obj._windowPro;
+    *windowProRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
+    beNDMWShopTitle03_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)windowProRef, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatus_EnsureRegistered(void)

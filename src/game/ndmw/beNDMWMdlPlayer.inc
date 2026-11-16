@@ -24,64 +24,45 @@ void *beNDMWMdlPlayer_ResolveMetaObject(void) {
 }
 
 int beNDMWMdlPlayer_GetVTable(void) {
-    struct W_3bf970 o;
-    int r;
+    beNDMWMdlPlayer obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[5] = 0;
-    o.vt = g_beNDMWMdlPlayer_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWMdlPlayer_vtable;
-    FUN_003bf9d0((O_3bf9d0 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlPlayer_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlPlayer_vtable[0];
+    beNDMWMdlPEBase_Destroy((beNDMWMdlPEBase *)&obj, 0);
+    return vtable;
 }
 
-O_3bf9d0 *FUN_003bf9d0(O_3bf9d0 *arg0, short arg1) {
-    int *temp_a1;
-    int temp_v0;
-    R_3bf9d0 *temp_a0;
-    int *temp_v1;
-
-    if (arg0 != 0) {
-        arg0->vt = &g_beNDMWMdlPEBase_vtable[0];
-        if (arg0 != 0) {
-            arg0->vt = &g_beModelCtrl_vtable[0];
-            if (arg0 != 0) {
-                arg0->vt = &g_beBaseInfoManager_vtable[0];
-                if (&arg0->ref != 0) {
-                    temp_a0 = arg0->ref;
-                    if (temp_a0 != 0) {
-                        temp_a0->refs = temp_a0->refs - 1;
-                        if (((unsigned long long)((long long)temp_a0->refs << 0x29) >> 0x29) == 0) {
-                            igObject_Destroy(temp_a0);
-                        }
-                    }
+beNDMWMdlPEBase *beNDMWMdlPEBase_Destroy(beNDMWMdlPEBase *self, short flags) {
+    if (self != 0) {
+        *(int **)&self->_vtable = &g_beNDMWMdlPEBase_vtable[0];
+        if (self != 0) {
+            *(int **)&self->_vtable = &g_beModelCtrl_vtable[0];
+            if (self != 0) {
+                *(int **)&self->_vtable = &g_beBaseInfoManager_vtable[0];
+                if (&self->_infoList != 0) {
+                    igRelease((igObject *)self->_infoList);
                 }
-                if (arg0 != 0) {
-                    arg0->vt = &DAT_0052cf80[0];
-                    if (arg0 != 0) {
-                        arg0->vt = &g_igNamedObject_vtable[0];
-                        if (&arg0->str != 0) {
-                            temp_v1 = arg0->str;
-                            if (temp_v1 != 0) {
-                                temp_a1 = temp_v1 - 2;
-                                temp_v0 = temp_v1[-1] - 1;
-                                temp_v1[-1] = temp_v0;
-                                if (temp_v0 == 0) {
-                                    StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-                                }
-                            }
+                if (self != 0) {
+                    *(int **)&self->_vtable = &g_igInfoManager_vtable[0];
+                    if (self != 0) {
+                        *(int **)&self->_vtable = &g_igNamedObject_vtable[0];
+                        if (&self->_name != 0) {
+                            releaseString((const char *)self->_name);
                         }
                     }
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 void beNDMWMdlPlayer_EnsureRegistered(void)

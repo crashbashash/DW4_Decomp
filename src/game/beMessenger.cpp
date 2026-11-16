@@ -41,9 +41,9 @@ extern int kIGMemoryPoolHandleUser1[4];
 extern int g_propertyNameField[4];
 extern unsigned char g_useOwnerAllocator;
 extern int g_resultSuccess[4];
-extern int DAT_0058a4e0[4];
-extern int DAT_0058a4f0[4];
-extern int DAT_0058a530[4];
+extern int g_resolveEnumLastMetaEnum[4];
+extern int g_resolveEnumLastName[4];
+extern int g_resolveEnumLastValue[4];
 extern int emptyString[4];
 extern char SEARCH[], FIND_SPACE_3[];
 extern int DAT_004c8f88[4];
@@ -54,13 +54,13 @@ void beMessenger_Activate(beMessenger *, int);
 void beMessenger_Deactivate(beMessenger *, int);
 void beMessenger_Start(void);
 void beMessenger_Stop(void);
-int beMessenger_AddInfo(beMessenger *arg0);
+int beMessenger_AddInfo(beMessenger *self);
 void beMessenger_RemoveAllInfo(beMessenger *);
 void beMessenger_Update(beMessenger *self);
-void beMessenger_SetFreezeTime(beMessenger *arg0, int arg1);
-int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2);
+void beMessenger_SetFreezeTime(beMessenger *self, int frozen);
+int beMessenger_ResolveEnumValue(beMessenger *self, int metaEnum, int name);
 void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *name, const char *text, int value);
-void beMessenger_RegisterReceiverFromInfo(int arg0, beBaseInfoRam *arg1, int arg2);
+void beMessenger_RegisterReceiverFromInfo(int messenger, beBaseInfoRam *ram, int name);
 void beMessenger_SelectReceivers(beMessenger *self, char *category, char *name, int id);
 void beMessenger_DispatchSelected(beMessenger *self, int name);
 void beMessenger_SelectGroupRam(void *, const char *, int);
@@ -77,21 +77,21 @@ void beMessenger_PushArgContext(beMessenger *self);
 void beMessenger_PopArgContext(beMessenger *self);
 void beMessenger_SetRunCheck(beMessenger *self, char enabled);
 int beMessenger_GetBoolCount(beMessenger *self);
-void beMessenger_ResizeBool(beMessenger *arg0, int arg1);
+void beMessenger_ResizeBool(beMessenger *self, int count);
 void beMessenger_AppendBool(beMessenger *self, char value);
 void beMessenger_ClearBool(beMessenger *self);
-void beMessenger_SetBool(beMessenger *arg0, int arg1, char arg2);
+void beMessenger_SetBool(beMessenger *self, int index, char value);
 unsigned char beMessenger_GetBool(beMessenger *self, int index);
 int beMessenger_GetIntCount(beMessenger *self);
 void beMessenger_AppendInt(beMessenger *self, int value);
 void beMessenger_ClearInt(beMessenger *self);
-void beMessenger_SetInt(beMessenger *arg0, int arg1, int arg2);
+void beMessenger_SetInt(beMessenger *self, int index, int value);
 int beMessenger_GetInt(beMessenger *self, int index);
 int beMessenger_GetFloatCount(beMessenger *self);
 void beMessenger_AppendFloat(beMessenger *self, float value);
 float beMessenger_GetFloat(beMessenger *self, int index);
 int beMessenger_GetLongCount(beMessenger *self);
-void beMessenger_AppendLong(beMessenger *arg0, long long arg1);
+void beMessenger_AppendLong(beMessenger *self, long long value);
 long long beMessenger_GetLong(beMessenger *self, int index);
 int beMessenger_GetVec3Count(beMessenger *self);
 void beMessenger_AppendVec3(beMessenger *self, float *value);
@@ -102,7 +102,7 @@ void beMessenger_AppendMatrix(beMessenger *self, void *value);
 void beMessenger_GetMatrix(void *out, beMessenger *self, int index);
 int beMessenger_GetObjectCount(beMessenger *self);
 void beMessenger_AppendObject(beMessenger *self, int object);
-void beMessenger_ClearObjects(beMessenger *arg0);
+void beMessenger_ClearObjects(beMessenger *self);
 int beMessenger_GetObject(beMessenger *self, int index);
 int beMessenger_GetStringCount(beMessenger *self);
 void beMessenger_AppendString(beMessenger *self, const char *text);
@@ -182,8 +182,8 @@ public:
     }
 };
 
-#define ALLOC(var) \
-    { var = igObject_GetAllocator(arg0); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
+#define ALLOC(var, owner) \
+    { var = igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]); }
 
 template <class Ref> static inline void storeAt(const int &list, int i, const Ref &slot) {
     igObject *cur = slot.p;
@@ -194,34 +194,34 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
     if (n != 0 && i >= 0 && i < n) ((igObject **)l->_data)[i] = cur;
 }
 #define GROUP(field, CNT, factory, Ref, T) { \
-    igObjectList *list = (igObjectList *)arg0->field; \
+    igObjectList *list = (igObjectList *)self->field; \
     if (list->_count < (CNT) + 1) List_Reserve(list, CNT, 4); \
-    ObjectList_ResizeRetained((void *)arg0->field, CNT); \
+    ObjectList_ResizeRetained((void *)self->field, CNT); \
     int i; \
     for (i = 0; i < (CNT); i += 1) { \
         void *alloc; \
-        ALLOC(alloc) \
+        ALLOC(alloc, self) \
         Ref slot((T *)factory(alloc)); \
-        storeAt(arg0->field, i, slot); \
+        storeAt(self->field, i, slot); \
     } }
 
-void beMessenger_InitializeMemory(beMessenger *arg0)
+void beMessenger_InitializeMemory(beMessenger *self)
 {
     void *alloc0;
 
-    ALLOC(alloc0)
+    ALLOC(alloc0, self)
     {
         ObjectRef argData((igObject *)beMessengerArgData_Create(alloc0));
         igObject *cur0 = argData.p;
         RETAIN_REF(cur0)
-        RELEASE_REF((igObject *)arg0->_argData)
-        arg0->_argData = (int)cur0;
+        RELEASE_REF((igObject *)self->_argData)
+        self->_argData = (int)cur0;
     }
     GROUP(_workStack, 0x40, beMessengerWork_Create, WorkRef, igObject)
     GROUP(_delayStack, 0x20, beMessengerDelay_Create, igSmartPointer<beMessengerDelay>, beMessengerDelay)
     GROUP(_pushPopStack, 4, beMessengerArgData_Create, ObjectRef, igObject)
-    arg0->_pushPopCount = 0;
-    arg0->_isMemoryAssign = 1;
+    self->_pushPopCount = 0;
+    self->_isMemoryAssign = 1;
 }
 
 #define CLEAR(src) { \
@@ -243,27 +243,27 @@ void beMessenger_InitializeMemory(beMessenger *arg0)
         ((igObject **)l->_data)[j] = 0; \
     } \
     l->_count = 0; }
-void beMessenger_ResetMemory(beMessenger *arg0) {
-    igObject *t = (igObject *)arg0->_argData;
+void beMessenger_ResetMemory(beMessenger *self) {
+    igObject *t = (igObject *)self->_argData;
     if (t != 0) {
         t->_refCount = (int)t->_refCount - 1;
         if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t);
     }
-    arg0->_argData = 0;
-    CLEAR(arg0->_groupList)
-    if (((igObjectList *)arg0->_groupList)->_count < 5) List_Reserve((igObjectList *)arg0->_groupList, 4, 4);
-    CLEAR(arg0->_workStack)
-    if (((igObjectList *)arg0->_workStack)->_count < 5) List_Reserve((igObjectList *)arg0->_workStack, 4, 4);
-    CLEAR(arg0->_delayStack)
-    if (((igObjectList *)arg0->_delayStack)->_count < 5) List_Reserve((igObjectList *)arg0->_delayStack, 4, 4);
-    CLEAR(arg0->_pushPopStack)
-    if (((igObjectList *)arg0->_pushPopStack)->_count < 5) List_Reserve((igObjectList *)arg0->_pushPopStack, 4, 4);
-    arg0->_pushPopCount = 0;
-    arg0->_freezeTime = 0;
-    arg0->_isMemoryAssign = 0;
+    self->_argData = 0;
+    CLEAR(self->_groupList)
+    if (((igObjectList *)self->_groupList)->_count < 5) List_Reserve((igObjectList *)self->_groupList, 4, 4);
+    CLEAR(self->_workStack)
+    if (((igObjectList *)self->_workStack)->_count < 5) List_Reserve((igObjectList *)self->_workStack, 4, 4);
+    CLEAR(self->_delayStack)
+    if (((igObjectList *)self->_delayStack)->_count < 5) List_Reserve((igObjectList *)self->_delayStack, 4, 4);
+    CLEAR(self->_pushPopStack)
+    if (((igObjectList *)self->_pushPopStack)->_count < 5) List_Reserve((igObjectList *)self->_pushPopStack, 4, 4);
+    self->_pushPopCount = 0;
+    self->_freezeTime = 0;
+    self->_isMemoryAssign = 0;
 }
 
-void beMessengerArgData_Clear(beMessengerArgData *arg0) {
+void beMessengerArgData_Clear(beMessengerArgData *self) {
     igDataList *lo;
     void *v;
     int v0;
@@ -277,7 +277,7 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
     int n2;
     int i2;
 
-    arg0->_isRunCheck = 0;
+    self->_isRunCheck = 0;
     if (g_stringPool[0] == 0) {
         v = StringPool_Allocate(0x10);
         if (v != 0) {
@@ -286,7 +286,7 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
         g_stringPool[0] = v;
     }
     s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
-    old = (int *)arg0->_debugString;
+    old = (int *)self->_debugString;
     if (old != 0) {
         hd = old - 2;
         v0 = old[-1] - 1;
@@ -295,27 +295,27 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
             StringChunk_ReleaseHeader(*hd, hd);
         }
     }
-    arg0->_debugString = (int)s1;
-    ((igBoolList *)arg0->_boolList)->_count = 0;
-    l = (igDataList *)arg0->_boolList;
+    self->_debugString = (int)s1;
+    ((igBoolList *)self->_boolList)->_count = 0;
+    l = (igDataList *)self->_boolList;
     /* matching construct: list shrink guard spelled as nested ifs ("&&" or "> 4" changes the compare) */
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 1); }
-    ((igIntList *)arg0->_intList)->_count = 0;
-    l = (igDataList *)arg0->_intList;
+    ((igIntList *)self->_intList)->_count = 0;
+    l = (igDataList *)self->_intList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
-    ((igFloatList *)arg0->_floatList)->_count = 0;
-    l = (igDataList *)arg0->_floatList;
+    ((igFloatList *)self->_floatList)->_count = 0;
+    l = (igDataList *)self->_floatList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
-    ((igLongList *)arg0->_longList)->_count = 0;
-    l = (igDataList *)arg0->_longList;
+    ((igLongList *)self->_longList)->_count = 0;
+    l = (igDataList *)self->_longList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 8); }
-    ((igVec3fList *)arg0->_vec3fList)->_count = 0;
-    l = (igDataList *)arg0->_vec3fList;
+    ((igVec3fList *)self->_vec3fList)->_count = 0;
+    l = (igDataList *)self->_vec3fList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 12); }
-    ((igMatrix44fList *)arg0->_matrix44fList)->_count = 0;
-    l = (igDataList *)arg0->_matrix44fList;
+    ((igMatrix44fList *)self->_matrix44fList)->_count = 0;
+    l = (igDataList *)self->_matrix44fList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 64); }
-    sl = (igDataList *)arg0->_stringList;
+    sl = (igDataList *)self->_stringList;
 
     /* matching construct: separate n/i counters per loop and block-local rr/m/j fix register allocation */
     n1 = sl->_count;
@@ -343,9 +343,9 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
     }
 
     sl->_count = 0;
-    sl = (igDataList *)arg0->_stringList;
+    sl = (igDataList *)self->_stringList;
     if (sl->_capacity > 4) { if (sl->_count < 5) List_Reserve(sl, 4, 4); }
-    lo = (igDataList *)arg0->_objectList;
+    lo = (igDataList *)self->_objectList;
 
     n2 = lo->_count;
     for (i2 = 0; i2 < n2; i2++) {
@@ -366,18 +366,18 @@ void beMessengerArgData_Clear(beMessengerArgData *arg0) {
         }
     }
     lo->_count = 0;
-    l = (igDataList *)arg0->_objectList;
+    l = (igDataList *)self->_objectList;
     if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
 }
 
-void beMessengerDelay_Clear(beMessengerDelay *arg0) {
+void beMessengerDelay_Clear(beMessengerDelay *self) {
     void *v;
     int v0;
     int *old;
     int *hd;
     int *s1;
-    arg0->_isUse = 0;
-    arg0->_sendTime = 0;
+    self->_isUse = 0;
+    self->_sendTime = 0;
     if (g_stringPool[0] == 0) {
         v = StringPool_Allocate(0x10);
         if (v != 0) {
@@ -386,7 +386,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
         g_stringPool[0] = v;
     }
     s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
-    old = (int *)arg0->_groupName;
+    old = (int *)self->_groupName;
     if (old != 0) {
         hd = old - 2;
         v0 = old[-1] - 1;
@@ -395,7 +395,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
             StringChunk_ReleaseHeader(*hd, hd);
         }
     }
-    arg0->_groupName = (int)s1;
+    self->_groupName = (int)s1;
     if (g_stringPool[0] == 0) {
         v = StringPool_Allocate(0x10);
         if (v != 0) {
@@ -404,7 +404,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
         g_stringPool[0] = v;
     }
     s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
-    old = (int *)arg0->_infoName;
+    old = (int *)self->_infoName;
     if (old != 0) {
         hd = old - 2;
         v0 = old[-1] - 1;
@@ -413,8 +413,8 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
             StringChunk_ReleaseHeader(*hd, hd);
         }
     }
-    arg0->_infoName = (int)s1;
-    arg0->_ramNo = 0;
+    self->_infoName = (int)s1;
+    self->_ramNo = 0;
     if (g_stringPool[0] == 0) {
         v = StringPool_Allocate(0x10);
         if (v != 0) {
@@ -423,7 +423,7 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
         g_stringPool[0] = v;
     }
     s1 = (int *)StringPool_Intern(g_stringPool[0], 0);
-    old = (int *)arg0->_message;
+    old = (int *)self->_message;
     if (old != 0) {
         hd = old - 2;
         v0 = old[-1] - 1;
@@ -432,8 +432,8 @@ void beMessengerDelay_Clear(beMessengerDelay *arg0) {
             StringChunk_ReleaseHeader(*hd, hd);
         }
     }
-    arg0->_message = (int)s1;
-    beMessengerArgData_Clear((beMessengerArgData *)arg0->_argData);
+    self->_message = (int)s1;
+    beMessengerArgData_Clear((beMessengerArgData *)self->_argData);
 }
 
 void beMessenger_Activate(beMessenger *self, int unusedArg)
@@ -454,9 +454,9 @@ void beMessenger_Stop(void)
 {
 }
 
-int beMessenger_AddInfo(beMessenger *arg0) {
-    if (arg0->_isMemoryAssign == 0) {
-        beMessenger_InitializeMemory(arg0);
+int beMessenger_AddInfo(beMessenger *self) {
+    if (self->_isMemoryAssign == 0) {
+        beMessenger_InitializeMemory(self);
     }
     return 0;
 }
@@ -563,25 +563,25 @@ void beMessenger_Update(beMessenger *self)
     }
 }
 
-void beMessenger_SetFreezeTime(beMessenger *arg0, int arg1) {
-    if (arg1 != 0) {
-        arg0->_freezeTime = (long long) ((igInsightCore *)arg0->_insight)->_worldTime;
+void beMessenger_SetFreezeTime(beMessenger *self, int frozen) {
+    if (frozen != 0) {
+        self->_freezeTime = (long long) ((igInsightCore *)self->_insight)->_worldTime;
         return;
     }
-    arg0->_freezeTime = 0;
+    self->_freezeTime = 0;
 }
 
-int beMessenger_ResolveEnumValue(beMessenger *self, int arg1, int arg2) {
+int beMessenger_ResolveEnumValue(beMessenger *self, int metaEnum, int name) {
     int value;
     int found;
-    if ((DAT_0058a4e0[0] == arg1) && (strcmp(&DAT_0058a4f0[0], arg2) == 0)) {
-        return DAT_0058a530[0];
+    if ((g_resolveEnumLastMetaEnum[0] == metaEnum) && (strcmp(&g_resolveEnumLastName[0], name) == 0)) {
+        return g_resolveEnumLastValue[0];
     }
-    igMetaEnum_GetValueByName(&found, arg1, arg2, &value);
+    igMetaEnum_GetValueByName(&found, metaEnum, name, &value);
     if (*(int *)(unsigned)&found == g_resultSuccess[0]) {
-        DAT_0058a4e0[0] = arg1;
-        strcpy(&DAT_0058a4f0[0], arg2);
-        DAT_0058a530[0] = value;
+        g_resolveEnumLastMetaEnum[0] = metaEnum;
+        strcpy(&g_resolveEnumLastName[0], name);
+        g_resolveEnumLastValue[0] = value;
         return value;
     }
     return -1;
@@ -632,12 +632,12 @@ void beMessenger_RegisterReceiver(beMessenger *self, void *recv, const char *nam
 
 /* C++ keeps the call a real jal (C turns a trailing call into a tail jump); the ternary gives the
  * empty-then / branch-over shape. */
-void beMessenger_RegisterReceiverFromInfo(int arg0, beBaseInfoRam *arg1, int arg2) {
-    beBaseInfo *info = (beBaseInfo *)arg1->_parentInfo;
+void beMessenger_RegisterReceiverFromInfo(int messenger, beBaseInfoRam *ram, int name) {
+    beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     int *recv = (int *)info->_name;
-    int t = arg1->_ramNo;
+    int t = ram->_ramNo;
     recv = recv != 0 ? recv : &emptyString[0];
-    beMessenger_RegisterReceiver((beMessenger *)arg0, arg1, (const char *)arg2, (const char *)recv, t);
+    beMessenger_RegisterReceiver((beMessenger *)messenger, ram, (const char *)name, (const char *)recv, t);
 }
 
 /* The lists are igObjectList (_count +8, _capacity +12, _data +16); the data
@@ -1119,15 +1119,15 @@ int beMessenger_GetBoolCount(beMessenger *self) {
     return list->_count;
 }
 
-void beMessenger_ResizeBool(beMessenger *arg0, int arg1) {
-    igBoolList *temp_a0;
-    temp_a0 = (igBoolList *)((beMessengerArgData *)arg0->_argData)->_boolList;
-    if (arg1 >= 0) {
-        if (arg1 <= temp_a0->_capacity) {
-            temp_a0->_count = arg1;
+void beMessenger_ResizeBool(beMessenger *self, int count) {
+    igBoolList *list;
+    list = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
+    if (count >= 0) {
+        if (count <= list->_capacity) {
+            list->_count = count;
             return;
         }
-        List_Resize(temp_a0, arg1, 1);
+        List_Resize(list, count, 1);
     }
 }
 
@@ -1151,11 +1151,11 @@ void beMessenger_ClearBool(beMessenger *self) {
     list->_count = 0;
 }
 
-void beMessenger_SetBool(beMessenger *arg0, int arg1, char arg2) {
-    igBoolList *l = (igBoolList *)((beMessengerArgData *)arg0->_argData)->_boolList;
+void beMessenger_SetBool(beMessenger *self, int index, char value) {
+    igBoolList *l = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
     int n = l->_count;
-    if (n != 0 && arg1 >= 0 && arg1 < n) {
-        ((char *)l->_data)[arg1] = arg2;
+    if (n != 0 && index >= 0 && index < n) {
+        ((char *)l->_data)[index] = value;
     }
 }
 
@@ -1191,12 +1191,12 @@ void beMessenger_ClearInt(beMessenger *self) {
     list->_count = 0;
 }
 
-void beMessenger_SetInt(beMessenger *arg0, int arg1, int arg2) {
-    beMessengerArgData *args = (beMessengerArgData *)arg0->_argData;
-    igIntList *a3 = (igIntList *)args->_intList;
-    int n = a3->_count;
-    if ((n != 0) && (arg1 >= 0) && (arg1 < n)) {
-        ((int *)a3->_data)[arg1] = arg2;
+void beMessenger_SetInt(beMessenger *self, int index, int value) {
+    beMessengerArgData *args = (beMessengerArgData *)self->_argData;
+    igIntList *list = (igIntList *)args->_intList;
+    int n = list->_count;
+    if ((n != 0) && (index >= 0) && (index < n)) {
+        ((int *)list->_data)[index] = value;
     }
 }
 
@@ -1238,20 +1238,20 @@ int beMessenger_GetLongCount(beMessenger *self) {
     return list->_count;
 }
 
-void beMessenger_AppendLong(beMessenger *arg0, long long arg1) {
-    int temp_s2;
+void beMessenger_AppendLong(beMessenger *self, long long value) {
+    int index;
     beMessengerArgData *args;
-    igLongList *temp_s1;
+    igLongList *list;
 
-    args = (beMessengerArgData *)arg0->_argData;
-    temp_s1 = (igLongList *)args->_longList;
-    temp_s2 = temp_s1->_count;
-    if (temp_s2 < temp_s1->_capacity) {
-        temp_s1->_count = temp_s2 + 1;
+    args = (beMessengerArgData *)self->_argData;
+    list = (igLongList *)args->_longList;
+    index = list->_count;
+    if (index < list->_capacity) {
+        list->_count = index + 1;
     } else {
-        List_Resize(temp_s1, temp_s2 + 1, 8);
+        List_Resize(list, index + 1, 8);
     }
-    ((long long *)temp_s1->_data)[temp_s2] = arg1;
+    ((long long *)list->_data)[index] = value;
 }
 
 long long beMessenger_GetLong(beMessenger *self, int index) {
@@ -1337,37 +1337,32 @@ void beMessenger_AppendObject(beMessenger *self, int object)
     ObjectList_AppendRetained(((beMessengerArgData *)self->_argData)->_objectList, object);
 }
 
-/* reference-counted engine object header: refcount word at +4 */
-typedef struct RefCountedHeader { int pad; int f4; } RefCountedHeader;
-/* Element-buffer list header: count at +8, buffer at +16. */
-typedef struct ElementBufferList { char pad[8]; int f8; int pad2; RefCountedHeader **f16; } ElementBufferList;
-
-void beMessenger_ClearObjects(beMessenger *arg0) {
+void beMessenger_ClearObjects(beMessenger *self) {
     beMessengerArgData *args;
-    ElementBufferList *l;
+    igObjectList *l;
     int n;
     int i;
-    RefCountedHeader *o;
+    igObject *o;
     int n2;
     int j;
 
-    args = (beMessengerArgData *)arg0->_argData;
-    l = (ElementBufferList *)args->_objectList;
-    n = l->f8;
+    args = (beMessengerArgData *)self->_argData;
+    l = (igObjectList *)args->_objectList;
+    n = l->_count;
     for (i = 0; i < n; i++) {
-        o = l->f16[i];
+        o = ((igObject **)l->_data)[i];
         if (o != 0) {
-            o->f4 = o->f4 - 1;
-            if (((unsigned long long) ((long long) o->f4 << 0x29) >> 0x29) == 0) {
+            o->_refCount = (int)o->_refCount - 1;
+            if (((unsigned long long) ((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(o);
             }
         }
     }
-    n2 = l->f8;
+    n2 = l->_count;
     for (j = 0; j < n2; j++) {
-        l->f16[j] = 0;
+        ((igObject **)l->_data)[j] = 0;
     }
-    l->f8 = 0;
+    l->_count = 0;
 }
 
 int beMessenger_GetObject(beMessenger *self, int index) {

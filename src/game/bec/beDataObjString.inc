@@ -16,48 +16,22 @@ void *beDataObjString_GetMetaObject(void) {
 
 int beDataObjString_GetVTable(void) {
     beDataObjString obj;
-    int temp_s1;
-    int *q2;
-    int *q3;
-    int *temp_a1;
-    int *temp_a1_2;
-    int temp_v0;
-    int temp_v0_2;
-    void *temp_v1;
-    void *temp_v1_2;
+    int vtable;
+    char **dataSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    q2 = &obj._name;
-    *q2 = 0;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
     obj._vtable = (int)(&g_beDataObjString_vtable[0]);
-    q3 = &obj._data;
-    *q3 = 0;
-    temp_s1 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    dataSlot = (char **)&obj._data;
+    *dataSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj._vtable = (int)(&g_beDataObjString_vtable[0]);
-    if (q3 != 0) {
-        temp_v1 = (void *)*q3;
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
+    igStringRef_Release(dataSlot);
     obj._vtable = (int)(&g_igNamedObject_vtable[0]);
-    if (q2 != 0) {
-        temp_v1_2 = (void *)*q2;
-        if (temp_v1_2 != 0) {
-            temp_a1_2 = (int *)((char *)temp_v1_2 - 8);
-            temp_v0_2 = *(int *)((char *)(temp_v1_2) - 4) - 1;
-            *(int *)((char *)(temp_v1_2) - 4) = temp_v0_2;
-            if (temp_v0_2 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1_2, temp_a1_2);
-            }
-        }
-    }
-    return temp_s1;
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beDataObjString_EnsureRegistered(void)

@@ -134,7 +134,7 @@ int igEventDispatcher_AddReceiverOrder(int *p)
     return igDependencyOrderedList_AddDependency(*(int *)((char *)p + 12));
 }
 
-void FUN_004542e0(S0 *arg0, int arg1, int arg2) {
+void igEventDispatcher_RemoveReceiverOrder(S0 *arg0, int arg1, int arg2) {
     int sp1C;
 
     igDependencyOrderedList_RemoveDependency(&sp1C, arg0->fC, arg1, arg2);

@@ -22,45 +22,28 @@ void *beNDMWPanelWaza_ResolveMetaObject(void) {
 }
 
 int beNDMWPanelWaza_GetVTable(void) {
-    union U_3bef70 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
-    char *p38;
-    char *p48;
+    beNDMWPanelWaza obj;
+    int vtable;
+    int *nameRef;
+    int *infoListRef;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    p38 = &u.b[8];
-    *(int *)p38 = 0;
-    p48 = &u.b[24];
-    *(int *)p48 = 0;
-    u.vt = (int)&g_beNDMWPanelWaza_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beBaseInfoManager_vtable[0];
-    if (p48 != 0) {
-        v1 = *(int **)p48;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(v1);
-            }
-        }
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
+    nameRef = &obj._name;
+    *nameRef = 0;
+    infoListRef = &obj._infoList;
+    *infoListRef = 0;
+    *(int **)&obj._vtable = &g_beNDMWPanelWaza_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
+    if (infoListRef != 0) {
+        igRelease((igObject *)*infoListRef);
     }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (p38 != 0) {
-        v1 = *(int **)p38;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
+    if (nameRef != 0) {
+        releaseString((const char *)*nameRef);
     }
-    return r;
+    return vtable;
 }
 
 void beNDMWPanelWaza_EnsureRegistered(void)

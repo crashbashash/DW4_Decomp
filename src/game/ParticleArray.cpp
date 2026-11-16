@@ -13,12 +13,12 @@ extern "C" int igObject_IsKindOf(igObject *object, igMetaObject *meta);
 extern "C" int igObject_GetAllocator(void *object);
 extern "C" int igTraversal_RegisterFunction(int table, igMetaObject *meta, int (*function)(igObject *, igObject *));
 extern "C" igMetaObject *ParticleTimer_GetMetaObject(void);
-extern "C" void FUN_001d3550(void);
-extern "C" int FUN_001b9530(igCommonTraversal *traversal, ParticleTimer *timer);
+extern "C" void Gap__Sg__igNode__resetFields(void);
+extern "C" int igCommonTraversal_TraverseGeometry(igCommonTraversal *traversal, ParticleTimer *timer);
 extern "C" void igObjectPool_Grow(igTimeAttrPool *pool, igObject *(*create)(int));
 extern "C" igObject *igTimeAttr_CreateInstance(int allocator);
 extern "C" void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index);
-extern "C" void Gap__Gfx__igParticleArray__vfunc_13(void);
+extern "C" void Gap__Gfx__igParticleArray__resetFields(void);
 extern "C" int igParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int offset, int *status, float time);
 extern "C" igObject *igVisualContext_FindFirst(void);
 extern "C" igObject *igVertexArray_Create(int allocator);
@@ -26,13 +26,13 @@ extern "C" void igVertexArrayLock_Init(igVertexArrayLock *lock);
 extern "C" igMetaObject *g_igCommonTraversal_metaObject;
 extern "C" igMetaObject *g_ParticleArray_metaObject;
 extern "C" igMetaObject *g_ParticleTimer_metaObject;
-extern "C" int DAT_00562640;
+extern "C" int g_igCommonTraversal_travProcs;
 
 extern "C" {
-int FUN_003a3850(igObject *traversal, igObject *node);
-void FUN_003a3900(void);
+int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node);
+void ParticleTimer_RegisterTraversalFunction(void);
 void ParticleTimer_resetFields(void);
-int FUN_003a3960(ParticleTimer *timer, igCommonTraversal *traversal);
+int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal);
 void ParticleArray_resetFields(ParticleArray *self);
 int ParticleArray_UsesBaseUpdate(ParticleArray *self);
 int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int offset, int *status, float time);
@@ -175,7 +175,7 @@ static inline void createContext(ParticleArray *self) {
     }
 }
 
-int FUN_003a3850(igObject *traversal, igObject *node) {
+int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
     igCommonTraversal *common;
     ParticleTimer *timer;
     if (traversal != 0 && igObject_IsKindOf(traversal, g_igCommonTraversal_metaObject) != 0) {
@@ -188,19 +188,19 @@ int FUN_003a3850(igObject *traversal, igObject *node) {
     } else {
         timer = 0;
     }
-    return (common != 0 && timer != 0) ? FUN_003a3960(timer, common) : 0;
+    return (common != 0 && timer != 0) ? ParticleTimer_Traverse(timer, common) : 0;
 }
 
-void FUN_003a3900(void) {
-    igTraversal_RegisterFunction(DAT_00562640, ParticleTimer_GetMetaObject(), FUN_003a3850);
+void ParticleTimer_RegisterTraversalFunction(void) {
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), ParticleTimer_TraversalFunction);
 }
 
 void ParticleTimer_resetFields(void)
 {
-    FUN_001d3550();
+    Gap__Sg__igNode__resetFields();
 }
 
-int FUN_003a3960(ParticleTimer *timer, igCommonTraversal *traversal)
+int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
 {
     long long now;
     long long elapsed;
@@ -247,7 +247,7 @@ int FUN_003a3960(ParticleTimer *timer, igCommonTraversal *traversal)
     stack = ((igTDataList<igTimeAttr *> **)stack->_data)[stackIndex];
     stack->append(attr);
     igAttrStackManager_MarkStackChanged(stacks, (igAttrStack *)stack, stackIndex);
-    result = FUN_001b9530(traversal, timer);
+    result = igCommonTraversal_TraverseGeometry(traversal, timer);
     popIndex = *unitID + ((int *)stacks->_attrStackIndexTable)[*attrIndex];
     popStack = ((igAttrStack **)((igAttrStackList *)stacks->_attrStacks)->_data)[popIndex];
     topIndex = popStack->_count - 1;
@@ -264,7 +264,7 @@ int FUN_003a3960(ParticleTimer *timer, igCommonTraversal *traversal)
 }
 
 void ParticleArray_resetFields(ParticleArray *self) {
-    Gap__Gfx__igParticleArray__vfunc_13();
+    Gap__Gfx__igParticleArray__resetFields();
     if (self->_particleDataSize == 0) {
         self->_particleDataSize = sizeof(Particle);
     }

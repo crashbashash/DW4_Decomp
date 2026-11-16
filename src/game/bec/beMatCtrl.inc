@@ -30,21 +30,21 @@ void *beMatCtrl_GetMetaObject(void) {
 }
 
 int beMatCtrl_GetVTable(void) {
-    struct Obj_35a7f0 obj;
-    int r;
+    beMatCtrl obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.w[5] = 0;
-    obj.vt = &g_beMatCtrl_vtable[0];
-    obj.w[13] = 0;
-    obj.w[14] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMatCtrl_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj.w[14], -1);
-    igSmartPointer_igIntList_Destruct(&obj.w[13], -1);
-    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
-    return r;
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beMatCtrl_vtable[0];
+    obj._wkMatOnList = 0;
+    obj._wkMatOldOnList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMatCtrl_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._wkMatOldOnList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._wkMatOnList, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
 void beMatCtrl_EnsureRegistered(void)

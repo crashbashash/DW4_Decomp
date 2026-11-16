@@ -15,22 +15,22 @@ void *beNDMWStatusCtrlEquip_GetMetaObject(void) {
 }
 
 int beNDMWStatusCtrlEquip_GetVTable(void) {
-    struct Obj_3bad70 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f52 = 0;
-    o.f56 = 0;
-    o.f60 = 0;
-    o.f64 = 0;
-    o.f68 = 0;
-    o.f72 = 0;
-    o.f76 = 0;
-    o.vt = &g_beNDMWStatusCtrlEquip_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWStatusCtrlEquip_vtable[0];
-    
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&o, (long long)0);
-    return r;
+    beNDMWStatusCtrlEquip obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlEquip_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusCtrlEquip_vtable[0];
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 void beNDMWStatusCtrlEquip_EnsureRegistered(void)

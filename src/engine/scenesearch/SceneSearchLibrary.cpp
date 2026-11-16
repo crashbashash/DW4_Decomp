@@ -7,8 +7,8 @@
 unsigned char g_SceneSearchLibrary_registered;
 
 /* SceneSearch's register list: the library has one registrar. */
-void thunk_FUN_00238ed0(void) {
-    FUN_00238ed0();
+void SceneSearchLibrary_RegisterClasses(void) {
+    igSearchSceneGraph_EnsureRegistered();
 }
 
 void SceneSearchLibrary_MarkRegistered(void) {
@@ -40,7 +40,7 @@ int FUN_00238d70(void) {
 igMetaObject *igSearchSceneGraph_GetMetaObject(void) {
     igMetaObject *meta = g_igSearchSceneGraph_metaObject;
     if (!meta || ((meta->_validity & 4) != 0) == false)
-        FUN_00238ed0();
+        igSearchSceneGraph_EnsureRegistered();
     return g_igSearchSceneGraph_metaObject;
 }
 
@@ -60,11 +60,11 @@ int igSearchSceneGraph_GetVTable(void) {
     igSmartPointer_igMetaObject_Destruct(&obj.f14, -1);
     igStringRef_Destruct(&obj.f10, -1);
     FUN_002293d0(&obj.fC, -1);
-    FUN_00131bc0(&obj, 0);
+    igNamedObject_Destroy(&obj, 0);
     return vtable;
 }
 
-void FUN_00238ed0(void) {
+void igSearchSceneGraph_EnsureRegistered(void) {
     igMetaObject_RunStaticInit(igSearchSceneGraph_Register);
 }
 
@@ -192,7 +192,7 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
 }
 
 /* Three smart-pointer destructors: release the held object, then free the pointer when flags > 0. */
-void **FUN_00239200(void **ref, short flags) {
+void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags) {
     RefCounted *held;
 
     if (ref != 0) {

@@ -13,10 +13,10 @@ template <class T> static inline void ListStoreAt(T *data, int index, const T &v
 
 /* The same for an int list whose storage is read through the list's data accessor (a call, as the game's
    code makes it). */
-extern "C" int DataList_GetData_003e9090(...);
+extern "C" int beNDMWLoadIntf2_igIntList_GetData(...);
 template <class List> static inline void IntListSet(List *list, int index, const int &value) {
     int count = list->_count;
-    if (count != 0 && index >= 0 && index < count) ((int *)DataList_GetData_003e9090(list))[index] = value;
+    if (count != 0 && index >= 0 && index < count) ((int *)beNDMWLoadIntf2_igIntList_GetData(list))[index] = value;
 }
 
 #endif

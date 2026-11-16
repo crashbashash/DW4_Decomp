@@ -22,20 +22,24 @@ void *beLuaState_GetMetaObject(void) {
 }
 
 int beLuaState_GetVTable(void) {
-    Obj_35ab00 obj;
-    int r;
+    beLuaState obj;
+    int vtable;
+    igObject **memPoolSlot;
+    char **nameSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_igLuaState_vtable[0];
-    obj.r1 = 0;
-    obj.r2 = 0;
-    obj.vt = &g_beLuaState_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_igLuaState_vtable[0];
-    obj.rel2();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel1();
-    return r;
+    obj._vtable = (int)&g_igLuaState_vtable[0];
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    memPoolSlot = (igObject **)&obj._memPool;
+    *memPoolSlot = 0;
+    obj._vtable = (int)&g_beLuaState_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_igLuaState_vtable[0];
+    igObjectRef_Release(memPoolSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beLuaState_EnsureRegistered(void)

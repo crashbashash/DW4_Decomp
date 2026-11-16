@@ -33,12 +33,12 @@ int beTextureCtrl_GetVTable(void) {
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_beTextureCtrl_vtable[0];
-    FUN_00342460((igSmartPointer<igObject> *)&o.s, (short)(-1));
-    FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
+    igSmartPointer_beTextureCtrlWork_Destruct((igSmartPointer<igObject> *)&o.s, (short)(-1));
+    beBaseInfoManager_Destroy((O_33f5e0 *)&o, (short)0);
     return r;
 }
 
-igSmartPointer<igObject> *FUN_00342460(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beTextureCtrlWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

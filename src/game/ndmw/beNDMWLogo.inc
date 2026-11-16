@@ -32,19 +32,19 @@ void *beNDMWLogo_GetReadyMetaObject(void) {
 }
 
 int beNDMWLogo_GetVTable(void) {
-    struct Obj_3c2420 obj;
-    int temp_s0;
+    beNDMWLogo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f18 = 0;
-    obj.vt = (&g_beNDMWLogo_vtable[0]);
-    obj.f28 = 0;
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = (&g_beNDMWLogo_vtable[0]);
-    FUN_003b2a10((igSmartPointer<igObject> *)&obj.f28, -1);
-    FUN_0033f5e0(&obj, 0);
-    return temp_s0;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
+    obj._mcUtilCtrl = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
+    igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWLogo_EnsureRegistered(void)

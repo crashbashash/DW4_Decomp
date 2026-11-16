@@ -24,19 +24,19 @@ void *beNDMWSaveIntf_GetMetaObject(void) {
 }
 
 int beNDMWSaveIntf_GetVTable(void) {
-    struct F_3bcd60 f;
-    int temp_s0;
+    beNDMWSaveIntf obj;
+    int vtable;
 
-    igObject_InitHeader(&f);
-    f.w[1] = 0;
-    f.w[5] = 0;
-    f.vt = &g_beNDMWSaveIntf_vtable[0];
-    f.w[8] = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem[0]) + 916));
-    f.vt = &g_beNDMWSaveIntf_vtable[0];
-    FUN_0033dda0(&f.w[8], -1);
-    FUN_0033f5e0(&f, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWSaveIntf_vtable[0];
+    obj._padManager = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWSaveIntf_vtable[0];
+    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWSaveIntf_EnsureRegistered(void)

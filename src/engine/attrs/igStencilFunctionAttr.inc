@@ -117,7 +117,7 @@ void igStencilFunctionAttr_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, temp_s0);
 }
 
-void **FUN_001338d0(void **arg0, short arg1) {
+void **igSmartPointer_igVertexArray_Destruct(void **arg0, short arg1) {
     S_temp_a0_1338d0 *temp_a0;
 
     if (arg0 != 0) {

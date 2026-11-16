@@ -36,7 +36,7 @@ int igSwitch_GetVTable(void) {
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.vt = (int)&g_igSwitch_vtable[0];
     FUN_00196a50((struct R * *)ps, -1);
-    FUN_00195a90((struct T_195a90 *)u.b, 0);
+    igGroup_Destroy((struct T_195a90 *)u.b, 0);
     return temp_s0;
 }
 

@@ -8,7 +8,7 @@ void beNDMWItemWeapon_Create(int allocator) {
 void *beNDMWItemWeapon_GetReadyMetaObject(void) {
     unsigned char b;
     if (g_beNDMWItemWeapon_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWItemWeapon_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWItemWeapon_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWItemWeapon_EnsureRegistered();
@@ -17,11 +17,11 @@ done:
 }
 
 int beNDMWItemWeapon_GetVTable(void) {
-    union U_3c8d20 u;
+    beNDMWItemWeapon obj;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beNDMWItemWeapon_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWItemWeapon_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beNDMWItemWeapon_EnsureRegistered(void)

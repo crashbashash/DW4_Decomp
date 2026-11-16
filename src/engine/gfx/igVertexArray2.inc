@@ -37,8 +37,8 @@ int igVertexArray2_GetVTable(void) {
     obj.vt = &g_igVertexArray2_vtable[0];
     FUN_0014aaf0((ObjectRefWord *)&obj.w[4], -1);
     igSmartPointer_igObjectList_Destruct((void **)&obj.w[3], -1);
-    ObjectRef_Destruct_001363f0(&obj.w[2], -1);
-    FUN_00131bc0(&obj, 0);
+    igSmartPointer_igObject_Destruct(&obj.w[2], -1);
+    igNamedObject_Destroy(&obj, 0);
     return r;
 }
 

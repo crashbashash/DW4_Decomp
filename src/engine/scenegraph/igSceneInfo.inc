@@ -39,15 +39,15 @@ int igSceneInfo_GetVTable(void) {
     obj.w15 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
     obj.vt = &g_igSceneInfo_vtable[0];
-    FUN_001958f0((void * *)&obj.w15, -1);
+    igSmartPointer_igNodeList_Destruct((void * *)&obj.w15, -1);
     FUN_0019b1f0((void * *)&obj.w7, -1);
-    FUN_00131aa0(&obj.w6, -1);
-    FUN_00198210((ObjectRefWord *)&obj.w5, -1);
+    igSmartPointer_igTextureList_Destruct(&obj.w6, -1);
+    igSmartPointer_igNode_Destruct((ObjectRefWord *)&obj.w5, -1);
     igInfo_Destroy(&obj, 0);
     return t;
 }
 
-void *FUN_0019b040(igSceneInfo *arg0, short arg1) {
+void *igSceneInfo_Destroy(igSceneInfo *arg0, short arg1) {
     igObject *p;
     int rc;
     int *hd;
@@ -170,7 +170,7 @@ static FieldFactory g_igSceneInfo_ctorTable[] = {
     igObjectRefMetaField_Create,
     igLongMetaField_Create,
     igLongMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
 };
 static const char *g_igSceneInfo_fieldTable[] = {
@@ -230,7 +230,7 @@ void igSceneInfo_InitFields(void) {
     v.x = 0;
     v.y = 0x3F800000;
     v.z = 0;
-    FUN_0018e470(temp_a0, &v);
+    igVec3fMetaField_SetDefault(temp_a0, &v);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;

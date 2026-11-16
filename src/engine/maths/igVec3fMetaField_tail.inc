@@ -36,7 +36,7 @@ int igVec3fMetaField_GetSize(void) {
     return 0xC;
 }
 
-void FUN_0018e470(igVec3fMetaFieldView *self, const float *value)
+void igVec3fMetaField_SetDefault(igVec3fMetaFieldView *self, const float *value)
 {
     self->SetDefault(value);
 }

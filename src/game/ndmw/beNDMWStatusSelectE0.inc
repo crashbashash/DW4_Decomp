@@ -15,24 +15,24 @@ igMetaObject *beNDMWStatusSelectE0_GetMetaObject(void)
 }
 
 int beNDMWStatusSelectE0_GetVTable(void) {
-    struct W_3b5400 o;
-    int r;
+    beNDMWStatusSelectE0 obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[12] = 0;
-    o.f[13] = 0;
-    o.f[14] = 0;
-    o.f[15] = 0;
-    o.f[16] = 0;
-    o.f[17] = 0;
-    o.f[18] = 0;
-    o.f[19] = 0;
-    o.f[26] = 0;
-    o.vt = g_beNDMWStatusSelectE0_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beNDMWStatusSelectE0_vtable;
-    FUN_003b4050((struct S_3b4050 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    obj._infoName = 0;
+    obj._decideList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusSelectE0_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusSelectE0_vtable[0];
+    beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusSelectE0_EnsureRegistered(void)

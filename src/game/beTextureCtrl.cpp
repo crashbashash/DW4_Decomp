@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igObjectVirtuals.h"
+#include "dw4/igobject_release.h"
 
 extern "C" void igObject_Destroy(void *);
 extern "C" int beTextureCtrl_GetInfoMeta(void);
@@ -8,42 +10,35 @@ extern "C" int Memory_GetAllocatorBySelector(...);
 extern "C" int ObjectList_AppendRetained(...);
 extern "C" int igObject_GetAllocator(...);
 extern "C" int ObjectList_RemoveFirstRetained(...);
-typedef struct { int pad0; int rc; } RefObj;
-extern "C" void beTextureCtrl_Prepare(beTextureCtrl *arg0);
+extern "C" void beTextureCtrl_Prepare(beTextureCtrl *self);
 extern "C" int g_beTextureCtrlInfo_metaObject[4];
 extern "C" int g_beTextureCtrl_metaObject[4];
-struct TextureCtrlWork { char header[8]; int f8; int f12; };
-/* The _work object: two list handles at +8 and +12. */
-struct TextureCtrlSource { char pad[12]; struct TextureCtrlSource *f12; char pad1[12]; unsigned char f28; char pad2[3]; igObjectList *f32; };
-extern "C" struct TextureCtrlWork *beTextureCtrlWork_Create(int);
+extern "C" beTextureCtrlWork *beTextureCtrlWork_Create(int allocator);
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
-extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *arg0, struct TextureCtrlSource *arg1);
-/* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
-class TypeIdVirtual { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); };
-/* matching construct: dummy-virtual class supplies the retail vtable slot offsets for the virtual calls */
-class NewObjectVirtual : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void v132(int); };
-struct PropertyRecord { char pad[12]; int f12; };
+extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram);
+/* igTextureBindAttr seen through its vtable: slot 31 sets the bound texture. */
+class NewObjectVirtual : public igVirtualObject {
+public:
+    DW4_SLOTS_20(s) DW4_SLOTS_5(t) DW4_SLOTS_5(u)
+    virtual void setTexture(int texture);
+};
+/* A property record: the name it is found by and its value. */
+struct PropertyRecord { int _vtable; unsigned int _refCount; int _name; int _value; };
 extern "C" NewObjectVirtual *igTextureBindAttr_CreateInstance(...);
 extern "C" PropertyRecord *igProperty_FindByName(...);
 extern "C" int emptyString[4];
 extern "C" int g_igTextureBindAttr_metaObject[4];
 extern "C" int g_propertyNameField[4];
-extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *arg0, beBaseInfoRam *arg1);
+extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram);
 
-void beTextureCtrl_Prepare(beTextureCtrl *arg0) {
-    RefObj *temp_a0;
+void beTextureCtrl_Prepare(beTextureCtrl *self) {
+    beTextureCtrlWork *work;
 
-    arg0->_isFirstTime = 1;
-    temp_a0 = (RefObj *)arg0->_work;
-    if (temp_a0 != 0) {
-        temp_a0->rc = (int)((int) (temp_a0->rc - 1));
-        if (((unsigned long long) ((long long) temp_a0->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((void *)temp_a0);
-            ;
-        }
-    }
-    arg0->_work = 0;
+    self->_isFirstTime = 1;
+    work = (beTextureCtrlWork *)self->_work;
+    IG_OBJECT_RELEASE(work);
+    self->_work = 0;
 }
 
 int beTextureCtrl_GetInfoMeta(void)
@@ -51,51 +46,53 @@ int beTextureCtrl_GetInfoMeta(void)
     return g_beTextureCtrlInfo_metaObject[0];
 }
 
-void beTextureCtrl_OnAddRam(beTextureCtrl *arg0, struct TextureCtrlSource *arg1) {
-    int temp_s4;
-    int var_s3;
-    int var_s2;
-    int var_v0;
+void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
+    int count;
+    int i;
+    int offset;
+    int allocator;
     igObject *old;
+    beTextureCtrlInfo *info;
 
-    if (arg0->_work == 0) {
-        var_v0 = igObject_GetAllocator(arg0);
+    if (self->_work == 0) {
+        allocator = igObject_GetAllocator(self);
         if (g_useOwnerAllocator != 0) {
-            var_v0 = (int)var_v0;
+            allocator = (int)allocator;
         } else {
-            var_v0 = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
         }
-        old = (igObject *)arg0->_work;
+        old = (igObject *)self->_work;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;
             if ((old->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy((void *)old);
             }
         }
-        arg0->_work = (int)beTextureCtrlWork_Create(var_v0);
+        self->_work = (int)beTextureCtrlWork_Create(allocator);
     }
-    arg1 = arg1->f12;
-    if (arg1->f28 != 0) {
-        temp_s4 = arg1->f32->_count;
-        var_s3 = 0;
-        if (0 < temp_s4) {
-            var_s2 = 0;
+    ram = (beBaseInfoRam *)ram->_parentInfo;
+    info = (beTextureCtrlInfo *)ram;
+    if (info->_isTexture != 0) {
+        count = ((igObjectList *)info->_dataList_)->_count;
+        i = 0;
+        if (0 < count) {
+            offset = 0;
             do {
-                ObjectList_AppendRetained(((struct TextureCtrlWork *)arg0->_work)->f8, *(int *)((char *)arg1->f32->_data + var_s2));
-                var_s3 += 1;
-                var_s2 += 4;
-            } while (var_s3 < temp_s4);
+                ObjectList_AppendRetained(((beTextureCtrlWork *)self->_work)->_textureList, *(int *)((char *)((igObjectList *)info->_dataList_)->_data + offset));
+                i += 1;
+                offset += 4;
+            } while (i < count);
         }
     } else {
-        temp_s4 = arg1->f32->_count;
-        var_s3 = 0;
-        if (0 < temp_s4) {
-            var_s2 = 0;
+        count = ((igObjectList *)info->_dataList_)->_count;
+        i = 0;
+        if (0 < count) {
+            offset = 0;
             do {
-                ObjectList_AppendRetained(((struct TextureCtrlWork *)arg0->_work)->f12, *(int *)((char *)arg1->f32->_data + var_s2));
-                var_s3 += 1;
-                var_s2 += 4;
-            } while (var_s3 < temp_s4);
+                ObjectList_AppendRetained(((beTextureCtrlWork *)self->_work)->_attributeList, *(int *)((char *)((igObjectList *)info->_dataList_)->_data + offset));
+                i += 1;
+                offset += 4;
+            } while (i < count);
         }
     }
 }
@@ -104,68 +101,68 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *arg0, struct TextureCtrlSource *arg1)
  * on scope exit, after the attribute set has retained it (reference count in the low 23 bits of
  * _refCount). */
 
-void beTextureCtrl_UpdateRam(beTextureCtrl *arg0, beBaseInfoRam *arg1) {
-    struct { int spA0; int pad[5]; } sa;
-
-    beTextureCtrlAttr *s1;
-    int s4;
-    int s8;
-    int *a2;
-    igAttrSet *s3;
-    int var_v0;
-    beTextureCtrlWork *x;
-    PropertyRecord *p;
-    TypeIdVirtual *s2;
-    int s6;
-    int k;
-    int s5;
-    int s0;
-    if (arg0->_isFirstTime != 0) {
-        if (((beTextureCtrlInfo *)arg1->_parentInfo)->_isTexture == 0) {
-            sa.spA0 = ((igObjectList *)((beTextureCtrlWork *)arg0->_work)->_attributeList)->_count;
-            s5 = 0;
-            if (0 < sa.spA0) {
-                s8 = 0;
+void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
+    /* matching construct: hand search — retail keeps the attribute count in a stack slot; the padding places it at +0xa0 */
+    struct { int count; int pad[5]; } spilled;
+    beTextureCtrlAttr *entry;
+    int boundIndex;
+    int offset;
+    int *name;
+    igAttrSet *attrSet;
+    int allocator;
+    beTextureCtrlWork *work;
+    PropertyRecord *property;
+    igObjectVirtuals *existing;
+    int boundCount;
+    int bindMeta;
+    int attributeIndex;
+    int boundOffset;
+    if (self->_isFirstTime != 0) {
+        if (((beTextureCtrlInfo *)ram->_parentInfo)->_isTexture == 0) {
+            spilled.count = ((igObjectList *)((beTextureCtrlWork *)self->_work)->_attributeList)->_count;
+            attributeIndex = 0;
+            if (0 < spilled.count) {
+                offset = 0;
                 do {
-                    x = (beTextureCtrlWork *)arg0->_work;
-                    s1 = (beTextureCtrlAttr *)*(int *)(((igObjectList *)x->_attributeList)->_data + s8);
-                    a2 = (int *)s1->_name;
-                    if (a2 != 0) {
-                        a2 = (int *)a2;
+                    work = (beTextureCtrlWork *)self->_work;
+                    entry = (beTextureCtrlAttr *)*(int *)(((igObjectList *)work->_attributeList)->_data + offset);
+                    name = (int *)entry->_name;
+                    if (name != 0) {
+                        name = (int *)name;
                     } else {
-                        a2 = &emptyString[0];
+                        name = &emptyString[0];
                     }
-                    p = igProperty_FindByName(x->_textureList, g_propertyNameField[0], a2);
-                    if (p != 0) {
-                        var_v0 = igObject_GetAllocator(arg0);
-                        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-                        igSmartPointer<NewObjectVirtual> attr(igTextureBindAttr_CreateInstance(var_v0));
-                        attr.p->v132(p->f12);
-                        s3 = (igAttrSet *)s1->_attrSet;
-                        s6 = ((igAttrList *)s3->_attributes)->_count;
-                        s4 = 0;
-                        if (0 < s6) {
-                            s0 = 0;
+                    property = igProperty_FindByName(work->_textureList, g_propertyNameField[0], name);
+                    if (property != 0) {
+                        allocator = igObject_GetAllocator(self);
+                        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+                        igSmartPointer<NewObjectVirtual> attr(igTextureBindAttr_CreateInstance(allocator));
+                        attr.p->setTexture(property->_value);
+                        attrSet = (igAttrSet *)entry->_attrSet;
+                        boundCount = ((igAttrList *)attrSet->_attributes)->_count;
+                        boundIndex = 0;
+                        if (0 < boundCount) {
+                            boundOffset = 0;
                             do {
-                                k = g_igTextureBindAttr_metaObject[0];
-                                s2 = (TypeIdVirtual *)*(int *)(((igAttrList *)s3->_attributes)->_data + s0);
-                                if (k == s2->v88()) {
+                                bindMeta = g_igTextureBindAttr_metaObject[0];
+                                existing = (igObjectVirtuals *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
+                                if (bindMeta == existing->getMeta()) {
                                     int removed; /* matching construct: the removal out-slot is declared after the holder so it lies below it (+0xb8 under +0xbc) as in retail */
-                                    ObjectList_RemoveFirstRetained(&removed, s3->_attributes, s2, 0);
+                                    ObjectList_RemoveFirstRetained(&removed, attrSet->_attributes, existing, 0);
                                     break;
                                 }
-                                s4++;
-                                s0 += 4;
-                            } while (s4 < s6);
+                                boundIndex++;
+                                boundOffset += 4;
+                            } while (boundIndex < boundCount);
                         }
-                        ObjectList_AppendRetained(s3->_attributes, attr.p);
+                        ObjectList_AppendRetained(attrSet->_attributes, attr.p);
                     }
-                    s5++;
-                    s8 += 4;
-                } while (s5 < sa.spA0);
+                    attributeIndex++;
+                    offset += 4;
+                } while (attributeIndex < spilled.count);
             }
         }
-        arg0->_isFirstTime = 0;
+        self->_isFirstTime = 0;
     }
 }
 

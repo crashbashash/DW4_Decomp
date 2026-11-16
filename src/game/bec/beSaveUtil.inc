@@ -23,24 +23,24 @@ void *beSaveUtil_GetMetaObject(void) {
 }
 
 int beSaveUtil_GetVTable(void) {
-    struct Obj_346d60 obj;
-    int t;
+    beSaveUtil obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beSaveUtil_vtable[0];
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSaveUtil_vtable[0];
-    FUN_00346e70((igSmartPointer<igObject> *)&obj.w9, (short)(-1));
-    FUN_00346df0((igSmartPointer<igObject> *)&obj.w8, -1);
-    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beSaveUtil_vtable[0];
+    obj._api = 0;
+    obj._connectCheck = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveUtil_vtable[0];
+    igSmartPointer_beSvConnectCheck_Destruct((igSmartPointer<igObject> *)&obj._connectCheck, (short)(-1));
+    igSmartPointer_beSaveApi_Destruct((igSmartPointer<igObject> *)&obj._api, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00346df0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSaveApi_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -53,7 +53,7 @@ igSmartPointer<igObject> *FUN_00346df0(igSmartPointer<igObject> *self, int delet
     return self;
 }
 
-igSmartPointer<igObject> *FUN_00346e70(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSvConnectCheck_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

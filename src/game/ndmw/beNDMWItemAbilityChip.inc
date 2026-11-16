@@ -14,10 +14,10 @@ void *beNDMWItemAbilityChip_GetReadyMetaObject(void) {
 }
 
 int beNDMWItemAbilityChip_GetVTable(void) {
-    struct Obj obj;
+    beNDMWItemAbilityChip obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWItemAbilityChip_vtable[0];
+    *(int **)&obj._vtable = &g_beNDMWItemAbilityChip_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

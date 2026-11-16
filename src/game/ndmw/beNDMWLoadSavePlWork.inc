@@ -28,11 +28,11 @@ void *beNDMWLoadSavePlWork_ResolveMetaObject(void) {
 }
 
 int beNDMWLoadSavePlWork_GetVTable(void) {
-    struct O_3c5740 o;
+    beNDMWLoadSavePlWork obj;
 
-    igObject_InitHeader(&o.vt);
-    o.vt = g_beNDMWLoadSavePlWork_vtable;
-    return *(int *)((char *)&o.vt + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    igObject_InitHeader(&obj);
+    *(int **)&obj._vtable = &g_beNDMWLoadSavePlWork_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beNDMWLoadSavePlWork_EnsureRegistered(void)

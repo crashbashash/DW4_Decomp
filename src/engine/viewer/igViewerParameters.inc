@@ -71,7 +71,7 @@ int igViewerParameters_GetVTable(void) {
     FUN_001d6560(&u.b[240], -1);
     FUN_0019b1f0(&u.b[220], -1);
     FUN_00196a50(&u.b[204], -1);
-    FUN_00229350(p, -1);
+    igSmartPointer_igGroup_Destruct(p, -1);
     FUN_0044c110(u.b, 0);
     return temp_s1;
 }
@@ -106,13 +106,13 @@ void thunk_igViewerParameters_GetMetaObject(void) {
 
 static FieldFactory g_igViewerParameters_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00188660,
-    FUN_00188660,
+    igMatrix44fMetaField_CreateInstance,
+    igMatrix44fMetaField_CreateInstance,
     igLongMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
@@ -143,7 +143,7 @@ static FieldFactory g_igViewerParameters_ctorTable[] = {
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
 };
 static const char *g_igViewerParameters_fieldTable[] = {
     "_scene",
@@ -291,7 +291,7 @@ void igViewerParameters_InitFields(void) {
     sp50[0] = 0;
     sp50[1] = 0x3F800000;
     sp50[2] = 0;
-    FUN_0018e470(temp_a0, sp50);
+    igVec3fMetaField_SetDefault(temp_a0, sp50);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 45.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4), 1.0f);
@@ -316,7 +316,7 @@ void igViewerParameters_InitFields(void) {
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0x26));
     sp48[0] = 0;
     sp48[1] = 0;
-    FUN_0018e2f0(temp_a0_2, sp48);
+    igVec2fMetaField_SetDefault(temp_a0_2, sp48);
     igMetaObject_NameFields(temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
 }
 

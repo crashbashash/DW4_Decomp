@@ -1,7 +1,7 @@
 #include "dw4/igSmartPointer.h"
 
 extern "C" int strcmp(int, int *);
-extern "C" int beNDMWMdlEBullet_IsKind(int dummy0, int arg1);
+extern "C" int beNDMWMdlEBullet_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlEBullet_RegisterReceiver(void);
 extern "C" int beNDMWMdlEBullet_GetMeta(void);
 extern "C" int beModelCtrl__OnGenerateFromParent(...);
@@ -11,8 +11,7 @@ extern "C" int KIND_EBULLET[4];
 extern "C" int g_beNDMWMdlEBullet_metaObject[4];
 extern "C" igObject *beModelCtrlInfoWork_Create(...);
 extern "C" igObject *beBaseInfoDataList_Create(...);
-struct PropertyRecord { char header[20]; igObject *value; };
-extern "C" PropertyRecord *igProperty_FindByName(...);
+extern "C" beModelCtrlInfoRamData *igProperty_FindByName(...);
 extern "C" int g_propertyNameField[4];
 extern "C" int kIGMemoryPoolHandleUser1[4];
 extern "C" unsigned char g_useOwnerAllocator;
@@ -56,27 +55,27 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         ram->_dataList = (int)s0;
     }
 } };
-extern "C" void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *arg0, beBaseInfoRam *arg1);
+extern "C" void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRam *ram);
 
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEBullet_IsKind(int dummy0, int arg1) {
-    return strcmp(arg1, &KIND_EBULLET[0]) == 0;
+int beNDMWMdlEBullet_IsKind(int dummy0, int kind) {
+    return strcmp(kind, &KIND_EBULLET[0]) == 0;
 }
 
 void beNDMWMdlEBullet_RegisterReceiver(void)
 {
 }
 
-void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *arg0, beBaseInfoRam *arg1) {
+void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRam *ram) {
     igObject *s0;
-    PropertyRecord *s1;
+    beModelCtrlInfoRamData *s1;
     int alloc;
     int a;
-    RamDataList::Ensure(arg1);
-    s1 = igProperty_FindByName((void *)arg1->_dataList, g_propertyNameField[0], "ONE");
-    alloc = igObject_GetAllocator(arg0);
+    RamDataList::Ensure(ram);
+    s1 = igProperty_FindByName((void *)ram->_dataList, g_propertyNameField[0], "ONE");
+    alloc = igObject_GetAllocator(self);
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
@@ -87,9 +86,9 @@ void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *arg0, beBaseInfoRam *arg1) {
     if (s0 != 0) {
         s0->_refCount++;
     }
-    ReleaseRef::go(s1->value);
-    s1->value = s0;
-    beModelCtrl__OnGenerateFromParent(arg0, arg1);
+    ReleaseRef::go((igObject *)s1->_work);
+    s1->_work = (int)s0;
+    beModelCtrl__OnGenerateFromParent(self, ram);
 }
 
 int beNDMWMdlEBullet_GetMeta(void)

@@ -31,8 +31,8 @@ int igAttrSet_GetVTable(void) {
     o.s = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igAttrSet_vtable[0];
-    FUN_0013bfe0(&o.s, -1);
-    FUN_00195a90((struct T_195a90 *)&o, 0);
+    igSmartPointer_igAttrList_Destruct(&o.s, -1);
+    igGroup_Destroy((struct T_195a90 *)&o, 0);
     return r;
 }
 

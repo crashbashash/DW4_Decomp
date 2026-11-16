@@ -14,22 +14,22 @@ void *beNDMWShopCtrlSell_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlSell_GetVTable(void) {
-    union U_3b73f0 u;
-    int temp_s0;
+    beNDMWShopCtrlSell obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[13] = 0;
-    u.w[14] = 0;
-    u.w[15] = 0;
-    u.w[16] = 0;
-    u.w[17] = 0;
-    u.w[18] = 0;
-    u.w[19] = 0;
-    u.w[0] = (int)(&g_beNDMWShopCtrlSell_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beNDMWShopCtrlSell_vtable[0]);
-    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)(&u.w[0]), (long long)0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlSell_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlSell_vtable[0];
+    beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
+    return vtable;
 }
 
 void beNDMWShopCtrlSell_EnsureRegistered(void)

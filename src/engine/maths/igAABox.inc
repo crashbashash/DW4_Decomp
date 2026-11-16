@@ -58,8 +58,8 @@ void thunk_igAABox_GetMetaObject(void) {
 }
 
 static FieldFactory g_igAABox_ctorTable[] = {
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
 };
 
 static const char *g_igAABox_fieldTable[] = {
@@ -92,12 +92,12 @@ void igAABox_InitFields(void) {
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
     va[2] = 3.402823466e+38f;
-    FUN_0018e470((igVec3fMetaFieldView *)temp_a0, va);
+    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, va);
     temp_a0_2 = igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1);
     vb[0] = -3.402823466e+38f;
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
-    FUN_0018e470((igVec3fMetaFieldView *)temp_a0_2, vb);
+    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0_2, vb);
     igMetaObject_NameFields(temp_s0, g_igAABox_fieldTable, g_igAABox_fieldHandles, g_igAABox_fieldOffsets, temp_s1);
 }
 
@@ -106,7 +106,7 @@ void thunk_FUN_0018a8f0(void) {
 }
 
 void FUN_0018a8f0(void) {
-    FUN_0018fbc0((void *)g_igAABox_metaObject, (void *)g_igAABox_metaObject, (int)FUN_0018b050);
+    FUN_0018fbc0((void *)g_igAABox_metaObject, (void *)g_igAABox_metaObject, (int)igAABox_IntersectBox);
     FUN_0018fbc0((void *)g_igAABox_metaObject, igPlane_GetMetaObject(), (int)FUN_0018b110);
     FUN_0018fbc0((void *)g_igAABox_metaObject, igSphere_GetMetaObject(), (int)FUN_0018afa0);
     FUN_0018fca0((PairKeyedItem *)g_igAABox_metaObject, (PairKeyedItem *)g_igAABox_metaObject, (int)FUN_0018b350);
@@ -122,7 +122,7 @@ void FUN_0018a8f0(void) {
     FUN_0018fe50((IndexedSlotKey *)g_igAABox_metaObject, (int)thunk_igAABox_Transform);
     FUN_0018fe90((IndexedWordKey *)g_igAABox_metaObject, (int)FUN_0018b940);
     FUN_0018fed0(g_igAABox_metaObject, (int)FUN_0018b970);
-    FUN_0018ff10((int *)g_igAABox_metaObject, (int)FUN_0018b990);
+    FUN_0018ff10((int *)g_igAABox_metaObject, (int)igAABox_GetCenter);
 }
 
 void FUN_0018aaa0(S *arg0, float *arg1) {
@@ -239,7 +239,7 @@ int FUN_0018afa0(igAABox *box, igSphere *sphere) {
     }
 }
 
-int FUN_0018b050(struct B *arg0, struct B *arg1) {
+int igAABox_IntersectBox(struct B *arg0, struct B *arg1) {
     int var_v0;
 
     /* matching construct: hand enumeration under C++ — int result set then cleared, no bool narrowing */
@@ -457,7 +457,7 @@ int FUN_0018b970(void *arg0) {
     return var_v0;
 }
 
-void FUN_0018b990(float *arg0, float *arg1) {
+void igAABox_GetCenter(float *arg0, float *arg1) {
     arg1[0] = arg0[2] * 0.5f + arg0[5] * 0.5f;
     arg1[1] = arg0[3] * 0.5f + arg0[6] * 0.5f;
     arg1[2] = arg0[4] * 0.5f + arg0[7] * 0.5f;

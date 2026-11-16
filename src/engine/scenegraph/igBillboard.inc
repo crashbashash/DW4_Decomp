@@ -26,7 +26,7 @@ int igBillboard_GetVTable(void) {
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
     FUN_00142d10(&u.w[15], -1);
-    FUN_00195a90((struct T_195a90 *)&u.w[0], 0);
+    igGroup_Destroy((struct T_195a90 *)&u.w[0], 0);
     return temp_s0;
 }
 
@@ -60,8 +60,8 @@ void thunk_igBillboard_GetMetaObject(void) {
 
 static FieldFactory g_igBillboard_ctorTable[] = {
     igIntMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
 };
 static const char *g_igBillboard_fieldTable[] = {
@@ -99,12 +99,12 @@ void igBillboard_InitFields(void) {
     spA[0] = 0;
     spA[2] = 1.0f;
     spA[1] = 0;
-    FUN_0018e470(temp_a0, spA);
+    igVec3fMetaField_SetDefault(temp_a0, spA);
     temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2)));
     spB[0] = 0;
     spB[1] = 0;
     spB[2] = 0;
-    FUN_0018e470(temp_a0_2, spB);
+    igVec3fMetaField_SetDefault(temp_a0_2, spB);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1) + 56) = FUN_001356f0();
     *(char *)((char *)(temp_s1) + 38) = 0;

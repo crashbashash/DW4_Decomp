@@ -15,45 +15,23 @@ void *beDataObjFloatList_GetMetaObject(void) {
 }
 
 int beDataObjFloatList_GetVTable(void) {
-    union U_3642b0 u;
-    int t;
-    struct Rc *a;
-    int *a1;
-    int v0;
-    char *c;
-    void **q38;
-    void **q3c;
+    beDataObjFloatList obj;
+    int vtable;
+    igObject **dataSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q38 = &u.p[2];
-    *q38 = 0;
-    u.w[0] = (int)(&g_beDataObjFloatList_vtable[0]);
-    q3c = &u.p[3];
-    *q3c = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beDataObjFloatList_vtable[0]);
-    if (q3c != 0) {
-        a = (struct Rc *)*q3c;
-        if (a != 0) {
-            a->rc = a->rc - 1;
-            if ((a->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
-            }
-        }
-    }
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q38 != 0) {
-        c = (char *)*q38;
-        if (c != 0) {
-            a1 = (int *)(c - 8);
-            v0 = *(int *)(c - 4) - 1;
-            *(int *)(c - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beDataObjFloatList_vtable[0];
+    dataSlot = (igObject **)&obj._data;
+    *dataSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beDataObjFloatList_vtable[0];
+    igObjectRef_Release(dataSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beDataObjFloatList_EnsureRegistered(void)

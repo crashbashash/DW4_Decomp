@@ -14,24 +14,24 @@ void *beCameraBoxData_GetMetaObject(void) {
 }
 
 int beCameraBoxData_GetVTable(void) {
-    struct Obj_369200 obj;
-    int r;
+    beCameraBoxData obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beCameraBoxData_vtable[0];
-    obj.w[1] = 0;
-    obj.w[2] = 0;
-    obj.w[3] = 0;
-    obj.w[4] = 0;
-    obj.w[5] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beCameraBoxData_vtable[0];
-    FUN_00341160((igSmartPointer<igObject> *)(&obj.w[5]), (short)(-1));
-    FUN_00341160((igSmartPointer<igObject> *)(&obj.w[4]), (short)(-1));
-    FUN_00341160((igSmartPointer<igObject> *)(&obj.w[3]), (short)(-1));
-    FUN_0019c220(&obj.w[2], -1);
-    FUN_00343260((igSmartPointer<igObject> *)(&obj.w[1]), -1);
-    return r;
+    obj._vtable = (int)&g_beCameraBoxData_vtable[0];
+    obj._switch = 0;
+    obj._geometryList = 0;
+    obj._transformList = 0;
+    obj._eyePosList = 0;
+    obj._intPosList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCameraBoxData_vtable[0];
+    igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._intPosList), (short)(-1));
+    igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._eyePosList), (short)(-1));
+    igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._transformList), (short)(-1));
+    igSmartPointer_igGeometryList_Destruct(&obj._geometryList, -1);
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switch), -1);
+    return vtable;
 }
 
 void beCameraBoxData_EnsureRegistered(void)

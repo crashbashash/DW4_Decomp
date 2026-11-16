@@ -21,28 +21,28 @@ igMetaObject *beNDMWShopCtrlDigilabo_GetMetaObject(void) {
 }
 
 int beNDMWShopCtrlDigilabo_GetVTable(void) {
-    struct Obj_3b77e0 obj;
-    int t;
+    beNDMWShopCtrlDigilabo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w16 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.vt = &g_beNDMWShopCtrlDigilabo_vtable[0];
-    obj.w21 = 0;
-    obj.w22 = 0;
-    obj.w23 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShopCtrlDigilabo_vtable[0];
-    FUN_0019d200(&obj.w23, -1);
-    igSmartPointer_igIntList_Destruct(&obj.w22, -1);
-    igSmartPointer_igIntList_Destruct(&obj.w21, -1);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDigilabo_vtable[0];
+    obj._playerNoList = 0;
+    obj._digimonNoList = 0;
+    obj._wpuNoListList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShopCtrlDigilabo_vtable[0];
+    igSmartPointer_igIntListList_Destruct(&obj._wpuNoListList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._digimonNoList, -1);
+    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
-    return t;
+    return vtable;
 }
 
 void beNDMWShopCtrlDigilabo_EnsureRegistered(void)

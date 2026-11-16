@@ -13,41 +13,23 @@ done:
 }
 
 int beLuaData_GetVTable(void) {
-    struct Obj_35b1a0 obj;
-    char *o;
-    igObject *io;
-    int *a1;
-    int v0;
-    int t;
+    beLuaData obj;
+    int vtable;
+    char **nameSlot;
+    igObject **dataObjectSlot;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beLuaData_vtable[0];
-    obj.w3 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beLuaData_vtable[0];
-    if (&obj.w3 != 0) {
-        io = obj.w3;
-        if (io != 0) {
-            io->_refCount = io->_refCount - 1;
-            if ((io->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(io);
-            }
-        }
-    }
-    obj.vt = &g_igNamedObject_vtable[0];
-    if (&obj.w2 != 0) {
-        o = obj.w2;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    return t;
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beLuaData_vtable[0];
+    dataObjectSlot = (igObject **)&obj._dataObject;
+    *dataObjectSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLuaData_vtable[0];
+    igObjectRef_Release(dataObjectSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beLuaData_EnsureRegistered(void)

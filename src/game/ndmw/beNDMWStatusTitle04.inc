@@ -14,22 +14,22 @@ void *beNDMWStatusTitle04_GetMetaObject(void) {
 }
 
 int beNDMWStatusTitle04_GetVTable(void) {
-    Obj_3b35c0 o;
-    int r;
+    beNDMWStatusTitle04 obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.w[12] = 0;
-    o.w[13] = 0;
-    o.w[14] = 0;
-    o.w[15] = 0;
-    o.w[16] = 0;
-    o.w[17] = 0;
-    o.w[18] = 0;
-    o.vt = &g_beNDMWStatusTitle04_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWStatusTitle04_vtable[0];
-    FUN_003b3030((int **)&o, (long long)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._subWindow = 0;
+    obj._mother = 0;
+    obj._textCloseTypeList = 0;
+    obj._textCloseNameList = 0;
+    obj._modelCloseInfoNameList = 0;
+    obj._modelCloseRamNoList = 0;
+    obj._modelCloseSeqNameList = 0;
+    *(int **)&obj._vtable = &g_beNDMWStatusTitle04_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWStatusTitle04_vtable[0];
+    beNDMWWindowTitle_Destroy((beNDMWWindowTitle *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWStatusTitle04_EnsureRegistered(void)

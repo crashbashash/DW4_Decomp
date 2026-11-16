@@ -16,11 +16,11 @@ void *beWeaponSeqDataList_GetMetaObject(void) {
 }
 
 int beWeaponSeqDataList_GetVTable(void) {
-    union U_33f080 u;
+    beWeaponSeqDataList obj;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beWeaponSeqDataList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beWeaponSeqDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void beWeaponSeqDataList_EnsureRegistered(void)

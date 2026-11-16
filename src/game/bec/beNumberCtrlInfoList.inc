@@ -9,10 +9,10 @@ void *beNumberCtrlInfoList_GetMetaObject(void) {
 }
 
 int beNumberCtrlInfoList_GetVTable(void) {
-    struct Obj_34e0a0 obj;
+    beNumberCtrlInfoList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNumberCtrlInfoList_vtable[0];
+    obj._vtable = (int)&g_beNumberCtrlInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

@@ -24,21 +24,21 @@ igMetaObject *beMovie_GetMetaObject(void)
 }
 
 int beMovie_GetVTable(void) {
-    struct Obj_34f010 obj;
-    int t;
+    beMovie obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beMovie_vtable[0];
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMovie_vtable[0];
-    igStringRef_Destruct(&obj.w9, -1);
-    FUN_003369f0(&obj.w8, -1);
-    FUN_0033f5e0((O_33f5e0 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beMovie_vtable[0];
+    obj._movie = 0;
+    obj._playingName = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMovie_vtable[0];
+    igStringRef_Destruct(&obj._playingName, -1);
+    igSmartPointer_igMovieManager_Destruct(&obj._movie, -1);
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
 void beMovie_EnsureRegistered(void)

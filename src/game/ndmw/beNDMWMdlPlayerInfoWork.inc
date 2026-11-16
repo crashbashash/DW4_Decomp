@@ -40,51 +40,63 @@ int beNDMWMdlPlayerInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-Obj_3bfde0 *FUN_003bfde0(Obj_3bfde0 *arg0, short arg1) {
-    if (arg0) {
-        arg0->vt = g_beNDMWMdlPEBaseInfoWork_vtable;
-        arg0->rel(&arg0->m268);
-        arg0->rel(&arg0->m264);
-        arg0->rel(&arg0->m252);
-        arg0->rel(&arg0->m248);
-        arg0->rel(&arg0->m244);
-        arg0->rel(&arg0->m240);
-        if (arg0) {
-            arg0->vt = g_beModelCtrlInfoWork_vtable;
-            FUN_00198190((char *)arg0 + 232, -1);
-            FUN_00350e90((char *)arg0 + 228, -1);
-            igStringRef_Destruct((char *)arg0 + 220, -1);
-            FUN_00350e10((char *)arg0 + 212, -1);
-            FUN_00229350((char *)arg0 + 208, -1);
-            FUN_00350d90((char *)arg0 + 204, -1);
-            FUN_00350d10((char *)arg0 + 200, -1);
-            igStringRef_Destruct((char *)arg0 + 184, -1);
-            igStringRef_Destruct((char *)arg0 + 180, -1);
-            FUN_00350c90((char *)arg0 + 176, -1);
-            FUN_0034c1b0((char *)arg0 + 172, -1);
-            igStringRef_Destruct((char *)arg0 + 116, -1);
-            igStringRef_Destruct((char *)arg0 + 96, -1);
-            igStringRef_Destruct((char *)arg0 + 92, -1);
-            igStringRef_Destruct((char *)arg0 + 88, -1);
-            FUN_00350c10((char *)arg0 + 80, -1);
-            igStringRef_Destruct((char *)arg0 + 76, -1);
-            FUN_001354b0((char *)arg0 + 72, -1);
-            igStringRef_Destruct((char *)arg0 + 56, -1);
-            igStringRef_Destruct((char *)arg0 + 52, -1);
-            igStringRef_Destruct((char *)arg0 + 48, -1);
-            igSmartPointer_igIntList_Destruct((char *)arg0 + 44, -1);
-            igSmartPointer_igStringRefList_Destruct((char *)arg0 + 40, -1);
-            igSmartPointer_igStringRefList_Destruct((char *)arg0 + 36, -1);
-            FUN_00350b90((char *)arg0 + 24, -1);
-            igStringRef_Destruct((char *)arg0 + 20, -1);
-            igSmartPointer_beDataObjInt_Destruct((char *)arg0 + 12, -1);
-            igSmartPointer_beDataObjInt_Destruct((char *)arg0 + 8, -1);
+beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork *self, short flags) {
+    if (self) {
+        *(int **)&self->_vtable = g_beNDMWMdlPEBaseInfoWork_vtable;
+        if (&self->_upDataList != 0) {
+            igRelease((igObject *)self->_upDataList);
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (&self->_downDataList != 0) {
+            igRelease((igObject *)self->_downDataList);
+        }
+        if (&self->_isFirstList != 0) {
+            igRelease((igObject *)self->_isFirstList);
+        }
+        if (&self->_timerList != 0) {
+            igRelease((igObject *)self->_timerList);
+        }
+        if (&self->_dispPosNoList != 0) {
+            igRelease((igObject *)self->_dispPosNoList);
+        }
+        if (&self->_dispRamNoList != 0) {
+            igRelease((igObject *)self->_dispRamNoList);
+        }
+        if (self) {
+            *(int **)&self->_vtable = g_beModelCtrlInfoWork_vtable;
+            igSmartPointer_igAABox_Destruct(&self->_baseAABox, -1);
+            igSmartPointer_beModelCtrlSubCom_Destruct(&self->_subCommand, -1);
+            igStringRef_Destruct(&self->_hitParentName, -1);
+            igSmartPointer_beModelCtrlInfoHitBody_Destruct(&self->_hitBody, -1);
+            igSmartPointer_igGroup_Destruct(&self->_debugHitBoxNode, -1);
+            igSmartPointer_beModelCtrlInfoRideOn_Destruct(&self->_rideOnData, -1);
+            igSmartPointer_beModelCtrlMoveObjectList_Destruct(&self->_moveObjectList, -1);
+            igStringRef_Destruct(&self->_posLockBoneName, -1);
+            igStringRef_Destruct(&self->_posLockModelName, -1);
+            igSmartPointer_beModelCtrlInfoDataTrc_Destruct(&self->_posLockTrc, -1);
+            igSmartPointer_beModelCtrlNode2_Destruct(&self->_posLockNode, -1);
+            igStringRef_Destruct(&self->_keyEventName, -1);
+            igStringRef_Destruct(&self->_targetSpc1, -1);
+            igStringRef_Destruct(&self->_targetKind, -1);
+            igStringRef_Destruct(&self->_targetMode, -1);
+            igSmartPointer_beModelCtrlInfoAI_Destruct(&self->_aI, -1);
+            igStringRef_Destruct(&self->_wCheckName, -1);
+            igSmartPointer_igFloatList_Destruct(&self->_pdMoveDataList, -1);
+            igStringRef_Destruct(&self->_luaFHit, -1);
+            igStringRef_Destruct(&self->_luaWHit, -1);
+            igStringRef_Destruct(&self->_luaBHit, -1);
+            igSmartPointer_igIntList_Destruct(&self->_labelOffsetList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_labelNameList, -1);
+            igSmartPointer_igStringRefList_Destruct(&self->_labelSeqList, -1);
+            igSmartPointer_beModelCtrlData_Destruct(&self->_comData, -1);
+            igStringRef_Destruct(&self->_seqCodeName, -1);
+            igSmartPointer_beDataObjInt_Destruct(&self->_hp, -1);
+            igSmartPointer_beDataObjInt_Destruct(&self->_mHp, -1);
+        }
+        if (flags > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 PEBaseInfoWorkView::PEBaseInfoWorkView() {

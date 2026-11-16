@@ -21,17 +21,18 @@ void *beWaterMove_GetMetaObject(void) {
 }
 
 int beWaterMove_GetVTable(void) {
-    struct W o;
-    int r;
-    igObject *p;
+    beWaterMove obj;
+    int vtable;
+    igObject **dataListSlot;
 
-    igObject_InitHeader(&o);
-    o.vt = g_beWaterMove_vtable;
-    *(int *)((char *)&o + 36) = 0;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beWaterMove_vtable;
-    if (&*(int *)((char *)&o + 36) != 0) { p = *(igObject **)((char *)&o + 36); if (p != 0) { p->_refCount = (int)p->_refCount - 1; if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(p); } }
-    return r;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beWaterMove_vtable[0];
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beWaterMove_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 void beWaterMove_EnsureRegistered(void)

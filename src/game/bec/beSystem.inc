@@ -50,35 +50,35 @@ done:
 }
 
 int beSystem_GetVTable(void) {
-    struct Obj_342d80 obj;
-    int t;
+    beSystem obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beSystem_vtable[0];
-    obj.w12 = 0;
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.w15 = 0;
-    obj.w17 = 0;
-    obj.w18 = 0;
-    obj.w19 = 0;
-    obj.w20 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSystem_vtable[0];
-    FUN_00229350(&obj.w20, -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w19, -1);
-    igSmartPointer_igStringObj_Destruct(&obj.w18, -1);
-    igSmartPointer_igDirectory_Destruct(&obj.w17, -1);
-    igStringRef_Destruct(&obj.w15, -1);
-    igStringRef_Destruct(&obj.w14, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj.w13, -1);
-    FUN_00342eb0((igSmartPointer<igObject> *)&obj.w12, (short)(-1));
-    FUN_00231030(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._vtable = (int)&g_beSystem_vtable[0];
+    obj._random = 0;
+    obj._readFileList = 0;
+    obj._stageName = 0;
+    obj._nextStage = 0;
+    obj._bootDirectory = 0;
+    obj._globalStrObj = 0;
+    obj._discErrInfos = 0;
+    obj._viewerScene = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSystem_vtable[0];
+    igSmartPointer_igGroup_Destruct(&obj._viewerScene, -1);
+    igSmartPointer_igInfoList_Destruct(&obj._discErrInfos, -1);
+    igSmartPointer_igStringObj_Destruct(&obj._globalStrObj, -1);
+    igSmartPointer_igDirectory_Destruct(&obj._bootDirectory, -1);
+    igStringRef_Destruct(&obj._nextStage, -1);
+    igStringRef_Destruct(&obj._stageName, -1);
+    igSmartPointer_igStringRefList_Destruct(&obj._readFileList, -1);
+    igSmartPointer_igRandomNumber_Destruct((igSmartPointer<igObject> *)&obj._random, (short)(-1));
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00342eb0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igRandomNumber_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

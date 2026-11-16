@@ -33,29 +33,18 @@ igMetaObject *beNDMWShinkaObject_ResolveMetaObject(void) {
 }
 
 int beNDMWShinkaObject_GetVTable(void) {
-    struct Obj_3c9a30 obj;
-    char *o;
-    int *a1;
-    int v0;
-    int t;
+    beNDMWShinkaObject obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beNDMWShinkaObject_vtable[0];
-    obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWShinkaObject_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
+    *(int **)&obj._vtable = &g_beNDMWShinkaObject_vtable[0];
+    obj._name = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWShinkaObject_vtable[0];
+    if (&obj._name != 0) {
+        releaseString((const char *)obj._name);
     }
-    return t;
+    return vtable;
 }
 
 void beNDMWShinkaObject_EnsureRegistered(void)

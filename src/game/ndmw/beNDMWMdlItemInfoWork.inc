@@ -29,7 +29,7 @@ int beNDMWMdlItemInfoWork_GetVTable(void) {
     return *(int *)((char *)&work + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
-igSmartPointer<igObject> *FUN_003c1520(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -42,10 +42,10 @@ igSmartPointer<igObject> *FUN_003c1520(igSmartPointer<igObject> *self,int delete
     return self;
 }
 
-int *FUN_003c15a0(int *p)
+igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Construct(igSmartPointer<igObject> *self)
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    self->p = 0;
+    return self;
 }
 
 void beNDMWMdlItemInfoWork_EnsureRegistered(void)

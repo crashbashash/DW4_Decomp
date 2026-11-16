@@ -16,11 +16,11 @@ void *bePadDataList_GetMetaObject(void) {
 }
 
 int bePadDataList_GetVTable(void) {
-    union U_34cd60 u;
+    bePadDataList obj;
 
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_bePadDataList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_bePadDataList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 
 void bePadDataList_EnsureRegistered(void)

@@ -16,50 +16,27 @@ igMetaObject *beSvStartApi_GetMetaObject(void)
 }
 
 int beSvStartApi_GetVTable(void) {
-    union U_3489c0 u;
-    int r;
+    beSvStartApi obj;
+    int vtable;
+    igObject **iconWorkSlot;
+    igObject **mountWorkSlot;
+    igObject **imageWorkSlot;
 
-    int *v1; int *a1; int v0; int *a0;
-    char *pc; char *pb; char *pa;
-    igObject_InitHeader(u.b);
-    u.vt = (int)&g_beSaveApi_vtable[0];
-    pa = &u.b[48];
-    *(int *)pa = 0;
-    pb = &u.b[52];
-    *(int *)pb = 0;
-    pc = &u.b[56];
-    *(int *)pc = 0;
-    u.vt = (int)&g_beSvStartApi_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beSaveApi_vtable[0];
-    if (pc != 0) {
-        a0 = *(int **)pc;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
-    }
-    if (pb != 0) {
-        a0 = *(int **)pb;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
-    }
-    if (pa != 0) {
-        a0 = *(int **)pa;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy(a0);
-            }
-        }
-    }
-    return r;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    imageWorkSlot = (igObject **)&obj._imageWork;
+    *imageWorkSlot = 0;
+    mountWorkSlot = (igObject **)&obj._mountWork;
+    *mountWorkSlot = 0;
+    iconWorkSlot = (igObject **)&obj._iconWork;
+    *iconWorkSlot = 0;
+    obj._vtable = (int)&g_beSvStartApi_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSaveApi_vtable[0];
+    igObjectRef_Release(iconWorkSlot);
+    igObjectRef_Release(mountWorkSlot);
+    igObjectRef_Release(imageWorkSlot);
+    return vtable;
 }
 
 void beSvStartApi_EnsureRegistered(void)
@@ -98,7 +75,7 @@ void beSvStartApi_InitFields(void) {
     meta = (void *)g_beSvStartApi_metaObject;
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igIntMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igIntMetaField_SetDefault(clone, 0xA);
     clone->_externalEnumStorage = (int)(&g_beSvStartApi_orderTypeStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

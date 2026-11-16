@@ -34,7 +34,7 @@ void thunk_igBase_GetMetaObject(void) {
     igBase_GetMetaObject();
 }
 
-void **FUN_00229350(void **arg0, short arg1) {
+void **igSmartPointer_igGroup_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {

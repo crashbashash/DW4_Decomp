@@ -72,7 +72,7 @@ ObjectRefWord *FUN_00136370(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-ObjectRefWord *ObjectRef_Destruct_001363f0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igObject_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

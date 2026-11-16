@@ -79,16 +79,16 @@ void thunk_igFlyMode_GetMetaObject(void) {
 }
 
 static FieldFactory g_igFlyMode_ctorTable[] = {
-    FUN_00187890,
-    FUN_00187890,
-    FUN_00187b50,
-    FUN_00187890,
-    FUN_00187b50,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    FUN_00187b50,
-    FUN_00187b50,
+    igVec2fMetaField_CreateInstance,
+    igVec2fMetaField_CreateInstance,
     igBoolMetaField_Create,
 };
 static const char *g_igFlyMode_fieldTable[] = {
@@ -157,35 +157,35 @@ void igFlyMode_InitFields(void) {
     a.x = 0;
     a.y = 0;
     a.z = 0;
-    FUN_0018e470(temp_a0, &a);
+    igVec3fMetaField_SetDefault(temp_a0, &a);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
     b.x = 0;
     b.y = 0;
     b.z = 0;
-    FUN_0018e470(temp_a0_2, &b);
+    igVec3fMetaField_SetDefault(temp_a0_2, &b);
     temp_a0_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     c.x = 0;
     c.y = 0;
-    FUN_0018e2f0(temp_a0_3, &c);
+    igVec2fMetaField_SetDefault(temp_a0_3, &c);
     temp_a0_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
     d.x = 0;
     d.y = 0;
     d.z = 0;
-    FUN_0018e470(temp_a0_4, &d);
+    igVec3fMetaField_SetDefault(temp_a0_4, &d);
     temp_a0_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
     e.x = 0;
     e.y = 0;
-    FUN_0018e2f0(temp_a0_5, &e);
+    igVec2fMetaField_SetDefault(temp_a0_5, &e);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 7));
     *(int *)((char *)(temp_s1) + 56) = FUN_00145d40();
     temp_a0_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 8));
     f.x = 0;
     f.y = 0;
-    FUN_0018e2f0(temp_a0_6, &f);
+    igVec2fMetaField_SetDefault(temp_a0_6, &f);
     temp_a0_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 9));
     g.x = 0;
     g.y = 0;
-    FUN_0018e2f0(temp_a0_7, &g);
+    igVec2fMetaField_SetDefault(temp_a0_7, &g);
     igMetaObject_NameFields(temp_s0, g_igFlyMode_fieldTable, g_igFlyMode_fieldHandles, g_igFlyMode_fieldOffsets, temp_s2);
 }
 

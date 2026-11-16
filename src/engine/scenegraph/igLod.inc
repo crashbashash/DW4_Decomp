@@ -33,10 +33,10 @@ int igLod_GetVTable(void) {
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igLod_vtable[0];
-    FUN_001354b0(&o.f[15], -1);
-    FUN_00198210((ObjectRefWord *)p17, -1);
-    FUN_001354b0(p16, -1);
-    FUN_00195a90((struct T_195a90 *)&o, 0);
+    igSmartPointer_igFloatList_Destruct(&o.f[15], -1);
+    igSmartPointer_igNode_Destruct((ObjectRefWord *)p17, -1);
+    igSmartPointer_igFloatList_Destruct(p16, -1);
+    igGroup_Destroy((struct T_195a90 *)&o, 0);
     return r;
 }
 
@@ -74,7 +74,7 @@ static FieldFactory g_igLod_ctorTable[] = {
     igIntMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
     igObjectRefMetaField_Create,
 };
 static const char *g_igLod_fieldTable[] = {
@@ -141,7 +141,7 @@ void igLod_InitFields(void) {
     sp40[0] = 0;
     sp40[1] = 0;
     sp40[2] = 0;
-    FUN_0018e470(temp_a0, sp40);
+    igVec3fMetaField_SetDefault(temp_a0, sp40);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igFloatList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, temp_s0);

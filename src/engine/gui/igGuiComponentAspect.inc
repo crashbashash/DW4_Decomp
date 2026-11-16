@@ -48,8 +48,8 @@ void thunk_igGuiComponentAspect_GetMetaObject(void) {
 
 static FieldFactory g_igGuiComponentAspect_ctorTable[] = {
     igObjectRefMetaField_Create,
-    FUN_00187890,
-    FUN_00187890,
+    igVec3fMetaField_CreateInstance,
+    igVec3fMetaField_CreateInstance,
 };
 static const char *g_igGuiComponentAspect_fieldTable[] = {
     "_node",
@@ -86,12 +86,12 @@ void igGuiComponentAspect_InitFields(void) {
     v1[0] = 0.0f;
     v1[1] = 0.0f;
     v1[2] = 0.0f;
-    FUN_0018e470(temp_a0, v1);
+    igVec3fMetaField_SetDefault(temp_a0, v1);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
     v2[2] = 1.0f;
     v2[0] = 3.4028235e+38f;
     v2[1] = 3.4028235e+38f;
-    FUN_0018e470(temp_a0_2, v2);
+    igVec3fMetaField_SetDefault(temp_a0_2, v2);
     igMetaObject_NameFields(temp_s0, g_igGuiComponentAspect_fieldTable, g_igGuiComponentAspect_fieldHandles, g_igGuiComponentAspect_fieldOffsets, temp_s2);
 }
 

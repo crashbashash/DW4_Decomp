@@ -1,4 +1,4 @@
-void FUN_0033bf50(void) {
+void BecLibrary_RegisterClasses(void) {
     libBecRuntimePlugin_EnsureRegistered();
     beWeaponInfoRam_EnsureRegistered();
     beWeaponSeqData_EnsureRegistered();

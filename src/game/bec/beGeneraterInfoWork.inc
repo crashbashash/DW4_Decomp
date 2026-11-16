@@ -31,42 +31,22 @@ igMetaObject *beGeneraterInfoWork_GetMetaObject(void)
 }
 
 int beGeneraterInfoWork_GetVTable(void) {
-    union U u;
-    int t;
-    char *o;
-    int *a1;
-    int v0;
-    igObject *p0, *p1;
+    beGeneraterInfoWork obj;
+    int vtable;
+    char **geneEnemyNameSlot;
+    igObject **enemyRamListSlot;
 
-    igObject_InitHeader(u.b);
-    p0 = (igObject *)&u.b[20];
-    p1 = (igObject *)&u.b[28];
-    u.vt = (int)&g_beGeneraterInfoWork_vtable[0];
-    *(int *)p0 = 0;
-    *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beGeneraterInfoWork_vtable[0];
-    if (p1 != 0) {
-        o = *(char **)p1;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader(*a1, a1);
-            }
-        }
-    }
-    if (p0 != 0) {
-        p0 = *(igObject **)p0;
-        if (p0 != 0) {
-            p0->_refCount = (int)p0->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)p0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p0);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    enemyRamListSlot = (igObject **)&obj._enemyRamList;
+    geneEnemyNameSlot = (char **)&obj._geneEnemyName;
+    obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
+    *enemyRamListSlot = 0;
+    *geneEnemyNameSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
+    igStringRef_Release(geneEnemyNameSlot);
+    igObjectRef_Release(enemyRamListSlot);
+    return vtable;
 }
 
 void beGeneraterInfoWork_EnsureRegistered(void)

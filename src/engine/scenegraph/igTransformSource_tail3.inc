@@ -95,7 +95,7 @@ void FUN_001dd3e0(void *arg0, int arg1) {
     for (i = 0; i < n; i++) {
         igMatrix44f_SetIdentity(sp50);
         ((V_1dd3e0 *)arg0)->vGet(i, sp50);
-        FUN_001904f0(sp50, sp50, arg1);
+        igMatrix44f_Multiply(sp50, sp50, arg1);
         ((V_1dd3e0 *)arg0)->vSet(i, sp50);
         ((F_1dd3e0 *)arg0)->a = g_vec3Zero[0];
         ((F_1dd3e0 *)arg0)->b = DAT_004e105c[0];

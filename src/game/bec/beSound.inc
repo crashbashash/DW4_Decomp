@@ -27,30 +27,30 @@ done:
 }
 
 int beSound_GetVTable(void) {
-    struct W o;
-    int *p16;
-    int r;
-    int *p17;
+    beSound obj;
+    int *criSlot;
+    int vtable;
+    int *currentBGMSlot;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[5] = 0;
-    o.vt = &g_beSound_vtable[0];
-    p16 = &o.f[7];
-    *p16 = 0;
-    p17 = &o.f[8];
-    *p17 = 0;
-    o.f[9] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beSound_vtable[0];
-    FUN_00344440((igSmartPointer<igObject> *)(&o.f[9]), (short)(-1));
-    igStringRef_Destruct(p17, -1);
-    FUN_0033de20((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)p16)), (short)(-1));
-    FUN_0033f5e0((O_33f5e0 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    obj._vtable = (int)&g_beSound_vtable[0];
+    criSlot = &obj._cri;
+    *criSlot = 0;
+    currentBGMSlot = &obj._currentBGM;
+    *currentBGMSlot = 0;
+    obj._playSEs = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSound_vtable[0];
+    igSmartPointer_bePlaySEList_Destruct((igSmartPointer<igObject> *)(&obj._playSEs), (short)(-1));
+    igStringRef_Destruct(currentBGMSlot, -1);
+    igSmartPointer_beCri_Destruct((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)((igSmartPointer<igObject> *)criSlot)), (short)(-1));
+    beBaseInfoManager_Destroy((O_33f5e0 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00344440(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_bePlaySEList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

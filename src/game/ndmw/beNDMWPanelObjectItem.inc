@@ -19,22 +19,22 @@ igMetaObject *beNDMWPanelObjectItem_ResolveMetaObject(void) {
 }
 
 int beNDMWPanelObjectItem_GetVTable(void) {
-    struct Obj_3be640 obj;
-    int t;
+    beNDMWPanelObjectItem obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w9 = 0;
-    obj.w11 = 0;
-    obj.w12 = 0;
-    obj.vt = &g_beNDMWPanelObjectItem_vtable[0];
-    obj.w15 = 0;
-    obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWPanelObjectItem_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj.w16, -1);
-    igSmartPointer_igObjectList_Destruct(&obj.w15, -1);
-    FUN_003be240((Obj_3be240 *)&obj, (short)0);
-    return t;
+    obj._playerDataList = 0;
+    obj._textSetList = 0;
+    obj._textColorList = 0;
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectItem_vtable[0];
+    obj._listFolder = 0;
+    obj._listColor = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWPanelObjectItem_vtable[0];
+    igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
+    igSmartPointer_igObjectList_Destruct(&obj._listFolder, -1);
+    beNDMWPanelObject_Destroy((beNDMWPanelObject *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWPanelObjectItem_EnsureRegistered(void)
@@ -99,7 +99,7 @@ void beNDMWPanelObjectItem_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWPanelObjectItem_ctorTable, 2);
     inheritedPage = (void **)(igMetaObject_FindFieldByName(meta, "_page"));
     pageIndex = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, inheritedPage);
-    pageField = (igIntMetaField *)(((DW4VC_84_1 *)(inheritedPage))->vX((int)(1)));
+    pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
     igIntMetaField_SetDefault(pageField, 1);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectItem_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, pageIndex, pageField);
@@ -108,11 +108,11 @@ void beNDMWPanelObjectItem_InitFields(void) {
         igObject_Destroy(pageField);
     }
     listFolder = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((FT *)listFolder)->meta = igObjectList_GetOrCreateMetaObject();
-    ((FT *)listFolder)->flag = 1;
+    ((igObjectRefMetaField *)listFolder)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)listFolder)->_construct = 1;
     listColor = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((FT *)listColor)->meta = igIntList_GetOrCreateMetaObject();
-    ((FT *)listColor)->flag = 1;
+    ((igObjectRefMetaField *)listColor)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)listColor)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelObjectItem_fieldTable, g_beNDMWPanelObjectItem_fieldHandles, g_beNDMWPanelObjectItem_fieldOffsets, base);
 }
 

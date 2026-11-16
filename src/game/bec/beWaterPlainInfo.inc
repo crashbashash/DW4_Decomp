@@ -12,18 +12,18 @@ done:
 }
 
 int beWaterPlainInfo_GetVTable(void) {
-    struct W_340b40 o;
-    int r;
+    beWaterPlainInfo obj;
+    int vtable;
 
-    igObject_InitHeader(&o);
-    o.f[1] = 0;
-    o.f[4] = 0;
-    o.f[5] = 0;
-    o.vt = g_beWaterPlainInfo_vtable;
-    r = *(int *)((char *)&o + *(int *)(((char * *)g_objectSystem)[0] + 916));
-    o.vt = g_beWaterPlainInfo_vtable;
-    FUN_0033ec80((struct S_33ec80 *)&o, (short)0);
-    return r;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beWaterPlainInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)(((char * *)g_objectSystem)[0] + 916));
+    obj._vtable = (int)&g_beWaterPlainInfo_vtable[0];
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beWaterPlainInfo_EnsureRegistered(void)

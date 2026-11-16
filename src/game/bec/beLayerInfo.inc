@@ -10,25 +10,25 @@ void *beLayerInfo_GetMetaObject(void) {
 }
 
 int beLayerInfo_GetVTable(void) {
-    union U_35c470 u;
-    int t;
-    char *ps;
+    beLayerInfo obj;
+    int vtable;
+    char *groupsSlot;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beLayerInfo_vtable[0];
-    ps = &u.b[28];
-    *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beLayerInfo_vtable[0];
-    FUN_0035c4f0((igSmartPointer<igObject> *)ps, -1);
-    FUN_0033ec80((struct S_33ec80 *)u.b, (short)0);
-    return t;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beLayerInfo_vtable[0];
+    groupsSlot = (char *)&obj._groups;
+    *(int *)groupsSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLayerInfo_vtable[0];
+    igSmartPointer_beLayerGroupList_Destruct((igSmartPointer<igObject> *)groupsSlot, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035c4f0(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beLayerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

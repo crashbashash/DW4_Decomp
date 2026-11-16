@@ -21,7 +21,7 @@
 0x00154a80	Gap::Gfx::igClut::vfunc_24	engine
 0x00154e00	Gap::Gfx::igClut::vfunc_12	engine
 0x00154ea0	Gap::Gfx::igClut::vfunc_23	engine
-0x0015c8f0	Gap::Gfx::igParticleArray::vfunc_13	engine
+0x0015c8f0	Gap::Gfx::igParticleArray::resetFields	engine
 0x0015f730	Gap::Gfx::igVertexArray2::vfunc_25	engine
 0x00169c20	Gap::Gfx::igPsx2VisualContext::vfunc_176	engine
 0x00169c50	Gap::Gfx::igPsx2VisualContext::vfunc_171	engine

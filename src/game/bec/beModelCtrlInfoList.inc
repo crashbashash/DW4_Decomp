@@ -12,10 +12,10 @@ done:
 }
 
 int beModelCtrlInfoList_GetVTable(void) {
-    struct Obj_352be0 obj;
+    beModelCtrlInfoList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beModelCtrlInfoList_vtable[0];
+    obj._vtable = (int)&g_beModelCtrlInfoList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

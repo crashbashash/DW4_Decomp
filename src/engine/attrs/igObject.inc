@@ -28,7 +28,7 @@ ObjectRefWord *igSmartPointer_igPointerList_Destruct(ObjectRefWord *self,int del
     return self;
 }
 
-struct R_1354b0 **FUN_001354b0(struct R_1354b0 **arg0, short arg1) {
+struct R_1354b0 **igSmartPointer_igFloatList_Destruct(struct R_1354b0 **arg0, short arg1) {
     struct R_1354b0 *temp_a0;
 
     if (arg0 != 0) {

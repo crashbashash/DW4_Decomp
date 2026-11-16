@@ -13,19 +13,23 @@ done:;
 }
 
 int beMatCtrlInfoRam_GetVTable(void) {
-    Obj_359810 obj;
-    int r;
+    beMatCtrlInfoRam obj;
+    int vtable;
+    igObject **workSlot;
+    igObject **dataListSlot;
 
     igObject_InitHeader(&obj);
-    obj.r9 = 0;
-    obj.vt = &g_beMatCtrlInfoRam_vtable[0];
-    obj.r10 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beMatCtrlInfoRam_vtable[0];
-    obj.rel10();
-    obj.vt = &g_beBaseInfoRam_vtable[0];
-    obj.rel9();
-    return r;
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
+    workSlot = (igObject **)&obj._work;
+    *workSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
+    igObjectRef_Release(workSlot);
+    obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    return vtable;
 }
 
 igSmartPointer<igObject> *igSmartPointer_beMatCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, short delete_storage) {

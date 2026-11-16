@@ -58,8 +58,8 @@ int igTextureAttr_GetVTable(void) {
     u.vt = (int)&g_igTextureAttr_vtable[0];
     FUN_00132130((Ref **)&u.b[64], -1);
     FUN_001321b0((void **)p136, -1);
-    FUN_00132390((O *)p128, -1);
-    FUN_00130140((void **)p92, -1);
+    igSmartPointer_igImage_Destruct((O *)p128, -1);
+    igSmartPointer_igVisualContext_Destruct((void **)p92, -1);
     return temp_s;
 }
 
@@ -183,10 +183,10 @@ void igTextureAttr_InitFields(void) {
     igMetaObject_CreateFields(temp_s0, g_igTextureAttr_ctorTable, 0xF);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
     igEnumMetaField_SetDefaultValue(temp_v0, 0);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149980;
+    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
     igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
-    *(void **)&((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (void *)FUN_00149980;
+    *(void **)&((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
     igEnumMetaField_SetDefaultValue(temp_v0_3, g_igTextureAttr_wrapSDefault);
     *(void **)&((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (void *)FUN_00149920;

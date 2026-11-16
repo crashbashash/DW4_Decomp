@@ -1,5 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igobject_release.h"
+#include "dw4/beBaseInfoManagerVirtuals.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -9,7 +11,7 @@ igObject *beWeaponAttachDataList_Create(int);
 igObject *beWeaponAttachData_Create(int);
 int Memory_GetAllocatorBySelector(int);
 int ObjectList_AppendRetained(int, igObject *);
-int beMessenger_RegisterReceiverFromInfo(int, int, const char *);
+int beMessenger_RegisterReceiverFromInfo(int messenger, beWeaponInfoRam *ram, const char *receiver);
 int igObject_GetAllocator(...);
 
 extern int kIGMemoryPoolHandleUser1[4];
@@ -17,17 +19,17 @@ extern unsigned char g_useOwnerAllocator;
 extern int g_beWeaponInfo_metaObject[4];
 extern int g_beWeapon_metaObject[4];
 
-void beWeapon_Prepare(beWeapon *arg0);
+void beWeapon_Prepare(beWeapon *self);
 int beWeapon_GetInfoMeta(void);
-void beWeapon_OnAddRam(beWeapon *arg0, int arg1);
+void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram);
 void beWeapon_UpdateRam(void);
 int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *message);
 int beWeapon_GetMeta(void);
 
 igMetaEnum *beWeaponSeqData_GetMsgActionEnum(void);
 igModelViewMatrixBoneSelect *igModelViewMatrixBoneSelect_CreateInstance(int allocator);
-int FUN_001af7a0(igObject *appearance, igObject *graph);
-int FUN_001af7b0(igObject *appearance, igObject *graph);
+int igAppearance_AttachGraph(igObject *appearance, igObject *graph);
+int igAppearance_DetachGraph(igObject *appearance, igObject *graph);
 int igGroup_AppendChild(igObject *group, igObject *child);
 int beMessenger_ResolveEnumValue(int messenger, igMetaEnum *values, const char *name);
 void beMessenger_SendRam(int messenger, const char *category, int id, const char *selector);
@@ -42,16 +44,6 @@ void igObject_Destroy(void *object);
 
 extern char emptyString[];
 }
-
-/* The beWeapon slot this file calls through the vtable: slot 33, the message handler. */
-class beWeaponSlots {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
-    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
-    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void d30(); virtual void d31(); virtual void d32();
-    virtual int onMessage(beWeaponInfoRam *ram, const char *message);
-};
 
 /* The skeleton slot the weapon calls: slot 25 looks a bone up by name (-1 when it has none). */
 class SkeletonSlots {
@@ -81,17 +73,12 @@ static inline void ReleaseAll(igObjectList *list) {
     list->_count = 0;
 }
 
-void beWeapon_Prepare(beWeapon *arg0) {
-    int *temp_a0;
+void beWeapon_Prepare(beWeapon *self) {
+    igObject *attachDataList;
 
-    temp_a0 = (int *)arg0->_attachDataList;
-    if (temp_a0 != 0) {
-        temp_a0[1] = temp_a0[1] - 1;
-        if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
-        }
-    }
-    arg0->_attachDataList = 0;
+    attachDataList = (igObject *)self->_attachDataList;
+    IG_OBJECT_RELEASE(attachDataList);
+    self->_attachDataList = 0;
 }
 
 int beWeapon_GetInfoMeta(void)
@@ -106,35 +93,35 @@ public:
     ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
 
-void beWeapon_OnAddRam(beWeapon *arg0, int arg1) {
-    int var_v0;
-    int var_s0;
-    igObject *t;
+void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
+    int allocator;
+    int attachIndex;
+    igObject *retained;
     igObject *old;
-    if (arg0->_attachDataList == 0) {
-        var_v0 = igObject_GetAllocator();
-        var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-        igSmartPointer<igObject> list(beWeaponAttachDataList_Create(var_v0));
-        t = list.p;
-        if (t != 0) {
-            t->_refCount = t->_refCount + 1;
+    if (self->_attachDataList == 0) {
+        allocator = igObject_GetAllocator(self);
+        allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+        igSmartPointer<igObject> list(beWeaponAttachDataList_Create(allocator));
+        retained = list.p;
+        if (retained != 0) {
+            retained->_refCount = retained->_refCount + 1;
         }
-        old = (igObject *)arg0->_attachDataList;
+        old = (igObject *)self->_attachDataList;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;
             if ((old->_refCount & 0x7fffff) == 0) {
                 igObject_Destroy(old);
             }
         }
-        arg0->_attachDataList = (int)t;
-        for (var_s0 = 0; var_s0 < 4; var_s0++) {
-            var_v0 = igObject_GetAllocator(arg0);
-            var_v0 = g_useOwnerAllocator ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-            ObjectRef data(beWeaponAttachData_Create(var_v0));
-            ObjectList_AppendRetained(arg0->_attachDataList, data.p);
+        self->_attachDataList = (int)retained;
+        for (attachIndex = 0; attachIndex < 4; attachIndex++) {
+            allocator = igObject_GetAllocator(self);
+            allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+            ObjectRef data(beWeaponAttachData_Create(allocator));
+            ObjectList_AppendRetained(self->_attachDataList, data.p);
         }
     }
-    beMessenger_RegisterReceiverFromInfo(arg0->_messenger, arg1, "PLAYERARMS");
+    beMessenger_RegisterReceiverFromInfo(self->_messenger, ram, "PLAYERARMS");
 }
 
 void beWeapon_UpdateRam(void)
@@ -147,7 +134,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
     beWeaponInfo *info = (beWeaponInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue(self->_messenger, beWeaponSeqData_GetMsgActionEnum(), message)) {
     case 0: {
-        ((beWeaponSlots *)self)->onMessage(ram, "REMOVE");
+        ((beBaseInfoManagerVirtuals *)self)->onMessageText((beBaseInfoRam *)ram, "REMOVE");
         beMessenger_SendRam(self->_messenger, "PLAYER", ram->_ramNo, "GETINFONAME_RUN");
         if (beMessenger_GetStringCount(self->_messenger) == 1) {
             const char *infoName = beMessenger_GetString(self->_messenger, 0);
@@ -174,7 +161,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                     igGroup_AppendChild(boneSelect.p, ((igObject **)((igObjectList *)info->_nodeList)->_data)[j]);
                     int appearanceCount = appearances->_count;
                     for (int k = 0; k < appearanceCount; k++) {
-                        FUN_001af7a0(((igObject **)appearances->_data)[k], boneSelect.p);
+                        igAppearance_AttachGraph(((igObject **)appearances->_data)[k], boneSelect.p);
                     }
                     beWeaponAttachData *attach = ((beWeaponAttachData **)((beWeaponAttachDataList *)self->_attachDataList)->_data)[ram->_ramNo];
                     ObjectList_AppendRetained(attach->_boneSelectList, boneSelect.p);
@@ -193,7 +180,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                 igObjectList *appearances = ((igObjectList **)((igObjectList *)attach->_appearanceListList)->_data)[i];
                 int appearanceCount = appearances->_count;
                 for (int k = 0; k < appearanceCount; k++) {
-                    FUN_001af7b0(((igObject **)appearances->_data)[k], boneSelect);
+                    igAppearance_DetachGraph(((igObject **)appearances->_data)[k], boneSelect);
                 }
             }
         }

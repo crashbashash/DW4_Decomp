@@ -14,22 +14,22 @@ done:
 }
 
 int beNDMWLoadCtrl2Info_GetVTable(void) {
-    union U_3c4a10 u;
-    int temp_s0;
-    int *p;
+    beNDMWLoadCtrl2Info obj;
+    int vtable;
+    int *nameSelListRef;
 
-    igObject_InitHeader(u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[20] = 0;
-    *(int *)&u.b[24] = 0;
-    u.vt = (int)&g_beNDMWLoadCtrl2Info_vtable[0];
-    p = (int *)&u.b[28];
-    *p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beNDMWLoadCtrl2Info_vtable[0];
-    igSmartPointer_igObjectList_Destruct(p, -1);
-    FUN_0033ec80(u.b, 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
+    nameSelListRef = &obj._nameSelList;
+    *nameSelListRef = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
+    igSmartPointer_igObjectList_Destruct(nameSelListRef, -1);
+    beBaseInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWLoadCtrl2Info_EnsureRegistered(void)

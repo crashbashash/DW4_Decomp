@@ -21,44 +21,24 @@ void *beNumberCtrl_GetMetaObject(void) {
 }
 
 int beNumberCtrl_GetVTable(void) {
-    union U_34e440 u;
-    int temp_s1;
-    char *q1;
-    int *tv1, *ta1;
-    int tc1;
-    igObject *q2;
+    beNumberCtrl obj;
+    int vtable;
+    igObject **infoListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
-    q1 = &u.b[8];
-    *(int *)q1 = 0;
-    q2 = (igObject *)&u.b[24];
-    *(int *)q2 = 0;
-    u.w[0] = (int)(&g_beNumberCtrl_vtable[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beBaseInfoManager_vtable[0]);
-    if (q2 != 0) {
-        q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)q2->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
-    }
-    u.w[0] = (int)(&g_igNamedObject_vtable[0]);
-    if (q1 != 0) {
-        tv1 = *(int **)q1;
-        if (tv1 != 0) {
-            ta1 = tv1 - 2;
-            tc1 = tv1[-1] - 1;
-            tv1[-1] = tc1;
-            if (tc1 == 0) {
-                StringChunk_ReleaseHeader(*ta1, ta1);
-            }
-        }
-    }
-    return temp_s1;
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    infoListSlot = (igObject **)&obj._infoList;
+    *infoListSlot = 0;
+    obj._vtable = (int)&g_beNumberCtrl_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
+    igObjectRef_Release(infoListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beNumberCtrl_EnsureRegistered(void)

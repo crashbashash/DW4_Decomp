@@ -14,45 +14,23 @@ done:;
 }
 
 int beModelCtrlInfoDataSeq_GetVTable(void) {
-    union U_353600 u;
-    int t;
-    char *o;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
-    int *q8;
-    int *q16;
+    beModelCtrlInfoDataSeq obj;
+    int vtable;
+    igObject **dataListSlot;
+    char **nameSlot;
 
-    igObject_InitHeader(u.b);
-    q8 = (int *)&u.b[8];
-    *q8 = 0;
-    u.vt = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
-    q16 = (int *)&u.b[16];
-    *q16 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.vt = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
-    if (q16 != 0) {
-        o = (char *)*q16;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q8 != 0) {
-        temp_v1 = (int *)*q8;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader(*temp_a1, temp_a1);
-            }
-        }
-    }
-    return t;
+    igObject_InitHeader(&obj);
+    nameSlot = (char **)&obj._name;
+    *nameSlot = 0;
+    obj._vtable = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
+    dataListSlot = (igObject **)&obj._dataList;
+    *dataListSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
+    igObjectRef_Release(dataListSlot);
+    obj._vtable = (int)&g_igNamedObject_vtable[0];
+    igStringRef_Release(nameSlot);
+    return vtable;
 }
 
 void beModelCtrlInfoDataSeq_EnsureRegistered(void)
@@ -110,7 +88,7 @@ void beModelCtrlInfoDataSeq_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoDataSeq_ctorTable, 1);
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
-    clone = (igStringMetaField *)(((DW4VC_84_1 *)(found))->vX((int)(1)));
+    clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     igStringMetaField_SetDefaultText(clone, "SEQ");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataSeq_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, clone);

@@ -12,18 +12,18 @@ done:
 }
 
 int beNDMWSaveIntfInfo_GetVTable(void) {
-    union U_3bc0d0 u;
-    int temp_s0;
+    beNDMWSaveIntfInfo obj;
+    int vtable;
 
-    igObject_InitHeader(u.b);
-    u.w[2] = 0;
-    u.w[5] = 0;
-    u.w[6] = 0;
-    u.w[0] = (int)(&g_beNDMWSaveIntfInfo_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem[0]) + 916)];
-    u.w[0] = (int)(&g_beNDMWSaveIntfInfo_vtable[0]);
-    FUN_0033ec80(&u.w[0], 0);
-    return temp_s0;
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    *(int **)&obj._vtable = &g_beNDMWSaveIntfInfo_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWSaveIntfInfo_vtable[0];
+    beBaseInfo_Destroy(&obj, 0);
+    return vtable;
 }
 
 void beNDMWSaveIntfInfo_EnsureRegistered(void)

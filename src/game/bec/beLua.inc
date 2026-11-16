@@ -25,25 +25,25 @@ void *beLua_GetMetaObject(void) {
 }
 
 int beLua_GetVTable(void) {
-    struct Obj_35b810 obj;
-    int r;
+    beLua obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w[1] = 0;
-    obj.vt = &g_beLua_vtable[0];
-    obj.w[4] = 0;
-    obj.w[5] = 0;
-    obj.w[6] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beLua_vtable[0];
-    FUN_0035b940((igSmartPointer<igObject> *)(&obj.w[6]), -1);
-    FUN_0035b8c0((igSmartPointer<igObject> *)(&obj.w[5]), (short)(-1));
-    FUN_0033f560((igSmartPointer<igObject> *)(&obj.w[4]), -1);
-    FUN_00231030(&obj, 0);
-    return r;
+    obj._name = 0;
+    obj._vtable = (int)&g_beLua_vtable[0];
+    obj._infoList = 0;
+    obj._luaState = 0;
+    obj._luaGlue = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beLua_vtable[0];
+    igSmartPointer_igLuaGlue_Destruct((igSmartPointer<igObject> *)(&obj._luaGlue), -1);
+    igSmartPointer_beLuaState_Destruct((igSmartPointer<igObject> *)(&obj._luaState), (short)(-1));
+    igSmartPointer_beBaseInfoList_Destruct((igSmartPointer<igObject> *)(&obj._infoList), -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0035b8c0(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beLuaState_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {
@@ -56,7 +56,7 @@ igSmartPointer<igObject> *FUN_0035b8c0(igSmartPointer<igObject> *self, short del
     return self;
 }
 
-igSmartPointer<igObject> *FUN_0035b940(igSmartPointer<igObject> *self, int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igLuaGlue_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

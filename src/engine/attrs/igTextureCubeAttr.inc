@@ -47,10 +47,10 @@ int igTextureCubeAttr_GetVTable(void) {
     o.f[11] = 0;
     o.f[13] = 0;
     o.f[15] = 0;
-    __construct_array(&o.f[17], &FUN_00132410, &FUN_00132390, 4, 6);
+    __construct_array(&o.f[17], &FUN_00132410, &igSmartPointer_igImage_Destruct, 4, 6);
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
     o.vt = &g_igTextureCubeAttr_vtable[0];
-    __destroy_arr(&o.f[17], &FUN_00132390, 4, 6);
+    __destroy_arr(&o.f[17], &igSmartPointer_igImage_Destruct, 4, 6);
     FUN_00132230((S_132230 *)&o, 0);
     return r;
 }
@@ -134,7 +134,7 @@ void *FUN_00132230(struct S_132230 *arg0, short arg1) {
     return arg0;
 }
 
-O *FUN_00132390(O *arg0, short arg1) {
+O *igSmartPointer_igImage_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy(t); }

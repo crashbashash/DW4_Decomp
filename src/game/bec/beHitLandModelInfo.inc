@@ -10,24 +10,24 @@ igMetaObject *beHitLandModelInfo_GetMetaObject(void) {
 }
 
 int beHitLandModelInfo_GetVTable(void) {
-    struct Obj_35d4f0 obj;
-    int t;
+    beHitLandModelInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beHitLandModelInfo_vtable[0];
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beHitLandModelInfo_vtable[0];
-    FUN_00343260((igSmartPointer<igObject> *)&obj.w9, -1);
-    FUN_00343260((igSmartPointer<igObject> *)&obj.w8, -1);
-    igSmartPointer_igObjectList_Destruct(&obj.w7, -1);
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beHitLandModelInfo_vtable[0];
+    obj._nameList = 0;
+    obj._switchgraph = 0;
+    obj._checkSwitch = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beHitLandModelInfo_vtable[0];
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._checkSwitch, -1);
+    igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switchgraph, -1);
+    igSmartPointer_igObjectList_Destruct(&obj._nameList, -1);
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
 void beHitLandModelInfo_EnsureRegistered(void)
@@ -112,7 +112,7 @@ static int g_beHitLandModelInfo_messageValues[] = {
     0, 1, 2, 3, 4,
 };
 
-igMetaEnum *FUN_0035d720(void) {
+igMetaEnum *beHitLandModel_GetMessageEnum(void) {
     if (g_beHitLandModelInfo_messageMetaEnum == 0) {
         g_beHitLandModelInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beHitLandModelInfo_messageNames, g_beHitLandModelInfo_messageValues, 5);
     }

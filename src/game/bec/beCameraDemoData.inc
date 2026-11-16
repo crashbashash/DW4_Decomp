@@ -15,16 +15,18 @@ done:;
 }
 
 int beCameraDemoData_GetVTable(void) {
-    Obj_368fd0 obj;
-    int r;
+    beCameraDemoData obj;
+    int vtable;
+    igObject **cameraPathSlot;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beCameraDemoData_vtable[0];
-    obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beCameraDemoData_vtable[0];
-    obj.release();
-    return r;
+    obj._vtable = (int)&g_beCameraDemoData_vtable[0];
+    cameraPathSlot = (igObject **)&obj._cameraPath;
+    *cameraPathSlot = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beCameraDemoData_vtable[0];
+    igObjectRef_Release(cameraPathSlot);
+    return vtable;
 }
 
 void beCameraDemoData_EnsureRegistered(void)

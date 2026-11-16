@@ -43,7 +43,7 @@ int igCompileTraversal_GetVTable(void) {
     FUN_001a30c0((struct R * *)p6, -1);
     FUN_001a2bc0((ObjectRefWord *)p5, -1);
     FUN_001a0710((struct Ref * *)p4, -1);
-    FUN_00198190((void * *)p3, -1);
+    igSmartPointer_igAABox_Destruct((void * *)p3, -1);
     FUN_001a0690((void * *)p2, -1);
     FUN_001a2b40((void * *)p1, -1);
     FUN_00199970((struct R * *)p0, -1);

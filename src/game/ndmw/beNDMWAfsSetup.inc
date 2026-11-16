@@ -25,26 +25,27 @@ void *beNDMWAfsSetup_ResolveMetaObject(void) {
 }
 
 int beNDMWAfsSetup_GetVTable(void) {
-    struct Obj_3caee0 obj;
-    int t;
+    beNDMWAfsSetup obj;
+    int vtable;
+
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.vt = &g_beNDMWAfsSetup_vtable[0];
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWAfsSetup_vtable[0];
-    FUN_003cafa0((igSmartPointer<igObject> *)&obj.w7, -1);
-    GameMain_igSmartPointer_igObject_Destruct(&obj.w6, -1);
-    GameMain_igSmartPointer_igObject_Destruct(&obj.w5, -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
-    FUN_00231030(&obj, 0);
-    return t;
+    obj._name = 0;
+    *(int **)&obj._vtable = &g_beNDMWAfsSetup_vtable[0];
+    obj._infoList = 0;
+    obj._customMenu = 0;
+    obj._subMenu = 0;
+    obj._subMenuHolder = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWAfsSetup_vtable[0];
+    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&obj._subMenuHolder, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj._subMenu, -1);
+    GameMain_igSmartPointer_igObject_Destruct(&obj._customMenu, -1);
+    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
+    igInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003cafa0(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

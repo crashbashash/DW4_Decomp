@@ -9,11 +9,11 @@ void *beMeterCtrlInfoList_GetMetaObject(void) {
 }
 
 int beMeterCtrlInfoList_GetVTable(void) {
-    int obj[8];
+    beMeterCtrlInfoList obj;
 
-    igObject_InitHeader(obj);
-    obj[0] = (int)&g_beMeterCtrlInfoList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem[0] + 916));
+    igObject_InitHeader(&obj);
+    obj._vtable = (int)&g_beMeterCtrlInfoList_vtable[0];
+    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem[0] + 916));
 }
 
 void beMeterCtrlInfoList_EnsureRegistered(void)

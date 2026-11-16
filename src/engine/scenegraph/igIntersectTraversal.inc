@@ -38,13 +38,13 @@ int igIntersectTraversal_GetVTable(void) {
     FUN_0019e3c0((void * *)&obj.w[13], -1);
     FUN_0018fa00(&obj.w[12], -1);
     FUN_0019e340((void * *)&obj.w[9], -1);
-    FUN_001958f0((void * *)&obj.w[8], -1);
+    igSmartPointer_igNodeList_Destruct((void * *)&obj.w[8], -1);
     FUN_00150fb0(&obj.w[7], -1);
     FUN_00194490((struct S *)((int *)&obj), 0);
     return t;
 }
 
-O_19e150 *FUN_0019e150(O_19e150 *arg0, short arg1) {
+O_19e150 *igIntersectTraversal_Destroy(O_19e150 *arg0, short arg1) {
     if (arg0) {
         arg0->vt = &g_igIntersectTraversal_vtable[0];
         if (&arg0->m56) {
@@ -120,7 +120,7 @@ void FUN_0019e440(void)
     igMetaObject_RunStaticInit(igIntersectTraversal_Register);
 }
 
-static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { FUN_001e4820, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, FUN_00186d20, FUN_00188340, 0 };
+static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { FUN_001e4820, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, FUN_00186d20, igRay_EnsureRegistered, 0 };
 
 void igIntersectTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();

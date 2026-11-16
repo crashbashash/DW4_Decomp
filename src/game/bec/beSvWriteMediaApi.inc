@@ -19,25 +19,25 @@ done:
 }
 
 int beSvWriteMediaApi_GetVTable(void) {
-    struct Obj_348ff0 obj;
-    int t;
+    beSvWriteMediaApi obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w12 = 0;
-    obj.w13 = 0;
-    obj.w14 = 0;
-    obj.vt = &g_beSvWriteMediaApi_vtable[0];
-    obj.w16 = 0;
-    obj.w17 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beSvWriteMediaApi_vtable[0];
-    igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)&obj.w17, (short)(-1));
-    FUN_00349080((igSmartPointer<igObject> *)&obj.w16, (long long)(-1));
-    FUN_00348390((struct S_348390 *)&obj, (short)0);
-    return t;
+    obj._imageWork = 0;
+    obj._mountWork = 0;
+    obj._iconWork = 0;
+    obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
+    obj._nowGamedata = 0;
+    obj._saveWork = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
+    igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)&obj._saveWork, (short)(-1));
+    igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)&obj._nowGamedata, (long long)(-1));
+    beSaveApi_Destroy((struct S_348390 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_00349080(igSmartPointer<igObject> *self, long long delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beSvPlatBaseData_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

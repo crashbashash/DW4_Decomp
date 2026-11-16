@@ -5,28 +5,10 @@ Semantic roles, not asserted original method spelling. WAZALIST/_baseNo/_recNo
 and GETMATRIX/GETHP, retail unwind cleanup records, and whole-body instruction
 comparisons provide the evidence.
 """
-ROWS = [(0x1363F0, "ObjectRef_Destruct_001363f0", "engine"),
-        (0x33E9C0, "ObjectRef_Destruct_0033e9c0", "engine"),
-        (0x3C9BE0, "FightCom_GetMetaEnum", "game"),
+ROWS = [(0x3C9BE0, "FightCom_GetMetaEnum", "game"),
         (0x3C9C40, "GameRamMessage_GetMetaEnum", "game"),
-        (0x3D9BD0, "ObjectRef_Destruct_003d9bd0", "engine"),
-        (0x3D9C50, "ObjectRef_Destruct_003d9c50", "engine"),
-        (0x3D9CD0, "ObjectRef_Destruct_003d9cd0", "engine"),
-        (0x3D9D50, "ObjectRef_Destruct_003d9d50", "engine"),
-        (0x3E9010, "ObjectRef_Destruct_003e9010", "engine"),
-        (0x3E9090, "DataList_GetData_003e9090", "engine"),
-        (0x3E90D0, "ObjectRef_Retain_003e90d0", "engine"),
-        (0x3E90F0, "DataList_GetWordAt_003e90f0", "engine"),
-        (0x3E9110, "ObjectRef_Release_003e9110", "engine"),
-        (0x3E9160, "ObjectList_SetAtRetained_003e9160", "engine"),
-        (0x3E9240, "DataList_GetWordAt_003e9240", "engine"),
-        (0x3E9260, "ObjectList_GetAt_003e9260", "engine"),
-        (0x3E92B0, "ObjectRef_Assign_003e92b0", "engine"),
-        (0x3E9370, "Memory_SelectAllocator_003e9370", "engine"),
-        (0x3FC670, "ObjectRef_Destruct_003fc670", "engine"),
         (0x3FC6F0, "beNDMWGameRam_FindTechniqueRow", "game"),
         (0x3FC780, "beNDMWGameRam_CollectNearbyNonzeroHp", "game"),
-        (0x406E60, "ObjectRef_AssignObject_00406e60", "engine"),
         (0x406FE0, "StringPool_GetInstance", "engine")]
 
 if __name__ == "__main__":

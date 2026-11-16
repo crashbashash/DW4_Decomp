@@ -1,16 +1,16 @@
 #include "dw4/reflected.h"
 #include "dw4/igTDataList.h"
 
-extern "C" int FUN_0039c430(void *node, void *traversal);
+extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
 extern "C" void igMatrix44f_SetIdentity(float *);
 extern "C" void igMatrix44f_Copy(float *, float *);
 extern "C" void igMatrix44f_GetTranslation(float *, float *);
 extern "C" void igMatrix44f_SetTranslation(float *, float *);
-extern "C" void FUN_001356b0(void);
+extern "C" void igModelViewMatrixAttr_CreateInstance(void);
 extern "C" void igTimeAttr_CreateInstance(void);
 extern "C" int igTraversal_RegisterFunction(int, int, void (*)(void));
 extern "C" int beResetNode_GetMetaObject(...);
-extern "C" void FUN_0039c8c0(void);
+extern "C" void beResetNode_RegisterTraversal(void);
 extern "C" int igInsightCore_FindManager(int, int);
 extern "C" void beMessenger_RegisterReceiver(int, int, char *, int, int);
 extern "C" int beSeCtl_GetInfoMeta(void);
@@ -45,10 +45,10 @@ struct AttrList : igTDataList<igAttr *> {
         _data[n] = *p;
     }
 };
-extern "C" int FUN_0039c460(beResetNode *node, igCommonTraversal *trav);
-extern "C" int DAT_00562640[4];
+extern "C" int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav);
+extern "C" int g_igCommonTraversal_travProcs[4];
 extern "C" int g_beSound_metaObject[4];
-extern "C" void beSeCtl_Prepare(beSeCtl *arg0);
+extern "C" void beSeCtl_Prepare(beSeCtl *self);
 extern "C" char ACTION_BROADCAST_3[];
 extern "C" void beSeCtl_OnAddRam(beSeCtl * p0, int p1, char * p2, int p3, int p4);
 extern "C" int g_beSeInfo_metaObject[4];
@@ -56,17 +56,13 @@ extern "C" int g_beSeCtl_metaObject[4];
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_13[4];
 extern "C" int SETSOUND[4];
-/* arg1 context: +12 holds the owning info. */
-struct ContextView { char p[12]; int f12; };
-/* arg2 message record: +12 model name, +16 slot, +20 action name */
-struct SeMessageView { char p[12]; int f12; int f16; int f20; };
-extern "C" int beSeCtl_OnMessage(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2);
+extern "C" int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work);
 
-int FUN_0039c430(void *node, void *traversal) {
-    return FUN_0039c460((beResetNode *)traversal, (igCommonTraversal *)node);
+int beResetNode_TraverseCallback(void *node, void *traversal) {
+    return beResetNode_Traverse((beResetNode *)traversal, (igCommonTraversal *)node);
 }
 
-int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
+int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
     float t[3];
     long long time;
     float m[16];
@@ -83,7 +79,7 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
         igMatrix44f_SetTranslation(m, t);
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
-            igObjectPool_Grow(pool, FUN_001356b0);
+            igObjectPool_Grow(pool, igModelViewMatrixAttr_CreateInstance);
         matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
         ((MatrixAttrVT *)matAttr)->setMatrix(m);
     }
@@ -143,13 +139,13 @@ int FUN_0039c460(beResetNode *node, igCommonTraversal *trav) {
     return 0;
 }
 
-void FUN_0039c8c0(void) {
-    igTraversal_RegisterFunction(DAT_00562640[0], beResetNode_GetMetaObject(), (void (*)())FUN_0039c430);
+void beResetNode_RegisterTraversal(void) {
+    igTraversal_RegisterFunction(g_igCommonTraversal_travProcs[0], beResetNode_GetMetaObject(), (void (*)())beResetNode_TraverseCallback);
 }
 
-void beSeCtl_Prepare(beSeCtl *arg0) {
-    if (arg0->_sndMng == 0) {
-        arg0->_sndMng = igInsightCore_FindManager(arg0->_insight, g_beSound_metaObject[0]);
+void beSeCtl_Prepare(beSeCtl *self) {
+    if (self->_sndMng == 0) {
+        self->_sndMng = igInsightCore_FindManager(self->_insight, g_beSound_metaObject[0]);
     }
 }
 
@@ -167,62 +163,62 @@ void beSeCtl_UpdateRam(void)
 {
 }
 
-int beSeCtl_OnMessage(beSeCtl *arg0, struct ContextView *arg1, struct SeMessageView *arg2) {
-    int res;
-    int s5;
-    beSeDataList *l2;
+int beSeCtl_OnMessage(beSeCtl *self, beBaseInfoRam *ram, beMessengerWork *work) {
+    int modelIndex;
+    int modelName;
+    beSeDataList *actions;
     int j;
-    int sh;
-    beBaseInfoDataList *l1;
+    int delay;
+    beBaseInfoDataList *models;
     beSeInfo *info;
-    beSeInfoData *row;
+    beSeInfoData *model;
     int i;
     int off;
-    int s7;
-    int s8;
-    beSeData *it;
+    int actionName;
+    int ramNo;
+    beSeData *action;
     int *p;
 
-    res = -1;
-    s7 = arg2->f20;
-    s5 = arg2->f12;
-    s8 = arg2->f16;
-    info = (beSeInfo *)arg1->f12;
-    l1 = (beBaseInfoDataList *)info->_dataList;
+    modelIndex = -1;
+    actionName = work->_message;
+    modelName = work->_infoName;
+    ramNo = work->_ramNo;
+    info = (beSeInfo *)ram->_parentInfo;
+    models = (beBaseInfoDataList *)info->_dataList;
     i = 0;
-    if (0 < l1->_count) {
+    if (0 < models->_count) {
         off = 0;
         do {
-            row = (beSeInfoData *)*(int *)((char *)l1->_data + off);
-            p = (int *)row->_name;
-            if (strcmp(p != 0 ? p : &emptyString[0], s5) == 0) {
-                res = i;
+            model = (beSeInfoData *)*(int *)((char *)models->_data + off);
+            p = (int *)model->_name;
+            if (strcmp(p != 0 ? p : &emptyString[0], modelName) == 0) {
+                modelIndex = i;
             }
             i += 1;
             off += 4;
-        } while (i < l1->_count);
+        } while (i < models->_count);
     }
-    if (res == -1) {
+    if (modelIndex == -1) {
         return 1;
     }
-    row = ((beSeInfoData **)l1->_data)[res];
-    l2 = (beSeDataList *)row->_actionList;
+    model = ((beSeInfoData **)models->_data)[modelIndex];
+    actions = (beSeDataList *)model->_actionList;
     j = 0;
-    if (0 < l2->_count) {
+    if (0 < actions->_count) {
         off = 0;
         do {
-            it = *(beSeData **)((char *)l2->_data + off);
-            p = (int *)it->_name;
-            if (strcmp(p != 0 ? p : &emptyString[0], s7) == 0) {
-                sh = it->_delay;
-                beMessenger_SelectReceivers(arg0->_messenger, &MODELCTRL_13[0], s5, s8);
-                beMessenger_AppendString(arg0->_messenger, it->_sound);
-                beMessenger_AppendFloat(arg0->_messenger, __floatdisf(sh));
-                beMessenger_DispatchSelected(arg0->_messenger, &SETSOUND[0]);
+            action = *(beSeData **)((char *)actions->_data + off);
+            p = (int *)action->_name;
+            if (strcmp(p != 0 ? p : &emptyString[0], actionName) == 0) {
+                delay = action->_delay;
+                beMessenger_SelectReceivers(self->_messenger, &MODELCTRL_13[0], modelName, ramNo);
+                beMessenger_AppendString(self->_messenger, action->_sound);
+                beMessenger_AppendFloat(self->_messenger, __floatdisf(delay));
+                beMessenger_DispatchSelected(self->_messenger, &SETSOUND[0]);
             }
             j += 1;
             off += 4;
-        } while (j < l2->_count);
+        } while (j < actions->_count);
     }
     return 1;
 }

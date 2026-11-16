@@ -10,23 +10,23 @@ void *beActionStarterInfo_GetMetaObject(void) {
 }
 
 int beActionStarterInfo_GetVTable(void) {
-    struct Obj_36b3b0 obj;
-    int t;
+    beActionStarterInfo obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.f8 = 0;
-    obj.f14 = 0;
-    obj.f18 = 0;
-    obj.vt = &g_beActionStarterInfo_vtable[0];
-    obj.f1c = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beActionStarterInfo_vtable[0];
-    FUN_0036b430((igSmartPointer<igObject> *)&obj.f1c, (short)(-1));
-    FUN_0033ec80((struct S_33ec80 *)&obj, (short)0);
-    return t;
+    obj._name = 0;
+    obj._dataList = 0;
+    obj._ramList = 0;
+    obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
+    obj._modelList = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
+    igSmartPointer_beAsTargetModelDataList_Destruct((igSmartPointer<igObject> *)&obj._modelList, (short)(-1));
+    beBaseInfo_Destroy((struct S_33ec80 *)&obj, (short)0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_0036b430(igSmartPointer<igObject> *self, short delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beAsTargetModelDataList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

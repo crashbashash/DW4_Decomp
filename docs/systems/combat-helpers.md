@@ -12,7 +12,7 @@ The separate FightCom metadata builder and BLT attribute accessor are
 
 | Address | Bytes | Semantic name | Role |
 | --- | ---: | --- | --- |
-| `0x3fc670` | 128 | `ObjectRef_Destruct_003fc670` | Release a held object and optionally delete its wrapper |
+| `0x3fc670` | 128 | `igSmartPointer_beNDMWItemWaza_Destruct` | Release a held object and optionally delete its wrapper |
 | `0x3fc6f0` | 132 | `beNDMWGameRam_FindTechniqueRow` | Map a WAZALIST base number to its current database row |
 | `0x3fc780` | 652 | `beNDMWGameRam_CollectNearbyNonzeroHp` | Gather group members within radius 30 whose HP query is nonzero |
 

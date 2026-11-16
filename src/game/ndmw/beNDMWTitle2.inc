@@ -19,7 +19,7 @@ igMetaObject *beNDMWTitle2_GetOrCreateMetaObject(void) {
 void *beNDMWTitle2_GetMetaObject(void) {
     unsigned char b;
     if (g_beNDMWTitle2_metaObject != 0) {
-        b = (*(int *)((char *)(g_beNDMWTitle2_metaObject) + 36) & 4) != 0;
+        b = (g_beNDMWTitle2_metaObject->_validity & 4) != 0;
         if (b != 0) goto done;
     }
     beNDMWTitle2_EnsureRegistered();
@@ -28,24 +28,24 @@ done:
 }
 
 int beNDMWTitle2_GetVTable(void) {
-    struct Obj_3b2980 obj;
-    int t;
+    beNDMWTitle2 obj;
+    int vtable;
 
     igObject_InitHeader(&obj);
-    obj.w2 = 0;
-    obj.w6 = 0;
-    obj.vt = &g_beNDMWTitle2_vtable[0];
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
-    obj.vt = &g_beNDMWTitle2_vtable[0];
-    FUN_003b2a10((igSmartPointer<igObject> *)&obj.w9, -1);
-    FUN_0033dda0(&obj.w8, -1);
-    FUN_0033f5e0(&obj, 0);
-    return t;
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWTitle2_vtable[0];
+    obj._padManager = 0;
+    obj._mcUtilCtrl = 0;
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWTitle2_vtable[0];
+    igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
+    igSmartPointer_bePadManager_Destruct(&obj._padManager, -1);
+    beBaseInfoManager_Destroy(&obj, 0);
+    return vtable;
 }
 
-igSmartPointer<igObject> *FUN_003b2a10(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_beNDMWMcUtilCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
         if (object) {

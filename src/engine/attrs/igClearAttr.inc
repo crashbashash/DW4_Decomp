@@ -55,8 +55,8 @@ void thunk_igClearAttr_GetMetaObject(void) {
 
 static FieldFactory g_igClearAttr_ctorTable[] = {
     igUnsignedIntMetaField_Create,
-    FUN_001872a0,
-    FUN_001872a0,
+    igVec4fMetaField_CreateInstance,
+    igVec4fMetaField_CreateInstance,
     igDoubleMetaField_Create,
     igUnsignedIntMetaField_Create,
     igUnsignedIntMetaField_Create,
@@ -108,13 +108,13 @@ void igClearAttr_InitFields(void) {
     v1.w = 0x3F800000;
     v1.y = 0;
     v1.z = 0;
-    FUN_0018e670(temp_a0, &v1);
+    igVec4fMetaField_SetDefault(temp_a0, &v1);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     v2.x = 0;
     v2.y = 0;
     v2.z = 0;
     v2.w = 0;
-    FUN_0018e670(temp_a0_2, &v2);
+    igVec4fMetaField_SetDefault(temp_a0_2, &v2);
     igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3), 0x3FF00000LL << 0x20);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
     igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);

@@ -21,17 +21,17 @@ void *beNDMWMdlMapCursor_GetReadyMetaObject(void) {
 }
 
 int beNDMWMdlMapCursor_GetVTable(void) {
-    struct Obj_3c0e20 o;
-    int r;
-    igObject_InitHeader(&o);
-    o.f8 = 0;
-    o.f24 = 0;
-    o.vt = &g_beNDMWMdlMapCursor_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem[0]) + 916));
-    o.vt = &g_beNDMWMdlMapCursor_vtable[0];
-    
-    FUN_003bf2f0((struct NamedRefObject *)&o, (long long)0);
-    return r;
+    beNDMWMdlMapCursor obj;
+    int vtable;
+
+    igObject_InitHeader(&obj);
+    obj._name = 0;
+    obj._infoList = 0;
+    *(int **)&obj._vtable = &g_beNDMWMdlMapCursor_vtable[0];
+    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
+    *(int **)&obj._vtable = &g_beNDMWMdlMapCursor_vtable[0];
+    beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
+    return vtable;
 }
 
 void beNDMWMdlMapCursor_EnsureRegistered(void)

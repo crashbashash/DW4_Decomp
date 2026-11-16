@@ -9,10 +9,10 @@ void *beDataBaseList_GetMetaObject(void) {
 }
 
 int beDataBaseList_GetVTable(void) {
-    struct Obj_3657f0 obj;
+    beDataBaseList obj;
 
     igObject_InitHeader(&obj);
-    obj.vt = &g_beDataBaseList_vtable[0];
+    obj._vtable = (int)&g_beDataBaseList_vtable[0];
     return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem[0]) + 916));
 }
 

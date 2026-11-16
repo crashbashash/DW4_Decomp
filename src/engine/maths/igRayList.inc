@@ -28,7 +28,7 @@ void igRayList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igRayList_Register);
 }
 
-static igMetaObjectCallback g_igRayList_callbackList[] = { FUN_00188340, 0 };
+static igMetaObjectCallback g_igRayList_callbackList[] = { igRay_EnsureRegistered, 0 };
 
 void igRayList_Register(void) {
     FUN_00186a40();
