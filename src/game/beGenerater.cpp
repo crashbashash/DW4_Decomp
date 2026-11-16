@@ -277,6 +277,212 @@ enum beGeneraterMessage {
     MSG_OFFREEZE,
 };
 
+/* The game's string pool, created on first use. */
+static inline void *stringPool(void)
+{
+    if (g_stringPool[0] == 0) {
+        void *pool = StringPool_Allocate(16);
+        if (pool != 0) {
+            pool = StringPool_Construct(pool);
+        }
+        g_stringPool[0] = (int)pool;
+    }
+    return (void *)g_stringPool[0];
+}
+
+/* A pooled string keeps its chunk owner and reference count in the two words before its text. */
+static inline void releaseString(char *text)
+{
+    if (text != 0) {
+        int *header = (int *)(text - 8);
+        int count = header[1] - 1;
+        header[1] = count;
+        if (count == 0) {
+            StringChunk_ReleaseHeader(header[0], header);
+        }
+    }
+}
+
+/* Points the work's enemy name at the pooled copy of `name`, releasing the string it held. */
+static inline void setGeneEnemyName(beGeneraterInfoWork *work, const char *name)
+{
+    char *token = StringPool_Intern(stringPool(), name);
+    releaseString((char *)work->_geneEnemyName);
+    work->_geneEnemyName = (int)token;
+}
+
+/* The allocator an object's new members come from: its own, or the default one. */
+static inline int allocatorFor(void *object)
+{
+    int allocator = igObject_GetAllocator(object);
+    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+}
+
+/* The enemy record the generator spawns. */
+static inline int enemyRecNo(beGeneraterInfoRam *geneRam)
+{
+    return dataOf(geneRam)->_geneEnemyId;
+}
+
+/* Looks up enemy record `recNo` in the enemy database and copies its model and maximum HP into the work. */
+static inline void setGeneEnemy(beGenerater *self, igSmartPointer<beGeneraterInfoWork> &work, int recNo)
+{
+    beMessenger_SendNamed(self->_messenger, "DATABASE", "enemy", 0, "GETDATABASE");
+    beDataBase *database = (beDataBase *)beMessenger_GetObject(self->_messenger, 0);
+    work->_geneEnemyRecNo = recNo;
+    setGeneEnemyName(work, beDataBase_GetRecordString(database, recNo, "MODEL"));
+    int maxHp = beDataBase_GetRecordInt(database, recNo, "HPMAX");
+    work->_geneEnemyMHp = maxHp;
+}
+
+/* Frames at 60 per second, as timer nanoseconds. */
+static inline long long framesToTime(const float frames)
+{
+    return (long long)(1e9f * frames / 60.0f);
+}
+
+/* Spawns `count` enemies and counts them off the generator's remainder; true when none are left. */
+static inline bool spawnRemaining(beGenerater *self, beBaseInfoRam *ram, beGeneraterInfoWork *work, int count)
+{
+    work->_nokoriKazu -= beGenerater_SpawnEnemies(self, ram, count);
+    return work->_nokoriKazu <= 0;
+}
+
+/* Moves the generator on to its next state. */
+static inline void nextState(beGeneraterInfoRam *geneRam)
+{
+    geneRam->_st1 = geneRam->_st1 + 1;
+    geneRam->_st3 = 0;
+    geneRam->_st2 = 0;
+}
+
+void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram)
+{
+    beGeneraterInfoRam *geneRam = (beGeneraterInfoRam *)ram;
+    if (!geneRam->_isRun) {
+        return;
+    }
+    if (geneRam->_work == 0) {
+        beMessenger_SendGroup(self->_messenger, "PLAYER", "GETMATRIX");
+        int playerCount = beMessenger_GetMatrixCount(self->_messenger);
+        if (playerCount == 0) {
+            return;
+        }
+        igSmartPointer<beGeneraterInfoWork> created(beGeneraterInfoWork_Create(allocatorFor(self)));
+        created->_playerCount = playerCount;
+        (igSmartPointer<beGeneraterInfoWork> &)geneRam->_work = created;
+        setGeneEnemy(self, created, enemyRecNo(geneRam));
+    }
+    beGeneraterInfoWork *work = (igSmartPointer<beGeneraterInfoWork> &)geneRam->_work;
+    beGeneraterData *data = dataOf(geneRam);
+    beGeneraterPlayerData *playerData = ((ObjectListOf<beGeneraterPlayerData> *)data->_playerDataList)->get(work->_playerCount - 1);
+    if (work->_isFreeze || work->_isSystemFreeze) {
+        beGenerater_DropItemsForDead(self, ram, false);
+        return;
+    }
+    switch (geneRam->_st1) {
+    case 0: {
+        bool ready = false;
+        switch (*(char *)data->_startModeStr) {
+        case 'd':
+            ready = true;
+            break;
+        case 't':
+            /* matching construct: the timer queries return a byte, masked before the test as retail does */
+            if (!(beBaseInfoRam_HasTimer(geneRam, "BOOT_TIMER") & 0xFF)) {
+                beBaseInfoRam_StartTimer(geneRam, "BOOT_TIMER", framesToTime(data->_startData));
+            } else if (beBaseInfoRam_IsTimerExpired(geneRam, "BOOT_TIMER")) {
+                ready = true;
+                beBaseInfoRam_RemoveTimer(geneRam, "BOOT_TIMER");
+            }
+            break;
+        case 'r': {
+            float matrix[16];
+            igMatrix44f_SetIdentity(matrix);
+            igMatrix44f_SetTranslation(matrix, (igVec3f *)data->_pos);
+            if (beTargetObj_SelectTarget(matrix, "PLAYER", "NEAR") & 0xFF) {
+                float range = data->_startData;
+                if (beTargetObj_GetTargetDistanceSq() <= range) {
+                    ready = true;
+                }
+            }
+            break;
+        }
+        }
+        if (ready == false) {
+            return;
+        }
+        nextState(geneRam);
+    }
+    /* fall through */
+    case 1:
+        {
+            int total = playerData->_geneCount;
+            work->_nokoriKazu = total - beGenerater_SpawnEnemies(self, ram, playerData->_geneMaxCount);
+        }
+        nextState(geneRam);
+        if (work->_nokoriKazu <= 0) {
+            nextState(geneRam);
+            return;
+        }
+        switch (*(char *)data->_fillModeStr) {
+        case 't':
+            beBaseInfoRam_StartTimer(geneRam, "GENE_TIMER", framesToTime(data->_fillData));
+            break;
+        }
+        break;
+    case 2:
+        beGenerater_DropItemsForDead(self, ram, false);
+        switch (*(char *)data->_fillModeStr) {
+        case 'w':
+            if (((igObjectList *)work->_enemyRamList)->_count == 0) {
+                int remaining = work->_nokoriKazu;
+                int wave = playerData->_geneMaxCount;
+                if (spawnRemaining(self, ram, work, remaining < wave ? remaining : wave)) {
+                    nextState(geneRam);
+                    return;
+                }
+            }
+            break;
+        case 'a':
+            if (((igObjectList *)work->_enemyRamList)->_count != playerData->_geneMaxCount) {
+                if (spawnRemaining(self, ram, work, 1)) {
+                    nextState(geneRam);
+                    return;
+                }
+            }
+            break;
+        case 't':
+            if (beBaseInfoRam_IsTimerExpired(geneRam, "GENE_TIMER")) {
+                if (spawnRemaining(self, ram, work, 1)) {
+                    nextState(geneRam);
+                    beBaseInfoRam_RemoveTimer(geneRam, "GENE_TIMER");
+                    return;
+                }
+                beBaseInfoRam_StartTimer(geneRam, "GENE_TIMER", framesToTime(data->_fillData));
+                return;
+            }
+            break;
+        }
+        break;
+    case 3:
+        beGenerater_DropItemsForDead(self, ram, true);
+        if (((igObjectList *)work->_enemyRamList)->_count == 0) {
+            if (data->_callLua != 0) {
+                g_mdlEntity[0] = 0;
+                beLua__RunNamedChunk(self->_luaManager, (const char *)data->_callLua, 0);
+            }
+            geneRam->_isRun = 0;
+            ((igSmartPointer<beGeneraterInfoWork> &)geneRam->_work).clear();
+            geneRam->_st0 = 1;
+            geneRam->_st3 = 0;
+            geneRam->_st2 = 0;
+            geneRam->_st1 = 0;
+        }
+        break;
+    }
+}
+
 int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message)
 {
     beGeneraterInfoRam *geneRam = (beGeneraterInfoRam *)ram;
@@ -369,69 +575,6 @@ int beGenerater_OnMessageText(beGenerater *self, beBaseInfoRam *ram, int message
     }
     return 1;
 }
-
-/* The game's string pool, created on first use. */
-static inline void *stringPool(void)
-{
-    if (g_stringPool[0] == 0) {
-        void *pool = StringPool_Allocate(16);
-        if (pool != 0) {
-            pool = StringPool_Construct(pool);
-        }
-        g_stringPool[0] = (int)pool;
-    }
-    return (void *)g_stringPool[0];
-}
-
-/* A pooled string keeps its chunk owner and reference count in the two words before its text. */
-static inline void releaseString(char *text)
-{
-    if (text != 0) {
-        int *header = (int *)(text - 8);
-        int count = header[1] - 1;
-        header[1] = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader(header[0], header);
-        }
-    }
-}
-
-/* Points the work's enemy name at the pooled copy of `name`, releasing the string it held. */
-static inline void setGeneEnemyName(beGeneraterInfoWork *work, const char *name)
-{
-    char *token = StringPool_Intern(stringPool(), name);
-    releaseString((char *)work->_geneEnemyName);
-    work->_geneEnemyName = (int)token;
-}
-
-/* The allocator an object's new members come from: its own, or the default one. */
-static inline int allocatorFor(void *object)
-{
-    int allocator = igObject_GetAllocator(object);
-    return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
-}
-
-/* Frames at 60 per second, as timer nanoseconds. */
-static inline long long framesToTime(const float frames)
-{
-    return (long long)(1e9f * frames / 60.0f);
-}
-
-/* Spawns `count` enemies and counts them off the generator's remainder; true when none are left. */
-static inline bool spawnRemaining(beGenerater *self, beBaseInfoRam *ram, beGeneraterInfoWork *work, int count)
-{
-    work->_nokoriKazu -= beGenerater_SpawnEnemies(self, ram, count);
-    return work->_nokoriKazu <= 0;
-}
-
-/* Moves the generator on to its next state. */
-static inline void nextState(beGeneraterInfoRam *geneRam)
-{
-    geneRam->_st1 = geneRam->_st1 + 1;
-    geneRam->_st3 = 0;
-    geneRam->_st2 = 0;
-}
-
 
 int beGenerater_GetMeta(void)
 {

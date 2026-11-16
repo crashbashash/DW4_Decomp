@@ -36409,6 +36409,7 @@
       "beGenerater_OnAddRam": "0x003844f0",
       "beGenerater_SpawnEnemies": "0x00384540",
       "beGenerater_DropItemsForDead": "0x00384800",
+      "beGenerater_UpdateRam": "0x00384c40",
       "beGenerater_OnMessageText": "0x003853c0",
       "beGenerater_GetMeta": "0x00385820"
     },
@@ -36420,7 +36421,8 @@
       "g_beGenerater_metaObject": "0x005895d0",
       "g_beLua_metaObject": "0x00589208",
       "g_itemDropCategories": "0x004c8f30",
-      "g_mdlEntity": "0x0058a1e0"
+      "g_mdlEntity": "0x0058a1e0",
+      "kIGMemoryPoolHandleUser1": "0x00587110"
     },
     "symbol": "beGenerater_Prepare",
     "anon": [
@@ -36444,7 +36446,10 @@
       "0x0050e9b0",
       "0x0050e9c0",
       "0x0050e9d0"
-    ]
+    ],
+    "duplicates": {
+      "__dt__37igSmartPointer<19beGeneraterInfoWork>Fv": "0x0035f550"
+    }
   },
   "0x00385830": {
     "whole_file": true,
@@ -36756,6 +36761,7 @@
       "beMeterCtrl_GetInfoMeta": "0x0038f970",
       "beMeterCtrl_OnAddRam": "0x0038f980",
       "beMeterCtrl_SetupMaxValue__FP11beMeterCtrlP18beMeterCtrlOneData": "0x0038f9b0",
+      "beMeterCtrl_UpdateRam": "0x0038fa50",
       "beMeterCtrl_OnMessageText": "0x0038ff40",
       "beMeterCtrl_GetMeta": "0x003902e0"
     },
@@ -36767,6 +36773,8 @@
       "g_beMeterCtrl_metaObject": "0x00588f30"
     },
     "anon": [
+      "0x004c8f90",
+      "0x004c8f98",
       "0x0050eea0"
     ],
     "symbol": "beMeterCtrl_Prepare"

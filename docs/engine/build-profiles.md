@@ -26,7 +26,8 @@ because the exception mode is not a recorded setting at all. The unit table is w
 * `compiler`: an id declared by an `@compiler` line in the same file, which names the
   repository-relative executable and its SHA-256. `tools/unitprofiles.py` refuses a
   missing or changed executable rather than falling back to another build.
-* `flags`: the complete flag string except the exception mode.
+* `flags`: the complete flag string except the exception mode, with any `-session-prelude <file>` the unit is
+  compiled after in the same process ([session preludes](../build-system.md#session-preludes)).
 * `exceptions`: `on` or `off`. `off` adds `-Cpp_exceptions off` to every MWCC compile
   of the unit (C files included: the C front end ignores it, measured over every C
   unit in the sweep); nothing is passed for `on` (the compiler default) or for the Sony

@@ -23,6 +23,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
+import cc  # noqa: E402
 import regions  # noqa: E402
 import units as unitfiles  # noqa: E402
 import verify  # noqa: E402
@@ -30,6 +31,12 @@ import verify  # noqa: E402
 CONFIG = "config/SLUS-20836/"
 UNITS = CONFIG + "units.tsv"
 OVERRIDES = (CONFIG + "unit-flags.tsv", CONFIG + "unit-compilers.tsv")
+
+
+def rolled_flags(current, flags):
+    """`flags` plus the session preludes `current` names (tools/cc.py): a prelude belongs to the unit, not to the
+    profile it moves to."""
+    return " ".join([flags] + ["%s %s" % (cc.SESSION_PRELUDE, p) for p in cc.split_session_preludes(current)[1]])
 
 
 def rows():
@@ -98,7 +105,7 @@ def main():
         # GCC units roll only onto a GCC compiler and MWCC units only onto MWCC
         if (region.id in wanted and regions.of(end - 1) is region and (not only or start in only)
                 and unit_compiler.startswith("ee-gcc") == args.compiler.startswith("ee-gcc")
-                and (unit_compiler, flags) != (args.compiler, args.flags)
+                and (unit_compiler, flags) != (args.compiler, rolled_flags(flags, args.flags))
                 and "-lang" not in flags and not any(start <= held < end for held in holders)):
             targets[index] = units[index]
     paths = unitfiles.scan("src")
@@ -110,7 +117,7 @@ def main():
     for number, line in enumerate(lines):
         f = line.rstrip("\n").split("\t")
         if line[0] not in "#@" and len(f) > 6 and f[0].startswith("0x") and int(f[0], 16) in keys:
-            f[3], f[4] = args.compiler, args.flags
+            f[3], f[4] = args.compiler, rolled_flags(f[4], args.flags)
             lines[number] = "\t".join(f) + "\n"
     with open(tables[0], "w") as fh:
         fh.writelines(lines)
@@ -151,7 +158,7 @@ def main():
     for number, line in enumerate(lines):
         f = line.rstrip("\n").split("\t")
         if line[0] not in "#@" and len(f) > 6 and f[0].startswith("0x") and int(f[0], 16) in keys:
-            f[3], f[4], f[6] = args.compiler, args.flags, "-"
+            f[3], f[4], f[6] = args.compiler, rolled_flags(f[4], args.flags), "-"
             lines[number] = "\t".join(f) + "\n"
     with open(UNITS, "w") as fh:
         fh.writelines(lines)

@@ -16722,13 +16722,14 @@
 003843c0	beUnicodeObj_AllocateBuffer	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00384480	beUnicodeObj_GetMeta	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
 00384490	beFont_GetMeta	match	DEFERRED duplicate 0x1338d0 __dt__31igSmartPointer<13igVertexArray>Fv 128B (compared under the profile of its retail unit)
-003844a0	beGenerater_Prepare	match	-
-003844e0	beGenerater_GetInfoMeta	match	-
-003844f0	beGenerater_OnAddRam	match	-
-00384540	beGenerater_SpawnEnemies	match	-
-00384800	beGenerater_DropItemsForDead	match	-
-003853c0	beGenerater_OnMessageText	match	-
-00385820	beGenerater_GetMeta	match	-
+003844a0	beGenerater_Prepare	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+003844e0	beGenerater_GetInfoMeta	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+003844f0	beGenerater_OnAddRam	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+00384540	beGenerater_SpawnEnemies	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+00384800	beGenerater_DropItemsForDead	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+00384c40	beGenerater_UpdateRam	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+003853c0	beGenerater_OnMessageText	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
+00385820	beGenerater_GetMeta	match	DEFERRED duplicate 0x35f550 __dt__37igSmartPointer<19beGeneraterInfoWork>Fv 128B (compared under the profile of its retail unit)
 00385830	beHitLandDeliv_Prepare	match	-
 00385840	beHitLandDeliv_GetInfoMeta	match	-
 00385850	beHitLandDeliv_OnAddRam	match	-
@@ -16868,6 +16869,7 @@
 0038f970	beMeterCtrl_GetInfoMeta	match	-
 0038f980	beMeterCtrl_OnAddRam	match	-
 0038f9b0	beMeterCtrl_SetupMaxValue	match	-
+0038fa50	beMeterCtrl_UpdateRam	match	-
 0038ff40	beMeterCtrl_OnMessageText	match	-
 003902e0	beMeterCtrl_GetMeta	match	-
 003902f0	beMeterCtrlNode_TraversalFunction	match	DEFERRED duplicate 0x1c6460 __dt__12LabelListRefFv 128B (compared under the profile of its retail unit)

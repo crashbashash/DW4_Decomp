@@ -1,6 +1,8 @@
 #include "dw4/reflected.h"
+#include "dw4/igTDataList.h"
 
 extern "C" void beMeterCtrl_Prepare(void);
+extern "C" void beMeterCtrl_UpdateRam(beMeterCtrl *self, beBaseInfoRam *ram);
 extern "C" int beMeterCtrl_GetInfoMeta(void);
 extern "C" int beMeterCtrl_GetMeta(void);
 extern "C" void beMessenger_RegisterReceiverFromInfo(int, int, char *);
@@ -47,7 +49,7 @@ static inline float PerFrame(const float value)
     return value / 60.0f;
 }
 
-static void beMeterCtrl_SetupMaxValue(beMeterCtrl *self, beMeterCtrlOneData *data)
+void beMeterCtrl_SetupMaxValue(beMeterCtrl *self, beMeterCtrlOneData *data)
 {
     int digits = 1;
     int value = (int)data->_maxValueF;
@@ -68,11 +70,102 @@ static void beMeterCtrl_SetupMaxValue(beMeterCtrl *self, beMeterCtrlOneData *dat
     data->_isChange = 1;
 }
 
+/* Sets the meter's target value from a percentage of its maximum; any non-zero percentage shows at least 1. */
+static inline void SetNowPercent(beMeterCtrlOneData *one, float percent) {
+    unsigned char nonZero = (percent != 0.0f);
+    float value = (percent * one->_maxValueF) / 100.0f;
+    if (value < 1.0f && nonZero) value = 1.0f;
+    one->_nowValueF = value;
+}
+
+static inline igTDataList<long long> *TimeListOf(beMeterCtrlNode *node) { return (igTDataList<long long> *)node->_timeList; }
+static inline void AppendTime(igTDataList<long long> *times, const long long &time) {
+    int n = times->_count;
+    if (n < times->_capacity) {
+        times->_count = n + 1;
+    } else {
+        List_Resize(times, n + 1, sizeof(long long));
+    }
+    times->_data[n] = time;
+}
+
+/* Sets the meter up on its first update, follows the linked HP record, moves the shown value toward the target
+ * by at most _addMaxValueF a frame and, when it changed, rewrites the node's time list: one time for a bar meter,
+ * one per digit for a number. */
+void beMeterCtrl_UpdateRam(beMeterCtrl *self, beBaseInfoRam *ram) {
+    beMeterCtrlOneData *one = ((beMeterCtrlOneData **)((igObjectList *)((beMeterCtrlInfo *)ram->_parentInfo)->_oneDataList)->_data)[ram->_ramNo];
+    switch (ram->_st0) {
+    case 0:
+        beMeterCtrl_SetupMaxValue(self, one);
+        /* matching construct: the state steps by a reload-and-add and the other three counters clear in retail's order (st3, st2, st1) */
+        ram->_st0 = ram->_st0 + 1;
+        ram->_st3 = 0;
+        ram->_st2 = 0;
+        ram->_st1 = 0;
+        break;
+    }
+    if (one->_hp != 0) {
+        SetNowPercent(one, ((beDataObjInt *)one->_hp)->_data * 100 / ((beDataObjInt *)one->_mHp)->_data);
+    }
+    float diff = one->_nowValueF - one->_dspValueF;
+    float shown;
+    if (diff != 0.0f) {
+        /* matching construct: the direction is a byte flag set before the sign test, so the compare-and-negate branch shares one path */
+        unsigned char rising;
+        one->_isChange = 1;
+        rising = 1;
+        if (diff < 0.0f) {
+            diff = -diff;
+            rising = 0;
+        }
+        if (diff > one->_addMaxValueF) diff = one->_addMaxValueF;
+        if (rising) shown = diff + one->_dspValueF; else shown = one->_dspValueF - diff;
+        if (shown < 0.0f) shown = 0.0f; else if (shown > one->_maxValueF) shown = one->_maxValueF;
+        if (one->_isNotchMode) {
+            unsigned char nonZero = (shown != 0.0f);
+            shown = (float)(int)shown;
+            if (shown == 0.0f && nonZero) shown = 1.0f;
+        }
+        one->_dspValueF = shown;
+    }
+    if (one->_isChange) {
+        igTDataList<long long> *times;
+        one->_isChange = 0;
+        times = TimeListOf((beMeterCtrlNode *)one->_node);
+        times->_count = 0;
+        if (((beMeterCtrlNode *)one->_node)->_isMeter) {
+            shown = one->_dspValueF;
+            if (shown <= 0.0f) {
+                AppendTime(times, 1000000000LL);
+                one->_dspValueF = 0;
+            } else {
+                float max = one->_maxValueF;
+                if (shown >= max) {
+                    AppendTime(times, 3000000000LL);
+                    one->_dspValueF = one->_maxValueF;
+                } else {
+                    long long time = (long long)(shown * one->_ratioTimeValueF);
+                    if (shown > 0.0f && time < one->_nonZeroTimeL) time = one->_nonZeroTimeL;
+                    else if (shown < max && time > one->_nonMaxTimeL) time = one->_nonMaxTimeL;
+                    AppendTime(times, time + 1000000000LL);
+                }
+            }
+        } else {
+            int rest = (int)one->_dspValueF;
+            int i;
+            for (i = 0; i < one->_ketaKazu; i++) {
+                AppendTime(times, (long long)(rest % 10) * 1000000000LL + 1000000000LL);
+                rest = rest / 10;
+                if (one->_isZeroSupp && rest == 0) break;
+            }
+        }
+    }
+}
+
 int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message) {
     beMeterCtrlOneData *s1;
     igObjectList *l;
     float f0, f2, f3, v;
-    unsigned char zero;
     int s3, s0;
     igObject *o;
     l = (igObjectList *)((beMeterCtrlInfo *)ram->_parentInfo)->_oneDataList;
@@ -98,11 +191,7 @@ int beMeterCtrl_OnMessageText(beMeterCtrl *self, beBaseInfoRam *ram, int message
         return 1;
     case 4:
         if (s1->_hp == 0) {
-            f0 = beMessenger_GetFloat(self->_messenger, 0);
-            zero = (f0 != 0.0f);
-            v = (f0 * s1->_maxValueF) / 100.0f;
-            if (v < 1.0f && zero) v = 1.0f;
-            s1->_nowValueF = v;
+            SetNowPercent(s1, beMessenger_GetFloat(self->_messenger, 0));
         }
         return 1;
     case 5:

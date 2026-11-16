@@ -5,7 +5,8 @@
 #
 # @compiler	id	repository-relative executable	SHA-256
 # lo	hi	name	compiler	flags	exceptions	status	source
-#   lo <= function start < hi; flags is the complete flag string except the exception mode;
+#   lo <= function start < hi; flags is the complete flag string except the exception mode, with any
+#   -session-prelude <file> compiled first in the same process (docs/build-system.md#session-preludes);
 #   exceptions on|off (off adds -Cpp_exceptions off to an MWCC compile); status - or provisional
 #   (the members' evidence has no common profile: the majority profile is recorded and the
 #   dissenting members keep a provisional row in unit-flags.tsv / unit-compilers.tsv).
@@ -308,7 +309,7 @@
 0x0037e110	0x0037f1b0	bec_beDemoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0037f1b0	0x003819a0	bec_beFileListInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x003819a0	0x003844a0	bec_beFont	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
-0x003844a0	0x00385830	bec_beGenerater	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
+0x003844a0	0x00385830	bec_beGenerater	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -session-prelude config/SLUS-20836/session-preludes/runtime_call_a0.cpp	on	-	whole file; session prelude: the unit makes no runtime call with an integer argument, yet its __fixsfdi keeps a0 live from the call before it
 0x00385830	0x00386030	bec_beHitLandDeliv	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00386030	0x00389020	bec_beHitLandModel	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00389020	0x00389080	bec_beKeyboardReceiver	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
@@ -317,7 +318,7 @@
 0x0038a660	0x0038aca0	bec_beLuaState	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0038aca0	0x0038bee0	bec_beMatCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0038bee0	0x0038f95c	bec_beMessenger	b52	-O3,p -sdatathreshold 2 -Iinclude	on	-	whole file
-0x0038f960	0x003902ec	bec_beMeterCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
+0x0038f960	0x003902ec	bec_beMeterCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -session-prelude config/SLUS-20836/session-preludes/runtime_call_a0.cpp	on	-	whole file; session prelude: the unit makes no runtime call with an integer argument, yet its __fixsfdi keeps a0 live from entry
 0x003902f0	0x00398e4c	bec_beModelCtrl	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x00398e50	0x0039a930	bec_beModelCtrlSC	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file
 0x0039a930	0x0039b2dc	bec_bePadData	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude	on	-	whole file

@@ -1480,7 +1480,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     update the work, the data and the player data go through inline helpers too, and so does the enemy record number
     inside the setter: the id-order search could not find it because the ids come from where a value is created,
     with `database` < the model-name temporaries < `recNo` < the reload of `created`, and `ready` < `work` < `data` <
-    `playerData`. The example is the unmatched beGenerater_UpdateRam candidate (0x384c40), which has no source in the tree.
+    `playerData`. The example is `beGenerater_UpdateRam` (0x384c40).
 - **A decoder's helpers take the cursor and the result by reference, and the results are typed scratch locals.**
   - *Symptom:* a record decoder runs a variable-length-integer loop per field. Retail keeps the read pointer in
     one saved register throughout, the flags word in the next and the slot counter between them; the value and
@@ -1869,9 +1869,12 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `__fixsfdi`; a variadic `StartTimer`; double constants. All 23 conversion and call spellings tried leave the call
     using `f12` only. A standalone test of the same shape also gives `a0`, and no matched function in the census has
     the pattern.
-  - *Unit:* `beMeterCtrl_UpdateRam` (`0x38fa50`) and `beGenerater_UpdateRam` (`0x384c40`) are the two game functions
-    with no source in the tree: each matches only with a one-line `a0`-leaking prelude compiled first in the same
-    compiler process, which `tools/check.py` does not do, and the build has no setting for it.
+  - *Spelling:* none inside the unit; the unit's row in `config/SLUS-20836/units.tsv` names the session prelude
+    `config/SLUS-20836/session-preludes/runtime_call_a0.cpp`, which compiles a `(float)longlong` conversion first in
+    the same compiler process ([build system](../build-system.md#session-preludes)). An unused `static` function with
+    that conversion in the file before the affected function also sets the bit, but retail does not emit it.
+  - *Unit:* `beMeterCtrl_UpdateRam` (`0x38fa50`, `src/game/beMeterCtrl.cpp`) and `beGenerater_UpdateRam` (`0x384c40`,
+    `src/game/beGenerater.cpp`) are matched through the session prelude. Without it neither matches.
 - **Stack slots: address-taken named locals take the top slots, by-value temporaries the slots below.**
   - *Symptom:* spill and local slots of a function that builds vectors from calls sit in another order than retail's.
   - *Rule:* named locals whose address is taken take the top slots in source declaration order, whatever their scope;

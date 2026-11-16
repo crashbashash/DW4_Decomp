@@ -127,9 +127,10 @@ def unit_profile_sha(va, flags_default, mwcc_default, unit_objects=None, units=N
                      unit_compilers=None, symbols=None):
     """Digest of the build profile that applies to the function at `va`: the unit-objects group it belongs to (owner, emitted
     bodies, externals, duplicates, exception tables) and, for the owner and every member and duplicate of that group, the
-    unit profile row of config/SLUS-20836/units.tsv (compiler path and content digest, flags, exception mode, status), the per-function
-    override rows and what they resolve to. Mirrors what tools/verify.py and tools/linkgen.py look up by address
-    (tools/unitprofiles.resolve); a resolution error is part of the digest too.
+    unit profile row of config/SLUS-20836/units.tsv (compiler path and content digest, flags, exception mode, status), the content
+    of each session prelude its flags name, the per-function override rows and what they resolve to. Mirrors what
+    tools/verify.py and tools/linkgen.py look up by address (tools/unitprofiles.resolve); a resolution error is part of the
+    digest too.
 
     The digest depends on the group, not on which member asks, so it is computed once per group and set of loaded
     tables: a library-sized group has thousands of members, and resolving every member for each of them is quadratic."""
@@ -156,6 +157,7 @@ def unit_profile_sha(va, flags_default, mwcc_default, unit_objects=None, units=N
 
 
 def _profile_sha(group, owner, flags_default, mwcc_default, units, unit_flags, unit_compilers, symbols):
+    import cc
     import unitprofiles
     members = set(group.members) | {address for _name, address in group.duplicates} if group else {owner}
     parts = [repr(group)]
@@ -171,6 +173,9 @@ def _profile_sha(group, owner, flags_default, mwcc_default, units, unit_flags, u
         for profile in (res.profile, res.override):
             if profile is not None:
                 parts.append("compiler-bytes %s %s" % (profile.compiler, file_sha(profile.compiler)))
+                # a session prelude (tools/cc.py) is part of the compile: its bytes, like the compiler's
+                for prelude in cc.split_session_preludes(profile.flags)[1]:
+                    parts.append("session-prelude-bytes %s %s" % (prelude, file_sha(cc.session_prelude_path(prelude))))
     return sha(*parts)
 
 

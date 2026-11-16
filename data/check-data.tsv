@@ -3099,6 +3099,8 @@
 004c8f78	4	.data	0038aca0	match
 004c8f80	4	.data	0038aca0	match
 004c8f88	4	.data	0038bee0	match
+004c8f90	8	.data	0038f960	match
+004c8f98	8	.data	0038f960	match
 004c8fa0	4	.data	003902f0	match
 004c8fa8	4	.data	003902f0	match
 004c8fb0	4	.data	003902f0	match
@@ -10483,6 +10485,13 @@
 0050e948	9	.rodata	003844a0	match
 0050e958	12	.rodata	003844a0	match
 0050e968	6	.rodata	003844a0	match
+0050e970	7	.rodata	003844a0	match
+0050e978	10	.rodata	003844a0	match
+0050e988	6	.rodata	003844a0	match
+0050e990	6	.rodata	003844a0	match
+0050e998	11	.rodata	003844a0	match
+0050e9a8	5	.rodata	003844a0	match
+0050e9b0	11	.rodata	003844a0	match
 0050e9c0	8	.rodata	003844a0	match
 0050e9d0	32	.rodata	003844a0	match
 0050ea40	15	.rodata	00385830	match

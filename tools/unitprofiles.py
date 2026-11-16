@@ -21,6 +21,10 @@ Sony EE GCC, which has no such switch). `status` is `-` or `provisional`: a prov
 unit is one whose members' evidence has no common profile, so the row carries the
 majority profile and the dissenting members keep per-function overrides.
 
+A unit compiled after another file in the same compiler process (docs/build-system.md#session-preludes) says so
+in its flags: `-session-prelude <repository-relative file>`, MWCC units only. tools/cc.py compiles the file first
+in the same process, and the build cache keys on its content (tools/buildcache.py).
+
 Per-function rows in config/SLUS-20836/unit-flags.tsv and config/SLUS-20836/unit-compilers.tsv are
 **overrides** of the unit profile. Where a unit covers the function they are allowed
 only when marked `provisional` (tools/unitflags.py, tools/unitcompilers.py); an
@@ -109,6 +113,16 @@ def parse(text, path="units.tsv"):
             raise ValueError(f"{where}: exceptions must be on or off")
         if status not in STATUSES:
             raise ValueError(f"{where}: status must be - or provisional")
+        try:
+            _flags, preludes = cc.split_session_preludes(flags)
+        except ValueError as error:
+            raise ValueError(f"{where}: {error}") from None
+        for prelude in preludes:
+            relative = Path(prelude)
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError(f"{where}: session prelude must be repository-relative")
+        if preludes and cc.is_eegcc(compilers[compiler][0]):
+            raise ValueError(f"{where}: a session prelude needs an MWCC compiler")
         units.append(Unit(lo, hi, name, compiler, flags.strip(), exceptions, status, source))
     units.sort()
     for a, b in zip(units, units[1:]):
@@ -232,6 +246,9 @@ def resolve(va, default_flags, default_compiler, units=None, unit_flags=None, un
         executable, digest = table.compilers[unit.compiler]
         compiler = checked_executable(executable, digest, root)
         profile = Profile(compiler, unit.flags, unit.exceptions)
+        for prelude in cc.split_session_preludes(unit.flags)[1]:
+            if not os.path.isfile(cc.session_prelude_path(prelude, root)):
+                raise ValueError(f"{unit.name}: session prelude {prelude} is missing")
     else:
         flags, mode = split_exceptions(default_flags)
         compiler = default_compiler if os.path.isabs(default_compiler) else os.path.join(root, default_compiler)

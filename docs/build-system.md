@@ -30,6 +30,32 @@ make progress                              # the progress numbers (tools/progres
 the build and CI: it relinks, then writes the executable into a copy of your disc at
 `build/<GAMEID>/<GAMEID>.iso` with `tools/make_iso.py`. The copy is game data and stays in `build/`.
 
+## Session preludes
+
+The original build compiled several source files in one MWCC process, and MWCC 3.0b52 carries state from one
+file to the next: the register mask of runtime-call arguments is never cleared
+([understanding shapes](engine/understanding-shapes.md#compile-session-b52)). A unit whose retail code shows
+state left by an earlier file names a **session prelude** in the flags of its `config/<GAMEID>/units.tsv` row:
+
+```
+-O4,p ... -Iinclude -session-prelude config/SLUS-20836/session-preludes/<file>.cpp
+```
+
+* Every compile of the unit (`tools/check.py`, `tools/verify.py`, `tools/linkgen.py`, `make objdiff`, the sweep
+  tools) goes through `tools/cc.py`, which runs one compiler process over `<prelude> <unit source>` with a
+  private output folder and keeps only the unit's object; the prelude's object is discarded and links nowhere.
+  A unit without the setting gets the same single-source command as before.
+* A prelude is a repository-relative file under `config/<GAMEID>/session-preludes/`, MWCC only
+  (`tools/unitprofiles.parse` refuses an absolute path, `..` or an EE GCC unit), and a missing file is a compile
+  failure. Its comment states the compiler state it sets and why.
+* The build cache keys each unit on its prelude's bytes (`tools/buildcache.unit_profile_sha`), so editing the
+  prelude recomputes exactly the units that name it.
+* The setting is part of the profile (`same_profile` compares flags), but not of the library profile
+  `tools/progress.py` counts, and `tools/roll_profile.py` keeps it when it moves a unit.
+* It models the session, not a known file: which files came first in the original session is not recorded, so a
+  prelude holds the smallest code that sets the state retail shows, and a unit takes one only when its retail
+  code needs that state and its own source cannot produce it.
+
 ## objdiff objects
 
 The base object of a unit is the function's definition compiled under its unit profile, extracted
