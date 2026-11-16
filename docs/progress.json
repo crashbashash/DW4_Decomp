@@ -188,7 +188,7 @@
    },
    "code_only.bytes": {
     "reason": null,
-    "value": 8512
+    "value": 0
    },
    "code_only.differ.bytes": {
     "reason": null,
@@ -208,23 +208,23 @@
    },
    "code_only.functions": {
     "reason": null,
-    "value": 6
+    "value": 0
    },
    "code_only.missing.bytes": {
     "reason": null,
-    "value": 2704
+    "value": 0
    },
    "code_only.missing.functions": {
     "reason": null,
-    "value": 4
+    "value": 0
    },
    "code_only.other.bytes": {
     "reason": null,
-    "value": 5808
+    "value": 0
    },
    "code_only.other.functions": {
     "reason": null,
-    "value": 2
+    "value": 0
    },
    "compile.bytes": {
     "reason": null,
@@ -233,6 +233,22 @@
    "compile.functions": {
     "reason": null,
     "value": 0
+   },
+   "decl.header_conflicts": {
+    "reason": "decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left)",
+    "value": 933
+   },
+   "decl.local_externs": {
+    "reason": null,
+    "value": 7935
+   },
+   "decl.type_conflicts": {
+    "reason": null,
+    "value": 5131
+   },
+   "decl.varargs": {
+    "reason": null,
+    "value": 2448
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -244,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 9743
+    "value": 1417
    },
    "inline_asm.other": {
     "reason": null,
@@ -264,7 +280,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 193
+    "value": 26
    },
    "mismatch.bytes": {
     "reason": null,
@@ -300,11 +316,11 @@
    },
    "raw_casts.reflected": {
     "reason": null,
-    "value": 379
+    "value": 294
    },
    "struct.a": {
     "reason": null,
-    "value": 32
+    "value": 10
    },
    "struct.b": {
     "reason": null,
@@ -312,23 +328,23 @@
    },
    "struct.c": {
     "reason": null,
-    "value": 66
+    "value": 28
    },
    "unapproved.bytes": {
     "reason": null,
-    "value": 9472
+    "value": 660
    },
    "unapproved.functions": {
     "reason": null,
-    "value": 22
+    "value": 7
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 529384
+    "value": 271288
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 603
+    "value": 253
    }
   },
   "counters": {
@@ -346,6 +362,10 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
+   "decl.header_conflicts": 933,
+   "decl.local_externs": 7935,
+   "decl.type_conflicts": 5131,
+   "decl.varargs": 2448,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 1417,
@@ -472,19 +492,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2379288,
+  "bytes": 904900,
   "failing": {
    "addresses": {
     "bytes": 693608,
     "functions": 4266
    },
+   "declarations": {
+    "bytes": 2073332,
+    "functions": 9248
+   },
    "fields": {
-    "bytes": 332868,
-    "functions": 1717
+    "bytes": 332668,
+    "functions": 1713
    },
    "idioms": {
-    "bytes": 391364,
-    "functions": 2207
+    "bytes": 391200,
+    "functions": 2204
    },
    "name": {
     "bytes": 520504,
@@ -507,7 +531,7 @@
     "functions": 546
    }
   },
-  "functions": 13848,
+  "functions": 7723,
   "matched_functions": 20316
  },
  "regions": [
@@ -642,11 +666,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 4047,
-  "pct": 45.63,
+  "offset_casts": 4044,
+  "pct": 45.61,
   "recovered": 31613,
-  "synthetic": 5792,
-  "total": 69278,
+  "synthetic": 5796,
+  "total": 69310,
   "typeable": 294,
   "typeable_pct": 0.42
  }

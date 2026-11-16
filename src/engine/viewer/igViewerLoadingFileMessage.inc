@@ -2,9 +2,9 @@ igMetaObject *g_igViewerLoadingFileMessage_metaObject;
 igMetaField *g_igViewerLoadingFileMessage_currentMetaField;
 igMetaField *g_igViewerLoadingFileMessage_filenameMetaField;
 
-void igViewerLoadingFileMessage_Create(int arg0) {
+igViewerLoadingFileMessage *igViewerLoadingFileMessage_Create(int allocator) {
     igViewerLoadingFileMessage_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, arg0);
+    return (igViewerLoadingFileMessage *)igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, allocator);
 }
 
 igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void) {

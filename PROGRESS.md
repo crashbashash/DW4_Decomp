@@ -35,7 +35,7 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,848** of the 20,316 matched functions are readable: **2,379,288** code bytes, **68.5 %** of the code.
+**7,723** of the 20,316 matched functions are readable: **904,900** code bytes, **26.1 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -44,9 +44,10 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,209 | 303,472 |
 | it sits in its class or module file, not `src/unmatched/` | 11 | 668 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,996 | 459,088 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,207 | 391,364 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,717 | 332,868 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,204 | 391,200 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,713 | 332,668 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 546 | 135,540 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 9,248 | 2,073,332 |
 
 ## Debt
 
@@ -54,16 +55,16 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 
 | counter | baseline | current | Δ | measures |
 | --- | ---: | ---: | ---: | --- |
-| `code_only.functions` | 6 | 0 | -6 | units whose code bytes match but exception metadata is unproven (data/check-categories.tsv) |
-| `code_only.bytes` | 8,512 | 0 | -8512 | code bytes of those units |
-| `code_only.missing.functions` | 4 | 0 | -4 | code-only: retail keeps an exception record the unit does not produce |
-| `code_only.missing.bytes` | 2,704 | 0 | -2704 | bytes of those |
+| `code_only.functions` | 0 | 0 | 0 | units whose code bytes match but exception metadata is unproven (data/check-categories.tsv) |
+| `code_only.bytes` | 0 | 0 | 0 | code bytes of those units |
+| `code_only.missing.functions` | 0 | 0 | 0 | code-only: retail keeps an exception record the unit does not produce |
+| `code_only.missing.bytes` | 0 | 0 | 0 | bytes of those |
 | `code_only.extra.functions` | 0 | 0 | 0 | code-only: the unit emits exception metadata retail lacks |
 | `code_only.extra.bytes` | 0 | 0 | 0 | bytes of those |
 | `code_only.differ.functions` | 0 | 0 | 0 | code-only: both have exception metadata and it differs |
 | `code_only.differ.bytes` | 0 | 0 | 0 | bytes of those |
-| `code_only.other.functions` | 2 | 0 | -2 | code-only: the diagnostic line does not name the exception reason |
-| `code_only.other.bytes` | 5,808 | 0 | -5808 | bytes of those |
+| `code_only.other.functions` | 0 | 0 | 0 | code-only: the diagnostic line does not name the exception reason |
+| `code_only.other.bytes` | 0 | 0 | 0 | bytes of those |
 | `name_defect.functions` | 0 | 0 | 0 | code bytes match, a symbol name is wrong for its address |
 | `name_defect.bytes` | 0 | 0 | 0 | bytes of those |
 | `inventory_gap.functions` | 0 | 0 | 0 | code bytes match, a reference lands in a symbol-map gap or inside another extent |
@@ -75,23 +76,27 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
-| `unmatched.functions` | 603 | 253 | -350 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 529,384 | 271,288 | -258096 | bytes of those |
-| `struct.a` | 32 | 10 | -22 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `unmatched.functions` | 253 | 253 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 271,288 | 271,288 | 0 | bytes of those |
+| `struct.a` | 10 | 10 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 0 | 0 | 0 | struct-report groups: receiver view disagrees with the reflected class |
-| `struct.c` | 66 | 28 | -38 | struct-report groups: offset-named member whose number is not its offset |
-| `m2c_idiom.units` | 193 | 26 | -167 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
-| `raw_casts.reflected` | 379 | 294 | -85 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 9,743 | 1,417 | -8326 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `struct.c` | 28 | 28 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `m2c_idiom.units` | 26 | 26 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
+| `raw_casts.reflected` | 294 | 294 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
+| `fun_dat_refs` | 1,417 | 1,417 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
-| `unapproved.functions` | 22 | 7 | -15 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
-| `unapproved.bytes` | 9,472 | 660 | -8812 | bytes of those |
+| `unapproved.functions` | 7 | 7 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
+| `unapproved.bytes` | 660 | 660 | 0 | bytes of those |
 | `orphan.bytes` | 0 | 0 | 0 | exception-metadata orphan bytes: code-only `extra` + `differ` bytes, plus foreign-profile units whose override emits metadata retail lacks |
 | `inventory.unsymbolised_bytes` | 0 | 0 | 0 | instruction-shaped bytes in layout `data` units that no symbol owns (data/inventory-scan.tsv, scripts/inventory_scan.py) |
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
+| `decl.local_externs` | 7,935 | 7,935 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
+| `decl.varargs` | 2,448 | 2,448 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
+| `decl.type_conflicts` | 5,131 | 5,131 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
+| `decl.header_conflicts` | 933 | 933 | 0 | symbols declared in two or more headers that disagree on the type; increase recorded: decl.header_conflicts +5 (928 -> 933): the GameMain pilot's new include/dw4 homes give sceClose, sceRead, sceWrite, g_threadManager, igInsightCore_FindManager and igModel_NotifyViews their real types while loose copies remain in library headers the declaration slices have not reached yet (one older conflict left) |
 
 ## The data half
 
@@ -189,7 +194,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 31,613 of 69,278 (45.63 %) |
+| field accesses using a **recovered** type (not an offset cast) | 31,613 of 69,310 (45.61 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

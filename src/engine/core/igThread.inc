@@ -71,9 +71,9 @@ igMetaField *g_igThread_functionMetaField;
 igMetaField *g_igThread_isMasterMetaField;
 igMetaField *g_igThread_userStackMetaField;
 
-void * igThread_Create(int allocator) {
+igThread *igThread_Create(int allocator) {
     igThread_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igThread_metaObject, (igMemoryPoolView *)allocator));
+    return (igThread *)igMetaObject_CreateInstance(g_igThread_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igThread_GetOrCreateMetaObject(void) {

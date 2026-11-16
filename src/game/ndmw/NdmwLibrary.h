@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/ClassRegistration.h"
 extern "C" int StringChunk_ReleaseHeader(...);
 /* Header stored in front of every interned string token. */
 struct StringTokenHeader { int owner; int refCount; };
@@ -42,7 +43,6 @@ extern "C" void beDataBase_EnsureRegistered(void);
 extern "C" void beBaseInfoRam_EnsureRegistered(void);
 extern "C" void beBaseInfoManager_EnsureRegistered(void);
 extern "C" void igViewerSceneInfoManager_EnsureRegistered(void);
-extern "C" void igBoolList_EnsureRegistered(void);
 extern "C" void igBoxComponent_RunStaticInit(void);
 extern "C" void igGuiComponent_EnsureRegistered(void);
 extern "C" void igInfoList_EnsureRegistered(void);
@@ -54,7 +54,6 @@ extern "C" void igStringRefList_EnsureRegistered(void);
 
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 
-extern "C" void NdmwLibrary_RegisterClasses(void);
 extern "C" void NdmwLibrary_MarkRegistered(void);
 extern "C" int __dl__FPv(...);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Destruct(igSmartPointer<igObject> *self,int delete_storage);

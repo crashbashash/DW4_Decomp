@@ -1,8 +1,8 @@
 igMetaObject *g_igAnimationStatePool_metaObject;
 
-int igAnimationStatePool_Create(int allocator) {
+igAnimationStatePool *igAnimationStatePool_Create(int allocator) {
     igAnimationStatePool_RunStaticInit();
-    return igMetaObject_CreateInstance(g_igAnimationStatePool_metaObject, allocator);
+    return (igAnimationStatePool *)igMetaObject_CreateInstance(g_igAnimationStatePool_metaObject, allocator);
 }
 
 igMetaObject *igAnimationStatePool_GetMetaObject(void)

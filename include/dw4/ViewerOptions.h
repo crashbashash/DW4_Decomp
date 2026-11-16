@@ -66,4 +66,13 @@ struct SharedViewerOptions {
     int internedString;                              /* +236: an interned string released with the object; what it holds is not traced */
 };
 
+/* The viewer's parsed command line: the option block, then the repeat counts and the model names. */
+struct App;
+
+extern "C" {
+extern SharedViewerOptions *g_sharedViewerOptions;
+SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *options);
+void ViewerOptions_ParseCommandLine(App *args, int argc, char **argv);
+}
+
 #endif

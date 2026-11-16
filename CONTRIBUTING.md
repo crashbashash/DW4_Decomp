@@ -28,6 +28,9 @@ at a time. A function goes into its file (`src/<module>/<file>.c`), in the order
 game, and it only counts once the whole file still matches. A function compiles differently next to its
 neighbours, so check it inside its file.
 
+Declare a symbol once, in a header, with its real type, and include that header where the symbol is
+defined and used ([rules](docs/engine/debt-ratchet.md#declarations)).
+
 Inline `asm` and `volatile` make a function count as unmatched until the project owner approves that use
 ([why](docs/engine/source-approvals.md)), so look for plain C first.
 

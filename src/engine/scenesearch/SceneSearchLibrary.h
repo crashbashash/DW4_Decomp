@@ -2,12 +2,12 @@
 #define DW4_SCENE_SEARCH_LIBRARY_H
 
 #include "dw4/reflected.h"
+#include "dw4/ClassRegistration.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
 
 /* Library front: the register list, its one registrar and the registration latch. */
-extern "C" void SceneSearchLibrary_RegisterClasses(void);
 extern "C" void igSearchSceneGraph_EnsureRegistered(void);
 extern "C" void SceneSearchLibrary_MarkRegistered(void);
 extern "C" void igMetaObject_RunStaticInit(...);

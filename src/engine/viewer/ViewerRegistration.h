@@ -2,6 +2,7 @@
 #define DW4_VIEWER_REGISTRATION_H
 
 #include "dw4/reflected.h"
+#include "dw4/igViewer.h"
 
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
@@ -249,7 +250,6 @@ extern "C" void igViewerModeChangeMessage_InitFields(void);
 struct Obj_45a680 { int *vt; char pad[8]; char *m; };
 extern "C" int g_igViewerLoadingFileMessage_vtable[4];
 extern "C" int DAT_0051eef0[4];
-extern "C" void igViewerLoadingFileMessage_Create(int arg0);
 extern "C" igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void);
 extern "C" int igViewerLoadingFileMessage_GetVTable(void);
 extern "C" void igViewerLoadingFileMessage_EnsureRegistered(void);

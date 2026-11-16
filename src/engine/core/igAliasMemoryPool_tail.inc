@@ -630,8 +630,8 @@ int igMetaEnum_GetEmpty(void) {
     return g_emptyMetaEnum;
 }
 
-void igObjectSystem_SetIniText(int text) {
-    *(int *)0x586DE0 = text;
+void igObjectSystem_SetIniText(const char *text) {
+    *(const char **)0x586DE0 = text;
 }
 
 unsigned char g_headerVersionWarned;

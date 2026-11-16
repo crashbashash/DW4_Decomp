@@ -26,6 +26,8 @@ int FUN_00236e80(int);
 int FUN_00237280(int);
 int FUN_002376b0(int);
 
+/* The views ViewerSetup_Update reads members of the setup through: the window's slot 41, the scene-info
+ * manager's quit flag (+44, +12, +180) and the logo renderer's display time (+16). */
 struct Vobj {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
@@ -38,9 +40,6 @@ struct L4 { char pad[180]; unsigned char b180; };
 struct L2 { char pad[12]; L4 *p12; };
 struct L1 { char pad[44]; L2 *p44; };
 struct B { char pad[16]; long long ll16; };
-struct S {
-    igInsightCore *a; L1 *p4; char pad8[8]; unsigned char f16; char pad17[3]; B *b20; Vobj *c24;
-};
 extern "C" void FUN_00237730(igInsightCore *);
 
 int igView_SetModel(...);
@@ -209,50 +208,50 @@ ViewerSetup::~ViewerSetup() {
     }
 }
 
-void ViewerSetup_Open(int *arg0) {
-    FUN_00237530(*arg0);
-    FUN_00236ca0(*arg0);
-    FUN_002371f0(*arg0);
+void ViewerSetup_Open(ViewerSetup *setup) {
+    FUN_00237530((int)setup->core.p);
+    FUN_00236ca0((int)setup->core.p);
+    FUN_002371f0((int)setup->core.p);
 }
 
-void ViewerSetup_Close(int *arg0) {
-    FUN_00237280(*arg0);
-    FUN_00236e80(*arg0);
-    FUN_002376b0(*arg0);
+void ViewerSetup_Close(ViewerSetup *setup) {
+    FUN_00237280((int)setup->core.p);
+    FUN_00236e80((int)setup->core.p);
+    FUN_002376b0((int)setup->core.p);
 }
 
-int ViewerSetup_RunFrame(int *p)
+int ViewerSetup_RunFrame(ViewerSetup *setup)
 {
-    return FUN_002377c0(*(int *)((char *)p + 0));
+    return FUN_002377c0((int)setup->core.p);
 }
 
-extern "C" int ViewerSetup_Update(S *s) {
-    FUN_00237730(s->a);
-    if (s->f16) {
-        igInsightCore *t = s->a;
+int ViewerSetup_Update(ViewerSetup *setup) {
+    FUN_00237730((igInsightCore *)setup->core.p);
+    if (setup->showLogo) {
+        igInsightCore *t = (igInsightCore *)setup->core.p;
         long long v = t->_currentTime;
         if (v > 4000000000LL) {
-            igInsightCore_RemoveRenderer(t, s->b20);
-            s->f16 = 0;
+            igInsightCore_RemoveRenderer(t, setup->logo.p);
+            setup->showLogo = 0;
         } else {
-            s->b20->ll16 = v;
+            ((B *)setup->logo.p)->ll16 = v;
         }
     }
-    int r = (s->p4->p44->p12->b180 != 0) ^ 1;
+    int r = (((L1 *)setup->sceneInfo.p)->p44->p12->b180 != 0) ^ 1;
     if (r) {
-        r = s->c24->v41() != 0;
+        r = ((Vobj *)setup->window.p)->v41() != 0;
     }
     return r;
 }
 
-int ViewerSetup_ResetView(int *p)
+int ViewerSetup_ResetView(ViewerSetup *setup)
 {
-    return igViewerSceneInfoManager_ResetView(*(int *)((char *)p + 4));
+    return igViewerSceneInfoManager_ResetView((int)setup->sceneInfo.p);
 }
 
-int ViewerSetup_ClearInfos(int *p)
+int ViewerSetup_ClearInfos(ViewerSetup *setup)
 {
-    return FUN_002370c0(*(int *)((char *)p + 0));
+    return FUN_002370c0((int)setup->core.p);
 }
 
 void igViewManager_SetViewMode(S2 *arg0, R *arg1) {

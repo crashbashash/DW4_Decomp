@@ -226,14 +226,19 @@ def _spaced(text):
     return _STRING.sub(lambda m: '"' + " " * (len(m.group(0)) - 2) + '"', inline_asm.blank_comments(text))
 
 
+_LINKAGE_BLOCK = re.compile(r'extern\s*"\s*"\s*\{')
+
+
 def _file_scope_statements(text, kept):
     """[(start, end)] of the declarations a file makes outside its definitions (`kept`): each runs to its
     `;` at brace and parenthesis depth 0, and a preprocessor line, continuations included, is one statement.
-    A file-scope `volatile` reaches a function only through a name the function uses, so the text of the
-    other statements is what `_reachable_text` may blank."""
+    An `extern "C" { … }` linkage block is transparent, as in `units.definitions`: its declarations are
+    statements of their own (a header's `#ifdef __cplusplus` wrapping opens it on one line and closes it
+    on another). A file-scope `volatile` reaches a function only through a name the function uses, so the
+    text of the other statements is what `_reachable_text` may blank."""
     clean = _spaced(text)
     inside = sorted(kept)
-    out, i, n, start, depth = [], 0, len(clean), None, 0
+    out, i, n, start, depth, linkage = [], 0, len(clean), None, 0, 0
     at = 0   # the definitions are sorted and disjoint, and `i` only grows: the first one not yet behind it
     while i < n:
         while at < len(inside) and inside[at][1] <= i:
@@ -259,6 +264,16 @@ def _file_scope_statements(text, kept):
             out.append((i, end))
             i = end
             continue
+        if start is None and depth == 0:
+            block = _LINKAGE_BLOCK.match(clean, i)
+            if block:
+                linkage += 1
+                i = block.end()
+                continue
+            if c == "}" and linkage:
+                linkage -= 1
+                i += 1
+                continue
         if start is None and not c.isspace():
             start = i
         if c in "{(":

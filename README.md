@@ -6,17 +6,17 @@ readable source that rebuilds the retail executable byte for byte.
 <!-- progress:start -->
 | Region | Size | Matched | Readable |
 | --- | ---: | ---: | ---: |
-| Game | 1107 KB | 100.0 % | 100.0 % |
-| Alchemy engine | 1573 KB | 84.7 % | 40.7 % |
-| Lua 4.0.1 interpreter | 70 KB | 100.0 % | 100.0 % |
-| CRI ADX | 140 KB | 98.1 % | 76.2 % |
-| CRI Sofdec | 209 KB | 89.5 % | 51.4 % |
+| Game | 1107 KB | 100.0 % | 11.5 % |
+| Alchemy engine | 1573 KB | 84.7 % | 24.4 % |
+| Lua 4.0.1 interpreter | 70 KB | 100.0 % | 99.6 % |
+| CRI ADX | 140 KB | 98.1 % | 30.6 % |
+| CRI Sofdec | 209 KB | 89.5 % | 26.4 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
-| Sony SDK | 97 KB | 100.0 % | 100.0 % |
-| newlib | 84 KB | 100.0 % | 100.0 % |
-| libgcc | 11 KB | 100.0 % | 100.0 % |
-| Metrowerks runtime | 10 KB | 100.0 % | 100.0 % |
-| **Total** | **3391 KB** | **92.2 %** | **68.5 %** |
+| Sony SDK | 97 KB | 100.0 % | 58.7 % |
+| newlib | 84 KB | 100.0 % | 44.9 % |
+| libgcc | 11 KB | 100.0 % | 98.7 % |
+| Metrowerks runtime | 10 KB | 100.0 % | 97.3 % |
+| **Total** | **3391 KB** | **92.2 %** | **26.1 %** |
 
 The full figures and the verification debt are in [PROGRESS.md](PROGRESS.md).
 <!-- progress:end -->

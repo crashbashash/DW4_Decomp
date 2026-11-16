@@ -1,9 +1,9 @@
 igMetaObject *g_igStringRefList_metaObject;
 int g_igStringRefList_dataDescriptorCell;
 
-void * igStringRefList_Create(int allocator) {
+igStringRefList *igStringRefList_Create(int allocator) {
     igStringRefList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igStringRefList_metaObject, (igMemoryPoolView *)allocator));
+    return (igStringRefList *)igMetaObject_CreateInstance(g_igStringRefList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igStringRefList_GetOrCreateMetaObject(void) {

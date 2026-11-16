@@ -3,9 +3,9 @@ igMetaField *g_igEnbayaContextPool_poolListMetaField;
 igMetaField *g_igEnbayaContextPool_boneCountListMetaField;
 igMetaField *g_igEnbayaContextPool_freeIndexListMetaField;
 
-int igEnbayaContextPool_Create(int allocator) {
+igEnbayaContextPool *igEnbayaContextPool_Create(int allocator) {
     igEnbayaContextPool_RunStaticInit();
-    return igMetaObject_CreateInstance(g_igEnbayaContextPool_metaObject, allocator);
+    return (igEnbayaContextPool *)igMetaObject_CreateInstance(g_igEnbayaContextPool_metaObject, allocator);
 }
 
 igMetaObject *igEnbayaContextPool_GetMetaObject(void)

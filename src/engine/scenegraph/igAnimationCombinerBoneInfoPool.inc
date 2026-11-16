@@ -1,8 +1,8 @@
 igMetaObject *g_igAnimationCombinerBoneInfoPool_metaObject;
 
-int igAnimationCombinerBoneInfoPool_Create(int allocator) {
+igAnimationCombinerBoneInfoPool *igAnimationCombinerBoneInfoPool_Create(int allocator) {
     igAnimationCombinerBoneInfoPool_RunStaticInit();
-    return igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject, allocator);
+    return (igAnimationCombinerBoneInfoPool *)igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfoPool_metaObject, allocator);
 }
 
 igMetaObject *igAnimationCombinerBoneInfoPool_GetMetaObject(void)

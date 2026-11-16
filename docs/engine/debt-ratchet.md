@@ -45,10 +45,57 @@ as zero.
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
 | `profile_split.units` / `.bytes` | `config/SLUS-20836/units.tsv` by `config/SLUS-20836/regions.tsv` | units whose compiler, optimisation level, `-sdatathreshold` or `-inline` setting differs from the most common profile of their library. A library was one build, so each such unit is one whose members still match only elsewhere. The static initialisers are exempt: they are collected from every library |
 | `opt_pragma.statements` | `src/` | `#pragma` lines that change the code or data b52 emits: the optimiser (`optimization_level`, `optimize_for_size`, `peephole`, `global_optimizer`, every `opt_*` switch b52 accepts), inlining (`auto_inline`, `dont_inline`, `always_inline`, `inline_depth`, `inline_bottom_up`, `defer_codegen`, `inline_intrinsics`), the MIPS back end (`schedule`, `conditional_move`, `tailcall`, `far_call`, `interrupt`, …) and data placement and types (`pool_strings`, `dont_reuse_strings`, `explicit_zero_data`, `reverse_bitfields`, `unsigned_char`, `enumsalwaysint`, …); the list is `OPT_PRAGMAS` in `tools/progress.py`, the effects are in [MWCC pragmas](mwcc-pragmas.md). Not counted: `push`, `pop`, `cplusplus`, the runtime's `exception_*`, names b52 ignores (`scheduling`, `opt_peephole`), and `readonly_strings` between `push` and `pop`, which the rule allows ([understanding shapes](understanding-shapes.md#types-and-values)); outside a closed `push`/`pop` it counts. They change the compiler for one function, which is a flag change written in the source; owner rule 2026-11-08: a rise needs the owner, as for `inline_asm` |
+| `decl.local_externs` | `src/`, `include/` (`tools/declarations.py`) | declarations, in a unit's own text, of a symbol another unit defines ([declarations](#declarations)) |
+| `decl.varargs` | `src/`, `include/` | prototypes that leave out the parameters a symbol has: `(...)` or a C `()` |
+| `decl.type_conflicts` | `src/`, `include/` | declarations whose type differs from the symbol's C definition |
+| `decl.header_conflicts` | `src/`, `include/` | symbols declared in two or more headers that disagree on the type |
 
 `m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
 job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report
 and may rise without a recorded reason, so a byte-matching change is never refused for them.
+
+## Declarations
+
+The convention: a symbol is declared once, in a header (under `include/dw4/` or the module's own
+header), with the type its definition has, and the file that defines it includes that header. A
+library header that copies other libraries' symbols (`src/engine/core/CoreLibrary.h` and the other
+`*Library.h`) is not their home. `tools/declarations.py` reads every declaration in `src/` and
+`include/` (comments, strings, preprocessor lines and `#if 0` arms blanked; class and function bodies
+skipped, `extern` inside a function body read) against the definitions in `src/`;
+`python3 tools/declarations.py --list local|varargs|conflicts|headers [PATH]` lists what it counts.
+Stock source under `src/third_party/` is its authors' text: its declarations are not counted, its
+definitions are the reference for the code that calls into it.
+
+- **`decl.local_externs`**: a declaration of a symbol *another unit defines*, in a unit's own text: its
+  `.c`/`.cpp` file, the `.inc` fragments it includes, and any header no other unit includes (a library's
+  unity header). A function prototype, file-scope `extern` data and `extern` inside a function body all
+  count. A declaration of the unit's own symbol (a C++ unit's `extern "C"` line for its own function, a
+  library header's own prototypes, a forward declaration) is linkage, not debt. Not counted either: an
+  unnamed placeholder (`FUN_<va>`, `DAT_<va>`), and a symbol with no C definition that only one unit
+  declares; until it is named or decompiled, the unit that uses it is its home. A symbol with no C
+  definition that two or more units declare counts in each.
+- **`decl.varargs`**: a prototype whose whole parameter list is `(...)`, unless a C definition of the
+  symbol is itself variadic. A symbol with no C definition counts: `(...)` states no type, and no
+  definition says the list is variable. A C `()` list (no parameters stated) counts when the C definition
+  takes parameters. A list with named parameters before `...` is a real signature and is judged by
+  `decl.type_conflicts`.
+- **`decl.type_conflicts`**: a declaration whose type differs from the symbol's C definition: data type,
+  array against scalar or array length, data declared for a function (`char X[]`) or the reverse, return
+  type, parameter count and types. Both sides are normalised first: whitespace, parameter names,
+  `struct`/`class`/`union`/`enum` keywords, integer spellings (`unsigned int` is `unsigned`), typedefs
+  with one meaning across the tree, array parameters as pointers, top-level `const` on parameters and
+  return types. Functions are compared when both sides have C linkage (a C++ declaration with other
+  parameters names another overload); data is always compared. A `(...)` or C `()` list compares the
+  return type only. A symbol with no C definition, or whose C definitions disagree with each other, has
+  nothing to compare against and is not counted here.
+- **`decl.header_conflicts`**: a symbol (data, or a function with C linkage) declared in two or more
+  headers whose declarations disagree with each other. It needs no definition, so a symbol still in
+  assembly counts.
+
+The README's Readable column applies the same rules per function (the `declarations` check): a function
+fails when a symbol its body uses (a call or a read, not a member after `.`, `->` or `::`) is declared,
+in the text the compiler sees for its unit (the unit's files and every header they include), by a
+counted local extern, a counted `(...)`/`()` prototype, or with a conflicting type.
 
 ## Re-recording the baseline
 

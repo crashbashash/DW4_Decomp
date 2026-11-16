@@ -2,6 +2,7 @@
  * one shared send buffer and calls fileio's RPC server, which writes the result back by SIF DMA. */
 #include "dw4/eekernel.h"
 #include "dw4/sony/sif.h"
+#include "dw4/sony/sifdev.h"
 
 #define FS_MAX_IOB 32
 #define FS_PATH_MAX 1024

@@ -152,7 +152,7 @@ void FUN_0032d070(void)
 
 int g_igPsx2_sifCmdBufferCount = 5;
 unsigned char g_igPsx2_resetIopServices = 1;
-int g_igPsx2_iopImagePath;
+const char *g_igPsx2_iopImagePath;
 int g_igPsx2_loadFileModule;
 
 void igPsx2_RebootIop(void) {
@@ -249,9 +249,9 @@ void igPsx2_SetupOutputFiles(void) {
     }
 }
 
-void igPsx2_SetAtfilePrefix(int *result, char *text) {
+igResult igPsx2_SetAtfilePrefix(const char *text) {
     int length;
-    char *cursor;
+    const char *cursor;
 
     if ((text != 0) && (strncasecmp(text, "atfile:", 7) == 0)) {
         cursor = text + 7;
@@ -264,9 +264,9 @@ void igPsx2_SetAtfilePrefix(int *result, char *text) {
         *(char *)(g_igPsx2_atfilePrefix + length) = 0;
         g_igPsx2File_defaultPrefix = g_igPsx2_atfilePrefix;
         igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix);
-        *result = g_resultSuccess.v;
+        return g_resultSuccess;
     } else {
-        *result = g_resultFailure.v;
+        return g_resultFailure;
     }
 }
 

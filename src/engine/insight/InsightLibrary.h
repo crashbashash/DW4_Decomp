@@ -5,6 +5,7 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igobject_release.h"
 #include "dw4/fun_00235370_refs.h"
+#include "dw4/ViewerOptions.h"
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
 #define OPTION_BOOL(name, help, value)  { const char *optionName = name; if (optionName) FUN_002342b0(optionName, help, value); }
 #define OPTION_INT(name, help, value)   { const char *optionName = name; if (optionName) FUN_002342e0(optionName, help, value); }
@@ -459,9 +460,8 @@ struct FlushSettings {
     char pad230[2];
     void *f232;
     void *f236;
-    struct FlushShared *shared;
+    SharedViewerOptions *shared;
 };
-struct FlushShared { char *f0; char pad4[228]; int refs; void *f236; };
 struct App {
     void *f0;
     char pad[228];
@@ -476,7 +476,6 @@ extern "C" long long atof(...);
 extern "C" int exit(int status);
 extern "C" int fptodp(float);
 extern "C" float dptofp(long long);
-extern "C" struct FlushShared *__nw__FUi(int size);
 extern "C" int Vec3f_FromString(...);
 extern "C" int FUN_001e6d80(...);
 extern "C" void *igIntList_Create(int allocator);
@@ -550,7 +549,6 @@ extern "C" int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, 
 extern "C" struct FlushSettings *FUN_00234900(struct FlushSettings *s);
 extern "C" void *FUN_00234b90(struct App *arg0, short arg1);
 extern "C" void ViewerOptions_ReleaseShared(void);
-extern "C" void ViewerOptions_ParseCommandLine(int self, int count, int *names);
 extern "C" void FUN_00235370(ViewerOptions *opts, igStringRefList *args);
 typedef struct Vec3 { float x, y, z; } Vec3;
 typedef struct Vec4 { float x, y, z, w; } Vec4;
@@ -929,7 +927,6 @@ extern "C" float DAT_004e1060[4];
 extern "C" float DAT_004e1174[4];
 extern "C" float DAT_004e1178[4];
 extern "C" float DAT_004e117c[4];
-extern "C" void *ViewerOptions_Construct(void *arg0);
 /* Saves the Alchemy viewer (INSIGHT) options into the property tree: the INSIGHT group is looked
  * up in the property set held by the global (+56), falling back to 'Viewer', and each option is
  * written under its string name. Every write is guarded by its name pointer (the original option

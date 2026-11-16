@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/ClassRegistration.h"
 
 extern "C" void igMetaObject_RunStaticInit(...);
 typedef void (*igMetaObjectCallback)();
@@ -16,11 +17,8 @@ extern "C" igMetaField *igObjectRefMetaField_Create(void *);
 extern "C" igMetaField *igStringMetaField_Create(void *);
 extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
 extern "C" void igMetaObject_EnsureRegistered(void);
-extern "C" void igTransform_EnsureRegistered(void);
-extern "C" void igAABox_EnsureRegistered(void);
 extern "C" void FUN_00187f30(void);
 struct Rc;
-extern "C" void CollisionLibrary_RegisterClasses(void);
 extern "C" unsigned char g_CollisionLibrary_registered;
 extern "C" void CollisionLibrary_MarkRegistered(void);
 extern "C" igMetaObject *g_igCreateCollisionDatabase_metaObject;

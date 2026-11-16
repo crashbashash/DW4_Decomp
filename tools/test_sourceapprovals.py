@@ -123,6 +123,15 @@ class SourceApprovals(unittest.TestCase):
         self.assertIsNone(sa.problem(path, "g", {}))
         self.assertIn("1 volatile", sa.problem(path, "h", {}))
 
+    def test_a_linkage_block_in_a_header_does_not_join_the_files_globals(self):
+        # a header's `#ifdef __cplusplus` / `extern "C" {` opens the block on one line and closes it on another
+        self.write("h.h", '#ifdef __cplusplus\nextern "C" {\n#endif\nint open(const char *name);\n'
+                          '#ifdef __cplusplus\n}\n#endif\n')
+        path = self.write("a.c", '#include "h.h"\nvolatile int q;\nint f(void) { return q; }\n'
+                                 'int g(void) { return open("x"); }\n')
+        self.assertIn("1 volatile", sa.problem(path, "f", {}))
+        self.assertIsNone(sa.problem(path, "g", {}))
+
     def test_a_type_reached_through_another_type_counts(self):
         path = self.write("a.c", "typedef struct { volatile int n; } Q;\ntypedef struct { Q *q; } D;\n"
                                  "int f(D *d) { return d->q->n; }\nint g(void) { return 0; }\n")

@@ -815,11 +815,11 @@ int igReport_Detail(const char *format, ...) {
     return igReport_VReport(6, format, (int)((char*)__builtin_next_arg(format) - offset));
 }
 
-void igReport_Info(const char *format, ...) {
+int igReport_Info(const char *format, ...) {
     int named = __builtin_args_info(2);
     int offset;
     if (named >= 8) offset = 0; else offset = (8 - named) * 8;
-    igReport_VReport(5, format, (int)((char *)__builtin_next_arg(format) - offset));
+    return igReport_VReport(5, format, (int)((char *)__builtin_next_arg(format) - offset));
 }
 
 int igReportError(const char *format, ...) {

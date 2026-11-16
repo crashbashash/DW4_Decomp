@@ -1,5 +1,5 @@
 igMetaObject *g_igFlushRenderer_metaObject;
-struct FlushShared *g_viewerOptions;
+SharedViewerOptions *g_viewerOptions;
 
 igMetaObject *FUN_00233a40(void) {
     if (g_igFlushRenderer_metaObject == 0) {
@@ -509,15 +509,15 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     s->f232 = igIntList_Create(renderAllocator());
     s->f236 = igStringRefList_Create(renderAllocator());
     if (g_viewerOptions == 0) {
-        struct FlushShared *shared = __nw__FUi(240);
+        SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (shared) {
-            shared = (struct FlushShared *)ViewerOptions_Construct(shared);
+            shared = ViewerOptions_Construct(shared);
         }
         g_viewerOptions = shared;
     }
-    g_viewerOptions->refs++;
+    g_viewerOptions->useCount++;
     s->shared = g_viewerOptions;
-    FUN_00234ee0(s, s->shared->f0);
+    FUN_00234ee0(s, s->shared->extraCommandLine);
     return s;
 }
 
@@ -569,17 +569,17 @@ void *FUN_00234b90(struct App *arg0, short arg1) {
 
 /* Drops a reference to the shared viewer options, freeing them with the last one. */
 static inline void releaseSharedOptions(void) {
-    struct FlushShared *f;
+    SharedViewerOptions *f;
     void *p;
     int *h;
     int rc;
 
     if (g_viewerOptions != 0) {
-        if (--g_viewerOptions->refs <= 0) {
+        if (--g_viewerOptions->useCount <= 0) {
             f = g_viewerOptions;
             if (f != 0) {
-                if (&f->f236) {
-                    p = f->f236;
+                if (&f->internedString) {
+                    p = (void *)f->internedString;
                     if (p != 0) {
                         h = (int *)((char *)(p) - 8);
                         rc = *(int *)((char *)(p) - 4) - 1;
@@ -590,7 +590,7 @@ static inline void releaseSharedOptions(void) {
                     }
                 }
                 if (f != 0) {
-                    p = f->f0;
+                    p = f->extraCommandLine;
                     if (p != 0) {
                         h = (int *)((char *)(p) - 8);
                         rc = *(int *)((char *)(p) - 4) - 1;
@@ -611,7 +611,7 @@ void ViewerOptions_ReleaseShared(void) {
     releaseSharedOptions();
 }
 
-void ViewerOptions_ParseCommandLine(int self, int count, int *names) {
+void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
     int allocator;
     int i;
     if (g_useOwnerAllocator != 0) {
@@ -621,7 +621,7 @@ void ViewerOptions_ParseCommandLine(int self, int count, int *names) {
     }
     igSmartPointer<InternedStringList> list(igStringRefList_Create(allocator));
     for (i = 0; i < count; i++) {
-        int text = names[i];
+        int text = (int)names[i];
         StringRef name(text);
         StringList_AppendRetained(list.get(), &name);
     }
@@ -950,11 +950,11 @@ igSmartPointer<igWindowView> Viewer_CreateDisplay(int allocator) {
     if (allocator == 0) allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent[0]);
     windowAllocator = allocator;
     if (g_viewerOptions == 0) {
-        struct FlushShared *shared = __nw__FUi(240);
-        if (shared != 0) shared = (struct FlushShared *)ViewerOptions_Construct(shared);
+        SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
+        if (shared != 0) shared = ViewerOptions_Construct(shared);
         g_viewerOptions = shared;
     }
-    g_viewerOptions->refs++;
+    g_viewerOptions->useCount++;
     options = (ViewerOptions_2382e0 *)g_viewerOptions;
     igSmartPointer<igWindowView> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {

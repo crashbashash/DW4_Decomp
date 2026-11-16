@@ -1,9 +1,9 @@
 igMetaObject *g_igFolder_metaObject;
 igMetaField *g_igFolder_folderNameMetaField;
 
-void * igFolder_Create(int pool) {
+igFolder *igFolder_Create(int allocator) {
     igFolder_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igFolder_metaObject, (igMemoryPoolView *)pool));
+    return (igFolder *)igMetaObject_CreateInstance(g_igFolder_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igFolder_GetMetaObject(void)

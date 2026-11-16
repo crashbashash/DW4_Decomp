@@ -5,6 +5,8 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTransformDispatchView.h"
+#include "dw4/ClassRegistration.h"
+#include "dw4/beSystem.h"
 static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #define RELEASE_OBJ(o) { \
     if (o) { \
@@ -16,7 +18,6 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #include "dw4/igTDataList.h"
 typedef void (*igMetaObjectCallback)();
 typedef igMetaField *(*FieldFactory)(void *);
-extern "C" void igModelViewMatrixBoneSelect_EnsureRegistered(void);
 extern "C" igMetaField *igObjectRefMetaField_Create(void *);
 extern "C" igMetaField *igStringMetaField_Create(void *);
 extern "C" igMetaField *igFloatMetaField_Create(void *);
@@ -40,44 +41,20 @@ extern "C" igMetaField *igBoolArrayMetaField_Create(void *);
 extern "C" igMetaField *igRawRefMetaField_Create(void *);
 extern "C" igMetaField *igVec4fMetaField_CreateInstance(void *);
 extern "C" igMetaField *igEnumMetaField_Create(void *);
-extern "C" void igNodeList_EnsureRegistered(void);
-extern "C" void igNamedObjectList_EnsureRegistered(void);
-extern "C" void igAppearanceList_EnsureRegistered(void);
 extern "C" void igVertexArray_EnsureRegistered(void);
-extern "C" void igFloatList_EnsureRegistered(void);
 extern "C" void igIntList_EnsureRegistered(void);
-extern "C" void igFloatListList_EnsureRegistered(void);
-extern "C" void igVec3fList_EnsureRegistered(void);
-extern "C" void igTransformList_EnsureRegistered(void);
-extern "C" void igAttrSet_EnsureRegistered(void);
-extern "C" void igTextureAttr_EnsureRegistered(void);
 extern "C" void igRandomNumber_EnsureRegistered(void);
 extern "C" void igStringRefList_EnsureRegistered(void);
 extern "C" void igDirectory_EnsureRegistered(void);
 extern "C" void igStringObj_EnsureRegistered(void);
 extern "C" void igInfoList_EnsureRegistered(void);
-extern "C" void igGroup_EnsureRegistered(void);
-extern "C" void igSwitch_EnsureRegistered(void);
 extern "C" void igNode_EnsureRegistered(void);
-extern "C" void igProjectiveShadowShader_EnsureRegistered(void);
-extern "C" void igBoolList_EnsureRegistered(void);
 extern "C" void igObjectList_EnsureRegistered(void);
-extern "C" void igTransform_EnsureRegistered(void);
-extern "C" void igGeometry_EnsureRegistered(void);
-extern "C" void igSceneInfo_EnsureRegistered(void);
 extern "C" void igMovieManager_EnsureRegistered(void);
-extern "C" void igAttrList_EnsureRegistered(void);
-extern "C" void igAABox_EnsureRegistered(void);
 extern "C" void igAABoxList_EnsureRegistered(void);
-extern "C" void igTransformRecorder_EnsureRegistered(void);
-extern "C" void igLongList_EnsureRegistered(void);
 extern "C" void igMatrix44fList_EnsureRegistered(void);
 extern "C" void igIntListList_EnsureRegistered(void);
 extern "C" void igLuaGlue_EnsureRegistered(void);
-extern "C" void igLightSet_EnsureRegistered(void);
-extern "C" void igBlendStateAttr_EnsureRegistered(void);
-extern "C" void igBlendFunctionAttr_EnsureRegistered(void);
-extern "C" void igColorAttr_EnsureRegistered(void);
 extern "C" void igProbe_EnsureRegistered(void);
 extern "C" void igRayList_EnsureRegistered(void);
 extern "C" void igGeometryAttrList_EnsureRegistered(void);
@@ -88,19 +65,10 @@ extern "C" void igNamedObject_EnsureRegistered(void);
 extern "C" void igCharList_EnsureRegistered(void);
 extern "C" void igShortList_EnsureRegistered(void);
 extern "C" void igAdxAudio_EnsureRegistered(void);
-extern "C" void igGraphPath_EnsureRegistered(void);
-extern "C" void igCamera_EnsureRegistered(void);
 extern "C" void igInsightCore_EnsureRegistered(void);
 extern "C" void igObject_EnsureRegistered(void);
-extern "C" void igGeometryList_EnsureRegistered(void);
 extern "C" void igViewerParameters_EnsureRegistered(void);
-extern "C" void igTextureStateAttr_EnsureRegistered(void);
-extern "C" void igLightingStateAttr_EnsureRegistered(void);
-extern "C" void igActorList_EnsureRegistered(void);
-extern "C" void igAnimationDatabase_EnsureRegistered(void);
-extern "C" void igImage_EnsureRegistered(void);
 
-extern "C" void BecLibrary_RegisterClasses(void);
 extern "C" void BecLibrary_MarkRegistered(void);
 extern "C" void *libBecRuntimePlugin_GetMetaObject(void);
 extern "C" int __dl__FPv(...);
@@ -2836,7 +2804,6 @@ extern "C" igMetaObject *g_beTextureCtrlWork_metaObject;
 extern "C" int g_beTextureCtrlWork_vtable[4];
 extern "C" igMetaObject *g_beTargetObj_metaObject;
 extern "C" int g_beTargetObj_vtable[4];
-extern "C" igMetaObject *g_beSystem_metaObject;
 extern "C" int g_beSystem_vtable[4];
 extern "C" igMetaObject *g_beSwitchCtrlInfo_metaObject;
 extern "C" int g_beSwitchCtrlInfo_vtable[4];

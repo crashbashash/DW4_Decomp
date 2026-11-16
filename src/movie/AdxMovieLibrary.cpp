@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/ClassRegistration.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -16,17 +17,11 @@ extern "C" igMetaField *igShortMetaField_Create(void *);
 extern "C" igMetaField *igStringMetaField_Create(void *);
 extern "C" igMetaField *igStructMetaField_Create(void *);
 extern "C" igMetaField *igUnsignedLongMetaField_Create(void *);
-extern "C" void igTextureBindAttr_EnsureRegistered(void);
 extern "C" void igAudioContext_EnsureRegistered(void);
-extern "C" void igTextureList_EnsureRegistered(void);
 extern "C" void igVisualContext_EnsureRegistered(void);
-extern "C" void igImage_EnsureRegistered(void);
-extern "C" void igSceneInfo_EnsureRegistered(void);
 extern "C" void igObject_EnsureRegistered(void);
-extern "C" void igNamedObjectList_EnsureRegistered(void);
 extern "C" void igRendererOrderedList_EnsureRegistered(void);
 
-extern "C" void AdxMovieLibrary_RegisterClasses(void);
 extern "C" void AdxMovieLibrary_MarkRegistered(void);
 extern "C" void *igAdx_GetMetaObject(void);
 extern "C" int igObject_InitHeader(...);

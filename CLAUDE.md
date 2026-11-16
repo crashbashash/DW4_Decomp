@@ -166,6 +166,9 @@ A function is readable when all of these hold:
    document or tool, and no account of how the code was recovered.
 4. A shape found by a permuter, flag sweep or random walk carries
    `/* matching construct: <tool> — <what moved> */` at the affected line.
+5. What it calls and reads is declared once, in a header, with its real type
+   ([rules](docs/engine/debt-ratchet.md#declarations)): no local `extern` of another unit's symbol, no `(...)`
+   or C `()` prototype in place of real parameters, no declaration whose type differs from the definition.
 
 An owner-approved assembly source counts as readable once it has a recovered name. When two spellings match
 the same bytes, keep the more readable one.

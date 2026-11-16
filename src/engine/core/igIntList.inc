@@ -5,9 +5,9 @@ igMetaObject *igIntList_GetPublishedMetaObject(void) {
     return g_igIntList_metaObject;
 }
 
-void * igIntList_Create(int allocator) {
+igIntList *igIntList_Create(int allocator) {
     igIntList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igIntList_metaObject, (igMemoryPoolView *)allocator));
+    return (igIntList *)igMetaObject_CreateInstance(g_igIntList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 /* Created with allocation only when missing. */

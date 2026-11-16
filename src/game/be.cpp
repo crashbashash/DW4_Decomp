@@ -7,6 +7,7 @@
 #include "dw4/igRandomNumberDispatchView.h"
 #include "dw4/beDemoManager.h"
 #include "dw4/listSet.h"
+#include "dw4/ClassRegistration.h"
 
 
 /* The C runtime and the Alchemy memory services this file uses. */
@@ -107,7 +108,6 @@ extern "C" {
 int LuaAPI_Dispatch(lua_State *L);
 igLuaGlue::Class *beLuaWrapper_Create(void);
 igLuaGlue::Class *BecLuaWrapper_Create(void);
-void LuaAPI_RegisterClasses(void);
 int be_GetMetaObject_Virtual(void);
 void be_Activate(void);
 void be_Deactivate(void);
